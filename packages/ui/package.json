@@ -9,7 +9,9 @@
   ],
   "exports": {
     "./styles.css": "./dist/index.css",
-    "./card": "./src/card.tsx"
+    "./card": "./src/card.tsx",
+    "./components/**/*": "./src/components/**/*.tsx",
+    "./lib/*": "./src/lib/*.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -25,10 +27,17 @@
     "@meaku/eslint-config": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
     "@meaku/typescript-config": "workspace:*",
+    "@meaku/core": "workspace:*",
     "@types/react": "^18.2.61",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.2"
   }
 }
