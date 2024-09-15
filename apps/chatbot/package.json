@@ -16,10 +16,11 @@
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
-    "@meaku/ui": "workspace:*",
-    "@meaku/tailwind-config": "workspace:*",
-    "@meaku/core": "workspace:*",
     "@eslint/js": "^9.9.0",
+    "@meaku/core": "workspace:*",
+    "@meaku/tailwind-config": "workspace:*",
+    "@meaku/ui": "workspace:*",
+    "@types/node": "^22.5.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

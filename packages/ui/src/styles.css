@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #4e46dc;
-  --primary-foreground: #ffffff;
+@layer base {
+  :root {
+    --primary: 78 70 220;
+    --primary-foreground: 255 255 255;
 
-  --card: #eff1f5;
-  --card-foreground: #2d3454;
+    --card: 239 241 245;
+    --card-foreground: 45 52 84;
+  }
 }

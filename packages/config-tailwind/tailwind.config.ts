@@ -23,12 +23,46 @@ const config: Omit<Config, "content"> = {
           900: "#101828",
         },
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
+          DEFAULT: "rgb(var(--primary))",
+          foreground: "rgb(var(--primary-foreground))",
+          50: "#F4F3FF",
+          100: "#EBE9FE",
+          200: "#D9D6FE",
+          300: "#BDB4FE",
+          500: "#A6A2ED",
+          1000: "#4E46DC",
         },
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "rgb(var(--card))",
+          foreground: "rgb(var(--card-foreground))",
+        },
+        link: "#2E90FA",
+        alerts: {
+          50: "#FEF3F2",
+          500: "#F04438",
+        },
+        success: {
+          50: "#ECFDF3",
+          600: "#039855",
+          800: "#05603A",
+        },
+      },
+      animation: {
+        ripple: "ripple 1s infinite ease-in-out",
+      },
+      keyframes: {
+        ripple: {
+          "0%": {
+            transform: "scale(.8)",
+            opacity: 0.5,
+          },
+          "50%": {
+            opacity: 1,
+          },
+          "100%": {
+            transform: "scale(2.2)",
+            opacity: 0,
+          },
         },
       },
     },

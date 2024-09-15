@@ -8,8 +8,10 @@
     "dist"
   ],
   "exports": {
+    "./tailwind-config": "./tailwind.config.ts",
     "./styles.css": "./dist/index.css",
     "./card": "./src/card.tsx",
+    "./components/*": "./src/components/*.tsx",
     "./components/**/*": "./src/components/**/*.tsx",
     "./lib/*": "./src/lib/*.ts"
   },
@@ -24,10 +26,10 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@meaku/core": "workspace:*",
     "@meaku/eslint-config": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
     "@meaku/typescript-config": "workspace:*",
-    "@meaku/core": "workspace:*",
     "@types/react": "^18.2.61",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
@@ -37,7 +39,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "lucide-react": "^0.440.0",
     "tailwind-merge": "^2.5.2"
   }
 }
