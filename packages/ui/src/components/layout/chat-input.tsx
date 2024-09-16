@@ -11,6 +11,8 @@ const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
 const ChatInput = (props: Props) => {
+  const { disclaimerText } = props;
+
   const [inputValue, setInputValue] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -43,25 +45,34 @@ const ChatInput = (props: Props) => {
   }, [inputValue]);
 
   return (
-    <div className="ui-flex ui-items-center ui-gap-2 ui-border-t ui-border-gray-200 ui-p-4 ui-shadow-2xl ui-shadow-primary">
-      <div className="ui-hidden ui-items-center -ui-space-x-3 sm:ui-flex">
-        <WrappedLogo />
-        <UserAvatarIcon className="ui-relative ui-z-20 !ui-h-11 !ui-w-11 ui-rounded-full ui-border-[3px] ui-border-primary-foreground" />
+    <div>
+      <div className="ui-flex ui-items-center ui-gap-2 ui-border-t ui-border-gray-200 ui-p-4 ui-shadow-2xl ui-shadow-primary">
+        <div className="ui-hidden ui-items-center -ui-space-x-3 sm:ui-flex">
+          <WrappedLogo />
+          <UserAvatarIcon className="ui-relative ui-z-20 !ui-h-11 !ui-w-11 ui-rounded-full ui-border-[3px] ui-border-primary-foreground" />
+        </div>
+        <textarea
+          ref={textAreaRef}
+          value={inputValue}
+          onChange={handleInputValueChange}
+          placeholder="Type your questions here."
+          className="ui-h-10 ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-ring-primary"
+        />
+        <button
+          disabled={isButtonDisabled}
+          onClick={handleSendButtonClick}
+          className="ui-flex ui-h-10 ui-w-10 ui-items-center ui-justify-center ui-rounded-md ui-bg-primary ui-opacity-100 ui-transition-opacity ui-duration-300 hover:ui-opacity-80 disabled:ui-pointer-events-none disabled:ui-cursor-not-allowed disabled:ui-opacity-50"
+        >
+          <SendIcon className="ui-text-primary-foreground" />
+        </button>
       </div>
-      <textarea
-        ref={textAreaRef}
-        value={inputValue}
-        onChange={handleInputValueChange}
-        placeholder="Type your questions here."
-        className="ui-h-10 ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-ring-primary"
-      />
-      <button
-        disabled={isButtonDisabled}
-        onClick={handleSendButtonClick}
-        className="ui-flex ui-h-10 ui-w-10 ui-items-center ui-justify-center ui-rounded-md ui-bg-primary ui-opacity-100 ui-transition-opacity ui-duration-300 hover:ui-opacity-80 disabled:ui-pointer-events-none disabled:ui-cursor-not-allowed disabled:ui-opacity-50"
-      >
-        <SendIcon className="ui-text-primary-foreground" />
-      </button>
+
+      {/* {Boolean(disclaimerText) && (
+        <div className="ui-flex ui-items-center ui-gap-2 ui-bg-white ui-px-4">
+          <DisclaimerIcon className="ui-h-4 ui-w-4" />
+          <p>{disclaimerText}</p>
+        </div>
+      )} */}
     </div>
   );
 };
