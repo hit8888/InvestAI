@@ -1,0 +1,143 @@
+import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
+import { AIResponse } from "@meaku/core/types/chat";
+import { nanoid } from "nanoid";
+import { useCallback, useEffect, useRef, useState } from "react";
+import useWebSocket from "react-use-websocket";
+import { ENV } from "../config/env";
+import { useChatStore } from "../stores/useChatStore";
+import { useMessageStore } from "../stores/useMessageStore";
+
+const MAX_RETRIES = 5;
+const INITIAL_RETRY_INTERVAL = 1000;
+const MAX_RETRY_INTERVAL = 20000;
+// const HEARTBEAT_INTERVAL = 10000;
+const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
+
+const useWebSocketChat = () => {
+  const orgName = useChatStore((state) => state.orgName);
+  const session = useChatStore((state) => state.session);
+  const hasFirstUserMessageBeenSent = useChatStore(
+    (state) => state.hasFirstUserMessageBeenSent,
+  );
+  const setHasFirstUserMessageBeenSent = useChatStore(
+    (state) => state.setHasFirstUserMessageBeenSent,
+  );
+
+  const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
+
+  const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const handleAddUserMessage = useMessageStore(
+    (state) => state.handleAddUserMessage,
+  );
+  const handleAddAIMessage = useMessageStore(
+    (state) => state.handleAddAIMessage,
+  );
+  const setSuggestedQuestions = useMessageStore(
+    (state) => state.setSuggestedQuestions,
+  );
+  const setIsAMessageBeingProcessed = useMessageStore(
+    (state) => state.setIsAMessageBeingProcessed,
+  );
+
+  const wsUrl = orgName
+    ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
+    : "";
+
+  const { readyState, sendMessage, lastMessage } = useWebSocket(wsUrl, {
+    share: true,
+    shouldReconnect: () => true,
+    reconnectAttempts: MAX_RETRIES,
+    reconnectInterval: (retryCount) => {
+      const interval = Math.min(
+        retryInterval * Math.pow(2, retryCount - 1),
+        MAX_RETRY_INTERVAL,
+      );
+      setRetryInterval(interval);
+      return interval;
+    },
+    // heartbeat: {
+    //   message: "ping",
+    //   interval: HEARTBEAT_INTERVAL,
+    // },
+  });
+
+  const handleSendUserMessage = useCallback(
+    (message: string) => {
+      if (!hasFirstUserMessageBeenSent) {
+        setHasFirstUserMessageBeenSent(true);
+      }
+
+      const messageId = nanoid();
+
+      const payload = {
+        session_id: session?.session_id,
+        message,
+        response_id: messageId,
+      };
+
+      handleAddUserMessage(message);
+
+      handleAddAIMessage({
+        response_id: messageId,
+        message: PROCESSING_MESSAGE_SEQUENCE[0],
+        media: null,
+        documents: [],
+        is_complete: false,
+        is_loading: true,
+      });
+
+      setIsAMessageBeingProcessed(true);
+      sendMessage(JSON.stringify(payload));
+
+      let messageIndex = 1;
+      processingMessageInterval.current = setInterval(() => {
+        if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
+          clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+          return;
+        }
+
+        handleAddAIMessage({
+          response_id: messageId,
+          message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+          media: null,
+          documents: [],
+          is_complete: false,
+          is_loading: true,
+        });
+
+        messageIndex++;
+      }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
+    },
+    [hasFirstUserMessageBeenSent, session],
+  );
+
+  useEffect(() => {
+    if (!lastMessage) return;
+
+    try {
+      clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+      const response = JSON.parse(lastMessage.data) as AIResponse;
+      handleAddAIMessage(response);
+
+      if (response.is_complete) {
+        setSuggestedQuestions([]);
+        setIsAMessageBeingProcessed(false);
+      }
+    } catch (error) {
+      // TODO: Track error in sentry
+    }
+  }, [lastMessage]);
+
+  useEffect(() => {
+    return () => {
+      if (processingMessageInterval.current) {
+        clearInterval(processingMessageInterval.current);
+      }
+    };
+  }, []);
+
+  return { readyState, handleSendUserMessage };
+};
+
+export default useWebSocketChat;

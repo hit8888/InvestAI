@@ -11,11 +11,11 @@ const router = sentryCreateBrowserRouter([
     element: <>👋</>,
   },
   {
-    path: "/org/:orgId/agent/:agentId",
+    path: "/org/:orgName/agent/:agentId",
     element: <Chat />,
   },
   {
-    path: "/demo/org/:orgId/agent/:agentId",
+    path: "/demo/org/:orgName/agent/:agentId",
     element: <Demo />,
   },
 ]);

@@ -1,28 +1,28 @@
 import { XIcon } from "lucide-react";
-import { useState } from "react";
 import { cn } from "../../lib/cn";
 import ChatIcon from "../icons/chat";
 
 type Props = {
-  // isChatOpen: boolean;
+  isChatOpen: boolean;
+  handleToggleChatOpenState: () => void;
 };
 
 const TriggerButton = (props: Props) => {
-  const [toggle, setToggle] = useState(false);
+  const { isChatOpen, handleToggleChatOpenState } = props;
 
   return (
     <div className="ui-flex ui-items-center ui-justify-end ui-overflow-hidden ui-p-4">
       <button
-        onClick={() => setToggle(!toggle)}
+        onClick={handleToggleChatOpenState}
         className={cn(
           "ui-flex ui-items-center ui-gap-2 ui-rounded-full ui-bg-gradient-to-br ui-from-primary/70 ui-to-primary ui-p-2 ui-opacity-100 ui-transition-all ui-duration-300 hover:ui-opacity-80",
           {
-            "ui-w-14": !toggle,
-            "ui-w-44": toggle,
+            "ui-w-14": isChatOpen,
+            "ui-w-44": !isChatOpen,
           },
         )}
       >
-        {toggle ? (
+        {!isChatOpen ? (
           <>
             <div className="ui-rounded-full ui-bg-primary-foreground">
               <div className="ui-rounded-full ui-bg-primary/50 ui-p-2">
