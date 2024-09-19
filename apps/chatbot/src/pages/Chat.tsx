@@ -122,11 +122,6 @@ const Chat = () => {
     const orgName = sessionData.configuration.org_name;
     const agentId = sessionData.agent_id.toString();
 
-    const welcomeMessage =
-      sessionData.configuration.body.welcome_message.message;
-    const suggestedQuestions =
-      sessionData.configuration.body.welcome_message.suggested_questions;
-
     const chatHistory = sessionData.configuration.body.chat_history;
     const formattedChatHistory: Message[] = chatHistory.map((message) => ({
       id: message.message_id,
@@ -134,7 +129,12 @@ const Chat = () => {
       media: message.media,
       documents: message.documents,
       role: message.role,
+      suggested_questions: message.suggested_questions,
     }));
+
+    const suggestedQuestions =
+      formattedChatHistory[formattedChatHistory.length - 1]
+        .suggested_questions ?? [];
 
     const styleConfig = sessionData.configuration.style_config;
 
@@ -143,8 +143,9 @@ const Chat = () => {
     setSession(sessionData);
     setConfiguration(sessionData.configuration);
 
-    setMessages(formattedChatHistory, welcomeMessage);
     setSuggestedQuestions(suggestedQuestions);
+
+    setMessages(formattedChatHistory);
 
     Object.keys(styleConfig).forEach((key) => {
       const formattedKey = key.replace(/_/g, "-");

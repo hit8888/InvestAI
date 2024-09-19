@@ -2,7 +2,7 @@ import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useWebSocket from "react-use-websocket";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
@@ -15,8 +15,10 @@ const MAX_RETRY_INTERVAL = 20000;
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
+  const isChatOpen = useChatStore((state) => state.isChatOpen);
   const orgName = useChatStore((state) => state.orgName);
   const session = useChatStore((state) => state.session);
+  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
   );
@@ -69,6 +71,12 @@ const useWebSocketChat = () => {
         setHasFirstUserMessageBeenSent(true);
       }
 
+      if (!isChatOpen) {
+        setIsChatOpen(true);
+      }
+
+      setSuggestedQuestions([]);
+
       const messageId = nanoid();
 
       const payload = {
@@ -86,6 +94,7 @@ const useWebSocketChat = () => {
         documents: [],
         is_complete: false,
         is_loading: true,
+        suggested_questions: [],
       });
 
       setIsAMessageBeingProcessed(true);
@@ -105,12 +114,13 @@ const useWebSocketChat = () => {
           documents: [],
           is_complete: false,
           is_loading: true,
+          suggested_questions: [],
         });
 
         messageIndex++;
       }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
     },
-    [hasFirstUserMessageBeenSent, session],
+    [hasFirstUserMessageBeenSent, session, isChatOpen],
   );
 
   useEffect(() => {
@@ -122,7 +132,7 @@ const useWebSocketChat = () => {
       handleAddAIMessage(response);
 
       if (response.is_complete) {
-        setSuggestedQuestions([]);
+        setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
       }
     } catch (error) {
@@ -141,6 +151,20 @@ const useWebSocketChat = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (readyState === ReadyState.CLOSED) {
+      handleAddAIMessage({
+        response_id: nanoid(),
+        message: session?.configuration.body.default_error_message ?? "",
+        media: null,
+        documents: [],
+        is_complete: true,
+        is_loading: false,
+        suggested_questions: [],
+      });
+    }
+  }, [readyState]);
 
   return { readyState, handleSendUserMessage };
 };

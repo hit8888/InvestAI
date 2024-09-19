@@ -1,13 +1,17 @@
 import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef } from "react";
 import MessageItem from "./message-item";
+import SuggestedQuestion from "./suggested-question";
 
 type Props = {
   messages: Message[];
+  suggestedQuestions: string[];
+  handleSuggestedQuestionOnClick: (question: string) => void;
 };
 
 const ChatMessage = (props: Props) => {
-  const { messages } = props;
+  const { messages, suggestedQuestions, handleSuggestedQuestionOnClick } =
+    props;
 
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -20,6 +24,16 @@ const ChatMessage = (props: Props) => {
       {messages.map((message) => (
         <MessageItem message={message} key={message.id} />
       ))}
+
+      <div className="ui-space-y-2">
+        {suggestedQuestions.map((question) => (
+          <SuggestedQuestion
+            key={question}
+            question={question}
+            handleOnClick={handleSuggestedQuestionOnClick}
+          />
+        ))}
+      </div>
 
       <div ref={endRef} className="ui-p-1" />
     </div>

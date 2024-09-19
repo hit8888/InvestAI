@@ -3,6 +3,7 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
+import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
@@ -10,17 +11,35 @@ import { useMessageStore } from "../../stores/useMessageStore";
 const Widget = () => {
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
-  const orgName = useChatStore((state) => state.orgName) || "";
+  const orgName = useChatStore((state) => state.orgName) ?? "";
+  const agentId = useChatStore((state) => state.agentId) ?? "";
+  const session = useChatStore((state) => state.session);
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
   );
   const messages = useMessageStore((state) => state.messages);
+  const suggestedQuestions = useMessageStore(
+    (state) => state.suggestedQuestions,
+  );
 
   const { handleSendUserMessage } = useWebSocketChat();
+  const { sessionData, handleUpdateSessionData } = useLocalStorageSession({
+    orgName,
+    agentId,
+  });
+
+  const tooltipSuggestedQuestions =
+    session?.configuration.body.welcome_message.suggested_questions ?? [];
+  const showTooltip =
+    !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
 
   const handleToggleChatOpenState = () => {
     setIsChatOpen((previous) => !previous);
+  };
+
+  const handleCloseTooltip = () => {
+    handleUpdateSessionData({ showTooltip: false });
   };
 
   return (
@@ -29,9 +48,12 @@ const Widget = () => {
         {isChatOpen && (
           <>
             <ChatHeader orgName={orgName} config={ChatConfig.WIDGET} />
-            <ChatMessage messages={messages} />
+            <ChatMessage
+              messages={messages}
+              suggestedQuestions={suggestedQuestions}
+              handleSuggestedQuestionOnClick={handleSendUserMessage}
+            />
             <ChatInput
-              disclaimerText="If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
               isAMessageBeingProcessed={isAMessageBeingProcessed}
               handleSendUserMessage={handleSendUserMessage}
             />
@@ -41,7 +63,11 @@ const Widget = () => {
 
       <TriggerButton
         isChatOpen={isChatOpen}
+        showTooltip={showTooltip}
+        suggestedQuestions={tooltipSuggestedQuestions}
         handleToggleChatOpenState={handleToggleChatOpenState}
+        handleCloseTooltip={handleCloseTooltip}
+        handleSuggestionsOnClick={handleSendUserMessage}
       />
     </div>
   );

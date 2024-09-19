@@ -64,9 +64,11 @@ const MessageItem = (props: Props) => {
             "ui-w-11/12 ui-max-w-fit ui-rounded-b-2xl sm:ui-w-10/12 md:ui-w-4/6 lg:ui-w-3/6 2xl:ui-w-2/6"
           }
           controls
-          src={videoURL}
           autoPlay={!message.isPartOfHistory}
-        />
+        >
+          <source src={videoURL} type="video/mp4" />
+          Your browser does not support viewing this video.
+        </video>
       )}
     </div>
   );

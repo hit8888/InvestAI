@@ -6,6 +6,8 @@ import { immer } from "zustand/middleware/immer";
 interface State {
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean | ((prevState: boolean) => boolean)) => void;
+  showTooltip: boolean;
+  setShowTooltip: (value: boolean) => void;
   orgName: string | null;
   setOrgName: (orgName: string) => void;
   agentId: string | null;
@@ -26,6 +28,11 @@ export const useChatStore = create<State>()(
         set((draft) => {
           draft.isChatOpen =
             typeof value === "function" ? value(draft.isChatOpen) : value;
+        }),
+      showTooltip: false,
+      setShowTooltip: (value) =>
+        set((draft) => {
+          draft.showTooltip = value;
         }),
       orgName: null,
       setOrgName: (orgName) =>

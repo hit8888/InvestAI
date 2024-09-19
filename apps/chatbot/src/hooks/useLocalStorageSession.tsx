@@ -1,4 +1,6 @@
 import { useLocalStorageState } from "ahooks";
+import { useEffect } from "react";
+import { useChatStore } from "../stores/useChatStore";
 import { trackError } from "../utils/error";
 
 type Props = {
@@ -15,7 +17,7 @@ type Session = {
 const useLocalStorageSession = (props: Props) => {
   const { orgName, agentId } = props;
 
-  const localStorageKey = `${orgName}-${agentId}`;
+  const localStorageKey = `${orgName?.toLowerCase()}-${agentId}`;
   const fallbackSessionKey = "sessionId";
   const fallbackProspectKey = "prospectId";
 
@@ -24,6 +26,8 @@ const useLocalStorageSession = (props: Props) => {
     useLocalStorageState<string>(fallbackSessionKey);
   const [fallbackProspectId, setFallbackProspectId] =
     useLocalStorageState<string>(fallbackProspectKey);
+
+  const setShowTooltip = useChatStore((state) => state.setShowTooltip);
 
   const sessionData: Session = {
     sessionId: session?.sessionId || fallbackSessionId,
@@ -49,6 +53,12 @@ const useLocalStorageSession = (props: Props) => {
       });
     }
   };
+
+  useEffect(() => {
+    if (!session) return;
+
+    setShowTooltip(session.showTooltip);
+  }, [session]);
 
   return {
     sessionData,

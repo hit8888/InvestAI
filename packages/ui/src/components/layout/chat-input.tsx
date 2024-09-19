@@ -4,7 +4,7 @@ import UserAvatarIcon from "../icons/user";
 import WrappedLogo from "../icons/wrapped-logo";
 
 type Props = {
-  disclaimerText: string;
+  disclaimerText?: string;
   isAMessageBeingProcessed: boolean;
   handleSendUserMessage: (message: string) => void;
 };
@@ -85,8 +85,8 @@ const ChatInput = (props: Props) => {
       </div>
 
       {Boolean(disclaimerText) && (
-        <div className="ui-flex ui-items-center ui-gap-2 ui-bg-white ui-px-4">
-          <p className="ui-text-gray-400">
+        <div className="ui-flex ui-items-center ui-gap-2 ui-bg-white ui-px-4 ui-pb-1">
+          <p className="ui-text-sm ui-text-gray-400">
             <span className="ui-font-semibold">Note: </span>
             {disclaimerText}
           </p>

@@ -6,7 +6,7 @@ import { immer } from "zustand/middleware/immer";
 
 interface State {
   messages: Message[];
-  setMessages: (messages: Message[], welcomeMessage: string) => void;
+  setMessages: (messages: Message[]) => void;
   suggestedQuestions: string[];
   setSuggestedQuestions: (suggestedQuestions: string[]) => void;
   isAMessageBeingProcessed: boolean;
@@ -19,19 +19,9 @@ export const useMessageStore = create<State>()(
   devtools(
     immer((set) => ({
       messages: [],
-      setMessages: (messages, welcomeMessage) =>
+      setMessages: (messages) =>
         set((draft) => {
-          let updatedMessages = [...messages];
-
-          updatedMessages.splice(0, 0, {
-            role: "ai",
-            message: welcomeMessage,
-            media: null,
-            documents: [],
-            id: nanoid(),
-          });
-
-          updatedMessages = updatedMessages.map((message) => ({
+          const updatedMessages = messages.map((message) => ({
             ...message,
             isPartOfHistory: true,
           }));

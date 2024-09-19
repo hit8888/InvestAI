@@ -73,7 +73,7 @@ const ChatHeader = (props: Props) => {
                 </div>
               </div>
               <h2 className="ui-text-center ui-text-lg ui-font-medium">
-                {title || "Hello!"}
+                {title ?? "Hello!"}
               </h2>
             </div>
           )}

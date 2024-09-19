@@ -14,6 +14,9 @@ const Embed = () => {
     (state) => state.isAMessageBeingProcessed,
   );
   const messages = useMessageStore((state) => state.messages);
+  const suggestedQuestions = useMessageStore(
+    (state) => state.suggestedQuestions,
+  );
 
   const { handleSendUserMessage } = useWebSocketChat();
 
@@ -22,12 +25,16 @@ const Embed = () => {
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
       <ChatHeader
-        orgName={orgName || ""}
+        orgName={orgName ?? ""}
         config={ChatConfig.EMBED}
-        subtitle={configuration?.header.sub_title || ""}
-        title={configuration?.header.title || ""}
+        subtitle={configuration?.header.sub_title ?? ""}
+        title={configuration?.header.title ?? ""}
       />
-      <ChatMessage messages={messages} />
+      <ChatMessage
+        messages={messages}
+        suggestedQuestions={suggestedQuestions}
+        handleSuggestedQuestionOnClick={handleSendUserMessage}
+      />
       <ChatInput
         disclaimerText={
           isC2FO

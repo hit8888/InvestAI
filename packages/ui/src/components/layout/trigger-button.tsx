@@ -1,17 +1,61 @@
 import { XIcon } from "lucide-react";
+import { memo } from "react";
 import { cn } from "../../lib/cn";
 import ChatIcon from "../icons/chat";
+import SuggestedQuestion from "./suggested-question";
 
 type Props = {
   isChatOpen: boolean;
+  showTooltip: boolean;
+  suggestedQuestions: string[];
   handleToggleChatOpenState: () => void;
+  handleCloseTooltip: () => void;
+  handleSuggestionsOnClick: (msg: string) => void;
 };
 
 const TriggerButton = (props: Props) => {
-  const { isChatOpen, handleToggleChatOpenState } = props;
+  const {
+    isChatOpen,
+    showTooltip,
+    suggestedQuestions,
+    handleToggleChatOpenState,
+    handleCloseTooltip,
+    handleSuggestionsOnClick,
+  } = props;
 
   return (
-    <div className="ui-flex ui-items-center ui-justify-end ui-overflow-hidden ui-p-4">
+    <div className="ui-flex ui-flex-col ui-items-end ui-justify-end ui-overflow-hidden ui-p-4">
+      {showTooltip && (
+        <div className="ui-max-w-80">
+          <div className="ui-relative ui-mb-4 ui-rounded-md ui-border ui-bg-white ui-p-2 ui-text-gray-700">
+            <button
+              onClick={handleCloseTooltip}
+              className="ui-absolute -ui-right-2 -ui-top-2 ui-flex ui-items-center ui-justify-center ui-rounded-full ui-border ui-bg-white ui-p-1"
+            >
+              <XIcon
+                strokeWidth={2}
+                className="ui-right-2 ui-top-2 ui-h-3 ui-w-3 ui-cursor-pointer ui-text-gray-700"
+              />
+            </button>
+
+            <p className="ui-text-sm">
+              Hey, I am your AI Companion – Experience the Future of Interaction
+              with me!
+            </p>
+          </div>
+
+          <div className="ui-mb-3 ui-space-y-2">
+            {suggestedQuestions.map((question) => (
+              <SuggestedQuestion
+                handleOnClick={handleSuggestionsOnClick}
+                key={question}
+                question={question}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       <button
         onClick={handleToggleChatOpenState}
         className={cn(
@@ -47,4 +91,4 @@ const TriggerButton = (props: Props) => {
   );
 };
 
-export default TriggerButton;
+export default memo(TriggerButton);
