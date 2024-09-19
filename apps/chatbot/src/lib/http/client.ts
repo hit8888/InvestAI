@@ -15,15 +15,13 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     if (!error.response || !error.config) return Promise.reject(error);
 
-    const apiPath = error.config.url?.split(
-      ENV.VITE_BASE_API_URL,
-    )?.[1] as string;
+    const apiPath = error.config.url;
 
-    if (apiPath?.includes("/session/init/")) {
+    if (apiPath?.includes("/session/init")) {
       const updatedConfig = {
         ...error.config,
         data: {
-          ...error.config.data,
+          ...JSON.parse(error.config.data),
           session_id: null,
           prospect_id: null,
         },
