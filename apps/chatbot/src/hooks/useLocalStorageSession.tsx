@@ -1,4 +1,5 @@
 import { useLocalStorageState } from "ahooks";
+import { trackError } from "../utils/error";
 
 type Props = {
   orgName: string;
@@ -41,7 +42,11 @@ const useLocalStorageSession = (props: Props) => {
       setFallbackSessionId(undefined);
       setFallbackProspectId(undefined);
     } catch (error) {
-      // TODO: Track error in sentry
+      trackError(error, {
+        action: "handleUpdateSessionData",
+        component: "useLocalStorageSession",
+        sessionId: sessionData?.sessionId || fallbackSessionId,
+      });
     }
   };
 

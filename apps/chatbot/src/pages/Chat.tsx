@@ -16,6 +16,7 @@ import {
   UpdateSessionDataPayload,
   UpdateSessionDataPayloadSchema,
 } from "../types/api";
+import { trackError } from "../utils/error";
 import { getBrowserSignature } from "../utils/tracking";
 
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
@@ -84,8 +85,11 @@ const Chat = () => {
       return response.data;
     },
     onError: (error) => {
-      console.log("🚀 ~ file: Chat.tsx:87 ~ Chat ~ error:", error);
-      // TODO: Track error in sentry
+      trackError(error, {
+        action: "handleMutateSession",
+        component: "Chat",
+        sessionId: session?.session_id,
+      });
     },
   });
 
@@ -103,7 +107,10 @@ const Chat = () => {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
-      // TODO: Track error in sentry
+      trackError(validatedSession.error, {
+        action: "useEffect | SessionSchema",
+        component: "Chat",
+      });
       return;
     }
 
@@ -149,7 +156,10 @@ const Chat = () => {
         const value = hexToRGB(hexValue);
         document.documentElement.style.setProperty(`--${formattedKey}`, value);
       } catch (error) {
-        // TODO: Track error in sentry
+        trackError(error, {
+          action: "useEffect | hexToRGB",
+          component: "Chat",
+        });
       }
     });
 
@@ -169,7 +179,10 @@ const Chat = () => {
         UpdateSessionDataPayloadSchema.safeParse(payload);
 
       if (!validatedPayload.success) {
-        // TODO: Track error in sentry
+        trackError(validatedPayload.error, {
+          action: "handleMessagePassing | UpdateSessionDataPayloadSchema",
+          component: "Chat",
+        });
         return;
       }
 
@@ -188,11 +201,13 @@ const Chat = () => {
   }, [session]);
 
   useEffect(() => {
-    // TODO: Track error in sentry
     if (isError) {
-      console.log(error);
+      trackError(error, {
+        action: "initialization query error",
+        component: "Chat",
+      });
     }
-  }, [isError]);
+  }, [isError, error]);
 
   if (isFetching || isError || !isValidSession) return <></>;
 

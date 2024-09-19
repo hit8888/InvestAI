@@ -6,6 +6,7 @@ import useWebSocket from "react-use-websocket";
 import { ENV } from "../config/env";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
+import { trackError } from "../utils/error";
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -125,7 +126,11 @@ const useWebSocketChat = () => {
         setIsAMessageBeingProcessed(false);
       }
     } catch (error) {
-      // TODO: Track error in sentry
+      trackError(error, {
+        action: "useEffect | handleAddAIMessage",
+        component: "useWebSocketChat",
+        sessionId: session?.session_id,
+      });
     }
   }, [lastMessage]);
 
