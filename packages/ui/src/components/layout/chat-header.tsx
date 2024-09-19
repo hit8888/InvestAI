@@ -1,6 +1,6 @@
 import { ChatConfig } from "@meaku/core/types/config";
 import { XIcon } from "lucide-react";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
 import Logo from "../icons/logo";
@@ -94,4 +94,4 @@ const ChatHeader = (props: Props) => {
   );
 };
 
-export default ChatHeader;
+export default memo(ChatHeader);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import SendIcon from "../icons/send";
 import UserAvatarIcon from "../icons/user";
 import WrappedLogo from "../icons/wrapped-logo";
@@ -84,14 +84,16 @@ const ChatInput = (props: Props) => {
         </button>
       </div>
 
-      {/* {Boolean(disclaimerText) && (
+      {Boolean(disclaimerText) && (
         <div className="ui-flex ui-items-center ui-gap-2 ui-bg-white ui-px-4">
-          <DisclaimerIcon className="ui-h-4 ui-w-4" />
-          <p>{disclaimerText}</p>
+          <p className="ui-text-gray-400">
+            <span className="ui-font-semibold">Note: </span>
+            {disclaimerText}
+          </p>
         </div>
-      )} */}
+      )}
     </div>
   );
 };
 
-export default ChatInput;
+export default memo(ChatInput);

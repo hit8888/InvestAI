@@ -13,7 +13,7 @@ const ChatMessage = (props: Props) => {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+  }, [messages[messages.length - 1]?.message]);
 
   return (
     <div className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-p-4">

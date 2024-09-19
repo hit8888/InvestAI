@@ -9,9 +9,6 @@ import { useMessageStore } from "../../stores/useMessageStore";
 const Embed = () => {
   const orgName = useChatStore((state) => state.orgName);
   const configuration = useChatStore((state) => state.configuration);
-  const hasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.hasFirstUserMessageBeenSent,
-  );
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -20,21 +17,23 @@ const Embed = () => {
 
   const { handleSendUserMessage } = useWebSocketChat();
 
-  const logoURL = configuration?.logo;
+  const isC2FO = orgName?.toLowerCase() === "c2fo";
 
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
       <ChatHeader
         orgName={orgName || ""}
         config={ChatConfig.EMBED}
-        logoURL={logoURL || ""}
-        showMinimizedHeader={hasFirstUserMessageBeenSent}
         subtitle={configuration?.header.sub_title || ""}
         title={configuration?.header.title || ""}
       />
       <ChatMessage messages={messages} />
       <ChatInput
-        disclaimerText="If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
+        disclaimerText={
+          isC2FO
+            ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
+            : ""
+        }
         isAMessageBeingProcessed={isAMessageBeingProcessed}
         handleSendUserMessage={handleSendUserMessage}
       />
