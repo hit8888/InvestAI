@@ -1,10 +1,8 @@
+import {
+  InitializationPayload,
+  UpdateSessionDataPayload,
+} from "../../types/api";
 import apiClient from "./client";
-
-type InitializationPayload = {
-  url: string;
-  session_id?: string;
-  prospect_id?: string;
-};
 
 export const initialize = (
   tenantName: string,
@@ -16,3 +14,8 @@ export const initialize = (
       "x-tenant-name": tenantName,
     },
   });
+
+export const updateSession = (
+  sessionId: string,
+  payload: UpdateSessionDataPayload,
+) => apiClient.put(`/tenant/chat/session/${sessionId}/`, payload);

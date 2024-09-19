@@ -2,16 +2,21 @@ import { Message } from "@meaku/core/types/chat";
 import { ChatConfig } from "@meaku/core/types/config";
 import { SessionSchema } from "@meaku/core/types/session";
 import { hexToRGB } from "@meaku/core/utils/color";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Embed from "../components/views/Embed";
 import Widget from "../components/views/Widget";
 import useLocalStorageSession from "../hooks/useLocalStorageSession";
 import useWebSocketChat from "../hooks/useWebSocketChat";
-import { initialize } from "../lib/http/api";
+import { initialize, updateSession } from "../lib/http/api";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
+import {
+  UpdateSessionDataPayload,
+  UpdateSessionDataPayloadSchema,
+} from "../types/api";
+import { getBrowserSignature } from "../utils/tracking";
 
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
   [ChatConfig.WIDGET]: Widget,
@@ -58,10 +63,30 @@ const Chat = () => {
         url,
         session_id: sessionDataInLocalStorage?.sessionId,
         prospect_id: sessionDataInLocalStorage?.prospectId,
+        browser_signature: getBrowserSignature(),
       });
       return response.data;
     },
     refetchOnWindowFocus: false,
+  });
+
+  const { mutateAsync: handleMutateSession } = useMutation({
+    mutationKey: ["update-session-data", session?.session_id],
+    mutationFn: async ({
+      sessionId,
+      payload,
+    }: {
+      sessionId: string;
+      payload: UpdateSessionDataPayload;
+    }) => {
+      const response = await updateSession(sessionId, payload);
+
+      return response.data;
+    },
+    onError: (error) => {
+      console.log("🚀 ~ file: Chat.tsx:87 ~ Chat ~ error:", error);
+      // TODO: Track error in sentry
+    },
   });
 
   useWebSocketChat();
@@ -85,6 +110,7 @@ const Chat = () => {
     setIsValidSession(true);
 
     const sessionData = validatedSession.data;
+    const sessionId = sessionData.session_id;
 
     const orgName = sessionData.configuration.org_name;
     const agentId = sessionData.agent_id.toString();
@@ -125,15 +151,41 @@ const Chat = () => {
       } catch (error) {
         // TODO: Track error in sentry
       }
-
-      handleUpdateSessionData({
-        sessionId: sessionData.session_id,
-        prospectId: sessionData.prospect_id.toString(),
-      });
     });
-  }, [session]);
 
-  useEffect(() => {}, []);
+    handleUpdateSessionData({
+      sessionId: sessionData.session_id,
+      prospectId: sessionData.prospect_id.toString(),
+    });
+
+    const handleMessagePassing = async (event: MessageEvent) => {
+      const type = event.data?.type;
+
+      if (type !== "INIT") return;
+
+      const payload = event.data.payload;
+
+      const validatedPayload =
+        UpdateSessionDataPayloadSchema.safeParse(payload);
+
+      if (!validatedPayload.success) {
+        // TODO: Track error in sentry
+        return;
+      }
+
+      try {
+        window.top?.postMessage({ type: "CHAT_READY" }, "*");
+      } catch (error) {}
+
+      await handleMutateSession({ sessionId, payload: validatedPayload.data });
+    };
+
+    window.addEventListener("message", handleMessagePassing);
+
+    return () => {
+      window.removeEventListener("message", handleMessagePassing);
+    };
+  }, [session]);
 
   useEffect(() => {
     // TODO: Track error in sentry
