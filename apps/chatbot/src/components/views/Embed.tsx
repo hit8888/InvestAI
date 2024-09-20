@@ -2,6 +2,7 @@ import { ChatConfig } from "@meaku/core/types/config";
 import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
+import { memo } from "react";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
@@ -48,4 +49,4 @@ const Embed = () => {
   );
 };
 
-export default Embed;
+export default memo(Embed);

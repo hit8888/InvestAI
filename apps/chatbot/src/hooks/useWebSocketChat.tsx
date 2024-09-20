@@ -87,6 +87,18 @@ const useWebSocketChat = () => {
 
       handleAddUserMessage(message);
 
+      if (readyState === ReadyState.CLOSED) {
+        return handleAddAIMessage({
+          response_id: nanoid(),
+          message: session?.configuration.body.default_error_message ?? "",
+          media: null,
+          documents: [],
+          is_complete: true,
+          is_loading: false,
+          suggested_questions: [],
+        });
+      }
+
       handleAddAIMessage({
         response_id: messageId,
         message: PROCESSING_MESSAGE_SEQUENCE[0],
@@ -151,20 +163,6 @@ const useWebSocketChat = () => {
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (readyState === ReadyState.CLOSED) {
-      handleAddAIMessage({
-        response_id: nanoid(),
-        message: session?.configuration.body.default_error_message ?? "",
-        media: null,
-        documents: [],
-        is_complete: true,
-        is_loading: false,
-        suggested_questions: [],
-      });
-    }
-  }, [readyState]);
 
   return { readyState, handleSendUserMessage };
 };

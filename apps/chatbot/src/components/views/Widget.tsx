@@ -3,6 +3,7 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
+import { memo } from "react";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
@@ -73,4 +74,4 @@ const Widget = () => {
   );
 };
 
-export default Widget;
+export default memo(Widget);
