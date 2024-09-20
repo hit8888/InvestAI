@@ -15,6 +15,10 @@ export default defineConfig({
     sentryVitePlugin({
       org: "acme-30",
       project: "javascript-react",
+      sourcemaps: {
+        assets: "./dist/**",
+        filesToDeleteAfterUpload: ["./dist/**/*.map"],
+      },
     }),
   ],
 
@@ -29,5 +33,11 @@ export default defineConfig({
 
   build: {
     sourcemap: true,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
   },
 });
