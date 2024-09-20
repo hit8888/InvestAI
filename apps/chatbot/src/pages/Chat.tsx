@@ -3,10 +3,8 @@ import { ChatConfig } from "@meaku/core/types/config";
 import { SessionSchema } from "@meaku/core/types/session";
 import { hexToRGB } from "@meaku/core/utils/color";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import Embed from "../components/views/Embed";
-import Widget from "../components/views/Widget";
 import useLocalStorageSession from "../hooks/useLocalStorageSession";
 import useWebSocketChat from "../hooks/useWebSocketChat";
 import { initialize, updateSession } from "../lib/http/api";
@@ -18,6 +16,9 @@ import {
 } from "../types/api";
 import { trackError } from "../utils/error";
 import { getBrowserSignature } from "../utils/tracking";
+
+const Widget = lazy(() => import("../components/views/Widget"));
+const Embed = lazy(() => import("../components/views/Embed"));
 
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
   [ChatConfig.WIDGET]: Widget,
@@ -189,7 +190,13 @@ const Chat = () => {
 
       try {
         window.top?.postMessage({ type: "CHAT_READY" }, "*");
-      } catch (error) {}
+      } catch (error) {
+        trackError(error, {
+          action: "handleMessagePassing | postMessage",
+          component: "Chat",
+          sessionId: sessionData.session_id,
+        });
+      }
 
       await handleMutateSession({ sessionId, payload: validatedPayload.data });
     };
@@ -212,7 +219,11 @@ const Chat = () => {
 
   if (isFetching || isError || !isValidSession) return <></>;
 
-  return <Component />;
+  return (
+    <Suspense fallback={<></>}>
+      <Component />
+    </Suspense>
+  );
 };
 
 export default Chat;
