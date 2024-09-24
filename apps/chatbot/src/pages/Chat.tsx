@@ -7,13 +7,14 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import useLocalStorageSession from "../hooks/useLocalStorageSession";
 import useWebSocketChat from "../hooks/useWebSocketChat";
-import { initialize, updateSession } from "../lib/http/api";
+import { initializeSession, updateSession } from "../lib/http/api";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import {
   UpdateSessionDataPayload,
   UpdateSessionDataPayloadSchema,
 } from "../types/api";
+import { ChatParams } from "../types/msc";
 import { trackError } from "../utils/error";
 import { getBrowserSignature } from "../utils/tracking";
 
@@ -23,11 +24,6 @@ const Embed = lazy(() => import("../components/views/Embed"));
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
   [ChatConfig.WIDGET]: Widget,
   [ChatConfig.EMBED]: Embed,
-};
-
-type ChatParams = {
-  orgName: string;
-  agentId: string;
 };
 
 const Chat = () => {
@@ -59,10 +55,7 @@ const Chat = () => {
     queryFn: async () => {
       if (!orgName || !agentId) return;
 
-      const url = window.location.href;
-
-      const response = await initialize(orgName, agentId, {
-        url,
+      const response = await initializeSession(orgName, agentId, {
         session_id: sessionDataInLocalStorage?.sessionId,
         prospect_id: sessionDataInLocalStorage?.prospectId,
         browser_signature: getBrowserSignature(),
@@ -81,7 +74,7 @@ const Chat = () => {
       sessionId: string;
       payload: UpdateSessionDataPayload;
     }) => {
-      const response = await updateSession(sessionId, payload);
+      const response = await updateSession(sessionId, agentId, payload);
 
       return response.data;
     },

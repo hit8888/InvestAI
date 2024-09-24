@@ -29,7 +29,6 @@ export type BrowserSignature = {
 };
 
 export type InitializationPayload = {
-  url: string;
   session_id?: string;
   prospect_id?: string;
   browser_signature?: Partial<BrowserSignature>;
