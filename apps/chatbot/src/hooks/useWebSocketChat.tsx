@@ -2,10 +2,12 @@ import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
+import { ChatParams } from "../types/msc";
 import { trackError } from "../utils/error";
 
 const MAX_RETRIES = 5;
@@ -15,8 +17,8 @@ const MAX_RETRY_INTERVAL = 20000;
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
+  const { orgName = "" } = useParams<ChatParams>();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const orgName = useChatStore((state) => state.orgName);
   const session = useChatStore((state) => state.session);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
