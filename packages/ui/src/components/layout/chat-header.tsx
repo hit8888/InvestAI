@@ -1,6 +1,6 @@
 import { ChatConfig } from "@meaku/core/types/config";
 import { XIcon } from "lucide-react";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
 import Logo from "../icons/logo";
@@ -13,6 +13,7 @@ type Props = {
   handleClose?: () => void;
   title?: string;
   subtitle?: string;
+  logoURL?: string;
 };
 
 const ChatHeader = (props: Props) => {
@@ -23,18 +24,21 @@ const ChatHeader = (props: Props) => {
     handleClose,
     title,
     subtitle,
+    logoURL,
   } = props;
 
   const isConfigWidget = config === ChatConfig.WIDGET;
   const showHeaderText = !isConfigWidget || !showMinimizedHeader;
+  const showOrgLogoInHeader =
+    !isConfigWidget && !!logoURL && !showMinimizedHeader;
 
   const headerText = useMemo(() => {
-    if (title) return title;
+    if (subtitle) return subtitle;
 
     if (isConfigWidget)
       return `Need help navigating ${orgName}? Our AI assistant is here to answer your questions.`;
     return `You’re now talking to Sam, our Smart Agent at ${orgName}.`;
-  }, [orgName, title, isConfigWidget]);
+  }, [orgName, subtitle, isConfigWidget]);
 
   return (
     <div className="ui-bg-primary ui-p-4 ui-text-primary-foreground">
@@ -48,6 +52,10 @@ const ChatHeader = (props: Props) => {
           >
             {showMinimizedHeader && (
               <WrappedLogo inverted showRippleAnimation />
+            )}
+
+            {showOrgLogoInHeader && (
+              <img src={logoURL} alt="Organization Logo" className="ui-w-8" />
             )}
 
             <button onClick={handleClose}>
@@ -65,7 +73,7 @@ const ChatHeader = (props: Props) => {
                 </div>
               </div>
               <h2 className="ui-text-center ui-text-lg ui-font-medium">
-                {subtitle || "Hello!"}
+                {title ?? "Hello!"}
               </h2>
             </div>
           )}
@@ -86,4 +94,4 @@ const ChatHeader = (props: Props) => {
   );
 };
 
-export default ChatHeader;
+export default memo(ChatHeader);
