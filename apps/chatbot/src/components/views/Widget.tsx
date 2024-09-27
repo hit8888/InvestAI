@@ -54,7 +54,7 @@ const Widget = () => {
 
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
-      <div className="ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden">
+      <div className="ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden ui-bg-white">
         {isChatOpen && (
           <>
             <ChatHeader orgName={orgName} config={ChatConfig.WIDGET} />
