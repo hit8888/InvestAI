@@ -3,7 +3,7 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
@@ -42,6 +42,15 @@ const Widget = () => {
   const handleCloseTooltip = () => {
     handleUpdateSessionData({ showTooltip: false });
   };
+
+  useEffect(() => {
+    const payload = {
+      chatOpen: isChatOpen,
+      tooltipOpen: showTooltip,
+    };
+
+    window.parent.postMessage(payload, "*");
+  }, [showTooltip, isChatOpen]);
 
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
