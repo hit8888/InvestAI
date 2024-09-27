@@ -3,6 +3,7 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
+import { cn } from "@meaku/ui/lib/cn";
 import { memo, useEffect } from "react";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
@@ -43,6 +44,10 @@ const Widget = () => {
     handleUpdateSessionData({ showTooltip: false });
   };
 
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+  };
+
   useEffect(() => {
     const payload = {
       chatOpen: isChatOpen,
@@ -54,10 +59,18 @@ const Widget = () => {
 
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
-      <div className="ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden ui-bg-white">
+      <div
+        className={cn("ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden", {
+          "ui-bg-white": isChatOpen,
+        })}
+      >
         {isChatOpen && (
           <>
-            <ChatHeader orgName={orgName} config={ChatConfig.WIDGET} />
+            <ChatHeader
+              orgName={orgName}
+              config={ChatConfig.WIDGET}
+              handleClose={handleCloseChat}
+            />
             <ChatMessage
               messages={messages}
               suggestedQuestions={suggestedQuestions}
