@@ -17,7 +17,7 @@ export default defineConfig({
     sentryVitePlugin({
       org: "breakout",
       project: "react-frontend",
-      authToken: process.env.SENTRY_AUTH_TOKEN,
+      authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
       sourcemaps: {
         assets: "./dist/**",
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
