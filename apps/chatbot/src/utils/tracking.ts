@@ -37,26 +37,117 @@ export const getBrowserSignature = (): Partial<BrowserSignature> => ({
   userAgent: navigator.userAgent,
   platform: navigator.platform,
   language: navigator.language,
-  screen: {
-    width: window.screen.width,
-    height: window.screen.height,
-    colorDepth: window.screen.colorDepth,
-    pixelDepth: window.screen.pixelDepth,
-    orientation: window.screen.orientation.type,
-  },
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  plugins: Array.from(navigator.plugins).map((plugin) => plugin.name),
-  mimeTypes: Array.from(navigator.mimeTypes).map((mimeType) => mimeType.type),
-  hardwareConcurrency: navigator.hardwareConcurrency,
-  deviceMemory: navigator.deviceMemory,
-  touchPoints: navigator.maxTouchPoints,
-  cookieEnabled: navigator.cookieEnabled,
-  online: navigator.onLine,
-  webGL: getWebGLInfo(),
-  canvas: getCanvasFingerprint(),
-  localStorage: !!window.localStorage,
-  sessionStorage: !!window.sessionStorage,
-  indexedDB: !!window.indexedDB,
-  doNotTrack:
-    navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack,
+  screen: (() => {
+    try {
+      return {
+        width: window.screen.width,
+        height: window.screen.height,
+        colorDepth: window.screen.colorDepth,
+        pixelDepth: window.screen.pixelDepth,
+        orientation: window.screen.orientation.type,
+      };
+    } catch {
+      return undefined;
+    }
+  })(),
+  timezone: (() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch {
+      return undefined;
+    }
+  })(),
+  plugins: (() => {
+    try {
+      return Array.from(navigator.plugins).map((plugin) => plugin.name);
+    } catch {
+      return [];
+    }
+  })(),
+  mimeTypes: (() => {
+    try {
+      return Array.from(navigator.mimeTypes).map((mimeType) => mimeType.type);
+    } catch {
+      return [];
+    }
+  })(),
+  hardwareConcurrency: (() => {
+    try {
+      return navigator.hardwareConcurrency;
+    } catch {
+      return undefined;
+    }
+  })(),
+  deviceMemory: (() => {
+    try {
+      return navigator.deviceMemory;
+    } catch {
+      return undefined;
+    }
+  })(),
+  touchPoints: (() => {
+    try {
+      return navigator.maxTouchPoints;
+    } catch {
+      return undefined;
+    }
+  })(),
+  cookieEnabled: (() => {
+    try {
+      return navigator.cookieEnabled;
+    } catch {
+      return undefined;
+    }
+  })(),
+  online: (() => {
+    try {
+      return navigator.onLine;
+    } catch {
+      return undefined;
+    }
+  })(),
+  webGL: (() => {
+    try {
+      return getWebGLInfo();
+    } catch {
+      return null;
+    }
+  })(),
+  canvas: (() => {
+    try {
+      return getCanvasFingerprint();
+    } catch {
+      return null;
+    }
+  })(),
+  localStorage: (() => {
+    try {
+      return !!window.localStorage;
+    } catch {
+      return false;
+    }
+  })(),
+  sessionStorage: (() => {
+    try {
+      return !!window.sessionStorage;
+    } catch {
+      return false;
+    }
+  })(),
+  indexedDB: (() => {
+    try {
+      return !!window.indexedDB;
+    } catch {
+      return false;
+    }
+  })(),
+  doNotTrack: (() => {
+    try {
+      return (
+        navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack
+      );
+    } catch {
+      return undefined;
+    }
+  })(),
 });
