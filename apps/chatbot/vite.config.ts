@@ -13,7 +13,7 @@ export default defineConfig({
     react(),
     sentryVitePlugin({
       org: "breakout",
-      project: "react-frontend/",
+      project: "react-frontend",
       authToken: process.env.SENTRY_AUTH_TOKEN,
       sourcemaps: {
         assets: "./dist/**",
