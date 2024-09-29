@@ -1,5 +1,8 @@
+import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
+import useAnalytics from "@meaku/core/hooks/useAnalytics";
 import { Message } from "@meaku/core/types/chat";
-import ReactMarkdown from "react-markdown";
+import { useEffect } from "react";
+import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
 import { cn } from "../../lib/cn";
 import UserAvatarIcon from "../icons/user";
@@ -9,12 +12,47 @@ type Props = {
   message: Message;
 };
 
+const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
+  const { href, ...rest } = props;
+
+  return <a href={href} {...rest} target="_blank" rel="noreferrer" />;
+};
+
 const MessageItem = (props: Props) => {
   const { message } = props;
+
+  const { trackEvent } = useAnalytics();
 
   const isSenderBot = message.role === "ai";
   const isLoading = message.is_loading;
   const videoURL = message.media?.type === "VIDEO" && message.media.url;
+
+  const reactMarkdownComponents: Partial<Components> = {
+    a: MesageLink,
+  };
+
+  const handleMessageClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const isLink = target.tagName === "A";
+
+    if (isLink) {
+      trackEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
+        link: (target as HTMLAnchorElement).href,
+        message: message.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const messageContent = message.message;
+    const doesMessageContainLink = messageContent.includes("http");
+
+    if (doesMessageContainLink) {
+      trackEvent(ANALYTICS_EVENT_NAMES.LINK_VIEWED, {
+        message: messageContent,
+      });
+    }
+  }, [message.message]);
 
   return (
     <div
@@ -51,8 +89,14 @@ const MessageItem = (props: Props) => {
           {isSenderBot && (
             <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
           )}
-          <div className="ui-prose ui-text-sm md:ui-text-[15px]">
-            <ReactMarkdown remarkPlugins={[gfm]}>
+          <div
+            className="ui-prose ui-text-sm md:ui-text-[15px]"
+            onClick={handleMessageClick}
+          >
+            <ReactMarkdown
+              remarkPlugins={[gfm]}
+              components={reactMarkdownComponents}
+            >
               {message.message}
             </ReactMarkdown>
           </div>

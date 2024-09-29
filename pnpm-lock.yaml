@@ -20,6 +20,9 @@ importers:
 
   apps/chatbot:
     dependencies:
+      '@amplitude/analytics-browser':
+        specifier: ^2.11.7
+        version: 2.11.7
       '@sentry/react':
         specifier: ^8.30.0
         version: 8.30.0(react@18.3.1)
@@ -156,10 +159,22 @@ importers:
 
   packages/core:
     dependencies:
+      '@amplitude/analytics-browser':
+        specifier: ^2.11.7
+        version: 2.11.7
       zod:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@meaku/typescript-config':
+        specifier: workspace:*
+        version: link:../config-typescript
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-router-dom:
+        specifier: ^6.26.2
+        version: 6.26.2(react-dom@18.3.1)(react@18.3.1)
       typescript:
         specifier: ^5.6.2
         version: 5.6.2
@@ -232,6 +247,68 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  /@amplitude/analytics-browser@2.11.7:
+    resolution: {integrity: sha512-tbBeMA2n1JQJlHGEa1LQ7XrSGPM4YKrNdFKV+gDCzqOixx4wBwwYCxN33lVwCpJvCPAjtYonkAO2dq9d78U7Pw==}
+    dependencies:
+      '@amplitude/analytics-client-common': 2.3.3
+      '@amplitude/analytics-core': 2.5.2
+      '@amplitude/analytics-remote-config': 0.4.0
+      '@amplitude/analytics-types': 2.8.2
+      '@amplitude/plugin-autocapture-browser': 1.0.3
+      '@amplitude/plugin-page-view-tracking-browser': 2.3.3
+      tslib: 2.6.2
+    dev: false
+
+  /@amplitude/analytics-client-common@2.3.3:
+    resolution: {integrity: sha512-HOvD2A8DH0y2LATrQ0AhFSOCk6yZayebu4+UsEBT76Q7EEYtnc59WMCRRIi5Zv6OqHpOvABumF7g3HmL6ehTYA==}
+    dependencies:
+      '@amplitude/analytics-connector': 1.5.0
+      '@amplitude/analytics-core': 2.5.2
+      '@amplitude/analytics-types': 2.8.2
+      tslib: 2.6.2
+    dev: false
+
+  /@amplitude/analytics-connector@1.5.0:
+    resolution: {integrity: sha512-T8mOYzB9RRxckzhL0NTHwdge9xuFxXEOplC8B1Y3UX3NHa3BLh7DlBUZlCOwQgMc2nxDfnSweDL5S3bhC+W90g==}
+    dev: false
+
+  /@amplitude/analytics-core@2.5.2:
+    resolution: {integrity: sha512-4ojYUL7LA+qrlaz1n1nxpsbpgS1k6DOrQ3fBiQOuDJE8Av0aZfylDksFPnZvD1+MMdIm/ONkVAYfEaW3x/uH3Q==}
+    dependencies:
+      '@amplitude/analytics-types': 2.8.2
+      tslib: 2.6.2
+    dev: false
+
+  /@amplitude/analytics-remote-config@0.4.0:
+    resolution: {integrity: sha512-ilp9Dz8Z92V9Wilmz8XIbvEbtuVaN65+jM06JP8I7wL8eNOHVIi4HcI151BzIyekjbprbS1w18Ps3dj2sHlFXA==}
+    dependencies:
+      '@amplitude/analytics-client-common': 2.3.3
+      '@amplitude/analytics-core': 2.5.2
+      '@amplitude/analytics-types': 2.8.2
+      tslib: 2.6.2
+    dev: false
+
+  /@amplitude/analytics-types@2.8.2:
+    resolution: {integrity: sha512-SWFXIMxhFm1/k3PUvxvYLY1iwzS28yd9A6pa5pEnrbaAZwM+E/24ucxs59VGp1N5qlIsvF0aVGSoKzN4ydh4eA==}
+    dev: false
+
+  /@amplitude/plugin-autocapture-browser@1.0.3:
+    resolution: {integrity: sha512-XUQWUAw9VqtJPlmOyWjnhsEspyVakd9LuSjVNtLjhwlWv+f/yZM1AAQVUdq/Os1+b5OptSgJQ2pPfRJJHZDXTw==}
+    dependencies:
+      '@amplitude/analytics-client-common': 2.3.3
+      '@amplitude/analytics-types': 2.8.2
+      rxjs: 7.8.1
+      tslib: 2.6.2
+    dev: false
+
+  /@amplitude/plugin-page-view-tracking-browser@2.3.3:
+    resolution: {integrity: sha512-tGDt7aU/okGHH38sxZvBckRXBw2btkw+wJz/PmIFIQdD7/7EMVnTtXgZJTokE+fqfxCx79F2ojEHp37xgVSxpg==}
+    dependencies:
+      '@amplitude/analytics-client-common': 2.3.3
+      '@amplitude/analytics-types': 2.8.2
+      tslib: 2.6.2
+    dev: false
 
   /@ampproject/remapping@2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
@@ -1057,7 +1134,6 @@ packages:
   /@remix-run/router@1.19.2:
     resolution: {integrity: sha512-baiMx18+IMuD1yyvOGaHM9QrVUPGGG0jC+z+IPHnRJWUAUvaKuWKyE8gjDj2rzv3sz9zOGoRSPgeBVHRhZnBlA==}
     engines: {node: '>=14.0.0'}
-    dev: false
 
   /@rollup/rollup-android-arm-eabi@4.21.2:
     resolution: {integrity: sha512-fSuPrt0ZO8uXeS+xP3b+yYTCBUd05MoSp2N/MFOgjhhUhMmchXlpTQrTpI8T+YAwAQuK7MafsCOxW7VrPMrJcg==}
@@ -4061,6 +4137,7 @@ packages:
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
     dependencies:
       js-tokens: 4.0.0
 
@@ -5110,7 +5187,6 @@ packages:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
-    dev: false
 
   /react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
@@ -5157,7 +5233,6 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-router: 6.26.2(react@18.3.1)
-    dev: false
 
   /react-router@6.26.2(react@18.3.1):
     resolution: {integrity: sha512-tvN1iuT03kHgOFnLPfLJ8V95eijteveqdOSk+srqfePtQvqCExB8eHOYnlilbOcyJyKnYkr1vJvf7YqotAJu1A==}
@@ -5167,7 +5242,6 @@ packages:
     dependencies:
       '@remix-run/router': 1.19.2
       react: 18.3.1
-    dev: false
 
   /react-use-websocket@4.8.1(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-FTXuG5O+LFozmu1BRfrzl7UIQngECvGJmL7BHsK4TYXuVt+mCizVA8lT0hGSIF0Z0TedF7bOo1nRzOUdginhDw==}
@@ -5191,7 +5265,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
@@ -5384,6 +5457,12 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
 
+  /rxjs@7.8.1:
+    resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /safe-array-concat@1.0.1:
     resolution: {integrity: sha512-6XbUAseYE2KtOuGueyeobCySj9L4+66Tn6KQMOPQJrAJEowYKW/YR/MGJZl7FdydUdaFu4LYyDZjxf4/Nmo23Q==}
     engines: {node: '>=0.4'}
@@ -5406,7 +5485,6 @@ packages:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /screenfull@5.2.0:
     resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
