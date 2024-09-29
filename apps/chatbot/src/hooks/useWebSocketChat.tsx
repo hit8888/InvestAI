@@ -1,4 +1,6 @@
+import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
+import useAnalytics from "@meaku/core/hooks/useAnalytics";
 import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,6 +20,9 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
+
+  const { trackEvent } = useAnalytics();
+
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const session = useChatStore((state) => state.session);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -157,6 +162,12 @@ const useWebSocketChat = () => {
       });
     }
   }, [lastMessage]);
+
+  useEffect(() => {
+    if (hasFirstUserMessageBeenSent) {
+      trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+    }
+  }, [hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
     return () => {
