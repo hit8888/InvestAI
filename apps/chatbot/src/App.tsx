@@ -6,9 +6,11 @@ import router from "./router";
 
 function App() {
   useEffect(() => {
-    amplitude.init(ENV.VITE_AMPLITUDE_API_KEY, {
-      autocapture: true,
-    });
+    try {
+      amplitude.init(ENV.VITE_AMPLITUDE_API_KEY, {
+        autocapture: true,
+      });
+    } catch (error) {}
   }, []);
 
   return (
