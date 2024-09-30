@@ -4,7 +4,9 @@ import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
 import Logo from "../icons/logo";
+import RefreshChatIcon from "../icons/refresh";
 import WrappedLogo from "../icons/wrapped-logo";
+import Button from "./button";
 
 type Props = {
   config: ChatConfig;
@@ -14,6 +16,8 @@ type Props = {
   title?: string;
   subtitle?: string;
   logoURL?: string;
+  showRestartButton?: boolean;
+  handleRestart?: () => void;
 };
 
 const ChatHeader = (props: Props) => {
@@ -25,6 +29,8 @@ const ChatHeader = (props: Props) => {
     title,
     subtitle,
     logoURL,
+    showRestartButton = false,
+    handleRestart,
   } = props;
 
   const isConfigWidget = config === ChatConfig.WIDGET;
@@ -58,9 +64,11 @@ const ChatHeader = (props: Props) => {
               <img src={logoURL} alt="Organization Logo" className="ui-w-8" />
             )}
 
-            <button onClick={handleClose}>
-              <XIcon />
-            </button>
+            <div>
+              <button onClick={handleClose}>
+                <XIcon />
+              </button>
+            </div>
           </div>
 
           {!showMinimizedHeader && (
@@ -80,16 +88,33 @@ const ChatHeader = (props: Props) => {
         </div>
       )}
 
-      {showHeaderText && (
-        <h2
-          className={cn({
-            "ui-mt-2 ui-text-center": isConfigWidget,
-            "ui-text-sm": !isConfigWidget,
-          })}
-        >
-          {headerText}
-        </h2>
-      )}
+      <div
+        className={cn("ui-flex ui-items-center", {
+          "ui-justify-center": isConfigWidget,
+          "ui-justify-between": !isConfigWidget,
+        })}
+      >
+        {showHeaderText && (
+          <h2
+            className={cn({
+              "ui-mt-2 ui-text-center": isConfigWidget,
+              "ui-text-sm": !isConfigWidget,
+            })}
+          >
+            {headerText}
+          </h2>
+        )}
+
+        {showRestartButton && (
+          <Button
+            onClick={handleRestart}
+            size="icon"
+            className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
+          >
+            <RefreshChatIcon className="ui-text-primary" />
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

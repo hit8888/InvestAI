@@ -1,23 +1,50 @@
 import { Message } from "@meaku/core/types/chat";
+import {
+  FeedbackEnum,
+  InitialFeedbackPayload,
+} from "@meaku/core/types/feedback";
+import { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { cn } from "../../lib/cn";
 import UserAvatarIcon from "../icons/user";
 import WrappedLogo from "../icons/wrapped-logo";
+import FeedbackButton from "./feedback-button";
 
 type Props = {
   message: Message;
+  handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
 };
 
 const MessageItem = (props: Props) => {
-  const { message } = props;
+  const { message, handleShareInitialFeedback } = props;
 
   const isSenderBot = message.role === "ai";
   const isLoading = message.is_loading;
+  const isComplete = message.is_complete;
   const videoURL = message.media?.type === "VIDEO" && message.media.url;
+  // const showFeedbackButtons = showFeedback && isSenderBot && isComplete;
+  const showFeedbackButtons =
+    message.showFeedbackOptions && isSenderBot && isComplete;
+  const isFeedbackThumbUp = message.feedback_type === FeedbackEnum.THUMBS_UP;
+  const isFeedbackThumbDown =
+    message.feedback_type === FeedbackEnum.THUMBS_DOWN;
+
+  const handleSendResponseFeedback = useCallback(
+    (feedback: FeedbackEnum) => {
+      if (!handleShareInitialFeedback) return;
+
+      handleShareInitialFeedback({
+        responseId: message.id.toString(),
+        feedbackType: feedback,
+      });
+    },
+    [message.id],
+  );
 
   return (
     <div
+      id={`message-${message.id}`}
       className={cn("ui-flex ui-flex-col", {
         "ui-items-end ui-space-y-2": !isSenderBot,
         "ui-items-start": isSenderBot,
@@ -69,6 +96,20 @@ const MessageItem = (props: Props) => {
           <source src={videoURL} type="video/mp4" />
           Your browser does not support viewing this video.
         </video>
+      )}
+
+      {showFeedbackButtons && (
+        <div className="ui-mt-2 ui-flex ui-items-center ui-gap-2">
+          <FeedbackButton
+            isFilled={isFeedbackThumbUp}
+            onClick={() => handleSendResponseFeedback(FeedbackEnum.THUMBS_UP)}
+          />
+          <FeedbackButton
+            isFilled={isFeedbackThumbDown}
+            isInverted={true}
+            onClick={() => handleSendResponseFeedback(FeedbackEnum.THUMBS_DOWN)}
+          />
+        </div>
       )}
     </div>
   );
