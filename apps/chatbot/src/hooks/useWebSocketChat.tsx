@@ -1,12 +1,16 @@
 import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
+import InitializeSessionResponseManager from "../managers/InitializeSessionResponseManager";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
+import { ChatParams } from "../types/msc";
 import { trackError } from "../utils/error";
+import useInitializeSessionData from "./query/useInitializeSessionData";
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -15,9 +19,11 @@ const MAX_RETRY_INTERVAL = 20000;
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
+  const { orgName = "" } = useParams<ChatParams>();
+
+  const { session, isAdmin } = useInitializeSessionData();
+
   const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const orgName = useChatStore((state) => state.orgName);
-  const session = useChatStore((state) => state.session);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
@@ -42,6 +48,14 @@ const useWebSocketChat = () => {
   const setIsAMessageBeingProcessed = useMessageStore(
     (state) => state.setIsAMessageBeingProcessed,
   );
+
+  const manager = useMemo(() => {
+    if (!session) return;
+
+    return new InitializeSessionResponseManager(session);
+  }, [session]);
+
+  const sessionId = manager?.getSessionId() ?? "";
 
   const wsUrl = orgName
     ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
@@ -80,7 +94,7 @@ const useWebSocketChat = () => {
       const messageId = nanoid();
 
       const payload = {
-        session_id: session?.session_id,
+        session_id: sessionId,
         message,
         response_id: messageId,
       };
@@ -132,7 +146,7 @@ const useWebSocketChat = () => {
         messageIndex++;
       }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
     },
-    [hasFirstUserMessageBeenSent, session, isChatOpen],
+    [hasFirstUserMessageBeenSent, session, isChatOpen, isAdmin],
   );
 
   useEffect(() => {
@@ -141,6 +155,7 @@ const useWebSocketChat = () => {
     try {
       clearInterval(processingMessageInterval.current as NodeJS.Timeout);
       const response = JSON.parse(lastMessage.data) as AIResponse;
+      response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
 
       if (response.is_complete) {
