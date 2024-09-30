@@ -13,8 +13,10 @@ const Widget = () => {
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const orgName = useChatStore((state) => state.orgName) ?? "";
-  const agentId = useChatStore((state) => state.agentId) ?? "";
   const session = useChatStore((state) => state.session);
+  const hasFirstUserMessageBeenSent = useChatStore(
+    (state) => state.hasFirstUserMessageBeenSent,
+  );
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -25,10 +27,7 @@ const Widget = () => {
   );
 
   const { handleSendUserMessage } = useWebSocketChat();
-  const { sessionData, handleUpdateSessionData } = useLocalStorageSession({
-    orgName,
-    agentId,
-  });
+  const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const tooltipSuggestedQuestions =
     session?.configuration.body.welcome_message.suggested_questions ?? [];
@@ -48,7 +47,11 @@ const Widget = () => {
       <div className="ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden">
         {isChatOpen && (
           <>
-            <ChatHeader orgName={orgName} config={ChatConfig.WIDGET} />
+            <ChatHeader
+              orgName={orgName}
+              config={ChatConfig.WIDGET}
+              showMinimizedHeader={hasFirstUserMessageBeenSent}
+            />
             <ChatMessage
               messages={messages}
               suggestedQuestions={suggestedQuestions}
