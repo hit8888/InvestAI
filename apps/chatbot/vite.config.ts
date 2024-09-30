@@ -13,8 +13,9 @@ export default defineConfig({
   plugins: [
     react(),
     sentryVitePlugin({
-      org: "acme-30",
-      project: "javascript-react",
+      org: "breakout",
+      project: "react-frontend",
+      authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
       sourcemaps: {
         assets: "./dist/**",
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
