@@ -31,9 +31,9 @@ const MessageItem = (props: Props) => {
   const isLoading = message.is_loading;
   const isComplete = message.is_complete;
   const videoURL = message.media?.type === "VIDEO" && message.media.url;
-  const showDocuments = message.documents?.length > 0;
   const showFeedbackButtons =
     message.showFeedbackOptions && isSenderBot && isComplete;
+  const showDocuments = showFeedbackButtons && message.documents?.length > 0;
   const isFeedbackThumbUp = Boolean(
     message.feedback?.positive_feedback === true,
   );
