@@ -32,7 +32,7 @@ export const ConfigurationSchema = z.object({
 export const SessionSchema = z.object({
   agent_id: z.number(),
   session_id: z.string(),
-  prospect_id: z.number(),
+  prospect_id: z.string(),
   configuration: ConfigurationSchema,
 });
 
