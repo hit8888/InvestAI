@@ -35,7 +35,7 @@ const useInitializeSessionData = () => {
         session_id: sessionDataInLocalStorage?.sessionId,
         prospect_id: sessionDataInLocalStorage?.prospectId,
         browser_signature: getBrowserSignature(),
-        // is_admin: isAdmin,
+        is_admin: isAdmin,
       });
 
       const session = response.data as Session;
