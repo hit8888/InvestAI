@@ -122,7 +122,7 @@ const MessageItem = (props: Props) => {
                   </div>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="ui-pb-0">
+              <AccordionContent className="!ui-pb-0">
                 <div className="ui-bg-primary/20">
                   {message.documents.map((doc, idx) => (
                     <div
