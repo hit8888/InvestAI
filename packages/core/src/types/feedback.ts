@@ -3,11 +3,6 @@ export enum FeedbackEnum {
   THUMBS_DOWN = "thumbs_down",
 }
 
-export type Feedback = {
-  responseId: string;
-  feedback: FeedbackEnum;
-};
-
 export type InitialFeedbackPayload = {
   responseId: string;
   feedbackType: FeedbackEnum;

@@ -15,6 +15,7 @@ interface IProps {
   showFeedbackRating?: boolean;
   showFeedbackForm?: boolean;
   activeRating?: string;
+  existingFeedback?: string;
   handleCloseFeedbackContainer: () => void;
   handleShareFeedback: (payload: DetailedFeedbackPayload) => void;
 }
@@ -25,11 +26,12 @@ const FeedbackContainer = (props: IProps) => {
     showFeedbackRating,
     showFeedbackForm,
     activeRating,
+    existingFeedback,
     handleCloseFeedbackContainer,
     handleShareFeedback,
   } = props;
 
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(existingFeedback ?? "");
 
   const textAreaRef = useAutoResizeTextArea({
     textAreaValue: inputValue,

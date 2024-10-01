@@ -8,7 +8,11 @@ class InitializeSessionResponseManager {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
-      throw new Error("Invalid session data");
+      console.log(validatedSession.error.errors);
+
+      throw new Error(
+        validatedSession.error.errors.map((error) => error.message).join(", "),
+      );
     }
 
     this.session = validatedSession.data;
@@ -28,6 +32,8 @@ class InitializeSessionResponseManager {
 
   getFormattedChatHistory(isAdmin: boolean = false): Message[] {
     const chatHistory = this.session.configuration.body.chat_history;
+    const feedbacks = this.session.configuration.body.feedback ?? [];
+
     return chatHistory.map((message, idx) => ({
       id: message.message_id,
       message: message.message,
@@ -38,6 +44,10 @@ class InitializeSessionResponseManager {
       isPartOfHistory: true,
       is_complete: true,
       showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
+      feedback:
+        feedbacks.find(
+          (feedback) => feedback.response_id === message.message_id.toString(),
+        ) ?? undefined,
     }));
   }
 

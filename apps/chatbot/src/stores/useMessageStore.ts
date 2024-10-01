@@ -1,5 +1,5 @@
 import { AIResponse, Message } from "@meaku/core/types/chat";
-import { FeedbackEnum } from "@meaku/core/types/feedback";
+import { Feedback } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -16,10 +16,11 @@ interface State {
   handleAddUserMessage: (message: string) => void;
   handleAddMessageFeedback: (
     messageId: string,
-    feedback: {
-      feedback_type: FeedbackEnum;
-      feedback: string;
-    },
+    feedback: Partial<Feedback>,
+  ) => void;
+  handleRemoveMessageFeedback: (
+    messageId: string,
+    previousState?: Message,
   ) => void;
 }
 
@@ -90,10 +91,32 @@ export const useMessageStore = create<State>()(
 
           if (messageIndex === -1) return;
 
+          const existingFeedback = draft.messages[messageIndex].feedback;
+          const updatedFeedback = {
+            ...existingFeedback,
+            ...feedback,
+            positive_feedback: feedback.positive_feedback ?? false,
+          };
+
+          if (updatedFeedback.positive_feedback)
+            delete updatedFeedback.category;
+
           draft.messages[messageIndex] = {
             ...draft.messages[messageIndex],
-            feedback_type: feedback.feedback_type,
-            feedback: feedback.feedback,
+            feedback: updatedFeedback,
+          };
+        }),
+      handleRemoveMessageFeedback: (messageId, previousState) =>
+        set((draft) => {
+          const messageIndex = draft.messages.findIndex(
+            (message) => message.id == messageId,
+          );
+
+          if (messageIndex === -1) return;
+
+          draft.messages[messageIndex] = {
+            ...draft.messages[messageIndex],
+            feedback: previousState?.feedback ?? undefined,
           };
         }),
     })),

@@ -21,7 +21,7 @@ const useInitializeSessionData = () => {
     (state) => state.setSuggestedQuestions,
   );
 
-  const isAdmin = pathname.includes("feedback");
+  const isAdmin = pathname.includes("/demo/");
 
   const {
     data: session,
@@ -31,12 +31,11 @@ const useInitializeSessionData = () => {
   } = useQuery({
     queryKey: ["session-initializer"],
     queryFn: async () => {
-      if (!orgName || !agentId) return;
-
       const response = await initializeSession(orgName, agentId, {
         session_id: sessionDataInLocalStorage?.sessionId,
         prospect_id: sessionDataInLocalStorage?.prospectId,
         browser_signature: getBrowserSignature(),
+        // is_admin: isAdmin,
       });
 
       const session = response.data as Session;

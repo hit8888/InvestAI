@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FeedbackEnum } from "./feedback";
+import { Feedback } from "./session";
 
 export const DocumentSchema = z.object({
   id: z.number(),
@@ -17,6 +17,7 @@ export const MediaSchema = z.object({
 
 export const MessageSchema = z.object({
   message_id: z.number(),
+  response_id: z.string().nullable(),
   session_id: z.string(),
   role: z.enum(["user", "ai"]),
   message: z.string(),
@@ -38,6 +39,7 @@ export const AIResponseSchema = z.object({
 
 export type Message = {
   id: number | string;
+  // response_id: string | null;
   // id: number | string | null; // temporary to accomodate backend changes
   message: string;
   media: z.infer<typeof MediaSchema> | null;
@@ -47,8 +49,7 @@ export type Message = {
   isPartOfHistory?: boolean;
   is_loading?: boolean;
   is_complete?: boolean;
-  feedback_type?: FeedbackEnum;
-  feedback?: string;
+  feedback?: Feedback;
   showFeedbackOptions?: boolean;
 };
 

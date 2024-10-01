@@ -9,6 +9,7 @@ import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import FeedbackContainer from "@meaku/ui/components/layout/feedback-containter";
 import { useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
@@ -16,6 +17,7 @@ import useWebSocketChat from "../../../hooks/useWebSocketChat";
 import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
+import { trackError } from "../../../utils/error";
 
 const Feedback = () => {
   const { session } = useInitializeSessionData();
@@ -33,35 +35,41 @@ const Feedback = () => {
   const handleAddMessageFeedback = useMessageStore(
     (state) => state.handleAddMessageFeedback,
   );
-
-  // const activeFeedbackType = useFeedbackStore(
-  //   (state) => state.activeFeedbackType,
-  // );
-  const setActiveFeedbackType = useFeedbackStore(
-    (state) => state.setActiveFeedbackType,
+  const handleRemoveMessageFeedback = useMessageStore(
+    (state) => state.handleRemoveMessageFeedback,
   );
-  const activeRating = useFeedbackStore((state) => state.activeRating) ?? "";
-  const setActiveRating = useFeedbackStore((state) => state.setActiveRating);
+
   const activeResponseId =
     useFeedbackStore((state) => state.activeResponseId) ?? "";
   const setActiveResponseId = useFeedbackStore(
     (state) => state.setActiveResponseId,
   );
-  const showRatingOptions = useFeedbackStore(
-    (state) => state.showRatingOptions,
-  );
-  const setShowRatingOptions = useFeedbackStore(
-    (state) => state.setShowRatingOptions,
-  );
-  const showRatingForm = useFeedbackStore((state) => state.showRatingForm);
-  const setShowRatingForm = useFeedbackStore(
-    (state) => state.setShowRatingForm,
-  );
-  const handleClearFeedback = useFeedbackStore(
-    (state) => state.handleClearFeedback,
-  );
 
-  const { mutateAsync: handlePostResponseFeedback } = useResponseFeedback();
+  const { mutateAsync: handlePostResponseFeedback } = useResponseFeedback({
+    onError: (error, payload) => {
+      trackError(error, {
+        action: "handlePostResponseFeedback",
+        sessionId: payload.sessionId,
+        component: "Feedback",
+      });
+
+      handleRemoveMessageFeedback(payload.payload.response_id);
+    },
+    onSuccess: (
+      _data,
+      { payload: { positive_feedback, category, remarks } },
+    ) => {
+      let isCompleteFeedback = false;
+
+      if (positive_feedback && remarks) isCompleteFeedback = true;
+      if (!positive_feedback && category && remarks) isCompleteFeedback = true;
+
+      if (isCompleteFeedback) {
+        toast.success("Thanks for your feedback!");
+        setActiveResponseId(null);
+      }
+    },
+  });
 
   const manager = useMemo(() => {
     if (!session) return;
@@ -73,28 +81,24 @@ const Feedback = () => {
   const isC2FO = orgName?.toLowerCase() === "c2fo";
   const sessionId = manager?.getSessionId() ?? "";
 
+  const activeResponse = messages.find(
+    (message) => message.id == activeResponseId,
+  );
+  const isActiveResponseFeedbackNegative =
+    activeResponse?.feedback?.positive_feedback === false;
+  const showRatingOptions = isActiveResponseFeedbackNegative;
+  const showRatingForm =
+    activeResponse?.feedback?.positive_feedback === true ||
+    (isActiveResponseFeedbackNegative && !!activeResponse?.feedback?.category);
+
   const handleShareInitialFeedback = async ({
     responseId,
     feedbackType,
   }: InitialFeedbackPayload) => {
     setActiveResponseId(responseId);
-    setActiveFeedbackType(feedbackType);
     handleAddMessageFeedback(responseId, {
-      feedback_type: feedbackType,
-      feedback: "",
+      positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
     });
-
-    switch (feedbackType) {
-      case FeedbackEnum.THUMBS_UP:
-        setShowRatingForm(true);
-        setShowRatingOptions(false);
-        break;
-
-      case FeedbackEnum.THUMBS_DOWN:
-        setShowRatingOptions(true);
-        setShowRatingForm(false);
-        break;
-    }
 
     await handlePostResponseFeedback({
       sessionId,
@@ -109,16 +113,27 @@ const Feedback = () => {
     feedbackOption,
     feedback,
   }: DetailedFeedbackPayload) => {
-    if (feedbackOption) setActiveRating(feedbackOption);
+    if (feedbackOption)
+      handleAddMessageFeedback(activeResponseId, { category: feedbackOption });
 
-    if (!feedback) {
-      setShowRatingForm(true);
+    const response = messages.find((message) => message.id == activeResponseId);
+
+    if (!response) {
+      toast.error("An error occurred while sharing feedback.");
+      return;
     }
+
+    handleAddMessageFeedback(activeResponseId, {
+      positive_feedback: response.feedback?.positive_feedback ?? false,
+      category: feedbackOption,
+      remarks: feedback,
+    });
 
     await handlePostResponseFeedback({
       sessionId,
       payload: {
         response_id: activeResponseId,
+        positive_feedback: response.feedback?.positive_feedback ?? false,
         category: feedbackOption,
         remarks: feedback,
       },
@@ -127,7 +142,6 @@ const Feedback = () => {
 
   const handleCloseFeedbackContainer = () => {
     setActiveResponseId(null);
-    setActiveRating(null);
   };
 
   const handleRefreshChat = () => {
@@ -143,7 +157,7 @@ const Feedback = () => {
   useEffect(() => {
     if (!activeResponseId) {
       setTimeout(() => {
-        handleClearFeedback();
+        setActiveResponseId(null);
       }, 100);
     }
   }, [activeResponseId]);
@@ -164,10 +178,12 @@ const Feedback = () => {
         handleShareInitialFeedback={handleShareInitialFeedback}
       />
       <FeedbackContainer
+        key={activeResponseId}
         showFeedbackContainer={Boolean(activeResponseId)}
         showFeedbackRating={showRatingOptions}
         showFeedbackForm={showRatingForm}
-        activeRating={activeRating}
+        activeRating={activeResponse?.feedback?.category ?? ""}
+        existingFeedback={activeResponse?.feedback?.remarks ?? ""}
         handleCloseFeedbackContainer={handleCloseFeedbackContainer}
         handleShareFeedback={handleShareDetailedFeedback}
       />
