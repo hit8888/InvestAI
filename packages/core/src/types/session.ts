@@ -8,6 +8,21 @@ export const FeedbackSchema = z.object({
   remarks: z.string().nullable().optional(),
 });
 
+export const DataSourceSchema = z.object({
+  id: z.number(),
+  data_source_id: z.number(),
+  title: z.string().nullable(),
+  url: z.string().nullable(),
+  data_source_name: z.string(),
+  data_source_type: z.string(),
+  text: z.string().nullable(),
+});
+
+export const DocumentSchema = z.object({
+  response_id: z.string().nullable(),
+  data_sources: z.array(DataSourceSchema),
+});
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -25,6 +40,7 @@ export const ConfigurationSchema = z.object({
     }),
     chat_history: z.array(MessageSchema),
     feedback: z.array(FeedbackSchema).optional(),
+    documents: z.array(DocumentSchema).optional(),
   }),
   style_config: z.object({
     primary: z.string().optional(),

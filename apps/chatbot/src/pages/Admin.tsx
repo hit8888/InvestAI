@@ -30,7 +30,7 @@ const Admin = () => {
   return (
     <div className="ui-h-screen">
       <Backdrop className="ui-flex ui-items-center ui-justify-center">
-        <div className="ui-flex ui-h-4/5 ui-w-11/12 ui-flex-col ui-overflow-hidden ui-rounded-xl ui-bg-white lg:ui-w-10/12 xl:ui-w-9/12">
+        <div className="ui-flex ui-h-4/5 ui-w-11/12 ui-max-w-7xl ui-flex-col ui-overflow-hidden ui-rounded-xl ui-bg-white lg:ui-w-10/12 xl:ui-w-9/12">
           <Suspense fallback={<></>}>
             <Component />
           </Suspense>
