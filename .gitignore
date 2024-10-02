@@ -17,6 +17,9 @@ build
 # misc
 .DS_Store
 *.pem
+*.tsbuildinfo
+vite.config.ts.timestamp-*
+
 
 # debug
 npm-debug.log*

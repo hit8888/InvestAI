@@ -14,7 +14,7 @@ function App() {
   }, []);
 
   return (
-    <main className="h-screen">
+    <main>
       <RouterProvider router={router} />
     </main>
   );

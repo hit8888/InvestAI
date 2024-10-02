@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { MessageSchema } from "./chat";
 
+export const FeedbackSchema = z.object({
+  response_id: z.string(),
+  positive_feedback: z.boolean(),
+  category: z.string().nullable().optional(),
+  remarks: z.string().nullable().optional(),
+});
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -17,6 +24,7 @@ export const ConfigurationSchema = z.object({
       suggested_questions: z.array(z.string()),
     }),
     chat_history: z.array(MessageSchema),
+    feedback: z.array(FeedbackSchema).optional(),
   }),
   style_config: z.object({
     primary: z.string().optional(),
@@ -32,10 +40,12 @@ export const ConfigurationSchema = z.object({
 export const SessionSchema = z.object({
   agent_id: z.number(),
   session_id: z.string(),
-  prospect_id: z.number(),
+  prospect_id: z.string(),
   configuration: ConfigurationSchema,
 });
 
 export type Configuration = z.infer<typeof ConfigurationSchema>;
 
 export type Session = z.infer<typeof SessionSchema>;
+
+export type Feedback = Omit<z.infer<typeof FeedbackSchema>, "response_id">;

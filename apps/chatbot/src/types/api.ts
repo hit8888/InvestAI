@@ -32,6 +32,7 @@ export type InitializationPayload = {
   session_id?: string;
   prospect_id?: string;
   browser_signature?: Partial<BrowserSignature>;
+  is_admin?: boolean;
 };
 
 export const UpdateSessionDataPayloadSchema = z.object({
@@ -43,3 +44,16 @@ export const UpdateSessionDataPayloadSchema = z.object({
 export type UpdateSessionDataPayload = z.infer<
   typeof UpdateSessionDataPayloadSchema
 >;
+
+export type PostResponseFeedbackPayload = {
+  response_id: string;
+  positive_feedback: boolean;
+  category?: string;
+  remarks?: string;
+};
+
+export type UpdateProspectPayload = {
+  name?: string;
+  email?: string;
+  external_id?: string;
+};

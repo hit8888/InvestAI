@@ -1,6 +1,7 @@
 import twForms from "@tailwindcss/forms";
 import twTypography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
+import twAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
 
 // We want each package to be responsible for its own content.
@@ -50,6 +51,8 @@ const config: Omit<Config, "content"> = {
       animation: {
         ripple: "ripple 1s infinite ease-in-out",
         wave: "wave 1.5s infinite",
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
       keyframes: {
         ripple: {
@@ -75,10 +78,18 @@ const config: Omit<Config, "content"> = {
           "70%": { transform: "rotate(0.0deg)" },
           "100%": { transform: "rotate(0.0deg)" },
         },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       },
     },
   },
-  plugins: [twTypography, twForms],
+  plugins: [twTypography, twForms, twAnimate],
 };
 
 export default config;

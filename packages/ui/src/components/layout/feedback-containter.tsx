@@ -1,0 +1,107 @@
+import { DetailedFeedbackPayload } from "@meaku/core/types/feedback";
+import { XIcon } from "lucide-react";
+import { memo, useState } from "react";
+import useAutoResizeTextArea from "../../hooks/useAutoResizeTextArea";
+import { cn } from "../../lib/cn";
+import Button from "./button";
+import FeedbackRating from "./feedback-rating";
+import TextArea from "./textarea";
+
+const INITIAL_INPUT_HEIGHT = 40; // px
+const MAX_INPUT_HEIGHT = 100; // px
+
+interface IProps {
+  showFeedbackContainer?: boolean;
+  showFeedbackRating?: boolean;
+  showFeedbackForm?: boolean;
+  activeRating?: string;
+  existingFeedback?: string;
+  handleCloseFeedbackContainer: () => void;
+  handleShareFeedback: (payload: DetailedFeedbackPayload) => void;
+}
+
+const FeedbackContainer = (props: IProps) => {
+  const {
+    showFeedbackContainer,
+    showFeedbackRating,
+    showFeedbackForm,
+    activeRating,
+    existingFeedback,
+    handleCloseFeedbackContainer,
+    handleShareFeedback,
+  } = props;
+
+  const [inputValue, setInputValue] = useState(existingFeedback ?? "");
+
+  const textAreaRef = useAutoResizeTextArea({
+    textAreaValue: inputValue,
+    initialHeight: INITIAL_INPUT_HEIGHT,
+    maxHeight: MAX_INPUT_HEIGHT,
+  });
+
+  const handleShareRating = (rating: string) => {
+    handleShareFeedback({ feedbackOption: rating });
+  };
+
+  const handleShareDetailedFeedback = () => {
+    handleShareFeedback({
+      feedbackOption: activeRating,
+      feedback: inputValue,
+    });
+  };
+
+  return (
+    <div
+      className={cn(
+        "ui-overflow-hidden ui-transition-all ui-duration-300 ui-ease-in-out",
+        {
+          "ui-max-h-0": !showFeedbackContainer,
+          "ui-max-h-[301px]": showFeedbackContainer,
+        },
+      )}
+    >
+      <div className="ui-p-4">
+        <div className="ui-rounded-lg ui-bg-gray-50 ui-p-4 ui-text-gray-800">
+          <div className="ui-flex ui-items-center ui-justify-between">
+            <h3 className="ui-text-sm">
+              Please provide more details about your rating
+            </h3>
+            <button onClick={handleCloseFeedbackContainer}>
+              <XIcon className="ui-h-4 ui-w-4" />
+            </button>
+          </div>
+          <div>
+            {showFeedbackRating && (
+              <div className="ui-mt-6">
+                <FeedbackRating
+                  activeRating={activeRating}
+                  handleShareRating={handleShareRating}
+                />
+              </div>
+            )}
+            {showFeedbackForm && (
+              <div className="ui-mt-3">
+                <TextArea
+                  ref={textAreaRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="We appreciate a more detailed feedback :)"
+                />
+              </div>
+            )}
+          </div>
+          <div className="ui-mt-6 ui-flex ui-items-center ui-justify-end">
+            <Button
+              onClick={handleShareDetailedFeedback}
+              className="ui-h-auto ui-bg-transparent !ui-p-0 ui-text-sm ui-font-medium !ui-text-primary ui-transition-colors ui-duration-300 hover:ui-text-primary/80"
+            >
+              Submit
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default memo(FeedbackContainer);

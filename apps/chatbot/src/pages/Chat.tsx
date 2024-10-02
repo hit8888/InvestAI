@@ -31,7 +31,7 @@ const Chat = () => {
   const [searchParams] = useSearchParams();
 
   const { sessionData: sessionDataInLocalStorage, handleUpdateSessionData } =
-    useLocalStorageSession({ orgName, agentId });
+    useLocalStorageSession();
 
   const setOrgName = useChatStore((state) => state.setOrgName);
   const setAgentId = useChatStore((state) => state.setAgentId);
@@ -74,7 +74,12 @@ const Chat = () => {
       sessionId: string;
       payload: UpdateSessionDataPayload;
     }) => {
-      const response = await updateSession(sessionId, agentId, payload);
+      const response = await updateSession(
+        sessionId,
+        agentId,
+        orgName,
+        payload,
+      );
 
       return response.data;
     },

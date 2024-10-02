@@ -1,4 +1,5 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useState } from "react";
+import useAutoResizeTextArea from "../../hooks/useAutoResizeTextArea";
 import SendIcon from "../icons/send";
 import UserAvatarIcon from "../icons/user";
 import WrappedLogo from "../icons/wrapped-logo";
@@ -17,7 +18,11 @@ const ChatInput = (props: Props) => {
     props;
 
   const [inputValue, setInputValue] = useState<string>("");
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef = useAutoResizeTextArea({
+    textAreaValue: inputValue,
+    initialHeight: INITIAL_INPUT_HEIGHT,
+    maxHeight: MAX_INPUT_HEIGHT,
+  });
 
   const isSubmissionDisabled =
     isAMessageBeingProcessed || inputValue?.length === 0;
@@ -44,22 +49,6 @@ const ChatInput = (props: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = `${INITIAL_INPUT_HEIGHT}px`;
-      const padding =
-        textAreaRef.current.offsetHeight - textAreaRef.current.clientHeight;
-
-      const scrollHeight = textAreaRef.current.scrollHeight;
-      const newHeight = Math.min(
-        Math.max(scrollHeight - padding, INITIAL_INPUT_HEIGHT),
-        MAX_INPUT_HEIGHT,
-      );
-
-      textAreaRef.current.style.height = `${newHeight}px`;
-    }
-  }, [inputValue]);
-
   return (
     <div>
       <div className="ui-flex ui-items-center ui-gap-2 ui-border-t ui-border-gray-200 ui-p-4 ui-shadow-2xl ui-shadow-primary">
@@ -73,7 +62,7 @@ const ChatInput = (props: Props) => {
           onChange={handleInputValueChange}
           onKeyDown={handleKeyDown}
           placeholder="Type your questions here."
-          className="ui-h-10 ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-ring-primary"
+          className="ui-h-10 ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-border-primary focus:ui-ring-primary"
         />
         <button
           disabled={isSubmissionDisabled}

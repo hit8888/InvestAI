@@ -1,4 +1,5 @@
 import { AIResponse, Message } from "@meaku/core/types/chat";
+import { Feedback } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -13,6 +14,14 @@ interface State {
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: AIResponse) => void;
   handleAddUserMessage: (message: string) => void;
+  handleAddMessageFeedback: (
+    messageId: string,
+    feedback: Partial<Feedback>,
+  ) => void;
+  handleRemoveMessageFeedback: (
+    messageId: string,
+    previousState?: Message,
+  ) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -21,12 +30,7 @@ export const useMessageStore = create<State>()(
       messages: [],
       setMessages: (messages) =>
         set((draft) => {
-          const updatedMessages = messages.map((message) => ({
-            ...message,
-            isPartOfHistory: true,
-          }));
-
-          draft.messages = updatedMessages;
+          draft.messages = messages;
         }),
       suggestedQuestions: [],
       setSuggestedQuestions: (suggestedQuestions) =>
@@ -53,6 +57,8 @@ export const useMessageStore = create<State>()(
               media: response.media,
               documents: response.documents,
               is_loading: response.is_loading,
+              is_complete: response.is_complete,
+              showFeedbackOptions: response.showFeedbackOptions,
             };
           } else {
             draft.messages.push({
@@ -62,6 +68,8 @@ export const useMessageStore = create<State>()(
               media: response.media,
               documents: response.documents,
               is_loading: response.is_loading,
+              is_complete: response.is_complete,
+              showFeedbackOptions: response.showFeedbackOptions,
             });
           }
         }),
@@ -74,6 +82,42 @@ export const useMessageStore = create<State>()(
             media: null,
             documents: [],
           });
+        }),
+      handleAddMessageFeedback: (messageId, feedback) =>
+        set((draft) => {
+          const messageIndex = draft.messages.findIndex(
+            (message) => message.id == messageId,
+          );
+
+          if (messageIndex === -1) return;
+
+          const existingFeedback = draft.messages[messageIndex].feedback;
+          const updatedFeedback = {
+            ...existingFeedback,
+            ...feedback,
+            positive_feedback: feedback.positive_feedback ?? false,
+          };
+
+          if (updatedFeedback.positive_feedback)
+            delete updatedFeedback.category;
+
+          draft.messages[messageIndex] = {
+            ...draft.messages[messageIndex],
+            feedback: updatedFeedback,
+          };
+        }),
+      handleRemoveMessageFeedback: (messageId, previousState) =>
+        set((draft) => {
+          const messageIndex = draft.messages.findIndex(
+            (message) => message.id == messageId,
+          );
+
+          if (messageIndex === -1) return;
+
+          draft.messages[messageIndex] = {
+            ...draft.messages[messageIndex],
+            feedback: previousState?.feedback ?? undefined,
+          };
         }),
     })),
   ),
