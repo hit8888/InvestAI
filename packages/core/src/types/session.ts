@@ -1,21 +1,12 @@
 import { z } from "zod";
 import { MessageSchema } from "./chat";
+import { DataSourceSchema } from "./common";
 
 export const FeedbackSchema = z.object({
   response_id: z.string(),
   positive_feedback: z.boolean(),
   category: z.string().nullable().optional(),
   remarks: z.string().nullable().optional(),
-});
-
-export const DataSourceSchema = z.object({
-  id: z.number(),
-  data_source_id: z.number(),
-  title: z.string().nullable(),
-  url: z.string().nullable(),
-  data_source_name: z.string(),
-  data_source_type: z.string(),
-  text: z.string().nullable(),
 });
 
 export const DocumentSchema = z.object({
