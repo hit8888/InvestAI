@@ -8,6 +8,7 @@ interface IProps {
 const RATINGS = [
   "Incorrect",
   "Incomplete",
+  "Incorrect video",
   "Don’t like the style",
   "Problem with Source",
   "Other…",

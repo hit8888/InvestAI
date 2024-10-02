@@ -42,7 +42,7 @@ const ChatMessage = (props: Props) => {
 
     activeResponseElement.scrollIntoView({
       behavior: "smooth",
-      block: "center",
+      block: "end",
     });
   }, 100);
 

@@ -50,6 +50,18 @@ const FeedbackContainer = (props: IProps) => {
     });
   };
 
+  const handleTextAreaKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    const isCtrlOrCmdPressed = e.ctrlKey || e.metaKey;
+    const isEnterKeyPressed = e.key === "Enter";
+
+    if (isCtrlOrCmdPressed && isEnterKeyPressed) {
+      e.preventDefault();
+      handleShareDetailedFeedback();
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -61,7 +73,7 @@ const FeedbackContainer = (props: IProps) => {
       )}
     >
       <div className="ui-p-4">
-        <div className="ui-rounded-lg ui-bg-gray-50 ui-p-4 ui-text-gray-800">
+        <div className="ui-rounded-lg ui-border ui-border-gray-300 ui-bg-gray-50 ui-p-4 ui-text-gray-800">
           <div className="ui-flex ui-items-center ui-justify-between">
             <h3 className="ui-text-sm">
               Please provide more details about your rating
@@ -84,6 +96,7 @@ const FeedbackContainer = (props: IProps) => {
                 <TextArea
                   ref={textAreaRef}
                   value={inputValue}
+                  onKeyDown={handleTextAreaKeyDown}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="We appreciate a more detailed feedback :)"
                 />
@@ -92,8 +105,9 @@ const FeedbackContainer = (props: IProps) => {
           </div>
           <div className="ui-mt-6 ui-flex ui-items-center ui-justify-end">
             <Button
+              size="sm"
               onClick={handleShareDetailedFeedback}
-              className="ui-h-auto ui-bg-transparent !ui-p-0 ui-text-sm ui-font-medium !ui-text-primary ui-transition-colors ui-duration-300 hover:ui-text-primary/80"
+              // className="ui-text-sm ui-font-medium"
             >
               Submit
             </Button>

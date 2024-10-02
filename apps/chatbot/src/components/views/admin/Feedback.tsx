@@ -53,7 +53,9 @@ const Feedback = () => {
         component: "Feedback",
       });
 
+      toast.error("An error occurred while sharing feedback.");
       handleRemoveMessageFeedback(payload.payload.response_id);
+      handleCloseFeedbackContainer();
     },
     onSuccess: (
       _data,

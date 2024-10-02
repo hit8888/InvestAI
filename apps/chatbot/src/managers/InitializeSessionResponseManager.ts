@@ -33,22 +33,38 @@ class InitializeSessionResponseManager {
   getFormattedChatHistory(isAdmin: boolean = false): Message[] {
     const chatHistory = this.session.configuration.body.chat_history;
     const feedbacks = this.session.configuration.body.feedback ?? [];
+    const documents = this.session.configuration.body.documents ?? [];
 
-    return chatHistory.map((message, idx) => ({
-      id: message.message_id,
-      message: message.message,
-      media: message.media,
-      documents: message.documents,
-      role: message.role,
-      suggested_questions: message.suggested_questions,
-      isPartOfHistory: true,
-      is_complete: true,
-      showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
-      feedback:
-        feedbacks.find(
-          (feedback) => feedback.response_id === message.message_id.toString(),
-        ) ?? undefined,
-    }));
+    return chatHistory.map((message, idx) => {
+      const relevantDcouments = documents.find(
+        (document) => document.response_id === message.response_id,
+      );
+      const messageDocuments = (relevantDcouments?.data_sources ?? []).map(
+        (document) => ({
+          ...document,
+          url: document.url ?? "",
+          title: document.title ?? "",
+        }),
+      );
+      const messageFeedback = feedbacks.find(
+        (feedback) =>
+          feedback.response_id === message.response_id ||
+          feedback.response_id === message.message_id.toString(),
+      );
+
+      return {
+        id: message.message_id,
+        message: message.message,
+        media: message.media,
+        documents: messageDocuments,
+        role: message.role,
+        suggested_questions: message.suggested_questions,
+        isPartOfHistory: true,
+        is_complete: true,
+        showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
+        feedback: messageFeedback,
+      };
+    });
   }
 
   getSuggestedQuestions() {

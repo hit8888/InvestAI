@@ -1,18 +1,18 @@
 import { Session } from "@meaku/core/types/session";
 import { hexToRGB } from "@meaku/core/utils/color";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
 import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
 import { trackError } from "../../utils/error";
 import { getBrowserSignature } from "../../utils/tracking";
+import useIsAdmin from "../useIsAdmin";
 import useLocalStorageSession from "../useLocalStorageSession";
 
 const useInitializeSessionData = () => {
   const { orgName = "", agentId = "" } = useParams<ChatParams>();
-  const { pathname } = useLocation();
 
   const { sessionData: sessionDataInLocalStorage, handleUpdateSessionData } =
     useLocalStorageSession();
@@ -21,7 +21,7 @@ const useInitializeSessionData = () => {
     (state) => state.setSuggestedQuestions,
   );
 
-  const isAdmin = pathname.includes("/demo/");
+  const isAdmin = useIsAdmin();
 
   const {
     data: session,
