@@ -1,14 +1,6 @@
 import { z } from "zod";
 import { Feedback } from "./session";
-
-export const DocumentSchema = z.object({
-  id: z.number(),
-  data_source_id: z.number(),
-  title: z.string(),
-  url: z.string(),
-  data_source_name: z.string(),
-  data_source_type: z.string(),
-});
+import { DataSourceSchema } from "./common";
 
 export const MediaSchema = z.object({
   type: z.enum(["IMAGE", "VIDEO"]),
@@ -22,7 +14,7 @@ export const MessageSchema = z.object({
   role: z.enum(["user", "ai"]),
   message: z.string(),
   media: MediaSchema.nullable(),
-  documents: z.array(DocumentSchema),
+  documents: z.array(DataSourceSchema),
   suggested_questions: z.array(z.string()),
 });
 
@@ -31,7 +23,7 @@ export const AIResponseSchema = z.object({
   message: z.string(),
   media: MediaSchema.nullable(),
   is_complete: z.boolean(),
-  documents: z.array(DocumentSchema),
+  documents: z.array(DataSourceSchema),
   is_loading: z.boolean().optional(),
   suggested_questions: z.array(z.string()),
   showFeedbackOptions: z.boolean().optional(),
@@ -43,7 +35,7 @@ export type Message = {
   // id: number | string | null; // temporary to accomodate backend changes
   message: string;
   media: z.infer<typeof MediaSchema> | null;
-  documents: z.infer<typeof DocumentSchema>[];
+  documents: z.infer<typeof DataSourceSchema>[];
   role: z.infer<typeof MessageSchema>["role"];
   suggested_questions?: string[];
   isPartOfHistory?: boolean;
