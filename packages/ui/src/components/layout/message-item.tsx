@@ -103,7 +103,7 @@ const MessageItem = (props: Props) => {
           className={cn(
             "ui-w-11/12 ui-overflow-hidden ui-rounded-b-2xl ui-border ui-border-t-0 ui-border-primary/25 ui-bg-primary/10 sm:ui-w-10/12 md:ui-w-4/6 lg:ui-w-3/6 2xl:ui-w-2/6",
             {
-              "ui-border-b-0": Boolean(videoURL),
+              "ui-rounded-b-none ui-border-b-0": Boolean(videoURL),
             },
           )}
         >
