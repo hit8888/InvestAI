@@ -5,8 +5,6 @@ import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
 import { useChatStore } from "../stores/useChatStore";
 import { ChatParams } from "../types/msc";
 import { trackError } from "../utils/error";
-import useUpdateProspect from "./mutation/useUpdateProspect";
-import useAdminUserEmail from "./useAdminUserEmail";
 
 type Session = {
   sessionId?: string;
@@ -26,11 +24,8 @@ const useLocalStorageSession = () => {
     useLocalStorageState<string>(fallbackSessionKey);
   const [fallbackProspectId, setFallbackProspectId] =
     useLocalStorageState<string>(fallbackProspectKey);
-  const { userEmail } = useAdminUserEmail();
 
   const setShowTooltip = useChatStore((state) => state.setShowTooltip);
-
-  const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
 
   const sessionData: Session = {
     sessionId: session?.sessionId || fallbackSessionId,
@@ -50,13 +45,6 @@ const useLocalStorageSession = () => {
       // Remove fallback session and prospect id
       setFallbackSessionId(undefined);
       setFallbackProspectId(undefined);
-
-      await handleUpdateProspect({
-        prospectId: updatedSessionData.prospectId as string,
-        payload: {
-          email: userEmail,
-        },
-      });
     } catch (error) {
       trackError(error, {
         action: "handleUpdateSessionData",

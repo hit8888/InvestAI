@@ -16,6 +16,8 @@ const useUpdateProspect = () => {
       prospectId: string;
       payload: UpdateProspectPayload;
     }) => {
+      if (!prospectId || !payload.email) return;
+
       const response = await updateProspect(orgName, prospectId, payload);
 
       return response.data;

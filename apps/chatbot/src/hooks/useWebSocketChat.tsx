@@ -13,6 +13,7 @@ import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
 import { trackError } from "../utils/error";
 import useInitializeSessionData from "./query/useInitializeSessionData";
+import useIsAdmin from "./useIsAdmin";
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -23,8 +24,8 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
-  const { session, isAdmin } = useInitializeSessionData();
-
+  const { session } = useInitializeSessionData();
+  const isAdmin = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
