@@ -1,5 +1,5 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import { XIcon } from "lucide-react";
+import { CopyIcon, XIcon } from "lucide-react";
 import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
@@ -18,6 +18,7 @@ type Props = {
   logoURL?: string;
   showRestartButton?: boolean;
   handleRestart?: () => void;
+  handleCopyMessagesJSON?: () => void;
 };
 
 const ChatHeader = (props: Props) => {
@@ -31,6 +32,7 @@ const ChatHeader = (props: Props) => {
     logoURL,
     showRestartButton = false,
     handleRestart,
+    handleCopyMessagesJSON,
   } = props;
 
   const isConfigWidget = config === ChatConfig.WIDGET;
@@ -106,13 +108,22 @@ const ChatHeader = (props: Props) => {
         )}
 
         {showRestartButton && (
-          <Button
-            onClick={handleRestart}
-            size="icon"
-            className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
-          >
-            <RefreshChatIcon className="ui-text-primary" />
-          </Button>
+          <div className="ui-flex ui-items-center ui-gap-1">
+            <Button
+              onClick={handleCopyMessagesJSON}
+              size="icon"
+              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-2"
+            >
+              <CopyIcon className="ui-h-5 ui-w-5 ui-text-primary " />
+            </Button>
+            <Button
+              onClick={handleRestart}
+              size="icon"
+              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
+            >
+              <RefreshChatIcon className="ui-text-primary" />
+            </Button>
+          </div>
         )}
       </div>
     </div>

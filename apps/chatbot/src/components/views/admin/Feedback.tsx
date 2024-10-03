@@ -155,6 +155,20 @@ const Feedback = () => {
     window.location.reload();
   };
 
+  const handleCopyMessagesJSON = () => {
+    try {
+      navigator.clipboard.writeText(JSON.stringify(messages, null, 2));
+      toast.success("Messages copied to clipboard!");
+    } catch (error) {
+      trackError(error, {
+        action: "handleCopyMessagesJSON",
+        component: "Feedback",
+      });
+
+      toast.error("An error occurred while copying messages to clipboard.");
+    }
+  };
+
   // The timeout is added for the transition to complete before clearing the feedback states
   useEffect(() => {
     if (!activeResponseId) {
@@ -171,6 +185,7 @@ const Feedback = () => {
         config={ChatConfig.EMBED}
         showRestartButton={true}
         handleRestart={handleRefreshChat}
+        handleCopyMessagesJSON={handleCopyMessagesJSON}
       />
       <ChatMessage
         messages={messages}
