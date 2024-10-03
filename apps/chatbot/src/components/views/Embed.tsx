@@ -2,14 +2,23 @@ import { ChatConfig } from "@meaku/core/types/config";
 import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
-import { memo } from "react";
+import { memo, useMemo } from "react";
+import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import { useChatStore } from "../../stores/useChatStore";
+import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Embed = () => {
-  const orgName = useChatStore((state) => state.orgName);
-  const configuration = useChatStore((state) => state.configuration);
+  const { session } = useInitializeSessionData();
+
+  const manager = useMemo(() => {
+    if (!session) return;
+
+    return new InitializeSessionResponseManager(session);
+  }, [session]);
+
+  const orgName = manager?.getOrgName();
+  const configuration = manager?.getConfig();
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,

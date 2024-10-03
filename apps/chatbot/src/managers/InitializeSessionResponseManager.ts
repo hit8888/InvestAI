@@ -79,6 +79,10 @@ class InitializeSessionResponseManager {
   getStyleConfig() {
     return this.session.configuration.style_config;
   }
+
+  getConfig() {
+    return this.session.configuration;
+  }
 }
 
 export default InitializeSessionResponseManager;
