@@ -136,7 +136,7 @@ const MessageItem = (props: Props) => {
             <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
           )} */}
           <div
-            className="ui-prose ui-max-w-full ui-text-sm md:ui-text-base xl:ui-text-lg"
+            className="ui-prose ui-max-w-full ui-text-sm md:ui-text-base"
             onClick={handleMessageClick}
           >
             <ReactMarkdown
