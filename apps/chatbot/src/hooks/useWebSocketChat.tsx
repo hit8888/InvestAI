@@ -1,7 +1,7 @@
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import { AIResponse } from "@meaku/core/types/chat";
+import { AIResponse, Message } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -38,8 +38,10 @@ const useWebSocketChat = () => {
   );
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
+  const [shouldConnect, setShouldConnect] = useState(false);
 
   const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
+  const messageQueue = useRef<Message[]>([]);
 
   const handleAddUserMessage = useMessageStore(
     (state) => state.handleAddUserMessage,
@@ -66,26 +68,40 @@ const useWebSocketChat = () => {
     ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
     : "";
 
-  const { readyState, sendMessage, lastMessage } = useWebSocket(wsUrl, {
-    share: true,
-    shouldReconnect: () => true,
-    reconnectAttempts: MAX_RETRIES,
-    reconnectInterval: (retryCount) => {
-      const interval = Math.min(
-        retryInterval * Math.pow(2, retryCount - 1),
-        MAX_RETRY_INTERVAL,
-      );
-      setRetryInterval(interval);
-      return interval;
+  const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
+    wsUrl,
+    {
+      share: true,
+      shouldReconnect: () => true,
+      reconnectAttempts: MAX_RETRIES,
+      reconnectInterval: (retryCount) => {
+        const interval = Math.min(
+          retryInterval * Math.pow(2, retryCount - 1),
+          MAX_RETRY_INTERVAL,
+        );
+        setRetryInterval(interval);
+        return interval;
+      },
+      filter: () => shouldConnect,
+
+      // heartbeat: {
+      //   message: "ping",
+      //   interval: HEARTBEAT_INTERVAL,
+      // },
     },
-    // heartbeat: {
-    //   message: "ping",
-    //   interval: HEARTBEAT_INTERVAL,
-    // },
-  });
+    shouldConnect,
+  );
+
+  const initializeWebSocket = useCallback(() => {
+    setShouldConnect(true);
+  }, []);
 
   const handleSendUserMessage = useCallback(
     (message: string) => {
+      if (!shouldConnect) {
+        initializeWebSocket();
+      }
+
       if (!hasFirstUserMessageBeenSent) {
         setHasFirstUserMessageBeenSent(true);
       }
@@ -151,7 +167,15 @@ const useWebSocketChat = () => {
         messageIndex++;
       }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
     },
-    [hasFirstUserMessageBeenSent, session, isChatOpen, isAdmin],
+    [
+      hasFirstUserMessageBeenSent,
+      session,
+      isChatOpen,
+      isAdmin,
+      readyState,
+      shouldConnect,
+      initializeWebSocket,
+    ],
   );
 
   useEffect(() => {
@@ -183,9 +207,23 @@ const useWebSocketChat = () => {
   }, [hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
+    if (readyState === ReadyState.OPEN && messageQueue.current.length > 0) {
+      messageQueue.current.forEach((msg) => {
+        sendMessage(JSON.stringify(msg));
+      });
+      messageQueue.current = [];
+    }
+  }, [readyState, sendMessage]);
+
+  useEffect(() => {
     return () => {
       if (processingMessageInterval.current) {
         clearInterval(processingMessageInterval.current);
+      }
+      setShouldConnect(false);
+      const ws = getWebSocket();
+      if (ws) {
+        ws.close();
       }
     };
   }, []);

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
 import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
+import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
 import { trackError } from "../../utils/error";
@@ -19,6 +20,9 @@ const useInitializeSessionData = () => {
   const setMessages = useMessageStore((state) => state.setMessages);
   const setSuggestedQuestions = useMessageStore(
     (state) => state.setSuggestedQuestions,
+  );
+  const setHasFirstUserMessageBeenSent = useChatStore(
+    (state) => state.setHasFirstUserMessageBeenSent,
   );
 
   const isAdmin = useIsAdmin();
@@ -47,8 +51,13 @@ const useInitializeSessionData = () => {
         const chatHistory = manager.getFormattedChatHistory(isAdmin);
         const suggestedQuestions = manager.getSuggestedQuestions();
 
+        const hasFirstUserMessageBeenSent = chatHistory.some(
+          (message) => message.role === "user",
+        );
+
         setMessages(chatHistory);
         setSuggestedQuestions(suggestedQuestions);
+        setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
 
         handleUpdateSessionData({
           sessionId: session.session_id,
