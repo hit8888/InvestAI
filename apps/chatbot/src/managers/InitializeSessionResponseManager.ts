@@ -82,7 +82,13 @@ class InitializeSessionResponseManager {
   }
 
   getSuggestedQuestions() {
-    return this.session.configuration.body.welcome_message.suggested_questions;
+    const chatHistory = this.getFormattedChatHistory();
+
+    if (chatHistory.length <= 1)
+      return this.session.configuration.body.welcome_message
+        .suggested_questions;
+
+    return chatHistory[chatHistory.length - 1].suggested_questions ?? [];
   }
 
   getStyleConfig() {
