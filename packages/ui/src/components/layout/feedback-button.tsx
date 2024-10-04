@@ -21,7 +21,7 @@ const FeedbackButton = (props: IProps) => {
       {...restProps}
     >
       <ThumbIcon
-        className="!ui-h-4 !ui-w-4 ui-text-primary"
+        className="!ui-h-6 !ui-w-6 ui-text-primary"
         isFilled={isFilled}
       />
     </Button>

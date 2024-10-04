@@ -99,7 +99,15 @@ const MessageItem = (props: Props) => {
         "ui-animate-pulse": isLoading,
       })}
     >
-      {!isSenderBot && (
+      {isSenderBot ? (
+        <div className="ui-mb-2 ui-flex ui-items-center ui-gap-2">
+          <div className="ui-max-w-min">
+            <WrappedLogo className="!ui-h-4 !ui-w-4" />
+          </div>
+          <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
+          {/* <h3 className="ui-text-sm ui-font-medium ui-text-gray-800">Sam</h3> */}
+        </div>
+      ) : (
         <div className="ui-flex ui-items-center ui-justify-end ui-gap-2">
           <p className="ui-text-sm ui-text-gray-500">You</p>
           <UserAvatarIcon />
@@ -108,7 +116,7 @@ const MessageItem = (props: Props) => {
 
       <div
         className={cn(
-          "ui-w-11/12 ui-max-w-fit ui-rounded-2xl ui-border ui-p-4 ui-text-gray-700 sm:ui-w-10/12 md:ui-w-4/6 lg:ui-w-3/6 2xl:ui-w-2/6",
+          "ui-w-11/12 ui-max-w-fit ui-rounded-2xl ui-border ui-p-4 ui-text-gray-700 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
           {
             "ui-flex ui-items-start ui-space-x-4 ui-rounded-tl-none ui-border-primary/25 ui-bg-primary/10":
               isSenderBot,
@@ -118,17 +126,17 @@ const MessageItem = (props: Props) => {
           },
         )}
       >
-        {isSenderBot && (
+        {/* {isSenderBot && (
           <div className="ui-max-w-min">
             <WrappedLogo className="!ui-h-5 !ui-w-5" />
           </div>
-        )}
+        )} */}
         <div>
-          {isSenderBot && (
+          {/* {isSenderBot && (
             <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
-          )}
+          )} */}
           <div
-            className="ui-prose ui-text-sm md:ui-text-[15px]"
+            className="ui-prose ui-max-w-full ui-text-sm md:ui-text-base"
             onClick={handleMessageClick}
           >
             <ReactMarkdown
@@ -144,7 +152,7 @@ const MessageItem = (props: Props) => {
       {showDocuments && (
         <div
           className={cn(
-            "ui-w-11/12 ui-overflow-hidden ui-rounded-b-2xl ui-border ui-border-t-0 ui-border-primary/25 ui-bg-primary/10 sm:ui-w-10/12 md:ui-w-4/6 lg:ui-w-3/6 2xl:ui-w-2/6",
+            "ui-w-11/12 ui-overflow-hidden ui-rounded-b-2xl ui-border ui-border-t-0 ui-border-primary/25 ui-bg-primary/10 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
             {
               "ui-rounded-b-none ui-border-b-0": Boolean(videoURL),
             },
@@ -223,7 +231,7 @@ const MessageItem = (props: Props) => {
       {videoURL && (
         <video
           className={
-            "ui-w-11/12 ui-max-w-fit ui-rounded-b-2xl sm:ui-w-10/12 md:ui-w-4/6 lg:ui-w-3/6 2xl:ui-w-2/6"
+            "ui-w-11/12 ui-max-w-fit ui-rounded-b-2xl md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6"
           }
           controls
           autoPlay={!message.isPartOfHistory}

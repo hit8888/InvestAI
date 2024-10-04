@@ -70,6 +70,8 @@ class InitializeSessionResponseManager {
   getSuggestedQuestions() {
     const formattedChatHistory = this.getFormattedChatHistory();
 
+    if (formattedChatHistory.length === 0) return [];
+
     return (
       formattedChatHistory[formattedChatHistory.length - 1]
         .suggested_questions ?? []
@@ -78,6 +80,10 @@ class InitializeSessionResponseManager {
 
   getStyleConfig() {
     return this.session.configuration.style_config;
+  }
+
+  getConfig() {
+    return this.session.configuration;
   }
 }
 
