@@ -1,0 +1,61 @@
+name: Upload scripts to S3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/scripts/**"
+      - "packages/core/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/scripts/**"
+      - "packages/core/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --name-only HEAD^ HEAD | grep -E "^(apps/scripts|packages/core)/" && echo "changes=true" >> $GITHUB_OUTPUT || echo "changes=false" >> $GITHUB_OUTPUT
+
+      - name: Build scripts
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          cd apps/scripts
+          pnpm build
+          pnpm minify
+
+      - name: Configure AWS credentials
+        if: steps.check_changes.outputs.changes == 'true'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1 # Replace with your AWS region
+
+      - name: Upload to S3
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          aws s3 sync apps/scripts/dist s3://your-bucket-name/scripts

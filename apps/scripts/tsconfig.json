@@ -1,0 +1,17 @@
+{
+  "extends": "@meaku/typescript-config/base.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@meaku/core/*": ["../../packages/core/src/*"]
+    },
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
+  }
+}
