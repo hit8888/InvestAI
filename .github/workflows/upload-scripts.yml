@@ -45,7 +45,6 @@ jobs:
         run: |
           cd apps/scripts
           pnpm build
-          pnpm minify
 
       - name: Configure AWS credentials
         if: steps.check_changes.outputs.changes == 'true'
