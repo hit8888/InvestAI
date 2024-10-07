@@ -106,7 +106,7 @@ const payload = {
 
 const establishConnection = () => {
   if (window.isBreakoutChatReady) {
-    clearInterval(window.breakoutInitializationIntervalId);
+    clearInterval(window.breakoutInitializationIntervalId as number);
     return;
   }
 
