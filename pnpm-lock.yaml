@@ -108,6 +108,9 @@ importers:
       globals:
         specifier: ^15.9.0
         version: 15.9.0
+      logrocket:
+        specifier: ^9.0.0
+        version: 9.0.0
       postcss:
         specifier: ^8.4.35
         version: 8.4.45
@@ -3377,6 +3380,7 @@ packages:
   /eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
@@ -4382,6 +4386,10 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
+  /logrocket@9.0.0:
+    resolution: {integrity: sha512-/nYoKA4W8nr3YETPyOin9oiFFzwGDv8Lh02DG8ZnS9coKBYwrEG+dE2OqpOotVbs4zJWjCCPaqhR/HAMi+O3yA==}
+    dev: true
 
   /longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}

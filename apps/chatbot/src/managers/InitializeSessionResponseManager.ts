@@ -23,6 +23,10 @@ class InitializeSessionResponseManager {
     return this.session.session_id;
   }
 
+  getProspectId() {
+    return this.session.prospect_id;
+  }
+
   getAgentId() {
     return this.session.agent_id;
   }

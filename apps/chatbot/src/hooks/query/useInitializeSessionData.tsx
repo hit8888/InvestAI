@@ -1,6 +1,7 @@
 import { Session } from "@meaku/core/types/session";
 import { hexToRGB } from "@meaku/core/utils/color";
 import { useQuery } from "@tanstack/react-query";
+import Logrocket from "logrocket";
 import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
 import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
@@ -47,6 +48,8 @@ const useInitializeSessionData = () => {
       try {
         const manager = new InitializeSessionResponseManager(session);
 
+        const sessionId = manager.getSessionId();
+        const prospectId = manager.getProspectId();
         const styleConfig = manager.getStyleConfig();
         const chatHistory = manager.getFormattedChatHistory(isAdmin);
         const suggestedQuestions = manager.getSuggestedQuestions();
@@ -82,6 +85,10 @@ const useInitializeSessionData = () => {
               component: "Chat",
             });
           }
+        });
+
+        Logrocket.identify(prospectId, {
+          sessionId,
         });
 
         return session;
