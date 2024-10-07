@@ -132,8 +132,10 @@ const Chat = () => {
     }));
 
     const suggestedQuestions =
-      formattedChatHistory[formattedChatHistory.length - 1]
-        .suggested_questions ?? [];
+      formattedChatHistory.length === 0
+        ? []
+        : formattedChatHistory[formattedChatHistory.length - 1]
+            .suggested_questions ?? [];
 
     const styleConfig = sessionData.configuration.style_config;
 

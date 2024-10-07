@@ -4,6 +4,7 @@ import {
   FeedbackEnum,
   InitialFeedbackPayload,
 } from "@meaku/core/types/feedback";
+import { SessionHashData } from "@meaku/core/types/session";
 import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
@@ -155,17 +156,24 @@ const Feedback = () => {
     window.location.reload();
   };
 
-  const handleCopyMessagesJSON = () => {
+  const handleCopySessionHash = () => {
     try {
-      navigator.clipboard.writeText(JSON.stringify(messages, null, 2));
-      toast.success("Messages copied to clipboard!");
+      const sessionDataToBeHashed: SessionHashData = {
+        sessionId: sessionId,
+        prospectId: session?.prospect_id.toString() ?? "",
+      };
+
+      const hashedSessionData = btoa(JSON.stringify(sessionDataToBeHashed));
+
+      navigator.clipboard.writeText(hashedSessionData);
+      toast.success("Session hash copied.");
     } catch (error) {
       trackError(error, {
-        action: "handleCopyMessagesJSON",
+        action: "handleCopySessionHash",
         component: "Feedback",
       });
 
-      toast.error("An error occurred while copying messages to clipboard.");
+      toast.error("An error occurred while copying session hash to clipboard.");
     }
   };
 
@@ -185,7 +193,7 @@ const Feedback = () => {
         config={ChatConfig.EMBED}
         showRestartButton={true}
         handleRestart={handleRefreshChat}
-        handleCopyMessagesJSON={handleCopyMessagesJSON}
+        handleCopyMessagesJSON={handleCopySessionHash}
       />
       <ChatMessage
         messages={messages}

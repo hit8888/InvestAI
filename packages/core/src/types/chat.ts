@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { Feedback } from "./session";
 import { DataSourceSchema } from "./common";
+import { Feedback } from "./session";
 
 export const MediaSchema = z.object({
   type: z.enum(["IMAGE", "VIDEO"]),
@@ -43,6 +43,7 @@ export type Message = {
   is_complete?: boolean;
   feedback?: Feedback;
   showFeedbackOptions?: boolean;
+  isReadOnly?: boolean;
 };
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;

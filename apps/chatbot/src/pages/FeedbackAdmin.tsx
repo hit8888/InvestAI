@@ -7,7 +7,7 @@ import useAdminUserEmail from "../hooks/useAdminUserEmail";
 const Welcome = lazy(() => import("../components/views/admin/Welcome"));
 const Feedback = lazy(() => import("../components/views/admin/Feedback"));
 
-const Admin = () => {
+const FeedbackAdmin = () => {
   const { userEmail } = useAdminUserEmail();
   const { session, isError, isFetching } = useInitializeSessionData();
 
@@ -42,4 +42,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default FeedbackAdmin;
