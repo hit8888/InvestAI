@@ -178,6 +178,10 @@ const useWebSocketChat = () => {
     ],
   );
 
+  const handlePrimaryCta = () => {
+    handleSendUserMessage("I want to book a demo for the product.");
+  };
+
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -228,7 +232,7 @@ const useWebSocketChat = () => {
     };
   }, []);
 
-  return { readyState, handleSendUserMessage };
+  return { readyState, handleSendUserMessage, handlePrimaryCta };
 };
 
 export default useWebSocketChat;

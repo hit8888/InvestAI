@@ -28,7 +28,7 @@ const Embed = () => {
     (state) => state.suggestedQuestions,
   );
 
-  const { handleSendUserMessage } = useWebSocketChat();
+  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
 
   const isC2FO = orgName?.toLowerCase() === "c2fo";
 
@@ -39,6 +39,7 @@ const Embed = () => {
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
+        handlePrimaryCta={handlePrimaryCta}
       />
       <ChatMessage
         messages={messages}

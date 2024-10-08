@@ -37,7 +37,7 @@ const Widget = () => {
 
   const orgName = manager?.getOrgName() ?? "";
 
-  const { handleSendUserMessage } = useWebSocketChat();
+  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const tooltipSuggestedQuestions =
@@ -80,6 +80,7 @@ const Widget = () => {
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
               handleClose={handleCloseChat}
+              handlePrimaryCta={handlePrimaryCta}
             />
             <ChatMessage
               messages={messages}
