@@ -36,6 +36,8 @@ const Widget = () => {
   }, [session]);
 
   const orgName = manager?.getOrgName() ?? "";
+  const configuration = manager?.getConfig();
+  const showCta = configuration?.body.show_cta ?? false;
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
@@ -80,7 +82,7 @@ const Widget = () => {
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
               handleClose={handleCloseChat}
-              handlePrimaryCta={handlePrimaryCta}
+              handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
             />
             <ChatMessage
               messages={messages}

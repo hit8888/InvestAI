@@ -19,6 +19,7 @@ const Embed = () => {
 
   const orgName = manager?.getOrgName();
   const configuration = manager?.getConfig();
+  const disclaimerText = configuration?.body.disclaimer_message ?? "";
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -30,8 +31,6 @@ const Embed = () => {
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
 
-  const isC2FO = orgName?.toLowerCase() === "c2fo";
-
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
       <ChatHeader
@@ -39,7 +38,9 @@ const Embed = () => {
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
-        handlePrimaryCta={handlePrimaryCta}
+        handlePrimaryCta={
+          configuration?.body.show_cta ? handlePrimaryCta : undefined
+        }
       />
       <ChatMessage
         messages={messages}
@@ -47,11 +48,7 @@ const Embed = () => {
         handleSuggestedQuestionOnClick={handleSendUserMessage}
       />
       <ChatInput
-        disclaimerText={
-          isC2FO
-            ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
-            : ""
-        }
+        disclaimerText={disclaimerText}
         isAMessageBeingProcessed={isAMessageBeingProcessed}
         handleSendUserMessage={handleSendUserMessage}
       />

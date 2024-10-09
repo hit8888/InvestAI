@@ -74,7 +74,7 @@ const ChatMessage = (props: Props) => {
   return (
     <div
       ref={containerRef}
-      className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-p-4"
+      className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-bg-white ui-p-4"
     >
       {messages.map((message) => (
         <MessageItem

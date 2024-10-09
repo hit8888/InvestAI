@@ -50,7 +50,7 @@ const ChatInput = (props: Props) => {
   };
 
   return (
-    <div>
+    <div className="ui-bg-white">
       <div className="ui-flex ui-items-center ui-gap-2 ui-border-t ui-border-gray-200 ui-p-4 ui-shadow-2xl ui-shadow-primary">
         <div className="ui-hidden ui-items-center -ui-space-x-3 sm:ui-flex">
           <WrappedLogo />

@@ -100,7 +100,17 @@ class InitializeSessionResponseManager {
   }
 
   getConfig() {
-    return this.session.configuration;
+    const serverConfig = this.session.configuration;
+    const isOrgC2FO = serverConfig.org_name === "C2FO";
+
+    if (isOrgC2FO) {
+      serverConfig.body.disclaimer_message =
+        "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support.";
+    }
+
+    serverConfig.body.show_cta = false;
+
+    return serverConfig;
   }
 }
 
