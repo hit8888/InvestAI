@@ -18,7 +18,11 @@ const useInitializeSessionData = () => {
 
   const { sessionData: sessionDataInLocalStorage, handleUpdateSessionData } =
     useLocalStorageSession();
+  const messages = useMessageStore((state) => state.messages);
   const setMessages = useMessageStore((state) => state.setMessages);
+  const suggestedQuestionsInStore = useMessageStore(
+    (state) => state.suggestedQuestions,
+  );
   const setSuggestedQuestions = useMessageStore(
     (state) => state.setSuggestedQuestions,
   );
@@ -33,6 +37,7 @@ const useInitializeSessionData = () => {
     isFetching,
     isError,
     error,
+    ...query
   } = useQuery({
     queryKey: ["session-initializer"],
     queryFn: async () => {
@@ -51,15 +56,20 @@ const useInitializeSessionData = () => {
         const sessionId = manager.getSessionId();
         const prospectId = manager.getProspectId();
         const styleConfig = manager.getStyleConfig();
-        const chatHistory = manager.getFormattedChatHistory(isAdmin);
         const suggestedQuestions = manager.getSuggestedQuestions();
-
+        const chatHistory = manager.getFormattedChatHistory(isAdmin);
         const hasFirstUserMessageBeenSent = chatHistory.some(
           (message) => message.role === "user",
         );
 
-        setMessages(chatHistory);
-        setSuggestedQuestions(suggestedQuestions);
+        if (messages.length <= 0) {
+          setMessages(chatHistory);
+        }
+
+        if (suggestedQuestionsInStore.length <= 0) {
+          setSuggestedQuestions(suggestedQuestions);
+        }
+
         setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
 
         handleUpdateSessionData({
@@ -102,10 +112,13 @@ const useInitializeSessionData = () => {
       }
     },
     staleTime: Infinity,
-    enabled: Boolean(orgName) && Boolean(agentId),
+    enabled:
+      Boolean(orgName) &&
+      Boolean(agentId) &&
+      Boolean(sessionDataInLocalStorage.sessionId),
   });
 
-  return { session, isFetching, isError, error, isAdmin };
+  return { session, isFetching, isError, error, isAdmin, ...query };
 };
 
 export default useInitializeSessionData;

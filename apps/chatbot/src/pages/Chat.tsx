@@ -2,6 +2,7 @@ import { ChatConfig } from "@meaku/core/types/config";
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import useUpdateSession from "../hooks/mutation/useUpdateSession";
+import useConfigData from "../hooks/query/useConfigData";
 import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../hooks/useWebSocketChat";
 import InitializeSessionResponseManager from "../managers/InitializeSessionResponseManager";
@@ -21,7 +22,9 @@ const Chat = () => {
 
   useWebSocketChat();
 
-  const { session, isError, isFetching } = useInitializeSessionData();
+  const { data: config, isError: isConfigFetchError } = useConfigData();
+  const { session, isError: isInitializationError } =
+    useInitializeSessionData();
 
   const manager = useMemo(() => {
     if (!session) return;
@@ -30,6 +33,8 @@ const Chat = () => {
   }, [session]);
 
   const sessionId = manager?.getSessionId() ?? "";
+  const isError = isConfigFetchError || isInitializationError;
+  const renderUI = Boolean(config ?? session) && !isError;
 
   const { mutateAsync: handleMutateSession } = useUpdateSession({
     onError: (error) => {
@@ -41,11 +46,11 @@ const Chat = () => {
     },
   });
 
-  const config =
+  const chatConfig =
     (searchParams.get("config")?.toLowerCase() as ChatConfig) ||
     ChatConfig.EMBED;
 
-  const Component = componentsMap[config];
+  const Component = componentsMap[chatConfig];
 
   useEffect(() => {
     const handleMessagePassing = async (event: MessageEvent) => {
@@ -86,7 +91,7 @@ const Chat = () => {
     };
   }, []);
 
-  if (isFetching || isError) return <></>;
+  if (!renderUI) return <></>;
 
   return (
     <Suspense fallback={<></>}>

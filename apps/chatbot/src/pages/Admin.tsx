@@ -1,6 +1,7 @@
 import Backdrop from "@meaku/ui/components/layout/backdrop";
 import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
+import useConfigData from "../hooks/query/useConfigData";
 import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useAdminUserEmail from "../hooks/useAdminUserEmail";
 
@@ -9,7 +10,12 @@ const Feedback = lazy(() => import("../components/views/admin/Feedback"));
 
 const Admin = () => {
   const { userEmail } = useAdminUserEmail();
-  const { session, isError, isFetching } = useInitializeSessionData();
+  const { data: config, isError: isConfigFetchError } = useConfigData();
+  const { session, isError: isInitializationError } =
+    useInitializeSessionData();
+
+  const isError = isConfigFetchError || isInitializationError;
+  const renderUI = Boolean(config ?? session) && !isError;
 
   const Component = useMemo(() => {
     if (userEmail) {
@@ -19,11 +25,7 @@ const Admin = () => {
     return Welcome;
   }, [userEmail]);
 
-  if (isError || isFetching) {
-    return <></>;
-  }
-
-  if (!session) {
+  if (!renderUI) {
     return <></>;
   }
 
