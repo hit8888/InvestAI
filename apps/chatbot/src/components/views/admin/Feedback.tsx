@@ -8,7 +8,7 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import FeedbackContainer from "@meaku/ui/components/layout/feedback-containter";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
@@ -93,23 +93,23 @@ const Feedback = () => {
     activeResponse?.feedback?.positive_feedback === true ||
     (isActiveResponseFeedbackNegative && !!activeResponse?.feedback?.category);
 
-  const handleShareInitialFeedback = async ({
-    responseId,
-    feedbackType,
-  }: InitialFeedbackPayload) => {
-    setActiveResponseId(responseId);
-    handleAddMessageFeedback(responseId, {
-      positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
-    });
-
-    await handlePostResponseFeedback({
-      sessionId,
-      payload: {
-        response_id: responseId,
+  const handleShareInitialFeedback = useCallback(
+    async ({ responseId, feedbackType }: InitialFeedbackPayload) => {
+      setActiveResponseId(responseId);
+      handleAddMessageFeedback(responseId, {
         positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
-      },
-    });
-  };
+      });
+
+      await handlePostResponseFeedback({
+        sessionId,
+        payload: {
+          response_id: responseId,
+          positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
+        },
+      });
+    },
+    [session, sessionId],
+  );
 
   const handleShareDetailedFeedback = async ({
     feedbackOption,

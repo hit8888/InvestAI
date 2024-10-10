@@ -20,9 +20,6 @@ const useInitializeSessionData = () => {
     useLocalStorageSession();
   const messages = useMessageStore((state) => state.messages);
   const setMessages = useMessageStore((state) => state.setMessages);
-  const suggestedQuestionsInStore = useMessageStore(
-    (state) => state.suggestedQuestions,
-  );
   const setSuggestedQuestions = useMessageStore(
     (state) => state.setSuggestedQuestions,
   );
@@ -64,9 +61,6 @@ const useInitializeSessionData = () => {
 
         if (messages.length <= 0) {
           setMessages(chatHistory);
-        }
-
-        if (suggestedQuestionsInStore.length <= 0) {
           setSuggestedQuestions(suggestedQuestions);
         }
 

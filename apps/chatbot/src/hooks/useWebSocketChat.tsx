@@ -99,7 +99,7 @@ const useWebSocketChat = () => {
 
   const initializeWebSocket = useCallback(async () => {
     if (!session?.session_id) {
-      await fetchSession();
+      fetchSession();
     }
 
     setShouldConnect(true);
