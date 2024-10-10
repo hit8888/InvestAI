@@ -1,5 +1,6 @@
 import { Message } from "@meaku/core/types/chat";
 import { Session, SessionSchema } from "@meaku/core/types/session";
+import { nanoid } from "nanoid";
 
 class InitializeSessionResponseManager {
   private session: Session;
@@ -22,6 +23,10 @@ class InitializeSessionResponseManager {
     return this.session.session_id;
   }
 
+  getProspectId() {
+    return this.session.prospect_id;
+  }
+
   getAgentId() {
     return this.session.agent_id;
   }
@@ -41,7 +46,18 @@ class InitializeSessionResponseManager {
     const feedbacks = this.session.configuration.body.feedback ?? [];
     const documents = this.session.configuration.body.documents ?? [];
 
-    return chatHistory.map((message, idx) => {
+    const welcomeMessage: Message = {
+      id: nanoid(),
+      message: this.session.configuration.body.welcome_message.message,
+      role: "ai",
+      isPartOfHistory: false,
+      is_complete: true,
+      showFeedbackOptions: false,
+      documents: [],
+      media: null,
+    };
+
+    const formattedChatHistory = chatHistory.map((message, idx) => {
       const relevantDcouments = documents.find(
         (document) => document.response_id === message.response_id,
       );
@@ -72,21 +88,26 @@ class InitializeSessionResponseManager {
         isReadOnly,
       };
     });
+
+    return [welcomeMessage, ...formattedChatHistory];
   }
 
   getSuggestedQuestions() {
-    const formattedChatHistory = this.getFormattedChatHistory();
+    const chatHistory = this.getFormattedChatHistory();
 
-    if (formattedChatHistory.length === 0) return [];
+    if (chatHistory.length <= 1)
+      return this.session.configuration.body.welcome_message
+        .suggested_questions;
 
-    return (
-      formattedChatHistory[formattedChatHistory.length - 1]
-        .suggested_questions ?? []
-    );
+    return chatHistory[chatHistory.length - 1].suggested_questions ?? [];
   }
 
   getStyleConfig() {
     return this.session.configuration.style_config;
+  }
+
+  getConfig() {
+    return this.session.configuration;
   }
 }
 

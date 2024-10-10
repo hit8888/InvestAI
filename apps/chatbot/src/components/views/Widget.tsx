@@ -4,17 +4,19 @@ import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
 import { cn } from "@meaku/ui/lib/cn";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
+import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
+import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Widget = () => {
+  const { session } = useInitializeSessionData();
+
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
-  const orgName = useChatStore((state) => state.orgName) ?? "";
-  const session = useChatStore((state) => state.session);
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
   );
@@ -26,6 +28,14 @@ const Widget = () => {
   const suggestedQuestions = useMessageStore(
     (state) => state.suggestedQuestions,
   );
+
+  const manager = useMemo(() => {
+    if (!session) return;
+
+    return new InitializeSessionResponseManager(session);
+  }, [session]);
+
+  const orgName = manager?.getOrgName() ?? "";
 
   const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
