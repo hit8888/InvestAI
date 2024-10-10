@@ -35,7 +35,13 @@ class InitializeSessionResponseManager {
     return this.session.configuration.org_name;
   }
 
-  getFormattedChatHistory(isAdmin: boolean = false): Message[] {
+  getFormattedChatHistory({
+    isAdmin = false,
+    isReadOnly = false,
+  }: {
+    isAdmin?: boolean;
+    isReadOnly?: boolean;
+  } = {}): Message[] {
     const chatHistory = this.session.configuration.body.chat_history;
     const feedbacks = this.session.configuration.body.feedback ?? [];
     const documents = this.session.configuration.body.documents ?? [];
@@ -79,6 +85,7 @@ class InitializeSessionResponseManager {
         is_complete: true,
         showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
         feedback: messageFeedback,
+        isReadOnly,
       };
     });
 

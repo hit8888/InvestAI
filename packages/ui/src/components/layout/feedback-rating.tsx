@@ -2,6 +2,7 @@ import RatingPill from "./rating-pill";
 
 interface IProps {
   activeRating?: string;
+  isReadOnly?: boolean;
   handleShareRating: (rating: string) => void;
 }
 
@@ -15,13 +16,14 @@ const RATINGS = [
 ];
 
 const FeedbackRating = (props: IProps) => {
-  const { activeRating, handleShareRating } = props;
+  const { activeRating, isReadOnly = false, handleShareRating } = props;
 
   return (
     <div className="ui-flex ui-items-center ui-gap-2">
       {RATINGS.map((rating) => (
         <RatingPill
           key={rating}
+          disabled={isReadOnly}
           text={rating}
           isActive={activeRating === rating}
           handleOnClick={() => {

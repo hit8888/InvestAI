@@ -5,6 +5,8 @@ import {
   FeedbackEnum,
   InitialFeedbackPayload,
 } from "@meaku/core/types/feedback";
+import isUndefined from "lodash/isUndefined";
+import { CirclePlayIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
@@ -18,12 +20,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./accordion";
+import Button from "./button";
 import FaviconImage from "./favicon-image";
 import FeedbackButton from "./feedback-button";
 
 type Props = {
   message: Message;
   handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
+  handleShowFeedback?: (responseId: string) => void;
 };
 
 const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -33,7 +37,7 @@ const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
 };
 
 const MessageItem = (props: Props) => {
-  const { message, handleShareInitialFeedback } = props;
+  const { message, handleShareInitialFeedback, handleShowFeedback } = props;
 
   const { trackEvent } = useAnalytics();
 
@@ -44,6 +48,7 @@ const MessageItem = (props: Props) => {
   const showFeedbackButtons =
     message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
+  const isMessageReadOnly = message.isReadOnly ?? false;
   const isFeedbackThumbUp = Boolean(
     message.feedback?.positive_feedback === true,
   );
@@ -244,14 +249,28 @@ const MessageItem = (props: Props) => {
       {showFeedbackButtons && (
         <div className="ui-mt-2 ui-flex ui-items-center ui-gap-2">
           <FeedbackButton
+            disabled={isMessageReadOnly}
             isFilled={isFeedbackThumbUp}
             onClick={() => handleSendResponseFeedback(FeedbackEnum.THUMBS_UP)}
           />
           <FeedbackButton
+            disabled={isMessageReadOnly}
             isFilled={isFeedbackThumbDown}
             isInverted={true}
             onClick={() => handleSendResponseFeedback(FeedbackEnum.THUMBS_DOWN)}
           />
+          {isMessageReadOnly && (
+            <Button
+              size="icon"
+              disabled={isUndefined(message.feedback?.positive_feedback)}
+              onClick={() =>
+                handleShowFeedback && handleShowFeedback(message.id.toString())
+              }
+              className="ui-h-7 ui-w-7"
+            >
+              <CirclePlayIcon className="ui-h-4 ui-w-4" />
+            </Button>
+          )}
         </div>
       )}
     </div>

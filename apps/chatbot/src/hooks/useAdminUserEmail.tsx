@@ -11,7 +11,7 @@ const useAdminUserEmail = () => {
 
   const userEmailKey = `${LOCAL_STORAGE_KEYS.USER_EMAIL}-${orgName}-${agentId}`;
 
-  const isAdmin = useIsAdmin();
+  const { isAdmin } = useIsAdmin();
   const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
 
   const [userEmail, setUserEmail] = useLocalStorageState<string>(userEmailKey, {
