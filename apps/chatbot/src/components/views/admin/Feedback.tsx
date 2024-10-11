@@ -12,6 +12,7 @@ import FeedbackContainer from "@meaku/ui/components/layout/feedback-containter";
 import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
+import useConfigData from "../../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
@@ -21,6 +22,7 @@ import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";
 
 const Feedback = () => {
+  const { data: config } = useConfigData();
   const { session, refetch: fetchSessionData } = useInitializeSessionData();
   const { handleSendUserMessage } = useWebSocketChat();
 
@@ -75,10 +77,10 @@ const Feedback = () => {
   });
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new UnifiedResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
   const isC2FO = orgName?.toLowerCase() === "c2fo";
