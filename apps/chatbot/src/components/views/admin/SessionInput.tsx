@@ -4,8 +4,8 @@ import Button from "@meaku/ui/components/layout/button";
 import Input from "@meaku/ui/components/layout/input";
 import { FormEvent, memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
-import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
+import useConfigData from "../../../hooks/query/useConfigData";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 
 const SUPERADMIN_PASSWORD = "VzEsWuLDN4wg0335/KVxjg==";
@@ -19,15 +19,13 @@ const SessionInput = () => {
   const setSessionId = useAdminStore((state) => state.setSessionId);
   const setProspectId = useAdminStore((state) => state.setProspectId);
 
-  const { session } = useInitializeSessionData({
-    ignoreUpdatingLocalStorage: true,
-  });
+  const { data: config } = useConfigData();
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!config) return;
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(config);
+  }, [config]);
 
   const agentName = manager?.getAgentName() ?? "";
 

@@ -7,21 +7,19 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
-import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
 
   const [emailInputValue, setEmailInputValue] = useState<string>("");
 
-  const { session } = useInitializeSessionData({
-    ignoreUpdatingLocalStorage: true,
-  });
+  const { session } = useInitializeSessionData();
 
   const manager = useMemo(() => {
     if (!session) return;
 
-    return new InitializeSessionResponseManager(session);
+    return new UnifiedResponseManager(session);
   }, [session]);
 
   const agentName = manager?.getAgentName() ?? "";
