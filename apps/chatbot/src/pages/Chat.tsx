@@ -5,7 +5,7 @@ import useUpdateSession from "../hooks/mutation/useUpdateSession";
 import useConfigData from "../hooks/query/useConfigData";
 import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../hooks/useWebSocketChat";
-import InitializeSessionResponseManager from "../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../managers/UnifiedResponseManager";
 import { UpdateSessionDataPayloadSchema } from "../types/api";
 import { trackError } from "../utils/error";
 
@@ -27,10 +27,10 @@ const Chat = () => {
     useInitializeSessionData();
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [config, session]);
 
   const sessionId = manager?.getSessionId() ?? "";
   const isError = isConfigFetchError || isInitializationError;

@@ -15,7 +15,7 @@ import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";
@@ -77,7 +77,7 @@ const Feedback = () => {
   const manager = useMemo(() => {
     if (!session) return;
 
-    return new InitializeSessionResponseManager(session);
+    return new UnifiedResponseManager(session);
   }, [session]);
 
   const orgName = manager?.getOrgName() ?? "";

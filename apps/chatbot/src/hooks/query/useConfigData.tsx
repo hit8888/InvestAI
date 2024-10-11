@@ -2,7 +2,7 @@ import { Configuration } from "@meaku/core/types/session";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getConfig } from "../../lib/http/api";
-import ConfigResponseManager from "../../managers/ConfigResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
 import { handleColorConfig } from "../../utils/common";
@@ -25,7 +25,7 @@ const useConfigData = () => {
       const config = response.data as Configuration;
 
       try {
-        const manager = new ConfigResponseManager(config);
+        const manager = new UnifiedResponseManager(config);
         const styleConfig = manager.getStyleConfig();
         const chatHistory = manager.getFormattedChatHistory();
         const suggestedQuestions = manager.getSuggestedQuestions();
@@ -39,6 +39,7 @@ const useConfigData = () => {
       return response.data;
     },
     enabled: !sessionData.sessionId,
+    staleTime: Infinity,
   });
 
   return query;

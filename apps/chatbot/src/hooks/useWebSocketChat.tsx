@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
-import InitializeSessionResponseManager from "../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../managers/UnifiedResponseManager";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
@@ -64,7 +64,7 @@ const useWebSocketChat = () => {
   const manager = useMemo(() => {
     if (!session) return;
 
-    return new InitializeSessionResponseManager(session);
+    return new UnifiedResponseManager(session);
   }, [session]);
 
   const sessionId = manager?.getSessionId() ?? "";
@@ -98,12 +98,12 @@ const useWebSocketChat = () => {
   );
 
   const initializeWebSocket = useCallback(async () => {
-    if (!session?.session_id) {
+    if (!sessionId) {
       fetchSession();
     }
 
     setShouldConnect(true);
-  }, [session]);
+  }, [sessionId]);
 
   const processQueuedMessages = useCallback(() => {
     if (

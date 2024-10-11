@@ -3,13 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import Logrocket from "logrocket";
 import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
-import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
 import { handleColorConfig } from "../../utils/common";
 import { trackError } from "../../utils/error";
 import { getBrowserSignature } from "../../utils/tracking";
+import useUpdateProspect from "../mutation/useUpdateProspect";
+import useAdminUserEmail from "../useAdminUserEmail";
 import useIsAdmin from "../useIsAdmin";
 import useLocalStorageSession from "../useLocalStorageSession";
 
@@ -38,6 +40,11 @@ const useInitializeSessionData = (
   );
 
   const { isAdmin, isReadOnly } = useIsAdmin();
+  const { userEmail, hasProspectBeenUpdated, setHasProspectBeenUpdated } =
+    useAdminUserEmail();
+
+  const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
+
   const effectiveSessionId = sessionId || sessionDataInLocalStorage?.sessionId;
   const effectiveProspectId =
     prospectId || sessionDataInLocalStorage?.prospectId;
@@ -49,7 +56,7 @@ const useInitializeSessionData = (
     error,
     ...query
   } = useQuery({
-    queryKey: ["session-initializer", effectiveSessionId, effectiveProspectId],
+    queryKey: ["session-initializer"],
     queryFn: async () => {
       const response = await initializeSession(orgName, agentId, {
         session_id: effectiveSessionId,
@@ -61,10 +68,10 @@ const useInitializeSessionData = (
       const session = response.data as Session;
 
       try {
-        const manager = new InitializeSessionResponseManager(session);
+        const manager = new UnifiedResponseManager(session);
 
-        const sessionId = manager.getSessionId();
-        const prospectId = manager.getProspectId();
+        const sessionId = manager.getSessionId() ?? "";
+        const prospectId = manager.getProspectId() ?? "";
         const styleConfig = manager.getStyleConfig();
         const chatHistory = manager.getFormattedChatHistory({
           isAdmin,
@@ -78,9 +85,8 @@ const useInitializeSessionData = (
         if (messages.length <= 0) {
           setMessages(chatHistory);
           setSuggestedQuestions(suggestedQuestions);
+          setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
         }
-
-        setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
 
         if (!ignoreUpdatingLocalStorage) {
           handleUpdateSessionData({
@@ -90,6 +96,19 @@ const useInitializeSessionData = (
         }
 
         handleColorConfig(styleConfig);
+
+        if (isAdmin && !hasProspectBeenUpdated) {
+          const data = await handleUpdateProspect({
+            prospectId: session.prospect_id.toString(),
+            payload: {
+              email: userEmail,
+            },
+          });
+
+          if (data) {
+            setHasProspectBeenUpdated(true);
+          }
+        }
 
         Logrocket.identify(prospectId, {
           sessionId,
@@ -109,7 +128,9 @@ const useInitializeSessionData = (
     enabled:
       Boolean(orgName) &&
       Boolean(agentId) &&
-      Boolean(sessionDataInLocalStorage.sessionId),
+      Boolean(
+        sessionDataInLocalStorage.sessionId || ignoreUpdatingLocalStorage,
+      ),
   });
 
   return { session, isFetching, isError, error, isAdmin, ...query };
