@@ -23,3 +23,19 @@ export const handleColorConfig = (styleConfig: StyleConfig) => {
     }
   });
 };
+
+export const capitalizeString = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const getProcessingMessageSequence = (agentName: string = "Sam") => {
+  const formattedAgentName = capitalizeString(agentName);
+
+  return [
+    `${formattedAgentName} is thinking...`,
+    `Hang tight, ${formattedAgentName} is working on it...`,
+    "Just a few more seconds...",
+    `Almost there, ${formattedAgentName} is getting everything in place...`,
+    `${formattedAgentName} is almost done...`,
+  ];
+};

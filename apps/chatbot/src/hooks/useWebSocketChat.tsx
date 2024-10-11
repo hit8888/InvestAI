@@ -1,5 +1,4 @@
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import useAnalytics from "@meaku/core/hooks/useAnalytics";
 import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
@@ -11,7 +10,9 @@ import UnifiedResponseManager from "../managers/UnifiedResponseManager";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
+import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
+import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
 
@@ -24,6 +25,7 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
+  const { data: config } = useConfigData();
   const { session, refetch: fetchSession } = useInitializeSessionData();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
@@ -62,12 +64,17 @@ const useWebSocketChat = () => {
   >([]);
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new UnifiedResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [session, config]);
 
   const sessionId = manager?.getSessionId() ?? "";
+  const agentName = manager?.getAgentName() ?? "";
+
+  const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
+    return getProcessingMessageSequence(agentName);
+  }, [agentName]);
 
   const wsUrl = orgName
     ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
