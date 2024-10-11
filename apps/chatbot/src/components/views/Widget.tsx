@@ -13,7 +13,7 @@ import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Widget = () => {
-  const { session } = useInitializeSessionData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -36,6 +36,7 @@ const Widget = () => {
   }, [session]);
 
   const orgName = manager?.getOrgName() ?? "";
+  const sessionId = manager?.getSessionId();
 
   const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
@@ -55,6 +56,12 @@ const Widget = () => {
 
   const handleCloseChat = () => {
     setIsChatOpen(false);
+  };
+
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
   };
 
   useEffect(() => {
@@ -88,6 +95,7 @@ const Widget = () => {
             />
             <ChatInput
               isAMessageBeingProcessed={isAMessageBeingProcessed}
+              handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
               handleSendUserMessage={handleSendUserMessage}
             />
           </>

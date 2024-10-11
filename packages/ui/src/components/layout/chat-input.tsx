@@ -7,6 +7,7 @@ import WrappedLogo from "../icons/wrapped-logo";
 type Props = {
   disclaimerText?: string;
   isAMessageBeingProcessed: boolean;
+  handleChatInputOnChangeCallback?: () => void;
   handleSendUserMessage: (message: string) => void;
 };
 
@@ -14,8 +15,12 @@ const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
 const ChatInput = (props: Props) => {
-  const { disclaimerText, isAMessageBeingProcessed, handleSendUserMessage } =
-    props;
+  const {
+    disclaimerText,
+    isAMessageBeingProcessed,
+    handleChatInputOnChangeCallback,
+    handleSendUserMessage,
+  } = props;
 
   const [inputValue, setInputValue] = useState<string>("");
   const textAreaRef = useAutoResizeTextArea({
@@ -31,6 +36,10 @@ const ChatInput = (props: Props) => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setInputValue(e.target.value);
+
+    if (typeof handleChatInputOnChangeCallback === "function") {
+      handleChatInputOnChangeCallback();
+    }
   };
 
   const handleSubmission = () => {

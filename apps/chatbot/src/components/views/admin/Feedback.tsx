@@ -20,7 +20,7 @@ import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";
 
 const Feedback = () => {
-  const { session } = useInitializeSessionData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
   const { handleSendUserMessage } = useWebSocketChat();
 
   const { handleUpdateSessionData } = useLocalStorageSession();
@@ -155,6 +155,12 @@ const Feedback = () => {
     window.location.reload();
   };
 
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
+  };
+
   // The timeout is added for the transition to complete before clearing the feedback states
   useEffect(() => {
     if (!activeResponseId) {
@@ -195,6 +201,7 @@ const Feedback = () => {
             ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
             : ""
         }
+        handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}
         isAMessageBeingProcessed={isAMessageBeingProcessed}
       />

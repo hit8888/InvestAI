@@ -9,7 +9,7 @@ import InitializeSessionResponseManager from "../../managers/InitializeSessionRe
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Embed = () => {
-  const { session } = useInitializeSessionData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
   const manager = useMemo(() => {
     if (!session) return;
@@ -19,6 +19,7 @@ const Embed = () => {
 
   const orgName = manager?.getOrgName();
   const configuration = manager?.getConfig();
+  const sessionId = manager?.getSessionId();
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -31,6 +32,12 @@ const Embed = () => {
   const { handleSendUserMessage } = useWebSocketChat();
 
   const isC2FO = orgName?.toLowerCase() === "c2fo";
+
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
+  };
 
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
@@ -52,6 +59,7 @@ const Embed = () => {
             : ""
         }
         isAMessageBeingProcessed={isAMessageBeingProcessed}
+        handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}
       />
     </div>
