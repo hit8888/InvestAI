@@ -248,8 +248,6 @@ const useWebSocketChat = () => {
   }, [hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
-    console.log({ queue: messageQueue.current, readyState, sessionId });
-
     if (
       readyState === ReadyState.OPEN &&
       messageQueue.current.length > 0 &&
