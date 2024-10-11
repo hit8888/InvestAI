@@ -56,3 +56,5 @@ export type Configuration = z.infer<typeof ConfigurationSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 
 export type Feedback = Omit<z.infer<typeof FeedbackSchema>, "response_id">;
+
+export type StyleConfig = z.infer<typeof ConfigurationSchema>["style_config"];

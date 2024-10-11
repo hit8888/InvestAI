@@ -1,5 +1,4 @@
 import { Session } from "@meaku/core/types/session";
-import { hexToRGB } from "@meaku/core/utils/color";
 import { useQuery } from "@tanstack/react-query";
 import Logrocket from "logrocket";
 import { useParams } from "react-router-dom";
@@ -8,6 +7,7 @@ import InitializeSessionResponseManager from "../../managers/InitializeSessionRe
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
+import { handleColorConfig } from "../../utils/common";
 import { trackError } from "../../utils/error";
 import { getBrowserSignature } from "../../utils/tracking";
 import useIsAdmin from "../useIsAdmin";
@@ -71,25 +71,7 @@ const useInitializeSessionData = () => {
           prospectId: session.prospect_id.toString(),
         });
 
-        Object.keys(styleConfig).forEach((key) => {
-          const formattedKey = key.replace(/_/g, "-");
-          const hexValue = styleConfig[key as keyof typeof styleConfig];
-
-          if (!hexValue) return;
-
-          try {
-            const value = hexToRGB(hexValue);
-            document.documentElement.style.setProperty(
-              `--${formattedKey}`,
-              value,
-            );
-          } catch (error) {
-            trackError(error, {
-              action: "useEffect | hexToRGB",
-              component: "Chat",
-            });
-          }
-        });
+        handleColorConfig(styleConfig);
 
         Logrocket.identify(prospectId, {
           sessionId,

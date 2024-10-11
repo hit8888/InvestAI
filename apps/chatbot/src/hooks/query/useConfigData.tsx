@@ -1,12 +1,11 @@
 import { Configuration } from "@meaku/core/types/session";
-import { hexToRGB } from "@meaku/core/utils/color";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getConfig } from "../../lib/http/api";
 import ConfigResponseManager from "../../managers/ConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
-import { trackError } from "../../utils/error";
+import { handleColorConfig } from "../../utils/common";
 import useLocalStorageSession from "../useLocalStorageSession";
 
 const useConfigData = () => {
@@ -34,25 +33,7 @@ const useConfigData = () => {
         setMessages(chatHistory);
         setSuggestedQuestions(suggestedQuestions);
 
-        Object.keys(styleConfig).forEach((key) => {
-          const formattedKey = key.replace(/_/g, "-");
-          const hexValue = styleConfig[key as keyof typeof styleConfig];
-
-          if (!hexValue) return;
-
-          try {
-            const value = hexToRGB(hexValue);
-            document.documentElement.style.setProperty(
-              `--${formattedKey}`,
-              value,
-            );
-          } catch (error) {
-            trackError(error, {
-              action: "useEffect | hexToRGB",
-              component: "useConfigData",
-            });
-          }
-        });
+        handleColorConfig(styleConfig);
       } catch (err) {}
 
       return response.data;
