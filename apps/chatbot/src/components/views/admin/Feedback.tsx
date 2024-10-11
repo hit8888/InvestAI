@@ -83,6 +83,7 @@ const Feedback = () => {
   const orgName = manager?.getOrgName() ?? "";
   const isC2FO = orgName?.toLowerCase() === "c2fo";
   const sessionId = manager?.getSessionId() ?? "";
+  const agentName = manager?.getAgentName() ?? "";
 
   const activeResponse = messages.find(
     (message) => message.id == activeResponseId,
@@ -189,6 +190,7 @@ const Feedback = () => {
   return (
     <>
       <ChatHeader
+        agentName={agentName}
         orgName={orgName}
         config={ChatConfig.EMBED}
         showRestartButton={true}
@@ -196,6 +198,7 @@ const Feedback = () => {
         handleCopyMessagesJSON={handleCopySessionHash}
       />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={suggestedQuestions}
         activeResponseId={activeResponseId}

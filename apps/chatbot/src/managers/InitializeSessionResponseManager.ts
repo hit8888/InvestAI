@@ -31,6 +31,10 @@ class InitializeSessionResponseManager {
     return this.session.agent_id;
   }
 
+  getAgentName() {
+    return this.session.configuration.agent_name ?? "Sam";
+  }
+
   getOrgName() {
     return this.session.configuration.org_name;
   }

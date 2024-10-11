@@ -19,6 +19,7 @@ const Embed = () => {
 
   const orgName = manager?.getOrgName();
   const configuration = manager?.getConfig();
+  const agentName = manager?.getAgentName() ?? "";
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -35,12 +36,14 @@ const Embed = () => {
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
       <ChatHeader
+        agentName={agentName}
         orgName={orgName ?? ""}
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
       />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={suggestedQuestions}
         handleSuggestedQuestionOnClick={handleSendUserMessage}

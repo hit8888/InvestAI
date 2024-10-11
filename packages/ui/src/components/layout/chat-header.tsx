@@ -11,6 +11,7 @@ import Button from "./button";
 type Props = {
   config: ChatConfig;
   orgName: string;
+  agentName: string;
   showMinimizedHeader?: boolean;
   handleClose?: () => void;
   title?: string;
@@ -24,6 +25,7 @@ type Props = {
 const ChatHeader = (props: Props) => {
   const {
     config,
+    agentName,
     orgName,
     showMinimizedHeader = false,
     handleClose,
@@ -45,7 +47,7 @@ const ChatHeader = (props: Props) => {
 
     if (isConfigWidget)
       return `Need help navigating ${orgName}? Our AI assistant is here to answer your questions.`;
-    return `You’re now talking to Sam, our Smart Agent at ${orgName}.`;
+    return `You’re now talking to ${agentName}, our Smart Agent at ${orgName}.`;
   }, [orgName, subtitle, isConfigWidget]);
 
   return (
