@@ -33,6 +33,7 @@ const SessionPlayback = () => {
 
   const orgName = manager?.getOrgName() ?? "";
   const isC2FO = orgName?.toLowerCase() === "c2fo";
+  const agentName = manager?.getAgentName() ?? "";
   const messages =
     manager?.getFormattedChatHistory({ isAdmin: true, isReadOnly: true }) ?? [];
 
@@ -52,8 +53,13 @@ const SessionPlayback = () => {
 
   return (
     <>
-      <ChatHeader orgName={orgName} config={ChatConfig.EMBED} />
+      <ChatHeader
+        agentName={agentName}
+        orgName={orgName}
+        config={ChatConfig.EMBED}
+      />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={[]}
         handleSuggestedQuestionOnClick={() => {}}

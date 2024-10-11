@@ -2,15 +2,27 @@ import SendIcon from "@meaku/ui/components/icons/send";
 import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
 import Button from "@meaku/ui/components/layout/button";
 import Input from "@meaku/ui/components/layout/input";
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import useConfigData from "../../../hooks/query/useConfigData";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
 
   const [emailInputValue, setEmailInputValue] = useState<string>("");
+
+  const { data: config } = useConfigData();
+
+  const manager = useMemo(() => {
+    if (!config) return;
+
+    return new UnifiedResponseManager(config);
+  }, [config]);
+
+  const agentName = manager?.getAgentName() ?? "";
 
   const handleEmailSubmission = () => {
     if (!emailInputValue) return;
@@ -34,7 +46,7 @@ const Welcome = () => {
         <div className="ui-space-y-2 ui-text-center">
           <div className="ui-flex ui-items-start ui-justify-center ui-gap-1">
             <h1 className="ui-text-2xl ui-font-medium ui-text-gray-800">
-              Hello! I'm Sam, your smart assistant.
+              Hello! I'm {agentName}, your smart assistant.
             </h1>
             <span className="ui-animate-wave">👋</span>
           </div>

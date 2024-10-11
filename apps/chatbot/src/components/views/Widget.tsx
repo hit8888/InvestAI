@@ -38,6 +38,7 @@ const Widget = () => {
   }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
+  const agentName = manager?.getAgentName() ?? "";
   const sessionId = manager?.getSessionId();
 
   const { handleSendUserMessage } = useWebSocketChat();
@@ -83,12 +84,14 @@ const Widget = () => {
         {isChatOpen && (
           <>
             <ChatHeader
+              agentName={agentName}
               orgName={orgName}
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
               handleClose={handleCloseChat}
             />
             <ChatMessage
+              agentName={agentName}
               messages={messages}
               suggestedQuestions={suggestedQuestions}
               handleSuggestedQuestionOnClick={handleSendUserMessage}

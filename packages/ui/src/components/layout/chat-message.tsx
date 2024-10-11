@@ -6,6 +6,7 @@ import MessageItem from "./message-item";
 import SuggestedQuestion from "./suggested-question";
 
 type Props = {
+  agentName: string;
   messages: Message[];
   suggestedQuestions: string[];
   activeResponseId?: string;
@@ -16,6 +17,7 @@ type Props = {
 
 const ChatMessage = (props: Props) => {
   const {
+    agentName,
     messages,
     suggestedQuestions,
     activeResponseId,
@@ -80,6 +82,7 @@ const ChatMessage = (props: Props) => {
     >
       {messages.map((message) => (
         <MessageItem
+          agentName={agentName}
           message={message}
           handleShareInitialFeedback={handleShareInitialFeedback}
           handleShowFeedback={handleShowFeedback}

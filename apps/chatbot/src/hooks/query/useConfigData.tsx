@@ -8,7 +8,13 @@ import { ChatParams } from "../../types/msc";
 import { handleColorConfig } from "../../utils/common";
 import useLocalStorageSession from "../useLocalStorageSession";
 
-const useConfigData = () => {
+interface useConfigDataOptions {
+  forceFetch?: boolean;
+}
+
+const useConfigData = (options: useConfigDataOptions = {}) => {
+  const { forceFetch = false } = options;
+
   const { orgName = "", agentId = "" } = useParams<ChatParams>();
   const { sessionData } = useLocalStorageSession();
 
@@ -38,7 +44,7 @@ const useConfigData = () => {
 
       return response.data;
     },
-    enabled: !sessionData.sessionId,
+    enabled: !sessionData.sessionId || forceFetch,
     staleTime: Infinity,
   });
 

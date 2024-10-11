@@ -12,8 +12,13 @@ const SessionPlayback = lazy(
 );
 
 const InternalAdmin = () => {
-  const { data: config, isError, error } = useConfigData();
+  const {
+    data: config,
+    isError: isConfigFetchError,
+    error: configError,
+  } = useConfigData({ forceFetch: true });
 
+  const isError = isConfigFetchError;
   const renderUI = Boolean(config);
   const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
 
@@ -28,8 +33,10 @@ const InternalAdmin = () => {
   if (isError) {
     return (
       <div>
-        <h3>Config Error</h3>
-        <pre>{JSON.stringify(error, null, 2)}</pre>
+        <div>
+          <h3>Config Error</h3>
+          <pre>{JSON.stringify(configError, null, 2)}</pre>
+        </div>
       </div>
     );
   }
