@@ -6,6 +6,13 @@ import {
 } from "../../types/api";
 import apiClient from "./client";
 
+export const getConfig = (tenantName: string, agentId: string) =>
+  apiClient.get(`/tenant/chat/agent/${agentId}/config/`, {
+    headers: {
+      "x-tenant-name": tenantName,
+    },
+  });
+
 export const initializeSession = (
   tenantName: string,
   agentId: string,

@@ -9,19 +9,21 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import FeedbackContainer from "@meaku/ui/components/layout/feedback-containter";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
+import useConfigData from "../../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";
 
 const Feedback = () => {
-  const { session } = useInitializeSessionData();
+  const { data: config } = useConfigData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
   const { handleSendUserMessage } = useWebSocketChat();
 
   const { handleUpdateSessionData } = useLocalStorageSession();
@@ -75,14 +77,15 @@ const Feedback = () => {
   });
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
   const isC2FO = orgName?.toLowerCase() === "c2fo";
   const sessionId = manager?.getSessionId() ?? "";
+  const agentName = manager?.getAgentName() ?? "";
 
   const activeResponse = messages.find(
     (message) => message.id == activeResponseId,
@@ -94,23 +97,23 @@ const Feedback = () => {
     activeResponse?.feedback?.positive_feedback === true ||
     (isActiveResponseFeedbackNegative && !!activeResponse?.feedback?.category);
 
-  const handleShareInitialFeedback = async ({
-    responseId,
-    feedbackType,
-  }: InitialFeedbackPayload) => {
-    setActiveResponseId(responseId);
-    handleAddMessageFeedback(responseId, {
-      positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
-    });
-
-    await handlePostResponseFeedback({
-      sessionId,
-      payload: {
-        response_id: responseId,
+  const handleShareInitialFeedback = useCallback(
+    async ({ responseId, feedbackType }: InitialFeedbackPayload) => {
+      setActiveResponseId(responseId);
+      handleAddMessageFeedback(responseId, {
         positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
-      },
-    });
-  };
+      });
+
+      await handlePostResponseFeedback({
+        sessionId,
+        payload: {
+          response_id: responseId,
+          positive_feedback: feedbackType === FeedbackEnum.THUMBS_UP,
+        },
+      });
+    },
+    [session, sessionId],
+  );
 
   const handleShareDetailedFeedback = async ({
     feedbackOption,
@@ -156,6 +159,12 @@ const Feedback = () => {
     window.location.reload();
   };
 
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
+  };
+
   const handleCopySessionHash = () => {
     try {
       const sessionDataToBeHashed: SessionHashData = {
@@ -189,6 +198,7 @@ const Feedback = () => {
   return (
     <>
       <ChatHeader
+        agentName={agentName}
         orgName={orgName}
         config={ChatConfig.EMBED}
         showRestartButton={true}
@@ -196,6 +206,7 @@ const Feedback = () => {
         handleCopyMessagesJSON={handleCopySessionHash}
       />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={suggestedQuestions}
         activeResponseId={activeResponseId}
@@ -218,6 +229,7 @@ const Feedback = () => {
             ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
             : ""
         }
+        handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}
         isAMessageBeingProcessed={isAMessageBeingProcessed}
       />

@@ -3,22 +3,26 @@ import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import { memo, useMemo } from "react";
+import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Embed = () => {
-  const { session } = useInitializeSessionData();
+  const { data: config } = useConfigData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [config, session]);
 
   const orgName = manager?.getOrgName();
   const configuration = manager?.getConfig();
+  const agentName = manager?.getAgentName() ?? "";
+  const sessionId = manager?.getSessionId();
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -32,15 +36,23 @@ const Embed = () => {
 
   const isC2FO = orgName?.toLowerCase() === "c2fo";
 
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
+  };
+
   return (
     <div className="ui-flex ui-h-screen ui-flex-col">
       <ChatHeader
+        agentName={agentName}
         orgName={orgName ?? ""}
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
       />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={suggestedQuestions}
         handleSuggestedQuestionOnClick={handleSendUserMessage}
@@ -52,6 +64,7 @@ const Embed = () => {
             : ""
         }
         isAMessageBeingProcessed={isAMessageBeingProcessed}
+        handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}
       />
     </div>

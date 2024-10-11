@@ -1,6 +1,7 @@
 import Backdrop from "@meaku/ui/components/layout/backdrop";
 import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
+import useConfigData from "../hooks/query/useConfigData";
 import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useAdminUserEmail from "../hooks/useAdminUserEmail";
 
@@ -9,7 +10,19 @@ const Feedback = lazy(() => import("../components/views/admin/Feedback"));
 
 const FeedbackAdmin = () => {
   const { userEmail } = useAdminUserEmail();
-  const { session, isError, isFetching } = useInitializeSessionData();
+  const {
+    data: config,
+    isError: isConfigFetchError,
+    error: configError,
+  } = useConfigData();
+  const {
+    session,
+    isError: isInitializationError,
+    error: initializationError,
+  } = useInitializeSessionData();
+
+  const isError = isConfigFetchError || isInitializationError;
+  const renderUI = Boolean(config ?? session);
 
   const Component = useMemo(() => {
     if (userEmail) {
@@ -19,11 +32,22 @@ const FeedbackAdmin = () => {
     return Welcome;
   }, [userEmail]);
 
-  if (isError || isFetching) {
-    return <></>;
+  if (isError) {
+    return (
+      <div>
+        <div>
+          <h3>Config Error</h3>
+          <pre>{JSON.stringify(configError, null, 2)}</pre>
+        </div>
+        <div>
+          <h3>Initialization Error</h3>
+          <pre>{JSON.stringify(initializationError, null, 2)}</pre>
+        </div>
+      </div>
+    );
   }
 
-  if (!session) {
+  if (!renderUI) {
     return <></>;
   }
 

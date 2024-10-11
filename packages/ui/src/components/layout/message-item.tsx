@@ -25,6 +25,7 @@ import FaviconImage from "./favicon-image";
 import FeedbackButton from "./feedback-button";
 
 type Props = {
+  agentName: string;
   message: Message;
   handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
   handleShowFeedback?: (responseId: string) => void;
@@ -37,7 +38,8 @@ const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
 };
 
 const MessageItem = (props: Props) => {
-  const { message, handleShareInitialFeedback, handleShowFeedback } = props;
+  const { agentName, message, handleShareInitialFeedback, handleShowFeedback } =
+    props;
 
   const { trackEvent } = useAnalytics();
 
@@ -65,7 +67,7 @@ const MessageItem = (props: Props) => {
         feedbackType: feedback,
       });
     },
-    [message.id],
+    [message.id, handleShareInitialFeedback],
   );
 
   const reactMarkdownComponents: Partial<Components> = {
@@ -109,8 +111,7 @@ const MessageItem = (props: Props) => {
           <div className="ui-max-w-min">
             <WrappedLogo className="!ui-h-4 !ui-w-4" />
           </div>
-          <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
-          {/* <h3 className="ui-text-sm ui-font-medium ui-text-gray-800">Sam</h3> */}
+          <h3 className="ui-font-medium ui-text-gray-800">{agentName}</h3>
         </div>
       ) : (
         <div className="ui-flex ui-items-center ui-justify-end ui-gap-2">
@@ -131,15 +132,7 @@ const MessageItem = (props: Props) => {
           },
         )}
       >
-        {/* {isSenderBot && (
-          <div className="ui-max-w-min">
-            <WrappedLogo className="!ui-h-5 !ui-w-5" />
-          </div>
-        )} */}
         <div>
-          {/* {isSenderBot && (
-            <h3 className="ui-font-medium ui-text-gray-800">Sam</h3>
-          )} */}
           <div
             className="ui-prose ui-max-w-full ui-text-sm md:ui-text-base"
             onClick={handleMessageClick}

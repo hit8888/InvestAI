@@ -5,16 +5,13 @@ import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import FeedbackContainter from "@meaku/ui/components/layout/feedback-containter";
 import { useMemo } from "react";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
-import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
-import { useMessageStore } from "../../../stores/useMessageStore";
 
 const SessionPlayback = () => {
   const sessionId = useAdminStore((state) => state.sessionId) ?? "";
   const prospectId = useAdminStore((state) => state.prospectId) ?? "";
-
-  const messages = useMessageStore((state) => state.messages);
 
   const activeResponseId =
     useFeedbackStore((state) => state.activeResponseId) ?? "";
@@ -31,11 +28,14 @@ const SessionPlayback = () => {
   const manager = useMemo(() => {
     if (!session) return;
 
-    return new InitializeSessionResponseManager(session);
+    return new UnifiedResponseManager(session);
   }, [session]);
 
   const orgName = manager?.getOrgName() ?? "";
   const isC2FO = orgName?.toLowerCase() === "c2fo";
+  const agentName = manager?.getAgentName() ?? "";
+  const messages =
+    manager?.getFormattedChatHistory({ isAdmin: true, isReadOnly: true }) ?? [];
 
   const activeResponse = messages.find(
     (message) => message.id == activeResponseId,
@@ -53,8 +53,13 @@ const SessionPlayback = () => {
 
   return (
     <>
-      <ChatHeader orgName={orgName} config={ChatConfig.EMBED} />
+      <ChatHeader
+        agentName={agentName}
+        orgName={orgName}
+        config={ChatConfig.EMBED}
+      />
       <ChatMessage
+        agentName={agentName}
         messages={messages}
         suggestedQuestions={[]}
         handleSuggestedQuestionOnClick={() => {}}

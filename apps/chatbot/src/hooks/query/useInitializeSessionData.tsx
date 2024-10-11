@@ -1,15 +1,17 @@
 import { Session } from "@meaku/core/types/session";
-import { hexToRGB } from "@meaku/core/utils/color";
 import { useQuery } from "@tanstack/react-query";
 import Logrocket from "logrocket";
 import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
-import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
+import { handleColorConfig } from "../../utils/common";
 import { trackError } from "../../utils/error";
 import { getBrowserSignature } from "../../utils/tracking";
+import useUpdateProspect from "../mutation/useUpdateProspect";
+import useAdminUserEmail from "../useAdminUserEmail";
 import useIsAdmin from "../useIsAdmin";
 import useLocalStorageSession from "../useLocalStorageSession";
 
@@ -28,6 +30,7 @@ const useInitializeSessionData = (
 
   const { sessionData: sessionDataInLocalStorage, handleUpdateSessionData } =
     useLocalStorageSession();
+  const messages = useMessageStore((state) => state.messages);
   const setMessages = useMessageStore((state) => state.setMessages);
   const setSuggestedQuestions = useMessageStore(
     (state) => state.setSuggestedQuestions,
@@ -37,6 +40,11 @@ const useInitializeSessionData = (
   );
 
   const { isAdmin, isReadOnly } = useIsAdmin();
+  const { userEmail, hasProspectBeenUpdated, setHasProspectBeenUpdated } =
+    useAdminUserEmail();
+
+  const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
+
   const effectiveSessionId = sessionId || sessionDataInLocalStorage?.sessionId;
   const effectiveProspectId =
     prospectId || sessionDataInLocalStorage?.prospectId;
@@ -46,8 +54,9 @@ const useInitializeSessionData = (
     isFetching,
     isError,
     error,
+    ...query
   } = useQuery({
-    queryKey: ["session-initializer", effectiveSessionId, effectiveProspectId],
+    queryKey: ["session-initializer"],
     queryFn: async () => {
       const response = await initializeSession(orgName, agentId, {
         session_id: effectiveSessionId,
@@ -59,24 +68,25 @@ const useInitializeSessionData = (
       const session = response.data as Session;
 
       try {
-        const manager = new InitializeSessionResponseManager(session);
+        const manager = new UnifiedResponseManager(session);
 
-        const sessionId = manager.getSessionId();
-        const prospectId = manager.getProspectId();
+        const sessionId = manager.getSessionId() ?? "";
+        const prospectId = manager.getProspectId() ?? "";
         const styleConfig = manager.getStyleConfig();
         const chatHistory = manager.getFormattedChatHistory({
           isAdmin,
           isReadOnly,
         });
         const suggestedQuestions = manager.getSuggestedQuestions();
-
         const hasFirstUserMessageBeenSent = chatHistory.some(
           (message) => message.role === "user",
         );
 
-        setMessages(chatHistory);
-        setSuggestedQuestions(suggestedQuestions);
-        setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
+        if (messages.length <= 0) {
+          setMessages(chatHistory);
+          setSuggestedQuestions(suggestedQuestions);
+          setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
+        }
 
         if (!ignoreUpdatingLocalStorage) {
           handleUpdateSessionData({
@@ -85,25 +95,20 @@ const useInitializeSessionData = (
           });
         }
 
-        Object.keys(styleConfig).forEach((key) => {
-          const formattedKey = key.replace(/_/g, "-");
-          const hexValue = styleConfig[key as keyof typeof styleConfig];
+        handleColorConfig(styleConfig);
 
-          if (!hexValue) return;
+        if (isAdmin && !hasProspectBeenUpdated) {
+          const data = await handleUpdateProspect({
+            prospectId: session.prospect_id.toString(),
+            payload: {
+              email: userEmail,
+            },
+          });
 
-          try {
-            const value = hexToRGB(hexValue);
-            document.documentElement.style.setProperty(
-              `--${formattedKey}`,
-              value,
-            );
-          } catch (error) {
-            trackError(error, {
-              action: "useEffect | hexToRGB",
-              component: "Chat",
-            });
+          if (data) {
+            setHasProspectBeenUpdated(true);
           }
-        });
+        }
 
         Logrocket.identify(prospectId, {
           sessionId,
@@ -120,10 +125,15 @@ const useInitializeSessionData = (
       }
     },
     staleTime: Infinity,
-    enabled: Boolean(orgName) && Boolean(agentId),
+    enabled:
+      Boolean(orgName) &&
+      Boolean(agentId) &&
+      Boolean(
+        sessionDataInLocalStorage.sessionId || ignoreUpdatingLocalStorage,
+      ),
   });
 
-  return { session, isFetching, isError, error, isAdmin };
+  return { session, isFetching, isError, error, isAdmin, ...query };
 };
 
 export default useInitializeSessionData;
