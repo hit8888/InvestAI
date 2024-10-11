@@ -5,7 +5,7 @@ import Input from "@meaku/ui/components/layout/input";
 import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
+import useConfigData from "../../../hooks/query/useConfigData";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
 import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
 
@@ -14,13 +14,13 @@ const Welcome = () => {
 
   const [emailInputValue, setEmailInputValue] = useState<string>("");
 
-  const { session } = useInitializeSessionData();
+  const { data: config } = useConfigData();
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!config) return;
 
-    return new UnifiedResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(config);
+  }, [config]);
 
   const agentName = manager?.getAgentName() ?? "";
 
