@@ -2,7 +2,6 @@ import Backdrop from "@meaku/ui/components/layout/backdrop";
 import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 import useConfigData from "../hooks/query/useConfigData";
-import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import { useAdminStore } from "../stores/useAdminStore";
 
 const SessionInput = lazy(
@@ -17,15 +16,10 @@ const InternalAdmin = () => {
     data: config,
     isError: isConfigFetchError,
     error: configError,
-  } = useConfigData();
-  const {
-    session,
-    isError: isInitializationError,
-    error: initializationError,
-  } = useInitializeSessionData();
+  } = useConfigData({ forceFetch: true });
 
-  const isError = isConfigFetchError || isInitializationError;
-  const renderUI = Boolean(config ?? session);
+  const isError = isConfigFetchError;
+  const renderUI = Boolean(config);
   const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
 
   const Component = useMemo(() => {
@@ -42,10 +36,6 @@ const InternalAdmin = () => {
         <div>
           <h3>Config Error</h3>
           <pre>{JSON.stringify(configError, null, 2)}</pre>
-        </div>
-        <div>
-          <h3>Initialization Error</h3>
-          <pre>{JSON.stringify(initializationError, null, 2)}</pre>
         </div>
       </div>
     );
