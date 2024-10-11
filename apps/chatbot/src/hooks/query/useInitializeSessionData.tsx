@@ -13,7 +13,17 @@ import { getBrowserSignature } from "../../utils/tracking";
 import useIsAdmin from "../useIsAdmin";
 import useLocalStorageSession from "../useLocalStorageSession";
 
-const useInitializeSessionData = () => {
+interface UseInitializeSessionDataOptions {
+  ignoreUpdatingLocalStorage?: boolean;
+  sessionId?: string;
+  prospectId?: string;
+}
+
+const useInitializeSessionData = (
+  options: UseInitializeSessionDataOptions = {},
+) => {
+  const { ignoreUpdatingLocalStorage = false, sessionId, prospectId } = options;
+
   const { orgName = "", agentId = "" } = useParams<ChatParams>();
 
   const { sessionData: sessionDataInLocalStorage, handleUpdateSessionData } =
@@ -27,7 +37,10 @@ const useInitializeSessionData = () => {
     (state) => state.setHasFirstUserMessageBeenSent,
   );
 
-  const isAdmin = useIsAdmin();
+  const { isAdmin, isReadOnly } = useIsAdmin();
+  const effectiveSessionId = sessionId || sessionDataInLocalStorage?.sessionId;
+  const effectiveProspectId =
+    prospectId || sessionDataInLocalStorage?.prospectId;
 
   const {
     data: session,
@@ -36,11 +49,11 @@ const useInitializeSessionData = () => {
     error,
     ...query
   } = useQuery({
-    queryKey: ["session-initializer"],
+    queryKey: ["session-initializer", effectiveSessionId, effectiveProspectId],
     queryFn: async () => {
       const response = await initializeSession(orgName, agentId, {
-        session_id: sessionDataInLocalStorage?.sessionId,
-        prospect_id: sessionDataInLocalStorage?.prospectId,
+        session_id: effectiveSessionId,
+        prospect_id: effectiveProspectId,
         browser_signature: getBrowserSignature(),
         is_admin: isAdmin,
       });
@@ -53,8 +66,11 @@ const useInitializeSessionData = () => {
         const sessionId = manager.getSessionId();
         const prospectId = manager.getProspectId();
         const styleConfig = manager.getStyleConfig();
+        const chatHistory = manager.getFormattedChatHistory({
+          isAdmin,
+          isReadOnly,
+        });
         const suggestedQuestions = manager.getSuggestedQuestions();
-        const chatHistory = manager.getFormattedChatHistory(isAdmin);
         const hasFirstUserMessageBeenSent = chatHistory.some(
           (message) => message.role === "user",
         );
@@ -66,10 +82,12 @@ const useInitializeSessionData = () => {
 
         setHasFirstUserMessageBeenSent(hasFirstUserMessageBeenSent);
 
-        handleUpdateSessionData({
-          sessionId: session.session_id,
-          prospectId: session.prospect_id.toString(),
-        });
+        if (!ignoreUpdatingLocalStorage) {
+          handleUpdateSessionData({
+            sessionId: session.session_id,
+            prospectId: session.prospect_id.toString(),
+          });
+        }
 
         handleColorConfig(styleConfig);
 

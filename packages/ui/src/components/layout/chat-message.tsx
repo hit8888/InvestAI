@@ -11,6 +11,7 @@ type Props = {
   activeResponseId?: string;
   handleSuggestedQuestionOnClick: (question: string) => void;
   handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
+  handleShowFeedback?: (responseId: string) => void;
 };
 
 const ChatMessage = (props: Props) => {
@@ -20,6 +21,7 @@ const ChatMessage = (props: Props) => {
     activeResponseId,
     handleSuggestedQuestionOnClick,
     handleShareInitialFeedback,
+    handleShowFeedback,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,6 +82,7 @@ const ChatMessage = (props: Props) => {
         <MessageItem
           message={message}
           handleShareInitialFeedback={handleShareInitialFeedback}
+          handleShowFeedback={handleShowFeedback}
           key={message.id}
         />
       ))}

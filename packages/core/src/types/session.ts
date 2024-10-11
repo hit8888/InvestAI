@@ -51,6 +51,11 @@ export const SessionSchema = z.object({
   configuration: ConfigurationSchema,
 });
 
+export const SessionHashDataSchema = z.object({
+  sessionId: z.string(),
+  prospectId: z.string(),
+});
+
 export type Configuration = z.infer<typeof ConfigurationSchema>;
 
 export type Session = z.infer<typeof SessionSchema>;
@@ -58,3 +63,5 @@ export type Session = z.infer<typeof SessionSchema>;
 export type Feedback = Omit<z.infer<typeof FeedbackSchema>, "response_id">;
 
 export type StyleConfig = z.infer<typeof ConfigurationSchema>["style_config"];
+
+export type SessionHashData = z.infer<typeof SessionHashDataSchema>;

@@ -25,7 +25,7 @@ const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
   const { session, refetch: fetchSession } = useInitializeSessionData();
-  const isAdmin = useIsAdmin();
+  const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);

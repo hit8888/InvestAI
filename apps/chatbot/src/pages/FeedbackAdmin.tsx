@@ -8,7 +8,7 @@ import useAdminUserEmail from "../hooks/useAdminUserEmail";
 const Welcome = lazy(() => import("../components/views/admin/Welcome"));
 const Feedback = lazy(() => import("../components/views/admin/Feedback"));
 
-const Admin = () => {
+const FeedbackAdmin = () => {
   const { userEmail } = useAdminUserEmail();
   const {
     data: config,
@@ -66,4 +66,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default FeedbackAdmin;

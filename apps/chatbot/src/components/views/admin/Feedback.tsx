@@ -4,6 +4,7 @@ import {
   FeedbackEnum,
   InitialFeedbackPayload,
 } from "@meaku/core/types/feedback";
+import { SessionHashData } from "@meaku/core/types/session";
 import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
@@ -161,6 +162,27 @@ const Feedback = () => {
     fetchSessionData();
   };
 
+  const handleCopySessionHash = () => {
+    try {
+      const sessionDataToBeHashed: SessionHashData = {
+        sessionId: sessionId,
+        prospectId: session?.prospect_id.toString() ?? "",
+      };
+
+      const hashedSessionData = btoa(JSON.stringify(sessionDataToBeHashed));
+
+      navigator.clipboard.writeText(hashedSessionData);
+      toast.success("Session hash copied.");
+    } catch (error) {
+      trackError(error, {
+        action: "handleCopySessionHash",
+        component: "Feedback",
+      });
+
+      toast.error("An error occurred while copying session hash to clipboard.");
+    }
+  };
+
   // The timeout is added for the transition to complete before clearing the feedback states
   useEffect(() => {
     if (!activeResponseId) {
@@ -177,6 +199,7 @@ const Feedback = () => {
         config={ChatConfig.EMBED}
         showRestartButton={true}
         handleRestart={handleRefreshChat}
+        handleCopyMessagesJSON={handleCopySessionHash}
       />
       <ChatMessage
         messages={messages}
