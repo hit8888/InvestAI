@@ -9,7 +9,7 @@ import {
 import { ENV } from "../config/env";
 
 Sentry.init({
-  // dsn: ENV.VITE_SENTRY_DSN,
+  dsn: ENV.VITE_SENTRY_DSN,
   integrations: [
     Sentry.reactRouterV6BrowserTracingIntegration({
       useEffect,
