@@ -1,4 +1,5 @@
 import { useLocalStorageState } from "ahooks";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
 import { ChatParams } from "../types/msc";
@@ -14,6 +15,7 @@ const useAdminUserEmail = () => {
   const { isAdmin } = useIsAdmin();
   const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
 
+  const [hasProspectBeenUpdated, setHasProspectBeenUpdated] = useState(false);
   const [userEmail, setUserEmail] = useLocalStorageState<string>(userEmailKey, {
     listenStorageChange: true,
   });
@@ -23,16 +25,25 @@ const useAdminUserEmail = () => {
     setUserEmail(email);
 
     if (isAdmin) {
-      await handleUpdateProspect({
+      const data = await handleUpdateProspect({
         prospectId: sessionData.prospectId as string,
         payload: {
           email,
         },
       });
+
+      if (data) {
+        setHasProspectBeenUpdated(true);
+      }
     }
   };
 
-  return { userEmail, setUserEmail: handleSetUserEmail } as const;
+  return {
+    userEmail,
+    setUserEmail: handleSetUserEmail,
+    hasProspectBeenUpdated,
+    setHasProspectBeenUpdated,
+  } as const;
 };
 
 export default useAdminUserEmail;

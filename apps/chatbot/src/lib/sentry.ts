@@ -7,9 +7,10 @@ import {
   useNavigationType,
 } from "react-router-dom";
 import { ENV } from "../config/env";
+import { isDev } from "../utils/common";
 
 Sentry.init({
-  // dsn: ENV.VITE_SENTRY_DSN,
+  dsn: isDev ? "" : ENV.VITE_SENTRY_DSN,
   integrations: [
     Sentry.reactRouterV6BrowserTracingIntegration({
       useEffect,

@@ -8,6 +8,7 @@ type Props = {
   disclaimerText?: string;
   disabled?: boolean;
   isAMessageBeingProcessed: boolean;
+  handleChatInputOnChangeCallback?: () => void;
   handleSendUserMessage: (message: string) => void;
 };
 
@@ -19,6 +20,7 @@ const ChatInput = (props: Props) => {
     disclaimerText,
     disabled = false,
     isAMessageBeingProcessed,
+    handleChatInputOnChangeCallback,
     handleSendUserMessage,
   } = props;
 
@@ -36,6 +38,10 @@ const ChatInput = (props: Props) => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setInputValue(e.target.value);
+
+    if (typeof handleChatInputOnChangeCallback === "function") {
+      handleChatInputOnChangeCallback();
+    }
   };
 
   const handleSubmission = () => {
