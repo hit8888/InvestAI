@@ -2,8 +2,10 @@ import { SessionHashDataSchema } from "@meaku/core/types/session";
 import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
 import Button from "@meaku/ui/components/layout/button";
 import Input from "@meaku/ui/components/layout/input";
-import { FormEvent, memo, useState } from "react";
+import { FormEvent, memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
+import InitializeSessionResponseManager from "../../../managers/InitializeSessionResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 
 const SUPERADMIN_PASSWORD = "VzEsWuLDN4wg0335/KVxjg==";
@@ -16,6 +18,18 @@ const SessionInput = () => {
 
   const setSessionId = useAdminStore((state) => state.setSessionId);
   const setProspectId = useAdminStore((state) => state.setProspectId);
+
+  const { session } = useInitializeSessionData({
+    ignoreUpdatingLocalStorage: true,
+  });
+
+  const manager = useMemo(() => {
+    if (!session) return;
+
+    return new InitializeSessionResponseManager(session);
+  }, [session]);
+
+  const agentName = manager?.getAgentName() ?? "";
 
   const handleFormSubmission = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -60,13 +74,13 @@ const SessionInput = () => {
         <div className="ui-space-y-2 ui-text-center">
           <div className="ui-flex ui-items-start ui-justify-center ui-gap-1">
             <h1 className="ui-text-2xl ui-font-medium ui-text-gray-800">
-              Hello! I'm Ada, Sam's debugging expert.
+              Hello! I'm Ada, {agentName}'s debugging expert.
             </h1>
             <span className="ui-animate-wave">👋</span>
           </div>
           <p className="ui-text-gray-700">
-            Peek behind the scenes and watch Sam in action. Let's start by
-            filling in the following details:
+            Peek behind the scenes and watch {agentName} in action. Let's start
+            by filling in the following details:
           </p>
         </div>
 
