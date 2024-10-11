@@ -10,12 +10,19 @@ const Feedback = lazy(() => import("../components/views/admin/Feedback"));
 
 const Admin = () => {
   const { userEmail } = useAdminUserEmail();
-  const { data: config, isError: isConfigFetchError } = useConfigData();
-  const { session, isError: isInitializationError } =
-    useInitializeSessionData();
+  const {
+    data: config,
+    isError: isConfigFetchError,
+    error: configError,
+  } = useConfigData();
+  const {
+    session,
+    isError: isInitializationError,
+    error: initializationError,
+  } = useInitializeSessionData();
 
   const isError = isConfigFetchError || isInitializationError;
-  const renderUI = Boolean(config ?? session) && !isError;
+  const renderUI = Boolean(config ?? session);
 
   const Component = useMemo(() => {
     if (userEmail) {
@@ -24,6 +31,21 @@ const Admin = () => {
 
     return Welcome;
   }, [userEmail]);
+
+  if (isError) {
+    return (
+      <div>
+        <div>
+          <h3>Config Error</h3>
+          <pre>{JSON.stringify(configError, null, 2)}</pre>
+        </div>
+        <div>
+          <h3>Initialization Error</h3>
+          <pre>{JSON.stringify(initializationError, null, 2)}</pre>
+        </div>
+      </div>
+    );
+  }
 
   if (!renderUI) {
     return <></>;
