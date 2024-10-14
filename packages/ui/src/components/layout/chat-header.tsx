@@ -1,5 +1,5 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import { PhoneIcon, XIcon } from "lucide-react";
+import { CopyIcon, PhoneIcon, XIcon } from "lucide-react";
 import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
@@ -11,6 +11,7 @@ import Button from "./button";
 type Props = {
   config: ChatConfig;
   orgName: string;
+  agentName: string;
   showMinimizedHeader?: boolean;
   handleClose?: () => void;
   title?: string;
@@ -19,11 +20,13 @@ type Props = {
   showRestartButton?: boolean;
   handleRestart?: () => void;
   handlePrimaryCta?: () => void;
+  handleCopyMessagesJSON?: () => void;
 };
 
 const ChatHeader = (props: Props) => {
   const {
     config,
+    agentName,
     orgName,
     showMinimizedHeader = false,
     handleClose,
@@ -33,6 +36,7 @@ const ChatHeader = (props: Props) => {
     showRestartButton = false,
     handleRestart,
     handlePrimaryCta,
+    handleCopyMessagesJSON,
   } = props;
 
   const isConfigWidget = config === ChatConfig.WIDGET;
@@ -51,7 +55,7 @@ const ChatHeader = (props: Props) => {
 
     if (isConfigWidget)
       return `Need help navigating ${orgName}? Our AI assistant is here to answer your questions.`;
-    return `You’re now talking to Sam, our Smart Agent at ${orgName}.`;
+    return `You’re now talking to ${agentName}, our Smart Agent at ${orgName}.`;
   }, [orgName, subtitle, isConfigWidget]);
 
   return (
@@ -123,13 +127,22 @@ const ChatHeader = (props: Props) => {
         )}
 
         {showRestartButton && (
-          <Button
-            onClick={handleRestart}
-            size="icon"
-            className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
-          >
-            <RefreshChatIcon className="ui-text-primary" />
-          </Button>
+          <div className="ui-flex ui-items-center ui-gap-1">
+            <Button
+              onClick={handleCopyMessagesJSON}
+              size="icon"
+              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-2"
+            >
+              <CopyIcon className="ui-h-5 ui-w-5 ui-text-primary " />
+            </Button>
+            <Button
+              onClick={handleRestart}
+              size="icon"
+              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
+            >
+              <RefreshChatIcon className="ui-text-primary" />
+            </Button>
+          </div>
         )}
 
         {showCtaInEmbedMode && (

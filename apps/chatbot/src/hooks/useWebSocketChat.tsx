@@ -1,17 +1,18 @@
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import { PROCESSING_MESSAGE_SEQUENCE } from "@meaku/core/constants/chat";
 import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import { AIResponse, Message } from "@meaku/core/types/chat";
+import { AIResponse } from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
-import InitializeSessionResponseManager from "../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../managers/UnifiedResponseManager";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
+import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
+import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
 
@@ -24,8 +25,9 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
-  const { session } = useInitializeSessionData();
-  const isAdmin = useIsAdmin();
+  const { data: config } = useConfigData();
+  const { session, refetch: fetchSession } = useInitializeSessionData();
+  const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
@@ -36,12 +38,6 @@ const useWebSocketChat = () => {
   const setHasFirstUserMessageBeenSent = useChatStore(
     (state) => state.setHasFirstUserMessageBeenSent,
   );
-
-  const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
-  const [shouldConnect, setShouldConnect] = useState(false);
-
-  const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
-  const messageQueue = useRef<Message[]>([]);
 
   const handleAddUserMessage = useMessageStore(
     (state) => state.handleAddUserMessage,
@@ -56,13 +52,29 @@ const useWebSocketChat = () => {
     (state) => state.setIsAMessageBeingProcessed,
   );
 
-  const manager = useMemo(() => {
-    if (!session) return;
+  const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
+  const [shouldConnect, setShouldConnect] = useState(false);
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+  const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
+  const messageQueue = useRef<
+    {
+      message: string;
+      messageId: string;
+    }[]
+  >([]);
+
+  const manager = useMemo(() => {
+    if (!session && !config) return;
+
+    return new UnifiedResponseManager(session ?? config);
+  }, [session, config]);
 
   const sessionId = manager?.getSessionId() ?? "";
+  const agentName = manager?.getAgentName() ?? "";
+
+  const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
+    return getProcessingMessageSequence(agentName);
+  }, [agentName]);
 
   const wsUrl = orgName
     ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
@@ -92,14 +104,38 @@ const useWebSocketChat = () => {
     shouldConnect,
   );
 
-  const initializeWebSocket = useCallback(() => {
+  const initializeWebSocket = useCallback(async () => {
+    if (!sessionId) {
+      fetchSession();
+    }
+
     setShouldConnect(true);
-  }, []);
+  }, [sessionId]);
+
+  const processQueuedMessages = useCallback(() => {
+    if (
+      readyState === ReadyState.OPEN &&
+      messageQueue.current.length > 0 &&
+      sessionId
+    ) {
+      messageQueue.current.forEach(({ message, messageId }) => {
+        const payload = {
+          session_id: sessionId,
+          message,
+          response_id: messageId,
+        };
+
+        sendMessage(JSON.stringify(payload));
+      });
+
+      messageQueue.current = [];
+    }
+  }, [readyState, sessionId]);
 
   const handleSendUserMessage = useCallback(
-    (message: string) => {
+    async (message: string) => {
       if (!shouldConnect) {
-        initializeWebSocket();
+        await initializeWebSocket();
       }
 
       if (!hasFirstUserMessageBeenSent) {
@@ -110,8 +146,6 @@ const useWebSocketChat = () => {
         setIsChatOpen(true);
       }
 
-      setSuggestedQuestions([]);
-
       const messageId = nanoid();
 
       const payload = {
@@ -120,6 +154,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
 
+      setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
       if (readyState === ReadyState.CLOSED) {
@@ -145,31 +180,37 @@ const useWebSocketChat = () => {
       });
 
       setIsAMessageBeingProcessed(true);
-      sendMessage(JSON.stringify(payload));
 
-      let messageIndex = 1;
-      processingMessageInterval.current = setInterval(() => {
-        if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
-          clearInterval(processingMessageInterval.current as NodeJS.Timeout);
-          return;
-        }
+      if (!sessionId) {
+        messageQueue.current.push({ message, messageId });
+      } else {
+        sendMessage(JSON.stringify(payload));
 
-        handleAddAIMessage({
-          response_id: messageId,
-          message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-          media: null,
-          documents: [],
-          is_complete: false,
-          is_loading: true,
-          suggested_questions: [],
-        });
+        let messageIndex = 1;
+        processingMessageInterval.current = setInterval(() => {
+          if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
+            clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+            return;
+          }
 
-        messageIndex++;
-      }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
+          handleAddAIMessage({
+            response_id: messageId,
+            message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+            media: null,
+            documents: [],
+            is_complete: false,
+            is_loading: true,
+            suggested_questions: [],
+          });
+
+          messageIndex++;
+        }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
+      }
     },
     [
       hasFirstUserMessageBeenSent,
       session,
+      sessionId,
       isChatOpen,
       isAdmin,
       readyState,
@@ -211,13 +252,14 @@ const useWebSocketChat = () => {
   }, [hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
-    if (readyState === ReadyState.OPEN && messageQueue.current.length > 0) {
-      messageQueue.current.forEach((msg) => {
-        sendMessage(JSON.stringify(msg));
-      });
-      messageQueue.current = [];
+    if (
+      readyState === ReadyState.OPEN &&
+      messageQueue.current.length > 0 &&
+      sessionId
+    ) {
+      processQueuedMessages();
     }
-  }, [readyState, sendMessage]);
+  }, [readyState, sendMessage, sessionId]);
 
   useEffect(() => {
     return () => {

@@ -6,20 +6,24 @@ import MessageItem from "./message-item";
 import SuggestedQuestion from "./suggested-question";
 
 type Props = {
+  agentName: string;
   messages: Message[];
   suggestedQuestions: string[];
   activeResponseId?: string;
   handleSuggestedQuestionOnClick: (question: string) => void;
   handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
+  handleShowFeedback?: (responseId: string) => void;
 };
 
 const ChatMessage = (props: Props) => {
   const {
+    agentName,
     messages,
     suggestedQuestions,
     activeResponseId,
     handleSuggestedQuestionOnClick,
     handleShareInitialFeedback,
+    handleShowFeedback,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,8 +82,10 @@ const ChatMessage = (props: Props) => {
     >
       {messages.map((message) => (
         <MessageItem
+          agentName={agentName}
           message={message}
           handleShareInitialFeedback={handleShareInitialFeedback}
+          handleShowFeedback={handleShowFeedback}
           key={message.id}
         />
       ))}

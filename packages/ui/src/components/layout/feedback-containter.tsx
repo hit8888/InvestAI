@@ -16,6 +16,7 @@ interface IProps {
   showFeedbackForm?: boolean;
   activeRating?: string;
   existingFeedback?: string;
+  isReadOnly?: boolean;
   handleCloseFeedbackContainer: () => void;
   handleShareFeedback: (payload: DetailedFeedbackPayload) => void;
 }
@@ -27,6 +28,7 @@ const FeedbackContainer = (props: IProps) => {
     showFeedbackForm,
     activeRating,
     existingFeedback,
+    isReadOnly = false,
     handleCloseFeedbackContainer,
     handleShareFeedback,
   } = props;
@@ -86,6 +88,7 @@ const FeedbackContainer = (props: IProps) => {
             {showFeedbackRating && (
               <div className="ui-mt-6">
                 <FeedbackRating
+                  isReadOnly={isReadOnly}
                   activeRating={activeRating}
                   handleShareRating={handleShareRating}
                 />
@@ -94,6 +97,7 @@ const FeedbackContainer = (props: IProps) => {
             {showFeedbackForm && (
               <div className="ui-mt-3">
                 <TextArea
+                  disabled={isReadOnly}
                   ref={textAreaRef}
                   value={inputValue}
                   onKeyDown={handleTextAreaKeyDown}
@@ -107,6 +111,7 @@ const FeedbackContainer = (props: IProps) => {
             <Button
               size="sm"
               onClick={handleShareDetailedFeedback}
+              disabled={isReadOnly}
               // className="ui-text-sm ui-font-medium"
             >
               Submit

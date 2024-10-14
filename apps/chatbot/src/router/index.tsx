@@ -1,7 +1,8 @@
 import { wrapCreateBrowserRouter } from "@sentry/react";
 import { createBrowserRouter } from "react-router-dom";
-import Admin from "../pages/Admin";
 import Chat from "../pages/Chat";
+import FeedbackAdmin from "../pages/FeedbackAdmin";
+import InternalAdmin from "../pages/InternalAdmin";
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -16,7 +17,11 @@ const router = sentryCreateBrowserRouter([
   },
   {
     path: "/demo/org/:orgName/agent/:agentId",
-    element: <Admin />,
+    element: <FeedbackAdmin />,
+  },
+  {
+    path: "/internal-admin-use/org/:orgName/agent/:agentId",
+    element: <InternalAdmin />,
   },
 ]);
 

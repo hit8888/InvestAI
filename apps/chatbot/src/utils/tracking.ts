@@ -1,3 +1,4 @@
+import md5 from "md5";
 import { BrowserSignature } from "../types/api";
 
 export const getWebGLInfo = () => {
@@ -30,7 +31,10 @@ export const getCanvasFingerprint = () => {
   ctx.fillText("Meaku", 2, 15);
   ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
   ctx.fillText("Meaku", 4, 17);
-  return canvas.toDataURL();
+  const dataURL = canvas.toDataURL();
+  const hashedDataURL = md5(dataURL);
+
+  return hashedDataURL;
 };
 
 export const getBrowserSignature = (): Partial<BrowserSignature> => ({

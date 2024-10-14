@@ -5,15 +5,17 @@ import ChatMessage from "@meaku/ui/components/layout/chat-message";
 import TriggerButton from "@meaku/ui/components/layout/trigger-button";
 import { cn } from "@meaku/ui/lib/cn";
 import { memo, useEffect, useMemo } from "react";
+import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import InitializeSessionResponseManager from "../../managers/InitializeSessionResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Widget = () => {
-  const { session } = useInitializeSessionData();
+  const { data: config } = useConfigData();
+  const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -30,20 +32,20 @@ const Widget = () => {
   );
 
   const manager = useMemo(() => {
-    if (!session) return;
+    if (!session && !config) return;
 
-    return new InitializeSessionResponseManager(session);
-  }, [session]);
+    return new UnifiedResponseManager(session ?? config);
+  }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
   const configuration = manager?.getConfig();
   const showCta = configuration?.body.show_cta ?? false;
+  const agentName = manager?.getAgentName() ?? "";
+  const sessionId = manager?.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
-  const tooltipSuggestedQuestions =
-    session?.configuration.body.welcome_message.suggested_questions ?? [];
   const showTooltip =
     !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
 
@@ -57,6 +59,12 @@ const Widget = () => {
 
   const handleCloseChat = () => {
     setIsChatOpen(false);
+  };
+
+  const handleChatInputOnChangeCallback = () => {
+    if (sessionId) return;
+
+    fetchSessionData();
   };
 
   useEffect(() => {
@@ -78,6 +86,7 @@ const Widget = () => {
         {isChatOpen && (
           <>
             <ChatHeader
+              agentName={agentName}
               orgName={orgName}
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
@@ -85,12 +94,14 @@ const Widget = () => {
               handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
             />
             <ChatMessage
+              agentName={agentName}
               messages={messages}
               suggestedQuestions={suggestedQuestions}
               handleSuggestedQuestionOnClick={handleSendUserMessage}
             />
             <ChatInput
               isAMessageBeingProcessed={isAMessageBeingProcessed}
+              handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
               handleSendUserMessage={handleSendUserMessage}
             />
           </>
@@ -100,7 +111,7 @@ const Widget = () => {
       <TriggerButton
         isChatOpen={isChatOpen}
         showTooltip={showTooltip}
-        suggestedQuestions={tooltipSuggestedQuestions}
+        suggestedQuestions={suggestedQuestions}
         handleToggleChatOpenState={handleToggleChatOpenState}
         handleCloseTooltip={handleCloseTooltip}
         handleSuggestionsOnClick={handleSendUserMessage}
