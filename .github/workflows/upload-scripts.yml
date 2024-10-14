@@ -2,12 +2,16 @@ name: Upload scripts to S3
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - staging
     paths:
       - "apps/scripts/**"
       - "packages/core/**"
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - staging
     paths:
       - "apps/scripts/**"
       - "packages/core/**"
@@ -57,4 +61,8 @@ jobs:
       - name: Upload to S3
         if: steps.check_changes.outputs.changes == 'true'
         run: |
-          aws s3 sync apps/scripts/build s3://frontend/scripts
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            aws s3 sync apps/scripts/build s3://frontendscripts/production
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            aws s3 sync apps/scripts/build s3://frontendscripts/staging
+          fi
