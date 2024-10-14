@@ -24,6 +24,7 @@ const Embed = () => {
   const disclaimerText = configuration?.body.disclaimer_message ?? "";
   const agentName = manager?.getAgentName() ?? "";
   const sessionId = manager?.getSessionId();
+  const showCta = configuration?.body.show_cta ?? false;
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -49,9 +50,7 @@ const Embed = () => {
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
-        handlePrimaryCta={
-          configuration?.body.show_cta ? handlePrimaryCta : undefined
-        }
+        handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
       />
       <ChatMessage
         agentName={agentName}

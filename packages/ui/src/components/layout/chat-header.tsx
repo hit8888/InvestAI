@@ -1,5 +1,5 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import { CopyIcon, PhoneIcon, XIcon } from "lucide-react";
+import { CopyIcon, MessageCircleIcon, XIcon } from "lucide-react";
 import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
@@ -82,7 +82,7 @@ const ChatHeader = (props: Props) => {
                   onClick={handlePrimaryCta}
                   className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
                 >
-                  <PhoneIcon className="ui-h-5 ui-w-5" />
+                  <MessageCircleIcon className="ui-h-5 ui-w-5" />
                   <p className="ui-text-sm">Book a demo</p>
                 </Button>
               )}
@@ -150,7 +150,7 @@ const ChatHeader = (props: Props) => {
             onClick={handlePrimaryCta}
             className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
           >
-            <PhoneIcon className="ui-h-5 ui-w-5" />
+            <MessageCircleIcon className="ui-h-5 ui-w-5" />
             <p className="ui-text-sm">Book a demo</p>
           </Button>
         )}
