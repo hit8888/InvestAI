@@ -58,11 +58,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
-      - name: Upload to S3
+      - name: Upload embed and communication script to S3
         if: steps.check_changes.outputs.changes == 'true'
         run: |
+          echo "Uploading scripts to S3..."
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             aws s3 sync apps/scripts/build s3://frontendscripts/production
+            echo "Production scripts uploaded to S3."
           elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
             aws s3 sync apps/scripts/build s3://frontendscripts/staging
+            echo "Staging scripts uploaded to S3."
           fi
