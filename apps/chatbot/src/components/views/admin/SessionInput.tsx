@@ -1,4 +1,3 @@
-import { SessionHashDataSchema } from "@meaku/core/types/session";
 import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
 import Button from "@meaku/ui/components/layout/button";
 import Input from "@meaku/ui/components/layout/input";
@@ -41,17 +40,7 @@ const SessionInput = () => {
     }
 
     try {
-      const decodedSessionHash = atob(sessionHash);
-      const parsedSessionData = JSON.parse(decodedSessionHash);
-
-      const sessionDataValidation =
-        SessionHashDataSchema.safeParse(parsedSessionData);
-
-      if (!sessionDataValidation.success) {
-        throw new Error("Invalid session data.");
-      }
-
-      const { sessionId, prospectId } = sessionDataValidation.data;
+      const [sessionId, prospectId] = sessionHash.split("|");
 
       setSessionId(sessionId);
       setProspectId(prospectId);
