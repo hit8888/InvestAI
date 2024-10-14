@@ -42,6 +42,10 @@ const SessionInput = () => {
     try {
       const [sessionId, prospectId] = sessionHash.split("|");
 
+      if (!sessionId || !prospectId) {
+        throw new Error("Invalid session hash.");
+      }
+
       setSessionId(sessionId);
       setProspectId(prospectId);
 
