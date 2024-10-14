@@ -58,14 +58,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
-      - name: Upload embed and communication script to S3
+      - name: Determine branch, upload embed and communication scripts to S3
         if: steps.check_changes.outputs.changes == 'true'
         run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BRANCH="${{ github.event.pull_request.base.ref }}"
+          else
+            BRANCH="${{ github.ref_name }}"
+          fi
+
           echo "Uploading scripts to S3..."
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            aws s3 sync apps/scripts/build s3://frontendscripts/production
-            echo "Production scripts uploaded to S3."
-          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
-            aws s3 sync apps/scripts/build s3://frontendscripts/staging
-            echo "Staging scripts uploaded to S3."
+          aws s3 sync apps/scripts/build s3://frontendscripts/${BRANCH}
+          echo "Scripts uploaded to S3 for ${BRANCH}."
+
+          if [ $? -eq 0 ]; then
+            echo "Scripts uploaded to S3 for ${BRANCH} branch."
+          else
+            echo "Failed to upload scripts to S3."
+            exit 1
           fi
