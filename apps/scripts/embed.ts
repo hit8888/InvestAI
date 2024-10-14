@@ -55,7 +55,7 @@ const createIframe = (container: HTMLElement, IFRAME_SRC: string): void => {
 const adjustResponsiveStyles = (
   container: HTMLElement,
   isChatOpen: boolean,
-  isTooltipOpen: boolean
+  isTooltipOpen: boolean = true
 ): void => {
   const isMobile =
     window.innerWidth < DEFAULT_WIDTH_PX ||
@@ -119,39 +119,8 @@ const getUtmParameters = (): Record<string, string | null> => {
   );
 };
 
-/**
- * Fetches the IP address of the user.
- * @returns {Promise<string>} The IP address.
- */
-const fetchIpAddress = async (): Promise<string> => {
-  let ip = "None";
-  const url = "https://ipinfo.io/json";
-  try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(1000) });
-    const location = await response.json();
-    ip = location.ip;
-  } catch (error) {
-    console.error("Error fetching IP Address:", error);
-  }
-  return ip;
-};
-
-/**
- * Checks if a chat session exists in local storage.
- * @returns {boolean} True if a chat session exists, false otherwise.
- */
-const checkSessionExists = (): boolean => {
-  try {
-    return JSON.parse(localStorage.getItem("chatSession") as string) !== null;
-  } catch (error) {
-    return false;
-  }
-};
-
 // Main function
 (async function () {
-  console.log("enters main fn");
-
   //   const parentUrl = document.currentScript.dataset.param1;
   const tenantId =
     document.currentScript?.getAttribute("tenant-id") || "hackerearth";
@@ -160,17 +129,14 @@ const checkSessionExists = (): boolean => {
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=widget`;
 
-  let ip = await fetchIpAddress();
   let isChatOpen = false;
-  let isTooltipOpen = checkSessionExists();
+  let isTooltipOpen = true;
   let iFrameSource: Window | MessageEventSource | null = null;
 
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
-
-  console.log("sets up the container and iframe");
+  adjustResponsiveStyles(container, isChatOpen);
 
   const url =
     window.location !== window.parent.location
@@ -190,7 +156,6 @@ const checkSessionExists = (): boolean => {
     (iFrameSource as Window)?.postMessage(
       {
         utmParams,
-        ip,
         http_referrer,
         url,
       },

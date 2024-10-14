@@ -8,36 +8,6 @@ window.breakoutInitializationIntervalId = "";
 
 const USER_VISIT_LS_KEY = "BREAKOUT_USER_VISIT";
 
-const getWebGLInfo = () => {
-  const canvas = document.createElement("canvas");
-  const gl =
-    canvas.getContext("webgl") ||
-    (canvas.getContext("experimental-webgl") as WebGLRenderingContext | null);
-  if (!gl) return null;
-  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
-  return debugInfo
-    ? {
-        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
-        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
-      }
-    : null;
-};
-
-const getCanvasFingerprint = () => {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
-  ctx.textBaseline = "top";
-  ctx.font = "14px Arial";
-  ctx.fillStyle = "#f60";
-  ctx.fillRect(125, 1, 62, 20);
-  ctx.fillStyle = "#069";
-  ctx.fillText("Meaku", 2, 15);
-  ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-  ctx.fillText("Meaku", 4, 17);
-  return canvas.toDataURL();
-};
-
 const getAllQueryParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const params: Record<string, string> = {};
@@ -45,14 +15,6 @@ const getAllQueryParams = () => {
     params[key] = value;
   });
   return params;
-};
-
-const getBrowserSignature = () => {
-  return {
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-  };
 };
 
 const getURL = () => {
@@ -95,10 +57,7 @@ const trackUserVisits = () => {
 };
 
 const payload = {
-  webGLInfo: getWebGLInfo(),
-  canvasFingerprint: getCanvasFingerprint(),
   queryParams: getAllQueryParams(),
-  browserSignature: getBrowserSignature(),
   referer: getReferer(),
   parentURL: getURL(),
   userVisits: trackUserVisits(),
