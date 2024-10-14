@@ -67,12 +67,18 @@ jobs:
             BRANCH="${{ github.ref_name }}"
           fi
 
+          if [ "$BRANCH" == "main" ]; then
+            ENVIRONMENT="production"
+          else
+            ENVIRONMENT="staging"
+          fi
+
+
           echo "Uploading scripts to S3..."
-          aws s3 sync apps/scripts/build s3://frontendscripts/${BRANCH}
-          echo "Scripts uploaded to S3 for ${BRANCH}."
+          aws s3 sync apps/scripts/build s3://frontendscripts/${ENVIRONMENT}
 
           if [ $? -eq 0 ]; then
-            echo "Scripts uploaded to S3 for ${BRANCH} branch."
+            echo "Scripts uploaded to S3 for ${ENVIRONMENT} environment."
           else
             echo "Failed to upload scripts to S3."
             exit 1
