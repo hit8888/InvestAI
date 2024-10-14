@@ -1,0 +1,16 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc && tsc-alias && esbuild ./dist/**/*.js --minify --outdir=build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@meaku/typescript-config": "workspace:*",
+    "esbuild": "^0.24.0",
+    "tsc-alias": "^1.8.10"
+  }
+}
