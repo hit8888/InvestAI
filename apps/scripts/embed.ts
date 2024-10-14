@@ -122,9 +122,8 @@ const getUtmParameters = (): Record<string, string | null> => {
 // Main function
 (async function () {
   //   const parentUrl = document.currentScript.dataset.param1;
-  const tenantId =
-    document.currentScript?.getAttribute("tenant-id") || "hackerearth";
-  const agentId = document.currentScript?.getAttribute("agent-id") || "1";
+  const tenantId = document.currentScript?.getAttribute("tenant-id");
+  const agentId = document.currentScript?.getAttribute("agent-id");
 
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=widget`;
