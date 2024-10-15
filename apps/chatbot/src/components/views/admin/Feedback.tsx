@@ -4,7 +4,6 @@ import {
   FeedbackEnum,
   InitialFeedbackPayload,
 } from "@meaku/core/types/feedback";
-import { SessionHashData } from "@meaku/core/types/session";
 import ChatHeader from "@meaku/ui/components/layout/chat-header";
 import ChatInput from "@meaku/ui/components/layout/chat-input";
 import ChatMessage from "@meaku/ui/components/layout/chat-message";
@@ -166,14 +165,10 @@ const Feedback = () => {
     fetchSessionData();
   };
 
-  const handleCopySessionHash = () => {
+  const handleCopySession = () => {
     try {
-      const sessionDataToBeHashed: SessionHashData = {
-        sessionId: sessionId,
-        prospectId: session?.prospect_id.toString() ?? "",
-      };
-
-      const hashedSessionData = btoa(JSON.stringify(sessionDataToBeHashed));
+      const prospectId = session?.prospect_id.toString() ?? "";
+      const hashedSessionData = `${sessionId}|${prospectId}`;
 
       navigator.clipboard.writeText(hashedSessionData);
       toast.success("Session hash copied.");
@@ -204,7 +199,7 @@ const Feedback = () => {
         config={ChatConfig.EMBED}
         showRestartButton={true}
         handleRestart={handleRefreshChat}
-        handleCopyMessagesJSON={handleCopySessionHash}
+        handleCopySession={handleCopySession}
       />
       <ChatMessage
         agentName={agentName}

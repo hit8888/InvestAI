@@ -19,8 +19,8 @@ type Props = {
   logoURL?: string;
   showRestartButton?: boolean;
   handleRestart?: () => void;
+  handleCopySession?: () => void;
   handlePrimaryCta?: () => void;
-  handleCopyMessagesJSON?: () => void;
 };
 
 const ChatHeader = (props: Props) => {
@@ -35,8 +35,8 @@ const ChatHeader = (props: Props) => {
     logoURL,
     showRestartButton = false,
     handleRestart,
+    handleCopySession,
     handlePrimaryCta,
-    handleCopyMessagesJSON,
   } = props;
 
   const isConfigWidget = config === ChatConfig.WIDGET;
@@ -129,7 +129,7 @@ const ChatHeader = (props: Props) => {
         {showRestartButton && (
           <div className="ui-flex ui-items-center ui-gap-1">
             <Button
-              onClick={handleCopyMessagesJSON}
+              onClick={handleCopySession}
               size="icon"
               className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-2"
             >
