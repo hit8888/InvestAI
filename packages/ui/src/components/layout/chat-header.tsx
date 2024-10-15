@@ -1,5 +1,5 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import { CopyIcon, XIcon } from "lucide-react";
+import { CopyIcon, MessageCircleIcon, XIcon } from "lucide-react";
 import { memo, useMemo } from "react";
 import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
@@ -19,6 +19,7 @@ type Props = {
   logoURL?: string;
   showRestartButton?: boolean;
   handleRestart?: () => void;
+  handlePrimaryCta?: () => void;
   handleCopyMessagesJSON?: () => void;
 };
 
@@ -34,6 +35,7 @@ const ChatHeader = (props: Props) => {
     logoURL,
     showRestartButton = false,
     handleRestart,
+    handlePrimaryCta,
     handleCopyMessagesJSON,
   } = props;
 
@@ -41,6 +43,12 @@ const ChatHeader = (props: Props) => {
   const showHeaderText = !isConfigWidget || !showMinimizedHeader;
   const showOrgLogoInHeader =
     !isConfigWidget && !!logoURL && !showMinimizedHeader;
+  const showCtaInWidgetMode =
+    isConfigWidget &&
+    showMinimizedHeader &&
+    typeof handlePrimaryCta === "function";
+  const showCtaInEmbedMode =
+    !isConfigWidget && typeof handlePrimaryCta === "function";
 
   const headerText = useMemo(() => {
     if (subtitle) return subtitle;
@@ -68,7 +76,16 @@ const ChatHeader = (props: Props) => {
               <img src={logoURL} alt="Organization Logo" className="ui-w-8" />
             )}
 
-            <div>
+            <div className="ui-flex ui-items-center ui-gap-6">
+              {showCtaInWidgetMode && (
+                <Button
+                  onClick={handlePrimaryCta}
+                  className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
+                >
+                  <MessageCircleIcon className="ui-h-5 ui-w-5" />
+                  <p className="ui-text-sm">Book a demo</p>
+                </Button>
+              )}
               <button onClick={handleClose}>
                 <XIcon />
               </button>
@@ -126,6 +143,16 @@ const ChatHeader = (props: Props) => {
               <RefreshChatIcon className="ui-text-primary" />
             </Button>
           </div>
+        )}
+
+        {showCtaInEmbedMode && (
+          <Button
+            onClick={handlePrimaryCta}
+            className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
+          >
+            <MessageCircleIcon className="ui-h-5 ui-w-5" />
+            <p className="ui-text-sm">Book a demo</p>
+          </Button>
         )}
       </div>
     </div>

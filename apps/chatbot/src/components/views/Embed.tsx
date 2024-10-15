@@ -21,8 +21,10 @@ const Embed = () => {
 
   const orgName = manager?.getOrgName();
   const configuration = manager?.getConfig();
+  const disclaimerText = configuration?.body.disclaimer_message ?? "";
   const agentName = manager?.getAgentName() ?? "";
   const sessionId = manager?.getSessionId();
+  const showCta = configuration?.body.show_cta ?? false;
 
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
@@ -32,9 +34,7 @@ const Embed = () => {
     (state) => state.suggestedQuestions,
   );
 
-  const { handleSendUserMessage } = useWebSocketChat();
-
-  const isC2FO = orgName?.toLowerCase() === "c2fo";
+  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
 
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
@@ -50,6 +50,7 @@ const Embed = () => {
         config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ""}
         title={configuration?.header.title ?? ""}
+        handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
       />
       <ChatMessage
         agentName={agentName}
@@ -58,11 +59,7 @@ const Embed = () => {
         handleSuggestedQuestionOnClick={handleSendUserMessage}
       />
       <ChatInput
-        disclaimerText={
-          isC2FO
-            ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
-            : ""
-        }
+        disclaimerText={disclaimerText}
         isAMessageBeingProcessed={isAMessageBeingProcessed}
         handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}

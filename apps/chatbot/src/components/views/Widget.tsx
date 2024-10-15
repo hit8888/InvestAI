@@ -38,10 +38,12 @@ const Widget = () => {
   }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
+  const configuration = manager?.getConfig();
+  const showCta = configuration?.body.show_cta ?? false;
   const agentName = manager?.getAgentName() ?? "";
   const sessionId = manager?.getSessionId();
 
-  const { handleSendUserMessage } = useWebSocketChat();
+  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const showTooltip =
@@ -89,6 +91,7 @@ const Widget = () => {
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
               handleClose={handleCloseChat}
+              handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
             />
             <ChatMessage
               agentName={agentName}
