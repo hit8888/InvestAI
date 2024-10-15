@@ -82,8 +82,9 @@ const Feedback = () => {
   }, [config, session]);
 
   const orgName = manager?.getOrgName() ?? "";
-  const isC2FO = orgName?.toLowerCase() === "c2fo";
   const sessionId = manager?.getSessionId() ?? "";
+  const configuration = manager?.getConfig();
+  const disclaimerText = configuration?.body.disclaimer_message ?? "";
   const agentName = manager?.getAgentName() ?? "";
 
   const activeResponse = messages.find(
@@ -219,11 +220,7 @@ const Feedback = () => {
         handleShareFeedback={handleShareDetailedFeedback}
       />
       <ChatInput
-        disclaimerText={
-          isC2FO
-            ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
-            : ""
-        }
+        disclaimerText={disclaimerText}
         handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
         handleSendUserMessage={handleSendUserMessage}
         isAMessageBeingProcessed={isAMessageBeingProcessed}

@@ -151,7 +151,17 @@ class UnifiedResponseManager {
   }
 
   getConfig() {
-    return this.config;
+    const config = this.config;
+    const isOrgC2FO = config.org_name === "C2FO";
+
+    if (isOrgC2FO) {
+      config.body.disclaimer_message =
+        "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support.";
+    }
+
+    config.body.show_cta = false;
+
+    return config;
   }
 }
 
