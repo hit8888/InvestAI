@@ -130,7 +130,7 @@ const MessageItem = (props: Props) => {
           },
         )}
       >
-        <div className="ui-p-4">
+        <div className="ui-p-4" onClick={handleMessageClick}>
           <ReactMarkdown
             remarkPlugins={[gfm]}
             components={reactMarkdownComponents}
