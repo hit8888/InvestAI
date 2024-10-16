@@ -1,9 +1,10 @@
 import { StyleConfig } from "@meaku/core/types/session";
 import { hexToRGB } from "@meaku/core/utils/color";
+import { ENV } from "../config/env";
 import { trackError } from "./error";
 
-export const isDev = process.env.NODE_ENV === "development";
-export const isProduction = process.env.NODE_ENV === "production";
+export const isDev = ENV.VITE_APP_ENV !== "production";
+export const isProduction = ENV.VITE_APP_ENV === "production";
 
 export const handleColorConfig = (styleConfig: StyleConfig) => {
   Object.keys(styleConfig).forEach((key) => {

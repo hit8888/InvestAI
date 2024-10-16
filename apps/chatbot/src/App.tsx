@@ -24,6 +24,8 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!isProduction) return;
+
     try {
       LogRocket.init(ENV.VITE_LOGROCKET_APP_ID);
     } catch (error) {
