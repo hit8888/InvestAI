@@ -122,122 +122,105 @@ const MessageItem = (props: Props) => {
 
       <div
         className={cn(
-          "ui-w-11/12 ui-max-w-fit ui-rounded-2xl ui-border ui-p-4 ui-text-gray-700 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
+          "ui-w-11/12 ui-max-w-fit ui-overflow-hidden ui-rounded-2xl ui-border ui-text-gray-700 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
           {
-            "ui-flex ui-items-start ui-space-x-4 ui-rounded-tl-none ui-border-primary/25 ui-bg-primary/10":
+            "ui-flex ui-flex-col ui-items-start ui-rounded-tl-none ui-border-primary/25 ui-bg-primary/10":
               isSenderBot,
-            "ui-rounded-br-none ui-border-gray-200": !isSenderBot,
-            "ui-rounded-b-none": Boolean(videoURL) || showDocuments,
-            "ui-border-b-0": showDocuments,
+            "ui-border-gray-200": !isSenderBot,
           },
         )}
       >
-        <div>
-          <div
-            className="ui-prose ui-max-w-full ui-text-sm md:ui-text-base"
-            onClick={handleMessageClick}
+        <div className="ui-p-4">
+          <ReactMarkdown
+            remarkPlugins={[gfm]}
+            components={reactMarkdownComponents}
           >
-            <ReactMarkdown
-              remarkPlugins={[gfm]}
-              components={reactMarkdownComponents}
-            >
-              {message.message}
-            </ReactMarkdown>
-          </div>
+            {message.message}
+          </ReactMarkdown>
         </div>
-      </div>
 
-      {showDocuments && (
-        <div
-          className={cn(
-            "ui-w-11/12 ui-overflow-hidden ui-rounded-b-2xl ui-border ui-border-t-0 ui-border-primary/25 ui-bg-primary/10 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
-            {
-              "ui-rounded-b-none ui-border-b-0": Boolean(videoURL),
-            },
-          )}
-        >
-          <Accordion type="single" collapsible>
-            <AccordionItem
-              value="sources"
-              className="ui-border-0 ui-border-none"
-            >
-              <AccordionTrigger className="ui-w-full ui-px-4 ui-py-1 hover:ui-no-underline [&[data-state=open]_svg]:!-ui-rotate-0">
-                <div className="ui-flex ui-w-full ui-items-center ui-justify-between">
-                  <h4 className="ui-text-x[13px] ui-font-medium ui-text-gray-700">
-                    Show sources:
-                  </h4>
-                  <div className="ui-flex ui-items-center ui-justify-center ui-rounded-lg ui-bg-primary/20 ui-p-[1px] ui-transition-colors ui-duration-300 ui-ease-in-out hover:ui-bg-primary/30">
-                    <ChevronIcon className="ui-h-7 ui-w-7 ui-rotate-180 ui-transform ui-text-primary ui-transition-transform ui-duration-300" />
+        {showDocuments && (
+          <div className="ui-w-full">
+            <Accordion type="single" collapsible>
+              <AccordionItem
+                value="sources"
+                className="ui-border-0 ui-border-none"
+              >
+                <AccordionTrigger className="ui-w-full ui-px-4 ui-py-1 hover:ui-no-underline [&[data-state=open]_svg]:!-ui-rotate-0">
+                  <div className="ui-flex ui-w-full ui-items-center ui-justify-between">
+                    <h4 className="ui-text-x[13px] ui-font-medium ui-text-gray-700">
+                      Show sources:
+                    </h4>
+                    <div className="ui-flex ui-items-center ui-justify-center ui-rounded-lg ui-bg-primary/20 ui-p-[1px] ui-transition-colors ui-duration-300 ui-ease-in-out hover:ui-bg-primary/30">
+                      <ChevronIcon className="ui-h-7 ui-w-7 ui-rotate-180 ui-transform ui-text-primary ui-transition-transform ui-duration-300" />
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="!ui-pb-0">
-                <div className="ui-bg-primary/20">
-                  {message.documents.map((doc, idx) => (
-                    <div
-                      key={doc.id}
-                      className={cn(
-                        "ui-flex ui-items-center ui-gap-4 ui-px-4 ui-py-2",
-                        {
-                          "ui-border-b ui-border-primary/30":
-                            idx !== message.documents.length - 1,
-                        },
-                      )}
-                    >
-                      <div className="ui-flex ui-h-6 ui-w-6 ui-items-center ui-justify-center ui-rounded-md ui-bg-white">
-                        <p className="ui-text-sm ui-font-medium ui-text-gray-700">
-                          {idx + 1}
-                        </p>
-                      </div>
-                      <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
-                        {doc.url ? (
-                          <>
-                            <a
-                              href={doc.url}
-                              target="_blank"
-                              className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
+                </AccordionTrigger>
+                <AccordionContent className="!ui-pb-0">
+                  <div className="ui-bg-primary/20">
+                    {message.documents.map((doc, idx) => (
+                      <div
+                        key={doc.id}
+                        className={cn(
+                          "ui-flex ui-items-center ui-gap-4 ui-px-4 ui-py-2",
+                          {
+                            "ui-border-b ui-border-primary/30":
+                              idx !== message.documents.length - 1,
+                          },
+                        )}
+                      >
+                        <div className="ui-flex ui-h-6 ui-w-6 ui-items-center ui-justify-center ui-rounded-md ui-bg-white">
+                          <p className="ui-text-sm ui-font-medium ui-text-gray-700">
+                            {idx + 1}
+                          </p>
+                        </div>
+                        <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
+                          {doc.url ? (
+                            <>
+                              <a
+                                href={doc.url}
+                                target="_blank"
+                                className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
+                                title={doc.title || doc.data_source_name}
+                              >
+                                {doc.title || doc.data_source_name}
+                              </a>
+                              <div>
+                                <FaviconImage
+                                  url={doc.url}
+                                  className="ui-h-4 ui-w-4"
+                                />
+                              </div>
+                            </>
+                          ) : (
+                            <p
+                              className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
                               title={doc.title || doc.data_source_name}
                             >
                               {doc.title || doc.data_source_name}
-                            </a>
-
-                            <div>
-                              <FaviconImage
-                                url={doc.url}
-                                className="ui-h-4 ui-w-4"
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <p
-                            className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                            title={doc.title || doc.data_source_name}
-                          >
-                            {doc.title || doc.data_source_name}
-                          </p>
-                        )}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      )}
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        )}
 
-      {videoURL && (
-        <video
-          className={
-            "ui-w-11/12 ui-max-w-fit ui-rounded-b-2xl md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6"
-          }
-          controls
-          autoPlay={!message.isPartOfHistory}
-        >
-          <source src={videoURL} type="video/mp4" />
-          Your browser does not support viewing this video.
-        </video>
-      )}
+        {videoURL && (
+          <video
+            className="ui-w-full"
+            controls
+            autoPlay={!message.isPartOfHistory}
+          >
+            <source src={videoURL} type="video/mp4" />
+            Your browser does not support viewing this video.
+          </video>
+        )}
+      </div>
 
       {showFeedbackButtons && (
         <div className="ui-mt-2 ui-flex ui-items-center ui-gap-2">
