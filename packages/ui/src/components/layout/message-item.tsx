@@ -130,7 +130,10 @@ const MessageItem = (props: Props) => {
           },
         )}
       >
-        <div className="ui-p-4" onClick={handleMessageClick}>
+        <div
+          className="ui-prose ui-max-w-full ui-p-4"
+          onClick={handleMessageClick}
+        >
           <ReactMarkdown
             remarkPlugins={[gfm]}
             components={reactMarkdownComponents}
