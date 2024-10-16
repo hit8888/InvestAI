@@ -6,11 +6,15 @@ const useAnalytics = () => {
   const { orgName = "", agentId = "" } = useParams<ChatParams>();
 
   const commonPayload = { orgName, agentId };
+  const isProduction = process.env.NODE_ENV === "production";
 
   const trackEvent = (
     eventName: string,
     payload: Record<string, unknown> = {}
   ) => {
+    if (!isProduction) return;
+    if (orgName?.toLowerCase() !== "c2fo") return;
+
     try {
       amplitude.track(eventName, { ...commonPayload, ...payload });
     } catch (error) {}
