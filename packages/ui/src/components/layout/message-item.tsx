@@ -50,7 +50,8 @@ const MessageItem = (props: Props) => {
   const showFeedbackButtons =
     message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
-  const showBuyerIntentScore = Boolean(message.analytics.buyer_intent_score);
+  const showBuyerIntentScore =
+    showFeedbackButtons && Boolean(message.analytics.buyer_intent_score);
   const isMessageReadOnly = message.isReadOnly ?? false;
   const isFeedbackThumbUp = Boolean(
     message.feedback?.positive_feedback === true,
