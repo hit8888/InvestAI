@@ -31,7 +31,7 @@ export const ConfigurationSchema = z.object({
     }),
     chat_history: z.array(MessageSchema),
     feedback: z.array(FeedbackSchema).optional(),
-    documents: z.array(DocumentSchema).optional(),
+    documents: z.array(DataSourceSchema).optional(),
     disclaimer_message: z.string().optional(),
     show_cta: z.boolean().optional(),
   }),

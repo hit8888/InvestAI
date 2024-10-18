@@ -70,6 +70,7 @@ export const useMessageStore = create<State>()(
               is_loading: response.is_loading,
               is_complete: response.is_complete,
               showFeedbackOptions: response.showFeedbackOptions,
+              analytics: response.analytics,
             });
           }
         }),
@@ -81,6 +82,7 @@ export const useMessageStore = create<State>()(
             message,
             media: null,
             documents: [],
+            analytics: {},
           });
         }),
       handleAddMessageFeedback: (messageId, feedback) =>

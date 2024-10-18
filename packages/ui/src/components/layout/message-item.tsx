@@ -50,6 +50,7 @@ const MessageItem = (props: Props) => {
   const showFeedbackButtons =
     message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
+  const showBuyerIntentScore = Boolean(message.analytics.buyer_intent_score);
   const isMessageReadOnly = message.isReadOnly ?? false;
   const isFeedbackThumbUp = Boolean(
     message.feedback?.positive_feedback === true,
@@ -144,6 +145,16 @@ const MessageItem = (props: Props) => {
               {message.message}
             </ReactMarkdown>
           </div>
+
+          {showBuyerIntentScore && (
+            <div className="ui-mt-4 ui-flex ui-items-center ui-gap-3">
+              <p className="ui-text-sm ui-font-medium">Analytics:</p>
+              <p className="ui-rounded-md ui-bg-primary/40 ui-p-1 ui-text-sm">
+                Buyer Intent Score:{" "}
+                <span>{message.analytics.buyer_intent_score}</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -161,7 +172,7 @@ const MessageItem = (props: Props) => {
               value="sources"
               className="ui-border-0 ui-border-none"
             >
-              <AccordionTrigger className="ui-w-full ui-px-4 ui-py-1 hover:ui-no-underline [&[data-state=open]_svg]:!-ui-rotate-0">
+              <AccordionTrigger className="ui-w-full ui-px-4 ui-py-1 ui-pt-0 hover:ui-no-underline [&[data-state=open]_svg]:!-ui-rotate-0">
                 <div className="ui-flex ui-w-full ui-items-center ui-justify-between">
                   <h4 className="ui-text-x[13px] ui-font-medium ui-text-gray-700">
                     Show sources:
@@ -173,52 +184,56 @@ const MessageItem = (props: Props) => {
               </AccordionTrigger>
               <AccordionContent className="!ui-pb-0">
                 <div className="ui-bg-primary/20">
-                  {message.documents.map((doc, idx) => (
-                    <div
-                      key={doc.id}
-                      className={cn(
-                        "ui-flex ui-items-center ui-gap-4 ui-px-4 ui-py-2",
-                        {
-                          "ui-border-b ui-border-primary/30":
-                            idx !== message.documents.length - 1,
-                        },
-                      )}
-                    >
-                      <div className="ui-flex ui-h-6 ui-w-6 ui-items-center ui-justify-center ui-rounded-md ui-bg-white">
-                        <p className="ui-text-sm ui-font-medium ui-text-gray-700">
-                          {idx + 1}
-                        </p>
-                      </div>
-                      <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
-                        {doc.url ? (
-                          <>
-                            <a
-                              href={doc.url}
-                              target="_blank"
-                              className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                              title={doc.title || doc.data_source_name}
-                            >
-                              {doc.title || doc.data_source_name}
-                            </a>
-
-                            <div>
-                              <FaviconImage
-                                url={doc.url}
-                                className="ui-h-4 ui-w-4"
-                              />
-                            </div>
-                          </>
-                        ) : (
-                          <p
-                            className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                            title={doc.title || doc.data_source_name}
-                          >
-                            {doc.title || doc.data_source_name}
-                          </p>
+                  {message.documents
+                    .filter((doc) => Boolean(doc.url))
+                    .map((doc, idx) => (
+                      <div
+                        key={doc.id}
+                        className={cn(
+                          "ui-flex ui-items-center ui-gap-4 ui-px-4 ui-py-2",
+                          {
+                            "ui-border-b ui-border-primary/30":
+                              idx !== message.documents.length - 1,
+                          },
                         )}
+                      >
+                        <div className="ui-flex ui-h-6 ui-w-6 ui-items-center ui-justify-center ui-rounded-md ui-bg-white">
+                          <p className="ui-text-sm ui-font-medium ui-text-gray-700">
+                            {idx + 1}
+                          </p>
+                        </div>
+                        <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
+                          {doc.url && (
+                            <>
+                              <a
+                                href={doc.url}
+                                target="_blank"
+                                className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
+                                title={
+                                  doc.title || doc.data_source_name || doc.url
+                                }
+                              >
+                                {doc.title || doc.data_source_name || doc.url}
+                              </a>
+
+                              <p className="ui-text-sm ui-font-medium">
+                                Similarity Score:{" "}
+                                <span className="ui-text-primary">
+                                  {doc.similarity_score.toFixed(2)}
+                                </span>
+                              </p>
+
+                              <div>
+                                <FaviconImage
+                                  url={doc.url}
+                                  className="ui-h-4 ui-w-4"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </AccordionContent>
             </AccordionItem>

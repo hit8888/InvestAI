@@ -166,6 +166,7 @@ const useWebSocketChat = () => {
           is_complete: true,
           is_loading: false,
           suggested_questions: [],
+          analytics: {},
         });
       }
 
@@ -177,6 +178,7 @@ const useWebSocketChat = () => {
         is_complete: false,
         is_loading: true,
         suggested_questions: [],
+        analytics: {},
       });
 
       setIsAMessageBeingProcessed(true);
@@ -201,6 +203,7 @@ const useWebSocketChat = () => {
             is_complete: false,
             is_loading: true,
             suggested_questions: [],
+            analytics: {},
           });
 
           messageIndex++;
