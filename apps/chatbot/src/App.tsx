@@ -4,10 +4,13 @@ import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { ENV } from "./config/env";
 import router from "./router";
+import { isProduction } from "./utils/common";
 import { trackError } from "./utils/error";
 
 function App() {
   useEffect(() => {
+    if (!isProduction) return;
+
     try {
       amplitude.init(ENV.VITE_AMPLITUDE_API_KEY, {
         autocapture: true,
@@ -21,6 +24,8 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!isProduction) return;
+
     try {
       LogRocket.init(ENV.VITE_LOGROCKET_APP_ID);
     } catch (error) {
