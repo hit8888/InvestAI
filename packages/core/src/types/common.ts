@@ -8,5 +8,5 @@ export const DataSourceSchema = z.object({
   title: z.string().nullable(),
   url: z.string().nullable(),
   text: z.string().nullable(),
-  similarity_score: z.number(),
+  similarity_score: z.number().optional().nullable(),
 });

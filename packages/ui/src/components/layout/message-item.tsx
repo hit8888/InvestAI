@@ -217,12 +217,14 @@ const MessageItem = (props: Props) => {
                                 {doc.title || doc.data_source_name || doc.url}
                               </a>
 
-                              <p className="ui-text-sm ui-font-medium">
-                                Similarity Score:{" "}
-                                <span className="ui-text-primary">
-                                  {doc.similarity_score.toFixed(2)}
-                                </span>
-                              </p>
+                              {!!doc.similarity_score && (
+                                <p className="ui-text-sm ui-font-medium">
+                                  Similarity Score:{" "}
+                                  <span className="ui-text-primary">
+                                    {doc.similarity_score.toFixed(2)}
+                                  </span>
+                                </p>
+                              )}
 
                               <div>
                                 <FaviconImage
