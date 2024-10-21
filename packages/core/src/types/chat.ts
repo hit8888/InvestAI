@@ -7,6 +7,10 @@ export const MediaSchema = z.object({
   url: z.string(),
 });
 
+export const AnalyticsSchema = z.object({
+  buyer_intent_score: z.number().optional().nullable(),
+});
+
 export const MessageSchema = z.object({
   message_id: z.number(),
   response_id: z.string().nullable(),
@@ -16,6 +20,7 @@ export const MessageSchema = z.object({
   media: MediaSchema.nullable(),
   documents: z.array(DataSourceSchema),
   suggested_questions: z.array(z.string()),
+  analytics: AnalyticsSchema,
 });
 
 export const AIResponseSchema = z.object({
@@ -27,6 +32,7 @@ export const AIResponseSchema = z.object({
   is_loading: z.boolean().optional(),
   suggested_questions: z.array(z.string()),
   showFeedbackOptions: z.boolean().optional(),
+  analytics: AnalyticsSchema,
 });
 
 export type Message = {
@@ -44,6 +50,7 @@ export type Message = {
   feedback?: Feedback;
   showFeedbackOptions?: boolean;
   isReadOnly?: boolean;
+  analytics: z.infer<typeof AnalyticsSchema>;
 };
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;

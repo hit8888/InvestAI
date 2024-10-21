@@ -50,6 +50,8 @@ const MessageItem = (props: Props) => {
   const showFeedbackButtons =
     message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
+  const showBuyerIntentScore =
+    showFeedbackButtons && Boolean(message.analytics.buyer_intent_score);
   const isMessageReadOnly = message.isReadOnly ?? false;
   const isFeedbackThumbUp = Boolean(
     message.feedback?.positive_feedback === true,
@@ -178,15 +180,15 @@ const MessageItem = (props: Props) => {
                           </p>
                         </div>
                         <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
-                          {doc.url ? (
+                          {!!doc.url && (
                             <>
                               <a
                                 href={doc.url}
                                 target="_blank"
                                 className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                                title={doc.title || doc.data_source_name}
+                                title={doc.title || doc.data_source_name || doc.url}
                               >
-                                {doc.title || doc.data_source_name}
+                                {doc.title || doc.data_source_name || doc.url}
                               </a>
                               <div>
                                 <FaviconImage
@@ -195,13 +197,6 @@ const MessageItem = (props: Props) => {
                                 />
                               </div>
                             </>
-                          ) : (
-                            <p
-                              className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                              title={doc.title || doc.data_source_name}
-                            >
-                              {doc.title || doc.data_source_name}
-                            </p>
                           )}
                         </div>
                       </div>

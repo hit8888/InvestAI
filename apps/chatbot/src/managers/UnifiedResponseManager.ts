@@ -87,7 +87,6 @@ class UnifiedResponseManager {
   } = {}): Message[] {
     const chatHistory = this.config.body.chat_history ?? [];
     const feedbacks = this.config.body.feedback ?? [];
-    const documents = this.config.body.documents ?? [];
 
     const welcomeMessage: Message = {
       id: nanoid(),
@@ -98,19 +97,10 @@ class UnifiedResponseManager {
       showFeedbackOptions: false,
       documents: [],
       media: null,
+      analytics: {},
     };
 
     const formattedChatHistory = chatHistory.map((message, idx) => {
-      const relevantDcouments = documents.find(
-        (document) => document.response_id === message.response_id,
-      );
-      const messageDocuments = (relevantDcouments?.data_sources ?? []).map(
-        (document) => ({
-          ...document,
-          url: document.url ?? "",
-          title: document.title ?? "",
-        }),
-      );
       const messageFeedback = feedbacks.find(
         (feedback) =>
           feedback.response_id === message.response_id ||
@@ -121,7 +111,7 @@ class UnifiedResponseManager {
         id: message.message_id,
         message: message.message,
         media: message.media,
-        documents: messageDocuments,
+        documents: message.documents,
         role: message.role,
         suggested_questions: message.suggested_questions,
         isPartOfHistory: true,
@@ -129,6 +119,7 @@ class UnifiedResponseManager {
         showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
         feedback: messageFeedback,
         isReadOnly,
+        analytics: message.analytics,
       };
     });
 
