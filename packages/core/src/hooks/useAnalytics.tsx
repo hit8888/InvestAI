@@ -11,6 +11,8 @@ const useAnalytics = () => {
     eventName: string,
     payload: Record<string, unknown> = {}
   ) => {
+    if (orgName?.toLowerCase() !== "c2fo") return;
+
     try {
       amplitude.track(eventName, { ...commonPayload, ...payload });
     } catch (error) {}
