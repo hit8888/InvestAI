@@ -87,7 +87,6 @@ class UnifiedResponseManager {
   } = {}): Message[] {
     const chatHistory = this.config.body.chat_history ?? [];
     const feedbacks = this.config.body.feedback ?? [];
-    // const documents = this.config.body.documents ?? [];
 
     const welcomeMessage: Message = {
       id: nanoid(),
@@ -102,16 +101,6 @@ class UnifiedResponseManager {
     };
 
     const formattedChatHistory = chatHistory.map((message, idx) => {
-      // const relevantDcouments = documents.find(
-      //   (document) => document.response_id === message.response_id,
-      // );
-      // const messageDocuments = (relevantDcouments?.data_sources ?? []).map(
-      //   (document) => ({
-      //     ...document,
-      //     url: document.url ?? "",
-      //     title: document.title ?? "",
-      //   }),
-      // );
       const messageFeedback = feedbacks.find(
         (feedback) =>
           feedback.response_id === message.response_id ||
