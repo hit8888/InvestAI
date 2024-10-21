@@ -144,6 +144,16 @@ const MessageItem = (props: Props) => {
           </ReactMarkdown>
         </div>
 
+        {showBuyerIntentScore && (
+          <div className="ui-mt-4 ui-flex ui-items-center ui-gap-3 ui-px-4">
+            <p className="ui-text-sm ui-font-medium">Analytics:</p>
+            <p className="ui-rounded-md ui-bg-primary/40 ui-p-1 ui-text-sm">
+              Buyer Intent Score:{" "}
+              <span>{message.analytics.buyer_intent_score}</span>
+            </p>
+          </div>
+        )}
+
         {showDocuments && (
           <div className="ui-w-full">
             <Accordion type="single" collapsible>
@@ -186,7 +196,9 @@ const MessageItem = (props: Props) => {
                                 href={doc.url}
                                 target="_blank"
                                 className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
-                                title={doc.title || doc.data_source_name || doc.url}
+                                title={
+                                  doc.title || doc.data_source_name || doc.url
+                                }
                               >
                                 {doc.title || doc.data_source_name || doc.url}
                               </a>

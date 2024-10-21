@@ -59,6 +59,7 @@ export const useMessageStore = create<State>()(
               is_loading: response.is_loading,
               is_complete: response.is_complete,
               showFeedbackOptions: response.showFeedbackOptions,
+              analytics: response.analytics,
             };
           } else {
             draft.messages.push({
