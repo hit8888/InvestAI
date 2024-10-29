@@ -10,4 +10,32 @@
     --card: 239 241 245;
     --card-foreground: 45 52 84;
   }
+
+  .bottom-bar-shadow {
+    box-shadow:
+      0px 2px 80px 0px rgba(49, 135, 247, 0.07),
+      0px 1.296px 46.852px 0px rgba(49, 135, 247, 0.05),
+      0px 0.77px 25.481px 0px rgba(49, 135, 247, 0.04),
+      0px 0.4px 13px 0px rgba(49, 135, 247, 0.04),
+      0px 0.163px 6.519px 0px rgba(49, 135, 247, 0.03),
+      0px 0.037px 3.148px 0px rgba(49, 135, 247, 0.02);
+    /* box-shadow:
+      0px 2px 80px 0px rgba(var(--primary), 0.07),
+      0px 1.296px 46.852px 0px rgba(var(--primary), 0.05),
+      0px 0.77px 25.481px 0px rgba(var(--primary), 0.04),
+      0px 0.4px 13px 0px rgba(var(--primary), 0.04),
+      0px 0.163px 6.519px 0px rgba(var(--primary), 0.03),
+      0px 0.037px 3.148px 0px rgba(var(--primary), 0.02); */
+  }
+
+  .bot-indicator {
+    background: radial-gradient(
+      61.46% 61.46% at 50% 38.54%,
+      #3089fc 0%,
+      #293f88 100%
+    );
+    filter: drop-shadow(0px 0px 10.5px rgba(48, 137, 252, 0.36))
+      drop-shadow(0px 3.5px 7px rgba(0, 0, 0, 0.2));
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
 }
