@@ -1,4 +1,3 @@
-import BottomBar from "@meaku/ui/components/layout/bottom-bar";
 import { cn } from "@meaku/ui/lib/cn";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -12,6 +11,7 @@ import { useMessageStore } from "../../../stores/useMessageStore";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import ChatHeader from "./ChatHeader";
+import BottomBar from "./BottomBar";
 
 type QueryParams = {
   showGlass?: boolean;

@@ -1,5 +1,5 @@
 {
   "extends": "@meaku/typescript-config/react-library.json",
-  "include": [".", "../../apps/chatbot/src/components/views/MultimediaChat/message-item-new.tsx"],
+  "include": [".", "../../apps/chatbot/src/components/views/MultimediaChat/MessageItem.tsx"],, "../../apps/chatbot/src/components/views/MultimediaChat/bottom-bar.tsx"
   "exclude": ["dist", "build", "node_modules"]
 }
