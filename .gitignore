@@ -38,3 +38,5 @@ yarn-error.log*
 
 # ui
 dist/
+
+*storybook.log
