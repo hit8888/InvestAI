@@ -1,0 +1,55 @@
+/* Switch.module.css */
+
+/* Root styles */
+.root {
+    display: inline-flex;
+    height: 1.5rem; /* 6 */
+    width: 2.75rem; /* 11 */
+    cursor: pointer;
+    align-items: center;
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+  }
+  
+  /* State-dependent styles */
+  .checked {
+    background-color: var(--primary-color);
+  }
+  .unchecked {
+    background-color: #e0e0e0; /* gray-300 */
+  }
+  
+  /* Focus styles */
+  .focusVisible {
+    outline: none;
+    ring: 2px;
+    ring-offset: 2px;
+  }
+  
+  /* Disabled state */
+  .disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  /* Thumb styles */
+  .thumb {
+    pointer-events: none;
+    display: block;
+    height: 1.25rem; /* 5 */
+    width: 1.25rem; /* 5 */
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s;
+  }
+  
+  /* Thumb transform states */
+  .thumbChecked {
+    transform: translateX(1.25rem); /* move right */
+  }
+  .thumbUnchecked {
+    transform: translateX(0); /* move left */
+  }
+  
