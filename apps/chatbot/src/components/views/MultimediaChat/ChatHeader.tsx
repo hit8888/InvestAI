@@ -1,6 +1,7 @@
-import { EllipsisVerticalIcon, XIcon } from "lucide-react";
-import Button from "./button";
-import { Switch } from "./switch";
+import Button from "@meaku/ui/components/layout/button";
+import { Switch } from "@meaku/ui/components/layout/switch"; // Adjust the import path as necessary
+import { EllipsisVerticalIcon, XIcon } from "lucide-react";//TODO: Expos this for design system
+
 
 interface IProps {
   handlePrimaryCta: () => void;

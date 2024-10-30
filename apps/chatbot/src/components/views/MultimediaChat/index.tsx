@@ -1,17 +1,17 @@
-import ChatInputNew from "@meaku/ui/components/chat-input-new";
 import BottomBar from "@meaku/ui/components/layout/bottom-bar";
-import ChatHeaderNew from "@meaku/ui/components/layout/chat-header-new";
-import ChatMessageNew from "@meaku/ui/components/layout/chat-message-new";
 import { cn } from "@meaku/ui/lib/cn";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import useConfigData from "../../hooks/query/useConfigData";
-import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
-import useLocalStorageSession from "../../hooks/useLocalStorageSession";
-import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
-import { useChatStore } from "../../stores/useChatStore";
-import { useMessageStore } from "../../stores/useMessageStore";
+import useConfigData from "../../../hooks/query/useConfigData";
+import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
+import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
+import useWebSocketChat from "../../../hooks/useWebSocketChat";
+import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
+import { useChatStore } from "../../../stores/useChatStore";
+import { useMessageStore } from "../../../stores/useMessageStore";
+import ChatInput from "./ChatInput";
+import ChatMessage from "./ChatMessage";
+import ChatHeader from "./ChatHeader";
 
 type QueryParams = {
   showGlass?: boolean;
@@ -104,13 +104,13 @@ const Multimedia = () => {
       >
         {isChatOpen && (
           <div className="ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden ui-rounded-md ui-bg-white ui-bg-opacity-20 ui-backdrop-blur-lg">
-            <ChatHeaderNew
+            <ChatHeader
               handlePrimaryCta={handlePrimaryCta}
               handleCloseChat={handleCloseChat}
               handleToggleWidth={handleToggleWidth}
             />
-            <ChatMessageNew messages={messages} />
-            <ChatInputNew
+            <ChatMessage messages={messages} />
+            <ChatInput
               handleOnChange={handleChatInputOnChangeCallback}
               handleSendMessage={handleSendUserMessage}
               isAMessageBeingProcessed={isAMessageBeingProcessed}
@@ -118,37 +118,6 @@ const Multimedia = () => {
           </div>
         )}
       </div>
-
-      {/* <div
-        className={cn("ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden", {
-          "ui-bg-white": isChatOpen,
-        })}
-      > */}
-      {/* {isChatOpen && (
-            <>
-              <ChatHeader
-                agentName={agentName}
-                orgName={orgName}
-                config={ChatConfig.WIDGET}
-                showMinimizedHeader={hasFirstUserMessageBeenSent}
-                handleClose={handleCloseChat}
-                handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
-              />
-              <ChatMessage
-                agentName={agentName}
-                messages={messages}
-                suggestedQuestions={suggestedQuestions}
-                handleSuggestedQuestionOnClick={handleSendUserMessage}
-              />
-              <ChatInput
-                isAMessageBeingProcessed={isAMessageBeingProcessed}
-                handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
-                handleSendUserMessage={handleSendUserMessage}
-              />
-            </>
-          )} */}
-      {/* </div> */}
-
       <BottomBar
         isChatOpen={isChatOpen}
         suggestedQuestions={suggestedQuestions}
