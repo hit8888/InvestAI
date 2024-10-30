@@ -13,7 +13,7 @@ interface IProps {
 const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
-const ChatInputNew = (props: IProps) => {
+const ChatInput = (props: IProps) => {
   const { handleOnChange, handleSendMessage, isAMessageBeingProcessed } = props;
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -78,4 +78,4 @@ const ChatInputNew = (props: IProps) => {
   );
 };
 
-export default ChatInputNew;
+export default ChatInput;

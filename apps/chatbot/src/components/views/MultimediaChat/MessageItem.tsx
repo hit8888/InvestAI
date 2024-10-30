@@ -2,7 +2,7 @@ import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
-import { cn } from "../../lib/cn";
+import { cn } from "@meaku/ui/lib/cn";
 
 interface IProps {
   message: Message;
@@ -26,7 +26,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
   return <strong className="ui-text-gray-600" {...props} />;
 };
 
-const MessageItemNew = (props: IProps) => {
+const MessageItem = (props: IProps) => {
   const { message } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -91,4 +91,4 @@ const MessageItemNew = (props: IProps) => {
   );
 };
 
-export default MessageItemNew;
+export default MessageItem;

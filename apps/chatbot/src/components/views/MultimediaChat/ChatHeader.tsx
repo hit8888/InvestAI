@@ -9,7 +9,7 @@ interface IProps {
   handleToggleWidth: () => void;
 }
 
-const ChatHeaderNew = (props: IProps) => {
+const ChatHeader = (props: IProps) => {
   const { handlePrimaryCta, handleCloseChat, handleToggleWidth } = props;
 
   return (
@@ -44,4 +44,4 @@ const ChatHeaderNew = (props: IProps) => {
   );
 };
 
-export default ChatHeaderNew;
+export default ChatHeader;

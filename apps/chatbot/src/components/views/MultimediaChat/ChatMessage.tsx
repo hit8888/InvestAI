@@ -1,12 +1,12 @@
 import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef } from "react";
-import MessageItemNew from "@meaku/ui/components/layout/message-item-new";
+import MessageItem from "./MessageItem";
 
 interface IProps {
   messages: Message[];
 }
 
-const ChatMessageNew = (props: IProps) => {
+const ChatMessage = (props: IProps) => {
   const { messages } = props;
 
   const endRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ const ChatMessageNew = (props: IProps) => {
     <div className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-bg-white ui-bg-opacity-60 ui-p-2">
       <div className="ui-mx-auto ui-h-full ui-w-full sm:ui-max-w-[85%] lg:ui-max-w-[80%] xl:ui-max-w-[70%] 2xl:ui-max-w-[60%]">
         {messages.map((message) => (
-          <MessageItemNew key={message.id} message={message} />
+          <MessageItem key={message.id} message={message} />
         ))}
       </div>
 
@@ -32,4 +32,4 @@ const ChatMessageNew = (props: IProps) => {
   );
 };
 
-export default ChatMessageNew;
+export default ChatMessage;
