@@ -2,11 +2,11 @@ import { cn } from "../../lib/cn";
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const ChevronIcon = ({ className = "ui-text-primary", ...props }: Props) => {
+const ChevronIcon = ({ className = "text-primary", ...props }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("ui-h-4 ui-w-4 ui-fill-current", className)}
+      className={cn("h-4 w-4 fill-current", className)}
       fill="none"
       viewBox="0 0 24 24"
       {...props}

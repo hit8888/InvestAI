@@ -61,11 +61,11 @@ const ChatInput = (props: Props) => {
   };
 
   return (
-    <div className="ui-bg-white">
-      <div className="ui-flex ui-items-center ui-gap-2 ui-border-t ui-border-gray-200 ui-p-4 ui-shadow-2xl ui-shadow-primary">
-        <div className="ui-hidden ui-items-center -ui-space-x-3 sm:ui-flex">
+    <div className="bg-white">
+      <div className="flex items-center gap-2 border-t border-gray-200 p-4 shadow-2xl shadow-primary">
+        <div className="hidden items-center -space-x-3 sm:flex">
           <WrappedLogo />
-          <UserAvatarIcon className="ui-relative ui-z-20 !ui-h-11 !ui-w-11 ui-rounded-full ui-border-[3px] ui-border-white" />
+          <UserAvatarIcon className="relative z-20 !h-11 !w-11 rounded-full border-[3px] border-white" />
         </div>
         <textarea
           disabled={disabled}
@@ -74,21 +74,21 @@ const ChatInput = (props: Props) => {
           onChange={handleInputValueChange}
           onKeyDown={handleKeyDown}
           placeholder="Type your questions here."
-          className="ui-h-10 ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-border-primary focus:ui-ring-primary disabled:ui-opacity-40"
+          className="h-10 flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary disabled:opacity-40"
         />
         <button
           disabled={isSubmissionDisabled || disabled}
           onClick={handleSubmission}
-          className="ui-flex ui-h-10 ui-w-10 ui-items-center ui-justify-center ui-rounded-md ui-bg-primary ui-opacity-100 ui-transition-opacity ui-duration-300 hover:ui-opacity-80 disabled:ui-pointer-events-none disabled:ui-cursor-not-allowed disabled:ui-opacity-50"
+          className="flex h-10 w-10 items-center justify-center rounded-md bg-primary opacity-100 transition-opacity duration-300 hover:opacity-80 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <SendIcon className="ui-text-primary-foreground" />
+          <SendIcon className="text-primary-foreground" />
         </button>
       </div>
 
       {Boolean(disclaimerText) && (
-        <div className="ui-flex ui-items-center ui-gap-2 ui-bg-white ui-px-4 ui-pb-1">
-          <p className="ui-text-sm ui-text-gray-400">
-            <span className="ui-font-semibold">Note: </span>
+        <div className="flex items-center gap-2 bg-white px-4 pb-1">
+          <p className="text-sm text-gray-400">
+            <span className="font-semibold">Note: </span>
             {disclaimerText}
           </p>
         </div>

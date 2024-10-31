@@ -77,10 +77,10 @@ const Widget = () => {
   }, [showTooltip, isChatOpen]);
 
   return (
-    <div className="ui-flex ui-h-screen ui-flex-col">
+    <div className="flex h-screen flex-col">
       <div
-        className={cn("ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden", {
-          "ui-bg-white": isChatOpen,
+        className={cn("flex flex-1 flex-col overflow-hidden", {
+          "bg-white": isChatOpen,
         })}
       >
         {isChatOpen && (

@@ -10,7 +10,7 @@ const Backdrop = (props: Props) => {
   return (
     <div
       className={cn(
-        "ui-fixed ui-inset-0 ui-h-screen ui-overflow-hidden ui-bg-black/30",
+        "fixed inset-0 h-screen overflow-hidden bg-black/30",
         className,
       )}
     >

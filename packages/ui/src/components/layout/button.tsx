@@ -3,14 +3,14 @@ import React from "react";
 import { cn } from "../../lib/cn";
 
 const buttonVariants = cva(
-  "ui-rounded-md ui-bg-primary ui-text-primary-foreground ui-font-medium ui-transition-all ui-duration-300 hover:ui-opacity-80 disabled:ui-pointer-events-none disabled:ui-cursor-not-allowed disabled:ui-opacity-50",
+  "rounded-md bg-primary text-primary-foreground font-medium transition-all duration-300 hover:opacity-80 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       size: {
-        sm: "ui-h-8 ui-px-3 ui-text-sm",
-        md: "ui-h-10 ui-px-4 ui-text-base",
-        lg: "ui-h-12 ui-px-6 ui-text-lg",
-        icon: "ui-h-10 ui-w-10 ui-p-0 ui-flex ui-items-center ui-justify-center",
+        sm: "h-8 px-3 text-sm",
+        md: "h-10 px-4 text-base",
+        lg: "h-12 px-6 text-lg",
+        icon: "h-10 w-10 p-0 flex items-center justify-center",
       },
     },
     defaultVariants: {

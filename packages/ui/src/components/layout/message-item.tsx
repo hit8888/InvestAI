@@ -102,38 +102,38 @@ const MessageItem = (props: Props) => {
   return (
     <div
       id={`message-${message.id}`}
-      className={cn("ui-flex ui-flex-col", {
-        "ui-items-end ui-space-y-2": !isSenderBot,
-        "ui-items-start": isSenderBot,
-        "ui-animate-pulse": isLoading,
+      className={cn("flex flex-col", {
+        "items-end space-y-2": !isSenderBot,
+        "items-start": isSenderBot,
+        "animate-pulse": isLoading,
       })}
     >
       {isSenderBot ? (
-        <div className="ui-mb-2 ui-flex ui-items-center ui-gap-2">
-          <div className="ui-max-w-min">
-            <WrappedLogo className="!ui-h-4 !ui-w-4" />
+        <div className="mb-2 flex items-center gap-2">
+          <div className="max-w-min">
+            <WrappedLogo className="!h-4 !w-4" />
           </div>
-          <h3 className="ui-font-medium ui-text-gray-800">{agentName}</h3>
+          <h3 className="font-medium text-gray-800">{agentName}</h3>
         </div>
       ) : (
-        <div className="ui-flex ui-items-center ui-justify-end ui-gap-2">
-          <p className="ui-text-sm ui-text-gray-500">You</p>
+        <div className="flex items-center justify-end gap-2">
+          <p className="text-sm text-gray-500">You</p>
           <UserAvatarIcon />
         </div>
       )}
 
       <div
         className={cn(
-          "ui-w-11/12 ui-max-w-fit ui-overflow-hidden ui-rounded-2xl ui-border ui-text-gray-700 md:ui-w-5/6 lg:ui-w-5/6 2xl:ui-w-4/6",
+          "w-11/12 max-w-fit overflow-hidden rounded-2xl border text-gray-700 md:w-5/6 lg:w-5/6 2xl:w-4/6",
           {
-            "ui-flex ui-flex-col ui-items-start ui-rounded-tl-none ui-border-primary/25 ui-bg-primary/10":
+            "flex flex-col items-start rounded-tl-none border-primary/25 bg-primary/10":
               isSenderBot,
-            "ui-border-gray-200": !isSenderBot,
+            "border-gray-200": !isSenderBot,
           },
         )}
       >
         <div
-          className="ui-prose ui-max-w-full ui-p-4"
+          className="prose max-w-full p-4"
           onClick={handleMessageClick}
         >
           <ReactMarkdown
@@ -145,9 +145,9 @@ const MessageItem = (props: Props) => {
         </div>
 
         {showBuyerIntentScore && (
-          <div className="ui-mt-4 ui-flex ui-items-center ui-gap-3 ui-px-4">
-            <p className="ui-text-sm ui-font-medium">Analytics:</p>
-            <p className="ui-rounded-md ui-bg-primary/40 ui-p-1 ui-text-sm">
+          <div className="mt-4 flex items-center gap-3 px-4">
+            <p className="text-sm font-medium">Analytics:</p>
+            <p className="rounded-md bg-primary/40 p-1 text-sm">
               Buyer Intent Score:{" "}
               <span>{message.analytics.buyer_intent_score}</span>
             </p>
@@ -155,65 +155,65 @@ const MessageItem = (props: Props) => {
         )}
 
         {showDocuments && (
-          <div className="ui-w-full">
+          <div className="w-full">
             <Accordion type="single" collapsible>
               <AccordionItem
                 value="sources"
-                className="ui-border-0 ui-border-none"
+                className="border-0 border-none"
               >
-                <AccordionTrigger className="ui-w-full ui-px-4 ui-py-1 hover:ui-no-underline [&[data-state=open]_svg]:!-ui-rotate-0">
-                  <div className="ui-flex ui-w-full ui-items-center ui-justify-between">
-                    <h4 className="ui-text-x[13px] ui-font-medium ui-text-gray-700">
+                <AccordionTrigger className="w-full px-4 py-1 hover:no-underline [&[data-state=open]_svg]:!-rotate-0">
+                  <div className="flex w-full items-center justify-between">
+                    <h4 className="text-x[13px] font-medium text-gray-700">
                       Show sources:
                     </h4>
-                    <div className="ui-flex ui-items-center ui-justify-center ui-rounded-lg ui-bg-primary/20 ui-p-[1px] ui-transition-colors ui-duration-300 ui-ease-in-out hover:ui-bg-primary/30">
-                      <ChevronIcon className="ui-h-7 ui-w-7 ui-rotate-180 ui-transform ui-text-primary ui-transition-transform ui-duration-300" />
+                    <div className="flex items-center justify-center rounded-lg bg-primary/20 p-[1px] transition-colors duration-300 ease-in-out hover:bg-primary/30">
+                      <ChevronIcon className="h-7 w-7 rotate-180 transform text-primary transition-transform duration-300" />
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="!ui-pb-0">
-                  <div className="ui-bg-primary/20">
+                <AccordionContent className="!pb-0">
+                  <div className="bg-primary/20">
                     {message.documents.map((doc, idx) => (
                       <div
                         key={doc.id}
                         className={cn(
-                          "ui-flex ui-items-center ui-gap-4 ui-px-4 ui-py-2",
+                          "flex items-center gap-4 px-4 py-2",
                           {
-                            "ui-border-b ui-border-primary/30":
+                            "border-b border-primary/30":
                               idx !== message.documents.length - 1,
                           },
                         )}
                       >
-                        <div className="ui-flex ui-h-6 ui-w-6 ui-items-center ui-justify-center ui-rounded-md ui-bg-white">
-                          <p className="ui-text-sm ui-font-medium ui-text-gray-700">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-white">
+                          <p className="text-sm font-medium text-gray-700">
                             {idx + 1}
                           </p>
                         </div>
-                        <div className="ui-flex ui-flex-1 ui-items-center ui-justify-between">
+                        <div className="flex flex-1 items-center justify-between">
                           {!!doc.url && (
                             <>
                               <a
                                 href={doc.url}
                                 target="_blank"
-                                className="ui-block ui-max-w-[18ch] ui-overflow-hidden ui-truncate ui-overflow-ellipsis ui-whitespace-nowrap ui-text-primary ui-underline md:ui-max-w-[25ch] xl:ui-max-w-[35ch]"
+                                className="block max-w-[18ch] overflow-hidden truncate overflow-ellipsis whitespace-nowrap text-primary underline md:max-w-[25ch] xl:max-w-[35ch]"
                                 title={
                                   doc.title || doc.data_source_name || doc.url
                                 }
                               >
                                 {doc.title || doc.data_source_name || doc.url}
                               </a>
-                              <div className="ui-flex ui-items-center ui-gap-3">
+                              <div className="flex items-center gap-3">
                                 {!!doc.similarity_score && (
-                                  <p className="ui-font-medium">
+                                  <p className="font-medium">
                                     Similarity Score:{" "}
-                                    <span className="ui-text-primary">
+                                    <span className="text-primary">
                                       {doc.similarity_score}
                                     </span>
                                   </p>
                                 )}
                                 <FaviconImage
                                   url={doc.url}
-                                  className="ui-h-4 ui-w-4"
+                                  className="h-4 w-4"
                                 />
                               </div>
                             </>
@@ -230,7 +230,7 @@ const MessageItem = (props: Props) => {
 
         {videoURL && (
           <video
-            className="ui-w-full"
+            className="w-full"
             controls
             autoPlay={!message.isPartOfHistory}
           >
@@ -241,7 +241,7 @@ const MessageItem = (props: Props) => {
       </div>
 
       {showFeedbackButtons && (
-        <div className="ui-mt-2 ui-flex ui-items-center ui-gap-2">
+        <div className="mt-2 flex items-center gap-2">
           <FeedbackButton
             disabled={isMessageReadOnly}
             isFilled={isFeedbackThumbUp}
@@ -260,9 +260,9 @@ const MessageItem = (props: Props) => {
               onClick={() =>
                 handleShowFeedback && handleShowFeedback(message.id.toString())
               }
-              className="ui-h-7 ui-w-7"
+              className="h-7 w-7"
             >
-              <CirclePlayIcon className="ui-h-4 ui-w-4" />
+              <CirclePlayIcon className="h-4 w-4" />
             </Button>
           )}
         </div>

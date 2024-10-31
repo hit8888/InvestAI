@@ -2,11 +2,11 @@ import { cn } from "../../lib/cn";
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const DisclaimerIcon = ({ className = "ui-text-primary", ...props }: Props) => {
+const DisclaimerIcon = ({ className = "text-primary", ...props }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("ui-h-4 ui-w-4 ui-fill-current", className)}
+      className={cn("h-4 w-4 fill-current", className)}
       fill="none"
       viewBox="0 0 14 14"
       {...props}

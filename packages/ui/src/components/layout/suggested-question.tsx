@@ -10,15 +10,15 @@ const SuggestedQuestion = (props: Props) => {
   const { question, inverted, handleOnClick } = props;
 
   return (
-    <div className="ui-flex ui-items-center ui-justify-end">
+    <div className="flex items-center justify-end">
       <button
         onClick={() => handleOnClick(question)}
         className={cn(
-          "ui-rounded-md ui-px-4 ui-py-2 ui-text-left ui-text-[15px] ui-transition-all ui-duration-300",
+          "rounded-md px-4 py-2 text-left text-[15px] transition-all duration-300",
           {
-            "ui-bg-gray-200 ui-text-gray-800 hover:ui-bg-primary hover:ui-text-primary-foreground":
+            "bg-gray-200 text-gray-800 hover:bg-primary hover:text-primary-foreground":
               !inverted,
-            "ui-bg-primary ui-text-primary-foreground hover:ui-opacity-80":
+            "bg-primary text-primary-foreground hover:opacity-80":
               inverted,
           },
         )}

@@ -19,7 +19,7 @@ const FeedbackRating = (props: IProps) => {
   const { activeRating, isReadOnly = false, handleShareRating } = props;
 
   return (
-    <div className="ui-flex ui-items-center ui-gap-2">
+    <div className="flex items-center gap-2">
       {RATINGS.map((rating) => (
         <RatingPill
           key={rating}

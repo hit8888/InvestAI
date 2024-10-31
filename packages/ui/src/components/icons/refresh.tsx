@@ -3,7 +3,7 @@ import { cn } from "../../lib/cn";
 type Props = React.SVGProps<SVGSVGElement>;
 
 const RefreshChatIcon = ({
-  className = "ui-text-primary",
+  className = "text-primary",
   ...props
 }: Props) => {
   return (
@@ -11,7 +11,7 @@ const RefreshChatIcon = ({
       xmlns="http://www.w3.org/2000/svg"
       //   width="24"
       //   height="24"
-      className={cn("ui-h-6 ui-w-6", className)}
+      className={cn("h-6 w-6", className)}
       fill="currentColor"
       viewBox="0 0 24 24"
       {...props}

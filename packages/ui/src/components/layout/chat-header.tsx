@@ -59,13 +59,13 @@ const ChatHeader = (props: Props) => {
   }, [orgName, subtitle, isConfigWidget]);
 
   return (
-    <div className="ui-bg-primary ui-p-4 ui-text-primary-foreground">
+    <div className="bg-primary p-4 text-primary-foreground">
       {isConfigWidget && (
         <div>
           <div
-            className={cn("ui-flex ui-items-center", {
-              "ui-justify-between": showMinimizedHeader,
-              "ui-justify-end": !showMinimizedHeader,
+            className={cn("flex items-center", {
+              "justify-between": showMinimizedHeader,
+              "justify-end": !showMinimizedHeader,
             })}
           >
             {showMinimizedHeader && (
@@ -73,17 +73,17 @@ const ChatHeader = (props: Props) => {
             )}
 
             {showOrgLogoInHeader && (
-              <img src={logoURL} alt="Organization Logo" className="ui-w-8" />
+              <img src={logoURL} alt="Organization Logo" className="w-8" />
             )}
 
-            <div className="ui-flex ui-items-center ui-gap-6">
+            <div className="flex items-center gap-6">
               {showCtaInWidgetMode && (
                 <Button
                   onClick={handlePrimaryCta}
-                  className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
+                  className="flex items-center gap-2 rounded-md bg-primary-foreground/70 !text-primary"
                 >
-                  <MessageCircleIcon className="ui-h-5 ui-w-5" />
-                  <p className="ui-text-sm">Book a demo</p>
+                  <MessageCircleIcon className="h-5 w-5" />
+                  <p className="text-sm">Book a demo</p>
                 </Button>
               )}
               <button onClick={handleClose}>
@@ -93,15 +93,15 @@ const ChatHeader = (props: Props) => {
           </div>
 
           {!showMinimizedHeader && (
-            <div className="ui-space-y-1">
-              <div className="ui-flex ui-items-center ui-justify-center">
-                <div className="ui-relative ui-rounded-full ui-bg-primary-foreground ui-p-3">
-                  <Logo className="ui-h-8 ui-w-8 ui-text-primary" />
+            <div className="space-y-1">
+              <div className="flex items-center justify-center">
+                <div className="relative rounded-full bg-primary-foreground p-3">
+                  <Logo className="h-8 w-8 text-primary" />
 
                   <Ripple />
                 </div>
               </div>
-              <h2 className="ui-text-center ui-text-lg ui-font-medium">
+              <h2 className="text-center text-lg font-medium">
                 {title ?? "Hello!"}
               </h2>
             </div>
@@ -110,16 +110,16 @@ const ChatHeader = (props: Props) => {
       )}
 
       <div
-        className={cn("ui-flex ui-items-center", {
-          "ui-justify-center": isConfigWidget,
-          "ui-justify-between": !isConfigWidget,
+        className={cn("flex items-center", {
+          "justify-center": isConfigWidget,
+          "justify-between": !isConfigWidget,
         })}
       >
         {showHeaderText && (
           <h2
             className={cn({
-              "ui-mt-2 ui-text-center": isConfigWidget,
-              "ui-text-sm": !isConfigWidget,
+              "mt-2 text-center": isConfigWidget,
+              "text-sm": !isConfigWidget,
             })}
           >
             {headerText}
@@ -127,20 +127,20 @@ const ChatHeader = (props: Props) => {
         )}
 
         {showRestartButton && (
-          <div className="ui-flex ui-items-center ui-gap-1">
+          <div className="flex items-center gap-1">
             <Button
               onClick={handleCopySession}
               size="icon"
-              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-2"
+              className="rounded-md bg-primary-foreground/70 p-2"
             >
-              <CopyIcon className="ui-h-5 ui-w-5 ui-text-primary " />
+              <CopyIcon className="h-5 w-5 text-primary " />
             </Button>
             <Button
               onClick={handleRestart}
               size="icon"
-              className="ui-rounded-md ui-bg-primary-foreground/70 ui-p-1"
+              className="rounded-md bg-primary-foreground/70 p-1"
             >
-              <RefreshChatIcon className="ui-text-primary" />
+              <RefreshChatIcon className="text-primary" />
             </Button>
           </div>
         )}
@@ -148,10 +148,10 @@ const ChatHeader = (props: Props) => {
         {showCtaInEmbedMode && (
           <Button
             onClick={handlePrimaryCta}
-            className="ui-flex ui-items-center ui-gap-2 ui-rounded-md ui-bg-primary-foreground/70 !ui-text-primary"
+            className="flex items-center gap-2 rounded-md bg-primary-foreground/70 !text-primary"
           >
-            <MessageCircleIcon className="ui-h-5 ui-w-5" />
-            <p className="ui-text-sm">Book a demo</p>
+            <MessageCircleIcon className="h-5 w-5" />
+            <p className="text-sm">Book a demo</p>
           </Button>
         )}
       </div>

@@ -78,7 +78,7 @@ const ChatMessage = (props: Props) => {
   return (
     <div
       ref={containerRef}
-      className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-bg-white ui-p-4"
+      className="flex-1 space-y-4 overflow-y-auto bg-white p-4"
     >
       {messages.map((message) => (
         <MessageItem
@@ -90,7 +90,7 @@ const ChatMessage = (props: Props) => {
         />
       ))}
 
-      <div className="ui-space-y-2">
+      <div className="space-y-2">
         {suggestedQuestions.map((question) => (
           <SuggestedQuestion
             key={question}
@@ -100,7 +100,7 @@ const ChatMessage = (props: Props) => {
         ))}
       </div>
 
-      <div ref={endRef} className="ui-p-1" />
+      <div ref={endRef} className="p-1" />
     </div>
   );
 };

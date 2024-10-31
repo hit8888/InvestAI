@@ -20,14 +20,14 @@ const ChatMessage = (props: IProps) => {
   }, [messages.length]);
 
   return (
-    <div className="ui-flex-1 ui-space-y-4 ui-overflow-y-auto ui-bg-white ui-bg-opacity-60 ui-p-2">
-      <div className="ui-mx-auto ui-h-full ui-w-full sm:ui-max-w-[85%] lg:ui-max-w-[80%] xl:ui-max-w-[70%] 2xl:ui-max-w-[60%]">
+    <div className="flex-1 space-y-4 overflow-y-auto bg-white bg-opacity-60 p-2">
+      <div className="mx-auto h-full w-full sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]">
         {messages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
       </div>
 
-      <div ref={endRef} className="ui-p-1" />
+      <div ref={endRef} className="p-1" />
     </div>
   );
 };
