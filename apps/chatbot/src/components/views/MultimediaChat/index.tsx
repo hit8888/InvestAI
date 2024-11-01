@@ -1,4 +1,4 @@
-import { cn } from "@meaku/ui/lib/cn";
+import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useConfigData from "../../../hooks/query/useConfigData";

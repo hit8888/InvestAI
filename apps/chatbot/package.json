@@ -37,7 +37,7 @@
     "@eslint/js": "^9.9.0",
     "@meaku/core": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
-    "@meaku/ui": "workspace:*",
+    "@breakout/design-system": "workspace:*",
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

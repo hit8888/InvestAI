@@ -1,5 +1,5 @@
-import Button from "@meaku/ui/components/layout/button";
-import { Switch } from "@meaku/ui/components/layout/switch"; // Adjust the import path as necessary
+import Button from "@breakout/design-system/components/layout/button";
+import { Switch } from "@breakout/design-system/components/layout/switch"; // Adjust the import path as necessary
 import { EllipsisVerticalIcon, XIcon } from "lucide-react";//TODO: Expos this for design system
 
 

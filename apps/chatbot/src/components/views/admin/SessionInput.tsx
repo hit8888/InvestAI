@@ -1,6 +1,6 @@
-import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
-import Button from "@meaku/ui/components/layout/button";
-import Input from "@meaku/ui/components/layout/input";
+import WrappedLogo from "@breakout/design-system/components/icons/wrapped-logo";
+import Button from "@breakout/design-system/components/layout/button";
+import Input from "@breakout/design-system/components/layout/input";
 import { FormEvent, memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import useConfigData from "../../../hooks/query/useConfigData";

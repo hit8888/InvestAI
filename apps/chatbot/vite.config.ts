@@ -28,8 +28,8 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: "@meaku/ui",
-        replacement: path.resolve(__dirname, "../../packages/ui/src"),
+        find: "@breakout/design-system",
+        replacement: path.resolve(__dirname, "../../packages/design-system/src"),
       },
     ],
   },

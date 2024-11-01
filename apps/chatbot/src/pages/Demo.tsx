@@ -1,4 +1,4 @@
-import Backdrop from "@meaku/ui/components/layout/backdrop";
+import Backdrop from "@breakout/design-system/components/layout/backdrop";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { ChatParams } from "../types/msc";

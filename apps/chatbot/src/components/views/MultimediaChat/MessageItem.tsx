@@ -2,7 +2,7 @@ import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
-import { cn } from "@meaku/ui/lib/cn";
+import { cn } from "@breakout/design-system/lib/cn";
 
 interface IProps {
   message: Message;
