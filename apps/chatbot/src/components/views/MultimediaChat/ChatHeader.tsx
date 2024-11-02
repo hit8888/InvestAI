@@ -1,16 +1,14 @@
 import Button from "@meaku/ui/components/layout/button";
-import { Switch } from "@meaku/ui/components/layout/switch"; // Adjust the import path as necessary
-import { EllipsisVerticalIcon, XIcon } from "lucide-react";//TODO: Expos this for design system
-
+import { EllipsisVerticalIcon, XIcon } from "lucide-react"; //TODO: Expos this for design system
 
 interface IProps {
   handlePrimaryCta: () => void;
   handleCloseChat: () => void;
-  handleToggleWidth: () => void;
+  // handleToggleWidth: () => void;
 }
 
 const ChatHeader = (props: IProps) => {
-  const { handlePrimaryCta, handleCloseChat, handleToggleWidth } = props;
+  const { handlePrimaryCta, handleCloseChat } = props;
 
   return (
     <div className="ui-flex ui-items-center ui-justify-between ui-bg-gray-50 ui-bg-opacity-20 ui-p-2 ui-backdrop-blur-lg">
@@ -21,10 +19,10 @@ const ChatHeader = (props: IProps) => {
           </Button>
         </div>
       </div>
-      <div className="ui-flex ui-items-center ui-gap-1">
+      {/* <div className="ui-flex ui-items-center ui-gap-1">
         <label htmlFor="toggle-width">Toggle width</label>
         <Switch onCheckedChange={handleToggleWidth} id="toggle-width" />
-      </div>
+      </div> */}
       <div className="ui-flex ui-items-center ui-gap-2">
         <Button
           size="icon"

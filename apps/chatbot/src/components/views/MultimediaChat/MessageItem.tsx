@@ -1,11 +1,12 @@
 import { Message } from "@meaku/core/types/chat";
+import { cn } from "@meaku/ui/lib/cn";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
-import { cn } from "@meaku/ui/lib/cn";
 
 interface IProps {
   message: Message;
+  isInSplitScreenView?: boolean;
 }
 
 const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -27,7 +28,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
-  const { message } = props;
+  const { message, isInSplitScreenView = false } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
@@ -47,9 +48,12 @@ const MessageItem = (props: IProps) => {
         getComputedStyle(messageRef.current).lineHeight,
       );
       const height = messageRef.current.scrollHeight;
+
+      if (isSingleLineMessage === height <= lineHeight) return;
+
       setIsSingleLineMessage(height <= lineHeight);
     }
-  }, [message.message]);
+  }, [message.message, isSingleLineMessage]);
 
   return (
     <div
@@ -58,9 +62,9 @@ const MessageItem = (props: IProps) => {
       })}
     >
       <div
-        className={cn({
-          "ui-bg-primary ui-px-3 ui-py-2": !isSenderBot,
-          "ui-flex ui-gap-7 ui-p-6 ui-pl-0": isSenderBot,
+        className={cn("ui-max-w-full", {
+          "ui-ml-10 ui-bg-primary ui-px-3 ui-py-2": !isSenderBot,
+          "ui-mr-10 ui-flex ui-gap-7 ui-p-6 ui-pl-0": isSenderBot,
           "ui-rounded-full": isSingleLineMessage,
           "ui-rounded-2xl": !isSingleLineMessage,
         })}

@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
 import UnifiedResponseManager from "../managers/UnifiedResponseManager";
+import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
@@ -50,6 +51,10 @@ const useWebSocketChat = () => {
   );
   const setIsAMessageBeingProcessed = useMessageStore(
     (state) => state.setIsAMessageBeingProcessed,
+  );
+
+  const handleAddActiveArtifact = useArtifactStore(
+    (state) => state.handleAddActiveArtifact,
   );
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
@@ -238,6 +243,18 @@ const useWebSocketChat = () => {
       if (response.is_complete) {
         setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
+      }
+
+      if (response.artifact && response.artifact.artifact_type !== "NONE") {
+        console.log(
+          "🚀 ~ file: useWebSocketChat.tsx:249 ~ useEffect ~ response:",
+          response,
+        );
+
+        handleAddActiveArtifact(
+          response.artifact.artifact_id,
+          response.artifact.artifact_type,
+        );
       }
     } catch (error) {
       trackError(error, {

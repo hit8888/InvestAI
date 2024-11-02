@@ -1,4 +1,11 @@
 import { z } from "zod";
+import {
+  ArtifactEnumSchema,
+  ArtifactSchema,
+  DemoArtifactSchema,
+  SlideArtifactSchema,
+  VideoArtifactSchema,
+} from "./artifact";
 import { DataSourceSchema } from "./common";
 import { Feedback } from "./session";
 
@@ -33,7 +40,19 @@ export const AIResponseSchema = z.object({
   suggested_questions: z.array(z.string()),
   showFeedbackOptions: z.boolean().optional(),
   analytics: AnalyticsSchema,
+  artifact: z
+    .object({
+      artifact_type: ArtifactEnumSchema,
+      artifact_id: z.string(),
+    })
+    .optional(),
 });
+
+export type SlideArtifactType = z.infer<typeof SlideArtifactSchema>;
+
+export type DemoArtifactType = z.infer<typeof DemoArtifactSchema>;
+
+export type VideoArtifactType = z.infer<typeof VideoArtifactSchema>;
 
 export type Message = {
   id: number | string;
@@ -54,3 +73,7 @@ export type Message = {
 };
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;
+
+export type Artifact = z.infer<typeof ArtifactSchema>;
+
+export type ArtifactEnum = z.infer<typeof ArtifactEnumSchema>;
