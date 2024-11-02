@@ -1,8 +1,8 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import ChatHeader from "@meaku/ui/components/layout/chat-header";
-import ChatInput from "@meaku/ui/components/layout/chat-input";
-import ChatMessage from "@meaku/ui/components/layout/chat-message";
-import FeedbackContainter from "@meaku/ui/components/layout/feedback-containter";
+import ChatHeader from "@breakout/design-system/components/layout/chat-header";
+import ChatInput from "@breakout/design-system/components/layout/chat-input";
+import ChatMessage from "@breakout/design-system/components/layout/chat-message";
+import FeedbackContainter from "@breakout/design-system/components/layout/feedback-containter";
 import { useMemo } from "react";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";

@@ -1,4 +1,4 @@
-import Backdrop from "@meaku/ui/components/layout/backdrop";
+import Backdrop from "@breakout/design-system/components/layout/backdrop";
 import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 import useConfigData from "../hooks/query/useConfigData";

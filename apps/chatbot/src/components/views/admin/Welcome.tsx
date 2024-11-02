@@ -1,7 +1,7 @@
-import SendIcon from "@meaku/ui/components/icons/send";
-import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
-import Button from "@meaku/ui/components/layout/button";
-import Input from "@meaku/ui/components/layout/input";
+import SendIcon from "@breakout/design-system/components/icons/send";
+import WrappedLogo from "@breakout/design-system/components/icons/wrapped-logo";
+import Button from "@breakout/design-system/components/layout/button";
+import Input from "@breakout/design-system/components/layout/input";
 import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";

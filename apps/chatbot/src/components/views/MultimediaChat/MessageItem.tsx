@@ -1,5 +1,5 @@
+import { cn } from "@breakout/design-system/lib/cn";
 import { Message } from "@meaku/core/types/chat";
-import { cn } from "@meaku/ui/lib/cn";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";

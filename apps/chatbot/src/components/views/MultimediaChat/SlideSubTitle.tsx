@@ -5,7 +5,7 @@ interface IProps {
 const SlideSubTitle = ({ text }: IProps) => {
   return (
     <div>
-      <h2 className="ui-max-w-[30ch] ui-text-3xl ui-font-medium ui-leading-relaxed ui-text-primary">
+      <h2 className="max-w-[30ch] text-3xl font-medium leading-relaxed text-primary">
         {text}
       </h2>
     </div>

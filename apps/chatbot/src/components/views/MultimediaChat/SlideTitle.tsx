@@ -5,8 +5,8 @@ interface IProps {
 const SlideTitle = ({ text }: IProps) => {
   return (
     <div>
-      <div className="ui-absolute ui-left-0 ui-z-10 ui-h-7 ui-w-2 ui-bg-primary"></div>
-      <h1 className="ui-text-lg ui-font-medium ui-text-primary">{text}</h1>
+      <div className="absolute left-0 z-10 h-7 w-2 bg-primary"></div>
+      <h1 className="text-lg font-medium text-primary">{text}</h1>
     </div>
   );
 };

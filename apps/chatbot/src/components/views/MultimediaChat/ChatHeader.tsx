@@ -1,4 +1,4 @@
-import Button from "@meaku/ui/components/layout/button";
+import Button from "@breakout/design-system/components/layout/button";
 import { EllipsisVerticalIcon, XIcon } from "lucide-react"; //TODO: Expos this for design system
 
 interface IProps {
@@ -19,7 +19,7 @@ const ChatHeader = (props: IProps) => {
           </Button>
         </div>
       </div>
-      {/* <div className="ui-flex ui-items-center ui-gap-1">
+      {/* <div className="flex items-center gap-1">
         <label htmlFor="toggle-width">Toggle width</label>
         <Switch onCheckedChange={handleToggleWidth} id="toggle-width" />
       </div> */}

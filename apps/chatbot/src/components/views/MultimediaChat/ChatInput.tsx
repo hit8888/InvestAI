@@ -1,8 +1,8 @@
-import SendIcon from "@meaku/ui/components/icons/send";
-import Button from "@meaku/ui/components/layout/button";
-import TextArea from "@meaku/ui/components/layout/textarea";
+import SendIcon from "@breakout/design-system/components/icons/send";
+import Button from "@breakout/design-system/components/layout/button";
+import TextArea from "@breakout/design-system/components/layout/textarea";
 import { useState } from "react";
-import useAutoResizeTextArea from "../../../../../../packages/ui/src/hooks/useAutoResizeTextArea";
+import useAutoResizeTextArea from "../../../../../../packages/design-system/src/hooks/useAutoResizeTextArea";
 
 interface IProps {
   handleOnChange: () => void;

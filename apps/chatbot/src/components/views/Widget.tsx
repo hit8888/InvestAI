@@ -1,9 +1,9 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import ChatHeader from "@meaku/ui/components/layout/chat-header";
-import ChatInput from "@meaku/ui/components/layout/chat-input";
-import ChatMessage from "@meaku/ui/components/layout/chat-message";
-import TriggerButton from "@meaku/ui/components/layout/trigger-button";
-import { cn } from "@meaku/ui/lib/cn";
+import ChatHeader from "@breakout/design-system/components/layout/chat-header";
+import ChatInput from "@breakout/design-system/components/layout/chat-input";
+import ChatMessage from "@breakout/design-system/components/layout/chat-message";
+import TriggerButton from "@breakout/design-system/components/layout/trigger-button";
+import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo } from "react";
 import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";

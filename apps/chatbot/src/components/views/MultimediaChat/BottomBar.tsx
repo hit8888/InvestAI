@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { cn } from "@meaku/ui/lib/cn";
-import SendIcon from "@meaku/ui/components/icons/send";
-import SparkleIcon from "@meaku/ui/components/icons/sparkle";
-import Input from "@meaku/ui/components/layout/input";
+import { cn } from "@breakout/design-system/lib/cn";
+import SendIcon from "@breakout/design-system/components/icons/send";
+import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
+import Input from "@breakout/design-system/components/layout/input";
 
 interface IProps {
   isChatOpen: boolean;

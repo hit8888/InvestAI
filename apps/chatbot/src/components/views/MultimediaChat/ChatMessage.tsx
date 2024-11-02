@@ -1,5 +1,5 @@
+import { cn } from "@breakout/design-system/lib/cn";
 import { Message } from "@meaku/core/types/chat";
-import { cn } from "@meaku/ui/lib/cn";
 import { useEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
 
@@ -33,7 +33,7 @@ const ChatMessage = (props: IProps) => {
   return (
     <div
       ref={chatContainerRef}
-      className="flex-1 space-y-4 overflow-y-auto bg-white bg-opacity-60 p-2"
+      className="flex-1 space-y-4 overflow-y-auto p-2"
     >
       <div
         className={cn("mx-auto h-full w-full", {

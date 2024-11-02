@@ -58,12 +58,12 @@ const Artifact = () => {
   };
 
   return (
-    <div className="ui-relative ui-h-full ui-w-full ui-overflow-hidden ui-rounded-xl">
+    <div className="relative h-full w-full overflow-hidden rounded-xl bg-indigo-400">
       <button
         onClick={handleRemoveActiveArtifact}
-        className="ui-absolute ui-right-6 ui-top-6 ui-z-10 ui-rounded-full ui-border ui-bg-white ui-bg-opacity-60 ui-p-1 ui-text-gray-700 ui-shadow-lg ui-backdrop-blur-lg"
+        className="absolute right-6 top-6 z-10 rounded-full border bg-white bg-opacity-60 p-1 text-gray-700 shadow-lg backdrop-blur-lg"
       >
-        <XIcon className="ui-h-4 ui-w-4" />
+        <XIcon className="h-4 w-4" />
       </button>
       {renderArtifact()}
     </div>

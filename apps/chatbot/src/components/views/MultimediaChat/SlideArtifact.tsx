@@ -7,7 +7,7 @@ interface IProps {
 const SlideArtifact = (props: IProps) => {
   const { artifact } = props;
 
-  return <div className="ui-h-full ui-w-full ui-bg-indigo-400"></div>;
+  return <div className="h-full w-full bg-indigo-400"></div>;
 };
 
 export default SlideArtifact;

@@ -1,4 +1,4 @@
-import { cn } from "@meaku/ui/lib/cn";
+import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useConfigData from "../../../hooks/query/useConfigData";
@@ -143,7 +143,7 @@ const Multimedia = () => {
               </div>
 
               <div
-                className={cn("overflow-y-auto", {
+                className={cn("flex-1 overflow-y-auto", {
                   "col-span-3": !activeArtifactId,
                   "col-span-1": !!activeArtifactId,
                 })}

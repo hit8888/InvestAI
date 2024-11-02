@@ -8,12 +8,8 @@ const VideoArtifact = (props: IProps) => {
   if (!videoUrl) return null;
 
   return (
-    <div className="ui-h-full ui-w-full">
-      <video
-        className="ui-h-full ui-w-full ui-object-cover"
-        controls
-        autoPlay={true}
-      >
+    <div className="h-full w-full">
+      <video className="h-full w-full object-cover" controls autoPlay={true}>
         <source src={videoUrl} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
