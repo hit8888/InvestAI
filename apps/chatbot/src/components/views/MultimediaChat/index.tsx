@@ -22,9 +22,8 @@ type QueryParams = {
 
 const Multimedia = () => {
   const [searchParams] = useSearchParams();
-  const { showGlass, showDemo }: QueryParams = {
+  const { showGlass }: QueryParams = {
     showGlass: searchParams.get("showGlass") === "true",
-    showDemo: searchParams.get("showDemo") === "true",
   };
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);

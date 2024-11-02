@@ -1,5 +1,5 @@
+import { cn } from "@breakout/design-system/lib/cn";
 import { SlideArtifactType } from "@meaku/core/types/chat";
-import { cn } from "@meaku/ui/lib/cn";
 import dynamicIconImports from "lucide-react/dynamicIconImports";
 import SlideItem from "./SlideItem";
 

@@ -28,7 +28,10 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
-  const { message, isInSplitScreenView = false } = props;
+  const {
+    message,
+    // isInSplitScreenView = false
+  } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
