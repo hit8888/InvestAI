@@ -99,30 +99,29 @@ const Multimedia = () => {
 
   return (
     <div
-      className={cn("ui-flex ui-h-screen ui-flex-col ui-backdrop-blur-md", {
-        "ui-bg-primary": showGlass,
-        // "ui-grid ui-grid-cols-3": showDemo,
+      className={cn("flex h-screen flex-col backdrop-blur-md", {
+        "bg-primary": showGlass,
+        // "grid grid-cols-3": showDemo,
       })}
     >
       <div
         className={cn(
-          "ui-mx-auto ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden ui-rounded-2xl ui-bg-opacity-80 ui-backdrop-blur-lg ui-transition-all ui-duration-300 ui-ease-in-out",
+          "mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 backdrop-blur-lg transition-all duration-300 ease-in-out",
           {
-            "ui-border ui-border-gray-300 ui-bg-white ui-bg-opacity-60 ui-p-2":
-              isChatOpen,
+            "border border-gray-300 bg-white bg-opacity-60 p-2": isChatOpen,
             // TODO: Enable this when we remove the toggle width switch
-            // "ui-mx-auto ui-max-w-full lg:ui-max-w-[80%]": false,
-            // "ui-col-span-2 ui-w-full": showDemo,
-            // "ui-grid ui-w-full ui-grid-cols-3": showDemo,
-            "ui-w-10/12": !isWidthMaximized,
-            "ui-w-full": isWidthMaximized,
+            // "mx-auto max-w-full lg:max-w-[80%]": false,
+            // "col-span-2 w-full": showDemo,
+            // "grid w-full grid-cols-3": showDemo,
+            "w-10/12": !isWidthMaximized,
+            "w-full": isWidthMaximized,
           },
         )}
       >
         {isChatOpen && (
           <div
             className={cn(
-              "ui-flex ui-flex-1 ui-flex-col ui-overflow-hidden ui-rounded-lg ui-bg-white ui-bg-opacity-20 ui-backdrop-blur-lg",
+              "flex flex-1 flex-col overflow-hidden rounded-lg bg-white bg-opacity-20 backdrop-blur-lg",
             )}
           >
             <ChatHeader
@@ -130,26 +129,23 @@ const Multimedia = () => {
               handleCloseChat={handleCloseChat}
             />
             <div
-              className={cn(
-                "ui-flex-1 ui-overflow-y-auto ui-bg-white ui-bg-opacity-60",
-                {
-                  "ui-grid ui-grid-cols-3 ui-gap-8": !!activeArtifactId,
-                },
-              )}
+              className={cn("flex-1 overflow-y-auto bg-white bg-opacity-60", {
+                "grid grid-cols-3 gap-8": !!activeArtifactId,
+              })}
             >
               <div
                 className={cn({
-                  "ui-col-span-2 ui-pl-2": !!activeArtifactId,
-                  "ui-hidden": !activeArtifactId,
+                  "col-span-2 pl-2": !!activeArtifactId,
+                  hidden: !activeArtifactId,
                 })}
               >
                 <Artifact />
               </div>
 
               <div
-                className={cn("ui-overflow-y-auto", {
-                  "ui-col-span-3": !activeArtifactId,
-                  "ui-col-span-1": !!activeArtifactId,
+                className={cn("overflow-y-auto", {
+                  "col-span-3": !activeArtifactId,
+                  "col-span-1": !!activeArtifactId,
                 })}
               >
                 <ChatMessage

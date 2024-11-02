@@ -43,7 +43,7 @@ const Embed = () => {
   };
 
   return (
-    <div className="ui-flex ui-h-screen ui-flex-col">
+    <div className="flex h-screen flex-col">
       <ChatHeader
         agentName={agentName}
         orgName={orgName ?? ""}

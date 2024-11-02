@@ -8,7 +8,6 @@ const config: Pick<Config, "prefix" | "presets" | "content"> = {
     "./src/components/**/*.{ts,tsx}",
     "./src/components/*.{ts,tsx}",
   ],
-  prefix: "ui-",
   presets: [sharedConfig],
 };
 

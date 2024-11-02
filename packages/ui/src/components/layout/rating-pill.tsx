@@ -14,9 +14,9 @@ const RatingPill = (props: IProps) => {
     <button
       disabled={disabled}
       className={cn(
-        "ui-rounded-full ui-border ui-border-primary ui-px-2 ui-py-1 ui-text-sm ui-text-primary ui-transition-colors ui-duration-300 ui-ease-in-out hover:ui-bg-primary/10 disabled:ui-opacity-60",
+        "rounded-full border border-primary px-2 py-1 text-sm text-primary transition-colors duration-300 ease-in-out hover:bg-primary/10 disabled:opacity-60",
         {
-          "ui-bg-primary ui-text-white hover:ui-bg-primary/80": isActive,
+          "bg-primary text-white hover:bg-primary/80": isActive,
         },
       )}
       onClick={handleOnClick}

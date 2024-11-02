@@ -13,7 +13,7 @@ const ThumbIcon = (props: IProps) => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 16 16"
-      className={cn("ui-h-7 ui-w-7 ui-fill-current", className)}
+      className={cn("h-7 w-7 fill-current", className)}
       {...restProps}
     >
       {isFilled ? (

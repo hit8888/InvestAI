@@ -2,12 +2,12 @@ import { cn } from "../../lib/cn";
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const Logo = ({ className = "ui-text-primary", ...props }: Props) => {
+const Logo = ({ className = "text-primary", ...props }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      className={cn("ui-h-6 ui-w-6 ui-fill-current", className)}
+      className={cn("h-6 w-6 fill-current", className)}
       viewBox="0 0 114 114"
       {...props}
     >

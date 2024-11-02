@@ -2,7 +2,7 @@ import { cn } from "../../lib/cn";
 
 interface IProps extends React.SVGProps<SVGSVGElement> {}
 
-const SparkleIcon = ({ className = "ui-text-primary", ...props }: IProps) => {
+const SparkleIcon = ({ className = "text-primary", ...props }: IProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +10,7 @@ const SparkleIcon = ({ className = "ui-text-primary", ...props }: IProps) => {
       //   height="18"
       fill="none"
       viewBox="0 0 18 18"
-      className={cn("ui-h-6 ui-w-6 ui-fill-current", className)}
+      className={cn("h-6 w-6 fill-current", className)}
       {...props}
     >
       <path

@@ -52,9 +52,9 @@ const FeedbackAdmin = () => {
   }
 
   return (
-    <div className="ui-h-screen">
-      <Backdrop className="ui-flex ui-items-center ui-justify-center">
-        <div className="ui-flex ui-h-4/5 ui-w-11/12 ui-max-w-7xl ui-flex-col ui-overflow-hidden ui-rounded-xl ui-bg-white lg:ui-w-10/12 xl:ui-w-9/12">
+    <div className="h-screen">
+      <Backdrop className="flex items-center justify-center">
+        <div className="flex h-4/5 w-11/12 max-w-7xl flex-col overflow-hidden rounded-xl bg-white lg:w-10/12 xl:w-9/12">
           <Suspense fallback={<></>}>
             <Component />
           </Suspense>

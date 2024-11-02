@@ -54,13 +54,13 @@ const ChatInput = (props: IProps) => {
   };
 
   return (
-    <div className="ui-flex ui-w-full ui-items-center ui-gap-2 ui-overflow-hidden ui-rounded-lg ui-bg-white ui-bg-opacity-60 ui-p-2">
+    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg bg-white bg-opacity-60 p-2">
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
-      <form className="ui-relative ui-flex-1" onSubmit={handleSubmission}>
+      <form className="relative flex-1" onSubmit={handleSubmission}>
         <TextArea
           ref={textAreaRef}
-          className="ui-w-full"
+          className="w-full"
           placeholder="Type your message here..."
           value={inputValue}
           onChange={handleInputValueChange}
@@ -68,10 +68,10 @@ const ChatInput = (props: IProps) => {
         />
         <Button
           type="submit"
-          className="ui-absolute ui-bottom-[11px] ui-right-1 ui-flex ui-h-8 ui-w-8 ui-transform ui-items-center ui-justify-center !ui-p-0"
+          className="absolute bottom-[11px] right-1 flex h-8 w-8 transform items-center justify-center !p-0"
           disabled={isSubmissionDisabled}
         >
-          <SendIcon className="ui-text-primary-foreground" />
+          <SendIcon className="text-primary-foreground" />
         </Button>
       </form>
     </div>

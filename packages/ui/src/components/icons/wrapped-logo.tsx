@@ -3,15 +3,15 @@ import { cn } from "../../lib/cn";
 import Ripple from "../animation/ripple";
 import Logo from "./logo";
 
-const wrapperStyles = cva("ui-relative ui-rounded-full", {
+const wrapperStyles = cva("relative rounded-full", {
   variants: {
     size: {
-      sm: "ui-p-2",
-      lg: "ui-p-5",
+      sm: "p-2",
+      lg: "p-5",
     },
     inverted: {
-      true: "ui-bg-primary-foreground ui-text-primary",
-      false: "ui-bg-primary ui-text-primary-foreground",
+      true: "bg-primary-foreground text-primary",
+      false: "bg-primary text-primary-foreground",
     },
   },
   defaultVariants: {
@@ -23,8 +23,8 @@ const wrapperStyles = cva("ui-relative ui-rounded-full", {
 const logoStyles = cva("", {
   variants: {
     size: {
-      sm: "ui-h-6 ui-w-6",
-      lg: "!ui-h-14 !ui-w-14",
+      sm: "h-6 w-6",
+      lg: "!h-14 !w-14",
     },
   },
   defaultVariants: {

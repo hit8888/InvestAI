@@ -13,15 +13,15 @@ const FeedbackButton = (props: IProps) => {
   return (
     <Button
       size="icon"
-      className={cn("ui-h-auto ui-w-auto ui-rounded-lg ui-p-[6px]", {
-        "ui-bg-primary/25": isFilled,
-        "ui-bg-primary/10": !isFilled,
-        "ui-rotate-180 ui-transform": isInverted,
+      className={cn("h-auto w-auto rounded-lg p-[6px]", {
+        "bg-primary/25": isFilled,
+        "bg-primary/10": !isFilled,
+        "rotate-180 transform": isInverted,
       })}
       {...restProps}
     >
       <ThumbIcon
-        className="!ui-h-6 !ui-w-6 ui-text-primary"
+        className="!h-6 !w-6 text-primary"
         isFilled={isFilled}
       />
     </Button>

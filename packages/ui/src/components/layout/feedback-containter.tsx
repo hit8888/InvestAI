@@ -67,26 +67,26 @@ const FeedbackContainer = (props: IProps) => {
   return (
     <div
       className={cn(
-        "ui-overflow-hidden ui-transition-all ui-duration-300 ui-ease-in-out",
+        "overflow-hidden transition-all duration-300 ease-in-out",
         {
-          "ui-max-h-0": !showFeedbackContainer,
-          "ui-max-h-[301px]": showFeedbackContainer,
+          "max-h-0": !showFeedbackContainer,
+          "max-h-[301px]": showFeedbackContainer,
         },
       )}
     >
-      <div className="ui-p-4">
-        <div className="ui-rounded-lg ui-border ui-border-gray-300 ui-bg-gray-50 ui-p-4 ui-text-gray-800">
-          <div className="ui-flex ui-items-center ui-justify-between">
-            <h3 className="ui-text-sm">
+      <div className="p-4">
+        <div className="rounded-lg border border-gray-300 bg-gray-50 p-4 text-gray-800">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm">
               Please provide more details about your rating
             </h3>
             <button onClick={handleCloseFeedbackContainer}>
-              <XIcon className="ui-h-4 ui-w-4" />
+              <XIcon className="h-4 w-4" />
             </button>
           </div>
           <div>
             {showFeedbackRating && (
-              <div className="ui-mt-6">
+              <div className="mt-6">
                 <FeedbackRating
                   isReadOnly={isReadOnly}
                   activeRating={activeRating}
@@ -95,7 +95,7 @@ const FeedbackContainer = (props: IProps) => {
               </div>
             )}
             {showFeedbackForm && (
-              <div className="ui-mt-3">
+              <div className="mt-3">
                 <TextArea
                   disabled={isReadOnly}
                   ref={textAreaRef}
@@ -107,12 +107,12 @@ const FeedbackContainer = (props: IProps) => {
               </div>
             )}
           </div>
-          <div className="ui-mt-6 ui-flex ui-items-center ui-justify-end">
+          <div className="mt-6 flex items-center justify-end">
             <Button
               size="sm"
               onClick={handleShareDetailedFeedback}
               disabled={isReadOnly}
-              // className="ui-text-sm ui-font-medium"
+              // className="text-sm font-medium"
             >
               Submit
             </Button>

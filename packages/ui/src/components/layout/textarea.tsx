@@ -12,7 +12,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       <textarea
         ref={ref}
         className={cn(
-          "ui-h-10 ui-w-full ui-flex-1 ui-resize-none ui-overflow-y-auto ui-rounded-md ui-border-gray-300 ui-text-sm focus:ui-border-primary focus:ui-ring-primary disabled:ui-opacity-60",
+          "h-10 w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary disabled:opacity-60",
           className,
         )}
         {...restProps}

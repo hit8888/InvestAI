@@ -2,11 +2,11 @@ import { cn } from "../../lib/cn";
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const SendIcon = ({ className = "ui-text-primary", ...props }: Props) => {
+const SendIcon = ({ className = "text-primary", ...props }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("ui-h-6 ui-w-6 ui-fill-current", className)}
+      className={cn("h-6 w-6 fill-current", className)}
       fill="none"
       viewBox="0 0 24 24"
       {...props}

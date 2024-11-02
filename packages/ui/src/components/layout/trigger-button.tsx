@@ -24,27 +24,27 @@ const TriggerButton = (props: Props) => {
   } = props;
 
   return (
-    <div className="ui-flex ui-flex-col ui-items-end ui-justify-end ui-overflow-hidden ui-p-4">
+    <div className="flex flex-col items-end justify-end overflow-hidden p-4">
       {showTooltip && (
-        <div className="ui-max-w-80">
-          <div className="ui-relative ui-mb-4 ui-rounded-md ui-border ui-bg-white ui-p-2 ui-text-gray-700">
+        <div className="max-w-80">
+          <div className="relative mb-4 rounded-md border bg-white p-2 text-gray-700">
             <button
               onClick={handleCloseTooltip}
-              className="ui-absolute -ui-right-2 -ui-top-2 ui-flex ui-items-center ui-justify-center ui-rounded-full ui-border ui-bg-white ui-p-1"
+              className="absolute -right-2 -top-2 flex items-center justify-center rounded-full border bg-white p-1"
             >
               <XIcon
                 strokeWidth={2}
-                className="ui-right-2 ui-top-2 ui-h-3 ui-w-3 ui-cursor-pointer ui-text-gray-700"
+                className="right-2 top-2 h-3 w-3 cursor-pointer text-gray-700"
               />
             </button>
 
-            <p className="ui-text-sm">
+            <p className="text-sm">
               Hey, I am your AI Companion – Experience the Future of Interaction
               with me!
             </p>
           </div>
 
-          <div className="ui-mb-3 ui-space-y-2">
+          <div className="mb-3 space-y-2">
             {suggestedQuestions.map((question) => (
               <SuggestedQuestion
                 handleOnClick={handleSuggestionsOnClick}
@@ -59,30 +59,30 @@ const TriggerButton = (props: Props) => {
       <button
         onClick={handleToggleChatOpenState}
         className={cn(
-          "ui-flex ui-items-center ui-gap-2 ui-rounded-full ui-bg-gradient-to-br ui-from-primary/70 ui-to-primary ui-p-2 ui-opacity-100 ui-transition-all ui-duration-300 hover:ui-opacity-80",
+          "flex items-center gap-2 rounded-full bg-gradient-to-br from-primary/70 to-primary p-2 opacity-100 transition-all duration-300 hover:opacity-80",
           {
-            "ui-w-14": isChatOpen,
-            "ui-w-44": !isChatOpen,
+            "w-14": isChatOpen,
+            "w-44": !isChatOpen,
           },
         )}
       >
         {!isChatOpen ? (
           <>
-            <div className="ui-rounded-full ui-bg-primary-foreground">
-              <div className="ui-rounded-full ui-bg-primary/50 ui-p-2">
-                <ChatIcon className="ui-h-4 ui-w-4 ui-text-primary-foreground" />
+            <div className="rounded-full bg-primary-foreground">
+              <div className="rounded-full bg-primary/50 p-2">
+                <ChatIcon className="h-4 w-4 text-primary-foreground" />
               </div>
             </div>
-            <div className="ui-flex ui-items-center ui-gap-2 ui-text-[15px] ui-font-medium ui-text-primary-foreground">
-              <h3 className="ui-text-nowrap">Let&apos;s Chat!</h3>
-              <span className="ui-animate-wave">👋</span>
+            <div className="flex items-center gap-2 text-[15px] font-medium text-primary-foreground">
+              <h3 className="text-nowrap">Let&apos;s Chat!</h3>
+              <span className="animate-wave">👋</span>
             </div>
           </>
         ) : (
-          <div className="ui-rounded-full ui-p-1">
+          <div className="rounded-full p-1">
             <XIcon
               strokeWidth={2}
-              className="ui-h-8 ui-w-8 ui-text-primary-foreground"
+              className="h-8 w-8 text-primary-foreground"
             />
           </div>
         )}
