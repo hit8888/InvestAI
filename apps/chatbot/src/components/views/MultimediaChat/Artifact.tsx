@@ -58,7 +58,7 @@ const Artifact = () => {
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl bg-indigo-400">
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
       <button
         onClick={handleRemoveActiveArtifact}
         className="absolute right-6 top-6 z-10 rounded-full border bg-white bg-opacity-60 p-1 text-gray-700 shadow-lg backdrop-blur-lg"

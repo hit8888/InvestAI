@@ -12,7 +12,7 @@ const SlideArtifact = (props: IProps) => {
   } = props;
 
   return (
-    <div className="h-full w-full bg-indigo-400">
+    <div className="h-full w-full">
       {title && <SlideTitle text={title} />}
       {sub_title && <SlideTitle text={sub_title} />}
       {items && <SlideItems items={items} />}
