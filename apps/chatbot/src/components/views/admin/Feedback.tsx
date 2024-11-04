@@ -4,10 +4,10 @@ import {
   FeedbackEnum,
   InitialFeedbackPayload,
 } from "@meaku/core/types/feedback";
-import ChatHeader from "@meaku/ui/components/layout/chat-header";
-import ChatInput from "@meaku/ui/components/layout/chat-input";
-import ChatMessage from "@meaku/ui/components/layout/chat-message";
-import FeedbackContainer from "@meaku/ui/components/layout/feedback-containter";
+import ChatHeader from "@breakout/design-system/components/layout/chat-header";
+import ChatInput from "@breakout/design-system/components/layout/chat-input";
+import ChatMessage from "@breakout/design-system/components/layout/chat-message";
+import FeedbackContainer from "@breakout/design-system/components/layout/feedback-containter";
 import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";

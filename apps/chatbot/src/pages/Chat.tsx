@@ -11,10 +11,12 @@ import { trackError } from "../utils/error";
 
 const Widget = lazy(() => import("../components/views/Widget"));
 const Embed = lazy(() => import("../components/views/Embed"));
+const Multimedia = lazy(() => import("../components/views/MultimediaChat"));
 
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
   [ChatConfig.WIDGET]: Widget,
   [ChatConfig.EMBED]: Embed,
+  [ChatConfig.MULTIMEDIA]: Multimedia,
 };
 
 const Chat = () => {

@@ -3,7 +3,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:chat": "turbo run dev --filter=chatbot --filter=@meaku/ui --filter=@meaku/core",
+    "dev:chat": "turbo run dev --filter=chatbot --filter=@breakout/design-system --filter=@meaku/core",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",

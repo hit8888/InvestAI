@@ -1,7 +1,7 @@
-import SendIcon from "@meaku/ui/components/icons/send";
-import WrappedLogo from "@meaku/ui/components/icons/wrapped-logo";
-import Button from "@meaku/ui/components/layout/button";
-import Input from "@meaku/ui/components/layout/input";
+import SendIcon from "@breakout/design-system/components/icons/send";
+import WrappedLogo from "@breakout/design-system/components/icons/wrapped-logo";
+import Button from "@breakout/design-system/components/layout/button";
+import Input from "@breakout/design-system/components/layout/input";
 import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -37,27 +37,27 @@ const Welcome = () => {
   };
 
   return (
-    <div className="ui-flex ui-h-full ui-w-full ui-items-center ui-justify-center">
-      <div className="ui-flex ui-flex-col ui-items-center ui-space-y-8">
-        <div className="ui-rounded-full ui-shadow-2xl ui-shadow-primary">
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex flex-col items-center space-y-8">
+        <div className="rounded-full shadow-2xl shadow-primary">
           <WrappedLogo size="lg" />
         </div>
 
-        <div className="ui-space-y-2 ui-text-center">
-          <div className="ui-flex ui-items-start ui-justify-center ui-gap-1">
-            <h1 className="ui-text-2xl ui-font-medium ui-text-gray-800">
+        <div className="space-y-2 text-center">
+          <div className="flex items-start justify-center gap-1">
+            <h1 className="text-2xl font-medium text-gray-800">
               Hello! I'm {agentName}, your smart assistant.
             </h1>
-            <span className="ui-animate-wave">👋</span>
+            <span className="animate-wave">👋</span>
           </div>
-          <p className="ui-text-gray-700">
+          <p className="text-gray-700">
             Let's start our conversation and see how I can assist you. Please
             enter your email to begin the dialogue.
           </p>
         </div>
 
         <form
-          className="ui-flex ui-w-full ui-items-center ui-space-x-3"
+          className="flex w-full items-center space-x-3"
           onSubmit={(e) => {
             e.preventDefault();
             handleEmailSubmission;
@@ -74,7 +74,7 @@ const Welcome = () => {
             disabled={!emailInputValue}
             onClick={handleEmailSubmission}
           >
-            <SendIcon className="ui-text-primary-foreground" />
+            <SendIcon className="text-primary-foreground" />
           </Button>
         </form>
       </div>

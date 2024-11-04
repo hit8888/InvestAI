@@ -1,7 +1,7 @@
 import { ChatConfig } from "@meaku/core/types/config";
-import ChatHeader from "@meaku/ui/components/layout/chat-header";
-import ChatInput from "@meaku/ui/components/layout/chat-input";
-import ChatMessage from "@meaku/ui/components/layout/chat-message";
+import ChatHeader from "@breakout/design-system/components/layout/chat-header";
+import ChatInput from "@breakout/design-system/components/layout/chat-input";
+import ChatMessage from "@breakout/design-system/components/layout/chat-message";
 import { memo, useMemo } from "react";
 import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
@@ -43,7 +43,7 @@ const Embed = () => {
   };
 
   return (
-    <div className="ui-flex ui-h-screen ui-flex-col">
+    <div className="flex h-screen flex-col">
       <ChatHeader
         agentName={agentName}
         orgName={orgName ?? ""}
