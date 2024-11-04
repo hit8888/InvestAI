@@ -243,19 +243,15 @@ const useWebSocketChat = () => {
       if (response.is_complete) {
         setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
+
+        if (response.artifact && response.artifact.artifact_type !== "NONE") {
+          handleAddActiveArtifact(
+            response.artifact.artifact_id,
+            response.artifact.artifact_type,
+          );
+        }
       }
 
-      if (response.artifact && response.artifact.artifact_type !== "NONE") {
-        console.log(
-          "🚀 ~ file: useWebSocketChat.tsx:249 ~ useEffect ~ response:",
-          response,
-        );
-
-        handleAddActiveArtifact(
-          response.artifact.artifact_id,
-          response.artifact.artifact_type,
-        );
-      }
     } catch (error) {
       trackError(error, {
         action: "useEffect | handleAddAIMessage",

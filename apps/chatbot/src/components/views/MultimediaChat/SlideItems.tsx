@@ -7,8 +7,6 @@ interface IProps {
   items: SlideArtifactType["items"];
 }
 
-// className="mt-auto grid grid-cols-4 gap-3"
-
 const SlideItems = (props: IProps) => {
   const { items } = props;
   const itemsLength = items.length;
@@ -16,9 +14,13 @@ const SlideItems = (props: IProps) => {
   return (
     <>
       <div
-        className={cn("mt-auto grid", {
+        className={cn("mt-auto grid gap-3", {
           "grid-cols-4": itemsLength >= 4,
-          [`grid-cols-${itemsLength}`]: itemsLength < 4,
+          "grid-cols-1": itemsLength === 1,
+          // [Math.random() > 0.5 ? "grid-cols-2" : "grid-cols-4"]:
+          // itemsLength === 2,
+          "grid-cols-2": itemsLength === 2,
+          "grid-cols-3": itemsLength === 3,
         })}
       >
         {items.map((item) => (
