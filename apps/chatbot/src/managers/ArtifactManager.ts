@@ -12,8 +12,6 @@ class ArtifactManager {
   private validateArtifact(artifact: Artifact) {
     const validatedArtifact = ArtifactSchema.safeParse(artifact);
 
-    // console.log("🚀 ~ file: ArtifactManager.ts:14 ~ ArtifactManager ~ validateArtifact ~ validatedArtifact:", validatedArtifact)
-
     if (!validatedArtifact.success) {
       throw new Error(
         validatedArtifact.error.errors.map((error) => error.message).join(", "),

@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { cn } from "@breakout/design-system/lib/cn";
 import SendIcon from "@breakout/design-system/components/icons/send";
 import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
 import Input from "@breakout/design-system/components/layout/input";
+import { cn } from "@breakout/design-system/lib/cn";
+import { useState } from "react";
 
 interface IProps {
   isChatOpen: boolean;
@@ -44,7 +44,7 @@ const BottomBar = (props: IProps) => {
       className={cn(
         "bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex min-w-[950px] -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/50 via-transparent to-primary/50 p-1 backdrop-blur-lg",
         {
-          "hidden": isChatOpen,
+          hidden: isChatOpen,
           "min-w-[700px]": hasFirstUserMessageBeenSent,
         },
       )}
@@ -78,6 +78,7 @@ const BottomBar = (props: IProps) => {
             {suggestedQuestions.map((question) => (
               <div key={question} className="rounded-full bg-primary">
                 <button
+                  type="button"
                   onClick={() => handleSuggestedQuestionOnClick(question)}
                   className="flex items-center justify-center gap-1 rounded-full border-2 border-white border-opacity-60 bg-gradient-to-br from-transparent via-white/10 to-white/40 p-2 text-white transition-all duration-300 ease-in-out hover:from-white/10 hover:to-white/40"
                 >
@@ -91,7 +92,10 @@ const BottomBar = (props: IProps) => {
           </div>
 
           <div className="flex items-center justify-center">
-            <button className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80">
+            <button
+              type="submit"
+              className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80"
+            >
               <SendIcon className="text-primary-foreground" />
             </button>
           </div>
