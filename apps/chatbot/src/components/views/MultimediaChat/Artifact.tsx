@@ -17,7 +17,7 @@ const Artifact = () => {
     (state) => state.handleRemoveActiveArtifact,
   );
 
-  const { data: artifactData } = useArtifactData({
+  const { data: artifactData, isFetching } = useArtifactData({
     artifactId: activeArtifactId || "",
     artifactType: activeArtifactType || "NONE",
     options: {
@@ -65,7 +65,11 @@ const Artifact = () => {
       >
         <XIcon className="h-4 w-4" />
       </button>
-      {renderArtifact()}
+      {isFetching ? (
+        <div className="h-full w-full animate-pulse bg-gray-50"></div>
+      ) : (
+        renderArtifact()
+      )}
     </div>
   );
 };
