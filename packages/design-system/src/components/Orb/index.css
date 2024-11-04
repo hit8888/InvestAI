@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .orb-container {
+    box-shadow:
+      0px 0px 36px 4px #fff,
+      0px 12px 24px 4px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .taking-input-1 {
+    background: radial-gradient(
+      61.46% 61.46% at 50% 38.54%,
+      #fff 0%,
+      #acb2eb 100%
+    );
+  }
+
+  .shining {
+    border-radius: 50px;
+    backdrop-filter: blur(2px);
+  }
+
+  .takingInput2 {
+    background: radial-gradient(
+      42.71% 42.71% at 50% 50%,
+      #fff 4%,
+      #acb2eb 56.5%
+    );
+  }
+
+  .taking-input-3 {
+    background: radial-gradient(50% 50% at 50% 50%, #fff 8%, #acb2eb 56%);
+  }
+}

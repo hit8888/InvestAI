@@ -1,0 +1,38 @@
+
+
+import { cn } from "../../lib/cn";
+import ShiningRectangle from "../icons/ShiningRectangle";
+import "./index.css"
+
+
+export enum OrbStatusEnum {
+    takingInput = 'takingInput',
+    thinking = 'thinking',
+    responding = 'responding',
+    impatient = 'impatient',
+    combined = 'combined',
+}
+
+
+interface IProps {
+    color: string;
+    state: OrbStatusEnum;
+    size: "md" | "sm";
+}
+
+
+const Orb = ({ color, state, size = "md" }: IProps) => {
+    return (
+        <div className={cn("h-12 w-12 flex justify-center align-middle orb-container", {
+            "rounded-custom-56": size === "md",
+        })}>
+            <div className="h-full w-full shining">
+                <div className="h-full w-full">
+                    <ShiningRectangle width="33" height="17" />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Orb;
