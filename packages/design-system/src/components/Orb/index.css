@@ -10,11 +10,15 @@
     backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
   }
 
-  .taking-input-1 {
+  .animate-taking-input {
+    animation: pulse 1.6s infinite;
+  }
+
+  .taking-input-thinking-1 {
     background: radial-gradient(
       61.46% 61.46% at 50% 38.54%,
       #fff 0%,
-      #acb2eb 100%
+      var(--input-color, #acb2eb) 100%
     );
   }
 
@@ -23,15 +27,36 @@
     backdrop-filter: blur(2px);
   }
 
-  .takingInput2 {
+  .taking-input-thinking-2 {
     background: radial-gradient(
       42.71% 42.71% at 50% 50%,
       #fff 4%,
-      #acb2eb 56.5%
+      var(--input-color, #acb2eb) 56.5%
     );
   }
 
   .taking-input-3 {
-    background: radial-gradient(50% 50% at 50% 50%, #fff 8%, #acb2eb 56%);
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      #fff 8%,
+      var(--input-color, #acb2eb) 56%
+    );
+  }
+
+  /* Keyframes for the pulsating animation */
+  @keyframes pulse {
+    0% {
+      @apply taking-input-thinking-1;
+    }
+    45% {
+      @apply taking-input-thinking-2;
+    }
+    100% {
+      @apply taking-input-3;
+    }
+  }
+
+  .thinking-2 {
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
   }
 }
