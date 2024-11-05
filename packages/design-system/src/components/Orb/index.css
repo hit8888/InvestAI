@@ -16,14 +16,13 @@
   }
 
   .animate-taking-input {
-    animation: animation-taking-input;
-    animation-delay: 0.1s;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+    animation: animation-taking-input 2s infinite linear;
+    animation-delay: 1ms;
   }
 
   .shining {
     border-radius: 50px;
+    backdrop-filter: blur(2px);
   }
 
   .taking-input-thinking-2 {
@@ -49,6 +48,31 @@
     }
     50% {
       @apply taking-input-3;
+    }
+    100% {
+      @apply taking-input-thinking-2;
+    }
+  }
+
+  .animate-thinking {
+    animation: animation-thinking 2s infinite linear;
+    animation-delay: 1ms;
+  }
+
+  .thinking-3 {
+    background: radial-gradient(
+      61.46% 61.46% at 50% 38.54%,
+      #fff 0%,
+      var(--input-color, #acb2eb) 55%
+    );
+  }
+
+  @keyframes animation-thinking {
+    0% {
+      @apply taking-input-thinking-2;
+    }
+    50% {
+      @apply thinking-3;
     }
     100% {
       @apply taking-input-thinking-2;
