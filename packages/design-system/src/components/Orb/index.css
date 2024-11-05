@@ -19,7 +19,6 @@
     animation: animation-taking-input;
     animation-delay: 0.1s;
     animation-duration: 2s;
-    animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
 
@@ -48,7 +47,7 @@
     0% {
       @apply taking-input-thinking-2;
     }
-    50% {
+    70% {
       @apply taking-input-3;
     }
     100% {
