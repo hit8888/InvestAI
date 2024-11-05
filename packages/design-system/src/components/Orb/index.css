@@ -48,8 +48,11 @@
     0% {
       @apply taking-input-thinking-2;
     }
-    100% {
+    50% {
       @apply taking-input-3;
+    }
+    100% {
+      @apply taking-input-thinking-2;
     }
   }
 }
