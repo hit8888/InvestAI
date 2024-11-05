@@ -24,6 +24,7 @@ const Orb = ({ color, state }: IProps) => {
         <div className={cn("h-12 w-12 flex justify-center orb-container rounded-custom-56 shining p-1", {
             "animate-taking-input": state === OrbStatusEnum.takingInput,
             "animate-thinking": state === OrbStatusEnum.thinking,
+            "animate-impatient": state === OrbStatusEnum.impatient,
         })} style={{ "--input-color": color } as React.CSSProperties}>
             <ShiningRectangle width="33" height="17" />
         </div>
