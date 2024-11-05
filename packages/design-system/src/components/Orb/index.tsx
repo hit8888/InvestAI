@@ -20,16 +20,11 @@ interface IProps {
 
 
 const Orb = ({ color, state }: IProps) => {
-    console.log({ color })
     return (
-        <div className={cn("h-12 w-12 flex justify-center align-middle orb-container rounded-custom-56", {
+        <div className={cn("h-12 w-12 flex justify-center align-middle orb-container rounded-custom-56 shining p-1", {
             "animate-taking-input": state === OrbStatusEnum.takingInput,
         })} style={{ "--input-color": color } as React.CSSProperties}>
-            <div className="h-full w-full shining">
-                <div className="h-full w-full">
-                    <ShiningRectangle width="33" height="17" />
-                </div>
-            </div>
+            <ShiningRectangle width="33" height="17" />
         </div>
     )
 }
