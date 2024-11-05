@@ -159,7 +159,7 @@
       @apply orb-container-shiny;
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-10px);
       @apply impatient-1;
     }
     100% {
