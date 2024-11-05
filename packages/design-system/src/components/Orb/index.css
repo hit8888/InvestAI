@@ -78,8 +78,10 @@
   /* animate-thinking Starts */
 
   .animate-thinking {
-    animation: animation-thinking 2s infinite
-      cubic-bezier(0.3, -0.05, 0.7, -0.5);
+    animation:
+      animation-thinking1 720ms linear 1ms,
+      animation-thinking2 1.6s linear 720ms infinite,
+      animation-thinking3 2s linear 2.32s infinite;
     animation-delay: 1ms;
   }
 
@@ -91,11 +93,26 @@
     );
   }
 
-  @keyframes animation-thinking {
+  @keyframes animation-thinking1 {
+    0% {
+      @apply orb-container;
+    }
+    100% {
+      @apply taking-input-thinking-2;
+    }
+  }
+
+  @keyframes animation-thinking2 {
     0% {
       @apply taking-input-thinking-2;
     }
-    45% {
+    100% {
+      @apply thinking-3;
+    }
+  }
+
+  @keyframes animation-thinking3 {
+    0% {
       @apply thinking-3;
     }
     100% {
@@ -106,6 +123,19 @@
   /* animate-thinking Ends */
 
   /* animate-impatient Starts */
+
+  .orb-container-shiny {
+    background: radial-gradient(
+      61.46% 61.46% at 50% 38.54%,
+      #fff 24%,
+      var(--input-color, #acb2eb) 100%
+    );
+    box-shadow:
+      0px 0px 36px 16px rgba(255, 255, 255, 0.64),
+      0px 12px 24px 4px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
   .animate-impatient {
     animation:
       animation-impatient-part1 1s cubic-bezier(0.3, -0.05, 0.7, -0.5) 1ms
@@ -126,7 +156,7 @@
   @keyframes animation-impatient-part1 {
     0% {
       transform: translateY(0);
-      @apply orb-container;
+      @apply orb-container-shiny;
     }
     50% {
       transform: translateY(-20px);
@@ -134,7 +164,7 @@
     }
     100% {
       transform: translateY(0);
-      @apply orb-container;
+      @apply orb-container-shiny;
     }
   }
 
@@ -146,7 +176,7 @@
     }
     50% {
       transform: translateY(-10px);
-      @apply orb-container;
+      @apply orb-container-shiny;
     }
     100% {
       transform: translateY(0);
