@@ -15,9 +15,13 @@
     );
   }
 
+  /* animate-taking-input Starts */
+
   .animate-taking-input {
-    animation: animation-taking-input 2s infinite
-      cubic-bezier(0.3, -0.05, 0.7, -0.5);
+    animation:
+      animation-taking-input1 720ms linear 1ms,
+      animation-taking-input2 1.6s linear 720ms infinite,
+      animation-taking-input3 2s linear 2.32s infinite;
     animation-delay: 1ms;
   }
 
@@ -42,18 +46,36 @@
     );
   }
 
-  /* Keyframes for the pulsating animation */
-  @keyframes animation-taking-input {
+  @keyframes animation-taking-input1 {
+    0% {
+      @apply orb-container;
+    }
+    100% {
+      @apply taking-input-thinking-2;
+    }
+  }
+
+  @keyframes animation-taking-input2 {
     0% {
       @apply taking-input-thinking-2;
     }
-    45% {
+    100% {
+      @apply taking-input-3;
+    }
+  }
+
+  @keyframes animation-taking-input3 {
+    0% {
       @apply taking-input-3;
     }
     100% {
       @apply taking-input-thinking-2;
     }
   }
+
+  /* animate-taking-input Ends */
+
+  /* animate-thinking Starts */
 
   .animate-thinking {
     animation: animation-thinking 2s infinite
@@ -81,6 +103,9 @@
     }
   }
 
+  /* animate-thinking Ends */
+
+  /* animate-impatient Starts */
   .animate-impatient {
     animation:
       animation-impatient-part1 1s cubic-bezier(0.3, -0.05, 0.7, -0.5) 1ms
@@ -128,4 +153,6 @@
       @apply impatient-1;
     }
   }
+
+  /* animate-impatient Ends */
 }
