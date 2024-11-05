@@ -11,7 +11,7 @@ export default {
 
 
 
-const Template = (args) => <Orb {...args} />;
+const Template = (args) => <div className='flex justify-center items-center'><Orb {...args} /></div>;
 
 export const TakingInput = Template.bind({});
 TakingInput.args = {
