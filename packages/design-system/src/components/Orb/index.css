@@ -47,7 +47,7 @@
     0% {
       @apply taking-input-thinking-2;
     }
-    70% {
+    50% {
       @apply taking-input-3;
     }
     100% {
