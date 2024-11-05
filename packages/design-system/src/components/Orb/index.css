@@ -16,7 +16,7 @@
   }
 
   .animate-taking-input {
-    animation: animation-taking-input 2s infinite linear;
+    animation: animation-taking-input 3s infinite cubic-bezier(0.42, 0, 0.58, 1);
     animation-delay: 1ms;
   }
 
@@ -55,7 +55,7 @@
   }
 
   .animate-thinking {
-    animation: animation-thinking 2s infinite linear;
+    animation: animation-thinking 3s infinite cubic-bezier(0.42, 0, 0.58, 1);
     animation-delay: 1ms;
   }
 
