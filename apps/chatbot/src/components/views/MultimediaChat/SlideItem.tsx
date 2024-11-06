@@ -13,7 +13,7 @@ const SlideItem = (props: IProps) => {
   return (
     <div className="flex flex-col items-center gap-3 rounded-md bg-white px-6 py-12 text-center shadow-lg">
       {icon && <DynamicIcon icon={icon} />}
-      <h4 className="text-lg font-medium text-primary">{title}</h4>
+      <h4 className="text-lg font-semibold text-primary">{title}</h4>
       <p>{description}</p>
     </div>
   );

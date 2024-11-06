@@ -1,3 +1,4 @@
+import BotIndicator from "@breakout/design-system/components/layout/bot-indicator";
 import { cn } from "@breakout/design-system/lib/cn";
 import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef, useState } from "react";
@@ -66,14 +67,17 @@ const MessageItem = (props: IProps) => {
     >
       <div
         className={cn("max-w-full", {
-          "ml-10 bg-primary px-3 py-2": !isSenderBot,
+          "ml-10 bg-primary/70 px-3 py-2": !isSenderBot,
           "mr-10 flex gap-7 p-6 pl-0": isSenderBot,
           "rounded-full": isSingleLineMessage,
           "rounded-2xl": !isSingleLineMessage,
         })}
       >
         {isSenderBot && (
-          <div className="bot-indicator h-4 w-4 min-w-max rounded-full bg-primary"></div>
+          <>
+            {/* <div className="bot-indicator h-5 w-5 min-w-max rounded-full"></div> */}
+            <BotIndicator />
+          </>
         )}
         <div
           className={cn("prose max-w-full flex-1", {

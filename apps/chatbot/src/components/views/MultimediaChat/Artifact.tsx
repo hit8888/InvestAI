@@ -1,4 +1,9 @@
-import { DemoArtifactType, SlideArtifactType } from "@meaku/core/types/chat";
+import { AspectRatio } from "@breakout/design-system/components/layout/aspect-ratio";
+import {
+  DemoArtifactType,
+  SlideArtifactType,
+  SlideImageArtifactType,
+} from "@meaku/core/types/chat";
 import { XIcon } from "lucide-react";
 import { useMemo } from "react";
 import useArtifactData from "../../../hooks/query/useArtifactData";
@@ -17,7 +22,11 @@ const Artifact = () => {
     (state) => state.handleRemoveActiveArtifact,
   );
 
-  const { data: artifactData, isFetching } = useArtifactData({
+  const {
+    data: artifactData,
+    isFetching,
+    isError,
+  } = useArtifactData({
     artifactId: activeArtifactId || "",
     artifactType: activeArtifactType || "NONE",
     options: {
@@ -35,15 +44,23 @@ const Artifact = () => {
     return new ArtifactManager(artifactData);
   }, [artifactData]);
 
+  const artifactType = manager?.getArtifactType();
   const artifactContent = manager?.getArtifactContent();
 
-  if (activeArtifactType === "NONE" || !activeArtifactId) return null;
-
   const renderArtifact = () => {
-    switch (activeArtifactType) {
+    switch (artifactType) {
       case "SLIDE":
         return (
           <SlideArtifact artifact={artifactContent as SlideArtifactType} />
+        );
+
+      case "SLIDE_IMAGE":
+        return (
+          <img
+            src={(artifactContent as SlideImageArtifactType).image_url}
+            alt="Slide"
+            className="h-full w-full"
+          />
         );
 
       case "DEMO":
@@ -57,19 +74,30 @@ const Artifact = () => {
     }
   };
 
+  if (activeArtifactType === "NONE" || !activeArtifactId || !artifactData)
+    return null;
+
+  if (isError) {
+    return <></>;
+  }
+
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
-      <button
-        onClick={handleRemoveActiveArtifact}
-        className="absolute right-6 top-6 z-10 rounded-full border bg-white bg-opacity-60 p-1 text-gray-700 shadow-lg backdrop-blur-lg"
-      >
-        <XIcon className="h-4 w-4" />
-      </button>
-      {isFetching ? (
-        <div className="h-full w-full animate-pulse bg-gray-50"></div>
-      ) : (
-        renderArtifact()
-      )}
+    <div className="flex h-full w-full items-center justify-center">
+      <AspectRatio ratio={16 / 9}>
+        <div className="relative h-full w-full overflow-hidden rounded-xl">
+          <button
+            onClick={handleRemoveActiveArtifact}
+            className="absolute right-6 top-6 z-10 rounded-full border bg-white bg-opacity-60 p-1 text-gray-700 shadow-lg backdrop-blur-lg"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
+          {isFetching ? (
+            <div className="h-full w-full animate-pulse bg-gray-50"></div>
+          ) : (
+            renderArtifact()
+          )}
+        </div>
+      </AspectRatio>
     </div>
   );
 };

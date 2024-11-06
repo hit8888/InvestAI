@@ -4,6 +4,7 @@ import {
   ArtifactSchema,
   DemoArtifactSchema,
   SlideArtifactSchema,
+  SlideImageArtifactSchema,
   VideoArtifactSchema,
 } from "./artifact";
 import { DataSourceSchema } from "./common";
@@ -49,6 +50,7 @@ export const AIResponseSchema = z.object({
 });
 
 export type SlideArtifactType = z.infer<typeof SlideArtifactSchema>;
+export type SlideImageArtifactType = z.infer<typeof SlideImageArtifactSchema>;
 
 export type DemoArtifactType = z.infer<typeof DemoArtifactSchema>;
 

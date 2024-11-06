@@ -10,6 +10,7 @@ type Session = {
   sessionId?: string;
   prospectId?: string;
   showTooltip: boolean;
+  isChatOpen: boolean;
 };
 
 const useLocalStorageSession = () => {
@@ -19,18 +20,22 @@ const useLocalStorageSession = () => {
   const fallbackSessionKey = LOCAL_STORAGE_KEYS.FALLBACK_SESSION_ID;
   const fallbackProspectKey = LOCAL_STORAGE_KEYS.FALLBACK_PROSPECT_ID;
 
-  const [session, setSession] = useLocalStorageState<Session>(localStorageKey);
+  const [session, setSession] = useLocalStorageState<Session>(localStorageKey, {
+    listenStorageChange: false,
+  });
   const [fallbackSessionId, setFallbackSessionId] =
     useLocalStorageState<string>(fallbackSessionKey);
   const [fallbackProspectId, setFallbackProspectId] =
     useLocalStorageState<string>(fallbackProspectKey);
 
   const setShowTooltip = useChatStore((state) => state.setShowTooltip);
+  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
 
   const sessionData: Session = {
     sessionId: session?.sessionId || fallbackSessionId,
     prospectId: session?.prospectId || fallbackProspectId,
     showTooltip: session?.showTooltip ?? true,
+    isChatOpen: session?.isChatOpen ?? true,
   };
 
   const handleUpdateSessionData = async (newSessionData: Partial<Session>) => {
@@ -38,6 +43,7 @@ const useLocalStorageSession = () => {
       const updatedSessionData = {
         ...sessionData,
         ...newSessionData,
+        isChatOpen: newSessionData.isChatOpen ?? sessionData.isChatOpen ?? true,
       };
 
       setSession(updatedSessionData);
@@ -58,7 +64,8 @@ const useLocalStorageSession = () => {
     if (!session) return;
 
     setShowTooltip(session.showTooltip);
-  }, [session]);
+    setIsChatOpen(session.isChatOpen);
+  }, []);
 
   return {
     sessionData,

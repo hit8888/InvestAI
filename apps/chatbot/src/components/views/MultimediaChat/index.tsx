@@ -31,6 +31,8 @@ const Multimedia = () => {
   const { data: config } = useConfigData();
   const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
+  const { handleUpdateSessionData } = useLocalStorageSession();
+
   const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
@@ -63,10 +65,12 @@ const Multimedia = () => {
 
   const handleCloseChat = () => {
     setIsChatOpen(false);
+    handleUpdateSessionData({ isChatOpen: false });
   };
 
   const handleOpenChat = () => {
     setIsChatOpen(true);
+    handleUpdateSessionData({ isChatOpen: true });
   };
 
   const handleChatInputOnChangeCallback = () => {
@@ -98,9 +102,8 @@ const Multimedia = () => {
 
   return (
     <div
-      className={cn("flex h-screen flex-col backdrop-blur-md", {
+      className={cn("flex h-screen flex-col font-inter backdrop-blur-md", {
         "bg-primary": showGlass,
-        // "grid grid-cols-3": showDemo,
       })}
     >
       <div

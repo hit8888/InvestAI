@@ -30,6 +30,12 @@ const ChatMessage = (props: IProps) => {
     handleScrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      handleScrollToBottom();
+    }, 1000);
+  }, []);
+
   return (
     <div
       ref={chatContainerRef}

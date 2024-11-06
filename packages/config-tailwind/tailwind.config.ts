@@ -8,6 +8,10 @@ import colors from "tailwindcss/colors";
 const config: Omit<Config, "content"> = {
   theme: {
     extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        rubik: ["Rubik", "sans-serif"],
+      },
       colors: {
         ...colors,
         gray: {

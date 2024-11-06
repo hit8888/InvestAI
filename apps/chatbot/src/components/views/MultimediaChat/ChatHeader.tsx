@@ -14,7 +14,11 @@ const ChatHeader = (props: IProps) => {
     <div className="flex items-center justify-between bg-gray-50 bg-opacity-20 p-2 backdrop-blur-lg">
       <div>
         <div className="rounded-md bg-primary/60 p-[2px]">
-          <Button size="sm" onClick={handlePrimaryCta}>
+          <Button
+            size="sm"
+            onClick={handlePrimaryCta}
+            className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40"
+          >
             Book a Demo!
           </Button>
         </div>
