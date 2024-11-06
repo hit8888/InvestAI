@@ -14,7 +14,7 @@ interface State {
     artifactType: ArtifactEnum,
   ) => void;
 }
-
+//TODO: Remove useArtifactStore;
 export const useArtifactStore = create<State>()(
   devtools(
     immer((set) => ({

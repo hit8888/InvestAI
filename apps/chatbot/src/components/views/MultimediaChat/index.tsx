@@ -24,7 +24,7 @@ const Multimedia = () => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get("showGlass") === "true",
-  };
+  };//Remove after UI is finalized
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
@@ -48,12 +48,11 @@ const Multimedia = () => {
   );
 
   const manager = useMemo(() => {
-    if (!session && !config) return;
+    if (!session && !config) return; //Create a provider which renders the children only if session or config is present
 
     return new UnifiedResponseManager(session ?? config);
   }, [config, session]);
 
-  const sessionId = manager?.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
@@ -68,6 +67,9 @@ const Multimedia = () => {
   const handleOpenChat = () => {
     setIsChatOpen(true);
   };
+
+
+  const sessionId = manager?.getSessionId();
 
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;

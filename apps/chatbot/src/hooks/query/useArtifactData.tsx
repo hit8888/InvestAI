@@ -1,4 +1,4 @@
-import { ArtifactEnum } from "@meaku/core/types/chat";
+import { Artifact, ArtifactEnum } from "@meaku/core/types/chat";
 import { ChatParams } from "@meaku/core/types/config";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { getArtifact } from "../../lib/http/api";
 interface IProps {
   artifactId?: string;
   artifactType?: ArtifactEnum;
-  options?: Omit<UseQueryOptions<any, Error>, "queryKey" | "queryFn">;
+  options?: Omit<UseQueryOptions<Artifact, Error>, "queryKey" | "queryFn">;
 }
 
 const useArtifactData = (props: IProps) => {
@@ -25,7 +25,8 @@ const useArtifactData = (props: IProps) => {
         artifactType,
       });
 
-      return response.data;
+      const data = response.data as Artifact;
+      return data;
     },
     enabled: !!artifactId && artifactType && artifactType !== "NONE",
     staleTime: Infinity,
