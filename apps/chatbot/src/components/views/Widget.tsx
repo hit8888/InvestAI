@@ -9,7 +9,7 @@ import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 

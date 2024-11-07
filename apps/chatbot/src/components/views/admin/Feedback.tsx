@@ -15,7 +15,7 @@ import useConfigData from "../../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";

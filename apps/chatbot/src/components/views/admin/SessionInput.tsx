@@ -4,7 +4,7 @@ import Input from "@breakout/design-system/components/layout/input";
 import { FormEvent, memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import useConfigData from "../../../hooks/query/useConfigData";
-import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 
 const SUPERADMIN_PASSWORD = "VzEsWuLDN4wg0335/KVxjg==";

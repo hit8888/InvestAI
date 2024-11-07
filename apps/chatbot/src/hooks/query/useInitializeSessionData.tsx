@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import Logrocket from "logrocket";
 import { useParams } from "react-router-dom";
 import { initializeSession } from "../../lib/http/api";
-import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";

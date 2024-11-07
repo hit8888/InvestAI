@@ -13,15 +13,15 @@ type ResponseType = Configuration | Session;
  * This is an UnifiedResponseManager that helps us manage the response for the initialization api as well as the config api. This has been made into a single manager to avoid code duplication and to make the code more maintainable.
  */
 
-class UnifiedResponseManager {
+class UnifiedSessionConfigResponseManager {
   private config: Configuration;
   private session: Session | null = null;
 
   constructor(response: ResponseType) {
     if (this.isSession(response)) {
-      const validatedSession = this.validateSession(response);
-      this.session = validatedSession.session;
-      this.config = validatedSession.config;
+      const {config,session} = this.validateSession(response);
+      this.session = session;
+      this.config = config;
     } else {
       this.config = this.validateConfig(response);
     }
@@ -156,4 +156,4 @@ class UnifiedResponseManager {
   }
 }
 
-export default UnifiedResponseManager;
+export default UnifiedSessionConfigResponseManager;

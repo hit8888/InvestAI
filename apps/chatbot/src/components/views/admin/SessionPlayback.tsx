@@ -5,7 +5,7 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import FeedbackContainter from "@breakout/design-system/components/layout/feedback-containter";
 import { useMemo } from "react";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
-import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 
@@ -62,7 +62,7 @@ const SessionPlayback = () => {
         agentName={agentName}
         messages={messages}
         suggestedQuestions={[]}
-        handleSuggestedQuestionOnClick={() => {}}
+        handleSuggestedQuestionOnClick={() => { }}
         handleShowFeedback={(responseId) => {
           setActiveResponseId(responseId);
         }}
@@ -76,7 +76,7 @@ const SessionPlayback = () => {
         activeRating={activeResponse?.feedback?.category ?? ""}
         existingFeedback={activeResponse?.feedback?.remarks ?? ""}
         handleCloseFeedbackContainer={() => setActiveResponseId(null)}
-        handleShareFeedback={() => {}}
+        handleShareFeedback={() => { }}
         isReadOnly={true}
       />
       <ChatInput
@@ -85,7 +85,7 @@ const SessionPlayback = () => {
             ? "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support."
             : ""
         }
-        handleSendUserMessage={() => {}}
+        handleSendUserMessage={() => { }}
         isAMessageBeingProcessed={true}
         disabled={true}
       />

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
-import UnifiedResponseManager from "../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../managers/UnifiedSessionConfigResponseManager";
 import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";

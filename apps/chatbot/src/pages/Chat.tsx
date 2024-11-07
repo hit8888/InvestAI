@@ -5,7 +5,7 @@ import useUpdateSession from "../hooks/mutation/useUpdateSession";
 import useConfigData from "../hooks/query/useConfigData";
 import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../managers/UnifiedSessionConfigResponseManager";
 import { UpdateSessionDataPayloadSchema } from "../types/api";
 import { trackError } from "../utils/error";
 

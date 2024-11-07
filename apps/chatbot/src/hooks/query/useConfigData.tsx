@@ -2,7 +2,7 @@ import { Configuration } from "@meaku/core/types/session";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getConfig } from "../../lib/http/api";
-import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 import { ChatParams } from "../../types/msc";
 import { handleColorConfig } from "../../utils/common";
@@ -40,7 +40,7 @@ const useConfigData = (options: useConfigDataOptions = {}) => {
         setSuggestedQuestions(suggestedQuestions);
 
         handleColorConfig(styleConfig);
-      } catch (err) {}
+      } catch (err) { }
 
       return response.data;
     },

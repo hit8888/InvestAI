@@ -6,7 +6,7 @@ import { memo, useMemo } from "react";
 import useConfigData from "../../hooks/query/useConfigData";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedResponseManager";
+import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 
 const Embed = () => {
