@@ -2,7 +2,7 @@ import { Artifact, ArtifactEnum } from "@meaku/core/types/chat";
 import { ChatParams } from "@meaku/core/types/config";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getArtifact } from "../../lib/http/api";
+import { getArtifact } from "../http/api";
 
 interface IProps {
   artifactId?: string;

@@ -15,7 +15,6 @@ interface useConfigDataQueryOptions {
   queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>,
 }
 
-
 const useConfigDataQuery = (
   { orgName, agentId, queryOptions }: useConfigDataQueryOptions) => {
   const query = useQuery({

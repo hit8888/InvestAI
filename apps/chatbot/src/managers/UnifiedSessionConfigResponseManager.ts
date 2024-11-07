@@ -2,12 +2,12 @@ import { Message } from "@meaku/core/types/chat";
 import {
   ConfigurationApiResponse,
   ConfigurationSchema,
-  Session,
+  SessionApiResponse,
   SessionSchema,
 } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
 
-export type SessionConfigResponseType = ConfigurationApiResponse | Session;
+export type SessionConfigResponseType = ConfigurationApiResponse | SessionApiResponse;
 
 /**
  * This is an UnifiedResponseManager that helps us manage the response for the initialization api as well as the config api. This has been made into a single manager to avoid code duplication and to make the code more maintainable.
@@ -15,7 +15,7 @@ export type SessionConfigResponseType = ConfigurationApiResponse | Session;
 
 class UnifiedSessionConfigResponseManager {
   private config: ConfigurationApiResponse;
-  private session: Session | null = null;
+  private session: SessionApiResponse | null = null;
 
   constructor(response: SessionConfigResponseType) {
     if (this.isSession(response)) {
@@ -27,11 +27,11 @@ class UnifiedSessionConfigResponseManager {
     }
   }
 
-  private isSession(response: SessionConfigResponseType): response is Session {
+  private isSession(response: SessionConfigResponseType): response is SessionApiResponse {
     return "session_id" in response;
   }
 
-  private validateSession(session: Session) {
+  private validateSession(session: SessionApiResponse) {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {

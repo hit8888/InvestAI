@@ -12,7 +12,8 @@
     "./types/*": "./src/types/*.ts",
     "./utils/*": "./src/utils/*.ts",
     "./constants/*": "./src/constants/*.ts",
-    "./hooks/*": "./src/hooks/*.tsx"
+    "./hooks/*": "./src/hooks/*.tsx",
+    "./queries/*": "./src/queries/*.ts"
   },
   "devDependencies": {
     "@meaku/typescript-config": "workspace:*",

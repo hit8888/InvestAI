@@ -1,6 +1,6 @@
 import { ArtifactEnum } from "@meaku/core/types/chat";
 import { z } from "zod";
-import { getCanvasFingerprint, getWebGLInfo } from "../../../../apps/chatbot/src/utils/tracking";
+import { getCanvasFingerprint, getWebGLInfo } from "../../../../apps/chatbot/src/utils/tracking";///don't import from app
 
 export type BrowserSignature = {
   userAgent: string;
