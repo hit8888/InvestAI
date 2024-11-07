@@ -3,6 +3,7 @@ import {
   DemoArtifactType,
   SlideArtifactType,
   SlideImageArtifactType,
+  VideoArtifactType,
 } from "@meaku/core/types/chat";
 import { XIcon } from "lucide-react";
 import { useMemo } from "react";
@@ -67,7 +68,11 @@ const Artifact = () => {
         return <DemoArtifact artifact={artifactContent as DemoArtifactType} />;
 
       case "VIDEO":
-        return <VideoArtifact videoUrl={artifactContent as string} />;
+        return (
+          <VideoArtifact
+            videoUrl={(artifactContent as VideoArtifactType).video_url}
+          />
+        );
 
       default:
         return <></>;

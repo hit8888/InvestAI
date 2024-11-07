@@ -54,7 +54,6 @@ export const ArtifactSchema = z.object({
   artifact_id: z.string(),
   content: SlideArtifactSchema.or(SlideImageArtifactSchema)
     .or(DemoArtifactSchema)
-    .optional(),
-  video_url: z.string().optional(),
+    .or(VideoArtifactSchema),
   artifact_type: ArtifactEnumSchema,
 });

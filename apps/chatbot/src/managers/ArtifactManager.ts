@@ -30,10 +30,7 @@ class ArtifactManager {
   }
 
   getArtifactContent() {
-    const artifactType = this.getArtifactType();
-    return artifactType === "VIDEO"
-      ? this.artifact.video_url
-      : this.artifact.content;
+    return this.artifact.content;
   }
 }
 
