@@ -1,8 +1,7 @@
 import { FC, ReactElement } from "react";
 import { IAllApiResponses } from "../ApiProvider/types";
 import { Loader } from "lucide-react";
-import useConfigDataQuery from "../../../hooks/query/useConfigDataQuery";
-import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
+
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import { useParams } from "react-router-dom";
 import { ChatParams } from "@meaku/core/types/config";

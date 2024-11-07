@@ -1,33 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 import { getConfig } from "../http/api";
+import { BreakoutQueryOptions } from "../types/queries";
+import { ConfigurationApiResponse } from "../types";
+
+
+
+const configDataKey = (): unknown[] => ["config"];
+
+type ConfigDataKey = ReturnType<typeof configDataKey>;
 
 interface useConfigDataOptions {
   forceFetch?: boolean;
   orgName: string;
   agentId: string;
-  sessionId: string;
-  queryOptions: BreakoutQueryOptions<AirSearchResponse, AirLlfSearchKey>,
+  queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>,
 }
 
 
-const airLlfSearchKey = (llfSearchRequest: LlfSearchRequest): unknown[] => ['air-llf-search', llfSearchRequest];
-
-type AirLlfSearchKey = ReturnType<typeof airLlfSearchKey>;
 
 
 const useConfigDataQuery = (
-  { forceFetch, orgName, agentId, sessionId, queryOptions }: useConfigDataOptions) => {
-
+  { orgName, agentId, queryOptions }: useConfigDataOptions) => {
   const query = useQuery({
-    queryKey: ["config"],
     queryFn: async () => {
       const response = await getConfig(orgName, agentId);
 
-      return response.data;
+      return response.data as ConfigurationApiResponse;
     },
-    enabled: !sessionId || forceFetch,
-    staleTime: Infinity,
-  });
+    ...queryOptions,
+    queryKey: configDataKey(),
+  }
+  );
 
   return query;
 };
