@@ -75,7 +75,6 @@ const MessageItem = (props: IProps) => {
       >
         {isSenderBot && (
           <>
-            {/* <div className="bot-indicator h-5 w-5 min-w-max rounded-full"></div> */}
             <BotIndicator />
           </>
         )}

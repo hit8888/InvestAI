@@ -37,6 +37,9 @@ const Multimedia = () => {
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
+  const isChatMaximized = useChatStore((state) => state.isChatMaximized);
+  const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
+
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
   );
@@ -81,6 +84,10 @@ const Multimedia = () => {
 
   const handleExpandWidth = () => {
     setIsWidthMaximized(true);
+  };
+
+  const handleFinishDemo = () => {
+    setIsChatMaximized(false);
   };
 
   useEffect(() => {
@@ -129,6 +136,7 @@ const Multimedia = () => {
             <ChatHeader
               handlePrimaryCta={handlePrimaryCta}
               handleCloseChat={handleCloseChat}
+              handleFinishDemo={handleFinishDemo}
             />
             <div
               className={cn("flex-1 overflow-y-auto bg-white bg-opacity-60", {
@@ -139,6 +147,7 @@ const Multimedia = () => {
                 className={cn({
                   "col-span-2 pl-2": !!activeArtifactId,
                   hidden: !activeArtifactId,
+                  "col-span-3": isChatMaximized,
                 })}
               >
                 <Artifact />
@@ -148,6 +157,7 @@ const Multimedia = () => {
                 className={cn("flex-1 overflow-y-auto", {
                   "col-span-3": !activeArtifactId,
                   "col-span-1": !!activeArtifactId,
+                  "col-span-0 hidden": isChatMaximized,
                 })}
               >
                 <ChatMessage
