@@ -1,8 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { postResponseFeedback } from "../../lib/http/api";
-import { PostResponseFeedbackPayload } from "../../types/api";
-import { ChatParams } from "../../types/msc";
+import { postResponseFeedback } from "../../../../../packages/core/src/http/api";
+import { PostResponseFeedbackPayload } from "@meaku/core/types/api";
+import { ChatParams } from "@meaku/core/types/msc";
 
 type ResponseFeedbackResult =
   ReturnType<typeof postResponseFeedback> extends Promise<infer T> ? T : never;

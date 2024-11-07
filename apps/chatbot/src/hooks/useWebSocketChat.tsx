@@ -10,12 +10,12 @@ import UnifiedResponseManager from "../managers/UnifiedSessionConfigResponseMana
 import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
-import { ChatParams } from "../types/msc";
+import { ChatParams } from "@meaku/core/types/msc";
 import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
-import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
+import useConfigDataQuery from "./query/useConfigDataQuery";
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -26,7 +26,7 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
-  const { data: config } = useConfigData();
+  const { data: config } = useConfigDataQuery();
   const { session, refetch: fetchSession } = useInitializeSessionData();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();

@@ -5,7 +5,7 @@ import Input from "@breakout/design-system/components/layout/input";
 import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import useConfigData from "../../../hooks/query/useConfigData";
+import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
 import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
 

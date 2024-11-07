@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
 import { useChatStore } from "../stores/useChatStore";
-import { ChatParams } from "../types/msc";
+import { ChatParams } from "@meaku/core/types/msc";
 import { trackError } from "../utils/error";
 
 type Session = {

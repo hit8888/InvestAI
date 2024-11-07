@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { updateProspect } from "../../lib/http/api";
-import { UpdateProspectPayload } from "../../types/api";
-import { ChatParams } from "../../types/msc";
+import { updateProspect } from "../../../../../packages/core/src/http/api";
+import { UpdateProspectPayload } from "@meaku/core/types/api";
+import { ChatParams } from "@meaku/core/types/msc";
 
 const useUpdateProspect = () => {
   const { orgName = "" } = useParams<ChatParams>();

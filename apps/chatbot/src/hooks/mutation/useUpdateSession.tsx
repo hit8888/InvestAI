@@ -1,8 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { updateSession } from "../../lib/http/api";
-import { UpdateSessionDataPayload } from "../../types/api";
-import { ChatParams } from "../../types/msc";
+import { updateSession } from "../../../../../packages/core/src/http/api";
+import { UpdateSessionDataPayload } from "@meaku/core/types/api";
+import { ChatParams } from "@meaku/core/types/msc";
 
 type ResponseFeedbackResult =
   ReturnType<typeof updateSession> extends Promise<infer T> ? T : never;

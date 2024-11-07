@@ -11,7 +11,7 @@ import FeedbackContainer from "@breakout/design-system/components/layout/feedbac
 import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
-import useConfigData from "../../../hooks/query/useConfigData";
+import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";

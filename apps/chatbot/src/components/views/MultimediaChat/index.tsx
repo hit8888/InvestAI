@@ -1,7 +1,7 @@
 import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import useConfigData from "../../../hooks/query/useConfigData";
+import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
@@ -28,7 +28,6 @@ const Multimedia = () => {
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
-  const { data: config } = useConfigData();
   const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
   const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);

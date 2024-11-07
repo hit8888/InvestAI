@@ -4,7 +4,7 @@ import {
   PostResponseFeedbackPayload,
   UpdateProspectPayload,
   UpdateSessionDataPayload,
-} from "../../types/api";
+} from "../types/api";
 import apiClient from "./client";
 
 export const getConfig = (tenantName: string, agentId: string) =>

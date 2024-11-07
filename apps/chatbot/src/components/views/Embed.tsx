@@ -3,7 +3,7 @@ import ChatHeader from "@breakout/design-system/components/layout/chat-header";
 import ChatInput from "@breakout/design-system/components/layout/chat-input";
 import ChatMessage from "@breakout/design-system/components/layout/chat-message";
 import { memo, useMemo } from "react";
-import useConfigData from "../../hooks/query/useConfigData";
+import useConfigData from "../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";

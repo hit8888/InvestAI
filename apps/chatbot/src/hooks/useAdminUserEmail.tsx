@@ -2,7 +2,7 @@ import { useLocalStorageState } from "ahooks";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
-import { ChatParams } from "../types/msc";
+import { ChatParams } from "@meaku/core/types/msc";
 import useUpdateProspect from "./mutation/useUpdateProspect";
 import useIsAdmin from "./useIsAdmin";
 import useLocalStorageSession from "./useLocalStorageSession";

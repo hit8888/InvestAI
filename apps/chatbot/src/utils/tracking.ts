@@ -1,5 +1,5 @@
 import md5 from "md5";
-import { BrowserSignature } from "../types/api";
+import { BrowserSignature } from "@meaku/core/types/api";
 
 export const getWebGLInfo = () => {
   const canvas = document.createElement("canvas");

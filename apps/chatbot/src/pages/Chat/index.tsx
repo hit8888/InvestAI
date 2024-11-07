@@ -1,17 +1,17 @@
 import { ChatConfig } from "@meaku/core/types/config";
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import useUpdateSession from "../hooks/mutation/useUpdateSession";
-import useConfigData from "../hooks/query/useConfigData";
-import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
-import useWebSocketChat from "../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../managers/UnifiedSessionConfigResponseManager";
-import { UpdateSessionDataPayloadSchema } from "../types/api";
-import { trackError } from "../utils/error";
+import useUpdateSession from "../../hooks/mutation/useUpdateSession";
+import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
+import useWebSocketChat from "../../hooks/useWebSocketChat";
+import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
+import { UpdateSessionDataPayloadSchema } from "@meaku/core/types/api";
+import { trackError } from "../../utils/error";
+import useConfigDataQuery from "../../hooks/query/useConfigDataQuery";
 
-const Widget = lazy(() => import("../components/views/Widget"));
-const Embed = lazy(() => import("../components/views/Embed"));
-const Multimedia = lazy(() => import("../components/views/MultimediaChat"));
+const Widget = lazy(() => import("../../components/views/Widget"));
+const Embed = lazy(() => import("../../components/views/Embed"));
+const Multimedia = lazy(() => import("../../components/views/MultimediaChat"));
 
 const componentsMap: Record<ChatConfig, React.ComponentType> = {
   [ChatConfig.WIDGET]: Widget,
@@ -24,7 +24,7 @@ const Chat = () => {
 
   useWebSocketChat();
 
-  const { data: config, isError: isConfigFetchError } = useConfigData();
+  const { data: config, isError: isConfigFetchError } = useConfigDataQuery();
   const { session, isError: isInitializationError } =
     useInitializeSessionData();
 

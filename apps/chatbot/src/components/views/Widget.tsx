@@ -5,7 +5,7 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import TriggerButton from "@breakout/design-system/components/layout/trigger-button";
 import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo } from "react";
-import useConfigData from "../../hooks/query/useConfigData";
+import useConfigData from "../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";

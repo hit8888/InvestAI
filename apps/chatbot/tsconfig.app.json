@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "../../packages/core/src/http", "../../packages/core/src/types/api.ts", "../../packages/core/src/types/msc.ts"]
 }

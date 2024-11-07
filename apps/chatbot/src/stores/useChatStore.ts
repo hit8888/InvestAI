@@ -1,4 +1,4 @@
-import { Configuration, Session } from "@meaku/core/types/session";
+import { ConfigurationApiResponse, Session } from "@meaku/core/types/session";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -14,8 +14,8 @@ interface State {
   setAgentId: (agentId: string) => void;
   session: Session | null;
   setSession: (session: Session) => void;
-  configuration: Configuration | null;
-  setConfiguration: (configuration: Configuration) => void;
+  configuration: ConfigurationApiResponse | null;
+  setConfiguration: (configuration: ConfigurationApiResponse) => void;
   hasFirstUserMessageBeenSent: boolean;
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
 }

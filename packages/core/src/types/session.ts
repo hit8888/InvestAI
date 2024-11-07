@@ -58,7 +58,7 @@ export const SessionHashDataSchema = z.object({
   prospectId: z.string(),
 });
 
-export type Configuration = z.infer<typeof ConfigurationSchema>;
+export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
 
 export type Session = z.infer<typeof SessionSchema>;
 
