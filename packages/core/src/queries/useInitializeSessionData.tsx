@@ -1,16 +1,25 @@
 import { Session } from "@meaku/core/types/session";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { initializeSession } from "../../lib/http/api";
-import { ChatParams } from "../../types/msc";
-import { getBrowserSignature } from "../../utils/tracking";
-import useIsAdmin from "../useIsAdmin";
-import useLocalStorageSession from "../useLocalStorageSession";
+import { initializeSession } from "../http/api";
+import { getBrowserSignature } from "../../../../apps/chatbot/src/utils/tracking";
+import { BrowserSignature } from "../types/api";
+
+
+
+
+const configDataKey = (): unknown[] => ["session-initializer"];
+
+type ConfigDataKey = ReturnType<typeof configDataKey>;
 
 interface UseInitializeSessionDataOptions {
   ignoreUpdatingLocalStorage?: boolean;
   sessionId?: string;
   prospectId?: string;
+  orgName: string;
+  agentId: string;
+  browser_signature: Partial<BrowserSignature>;
+  queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>,
+
 }
 
 const useInitializeSessionData = (
@@ -18,16 +27,9 @@ const useInitializeSessionData = (
 ) => {
   const { ignoreUpdatingLocalStorage = false, sessionId, prospectId } = options;
 
-  const { orgName = "", agentId = "" } = useParams<ChatParams>();
 
-  const { sessionData: sessionDataInLocalStorage } =
-    useLocalStorageSession();
-
-  const { isAdmin } = useIsAdmin(); //TODO: take this as props
-
-  const effectiveSessionId = sessionId || sessionDataInLocalStorage?.sessionId;
-  const effectiveProspectId =
-    prospectId || sessionDataInLocalStorage?.prospectId;
+  const effectiveSessionId = sessionId;
+  const effectiveProspectId = prospectId;
 
   const {
     data: session,
