@@ -13,9 +13,13 @@ const DynamicIcon = (props: IProps) => {
 
   const IconComponent = useMemo(() => {
     try {
-      return lazy(dynamicIconImports[icon]);
+      if (icon in dynamicIconImports) {
+        return lazy(dynamicIconImports[icon]);
+      }
+
+      return lazy(dynamicIconImports[fallbackIcon]);
     } catch (error) {
-      console.error(`Error loading icon "${icon}":`, error);
+      console.log(`Error loading icon "${icon}":`, error);
       return lazy(dynamicIconImports[fallbackIcon]);
     }
   }, [icon, fallbackIcon]);

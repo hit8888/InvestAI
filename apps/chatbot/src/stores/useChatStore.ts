@@ -23,6 +23,10 @@ interface State {
   hasFirstUserMessageBeenSent: boolean;
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
   handleToggleMaximizeChat: () => void;
+  suggestionArtifactId: string | null;
+  setSuggestionArtifactId: (suggestionArtifactId: string | null) => void;
+  suggestedQuestions: string[];
+  setSuggestedQuestions: (suggestedQuestions: string[]) => void;
 }
 
 export const useChatStore = create<State>()(
@@ -73,6 +77,16 @@ export const useChatStore = create<State>()(
       handleToggleMaximizeChat: () =>
         set((draft) => {
           draft.isChatMaximized = !draft.isChatMaximized;
+        }),
+      suggestionArtifactId: null,
+      setSuggestionArtifactId: (suggestionArtifactId) =>
+        set((draft) => {
+          draft.suggestionArtifactId = suggestionArtifactId;
+        }),
+      suggestedQuestions: [],
+      setSuggestedQuestions: (suggestedQuestions) =>
+        set((draft) => {
+          draft.suggestedQuestions = suggestedQuestions;
         }),
     })),
   ),

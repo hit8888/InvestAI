@@ -20,12 +20,15 @@ interface IProps
     VariantProps<typeof botIndicatorVariants> {}
 
 const BotIndicator = React.forwardRef<HTMLDivElement, IProps>(
-  ({ className, size, ...props }) => {
+  ({ className, size, ...props }, ref) => {
     return (
-      <div className={cn("relative h-5 w-5", botIndicatorVariants({ size }))}>
+      <div
+        className={cn("relative h-5 w-5", botIndicatorVariants({ size }))}
+        ref={ref}
+      >
         <div
           className={cn(
-            "bot-indicator absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 scale-150 transform rounded-full opacity-60 blur-lg",
+            "bot-indicator absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 transform rounded-full opacity-80 blur-lg",
             botIndicatorVariants({ size }),
           )}
         ></div>
