@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getArtifact } from "../http/api";
 import { BreakoutQueryOptions } from "../types/queries";
 import { ArtifactEnum, ArtifactResponse } from "../types/chat";
@@ -12,7 +12,7 @@ interface IProps {
   artifactType?: ArtifactEnum;
   queryOptions: BreakoutQueryOptions<ArtifactResponse, ArtifactDataKey>,
 }
-const useArtifactDataQuery = ({ artifactId = "", artifactType = "NONE", queryOptions }: IProps) => {
+const useArtifactDataQuery = ({ artifactId = "", artifactType = "NONE", queryOptions }: IProps):UseQueryResult<ArtifactResponse> => {
 
   const query = useQuery({
     queryFn: async () => {

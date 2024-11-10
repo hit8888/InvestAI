@@ -7,6 +7,9 @@ import { useParams } from "react-router-dom";
 import { ChatParams } from "@meaku/core/types/config";
 import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
 import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
+import useIsAdmin from "../../../hooks/useIsAdmin";
+import { getBrowserSignature } from "../../../utils/tracking";
+import { SessionConfigResponseType } from "@meaku/core/managers/UnifiedSessionConfigResponseManager";
 
 interface Props {
     children: (props: IAllApiResponses) => ReactElement;
@@ -15,24 +18,20 @@ interface Props {
 const PreloadContainer: FC<Props> = ({ children }) => {
     const { agentId = "" } = useParams<ChatParams>();
     const { sessionData } = useLocalStorageSession();
-    const { data: config } = useConfigDataQuery({ agentId, queryOptions: { enabled: !!sessionData?.sessionId } });
-    const { session } = useInitializeSessionDataQuery({ agentId, });
+    const { isAdmin } = useIsAdmin();
+
+    const config = useConfigDataQuery({ agentId, queryOptions: { enabled: !!sessionData?.sessionId } });
+    const initializeSessionPayload = { is_admin: isAdmin, session_id: sessionData.sessionId, prospect_id: sessionData.prospectId, browser_signature: getBrowserSignature() }
+    const session = useInitializeSessionDataQuery({ agentId, initializeSessionPayload, queryOptions: { enabled: !!agentId && !!(sessionData.sessionId) } });//TODO: When ignoreUpdatingLocalStorage is unset
+
+    //TODO: How do we handle errors? 
 
     if (
-        userProfile.data &&
-        tripDetails.data &&
-        airSeatMap.data &&
-        airSelectedItineraryResponse &&
-        listBookingPaymentSourcesResponse.data &&
-        travelersInfo
+        config.data ||
+        session.data
     ) {
         return children({
-            traveler: userProfile.data,
-            tripDetailsResponse: tripDetails.data,
-            airSeatMapResponse: airSeatMap.data,
-            airSelectedItineraryResponse,
-            listBookingPaymentSourcesResponse: listBookingPaymentSourcesResponse.data,
-            travelerInfoForPaymentSources: travelersInfo.travelers,
+            unifiedConfigurationResponse: (config.data || session.data) as SessionConfigResponseType,
         });
     }
 

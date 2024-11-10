@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getConfig } from "../http/api";
 import { BreakoutQueryOptions } from "../types/queries";
 import { ConfigurationApiResponse } from "../types";
+import { AxiosError } from "axios";
 
 
 
@@ -15,7 +16,7 @@ interface useConfigDataQueryOptions {
 }
 
 const useConfigDataQuery = (
-  { agentId, queryOptions }: useConfigDataQueryOptions) => {
+  { agentId, queryOptions }: useConfigDataQueryOptions):UseQueryResult<ConfigurationApiResponse> => {
   const query = useQuery({
     queryFn: async () => {
       const response = await getConfig(agentId);

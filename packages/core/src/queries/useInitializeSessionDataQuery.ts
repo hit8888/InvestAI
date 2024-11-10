@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { initializeSession } from "../http/api";
 import {  InitializationPayload } from "../types/api";
 import { BreakoutQueryOptions } from "../types/queries";
@@ -20,7 +20,7 @@ interface UseInitializeSessionDataOptions {
 
 const useInitializeSessionDataQuery = (
   { agentId, initializeSessionPayload, queryOptions }: UseInitializeSessionDataOptions
-) => {
+):UseQueryResult<SessionApiResponse> => {
   return useQuery({
     queryFn: async () => {
       const response = await initializeSession(agentId, initializeSessionPayload);
