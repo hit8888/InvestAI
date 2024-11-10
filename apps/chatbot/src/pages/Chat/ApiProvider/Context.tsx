@@ -1,4 +1,4 @@
 import { createContext } from 'use-context-selector';
-import type { IAllApiResponses } from './types';
+import type { IAllApiResponsesWithQuery } from './types';
 
-export const ApiProviderContext = createContext({} as IAllApiResponses);
+export const ApiProviderContext = createContext({} as IAllApiResponsesWithQuery);

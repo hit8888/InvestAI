@@ -1,6 +1,7 @@
 import { FC, ReactElement } from "react";
-import { IAllApiResponses } from "../ApiProvider/types";
+import { IAllApiResponsesWithQuery } from "../ApiProvider/types";
 import { Loader } from "lucide-react";
+import { AxiosError } from 'axios';
 
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import { useParams } from "react-router-dom";
@@ -12,7 +13,7 @@ import { getBrowserSignature } from "../../../utils/tracking";
 import { SessionConfigResponseType } from "@meaku/core/managers/UnifiedSessionConfigResponseManager";
 
 interface Props {
-    children: (props: IAllApiResponses) => ReactElement;
+    children: (props: IAllApiResponsesWithQuery) => ReactElement;
 }
 
 const PreloadContainer: FC<Props> = ({ children }) => {
@@ -20,18 +21,35 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     const { sessionData } = useLocalStorageSession();
     const { isAdmin } = useIsAdmin();
 
-    const config = useConfigDataQuery({ agentId, queryOptions: { enabled: !sessionData?.sessionId } });
+    const configQuery = useConfigDataQuery({ agentId, queryOptions: { enabled: !sessionData?.sessionId } });
     const initializeSessionPayload = { is_admin: isAdmin, session_id: sessionData.sessionId, prospect_id: sessionData.prospectId, browser_signature: getBrowserSignature() }
-    const session = useInitializeSessionDataQuery({ agentId, initializeSessionPayload, queryOptions: { enabled: !!agentId && !!(sessionData.sessionId) } });//TODO: When ignoreUpdatingLocalStorage is unset
+    const sessionQuery = useInitializeSessionDataQuery({ agentId, initializeSessionPayload, queryOptions: { enabled: !!agentId && !!(sessionData.sessionId) } });//TODO: When ignoreUpdatingLocalStorage is unset
 
-    //TODO: How do we handle errors? 
+
+
+    const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
+
+
+
+    if (firstQueryWithError?.error) {
+        if (firstQueryWithError.isFetching) {
+            return <Loader />; //Fix styling
+        }
+
+        const internalAPIError = firstQueryWithError.error as AxiosError<Error>;
+        return <>{JSON.stringify({ internalAPIError })}</>; //TODO: How do we handle errors? Log errors here
+    }
+
+
 
     if (
-        config.data ||
-        session.data
+        configQuery.data ||
+        sessionQuery.data
     ) {
         return children({
-            unifiedConfigurationResponse: (session.data || config.data) as SessionConfigResponseType,
+            unifiedConfigurationResponse: (sessionQuery.data || configQuery.data) as SessionConfigResponseType,
+            configQuery,
+            sessionQuery
         });
     }
 

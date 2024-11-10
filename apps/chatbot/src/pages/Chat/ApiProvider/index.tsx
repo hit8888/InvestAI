@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { ApiProviderContext } from './Context';
-import { IAllApiResponses } from './types';
+import { IAllApiResponsesWithQuery } from './types';
 import { BaseApiProvider, IChildrenWithApiResponse } from '../../../shared/BaseApiProvider';
 
-export const ApiProvider: FC<IChildrenWithApiResponse<IAllApiResponses>> = (props) => {
+export const ApiProvider: FC<IChildrenWithApiResponse<IAllApiResponsesWithQuery>> = (props) => {
   return <BaseApiProvider ApiContext={ApiProviderContext} {...props} />;
 };

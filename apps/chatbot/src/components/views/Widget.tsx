@@ -10,8 +10,11 @@ import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
 import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponse";
+import { ApiProviderContext } from "../../pages/Chat/ApiProvider/Context";
+import { useContextSelector } from "use-context-selector";
 
 const Widget = () => {
+  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)
   const manager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -53,8 +56,7 @@ const Widget = () => {
 
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
-
-    handleUpdateSessionData({ ...sessionData, isChatOpen: true });
+    sessionQuery.refetch();
   };
 
   useEffect(() => {
