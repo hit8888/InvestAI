@@ -1,5 +1,6 @@
 import SendIcon from "@breakout/design-system/components/icons/send";
 import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
+import BotIndicator from "@breakout/design-system/components/layout/bot-indicator";
 import Input from "@breakout/design-system/components/layout/input";
 import { cn } from "@breakout/design-system/lib/cn";
 import { useState } from "react";
@@ -42,10 +43,10 @@ const BottomBar = (props: IProps) => {
   return (
     <div
       className={cn(
-        "bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex min-w-[950px] -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/50 via-transparent to-primary/50 p-1 backdrop-blur-lg",
+        "bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex min-w-[950px] -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-1 backdrop-blur-lg",
         {
           hidden: isChatOpen,
-          "min-w-[700px]": hasFirstUserMessageBeenSent,
+          "min-w-[300px]": hasFirstUserMessageBeenSent,
         },
       )}
       style={{
@@ -61,8 +62,18 @@ const BottomBar = (props: IProps) => {
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-gray-900 focus:ring-0"
-              placeholder="Ready to explore skills or hackathons?"
+              className={cn(
+                "w-full min-w-80 border-none text-gray-900 outline-none ring-0 focus:ring-0",
+                {
+                  "placeholder:text-gray-600": !hasFirstUserMessageBeenSent,
+                  "placeholder:text-gray-900": hasFirstUserMessageBeenSent,
+                },
+              )}
+              placeholder={
+                hasFirstUserMessageBeenSent
+                  ? "Have a question? Ask here"
+                  : "Ready to explore skills or hackathons?"
+              }
             />
           </div>
 
@@ -76,16 +87,16 @@ const BottomBar = (props: IProps) => {
             )}
           >
             {suggestedQuestions.map((question) => (
-              <div key={question} className="rounded-full bg-primary">
+              <div key={question} className="rounded-full bg-white">
                 <button
                   type="button"
                   onClick={() => handleSuggestedQuestionOnClick(question)}
-                  className="flex items-center justify-center gap-1 rounded-full border-2 border-white border-opacity-60 bg-gradient-to-br from-transparent via-white/10 to-white/40 p-2 text-white transition-all duration-300 ease-in-out hover:from-white/10 hover:to-white/40"
+                  className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
                 >
+                  <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
                   <span className="min-w-max text-sm font-medium">
                     {question}
                   </span>
-                  <SparkleIcon className="!h-4 !w-4 text-white" />
                 </button>
               </div>
             ))}
@@ -94,9 +105,21 @@ const BottomBar = (props: IProps) => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80"
+              className={cn(
+                "flex h-9 w-9 items-center justify-center rounded-md",
+                {
+                  "bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80":
+                    !hasFirstUserMessageBeenSent,
+                },
+              )}
             >
-              <SendIcon className="text-primary-foreground" />
+              {hasFirstUserMessageBeenSent ? (
+                <>
+                  <BotIndicator size="md" />
+                </>
+              ) : (
+                <SendIcon className="text-primary-foreground" />
+              )}
             </button>
           </div>
         </form>

@@ -4,8 +4,11 @@
 
 @layer base {
   :root {
-    --primary: 78 70 220;
+    /* --primary: 102 120 176; */
+    --primary: 32 62 142;
     --primary-foreground: 255 255 255;
+    /* --primary: 78 70 220;
+    --primary-foreground: 255 255 255; */
 
     --card: 239 241 245;
     --card-foreground: 45 52 84;
@@ -24,11 +27,8 @@
   .bot-indicator {
     background: radial-gradient(
       61.46% 61.46% at 50% 38.54%,
-      #3089fc 0%,
-      #293f88 100%
+      rgba(var(--primary) / 70%) 0%,
+      rgba(var(--primary) / 90%) 100%
     );
-    filter: drop-shadow(0px 0px 10.5px rgba(48, 137, 252, 0.36))
-      drop-shadow(0px 3.5px 7px rgba(0, 0, 0, 0.2));
-    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
   }
 }
