@@ -4,19 +4,15 @@ import ChatInput from "@breakout/design-system/components/layout/chat-input";
 import ChatMessage from "@breakout/design-system/components/layout/chat-message";
 import TriggerButton from "@breakout/design-system/components/layout/trigger-button";
 import { cn } from "@breakout/design-system/lib/cn";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect } from "react";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
-import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
-import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
+import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponse";
 
 const Widget = () => {
-  const { data: config } = useConfigDataQuery();
-  const { session, refetch: fetchSessionData } = useInitializeSessionDataQuery();
-
+  const manager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
@@ -31,17 +27,11 @@ const Widget = () => {
     (state) => state.suggestedQuestions,
   );
 
-  const manager = useMemo(() => {
-    if (!session && !config) return;
-
-    return new UnifiedResponseManager(session ?? config);
-  }, [config, session]);
-
-  const orgName = manager?.getOrgName() ?? "";
-  const configuration = manager?.getConfig();
-  const showCta = configuration?.body.show_cta ?? false;
-  const agentName = manager?.getAgentName() ?? "";
-  const sessionId = manager?.getSessionId();
+  const orgName = manager.getOrgName() ?? "";
+  const configuration = manager.getConfig();
+  const showCta = configuration.body.show_cta ?? false;
+  const agentName = manager.getAgentName() ?? "";
+  const sessionId = manager.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
@@ -64,7 +54,7 @@ const Widget = () => {
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
 
-    fetchSessionData();
+    handleUpdateSessionData({ ...sessionData, isChatOpen: true });
   };
 
   useEffect(() => {

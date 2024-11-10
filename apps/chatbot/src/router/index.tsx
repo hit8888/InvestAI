@@ -1,6 +1,6 @@
 import { wrapCreateBrowserRouter } from "@sentry/react";
 import { createBrowserRouter } from "react-router-dom";
-import Chat from "../pages/Chat/PageContent";
+import Chat from "../pages/Chat";
 import FeedbackAdmin from "../pages/FeedbackAdmin";
 import InternalAdmin from "../pages/InternalAdmin";
 

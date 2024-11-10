@@ -20,7 +20,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     const { sessionData } = useLocalStorageSession();
     const { isAdmin } = useIsAdmin();
 
-    const config = useConfigDataQuery({ agentId, queryOptions: { enabled: !!sessionData?.sessionId } });
+    const config = useConfigDataQuery({ agentId, queryOptions: { enabled: !sessionData?.sessionId } });
     const initializeSessionPayload = { is_admin: isAdmin, session_id: sessionData.sessionId, prospect_id: sessionData.prospectId, browser_signature: getBrowserSignature() }
     const session = useInitializeSessionDataQuery({ agentId, initializeSessionPayload, queryOptions: { enabled: !!agentId && !!(sessionData.sessionId) } });//TODO: When ignoreUpdatingLocalStorage is unset
 
@@ -31,7 +31,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
         session.data
     ) {
         return children({
-            unifiedConfigurationResponse: (config.data || session.data) as SessionConfigResponseType,
+            unifiedConfigurationResponse: (session.data || config.data) as SessionConfigResponseType,
         });
     }
 
