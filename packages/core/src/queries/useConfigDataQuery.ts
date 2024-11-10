@@ -10,16 +10,15 @@ const configDataKey = (): unknown[] => ["config"];
 type ConfigDataKey = ReturnType<typeof configDataKey>;
 
 interface useConfigDataQueryOptions {
-  orgName: string;
   agentId: string;
   queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>,
 }
 
 const useConfigDataQuery = (
-  { orgName, agentId, queryOptions }: useConfigDataQueryOptions) => {
+  { agentId, queryOptions }: useConfigDataQueryOptions) => {
   const query = useQuery({
     queryFn: async () => {
-      const response = await getConfig(orgName, agentId);
+      const response = await getConfig(agentId);
 
       return response.data as ConfigurationApiResponse;
     },

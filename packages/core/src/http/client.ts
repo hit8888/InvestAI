@@ -1,12 +1,25 @@
 import axios, { AxiosError } from "axios";
 import { ENV } from "../../../../apps/chatbot/src/config/env";
 
+
 const apiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+});
+
+
+// Add request interceptor to inject tenant header
+apiClient.interceptors.request.use((config) => {
+  const params = new URLSearchParams(window.location.search);
+  // Add tenant header to all requests
+  config.headers['x-tenant-name'] = params.get('orgName') || '';//TODO: get this from localstorage
+  
+  return config;
+}, (error: any) => {
+  return Promise.reject(error);
 });
 
 // Sometimes the backend throws in a 500 or some other error code when it can't find the session id, in such cases, we are required to clear the session id and prospect id from the local storage and retry the request. This interceptor automatically clears the session id and prospect id from the request and retries the request.

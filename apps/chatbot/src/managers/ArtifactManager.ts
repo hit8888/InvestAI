@@ -1,17 +1,17 @@
 import { ArtifactSchema } from "@meaku/core/types/artifact";
-import { Artifact } from "@meaku/core/types/chat";
+import {  ArtifactResponse } from "@meaku/core/types/chat";
 
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
 class ArtifactManager {
-  private artifact: Artifact;
+  private artifact: ArtifactResponse;
 
-  constructor(artifact: Artifact) {
+  constructor(artifact: ArtifactResponse) {
     const validatedArtifact = this.validateArtifact(artifact);
     this.artifact = validatedArtifact;
   }
 
-  private validateArtifact(artifact: Artifact) {
+  private validateArtifact(artifact: ArtifactResponse) {
     const validatedArtifact = ArtifactSchema.safeParse(artifact);
 
     if (!validatedArtifact.success) {

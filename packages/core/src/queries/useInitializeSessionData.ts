@@ -25,7 +25,7 @@ const useInitializeSessionData = (
 ) => {
   return useQuery({
     queryFn: async () => {
-      const response = await initializeSession(orgName, agentId, initializeSessionPayload);
+      const response = await initializeSession(orgName, initializeSessionPayload);
       const session = response.data as SessionApiResponse;
       return session;
     },

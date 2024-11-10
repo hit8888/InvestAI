@@ -60,7 +60,7 @@ export const SessionHashDataSchema = z.object({
 
 export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
 
-export type Session = z.infer<typeof SessionSchema>;
+export type SessionApiResponse = z.infer<typeof SessionSchema>;
 
 export type Feedback = Omit<z.infer<typeof FeedbackSchema>, "response_id">;
 

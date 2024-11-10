@@ -74,6 +74,6 @@ export type Message = {
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;
 
-export type Artifact = z.infer<typeof ArtifactSchema>;
+export type ArtifactResponse = z.infer<typeof ArtifactSchema>;
 
 export type ArtifactEnum = z.infer<typeof ArtifactEnumSchema>;

@@ -1,7 +1,7 @@
 import { DemoArtifactType, SlideArtifactType } from "@meaku/core/types/chat";
 import { XIcon } from "lucide-react";
 import { useMemo } from "react";
-import useArtifactData from "../../../hooks/query/useArtifactData";
+import useArtifactDataQuery from "@meaku/core/queries/useArtifactDataQuery";
 import ArtifactManager from "../../../managers/ArtifactManager";
 import { useArtifactStore } from "../../../stores/useArtifactStore";
 import DemoArtifact from "./DemoArtifact";
@@ -17,13 +17,12 @@ const Artifact = () => {
     (state) => state.handleRemoveActiveArtifact,
   );
 
-  const { data: artifactData, isFetching } = useArtifactData({
+  const { data: artifactData, isFetching } = useArtifactDataQuery({
     artifactId: activeArtifactId || "",
     artifactType: activeArtifactType || "NONE",
-    options: {
+    queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
-
         return 1000;
       },
     },
