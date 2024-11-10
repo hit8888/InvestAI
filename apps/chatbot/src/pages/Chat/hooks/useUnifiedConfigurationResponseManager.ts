@@ -1,10 +1,10 @@
+import UnifiedSessionConfigResponseManager from "@meaku/core/managers/UnifiedSessionConfigResponseManager";
+import useUnifiedConfigurationResponse from "./useUnifiedConfigurationResponse";
 
-import { useContextSelector } from 'use-context-selector';
-import { ApiProviderContext } from '../ApiProvider/Context';
+function useUnifiedConfigurationResponseManager() {
+    const response = useUnifiedConfigurationResponse();
 
-
-function useUnifiedConfigurationResponse() {
-  return useContextSelector(ApiProviderContext, (state) => state.unifiedConfigurationResponse);
+    return new UnifiedSessionConfigResponseManager(response);
 }
 
-export default useUnifiedConfigurationResponse;
+export default useUnifiedConfigurationResponseManager;

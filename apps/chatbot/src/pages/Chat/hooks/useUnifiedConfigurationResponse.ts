@@ -1,11 +1,8 @@
+import { useContextSelector } from "use-context-selector";
+import { ApiProviderContext } from "../ApiProvider/Context";
 
-import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
-import useUnifiedConfigurationResponse from './useUnifiedConfigurationResponseManager';
-
-function useUnifiedConfigurationResponseManager() {
-  const airSeatMapResponse = useUnifiedConfigurationResponse();
-
-  return new UnifiedSessionConfigResponseManager(airSeatMapResponse);
+function useUnifiedConfigurationResponse() {
+    return useContextSelector(ApiProviderContext, (state) => state.unifiedConfigurationResponse);
 }
 
-export default useUnifiedConfigurationResponseManager;
+export default useUnifiedConfigurationResponse;

@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
-import UnifiedResponseManager from "../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
@@ -14,6 +13,7 @@ import { ChatParams } from "@meaku/core/types/msc";
 import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
 import useIsAdmin from "./useIsAdmin";
+import useUnifiedConfigurationResponseManager from "../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -24,8 +24,7 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 const useWebSocketChat = () => {
   const { orgName = "" } = useParams<ChatParams>();
 
-  const { data: config } = useConfigDataQuery();
-  const { session, refetch: fetchSession } = useInitializeSessionData();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
@@ -69,14 +68,9 @@ const useWebSocketChat = () => {
     }[]
   >([]);
 
-  const manager = useMemo(() => {
-    if (!session && !config) return;
 
-    return new UnifiedResponseManager(session ?? config);
-  }, [session, config]);
-
-  const sessionId = manager?.getSessionId() ?? "";
-  const agentName = manager?.getAgentName() ?? "";
+  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? "";
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? "";
 
   const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
     return getProcessingMessageSequence(agentName);
@@ -112,7 +106,7 @@ const useWebSocketChat = () => {
 
   const initializeWebSocket = useCallback(async () => {
     if (!sessionId) {
-      fetchSession();
+      return; ///discuss with Sankha about this
     }
 
     setShouldConnect(true);

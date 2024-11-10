@@ -3,7 +3,7 @@ import { trackError } from "../../../utils/error";
 import { useEffect } from "react";
 import { ChatParams } from "@meaku/core/types/index";
 import { useParams } from "react-router-dom";
-import useUnifiedConfigurationResponseManager from "./useUnifiedConfigurationResponse";
+import useUnifiedConfigurationResponseManager from "./useUnifiedConfigurationResponseManager";
 import useUpdateSession from "@meaku/core/queries/mutation/useUpdateSession";
 
 const useUpdateSessionOnMount = () => {

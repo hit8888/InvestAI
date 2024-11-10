@@ -9,7 +9,7 @@ import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
-import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponse";
+import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
 import { ApiProviderContext } from "../../pages/Chat/ApiProvider/Context";
 import { useContextSelector } from "use-context-selector";
 
@@ -25,10 +25,9 @@ const Widget = () => {
   const isAMessageBeingProcessed = useMessageStore(
     (state) => state.isAMessageBeingProcessed,
   );
-  const messages = useMessageStore((state) => state.messages);
-  const suggestedQuestions = useMessageStore(
-    (state) => state.suggestedQuestions,
-  );
+
+  const messages = manager.getFormattedChatHistory();
+  const suggestedQuestions = manager.getSuggestedQuestions();
 
   const orgName = manager.getOrgName() ?? "";
   const configuration = manager.getConfig();
