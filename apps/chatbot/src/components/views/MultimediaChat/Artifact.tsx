@@ -7,7 +7,7 @@ import {
 } from "@meaku/core/types/chat";
 import { useMemo } from "react";
 import useArtifactDataQuery from "@meaku/core/queries/useArtifactDataQuery";
-import ArtifactManager from "../../../managers/ArtifactManager";
+import ArtifactManager from "../../../../../../packages/core/src/managers/ArtifactManager";
 import { useArtifactStore } from "../../../stores/useArtifactStore";
 import DemoArtifact from "./DemoArtifact";
 import SlideArtifact from "./SlideArtifact";

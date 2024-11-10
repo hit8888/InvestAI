@@ -6,16 +6,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
-import UnifiedResponseManager from "../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "@meaku/core/types/msc";
 import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
-import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
-import useConfigDataQuery from "./query/useConfigDataQuery";
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;

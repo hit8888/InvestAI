@@ -3,15 +3,14 @@ import ChatHeader from "@breakout/design-system/components/layout/chat-header";
 import ChatInput from "@breakout/design-system/components/layout/chat-input";
 import ChatMessage from "@breakout/design-system/components/layout/chat-message";
 import { memo, useMemo } from "react";
-import useConfigData from "../../hooks/query/useConfigDataQuery";
-import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
+import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
 
 const Embed = () => {
-  const { data: config } = useConfigData();
-  const { session, refetch: fetchSessionData } = useInitializeSessionData();
+  const { data: config } = useConfigDataQuery();
+  const { session, refetch: fetchSessionData } = useInitializeSessionDataQuery();
 
   const manager = useMemo(() => {
     if (!session && !config) return;

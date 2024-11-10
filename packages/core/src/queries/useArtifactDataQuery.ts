@@ -1,8 +1,7 @@
-import { ArtifactResponse, ArtifactEnum } from "@meaku/core/types/chat";
 import { useQuery } from "@tanstack/react-query";
 import { getArtifact } from "../http/api";
 import { BreakoutQueryOptions } from "../types/queries";
-import { ConfigurationApiResponse } from "../types/session";
+import { ArtifactEnum, ArtifactResponse } from "../types/chat";
 
 const getArtifactKey = (): unknown[] => ["config"];
 

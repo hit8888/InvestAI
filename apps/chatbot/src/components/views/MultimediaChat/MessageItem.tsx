@@ -5,10 +5,10 @@ import { Message, SuggestionArtifactType } from "@meaku/core/types/chat";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
-import useArtifactData from "../../../hooks/query/useArtifactData";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import ArtifactManager from "../../../managers/ArtifactManager";
+import ArtifactManager from "../../../../../../packages/core/src/managers/ArtifactManager";
 import { useChatStore } from "../../../stores/useChatStore";
+import useArtifactDataQuery from "@meaku/core/queries/useArtifactDataQuery";
 
 interface IProps {
   message: Message;
@@ -49,10 +49,10 @@ const MessageItem = (props: IProps) => {
     (state) => state.setSuggestionArtifactId,
   );
 
-  const { data: suggestionData } = useArtifactData({
+  const { data: suggestionData } = useArtifactDataQuery({
     artifactId: suggestionArtifactId as string,
     artifactType: "SUGGESTIONS",
-    options: {
+    queryOptions: {
       enabled: !!suggestionArtifactId,
     },
   });

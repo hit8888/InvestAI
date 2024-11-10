@@ -5,6 +5,8 @@ import { Loader } from "lucide-react";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import { useParams } from "react-router-dom";
 import { ChatParams } from "@meaku/core/types/config";
+import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
+import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
 
 interface Props {
     children: (props: IAllApiResponses) => ReactElement;
@@ -14,7 +16,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     const { orgName = "", agentId = "" } = useParams<ChatParams>();
     const { sessionData } = useLocalStorageSession();
     const { data: config } = useConfigDataQuery({ forceFetch: false, orgName, agentId, sessionId: sessionData?.sessionId ?? "" });
-    const { session } = useInitializeSessionData();
+    const { session } = useInitializeSessionDataQuery();
 
     if (
         userProfile.data &&

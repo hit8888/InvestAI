@@ -1,5 +1,5 @@
-import { ArtifactSchema } from "@meaku/core/types/artifact";
-import {  ArtifactResponse } from "@meaku/core/types/chat";
+import { ArtifactSchema } from "../types/artifact";
+import { ArtifactResponse } from "../types/chat";
 
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error

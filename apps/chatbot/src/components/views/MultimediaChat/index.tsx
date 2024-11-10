@@ -5,7 +5,7 @@ import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useArtifactStore } from "../../../stores/useArtifactStore";
 import { useChatStore } from "../../../stores/useChatStore";
 import { useMessageStore } from "../../../stores/useMessageStore";

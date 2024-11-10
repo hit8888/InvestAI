@@ -1,12 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { updateProspect } from "../../../../../packages/core/src/http/api";
-import { UpdateProspectPayload } from "@meaku/core/types/api";
-import { ChatParams } from "@meaku/core/types/msc";
+import { updateProspect } from "../../http/api";
+import { UpdateProspectPayload } from "../../types/api";
 
 const useUpdateProspect = () => {
-  const { orgName = "" } = useParams<ChatParams>();
-
   const mutation = useMutation({
     mutationKey: ["update-prospect"],
     mutationFn: async ({
@@ -18,7 +14,7 @@ const useUpdateProspect = () => {
     }) => {
       if (!prospectId || !payload.email) return;
 
-      const response = await updateProspect(orgName, prospectId, payload);
+      const response = await updateProspect(prospectId, payload);
 
       return response.data;
     },

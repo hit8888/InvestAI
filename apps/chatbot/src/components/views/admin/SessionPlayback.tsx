@@ -5,7 +5,7 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import FeedbackContainter from "@breakout/design-system/components/layout/feedback-containter";
 import { useMemo } from "react";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
-import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useAdminStore } from "../../../stores/useAdminStore";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 

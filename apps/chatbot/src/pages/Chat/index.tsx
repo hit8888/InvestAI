@@ -1,13 +1,12 @@
 import { ChatConfig } from "@meaku/core/types/config";
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import useUpdateSession from "../../hooks/mutation/useUpdateSession";
-import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
+import useUpdateSession from "@meaku/core/queries/mutation/useUpdateSession";
+import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery"
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { UpdateSessionDataPayloadSchema } from "@meaku/core/types/api";
 import { trackError } from "../../utils/error";
-import useConfigDataQuery from "../../hooks/query/useConfigDataQuery";
 
 const Widget = lazy(() => import("../../components/views/Widget"));
 const Embed = lazy(() => import("../../components/views/Embed"));

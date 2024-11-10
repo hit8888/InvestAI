@@ -5,17 +5,17 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import TriggerButton from "@breakout/design-system/components/layout/trigger-button";
 import { cn } from "@breakout/design-system/lib/cn";
 import { memo, useEffect, useMemo } from "react";
-import useConfigData from "../../hooks/query/useConfigDataQuery";
-import useInitializeSessionData from "../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
+import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
+import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
 
 const Widget = () => {
-  const { data: config } = useConfigData();
-  const { session, refetch: fetchSessionData } = useInitializeSessionData();
+  const { data: config } = useConfigDataQuery();
+  const { session, refetch: fetchSessionData } = useInitializeSessionDataQuery();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);

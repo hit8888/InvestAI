@@ -10,12 +10,12 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import FeedbackContainer from "@breakout/design-system/components/layout/feedback-containter";
 import { useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import useResponseFeedback from "../../../hooks/mutation/useResponseFeedback";
+import useResponseFeedback from "@meaku/core/queries/mutation/useResponseFeedback";
 import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useFeedbackStore } from "../../../stores/useFeedbackStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import { trackError } from "../../../utils/error";

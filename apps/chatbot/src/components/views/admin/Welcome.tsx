@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import useConfigData from "../../../hooks/query/useConfigDataQuery";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
-import UnifiedResponseManager from "../../../managers/UnifiedSessionConfigResponseManager";
+import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();

@@ -1,8 +1,7 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { updateSession } from "../../../../../packages/core/src/http/api";
-import { UpdateSessionDataPayload } from "@meaku/core/types/api";
-import { ChatParams } from "@meaku/core/types/msc";
+import { updateSession } from "../../http/api";
+import { UpdateSessionDataPayload } from "../../types/api";
 
 type ResponseFeedbackResult =
   ReturnType<typeof updateSession> extends Promise<infer T> ? T : never;
@@ -22,21 +21,21 @@ const useUpdateSession = (
     "mutationFn"
   >,
 ) => {
-  const { orgName = "", agentId = "" } = useParams<ChatParams>();
 
   const mutation = useMutation({
     mutationKey: ["update-session-data"],
     mutationFn: async ({
+      agentId,
       sessionId,
       payload,
     }: {
+      agentId:string;
       sessionId: string;
       payload: UpdateSessionDataPayload;
     }) => {
       const response = await updateSession(
         sessionId,
         agentId,
-        orgName,
         payload,
       );
 

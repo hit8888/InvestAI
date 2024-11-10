@@ -1,11 +1,7 @@
-import { Message } from "@meaku/core/types/chat";
-import {
-  ConfigurationApiResponse,
-  ConfigurationSchema,
-  SessionApiResponse,
-  SessionSchema,
-} from "@meaku/core/types/session";
+
 import { nanoid } from "nanoid";
+import { ConfigurationApiResponse, ConfigurationSchema, SessionApiResponse, SessionSchema } from "../types/session";
+import { Message } from "../types/chat";
 
 export type SessionConfigResponseType = ConfigurationApiResponse | SessionApiResponse;
 
