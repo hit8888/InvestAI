@@ -40,8 +40,6 @@ const PreloadContainer: FC<Props> = ({ children }) => {
         return <>{JSON.stringify({ internalAPIError })}</>; //TODO: How do we handle errors? Log errors here
     }
 
-
-
     if (
         configQuery.data ||
         sessionQuery.data
