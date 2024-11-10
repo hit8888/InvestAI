@@ -23,9 +23,6 @@ const Chat = () => {
 
   useWebSocketChat();
 
-  const { data: config, isError: isConfigFetchError } = useConfigDataQuery();
-  const { session, isError: isInitializationError } =
-    useInitializeSessionData();
 
   const manager = useMemo(() => {
     if (!session && !config) return;

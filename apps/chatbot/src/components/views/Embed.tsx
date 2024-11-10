@@ -7,6 +7,7 @@ import useWebSocketChat from "../../hooks/useWebSocketChat";
 import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
 import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
+import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
 
 const Embed = () => {
   const { data: config } = useConfigDataQuery();

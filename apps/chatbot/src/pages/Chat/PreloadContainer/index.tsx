@@ -13,10 +13,10 @@ interface Props {
 }
 
 const PreloadContainer: FC<Props> = ({ children }) => {
-    const { orgName = "", agentId = "" } = useParams<ChatParams>();
+    const { agentId = "" } = useParams<ChatParams>();
     const { sessionData } = useLocalStorageSession();
-    const { data: config } = useConfigDataQuery({ forceFetch: false, orgName, agentId, sessionId: sessionData?.sessionId ?? "" });
-    const { session } = useInitializeSessionDataQuery();
+    const { data: config } = useConfigDataQuery({ agentId, queryOptions: { enabled: !!sessionData?.sessionId } });
+    const { session } = useInitializeSessionDataQuery({ agentId, });
 
     if (
         userProfile.data &&

@@ -1,9 +1,9 @@
 import Backdrop from "@breakout/design-system/components/layout/backdrop";
 import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
-import useConfigData from "../hooks/query/useConfigDataQuery";
-import useInitializeSessionData from "../hooks/query/useInitializeSessionData";
 import useAdminUserEmail from "../hooks/useAdminUserEmail";
+import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
+import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
 
 const Welcome = lazy(() => import("../components/views/admin/Welcome"));
 const Feedback = lazy(() => import("../components/views/admin/Feedback"));
@@ -14,12 +14,12 @@ const FeedbackAdmin = () => {
     data: config,
     isError: isConfigFetchError,
     error: configError,
-  } = useConfigData();
+  } = useConfigDataQuery();
   const {
     session,
     isError: isInitializationError,
     error: initializationError,
-  } = useInitializeSessionData();
+  } = useInitializeSessionDataQuery();
 
   const isError = isConfigFetchError || isInitializationError;
   const renderUI = Boolean(config ?? session);
