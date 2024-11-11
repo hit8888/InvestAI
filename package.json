@@ -27,10 +27,6 @@
       "eslint --config apps/chatbot/eslint.config.js --fix",
       "prettier --write"
     ],
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "eslint --config apps/chatbot/eslint.config.js --fix",
-      "prettier --write"
-    ],
     "{apps,packages}/**/*.{json,md,html,css}": [
       "prettier --write"
     ]
