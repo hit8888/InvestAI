@@ -15,6 +15,8 @@ class ArtifactManager {
     const validatedArtifact = ArtifactSchema.safeParse(artifact);
 
     if (!validatedArtifact.success) {
+      console.log(validatedArtifact.error.errors);
+
       throw new Error(
         validatedArtifact.error.errors.map((error) => error.message).join(", "),
       );
@@ -33,10 +35,7 @@ class ArtifactManager {
 
   //Refactor this code to use different mehods
   getArtifactContent() {
-    const artifactType = this.getArtifactType();
-    return artifactType === "VIDEO"
-      ? this.artifact.video_url
-      : this.artifact.content;
+    return this.artifact.content;
   }
 }
 

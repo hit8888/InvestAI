@@ -39,6 +39,9 @@ const useWebSocketChat = () => {
   const setHasFirstUserMessageBeenSent = useChatStore(
     (state) => state.setHasFirstUserMessageBeenSent,
   );
+  const setSuggestionArtifactId = useChatStore(
+    (state) => state.setSuggestionArtifactId,
+  );
 
   const handleAddUserMessage = useMessageStore(
     (state) => state.handleAddUserMessage,
@@ -159,6 +162,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
 
+      setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
@@ -172,6 +176,7 @@ const useWebSocketChat = () => {
           is_loading: false,
           suggested_questions: [],
           analytics: {},
+          artifacts: [],
         });
       }
 
@@ -184,6 +189,7 @@ const useWebSocketChat = () => {
         is_loading: true,
         suggested_questions: [],
         analytics: {},
+        artifacts: [],
       });
 
       setIsAMessageBeingProcessed(true);
@@ -209,6 +215,7 @@ const useWebSocketChat = () => {
             is_loading: true,
             suggested_questions: [],
             analytics: {},
+            artifacts: [],
           });
 
           messageIndex++;
@@ -245,11 +252,22 @@ const useWebSocketChat = () => {
         setIsAMessageBeingProcessed(false);
       }
 
-      if (response.artifact && response.artifact.artifact_type !== "NONE") {
+      const { artifacts } = response;
+      const [activeArtifact, suggestionArtifact] = artifacts;
+
+      if (activeArtifact && activeArtifact.artifact_type !== "NONE") {
         handleAddActiveArtifact(
-          response.artifact.artifact_id,
-          response.artifact.artifact_type,
+          activeArtifact.artifact_id,
+          activeArtifact.artifact_type,
         );
+      }
+
+      if (
+        response.is_complete &&
+        suggestionArtifact &&
+        suggestionArtifact.artifact_type === "SUGGESTIONS"
+      ) {
+        setSuggestionArtifactId(suggestionArtifact.artifact_id);
       }
     } catch (error) {
       trackError(error, {

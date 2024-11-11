@@ -30,6 +30,12 @@ const ChatMessage = (props: IProps) => {
     handleScrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      handleScrollToBottom();
+    }, 1000);
+  }, []);
+
   return (
     <div
       ref={chatContainerRef}
@@ -41,11 +47,11 @@ const ChatMessage = (props: IProps) => {
             !isInSplitScreenView,
         })}
       >
-        {messages.map((message) => (
+        {messages.map((message, idx) => (
           <MessageItem
             key={message.id}
             message={message}
-            isInSplitScreenView={isInSplitScreenView}
+            showMessageArtifact={idx === messages.length - 1}
           />
         ))}
       </div>
