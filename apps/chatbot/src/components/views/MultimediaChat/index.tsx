@@ -1,11 +1,8 @@
 import { cn } from "@breakout/design-system/lib/cn";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import useConfigData from "../../../hooks/query/useConfigDataQuery";
-import useInitializeSessionData from "../../../hooks/query/useInitializeSessionData";
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useArtifactStore } from "../../../stores/useArtifactStore";
 import { useChatStore } from "../../../stores/useChatStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
@@ -14,6 +11,9 @@ import BottomBar from "./BottomBar";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
+import useUnifiedConfigurationResponseManager from "../../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
+import { useContextSelector } from "use-context-selector";
+import { ApiProviderContext } from "../../../pages/Chat/ApiProvider/Context";
 
 type QueryParams = {
   showGlass?: boolean;
@@ -28,7 +28,10 @@ const Multimedia = () => {
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
-  const { session, refetch: fetchSessionData } = useInitializeSessionData();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+
+  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)
+
 
   const { handleUpdateSessionData } = useLocalStorageSession();
 
@@ -68,12 +71,12 @@ const Multimedia = () => {
   };
 
 
-  const sessionId = manager?.getSessionId();
+  const sessionId = unifiedConfigurationResponseManager.getSessionId();
 
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
 
-    fetchSessionData();
+    sessionQuery.refetch();
   };
 
   const handleExpandWidth = () => {

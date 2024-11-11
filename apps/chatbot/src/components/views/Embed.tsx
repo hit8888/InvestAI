@@ -2,28 +2,23 @@ import { ChatConfig } from "@meaku/core/types/config";
 import ChatHeader from "@breakout/design-system/components/layout/chat-header";
 import ChatInput from "@breakout/design-system/components/layout/chat-input";
 import ChatMessage from "@breakout/design-system/components/layout/chat-message";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import UnifiedResponseManager from "../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
 import { useMessageStore } from "../../stores/useMessageStore";
-import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
-import useInitializeSessionDataQuery from "@meaku/core/queries/useInitializeSessionDataQuery";
+import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
+import { ApiProviderContext } from "../../pages/Chat/ApiProvider/Context";
+import { useContextSelector } from "use-context-selector";
 
 const Embed = () => {
-  const { data: config } = useConfigDataQuery();
-  const { session, refetch: fetchSessionData } = useInitializeSessionDataQuery();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
-  const manager = useMemo(() => {
-    if (!session && !config) return;
+  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)
 
-    return new UnifiedResponseManager(session ?? config);
-  }, [config, session]);
-
-  const orgName = manager?.getOrgName();
-  const configuration = manager?.getConfig();
+  const orgName = unifiedConfigurationResponseManager.getOrgName();
+  const configuration = unifiedConfigurationResponseManager.getConfig();
   const disclaimerText = configuration?.body.disclaimer_message ?? "";
-  const agentName = manager?.getAgentName() ?? "";
-  const sessionId = manager?.getSessionId();
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? "";
+  const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const showCta = configuration?.body.show_cta ?? false;
 
   const isAMessageBeingProcessed = useMessageStore(
@@ -39,7 +34,7 @@ const Embed = () => {
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
 
-    fetchSessionData();
+    sessionQuery.refetch();
   };
 
   return (
