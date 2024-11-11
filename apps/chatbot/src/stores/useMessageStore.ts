@@ -8,6 +8,7 @@ import { immer } from "zustand/middleware/immer";
 interface State {
   messages: Message[];
   setMessages: (messages: Message[]) => void;
+  // TODO: Remove Suggestion from here
   suggestedQuestions: string[];
   setSuggestedQuestions: (suggestedQuestions: string[]) => void;
   isAMessageBeingProcessed: boolean;
