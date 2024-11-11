@@ -1,10 +1,11 @@
 import Backdrop from '@breakout/design-system/components/layout/backdrop';
 import { lazy, Suspense, useMemo } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useAdminStore } from '../stores/useAdminStore';
+import { useAdminStore } from '../../stores/useAdminStore';
+import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
 
-const SessionInput = lazy(() => import('../components/views/admin/SessionInput'));
-const SessionPlayback = lazy(() => import('../components/views/admin/SessionPlayback'));
+const SessionInput = lazy(() => import('../../components/views/admin/SessionInput'));
+const SessionPlayback = lazy(() => import('../../components/views/admin/SessionPlayback'));
 
 const InternalAdmin = () => {
   const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
@@ -31,4 +32,5 @@ const InternalAdmin = () => {
   );
 };
 
-export default InternalAdmin;
+const InternalAdminWithWithWhiteLabelConfig = withWhiteLabelConfig(InternalAdmin);
+export default InternalAdminWithWithWhiteLabelConfig;

@@ -1,26 +1,26 @@
-import { wrapCreateBrowserRouter } from "@sentry/react";
-import { createBrowserRouter } from "react-router-dom";
-import Chat from "../pages/Chat";
-import FeedbackAdmin from "../pages/FeedbackAdmin/FeedbackAdmin";
-import InternalAdmin from "../pages/InternalAdmin";
+import { wrapCreateBrowserRouter } from '@sentry/react';
+import { createBrowserRouter } from 'react-router-dom';
+import Chat from '../pages/Chat';
+import InternalAdmin from '../pages/InternalAdmin/';
+import FeedbackAdmin from '../pages/FeedbackAdmin';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
 const router = sentryCreateBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <>👋</>,
   },
   {
-    path: "/org/:orgName/agent/:agentId",
+    path: '/org/:orgName/agent/:agentId',
     element: <Chat />,
   },
   {
-    path: "/demo/org/:orgName/agent/:agentId",
+    path: '/demo/org/:orgName/agent/:agentId',
     element: <FeedbackAdmin />,
   },
   {
-    path: "/internal-admin-use/org/:orgName/agent/:agentId",
+    path: '/internal-admin-use/org/:orgName/agent/:agentId',
     element: <InternalAdmin />,
   },
 ]);
