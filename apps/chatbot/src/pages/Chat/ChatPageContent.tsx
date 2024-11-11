@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useUpdateSessionOnMount } from "./hooks/useUpdateSessionOnMount";
-import { useApplyWhiteLabelConfig } from "./hooks/useApplyWhiteLabelConfig";
+import { withWhiteLabelConfig } from "../../utils/withWhiteLabelConfig";
 
 const Widget = lazy(() => import("../../components/views/Widget"));
 const Embed = lazy(() => import("../../components/views/Embed"));
@@ -22,8 +22,6 @@ const Chat = () => {
 
   useUpdateSessionOnMount();
 
-  useApplyWhiteLabelConfig(); //Move this to Top
-
   const chatConfig =
     (searchParams.get("config")?.toLowerCase() as ChatConfig) ||
     ChatConfig.EMBED;
@@ -37,4 +35,5 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+const ChatWithWhiteLabelConfig = withWhiteLabelConfig(Chat);
+export default ChatWithWhiteLabelConfig;
