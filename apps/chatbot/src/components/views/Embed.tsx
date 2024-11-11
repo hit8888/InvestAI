@@ -5,9 +5,9 @@ import ChatMessage from "@breakout/design-system/components/layout/chat-message"
 import { memo } from "react";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useMessageStore } from "../../stores/useMessageStore";
-import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
-import { ApiProviderContext } from "../../pages/Chat/ApiProvider/Context";
 import { useContextSelector } from "use-context-selector";
+import useUnifiedConfigurationResponseManager from "../../pages/shared/hooks/useUnifiedConfigurationResponseManager";
+import { ApiProviderContext } from "../../pages/shared/ApiProvider/Context";
 
 const Embed = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();

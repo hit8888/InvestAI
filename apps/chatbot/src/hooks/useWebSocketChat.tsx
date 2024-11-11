@@ -13,8 +13,8 @@ import { ChatParams } from "@meaku/core/types/msc";
 import { getProcessingMessageSequence } from "../utils/common";
 import { trackError } from "../utils/error";
 import useIsAdmin from "./useIsAdmin";
-import useUnifiedConfigurationResponseManager from "../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
-//TODO: Krishna Reafctor useEffect logic in next PR
+import useUnifiedConfigurationResponseManager from "../pages/shared/hooks/useUnifiedConfigurationResponseManager";
+
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;

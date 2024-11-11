@@ -9,9 +9,9 @@ import useLocalStorageSession from "../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
 import { useChatStore } from "../../stores/useChatStore";
 import { useMessageStore } from "../../stores/useMessageStore";
-import useUnifiedConfigurationResponseManager from "../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
-import { ApiProviderContext } from "../../pages/Chat/ApiProvider/Context";
 import { useContextSelector } from "use-context-selector";
+import { ApiProviderContext } from "../../pages/shared/ApiProvider/Context";
+import useUnifiedConfigurationResponseManager from "../../pages/shared/hooks/useUnifiedConfigurationResponseManager";
 
 const Widget = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)

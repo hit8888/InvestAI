@@ -2,27 +2,20 @@ import SendIcon from "@breakout/design-system/components/icons/send";
 import WrappedLogo from "@breakout/design-system/components/icons/wrapped-logo";
 import Button from "@breakout/design-system/components/layout/button";
 import Input from "@breakout/design-system/components/layout/input";
-import { memo, useMemo, useState } from "react";
+import { memo, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import useAdminUserEmail from "../../../hooks/useAdminUserEmail";
-import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
-import useConfigDataQuery from "@meaku/core/queries/useConfigDataQuery";
+import useUnifiedConfigurationResponseManager from "../../../pages/shared/hooks/useUnifiedConfigurationResponseManager";
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
 
   const [emailInputValue, setEmailInputValue] = useState<string>("");
 
-  const { data: config } = useConfigDataQuery();
+  const manager = useUnifiedConfigurationResponseManager();
 
-  const manager = useMemo(() => {
-    if (!config) return;
-
-    return new UnifiedResponseManager(config);
-  }, [config]);
-
-  const agentName = manager?.getAgentName() ?? "";
+  const agentName = manager.getAgentName();
 
   const handleEmailSubmission = () => {
     if (!emailInputValue) return;
@@ -60,7 +53,7 @@ const Welcome = () => {
           className="flex w-full items-center space-x-3"
           onSubmit={(e) => {
             e.preventDefault();
-            handleEmailSubmission;
+            handleEmailSubmission();
           }}
         >
           <Input

@@ -1,7 +1,7 @@
 // withWhiteLabelConfig.tsx
 import React, { useEffect, useState } from "react";
-import useUnifiedConfigurationResponseManager from "../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
-import { handleColorConfig } from "./common";
+import { handleColorConfig } from "../utils/common";
+import useUnifiedConfigurationResponseManager from "./shared/hooks/useUnifiedConfigurationResponseManager";
 
 
 /** 

@@ -2,8 +2,8 @@ import { ChatConfig } from "@meaku/core/types/config";
 import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
 import useWebSocketChat from "../../hooks/useWebSocketChat";
-import { useUpdateSessionOnMount } from "./hooks/useUpdateSessionOnMount";
-import { withWhiteLabelConfig } from "../../utils/withWhiteLabelConfig";
+import { withWhiteLabelConfig } from "../withWhiteLabelConfig";
+import { useUpdateSessionOnMount } from "../shared/hooks/useUpdateSessionOnMount";
 
 const Widget = lazy(() => import("../../components/views/Widget"));
 const Embed = lazy(() => import("../../components/views/Embed"));

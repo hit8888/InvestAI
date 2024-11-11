@@ -1,7 +1,7 @@
 import { wrapCreateBrowserRouter } from "@sentry/react";
 import { createBrowserRouter } from "react-router-dom";
 import Chat from "../pages/Chat";
-import FeedbackAdmin from "../pages/FeedbackAdmin";
+import FeedbackAdmin from "../pages/FeedbackAdmin/FeedbackAdmin";
 import InternalAdmin from "../pages/InternalAdmin";
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);

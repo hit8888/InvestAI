@@ -11,9 +11,9 @@ import BottomBar from "./BottomBar";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
-import useUnifiedConfigurationResponseManager from "../../../pages/Chat/hooks/useUnifiedConfigurationResponseManager";
 import { useContextSelector } from "use-context-selector";
-import { ApiProviderContext } from "../../../pages/Chat/ApiProvider/Context";
+import { ApiProviderContext } from "../../../pages/shared/ApiProvider/Context";
+import useUnifiedConfigurationResponseManager from "../../../pages/shared/hooks/useUnifiedConfigurationResponseManager";
 
 type QueryParams = {
   showGlass?: boolean;

@@ -59,7 +59,7 @@ class UnifiedSessionConfigResponseManager {
   }
 
   getProspectId() {
-    return this.session?.prospect_id;
+    return this.session?.prospect_id ?? "";
   }
 
   getAgentId() {
