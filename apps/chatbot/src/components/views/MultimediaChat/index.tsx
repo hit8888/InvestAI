@@ -51,13 +51,6 @@ const Multimedia = () => {
     (state) => state.suggestedQuestions,
   );
 
-  const manager = useMemo(() => {
-    if (!session && !config) return; //Create a provider which renders the children only if session or config is present
-
-    return new UnifiedResponseManager(session ?? config);
-  }, [config, session]);
-
-
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
 

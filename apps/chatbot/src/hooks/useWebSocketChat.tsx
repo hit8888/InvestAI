@@ -160,7 +160,7 @@ const useWebSocketChat = () => {
       if (readyState === ReadyState.CLOSED) {
         return handleAddAIMessage({
           response_id: nanoid(),
-          message: session?.configuration.body.default_error_message ?? "",
+          message: unifiedConfigurationResponseManager.getDefaultErrorMessage(),
           media: null,
           documents: [],
           is_complete: true,
@@ -215,7 +215,6 @@ const useWebSocketChat = () => {
     },
     [
       hasFirstUserMessageBeenSent,
-      session,
       sessionId,
       isChatOpen,
       isAdmin,
@@ -264,7 +263,7 @@ const useWebSocketChat = () => {
       trackError(error, {
         action: "useEffect | handleAddAIMessage",
         component: "useWebSocketChat",
-        sessionId: session?.session_id,
+        sessionId: unifiedConfigurationResponseManager.getSessionId(),
       });
     }
   }, [lastMessage]);

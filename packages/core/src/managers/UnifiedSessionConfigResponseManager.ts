@@ -15,7 +15,7 @@ class UnifiedSessionConfigResponseManager {
 
   constructor(response: SessionConfigResponseType) {
     if (this.isSession(response)) {
-      const {config,session} = this.validateSession(response);
+      const { config, session } = this.validateSession(response);
       this.session = session;
       this.config = config;
     } else {
@@ -120,6 +120,11 @@ class UnifiedSessionConfigResponseManager {
     });
 
     return [welcomeMessage, ...formattedChatHistory];
+  }
+
+
+  getDefaultErrorMessage() {
+    return this.config.body.default_error_message;
   }
 
   getSuggestedQuestions() {
