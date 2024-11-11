@@ -6,6 +6,7 @@ export const ArtifactEnumSchema = z.enum([
   "DEMO",
   "SLIDE_IMAGE",
   "NONE",
+  "SUGGESTIONS",
 ]);
 
 export const SlideItemSchema = z.object({
@@ -16,7 +17,7 @@ export const SlideItemSchema = z.object({
 
 export const SlideArtifactSchema = z.object({
   title: z.string(),
-  sub_title: z.string(),
+  sub_title: z.string().optional().nullable(),
   items: z.array(SlideItemSchema),
 });
 
@@ -50,10 +51,16 @@ export const SlideImageArtifactSchema = z.object({
   image_url: z.string(),
 });
 
+export const SuggestionArtifactSchema = z.object({
+  suggested_questions: z.array(z.string()),
+  suggested_questions_type: z.enum(["STAR", "BUBBLE"]),
+});
+
 export const ArtifactSchema = z.object({
   artifact_id: z.string(),
   content: SlideArtifactSchema.or(SlideImageArtifactSchema)
     .or(DemoArtifactSchema)
-    .or(VideoArtifactSchema),
+    .or(VideoArtifactSchema)
+    .or(SuggestionArtifactSchema),
   artifact_type: ArtifactEnumSchema,
 });

@@ -6,6 +6,10 @@ import { immer } from "zustand/middleware/immer";
 interface State {
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean | ((prevState: boolean) => boolean)) => void;
+  isChatMaximized: boolean;
+  setIsChatMaximized: (
+    value: boolean | ((prevState: boolean) => boolean),
+  ) => void;
   showTooltip: boolean;
   setShowTooltip: (value: boolean) => void;
   orgName: string | null;
@@ -18,6 +22,11 @@ interface State {
   setConfiguration: (configuration: Configuration) => void;
   hasFirstUserMessageBeenSent: boolean;
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
+  handleToggleMaximizeChat: () => void;
+  suggestionArtifactId: string | null;
+  setSuggestionArtifactId: (suggestionArtifactId: string | null) => void;
+  suggestedQuestions: string[];
+  setSuggestedQuestions: (suggestedQuestions: string[]) => void;
 }
 
 export const useChatStore = create<State>()(
@@ -28,6 +37,12 @@ export const useChatStore = create<State>()(
         set((draft) => {
           draft.isChatOpen =
             typeof value === "function" ? value(draft.isChatOpen) : value;
+        }),
+      isChatMaximized: false,
+      setIsChatMaximized: (value) =>
+        set((draft) => {
+          draft.isChatMaximized =
+            typeof value === "function" ? value(draft.isChatMaximized) : value;
         }),
       showTooltip: false,
       setShowTooltip: (value) =>
@@ -58,6 +73,20 @@ export const useChatStore = create<State>()(
       setHasFirstUserMessageBeenSent: (value) =>
         set((draft) => {
           draft.hasFirstUserMessageBeenSent = value;
+        }),
+      handleToggleMaximizeChat: () =>
+        set((draft) => {
+          draft.isChatMaximized = !draft.isChatMaximized;
+        }),
+      suggestionArtifactId: null,
+      setSuggestionArtifactId: (suggestionArtifactId) =>
+        set((draft) => {
+          draft.suggestionArtifactId = suggestionArtifactId;
+        }),
+      suggestedQuestions: [],
+      setSuggestedQuestions: (suggestedQuestions) =>
+        set((draft) => {
+          draft.suggestedQuestions = suggestedQuestions;
         }),
     })),
   ),

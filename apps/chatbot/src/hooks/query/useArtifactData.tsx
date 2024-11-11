@@ -37,7 +37,12 @@ const useArtifactData = (props: IProps) => {
 
       const data = response.data as Artifact;
 
-      if (data.artifact_id && data.artifact_type) {
+      const artifactTypesNotToCache = ["NONE", "SUGGESTIONS"];
+
+      if (
+        data.artifact_id &&
+        !artifactTypesNotToCache.includes(data.artifact_type)
+      ) {
         handleUpdateArtifact({
           activeArtifactId: data.artifact_id,
           activeArtifactType: data.artifact_type,

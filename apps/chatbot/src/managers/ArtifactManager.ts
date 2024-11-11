@@ -15,6 +15,8 @@ class ArtifactManager {
     const validatedArtifact = ArtifactSchema.safeParse(artifact);
 
     if (!validatedArtifact.success) {
+      console.log(validatedArtifact.error.errors);
+
       throw new Error(
         validatedArtifact.error.errors.map((error) => error.message).join(", "),
       );
