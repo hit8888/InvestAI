@@ -1,6 +1,8 @@
 {
   "private": true,
   "scripts": {
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
     "build": "turbo build",
     "dev": "turbo dev",
     "dev:chat": "turbo run dev --filter=chatbot --filter=@breakout/design-system --filter=@meaku/core",
@@ -10,6 +12,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "turbo": "^2.1.1"
@@ -17,6 +21,15 @@
   "packageManager": "pnpm@8.15.6",
   "engines": {
     "node": ">=18"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,html,css}": [
+      "prettier --write"
+    ]
   },
   "name": "meaku"
 }
