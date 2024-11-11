@@ -4,19 +4,19 @@ import { BreakoutQueryOptions } from "../types/queries";
 import { ConfigurationApiResponse } from "../types";
 import { AxiosError } from "axios";
 
-
-
 const configDataKey = (): unknown[] => ["config"];
 
 type ConfigDataKey = ReturnType<typeof configDataKey>;
 
 interface useConfigDataQueryOptions {
   agentId: string;
-  queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>,
+  queryOptions: BreakoutQueryOptions<ConfigurationApiResponse, ConfigDataKey>;
 }
 
-const useConfigDataQuery = (
-  { agentId, queryOptions }: useConfigDataQueryOptions):UseQueryResult<ConfigurationApiResponse> => {
+const useConfigDataQuery = ({
+  agentId,
+  queryOptions,
+}: useConfigDataQueryOptions): UseQueryResult<ConfigurationApiResponse> => {
   const query = useQuery({
     queryFn: async () => {
       const response = await getConfig(agentId);
@@ -25,8 +25,7 @@ const useConfigDataQuery = (
     },
     ...queryOptions,
     queryKey: configDataKey(),
-  }
-  );
+  });
 
   return query;
 };

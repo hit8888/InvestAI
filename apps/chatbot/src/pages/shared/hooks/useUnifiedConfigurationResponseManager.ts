@@ -1,10 +1,10 @@
-import UnifiedSessionConfigResponseManager from "@meaku/core/managers/UnifiedSessionConfigResponseManager";
-import useUnifiedConfigurationResponse from "./useUnifiedConfigurationResponse";
+import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
+import useUnifiedConfigurationResponse from './useUnifiedConfigurationResponse';
 
 function useUnifiedConfigurationResponseManager() {
-    const response = useUnifiedConfigurationResponse();
+  const response = useUnifiedConfigurationResponse();
 
-    return new UnifiedSessionConfigResponseManager(response);
+  return new UnifiedSessionConfigResponseManager(response);
 }
 
 export default useUnifiedConfigurationResponseManager;

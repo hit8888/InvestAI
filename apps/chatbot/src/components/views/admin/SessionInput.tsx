@@ -1,32 +1,25 @@
-import WrappedLogo from "@breakout/design-system/components/icons/wrapped-logo";
-import Button from "@breakout/design-system/components/layout/button";
-import Input from "@breakout/design-system/components/layout/input";
-import { FormEvent, memo, useMemo, useState } from "react";
-import toast from "react-hot-toast";
-import useConfigData from "../../../hooks/query/useConfigDataQuery";
-import UnifiedResponseManager from "../../../../../../packages/core/src/managers/UnifiedSessionConfigResponseManager";
-import { useAdminStore } from "../../../stores/useAdminStore";
+import WrappedLogo from '@breakout/design-system/components/icons/wrapped-logo';
+import Button from '@breakout/design-system/components/layout/button';
+import Input from '@breakout/design-system/components/layout/input';
+import { FormEvent, memo, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useAdminStore } from '../../../stores/useAdminStore';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
-const SUPERADMIN_PASSWORD = "VzEsWuLDN4wg0335/KVxjg==";
+const SUPERADMIN_PASSWORD = 'VzEsWuLDN4wg0335/KVxjg==';
 
 const SessionInput = () => {
-  const [sessionHash, setSessionHash] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [sessionHash, setSessionHash] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const setIsAuthenticated = useAdminStore((state) => state.setIsAuthenticated);
 
   const setSessionId = useAdminStore((state) => state.setSessionId);
   const setProspectId = useAdminStore((state) => state.setProspectId);
 
-  const { data: config } = useConfigData();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
-  const manager = useMemo(() => {
-    if (!config) return;
-
-    return new UnifiedResponseManager(config);
-  }, [config]);
-
-  const agentName = manager?.getAgentName() ?? "";
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
 
   const handleFormSubmission = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -35,23 +28,23 @@ const SessionInput = () => {
 
     if (password !== SUPERADMIN_PASSWORD) {
       // This is a misleading error message and is there to not reveal that the password is wrong in order to avoid any sort of brute force attack.
-      toast.error("Invalid session hash. Please try again.");
+      toast.error('Invalid session hash. Please try again.');
       return;
     }
 
     try {
-      const [sessionId, prospectId] = sessionHash.split("|");
+      const [sessionId, prospectId] = sessionHash.split('|');
 
       if (!sessionId || !prospectId) {
-        throw new Error("Invalid session hash.");
+        throw new Error('Invalid session hash.');
       }
 
       setSessionId(sessionId);
       setProspectId(prospectId);
 
       setIsAuthenticated(true);
-    } catch (error) {
-      toast.error("Invalid session hash. Please try again.");
+    } catch {
+      toast.error('Invalid session hash. Please try again.');
     }
   };
 
@@ -64,21 +57,15 @@ const SessionInput = () => {
 
         <div className="space-y-2 text-center">
           <div className="flex items-start justify-center gap-1">
-            <h1 className="text-2xl font-medium text-gray-800">
-              Hello! I'm Ada, {agentName}'s debugging expert.
-            </h1>
+            <h1 className="text-2xl font-medium text-gray-800">Hello! I'm Ada, {agentName}'s debugging expert.</h1>
             <span className="animate-wave">👋</span>
           </div>
           <p className="text-gray-700">
-            Peek behind the scenes and watch {agentName} in action. Let's start
-            by filling in the following details:
+            Peek behind the scenes and watch {agentName} in action. Let's start by filling in the following details:
           </p>
         </div>
 
-        <form
-          className="flex w-full flex-col items-end gap-4"
-          onSubmit={handleFormSubmission}
-        >
+        <form className="flex w-full flex-col items-end gap-4" onSubmit={handleFormSubmission}>
           <div className="flex w-full flex-col gap-3">
             <Input
               value={sessionHash}

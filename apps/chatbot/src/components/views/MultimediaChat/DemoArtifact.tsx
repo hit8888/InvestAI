@@ -1,13 +1,13 @@
-import { DemoArtifactType } from "@meaku/core/types/chat";
-import { useEffect, useRef, useState } from "react";
-import ArtifactControls from "./ArtifactControls";
+import { DemoArtifactType } from '@meaku/core/types/chat';
+import { useEffect, useRef, useState } from 'react';
+import ArtifactControls from './ArtifactControls';
 // import { useMessageStore } from "../../../stores/useMessageStore";
 
 interface IProps {
   artifact: DemoArtifactType;
 }
 
-type Frame = DemoArtifactType["features"][0]["frames"][0];
+type Frame = DemoArtifactType['features'][0]['frames'][0];
 
 const DemoArtifact = (props: IProps) => {
   const { artifact } = props;
@@ -51,16 +51,10 @@ const DemoArtifact = (props: IProps) => {
     if (!frame) return null;
 
     switch (frame.frame_type) {
-      case "IMAGE":
-        return (
-          <img
-            className="h-full w-full object-contain"
-            src={frame.frame_url}
-            alt={frame.frame_name}
-          />
-        );
+      case 'IMAGE':
+        return <img className="h-full w-full object-contain" src={frame.frame_url} alt={frame.frame_name} />;
 
-      case "VIDEO":
+      case 'VIDEO':
         return (
           <video className="h-full w-full object-contain" controls>
             <source src={frame.frame_url} type="video/mp4" />
@@ -92,10 +86,7 @@ const DemoArtifact = (props: IProps) => {
     <div className="relative h-full w-full">
       {frames.length > 0 && renderFrame(frames[activeFrameIndex])}
 
-      <ArtifactControls
-        handlePause={handlePlayPause}
-        handleRestart={handleRestart}
-      />
+      <ArtifactControls handlePause={handlePlayPause} handleRestart={handleRestart} />
     </div>
   );
 };

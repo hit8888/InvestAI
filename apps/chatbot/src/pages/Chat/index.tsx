@@ -4,15 +4,15 @@ import PreloadContainer from '../shared/PreloadContainer';
 import { ApiProvider } from '../shared/ApiProvider';
 
 const ChatPage: FC = () => {
-    return (
-        <PreloadContainer>
-            {(props): ReactElement => (
-                <ApiProvider {...props}>
-                    <ChatWithWhiteLabelConfig />
-                </ApiProvider>
-            )}
-        </PreloadContainer>
-    );
+  return (
+    <PreloadContainer>
+      {(props): ReactElement => (
+        <ApiProvider {...props}>
+          <ChatWithWhiteLabelConfig />
+        </ApiProvider>
+      )}
+    </PreloadContainer>
+  );
 };
 
 export default ChatPage;

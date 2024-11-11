@@ -1,6 +1,6 @@
-import Button from "@breakout/design-system/components/layout/button";
-import { ArrowLeftIcon, EllipsisVerticalIcon, XIcon } from "lucide-react"; //TODO: Expos this for design system
-import { useChatStore } from "../../../stores/useChatStore";
+import Button from '@breakout/design-system/components/layout/button';
+import { ArrowLeftIcon, EllipsisVerticalIcon, XIcon } from 'lucide-react'; //TODO: Expos this for design system
+import { useChatStore } from '../../../stores/useChatStore';
 
 interface IProps {
   handlePrimaryCta: () => void;
@@ -46,11 +46,7 @@ const ChatHeader = (props: IProps) => {
         >
           <EllipsisVerticalIcon className="text-primary" />
         </Button>
-        <Button
-          size="icon"
-          className="bg-transparent p-0"
-          onClick={handleCloseChat}
-        >
+        <Button size="icon" className="bg-transparent p-0" onClick={handleCloseChat}>
           <XIcon className="text-primary" />
         </Button>
       </div>

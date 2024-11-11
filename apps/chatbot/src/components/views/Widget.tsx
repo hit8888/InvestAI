@@ -1,45 +1,40 @@
-import { ChatConfig } from "@meaku/core/types/config";
-import ChatHeader from "@breakout/design-system/components/layout/chat-header";
-import ChatInput from "@breakout/design-system/components/layout/chat-input";
-import ChatMessage from "@breakout/design-system/components/layout/chat-message";
-import TriggerButton from "@breakout/design-system/components/layout/trigger-button";
-import { cn } from "@breakout/design-system/lib/cn";
-import { memo, useEffect } from "react";
-import useLocalStorageSession from "../../hooks/useLocalStorageSession";
-import useWebSocketChat from "../../hooks/useWebSocketChat";
-import { useChatStore } from "../../stores/useChatStore";
-import { useMessageStore } from "../../stores/useMessageStore";
-import { useContextSelector } from "use-context-selector";
-import { ApiProviderContext } from "../../pages/shared/ApiProvider/Context";
-import useUnifiedConfigurationResponseManager from "../../pages/shared/hooks/useUnifiedConfigurationResponseManager";
+import { ChatConfig } from '@meaku/core/types/config';
+import ChatHeader from '@breakout/design-system/components/layout/chat-header';
+import ChatInput from '@breakout/design-system/components/layout/chat-input';
+import ChatMessage from '@breakout/design-system/components/layout/chat-message';
+import TriggerButton from '@breakout/design-system/components/layout/trigger-button';
+import { cn } from '@breakout/design-system/lib/cn';
+import { memo, useEffect } from 'react';
+import useLocalStorageSession from '../../hooks/useLocalStorageSession';
+import useWebSocketChat from '../../hooks/useWebSocketChat';
+import { useChatStore } from '../../stores/useChatStore';
+import { useMessageStore } from '../../stores/useMessageStore';
+import { useContextSelector } from 'use-context-selector';
+import { ApiProviderContext } from '../../pages/shared/ApiProvider/Context';
+import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 const Widget = () => {
-  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)
+  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
-  const hasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.hasFirstUserMessageBeenSent,
-  );
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
-  const isAMessageBeingProcessed = useMessageStore(
-    (state) => state.isAMessageBeingProcessed,
-  );
+  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
   const messages = unifiedConfigurationResponseManager.getFormattedChatHistory();
   const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions();
 
-  const orgName = unifiedConfigurationResponseManager.getOrgName() ?? "";
+  const orgName = unifiedConfigurationResponseManager.getOrgName() ?? '';
   const configuration = unifiedConfigurationResponseManager.getConfig();
   const showCta = configuration.body.show_cta ?? false;
-  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? "";
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
-  const showTooltip =
-    !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
+  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
 
   const handleToggleChatOpenState = () => {
     setIsChatOpen((previous) => !previous);
@@ -64,14 +59,14 @@ const Widget = () => {
       tooltipOpen: showTooltip,
     };
 
-    window.parent.postMessage(payload, "*");
+    window.parent.postMessage(payload, '*');
   }, [showTooltip, isChatOpen]);
 
   return (
     <div className="flex h-screen flex-col">
       <div
-        className={cn("flex flex-1 flex-col overflow-hidden", {
-          "bg-white": isChatOpen,
+        className={cn('flex flex-1 flex-col overflow-hidden', {
+          'bg-white': isChatOpen,
         })}
       >
         {isChatOpen && (

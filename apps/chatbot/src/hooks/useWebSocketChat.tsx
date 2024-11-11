@@ -1,19 +1,19 @@
-import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import { AIResponse } from "@meaku/core/types/chat";
-import { nanoid } from "nanoid";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { ENV } from "../config/env";
-import { useArtifactStore } from "../stores/useArtifactStore";
-import { useChatStore } from "../stores/useChatStore";
-import { useMessageStore } from "../stores/useMessageStore";
-import { ChatParams } from "@meaku/core/types/msc";
-import { getProcessingMessageSequence } from "../utils/common";
-import { trackError } from "../utils/error";
-import useIsAdmin from "./useIsAdmin";
-import useUnifiedConfigurationResponseManager from "../pages/shared/hooks/useUnifiedConfigurationResponseManager";
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import { AIResponse } from '@meaku/core/types/chat';
+import { nanoid } from 'nanoid';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { ENV } from '../config/env';
+import { useArtifactStore } from '../stores/useArtifactStore';
+import { useChatStore } from '../stores/useChatStore';
+import { useMessageStore } from '../stores/useMessageStore';
+import { ChatParams } from '@meaku/core/types/msc';
+import { getProcessingMessageSequence } from '../utils/common';
+import { trackError } from '../utils/error';
+import useIsAdmin from './useIsAdmin';
+import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -22,38 +22,22 @@ const MAX_RETRY_INTERVAL = 20000;
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
-  const { orgName = "" } = useParams<ChatParams>();
+  const { orgName = '' } = useParams<ChatParams>();
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
-  const hasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.hasFirstUserMessageBeenSent,
-  );
-  const setHasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.setHasFirstUserMessageBeenSent,
-  );
-  const setSuggestionArtifactId = useChatStore(
-    (state) => state.setSuggestionArtifactId,
-  );
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
+  const setSuggestionArtifactId = useChatStore((state) => state.setSuggestionArtifactId);
 
-  const handleAddUserMessage = useMessageStore(
-    (state) => state.handleAddUserMessage,
-  );
-  const handleAddAIMessage = useMessageStore(
-    (state) => state.handleAddAIMessage,
-  );
-  const setSuggestedQuestions = useMessageStore(
-    (state) => state.setSuggestedQuestions,
-  );
-  const setIsAMessageBeingProcessed = useMessageStore(
-    (state) => state.setIsAMessageBeingProcessed,
-  );
+  const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
+  const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
+  const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
+  const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
 
-  const handleAddActiveArtifact = useArtifactStore(
-    (state) => state.handleAddActiveArtifact,
-  );
+  const handleAddActiveArtifact = useArtifactStore((state) => state.handleAddActiveArtifact);
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
@@ -65,17 +49,14 @@ const useWebSocketChat = () => {
     }[]
   >([]);
 
-
-  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? "";
-  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? "";
+  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
 
   const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
     return getProcessingMessageSequence(agentName);
   }, [agentName]);
 
-  const wsUrl = orgName
-    ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
-    : "";
+  const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
     wsUrl,
@@ -84,10 +65,7 @@ const useWebSocketChat = () => {
       shouldReconnect: () => true,
       reconnectAttempts: MAX_RETRIES,
       reconnectInterval: (retryCount) => {
-        const interval = Math.min(
-          retryInterval * Math.pow(2, retryCount - 1),
-          MAX_RETRY_INTERVAL,
-        );
+        const interval = Math.min(retryInterval * Math.pow(2, retryCount - 1), MAX_RETRY_INTERVAL);
         setRetryInterval(interval);
         return interval;
       },
@@ -95,7 +73,6 @@ const useWebSocketChat = () => {
     },
     !!sessionId,
   );
-
 
   const handleSendUserMessage = useCallback(
     async (message: string) => {
@@ -172,16 +149,11 @@ const useWebSocketChat = () => {
         }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
       }
     },
-    [
-      hasFirstUserMessageBeenSent,
-      sessionId,
-      isAdmin,
-      readyState,
-    ],
+    [hasFirstUserMessageBeenSent, sessionId, isAdmin, readyState],
   );
 
   const handlePrimaryCta = () => {
-    handleSendUserMessage("I want to book a demo for the product.");
+    handleSendUserMessage('I want to book a demo for the product.');
   };
 
   useEffect(() => {
@@ -201,37 +173,24 @@ const useWebSocketChat = () => {
       const { artifacts } = response;
       const [activeArtifact, suggestionArtifact] = artifacts;
 
-      if (activeArtifact && activeArtifact.artifact_type !== "NONE") {
-        handleAddActiveArtifact(
-          activeArtifact.artifact_id,
-          activeArtifact.artifact_type,
-        );
+      if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
+        handleAddActiveArtifact(activeArtifact.artifact_id, activeArtifact.artifact_type);
       }
 
-      if (
-        response.is_complete &&
-        suggestionArtifact &&
-        suggestionArtifact.artifact_type === "SUGGESTIONS"
-      ) {
+      if (response.is_complete && suggestionArtifact && suggestionArtifact.artifact_type === 'SUGGESTIONS') {
         setSuggestionArtifactId(suggestionArtifact.artifact_id);
       }
     } catch (error) {
       trackError(error, {
-        action: "useEffect | handleAddAIMessage",
-        component: "useWebSocketChat",
+        action: 'useEffect | handleAddAIMessage',
+        component: 'useWebSocketChat',
         sessionId: unifiedConfigurationResponseManager.getSessionId(),
       });
     }
   }, [lastMessage]);
 
-
-
   useEffect(() => {
-    if (
-      readyState === ReadyState.OPEN &&
-      messageQueue.current.length > 0 &&
-      sessionId
-    ) {
+    if (readyState === ReadyState.OPEN && messageQueue.current.length > 0 && sessionId) {
       messageQueue.current.forEach(({ message, messageId }) => {
         const payload = {
           session_id: sessionId,
@@ -263,8 +222,6 @@ const useWebSocketChat = () => {
   useEffect(() => {
     return cleanupWebSocketConnection;
   }, []);
-
-
 
   return { readyState, handleSendUserMessage, handlePrimaryCta };
 };

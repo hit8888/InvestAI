@@ -1,10 +1,10 @@
-import { useLocalStorageState } from "ahooks";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
-import { useChatStore } from "../stores/useChatStore";
-import { ChatParams } from "@meaku/core/types/msc";
-import { trackError } from "../utils/error";
+import { useLocalStorageState } from 'ahooks';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
+import { useChatStore } from '../stores/useChatStore';
+import { ChatParams } from '@meaku/core/types/msc';
+import { trackError } from '../utils/error';
 
 type Session = {
   sessionId?: string;
@@ -14,7 +14,7 @@ type Session = {
 };
 
 const useLocalStorageSession = () => {
-  const { orgName = "", agentId = "" } = useParams<ChatParams>();
+  const { orgName = '', agentId = '' } = useParams<ChatParams>();
 
   const localStorageKey = `${orgName?.toLowerCase()}-${agentId}`;
   const fallbackSessionKey = LOCAL_STORAGE_KEYS.FALLBACK_SESSION_ID;
@@ -23,10 +23,8 @@ const useLocalStorageSession = () => {
   const [session, setSession] = useLocalStorageState<Session>(localStorageKey, {
     listenStorageChange: false,
   });
-  const [fallbackSessionId, setFallbackSessionId] =
-    useLocalStorageState<string>(fallbackSessionKey);
-  const [fallbackProspectId, setFallbackProspectId] =
-    useLocalStorageState<string>(fallbackProspectKey);
+  const [fallbackSessionId, setFallbackSessionId] = useLocalStorageState<string>(fallbackSessionKey);
+  const [fallbackProspectId, setFallbackProspectId] = useLocalStorageState<string>(fallbackProspectKey);
 
   const setShowTooltip = useChatStore((state) => state.setShowTooltip);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -53,8 +51,8 @@ const useLocalStorageSession = () => {
       setFallbackProspectId(undefined);
     } catch (error) {
       trackError(error, {
-        action: "handleUpdateSessionData",
-        component: "useLocalStorageSession",
+        action: 'handleUpdateSessionData',
+        component: 'useLocalStorageSession',
         sessionId: sessionData?.sessionId || fallbackSessionId,
       });
     }

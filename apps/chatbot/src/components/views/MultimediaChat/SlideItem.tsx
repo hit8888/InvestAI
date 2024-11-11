@@ -1,5 +1,5 @@
-import dynamicIconImports from "lucide-react/dynamicIconImports";
-import DynamicIcon from "./DynamicIcon";
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
+import DynamicIcon from './DynamicIcon';
 
 interface IProps {
   icon?: keyof typeof dynamicIconImports;

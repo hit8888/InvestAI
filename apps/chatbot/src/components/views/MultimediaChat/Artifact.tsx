@@ -1,30 +1,27 @@
-import { AspectRatio } from "@breakout/design-system/components/layout/aspect-ratio";
-import {
-  DemoArtifactType,
-  SlideArtifactType,
-  SlideImageArtifactType,
-  VideoArtifactType,
-} from "@meaku/core/types/chat";
-import { useMemo } from "react";
-import useArtifactDataQuery from "@meaku/core/queries/useArtifactDataQuery";
-import ArtifactManager from "../../../../../../packages/core/src/managers/ArtifactManager";
-import { useArtifactStore } from "../../../stores/useArtifactStore";
-import DemoArtifact from "./DemoArtifact";
-import SlideArtifact from "./SlideArtifact";
-import VideoArtifact from "./VideoArtifact";
+import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
+import { DemoArtifactType, SlideArtifactType, SlideImageArtifactType, VideoArtifactType } from '@meaku/core/types/chat';
+import { useMemo } from 'react';
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import ArtifactManager from '../../../../../../packages/core/src/managers/ArtifactManager';
+import { useArtifactStore } from '../../../stores/useArtifactStore';
+import DemoArtifact from './DemoArtifact';
+import SlideArtifact from './SlideArtifact';
+import VideoArtifact from './VideoArtifact';
 
 const Artifact = () => {
   const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
-  const activeArtifactType = useArtifactStore(
-    (state) => state.activeArtifactType,
-  );
+  const activeArtifactType = useArtifactStore((state) => state.activeArtifactType);
   // const handleRemoveActiveArtifact = useArtifactStore(
   //   (state) => state.handleRemoveActiveArtifact,
   // );
 
-  const { data: artifactData, isFetching, isError } = useArtifactDataQuery({
-    artifactId: activeArtifactId || "",
-    artifactType: activeArtifactType || "NONE",
+  const {
+    data: artifactData,
+    isFetching,
+    isError,
+  } = useArtifactDataQuery({
+    artifactId: activeArtifactId || '',
+    artifactType: activeArtifactType || 'NONE',
     queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
@@ -44,37 +41,26 @@ const Artifact = () => {
 
   const renderArtifact = () => {
     switch (artifactType) {
-      case "SLIDE":
+      case 'SLIDE':
+        return <SlideArtifact artifact={artifactContent as SlideArtifactType} />;
+
+      case 'SLIDE_IMAGE':
         return (
-          <SlideArtifact artifact={artifactContent as SlideArtifactType} />
+          <img src={(artifactContent as SlideImageArtifactType).image_url} alt="Slide" className="h-full w-full" />
         );
 
-      case "SLIDE_IMAGE":
-        return (
-          <img
-            src={(artifactContent as SlideImageArtifactType).image_url}
-            alt="Slide"
-            className="h-full w-full"
-          />
-        );
-
-      case "DEMO":
+      case 'DEMO':
         return <DemoArtifact artifact={artifactContent as DemoArtifactType} />;
 
-      case "VIDEO":
-        return (
-          <VideoArtifact
-            videoUrl={(artifactContent as VideoArtifactType).video_url}
-          />
-        );
+      case 'VIDEO':
+        return <VideoArtifact videoUrl={(artifactContent as VideoArtifactType).video_url} />;
 
       default:
         return <></>;
     }
   };
 
-  if (activeArtifactType === "NONE" || !activeArtifactId || !artifactData)
-    return null;
+  if (activeArtifactType === 'NONE' || !activeArtifactId || !artifactData) return null;
 
   if (isError) {
     return <></>;
@@ -91,11 +77,7 @@ const Artifact = () => {
           >
             <XIcon className="h-4 w-4" />
           </button> */}
-          {isFetching ? (
-            <div className="h-full w-full animate-pulse bg-gray-50"></div>
-          ) : (
-            renderArtifact()
-          )}
+          {isFetching ? <div className="h-full w-full animate-pulse bg-gray-50"></div> : renderArtifact()}
 
           {/* <div className="absolute bottom-0 left-0 right-0 flex h-14 translate-y-full transform items-center justify-between bg-gradient-to-t from-black/50 to-transparent p-6 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
             <div>

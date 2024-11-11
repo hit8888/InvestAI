@@ -1,7 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
-const ADMIN_PATHS = ["/demo/", "/internal-admin-use/"];
-const READONLY_PATHS = ["/internal-admin-use/"];
+const ADMIN_PATHS = ['/demo/', '/internal-admin-use/'];
+const READONLY_PATHS = ['/internal-admin-use/'];
 
 const useIsAdmin = () => {
   const { pathname } = useLocation();

@@ -1,8 +1,8 @@
-import { useContextSelector } from "use-context-selector";
-import { ApiProviderContext } from "../ApiProvider/Context";
+import { useContextSelector } from 'use-context-selector';
+import { ApiProviderContext } from '../ApiProvider/Context';
 
 function useUnifiedConfigurationResponse() {
-    return useContextSelector(ApiProviderContext, (state) => state.unifiedConfigurationResponse);
+  return useContextSelector(ApiProviderContext, (state) => state.unifiedConfigurationResponse);
 }
 
 export default useUnifiedConfigurationResponse;

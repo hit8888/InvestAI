@@ -1,7 +1,7 @@
-import { cn } from "@breakout/design-system/lib/cn";
-import { Message } from "@meaku/core/types/chat";
-import { useEffect, useRef } from "react";
-import MessageItem from "./MessageItem";
+import { cn } from '@breakout/design-system/lib/cn';
+import { Message } from '@meaku/core/types/chat';
+import { useEffect, useRef } from 'react';
+import MessageItem from './MessageItem';
 
 interface IProps {
   messages: Message[];
@@ -16,12 +16,11 @@ const ChatMessage = (props: IProps) => {
 
   const handleScrollToBottom = () => {
     if (chatContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } =
-        chatContainerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
       const isAtBottom = scrollHeight - scrollTop <= clientHeight + 1;
 
       if (isAtBottom) {
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        endRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
     }
   };
@@ -37,22 +36,14 @@ const ChatMessage = (props: IProps) => {
   }, []);
 
   return (
-    <div
-      ref={chatContainerRef}
-      className="flex-1 space-y-4 overflow-y-auto p-2"
-    >
+    <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto p-2">
       <div
-        className={cn("mx-auto h-full w-full", {
-          "sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]":
-            !isInSplitScreenView,
+        className={cn('mx-auto h-full w-full', {
+          'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !isInSplitScreenView,
         })}
       >
         {messages.map((message, idx) => (
-          <MessageItem
-            key={message.id}
-            message={message}
-            showMessageArtifact={idx === messages.length - 1}
-          />
+          <MessageItem key={message.id} message={message} showMessageArtifact={idx === messages.length - 1} />
         ))}
       </div>
 
