@@ -10,7 +10,7 @@ import useLocalStorageArtifact from "../useLocalStorageArtifact";
 interface IProps {
   artifactId?: string;
   artifactType?: ArtifactEnum;
-  options?: Omit<UseQueryOptions<any, Error>, "queryKey" | "queryFn">;
+  options?: Omit<UseQueryOptions<Artifact, Error>, "queryKey" | "queryFn">;
 }
 
 const MAX_RETRIES = 6;

@@ -7,6 +7,7 @@ interface IProps {
   items: SlideArtifactType["items"];
 }
 
+//TODO: KK: Move this to design system
 const SlideItems = (props: IProps) => {
   const { items } = props;
   const itemsLength = items.length;

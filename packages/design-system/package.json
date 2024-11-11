@@ -22,13 +22,14 @@
     "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=chpt_1f8853b88848365"
   },
   "peerDependencies": {
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.9.0",
+    "@chromatic-com/storybook": "^3.2.2",
     "@meaku/core": "workspace:*",
     "@meaku/eslint-config": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
@@ -44,6 +45,7 @@
     "@types/lodash": "^4.17.9",
     "@types/react": "^18.2.61",
     "autoprefixer": "^10.4.18",
+    "chromatic": "^11.16.5",
     "eslint-plugin-storybook": "^0.10.1",
     "postcss": "^8.4.35",
     "postcss-import": "^16.1.0",

@@ -103,6 +103,9 @@ const config: Omit<Config, "content"> = {
           },
         },
       },
+      borderRadius: {
+        'custom-56': '56px',
+      },
     },
   },
   plugins: [twTypography, twForms, twAnimate],

@@ -1,6 +1,8 @@
 import { ArtifactSchema } from "@meaku/core/types/artifact";
 import { Artifact } from "@meaku/core/types/chat";
 
+
+//TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
 class ArtifactManager {
   private artifact: Artifact;
 
@@ -29,6 +31,7 @@ class ArtifactManager {
     return this.artifact.artifact_type;
   }
 
+  //Refactor this code to use different mehods
   getArtifactContent() {
     return this.artifact.content;
   }

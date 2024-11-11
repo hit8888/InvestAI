@@ -19,7 +19,7 @@ export const getArtifact = (tenantName: string, payload: GetArtifactPayload) =>
     `/tenant/chat/message/artifact/${payload.artifactId}?artifact_type=${payload.artifactType}`,
     {
       headers: {
-        "x-tenant-name": tenantName,
+        "x-tenant-name": tenantName,//TODO: Set up headers inside interceptor
       },
     },
   );

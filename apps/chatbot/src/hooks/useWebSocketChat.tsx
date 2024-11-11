@@ -16,7 +16,7 @@ import { trackError } from "../utils/error";
 import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
-
+//TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
