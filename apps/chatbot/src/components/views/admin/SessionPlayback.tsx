@@ -11,10 +11,10 @@ const SessionPlayback = () => {
   const setActiveResponseId = useFeedbackStore((state) => state.setActiveResponseId);
 
   const manager = useUnifiedConfigurationResponseManager();
-  const orgName = manager?.getOrgName() ?? '';
+  const orgName = manager.getOrgName() ?? '';
   const isC2FO = orgName?.toLowerCase() === 'c2fo';
-  const agentName = manager?.getAgentName() ?? '';
-  const messages = manager?.getFormattedChatHistory({ isAdmin: true, isReadOnly: true }) ?? [];
+  const agentName = manager.getAgentName() ?? '';
+  const messages = manager.getFormattedChatHistory({ isAdmin: true, isReadOnly: true }) ?? [];
 
   const activeResponse = messages.find((message) => message.id == activeResponseId);
   const isActiveResponseFeedbackNegative = activeResponse?.feedback?.positive_feedback === false;

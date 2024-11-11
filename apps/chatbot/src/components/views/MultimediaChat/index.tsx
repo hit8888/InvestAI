@@ -11,26 +11,23 @@ import BottomBar from './BottomBar';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
-import { useContextSelector } from 'use-context-selector';
-import { ApiProviderContext } from '../../../pages/shared/ApiProvider/Context';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 type QueryParams = {
   showGlass?: boolean;
   showDemo?: boolean;
 };
 
-const Multimedia = () => {
+interface IProps {
+  handleChatInputOnChangeCallback: () => void;
+}
+
+const Multimedia = ({ handleChatInputOnChangeCallback }: IProps) => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get('showGlass') === 'true',
   }; //Remove after UI is finalized
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
-
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-
-  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
 
   const { handleUpdateSessionData } = useLocalStorageSession();
 
@@ -47,7 +44,7 @@ const Multimedia = () => {
   const messages = useMessageStore((state) => state.messages);
   const suggestedQuestions = useMessageStore((state) => state.suggestedQuestions);
 
-  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
+  const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
 
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
@@ -60,14 +57,6 @@ const Multimedia = () => {
   const handleOpenChat = () => {
     setIsChatOpen(true);
     handleUpdateSessionData({ isChatOpen: true });
-  };
-
-  const sessionId = unifiedConfigurationResponseManager.getSessionId();
-
-  const handleChatInputOnChangeCallback = () => {
-    if (sessionId) return;
-
-    sessionQuery.refetch();
   };
 
   const handleExpandWidth = () => {
@@ -120,7 +109,7 @@ const Multimedia = () => {
             className={cn('flex flex-1 flex-col overflow-hidden rounded-lg bg-white bg-opacity-20 backdrop-blur-lg')}
           >
             <ChatHeader
-              handlePrimaryCta={handlePrimaryCta}
+              handlePrimaryCta={() => handleSendUserMessage('I want to book a demo for the product.')}
               handleCloseChat={handleCloseChat}
               handleFinishDemo={handleFinishDemo}
             />

@@ -1,9 +1,15 @@
-
 import { nanoid } from "nanoid";
-import { ConfigurationApiResponse, ConfigurationSchema, SessionApiResponse, SessionSchema } from "../types/session";
+import {
+  ConfigurationApiResponse,
+  ConfigurationSchema,
+  SessionApiResponse,
+  SessionSchema,
+} from "../types/session";
 import { Message } from "../types/chat";
 
-export type SessionConfigResponseType = ConfigurationApiResponse | SessionApiResponse;
+export type SessionConfigResponseType =
+  | ConfigurationApiResponse
+  | SessionApiResponse;
 
 /**
  * This is an UnifiedResponseManager that helps us manage the response for the initialization api as well as the config api. This has been made into a single manager to avoid code duplication and to make the code more maintainable.
@@ -23,7 +29,9 @@ class UnifiedSessionConfigResponseManager {
     }
   }
 
-  private isSession(response: SessionConfigResponseType): response is SessionApiResponse {
+  private isSession(
+    response: SessionConfigResponseType,
+  ): response is SessionApiResponse {
     return "session_id" in response;
   }
 
@@ -75,12 +83,12 @@ class UnifiedSessionConfigResponseManager {
   }
 
   getFormattedChatHistory({
-    isAdmin = false,
-    isReadOnly = false,
+    isAdmin,
+    isReadOnly,
   }: {
-    isAdmin?: boolean;
-    isReadOnly?: boolean;
-  } = {}): Message[] {
+    isAdmin: boolean;
+    isReadOnly: boolean;
+  }): Message[] {
     const chatHistory = this.config.body.chat_history ?? [];
     const feedbacks = this.config.body.feedback ?? [];
 
@@ -122,13 +130,18 @@ class UnifiedSessionConfigResponseManager {
     return [welcomeMessage, ...formattedChatHistory];
   }
 
-
   getDefaultErrorMessage() {
     return this.config.body.default_error_message;
   }
 
-  getSuggestedQuestions() {
-    const chatHistory = this.getFormattedChatHistory();
+  getSuggestedQuestions({
+    isAdmin,
+    isReadOnly,
+  }: {
+    isAdmin: boolean;
+    isReadOnly: boolean;
+  }) {
+    const chatHistory = this.getFormattedChatHistory({ isAdmin, isReadOnly });
 
     if (chatHistory.length > 1) {
       const lastMessage = chatHistory[chatHistory.length - 1];

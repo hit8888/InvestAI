@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect } from 'react';
 import { IAllApiResponsesWithQuery } from '../ApiProvider/types';
 import { Loader } from 'lucide-react';
 import { AxiosError } from 'axios';
@@ -19,11 +19,12 @@ interface Props {
 const PreloadContainer: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<ChatParams>();
   const { sessionData } = useLocalStorageSession();
-  const { isAdmin } = useIsAdmin();
+  const { isAdmin, isReadOnly: isInternalAdminRoute } = useIsAdmin();
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: !sessionData?.sessionId },
+    queryOptions: { enabled: isInternalAdminRoute || !sessionData?.sessionId },
+    //for ReadOnly routes session Id is ignored and config is fetched directly
   });
 
   const initializeSessionPayload = {
@@ -36,8 +37,14 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: !!agentId && !!sessionData.sessionId },
-  }); //TODO: When ignoreUpdatingLocalStorage is unset
+    queryOptions: { enabled: !isInternalAdminRoute && !!agentId && !!sessionData.sessionId },
+  });
+
+  //TODO: When ignoreUpdatingLocalStorage is not set: isInternalAdminRoute
+  useEffect(() => {
+    //sessionId from api changes, update localstorage
+    //for chat screen only, not for admin screens, handle header if the message sent by user is greater than 0 (In case user revists the page) or user sensd the message for the first time:  hasFirstMessageSent
+  }, []);
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
 

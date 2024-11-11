@@ -1,9 +1,9 @@
-import { AIResponse, Message } from "@meaku/core/types/chat";
-import { Feedback } from "@meaku/core/types/session";
-import { nanoid } from "nanoid";
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { AIResponse, Message } from '@meaku/core/types/chat';
+import { Feedback } from '@meaku/core/types/session';
+import { nanoid } from 'nanoid';
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 
 interface State {
   messages: Message[];
@@ -15,14 +15,8 @@ interface State {
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: AIResponse) => void;
   handleAddUserMessage: (message: string) => void;
-  handleAddMessageFeedback: (
-    messageId: string,
-    feedback: Partial<Feedback>,
-  ) => void;
-  handleRemoveMessageFeedback: (
-    messageId: string,
-    previousState?: Message,
-  ) => void;
+  handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
+  handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -45,11 +39,9 @@ export const useMessageStore = create<State>()(
         }),
       handleAddAIMessage: (response) =>
         set((draft) => {
-          const messageId = response.response_id;
+          const messageId = response.response_id; //AI response
 
-          const existingMessageIndex = draft.messages.findIndex(
-            (message) => message.id === messageId,
-          );
+          const existingMessageIndex = draft.messages.findIndex((message) => message.id === messageId);
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
@@ -65,7 +57,7 @@ export const useMessageStore = create<State>()(
           } else {
             draft.messages.push({
               id: messageId,
-              role: "ai",
+              role: 'ai',
               message: response.message,
               media: response.media,
               documents: response.documents,
@@ -80,7 +72,7 @@ export const useMessageStore = create<State>()(
         set((draft) => {
           draft.messages.push({
             id: nanoid(),
-            role: "user",
+            role: 'user',
             message,
             media: null,
             documents: [],
@@ -89,9 +81,7 @@ export const useMessageStore = create<State>()(
         }),
       handleAddMessageFeedback: (messageId, feedback) =>
         set((draft) => {
-          const messageIndex = draft.messages.findIndex(
-            (message) => message.id == messageId,
-          );
+          const messageIndex = draft.messages.findIndex((message) => message.id == messageId);
 
           if (messageIndex === -1) return;
 
@@ -102,8 +92,7 @@ export const useMessageStore = create<State>()(
             positive_feedback: feedback.positive_feedback ?? false,
           };
 
-          if (updatedFeedback.positive_feedback)
-            delete updatedFeedback.category;
+          if (updatedFeedback.positive_feedback) delete updatedFeedback.category;
 
           draft.messages[messageIndex] = {
             ...draft.messages[messageIndex],
@@ -112,9 +101,7 @@ export const useMessageStore = create<State>()(
         }),
       handleRemoveMessageFeedback: (messageId, previousState) =>
         set((draft) => {
-          const messageIndex = draft.messages.findIndex(
-            (message) => message.id == messageId,
-          );
+          const messageIndex = draft.messages.findIndex((message) => message.id == messageId);
 
           if (messageIndex === -1) return;
 

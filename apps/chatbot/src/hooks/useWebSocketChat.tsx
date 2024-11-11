@@ -23,12 +23,23 @@ const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
+  const messageId = nanoid();
+
+  const defaultConfig = {
+    media: null,
+    documents: [],
+    is_complete: false,
+    is_loading: true,
+    suggested_questions: [],
+    analytics: {},
+    artifacts: [],
+  }; //BE type AIResponse
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent); //chat app
   const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
   const setSuggestionArtifactId = useChatStore((state) => state.setSuggestionArtifactId);
 
@@ -42,15 +53,9 @@ const useWebSocketChat = () => {
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
   const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
-  const messageQueue = useRef<
-    {
-      message: string;
-      messageId: string;
-    }[]
-  >([]);
 
-  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
-  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
+  const sessionId = unifiedConfigurationResponseManager.getSessionId();
+  const agentName = unifiedConfigurationResponseManager.getAgentName();
 
   const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
     return getProcessingMessageSequence(agentName);
@@ -74,14 +79,34 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
 
+  const animateOrbTodifferentState = () => {
+    let messageIndex = 0;
+    const response_id = nanoid();
+
+    //This is putting app in different loading state after 5sec
+    processingMessageInterval.current = setInterval(() => {
+      if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
+        clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+        return;
+      }
+
+      handleAddAIMessage({
+        ...defaultConfig,
+        response_id,
+        message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+      });
+
+      messageIndex++;
+    }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
+  };
+
+  //first time: sessionId is null, readyState !== ReadyState.OPEN
   const handleSendUserMessage = useCallback(
     async (message: string) => {
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
       }
-
-      const messageId = nanoid();
 
       const payload = {
         session_id: sessionId,
@@ -93,6 +118,7 @@ const useWebSocketChat = () => {
       setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
+      //This mostly happens when the websocket connection is closed or has been idle for some time
       if (readyState === ReadyState.CLOSED) {
         return handleAddAIMessage({
           response_id: nanoid(),
@@ -107,54 +133,14 @@ const useWebSocketChat = () => {
         });
       }
 
-      handleAddAIMessage({
-        response_id: messageId,
-        message: PROCESSING_MESSAGE_SEQUENCE[0],
-        media: null,
-        documents: [],
-        is_complete: false,
-        is_loading: true,
-        suggested_questions: [],
-        analytics: {},
-        artifacts: [],
-      });
-
       setIsAMessageBeingProcessed(true);
 
-      if (!sessionId) {
-        messageQueue.current.push({ message, messageId });
-      } else {
-        sendMessage(JSON.stringify(payload));
+      sendMessage(JSON.stringify(payload));
 
-        let messageIndex = 1;
-        processingMessageInterval.current = setInterval(() => {
-          if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
-            clearInterval(processingMessageInterval.current as NodeJS.Timeout);
-            return;
-          }
-
-          handleAddAIMessage({
-            response_id: messageId,
-            message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-            media: null,
-            documents: [],
-            is_complete: false,
-            is_loading: true,
-            suggested_questions: [],
-            analytics: {},
-            artifacts: [],
-          });
-
-          messageIndex++;
-        }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
-      }
+      animateOrbTodifferentState(); //async call without blocking main thread
     },
     [hasFirstUserMessageBeenSent, sessionId, isAdmin, readyState],
   );
-
-  const handlePrimaryCta = () => {
-    handleSendUserMessage('I want to book a demo for the product.');
-  };
 
   useEffect(() => {
     if (!lastMessage) return;
@@ -187,23 +173,8 @@ const useWebSocketChat = () => {
         sessionId: unifiedConfigurationResponseManager.getSessionId(),
       });
     }
-  }, [lastMessage]);
-
-  useEffect(() => {
-    if (readyState === ReadyState.OPEN && messageQueue.current.length > 0 && sessionId) {
-      messageQueue.current.forEach(({ message, messageId }) => {
-        const payload = {
-          session_id: sessionId,
-          message,
-          response_id: messageId,
-        };
-
-        sendMessage(JSON.stringify(payload));
-      });
-
-      messageQueue.current = [];
-    }
-  }, [readyState, sendMessage, sessionId]);
+  }, [lastMessage]); //This hook is called whenebver lastMessage changes
+  //TODO: Figure out smoothness while sending messages
 
   // Cleanup function
   const cleanupWebSocketConnection = () => {
@@ -223,7 +194,10 @@ const useWebSocketChat = () => {
     return cleanupWebSocketConnection;
   }, []);
 
-  return { readyState, handleSendUserMessage, handlePrimaryCta };
+  return { readyState, handleSendUserMessage };
 };
 
 export default useWebSocketChat;
+
+//response will have previous chats
+//last message will have the current message

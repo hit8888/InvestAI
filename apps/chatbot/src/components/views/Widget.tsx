@@ -9,12 +9,13 @@ import useLocalStorageSession from '../../hooks/useLocalStorageSession';
 import useWebSocketChat from '../../hooks/useWebSocketChat';
 import { useChatStore } from '../../stores/useChatStore';
 import { useMessageStore } from '../../stores/useMessageStore';
-import { useContextSelector } from 'use-context-selector';
-import { ApiProviderContext } from '../../pages/shared/ApiProvider/Context';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
-const Widget = () => {
-  const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
+interface IProps {
+  handleChatInputOnChangeCallback: () => void;
+}
+
+const Widget = ({ handleChatInputOnChangeCallback }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -22,16 +23,18 @@ const Widget = () => {
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
-  const messages = unifiedConfigurationResponseManager.getFormattedChatHistory();
-  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions();
+  const messages = unifiedConfigurationResponseManager.getFormattedChatHistory({ isAdmin: false, isReadOnly: false });
+  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
+    isAdmin: false,
+    isReadOnly: false,
+  });
 
   const orgName = unifiedConfigurationResponseManager.getOrgName() ?? '';
   const configuration = unifiedConfigurationResponseManager.getConfig();
   const showCta = configuration.body.show_cta ?? false;
   const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
-  const sessionId = unifiedConfigurationResponseManager.getSessionId();
 
-  const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
+  const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
@@ -46,11 +49,6 @@ const Widget = () => {
 
   const handleCloseChat = () => {
     setIsChatOpen(false);
-  };
-
-  const handleChatInputOnChangeCallback = () => {
-    if (sessionId) return;
-    sessionQuery.refetch();
   };
 
   useEffect(() => {
@@ -77,7 +75,9 @@ const Widget = () => {
               config={ChatConfig.WIDGET}
               showMinimizedHeader={hasFirstUserMessageBeenSent}
               handleClose={handleCloseChat}
-              handlePrimaryCta={showCta ? handlePrimaryCta : undefined}
+              handlePrimaryCta={
+                showCta ? () => handleSendUserMessage('I want to book a demo for the product.') : undefined
+              }
             />
             <ChatMessage
               agentName={agentName}
