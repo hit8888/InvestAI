@@ -28,8 +28,6 @@ const useWebSocketChat = () => {
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
 
-  const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
   );
@@ -101,15 +99,9 @@ const useWebSocketChat = () => {
 
   const handleSendUserMessage = useCallback(
     async (message: string) => {
-
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
-
         setHasFirstUserMessageBeenSent(true);
-      }
-
-      if (!isChatOpen) {
-        setIsChatOpen(true);
       }
 
       const messageId = nanoid();
@@ -183,7 +175,6 @@ const useWebSocketChat = () => {
     [
       hasFirstUserMessageBeenSent,
       sessionId,
-      isChatOpen,
       isAdmin,
       readyState,
     ],
