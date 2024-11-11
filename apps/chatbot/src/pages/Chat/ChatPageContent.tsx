@@ -22,7 +22,7 @@ const Chat = () => {
 
   useUpdateSessionOnMount();
 
-  useApplyWhiteLabelConfig();
+  useApplyWhiteLabelConfig(); //Move this to Top
 
   const chatConfig =
     (searchParams.get("config")?.toLowerCase() as ChatConfig) ||

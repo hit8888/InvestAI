@@ -15,7 +15,7 @@ import { useContextSelector } from "use-context-selector";
 
 const Widget = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery)
-  const manager = useUnifiedConfigurationResponseManager();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore(
@@ -26,14 +26,14 @@ const Widget = () => {
     (state) => state.isAMessageBeingProcessed,
   );
 
-  const messages = manager.getFormattedChatHistory();
-  const suggestedQuestions = manager.getSuggestedQuestions();
+  const messages = unifiedConfigurationResponseManager.getFormattedChatHistory();
+  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions();
 
-  const orgName = manager.getOrgName() ?? "";
-  const configuration = manager.getConfig();
+  const orgName = unifiedConfigurationResponseManager.getOrgName() ?? "";
+  const configuration = unifiedConfigurationResponseManager.getConfig();
   const showCta = configuration.body.show_cta ?? false;
-  const agentName = manager.getAgentName() ?? "";
-  const sessionId = manager.getSessionId();
+  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? "";
+  const sessionId = unifiedConfigurationResponseManager.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();

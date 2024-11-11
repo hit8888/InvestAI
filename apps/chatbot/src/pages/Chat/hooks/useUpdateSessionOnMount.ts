@@ -24,7 +24,6 @@ const useUpdateSessionOnMount = () => {
         },
     });
 
-
     useEffect(() => {
         const handleMessagePassing = async (event: MessageEvent) => {
             const type = event.data?.type;

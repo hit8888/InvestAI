@@ -15,8 +15,8 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   const params = new URLSearchParams(window.location.search);
   // Add tenant header to all requests
-  config.headers['x-tenant-name'] = params.get('orgName') || '';//TODO: get this from localstorage
-  
+  config.headers['x-tenant-name'] = params.get('orgName') || '';//TODO: get this from localstorage. Put this inside localstorage
+
   return config;
 }, (error: any) => {
   return Promise.reject(error);

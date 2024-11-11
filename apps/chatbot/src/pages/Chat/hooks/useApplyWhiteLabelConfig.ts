@@ -8,6 +8,5 @@ export const useApplyWhiteLabelConfig = () => {
     useEffect(() => {
         const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
         handleColorConfig(styleConfig);
-    }, [unifiedConfigurationResponseManager])
-
+    }, [unifiedConfigurationResponseManager]);
 }

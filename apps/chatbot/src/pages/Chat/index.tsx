@@ -9,6 +9,7 @@ const ChatPage: FC = () => {
         <PreloadContainer>
             {(props): ReactElement => (
                 <ApiProvider {...props}>
+                    {/*Add WhiteLabelProvider*/}
                     <ChatPageContent />
                 </ApiProvider>
             )}
