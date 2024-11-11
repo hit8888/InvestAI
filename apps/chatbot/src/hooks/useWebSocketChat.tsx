@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { ENV } from "../config/env";
 import UnifiedResponseManager from "../managers/UnifiedResponseManager";
+import { useArtifactStore } from "../stores/useArtifactStore";
 import { useChatStore } from "../stores/useChatStore";
 import { useMessageStore } from "../stores/useMessageStore";
 import { ChatParams } from "../types/msc";
@@ -15,7 +16,7 @@ import { trackError } from "../utils/error";
 import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
-
+//TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
@@ -38,6 +39,9 @@ const useWebSocketChat = () => {
   const setHasFirstUserMessageBeenSent = useChatStore(
     (state) => state.setHasFirstUserMessageBeenSent,
   );
+  const setSuggestionArtifactId = useChatStore(
+    (state) => state.setSuggestionArtifactId,
+  );
 
   const handleAddUserMessage = useMessageStore(
     (state) => state.handleAddUserMessage,
@@ -50,6 +54,10 @@ const useWebSocketChat = () => {
   );
   const setIsAMessageBeingProcessed = useMessageStore(
     (state) => state.setIsAMessageBeingProcessed,
+  );
+
+  const handleAddActiveArtifact = useArtifactStore(
+    (state) => state.handleAddActiveArtifact,
   );
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
@@ -154,6 +162,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
 
+      setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
@@ -167,6 +176,7 @@ const useWebSocketChat = () => {
           is_loading: false,
           suggested_questions: [],
           analytics: {},
+          artifacts: [],
         });
       }
 
@@ -179,6 +189,7 @@ const useWebSocketChat = () => {
         is_loading: true,
         suggested_questions: [],
         analytics: {},
+        artifacts: [],
       });
 
       setIsAMessageBeingProcessed(true);
@@ -204,6 +215,7 @@ const useWebSocketChat = () => {
             is_loading: true,
             suggested_questions: [],
             analytics: {},
+            artifacts: [],
           });
 
           messageIndex++;
@@ -238,6 +250,24 @@ const useWebSocketChat = () => {
       if (response.is_complete) {
         setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
+      }
+
+      const { artifacts } = response;
+      const [activeArtifact, suggestionArtifact] = artifacts;
+
+      if (activeArtifact && activeArtifact.artifact_type !== "NONE") {
+        handleAddActiveArtifact(
+          activeArtifact.artifact_id,
+          activeArtifact.artifact_type,
+        );
+      }
+
+      if (
+        response.is_complete &&
+        suggestionArtifact &&
+        suggestionArtifact.artifact_type === "SUGGESTIONS"
+      ) {
+        setSuggestionArtifactId(suggestionArtifact.artifact_id);
       }
     } catch (error) {
       trackError(error, {

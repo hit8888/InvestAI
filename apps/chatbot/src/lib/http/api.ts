@@ -1,4 +1,5 @@
 import {
+  GetArtifactPayload,
   InitializationPayload,
   PostResponseFeedbackPayload,
   UpdateProspectPayload,
@@ -12,6 +13,16 @@ export const getConfig = (tenantName: string, agentId: string) =>
       "x-tenant-name": tenantName,
     },
   });
+
+export const getArtifact = (tenantName: string, payload: GetArtifactPayload) =>
+  apiClient.get(
+    `/tenant/chat/message/artifact/${payload.artifactId}?artifact_type=${payload.artifactType}`,
+    {
+      headers: {
+        "x-tenant-name": tenantName,//TODO: Set up headers inside interceptor
+      },
+    },
+  );
 
 export const initializeSession = (
   tenantName: string,

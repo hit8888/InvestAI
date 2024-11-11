@@ -1,29 +1,58 @@
+import { cn } from "@breakout/design-system/lib/cn";
 import { Message } from "@meaku/core/types/chat";
 import { useEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
 
 interface IProps {
   messages: Message[];
+  isInSplitScreenView?: boolean;
 }
 
 const ChatMessage = (props: IProps) => {
-  const { messages } = props;
+  const { messages, isInSplitScreenView = false } = props;
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   const handleScrollToBottom = () => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        chatContainerRef.current;
+      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 1;
+
+      if (isAtBottom) {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   useEffect(() => {
     handleScrollToBottom();
-  }, [messages.length]);
+  }, [messages]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleScrollToBottom();
+    }, 1000);
+  }, []);
 
   return (
-    <div className="flex-1 space-y-4 overflow-y-auto bg-white bg-opacity-60 p-2">
-      <div className="mx-auto h-full w-full sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]">
-        {messages.map((message) => (
-          <MessageItem key={message.id} message={message} />
+    <div
+      ref={chatContainerRef}
+      className="flex-1 space-y-4 overflow-y-auto p-2"
+    >
+      <div
+        className={cn("mx-auto h-full w-full", {
+          "sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]":
+            !isInSplitScreenView,
+        })}
+      >
+        {messages.map((message, idx) => (
+          <MessageItem
+            key={message.id}
+            message={message}
+            showMessageArtifact={idx === messages.length - 1}
+          />
         ))}
       </div>
 

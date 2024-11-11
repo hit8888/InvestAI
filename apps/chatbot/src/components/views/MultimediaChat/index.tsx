@@ -6,31 +6,40 @@ import useInitializeSessionData from "../../../hooks/query/useInitializeSessionD
 import useLocalStorageSession from "../../../hooks/useLocalStorageSession";
 import useWebSocketChat from "../../../hooks/useWebSocketChat";
 import UnifiedResponseManager from "../../../managers/UnifiedResponseManager";
+import { useArtifactStore } from "../../../stores/useArtifactStore";
 import { useChatStore } from "../../../stores/useChatStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
+import Artifact from "./Artifact";
+import BottomBar from "./BottomBar";
+import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
-import ChatHeader from "./ChatHeader";
-import BottomBar from "./BottomBar";
 
 type QueryParams = {
   showGlass?: boolean;
+  showDemo?: boolean;
 };
 
 const Multimedia = () => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get("showGlass") === "true",
-  };
+  };//Remove after UI is finalized
 
-  const [width, setWidth] = useState("80%");
+  const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
   const { data: config } = useConfigData();
   const { session, refetch: fetchSessionData } = useInitializeSessionData();
 
+  const { handleUpdateSessionData } = useLocalStorageSession();
+
+  const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
+
   const isChatOpen = useChatStore((state) => state.isChatOpen);
-  // const isChatOpen = true;
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
+  const isChatMaximized = useChatStore((state) => state.isChatMaximized);
+  const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
+
   const hasFirstUserMessageBeenSent = useChatStore(
     (state) => state.hasFirstUserMessageBeenSent,
   );
@@ -44,12 +53,11 @@ const Multimedia = () => {
   );
 
   const manager = useMemo(() => {
-    if (!session && !config) return;
+    if (!session && !config) return; //Create a provider which renders the children only if session or config is present
 
     return new UnifiedResponseManager(session ?? config);
   }, [config, session]);
 
-  const sessionId = manager?.getSessionId();
 
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
@@ -59,11 +67,16 @@ const Multimedia = () => {
 
   const handleCloseChat = () => {
     setIsChatOpen(false);
+    handleUpdateSessionData({ isChatOpen: false });
   };
 
   const handleOpenChat = () => {
     setIsChatOpen(true);
+    handleUpdateSessionData({ isChatOpen: true });
   };
+
+
+  const sessionId = manager?.getSessionId();
 
   const handleChatInputOnChangeCallback = () => {
     if (sessionId) return;
@@ -71,8 +84,12 @@ const Multimedia = () => {
     fetchSessionData();
   };
 
-  const handleToggleWidth = () => {
-    setWidth((width) => (width === "80%" ? "100%" : "80%"));
+  const handleExpandWidth = () => {
+    setIsWidthMaximized(true);
+  };
+
+  const handleFinishDemo = () => {
+    setIsChatMaximized(false);
   };
 
   useEffect(() => {
@@ -84,32 +101,73 @@ const Multimedia = () => {
     window.parent.postMessage(payload, "*");
   }, [showTooltip, isChatOpen]);
 
+  useEffect(() => {
+    if (isWidthMaximized) return;
+
+    if (activeArtifactId) {
+      handleExpandWidth();
+    }
+  }, [activeArtifactId, isWidthMaximized]);
+
   return (
     <div
-      className={cn("flex h-screen flex-col backdrop-blur-md", {
+      className={cn("flex h-screen flex-col font-inter backdrop-blur-md", {
         "bg-primary": showGlass,
       })}
     >
       <div
         className={cn(
-          "mx-auto flex flex-1 flex-col overflow-hidden rounded-md bg-opacity-80 backdrop-blur-lg transition-all duration-300 ease-in-out",
+          "mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 backdrop-blur-lg transition-all duration-300 ease-in-out",
           {
-            "border border-gray-300 bg-white bg-opacity-60 p-2":
-              isChatOpen,
+            "border border-gray-300 bg-white bg-opacity-60 p-2": isChatOpen,
             // TODO: Enable this when we remove the toggle width switch
-            "mx-auto max-w-full lg:max-w-[80%]": false,
+            // "mx-auto max-w-full lg:max-w-[80%]": false,
+            // "col-span-2 w-full": showDemo,
+            // "grid w-full grid-cols-3": showDemo,
+            "w-10/12": !isWidthMaximized,
+            "w-full": isWidthMaximized,
           },
         )}
-        style={{ width }}
       >
         {isChatOpen && (
-          <div className="flex flex-1 flex-col overflow-hidden rounded-md bg-white bg-opacity-20 backdrop-blur-lg">
+          <div
+            className={cn(
+              "flex flex-1 flex-col overflow-hidden rounded-lg bg-white bg-opacity-20 backdrop-blur-lg",
+            )}
+          >
             <ChatHeader
               handlePrimaryCta={handlePrimaryCta}
               handleCloseChat={handleCloseChat}
-              handleToggleWidth={handleToggleWidth}
+              handleFinishDemo={handleFinishDemo}
             />
-            <ChatMessage messages={messages} />
+            <div
+              className={cn("flex-1 overflow-y-auto bg-white bg-opacity-60", {
+                "grid grid-cols-3 gap-8": !!activeArtifactId,
+              })}
+            >
+              <div
+                className={cn({
+                  "col-span-2 pl-2": !!activeArtifactId,
+                  hidden: !activeArtifactId,
+                  "col-span-3": isChatMaximized,
+                })}
+              >
+                <Artifact />
+              </div>
+
+              <div
+                className={cn("flex-1 overflow-y-auto", {
+                  "col-span-3": !activeArtifactId,
+                  "col-span-1": !!activeArtifactId,
+                  "col-span-0 hidden": isChatMaximized,
+                })}
+              >
+                <ChatMessage
+                  messages={messages}
+                  isInSplitScreenView={!!activeArtifactId}
+                />
+              </div>
+            </div>
             <ChatInput
               handleOnChange={handleChatInputOnChangeCallback}
               handleSendMessage={handleSendUserMessage}

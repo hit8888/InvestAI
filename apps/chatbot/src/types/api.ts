@@ -1,3 +1,4 @@
+import { ArtifactEnum } from "@meaku/core/types/chat";
 import { z } from "zod";
 import { getCanvasFingerprint, getWebGLInfo } from "../utils/tracking";
 
@@ -56,4 +57,9 @@ export type UpdateProspectPayload = {
   name?: string;
   email?: string;
   external_id?: string;
+};
+
+export type GetArtifactPayload = {
+  artifactId: string;
+  artifactType: ArtifactEnum;
 };
