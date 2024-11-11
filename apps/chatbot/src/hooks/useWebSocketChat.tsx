@@ -162,6 +162,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
 
+      setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
