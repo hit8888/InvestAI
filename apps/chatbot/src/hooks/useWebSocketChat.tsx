@@ -58,7 +58,6 @@ const useWebSocketChat = () => {
   );
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
-  const [shouldConnect, setShouldConnect] = useState(false);
 
   const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
   const messageQueue = useRef<
@@ -94,51 +93,18 @@ const useWebSocketChat = () => {
         setRetryInterval(interval);
         return interval;
       },
-      filter: () => shouldConnect,
-
-      // heartbeat: {
-      //   message: "ping",
-      //   interval: HEARTBEAT_INTERVAL,
-      // },
+      filter: () => !!sessionId,
     },
-    shouldConnect,
+    !!sessionId,
   );
 
-  const initializeWebSocket = useCallback(async () => {
-    if (!sessionId) {
-      return; ///discuss with Sankha about this
-    }
-
-    setShouldConnect(true);
-  }, [sessionId]);
-
-  const processQueuedMessages = useCallback(() => {
-    if (
-      readyState === ReadyState.OPEN &&
-      messageQueue.current.length > 0 &&
-      sessionId
-    ) {
-      messageQueue.current.forEach(({ message, messageId }) => {
-        const payload = {
-          session_id: sessionId,
-          message,
-          response_id: messageId,
-        };
-
-        sendMessage(JSON.stringify(payload));
-      });
-
-      messageQueue.current = [];
-    }
-  }, [readyState, sessionId]);
 
   const handleSendUserMessage = useCallback(
     async (message: string) => {
-      if (!shouldConnect) {
-        await initializeWebSocket();
-      }
 
       if (!hasFirstUserMessageBeenSent) {
+        trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+
         setHasFirstUserMessageBeenSent(true);
       }
 
@@ -220,8 +186,6 @@ const useWebSocketChat = () => {
       isChatOpen,
       isAdmin,
       readyState,
-      shouldConnect,
-      initializeWebSocket,
     ],
   );
 
@@ -269,11 +233,7 @@ const useWebSocketChat = () => {
     }
   }, [lastMessage]);
 
-  useEffect(() => {
-    if (hasFirstUserMessageBeenSent) {
-      trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
-    }
-  }, [hasFirstUserMessageBeenSent]);
+
 
   useEffect(() => {
     if (
@@ -281,22 +241,39 @@ const useWebSocketChat = () => {
       messageQueue.current.length > 0 &&
       sessionId
     ) {
-      processQueuedMessages();
+      messageQueue.current.forEach(({ message, messageId }) => {
+        const payload = {
+          session_id: sessionId,
+          message,
+          response_id: messageId,
+        };
+
+        sendMessage(JSON.stringify(payload));
+      });
+
+      messageQueue.current = [];
     }
   }, [readyState, sendMessage, sessionId]);
 
+  // Cleanup function
+  const cleanupWebSocketConnection = () => {
+    if (processingMessageInterval.current) {
+      clearInterval(processingMessageInterval.current);
+      processingMessageInterval.current = null;
+    }
+
+    const websocket = getWebSocket();
+    if (websocket && websocket.readyState === WebSocket.OPEN) {
+      websocket.close();
+    }
+  };
+
+  // Cleanup effect
   useEffect(() => {
-    return () => {
-      if (processingMessageInterval.current) {
-        clearInterval(processingMessageInterval.current);
-      }
-      setShouldConnect(false);
-      const ws = getWebSocket();
-      if (ws) {
-        ws.close();
-      }
-    };
+    return cleanupWebSocketConnection;
   }, []);
+
+
 
   return { readyState, handleSendUserMessage, handlePrimaryCta };
 };
