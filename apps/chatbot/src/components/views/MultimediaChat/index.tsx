@@ -11,6 +11,7 @@ import BottomBar from './BottomBar';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 type QueryParams = {
   showGlass?: boolean;
@@ -37,12 +38,15 @@ const Multimedia = ({ handleChatInputOnChangeCallback }: IProps) => {
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
   const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
+  const suggestedQuestions = useUnifiedConfigurationResponseManager().getSuggestedQuestions({
+    isAdmin: false,
+    isReadOnly: false,
+  });
 
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
-  const suggestedQuestions = useMessageStore((state) => state.suggestedQuestions);
 
   const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();

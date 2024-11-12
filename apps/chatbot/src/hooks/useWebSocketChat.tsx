@@ -45,7 +45,6 @@ const useWebSocketChat = () => {
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
-  const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
 
   const handleAddActiveArtifact = useArtifactStore((state) => state.handleAddActiveArtifact);
@@ -115,7 +114,6 @@ const useWebSocketChat = () => {
       };
 
       setSuggestionArtifactId(null);
-      setSuggestedQuestions([]);
       handleAddUserMessage(message);
 
       //This mostly happens when the websocket connection is closed or has been idle for some time
@@ -152,7 +150,6 @@ const useWebSocketChat = () => {
       handleAddAIMessage(response);
 
       if (response.is_complete) {
-        setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
       }
 

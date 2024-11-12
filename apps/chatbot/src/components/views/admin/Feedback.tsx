@@ -23,10 +23,15 @@ const Feedback = () => {
   const { handleSendUserMessage } = useWebSocketChat();
 
   const { handleUpdateSessionData } = useLocalStorageSession();
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
-  const suggestedQuestions = useMessageStore((state) => state.suggestedQuestions);
+  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
+    isAdmin: true,
+    isReadOnly: true,
+  });
+
   const handleAddMessageFeedback = useMessageStore((state) => state.handleAddMessageFeedback);
   const handleRemoveMessageFeedback = useMessageStore((state) => state.handleRemoveMessageFeedback);
 

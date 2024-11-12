@@ -19,10 +19,13 @@ const Embed = ({ handleChatInputOnChangeCallback }: IProps) => {
   const disclaimerText = configuration?.body.disclaimer_message ?? '';
   const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
   const showCta = configuration?.body.show_cta ?? false;
+  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
+    isAdmin: false,
+    isReadOnly: false,
+  });
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
-  const suggestedQuestions = useMessageStore((state) => state.suggestedQuestions);
 
   const { handleSendUserMessage } = useWebSocketChat();
 
