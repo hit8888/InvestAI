@@ -5,7 +5,7 @@ import {
   SlideImageArtifactType,
   VideoArtifactType,
 } from "@meaku/core/types/chat";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import useArtifactData from "../../../hooks/query/useArtifactData";
 import ArtifactManager from "../../../managers/ArtifactManager";
 import { useArtifactStore } from "../../../stores/useArtifactStore";
@@ -133,4 +133,4 @@ const Artifact = () => {
   );
 };
 
-export default Artifact;
+export default memo(Artifact);
