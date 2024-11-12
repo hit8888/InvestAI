@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect } from 'react';
+import { FC, ReactElement } from 'react';
 import { IAllApiResponsesWithQuery } from '../ApiProvider/types';
 import { Loader } from 'lucide-react';
 import { AxiosError } from 'axios';
@@ -40,18 +40,11 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     queryOptions: { enabled: !isInternalAdminRoute && !!agentId && !!sessionData.sessionId },
   });
 
-  //TODO: When ignoreUpdatingLocalStorage is not set: isInternalAdminRoute
-  useEffect(() => {
-    //sessionId from api changes, update localstorage
-    //for chat screen only, not for admin screens, handle header if the message sent by user is greater than 0 (In case user revists the page) or user sensd the message for the first time:  hasFirstMessageSent
-  }, []);
-
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
 
-  //Handle localstorage using session data
   if (firstQueryWithError?.error) {
     if (firstQueryWithError.isFetching) {
-      return <Loader />; //Fix styling
+      return <Loader />;
     }
 
     const internalAPIError = firstQueryWithError.error as AxiosError<Error>;

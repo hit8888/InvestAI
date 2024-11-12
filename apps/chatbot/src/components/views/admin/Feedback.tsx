@@ -59,11 +59,11 @@ const Feedback = () => {
   });
 
   const manager = useUnifiedConfigurationResponseManager();
-  const orgName = manager?.getOrgName() ?? '';
-  const sessionId = manager?.getSessionId() ?? '';
-  const configuration = manager?.getConfig();
+  const orgName = manager.getOrgName() ?? '';
+  const sessionId = manager.getSessionId() ?? '';
+  const configuration = manager.getConfig();
   const disclaimerText = configuration?.body.disclaimer_message ?? '';
-  const agentName = manager?.getAgentName() ?? '';
+  const agentName = manager.getAgentName() ?? '';
 
   const activeResponse = messages.find((message) => message.id == activeResponseId);
   const isActiveResponseFeedbackNegative = activeResponse?.feedback?.positive_feedback === false;

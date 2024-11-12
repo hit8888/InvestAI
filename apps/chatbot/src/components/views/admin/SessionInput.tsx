@@ -12,8 +12,6 @@ const SessionInput = () => {
   const [sessionHash, setSessionHash] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const setIsAuthenticated = useAdminStore((state) => state.setIsAuthenticated);
-
   const setSessionId = useAdminStore((state) => state.setSessionId);
   const setProspectId = useAdminStore((state) => state.setProspectId);
 
@@ -41,8 +39,6 @@ const SessionInput = () => {
 
       setSessionId(sessionId);
       setProspectId(prospectId);
-
-      setIsAuthenticated(true);
     } catch {
       toast.error('Invalid session hash. Please try again.');
     }

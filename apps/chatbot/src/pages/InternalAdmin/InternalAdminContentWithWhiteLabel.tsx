@@ -8,15 +8,15 @@ const SessionInput = lazy(() => import('../../components/views/admin/SessionInpu
 const SessionPlayback = lazy(() => import('../../components/views/admin/SessionPlayback'));
 
 const InternalAdmin = () => {
-  const isAuthenticated = useAdminStore((state) => state.isAuthenticated);
+  const sessionId = useAdminStore((state) => state.sessionId);
 
   const Component = useMemo(() => {
-    if (isAuthenticated) {
+    if (sessionId) {
       return SessionPlayback;
     }
 
     return SessionInput;
-  }, [isAuthenticated]);
+  }, [sessionId]);
 
   return (
     <div className="h-screen">
