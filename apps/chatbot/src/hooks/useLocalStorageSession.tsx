@@ -14,13 +14,15 @@ type Session = {
 const useLocalStorageSession = () => {
   const { orgName = '', agentId = '' } = useParams<ChatParams>();
 
-  const [localStorageData, setSession] = useLocalStorageState<Session>(`${orgName?.toLowerCase()}-${agentId}`);
+  const [localStorageSessionData, setLocalStorageSessionData] = useLocalStorageState<Session>(
+    `${orgName?.toLowerCase()}-${agentId}`,
+  );
 
   const sessionData: Session = {
-    sessionId: localStorageData?.sessionId,
-    prospectId: localStorageData?.prospectId,
-    showTooltip: localStorageData?.showTooltip ?? true,
-    isChatOpen: localStorageData?.isChatOpen ?? true,
+    sessionId: localStorageSessionData?.sessionId,
+    prospectId: localStorageSessionData?.prospectId,
+    showTooltip: localStorageSessionData?.showTooltip ?? true,
+    isChatOpen: localStorageSessionData?.isChatOpen ?? true,
   };
 
   const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {
@@ -31,7 +33,7 @@ const useLocalStorageSession = () => {
         isChatOpen: newSessionData.isChatOpen ?? sessionData.isChatOpen ?? true,
       };
 
-      setSession(updatedSessionData);
+      setLocalStorageSessionData(updatedSessionData);
     } catch (error) {
       trackError(error, {
         action: 'handleUpdateSessionData',
