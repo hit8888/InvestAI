@@ -2,6 +2,7 @@ import { Configuration, Session } from "@meaku/core/types/session";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import { ChatBoxArtifactType } from "@meaku/core/types/chat";
 
 interface State {
   isChatOpen: boolean;
@@ -27,6 +28,15 @@ interface State {
   setSuggestionArtifactId: (suggestionArtifactId: string | null) => void;
   suggestedQuestions: string[];
   setSuggestedQuestions: (suggestedQuestions: string[]) => void;
+  activeChatArtifactId: string | null;
+  setActiveChatArtifactId: (activeChatArtifactId: string | null) => void;
+  activeChatArtifactType: ChatBoxArtifactType | null;
+  setActiveChatArtifactType: (artifactType: ChatBoxArtifactType | null) => void;
+  handleAddActiveChatArtifact: (
+    artifactId: string | null,
+    artifactType: ChatBoxArtifactType,
+  ) => void;
+  handleRemoveActiveChatArtifact: () => void;
 }
 
 export const useChatStore = create<State>()(
@@ -88,6 +98,28 @@ export const useChatStore = create<State>()(
         set((draft) => {
           draft.suggestedQuestions = suggestedQuestions;
         }),
+      activeChatArtifactId: null,
+      setActiveChatArtifactId: (activeChatArtifactId: string | null) =>
+        set((draft) => {
+          draft.activeChatArtifactId = activeChatArtifactId;
+        }),
+      activeChatArtifactType: null,
+      setActiveChatArtifactType: (artifactType) =>
+        set((draft) => {
+          draft.activeChatArtifactType = artifactType;
+        }),
+      handleAddActiveChatArtifact: (artifactId, artifactType) => {
+        set((state) => {
+          state.activeChatArtifactId = artifactId;
+          state.activeChatArtifactType = artifactType;
+        });
+      },
+      handleRemoveActiveChatArtifact: () => {
+        set((state) => {
+          state.activeChatArtifactId = null;
+          state.activeChatArtifactType = null;
+        });
+      },
     })),
   ),
 );

@@ -7,6 +7,20 @@ export const ArtifactEnumSchema = z.enum([
   "SLIDE_IMAGE",
   "NONE",
   "SUGGESTIONS",
+  "FORM"
+]);
+
+export const SplitScreenArtifactEnumSchema = z.enum([
+  ArtifactEnumSchema.Enum.DEMO,
+  ArtifactEnumSchema.Enum.VIDEO,
+  ArtifactEnumSchema.Enum.SLIDE,
+  ArtifactEnumSchema.Enum.SLIDE_IMAGE,
+  ArtifactEnumSchema.Enum.NONE,
+]);
+
+export const ChatBoxArtifactEnumSchema = z.enum([
+  ArtifactEnumSchema.Enum.FORM,
+  ArtifactEnumSchema.Enum.SUGGESTIONS,
 ]);
 
 export const SlideItemSchema = z.object({
