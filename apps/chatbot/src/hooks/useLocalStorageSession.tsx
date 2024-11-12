@@ -2,6 +2,7 @@ import { useLocalStorageState } from 'ahooks';
 import { useParams } from 'react-router-dom';
 import { ChatParams } from '@meaku/core/types/msc';
 import { trackError } from '../utils/error';
+import { useCallback } from 'react';
 
 type Session = {
   sessionId?: string;
@@ -22,7 +23,7 @@ const useLocalStorageSession = () => {
     isChatOpen: localStorageData?.isChatOpen ?? true,
   };
 
-  const handleUpdateSessionData = async (newSessionData: Partial<Session>) => {
+  const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {
     try {
       const updatedSessionData = {
         ...sessionData,
@@ -38,7 +39,7 @@ const useLocalStorageSession = () => {
         sessionId: sessionData?.sessionId,
       });
     }
-  };
+  }, []);
 
   return {
     sessionData,

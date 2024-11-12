@@ -11,6 +11,7 @@ import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSess
 import useIsAdmin from '../../../hooks/useIsAdmin';
 import { getBrowserSignature } from '../../../utils/tracking';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
+import { useInitializeRequestHeaderfromUrl } from '../../../useInitializeRequestHeaderfromUrl';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -19,11 +20,15 @@ interface Props {
 const PreloadContainer: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<ChatParams>();
   const { sessionData } = useLocalStorageSession();
+
+  useInitializeRequestHeaderfromUrl();
+  const isRequestHeaderSet = !!localStorage.getItem('x-tenant-name');
+
   const { isAdmin, isReadOnly: isInternalAdminRoute } = useIsAdmin();
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: isInternalAdminRoute || !sessionData?.sessionId },
+    queryOptions: { enabled: isRequestHeaderSet && (isInternalAdminRoute || !sessionData?.sessionId) },
     //for ReadOnly routes session Id is ignored and config is fetched directly
   });
 
@@ -37,7 +42,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: !isInternalAdminRoute && !!agentId && !!sessionData.sessionId },
+    queryOptions: { enabled: isRequestHeaderSet && !isInternalAdminRoute && !!agentId && !!sessionData.sessionId },
   });
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);

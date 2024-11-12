@@ -9,13 +9,13 @@ const useSetLocalStorageUsingConfigSessionData = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { handleUpdateSessionData } = useLocalStorageSession();
 
+  const sessionId = unifiedConfigurationResponseManager.getSessionId();
+  const prospectId = unifiedConfigurationResponseManager.getProspectId();
+
   useEffect(() => {
     if (isInternalAdminRoute) {
       return;
     }
-
-    const sessionId = unifiedConfigurationResponseManager.getSessionId();
-    const prospectId = unifiedConfigurationResponseManager.getProspectId();
 
     if (sessionId) {
       handleUpdateSessionData({
@@ -28,7 +28,7 @@ const useSetLocalStorageUsingConfigSessionData = () => {
         prospectId,
       });
     }
-  }, [handleUpdateSessionData, isInternalAdminRoute, unifiedConfigurationResponseManager]);
+  }, [handleUpdateSessionData, isInternalAdminRoute, prospectId, sessionId]);
 };
 
 export { useSetLocalStorageUsingConfigSessionData };
