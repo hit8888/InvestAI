@@ -13,29 +13,36 @@ const SlideItems = (props: IProps) => {
   const itemsLength = items.length;
 
   return (
-    <>
+    <div className="flex h-full items-center justify-center">
       <div
-        className={cn("mt-auto grid gap-3", {
-          "grid-cols-4": itemsLength >= 4,
-          "grid-cols-1": itemsLength === 1,
-          // [Math.random() > 0.5 ? "grid-cols-2" : "grid-cols-4"]:
-          // itemsLength === 2,
-          "grid-cols-2": itemsLength === 2,
-          "grid-cols-3": itemsLength === 3,
+        className={cn("grid w-full grid-cols-6", {
+          "gap-7": itemsLength <= 4,
+          "gap-5": itemsLength > 4,
         })}
       >
-        {items.map((item) => (
-          <SlideItem
-            title={item.title}
-            description={item.description}
-            icon={item.icon as keyof typeof dynamicIconImports}
+        {items.map((item, idx) => (
+          <div
+            className={cn("col-span-3", {
+              "col-start-4": idx === 0,
+              "col-start-2 row-start-2": idx === 1 && itemsLength <= 3,
+              "col-start-1 row-start-1": idx === 2,
+              "col-start-4 row-start-3": idx === 3,
+              "translate-y-1/2 transform":
+                (idx === 1 || idx === 2) && itemsLength > 3,
+              "translate-x-[18.5%] transform": idx === 1 && itemsLength === 3,
+            })}
             key={item.title}
-          />
+          >
+            <SlideItem
+              title={item.title}
+              icon={item.icon as keyof typeof dynamicIconImports}
+            />
+          </div>
         ))}
       </div>
       {/* DO NOT REMOVE THIS SPAN, THIS IS THERE SO THAT THE TAILWIND CLASSES ARE PRESENT FOR US TO USE THEM DYNAMICALLY */}
       <span className="hidden grid-cols-2 grid-cols-3 grid-cols-3 grid-cols-4"></span>
-    </>
+    </div>
   );
 };
 
