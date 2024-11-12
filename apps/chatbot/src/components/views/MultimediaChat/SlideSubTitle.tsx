@@ -7,7 +7,7 @@ const SlideSubTitle = ({ text }: IProps) => {
     <div className="col-span-2 flex h-full items-center">
       <div className="flex gap-8">
         <div className="w-2 rounded-lg bg-secondary" />
-        <h2 className="max-w-[18ch] border-secondary text-3xl font-bold leading-relaxed text-primary">
+        <h2 className="max-w-[18ch] border-secondary text-2xl font-bold leading-relaxed text-primary 2xl:max-w-[25ch] 2xl:text-3xl 2xl:leading-relaxed">
           {text}
         </h2>
       </div>
