@@ -31,7 +31,7 @@ const Chat = () => {
 
   useWebSocketChat();
 
-  useUpdateSessionOnMount();
+  useUpdateSessionOnMount(); //Understand once more with Sankha
 
   useSetLocalStorageUsingConfigSessionData();
 

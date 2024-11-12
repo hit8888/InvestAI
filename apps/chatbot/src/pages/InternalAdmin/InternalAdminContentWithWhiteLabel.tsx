@@ -8,7 +8,7 @@ const SessionInput = lazy(() => import('../../components/views/admin/SessionInpu
 const SessionPlayback = lazy(() => import('../../components/views/admin/SessionPlayback'));
 
 const InternalAdmin = () => {
-  const sessionId = useAdminStore((state) => state.sessionId);
+  const sessionId = useAdminStore((state) => state.sessionId); //Should this also be part of localStorage
 
   const Component = useMemo(() => {
     if (sessionId) {
