@@ -1,5 +1,5 @@
 // withWhiteLabelConfig.tsx
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { handleColorConfig } from '../utils/common';
 import useUnifiedConfigurationResponseManager from './shared/hooks/useUnifiedConfigurationResponseManager';
 
@@ -8,11 +8,8 @@ export const withWhiteLabelConfig = (WrappedComponent: React.ComponentType) => {
     const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
     const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
 
-    const applyConfig = useCallback(() => {
-      if (styleConfig) {
-        handleColorConfig(styleConfig);
-        applyConfig();
-      }
+    useEffect(() => {
+      handleColorConfig(styleConfig);
     }, [styleConfig]);
 
     return <WrappedComponent />;
