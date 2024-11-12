@@ -7,7 +7,6 @@ import { useUpdateSessionOnMount } from '../shared/hooks/useUpdateSessionOnMount
 import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedConfigurationResponseManager';
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '../shared/ApiProvider/Context';
-import { useSetLocalStorageUsingConfigSessionData } from '../shared/hooks/useSetLocalStorageUsingConfigSessionData';
 
 const Widget = lazy(() => import('../../components/views/Widget'));
 const Embed = lazy(() => import('../../components/views/Embed'));
@@ -32,8 +31,6 @@ const Chat = () => {
   useWebSocketChat();
 
   useUpdateSessionOnMount(); //Understand once more with Sankha
-
-  useSetLocalStorageUsingConfigSessionData();
 
   const chatConfig = (searchParams.get('config')?.toLowerCase() as ChatConfig) || ChatConfig.EMBED;
 

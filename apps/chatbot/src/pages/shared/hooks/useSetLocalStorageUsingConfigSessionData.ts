@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import useIsAdmin from '../../../hooks/useIsAdmin';
-import useUnifiedConfigurationResponseManager from './useUnifiedConfigurationResponseManager';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
+import UnifiedSessionConfigResponseManager, {
+  SessionConfigResponseType,
+} from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 
-const useSetLocalStorageUsingConfigSessionData = () => {
+const useSetLocalStorageUsingConfigSessionData = (unifiedConfigurationResponse: SessionConfigResponseType) => {
   const { isReadOnly: isInternalAdminRoute } = useIsAdmin();
 
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+  const unifiedConfigurationResponseManager = new UnifiedSessionConfigResponseManager(unifiedConfigurationResponse);
   const { handleUpdateSessionData } = useLocalStorageSession();
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
