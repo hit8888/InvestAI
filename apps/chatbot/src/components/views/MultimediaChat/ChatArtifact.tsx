@@ -38,8 +38,6 @@ const ChatArtifact = () => {
   const artifactType = manager?.getArtifactType();
   const artifactContent = manager?.getArtifactContent();
 
-  console.log({ artifactType: artifactType });
-
   const renderArtifact = () => {
     switch (artifactType) {
       case "SUGGESTIONS":
