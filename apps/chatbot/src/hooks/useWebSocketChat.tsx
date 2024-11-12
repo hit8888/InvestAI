@@ -82,7 +82,7 @@ const useWebSocketChat = () => {
     let messageIndex = 0;
     const response_id = nanoid();
 
-    //This is putting app in different loading state after 5sec
+    //This is putting app in different loading state after every 5sec
     processingMessageInterval.current = setInterval(() => {
       if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
         clearInterval(processingMessageInterval.current as NodeJS.Timeout);
