@@ -26,9 +26,9 @@ const SlideItems = (props: IProps) => {
               "col-start-4": idx === 0,
               "col-start-2 row-start-2": idx === 1 && itemsLength <= 3,
               "col-start-1 row-start-1": idx === 2,
-              "col-start-4 row-start-3": idx === 3,
+              "col-start-4 row-start-3": idx === 3 && itemsLength > 4,
               "translate-y-1/2 transform":
-                (idx === 1 || idx === 2) && itemsLength > 3,
+                (idx === 1 || idx === 2) && itemsLength > 4,
               "translate-x-[18.5%] transform": idx === 1 && itemsLength === 3,
             })}
             key={item.title}
