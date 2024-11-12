@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { ENV } from "../../../../apps/chatbot/src/config/env";
+import { ENV } from "../../../../apps/chatbot/src/config/env"; //TODO: Move the env file to the core package in next PR
 
 const apiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
