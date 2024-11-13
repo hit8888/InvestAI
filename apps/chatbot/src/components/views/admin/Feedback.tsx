@@ -27,9 +27,9 @@ const Feedback = () => {
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
-  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
-    isAdmin: true,
-    isReadOnly: true,
+  const initialSuggestedQuestions = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
+    isAdmin: false,
+    isReadOnly: false,
   });
 
   const handleAddMessageFeedback = useMessageStore((state) => state.handleAddMessageFeedback);
@@ -179,7 +179,7 @@ const Feedback = () => {
       <ChatMessage
         agentName={agentName}
         messages={messages}
-        suggestedQuestions={suggestedQuestions}
+        suggestedQuestions={initialSuggestedQuestions}
         activeResponseId={activeResponseId}
         handleSuggestedQuestionOnClick={handleSendUserMessage}
         handleShareInitialFeedback={handleShareInitialFeedback}

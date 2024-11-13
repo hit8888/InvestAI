@@ -30,7 +30,7 @@ class UnifiedSessionConfigResponseManager {
   }
 
   private isSession(
-    response: SessionConfigResponseType,
+    response: SessionConfigResponseType
   ): response is SessionApiResponse {
     return "session_id" in response;
   }
@@ -40,7 +40,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedSession.success) {
       throw new Error(
-        validatedSession.error.errors.map((error) => error.message).join(", "),
+        validatedSession.error.errors.map((error) => error.message).join(", ")
       );
     }
 
@@ -55,7 +55,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedConfig.success) {
       throw new Error(
-        validatedConfig.error.errors.map((error) => error.message).join(", "),
+        validatedConfig.error.errors.map((error) => error.message).join(", ")
       );
     }
 
@@ -108,7 +108,7 @@ class UnifiedSessionConfigResponseManager {
       const messageFeedback = feedbacks.find(
         (feedback) =>
           feedback.response_id === message.response_id ||
-          feedback.response_id === message.message_id.toString(),
+          feedback.response_id === message.message_id.toString()
       );
 
       return {
@@ -134,7 +134,7 @@ class UnifiedSessionConfigResponseManager {
     return this.config.body.default_error_message;
   }
 
-  getSuggestedQuestions({
+  getInitialSuggestedQuestions({
     isAdmin,
     isReadOnly,
   }: {

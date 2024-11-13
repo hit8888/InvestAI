@@ -19,7 +19,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const disclaimerText = configuration?.body.disclaimer_message ?? '';
   const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
   const showCta = configuration?.body.show_cta ?? false;
-  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
+  const initialSuggestedQuestions = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
     isAdmin: false,
     isReadOnly: false,
   });
@@ -40,7 +40,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       <ChatMessage
         agentName={agentName}
         messages={messages}
-        suggestedQuestions={suggestedQuestions}
+        suggestedQuestions={initialSuggestedQuestions}
         handleSuggestedQuestionOnClick={handleSendUserMessage}
       />
       <ChatInput

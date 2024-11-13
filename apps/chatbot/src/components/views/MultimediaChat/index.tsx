@@ -38,7 +38,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
   const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
-  const suggestedQuestions = useUnifiedConfigurationResponseManager().getSuggestedQuestions({
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
     isAdmin: false,
     isReadOnly: false,
   });
@@ -154,7 +154,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       </div>
       <BottomBar
         isChatOpen={isChatOpen}
-        suggestedQuestions={suggestedQuestions}
+        suggestedQuestions={initialSuggestedQuestions}
         hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
         handleSendUserMessage={handleSendUserMessage}
         handleOpenChat={handleOpenChat}

@@ -24,7 +24,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
   const messages = unifiedConfigurationResponseManager.getFormattedChatHistory({ isAdmin: false, isReadOnly: false });
-  const suggestedQuestions = unifiedConfigurationResponseManager.getSuggestedQuestions({
+  const initialSuggestedQuestions = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
     isAdmin: false,
     isReadOnly: false,
   });
@@ -99,7 +99,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       <TriggerButton
         isChatOpen={isChatOpen}
         showTooltip={showTooltip}
-        suggestedQuestions={suggestedQuestions}
+        suggestedQuestions={initialSuggestedQuestions}
         handleToggleChatOpenState={handleToggleChatOpenState}
         handleCloseTooltip={handleCloseTooltip}
         handleSuggestionsOnClick={handleSendUserMessage}
