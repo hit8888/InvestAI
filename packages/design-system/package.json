@@ -13,7 +13,8 @@
     "./card": "./src/card.tsx",
     "./components/*": "./src/components/*.tsx",
     "./components/**/*": "./src/components/**/*.tsx",
-    "./lib/*": "./src/lib/*.ts"
+    "./lib/*": "./src/lib/*.ts",
+    "./hooks/*": "./src/hooks/*.tsx"
   },
   "license": "MIT",
   "scripts": {

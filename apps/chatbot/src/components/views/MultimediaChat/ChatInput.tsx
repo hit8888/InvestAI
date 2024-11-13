@@ -1,8 +1,8 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
+import useAutoResizeTextArea from '@breakout/design-system/hooks/useAutoResizeTextArea';
 import { useState } from 'react';
-import useAutoResizeTextArea from '../../../../../../packages/design-system/src/hooks/useAutoResizeTextArea';
 
 interface IProps {
   handleOnChange: () => void;
@@ -13,9 +13,7 @@ interface IProps {
 const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
-const ChatInput = (props: IProps) => {
-  const { handleOnChange, handleSendMessage, isAMessageBeingProcessed } = props;
-
+const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const textAreaRef = useAutoResizeTextArea({
     textAreaValue: inputValue,
@@ -27,10 +25,7 @@ const ChatInput = (props: IProps) => {
 
   const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-
-    if (typeof handleOnChange === 'function') {
-      handleOnChange();
-    }
+    handleOnChange();
   };
 
   const handleSubmission = () => {

@@ -4,10 +4,13 @@ import { SuggestionArtifactType } from '@meaku/core/types/chat';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 
 const ChatArtifact = () => {
   const activeChatArtifactId = useChatStore((state) => state.activeChatArtifactId);
   const activeChatArtifactType = useChatStore((state) => state.activeChatArtifactType);
+
+  const { handleSendUserMessage } = useWebSocketChat();
 
   const {
     data: artifactData,
@@ -37,7 +40,12 @@ const ChatArtifact = () => {
   const renderArtifact = () => {
     switch (artifactType) {
       case 'SUGGESTIONS':
-        return <SuggestionsArtifact artifact={artifactContent as SuggestionArtifactType} />;
+        return (
+          <SuggestionsArtifact
+            artifact={artifactContent as SuggestionArtifactType}
+            handleSendUserMessage={handleSendUserMessage}
+          />
+        );
       default:
         return <></>;
     }

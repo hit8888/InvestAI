@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 type Props = {
   textAreaValue: string;
@@ -7,25 +7,17 @@ type Props = {
 };
 
 const useAutoResizeTextArea = (props: Props) => {
-  const {
-    textAreaValue: value,
-    initialHeight: INITIAL_INPUT_HEIGHT,
-    maxHeight: MAX_INPUT_HEIGHT,
-  } = props;
+  const { textAreaValue: value, initialHeight: INITIAL_INPUT_HEIGHT, maxHeight: MAX_INPUT_HEIGHT } = props;
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = `${INITIAL_INPUT_HEIGHT}px`;
-      const padding =
-        textAreaRef.current.offsetHeight - textAreaRef.current.clientHeight;
+      const padding = textAreaRef.current.offsetHeight - textAreaRef.current.clientHeight;
 
       const scrollHeight = textAreaRef.current.scrollHeight;
-      const newHeight = Math.min(
-        Math.max(scrollHeight - padding, INITIAL_INPUT_HEIGHT),
-        MAX_INPUT_HEIGHT,
-      );
+      const newHeight = Math.min(Math.max(scrollHeight - padding, INITIAL_INPUT_HEIGHT), MAX_INPUT_HEIGHT);
 
       textAreaRef.current.style.height = `${newHeight}px`;
     }
