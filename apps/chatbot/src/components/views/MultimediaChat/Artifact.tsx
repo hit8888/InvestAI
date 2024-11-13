@@ -2,24 +2,23 @@ import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ra
 import { DemoArtifactType, SlideArtifactType, SlideImageArtifactType, VideoArtifactType } from '@meaku/core/types/chat';
 import { useMemo } from 'react';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
-import { useArtifactStore } from '../../../stores/useArtifactStore';
 import DemoArtifact from './DemoArtifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifcatResponse';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 
 const Artifact = () => {
-  const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
-  const activeArtifactType = useArtifactStore((state) => state.activeArtifactType);
-
+  const { artifact } = useLocalStorageArtifact();
+  const { activeArtifactId, activeArtifactType } = artifact ?? {};
   const {
     data: artifactData,
     isFetching,
     isError,
   } = useArtifactDataQuery({
-    artifactId: activeArtifactId,
-    artifactType: activeArtifactType,
+    artifactId: activeArtifactId ?? '',
+    artifactType: activeArtifactType ?? null,
     queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;

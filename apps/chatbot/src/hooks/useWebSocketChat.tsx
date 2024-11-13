@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '../config/env';
-import { useArtifactStore } from '../stores/useArtifactStore';
 import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
@@ -15,6 +14,7 @@ import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { ChatParams } from '@meaku/core/types/config';
 import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
+import useLocalStorageArtifact from './useLocalStorageArtifact';
 
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
@@ -28,6 +28,7 @@ const useWebSocketChat = () => {
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
+  const artifact = useLocalStorageArtifact();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -40,9 +41,6 @@ const useWebSocketChat = () => {
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
-
-  // TODO: Rename to Split Screen Artifact
-  const handleAddActiveArtifact = useArtifactStore((state) => state.handleAddActiveArtifact);
 
   const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
 
@@ -168,7 +166,12 @@ const useWebSocketChat = () => {
       );
 
       if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
-        handleAddActiveArtifact(activeArtifact.artifact_id, activeArtifact.artifact_type);
+        if (artifact.handleUpdateArtifact) {
+          artifact.handleUpdateArtifact({
+            activeArtifactId: activeArtifact.artifact_id,
+            activeArtifactType: activeArtifact.artifact_type,
+          });
+        }
       }
 
       if (chatBoxArtifact) {

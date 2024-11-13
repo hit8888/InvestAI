@@ -2,7 +2,6 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { memo, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
-import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useChatStore } from '../../../stores/useChatStore';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import Artifact from './Artifact';
@@ -11,6 +10,7 @@ import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 
 type QueryParams = {
   showGlass?: boolean;
@@ -23,6 +23,8 @@ interface IProps {
 }
 
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
+  const { artifact } = useLocalStorageArtifact();
+  const { activeArtifactId } = artifact ?? {};
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get('showGlass') === 'true',
@@ -31,8 +33,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
   const { handleUpdateSessionData } = useLocalStorageSession();
-
-  const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
