@@ -14,6 +14,7 @@ const Multimedia = lazy(() => import('../../components/views/MultimediaChat'));
 
 interface IProps {
   fetchSessionData: () => void;
+  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
 const componentsMap: Record<ChatConfig, React.ComponentType<IProps>> = {
@@ -28,7 +29,7 @@ const Chat = () => {
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
 
-  useWebSocketChat();
+  const { handleSendUserMessage } = useWebSocketChat();
 
   useUpdateSessionOnMount(); //Understand once more with Sankha
 
@@ -43,7 +44,7 @@ const Chat = () => {
 
   return (
     <Suspense fallback={<></>}>
-      <Component fetchSessionData={handleOnFirstMessageSend} />
+      <Component fetchSessionData={handleOnFirstMessageSend} handleSendUserMessage={handleSendUserMessage} />
     </Suspense>
   );
 };

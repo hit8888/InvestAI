@@ -3,15 +3,15 @@ import ChatHeader from '@breakout/design-system/components/layout/chat-header';
 import ChatInput from '@breakout/design-system/components/layout/chat-input';
 import ChatMessage from '@breakout/design-system/components/layout/chat-message';
 import { memo } from 'react';
-import useWebSocketChat from '../../hooks/useWebSocketChat';
 import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
   fetchSessionData: () => void;
+  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Embed = ({ fetchSessionData }: IProps) => {
+const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
   const orgName = unifiedConfigurationResponseManager.getOrgName();
@@ -26,8 +26,6 @@ const Embed = ({ fetchSessionData }: IProps) => {
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
-
-  const { handleSendUserMessage } = useWebSocketChat();
 
   return (
     <div className="flex h-screen flex-col">

@@ -2,7 +2,6 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { memo, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
-import useWebSocketChat from '../../../hooks/useWebSocketChat';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useChatStore } from '../../../stores/useChatStore';
 import { useMessageStore } from '../../../stores/useMessageStore';
@@ -20,9 +19,10 @@ type QueryParams = {
 
 interface IProps {
   fetchSessionData: () => void;
+  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Multimedia = ({ fetchSessionData }: IProps) => {
+const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get('showGlass') === 'true',
@@ -48,7 +48,6 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
 
-  const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
 
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;

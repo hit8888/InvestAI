@@ -1,16 +1,17 @@
 import { SuggestionArtifactType } from '@meaku/core/types/chat';
 import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
-import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import { useChatStore } from '../../../stores/useChatStore.ts';
 
 interface IProps {
   artifact: SuggestionArtifactType;
+  handleSendUserMessage: (msg: string) => void;
 }
 
-const SuggestionsArtifact = ({ artifact: { suggested_questions, suggested_questions_type } }: IProps) => {
+const SuggestionsArtifact = ({
+  artifact: { suggested_questions, suggested_questions_type },
+  handleSendUserMessage,
+}: IProps) => {
   const showSuggestionsArtifact: boolean = suggested_questions.length > 0 && suggested_questions_type === 'BUBBLE';
-
-  const { handleSendUserMessage } = useWebSocketChat();
 
   const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
 

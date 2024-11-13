@@ -6,16 +6,16 @@ import TriggerButton from '@breakout/design-system/components/layout/trigger-but
 import { cn } from '@breakout/design-system/lib/cn';
 import { memo, useEffect } from 'react';
 import useLocalStorageSession from '../../hooks/useLocalStorageSession';
-import useWebSocketChat from '../../hooks/useWebSocketChat';
 import { useChatStore } from '../../stores/useChatStore';
 import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
   fetchSessionData: () => void;
+  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Widget = ({ fetchSessionData }: IProps) => {
+const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -34,7 +34,6 @@ const Widget = ({ fetchSessionData }: IProps) => {
   const showCta = configuration.body.show_cta ?? false;
   const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
 
-  const { handleSendUserMessage } = useWebSocketChat();
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
