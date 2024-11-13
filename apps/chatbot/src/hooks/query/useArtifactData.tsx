@@ -14,6 +14,7 @@ interface IProps {
 }
 
 const MAX_RETRIES = 6;
+const artifactTypesNotToCache = ["NONE", "SUGGESTIONS"];
 
 const useArtifactData = (props: IProps) => {
   const { artifactId = "", artifactType } = props;
@@ -37,8 +38,6 @@ const useArtifactData = (props: IProps) => {
 
       const data = response.data as Artifact;
 
-      const artifactTypesNotToCache = ["NONE", "SUGGESTIONS"];
-
       if (
         data.artifact_id &&
         !artifactTypesNotToCache.includes(data.artifact_type)
@@ -52,7 +51,11 @@ const useArtifactData = (props: IProps) => {
       return data;
     },
     retry: (failureCount, error) => {
-      if (failureCount >= MAX_RETRIES) {
+      artifactType;
+      if (
+        failureCount >= MAX_RETRIES &&
+        !artifactTypesNotToCache.includes(artifactType as string)
+      ) {
         handleRemoveActiveArtifact();
         return false;
       }
