@@ -2,26 +2,24 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import { AIResponse, ChatBoxArtifactType, SplitScreenArtifactType } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '../config/env';
 import { useArtifactStore } from '../stores/useArtifactStore';
 import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
-import { getProcessingMessageSequence } from '../utils/common';
 import { trackError } from '../utils/error';
 import useIsAdmin from './useIsAdmin';
 import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { ChatParams } from '@meaku/core/types/config';
+import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
 
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
-// const HEARTBEAT_INTERVAL = 10000;
-const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
@@ -29,6 +27,7 @@ const useWebSocketChat = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
   const { trackEvent } = useAnalytics();
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -49,14 +48,7 @@ const useWebSocketChat = () => {
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
-  const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
-
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
-  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
-
-  const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
-    return getProcessingMessageSequence(agentName);
-  }, [agentName]);
 
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
 
@@ -76,80 +68,76 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
 
-  const handleSendUserMessage = useCallback(async (message: string) => {
-    if (!hasFirstUserMessageBeenSent) {
-      trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
-      setHasFirstUserMessageBeenSent(true);
-    }
-
-    if (!isChatOpen) {
-      setIsChatOpen(true);
-    }
-
-    const messageId = nanoid();
-
-    const payload = {
-      session_id: sessionId,
-      message,
-      response_id: messageId,
-    };
-
-    setSuggestionArtifactId(null);
-    setSuggestedQuestions([]);
-    handleAddUserMessage(message);
-
-    if (readyState === ReadyState.CLOSED) {
-      return handleAddAIMessage({
-        response_id: nanoid(),
-        message: unifiedConfigurationResponseManager.getDefaultErrorMessage(),
-        media: null,
-        documents: [],
-        is_complete: true,
-        is_loading: false,
-        suggested_questions: [],
-        analytics: {},
-        artifacts: [],
-      });
-    }
-
-    handleAddAIMessage({
-      response_id: messageId,
-      message: PROCESSING_MESSAGE_SEQUENCE[0],
-      media: null,
-      documents: [],
-      is_complete: false,
-      is_loading: true,
-      suggested_questions: [],
-      analytics: {},
-      artifacts: [],
-    });
-
-    setIsAMessageBeingProcessed(true);
-
-    sendMessage(JSON.stringify(payload));
-
-    let messageIndex = 1;
-    processingMessageInterval.current = setInterval(() => {
-      if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
-        clearInterval(processingMessageInterval.current as NodeJS.Timeout);
-        return;
+  const handleSendUserMessage = useCallback(
+    async (message: string) => {
+      if (!hasFirstUserMessageBeenSent) {
+        trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+        setHasFirstUserMessageBeenSent(true);
       }
 
-      handleAddAIMessage({
-        response_id: messageId,
-        message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-        media: null,
-        documents: [],
-        is_complete: false,
-        is_loading: true,
-        suggested_questions: [],
-        analytics: {},
-        artifacts: [],
-      });
+      if (!isChatOpen) {
+        setIsChatOpen(true);
+      }
 
-      messageIndex++;
-    }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
-  }, []);
+      const messageId = nanoid();
+
+      setSuggestionArtifactId(null);
+      setSuggestedQuestions([]);
+      handleAddUserMessage(message);
+
+      // Wait for WebSocket connection
+      const waitForConnection = async (timeout = 3000): Promise<boolean> => {
+        return new Promise((resolve) => {
+          const start = Date.now();
+
+          const checkConnection = () => {
+            if (readyState === ReadyState.OPEN) {
+              resolve(true);
+              return;
+            }
+
+            if (Date.now() - start > timeout) {
+              resolve(false);
+              return;
+            } //wait for 3 seconds before resolving false
+
+            setTimeout(checkConnection, 100);
+          };
+
+          checkConnection();
+        });
+      };
+
+      const isConnected = await waitForConnection();
+
+      if (!isConnected) {
+        return handleAddAIMessage({
+          response_id: nanoid(),
+          message: unifiedConfigurationResponseManager.getDefaultErrorMessage(),
+          media: null,
+          documents: [],
+          is_complete: true,
+          is_loading: false,
+          suggested_questions: [],
+          analytics: {},
+          artifacts: [],
+        });
+      }
+
+      setIsAMessageBeingProcessed(true);
+
+      const payload = {
+        session_id: sessionId,
+        message,
+        response_id: messageId,
+      };
+
+      sendMessage(JSON.stringify(payload));
+
+      handleAnimatedOrb(messageId);
+    },
+    [readyState, sessionId, isChatOpen, hasFirstUserMessageBeenSent],
+  );
 
   const handlePrimaryCta = () => {
     handleSendUserMessage('I want to book a demo for the product.');
@@ -159,7 +147,7 @@ const useWebSocketChat = () => {
     if (!lastMessage) return;
 
     try {
-      clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+      handleStopOrbAnimation();
       const response = JSON.parse(lastMessage.data) as AIResponse;
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
@@ -205,9 +193,6 @@ const useWebSocketChat = () => {
 
   useEffect(() => {
     return () => {
-      if (processingMessageInterval.current) {
-        clearInterval(processingMessageInterval.current);
-      }
       const ws = getWebSocket();
       if (ws) {
         ws.close();
