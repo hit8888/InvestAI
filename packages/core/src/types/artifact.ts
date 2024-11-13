@@ -26,7 +26,7 @@ export const ChatBoxArtifactEnumSchema = z.enum([
 
 export const SlideItemSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   icon: z.string(),
 });
 

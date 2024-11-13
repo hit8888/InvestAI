@@ -1,7 +1,7 @@
 import { DemoArtifactType } from "@meaku/core/types/chat";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
+import { useMessageStore } from "../../../stores/useMessageStore";
 import ArtifactControls from "./ArtifactControls";
-// import { useMessageStore } from "../../../stores/useMessageStore";
 
 interface IProps {
   artifact: DemoArtifactType;
@@ -12,16 +12,31 @@ type Frame = DemoArtifactType["features"][0]["frames"][0];
 const DemoArtifact = (props: IProps) => {
   const { artifact } = props;
 
-  // const handleAddAIMessage = useMessageStore(
-  //   (state) => state.handleAddAIMessage,
-  // );
+  const handleAddAIMessage = useMessageStore(
+    (state) => state.handleAddAIMessage,
+  );
+  const setIsAMessageBeingProcessed = useMessageStore(
+    (state) => state.setIsAMessageBeingProcessed,
+  );
 
   const [activeFrameIndex, setActiveFrameIndex] = useState(0);
+  const [sentMessages, setSentMessages] = useState<Set<string>>(new Set());
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const frames = artifact.features.reduce((acc, feature) => {
     return [...acc, ...feature.frames];
   }, [] as Frame[]);
+
+  const frameToMessageMap = frames.reduce<{
+    [key: string]: string;
+  }>((acc, frame) => {
+    const frameId = `frame-${frame.id}-${frame.frame_name}`;
+
+    return {
+      ...acc,
+      [frameId]: frame.frame_description,
+    };
+  }, {});
 
   const handlePlayPause = () => {
     if (timeoutRef.current) {
@@ -45,6 +60,7 @@ const DemoArtifact = (props: IProps) => {
     }
 
     setActiveFrameIndex(0);
+    setIsAMessageBeingProcessed(true);
   };
 
   const renderFrame = (frame: Frame | undefined) => {
@@ -76,7 +92,31 @@ const DemoArtifact = (props: IProps) => {
   useEffect(() => {
     if (frames.length === 0) return;
 
+    setIsAMessageBeingProcessed(true);
     const currentFrame = frames[activeFrameIndex];
+
+    const frameId = `frame-${currentFrame.id}-${currentFrame.frame_name}`;
+    const message = frameToMessageMap[frameId];
+
+    if (!sentMessages.has(frameId)) {
+      handleAddAIMessage({
+        response_id: frameId,
+        message: message,
+        analytics: {},
+        artifacts: [],
+        documents: [],
+        is_complete: true,
+        media: null,
+        suggested_questions: [],
+      });
+
+      setSentMessages((prev) => new Set(prev).add(frameId));
+    }
+
+    if (activeFrameIndex === frames.length - 1) {
+      setIsAMessageBeingProcessed(false);
+    }
+
     timeoutRef.current = setTimeout(() => {
       if (activeFrameIndex < frames.length - 1) {
         setActiveFrameIndex((prevIndex) => prevIndex + 1);
@@ -100,4 +140,4 @@ const DemoArtifact = (props: IProps) => {
   );
 };
 
-export default DemoArtifact;
+export default memo(DemoArtifact);
