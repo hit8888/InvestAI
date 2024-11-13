@@ -47,6 +47,7 @@ const useWebSocketChat = () => {
   const setHasFirstUserMessageBeenSent = useChatStore(
     (state) => state.setHasFirstUserMessageBeenSent,
   );
+  // TODO: Remove Suggestion Artifacts
   const setSuggestionArtifactId = useChatStore(
     (state) => state.setSuggestionArtifactId,
   );
@@ -64,6 +65,7 @@ const useWebSocketChat = () => {
     (state) => state.setIsAMessageBeingProcessed,
   );
 
+  // TODO: Rename to Split Screen Artifact
   const handleAddActiveArtifact = useArtifactStore(
     (state) => state.handleAddActiveArtifact,
   );

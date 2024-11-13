@@ -10,6 +10,7 @@ export const ArtifactEnumSchema = z.enum([
   "FORM"
 ]);
 
+// Derive these enums from Backend ArtifactEnumSchema
 export const SplitScreenArtifactEnumSchema = z.enum([
   ArtifactEnumSchema.Enum.DEMO,
   ArtifactEnumSchema.Enum.VIDEO,
