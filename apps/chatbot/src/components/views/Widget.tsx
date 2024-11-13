@@ -81,7 +81,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
             <ChatMessage
               agentName={agentName}
               messages={messages}
-              suggestedQuestions={suggestedQuestions}
+              suggestedQuestions={initialSuggestedQuestions}
               handleSuggestedQuestionOnClick={handleSendUserMessage}
             />
             <ChatInput

@@ -7,32 +7,32 @@ import { useArtifactStore } from '../../../stores/useArtifactStore';
 import DemoArtifact from './DemoArtifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
+import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifcatResponse';
 
 const Artifact = () => {
   const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
   const activeArtifactType = useArtifactStore((state) => state.activeArtifactType);
-  // const handleRemoveActiveArtifact = useArtifactStore(
-  //   (state) => state.handleRemoveActiveArtifact,
-  // );
 
   const {
     data: artifactData,
     isFetching,
     isError,
   } = useArtifactDataQuery({
-    artifactId: activeArtifactId || '',
-    artifactType: activeArtifactType || 'NONE',
+    artifactId: activeArtifactId,
+    artifactType: activeArtifactType,
     queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
         return 1000;
       },
+      enabled: !!activeArtifactId && !!activeArtifactType && activeArtifactType !== 'NONE',
     },
   });
 
+  useUpdateLocalStorageOnArtiactResponse(artifactData);
+
   const manager = useMemo(() => {
     if (!artifactData) return;
-
     return new ArtifactManager(artifactData);
   }, [artifactData]);
 

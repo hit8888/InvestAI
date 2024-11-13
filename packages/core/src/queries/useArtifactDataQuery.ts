@@ -8,18 +8,20 @@ const getArtifactKey = (): unknown[] => ["config"];
 type ArtifactDataKey = ReturnType<typeof getArtifactKey>;
 
 interface IProps {
-  artifactId?: string;
-  artifactType?: ArtifactEnum;
-  queryOptions: BreakoutQueryOptions<ArtifactResponse, ArtifactDataKey>,
+  artifactId: string | null;
+  artifactType: ArtifactEnum | null;
+  queryOptions: BreakoutQueryOptions<ArtifactResponse, ArtifactDataKey>;
 }
-const useArtifactDataQuery = ({ artifactId = "", artifactType = "NONE", queryOptions }: IProps):UseQueryResult<ArtifactResponse> => {
-
+const useArtifactDataQuery = ({
+  artifactId,
+  artifactType,
+  queryOptions,
+}: IProps): UseQueryResult<ArtifactResponse> => {
   const query = useQuery({
     queryFn: async () => {
-
       const response = await getArtifact({
-        artifactId,
-        artifactType,
+        artifactId: artifactId ?? "",
+        artifactType: artifactType ?? "NONE",
       });
 
       const data = response.data as ArtifactResponse;
