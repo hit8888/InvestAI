@@ -19,10 +19,10 @@ type QueryParams = {
 };
 
 interface IProps {
-  handleChatInputOnChangeCallback: () => void;
+  fetchSessionData: () => void;
 }
 
-const Multimedia = ({ handleChatInputOnChangeCallback }: IProps) => {
+const Multimedia = ({ fetchSessionData }: IProps) => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get('showGlass') === 'true',
@@ -143,8 +143,11 @@ const Multimedia = ({ handleChatInputOnChangeCallback }: IProps) => {
               </div>
             </div>
             <ChatInput
-              handleOnChange={handleChatInputOnChangeCallback}
-              handleSendMessage={handleSendUserMessage}
+              handleOnChange={fetchSessionData}
+              handleSendMessage={(selectedMessage) => {
+                fetchSessionData();
+                handleSendUserMessage(selectedMessage);
+              }}
               isAMessageBeingProcessed={isAMessageBeingProcessed}
             />
           </div>

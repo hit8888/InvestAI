@@ -8,6 +8,9 @@ import { immer } from 'zustand/middleware/immer';
 interface State {
   messages: Message[];
   setMessages: (messages: Message[]) => void;
+  // TODO: Remove Suggestion from here
+  suggestedQuestions: string[];
+  setSuggestedQuestions: (suggestedQuestions: string[]) => void;
   isAMessageBeingProcessed: boolean;
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: AIResponse) => void;
@@ -23,6 +26,11 @@ export const useMessageStore = create<State>()(
       setMessages: (messages) =>
         set((draft) => {
           draft.messages = messages;
+        }),
+      suggestedQuestions: [],
+      setSuggestedQuestions: (suggestedQuestions) =>
+        set((draft) => {
+          draft.suggestedQuestions = suggestedQuestions;
         }),
       isAMessageBeingProcessed: false,
       setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>

@@ -8,10 +8,10 @@ import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
-  handleChatInputOnChangeCallback: () => void;
+  fetchSessionData: () => void;
 }
 
-const Embed = ({ handleChatInputOnChangeCallback }: IProps) => {
+const Embed = ({ fetchSessionData }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
   const orgName = unifiedConfigurationResponseManager.getOrgName();
@@ -48,8 +48,11 @@ const Embed = ({ handleChatInputOnChangeCallback }: IProps) => {
       <ChatInput
         disclaimerText={disclaimerText}
         isAMessageBeingProcessed={isAMessageBeingProcessed}
-        handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
-        handleSendUserMessage={handleSendUserMessage}
+        handleChatInputOnChangeCallback={fetchSessionData}
+        handleSendUserMessage={(selectedMessage) => {
+          fetchSessionData();
+          handleSendUserMessage(selectedMessage);
+        }}
       />
     </div>
   );

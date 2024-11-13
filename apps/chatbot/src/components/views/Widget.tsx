@@ -12,10 +12,10 @@ import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
-  handleChatInputOnChangeCallback: () => void;
+  fetchSessionData: () => void;
 }
 
-const Widget = ({ handleChatInputOnChangeCallback }: IProps) => {
+const Widget = ({ fetchSessionData }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -87,8 +87,11 @@ const Widget = ({ handleChatInputOnChangeCallback }: IProps) => {
             />
             <ChatInput
               isAMessageBeingProcessed={isAMessageBeingProcessed}
-              handleChatInputOnChangeCallback={handleChatInputOnChangeCallback}
-              handleSendUserMessage={handleSendUserMessage}
+              handleChatInputOnChangeCallback={fetchSessionData}
+              handleSendUserMessage={(selectedMessage) => {
+                fetchSessionData();
+                handleSendUserMessage(selectedMessage);
+              }}
             />
           </>
         )}

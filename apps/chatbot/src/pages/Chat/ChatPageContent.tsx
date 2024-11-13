@@ -13,7 +13,7 @@ const Embed = lazy(() => import('../../components/views/Embed'));
 const Multimedia = lazy(() => import('../../components/views/MultimediaChat'));
 
 interface IProps {
-  handleChatInputOnChangeCallback: () => void;
+  fetchSessionData: () => void;
 }
 
 const componentsMap: Record<ChatConfig, React.ComponentType<IProps>> = {
@@ -43,7 +43,7 @@ const Chat = () => {
 
   return (
     <Suspense fallback={<></>}>
-      <Component handleChatInputOnChangeCallback={handleOnFirstMessageSend} />
+      <Component fetchSessionData={handleOnFirstMessageSend} />
     </Suspense>
   );
 };
