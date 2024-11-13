@@ -1,6 +1,10 @@
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import { AIResponse } from "@meaku/core/types/chat";
+import {
+  AIResponse,
+  ChatBoxArtifactType,
+  SplitScreenArtifactType,
+} from "@meaku/core/types/chat";
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -16,6 +20,10 @@ import { trackError } from "../utils/error";
 import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
+import {
+  ChatBoxArtifactEnumSchema,
+  SplitScreenArtifactEnumSchema,
+} from "@meaku/core/types/artifact";
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -39,6 +47,7 @@ const useWebSocketChat = () => {
   const setHasFirstUserMessageBeenSent = useChatStore(
     (state) => state.setHasFirstUserMessageBeenSent,
   );
+  // TODO: Remove Suggestion Artifacts
   const setSuggestionArtifactId = useChatStore(
     (state) => state.setSuggestionArtifactId,
   );
@@ -56,8 +65,13 @@ const useWebSocketChat = () => {
     (state) => state.setIsAMessageBeingProcessed,
   );
 
+  // TODO: Rename to Split Screen Artifact
   const handleAddActiveArtifact = useArtifactStore(
     (state) => state.handleAddActiveArtifact,
+  );
+
+  const handleAddActiveChatArtifact = useChatStore(
+    (state) => state.handleAddActiveChatArtifact,
   );
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
@@ -257,7 +271,18 @@ const useWebSocketChat = () => {
       }
 
       const { artifacts } = response;
-      const [activeArtifact, suggestionArtifact] = artifacts;
+
+      const activeArtifact = artifacts.find((artifact) =>
+        SplitScreenArtifactEnumSchema.options.includes(
+          artifact.artifact_type as SplitScreenArtifactType,
+        ),
+      );
+
+      const chatBoxArtifact = artifacts.find((artifact) =>
+        ChatBoxArtifactEnumSchema.options.includes(
+          artifact.artifact_type as ChatBoxArtifactType,
+        ),
+      );
 
       if (activeArtifact && activeArtifact.artifact_type !== "NONE") {
         handleAddActiveArtifact(
@@ -266,12 +291,20 @@ const useWebSocketChat = () => {
         );
       }
 
+      if (chatBoxArtifact) {
+        handleAddActiveChatArtifact(
+          chatBoxArtifact.artifact_id,
+          chatBoxArtifact.artifact_type as ChatBoxArtifactType,
+        );
+      }
+
       if (
         response.is_complete &&
-        suggestionArtifact &&
-        suggestionArtifact.artifact_type === "SUGGESTIONS"
+        chatBoxArtifact &&
+        chatBoxArtifact.artifact_type ===
+          ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
       ) {
-        setSuggestionArtifactId(suggestionArtifact.artifact_id);
+        setSuggestionArtifactId(chatBoxArtifact.artifact_id);
       }
     } catch (error) {
       trackError(error, {

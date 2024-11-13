@@ -1,16 +1,13 @@
-import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
 import BotIndicator from "@breakout/design-system/components/layout/bot-indicator";
 import { cn } from "@breakout/design-system/lib/cn";
-import { Message, SuggestionArtifactType } from "@meaku/core/types/chat";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Message } from "@meaku/core/types/chat";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import gfm from "remark-gfm";
-import useArtifactData from "../../../hooks/query/useArtifactData";
 import useInView from "../../../hooks/useInView";
-import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import ArtifactManager from "../../../managers/ArtifactManager";
 import { useChatStore } from "../../../stores/useChatStore";
 import ArtifactPreview from "./ArtifactPreview";
+import ChatArtifact from "./ChatArtifact.tsx";
 
 interface IProps {
   message: Message;
@@ -48,39 +45,12 @@ const MessageItem = (props: IProps) => {
   const messageRef = useRef<HTMLDivElement>(null);
   const { isInView, ref: inViewRef } = useInView(0, true);
 
-  const { handleSendUserMessage } = useWebSocketChat();
-
-  const suggestionArtifactId = useChatStore(
-    (state) => state.suggestionArtifactId,
-  );
-  const setSuggestionArtifactId = useChatStore(
-    (state) => state.setSuggestionArtifactId,
+  const activeChatArtifactId = useChatStore(
+    (state) => state.activeChatArtifactId,
   );
 
-  const { data: suggestionData } = useArtifactData({
-    artifactId: suggestionArtifactId as string,
-    artifactType: "SUGGESTIONS",
-    options: {
-      enabled: !!suggestionArtifactId,
-    },
-  });
-
-  const manager = useMemo(() => {
-    if (!suggestionData) return null;
-
-    return new ArtifactManager(suggestionData);
-  }, [suggestionData]);
-
-  const suggestionContent =
-    manager?.getArtifactContent() as SuggestionArtifactType;
-
-  const suggestedQuestions = suggestionContent?.suggested_questions || [];
-  const suggestedQuestionType = suggestionContent?.suggested_questions_type;
-
-  const showSuggestedQuestions =
-    showMessageArtifact &&
-    suggestedQuestions.length > 0 &&
-    suggestedQuestionType === "BUBBLE";
+  const showChatArtifact: boolean =
+    showMessageArtifact && !!activeChatArtifactId;
 
   const isSenderBot = message.role === "ai";
   const isLoading = message.is_loading;
@@ -96,11 +66,6 @@ const MessageItem = (props: IProps) => {
   const reactMarkdownComponents: Partial<Components> = {
     a: MesageLink,
     strong: MessageStrong,
-  };
-
-  const handleSuggestedQuestionOnClick = (msg: string) => {
-    setSuggestionArtifactId(null);
-    handleSendUserMessage(msg);
   };
 
   useEffect(() => {
@@ -156,24 +121,7 @@ const MessageItem = (props: IProps) => {
         </div>
       </div>
       <div className="ml-auto flex flex-col">
-        {showSuggestedQuestions && (
-          <div className="flex flex-col gap-3">
-            {suggestedQuestions.map((question) => (
-              <button
-                key={question}
-                type="button"
-                onClick={() => handleSuggestedQuestionOnClick(question)}
-                className="group ml-auto flex max-w-fit items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
-                title={question}
-              >
-                <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
-                <span className="max-w-80 truncate text-sm font-medium">
-                  {question}
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
+        {showChatArtifact && <ChatArtifact />}
       </div>
 
       {showMessageArtifactPreview && (
