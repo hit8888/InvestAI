@@ -1,5 +1,5 @@
 import { DemoArtifactType } from "@meaku/core/types/chat";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import ArtifactControls from "./ArtifactControls";
 
@@ -21,24 +21,49 @@ const DemoArtifact = (props: IProps) => {
 
   const [activeFrameIndex, setActiveFrameIndex] = useState(0);
   const [sentMessages, setSentMessages] = useState<Set<string>>(new Set());
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const frames = artifact.features.reduce((acc, feature) => {
-    return [...acc, ...feature.frames];
-  }, [] as Frame[]);
+  const frames = useMemo(
+    () =>
+      artifact.features.reduce((acc, feature) => {
+        return [...acc, ...feature.frames];
+      }, [] as Frame[]),
+    [artifact],
+  );
 
-  const frameToMessageMap = frames.reduce<{
-    [key: string]: string;
+  const frameToMessageAndAudioMap = frames.reduce<{
+    [key: string]: {
+      message: string;
+      audio?: string;
+    };
   }>((acc, frame) => {
     const frameId = `frame-${frame.id}-${frame.frame_name}`;
 
     return {
       ...acc,
-      [frameId]: frame.frame_description,
+      [frameId]: {
+        message: frame.frame_description,
+        audio: frame.frame_audio_url,
+      },
     };
   }, {});
 
   const handlePlayPause = () => {
+    const audio = audioRef.current;
+
+    if (audio) {
+      if (audio.paused) {
+        audio.play().catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+      } else {
+        audio.pause();
+      }
+    }
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -54,6 +79,13 @@ const DemoArtifact = (props: IProps) => {
   };
 
   const handleRestart = () => {
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -89,6 +121,41 @@ const DemoArtifact = (props: IProps) => {
     }
   };
 
+  // useEffect(() => {
+  //   const preloadImages = (imageUrls: string[]) => {
+  //     return Promise.all(
+  //       imageUrls.map((url) => {
+  //         return new Promise((resolve, reject) => {
+  //           const img = new Image();
+  //           img.src = url;
+  //           img.onload = () => resolve(url);
+  //           img.onerror = () => reject(url);
+  //         });
+  //       }),
+  //     );
+  //   };
+
+  //   const preloadAudio = (audioUrls: string[]) => {
+  //     return Promise.all(
+  //       audioUrls.map((url) => {
+  //         return new Promise((resolve, reject) => {
+  //           const audio = new Audio();
+  //           audio.src = url;
+  //           audio.oncanplaythrough = () => resolve(url);
+  //           audio.onerror = () => reject(url);
+  //         });
+  //       }),
+  //     );
+  //   };
+
+  //   const imageUrls = frames.map((frame) => frame.frame_url);
+  //   const audioUrls = frames
+  //     .map((frame) => frame.frame_audio_url)
+  //     .filter(Boolean) as string[];
+
+  //   Promise.all([preloadImages(imageUrls), preloadAudio(audioUrls)]);
+  // }, [frameToMessageAndAudioMap]);
+
   useEffect(() => {
     if (frames.length === 0) return;
 
@@ -96,7 +163,16 @@ const DemoArtifact = (props: IProps) => {
     const currentFrame = frames[activeFrameIndex];
 
     const frameId = `frame-${currentFrame.id}-${currentFrame.frame_name}`;
-    const message = frameToMessageMap[frameId];
+    const message = frameToMessageAndAudioMap[frameId].message;
+
+    const audioUrl = frameToMessageAndAudioMap[frameId].audio;
+    const newAudio = new Audio(audioUrl);
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+
+    audioRef.current = newAudio;
 
     if (!sentMessages.has(frameId)) {
       handleAddAIMessage({
@@ -113,6 +189,11 @@ const DemoArtifact = (props: IProps) => {
       setSentMessages((prev) => new Set(prev).add(frameId));
     }
 
+    newAudio.load();
+    newAudio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+    });
+
     if (activeFrameIndex === frames.length - 1) {
       setIsAMessageBeingProcessed(false);
     }
@@ -125,6 +206,7 @@ const DemoArtifact = (props: IProps) => {
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      newAudio.pause();
     };
   }, [activeFrameIndex, frames]);
 

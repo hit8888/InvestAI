@@ -18,9 +18,6 @@ const Artifact = () => {
   const activeArtifactType = useArtifactStore(
     (state) => state.activeArtifactType,
   );
-  // const handleRemoveActiveArtifact = useArtifactStore(
-  //   (state) => state.handleRemoveActiveArtifact,
-  // );
 
   const {
     data: artifactData,
@@ -101,32 +98,6 @@ const Artifact = () => {
           ) : (
             renderArtifact()
           )}
-
-          {/* <div className="absolute bottom-0 left-0 right-0 flex h-14 translate-y-full transform items-center justify-between bg-gradient-to-t from-black/50 to-transparent p-6 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
-            <div>
-              <Button
-                size="icon"
-                className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-              >
-                <PauseIcon className="h-4 w-4 fill-current" />
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Button
-                size="icon"
-                className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-              >
-                <MaximizeIcon className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-              >
-                <RotateCcwIcon className="h-4 w-4" />
-              </Button>
-            </div>
-          </div> */}
         </div>
       </AspectRatio>
     </div>

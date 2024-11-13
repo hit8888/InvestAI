@@ -12,7 +12,7 @@ export const ArtifactEnumSchema = z.enum([
 export const SlideItemSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
-  icon: z.string(),
+  icon: z.string().nullable(),
 });
 
 export const SlideArtifactSchema = z.object({
@@ -28,6 +28,7 @@ export const DemoFeatureFrameItemSchema = z.object({
   frame_type: z.string(),
   frame_url: z.string(),
   frame_interval: z.number(),
+  frame_audio_url: z.string().optional(),
 });
 
 export const DemoFeatureItemSchema = z.object({

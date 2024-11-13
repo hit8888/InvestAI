@@ -77,6 +77,7 @@ const useInitializeSessionData = (
           isAdmin,
           isReadOnly,
         });
+
         const suggestedQuestions = manager.getSuggestedQuestions();
         const hasFirstUserMessageBeenSent = chatHistory.some(
           (message) => message.role === "user",
