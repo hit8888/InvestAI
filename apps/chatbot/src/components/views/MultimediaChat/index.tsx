@@ -24,7 +24,7 @@ const Multimedia = () => {
   const [searchParams] = useSearchParams();
   const { showGlass }: QueryParams = {
     showGlass: searchParams.get("showGlass") === "true",
-  };//Remove after UI is finalized
+  }; //Remove after UI is finalized
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
@@ -58,7 +58,6 @@ const Multimedia = () => {
     return new UnifiedResponseManager(session ?? config);
   }, [config, session]);
 
-
   const { handleSendUserMessage, handlePrimaryCta } = useWebSocketChat();
   const { sessionData } = useLocalStorageSession();
 
@@ -74,7 +73,6 @@ const Multimedia = () => {
     setIsChatOpen(true);
     handleUpdateSessionData({ isChatOpen: true });
   };
-
 
   const sessionId = manager?.getSessionId();
 
@@ -146,16 +144,6 @@ const Multimedia = () => {
               })}
             >
               <div
-                className={cn({
-                  "col-span-2 pl-2": !!activeArtifactId,
-                  hidden: !activeArtifactId,
-                  "col-span-3": isChatMaximized,
-                })}
-              >
-                <Artifact />
-              </div>
-
-              <div
                 className={cn("flex-1 overflow-y-auto", {
                   "col-span-3": !activeArtifactId,
                   "col-span-1": !!activeArtifactId,
@@ -166,6 +154,16 @@ const Multimedia = () => {
                   messages={messages}
                   isInSplitScreenView={!!activeArtifactId}
                 />
+              </div>
+
+              <div
+                className={cn({
+                  "col-span-2 pl-2": !!activeArtifactId,
+                  hidden: !activeArtifactId,
+                  "col-span-3": isChatMaximized,
+                })}
+              >
+                <Artifact />
               </div>
             </div>
             <ChatInput

@@ -17,7 +17,11 @@ const DynamicIcon = (props: IProps) => {
         return lazy(dynamicIconImports[icon]);
       }
 
-      return lazy(dynamicIconImports[fallbackIcon]);
+      const nearestIconKey = Object.keys(dynamicIconImports).find((key) =>
+        key.includes(icon),
+      ) as keyof typeof dynamicIconImports;
+
+      return lazy(dynamicIconImports[nearestIconKey || fallbackIcon]);
     } catch (error) {
       console.error(`Error loading icon "${icon}":`, error);
       return lazy(dynamicIconImports[fallbackIcon]);
