@@ -1,6 +1,9 @@
 import { ArtifactSchema } from "@meaku/core/types/artifact";
-import { Artifact } from "@meaku/core/types/chat";
-
+import {
+  Artifact,
+  DemoArtifactType,
+  SlideArtifactType,
+} from "@meaku/core/types/chat";
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
 class ArtifactManager {
@@ -36,6 +39,31 @@ class ArtifactManager {
   //Refactor this code to use different mehods
   getArtifactContent() {
     return this.artifact.content;
+  }
+
+  getArtifactTitle() {
+    switch (this.artifact.artifact_type) {
+      case "DEMO":
+        return (this.artifact.content as DemoArtifactType).features[0].frames[0]
+          .frame_name;
+
+      case "SLIDE":
+        return (this.artifact.content as SlideArtifactType).title;
+
+      default:
+        return "";
+    }
+  }
+
+  getArtifactDescription() {
+    switch (this.artifact.artifact_type) {
+      case "DEMO":
+        return (this.artifact.content as DemoArtifactType).features[0].frames[0]
+          .frame_description;
+
+      default:
+        return "";
+    }
   }
 }
 

@@ -258,6 +258,10 @@ const useWebSocketChat = () => {
     try {
       clearInterval(processingMessageInterval.current as NodeJS.Timeout);
       const response = JSON.parse(lastMessage.data) as AIResponse;
+      console.log(
+        "🚀 ~ file: useWebSocketChat.tsx:247 ~ useEffect ~ response:",
+        response,
+      );
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
 
@@ -340,7 +344,7 @@ const useWebSocketChat = () => {
     };
   }, []);
 
-  return { readyState, handleSendUserMessage, handlePrimaryCta };
+  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage };
 };
 
 export default useWebSocketChat;
