@@ -31,7 +31,7 @@ const Chat = () => {
 
   const { handleSendUserMessage } = useWebSocketChat();
 
-  useUpdateSessionOnMount(); //Understand once more with Sankha
+  useUpdateSessionOnMount();
 
   const chatConfig = (searchParams.get('config')?.toLowerCase() as ChatConfig) || ChatConfig.EMBED;
 
