@@ -1,14 +1,14 @@
 import Backdrop from '@breakout/design-system/components/layout/backdrop';
 import { lazy, Suspense, useMemo } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useAdminStore } from '../../stores/useAdminStore';
+import { useDebugStore } from '../../stores/useDebugStore';
 import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
 
 const SessionInput = lazy(() => import('../../components/views/admin/SessionInput'));
 const SessionPlayback = lazy(() => import('../../components/views/admin/SessionPlayback'));
 
 const InternalAdmin = () => {
-  const sessionId = useAdminStore((state) => state.sessionId); //Should this also be part of localStorage
+  const sessionId = useDebugStore((state) => state.sessionId); //Should this also be part of localStorage
 
   const Component = useMemo(() => {
     if (sessionId) {

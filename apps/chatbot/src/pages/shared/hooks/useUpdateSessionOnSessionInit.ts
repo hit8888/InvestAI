@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import useUnifiedConfigurationResponseManager from './useUnifiedConfigurationResponseManager';
 import useUpdateSession from '@meaku/core/queries/mutation/useUpdateSession';
 
-const useUpdateSessionOnMount = () => {
+const useUpdateSessionOnSessionInit = () => {
   const { agentId = '' } = useParams<ChatParams>();
 
   const manager = useUnifiedConfigurationResponseManager();
@@ -62,4 +62,4 @@ const useUpdateSessionOnMount = () => {
   }, [agentId, handleMutateSession, sessionId]);
 };
 
-export { useUpdateSessionOnMount };
+export { useUpdateSessionOnSessionInit };

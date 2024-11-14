@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useWebSocketChat from '../../hooks/useWebSocketChat';
 import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
-import { useUpdateSessionOnMount } from '../shared/hooks/useUpdateSessionOnMount';
+import { useUpdateSessionOnSessionInit } from '../shared/hooks/useUpdateSessionOnSessionInit';
 import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedConfigurationResponseManager';
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '../shared/ApiProvider/Context';
@@ -31,7 +31,7 @@ const Chat = () => {
 
   const { handleSendUserMessage } = useWebSocketChat();
 
-  useUpdateSessionOnMount();
+  useUpdateSessionOnSessionInit();
 
   const chatConfig = (searchParams.get('config')?.toLowerCase() as ChatConfig) || ChatConfig.EMBED;
 

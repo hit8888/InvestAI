@@ -9,7 +9,7 @@ interface State {
   setProspectId: (prospectId: string) => void;
 }
 
-export const useAdminStore = create<State>()(
+export const useDebugStore = create<State>()(
   devtools(
     immer((set) => ({
       sessionId: null,

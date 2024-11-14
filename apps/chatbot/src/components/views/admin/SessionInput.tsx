@@ -3,7 +3,7 @@ import Button from '@breakout/design-system/components/layout/button';
 import Input from '@breakout/design-system/components/layout/input';
 import { FormEvent, memo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useAdminStore } from '../../../stores/useAdminStore';
+import { useDebugStore } from '../../../stores/useDebugStore';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
 const SUPERADMIN_PASSWORD = 'VzEsWuLDN4wg0335/KVxjg==';
@@ -12,8 +12,8 @@ const SessionInput = () => {
   const [sessionHash, setSessionHash] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const setSessionId = useAdminStore((state) => state.setSessionId);
-  const setProspectId = useAdminStore((state) => state.setProspectId);
+  const setSessionId = useDebugStore((state) => state.setSessionId);
+  const setProspectId = useDebugStore((state) => state.setProspectId);
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 

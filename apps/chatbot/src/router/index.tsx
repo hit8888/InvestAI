@@ -20,7 +20,7 @@ const router = sentryCreateBrowserRouter([
     element: <FeedbackAdmin />,
   },
   {
-    path: '/internal-admin-use/org/:orgName/agent/:agentId',
+    path: '/debug/org/:orgName/agent/:agentId',
     element: <DebugTool />,
   },
 ]);
