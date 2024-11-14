@@ -1,12 +1,14 @@
 import { z } from "zod";
 import {
   ArtifactEnumSchema,
-  ArtifactSchema, ChatBoxArtifactEnumSchema,
+  ArtifactSchema,
+  ChatBoxArtifactEnumSchema,
   DemoArtifactSchema,
   FormArtifactSchema,
   FormFieldSchema,
   SlideArtifactSchema,
-  SlideImageArtifactSchema, SplitScreenArtifactEnumSchema,
+  SlideImageArtifactSchema,
+  SplitScreenArtifactEnumSchema,
   SuggestionArtifactSchema,
   VideoArtifactSchema,
 } from "./artifact";
@@ -38,14 +40,13 @@ export const MessageSchema = z.object({
   suggested_questions: z.array(z.string()),
   analytics: AnalyticsSchema,
   artifacts: z.array(MessageArtifactSchema),
+  type: z.enum(["text", "event"]),
 });
-
 
 export const WebSocketArtifactsSchema = z.object({
   artifact_type: ArtifactEnumSchema,
   artifact_id: z.string(),
-})
-
+});
 
 export const AIResponseSchema = z.object({
   response_id: z.string(),
@@ -90,6 +91,7 @@ export type Message = {
   isReadOnly?: boolean;
   analytics: z.infer<typeof AnalyticsSchema>;
   artifact?: z.infer<typeof MessageArtifactSchema>;
+  type?: z.infer<typeof MessageSchema>["type"];
 };
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;
@@ -98,6 +100,8 @@ export type Artifact = z.infer<typeof ArtifactSchema>;
 
 export type ArtifactEnum = z.infer<typeof ArtifactEnumSchema>;
 
-export type SplitScreenArtifactType = z.infer<typeof SplitScreenArtifactEnumSchema>;
+export type SplitScreenArtifactType = z.infer<
+  typeof SplitScreenArtifactEnumSchema
+>;
 
 export type ChatBoxArtifactType = z.infer<typeof ChatBoxArtifactEnumSchema>;

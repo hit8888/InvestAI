@@ -3,6 +3,8 @@ import {
   Artifact,
   DemoArtifactType,
   SlideArtifactType,
+  SlideImageArtifactType,
+  VideoArtifactType,
 } from "@meaku/core/types/chat";
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
@@ -15,10 +17,13 @@ class ArtifactManager {
   }
 
   private validateArtifact(artifact: Artifact) {
+    if (artifact.artifact_type === "FORM") return artifact;
+
     const validatedArtifact = ArtifactSchema.safeParse(artifact);
 
     if (!validatedArtifact.success) {
       console.log(validatedArtifact.error.errors);
+      console.log({ artifact });
 
       throw new Error(
         validatedArtifact.error.errors.map((error) => error.message).join(", "),
@@ -50,6 +55,12 @@ class ArtifactManager {
       case "SLIDE":
         return (this.artifact.content as SlideArtifactType).title;
 
+      case "SLIDE_IMAGE":
+        return (this.artifact.content as SlideImageArtifactType).title;
+
+      case "VIDEO":
+        return (this.artifact.content as VideoArtifactType).title;
+
       default:
         return "";
     }
@@ -60,6 +71,16 @@ class ArtifactManager {
       case "DEMO":
         return (this.artifact.content as DemoArtifactType).features[0].frames[0]
           .frame_description;
+
+      // TODO: Add description when backend adds it to the schema
+      case "SLIDE":
+        return (this.artifact.content as SlideArtifactType).title;
+
+      case "SLIDE_IMAGE":
+        return (this.artifact.content as SlideImageArtifactType).description;
+
+      case "VIDEO":
+        return (this.artifact.content as VideoArtifactType).description;
 
       default:
         return "";

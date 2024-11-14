@@ -1,21 +1,28 @@
-import { useChatStore } from "../../../stores/useChatStore.ts";
-import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
-import { useMemo } from "react";
-import ArtifactManager from "../../../managers/ArtifactManager.ts";
 import {
   FormArtifactType,
   SuggestionArtifactType,
 } from "@meaku/core/types/chat";
-import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
+import { memo, useMemo } from "react";
+import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
+import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
+import ArtifactManager from "../../../managers/ArtifactManager.ts";
+import { useChatStore } from "../../../stores/useChatStore.ts";
 import FormArtifact from "./FormArtifact.tsx";
+import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
 
-const ChatArtifact = () => {
+interface IProps {
+  showChatArtifact?: boolean;
+}
+
+const ChatArtifact = ({ showChatArtifact = false }: IProps) => {
   const activeChatArtifactId = useChatStore(
     (state) => state.activeChatArtifactId,
   );
   const activeChatArtifactType = useChatStore(
     (state) => state.activeChatArtifactType,
   );
+
+  const { handleSendUserMessage } = useWebSocketChat();
 
   const {
     data: artifactData,
@@ -30,6 +37,7 @@ const ChatArtifact = () => {
 
         return 1000;
       },
+      enabled: showChatArtifact,
     },
   });
 
@@ -48,6 +56,7 @@ const ChatArtifact = () => {
         return (
           <SuggestionsArtifact
             artifact={artifactContent as SuggestionArtifactType}
+            handleSendUserMessage={handleSendUserMessage}
           />
         );
       case "FORM":
@@ -57,6 +66,8 @@ const ChatArtifact = () => {
     }
   };
 
+  if (!showChatArtifact) return null;
+
   if (activeChatArtifactType === null || !activeChatArtifactId || !artifactData)
     return null;
 
@@ -64,7 +75,7 @@ const ChatArtifact = () => {
     return <></>;
   }
 
-  return renderArtifact();
+  return <>{renderArtifact()}</>;
 };
 
-export default ChatArtifact;
+export default memo(ChatArtifact);

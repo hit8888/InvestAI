@@ -13,6 +13,7 @@ interface IProps {
   message: Message;
   showMessageArtifact?: boolean;
   showArtifactPreview?: boolean;
+  isLastMessage?: boolean;
 }
 
 const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -38,6 +39,7 @@ const MessageItem = (props: IProps) => {
     message,
     showMessageArtifact = false,
     showArtifactPreview = false,
+    isLastMessage = false,
   } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -59,6 +61,7 @@ const MessageItem = (props: IProps) => {
   const messageArtifactType = message.artifact?.artifact_type;
 
   const showMessageArtifactPreview =
+    !isLastMessage &&
     (showArtifactPreview || isInView) &&
     !!messageArtifactId &&
     messageArtifactType !== "NONE";
@@ -121,7 +124,7 @@ const MessageItem = (props: IProps) => {
         </div>
       </div>
       <div className="ml-auto flex flex-col">
-        {showChatArtifact && <ChatArtifact />}
+        <ChatArtifact showChatArtifact={showChatArtifact} />
       </div>
 
       {showMessageArtifactPreview && (

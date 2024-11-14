@@ -8,6 +8,10 @@ interface State {
   setActiveArtifactId: (artifactId: string | null) => void;
   activeArtifactType: ArtifactEnum | null;
   setActiveArtifactType: (artifactType: ArtifactEnum | null) => void;
+  isArtifactPlaying: boolean;
+  setIsArtifactPlaying: (isPlaying: boolean) => void;
+  shouldEndArtifactImmediately: boolean;
+  setShouldEndArtifactImmediately: (shouldEnd: boolean) => void;
   handleRemoveActiveArtifact: () => void;
   handleAddActiveArtifact: (
     artifactId: string,
@@ -28,6 +32,18 @@ export const useArtifactStore = create<State>()(
       setActiveArtifactType: (artifactType) => {
         set((state) => {
           state.activeArtifactType = artifactType;
+        });
+      },
+      isArtifactPlaying: false,
+      setIsArtifactPlaying: (isPlaying) => {
+        set((state) => {
+          state.isArtifactPlaying = isPlaying;
+        });
+      },
+      shouldEndArtifactImmediately: false,
+      setShouldEndArtifactImmediately: (shouldEnd) => {
+        set((state) => {
+          state.shouldEndArtifactImmediately = shouldEnd;
         });
       },
       handleRemoveActiveArtifact: () => {

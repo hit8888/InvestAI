@@ -1,64 +1,107 @@
+import { cn } from "@breakout/design-system/lib/cn";
 import { DemoArtifactType } from "@meaku/core/types/chat";
+import { PauseIcon, PlayIcon } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import useWebSocketChat from "../../../hooks/useWebSocketChat";
+import { useArtifactStore } from "../../../stores/useArtifactStore";
 import { useMessageStore } from "../../../stores/useMessageStore";
 import ArtifactControls from "./ArtifactControls";
 
 interface IProps {
   artifact: DemoArtifactType;
+  artifactId: string;
 }
 
-type Frame = DemoArtifactType["features"][0]["frames"][0];
+type Content = {
+  id: string;
+  name: string;
+  description: string;
+  audioUrl: string;
+  frameUrl?: string;
+  frameType?: string;
+  interval: number;
+};
 
 const DemoArtifact = (props: IProps) => {
-  const { artifact } = props;
+  const { artifact, artifactId } = props;
 
-  const handleAddAIMessage = useMessageStore(
-    (state) => state.handleAddAIMessage,
-  );
-  const setIsAMessageBeingProcessed = useMessageStore(
-    (state) => state.setIsAMessageBeingProcessed,
-  );
-
-  const [activeFrameIndex, setActiveFrameIndex] = useState(0);
+  const [activeContentIndex, setActiveContentIndex] = useState(0);
   const [sentMessages, setSentMessages] = useState<Set<string>>(new Set());
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const frames = useMemo(
-    () =>
-      artifact.features.reduce((acc, feature) => {
-        return [...acc, ...feature.frames];
-      }, [] as Frame[]),
-    [artifact],
+  const handleAddAIMessage = useMessageStore(
+    (state) => state.handleAddAIMessage,
+  );
+  const handleRemoveMessages = useMessageStore(
+    (state) => state.handleRemoveMessages,
+  );
+  const shouldEndArtifactImmediately = useArtifactStore(
+    (state) => state.shouldEndArtifactImmediately,
+  );
+  const setShouldEndArtifactImmediately = useArtifactStore(
+    (state) => state.setShouldEndArtifactImmediately,
+  );
+  const setIsArtifactPlaying = useArtifactStore(
+    (state) => state.setIsArtifactPlaying,
   );
 
-  const frameToMessageAndAudioMap = frames.reduce<{
-    [key: string]: {
-      message: string;
-      audio?: string;
-    };
-  }>((acc, frame) => {
-    const frameId = `frame-${frame.id}-${frame.frame_name}`;
+  const { handleSendUserMessage } = useWebSocketChat();
 
-    return {
-      ...acc,
-      [frameId]: {
-        message: frame.frame_description,
-        audio: frame.frame_audio_url,
-      },
-    };
-  }, {});
+  const idToContentMap = useMemo(() => {
+    const map = [] as Content[];
+
+    const artifactFeatures = artifact.features;
+
+    artifactFeatures.forEach((feature) => {
+      const featureId = `feature-${feature.id}`;
+
+      map.push({
+        id: featureId,
+        name: feature.feature_name,
+        description: feature.feature_description,
+        audioUrl: feature.feature_audio_url,
+        interval: 10, // TODO: Take it from backend when available
+      });
+
+      const frames = feature.frames;
+
+      frames.forEach((frame) => {
+        const frameId = `feature-${featureId}-frame-${frame.id}`;
+
+        map.push({
+          id: frameId,
+          name: frame.frame_name,
+          description: frame.frame_description,
+          audioUrl: frame.frame_audio_url,
+          frameUrl: frame.frame_url,
+          frameType: frame.frame_type,
+          interval: frame.frame_interval,
+        });
+      });
+    });
+
+    return map;
+  }, [artifact, artifactId]);
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
 
+    setIsPlaying((prevState) => !prevState);
+
     if (audio) {
       if (audio.paused) {
-        audio.play().catch((error) => {
-          console.error("Error playing audio:", error);
-        });
+        audio
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            console.error("Error playing audio:", error);
+          });
       } else {
         audio.pause();
       }
@@ -70,12 +113,13 @@ const DemoArtifact = (props: IProps) => {
 
       return;
     }
-    const currentFrame = frames[activeFrameIndex];
+
+    const currentContent = idToContentMap[activeContentIndex];
     timeoutRef.current = setTimeout(() => {
-      if (activeFrameIndex < frames.length - 1) {
-        setActiveFrameIndex((prevIndex) => prevIndex + 1);
+      if (activeContentIndex < idToContentMap.length - 1) {
+        setActiveContentIndex((prevIndex) => prevIndex + 1);
       }
-    }, currentFrame.frame_interval * 1000);
+    }, currentContent.interval * 1000);
   };
 
   const handleRestart = () => {
@@ -91,27 +135,47 @@ const DemoArtifact = (props: IProps) => {
       timeoutRef.current = null;
     }
 
-    setActiveFrameIndex(0);
-    setIsAMessageBeingProcessed(true);
+    setActiveContentIndex(0);
   };
 
-  const renderFrame = (frame: Frame | undefined) => {
-    if (!frame) return null;
+  const handleSendArtifactCompletionEvent = () => {
+    const payload = {
+      artifact_type: "DEMO",
+      artifact_id: artifactId,
+    };
+    handleSendUserMessage("", "ARTIFACT_CONSUMED", payload);
+    setIsArtifactPlaying(false);
+  };
 
-    switch (frame.frame_type) {
+  const renderContent = (content: Content | undefined) => {
+    if (!content) return null;
+
+    if (!content.frameUrl || !content.frameType) {
+      const isLastContent = activeContentIndex === idToContentMap.length - 1;
+
+      if (isLastContent) {
+        return null;
+      }
+
+      const nextContent = idToContentMap[activeContentIndex + 1];
+
+      return renderContent(nextContent);
+    }
+
+    switch (content.frameType) {
       case "IMAGE":
         return (
           <img
             className="h-full w-full object-contain"
-            src={frame.frame_url}
-            alt={frame.frame_name}
+            src={content.frameUrl}
+            alt={content.name}
           />
         );
 
       case "VIDEO":
         return (
           <video className="h-full w-full object-contain" controls>
-            <source src={frame.frame_url} type="video/mp4" />
+            <source src={content.frameUrl} type="video/mp4" />
             This browser does not support the video tag.
           </video>
         );
@@ -121,51 +185,29 @@ const DemoArtifact = (props: IProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   const preloadImages = (imageUrls: string[]) => {
-  //     return Promise.all(
-  //       imageUrls.map((url) => {
-  //         return new Promise((resolve, reject) => {
-  //           const img = new Image();
-  //           img.src = url;
-  //           img.onload = () => resolve(url);
-  //           img.onerror = () => reject(url);
-  //         });
-  //       }),
-  //     );
-  //   };
-
-  //   const preloadAudio = (audioUrls: string[]) => {
-  //     return Promise.all(
-  //       audioUrls.map((url) => {
-  //         return new Promise((resolve, reject) => {
-  //           const audio = new Audio();
-  //           audio.src = url;
-  //           audio.oncanplaythrough = () => resolve(url);
-  //           audio.onerror = () => reject(url);
-  //         });
-  //       }),
-  //     );
-  //   };
-
-  //   const imageUrls = frames.map((frame) => frame.frame_url);
-  //   const audioUrls = frames
-  //     .map((frame) => frame.frame_audio_url)
-  //     .filter(Boolean) as string[];
-
-  //   Promise.all([preloadImages(imageUrls), preloadAudio(audioUrls)]);
-  // }, [frameToMessageAndAudioMap]);
-
   useEffect(() => {
-    if (frames.length === 0) return;
+    if (
+      idToContentMap.length === 0 ||
+      shouldEndArtifactImmediately ||
+      !isPlaying
+    )
+      return;
 
-    setIsAMessageBeingProcessed(true);
-    const currentFrame = frames[activeFrameIndex];
+    setIsArtifactPlaying(true);
 
-    const frameId = `frame-${currentFrame.id}-${currentFrame.frame_name}`;
-    const message = frameToMessageAndAudioMap[frameId].message;
+    const currentContent = idToContentMap[activeContentIndex];
 
-    const audioUrl = frameToMessageAndAudioMap[frameId].audio;
+    if (!currentContent) return;
+
+    const {
+      id: contentId,
+      name,
+      description,
+      audioUrl,
+      interval,
+    } = currentContent;
+
+    const message = `${name}\n\n${description}`;
     const newAudio = new Audio(audioUrl);
 
     if (audioRef.current) {
@@ -174,9 +216,9 @@ const DemoArtifact = (props: IProps) => {
 
     audioRef.current = newAudio;
 
-    if (!sentMessages.has(frameId)) {
+    if (!sentMessages.has(contentId)) {
       handleAddAIMessage({
-        response_id: frameId,
+        response_id: contentId,
         message: message,
         analytics: {},
         artifacts: [],
@@ -186,7 +228,7 @@ const DemoArtifact = (props: IProps) => {
         suggested_questions: [],
       });
 
-      setSentMessages((prev) => new Set(prev).add(frameId));
+      setSentMessages((prev) => new Set(prev).add(contentId));
     }
 
     newAudio.load();
@@ -194,25 +236,60 @@ const DemoArtifact = (props: IProps) => {
       console.error("Error playing audio:", error);
     });
 
-    if (activeFrameIndex === frames.length - 1) {
-      setIsAMessageBeingProcessed(false);
+    if (activeContentIndex === idToContentMap.length - 1) {
+      handleSendArtifactCompletionEvent();
     }
 
     timeoutRef.current = setTimeout(() => {
-      if (activeFrameIndex < frames.length - 1) {
-        setActiveFrameIndex((prevIndex) => prevIndex + 1);
+      if (activeContentIndex < idToContentMap.length - 1) {
+        setActiveContentIndex((prevIndex) => prevIndex + 1);
       }
-    }, currentFrame.frame_interval * 1000);
+    }, interval * 1000);
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       newAudio.pause();
     };
-  }, [activeFrameIndex, frames]);
+  }, [activeContentIndex, idToContentMap, isPlaying]);
+
+  useEffect(() => {
+    if (shouldEndArtifactImmediately) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      // TODO: Debug this
+      // setActiveFrameIndex(frames.length - 1);
+      if (audioRef.current) {
+        audioRef.current.currentTime = audioRef.current.duration;
+        audioRef.current.pause();
+      }
+      handleSendArtifactCompletionEvent();
+      handleRemoveMessages([...sentMessages]);
+      setShouldEndArtifactImmediately(false);
+      setIsArtifactPlaying(false);
+      setIsPlaying(false);
+    }
+  }, [shouldEndArtifactImmediately]);
 
   return (
     <div className="relative h-full w-full">
-      {frames.length > 0 && renderFrame(frames[activeFrameIndex])}
+      {idToContentMap.length > 0 &&
+        renderContent(idToContentMap[activeContentIndex])}
+
+      <div
+        className={cn(
+          "absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30",
+          {
+            "opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100":
+              isPlaying,
+          },
+        )}
+        onClick={handlePlayPause}
+      >
+        {isPlaying ? (
+          <PauseIcon className="fill-white text-white" size={60} />
+        ) : (
+          <PlayIcon className="fill-white text-white" size={60} />
+        )}
+      </div>
 
       <ArtifactControls
         handlePause={handlePlayPause}

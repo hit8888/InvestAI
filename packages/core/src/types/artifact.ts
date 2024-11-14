@@ -7,7 +7,7 @@ export const ArtifactEnumSchema = z.enum([
   "SLIDE_IMAGE",
   "NONE",
   "SUGGESTIONS",
-  "FORM"
+  "FORM",
 ]);
 
 // Derive these enums from Backend ArtifactEnumSchema
@@ -43,7 +43,7 @@ export const DemoFeatureFrameItemSchema = z.object({
   frame_type: z.string(),
   frame_url: z.string(),
   frame_interval: z.number(),
-  frame_audio_url: z.string().optional(),
+  frame_audio_url: z.string(),
 });
 
 export const DemoFeatureItemSchema = z.object({
@@ -51,6 +51,7 @@ export const DemoFeatureItemSchema = z.object({
   feature_name: z.string(),
   feature_description: z.string(),
   feature_type: z.string(),
+  feature_audio_url: z.string(),
   frames: z.array(DemoFeatureFrameItemSchema),
 });
 
@@ -61,10 +62,14 @@ export const DemoArtifactSchema = z.object({
 
 export const VideoArtifactSchema = z.object({
   video_url: z.string(),
+  description: z.string(),
+  title: z.string(),
 });
 
 export const SlideImageArtifactSchema = z.object({
   image_url: z.string(),
+  description: z.string(),
+  title: z.string(),
 });
 
 export const SuggestionArtifactSchema = z.object({
