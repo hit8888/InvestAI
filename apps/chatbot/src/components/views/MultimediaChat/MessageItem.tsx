@@ -124,7 +124,7 @@ const MessageItem = (props: IProps) => {
         </div>
       </div>
       <div className="ml-auto flex flex-col">
-        {showChatArtifact && <ChatArtifact />}
+        <ChatArtifact showChatArtifact={showChatArtifact} />
       </div>
 
       {showMessageArtifactPreview && (

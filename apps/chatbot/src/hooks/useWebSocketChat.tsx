@@ -190,10 +190,10 @@ const useWebSocketChat = () => {
 
       const payload = {
         session_id: sessionId,
-        message,
+        message: message ?? "",
         response_id: messageId,
-        event_type: eventType,
-        event_data: eventData,
+        event_type: eventType ?? "",
+        event_data: eventData ?? {},
       };
 
       setSuggestionArtifactId(null);
@@ -202,7 +202,6 @@ const useWebSocketChat = () => {
 
       if (eventType && eventData) {
         sendMessage(JSON.stringify(payload));
-
         return;
       }
 
@@ -318,13 +317,6 @@ const useWebSocketChat = () => {
         );
       }
 
-      if (chatBoxArtifact) {
-        handleAddActiveChatArtifact(
-          chatBoxArtifact.artifact_id,
-          chatBoxArtifact.artifact_type as ChatBoxArtifactType,
-        );
-      }
-
       if (
         response.is_complete &&
         chatBoxArtifact &&
@@ -332,6 +324,10 @@ const useWebSocketChat = () => {
           ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
       ) {
         setSuggestionArtifactId(chatBoxArtifact.artifact_id);
+        handleAddActiveChatArtifact(
+          chatBoxArtifact.artifact_id,
+          chatBoxArtifact.artifact_type as ChatBoxArtifactType,
+        );
       }
     } catch (error) {
       trackError(error, {
