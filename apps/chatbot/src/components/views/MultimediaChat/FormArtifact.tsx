@@ -48,7 +48,7 @@ const FormArtifact = (props: IFormProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    handleSendUserMessage("", "FORM", values);
+    handleSendUserMessage("", "FORM_FILLED", values);
     setSubmitted(true);
   }
 
