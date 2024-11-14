@@ -1,11 +1,9 @@
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import { ArtifactEnum } from '@meaku/core/types/chat';
 import { ArrowUpRight } from 'lucide-react';
 import { useMemo } from 'react';
-import useArtifactData from '../../../hooks/query/useArtifactData';
-// import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import ArtifactManager from '../../../managers/ArtifactManager';
-import { useArtifactStore } from '../../../stores/useArtifactStore';
-// import { useChatStore } from "../../../stores/useChatStore";
+import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
+import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 
 interface IProps {
   artifactId: string;
@@ -20,17 +18,13 @@ const truncateText = (text: string, limit: number): string => {
 };
 
 const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
-  //   const { sendMessage } = useWebSocketChat();
-  //   const session = useChatStore((state) => state.session);
+  const artifact = useLocalStorageArtifact();
 
-  const setActiveArtifactId = useArtifactStore((state) => state.setActiveArtifactId);
-  const setActiveArtifactType = useArtifactStore((state) => state.setActiveArtifactType);
-
-  const { data, isError } = useArtifactData({
+  const { data, isError } = useArtifactDataQuery({
     artifactId: artifactId as string,
     artifactType: 'SUGGESTIONS',
-    options: {
-      enabled: !!artifactId && artifactType !== 'NONE',
+    queryOptions: {
+      enabled: !!artifact?.artifact?.activeArtifactId && artifact?.artifact?.activeArtifactType !== 'NONE',
     },
   });
 
@@ -55,8 +49,13 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
 
     // sendMessage(JSON.stringify(payload));
 
-    setActiveArtifactId(artifactId);
-    setActiveArtifactType(artifactType as ArtifactEnum);
+    if (artifact) {
+      const { handleUpdateArtifact } = artifact;
+      handleUpdateArtifact({
+        activeArtifactId: artifactId,
+        activeArtifactType: artifactType as ArtifactEnum,
+      });
+    }
   };
 
   if (isError) return null;
