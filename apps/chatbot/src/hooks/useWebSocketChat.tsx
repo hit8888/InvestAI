@@ -1,6 +1,10 @@
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import useAnalytics from "@meaku/core/hooks/useAnalytics";
 import {
+  ChatBoxArtifactEnumSchema,
+  SplitScreenArtifactEnumSchema,
+} from "@meaku/core/types/artifact";
+import {
   AIResponse,
   ChatBoxArtifactType,
   SplitScreenArtifactType,
@@ -20,10 +24,6 @@ import { trackError } from "../utils/error";
 import useConfigData from "./query/useConfigData";
 import useInitializeSessionData from "./query/useInitializeSessionData";
 import useIsAdmin from "./useIsAdmin";
-import {
-  ChatBoxArtifactEnumSchema,
-  SplitScreenArtifactEnumSchema,
-} from "@meaku/core/types/artifact";
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -68,6 +68,12 @@ const useWebSocketChat = () => {
   // TODO: Rename to Split Screen Artifact
   const handleAddActiveArtifact = useArtifactStore(
     (state) => state.handleAddActiveArtifact,
+  );
+  const isArtifactPlaying = useArtifactStore(
+    (state) => state.isArtifactPlaying,
+  );
+  const setShouldEndArtifactImmediately = useArtifactStore(
+    (state) => state.setShouldEndArtifactImmediately,
   );
 
   const handleAddActiveChatArtifact = useChatStore(
@@ -155,7 +161,11 @@ const useWebSocketChat = () => {
   }, [readyState, sessionId]);
 
   const handleSendUserMessage = useCallback(
-    async (message: string) => {
+    async (
+      message?: string,
+      eventType?: string,
+      eventData?: Record<string, string>,
+    ) => {
       if (!shouldConnect) {
         await initializeWebSocket();
       }
@@ -168,16 +178,31 @@ const useWebSocketChat = () => {
         setIsChatOpen(true);
       }
 
+      if (isArtifactPlaying) {
+        setShouldEndArtifactImmediately(true);
+      }
+
       const messageId = nanoid();
 
       const payload = {
         session_id: sessionId,
         message,
         response_id: messageId,
+        event_type: eventType,
+        event_data: eventData,
       };
 
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
+
+      if (eventType && eventData) {
+        sendMessage(JSON.stringify(payload));
+
+        return;
+      }
+
+      if (!message) return;
+
       handleAddUserMessage(message);
 
       if (readyState === ReadyState.CLOSED) {
@@ -245,6 +270,7 @@ const useWebSocketChat = () => {
       readyState,
       shouldConnect,
       initializeWebSocket,
+      isArtifactPlaying,
     ],
   );
 
@@ -258,10 +284,6 @@ const useWebSocketChat = () => {
     try {
       clearInterval(processingMessageInterval.current as NodeJS.Timeout);
       const response = JSON.parse(lastMessage.data) as AIResponse;
-      console.log(
-        "🚀 ~ file: useWebSocketChat.tsx:247 ~ useEffect ~ response:",
-        response,
-      );
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
 

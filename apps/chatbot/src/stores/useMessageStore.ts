@@ -23,6 +23,7 @@ interface State {
     messageId: string,
     previousState?: Message,
   ) => void;
+  handleRemoveMessages: (messageIds: string[]) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -132,6 +133,12 @@ export const useMessageStore = create<State>()(
             ...draft.messages[messageIndex],
             feedback: previousState?.feedback ?? undefined,
           };
+        }),
+      handleRemoveMessages: (messageIds) =>
+        set((draft) => {
+          draft.messages = draft.messages.filter(
+            (message) => !messageIds.includes(message.id as string),
+          );
         }),
     })),
   ),
