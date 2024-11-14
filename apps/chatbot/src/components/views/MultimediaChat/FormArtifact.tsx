@@ -9,6 +9,9 @@ import Button from "@breakout/design-system/components/layout/button";
 import { getZodType } from "../../../utils/form_fields.ts";
 import ChatFormField from "./ChatFormField.tsx";
 import CardTitle from "@breakout/design-system/components/layout/card-title";
+import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
+import { useState } from "react";
+import CardDescription from "@breakout/design-system/components/layout/card-description";
 
 interface IFormProps {
   artifact: FormArtifactType;
@@ -35,6 +38,8 @@ const FormArtifact = (props: IFormProps) => {
   const {
     artifact: { form_fields },
   } = props;
+  const [submitted, setSubmitted] = useState(false);
+  const { handleSendUserMessage } = useWebSocketChat();
 
   const formSchema = createFormSchema(form_fields);
 
@@ -43,15 +48,29 @@ const FormArtifact = (props: IFormProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    handleSendUserMessage("", "FORM", values);
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    return (
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Thank You for Sharing Your Details!</CardTitle>
+          <CardDescription>
+            Info submitted! We will reach out soon.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
   }
 
   return (
     <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Demo Form</CardTitle>
+      </CardHeader>
       <CardContent>
-        <CardHeader>
-          <CardTitle>Demo Form</CardTitle>
-        </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {form_fields.map((field, i) => (
