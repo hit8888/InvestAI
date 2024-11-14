@@ -10,6 +10,10 @@ interface IProps {
 
 const ChatMessage = (props: IProps) => {
   const { messages, isInSplitScreenView = false } = props;
+  // console.log(
+  //   "🚀 ~ file: ChatMessage.tsx:13 ~ ChatMessage ~ messages:",
+  //   messages,
+  // );
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -20,7 +24,7 @@ const ChatMessage = (props: IProps) => {
       const isAtBottom = scrollHeight - scrollTop <= clientHeight + 1;
 
       if (isAtBottom) {
-        endRef.current?.scrollIntoView({ behavior: 'smooth' });
+        endRef.current?.scrollIntoView({ behavior: 'instant' });
       }
     }
   };
@@ -43,7 +47,12 @@ const ChatMessage = (props: IProps) => {
         })}
       >
         {messages.map((message, idx) => (
-          <MessageItem key={message.id} message={message} showMessageArtifact={idx === messages.length - 1} />
+          <MessageItem
+            key={message.id}
+            message={message}
+            showMessageArtifact={idx === messages.length - 1}
+            showArtifactPreview={idx >= messages.length - 4}
+          />
         ))}
       </div>
 

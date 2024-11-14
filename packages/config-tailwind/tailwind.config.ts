@@ -37,6 +37,10 @@ const config: Omit<Config, "content"> = {
           500: "#A6A2ED",
           1000: "#4E46DC",
         },
+        secondary: {
+          DEFAULT: "rgb(var(--secondary))",
+          foreground: "rgb(var(--secondary-foreground))",
+        },
         card: {
           DEFAULT: "rgb(var(--card))",
           foreground: "rgb(var(--card-foreground))",
@@ -104,7 +108,7 @@ const config: Omit<Config, "content"> = {
         },
       },
       borderRadius: {
-        'custom-56': '56px',
+        "custom-56": "56px",
       },
     },
   },

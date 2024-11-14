@@ -2,14 +2,17 @@ import BotIndicator from '@breakout/design-system/components/layout/bot-indicato
 import { cn } from '@breakout/design-system/lib/cn';
 import { Message } from '@meaku/core/types/chat';
 import { useEffect, useRef, useState } from 'react';
-import gfm from 'remark-gfm';
-import { useChatStore } from '../../../stores/useChatStore';
 import ReactMarkdown, { Components } from 'react-markdown';
+import gfm from 'remark-gfm';
+import useInView from '../../../hooks/useInView';
+import { useChatStore } from '../../../stores/useChatStore';
+import ArtifactPreview from './ArtifactPreview';
 import ChatArtifact from './ChatArtifact.tsx';
 
 interface IProps {
   message: Message;
   showMessageArtifact?: boolean;
+  showArtifactPreview?: boolean;
 }
 
 const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -23,11 +26,12 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
-  const { message, showMessageArtifact = false } = props;
+  const { message, showMessageArtifact = false, showArtifactPreview = false } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
+  const { isInView, ref: inViewRef } = useInView(0, true);
 
   const activeChatArtifactId = useChatStore((state) => state.activeChatArtifactId);
 
@@ -35,6 +39,12 @@ const MessageItem = (props: IProps) => {
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
+
+  const messageArtifactId = message.artifact?.artifact_id;
+  const messageArtifactType = message.artifact?.artifact_type;
+
+  const showMessageArtifactPreview =
+    (showArtifactPreview || isInView) && !!messageArtifactId && messageArtifactType !== 'NONE';
 
   const reactMarkdownComponents: Partial<Components> = {
     a: MesageLink,
@@ -53,7 +63,7 @@ const MessageItem = (props: IProps) => {
   }, [message.message, isSingleLineMessage]);
 
   return (
-    <div>
+    <div ref={inViewRef}>
       <div
         className={cn('flex items-center', {
           'justify-end': !isSenderBot,
@@ -89,6 +99,10 @@ const MessageItem = (props: IProps) => {
         </div>
       </div>
       <div className="ml-auto flex flex-col">{showChatArtifact && <ChatArtifact />}</div>
+
+      {showMessageArtifactPreview && (
+        <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType as string} />
+      )}
     </div>
   );
 };

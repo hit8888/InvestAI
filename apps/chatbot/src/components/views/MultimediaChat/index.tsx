@@ -122,16 +122,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
               })}
             >
               <div
-                className={cn({
-                  'col-span-2 pl-2': !!activeArtifactId,
-                  hidden: !activeArtifactId,
-                  'col-span-3': isChatMaximized,
-                })}
-              >
-                <Artifact />
-              </div>
-
-              <div
                 className={cn('flex-1 overflow-y-auto', {
                   'col-span-3': !activeArtifactId,
                   'col-span-1': !!activeArtifactId,
@@ -139,6 +129,16 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
                 })}
               >
                 <ChatMessage messages={messages} isInSplitScreenView={!!activeArtifactId} />
+              </div>
+
+              <div
+                className={cn({
+                  'col-span-2 pl-2': !!activeArtifactId,
+                  hidden: !activeArtifactId,
+                  'col-span-3': isChatMaximized,
+                })}
+              >
+                <Artifact />
               </div>
             </div>
             <ChatInput

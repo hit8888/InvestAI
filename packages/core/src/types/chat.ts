@@ -20,6 +20,11 @@ export const AnalyticsSchema = z.object({
   buyer_intent_score: z.number().optional().nullable(),
 });
 
+export const MessageArtifactSchema = z.object({
+  artifact_type: ArtifactEnumSchema,
+  artifact_id: z.string(),
+});
+
 export const MessageSchema = z.object({
   message_id: z.number(),
   response_id: z.string().nullable(),
@@ -30,6 +35,7 @@ export const MessageSchema = z.object({
   documents: z.array(DataSourceSchema),
   suggested_questions: z.array(z.string()),
   analytics: AnalyticsSchema,
+  artifacts: z.array(MessageArtifactSchema),
 });
 
 
@@ -77,6 +83,7 @@ export type Message = {
   showFeedbackOptions?: boolean;
   isReadOnly?: boolean;
   analytics: z.infer<typeof AnalyticsSchema>;
+  artifact?: z.infer<typeof MessageArtifactSchema>;
 };
 
 export type AIResponse = z.infer<typeof AIResponseSchema>;

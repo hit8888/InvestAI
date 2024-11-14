@@ -42,6 +42,12 @@ export const useMessageStore = create<State>()(
           const messageId = response.response_id; //AI response
 
           const existingMessageIndex = draft.messages.findIndex((message) => message.id === messageId);
+          // TODO: Replace this with the chat artifact enums created by Amogh
+          const ArtifactTypesToIgnore = ['SUGGESTIONS', 'FORM', 'NONE'];
+
+          const messageArtifact = response.artifacts.find(
+            (artifact) => !ArtifactTypesToIgnore.includes(artifact.artifact_type) && artifact.artifact_id,
+          );
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
@@ -53,6 +59,7 @@ export const useMessageStore = create<State>()(
               is_complete: response.is_complete,
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
+              artifact: messageArtifact,
             };
           } else {
             draft.messages.push({
@@ -65,6 +72,7 @@ export const useMessageStore = create<State>()(
               is_complete: response.is_complete,
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
+              artifact: messageArtifact,
             });
           }
         }),

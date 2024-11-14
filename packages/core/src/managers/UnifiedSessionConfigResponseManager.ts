@@ -111,6 +111,14 @@ class UnifiedSessionConfigResponseManager {
           feedback.response_id === message.message_id.toString()
       );
 
+      // TODO: Replace this with the chat artifact enums created by Amogh
+      const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
+      const messageArtifact = message.artifacts.find(
+        (artifact) =>
+          !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
+          artifact.artifact_id,
+      );
+
       return {
         id: message.message_id,
         message: message.message,
@@ -124,6 +132,7 @@ class UnifiedSessionConfigResponseManager {
         feedback: messageFeedback,
         isReadOnly,
         analytics: message.analytics,
+        artifact: messageArtifact,
       };
     });
 
