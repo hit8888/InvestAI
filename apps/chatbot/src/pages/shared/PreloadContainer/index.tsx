@@ -69,7 +69,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center bg-white/50">
+    <div className="flex h-screen animate-spin items-center justify-center bg-white/50">
       <Loader />
     </div>
   );
