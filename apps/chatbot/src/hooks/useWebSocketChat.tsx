@@ -159,7 +159,11 @@ const useWebSocketChat = () => {
   }, [readyState, sessionId]);
 
   const handleSendUserMessage = useCallback(
-    async (message: string) => {
+    async (
+      message: string,
+      event_type: string | null = null,
+      event_data: object | null = null,
+    ) => {
       if (!shouldConnect) {
         await initializeWebSocket();
       }
@@ -178,6 +182,8 @@ const useWebSocketChat = () => {
         session_id: sessionId,
         message,
         response_id: messageId,
+        event_type: event_type,
+        event_data: event_data,
       };
 
       setSuggestionArtifactId(null);

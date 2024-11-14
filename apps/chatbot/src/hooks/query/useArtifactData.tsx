@@ -51,7 +51,6 @@ const useArtifactData = (props: IProps) => {
       return data;
     },
     retry: (failureCount, error) => {
-      artifactType;
       if (
         failureCount >= MAX_RETRIES &&
         !artifactTypesNotToCache.includes(artifactType as string)
