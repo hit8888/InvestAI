@@ -3,7 +3,10 @@ import { getArtifact } from "../http/api";
 import { BreakoutQueryOptions } from "../types/queries";
 import { ArtifactEnum, ArtifactResponse } from "../types/chat";
 
-const getArtifactKey = (): unknown[] => ["config"];
+const getArtifactKey = (
+  artifactId: string,
+  artifactType: string
+): unknown[] => ["artifact", artifactId, artifactType];
 
 type ArtifactDataKey = ReturnType<typeof getArtifactKey>;
 
@@ -24,11 +27,12 @@ const useArtifactDataQuery = ({
         artifactType: artifactType ?? "NONE",
       });
 
+      console.log({ response });
       const data = response.data as ArtifactResponse;
       return data;
     },
     ...queryOptions,
-    queryKey: getArtifactKey(),
+    queryKey: getArtifactKey(artifactId ?? "", artifactType ?? ""),
   });
 
   return query;

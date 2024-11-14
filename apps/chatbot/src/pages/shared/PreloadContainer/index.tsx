@@ -23,7 +23,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { sessionData } = useLocalStorageSession();
 
   useInitializeRequestHeaderfromUrl();
-  const isRequestHeaderSet = useLocalStorageState('x-tenant-name', { listenStorageChange: true });
+  const isRequestHeaderSet = useLocalStorageState('x-tenant-name', {
+    listenStorageChange: true,
+    deserializer: (value) => value,
+  });
 
   const { isAdmin, isReadOnly: isInternalAdminRoute } = useIsAdmin();
 
@@ -65,7 +68,11 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     });
   }
 
-  return <Loader />;
+  return (
+    <div className="flex h-screen items-center justify-center bg-white/50">
+      <Loader />
+    </div>
+  );
 };
 
 export default PreloadContainer;
