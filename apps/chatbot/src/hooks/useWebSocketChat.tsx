@@ -2,7 +2,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import { AIResponse, ChatBoxArtifactType, SplitScreenArtifactType } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '../config/env';
@@ -23,6 +23,13 @@ const MAX_RETRY_INTERVAL = 20000;
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
+
+  const messageQueue = useRef<
+    {
+      message: string;
+      messageId: string;
+    }[]
+  >([]);
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
@@ -47,7 +54,6 @@ const useWebSocketChat = () => {
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
-
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
@@ -65,7 +71,6 @@ const useWebSocketChat = () => {
     },
     !!sessionId,
   );
-
   const handleSendUserMessage = useCallback(
     async (message: string) => {
       if (!hasFirstUserMessageBeenSent) {
@@ -78,50 +83,9 @@ const useWebSocketChat = () => {
       }
 
       const messageId = nanoid();
-
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleAddUserMessage(message);
-
-      // Wait for WebSocket connection
-      const waitForConnection = async (timeout = 3000): Promise<boolean> => {
-        return new Promise((resolve) => {
-          const start = Date.now();
-
-          const checkConnection = () => {
-            if (readyState === ReadyState.OPEN) {
-              resolve(true);
-              return;
-            }
-
-            if (Date.now() - start > timeout) {
-              resolve(false);
-              return;
-            } //wait for 3 seconds before resolving false
-
-            setTimeout(checkConnection, 100);
-          };
-
-          checkConnection();
-        });
-      };
-
-      const isConnected = await waitForConnection();
-
-      if (!isConnected) {
-        return handleAddAIMessage({
-          response_id: nanoid(),
-          message: unifiedConfigurationResponseManager.getDefaultErrorMessage(),
-          media: null,
-          documents: [],
-          is_complete: true,
-          is_loading: false,
-          suggested_questions: [],
-          analytics: {},
-          artifacts: [],
-        });
-      }
-
       setIsAMessageBeingProcessed(true);
 
       const payload = {
@@ -130,17 +94,22 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
 
-      sendMessage(JSON.stringify(payload));
-
       handleAnimatedOrb(messageId);
+
+      if (!sessionId) {
+        messageQueue.current.push({ message, messageId });
+      } else {
+        sendMessage(JSON.stringify(payload));
+
+        setIsAMessageBeingProcessed(false);
+      }
     },
-    [readyState, sessionId, isChatOpen, hasFirstUserMessageBeenSent],
+    [readyState, sessionId],
   );
 
   const handlePrimaryCta = () => {
     handleSendUserMessage('I want to book a demo for the product.');
   };
-
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -193,6 +162,28 @@ const useWebSocketChat = () => {
       });
     }
   }, [lastMessage]);
+
+  useEffect(() => {
+    if (readyState !== ReadyState.OPEN) {
+      return;
+    }
+
+    if (!messageQueue.current.length) {
+      return;
+    }
+
+    messageQueue.current.forEach(({ message, messageId }) => {
+      const payload = {
+        session_id: sessionId,
+        message,
+        response_id: messageId,
+      };
+
+      sendMessage(JSON.stringify(payload));
+    });
+
+    messageQueue.current = [];
+  }, [readyState, sendMessage, sessionId]);
 
   useEffect(() => {
     return () => {
