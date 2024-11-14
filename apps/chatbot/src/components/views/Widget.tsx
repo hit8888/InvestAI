@@ -102,7 +102,10 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         suggestedQuestions={initialSuggestedQuestions}
         handleToggleChatOpenState={handleToggleChatOpenState}
         handleCloseTooltip={handleCloseTooltip}
-        handleSuggestionsOnClick={handleSendUserMessage}
+        handleSuggestionsOnClick={(selectedMessage) => {
+          fetchSessionData();
+          handleSendUserMessage(selectedMessage);
+        }}
       />
     </div>
   );

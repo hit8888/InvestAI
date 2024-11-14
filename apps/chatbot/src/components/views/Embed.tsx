@@ -41,7 +41,10 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         agentName={agentName}
         messages={messages}
         suggestedQuestions={initialSuggestedQuestions}
-        handleSuggestedQuestionOnClick={handleSendUserMessage}
+        handleSuggestedQuestionOnClick={(selectedMessage) => {
+          fetchSessionData();
+          handleSendUserMessage(selectedMessage);
+        }}
       />
       <ChatInput
         disclaimerText={disclaimerText}

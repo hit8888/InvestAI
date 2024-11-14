@@ -156,7 +156,10 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         isChatOpen={isChatOpen}
         suggestedQuestions={initialSuggestedQuestions}
         hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
-        handleSendUserMessage={handleSendUserMessage}
+        handleSendUserMessage={(selectedMessage) => {
+          fetchSessionData();
+          handleSendUserMessage(selectedMessage);
+        }}
         handleOpenChat={handleOpenChat}
       />
     </div>
