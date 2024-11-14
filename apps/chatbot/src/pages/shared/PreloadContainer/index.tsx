@@ -12,6 +12,7 @@ import useIsAdmin from '../../../hooks/useIsAdmin';
 import { getBrowserSignature } from '../../../utils/tracking';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useInitializeRequestHeaderfromUrl } from '../../../useInitializeRequestHeaderfromUrl';
+import { useLocalStorageState } from 'ahooks';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -22,7 +23,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { sessionData } = useLocalStorageSession();
 
   useInitializeRequestHeaderfromUrl();
-  const isRequestHeaderSet = !!localStorage.getItem('x-tenant-name');
+  const isRequestHeaderSet = useLocalStorageState('x-tenant-name', { listenStorageChange: true });
 
   const { isAdmin, isReadOnly: isInternalAdminRoute } = useIsAdmin();
 
