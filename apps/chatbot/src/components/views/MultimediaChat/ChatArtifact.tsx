@@ -2,8 +2,12 @@ import { useChatStore } from "../../../stores/useChatStore.ts";
 import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
 import { useMemo } from "react";
 import ArtifactManager from "../../../managers/ArtifactManager.ts";
-import { SuggestionArtifactType } from "@meaku/core/types/chat";
+import {
+  FormArtifactType,
+  SuggestionArtifactType,
+} from "@meaku/core/types/chat";
 import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
+import FormArtifact from "./FormArtifact.tsx";
 
 const ChatArtifact = () => {
   const activeChatArtifactId = useChatStore(
@@ -46,6 +50,8 @@ const ChatArtifact = () => {
             artifact={artifactContent as SuggestionArtifactType}
           />
         );
+      case "FORM":
+        return <FormArtifact artifact={artifactContent as FormArtifactType} />;
       default:
         return <></>;
     }

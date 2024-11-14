@@ -4,6 +4,8 @@ import {
   ArtifactSchema,
   ChatBoxArtifactEnumSchema,
   DemoArtifactSchema,
+  FormArtifactSchema,
+  FormFieldSchema,
   SlideArtifactSchema,
   SlideImageArtifactSchema,
   SplitScreenArtifactEnumSchema,
@@ -67,6 +69,10 @@ export type DemoArtifactType = z.infer<typeof DemoArtifactSchema>;
 export type VideoArtifactType = z.infer<typeof VideoArtifactSchema>;
 
 export type SuggestionArtifactType = z.infer<typeof SuggestionArtifactSchema>;
+
+export type FormArtifactType = z.infer<typeof FormArtifactSchema>;
+
+export type FormFieldType = z.infer<typeof FormFieldSchema>;
 
 export type Message = {
   id: number | string;
