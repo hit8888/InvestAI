@@ -3,8 +3,8 @@ import Button from '@breakout/design-system/components/layout/button';
 import Input from '@breakout/design-system/components/layout/input';
 import { FormEvent, memo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useDebugStore } from '../../../stores/useDebugStore';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import { useDebugStore } from '../../../stores/useDebugStore';
 
 const SUPERADMIN_PASSWORD = 'VzEsWuLDN4wg0335/KVxjg==';
 

@@ -2,10 +2,10 @@ import { useLocalStorageState } from 'ahooks';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
-import { ChatParams } from '@meaku/core/types/msc';
 import useUpdateProspect from '@meaku/core/queries/mutation/useUpdateProspect';
 import useIsAdmin from './useIsAdmin';
 import useLocalStorageSession from './useLocalStorageSession';
+import { ChatParams } from '@meaku/core/types/config';
 
 const useAdminUserEmail = () => {
   const { orgName = '', agentId = '' } = useParams<ChatParams>();

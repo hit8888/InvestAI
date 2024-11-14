@@ -1,8 +1,8 @@
 import { useLocalStorageState } from 'ahooks';
 import { useParams } from 'react-router-dom';
-import { ChatParams } from '@meaku/core/types/msc';
 import { trackError } from '../utils/error';
 import { useCallback } from 'react';
+import { ChatParams } from '@meaku/core/types/config';
 
 type Session = {
   sessionId?: string;

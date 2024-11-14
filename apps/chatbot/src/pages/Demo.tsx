@@ -1,7 +1,7 @@
 import Backdrop from '@breakout/design-system/components/layout/backdrop';
+import { ChatParams } from '@meaku/core/types/config';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { ChatParams } from '@meaku/core/types/msc';
 
 const Demo = () => {
   const { orgName = '', agentId = '' } = useParams<ChatParams>();

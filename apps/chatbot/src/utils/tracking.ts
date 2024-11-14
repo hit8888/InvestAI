@@ -118,9 +118,9 @@ export const getBrowserSignature = (): Partial<BrowserSignature> => ({
   })(),
   canvas: (() => {
     try {
-      return getCanvasFingerprint();
+      return () => getCanvasFingerprint();
     } catch {
-      return null;
+      return () => null;
     }
   })(),
   localStorage: (() => {
