@@ -26,9 +26,7 @@ interface State {
   suggestionArtifactId: string | null;
   setSuggestionArtifactId: (suggestionArtifactId: string | null) => void;
   activeChatArtifactId: string | null;
-  setActiveChatArtifactId: (activeChatArtifactId: string | null) => void;
   activeChatArtifactType: ChatBoxArtifactType | null;
-  setActiveChatArtifactType: (artifactType: ChatBoxArtifactType | null) => void;
   handleAddActiveChatArtifact: (artifactId: string | null, artifactType: ChatBoxArtifactType) => void;
   handleRemoveActiveChatArtifact: () => void;
 }
@@ -86,15 +84,7 @@ export const useChatStore = create<State>()(
           draft.suggestionArtifactId = suggestionArtifactId;
         }),
       activeChatArtifactId: null,
-      setActiveChatArtifactId: (activeChatArtifactId: string | null) =>
-        set((draft) => {
-          draft.activeChatArtifactId = activeChatArtifactId;
-        }),
       activeChatArtifactType: null,
-      setActiveChatArtifactType: (artifactType) =>
-        set((draft) => {
-          draft.activeChatArtifactType = artifactType;
-        }),
       handleAddActiveChatArtifact: (artifactId, artifactType) => {
         set((state) => {
           state.activeChatArtifactId = artifactId;
