@@ -74,6 +74,10 @@ const useWebSocketChat = () => {
     (state) => state.handleAddActiveChatArtifact,
   );
 
+  const handleRemoveActiveChatArtifact = useChatStore(
+      (state) => state.handleRemoveActiveChatArtifact,
+  );
+
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
   const [shouldConnect, setShouldConnect] = useState(false);
 
@@ -178,6 +182,7 @@ const useWebSocketChat = () => {
 
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
+      handleRemoveActiveChatArtifact();
       handleAddUserMessage(message);
 
       if (readyState === ReadyState.CLOSED) {
