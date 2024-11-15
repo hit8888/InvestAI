@@ -76,7 +76,14 @@ const VideoArtifact = (props: IProps) => {
     if (shouldEndArtifactImmediately) {
       if (videoRef.current) {
         videoRef.current.pause();
-        videoRef.current.currentTime = videoRef.current.duration;
+        try {
+          videoRef.current.currentTime = videoRef.current.duration;
+        } catch (error) {
+          console.log(
+            "🚀 ~ file: VideoArtifact.tsx:83 ~ useEffect ~ error:",
+            error,
+          );
+        }
       }
       handleVideoOnEnd();
       setShouldEndArtifactImmediately(false);
