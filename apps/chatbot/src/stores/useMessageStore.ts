@@ -1,9 +1,14 @@
-import { AIResponse, Message } from "@meaku/core/types/chat";
+import {
+  AIResponse,
+  ChatBoxArtifactType,
+  Message,
+} from "@meaku/core/types/chat";
 import { Feedback } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import { ChatBoxArtifactEnumSchema } from "@meaku/core/types/artifact";
 
 interface State {
   messages: Message[];
@@ -60,6 +65,12 @@ export const useMessageStore = create<State>()(
               artifact.artifact_id,
           );
 
+          const chatBoxArtifact = response.artifacts.find((artifact) =>
+            ChatBoxArtifactEnumSchema.options.includes(
+              artifact.artifact_type as ChatBoxArtifactType,
+            ),
+          );
+
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
               ...draft.messages[existingMessageIndex],
@@ -71,6 +82,7 @@ export const useMessageStore = create<State>()(
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
               artifact: messageArtifact,
+              chatArtifact: chatBoxArtifact,
             };
           } else {
             draft.messages.push({
@@ -84,6 +96,7 @@ export const useMessageStore = create<State>()(
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
               artifact: messageArtifact,
+              chatArtifact: chatBoxArtifact,
             });
           }
         }),

@@ -9,12 +9,16 @@ import Button from "@breakout/design-system/components/layout/button";
 import { getZodType } from "../../../utils/form_fields.ts";
 import ChatFormField from "./ChatFormField.tsx";
 import CardTitle from "@breakout/design-system/components/layout/card-title";
-import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
 import { useState } from "react";
 import CardDescription from "@breakout/design-system/components/layout/card-description";
 
 interface IFormProps {
-  artifact: FormArtifactType;
+  artifact?: FormArtifactType;
+  handleSendUserMessage: (
+    message: string,
+    event_type: string,
+    event_data: Record<string, string>,
+  ) => void;
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
@@ -35,13 +39,10 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 };
 
 const FormArtifact = (props: IFormProps) => {
-  const {
-    artifact: { form_fields },
-  } = props;
+  const { artifact, handleSendUserMessage } = props;
   const [submitted, setSubmitted] = useState(false);
-  const { handleSendUserMessage } = useWebSocketChat();
 
-  const formSchema = createFormSchema(form_fields);
+  const formSchema = createFormSchema(artifact?.form_fields ?? []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,9 +53,9 @@ const FormArtifact = (props: IFormProps) => {
     setSubmitted(true);
   }
 
-  if (submitted) {
+  if (!artifact || submitted) {
     return (
-      <Card className="w-[350px]">
+      <Card className="mb-4 w-[350px]">
         <CardHeader>
           <CardTitle>Thank You for Sharing Your Details!</CardTitle>
           <CardDescription>
@@ -66,14 +67,14 @@ const FormArtifact = (props: IFormProps) => {
   }
 
   return (
-    <Card className="w-[350px]">
+    <Card className="mb-4 w-[350px]">
       <CardHeader>
         <CardTitle>Demo Form</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {form_fields.map((field, i) => (
+            {artifact.form_fields.map((field, i) => (
               <ChatFormField key={i} form={form} form_field={field} />
             ))}
             <Button type="submit">Submit Information</Button>

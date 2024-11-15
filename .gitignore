@@ -40,3 +40,6 @@ yarn-error.log*
 dist/
 
 *storybook.log
+
+#Webstorm
+.idea/

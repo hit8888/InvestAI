@@ -17,7 +17,7 @@ const MAX_RETRIES = 6;
 const artifactTypesNotToCache = ["NONE", "SUGGESTIONS"];
 
 const useArtifactData = (props: IProps) => {
-  const { artifactId = "", artifactType } = props;
+  const { artifactId = "", artifactType, options } = props;
 
   const { orgName = "" } = useParams<ChatParams>();
 
@@ -71,7 +71,11 @@ const useArtifactData = (props: IProps) => {
 
       return true;
     },
-    enabled: !!artifactId && artifactType && artifactType !== "NONE",
+    enabled:
+      (options?.enabled ?? true) &&
+      !!artifactId &&
+      artifactType &&
+      artifactType !== "NONE",
     staleTime: Infinity,
   });
 

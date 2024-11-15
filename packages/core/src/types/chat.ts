@@ -91,6 +91,7 @@ export type Message = {
   isReadOnly?: boolean;
   analytics: z.infer<typeof AnalyticsSchema>;
   artifact?: z.infer<typeof MessageArtifactSchema>;
+  chatArtifact?: z.infer<typeof MessageArtifactSchema>;
   type?: z.infer<typeof MessageSchema>["type"];
 };
 

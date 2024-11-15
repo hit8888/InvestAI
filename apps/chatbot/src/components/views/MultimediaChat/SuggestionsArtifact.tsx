@@ -2,30 +2,28 @@ import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
 import { SuggestionArtifactType } from "@meaku/core/types/chat";
 
 interface IProps {
-  artifact: SuggestionArtifactType;
+  artifact?: SuggestionArtifactType;
   handleSendUserMessage: (msg: string) => void;
 }
 
 const SuggestionsArtifact = (props: IProps) => {
-  const {
-    artifact: { suggested_questions, suggested_questions_type },
-    handleSendUserMessage,
-  } = props;
+  const { artifact, handleSendUserMessage } = props;
 
   const showSuggestionsArtifact: boolean =
-    suggested_questions.length > 0 && suggested_questions_type === "BUBBLE";
+    (artifact?.suggested_questions.length ?? 0) > 0 &&
+    artifact?.suggested_questions_type === "BUBBLE";
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
   };
 
-  if (!showSuggestionsArtifact) {
+  if (!artifact || !showSuggestionsArtifact) {
     return <></>;
   }
 
   return (
     <div className="flex flex-col gap-3">
-      {suggested_questions.map((question) => (
+      {artifact.suggested_questions.map((question) => (
         <button
           key={question}
           type="button"

@@ -51,9 +51,8 @@ const ChatMessage = (props: IProps) => {
           <MessageItem
             key={message.id}
             message={message}
-            showMessageArtifact={idx === messages.length - 1}
-            showArtifactPreview={idx >= messages.length - 4}
-            isLastMessage={idx === messages.length - 1}
+            messageIndex={idx}
+            totalMessages={messages.length}
           />
         ))}
       </div>
