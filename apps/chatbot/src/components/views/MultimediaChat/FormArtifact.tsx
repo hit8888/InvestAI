@@ -1,4 +1,8 @@
-import { FormArtifactType, FormFieldType } from "@meaku/core/types/chat";
+import {
+  FormArtifactMetadataType,
+  FormArtifactType,
+  FormFieldType,
+} from "@meaku/core/types/chat";
 import Card from "@breakout/design-system/components/layout/card";
 import CardContent from "@breakout/design-system/components/layout/card-content";
 import CardHeader from "@breakout/design-system/components/layout/card-header";
@@ -13,11 +17,13 @@ import { useState } from "react";
 import CardDescription from "@breakout/design-system/components/layout/card-description";
 
 interface IFormProps {
+  artifactId?: string;
   artifact?: FormArtifactType;
+  artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (
     message: string,
     event_type: string,
-    event_data: Record<string, string>,
+    event_data: Record<string, any>,
   ) => void;
 }
 
@@ -39,8 +45,11 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 };
 
 const FormArtifact = (props: IFormProps) => {
-  const { artifact, handleSendUserMessage } = props;
-  const [submitted, setSubmitted] = useState(false);
+  const { artifactId, artifact, artifactMetadata, handleSendUserMessage } =
+    props;
+  const [submitted, setSubmitted] = useState(
+    artifactMetadata?.is_filled ?? false,
+  );
 
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
 
@@ -49,11 +58,19 @@ const FormArtifact = (props: IFormProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    handleSendUserMessage("", "FORM_FILLED", values);
+    const response_data = {
+      artifact_id: artifactId,
+      form_data: values,
+    };
+    handleSendUserMessage("", "FORM_FILLED", response_data);
     setSubmitted(true);
   }
 
-  if (!artifact || submitted) {
+  if (!artifact) {
+    return <></>;
+  }
+
+  if (submitted) {
     return (
       <Card className="mb-4 w-[350px]">
         <CardHeader>

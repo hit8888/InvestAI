@@ -4,6 +4,7 @@ import {
   ArtifactSchema,
   ChatBoxArtifactEnumSchema,
   DemoArtifactSchema,
+  FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
   SlideArtifactSchema,
@@ -73,6 +74,8 @@ export type SuggestionArtifactType = z.infer<typeof SuggestionArtifactSchema>;
 export type FormArtifactType = z.infer<typeof FormArtifactSchema>;
 
 export type FormFieldType = z.infer<typeof FormFieldSchema>;
+
+export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
 
 export type Message = {
   id: number | string;

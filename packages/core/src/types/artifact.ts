@@ -77,25 +77,28 @@ export const SuggestionArtifactSchema = z.object({
   suggested_questions_type: z.enum(["STAR", "BUBBLE"]),
 });
 
-
 export const FormFieldDataTypeEnumSchema = z.enum([
-    "string",
-    "int",
-    "email",
-    "date",
-    "datetime",
-    "phone"
-])
+  "string",
+  "int",
+  "email",
+  "date",
+  "datetime",
+  "phone",
+]);
 
 export const FormFieldSchema = z.object({
   label: z.string(),
   data_type: FormFieldDataTypeEnumSchema,
   is_required: z.boolean(),
-})
+});
+
+export const FormArtifactMetadata = z.object({
+  is_filled: z.boolean().optional(),
+});
 
 export const FormArtifactSchema = z.object({
-  form_fields: z.array(FormFieldSchema)
-})
+  form_fields: z.array(FormFieldSchema),
+});
 
 export const ArtifactSchema = z.object({
   artifact_id: z.string(),
@@ -105,4 +108,5 @@ export const ArtifactSchema = z.object({
     .or(SuggestionArtifactSchema)
     .or(FormArtifactSchema),
   artifact_type: ArtifactEnumSchema,
+  metadata: FormArtifactMetadata.or(z.any()),
 });
