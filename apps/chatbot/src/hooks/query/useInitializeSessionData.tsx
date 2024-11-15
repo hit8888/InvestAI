@@ -117,6 +117,10 @@ const useInitializeSessionData = (
 
         return session;
       } catch (error) {
+        console.log(
+          "🚀 ~ file: useInitializeSessionData.tsx:120 ~ queryFn: ~ error:",
+          error,
+        );
         trackError(error, {
           action: "useInitializeSessionData | InitializeSessionResponseManager",
           component: "Chat",

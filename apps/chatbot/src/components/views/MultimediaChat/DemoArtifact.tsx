@@ -62,7 +62,8 @@ const DemoArtifact = (props: IProps) => {
       map.push({
         id: featureId,
         name: feature.feature_name,
-        description: feature.feature_description,
+        // TODO: Move this above loop when we have multiple features
+        description: `${artifact.introduction}\n\n${feature.feature_description}`,
         audioUrl: feature.feature_audio_url,
         interval: 10, // TODO: Take it from backend when available
       });
@@ -207,7 +208,7 @@ const DemoArtifact = (props: IProps) => {
       interval,
     } = currentContent;
 
-    const message = `${name}\n\n${description}`;
+    const message = description;
     const newAudio = new Audio(audioUrl);
 
     if (audioRef.current) {
