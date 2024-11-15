@@ -49,8 +49,8 @@ class ArtifactManager {
   getArtifactTitle() {
     switch (this.artifact.artifact_type) {
       case "DEMO":
-        return (this.artifact.content as DemoArtifactType).features[0].frames[0]
-          .frame_name;
+        return (this.artifact.content as DemoArtifactType).features[0]
+          .feature_name;
 
       case "SLIDE":
         return (this.artifact.content as SlideArtifactType).title;
@@ -69,8 +69,8 @@ class ArtifactManager {
   getArtifactDescription() {
     switch (this.artifact.artifact_type) {
       case "DEMO":
-        return (this.artifact.content as DemoArtifactType).features[0].frames[0]
-          .frame_description;
+        return (this.artifact.content as DemoArtifactType).features[0]
+          .feature_description;
 
       // TODO: Add description when backend adds it to the schema
       case "SLIDE":
