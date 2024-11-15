@@ -1,43 +1,43 @@
 import {
   FormArtifactType,
+  MessageArtifactSchema,
   SuggestionArtifactType,
 } from "@meaku/core/types/chat";
 import { memo, useMemo } from "react";
 import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
 import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
 import ArtifactManager from "../../../managers/ArtifactManager.ts";
-import { useChatStore } from "../../../stores/useChatStore.ts";
 import FormArtifact from "./FormArtifact.tsx";
 import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
+import { z } from "zod";
 
 interface IProps {
-  showChatArtifact?: boolean;
+  artifact?: z.infer<typeof MessageArtifactSchema>;
+  messageIndex: number;
+  totalMessages: number;
 }
 
-const ChatArtifact = ({ showChatArtifact = false }: IProps) => {
-  const activeChatArtifactId = useChatStore(
-    (state) => state.activeChatArtifactId,
-  );
-  const activeChatArtifactType = useChatStore(
-    (state) => state.activeChatArtifactType,
-  );
-
+const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
+
+  const isLastMessage = messageIndex === totalMessages - 1;
+
+  const artifactType = artifact?.artifact_type;
 
   const {
     data: artifactData,
     isFetching,
     isError,
   } = useArtifactData({
-    artifactId: activeChatArtifactId || "",
-    artifactType: activeChatArtifactType || "NONE",
+    artifactId: artifact?.artifact_id,
+    artifactType: artifactType,
     options: {
       refetchInterval: (data) => {
         if (data) return false;
 
         return 1000;
       },
-      enabled: showChatArtifact,
+      enabled: isLastMessage,
     },
   });
 
@@ -47,7 +47,6 @@ const ChatArtifact = ({ showChatArtifact = false }: IProps) => {
     return new ArtifactManager(artifactData);
   }, [artifactData]);
 
-  const artifactType = manager?.getArtifactType();
   const artifactContent = manager?.getArtifactContent();
 
   const renderArtifact = () => {
@@ -60,16 +59,18 @@ const ChatArtifact = ({ showChatArtifact = false }: IProps) => {
           />
         );
       case "FORM":
-        return <FormArtifact artifact={artifactContent as FormArtifactType} />;
+        return (
+          <FormArtifact
+            artifact={artifactContent as FormArtifactType}
+            handleSendUserMessage={handleSendUserMessage}
+          />
+        );
       default:
         return <></>;
     }
   };
 
-  if (!showChatArtifact) return null;
-
-  if (activeChatArtifactType === null || !activeChatArtifactId || !artifactData)
-    return null;
+  if (!artifact) return <></>;
 
   if (isError || isFetching) {
     return <></>;
