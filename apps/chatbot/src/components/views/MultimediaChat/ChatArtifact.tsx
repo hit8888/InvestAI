@@ -55,8 +55,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const renderArtifact = () => {
     switch (artifactType) {
       case "SUGGESTIONS":
-        if (!isLastMessage) return <></>;
-
+        if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
             artifact={artifactContent as SuggestionArtifactType}
