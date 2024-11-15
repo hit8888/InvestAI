@@ -4,12 +4,12 @@ import {
   SuggestionArtifactType,
 } from "@meaku/core/types/chat";
 import { memo, useMemo } from "react";
+import { z } from "zod";
 import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
 import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
 import ArtifactManager from "../../../managers/ArtifactManager.ts";
 import FormArtifact from "./FormArtifact.tsx";
 import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
-import { z } from "zod";
 
 interface IProps {
   artifact?: z.infer<typeof MessageArtifactSchema>;
@@ -52,6 +52,8 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const renderArtifact = () => {
     switch (artifactType) {
       case "SUGGESTIONS":
+        if (!isLastMessage) return <></>;
+
         return (
           <SuggestionsArtifact
             artifact={artifactContent as SuggestionArtifactType}
