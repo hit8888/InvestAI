@@ -41,9 +41,9 @@ const VideoArtifact = (props: IProps) => {
     (state) => state.setIsArtifactPlaying,
   );
 
-  const handleSendArtifactCompletionEvent = () => {
+  const handleVideoOnEnd = () => {
     const payload = {
-      artifact_type: "DEMO",
+      artifact_type: "VIDEO",
       artifact_id: artifactId,
     };
     handleSendUserMessage("", "ARTIFACT_CONSUMED", payload);
@@ -78,11 +78,22 @@ const VideoArtifact = (props: IProps) => {
         videoRef.current.pause();
         videoRef.current.currentTime = videoRef.current.duration;
       }
-      handleSendArtifactCompletionEvent();
+      handleVideoOnEnd();
       setShouldEndArtifactImmediately(false);
       setIsArtifactPlaying(false);
     }
   }, [shouldEndArtifactImmediately]);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.addEventListener("ended", handleVideoOnEnd);
+
+      return () => {
+        videoElement.removeEventListener("ended", handleVideoOnEnd);
+      };
+    }
+  }, []);
 
   if (!videoUrl) return null;
 

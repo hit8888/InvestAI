@@ -6,6 +6,7 @@ import {
   SessionSchema,
 } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
+import { trackError } from "../utils/error";
 
 type ResponseType = Configuration | Session;
 
@@ -35,6 +36,11 @@ class UnifiedResponseManager {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
+      trackError(validatedSession.error.errors, {
+        action: "validateSession",
+        component: "UnifiedResponseManager",
+      });
+
       throw new Error(
         validatedSession.error.errors.map((error) => error.message).join(", "),
       );
@@ -50,6 +56,11 @@ class UnifiedResponseManager {
     const validatedConfig = ConfigurationSchema.safeParse(config);
 
     if (!validatedConfig.success) {
+      trackError(validatedConfig.error.errors, {
+        action: "validateConfig",
+        component: "UnifiedResponseManager",
+      });
+
       throw new Error(
         validatedConfig.error.errors.map((error) => error.message).join(", "),
       );
