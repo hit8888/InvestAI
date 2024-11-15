@@ -200,13 +200,7 @@ const DemoArtifact = (props: IProps) => {
 
     if (!currentContent) return;
 
-    const {
-      id: contentId,
-      name,
-      description,
-      audioUrl,
-      interval,
-    } = currentContent;
+    const { id: contentId, description, audioUrl, interval } = currentContent;
 
     const message = description;
     const newAudio = new Audio(audioUrl);
