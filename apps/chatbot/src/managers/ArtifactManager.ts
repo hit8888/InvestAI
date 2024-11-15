@@ -41,9 +41,13 @@ class ArtifactManager {
     return this.artifact.artifact_type;
   }
 
-  //Refactor this code to use different mehods
+  //Refactor this code to use different methods
   getArtifactContent() {
     return this.artifact.content;
+  }
+
+  getArtifactMetaData() {
+    return this.artifact.metadata;
   }
 
   getArtifactTitle() {

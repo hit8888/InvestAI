@@ -1,4 +1,4 @@
-import { Message } from "@meaku/core/types/chat";
+import { ChatBoxArtifactType, Message } from "@meaku/core/types/chat";
 import {
   Configuration,
   ConfigurationSchema,
@@ -7,6 +7,7 @@ import {
 } from "@meaku/core/types/session";
 import { nanoid } from "nanoid";
 import { trackError } from "../utils/error";
+import { ChatBoxArtifactEnumSchema } from "@meaku/core/types/artifact";
 
 type ResponseType = Configuration | Session;
 
@@ -128,6 +129,12 @@ class UnifiedResponseManager {
             artifact.artifact_id,
         );
 
+        const chatBoxArtifact = message.artifacts.find((artifact) =>
+          ChatBoxArtifactEnumSchema.options.includes(
+            artifact.artifact_type as ChatBoxArtifactType,
+          ),
+        );
+
         return {
           id: message.message_id,
           message: message.message,
@@ -142,6 +149,7 @@ class UnifiedResponseManager {
           isReadOnly,
           analytics: message.analytics,
           artifact: messageArtifact,
+          chatArtifact: chatBoxArtifact,
         };
       });
 

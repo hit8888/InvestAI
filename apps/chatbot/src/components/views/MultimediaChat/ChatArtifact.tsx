@@ -1,4 +1,5 @@
 import {
+  FormArtifactMetadataType,
   FormArtifactType,
   MessageArtifactSchema,
   SuggestionArtifactType,
@@ -20,9 +21,10 @@ interface IProps {
 const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
 
-  const isLastMessage = messageIndex === totalMessages - 1;
-
   const artifactType = artifact?.artifact_type;
+
+  const shouldGetArtifactData =
+    artifactType == "FORM" || messageIndex === totalMessages - 1;
 
   const {
     data: artifactData,
@@ -37,7 +39,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
 
         return 1000;
       },
-      enabled: isLastMessage,
+      enabled: shouldGetArtifactData,
     },
   });
 
@@ -48,12 +50,12 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   }, [artifactData]);
 
   const artifactContent = manager?.getArtifactContent();
+  const artifactMetadata = manager?.getArtifactMetaData();
 
   const renderArtifact = () => {
     switch (artifactType) {
       case "SUGGESTIONS":
-        if (!isLastMessage) return <></>;
-
+        if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
             artifact={artifactContent as SuggestionArtifactType}
@@ -63,7 +65,9 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
       case "FORM":
         return (
           <FormArtifact
+            artifactId={artifact?.artifact_id}
             artifact={artifactContent as FormArtifactType}
+            artifactMetadata={artifactMetadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
           />
         );
@@ -72,7 +76,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
     }
   };
 
-  if (!artifact) return <></>;
+  if (!artifact || !artifactData) return <></>;
 
   if (isError || isFetching) {
     return <></>;
