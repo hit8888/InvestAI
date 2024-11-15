@@ -253,7 +253,14 @@ const DemoArtifact = (props: IProps) => {
       // TODO: Debug this
       // setActiveFrameIndex(frames.length - 1);
       if (audioRef.current) {
-        audioRef.current.currentTime = audioRef.current.duration;
+        try {
+          audioRef.current.currentTime = audioRef.current.duration;
+        } catch (error) {
+          console.log(
+            "🚀 ~ file: DemoArtifact.tsx:260 ~ useEffect ~ error:",
+            error,
+          );
+        }
         audioRef.current.pause();
       }
       handleSendArtifactCompletionEvent();
