@@ -21,8 +21,8 @@ const useLocalStorageSession = () => {
   const sessionData: Session = {
     sessionId: localStorageSessionData?.sessionId,
     prospectId: localStorageSessionData?.prospectId,
-    showTooltip: localStorageSessionData?.showTooltip ?? false,
-    isChatOpen: localStorageSessionData?.isChatOpen ?? false,
+    showTooltip: localStorageSessionData?.showTooltip ?? true,
+    isChatOpen: localStorageSessionData?.isChatOpen ?? true,
   };
 
   const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {
