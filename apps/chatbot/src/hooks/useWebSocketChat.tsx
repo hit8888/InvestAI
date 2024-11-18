@@ -51,6 +51,8 @@ const useWebSocketChat = () => {
 
   const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
 
+  const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
+
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
@@ -85,6 +87,7 @@ const useWebSocketChat = () => {
       const messageId = nanoid();
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
+      handleRemoveActiveChatArtifact();
       handleAddUserMessage(message);
       setIsAMessageBeingProcessed(true);
 
