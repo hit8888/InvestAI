@@ -93,6 +93,11 @@ const useWebSocketChat = () => {
         event_data: eventData ?? {},
       };
 
+      if (eventType && eventData) {
+        sendMessage(JSON.stringify(payload));
+        return;
+      }
+
       handleAnimatedOrb(messageId);
 
       if (!sessionId) {
