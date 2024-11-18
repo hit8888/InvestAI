@@ -25,8 +25,6 @@ const useWebSocketChat = () => {
 
   const { isAdmin } = useIsAdmin();
 
-  const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
   // TODO: Remove Suggestion Artifacts
@@ -78,10 +76,6 @@ const useWebSocketChat = () => {
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
-      }
-
-      if (!isChatOpen) {
-        setIsChatOpen(true);
       }
 
       const messageId = nanoid();

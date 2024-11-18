@@ -17,8 +17,6 @@ interface IProps {
 
 const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-  const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
@@ -36,10 +34,12 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
+  const isChatOpen = sessionData.isChatOpen;
+
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
 
   const handleToggleChatOpenState = () => {
-    setIsChatOpen((previous) => !previous);
+    handleUpdateSessionData({ isChatOpen: !isChatOpen });
   };
 
   const handleCloseTooltip = () => {
@@ -47,7 +47,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   };
 
   const handleCloseChat = () => {
-    setIsChatOpen(false);
+    handleUpdateSessionData({ isChatOpen: false });
   };
 
   useEffect(() => {
@@ -89,6 +89,9 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
               handleChatInputOnChangeCallback={fetchSessionData}
               handleSendUserMessage={(selectedMessage) => {
                 fetchSessionData();
+                if (!isChatOpen) {
+                  handleUpdateSessionData({ isChatOpen: true });
+                }
                 handleSendUserMessage(selectedMessage);
               }}
             />
@@ -104,6 +107,9 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         handleCloseTooltip={handleCloseTooltip}
         handleSuggestionsOnClick={(selectedMessage) => {
           fetchSessionData();
+          if (!isChatOpen) {
+            handleUpdateSessionData({ isChatOpen: true });
+          }
           handleSendUserMessage(selectedMessage);
         }}
       />

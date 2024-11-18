@@ -6,8 +6,6 @@ import { immer } from 'zustand/middleware/immer';
 import { ChatBoxArtifactType } from '@meaku/core/types/chat';
 
 interface State {
-  isChatOpen: boolean;
-  setIsChatOpen: (value: boolean | ((prevState: boolean) => boolean)) => void;
   isChatMaximized: boolean;
   setIsChatMaximized: (value: boolean | ((prevState: boolean) => boolean)) => void;
   showTooltip: boolean;
@@ -34,11 +32,6 @@ interface State {
 export const useChatStore = create<State>()(
   devtools(
     immer((set) => ({
-      isChatOpen: false,
-      setIsChatOpen: (value) =>
-        set((draft) => {
-          draft.isChatOpen = typeof value === 'function' ? value(draft.isChatOpen) : value;
-        }),
       isChatMaximized: false,
       setIsChatMaximized: (value) =>
         set((draft) => {

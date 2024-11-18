@@ -32,10 +32,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
-  const { handleUpdateSessionData } = useLocalStorageSession();
-
-  const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
   const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
@@ -48,17 +44,17 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
 
-  const { sessionData } = useLocalStorageSession();
+  const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
+
+  const isChatOpen = sessionData.isChatOpen;
 
   const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
 
   const handleCloseChat = () => {
-    setIsChatOpen(false);
     handleUpdateSessionData({ isChatOpen: false });
   };
 
   const handleOpenChat = () => {
-    setIsChatOpen(true);
     handleUpdateSessionData({ isChatOpen: true });
   };
 
@@ -145,6 +141,9 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
               handleOnChange={fetchSessionData}
               handleSendMessage={(selectedMessage) => {
                 fetchSessionData();
+                if (!isChatOpen) {
+                  handleUpdateSessionData({ isChatOpen: true });
+                }
                 handleSendUserMessage(selectedMessage);
               }}
               isAMessageBeingProcessed={isAMessageBeingProcessed}
@@ -158,6 +157,9 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
         handleSendUserMessage={(selectedMessage) => {
           fetchSessionData();
+          if (!isChatOpen) {
+            handleUpdateSessionData({ isChatOpen: true });
+          }
           handleSendUserMessage(selectedMessage);
         }}
         handleOpenChat={handleOpenChat}
