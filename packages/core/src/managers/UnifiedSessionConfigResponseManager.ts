@@ -1,4 +1,3 @@
-<<<<<<< HEAD:packages/core/src/managers/UnifiedSessionConfigResponseManager.ts
 import { nanoid } from "nanoid";
 import {
   ConfigurationApiResponse,
@@ -6,19 +5,8 @@ import {
   SessionApiResponse,
   SessionSchema,
 } from "../types/session";
-import { Message } from "../types/chat";
-=======
-import { ChatBoxArtifactType, Message } from "@meaku/core/types/chat";
-import {
-  Configuration,
-  ConfigurationSchema,
-  Session,
-  SessionSchema,
-} from "@meaku/core/types/session";
-import { nanoid } from "nanoid";
-import { trackError } from "../utils/error";
-import { ChatBoxArtifactEnumSchema } from "@meaku/core/types/artifact";
->>>>>>> main:apps/chatbot/src/managers/UnifiedResponseManager.ts
+import { ChatBoxArtifactType, Message } from "../types/chat";
+import { ChatBoxArtifactEnumSchema } from "../types/artifact";
 
 export type SessionConfigResponseType =
   | ConfigurationApiResponse
@@ -52,11 +40,6 @@ class UnifiedSessionConfigResponseManager {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
-      trackError(validatedSession.error.errors, {
-        action: "validateSession",
-        component: "UnifiedResponseManager",
-      });
-
       throw new Error(
         validatedSession.error.errors.map((error) => error.message).join(", ")
       );
@@ -72,11 +55,6 @@ class UnifiedSessionConfigResponseManager {
     const validatedConfig = ConfigurationSchema.safeParse(config);
 
     if (!validatedConfig.success) {
-      trackError(validatedConfig.error.errors, {
-        action: "validateConfig",
-        component: "UnifiedResponseManager",
-      });
-
       throw new Error(
         validatedConfig.error.errors.map((error) => error.message).join(", ")
       );
@@ -127,36 +105,28 @@ class UnifiedSessionConfigResponseManager {
       analytics: {},
     };
 
-<<<<<<< HEAD:packages/core/src/managers/UnifiedSessionConfigResponseManager.ts
-    const formattedChatHistory = chatHistory.map((message, idx) => {
-      const messageFeedback = feedbacks.find(
-        (feedback) =>
-          feedback.response_id === message.response_id ||
-          feedback.response_id === message.message_id.toString()
-      );
-=======
     const formattedChatHistory = chatHistory
       .filter((message) => message.type === "text")
       .map((message, idx) => {
         const messageFeedback = feedbacks.find(
           (feedback) =>
             feedback.response_id === message.response_id ||
-            feedback.response_id === message.message_id.toString(),
+            feedback.response_id === message.message_id.toString()
         );
->>>>>>> main:apps/chatbot/src/managers/UnifiedResponseManager.ts
 
         // TODO: Replace this with the chat artifact enums created by Amogh
         const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
         const messageArtifact = message.artifacts.find(
           (artifact) =>
-            !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
-            artifact.artifact_id,
+            ArtifactTypesToIgnore.indexOf(artifact.artifact_type) === -1 &&
+            artifact.artifact_id
         );
 
-        const chatBoxArtifact = message.artifacts.find((artifact) =>
-          ChatBoxArtifactEnumSchema.options.includes(
-            artifact.artifact_type as ChatBoxArtifactType,
-          ),
+        const chatBoxArtifact = message.artifacts.find(
+          (artifact) =>
+            Array.from(ChatBoxArtifactEnumSchema.options).indexOf(
+              artifact.artifact_type as ChatBoxArtifactType
+            ) !== -1
         );
 
         return {
