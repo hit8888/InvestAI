@@ -82,7 +82,6 @@ const useWebSocketChat = () => {
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleRemoveActiveChatArtifact();
-      handleAddUserMessage(message);
       setIsAMessageBeingProcessed(true);
 
       const payload = {
@@ -98,6 +97,7 @@ const useWebSocketChat = () => {
         return;
       }
 
+      handleAddUserMessage(message);
       handleAnimatedOrb(messageId);
 
       if (!sessionId) {
