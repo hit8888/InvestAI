@@ -93,41 +93,43 @@ const MessageItem = (props: IProps) => {
               <BotIndicator />
             </>
           )}
-          <div
-            className={cn("prose max-w-full flex-1", {
-              "text-primary-foreground": !isSenderBot,
-              "leading-snug text-gray-600": isSenderBot,
-              "animate-pulse": isLoading,
-            })}
-            ref={messageRef}
-          >
-            <ReactMarkdown
-              remarkPlugins={[gfm]}
-              components={reactMarkdownComponents}
+          <div className="flex-col">
+            <div
+              className={cn("prose max-w-full flex-1", {
+                "text-primary-foreground": !isSenderBot,
+                "leading-snug text-gray-600": isSenderBot,
+                "animate-pulse": isLoading,
+              })}
+              ref={messageRef}
             >
-              {message.message}
-            </ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[gfm]}
+                components={reactMarkdownComponents}
+              >
+                {message.message}
+              </ReactMarkdown>
+            </div>
+            <div className="ml-auto flex flex-col">
+              {message.chatArtifact && (
+                <ChatArtifact
+                  artifact={message.chatArtifact}
+                  messageIndex={messageIndex}
+                  totalMessages={totalMessages}
+                />
+              )}
+            </div>
+
+            {showMessageArtifactPreview && (
+              <ArtifactPreview
+                artifactId={messageArtifactId}
+                artifactType={messageArtifactType as string}
+              />
+            )}
           </div>
           {/* TODO: Add link preview */}
           {/* <div></div> */}
         </div>
       </div>
-      <div className="ml-auto flex flex-col">
-        {message.chatArtifact && (
-          <ChatArtifact
-            artifact={message.chatArtifact}
-            messageIndex={messageIndex}
-            totalMessages={totalMessages}
-          />
-        )}
-      </div>
-
-      {showMessageArtifactPreview && (
-        <ArtifactPreview
-          artifactId={messageArtifactId}
-          artifactType={messageArtifactType as string}
-        />
-      )}
     </div>
   );
 };
