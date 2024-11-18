@@ -21,7 +21,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
   return (
     <FormField
       control={form.control}
-      name={form_field.label}
+      name={form_field.field_name}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{form_field.label}</FormLabel>

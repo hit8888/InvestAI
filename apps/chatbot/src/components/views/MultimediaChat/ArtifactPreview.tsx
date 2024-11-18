@@ -1,6 +1,6 @@
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import { ArtifactEnum } from '@meaku/core/types/chat';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import { useMemo } from 'react';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
@@ -8,7 +8,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   artifactId: string;
-  artifactType: ArtifactEnum;
+  artifactType?: ArtifactEnum;
 }
 
 const truncateText = (text: string, limit: number): string => {
@@ -21,9 +21,9 @@ const truncateText = (text: string, limit: number): string => {
 const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   const localStorageArtifact = useLocalStorageArtifact();
 
-  const { data, isError } = useArtifactDataQuery({
+  const { data, isError, isFetching } = useArtifactDataQuery({
     artifactId: artifactId,
-    artifactType: artifactType,
+    artifactType: artifactType ?? 'NONE',
     queryOptions: {
       enabled: !!artifactId && artifactType !== 'NONE',
     },
@@ -36,7 +36,11 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   }, [data]);
 
   const title = manager?.getArtifactTitle();
-  const description = manager?.getArtifactDescription();
+  let description: string | null | undefined = manager?.getArtifactDescription();
+
+  if (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE') {
+    description = null;
+  }
 
   const handleArtifactOnClick = () => {
     if (!localStorageArtifact) {
@@ -53,30 +57,34 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   return (
     <button
       onClick={handleArtifactOnClick}
-      className="my-3 flex w-11/12 gap-6 rounded-xl bg-primary/10 p-5 transition-colors duration-300 ease-in-out hover:bg-primary/20"
+      className="mt-3 flex-col gap-6 rounded-xl bg-primary/10 p-5 transition-colors duration-300 ease-in-out hover:bg-primary/20"
     >
-      <div className="h-20 w-32 min-w-32 rounded-lg bg-white"></div>
-      <div className="flex flex-1 items-center gap-4">
-        <div
-          className={cn('flex flex-1 flex-col items-start text-left', {
-            'space-y-1': title && description,
-            'space-y-6': !title || !description,
-          })}
-        >
-          {title ? (
-            <h4 className="text-base font-semibold text-primary lg:text-lg 2xl:text-xl">{title}</h4>
-          ) : (
-            <div className="h-4 w-full animate-pulse rounded-lg bg-primary/30" />
-          )}
-          {description ? (
-            <p className="text-sm text-primary/60 2xl:text-base">{truncateText(description, 100)}</p>
-          ) : (
-            <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
-          )}
+      <div className="flex items-center justify-between">
+        <div className="flex h-14 min-h-14 w-14 min-w-14 items-center justify-center rounded-xl border-2 border-primary-foreground/60 bg-primary/70">
+          <CirclePlay height={32} width={32} />
         </div>
-        <div className="rounded-full bg-primary/10 p-2">
-          <ArrowUpRight className="h-6 w-6 text-primary/80" />
+        <div className="flex h-12 min-h-12 w-12 min-w-12 items-center justify-center rounded-full bg-primary/10">
+          <ArrowUpRight className="text-primary/70" height={24} width={24} />
         </div>
+      </div>
+      <div className=" mt-2 flex items-center gap-4">
+        {isFetching ? (
+          <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
+        ) : (
+          <div
+            className={cn('flex flex-1 flex-col items-start text-left', {
+              'space-y-1': title && description,
+              'space-y-6': !title || !description,
+            })}
+          >
+            {title ? (
+              <h4 className="lg:text-md text-base font-semibold text-primary 2xl:text-lg">{title}</h4>
+            ) : (
+              <div className="h-4 w-full animate-pulse rounded-lg bg-primary/30" />
+            )}
+            {description && <p className="text-sm text-primary/60 2xl:text-base">{truncateText(description, 100)}</p>}
+          </div>
+        )}
       </div>
     </button>
   );
