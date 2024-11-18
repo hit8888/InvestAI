@@ -10,7 +10,6 @@ import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import FormArtifact from './FormArtifact.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
-import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse.ts';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 
 interface IProps {
@@ -42,8 +41,6 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
       enabled: shouldGetArtifactData,
     },
   });
-
-  useUpdateLocalStorageOnArtifactResponse(artifactData);
 
   const manager = useMemo(() => {
     if (!artifactData) return;

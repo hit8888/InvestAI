@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { cn } from '@breakout/design-system/lib/cn';
-import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
 
 interface IProps {
   artifactId: string;
@@ -23,14 +22,13 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   const localStorageArtifact = useLocalStorageArtifact();
 
   const { data, isError } = useArtifactDataQuery({
-    artifactId: artifactId as string,
-    artifactType: 'SUGGESTIONS',
+    artifactId: artifactId,
+    artifactType: artifactType,
     queryOptions: {
       enabled: !!artifactId && artifactType !== 'NONE',
     },
   });
 
-  useUpdateLocalStorageOnArtifactResponse(data);
   const manager = useMemo(() => {
     if (!data) return null;
 
@@ -39,7 +37,6 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
 
   const title = manager?.getArtifactTitle();
   const description = manager?.getArtifactDescription();
-  console.log({ a: 'data' });
 
   const handleArtifactOnClick = () => {
     if (!localStorageArtifact) {
