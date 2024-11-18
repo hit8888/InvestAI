@@ -94,7 +94,7 @@ const MessageItem = (props: IProps) => {
               </ReactMarkdown>
             </div>
             <div className="ml-auto flex flex-col">
-              {message.chatArtifact && (
+              {message.chatArtifact && message.chatArtifact.artifact_type == 'FORM' && (
                 <ChatArtifact
                   artifact={message.chatArtifact}
                   messageIndex={messageIndex}
@@ -110,6 +110,11 @@ const MessageItem = (props: IProps) => {
           {/* TODO: Add link preview */}
           {/* <div></div> */}
         </div>
+      </div>
+      <div className="ml-auto">
+        {message.chatArtifact && message.chatArtifact.artifact_type == 'SUGGESTIONS' && (
+          <ChatArtifact artifact={message.chatArtifact} messageIndex={messageIndex} totalMessages={totalMessages} />
+        )}
       </div>
     </div>
   );
