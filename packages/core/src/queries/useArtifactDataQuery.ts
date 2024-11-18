@@ -27,7 +27,6 @@ const useArtifactDataQuery = ({
         artifactType: artifactType ?? "NONE",
       });
 
-      console.log({ response });
       const data = response.data as ArtifactResponse;
       return data;
     },

@@ -11,7 +11,6 @@ interface IProps {
 const SlideItems = (props: IProps) => {
   const { items } = props;
   const itemsLength = items.length;
-  console.log({ items });
 
   return (
     <div className="flex h-full items-center justify-center">

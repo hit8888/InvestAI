@@ -25,10 +25,6 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const artifactType = artifact?.artifact_type;
 
   const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;
-  console.log('ChatArtifact', {
-    artifact,
-    enabled: artifactType == 'FORM' || messageIndex === totalMessages - 1,
-  });
 
   const {
     data: artifactData,
