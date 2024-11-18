@@ -65,7 +65,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
       className="mt-3 flex-col gap-6 rounded-xl bg-primary/10 p-5 transition-colors duration-300 ease-in-out hover:bg-primary/20"
     >
       <div className="flex items-center justify-between">
-        <div className="flex h-14 min-h-14 w-14 min-w-14 items-center justify-center rounded-lg bg-primary/70">
+        <div className="flex h-14 min-h-14 w-14 min-w-14 items-center justify-center rounded-xl border-2 border-primary-foreground/60 bg-primary/70">
           <CirclePlay height={32} width={32} />
         </div>
         <div className="flex h-12 min-h-12 w-12 min-w-12 items-center justify-center rounded-full bg-primary/10">
