@@ -1,13 +1,13 @@
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 import { DemoArtifactType, SlideArtifactType, SlideImageArtifactType, VideoArtifactType } from '@meaku/core/types/chat';
 import { memo, useMemo } from 'react';
-import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import DemoArtifact from './DemoArtifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 
 const Artifact = () => {
   const { artifact } = useLocalStorageArtifact();

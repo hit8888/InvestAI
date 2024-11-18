@@ -102,8 +102,8 @@ const MessageItem = (props: IProps) => {
         )}
       </div>
 
-      {showMessageArtifactPreview && (
-        <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType as string} />
+      {showMessageArtifactPreview && messageArtifactType && (
+        <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType} />
       )}
     </div>
   );

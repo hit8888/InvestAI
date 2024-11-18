@@ -9,7 +9,7 @@ import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLoc
 
 interface IProps {
   artifactId: string;
-  artifactType: string;
+  artifactType: ArtifactEnum;
 }
 
 const truncateText = (text: string, limit: number): string => {
@@ -20,18 +20,17 @@ const truncateText = (text: string, limit: number): string => {
 };
 
 const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
-  const artifact = useLocalStorageArtifact();
+  const localStorageArtifact = useLocalStorageArtifact();
 
   const { data, isError } = useArtifactDataQuery({
     artifactId: artifactId as string,
     artifactType: 'SUGGESTIONS',
     queryOptions: {
-      enabled: !!artifact?.artifact?.activeArtifactId && artifact?.artifact?.activeArtifactType !== 'NONE',
+      enabled: !!artifactId && artifactType !== 'NONE',
     },
   });
 
   useUpdateLocalStorageOnArtifactResponse(data);
-
   const manager = useMemo(() => {
     if (!data) return null;
 
@@ -40,24 +39,16 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
 
   const title = manager?.getArtifactTitle();
   const description = manager?.getArtifactDescription();
+  console.log({ a: 'data' });
 
   const handleArtifactOnClick = () => {
-    // TODO: Add Type
-    // const payload = {
-    //   session_id: sessionId,
-    //   event_type: "ARTIFACT_CLICKED",
-    //   artifact_id: artifactId,
-    // };
-
-    // sendMessage(JSON.stringify(payload));
-
-    if (artifact) {
-      const { handleUpdateArtifact } = artifact;
-      handleUpdateArtifact({
-        activeArtifactId: artifactId,
-        activeArtifactType: artifactType as ArtifactEnum,
-      });
+    if (!localStorageArtifact) {
+      return;
     }
+    localStorageArtifact.handleUpdateArtifact({
+      activeArtifactId: artifactId,
+      activeArtifactType: artifactType,
+    });
   };
 
   if (isError) return null;
