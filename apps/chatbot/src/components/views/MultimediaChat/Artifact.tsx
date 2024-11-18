@@ -5,7 +5,7 @@ import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import DemoArtifact from './DemoArtifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
-import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifcatResponse';
+import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 
