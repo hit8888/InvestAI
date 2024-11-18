@@ -18,15 +18,9 @@ const useSetLocalStorageUsingConfigSessionData = (unifiedConfigurationResponse: 
     if (isInternalAdminRoute) {
       return;
     }
-
-    if (sessionId) {
+    if (sessionId && prospectId) {
       handleUpdateSessionData({
-        sessionId: sessionId,
-      });
-    }
-
-    if (prospectId) {
-      handleUpdateSessionData({
+        sessionId,
         prospectId,
       });
     }
