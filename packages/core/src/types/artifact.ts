@@ -88,12 +88,16 @@ export const FormFieldDataTypeEnumSchema = z.enum([
 
 export const FormFieldSchema = z.object({
   label: z.string(),
+  field_name: z.string(),
   data_type: FormFieldDataTypeEnumSchema,
   is_required: z.boolean(),
 });
 
 export const FormArtifactMetadata = z.object({
   is_filled: z.boolean().optional(),
+  filled_data: z.object({
+    default: z.string(),
+  }),
 });
 
 export const FormArtifactSchema = z.object({

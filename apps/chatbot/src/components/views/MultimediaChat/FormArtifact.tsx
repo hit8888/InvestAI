@@ -35,9 +35,9 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 
     // Make the field required if is_required is not null or undefined
     if (field.is_required) {
-      schemaShape[field.label] = fieldSchema;
+      schemaShape[field.field_name] = fieldSchema;
     } else {
-      schemaShape[field.label] = fieldSchema.optional();
+      schemaShape[field.field_name] = fieldSchema.optional();
     }
   });
 
@@ -55,6 +55,7 @@ const FormArtifact = (props: IFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: artifactMetadata.filled_data ?? {},
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
