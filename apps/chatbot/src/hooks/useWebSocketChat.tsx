@@ -15,7 +15,6 @@ import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import useIsAdmin from './useIsAdmin';
-import { useArtifactStore } from '../stores/useArtifactStore';
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -37,9 +36,6 @@ const useWebSocketChat = () => {
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
-
-  const isArtifactPlaying = useArtifactStore((state) => state.isArtifactPlaying);
-  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
 
   const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
 
@@ -86,10 +82,6 @@ const useWebSocketChat = () => {
 
       if (!isChatOpen) {
         setIsChatOpen(true);
-      }
-
-      if (isArtifactPlaying) {
-        setShouldEndArtifactImmediately(true);
       }
 
       const messageId = nanoid();

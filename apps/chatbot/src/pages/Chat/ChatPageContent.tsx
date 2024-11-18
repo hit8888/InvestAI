@@ -7,6 +7,7 @@ import { useUpdateSessionOnSessionInit } from '../shared/hooks/useUpdateSessionO
 import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedConfigurationResponseManager';
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '../shared/ApiProvider/Context';
+import { useArtifactStore } from '../../stores/useArtifactStore';
 
 const Widget = lazy(() => import('../../components/views/Widget'));
 const Embed = lazy(() => import('../../components/views/Embed'));
@@ -28,6 +29,8 @@ const Chat = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
+  const isArtifactPlaying = useArtifactStore((state) => state.isArtifactPlaying);
+  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
 
   const { handleSendUserMessage } = useWebSocketChat();
 
@@ -42,9 +45,16 @@ const Chat = () => {
     sessionQuery.refetch();
   };
 
+  const onMessageSend = async (message: string) => {
+    if (isArtifactPlaying) {
+      setShouldEndArtifactImmediately(true);
+    }
+    handleSendUserMessage(message);
+  };
+
   return (
     <Suspense fallback={<></>}>
-      <Component fetchSessionData={handleOnFirstMessageSend} handleSendUserMessage={handleSendUserMessage} />
+      <Component fetchSessionData={handleOnFirstMessageSend} handleSendUserMessage={onMessageSend} />
     </Suspense>
   );
 };
