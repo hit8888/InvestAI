@@ -1,36 +1,49 @@
-import { useChatStore } from '../../../stores/useChatStore.ts';
-import { useMemo } from 'react';
-import { SuggestionArtifactType } from '@meaku/core/types/chat';
+import {
+  FormArtifactMetadataType,
+  FormArtifactType,
+  MessageArtifactSchema,
+  SuggestionArtifactType,
+} from '@meaku/core/types/chat';
+import { memo, useMemo } from 'react';
+import { z } from 'zod';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import FormArtifact from './FormArtifact.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse.ts';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
-import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
-import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifcatResponse.ts';
 
-const ChatArtifact = () => {
-  const activeChatArtifactId = useChatStore((state) => state.activeChatArtifactId);
-  const activeChatArtifactType = useChatStore((state) => state.activeChatArtifactType);
+interface IProps {
+  artifact?: z.infer<typeof MessageArtifactSchema>;
+  messageIndex: number;
+  totalMessages: number;
+}
 
+const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
+
+  const artifactType = artifact?.artifact_type;
+
+  const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;
 
   const {
     data: artifactData,
     isFetching,
     isError,
   } = useArtifactDataQuery({
-    artifactId: activeChatArtifactId ?? '',
-    artifactType: activeChatArtifactType,
+    artifactId: artifact?.artifact_id ?? null,
+    artifactType: artifactType ?? null,
     queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
 
         return 1000;
       },
-      enabled: !!activeChatArtifactId && !!activeChatArtifactType,
+      enabled: shouldGetArtifactData,
     },
   });
 
-  useUpdateLocalStorageOnArtiactResponse(artifactData);
+  useUpdateLocalStorageOnArtifactResponse(artifactData);
 
   const manager = useMemo(() => {
     if (!artifactData) return;
@@ -38,15 +51,25 @@ const ChatArtifact = () => {
     return new ArtifactManager(artifactData);
   }, [artifactData]);
 
-  const artifactType = manager?.getArtifactType();
   const artifactContent = manager?.getArtifactContent();
+  const artifactMetadata = manager?.getArtifactMetaData();
 
   const renderArtifact = () => {
     switch (artifactType) {
       case 'SUGGESTIONS':
+        if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
             artifact={artifactContent as SuggestionArtifactType}
+            handleSendUserMessage={handleSendUserMessage}
+          />
+        );
+      case 'FORM':
+        return (
+          <FormArtifact
+            artifactId={artifact?.artifact_id}
+            artifact={artifactContent as FormArtifactType}
+            artifactMetadata={artifactMetadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
           />
         );
@@ -55,13 +78,13 @@ const ChatArtifact = () => {
     }
   };
 
-  if (activeChatArtifactType === null || !activeChatArtifactId || !artifactData) return null;
+  if (!artifact || !artifactData) return <></>;
 
   if (isError || isFetching) {
     return <></>;
   }
 
-  return renderArtifact();
+  return <>{renderArtifact()}</>;
 };
 
-export default ChatArtifact;
+export default memo(ChatArtifact);

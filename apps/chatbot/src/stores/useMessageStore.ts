@@ -1,9 +1,10 @@
-import { AIResponse, Message } from '@meaku/core/types/chat';
+import { AIResponse, ChatBoxArtifactType, Message } from '@meaku/core/types/chat';
 import { Feedback } from '@meaku/core/types/session';
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { ChatBoxArtifactEnumSchema } from '@meaku/core/types/artifact';
 
 interface State {
   messages: Message[];
@@ -15,8 +16,10 @@ interface State {
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: AIResponse) => void;
   handleAddUserMessage: (message: string) => void;
+
   handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
   handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
+  handleRemoveMessages: (messageIds: string[]) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -49,6 +52,10 @@ export const useMessageStore = create<State>()(
             (artifact) => !ArtifactTypesToIgnore.includes(artifact.artifact_type) && artifact.artifact_id,
           );
 
+          const chatBoxArtifact = response.artifacts.find((artifact) =>
+            ChatBoxArtifactEnumSchema.options.includes(artifact.artifact_type as ChatBoxArtifactType),
+          );
+
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
               ...draft.messages[existingMessageIndex],
@@ -60,6 +67,7 @@ export const useMessageStore = create<State>()(
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
               artifact: messageArtifact,
+              chatArtifact: chatBoxArtifact,
             };
           } else {
             draft.messages.push({
@@ -73,6 +81,7 @@ export const useMessageStore = create<State>()(
               showFeedbackOptions: response.showFeedbackOptions,
               analytics: response.analytics,
               artifact: messageArtifact,
+              chatArtifact: chatBoxArtifact,
             });
           }
         }),
@@ -117,6 +126,10 @@ export const useMessageStore = create<State>()(
             ...draft.messages[messageIndex],
             feedback: previousState?.feedback ?? undefined,
           };
+        }),
+      handleRemoveMessages: (messageIds) =>
+        set((draft) => {
+          draft.messages = draft.messages.filter((message) => !messageIds.includes(message.id as string));
         }),
     })),
   ),

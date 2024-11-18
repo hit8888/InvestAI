@@ -1,3 +1,4 @@
+<<<<<<< HEAD:packages/core/src/managers/UnifiedSessionConfigResponseManager.ts
 import { nanoid } from "nanoid";
 import {
   ConfigurationApiResponse,
@@ -6,6 +7,18 @@ import {
   SessionSchema,
 } from "../types/session";
 import { Message } from "../types/chat";
+=======
+import { ChatBoxArtifactType, Message } from "@meaku/core/types/chat";
+import {
+  Configuration,
+  ConfigurationSchema,
+  Session,
+  SessionSchema,
+} from "@meaku/core/types/session";
+import { nanoid } from "nanoid";
+import { trackError } from "../utils/error";
+import { ChatBoxArtifactEnumSchema } from "@meaku/core/types/artifact";
+>>>>>>> main:apps/chatbot/src/managers/UnifiedResponseManager.ts
 
 export type SessionConfigResponseType =
   | ConfigurationApiResponse
@@ -39,6 +52,11 @@ class UnifiedSessionConfigResponseManager {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
+      trackError(validatedSession.error.errors, {
+        action: "validateSession",
+        component: "UnifiedResponseManager",
+      });
+
       throw new Error(
         validatedSession.error.errors.map((error) => error.message).join(", ")
       );
@@ -54,6 +72,11 @@ class UnifiedSessionConfigResponseManager {
     const validatedConfig = ConfigurationSchema.safeParse(config);
 
     if (!validatedConfig.success) {
+      trackError(validatedConfig.error.errors, {
+        action: "validateConfig",
+        component: "UnifiedResponseManager",
+      });
+
       throw new Error(
         validatedConfig.error.errors.map((error) => error.message).join(", ")
       );
@@ -104,37 +127,55 @@ class UnifiedSessionConfigResponseManager {
       analytics: {},
     };
 
+<<<<<<< HEAD:packages/core/src/managers/UnifiedSessionConfigResponseManager.ts
     const formattedChatHistory = chatHistory.map((message, idx) => {
       const messageFeedback = feedbacks.find(
         (feedback) =>
           feedback.response_id === message.response_id ||
           feedback.response_id === message.message_id.toString()
       );
+=======
+    const formattedChatHistory = chatHistory
+      .filter((message) => message.type === "text")
+      .map((message, idx) => {
+        const messageFeedback = feedbacks.find(
+          (feedback) =>
+            feedback.response_id === message.response_id ||
+            feedback.response_id === message.message_id.toString(),
+        );
+>>>>>>> main:apps/chatbot/src/managers/UnifiedResponseManager.ts
 
-      // TODO: Replace this with the chat artifact enums created by Amogh
-      const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
-      const messageArtifact = message.artifacts.find(
-        (artifact) =>
-          !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
-          artifact.artifact_id,
-      );
+        // TODO: Replace this with the chat artifact enums created by Amogh
+        const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
+        const messageArtifact = message.artifacts.find(
+          (artifact) =>
+            !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
+            artifact.artifact_id,
+        );
 
-      return {
-        id: message.message_id,
-        message: message.message,
-        media: message.media,
-        documents: message.documents,
-        role: message.role,
-        suggested_questions: message.suggested_questions,
-        isPartOfHistory: true,
-        is_complete: true,
-        showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
-        feedback: messageFeedback,
-        isReadOnly,
-        analytics: message.analytics,
-        artifact: messageArtifact,
-      };
-    });
+        const chatBoxArtifact = message.artifacts.find((artifact) =>
+          ChatBoxArtifactEnumSchema.options.includes(
+            artifact.artifact_type as ChatBoxArtifactType,
+          ),
+        );
+
+        return {
+          id: message.message_id,
+          message: message.message,
+          media: message.media,
+          documents: message.documents,
+          role: message.role,
+          suggested_questions: message.suggested_questions,
+          isPartOfHistory: true,
+          is_complete: true,
+          showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
+          feedback: messageFeedback,
+          isReadOnly,
+          analytics: message.analytics,
+          artifact: messageArtifact,
+          chatArtifact: chatBoxArtifact,
+        };
+      });
 
     return [welcomeMessage, ...formattedChatHistory];
   }

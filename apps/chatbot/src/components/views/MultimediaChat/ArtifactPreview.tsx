@@ -4,6 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useMemo } from 'react';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   artifactId: string;
@@ -34,8 +35,6 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
     return new ArtifactManager(data);
   }, [data]);
 
-  //   const sessionId = session?.session_id;
-
   const title = manager?.getArtifactTitle();
   const description = manager?.getArtifactDescription();
 
@@ -61,28 +60,27 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   if (isError) return null;
 
   return (
-    <button onClick={handleArtifactOnClick} className="my-3 flex w-11/12 gap-6 rounded-xl bg-primary/10 p-5">
+    <button
+      onClick={handleArtifactOnClick}
+      className="my-3 flex w-11/12 gap-6 rounded-xl bg-primary/10 p-5 transition-colors duration-300 ease-in-out hover:bg-primary/20"
+    >
       <div className="h-20 w-32 min-w-32 rounded-lg bg-white"></div>
       <div className="flex flex-1 items-center gap-4">
-        <div className="flex flex-col items-start space-y-1 text-left">
+        <div
+          className={cn('flex flex-1 flex-col items-start text-left', {
+            'space-y-1': title && description,
+            'space-y-6': !title || !description,
+          })}
+        >
           {title ? (
-            <h4 className="text-base font-semibold text-primary lg:text-lg 2xl:text-xl">
-              Java Developer Test Walkthrough
-            </h4>
+            <h4 className="text-base font-semibold text-primary lg:text-lg 2xl:text-xl">{title}</h4>
           ) : (
             <div className="h-4 w-full animate-pulse rounded-lg bg-primary/30" />
           )}
           {description ? (
-            <p className="text-sm text-primary/60 2xl:text-base">
-              {truncateText(
-                `Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-        Commodi, rem. Repudiandae quasi saepe nam quos iusto impedit,
-        animi accusantium, nesciunt laborum perspiciatis, autem quod a.`,
-                150,
-              )}
-            </p>
+            <p className="text-sm text-primary/60 2xl:text-base">{truncateText(description, 100)}</p>
           ) : (
-            <div className="h-4 w-full animate-pulse rounded-lg" />
+            <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
           )}
         </div>
         <div className="rounded-full bg-primary/10 p-2">

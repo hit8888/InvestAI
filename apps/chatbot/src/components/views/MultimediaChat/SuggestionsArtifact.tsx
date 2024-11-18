@@ -1,32 +1,28 @@
-import { SuggestionArtifactType } from '@meaku/core/types/chat';
 import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
-import { useChatStore } from '../../../stores/useChatStore.ts';
+import { SuggestionArtifactType } from '@meaku/core/types/chat';
 
 interface IProps {
-  artifact: SuggestionArtifactType;
+  artifact?: SuggestionArtifactType;
   handleSendUserMessage: (msg: string) => void;
 }
 
-const SuggestionsArtifact = ({
-  artifact: { suggested_questions, suggested_questions_type },
-  handleSendUserMessage,
-}: IProps) => {
-  const showSuggestionsArtifact: boolean = suggested_questions.length > 0 && suggested_questions_type === 'BUBBLE';
+const SuggestionsArtifact = (props: IProps) => {
+  const { artifact, handleSendUserMessage } = props;
 
-  const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
+  const showSuggestionsArtifact: boolean =
+    (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
-    handleRemoveActiveChatArtifact();
   };
 
-  if (!showSuggestionsArtifact) {
+  if (!artifact || !showSuggestionsArtifact) {
     return <></>;
   }
 
   return (
     <div className="flex flex-col gap-3">
-      {suggested_questions.map((question) => (
+      {artifact.suggested_questions.map((question) => (
         <button
           key={question}
           type="button"
@@ -35,7 +31,7 @@ const SuggestionsArtifact = ({
           title={question}
         >
           <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
-          <span className="max-w-80 truncate text-sm font-medium">{question}</span>
+          <span className="text-sm font-medium">{question}</span>
         </button>
       ))}
     </div>

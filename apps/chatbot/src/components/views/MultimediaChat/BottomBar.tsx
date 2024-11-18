@@ -36,9 +36,10 @@ const BottomBar = (props: IProps) => {
   return (
     <div
       className={cn(
-        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex min-w-[950px] -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-1 backdrop-blur-lg',
+        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-1 backdrop-blur-lg',
         {
           hidden: isChatOpen,
+          'w-10/12': !hasFirstUserMessageBeenSent,
           'min-w-[300px]': hasFirstUserMessageBeenSent,
         },
       )}

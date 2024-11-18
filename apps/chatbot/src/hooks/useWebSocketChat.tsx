@@ -1,5 +1,10 @@
+import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import { ChatParams } from '@meaku/core/types/config';
+import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
+import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
 import { AIResponse, ChatBoxArtifactType, SplitScreenArtifactType } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,12 +15,7 @@ import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import useIsAdmin from './useIsAdmin';
-import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
-import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
-import { ChatParams } from '@meaku/core/types/config';
-import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
-import useLocalStorageArtifact from './useLocalStorageArtifact';
-
+import { useArtifactStore } from '../stores/useArtifactStore';
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -24,18 +24,7 @@ const MAX_RETRY_INTERVAL = 20000;
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
 
-  const messageQueue = useRef<
-    {
-      message: string;
-      messageId: string;
-    }[]
-  >([]);
-
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { isAdmin } = useIsAdmin();
-  const { trackEvent } = useAnalytics();
-  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
-  const artifact = useLocalStorageArtifact();
 
   const isChatOpen = useChatStore((state) => state.isChatOpen);
   const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
@@ -49,11 +38,26 @@ const useWebSocketChat = () => {
   const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
 
+  const isArtifactPlaying = useArtifactStore((state) => state.isArtifactPlaying);
+  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
+
   const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
 
   const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
+
+  const messageQueue = useRef<
+    {
+      message: string;
+      messageId: string;
+    }[]
+  >([]);
+
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+  const { trackEvent } = useAnalytics();
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
+  const artifact = useLocalStorageArtifact();
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
@@ -74,7 +78,7 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
   const handleSendUserMessage = useCallback(
-    async (message: string) => {
+    async (message: string, eventType?: string, eventData?: Record<string, string>) => {
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
@@ -82,6 +86,10 @@ const useWebSocketChat = () => {
 
       if (!isChatOpen) {
         setIsChatOpen(true);
+      }
+
+      if (isArtifactPlaying) {
+        setShouldEndArtifactImmediately(true);
       }
 
       const messageId = nanoid();
@@ -93,8 +101,10 @@ const useWebSocketChat = () => {
 
       const payload = {
         session_id: sessionId,
-        message,
+        message: message ?? '',
         response_id: messageId,
+        event_type: eventType ?? '',
+        event_data: eventData ?? {},
       };
 
       handleAnimatedOrb(messageId);
@@ -119,7 +129,6 @@ const useWebSocketChat = () => {
     try {
       handleStopOrbAnimation();
       const response = JSON.parse(lastMessage.data) as AIResponse;
-      console.log('🚀 ~ file: useWebSocketChat.tsx:247 ~ useEffect ~ response:', response);
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
 
@@ -146,17 +155,13 @@ const useWebSocketChat = () => {
           });
         }
       }
-
-      if (chatBoxArtifact) {
-        handleAddActiveChatArtifact(chatBoxArtifact.artifact_id, chatBoxArtifact.artifact_type as ChatBoxArtifactType);
-      }
-
       if (
         response.is_complete &&
         chatBoxArtifact &&
         chatBoxArtifact.artifact_type === ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
       ) {
         setSuggestionArtifactId(chatBoxArtifact.artifact_id);
+        handleAddActiveChatArtifact(chatBoxArtifact.artifact_id, chatBoxArtifact.artifact_type as ChatBoxArtifactType);
       }
     } catch (error) {
       trackError(error, {

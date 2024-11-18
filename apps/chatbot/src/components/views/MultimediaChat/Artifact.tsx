@@ -49,10 +49,15 @@ const Artifact = () => {
         );
 
       case 'DEMO':
-        return <DemoArtifact artifact={artifactContent as DemoArtifactType} />;
+        return <DemoArtifact artifact={artifactContent as DemoArtifactType} artifactId={activeArtifactId as string} />;
 
       case 'VIDEO':
-        return <VideoArtifact videoUrl={(artifactContent as VideoArtifactType).video_url} />;
+        return (
+          <VideoArtifact
+            videoUrl={(artifactContent as VideoArtifactType).video_url}
+            artifactId={activeArtifactId as string}
+          />
+        );
 
       default:
         return <></>;

@@ -1,21 +1,20 @@
 import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Message } from '@meaku/core/types/chat';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import useInView from '../../../hooks/useInView';
-import { useChatStore } from '../../../stores/useChatStore';
 import ArtifactPreview from './ArtifactPreview';
 import ChatArtifact from './ChatArtifact.tsx';
 
 interface IProps {
   message: Message;
-  showMessageArtifact?: boolean;
-  showArtifactPreview?: boolean;
+  messageIndex: number;
+  totalMessages: number;
 }
 
-const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
+const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
   const { href, ...rest } = props;
 
   return <a className="text-primary" href={href} {...rest} target="_blank" rel="noreferrer" />;
@@ -26,16 +25,12 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
-  const { message, showMessageArtifact = false, showArtifactPreview = false } = props;
+  const { message, messageIndex, totalMessages } = props;
 
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
   const { isInView, ref: inViewRef } = useInView(0, true);
-
-  const activeChatArtifactId = useChatStore((state) => state.activeChatArtifactId);
-
-  const showChatArtifact: boolean = showMessageArtifact && !!activeChatArtifactId;
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
@@ -43,11 +38,14 @@ const MessageItem = (props: IProps) => {
   const messageArtifactId = message.artifact?.artifact_id;
   const messageArtifactType = message.artifact?.artifact_type;
 
+  const showArtifactPreview = messageIndex >= totalMessages - 4;
+  const isLastMessage = messageIndex === totalMessages - 1;
+
   const showMessageArtifactPreview =
-    (showArtifactPreview || isInView) && !!messageArtifactId && messageArtifactType !== 'NONE';
+    !isLastMessage && (showArtifactPreview || isInView) && !!messageArtifactId && messageArtifactType !== 'NONE';
 
   const reactMarkdownComponents: Partial<Components> = {
-    a: MesageLink,
+    a: MessageLink,
     strong: MessageStrong,
   };
 
@@ -98,7 +96,11 @@ const MessageItem = (props: IProps) => {
           {/* <div></div> */}
         </div>
       </div>
-      <div className="ml-auto flex flex-col">{showChatArtifact && <ChatArtifact />}</div>
+      <div className="ml-auto flex flex-col">
+        {message.chatArtifact && (
+          <ChatArtifact artifact={message.chatArtifact} messageIndex={messageIndex} totalMessages={totalMessages} />
+        )}
+      </div>
 
       {showMessageArtifactPreview && (
         <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType as string} />

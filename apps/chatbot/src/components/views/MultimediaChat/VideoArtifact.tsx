@@ -1,11 +1,15 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { useRef } from 'react';
+import { PauseIcon, PlayIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import useWebSocketChat from '../../../hooks/useWebSocketChat';
+import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useChatStore } from '../../../stores/useChatStore';
 import ArtifactControls from './ArtifactControls';
 
 interface IProps {
   videoUrl: string;
+  artifactId: string;
 }
 
 type QueryParams = {
@@ -13,22 +17,41 @@ type QueryParams = {
 };
 
 const VideoArtifact = (props: IProps) => {
-  const { videoUrl } = props;
+  const { videoUrl, artifactId } = props;
 
   const [searchParams] = useSearchParams();
   const { expandVideo }: QueryParams = {
     expandVideo: searchParams.get('expandVideo') === 'true',
   };
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const { handleSendUserMessage } = useWebSocketChat();
+
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
+  const shouldEndArtifactImmediately = useArtifactStore((state) => state.shouldEndArtifactImmediately);
+  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
+  const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
+
+  const handleVideoOnEnd = () => {
+    const payload = {
+      artifact_type: 'VIDEO',
+      artifact_id: artifactId,
+    };
+    handleSendUserMessage('', 'ARTIFACT_CONSUMED', payload);
+    setIsArtifactPlaying(false);
+  };
 
   const handlePlayPauseVideo = () => {
     if (!videoRef.current) return;
 
+    setIsPlaying((prevState) => !prevState);
+
     if (videoRef.current.paused) {
       videoRef.current.play();
+      setIsArtifactPlaying(true);
     } else {
       videoRef.current.pause();
     }
@@ -39,13 +62,42 @@ const VideoArtifact = (props: IProps) => {
 
     videoRef.current.currentTime = 0;
     videoRef.current.play();
+    setIsPlaying(true);
+    setIsArtifactPlaying(true);
   };
+
+  useEffect(() => {
+    if (shouldEndArtifactImmediately) {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        try {
+          videoRef.current.currentTime = videoRef.current.duration;
+        } catch (error) {
+          console.log('🚀 ~ file: VideoArtifact.tsx:83 ~ useEffect ~ error:', error);
+        }
+      }
+      handleVideoOnEnd();
+      setShouldEndArtifactImmediately(false);
+      setIsArtifactPlaying(false);
+    }
+  }, [shouldEndArtifactImmediately]);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.addEventListener('ended', handleVideoOnEnd);
+
+      return () => {
+        videoElement.removeEventListener('ended', handleVideoOnEnd);
+      };
+    }
+  }, []);
 
   if (!videoUrl) return null;
 
   return (
     <div
-      className={cn('relative', {
+      className={cn('group relative', {
         'h-full w-full': !isChatMaximized,
         'h-full w-auto': isChatMaximized,
       })}
@@ -57,13 +109,24 @@ const VideoArtifact = (props: IProps) => {
           'object-contain': isChatMaximized,
         })}
         // controls
-        autoPlay={true}
+        autoPlay={false}
       >
         <source src={videoUrl} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      <div className="absolute inset-0 z-10" onClick={handlePlayPauseVideo} />
+      <div
+        className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
+          'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
+        })}
+        onClick={handlePlayPauseVideo}
+      >
+        {isPlaying ? (
+          <PauseIcon className="fill-white text-white" size={60} />
+        ) : (
+          <PlayIcon className="fill-white text-white" size={60} />
+        )}
+      </div>
 
       <ArtifactControls handlePause={handlePlayPauseVideo} handleRestart={handleRestartVideo} />
     </div>
