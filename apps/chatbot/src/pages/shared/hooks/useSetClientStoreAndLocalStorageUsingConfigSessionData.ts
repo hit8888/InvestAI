@@ -5,6 +5,7 @@ import UnifiedSessionConfigResponseManager, {
   SessionConfigResponseType,
 } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
+import { useChatStore } from '../../../stores/useChatStore';
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   unifiedConfigurationResponse: SessionConfigResponseType,
@@ -15,6 +16,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   const { handleUpdateSessionData } = useLocalStorageSession();
 
   const setMessages = useMessageStore((state) => state.setMessages);
+  const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const prospectId = unifiedConfigurationResponseManager.getProspectId();
@@ -33,6 +35,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
         prospectId,
       });
       setMessages(messages);
+      setHasFirstUserMessageBeenSent(messages.length > 0);
     }
   }, [handleUpdateSessionData, isInternalAdminRoute, prospectId, sessionId]);
 };
