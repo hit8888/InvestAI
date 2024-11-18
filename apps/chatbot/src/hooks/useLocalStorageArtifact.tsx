@@ -15,7 +15,9 @@ const useLocalStorageArtifact = () => {
   const localStoragePrefixKey = `${orgName?.toLowerCase()}-${agentId}-`;
   const artifactKey = localStoragePrefixKey + LOCAL_STORAGE_KEYS.ARTIFACT_METADATA;
 
-  const [artifact, setArtifact] = useLocalStorageState<LocalStorageArtifact>(artifactKey);
+  const [artifact, setArtifact] = useLocalStorageState<LocalStorageArtifact>(artifactKey, {
+    listenStorageChange: true,
+  });
 
   const handleUpdateArtifact = async (newArtifact: Partial<LocalStorageArtifact>) => {
     try {

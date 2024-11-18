@@ -5,13 +5,14 @@ import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import DemoArtifact from './DemoArtifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
-import useUpdateLocalStorageOnArtiactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
+import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 
 const Artifact = () => {
   const { artifact } = useLocalStorageArtifact();
   const { activeArtifactId, activeArtifactType } = artifact ?? {};
+
   const {
     data: artifactData,
     isFetching,
@@ -28,7 +29,7 @@ const Artifact = () => {
     },
   });
 
-  useUpdateLocalStorageOnArtiactResponse(artifactData);
+  useUpdateLocalStorageOnArtifactResponse(artifactData);
 
   const manager = useMemo(() => {
     if (!artifactData) return;

@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { cn } from '@breakout/design-system/lib/cn';
+import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
 
 interface IProps {
   artifactId: string;
@@ -28,6 +29,8 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
       enabled: !!artifact?.artifact?.activeArtifactId && artifact?.artifact?.activeArtifactType !== 'NONE',
     },
   });
+
+  useUpdateLocalStorageOnArtifactResponse(data);
 
   const manager = useMemo(() => {
     if (!data) return null;
