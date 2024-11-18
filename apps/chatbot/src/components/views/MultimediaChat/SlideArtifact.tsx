@@ -1,7 +1,7 @@
-import { SlideArtifactType } from "@meaku/core/types/chat";
-import SlideHeader from "./SlideHeader";
-import SlideItems from "./SlideItems";
-import SlideSubTitle from "./SlideSubTitle";
+import { SlideArtifactType } from '@meaku/core/types/chat';
+import SlideHeader from './SlideHeader';
+import SlideItems from './SlideItems';
+import SlideSubTitle from './SlideSubTitle';
 
 interface IProps {
   artifact: SlideArtifactType;

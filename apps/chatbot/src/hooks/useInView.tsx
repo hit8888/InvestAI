@@ -1,5 +1,5 @@
 // apps/chatbot/src/hooks/useInView.ts
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 const useInView = (duration: number = 1000, once: boolean = false) => {
   const [isInView, setIsInView] = useState(false);

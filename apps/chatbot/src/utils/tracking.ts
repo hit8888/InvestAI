@@ -1,14 +1,13 @@
-import md5 from "md5";
-import { BrowserSignature } from "../types/api";
+import md5 from 'md5';
+import { BrowserSignature } from '@meaku/core/types/api';
 
 export const getWebGLInfo = () => {
-  const canvas = document.createElement("canvas");
-  const gl = (canvas.getContext("webgl") ||
-    canvas.getContext("experimental-webgl")) as WebGLRenderingContext;
+  const canvas = document.createElement('canvas');
+  const gl = (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) as WebGLRenderingContext;
 
   if (!gl) return null;
 
-  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+  const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
   return debugInfo
     ? {
         vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
@@ -18,19 +17,19 @@ export const getWebGLInfo = () => {
 };
 
 export const getCanvasFingerprint = () => {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   if (!ctx) return null;
 
-  ctx.textBaseline = "top";
-  ctx.font = "14px Arial";
-  ctx.fillStyle = "#f60";
+  ctx.textBaseline = 'top';
+  ctx.font = '14px Arial';
+  ctx.fillStyle = '#f60';
   ctx.fillRect(125, 1, 62, 20);
-  ctx.fillStyle = "#069";
-  ctx.fillText("Meaku", 2, 15);
-  ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-  ctx.fillText("Meaku", 4, 17);
+  ctx.fillStyle = '#069';
+  ctx.fillText('Meaku', 2, 15);
+  ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+  ctx.fillText('Meaku', 4, 17);
   const dataURL = canvas.toDataURL();
   const hashedDataURL = md5(dataURL);
 
@@ -119,9 +118,9 @@ export const getBrowserSignature = (): Partial<BrowserSignature> => ({
   })(),
   canvas: (() => {
     try {
-      return getCanvasFingerprint();
+      return () => getCanvasFingerprint();
     } catch {
-      return null;
+      return () => null;
     }
   })(),
   localStorage: (() => {
@@ -147,9 +146,7 @@ export const getBrowserSignature = (): Partial<BrowserSignature> => ({
   })(),
   doNotTrack: (() => {
     try {
-      return (
-        navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack
-      );
+      return navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack;
     } catch {
       return undefined;
     }

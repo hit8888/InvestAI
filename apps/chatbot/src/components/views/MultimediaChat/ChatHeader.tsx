@@ -1,6 +1,6 @@
-import Button from "@breakout/design-system/components/layout/button";
-import { ArrowLeftIcon, XIcon } from "lucide-react"; //TODO: Expos this for design system
-import { useChatStore } from "../../../stores/useChatStore";
+import Button from '@breakout/design-system/components/layout/button';
+import { ArrowLeftIcon, XIcon } from 'lucide-react'; //TODO: Expos this for design system
+import { useChatStore } from '../../../stores/useChatStore';
 
 interface IProps {
   handlePrimaryCta: () => void;
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const ChatHeader = (props: IProps) => {
-  const { handlePrimaryCta, handleCloseChat, handleFinishDemo } = props;
+  const { handlePrimaryCta, handleFinishDemo, handleCloseChat } = props;
 
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
 
@@ -46,11 +46,7 @@ const ChatHeader = (props: IProps) => {
         >
           <EllipsisVerticalIcon className="text-primary" />
         </Button> */}
-        <Button
-          size="icon"
-          className="bg-transparent p-0"
-          onClick={handleCloseChat}
-        >
+        <Button size="icon" className="bg-transparent p-0" onClick={handleCloseChat}>
           <XIcon className="text-primary" />
         </Button>
       </div>

@@ -1,40 +1,31 @@
-import { cn } from "@breakout/design-system/lib/cn";
-import { ArtifactEnum } from "@meaku/core/types/chat";
-import { ArrowUpRight } from "lucide-react";
-import { useMemo } from "react";
-import useArtifactData from "../../../hooks/query/useArtifactData";
-import ArtifactManager from "../../../managers/ArtifactManager";
-import { useArtifactStore } from "../../../stores/useArtifactStore";
-import CirclePlay from "@breakout/design-system/components/icons/circle-play";
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import { ArtifactEnum } from '@meaku/core/types/chat';
+import { ArrowUpRight, CirclePlay } from 'lucide-react';
+import { useMemo } from 'react';
+import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
+import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   artifactId: string;
-  artifactType: string;
+  artifactType?: ArtifactEnum;
 }
 
 const truncateText = (text: string, limit: number): string => {
   if (text.length <= limit) return text;
   const truncated = text.slice(0, limit);
-  const lastSpaceIndex = truncated.lastIndexOf(" ");
-  return lastSpaceIndex > -1
-    ? truncated.slice(0, lastSpaceIndex) + "..."
-    : truncated + "...";
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+  return lastSpaceIndex > -1 ? truncated.slice(0, lastSpaceIndex) + '...' : truncated + '...';
 };
 
 const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
-  // const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
-  const setActiveArtifactId = useArtifactStore(
-    (state) => state.setActiveArtifactId,
-  );
-  const setActiveArtifactType = useArtifactStore(
-    (state) => state.setActiveArtifactType,
-  );
+  const localStorageArtifact = useLocalStorageArtifact();
 
-  const { data, isFetching, isError } = useArtifactData({
-    artifactId: artifactId as string,
-    artifactType: artifactType as ArtifactEnum,
-    options: {
-      enabled: !!artifactId && artifactType !== "NONE",
+  const { data, isError, isFetching } = useArtifactDataQuery({
+    artifactId: artifactId,
+    artifactType: artifactType ?? 'NONE',
+    queryOptions: {
+      enabled: !!artifactId && artifactType !== 'NONE',
     },
   });
 
@@ -45,16 +36,20 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   }, [data]);
 
   const title = manager?.getArtifactTitle();
-  let description: string | null | undefined =
-    manager?.getArtifactDescription();
+  let description: string | null | undefined = manager?.getArtifactDescription();
 
-  if (artifactType === "SLIDE" || artifactType === "SLIDE_IMAGE") {
+  if (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE') {
     description = null;
   }
 
   const handleArtifactOnClick = () => {
-    setActiveArtifactId(artifactId);
-    setActiveArtifactType(artifactType as ArtifactEnum);
+    if (!localStorageArtifact) {
+      return;
+    }
+    localStorageArtifact.handleUpdateArtifact({
+      activeArtifactId: artifactId,
+      activeArtifactType: artifactType,
+    });
   };
 
   if (isError) return null;
@@ -77,23 +72,17 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
           <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
         ) : (
           <div
-            className={cn("flex flex-1 flex-col items-start text-left", {
-              "space-y-1": title && description,
-              "space-y-6": !title || !description,
+            className={cn('flex flex-1 flex-col items-start text-left', {
+              'space-y-1': title && description,
+              'space-y-6': !title || !description,
             })}
           >
             {title ? (
-              <h4 className="lg:text-md text-base font-semibold text-primary 2xl:text-lg">
-                {title}
-              </h4>
+              <h4 className="lg:text-md text-base font-semibold text-primary 2xl:text-lg">{title}</h4>
             ) : (
               <div className="h-4 w-full animate-pulse rounded-lg bg-primary/30" />
             )}
-            {description && (
-              <p className="text-sm text-primary/60 2xl:text-base">
-                {truncateText(description, 100)}
-              </p>
-            )}
+            {description && <p className="text-sm text-primary/60 2xl:text-base">{truncateText(description, 100)}</p>}
           </div>
         )}
       </div>

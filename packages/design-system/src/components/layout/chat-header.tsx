@@ -23,21 +23,21 @@ type Props = {
   handlePrimaryCta?: () => void;
 };
 
-const ChatHeader = (props: Props) => {
-  const {
-    config,
-    agentName,
-    orgName,
-    showMinimizedHeader = false,
-    handleClose,
-    title,
-    subtitle,
-    logoURL,
-    showRestartButton = false,
-    handleRestart,
-    handleCopySession,
-    handlePrimaryCta,
-  } = props;
+const ChatHeader = ({
+  config,
+  agentName,
+  orgName,
+  showMinimizedHeader = false,
+  handleClose,
+  title,
+  subtitle,
+  logoURL,
+  showRestartButton = false,
+  handleRestart,
+  handleCopySession,
+  handlePrimaryCta,
+}: Props) => {
+
 
   const isConfigWidget = config === ChatConfig.WIDGET;
   const showHeaderText = !isConfigWidget || !showMinimizedHeader;

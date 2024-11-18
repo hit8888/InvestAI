@@ -1,43 +1,38 @@
-import { AspectRatio } from "@breakout/design-system/components/layout/aspect-ratio";
-import {
-  DemoArtifactType,
-  SlideArtifactType,
-  SlideImageArtifactType,
-  VideoArtifactType,
-} from "@meaku/core/types/chat";
-import { memo, useMemo } from "react";
-import useArtifactData from "../../../hooks/query/useArtifactData";
-import ArtifactManager from "../../../managers/ArtifactManager";
-import { useArtifactStore } from "../../../stores/useArtifactStore";
-import DemoArtifact from "./DemoArtifact";
-import SlideArtifact from "./SlideArtifact";
-import VideoArtifact from "./VideoArtifact";
+import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
+import { DemoArtifactType, SlideArtifactType, SlideImageArtifactType, VideoArtifactType } from '@meaku/core/types/chat';
+import { memo, useMemo } from 'react';
+import DemoArtifact from './DemoArtifact';
+import SlideArtifact from './SlideArtifact';
+import VideoArtifact from './VideoArtifact';
+import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLocalStorageOnArtifactResponse';
+import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 
 const Artifact = () => {
-  const activeArtifactId = useArtifactStore((state) => state.activeArtifactId);
-  const activeArtifactType = useArtifactStore(
-    (state) => state.activeArtifactType,
-  );
+  const { artifact } = useLocalStorageArtifact();
+  const { activeArtifactId, activeArtifactType } = artifact ?? {};
 
   const {
     data: artifactData,
     isFetching,
     isError,
-  } = useArtifactData({
-    artifactId: activeArtifactId || "",
-    artifactType: activeArtifactType || "NONE",
-    options: {
+  } = useArtifactDataQuery({
+    artifactId: activeArtifactId ?? '',
+    artifactType: activeArtifactType ?? null,
+    queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
-
         return 1000;
       },
+      enabled: !!activeArtifactId && !!activeArtifactType && activeArtifactType !== 'NONE',
     },
   });
 
+  useUpdateLocalStorageOnArtifactResponse(artifactData);
+
   const manager = useMemo(() => {
     if (!artifactData) return;
-
     return new ArtifactManager(artifactData);
   }, [artifactData]);
 
@@ -46,29 +41,18 @@ const Artifact = () => {
 
   const renderArtifact = () => {
     switch (artifactType) {
-      case "SLIDE":
+      case 'SLIDE':
+        return <SlideArtifact artifact={artifactContent as SlideArtifactType} />;
+
+      case 'SLIDE_IMAGE':
         return (
-          <SlideArtifact artifact={artifactContent as SlideArtifactType} />
+          <img src={(artifactContent as SlideImageArtifactType).image_url} alt="Slide" className="h-full w-full" />
         );
 
-      case "SLIDE_IMAGE":
-        return (
-          <img
-            src={(artifactContent as SlideImageArtifactType).image_url}
-            alt="Slide"
-            className="h-full w-full"
-          />
-        );
+      case 'DEMO':
+        return <DemoArtifact artifact={artifactContent as DemoArtifactType} artifactId={activeArtifactId as string} />;
 
-      case "DEMO":
-        return (
-          <DemoArtifact
-            artifact={artifactContent as DemoArtifactType}
-            artifactId={activeArtifactId as string}
-          />
-        );
-
-      case "VIDEO":
+      case 'VIDEO':
         return (
           <VideoArtifact
             videoUrl={(artifactContent as VideoArtifactType).video_url}
@@ -81,8 +65,7 @@ const Artifact = () => {
     }
   };
 
-  if (activeArtifactType === "NONE" || !activeArtifactId || !artifactData)
-    return null;
+  if (activeArtifactType === 'NONE' || !activeArtifactId || !artifactData) return null;
 
   if (isError) {
     return <></>;
@@ -99,11 +82,7 @@ const Artifact = () => {
           >
             <XIcon className="h-4 w-4" />
           </button> */}
-          {isFetching ? (
-            <div className="h-full w-full animate-pulse bg-gray-50"></div>
-          ) : (
-            renderArtifact()
-          )}
+          {isFetching ? <div className="h-full w-full animate-pulse bg-gray-50"></div> : renderArtifact()}
         </div>
       </AspectRatio>
     </div>

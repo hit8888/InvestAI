@@ -1,4 +1,4 @@
-import HackerEarthLogo from "./HackerEarthLogo";
+import HackerEarthLogo from './HackerEarthLogo';
 
 interface IProps {
   title: string;
@@ -11,13 +11,7 @@ const SlideHeader = ({ title, logoUrl }: IProps) => {
       <div>
         <h1 className="text-sm font-semibold">{title}</h1>
       </div>
-      <div>
-        {logoUrl ? (
-          <img src={logoUrl} alt="logo" className="w-28" />
-        ) : (
-          <HackerEarthLogo className="w-28" />
-        )}
-      </div>
+      <div>{logoUrl ? <img src={logoUrl} alt="logo" className="w-28" /> : <HackerEarthLogo className="w-28" />}</div>
     </div>
   );
 };

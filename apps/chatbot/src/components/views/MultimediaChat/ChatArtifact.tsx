@@ -3,14 +3,14 @@ import {
   FormArtifactType,
   MessageArtifactSchema,
   SuggestionArtifactType,
-} from "@meaku/core/types/chat";
-import { memo, useMemo } from "react";
-import { z } from "zod";
-import useArtifactData from "../../../hooks/query/useArtifactData.tsx";
-import useWebSocketChat from "../../../hooks/useWebSocketChat.tsx";
-import ArtifactManager from "../../../managers/ArtifactManager.ts";
-import FormArtifact from "./FormArtifact.tsx";
-import SuggestionsArtifact from "./SuggestionsArtifact.tsx";
+} from '@meaku/core/types/chat';
+import { memo, useMemo } from 'react';
+import { z } from 'zod';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import FormArtifact from './FormArtifact.tsx';
+import SuggestionsArtifact from './SuggestionsArtifact.tsx';
+import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 
 interface IProps {
   artifact?: z.infer<typeof MessageArtifactSchema>;
@@ -23,17 +23,16 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
 
   const artifactType = artifact?.artifact_type;
 
-  const shouldGetArtifactData =
-    artifactType == "FORM" || messageIndex === totalMessages - 1;
+  const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;
 
   const {
     data: artifactData,
     isFetching,
     isError,
-  } = useArtifactData({
-    artifactId: artifact?.artifact_id,
-    artifactType: artifactType,
-    options: {
+  } = useArtifactDataQuery({
+    artifactId: artifact?.artifact_id ?? null,
+    artifactType: artifactType ?? null,
+    queryOptions: {
       refetchInterval: (data) => {
         if (data) return false;
 
@@ -54,7 +53,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
 
   const renderArtifact = () => {
     switch (artifactType) {
-      case "SUGGESTIONS":
+      case 'SUGGESTIONS':
         if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
@@ -62,7 +61,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
             handleSendUserMessage={handleSendUserMessage}
           />
         );
-      case "FORM":
+      case 'FORM':
         return (
           <FormArtifact
             artifactId={artifact?.artifact_id}

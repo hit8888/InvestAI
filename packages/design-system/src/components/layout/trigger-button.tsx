@@ -1,8 +1,8 @@
-import { XIcon } from "lucide-react";
-import { memo } from "react";
-import { cn } from "../../lib/cn";
-import ChatIcon from "../icons/chat";
-import SuggestedQuestion from "./suggested-question";
+import { XIcon } from 'lucide-react';
+import { memo } from 'react';
+import { cn } from '../../lib/cn';
+import ChatIcon from '../icons/chat';
+import SuggestedQuestion from './suggested-question';
 
 type Props = {
   isChatOpen: boolean;
@@ -13,16 +13,14 @@ type Props = {
   handleSuggestionsOnClick: (msg: string) => void;
 };
 
-const TriggerButton = (props: Props) => {
-  const {
-    isChatOpen,
-    showTooltip,
-    suggestedQuestions,
-    handleToggleChatOpenState,
-    handleCloseTooltip,
-    handleSuggestionsOnClick,
-  } = props;
-
+const TriggerButton = ({
+  isChatOpen,
+  showTooltip,
+  suggestedQuestions,
+  handleToggleChatOpenState,
+  handleCloseTooltip,
+  handleSuggestionsOnClick,
+}: Props) => {
   return (
     <div className="flex flex-col items-end justify-end overflow-hidden p-4">
       {showTooltip && (
@@ -32,25 +30,15 @@ const TriggerButton = (props: Props) => {
               onClick={handleCloseTooltip}
               className="absolute -right-2 -top-2 flex items-center justify-center rounded-full border bg-white p-1"
             >
-              <XIcon
-                strokeWidth={2}
-                className="right-2 top-2 h-3 w-3 cursor-pointer text-gray-700"
-              />
+              <XIcon strokeWidth={2} className="right-2 top-2 h-3 w-3 cursor-pointer text-gray-700" />
             </button>
 
-            <p className="text-sm">
-              Hey, I am your AI Companion – Experience the Future of Interaction
-              with me!
-            </p>
+            <p className="text-sm">Hey, I am your AI Companion – Experience the Future of Interaction with me!</p>
           </div>
 
           <div className="mb-3 space-y-2">
             {suggestedQuestions.map((question) => (
-              <SuggestedQuestion
-                handleOnClick={handleSuggestionsOnClick}
-                key={question}
-                question={question}
-              />
+              <SuggestedQuestion handleOnClick={handleSuggestionsOnClick} key={question} question={question} />
             ))}
           </div>
         </div>
@@ -59,10 +47,10 @@ const TriggerButton = (props: Props) => {
       <button
         onClick={handleToggleChatOpenState}
         className={cn(
-          "flex items-center gap-2 rounded-full bg-gradient-to-br from-primary/70 to-primary p-2 opacity-100 transition-all duration-300 hover:opacity-80",
+          'flex items-center gap-2 rounded-full bg-gradient-to-br from-primary/70 to-primary p-2 opacity-100 transition-all duration-300 hover:opacity-80',
           {
-            "w-14": isChatOpen,
-            "w-44": !isChatOpen,
+            'w-14': isChatOpen,
+            'w-44': !isChatOpen,
           },
         )}
       >
@@ -80,10 +68,7 @@ const TriggerButton = (props: Props) => {
           </>
         ) : (
           <div className="rounded-full p-1">
-            <XIcon
-              strokeWidth={2}
-              className="h-8 w-8 text-primary-foreground"
-            />
+            <XIcon strokeWidth={2} className="h-8 w-8 text-primary-foreground" />
           </div>
         )}
       </button>

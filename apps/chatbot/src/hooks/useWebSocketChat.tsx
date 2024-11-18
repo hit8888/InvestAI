@@ -1,93 +1,46 @@
-import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import {
-  ChatBoxArtifactEnumSchema,
-  SplitScreenArtifactEnumSchema,
-} from "@meaku/core/types/artifact";
-import {
-  AIResponse,
-  ChatBoxArtifactType,
-  SplitScreenArtifactType,
-} from "@meaku/core/types/chat";
-import { nanoid } from "nanoid";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { ENV } from "../config/env";
-import UnifiedResponseManager from "../managers/UnifiedResponseManager";
-import { useArtifactStore } from "../stores/useArtifactStore";
-import { useChatStore } from "../stores/useChatStore";
-import { useMessageStore } from "../stores/useMessageStore";
-import { ChatParams } from "../types/msc";
-import { getProcessingMessageSequence } from "../utils/common";
-import { trackError } from "../utils/error";
-import useConfigData from "./query/useConfigData";
-import useInitializeSessionData from "./query/useInitializeSessionData";
-import useIsAdmin from "./useIsAdmin";
+import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import { ChatParams } from '@meaku/core/types/config';
+import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
+import useLocalStorageArtifact from './useLocalStorageArtifact';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
+import { AIResponse, ChatBoxArtifactType, SplitScreenArtifactType } from '@meaku/core/types/chat';
+import { nanoid } from 'nanoid';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { ENV } from '../config/env';
+import { useChatStore } from '../stores/useChatStore';
+import { useMessageStore } from '../stores/useMessageStore';
+import { trackError } from '../utils/error';
+import useIsAdmin from './useIsAdmin';
 //TODO: Krishna Reafctor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
-// const HEARTBEAT_INTERVAL = 10000;
-const PROCESSING_MESSAGE_CHANGE_INTERVAL = 5000;
 
 const useWebSocketChat = () => {
-  const { orgName = "" } = useParams<ChatParams>();
+  const { orgName = '' } = useParams<ChatParams>();
 
-  const { data: config } = useConfigData();
-  const { session, refetch: fetchSession } = useInitializeSessionData();
   const { isAdmin } = useIsAdmin();
-  const { trackEvent } = useAnalytics();
 
-  const isChatOpen = useChatStore((state) => state.isChatOpen);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
-  const hasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.hasFirstUserMessageBeenSent,
-  );
-  const setHasFirstUserMessageBeenSent = useChatStore(
-    (state) => state.setHasFirstUserMessageBeenSent,
-  );
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
   // TODO: Remove Suggestion Artifacts
-  const setSuggestionArtifactId = useChatStore(
-    (state) => state.setSuggestionArtifactId,
-  );
+  const setSuggestionArtifactId = useChatStore((state) => state.setSuggestionArtifactId);
 
-  const handleAddUserMessage = useMessageStore(
-    (state) => state.handleAddUserMessage,
-  );
-  const handleAddAIMessage = useMessageStore(
-    (state) => state.handleAddAIMessage,
-  );
-  const setSuggestedQuestions = useMessageStore(
-    (state) => state.setSuggestedQuestions,
-  );
-  const setIsAMessageBeingProcessed = useMessageStore(
-    (state) => state.setIsAMessageBeingProcessed,
-  );
+  const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
+  const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
+  const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
+  const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
 
-  // TODO: Rename to Split Screen Artifact
-  const handleAddActiveArtifact = useArtifactStore(
-    (state) => state.handleAddActiveArtifact,
-  );
-  const isArtifactPlaying = useArtifactStore(
-    (state) => state.isArtifactPlaying,
-  );
-  const setShouldEndArtifactImmediately = useArtifactStore(
-    (state) => state.setShouldEndArtifactImmediately,
-  );
+  const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
 
-  const handleAddActiveChatArtifact = useChatStore(
-    (state) => state.handleAddActiveChatArtifact,
-  );
-
-  const handleRemoveActiveChatArtifact = useChatStore(
-    (state) => state.handleRemoveActiveChatArtifact,
-  );
+  const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
-  const [shouldConnect, setShouldConnect] = useState(false);
 
-  const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
   const messageQueue = useRef<
     {
       message: string;
@@ -95,22 +48,13 @@ const useWebSocketChat = () => {
     }[]
   >([]);
 
-  const manager = useMemo(() => {
-    if (!session && !config) return;
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+  const { trackEvent } = useAnalytics();
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
+  const artifact = useLocalStorageArtifact();
 
-    return new UnifiedResponseManager(session ?? config);
-  }, [session, config]);
-
-  const sessionId = manager?.getSessionId() ?? "";
-  const agentName = manager?.getAgentName() ?? "";
-
-  const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
-    return getProcessingMessageSequence(agentName);
-  }, [agentName]);
-
-  const wsUrl = orgName
-    ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}`
-    : "";
+  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
+  const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
     wsUrl,
@@ -119,174 +63,62 @@ const useWebSocketChat = () => {
       shouldReconnect: () => true,
       reconnectAttempts: MAX_RETRIES,
       reconnectInterval: (retryCount) => {
-        const interval = Math.min(
-          retryInterval * Math.pow(2, retryCount - 1),
-          MAX_RETRY_INTERVAL,
-        );
+        const interval = Math.min(retryInterval * Math.pow(2, retryCount - 1), MAX_RETRY_INTERVAL);
         setRetryInterval(interval);
         return interval;
       },
-      filter: () => shouldConnect,
-
-      // heartbeat: {
-      //   message: "ping",
-      //   interval: HEARTBEAT_INTERVAL,
-      // },
+      filter: () => !!sessionId,
     },
-    shouldConnect,
+    !!sessionId,
   );
-
-  const initializeWebSocket = useCallback(async () => {
-    if (!sessionId) {
-      fetchSession();
-    }
-
-    setShouldConnect(true);
-  }, [sessionId]);
-
-  const processQueuedMessages = useCallback(() => {
-    if (
-      readyState === ReadyState.OPEN &&
-      messageQueue.current.length > 0 &&
-      sessionId
-    ) {
-      messageQueue.current.forEach(({ message, messageId }) => {
-        const payload = {
-          session_id: sessionId,
-          message,
-          response_id: messageId,
-        };
-
-        sendMessage(JSON.stringify(payload));
-      });
-
-      messageQueue.current = [];
-    }
-  }, [readyState, sessionId]);
-
   const handleSendUserMessage = useCallback(
-    async (
-      message?: string,
-      eventType?: string,
-      eventData?: Record<string, string>,
-    ) => {
-      if (!shouldConnect) {
-        await initializeWebSocket();
-      }
-
+    async (message: string, eventType?: string, eventData?: Record<string, string>) => {
       if (!hasFirstUserMessageBeenSent) {
+        trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
       }
 
-      if (!isChatOpen) {
-        setIsChatOpen(true);
-      }
-
-      if (isArtifactPlaying) {
-        setShouldEndArtifactImmediately(true);
-      }
-
       const messageId = nanoid();
-
-      const payload = {
-        session_id: sessionId,
-        message: message ?? "",
-        response_id: messageId,
-        event_type: eventType ?? "",
-        event_data: eventData ?? {},
-      };
-
       setSuggestionArtifactId(null);
       setSuggestedQuestions([]);
       handleRemoveActiveChatArtifact();
+      handleAddUserMessage(message);
+      setIsAMessageBeingProcessed(true);
+
+      const payload = {
+        session_id: sessionId,
+        message: message ?? '',
+        response_id: messageId,
+        event_type: eventType ?? '',
+        event_data: eventData ?? {},
+      };
 
       if (eventType && eventData) {
         sendMessage(JSON.stringify(payload));
         return;
       }
 
-      if (!message) return;
-
-      handleAddUserMessage(message);
-
-      if (readyState === ReadyState.CLOSED) {
-        return handleAddAIMessage({
-          response_id: nanoid(),
-          message: session?.configuration.body.default_error_message ?? "",
-          media: null,
-          documents: [],
-          is_complete: true,
-          is_loading: false,
-          suggested_questions: [],
-          analytics: {},
-          artifacts: [],
-        });
-      }
-
-      handleAddAIMessage({
-        response_id: messageId,
-        message: PROCESSING_MESSAGE_SEQUENCE[0],
-        media: null,
-        documents: [],
-        is_complete: false,
-        is_loading: true,
-        suggested_questions: [],
-        analytics: {},
-        artifacts: [],
-      });
-
-      setIsAMessageBeingProcessed(true);
+      handleAnimatedOrb(messageId);
 
       if (!sessionId) {
         messageQueue.current.push({ message, messageId });
       } else {
         sendMessage(JSON.stringify(payload));
 
-        let messageIndex = 1;
-        processingMessageInterval.current = setInterval(() => {
-          if (messageIndex >= PROCESSING_MESSAGE_SEQUENCE.length) {
-            clearInterval(processingMessageInterval.current as NodeJS.Timeout);
-            return;
-          }
-
-          handleAddAIMessage({
-            response_id: messageId,
-            message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-            media: null,
-            documents: [],
-            is_complete: false,
-            is_loading: true,
-            suggested_questions: [],
-            analytics: {},
-            artifacts: [],
-          });
-
-          messageIndex++;
-        }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
+        setIsAMessageBeingProcessed(false);
       }
     },
-    [
-      hasFirstUserMessageBeenSent,
-      session,
-      sessionId,
-      isChatOpen,
-      isAdmin,
-      readyState,
-      shouldConnect,
-      initializeWebSocket,
-      isArtifactPlaying,
-    ],
+    [readyState, sessionId],
   );
 
   const handlePrimaryCta = () => {
-    handleSendUserMessage("I want to book a demo for the product.");
+    handleSendUserMessage('I want to book a demo for the product.');
   };
-
   useEffect(() => {
     if (!lastMessage) return;
 
     try {
-      clearInterval(processingMessageInterval.current as NodeJS.Timeout);
+      handleStopOrbAnimation();
       const response = JSON.parse(lastMessage.data) as AIResponse;
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
@@ -299,73 +131,68 @@ const useWebSocketChat = () => {
       const { artifacts } = response;
 
       const activeArtifact = artifacts.find((artifact) =>
-        SplitScreenArtifactEnumSchema.options.includes(
-          artifact.artifact_type as SplitScreenArtifactType,
-        ),
+        SplitScreenArtifactEnumSchema.options.includes(artifact.artifact_type as SplitScreenArtifactType),
       );
 
       const chatBoxArtifact = artifacts.find((artifact) =>
-        ChatBoxArtifactEnumSchema.options.includes(
-          artifact.artifact_type as ChatBoxArtifactType,
-        ),
+        ChatBoxArtifactEnumSchema.options.includes(artifact.artifact_type as ChatBoxArtifactType),
       );
 
-      if (activeArtifact && activeArtifact.artifact_type !== "NONE") {
-        handleAddActiveArtifact(
-          activeArtifact.artifact_id,
-          activeArtifact.artifact_type,
-        );
+      if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
+        if (artifact.handleUpdateArtifact) {
+          artifact.handleUpdateArtifact({
+            activeArtifactId: activeArtifact.artifact_id,
+            activeArtifactType: activeArtifact.artifact_type,
+          });
+        }
       }
-
       if (
         response.is_complete &&
         chatBoxArtifact &&
-        chatBoxArtifact.artifact_type ===
-          ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
+        chatBoxArtifact.artifact_type === ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
       ) {
         setSuggestionArtifactId(chatBoxArtifact.artifact_id);
-        handleAddActiveChatArtifact(
-          chatBoxArtifact.artifact_id,
-          chatBoxArtifact.artifact_type as ChatBoxArtifactType,
-        );
+        handleAddActiveChatArtifact(chatBoxArtifact.artifact_id, chatBoxArtifact.artifact_type as ChatBoxArtifactType);
       }
     } catch (error) {
       trackError(error, {
-        action: "useEffect | handleAddAIMessage",
-        component: "useWebSocketChat",
-        sessionId: session?.session_id,
+        action: 'useEffect | handleAddAIMessage',
+        component: 'useWebSocketChat',
+        sessionId: unifiedConfigurationResponseManager.getSessionId(),
       });
     }
   }, [lastMessage]);
 
   useEffect(() => {
-    if (hasFirstUserMessageBeenSent) {
-      trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+    if (readyState !== ReadyState.OPEN) {
+      return;
     }
-  }, [hasFirstUserMessageBeenSent]);
 
-  useEffect(() => {
-    if (
-      readyState === ReadyState.OPEN &&
-      messageQueue.current.length > 0 &&
-      sessionId
-    ) {
-      processQueuedMessages();
+    if (!messageQueue.current.length) {
+      return;
     }
+
+    messageQueue.current.forEach(({ message, messageId }) => {
+      const payload = {
+        session_id: sessionId,
+        message,
+        response_id: messageId,
+      };
+
+      sendMessage(JSON.stringify(payload));
+    });
+
+    messageQueue.current = [];
   }, [readyState, sendMessage, sessionId]);
 
   useEffect(() => {
     return () => {
-      if (processingMessageInterval.current) {
-        clearInterval(processingMessageInterval.current);
-      }
-      setShouldConnect(false);
       const ws = getWebSocket();
       if (ws) {
         ws.close();
       }
     };
-  }, []);
+  }, []); //Cleanup effect
 
   return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage };
 };

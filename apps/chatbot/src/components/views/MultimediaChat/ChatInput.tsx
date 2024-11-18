@@ -1,8 +1,8 @@
-import SendIcon from "@breakout/design-system/components/icons/send";
-import Button from "@breakout/design-system/components/layout/button";
-import TextArea from "@breakout/design-system/components/layout/textarea";
-import { useState } from "react";
-import useAutoResizeTextArea from "../../../../../../packages/design-system/src/hooks/useAutoResizeTextArea";
+import SendIcon from '@breakout/design-system/components/icons/send';
+import Button from '@breakout/design-system/components/layout/button';
+import TextArea from '@breakout/design-system/components/layout/textarea';
+import useAutoResizeTextArea from '@breakout/design-system/hooks/useAutoResizeTextArea';
+import { useState } from 'react';
 
 interface IProps {
   handleOnChange: () => void;
@@ -13,39 +13,31 @@ interface IProps {
 const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
-const ChatInput = (props: IProps) => {
-  const { handleOnChange, handleSendMessage, isAMessageBeingProcessed } = props;
-
-  const [inputValue, setInputValue] = useState<string>("");
+const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed }: IProps) => {
+  const [inputValue, setInputValue] = useState<string>('');
   const textAreaRef = useAutoResizeTextArea({
     textAreaValue: inputValue,
     initialHeight: INITIAL_INPUT_HEIGHT,
     maxHeight: MAX_INPUT_HEIGHT,
   });
 
-  const isSubmissionDisabled =
-    isAMessageBeingProcessed || inputValue?.length === 0;
+  const isSubmissionDisabled = isAMessageBeingProcessed || inputValue?.length === 0;
 
-  const handleInputValueChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-
-    if (typeof handleOnChange === "function") {
-      handleOnChange();
-    }
+    handleOnChange();
   };
 
   const handleSubmission = () => {
     if (isSubmissionDisabled) return;
 
     handleSendMessage(inputValue);
-    setInputValue("");
+    setInputValue('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isShiftKeyPressed = e.shiftKey;
-    const isEnterKeyPressed = e.key === "Enter" || e.key === "Return";
+    const isEnterKeyPressed = e.key === 'Enter' || e.key === 'Return';
 
     if (!isShiftKeyPressed && isEnterKeyPressed) {
       e.preventDefault();

@@ -1,0 +1,37 @@
+{
+    "agent_id": 1,
+    "agent_name": "Sam",
+    "org_name": "Hacker Earth",
+    "logo": "https://meaku-static-files.s3.us-west-1.amazonaws.com/hackerearth-tenant/HE_identity_white.png",
+    "header": {
+        "title": "Hello !",
+        "sub_title": "Need help navigating HackerEarth? Our AI assistant is here to answer your questions."
+    },
+    "body": {
+        "default_error_message": "\ud83d\udea8 An error occurred, and the chat was unexpectedly disrupted. Please contact us at support@hackerearth.com or +1-650-461-4192.",
+        "welcome_message": {
+            "message": "Good afternoon, welcome to HackerEarth! I am Sam, I'm here to make your HackerEarth experience 100% more AI and 200% more fun. You can ask me anything.",
+            "suggested_questions": [
+                "How does HackerEarth prevent cheating?",
+                "What kind of coding skills can HackerEarth assess?"
+            ]
+        },
+        "disclaimer": null,
+        "cta_config": {
+            "text": null,
+            "url": null,
+            "message": null
+        },
+        "chat_history": [],
+        "feedback": []
+    },
+    "style_config": {
+        "card": "#DBDEE8",
+        "primary": "#262B4B",
+        "secondary": "#f8f9fa",
+        "card_foreground": "#2D3355",
+        "primary_foreground": "#FEFEFE",
+        "secondary_foreground": "#000"
+    },
+    "whitelisted_domains": []
+}

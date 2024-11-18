@@ -1,11 +1,11 @@
-import { cn } from "@breakout/design-system/lib/cn";
-import { DemoArtifactType } from "@meaku/core/types/chat";
-import { PauseIcon, PlayIcon } from "lucide-react";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import useWebSocketChat from "../../../hooks/useWebSocketChat";
-import { useArtifactStore } from "../../../stores/useArtifactStore";
-import { useMessageStore } from "../../../stores/useMessageStore";
-import ArtifactControls from "./ArtifactControls";
+import { DemoArtifactType } from '@meaku/core/types/chat';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import ArtifactControls from './ArtifactControls';
+import { useMessageStore } from '../../../stores/useMessageStore';
+import { PauseIcon, PlayIcon } from 'lucide-react';
+import { useArtifactStore } from '../../../stores/useArtifactStore';
+import useWebSocketChat from '../../../hooks/useWebSocketChat';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   artifact: DemoArtifactType;
@@ -25,6 +25,8 @@ type Content = {
 const DemoArtifact = (props: IProps) => {
   const { artifact, artifactId } = props;
 
+  const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
+
   const [activeContentIndex, setActiveContentIndex] = useState(0);
   const [sentMessages, setSentMessages] = useState<Set<string>>(new Set());
   const [isPlaying, setIsPlaying] = useState(false);
@@ -33,21 +35,10 @@ const DemoArtifact = (props: IProps) => {
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleAddAIMessage = useMessageStore(
-    (state) => state.handleAddAIMessage,
-  );
-  const handleRemoveMessages = useMessageStore(
-    (state) => state.handleRemoveMessages,
-  );
-  const shouldEndArtifactImmediately = useArtifactStore(
-    (state) => state.shouldEndArtifactImmediately,
-  );
-  const setShouldEndArtifactImmediately = useArtifactStore(
-    (state) => state.setShouldEndArtifactImmediately,
-  );
-  const setIsArtifactPlaying = useArtifactStore(
-    (state) => state.setIsArtifactPlaying,
-  );
+  const handleRemoveMessages = useMessageStore((state) => state.handleRemoveMessages);
+  const shouldEndArtifactImmediately = useArtifactStore((state) => state.shouldEndArtifactImmediately);
+  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
+  const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
 
   const { handleSendUserMessage } = useWebSocketChat();
 
@@ -101,7 +92,7 @@ const DemoArtifact = (props: IProps) => {
             setIsPlaying(true);
           })
           .catch((error) => {
-            console.error("Error playing audio:", error);
+            console.error('Error playing audio:', error);
           });
       } else {
         audio.pause();
@@ -141,10 +132,10 @@ const DemoArtifact = (props: IProps) => {
 
   const handleSendArtifactCompletionEvent = () => {
     const payload = {
-      artifact_type: "DEMO",
+      artifact_type: 'DEMO',
       artifact_id: artifactId,
     };
-    handleSendUserMessage("", "ARTIFACT_CONSUMED", payload);
+    handleSendUserMessage('', 'ARTIFACT_CONSUMED', payload);
     setIsArtifactPlaying(false);
   };
 
@@ -164,16 +155,10 @@ const DemoArtifact = (props: IProps) => {
     }
 
     switch (content.frameType) {
-      case "IMAGE":
-        return (
-          <img
-            className="h-full w-full object-contain"
-            src={content.frameUrl}
-            alt={content.name}
-          />
-        );
+      case 'IMAGE':
+        return <img className="h-full w-full object-contain" src={content.frameUrl} alt={content.name} />;
 
-      case "VIDEO":
+      case 'VIDEO':
         return (
           <video className="h-full w-full object-contain" controls>
             <source src={content.frameUrl} type="video/mp4" />
@@ -187,12 +172,7 @@ const DemoArtifact = (props: IProps) => {
   };
 
   useEffect(() => {
-    if (
-      idToContentMap.length === 0 ||
-      shouldEndArtifactImmediately ||
-      !isPlaying
-    )
-      return;
+    if (idToContentMap.length === 0 || shouldEndArtifactImmediately || !isPlaying) return;
 
     setIsArtifactPlaying(true);
 
@@ -228,7 +208,7 @@ const DemoArtifact = (props: IProps) => {
 
     newAudio.load();
     newAudio.play().catch((error) => {
-      console.error("Error playing audio:", error);
+      console.error('Error playing audio:', error);
     });
 
     if (activeContentIndex === idToContentMap.length - 1) {
@@ -256,10 +236,7 @@ const DemoArtifact = (props: IProps) => {
         try {
           audioRef.current.currentTime = audioRef.current.duration;
         } catch (error) {
-          console.log(
-            "🚀 ~ file: DemoArtifact.tsx:260 ~ useEffect ~ error:",
-            error,
-          );
+          console.log('🚀 ~ file: DemoArtifact.tsx:260 ~ useEffect ~ error:', error);
         }
         audioRef.current.pause();
       }
@@ -273,17 +250,12 @@ const DemoArtifact = (props: IProps) => {
 
   return (
     <div className="relative h-full w-full">
-      {idToContentMap.length > 0 &&
-        renderContent(idToContentMap[activeContentIndex])}
+      {idToContentMap.length > 0 && renderContent(idToContentMap[activeContentIndex])}
 
       <div
-        className={cn(
-          "absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30",
-          {
-            "opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100":
-              isPlaying,
-          },
-        )}
+        className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
+          'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
+        })}
         onClick={handlePlayPause}
       >
         {isPlaying ? (
@@ -293,10 +265,7 @@ const DemoArtifact = (props: IProps) => {
         )}
       </div>
 
-      <ArtifactControls
-        handlePause={handlePlayPause}
-        handleRestart={handleRestart}
-      />
+      <ArtifactControls handlePause={handlePlayPause} handleRestart={handleRestart} />
     </div>
   );
 };

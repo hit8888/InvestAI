@@ -1,10 +1,8 @@
-import { useLocalStorageState } from "ahooks";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { LOCAL_STORAGE_KEYS } from "../constants/localStorage";
-import { useChatStore } from "../stores/useChatStore";
-import { ChatParams } from "../types/msc";
-import { trackError } from "../utils/error";
+import { useLocalStorageState } from 'ahooks';
+import { useParams } from 'react-router-dom';
+import { trackError } from '../utils/error';
+import { useCallback } from 'react';
+import { ChatParams } from '@meaku/core/types/config';
 
 type Session = {
   sessionId?: string;
@@ -14,31 +12,20 @@ type Session = {
 };
 
 const useLocalStorageSession = () => {
-  const { orgName = "", agentId = "" } = useParams<ChatParams>();
+  const { orgName = '', agentId = '' } = useParams<ChatParams>();
 
-  const localStorageKey = `${orgName?.toLowerCase()}-${agentId}`;
-  const fallbackSessionKey = LOCAL_STORAGE_KEYS.FALLBACK_SESSION_ID;
-  const fallbackProspectKey = LOCAL_STORAGE_KEYS.FALLBACK_PROSPECT_ID;
-
-  const [session, setSession] = useLocalStorageState<Session>(localStorageKey, {
-    listenStorageChange: false,
-  });
-  const [fallbackSessionId, setFallbackSessionId] =
-    useLocalStorageState<string>(fallbackSessionKey);
-  const [fallbackProspectId, setFallbackProspectId] =
-    useLocalStorageState<string>(fallbackProspectKey);
-
-  const setShowTooltip = useChatStore((state) => state.setShowTooltip);
-  const setIsChatOpen = useChatStore((state) => state.setIsChatOpen);
+  const [localStorageSessionData, setLocalStorageSessionData] = useLocalStorageState<Session>(
+    `${orgName?.toLowerCase()}-${agentId}`,
+  );
 
   const sessionData: Session = {
-    sessionId: session?.sessionId || fallbackSessionId,
-    prospectId: session?.prospectId || fallbackProspectId,
-    showTooltip: session?.showTooltip ?? true,
-    isChatOpen: session?.isChatOpen ?? true,
+    sessionId: localStorageSessionData?.sessionId,
+    prospectId: localStorageSessionData?.prospectId,
+    showTooltip: localStorageSessionData?.showTooltip ?? false,
+    isChatOpen: localStorageSessionData?.isChatOpen ?? false,
   };
 
-  const handleUpdateSessionData = async (newSessionData: Partial<Session>) => {
+  const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {
     try {
       const updatedSessionData = {
         ...sessionData,
@@ -46,25 +33,14 @@ const useLocalStorageSession = () => {
         isChatOpen: newSessionData.isChatOpen ?? sessionData.isChatOpen ?? true,
       };
 
-      setSession(updatedSessionData);
-
-      // Remove fallback session and prospect id
-      setFallbackSessionId(undefined);
-      setFallbackProspectId(undefined);
+      setLocalStorageSessionData(updatedSessionData);
     } catch (error) {
       trackError(error, {
-        action: "handleUpdateSessionData",
-        component: "useLocalStorageSession",
-        sessionId: sessionData?.sessionId || fallbackSessionId,
+        action: 'handleUpdateSessionData',
+        component: 'useLocalStorageSession',
+        sessionId: sessionData?.sessionId,
       });
     }
-  };
-
-  useEffect(() => {
-    if (!session) return;
-
-    setShowTooltip(session.showTooltip);
-    setIsChatOpen(session.isChatOpen);
   }, []);
 
   return {

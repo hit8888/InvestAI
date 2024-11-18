@@ -1,5 +1,5 @@
-import SparkleIcon from "@breakout/design-system/components/icons/sparkle";
-import { SuggestionArtifactType } from "@meaku/core/types/chat";
+import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
+import { SuggestionArtifactType } from '@meaku/core/types/chat';
 
 interface IProps {
   artifact?: SuggestionArtifactType;
@@ -10,8 +10,7 @@ const SuggestionsArtifact = (props: IProps) => {
   const { artifact, handleSendUserMessage } = props;
 
   const showSuggestionsArtifact: boolean =
-    (artifact?.suggested_questions.length ?? 0) > 0 &&
-    artifact?.suggested_questions_type === "BUBBLE";
+    (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);

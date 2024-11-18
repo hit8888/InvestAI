@@ -1,9 +1,6 @@
 type Props = React.SVGProps<SVGSVGElement>;
 
-const HackerEarthLogo = ({
-  className = "text-primary-foreground",
-  ...props
-}: Props) => {
+const HackerEarthLogo = ({ className = 'text-primary-foreground', ...props }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
