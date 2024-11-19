@@ -1,5 +1,4 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { updateSession } from "../../http/api";
 import { UpdateSessionDataPayload } from "../../types/api";
 
@@ -21,7 +20,6 @@ const useUpdateSession = (
     "mutationFn"
   >,
 ) => {
-
   const mutation = useMutation({
     mutationKey: ["update-session-data"],
     mutationFn: async ({
@@ -29,15 +27,11 @@ const useUpdateSession = (
       sessionId,
       payload,
     }: {
-      agentId:string;
+      agentId: string;
       sessionId: string;
       payload: UpdateSessionDataPayload;
     }) => {
-      const response = await updateSession(
-        sessionId,
-        agentId,
-        payload,
-      );
+      const response = await updateSession(sessionId, agentId, payload);
 
       return response.data;
     },
