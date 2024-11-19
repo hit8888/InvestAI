@@ -129,7 +129,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
               <div
                 className={cn({
-                  'col-span-2 pl-2': !!activeArtifactId,
+                  'col-span-2 mr-2 pl-2': !!activeArtifactId,
                   hidden: !activeArtifactId,
                   'col-span-3': isChatMaximized,
                 })}
