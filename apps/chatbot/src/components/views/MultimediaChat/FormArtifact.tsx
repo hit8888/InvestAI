@@ -72,8 +72,8 @@ const FormArtifact = (props: IFormProps) => {
   }
 
   return (
-    <Card className="mb-4 w-[350px]">
-      <CardContent>
+    <Card className="m-4 w-[350px]">
+      <CardContent className="mt-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {artifact.form_fields.map((field, i) => (
