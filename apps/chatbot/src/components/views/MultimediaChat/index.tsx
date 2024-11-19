@@ -1,6 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { memo, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
 import { useChatStore } from '../../../stores/useChatStore';
 import { useMessageStore } from '../../../stores/useMessageStore';
@@ -12,11 +11,6 @@ import ChatMessage from './ChatMessage';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 
-type QueryParams = {
-  showGlass?: boolean;
-  showDemo?: boolean;
-};
-
 interface IProps {
   fetchSessionData: () => void;
   handleSendUserMessage: (message: string) => Promise<void>;
@@ -25,10 +19,6 @@ interface IProps {
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const { artifact } = useLocalStorageArtifact();
   const { activeArtifactId } = artifact ?? {};
-  const [searchParams] = useSearchParams();
-  const { showGlass }: QueryParams = {
-    showGlass: searchParams.get('showGlass') === 'true',
-  }; //Remove after UI is finalized
 
   const [isWidthMaximized, setIsWidthMaximized] = useState(false);
 
@@ -88,14 +78,14 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   return (
     <div
       className={cn('flex h-screen flex-col font-inter', {
-        'rounded-2xl bg-primary': showGlass && isChatOpen,
+        'rounded-2xl': isChatOpen,
       })}
     >
       <div
         className={cn(
           'mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 transition-all duration-300 ease-in-out',
           {
-            'border border-gray-300 bg-white bg-opacity-60 p-2 backdrop-blur-lg': isChatOpen,
+            'border border-gray-300 bg-white bg-opacity-50 p-2 backdrop-blur-lg': isChatOpen,
             // TODO: Enable this when we remove the toggle width switch
             // "mx-auto max-w-full lg:max-w-[80%]": false,
             // "col-span-2 w-full": showDemo,
@@ -115,7 +105,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
               handleFinishDemo={handleFinishDemo}
             />
             <div
-              className={cn('flex-1 overflow-y-auto bg-white bg-opacity-60', {
+              className={cn('flex-1 overflow-y-auto bg-white bg-opacity-50', {
                 'grid grid-cols-3 gap-8': !!activeArtifactId,
               })}
             >
