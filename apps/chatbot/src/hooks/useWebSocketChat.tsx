@@ -72,7 +72,7 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
   const handleSendUserMessage = useCallback(
-    async (message: string, eventType?: string, eventData?: Record<string, string>) => {
+    async (message: string, eventType?: string, eventData?: Record<string, unknown>) => {
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
