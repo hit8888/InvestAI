@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { cn } from '@breakout/design-system/lib/cn';
+import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 
 interface IProps {
   artifactId: string;
@@ -36,11 +37,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   }, [data]);
 
   const title = manager?.getArtifactTitle();
-  let description: string | null | undefined = manager?.getArtifactDescription();
-
-  if (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE') {
-    description = null;
-  }
+  const description = manager?.getArtifactDescription();
 
   const handleArtifactOnClick = () => {
     if (!localStorageArtifact) {
@@ -53,6 +50,10 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   };
 
   if (isError) return null;
+
+  if (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE') {
+    return <SlideArtifactPreview isFetching={isFetching} handleArtifactOnClick={handleArtifactOnClick} title={title} />;
+  }
 
   return (
     <button
