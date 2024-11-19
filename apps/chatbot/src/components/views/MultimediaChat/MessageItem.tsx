@@ -93,7 +93,7 @@ const MessageItem = (props: IProps) => {
                 {message.message}
               </ReactMarkdown>
             </div>
-            <div className="ml-auto flex flex-col">
+            <div className="flex flex-col items-start">
               {message.chatArtifact && message.chatArtifact.artifact_type == 'FORM' && (
                 <ChatArtifact
                   artifact={message.chatArtifact}
