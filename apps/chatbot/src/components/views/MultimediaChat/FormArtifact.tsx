@@ -62,7 +62,7 @@ const FormArtifact = (props: IFormProps) => {
 
   if (submitted) {
     return (
-      <Card className="mb-4 w-[350px]">
+      <Card className="m-4 ml-0 w-[350px]">
         <CardHeader>
           <CardTitle>Thank You for Sharing Your Details!</CardTitle>
           <CardDescription>Info submitted! We will reach out soon.</CardDescription>
