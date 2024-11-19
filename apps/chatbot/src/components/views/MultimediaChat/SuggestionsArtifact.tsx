@@ -31,7 +31,7 @@ const SuggestionsArtifact = (props: IProps) => {
           title={question}
         >
           <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
-          <span className="text-sm font-medium">{question}</span>
+          <span className="text-left text-sm font-medium">{question}</span>
         </button>
       ))}
     </div>
