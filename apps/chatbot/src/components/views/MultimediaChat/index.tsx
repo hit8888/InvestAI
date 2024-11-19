@@ -34,8 +34,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
 
-  console.log({ messages: messages });
-
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const isChatOpen = sessionData.isChatOpen;
