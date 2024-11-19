@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import { useCallback, useEffect, useRef } from 'react';
 import { getProcessingMessageSequence } from '../utils/common';
 import { useMessageStore } from '../stores/useMessageStore';
 
@@ -10,13 +9,7 @@ const useAnimateDIfferentOrbStates = () => {
 
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
 
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-
-  const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
-
-  const PROCESSING_MESSAGE_SEQUENCE = useMemo(() => {
-    return getProcessingMessageSequence(agentName);
-  }, [agentName]);
+  const PROCESSING_MESSAGE_SEQUENCE = getProcessingMessageSequence();
 
   const getAIMessage = useCallback(
     (messageIndex: number, messageId: string) => {

@@ -1,30 +1,22 @@
-import {
-  FormArtifactMetadataType,
-  FormArtifactType,
-  FormFieldType,
-} from "@meaku/core/types/chat";
-import Card from "@breakout/design-system/components/layout/card";
-import CardContent from "@breakout/design-system/components/layout/card-content";
-import CardHeader from "@breakout/design-system/components/layout/card-header";
-import { Form, useForm } from "@breakout/design-system/components/layout/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z, ZodSchema } from "zod";
-import Button from "@breakout/design-system/components/layout/button";
-import { getZodType } from "../../../utils/form_fields.ts";
-import ChatFormField from "./ChatFormField.tsx";
-import CardTitle from "@breakout/design-system/components/layout/card-title";
-import { useState } from "react";
-import CardDescription from "@breakout/design-system/components/layout/card-description";
+import { FormArtifactMetadataType, FormArtifactType, FormFieldType } from '@meaku/core/types/chat';
+import Card from '@breakout/design-system/components/layout/card';
+import CardContent from '@breakout/design-system/components/layout/card-content';
+import CardHeader from '@breakout/design-system/components/layout/card-header';
+import { Form, useForm } from '@breakout/design-system/components/layout/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z, ZodSchema } from 'zod';
+import Button from '@breakout/design-system/components/layout/button';
+import { getZodType } from '../../../utils/form_fields.ts';
+import ChatFormField from './ChatFormField.tsx';
+import CardTitle from '@breakout/design-system/components/layout/card-title';
+import { useState } from 'react';
+import CardDescription from '@breakout/design-system/components/layout/card-description';
 
 interface IFormProps {
   artifactId?: string;
   artifact?: FormArtifactType;
   artifactMetadata: FormArtifactMetadataType;
-  handleSendUserMessage: (
-    message: string,
-    event_type: string,
-    event_data: Record<string, any>,
-  ) => void;
+  handleSendUserMessage: (message: string, event_type: string, event_data: Record<string, unknown>) => void;
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
@@ -45,11 +37,8 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 };
 
 const FormArtifact = (props: IFormProps) => {
-  const { artifactId, artifact, artifactMetadata, handleSendUserMessage } =
-    props;
-  const [submitted, setSubmitted] = useState(
-    artifactMetadata?.is_filled ?? false,
-  );
+  const { artifactId, artifact, artifactMetadata, handleSendUserMessage } = props;
+  const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
 
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
 
@@ -63,7 +52,7 @@ const FormArtifact = (props: IFormProps) => {
       artifact_id: artifactId,
       form_data: values,
     };
-    handleSendUserMessage("", "FORM_FILLED", response_data);
+    handleSendUserMessage('', 'FORM_FILLED', response_data);
     setSubmitted(true);
   }
 
@@ -76,9 +65,7 @@ const FormArtifact = (props: IFormProps) => {
       <Card className="mb-4 w-[350px]">
         <CardHeader>
           <CardTitle>Thank You for Sharing Your Details!</CardTitle>
-          <CardDescription>
-            Info submitted! We will reach out soon.
-          </CardDescription>
+          <CardDescription>Info submitted! We will reach out soon.</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -86,16 +73,13 @@ const FormArtifact = (props: IFormProps) => {
 
   return (
     <Card className="mb-4 w-[350px]">
-      <CardHeader>
-        <CardTitle>Demo Form</CardTitle>
-      </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {artifact.form_fields.map((field, i) => (
               <ChatFormField key={i} form={form} form_field={field} />
             ))}
-            <Button type="submit">Submit Information</Button>
+            <Button type="submit">Submit</Button>
           </form>
         </Form>
       </CardContent>

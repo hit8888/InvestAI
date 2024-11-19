@@ -33,7 +33,7 @@ const ChatHeader = (props: IProps) => {
               onClick={handlePrimaryCta}
               className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40"
             >
-              Book a Demo!
+              Contact Sales
             </Button>
           </div>
         )}
