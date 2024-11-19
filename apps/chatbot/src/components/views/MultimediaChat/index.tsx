@@ -88,14 +88,14 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   return (
     <div
       className={cn('flex h-screen flex-col font-inter', {
-        'bg-primary': showGlass && isChatOpen,
+        'rounded-2xl bg-primary': showGlass && isChatOpen,
       })}
     >
       <div
         className={cn(
-          'mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 backdrop-blur-lg transition-all duration-300 ease-in-out',
+          'mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 transition-all duration-300 ease-in-out',
           {
-            'border border-gray-300 bg-white bg-opacity-60 p-2': isChatOpen,
+            'border border-gray-300 bg-white bg-opacity-60 p-2 backdrop-blur-lg': isChatOpen,
             // TODO: Enable this when we remove the toggle width switch
             // "mx-auto max-w-full lg:max-w-[80%]": false,
             // "col-span-2 w-full": showDemo,
