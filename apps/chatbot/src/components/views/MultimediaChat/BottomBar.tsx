@@ -18,7 +18,8 @@ const BottomBar = (props: IProps) => {
 
   const [inputValue, setInputValue] = useState('');
 
-  const showSuggestedQuestions = suggestedQuestions.length > 0 && inputValue.length <= 0;
+  const showSuggestedQuestions =
+    suggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
@@ -36,19 +37,22 @@ const BottomBar = (props: IProps) => {
   return (
     <div
       className={cn(
-        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-md bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-1 backdrop-blur-lg',
+        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5 backdrop-blur-lg ',
         {
           hidden: isChatOpen,
           'w-10/12': !hasFirstUserMessageBeenSent,
-          'min-w-[300px]': hasFirstUserMessageBeenSent,
+          'w-[400px]': hasFirstUserMessageBeenSent,
         },
       )}
       style={{
         backgroundSize: '200% 200%',
       }}
     >
-      <div className="w-full rounded-md bg-gray-50 p-1">
-        <form onSubmit={handleFormSubmission} className="flex items-center gap-2 rounded-md bg-white p-[2px]">
+      <div className="w-full rounded-xl bg-gray-50 p-1.5">
+        <form
+          onSubmit={handleFormSubmission}
+          className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
+        >
           <div className="flex-1">
             <Input
               value={inputValue}
@@ -104,7 +108,7 @@ const BottomBar = (props: IProps) => {
       </div>
 
       {hasFirstUserMessageBeenSent && (
-        <button className="absolute inset-0 rounded-md" onClick={handleOpenChat}></button>
+        <button className="absolute inset-0 rounded-xl" onClick={handleOpenChat}></button>
       )}
     </div>
   );

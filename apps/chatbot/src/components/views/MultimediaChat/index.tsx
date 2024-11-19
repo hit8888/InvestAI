@@ -87,8 +87,8 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   return (
     <div
-      className={cn('flex h-screen flex-col font-inter backdrop-blur-md', {
-        'bg-primary': showGlass,
+      className={cn('flex h-screen flex-col font-inter', {
+        'bg-primary': showGlass && isChatOpen,
       })}
     >
       <div
