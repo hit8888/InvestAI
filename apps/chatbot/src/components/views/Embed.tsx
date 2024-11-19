@@ -2,7 +2,7 @@ import { ChatConfig } from '@meaku/core/types/config';
 import ChatHeader from '@breakout/design-system/components/layout/chat-header';
 import ChatInput from '@breakout/design-system/components/layout/chat-input';
 import ChatMessage from '@breakout/design-system/components/layout/chat-message';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
@@ -19,13 +19,25 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const disclaimerText = configuration?.body.disclaimer_message ?? '';
   const agentName = unifiedConfigurationResponseManager.getAgentName() ?? '';
   const showCta = configuration?.body.show_cta ?? false;
-  const initialSuggestedQuestions = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
-    isAdmin: false,
-    isReadOnly: false,
-  });
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const messages = useMessageStore((state) => state.messages);
+  const setMessages = useMessageStore((state) => state.setMessages);
+
+  const [initialSuggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const suggestedQuestions: string[] = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
+      isAdmin: false,
+      isReadOnly: false,
+    });
+    setSuggestedQuestions(suggestedQuestions);
+    const chatHistory = unifiedConfigurationResponseManager.getFormattedChatHistory({
+      isAdmin: false,
+      isReadOnly: false,
+    });
+    setMessages(chatHistory);
+  }, []);
 
   return (
     <div className="flex h-screen flex-col">
@@ -43,6 +55,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         suggestedQuestions={initialSuggestedQuestions}
         handleSuggestedQuestionOnClick={(selectedMessage) => {
           fetchSessionData();
+          setSuggestedQuestions([]);
           handleSendUserMessage(selectedMessage);
         }}
       />
@@ -52,6 +65,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         handleChatInputOnChangeCallback={fetchSessionData}
         handleSendUserMessage={(selectedMessage) => {
           fetchSessionData();
+          setSuggestedQuestions([]);
           handleSendUserMessage(selectedMessage);
         }}
       />

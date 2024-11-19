@@ -4,7 +4,7 @@ import ChatInput from '@breakout/design-system/components/layout/chat-input';
 import ChatMessage from '@breakout/design-system/components/layout/chat-message';
 import TriggerButton from '@breakout/design-system/components/layout/trigger-button';
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useLocalStorageSession from '../../hooks/useLocalStorageSession';
 import { useChatStore } from '../../stores/useChatStore';
 import { useMessageStore } from '../../stores/useMessageStore';
@@ -21,11 +21,10 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
-  const messages = unifiedConfigurationResponseManager.getFormattedChatHistory({ isAdmin: false, isReadOnly: false });
-  const initialSuggestedQuestions = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
-    isAdmin: false,
-    isReadOnly: false,
-  });
+  const messages = useMessageStore((state) => state.messages);
+  const setMessages = useMessageStore((state) => state.setMessages);
+
+  const [initialSuggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
 
   const orgName = unifiedConfigurationResponseManager.getOrgName() ?? '';
   const configuration = unifiedConfigurationResponseManager.getConfig();
@@ -49,6 +48,19 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const handleCloseChat = () => {
     handleUpdateSessionData({ isChatOpen: false });
   };
+
+  useEffect(() => {
+    const suggestedQuestions: string[] = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
+      isAdmin: false,
+      isReadOnly: false,
+    });
+    setSuggestedQuestions(suggestedQuestions);
+    const chatHistory = unifiedConfigurationResponseManager.getFormattedChatHistory({
+      isAdmin: false,
+      isReadOnly: false,
+    });
+    setMessages(chatHistory);
+  }, []);
 
   useEffect(() => {
     const payload = {
@@ -82,7 +94,14 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
               agentName={agentName}
               messages={messages}
               suggestedQuestions={initialSuggestedQuestions}
-              handleSuggestedQuestionOnClick={handleSendUserMessage}
+              handleSuggestedQuestionOnClick={(selectedMessage) => {
+                fetchSessionData();
+                if (!isChatOpen) {
+                  handleUpdateSessionData({ isChatOpen: true });
+                }
+                setSuggestedQuestions([]);
+                handleSendUserMessage(selectedMessage);
+              }}
             />
             <ChatInput
               isAMessageBeingProcessed={isAMessageBeingProcessed}
@@ -92,6 +111,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
                 if (!isChatOpen) {
                   handleUpdateSessionData({ isChatOpen: true });
                 }
+                setSuggestedQuestions([]);
                 handleSendUserMessage(selectedMessage);
               }}
             />
@@ -110,6 +130,7 @@ const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
           if (!isChatOpen) {
             handleUpdateSessionData({ isChatOpen: true });
           }
+          setSuggestedQuestions([]);
           handleSendUserMessage(selectedMessage);
         }}
       />
