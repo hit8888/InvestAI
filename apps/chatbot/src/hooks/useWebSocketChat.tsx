@@ -96,13 +96,13 @@ const useWebSocketChat = () => {
         sendMessage(JSON.stringify(payload));
         return;
       }
-      handleAnimatedOrb(messageId);
 
       if (!sessionId) {
         messageQueue.current.push({ message, messageId });
       } else {
         handleAddUserMessage(message);
         sendMessage(JSON.stringify(payload));
+        handleAnimatedOrb(messageId);
 
         setIsAMessageBeingProcessed(false);
       }
@@ -178,6 +178,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
       };
       handleAddUserMessage(message);
+      handleAnimatedOrb(messageId);
       sendMessage(JSON.stringify(payload));
     });
 
