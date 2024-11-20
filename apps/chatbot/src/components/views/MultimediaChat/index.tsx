@@ -138,6 +138,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
                   handleSendUserMessage(selectedMessage);
                 }}
                 isAMessageBeingProcessed={isAMessageBeingProcessed}
+                messages={messages}
               />
             )}
           </div>
