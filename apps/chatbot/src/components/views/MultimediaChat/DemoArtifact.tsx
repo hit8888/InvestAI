@@ -199,7 +199,6 @@ const DemoArtifact = (props: IProps) => {
         artifacts: [],
         documents: [],
         is_complete: true,
-        media: null,
         suggested_questions: [],
       });
 

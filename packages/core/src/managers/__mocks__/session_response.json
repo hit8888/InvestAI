@@ -1,71 +1,69 @@
 {
+  "agent_id": 1,
+  "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
+  "prospect_id": "1548fafc-34ee-4d3c-9b6a-218ffc78ebc7",
+  "configuration": {
     "agent_id": 1,
-    "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-    "prospect_id": "1548fafc-34ee-4d3c-9b6a-218ffc78ebc7",
-    "configuration": {
-        "agent_id": 1,
-        "agent_name": "Sam",
-        "org_name": "Hacker Earth",
-        "logo": "https://meaku-static-files.s3.us-west-1.amazonaws.com/hackerearth-tenant/HE_identity_white.png",
-        "header": {
-            "title": "Hello !",
-            "sub_title": "Need help navigating HackerEarth? Our AI assistant is here to answer your questions."
+    "agent_name": "Sam",
+    "org_name": "Hacker Earth",
+    "logo": "https://meaku-static-files.s3.us-west-1.amazonaws.com/hackerearth-tenant/HE_identity_white.png",
+    "header": {
+      "title": "Hello !",
+      "sub_title": "Need help navigating HackerEarth? Our AI assistant is here to answer your questions."
+    },
+    "body": {
+      "default_error_message": "\ud83d\udea8 An error occurred, and the chat was unexpectedly disrupted. Please contact us at support@hackerearth.com or +1-650-461-4192.",
+      "welcome_message": {
+        "message": "Good afternoon, welcome to HackerEarth! I am Sam, I'm here to make your HackerEarth experience 100% more AI and 200% more fun. You can ask me anything.",
+        "suggested_questions": [
+          "How does HackerEarth prevent cheating?",
+          "What kind of coding skills can HackerEarth assess?"
+        ]
+      },
+      "disclaimer": null,
+      "cta_config": {
+        "text": null,
+        "url": null,
+        "message": null
+      },
+      "chat_history": [
+        {
+          "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
+          "response_id": "LF52fiwgRbb2dC-IgllzF",
+          "role": "user",
+          "message": "What does hackerearth do",
+          "timestamp": "2024-11-07T02:07:12.654",
+          "message_id": 11092,
+          "documents": [],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": []
         },
-        "body": {
-            "default_error_message": "\ud83d\udea8 An error occurred, and the chat was unexpectedly disrupted. Please contact us at support@hackerearth.com or +1-650-461-4192.",
-            "welcome_message": {
-                "message": "Good afternoon, welcome to HackerEarth! I am Sam, I'm here to make your HackerEarth experience 100% more AI and 200% more fun. You can ask me anything.",
-                "suggested_questions": [
-                    "How does HackerEarth prevent cheating?",
-                    "What kind of coding skills can HackerEarth assess?"
-                ]
-            },
-            "disclaimer": null,
-            "cta_config": {
-                "text": null,
-                "url": null,
-                "message": null
-            },
-            "chat_history": [
-                {
-                    "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-                    "response_id": "LF52fiwgRbb2dC-IgllzF",
-                    "role": "user",
-                    "message": "What does hackerearth do",
-                    "timestamp": "2024-11-07T02:07:12.654",
-                    "message_id": 11092,
-                    "documents": [],
-                    "media": null,
-                    "analytics": {
-                        "buyer_intent_score": null
-                    },
-                    "suggested_questions": []
-                },
-                {
-                    "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-                    "response_id": "LF52fiwgRbb2dC-IgllzF",
-                    "role": "ai",
-                    "message": "HackerEarth is an AI-powered developer assessment platform that helps organizations evaluate a developer's skills through online coding tests. It offers a skill-based approach, allowing companies to generate standardized tests based on various skills and accurately measure performance. \n\nAdditionally, HackerEarth hosts a community of over 7.6 million developers, providing opportunities for skill enhancement and job discovery. The platform also facilitates virtual hackathons, enabling organizations to engage with developers globally and drive innovation.\n\nFor more details, you can visit [HackerEarth's coding assessments page](https://www.hackerearth.com/recruit/coding-assessments) or [hackathons page](https://www.hackerearth.com/recruit/hackathons). \ud83d\ude80\n\n---\nTo help me answer you in a personalized way, do you mind sharing your name? \ud83d\ude0a",
-                    "timestamp": "2024-11-07T02:07:15.036",
-                    "message_id": 11093,
-                    "documents": [],
-                    "media": null,
-                    "analytics": {
-                        "buyer_intent_score": null
-                    },
-                    "suggested_questions": []
-                }
-            ],
-            "feedback": []
-        },
-        "style_config": {
-            "card": "#DBDEE8",
-            "primary": "#262B4B",
-            "secondary": "#f8f9fa",
-            "card_foreground": "#2D3355",
-            "primary_foreground": "#FEFEFE",
-            "secondary_foreground": "#000"
-        },
-        "whitelisted_domains": []
-    }
+        {
+          "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
+          "response_id": "LF52fiwgRbb2dC-IgllzF",
+          "role": "ai",
+          "message": "HackerEarth is an AI-powered developer assessment platform that helps organizations evaluate a developer's skills through online coding tests. It offers a skill-based approach, allowing companies to generate standardized tests based on various skills and accurately measure performance. \n\nAdditionally, HackerEarth hosts a community of over 7.6 million developers, providing opportunities for skill enhancement and job discovery. The platform also facilitates virtual hackathons, enabling organizations to engage with developers globally and drive innovation.\n\nFor more details, you can visit [HackerEarth's coding assessments page](https://www.hackerearth.com/recruit/coding-assessments) or [hackathons page](https://www.hackerearth.com/recruit/hackathons). \ud83d\ude80\n\n---\nTo help me answer you in a personalized way, do you mind sharing your name? \ud83d\ude0a",
+          "timestamp": "2024-11-07T02:07:15.036",
+          "message_id": 11093,
+          "documents": [],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": []
+        }
+      ],
+      "feedback": []
+    },
+    "style_config": {
+      "card": "#DBDEE8",
+      "primary": "#262B4B",
+      "secondary": "#f8f9fa",
+      "card_foreground": "#2D3355",
+      "primary_foreground": "#FEFEFE",
+      "secondary_foreground": "#000"
+    },
+    "whitelisted_domains": []
+  }
 }

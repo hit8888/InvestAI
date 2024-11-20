@@ -2,18 +2,20 @@ import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
 import useAutoResizeTextArea from '@breakout/design-system/hooks/useAutoResizeTextArea';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Message } from '@meaku/core/types/chat';
 
 interface IProps {
   handleOnChange: () => void;
   handleSendMessage: (message: string) => void;
   isAMessageBeingProcessed: boolean;
+  messages: Message[];
 }
 
 const INITIAL_INPUT_HEIGHT = 56; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
-const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed }: IProps) => {
+const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const textAreaRef = useAutoResizeTextArea({
     textAreaValue: inputValue,
@@ -44,6 +46,16 @@ const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed
       handleSubmission();
     }
   };
+
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (textAreaRef.current && isSubmissionDisabled) {
+      textAreaRef.current.blur();
+    }
+    if (textAreaRef.current && lastMessage && lastMessage.is_complete) {
+      textAreaRef.current.focus();
+    }
+  }, [messages, textAreaRef, isSubmissionDisabled]);
 
   return (
     <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg bg-gray-100 p-2">

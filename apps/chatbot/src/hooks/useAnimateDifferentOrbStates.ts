@@ -4,7 +4,7 @@ import { useMessageStore } from '../stores/useMessageStore';
 
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 2000; //Discuss with the team about the value of this constant
 
-const useAnimateDIfferentOrbStates = () => {
+const useAnimateDifferentOrbStates = () => {
   const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
 
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
@@ -16,7 +16,6 @@ const useAnimateDIfferentOrbStates = () => {
       return {
         response_id: messageId,
         message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-        media: null,
         documents: [],
         is_complete: false,
         is_loading: true,
@@ -66,4 +65,4 @@ const useAnimateDIfferentOrbStates = () => {
   return { handleAnimatedOrb, handleStopOrbAnimation };
 };
 
-export { useAnimateDIfferentOrbStates };
+export { useAnimateDifferentOrbStates };

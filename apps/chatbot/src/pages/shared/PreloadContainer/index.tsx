@@ -13,6 +13,7 @@ import { getBrowserSignature } from '../../../utils/tracking';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useInitializeRequestHeaderfromUrl } from '../../../useInitializeRequestHeaderfromUrl';
 import { useLocalStorageState } from 'ahooks';
+import { trackError } from '../../../utils/error.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -53,11 +54,16 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   if (firstQueryWithError?.error) {
     if (firstQueryWithError.isFetching) {
-      return <Loader />;
+      return (
+        <div className="flex h-screen animate-spin items-center justify-center">
+          <Loader />
+        </div>
+      );
     }
 
     const internalAPIError = firstQueryWithError.error as AxiosError<Error>;
-    return <>{JSON.stringify({ internalAPIError })}</>; //TODO: How do we handle errors? Log errors here
+    trackError(internalAPIError, { action: 'internalAPIError', component: 'PreloadContainer' });
+    return null;
   }
 
   if (configQuery.data || sessionQuery.data) {
@@ -69,7 +75,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-screen animate-spin items-center justify-center bg-white/50">
+    <div className="flex h-screen animate-spin items-center justify-center">
       <Loader />
     </div>
   );

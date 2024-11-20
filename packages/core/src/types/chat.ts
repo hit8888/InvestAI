@@ -52,7 +52,6 @@ export const WebSocketArtifactsSchema = z.object({
 export const AIResponseSchema = z.object({
   response_id: z.string(),
   message: z.string(),
-  media: MediaSchema.nullable(),
   is_complete: z.boolean(),
   documents: z.array(DataSourceSchema),
   is_loading: z.boolean().optional(),
@@ -82,7 +81,6 @@ export type Message = {
   // response_id: string | null;
   // id: number | string | null; // temporary to accomodate backend changes
   message: string;
-  media: z.infer<typeof MediaSchema> | null;
   documents: z.infer<typeof DataSourceSchema>[];
   role: z.infer<typeof MessageSchema>["role"];
   suggested_questions?: string[];

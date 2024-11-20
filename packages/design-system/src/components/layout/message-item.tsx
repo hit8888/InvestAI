@@ -1,28 +1,20 @@
-import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import useAnalytics from "@meaku/core/hooks/useAnalytics";
-import { Message } from "@meaku/core/types/chat";
-import {
-  FeedbackEnum,
-  InitialFeedbackPayload,
-} from "@meaku/core/types/feedback";
-import isUndefined from "lodash/isUndefined";
-import { CirclePlayIcon } from "lucide-react";
-import { useCallback, useEffect } from "react";
-import ReactMarkdown, { Components } from "react-markdown";
-import gfm from "remark-gfm";
-import { cn } from "../../lib/cn";
-import ChevronIcon from "../icons/chevron";
-import UserAvatarIcon from "../icons/user";
-import WrappedLogo from "../icons/wrapped-logo";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./accordion";
-import Button from "./button";
-import FaviconImage from "./favicon-image";
-import FeedbackButton from "./feedback-button";
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import { Message } from '@meaku/core/types/chat';
+import { FeedbackEnum, InitialFeedbackPayload } from '@meaku/core/types/feedback';
+import isUndefined from 'lodash/isUndefined';
+import { CirclePlayIcon } from 'lucide-react';
+import { useCallback, useEffect } from 'react';
+import ReactMarkdown, { Components } from 'react-markdown';
+import gfm from 'remark-gfm';
+import { cn } from '../../lib/cn';
+import ChevronIcon from '../icons/chevron';
+import UserAvatarIcon from '../icons/user';
+import WrappedLogo from '../icons/wrapped-logo';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion';
+import Button from './button';
+import FaviconImage from './favicon-image';
+import FeedbackButton from './feedback-button';
 
 type Props = {
   agentName: string;
@@ -38,27 +30,21 @@ const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
 };
 
 const MessageItem = (props: Props) => {
-  const { agentName, message, handleShareInitialFeedback, handleShowFeedback } =
-    props;
+  const { agentName, message, handleShareInitialFeedback, handleShowFeedback } = props;
 
   const { trackEvent } = useAnalytics();
 
-  const isSenderBot = message.role === "ai";
+  const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
   const isComplete = message.is_complete;
-  const videoURL = message.media?.type === "VIDEO" && message.media.url;
-  const showFeedbackButtons =
-    message.showFeedbackOptions && isSenderBot && isComplete;
+  // TODO Remove videoURL move to Artifacts
+  const videoURL = '';
+  const showFeedbackButtons = message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
-  const showBuyerIntentScore =
-    showFeedbackButtons && Boolean(message.analytics.buyer_intent_score);
+  const showBuyerIntentScore = showFeedbackButtons && Boolean(message.analytics.buyer_intent_score);
   const isMessageReadOnly = message.isReadOnly ?? false;
-  const isFeedbackThumbUp = Boolean(
-    message.feedback?.positive_feedback === true,
-  );
-  const isFeedbackThumbDown = Boolean(
-    message.feedback?.positive_feedback === false,
-  );
+  const isFeedbackThumbUp = Boolean(message.feedback?.positive_feedback === true);
+  const isFeedbackThumbDown = Boolean(message.feedback?.positive_feedback === false);
 
   const handleSendResponseFeedback = useCallback(
     (feedback: FeedbackEnum) => {
@@ -78,7 +64,7 @@ const MessageItem = (props: Props) => {
 
   const handleMessageClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
-    const isLink = target.tagName === "A";
+    const isLink = target.tagName === 'A';
 
     if (isLink) {
       trackEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
@@ -90,7 +76,7 @@ const MessageItem = (props: Props) => {
 
   useEffect(() => {
     const messageContent = message.message;
-    const doesMessageContainLink = messageContent.includes("http");
+    const doesMessageContainLink = messageContent.includes('http');
 
     if (doesMessageContainLink) {
       trackEvent(ANALYTICS_EVENT_NAMES.LINK_VIEWED, {
@@ -102,10 +88,10 @@ const MessageItem = (props: Props) => {
   return (
     <div
       id={`message-${message.id}`}
-      className={cn("flex flex-col", {
-        "items-end space-y-2": !isSenderBot,
-        "items-start": isSenderBot,
-        "animate-pulse": isLoading,
+      className={cn('flex flex-col', {
+        'items-end space-y-2': !isSenderBot,
+        'items-start': isSenderBot,
+        'animate-pulse': isLoading,
       })}
     >
       {isSenderBot ? (
@@ -124,22 +110,15 @@ const MessageItem = (props: Props) => {
 
       <div
         className={cn(
-          "w-11/12 max-w-fit overflow-hidden rounded-2xl border text-gray-700 md:w-5/6 lg:w-5/6 2xl:w-4/6",
+          'w-11/12 max-w-fit overflow-hidden rounded-2xl border text-gray-700 md:w-5/6 lg:w-5/6 2xl:w-4/6',
           {
-            "flex flex-col items-start rounded-tl-none border-primary/25 bg-primary/10":
-              isSenderBot,
-            "border-gray-200": !isSenderBot,
+            'flex flex-col items-start rounded-tl-none border-primary/25 bg-primary/10': isSenderBot,
+            'border-gray-200': !isSenderBot,
           },
         )}
       >
-        <div
-          className="prose max-w-full p-4"
-          onClick={handleMessageClick}
-        >
-          <ReactMarkdown
-            remarkPlugins={[gfm]}
-            components={reactMarkdownComponents}
-          >
+        <div className="prose max-w-full p-4" onClick={handleMessageClick}>
+          <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
             {message.message}
           </ReactMarkdown>
         </div>
@@ -148,8 +127,7 @@ const MessageItem = (props: Props) => {
           <div className="mt-4 flex items-center gap-3 px-4">
             <p className="text-sm font-medium">Analytics:</p>
             <p className="rounded-md bg-primary/40 p-1 text-sm">
-              Buyer Intent Score:{" "}
-              <span>{message.analytics.buyer_intent_score}</span>
+              Buyer Intent Score: <span>{message.analytics.buyer_intent_score}</span>
             </p>
           </div>
         )}
@@ -157,15 +135,10 @@ const MessageItem = (props: Props) => {
         {showDocuments && (
           <div className="w-full">
             <Accordion type="single" collapsible>
-              <AccordionItem
-                value="sources"
-                className="border-0 border-none"
-              >
+              <AccordionItem value="sources" className="border-0 border-none">
                 <AccordionTrigger className="w-full px-4 py-1 hover:no-underline [&[data-state=open]_svg]:!-rotate-0">
                   <div className="flex w-full items-center justify-between">
-                    <h4 className="text-x[13px] font-medium text-gray-700">
-                      Show sources:
-                    </h4>
+                    <h4 className="text-x[13px] font-medium text-gray-700">Show sources:</h4>
                     <div className="flex items-center justify-center rounded-lg bg-primary/20 p-[1px] transition-colors duration-300 ease-in-out hover:bg-primary/30">
                       <ChevronIcon className="h-7 w-7 rotate-180 transform text-primary transition-transform duration-300" />
                     </div>
@@ -176,18 +149,12 @@ const MessageItem = (props: Props) => {
                     {message.documents.map((doc, idx) => (
                       <div
                         key={doc.id}
-                        className={cn(
-                          "flex items-center gap-4 px-4 py-2",
-                          {
-                            "border-b border-primary/30":
-                              idx !== message.documents.length - 1,
-                          },
-                        )}
+                        className={cn('flex items-center gap-4 px-4 py-2', {
+                          'border-b border-primary/30': idx !== message.documents.length - 1,
+                        })}
                       >
                         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-white">
-                          <p className="text-sm font-medium text-gray-700">
-                            {idx + 1}
-                          </p>
+                          <p className="text-sm font-medium text-gray-700">{idx + 1}</p>
                         </div>
                         <div className="flex flex-1 items-center justify-between">
                           {!!doc.url && (
@@ -196,25 +163,17 @@ const MessageItem = (props: Props) => {
                                 href={doc.url}
                                 target="_blank"
                                 className="block max-w-[18ch] overflow-hidden truncate overflow-ellipsis whitespace-nowrap text-primary underline md:max-w-[25ch] xl:max-w-[35ch]"
-                                title={
-                                  doc.title || doc.data_source_name || doc.url
-                                }
+                                title={doc.title || doc.data_source_name || doc.url}
                               >
                                 {doc.title || doc.data_source_name || doc.url}
                               </a>
                               <div className="flex items-center gap-3">
                                 {!!doc.similarity_score && (
                                   <p className="font-medium">
-                                    Similarity Score:{" "}
-                                    <span className="text-primary">
-                                      {doc.similarity_score}
-                                    </span>
+                                    Similarity Score: <span className="text-primary">{doc.similarity_score}</span>
                                   </p>
                                 )}
-                                <FaviconImage
-                                  url={doc.url}
-                                  className="h-4 w-4"
-                                />
+                                <FaviconImage url={doc.url} className="h-4 w-4" />
                               </div>
                             </>
                           )}
@@ -229,11 +188,7 @@ const MessageItem = (props: Props) => {
         )}
 
         {videoURL && (
-          <video
-            className="w-full"
-            controls
-            autoPlay={!message.isPartOfHistory}
-          >
+          <video className="w-full" controls autoPlay={!message.isPartOfHistory}>
             <source src={videoURL} type="video/mp4" />
             Your browser does not support viewing this video.
           </video>
@@ -257,9 +212,7 @@ const MessageItem = (props: Props) => {
             <Button
               size="icon"
               disabled={isUndefined(message.feedback?.positive_feedback)}
-              onClick={() =>
-                handleShowFeedback && handleShowFeedback(message.id.toString())
-              }
+              onClick={() => handleShowFeedback && handleShowFeedback(message.id.toString())}
               className="h-7 w-7"
             >
               <CirclePlayIcon className="h-4 w-4" />

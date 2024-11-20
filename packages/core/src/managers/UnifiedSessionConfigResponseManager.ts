@@ -31,7 +31,7 @@ class UnifiedSessionConfigResponseManager {
   }
 
   private isSession(
-    response: SessionConfigResponseType
+    response: SessionConfigResponseType,
   ): response is SessionApiResponse {
     return "session_id" in response;
   }
@@ -41,7 +41,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedSession.success) {
       throw new Error(
-        validatedSession.error.errors.map((error) => error.message).join(", ")
+        validatedSession.error.errors.map((error) => error.message).join(", "),
       );
     }
 
@@ -56,7 +56,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedConfig.success) {
       throw new Error(
-        validatedConfig.error.errors.map((error) => error.message).join(", ")
+        validatedConfig.error.errors.map((error) => error.message).join(", "),
       );
     }
 
@@ -101,7 +101,6 @@ class UnifiedSessionConfigResponseManager {
       is_complete: true,
       showFeedbackOptions: false,
       documents: [],
-      media: null,
       analytics: {},
     };
 
@@ -111,7 +110,7 @@ class UnifiedSessionConfigResponseManager {
         const messageFeedback = feedbacks.find(
           (feedback) =>
             feedback.response_id === message.response_id ||
-            feedback.response_id === message.message_id.toString()
+            feedback.response_id === message.message_id.toString(),
         );
 
         // TODO: Replace this with the chat artifact enums created by Amogh
@@ -119,20 +118,19 @@ class UnifiedSessionConfigResponseManager {
         const messageArtifact = message.artifacts.find(
           (artifact) =>
             ArtifactTypesToIgnore.indexOf(artifact.artifact_type) === -1 &&
-            artifact.artifact_id
+            artifact.artifact_id,
         );
 
         const chatBoxArtifact = message.artifacts.find(
           (artifact) =>
             Array.from(ChatBoxArtifactEnumSchema.options).indexOf(
-              artifact.artifact_type as ChatBoxArtifactType
-            ) !== -1
+              artifact.artifact_type as ChatBoxArtifactType,
+            ) !== -1,
         );
 
         return {
           id: message.message_id,
           message: message.message,
-          media: message.media,
           documents: message.documents,
           role: message.role,
           suggested_questions: message.suggested_questions,
