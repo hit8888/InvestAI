@@ -9,14 +9,10 @@ import { ChatBoxArtifactEnumSchema } from '@meaku/core/types/artifact';
 interface State {
   messages: Message[];
   setMessages: (messages: Message[]) => void;
-  // TODO: Remove Suggestion from here
-  suggestedQuestions: string[];
-  setSuggestedQuestions: (suggestedQuestions: string[]) => void;
   isAMessageBeingProcessed: boolean;
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: AIResponse) => void;
   handleAddUserMessage: (message: string) => void;
-
   handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
   handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
   handleRemoveMessages: (messageIds: string[]) => void;
@@ -29,11 +25,6 @@ export const useMessageStore = create<State>()(
       setMessages: (messages) =>
         set((draft) => {
           draft.messages = messages;
-        }),
-      suggestedQuestions: [],
-      setSuggestedQuestions: (suggestedQuestions) =>
-        set((draft) => {
-          draft.suggestedQuestions = suggestedQuestions;
         }),
       isAMessageBeingProcessed: false,
       setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>
