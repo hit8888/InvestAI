@@ -82,7 +82,7 @@ export type Message = {
   // response_id: string | null;
   // id: number | string | null; // temporary to accomodate backend changes
   message: string;
-  media: z.infer<typeof MediaSchema> | null;
+  media?: z.infer<typeof MediaSchema> | null;
   documents: z.infer<typeof DataSourceSchema>[];
   role: z.infer<typeof MessageSchema>["role"];
   suggested_questions?: string[];

@@ -51,7 +51,6 @@ export const useMessageStore = create<State>()(
             draft.messages[existingMessageIndex] = {
               ...draft.messages[existingMessageIndex],
               message: response.message,
-              media: response.media,
               documents: response.documents,
               is_loading: response.is_loading,
               is_complete: response.is_complete,
@@ -65,7 +64,6 @@ export const useMessageStore = create<State>()(
               id: messageId,
               role: 'ai',
               message: response.message,
-              media: response.media,
               documents: response.documents,
               is_loading: response.is_loading,
               is_complete: response.is_complete,
@@ -82,7 +80,6 @@ export const useMessageStore = create<State>()(
             id: nanoid(),
             role: 'user',
             message,
-            media: null,
             documents: [],
             analytics: {},
           });
