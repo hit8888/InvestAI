@@ -4,8 +4,8 @@ import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
 import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
-import { ChatBoxArtifactEnumSchema, SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
-import { AIResponse, ChatBoxArtifactType, SplitScreenArtifactType } from '@meaku/core/types/chat';
+import { SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
+import { AIResponse, SplitScreenArtifactType } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -27,17 +27,10 @@ const useWebSocketChat = () => {
 
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
-  // TODO: Remove Suggestion Artifacts
-  const setSuggestionArtifactId = useChatStore((state) => state.setSuggestionArtifactId);
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
-  const setSuggestedQuestions = useMessageStore((state) => state.setSuggestedQuestions);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
-
-  const handleAddActiveChatArtifact = useChatStore((state) => state.handleAddActiveChatArtifact);
-
-  const handleRemoveActiveChatArtifact = useChatStore((state) => state.handleRemoveActiveChatArtifact);
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
@@ -79,9 +72,6 @@ const useWebSocketChat = () => {
       }
 
       const messageId = nanoid();
-      setSuggestionArtifactId(null);
-      setSuggestedQuestions([]);
-      handleRemoveActiveChatArtifact();
       setIsAMessageBeingProcessed(true);
 
       const payload = {
@@ -123,7 +113,6 @@ const useWebSocketChat = () => {
       handleAddAIMessage(response);
 
       if (response.is_complete) {
-        setSuggestedQuestions(response.suggested_questions ?? []);
         setIsAMessageBeingProcessed(false);
       }
 
@@ -133,10 +122,6 @@ const useWebSocketChat = () => {
         SplitScreenArtifactEnumSchema.options.includes(artifact.artifact_type as SplitScreenArtifactType),
       );
 
-      const chatBoxArtifact = artifacts.find((artifact) =>
-        ChatBoxArtifactEnumSchema.options.includes(artifact.artifact_type as ChatBoxArtifactType),
-      );
-
       if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
         if (artifact.handleUpdateArtifact) {
           artifact.handleUpdateArtifact({
@@ -144,14 +129,6 @@ const useWebSocketChat = () => {
             activeArtifactType: activeArtifact.artifact_type,
           });
         }
-      }
-      if (
-        response.is_complete &&
-        chatBoxArtifact &&
-        chatBoxArtifact.artifact_type === ChatBoxArtifactEnumSchema.Enum.SUGGESTIONS
-      ) {
-        setSuggestionArtifactId(chatBoxArtifact.artifact_id);
-        handleAddActiveChatArtifact(chatBoxArtifact.artifact_id, chatBoxArtifact.artifact_type as ChatBoxArtifactType);
       }
     } catch (error) {
       trackError(error, {
