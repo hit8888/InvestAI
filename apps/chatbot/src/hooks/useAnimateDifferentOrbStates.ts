@@ -16,7 +16,6 @@ const useAnimateDifferentOrbStates = () => {
       return {
         response_id: messageId,
         message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-        media: null,
         documents: [],
         is_complete: false,
         is_loading: true,
