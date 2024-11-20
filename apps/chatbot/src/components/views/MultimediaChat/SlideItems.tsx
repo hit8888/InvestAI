@@ -16,8 +16,8 @@ const SlideItems = (props: IProps) => {
     <div className="flex h-full items-center justify-center">
       <div
         className={cn('grid w-full grid-cols-6', {
-          'gap-7': itemsLength <= 4,
-          'gap-5': itemsLength > 4,
+          'gap-7': itemsLength <= 2,
+          'gap-5': itemsLength > 2,
         })}
       >
         {items.map((item, idx) => (

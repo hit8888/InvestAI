@@ -3,7 +3,7 @@ import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface IProps {
   isChatOpen: boolean;
@@ -13,6 +13,34 @@ interface IProps {
   handleOpenChat: () => void;
 }
 
+const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
+  const [index, setIndex] = useState(0);
+  const displayText = useMemo(() => text.slice(0, index), [index, text]);
+
+  useEffect(() => {
+    if (index >= text.length) {
+      // Wait for a delay before resetting the index to repeat the typing
+      const timeoutId = setTimeout(() => {
+        setIndex(0); // Reset to start the typing effect again
+      }, repeatDelay);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    const timeoutId = setTimeout(() => {
+      setIndex((i) => i + 1); // Move to next character
+    }, speed);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [index, text, speed, repeatDelay]);
+
+  return displayText;
+};
+
 const BottomBar = (props: IProps) => {
   const { isChatOpen, suggestedQuestions, hasFirstUserMessageBeenSent, handleSendUserMessage, handleOpenChat } = props;
 
@@ -20,6 +48,10 @@ const BottomBar = (props: IProps) => {
 
   const showSuggestedQuestions =
     suggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
+
+  const placeholderText = hasFirstUserMessageBeenSent
+    ? 'Have a question? Ask here'
+    : 'Ready to explore skills or hackathons?';
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
@@ -57,13 +89,10 @@ const BottomBar = (props: IProps) => {
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className={cn('w-full min-w-80 border-none text-gray-900 outline-none ring-0 focus:ring-0', {
-                'placeholder:text-gray-600': !hasFirstUserMessageBeenSent,
-                'placeholder:text-gray-900': hasFirstUserMessageBeenSent,
-              })}
-              placeholder={
-                hasFirstUserMessageBeenSent ? 'Have a question? Ask here' : 'Ready to explore skills or hackathons?'
-              }
+              className={cn(
+                'w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+              )}
+              placeholder={useTypewriter(placeholderText)}
             />
           </div>
 
@@ -73,36 +102,31 @@ const BottomBar = (props: IProps) => {
               'w-[710px]': showSuggestedQuestions,
             })}
           >
-            {suggestedQuestions.map((question) => (
-              <div key={question} className="rounded-full bg-white">
-                <button
-                  type="button"
-                  onClick={() => handleSuggestedQuestionOnClick(question)}
-                  className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
-                >
-                  <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
-                  <span className="min-w-max text-sm font-medium">{question}</span>
-                </button>
-              </div>
-            ))}
+            {!inputValue &&
+              suggestedQuestions.map((question) => (
+                <div key={question} className="rounded-full bg-white">
+                  <button
+                    type="button"
+                    onClick={() => handleSuggestedQuestionOnClick(question)}
+                    className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
+                  >
+                    <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
+                    <span className="min-w-max text-sm font-medium">{question}</span>
+                  </button>
+                </div>
+              ))}
           </div>
 
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className={cn('flex h-9 w-9 items-center justify-center rounded-md', {
-                'bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80':
-                  !hasFirstUserMessageBeenSent,
-              })}
-            >
-              {hasFirstUserMessageBeenSent ? (
-                <>
-                  <BotIndicator size="md" />
-                </>
-              ) : (
+            {hasFirstUserMessageBeenSent && <BotIndicator size="md" />}
+            {inputValue && (
+              <button
+                type="submit"
+                className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors duration-300 ease-in-out hover:bg-primary/80"
+              >
                 <SendIcon className="text-primary-foreground" />
-              )}
-            </button>
+              </button>
+            )}
           </div>
         </form>
       </div>

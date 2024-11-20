@@ -1,6 +1,6 @@
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { ChatParams } from '@meaku/core/types/config';
-import { useAnimateDIfferentOrbStates } from './useAnimateDIfferentOrbStates';
+import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
 import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
@@ -15,7 +15,7 @@ import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import useIsAdmin from './useIsAdmin';
-//TODO: Krishna Reafctor useEffect logic in next PR
+//TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
@@ -43,7 +43,7 @@ const useWebSocketChat = () => {
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { trackEvent } = useAnalytics();
-  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDIfferentOrbStates();
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
   const artifact = useLocalStorageArtifact();
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
