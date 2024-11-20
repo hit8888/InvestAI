@@ -23,7 +23,7 @@ const SlideArtifact = (props: IProps) => {
         </div>
       </div>
 
-      <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-secondary opacity-60 blur-3xl"></div>
+      <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-secondary opacity-40 blur-3xl"></div>
       <div className="absolute -bottom-44 left-32 h-80 w-80 rounded-full bg-primary opacity-15 blur-3xl"></div>
     </div>
   );
