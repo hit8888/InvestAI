@@ -46,25 +46,29 @@ const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed
   };
 
   return (
-    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg bg-white bg-opacity-60 p-2">
+    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg bg-gray-100 p-2">
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
       <form className="relative flex-1" onSubmit={handleSubmission}>
-        <TextArea
-          ref={textAreaRef}
-          className=" w-full rounded-xl border-2 border-gray-200 p-4"
-          placeholder="Type your message here..."
-          value={inputValue}
-          onChange={handleInputValueChange}
-          onKeyDown={handleKeyDown}
-        />
-        <Button
-          type="submit"
-          className="absolute bottom-[10px] right-1 flex h-12 w-12 transform items-center justify-center !p-0"
-          disabled={isSubmissionDisabled}
-        >
-          <SendIcon className="text-primary-foreground" />
-        </Button>
+        <div className="z-10 rounded-2xl bg-white p-4">
+          <TextArea
+            ref={textAreaRef}
+            className=" w-full rounded-xl border-2 border-gray-200 p-4"
+            placeholder="Type your message here..."
+            value={inputValue}
+            onChange={handleInputValueChange}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        {!isSubmissionDisabled && (
+          <Button
+            type="submit"
+            className="absolute bottom-[26px] right-5 flex h-12 w-12 transform items-center justify-center !p-0"
+            disabled={isSubmissionDisabled}
+          >
+            <SendIcon className="text-primary-foreground" />
+          </Button>
+        )}
       </form>
     </div>
   );

@@ -36,7 +36,7 @@ export const MessageSchema = z.object({
   session_id: z.string(),
   role: z.enum(["user", "ai"]),
   message: z.string(),
-  media: MediaSchema.nullable(),
+  media: MediaSchema.optional(),
   documents: z.array(DataSourceSchema),
   suggested_questions: z.array(z.string()),
   analytics: AnalyticsSchema,
