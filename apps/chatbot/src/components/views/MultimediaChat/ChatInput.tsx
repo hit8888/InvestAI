@@ -10,7 +10,7 @@ interface IProps {
   isAMessageBeingProcessed: boolean;
 }
 
-const INITIAL_INPUT_HEIGHT = 40; // px
+const INITIAL_INPUT_HEIGHT = 56; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
 const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed }: IProps) => {
@@ -52,7 +52,7 @@ const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <TextArea
           ref={textAreaRef}
-          className="w-full"
+          className=" w-full rounded-xl border-2 border-gray-200 p-4"
           placeholder="Type your message here..."
           value={inputValue}
           onChange={handleInputValueChange}
@@ -60,7 +60,7 @@ const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed
         />
         <Button
           type="submit"
-          className="absolute bottom-[11px] right-1 flex h-8 w-8 transform items-center justify-center !p-0"
+          className="absolute bottom-[10px] right-1 flex h-12 w-12 transform items-center justify-center !p-0"
           disabled={isSubmissionDisabled}
         >
           <SendIcon className="text-primary-foreground" />
