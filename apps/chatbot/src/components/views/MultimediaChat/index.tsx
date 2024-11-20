@@ -127,17 +127,19 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
                 <Artifact />
               </div>
             </div>
-            <ChatInput
-              handleOnChange={fetchSessionData}
-              handleSendMessage={(selectedMessage) => {
-                fetchSessionData();
-                if (!isChatOpen) {
-                  handleUpdateSessionData({ isChatOpen: true });
-                }
-                handleSendUserMessage(selectedMessage);
-              }}
-              isAMessageBeingProcessed={isAMessageBeingProcessed}
-            />
+            {!isChatMaximized && (
+              <ChatInput
+                handleOnChange={fetchSessionData}
+                handleSendMessage={(selectedMessage) => {
+                  fetchSessionData();
+                  if (!isChatOpen) {
+                    handleUpdateSessionData({ isChatOpen: true });
+                  }
+                  handleSendUserMessage(selectedMessage);
+                }}
+                isAMessageBeingProcessed={isAMessageBeingProcessed}
+              />
+            )}
           </div>
         )}
       </div>
