@@ -4,6 +4,7 @@ import BotIndicator from '@breakout/design-system/components/layout/bot-indicato
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
+import { BottomBarType } from '@meaku/core/types/session';
 
 interface IProps {
   isChatOpen: boolean;
@@ -11,6 +12,7 @@ interface IProps {
   hasFirstUserMessageBeenSent: boolean;
   handleSendUserMessage: (message: string) => void;
   handleOpenChat: () => void;
+  bottomBarConfig?: BottomBarType;
 }
 
 const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
@@ -42,7 +44,14 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
 };
 
 const BottomBar = (props: IProps) => {
-  const { isChatOpen, suggestedQuestions, hasFirstUserMessageBeenSent, handleSendUserMessage, handleOpenChat } = props;
+  const {
+    isChatOpen,
+    suggestedQuestions,
+    hasFirstUserMessageBeenSent,
+    handleSendUserMessage,
+    handleOpenChat,
+    bottomBarConfig,
+  } = props;
 
   const [inputValue, setInputValue] = useState('');
 
@@ -50,8 +59,8 @@ const BottomBar = (props: IProps) => {
     suggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
   const placeholderText = hasFirstUserMessageBeenSent
-    ? 'Have a question? Ask here'
-    : 'Ready to explore skills or hackathons?';
+    ? (bottomBarConfig?.primary_placeholder ?? 'Have a question? Ask here')
+    : (bottomBarConfig?.secondary_placeholder ?? 'Have a question? Ask here');
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
