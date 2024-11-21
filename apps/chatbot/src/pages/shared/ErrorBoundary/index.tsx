@@ -7,12 +7,16 @@ interface ErrorBoundaryProps {
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  isSmallScreen: boolean;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {
+      hasError: false,
+      isSmallScreen: window.matchMedia('(max-width: 450px)').matches,
+    };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
@@ -21,7 +25,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       action: 'getDerivedStateFromError',
       component: 'ErrorBoundary',
     });
-    return { hasError: true };
+    return { hasError: true, isSmallScreen: false };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -34,9 +38,26 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     });
   }
 
+  componentDidMount() {
+    this.handleResize = this.handleResize.bind(this);
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize() {
+    this.setState({
+      isSmallScreen: window.matchMedia('(max-width: 450px)').matches,
+    });
+  }
+
   render() {
-    if (this.state.hasError) {
-      // Render nothing if an error occurs
+    const { hasError, isSmallScreen } = this.state;
+
+    if (hasError || isSmallScreen) {
+      // Render nothing if an error occurs or if the screen size is small
       return null;
     }
 
