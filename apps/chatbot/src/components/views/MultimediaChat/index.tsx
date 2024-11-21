@@ -28,6 +28,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     isAdmin: false,
     isReadOnly: false,
   });
+  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
 
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
@@ -156,6 +157,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
           handleSendUserMessage(selectedMessage);
         }}
         handleOpenChat={handleOpenChat}
+        bottomBarConfig={bottomBarConfig}
       />
     </div>
   );
