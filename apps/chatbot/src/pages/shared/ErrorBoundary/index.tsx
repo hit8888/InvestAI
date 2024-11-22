@@ -54,10 +54,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   render() {
-    const { hasError, isSmallScreen } = this.state;
+    const { hasError } = this.state;
 
-    if (hasError || isSmallScreen) {
-      // Render nothing if an error occurs or if the screen size is small
+    if (hasError) {
+      // Render nothing if an error occurs
       return null;
     }
 
