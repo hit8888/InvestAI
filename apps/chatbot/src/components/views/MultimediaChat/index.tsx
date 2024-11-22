@@ -10,6 +10,7 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
+import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -24,9 +25,13 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const isChatMaximized = useChatStore((state) => state.isChatMaximized);
   const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
+
+  const isAdmin = useIsAdmin();
+  const isReadOnly = useAreMessagesReadonly();
+
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
-    isAdmin: false,
-    isReadOnly: false,
+    isAdmin: isAdmin,
+    isReadOnly: isReadOnly,
   });
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
 
@@ -85,10 +90,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
           'mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 transition-all duration-300 ease-in-out',
           {
             'border border-gray-300 bg-white bg-opacity-50 p-2 backdrop-blur-lg': isChatOpen,
-            // TODO: Enable this when we remove the toggle width switch
-            // "mx-auto max-w-full lg:max-w-[80%]": false,
-            // "col-span-2 w-full": showDemo,
-            // "grid w-full grid-cols-3": showDemo,
             'w-10/12': !isWidthMaximized,
             'w-full': isWidthMaximized,
           },

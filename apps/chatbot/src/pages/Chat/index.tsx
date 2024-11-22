@@ -3,17 +3,20 @@ import ChatWithWhiteLabelConfig from './ChatPageContent';
 import PreloadContainer from '../shared/PreloadContainer';
 import { ApiProvider } from '../shared/ApiProvider';
 import ErrorBoundary from '../shared/ErrorBoundary';
+import UrlDerivedDataProvider from '../../shared/UrlDerivedDataProvider';
 
 const ChatPage: FC = () => {
   return (
     <ErrorBoundary>
-      <PreloadContainer>
-        {(props): ReactElement => (
-          <ApiProvider {...props}>
-            <ChatWithWhiteLabelConfig />
-          </ApiProvider>
-        )}
-      </PreloadContainer>
+      <UrlDerivedDataProvider>
+        <PreloadContainer>
+          {(props): ReactElement => (
+            <ApiProvider {...props}>
+              <ChatWithWhiteLabelConfig />
+            </ApiProvider>
+          )}
+        </PreloadContainer>
+      </UrlDerivedDataProvider>
     </ErrorBoundary>
   );
 };
