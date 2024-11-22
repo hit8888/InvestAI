@@ -8,12 +8,12 @@ import { useParams } from 'react-router-dom';
 import { ChatParams } from '@meaku/core/types/config';
 import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
 import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSessionDataQuery';
-import useIsAdmin from '../../../hooks/useIsAdmin';
 import { getBrowserSignature } from '../../../utils/tracking';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useInitializeRequestHeaderfromUrl } from '../../../useInitializeRequestHeaderfromUrl';
 import { useLocalStorageState } from 'ahooks';
 import { trackError } from '../../../utils/error.ts';
+import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -29,12 +29,13 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     deserializer: (value) => value,
   });
 
-  const { isAdmin, isReadOnly: isInternalAdminRoute } = useIsAdmin();
+  const isAdmin = useIsAdmin();
+  const isReadOnly = useAreMessagesReadonly();
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: isRequestHeaderSet && (isInternalAdminRoute || !sessionData?.sessionId) },
-    //for ReadOnly routes session Id is ignored and config is fetched directly
+    queryOptions: { enabled: isRequestHeaderSet && (isReadOnly || !sessionData?.sessionId) },
+    //for ReadOnly routes session ID is ignored and config is fetched directly
   });
 
   const initializeSessionPayload = {
@@ -47,7 +48,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: isRequestHeaderSet && !isInternalAdminRoute && !!agentId && !!sessionData.sessionId },
+    queryOptions: { enabled: isRequestHeaderSet && !isReadOnly && !!agentId && !!sessionData.sessionId },
   });
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);

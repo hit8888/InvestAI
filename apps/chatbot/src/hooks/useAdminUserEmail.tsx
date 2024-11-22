@@ -3,16 +3,16 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import useUpdateProspect from '@meaku/core/queries/mutation/useUpdateProspect';
-import useIsAdmin from './useIsAdmin';
 import useLocalStorageSession from './useLocalStorageSession';
 import { ChatParams } from '@meaku/core/types/config';
+import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
 
 const useAdminUserEmail = () => {
   const { orgName = '', agentId = '' } = useParams<ChatParams>();
 
   const userEmailKey = `${LOCAL_STORAGE_KEYS.USER_EMAIL}-${orgName}-${agentId}`;
 
-  const { isAdmin } = useIsAdmin();
+  const isAdmin = useIsAdmin();
   const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
 
   const [hasProspectBeenUpdated, setHasProspectBeenUpdated] = useState(false);
