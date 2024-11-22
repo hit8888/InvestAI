@@ -33,8 +33,6 @@ const UrlDerivedDataProvider: React.FC<UrlDerivedDataProviderProps> = ({ childre
     areMessagesReadonly: isReadOnly,
   };
 
-  console.log({ contextValue: contextValue });
-
   return <UrlDerivedDataContext.Provider value={contextValue}>{children}</UrlDerivedDataContext.Provider>;
 };
 
