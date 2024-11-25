@@ -1,16 +1,8 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
-import { useChatStore } from '../../../stores/useChatStore';
-import { useMessageStore } from '../../../stores/useMessageStore';
-import Artifact from './Artifact';
 import BottomBar from './BottomBar';
-import ChatHeader from './ChatHeader';
-import ChatInput from './ChatInput';
-import ChatMessage from './ChatMessage';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
-import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
-import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
+import ChatArea from './ChatArea';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -18,48 +10,26 @@ interface IProps {
 }
 
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
-  const { artifact } = useLocalStorageArtifact();
-  const { activeArtifactId } = artifact ?? {};
-
-  const [isWidthMaximized, setIsWidthMaximized] = useState(false);
-
-  const isChatMaximized = useChatStore((state) => state.isChatMaximized);
-  const setIsChatMaximized = useChatStore((state) => state.setIsChatMaximized);
-
-  const isAdmin = useIsAdmin();
-  const isReadOnly = useAreMessagesReadonly();
-
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
-    isAdmin: isAdmin,
-    isReadOnly: isReadOnly,
-  });
-  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
-
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
-
-  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
-  const messages = useMessageStore((state) => state.messages);
-
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
   const isChatOpen = sessionData.isChatOpen;
 
-  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true) && messages.length <= 1;
-
-  const handleCloseChat = () => {
-    handleUpdateSessionData({ isChatOpen: false });
-  };
+  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true);
 
   const handleOpenChat = () => {
     handleUpdateSessionData({ isChatOpen: true });
   };
 
-  const handleExpandWidth = () => {
-    setIsWidthMaximized(true);
+  const handleCloseChat = () => {
+    handleUpdateSessionData({ isChatOpen: false });
   };
 
-  const handleFinishDemo = () => {
-    setIsChatMaximized(false);
+  const handleSendMessage = (message: string) => {
+    fetchSessionData();
+    if (!isChatOpen) {
+      handleUpdateSessionData({ isChatOpen: true });
+    }
+    handleSendUserMessage(message);
   };
 
   useEffect(() => {
@@ -71,95 +41,17 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     window.parent.postMessage(payload, '*');
   }, [showTooltip, isChatOpen]);
 
-  useEffect(() => {
-    if (isWidthMaximized) return;
-
-    if (activeArtifactId) {
-      handleExpandWidth();
-    }
-  }, [activeArtifactId, isWidthMaximized]);
-
   return (
     <div
       className={cn('flex h-screen flex-col font-inter', {
         'rounded-2xl': isChatOpen,
       })}
     >
-      <div
-        className={cn(
-          'mx-auto flex flex-1 flex-col overflow-hidden rounded-2xl bg-opacity-80 transition-all duration-300 ease-in-out',
-          {
-            'border border-gray-300 bg-white bg-opacity-50 p-2 backdrop-blur-lg': isChatOpen,
-            'w-10/12': !isWidthMaximized,
-            'w-full': isWidthMaximized,
-          },
-        )}
-      >
-        {isChatOpen && (
-          <div
-            className={cn('flex flex-1 flex-col overflow-hidden rounded-lg bg-white bg-opacity-20 backdrop-blur-lg')}
-          >
-            <ChatHeader
-              handlePrimaryCta={() => handleSendUserMessage('I want to book a demo for the product.')}
-              handleCloseChat={handleCloseChat}
-              handleFinishDemo={handleFinishDemo}
-            />
-            <div
-              className={cn('flex-1 overflow-y-auto bg-white bg-opacity-50', {
-                'grid grid-cols-3 gap-8': !!activeArtifactId,
-              })}
-            >
-              <div
-                className={cn('flex-1 overflow-y-auto', {
-                  'col-span-3': !activeArtifactId,
-                  'col-span-1': !!activeArtifactId,
-                  'col-span-0 hidden': isChatMaximized,
-                })}
-              >
-                <ChatMessage messages={messages} isInSplitScreenView={!!activeArtifactId} />
-              </div>
-
-              <div
-                className={cn({
-                  'col-span-2 mr-2 pl-2': !!activeArtifactId,
-                  hidden: !activeArtifactId,
-                  'col-span-3': isChatMaximized,
-                })}
-              >
-                <Artifact />
-              </div>
-            </div>
-            {!isChatMaximized && (
-              <ChatInput
-                handleOnChange={fetchSessionData}
-                handleSendMessage={(selectedMessage) => {
-                  fetchSessionData();
-                  if (!isChatOpen) {
-                    handleUpdateSessionData({ isChatOpen: true });
-                  }
-                  handleSendUserMessage(selectedMessage);
-                }}
-                isAMessageBeingProcessed={isAMessageBeingProcessed}
-                messages={messages}
-              />
-            )}
-          </div>
-        )}
-      </div>
-      <BottomBar
-        isChatOpen={isChatOpen}
-        suggestedQuestions={initialSuggestedQuestions}
-        hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
-        handleSendUserMessage={(selectedMessage) => {
-          fetchSessionData();
-          if (!isChatOpen) {
-            handleUpdateSessionData({ isChatOpen: true });
-          }
-          handleSendUserMessage(selectedMessage);
-        }}
-        handleOpenChat={handleOpenChat}
-        bottomBarConfig={bottomBarConfig}
-      />
+      {isChatOpen ? (
+        <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
+      ) : (
+        <BottomBar handleSendUserMessage={handleSendMessage} handleOpenChat={handleOpenChat} />
+      )}
     </div>
   );
 };

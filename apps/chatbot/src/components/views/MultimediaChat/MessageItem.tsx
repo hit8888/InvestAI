@@ -6,7 +6,9 @@ import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import useInView from '../../../hooks/useInView';
 import ArtifactPreview from './ArtifactPreview';
-import ChatArtifact from './ChatArtifact.tsx';
+import ChatArtifact from './ChatArtifact';
+import { useAllowFeedback } from '../../../shared/UrlDerivedDataProvider';
+import MessageAnalytics from './MessageAnalytics';
 
 interface IProps {
   message: Message;
@@ -44,6 +46,8 @@ const MessageItem = (props: IProps) => {
   const showMessageArtifactPreview =
     !isLastMessage && (showArtifactPreview || isInView) && !!messageArtifactId && messageArtifactType !== 'NONE';
 
+  const allowFeedback = useAllowFeedback();
+
   const reactMarkdownComponents: Partial<Components> = {
     a: MessageLink,
     strong: MessageStrong,
@@ -69,10 +73,8 @@ const MessageItem = (props: IProps) => {
       >
         <div
           className={cn('max-w-full', {
-            'ml-10 bg-primary/70 px-3 py-2': !isSenderBot,
+            'ml-10 rounded-2xl bg-primary/70 px-3 py-2': !isSenderBot,
             'mr-10 flex gap-7 p-6 pl-0': isSenderBot,
-            'rounded-full': isSingleLineMessage,
-            'rounded-2xl': !isSingleLineMessage,
           })}
         >
           {isSenderBot && (
@@ -102,6 +104,11 @@ const MessageItem = (props: IProps) => {
                 />
               )}
             </div>
+            {allowFeedback && (
+              <>
+                <MessageAnalytics analytics={message.analytics} />
+              </>
+            )}
 
             {showMessageArtifactPreview && (
               <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType} />

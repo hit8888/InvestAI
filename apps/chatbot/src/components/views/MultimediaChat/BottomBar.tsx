@@ -4,15 +4,13 @@ import BotIndicator from '@breakout/design-system/components/layout/bot-indicato
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
-import { BottomBarType } from '@meaku/core/types/session';
+import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { useChatStore } from '../../../stores/useChatStore.ts';
 
 interface IProps {
-  isChatOpen: boolean;
-  suggestedQuestions: string[];
-  hasFirstUserMessageBeenSent: boolean;
   handleSendUserMessage: (message: string) => void;
   handleOpenChat: () => void;
-  bottomBarConfig?: BottomBarType;
 }
 
 const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
@@ -44,19 +42,22 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
 };
 
 const BottomBar = (props: IProps) => {
-  const {
-    isChatOpen,
-    suggestedQuestions,
-    hasFirstUserMessageBeenSent,
-    handleSendUserMessage,
-    handleOpenChat,
-    bottomBarConfig,
-  } = props;
+  const { handleSendUserMessage, handleOpenChat } = props;
+
+  const isAdmin = useIsAdmin();
+  const isReadOnly = useAreMessagesReadonly();
+
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
+    isAdmin: isAdmin,
+    isReadOnly: isReadOnly,
+  });
+  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
 
   const showSuggestedQuestions =
-    suggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
+    initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
   const placeholderText = hasFirstUserMessageBeenSent
     ? (bottomBarConfig?.primary_placeholder ?? 'Have a question? Ask here')
@@ -80,7 +81,6 @@ const BottomBar = (props: IProps) => {
       className={cn(
         'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
-          hidden: isChatOpen,
           'w-10/12': !hasFirstUserMessageBeenSent,
           'w-[400px]': hasFirstUserMessageBeenSent,
         },
@@ -112,7 +112,7 @@ const BottomBar = (props: IProps) => {
             })}
           >
             {!inputValue &&
-              suggestedQuestions.map((question) => (
+              initialSuggestedQuestions.map((question) => (
                 <div key={question} className="rounded-full bg-white">
                   <button
                     type="button"
