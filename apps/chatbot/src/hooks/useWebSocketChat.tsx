@@ -14,6 +14,8 @@ import { ENV } from '../config/env';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
+import { useChatStore } from '../stores/useChatStore';
+
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
