@@ -1,6 +1,6 @@
 import Button from '@breakout/design-system/components/layout/button';
 import { MinimizeIcon, PauseIcon, RotateCcwIcon } from 'lucide-react';
-import { useChatStore } from '../../../stores/useChatStore';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 interface IProps {
   handlePause?: () => void;
@@ -10,7 +10,7 @@ interface IProps {
 const ArtifactControls = (props: IProps) => {
   const { handlePause, handleRestart } = props;
 
-  const handleMaximizeChat = useChatStore((state) => state.handleToggleMaximizeChat);
+  const handleToggleMaximizeArtifact = useArtifactStore((state) => state.handleToggleMaximizeArtifact);
 
   return (
     <div className="absolute bottom-0 left-0 right-0 z-50 flex h-14 translate-y-full transform items-center justify-between bg-gradient-to-t from-black/50 to-transparent p-6 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:translate-y-0 group-hover:opacity-100">
@@ -28,7 +28,7 @@ const ArtifactControls = (props: IProps) => {
 
       <div className="flex items-center gap-3">
         <Button
-          onClick={handleMaximizeChat}
+          onClick={handleToggleMaximizeArtifact}
           size="icon"
           className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
         >

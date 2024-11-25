@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { Message } from '@meaku/core/types/chat';
 
 interface IProps {
-  handleOnChange: () => void;
   handleSendMessage: (message: string) => void;
   isAMessageBeingProcessed: boolean;
   messages: Message[];
@@ -15,7 +14,7 @@ interface IProps {
 const INITIAL_INPUT_HEIGHT = 40; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
-const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
+const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const textAreaRef = useAutoResizeTextArea({
     textAreaValue: inputValue,
@@ -27,7 +26,6 @@ const ChatInput = ({ handleOnChange, handleSendMessage, isAMessageBeingProcessed
 
   const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-    handleOnChange();
   };
 
   const handleSubmission = () => {

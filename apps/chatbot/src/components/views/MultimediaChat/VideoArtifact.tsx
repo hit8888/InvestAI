@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import useWebSocketChat from '../../../hooks/useWebSocketChat';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
-import { useChatStore } from '../../../stores/useChatStore';
 import ArtifactControls from './ArtifactControls';
 
 interface IProps {
@@ -30,7 +29,7 @@ const VideoArtifact = (props: IProps) => {
 
   const { handleSendUserMessage } = useWebSocketChat();
 
-  const isChatMaximized = useChatStore((state) => state.isChatMaximized);
+  const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
   const shouldEndArtifactImmediately = useArtifactStore((state) => state.shouldEndArtifactImmediately);
   const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
@@ -98,15 +97,15 @@ const VideoArtifact = (props: IProps) => {
   return (
     <div
       className={cn('group relative', {
-        'h-full w-full': !isChatMaximized,
-        'h-full w-auto': isChatMaximized,
+        'h-full w-full': !isArtifactMaximized,
+        'h-full w-auto': isArtifactMaximized,
       })}
     >
       <video
         ref={videoRef}
         className={cn('absolute inset-0 h-full max-h-full w-full max-w-full', {
           'object-cover': expandVideo,
-          'object-contain': isChatMaximized,
+          'object-contain': !isArtifactMaximized,
         })}
         // controls
         autoPlay={false}

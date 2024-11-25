@@ -8,8 +8,15 @@ import useUpdateLocalStorageOnArtifactResponse from '../../../hooks/useUpdateLoc
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import { cn } from '@breakout/design-system/lib/cn';
 
-const Artifact = () => {
+interface IProps {
+  isArtifactMaximized: boolean;
+}
+
+const Artifact = (props: IProps) => {
+  const { isArtifactMaximized } = props;
+
   const { artifact } = useLocalStorageArtifact();
   const { activeArtifactId, activeArtifactType } = artifact ?? {};
 
@@ -72,19 +79,14 @@ const Artifact = () => {
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      <AspectRatio ratio={16 / 9}>
-        <div className="group relative h-full w-full overflow-hidden rounded-xl">
-          {/* Uncomment this if a close button is needed */}
-          {/* <button
-            onClick={handleRemoveActiveArtifact}
-            className="absolute right-6 top-6 z-10 rounded-full border bg-white bg-opacity-60 p-1 text-gray-700 shadow-lg backdrop-blur-lg"
-          >
-            <XIcon className="h-4 w-4" />
-          </button> */}
-          {isFetching ? <div className="h-full w-full animate-pulse bg-gray-50"></div> : renderArtifact()}
-        </div>
-      </AspectRatio>
+    <div className={cn('col-span-2 mr-2 pl-2', { 'col-span-3': isArtifactMaximized })}>
+      <div className="flex h-full w-full items-center justify-center">
+        <AspectRatio ratio={16 / 9}>
+          <div className="group relative h-full w-full overflow-hidden rounded-xl">
+            {isFetching ? <div className="h-full w-full animate-pulse bg-gray-50"></div> : renderArtifact()}
+          </div>
+        </AspectRatio>
+      </div>
     </div>
   );
 };
