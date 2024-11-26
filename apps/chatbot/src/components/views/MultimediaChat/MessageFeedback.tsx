@@ -105,7 +105,6 @@ const MessageFeedback = (props: IProps) => {
   };
 
   const handlePrimaryFeedback = async (feedback: FeedbackEnum) => {
-    console.log({ feedback: feedback });
     handleAddMessageFeedback(responseId, {
       positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
     });
@@ -117,12 +116,9 @@ const MessageFeedback = (props: IProps) => {
         positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
       },
     });
-    console.log('Successfully sent initial feedback feedback!');
   };
 
   const handleShareDetailedFeedback = async (response: z.infer<typeof formSchema>) => {
-    console.log({ feedback: response });
-
     const feedback = message.feedback;
 
     if (!feedback) {

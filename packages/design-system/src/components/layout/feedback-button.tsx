@@ -8,7 +8,7 @@ interface IProps extends ButtonProps {
   isInverted?: boolean;
 }
 
-const FeedbackButton = React.forwardRef((props: IProps, ref) => {
+const FeedbackButton = React.forwardRef((props: IProps) => {
   const { isFilled, isInverted, ...restProps } = props;
 
   return (

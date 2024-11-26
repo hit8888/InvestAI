@@ -29,7 +29,6 @@ const Feedback = () => {
 
   useEffect(() => {
     fetchSessionData();
-    console.log('Hereeee');
   }, []);
 
   return (
