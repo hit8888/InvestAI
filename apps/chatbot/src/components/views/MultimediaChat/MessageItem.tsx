@@ -9,6 +9,8 @@ import ArtifactPreview from './ArtifactPreview';
 import ChatArtifact from './ChatArtifact';
 import { useAllowFeedback } from '../../../shared/UrlDerivedDataProvider';
 import MessageAnalytics from './MessageAnalytics';
+import MessageDataSources from './MessageDataSources.tsx';
+import MessageFeedback from './MessageFeedback.tsx';
 
 interface IProps {
   message: Message;
@@ -104,18 +106,17 @@ const MessageItem = (props: IProps) => {
                 />
               )}
             </div>
-            {allowFeedback && (
-              <>
-                <MessageAnalytics analytics={message.analytics} />
-              </>
-            )}
-
             {showMessageArtifactPreview && (
               <ArtifactPreview artifactId={messageArtifactId} artifactType={messageArtifactType} />
             )}
+            {isSenderBot && allowFeedback && message.is_complete && (
+              <>
+                <MessageAnalytics analytics={message.analytics} />
+                <MessageDataSources dataSources={message.documents} />
+                <MessageFeedback message={message} />
+              </>
+            )}
           </div>
-          {/* TODO: Add link preview */}
-          {/* <div></div> */}
         </div>
       </div>
       <div className="ml-auto">

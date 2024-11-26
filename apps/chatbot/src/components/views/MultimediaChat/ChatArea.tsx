@@ -53,14 +53,14 @@ const ChatArea = (props: IProps) => {
         },
       )}
     >
-      <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-white bg-opacity-20 backdrop-blur-lg">
+      <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/10 bg-opacity-40 backdrop-blur-lg">
         <ChatHeader
           handlePrimaryCta={() => handleSendMessage('I want to book a demo for the product.')}
           handleCloseChat={handleCloseChat}
           handleFinishDemo={handleFinishDemo}
         />
         <div
-          className={cn('flex-1 overflow-y-auto bg-white bg-opacity-50', {
+          className={cn('flex-1 overflow-y-auto', {
             'grid grid-cols-3 gap-8': showArtifact,
           })}
         >

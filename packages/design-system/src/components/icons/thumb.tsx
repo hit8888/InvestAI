@@ -1,19 +1,20 @@
-import React from "react";
-import { cn } from "../../lib/cn";
+import React from 'react';
+import { cn } from '../../lib/cn';
 
 interface IProps extends React.SVGProps<SVGSVGElement> {
   isFilled?: boolean;
 }
 
 const ThumbIcon = (props: IProps) => {
-  const { className, isFilled, ...restProps } = props;
+  const { className, isFilled, height = 24, width = 24, ...restProps } = props;
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
+      height={height}
+      width={width}
       viewBox="0 0 16 16"
-      className={cn("h-7 w-7 fill-current", className)}
+      className={cn('fill-primary', className)}
       {...restProps}
     >
       {isFilled ? (

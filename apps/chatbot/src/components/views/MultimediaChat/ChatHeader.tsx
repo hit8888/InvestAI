@@ -14,7 +14,7 @@ const ChatHeader = (props: IProps) => {
   const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
 
   return (
-    <div className="flex items-center justify-between bg-gray-50 bg-opacity-20 p-2 backdrop-blur-lg">
+    <div className="flex items-center justify-between border-b border-white p-2">
       <div>
         {isArtifactMaximized ? (
           <Button
