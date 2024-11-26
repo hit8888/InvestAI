@@ -3,6 +3,7 @@ import SlideHeader from './SlideHeader';
 import SlideItems from './SlideItems';
 import SlideSubTitle from './SlideSubTitle';
 import { cn } from '@breakout/design-system/lib/cn';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 
 interface IProps {
   artifact: SlideArtifactType;
@@ -13,6 +14,8 @@ const SlideArtifact = (props: IProps) => {
     artifact: { title, items, sub_title },
   } = props;
 
+  const logoUrl = useUnifiedConfigurationResponseManager().getLogoUrl();
+
   return (
     <svg
       className="h-auto w-full"
@@ -22,7 +25,7 @@ const SlideArtifact = (props: IProps) => {
     >
       <foreignObject x="0" y="0" width="100%" height="100%">
         <div className="relative flex h-full w-full flex-col bg-gray-25 p-7">
-          <SlideHeader title={title} />
+          <SlideHeader title={title} logoUrl={logoUrl} />
 
           <div className="grid h-full grid-cols-6 px-8 ">
             {sub_title && <SlideSubTitle text={sub_title} />}

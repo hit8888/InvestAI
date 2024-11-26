@@ -2,7 +2,7 @@ import HackerEarthLogo from './HackerEarthLogo';
 
 interface IProps {
   title: string;
-  logoUrl?: string;
+  logoUrl?: string | null;
 }
 
 const SlideHeader = ({ title, logoUrl }: IProps) => {

@@ -83,6 +83,10 @@ class UnifiedSessionConfigResponseManager {
     return this.config.org_name;
   }
 
+  getLogoUrl() {
+    return this.config.logo;
+  }
+
   getFormattedChatHistory({
     isAdmin,
     isReadOnly,
