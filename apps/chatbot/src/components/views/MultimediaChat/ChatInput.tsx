@@ -56,7 +56,7 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
   }, [messages, textAreaRef, isSubmissionDisabled]);
 
   return (
-    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg bg-white bg-opacity-60 p-2">
+    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg p-2">
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
       <form className="relative flex-1" onSubmit={handleSubmission}>

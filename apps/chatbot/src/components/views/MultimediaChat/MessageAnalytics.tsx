@@ -7,12 +7,17 @@ interface IProps {
 
 const MessageAnalytics = (props: IProps) => {
   const { analytics } = props;
+
+  if (!analytics || !analytics.buyer_intent_score) {
+    return null;
+  }
+
   return (
-    <div className="mt-4 flex items-center gap-3 px-4">
-      <p className="text-sm font-medium">Analytics:</p>
-      <Badge className={'bg-primary/40'}>
-        Buyer Intent Score: <span>{analytics.buyer_intent_score}</span>
-      </Badge>
+    <div className="mt-4 flex items-center gap-3">
+      <p className="text-sm font-bold text-primary">Analytics:</p>
+      {analytics.buyer_intent_score && (
+        <Badge className={'bg-primary'}>Buyer Intent Score: {analytics.buyer_intent_score}</Badge>
+      )}
     </div>
   );
 };
