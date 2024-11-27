@@ -31,7 +31,7 @@ const Backdrop = (props: Props) => {
       {/* Backdrop Overlay */}
       <div
         className={cn('fixed inset-0 h-screen w-screen', className, {
-          'bg-black/30': !iframeLoaded || !landingPageUrl,
+          'bg-primary-foreground': !iframeLoaded || !landingPageUrl,
         })}
       >
         {children}

@@ -27,10 +27,10 @@ const MessageDataSources = (props: IProps) => {
   }
 
   return (
-    <div className="my-2 w-full rounded-xl border bg-white bg-opacity-50 backdrop-blur-lg">
+    <div className="my-2 w-full rounded-xl border bg-secondary-foreground bg-opacity-50 backdrop-blur-lg">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="sources" className="border-none">
-          <AccordionTrigger className={'px-3 py-2 text-gray-600'}>Show sources:</AccordionTrigger>
+          <AccordionTrigger className={'px-3 py-2 text-primary-textColor'}>Show sources:</AccordionTrigger>
           <AccordionContent className="!pb-0">
             <div>
               {dataSources
@@ -42,7 +42,7 @@ const MessageDataSources = (props: IProps) => {
                       'mx-3 my-1 flex items-center gap-4 rounded-xl border bg-primary-foreground/50 px-2 py-2',
                     )}
                   >
-                    <Badge variant={'outline'} className={'rounded-full'}>
+                    <Badge variant={'outline'} className={'rounded-full text-primary-textColor'}>
                       {idx + 1}
                     </Badge>
                     <div className="flex flex-1 items-center justify-between">
