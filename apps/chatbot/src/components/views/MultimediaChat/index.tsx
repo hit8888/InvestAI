@@ -43,7 +43,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   return (
     <div
-      className={cn('flex h-screen flex-col bg-primary-foreground font-inter', {
+      className={cn('flex h-screen flex-col font-inter', {
         'rounded-2xl': isChatOpen,
       })}
     >
