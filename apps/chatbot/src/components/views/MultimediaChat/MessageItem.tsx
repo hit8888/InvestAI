@@ -25,7 +25,7 @@ const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
 };
 
 const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
-  return <strong className="text-gray-600" {...props} />;
+  return <strong className="text-primary-textColor" {...props} />;
 };
 
 const MessageItem = (props: IProps) => {
@@ -87,8 +87,8 @@ const MessageItem = (props: IProps) => {
           <div className="flex-col">
             <div
               className={cn('prose max-w-full flex-1', {
-                'text-primary-foreground': !isSenderBot,
-                'leading-snug text-gray-600': isSenderBot,
+                'text-white': !isSenderBot,
+                'leading-snug text-primary-textColor': isSenderBot,
                 'animate-pulse': isLoading,
               })}
               ref={messageRef}

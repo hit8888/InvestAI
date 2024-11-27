@@ -44,6 +44,7 @@ export const ConfigurationSchema = z.object({
   style_config: z.object({
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),
+    primary_text: z.string().optional(),
     secondary: z.string().optional(),
     secondary_foreground: z.string().optional(),
     card: z.string().optional(),

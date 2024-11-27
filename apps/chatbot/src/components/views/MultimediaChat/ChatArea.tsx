@@ -47,13 +47,13 @@ const ChatArea = (props: IProps) => {
   return (
     <div
       className={cn(
-        'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white bg-opacity-50 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
+        'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
         {
           'w-full': showArtifact,
         },
       )}
     >
-      <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/10 bg-opacity-40 backdrop-blur-lg">
+      <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
         <ChatHeader
           handlePrimaryCta={() => handleSendMessage('I want to book a demo for the product.')}
           handleCloseChat={handleCloseChat}

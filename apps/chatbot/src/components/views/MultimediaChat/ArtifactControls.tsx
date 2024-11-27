@@ -1,14 +1,15 @@
 import Button from '@breakout/design-system/components/layout/button';
-import { MinimizeIcon, PauseIcon, RotateCcwIcon } from 'lucide-react';
+import { MinimizeIcon, PauseIcon, PlayIcon, RotateCcwIcon } from 'lucide-react';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 interface IProps {
+  isPlaying: boolean;
   handlePause?: () => void;
   handleRestart?: () => void;
 }
 
 const ArtifactControls = (props: IProps) => {
-  const { handlePause, handleRestart } = props;
+  const { isPlaying, handlePause, handleRestart } = props;
 
   const handleToggleMaximizeArtifact = useArtifactStore((state) => state.handleToggleMaximizeArtifact);
 
@@ -18,10 +19,10 @@ const ArtifactControls = (props: IProps) => {
         {!!handlePause && (
           <Button
             size="icon"
-            className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
+            className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
             onClick={handlePause}
           >
-            <PauseIcon className="h-4 w-4 fill-current" />
+            {isPlaying ? <PauseIcon className="h-4 w-4 fill-current" /> : <PlayIcon className="h-4 w-4 fill-current" />}
           </Button>
         )}
       </div>
@@ -30,14 +31,14 @@ const ArtifactControls = (props: IProps) => {
         <Button
           onClick={handleToggleMaximizeArtifact}
           size="icon"
-          className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
+          className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
         >
           <MinimizeIcon className="h-4 w-4 stroke-2" />
         </Button>
         {!!handleRestart && (
           <Button
             size="icon"
-            className="h-8 w-8 border-2 border-gray-50 bg-transparent transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
+            className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
             onClick={handleRestart}
           >
             <RotateCcwIcon className="h-4 w-4 stroke-2" />

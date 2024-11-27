@@ -264,7 +264,7 @@ const DemoArtifact = (props: IProps) => {
         )}
       </div>
 
-      <ArtifactControls handlePause={handlePlayPause} handleRestart={handleRestart} />
+      <ArtifactControls isPlaying={isPlaying} handlePause={handlePlayPause} handleRestart={handleRestart} />
     </div>
   );
 };

@@ -30,6 +30,7 @@ const config: Omit<Config, "content"> = {
         primary: {
           DEFAULT: "rgb(var(--primary))",
           foreground: "rgb(var(--primary-foreground))",
+          textColor: "rgb(var(--primary-text))",
           50: "#F4F3FF",
           100: "#EBE9FE",
           200: "#D9D6FE",

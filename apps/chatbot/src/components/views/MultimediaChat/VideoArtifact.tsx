@@ -98,7 +98,7 @@ const VideoArtifact = (props: IProps) => {
     <div
       className={cn('group relative', {
         'h-full w-full': !isArtifactMaximized,
-        'h-full w-auto': isArtifactMaximized,
+        'h-screen w-auto': isArtifactMaximized,
       })}
     >
       <video
@@ -127,7 +127,7 @@ const VideoArtifact = (props: IProps) => {
         )}
       </div>
 
-      <ArtifactControls handlePause={handlePlayPauseVideo} handleRestart={handleRestartVideo} />
+      <ArtifactControls isPlaying={isPlaying} handlePause={handlePlayPauseVideo} handleRestart={handleRestartVideo} />
     </div>
   );
 };

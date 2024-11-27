@@ -14,7 +14,7 @@ const ChatHeader = (props: IProps) => {
   const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
 
   return (
-    <div className="flex items-center justify-between border-b border-white p-2">
+    <div className="flex items-center justify-between border-b border-white/10 p-2">
       <div>
         {isArtifactMaximized ? (
           <Button
@@ -30,7 +30,7 @@ const ChatHeader = (props: IProps) => {
             <Button
               size="sm"
               onClick={handlePrimaryCta}
-              className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40"
+              className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40 text-white"
             >
               Contact Sales
             </Button>
