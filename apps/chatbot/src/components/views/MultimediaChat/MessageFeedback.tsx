@@ -158,14 +158,16 @@ const MessageFeedback = (props: IProps) => {
           />
         </DialogTrigger>
       </div>
-      <DialogContent className="bg-primary-foreground sm:min-w-[700px]">
+      <DialogContent className="bg-primary-foreground/80 sm:min-w-[700px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleShareDetailedFeedback)} className="space-y-8">
             <DialogHeader className="flex items-center gap-2">
               <DialogTitle>
                 <MessageSquare />
               </DialogTitle>
-              <DialogDescription className="text-2xl">Please provide more details about your rating</DialogDescription>
+              <DialogDescription className="text-2xl text-primary-textColor">
+                Please provide more details about your rating
+              </DialogDescription>
             </DialogHeader>
             <FormField
               control={form.control}
