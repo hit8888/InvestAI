@@ -106,10 +106,13 @@ const BottomBar = (props: IProps) => {
           </div>
 
           <div
-            className={cn('flex items-center gap-1 overflow-hidden transition-[width] duration-150 ease-in-out', {
-              'w-0': !showSuggestedQuestions,
-              'w-[710px]': showSuggestedQuestions,
-            })}
+            className={cn(
+              'flex items-center justify-end gap-1 overflow-hidden transition-[width] duration-150 ease-in-out',
+              {
+                'w-0': !showSuggestedQuestions,
+                'w-[710px]': showSuggestedQuestions,
+              },
+            )}
           >
             {!inputValue &&
               initialSuggestedQuestions.map((question) => (
