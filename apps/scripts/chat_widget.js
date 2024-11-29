@@ -47,6 +47,7 @@
     });
     iframe.allow = "geolocation *";
     iframe.src = IFRAME_SRC;
+    iframe.id = "breakout-agent";
     container.appendChild(iframe);
   };
 

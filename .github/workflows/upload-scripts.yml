@@ -3,15 +3,15 @@ name: Upload scripts to S3
 on:
   push:
     branches:
+      - release
       - main
-      - staging
     paths:
       - "apps/scripts/**"
       - "packages/core/**"
   pull_request:
     branches:
+      - release
       - main
-      - staging
     paths:
       - "apps/scripts/**"
       - "packages/core/**"
@@ -67,7 +67,7 @@ jobs:
             BRANCH="${{ github.ref_name }}"
           fi
 
-          if [ "$BRANCH" == "main" ]; then
+          if [ "$BRANCH" == "release" ]; then
             ENVIRONMENT="production"
           else
             ENVIRONMENT="staging"

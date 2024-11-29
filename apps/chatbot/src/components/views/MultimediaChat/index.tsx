@@ -41,6 +41,21 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     window.parent.postMessage(payload, '*');
   }, [showTooltip, isChatOpen]);
 
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const { type } = event.data;
+
+      if (type === 'open-breakout-button') {
+        handleOpenChat();
+      }
+    };
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
   return (
     <div
       className={cn('flex h-screen flex-col font-inter', {
