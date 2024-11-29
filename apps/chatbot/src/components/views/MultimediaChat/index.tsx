@@ -46,6 +46,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       const { type } = event.data;
 
       if (type === 'open-breakout-button') {
+        fetchSessionData();
         handleOpenChat();
       }
     };
