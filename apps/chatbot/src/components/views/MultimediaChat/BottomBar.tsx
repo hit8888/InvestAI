@@ -4,7 +4,6 @@ import BotIndicator from '@breakout/design-system/components/layout/bot-indicato
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
-import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { useChatStore } from '../../../stores/useChatStore.ts';
 
@@ -44,13 +43,7 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
 const BottomBar = (props: IProps) => {
   const { handleSendUserMessage, handleOpenChat } = props;
 
-  const isAdmin = useIsAdmin();
-  const isReadOnly = useAreMessagesReadonly();
-
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
-    isAdmin: isAdmin,
-    isReadOnly: isReadOnly,
-  });
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
