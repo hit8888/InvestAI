@@ -156,14 +156,12 @@ class UnifiedSessionConfigResponseManager {
     return this.config.body.default_error_message;
   }
 
-  getInitialSuggestedQuestions({
-    isAdmin,
-    isReadOnly,
-  }: {
-    isAdmin: boolean;
-    isReadOnly: boolean;
-  }) {
-    const chatHistory = this.getFormattedChatHistory({ isAdmin, isReadOnly });
+  getInitialSuggestedQuestions() {
+    // To be  removed when embed/widget are deprecated
+    const chatHistory = this.getFormattedChatHistory({
+      isAdmin: false,
+      isReadOnly: false,
+    });
 
     if (chatHistory.length > 1) {
       const lastMessage = chatHistory[chatHistory.length - 1];

@@ -41,10 +41,7 @@ const MessageItem = (props: IProps) => {
 
   const { handleSendUserMessage } = useWebSocketChat();
 
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
-    isAdmin: false,
-    isReadOnly: false,
-  });
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
