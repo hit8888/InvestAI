@@ -11,6 +11,9 @@ import { useAllowFeedback } from '../../../shared/UrlDerivedDataProvider';
 import MessageAnalytics from './MessageAnalytics';
 import MessageDataSources from './MessageDataSources.tsx';
 import MessageFeedback from './MessageFeedback.tsx';
+import SuggestionsArtifact from './SuggestionsArtifact.tsx';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 
 interface IProps {
   message: Message;
@@ -35,6 +38,13 @@ const MessageItem = (props: IProps) => {
 
   const messageRef = useRef<HTMLDivElement>(null);
   const { isInView, ref: inViewRef } = useInView(0, true);
+
+  const { handleSendUserMessage } = useWebSocketChat();
+
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions({
+    isAdmin: false,
+    isReadOnly: false,
+  });
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
@@ -120,6 +130,15 @@ const MessageItem = (props: IProps) => {
         </div>
       </div>
       <div className="ml-auto">
+        {totalMessages <= 1 && (
+          <SuggestionsArtifact
+            handleSendUserMessage={handleSendUserMessage}
+            artifact={{
+              suggested_questions: initialSuggestedQuestions,
+              suggested_questions_type: 'BUBBLE',
+            }}
+          />
+        )}
         {message.chatArtifact && message.chatArtifact.artifact_type == 'SUGGESTIONS' && (
           <ChatArtifact artifact={message.chatArtifact} messageIndex={messageIndex} totalMessages={totalMessages} />
         )}
