@@ -83,6 +83,10 @@ class UnifiedSessionConfigResponseManager {
     return this.config.org_name;
   }
 
+  getLogoUrl() {
+    return this.config.logo;
+  }
+
   getFormattedChatHistory({
     isAdmin,
     isReadOnly,
@@ -152,14 +156,12 @@ class UnifiedSessionConfigResponseManager {
     return this.config.body.default_error_message;
   }
 
-  getInitialSuggestedQuestions({
-    isAdmin,
-    isReadOnly,
-  }: {
-    isAdmin: boolean;
-    isReadOnly: boolean;
-  }) {
-    const chatHistory = this.getFormattedChatHistory({ isAdmin, isReadOnly });
+  getInitialSuggestedQuestions() {
+    // To be  removed when embed/widget are deprecated
+    const chatHistory = this.getFormattedChatHistory({
+      isAdmin: false,
+      isReadOnly: false,
+    });
 
     if (chatHistory.length > 1) {
       const lastMessage = chatHistory[chatHistory.length - 1];
@@ -171,6 +173,10 @@ class UnifiedSessionConfigResponseManager {
 
   getStyleConfig() {
     return this.config.style_config;
+  }
+
+  getBottomBarConfig() {
+    return this.config.body.bottom_bar_config;
   }
 
   getConfig() {

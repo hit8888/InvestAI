@@ -1,16 +1,17 @@
 import { useEffect } from 'react';
-import useIsAdmin from '../../../hooks/useIsAdmin';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
 import UnifiedSessionConfigResponseManager, {
   SessionConfigResponseType,
 } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { useChatStore } from '../../../stores/useChatStore';
+import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   unifiedConfigurationResponse: SessionConfigResponseType,
 ) => {
-  const { isReadOnly: isInternalAdminRoute } = useIsAdmin();
+  const isAdmin = useIsAdmin();
+  const isReadOnly = useAreMessagesReadonly();
 
   const unifiedConfigurationResponseManager = new UnifiedSessionConfigResponseManager(unifiedConfigurationResponse);
   const { handleUpdateSessionData } = useLocalStorageSession();
@@ -23,10 +24,10 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
 
   useEffect(() => {
     const messages = unifiedConfigurationResponseManager.getFormattedChatHistory({
-      isAdmin: isInternalAdminRoute,
-      isReadOnly: isInternalAdminRoute,
+      isAdmin: isAdmin,
+      isReadOnly: isReadOnly,
     });
-    if (isInternalAdminRoute) {
+    if (isReadOnly) {
       return;
     }
     if (sessionId && prospectId) {
@@ -37,7 +38,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
       setMessages(messages);
       setHasFirstUserMessageBeenSent(messages.length > 0);
     }
-  }, [handleUpdateSessionData, isInternalAdminRoute, prospectId, sessionId]);
+  }, [handleUpdateSessionData, isReadOnly, prospectId, sessionId]);
 };
 
 export { useSetClientStoreAndLocalStorageUsingConfigSessionData };

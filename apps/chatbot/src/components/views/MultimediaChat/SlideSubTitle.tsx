@@ -4,12 +4,10 @@ interface IProps {
 
 const SlideSubTitle = ({ text }: IProps) => {
   return (
-    <div className="col-span-2 flex h-full items-center">
-      <div className="flex gap-8">
+    <div className="col-span-3 flex h-full items-center">
+      <div className="flex gap-16">
         <div className="w-2 rounded-lg bg-secondary" />
-        <h2 className="max-w-[18ch] border-secondary text-2xl font-bold leading-relaxed text-primary 2xl:max-w-[20ch] 2xl:text-3xl 2xl:leading-relaxed">
-          {text}
-        </h2>
+        <h2 className="border-secondary text-6xl font-bold leading-snug text-primary">{text}</h2>
       </div>
     </div>
   );

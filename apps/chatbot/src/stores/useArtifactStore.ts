@@ -7,6 +7,9 @@ interface State {
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   shouldEndArtifactImmediately: boolean;
   setShouldEndArtifactImmediately: (shouldEnd: boolean) => void;
+  isArtifactMaximized: boolean;
+  setIsArtifactMaximized: (value: boolean | ((prevState: boolean) => boolean)) => void;
+  handleToggleMaximizeArtifact: () => void;
 }
 //TODO: Remove useArtifactStore;
 export const useArtifactStore = create<State>()(
@@ -24,6 +27,15 @@ export const useArtifactStore = create<State>()(
           state.shouldEndArtifactImmediately = shouldEnd;
         });
       },
+      isArtifactMaximized: false,
+      setIsArtifactMaximized: (value) =>
+        set((draft) => {
+          draft.isArtifactMaximized = typeof value === 'function' ? value(draft.isArtifactMaximized) : value;
+        }),
+      handleToggleMaximizeArtifact: () =>
+        set((draft) => {
+          draft.isArtifactMaximized = !draft.isArtifactMaximized;
+        }),
     })),
   ),
 );

@@ -11,10 +11,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '../config/env';
-import { useChatStore } from '../stores/useChatStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
-import useIsAdmin from './useIsAdmin';
+import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
+import { useChatStore } from '../stores/useChatStore';
+
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -23,7 +24,7 @@ const MAX_RETRY_INTERVAL = 20000;
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
 
-  const { isAdmin } = useIsAdmin();
+  const isAdmin = useIsAdmin();
 
   const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
@@ -80,6 +81,7 @@ const useWebSocketChat = () => {
         response_id: messageId,
         event_type: eventType ?? '',
         event_data: eventData ?? {},
+        is_admin: isAdmin,
       };
 
       if (eventType && eventData) {
@@ -153,6 +155,7 @@ const useWebSocketChat = () => {
         session_id: sessionId,
         message,
         response_id: messageId,
+        is_admin: isAdmin,
       };
       handleAddUserMessage(message);
       handleAnimatedOrb(messageId);

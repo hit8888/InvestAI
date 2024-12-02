@@ -14,6 +14,11 @@ export const DocumentSchema = z.object({
   data_sources: z.array(DataSourceSchema),
 });
 
+export const BottomBarConfigSchema = z.object({
+  primary_placeholder: z.string(),
+  secondary_placeholder: z.string(),
+});
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -32,12 +37,14 @@ export const ConfigurationSchema = z.object({
     chat_history: z.array(MessageSchema),
     feedback: z.array(FeedbackSchema).optional(),
     documents: z.array(DataSourceSchema).optional(),
+    bottom_bar_config: BottomBarConfigSchema.optional(),
     disclaimer_message: z.string().optional(),
     show_cta: z.boolean().optional(),
   }),
   style_config: z.object({
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),
+    primary_text: z.string().optional(),
     secondary: z.string().optional(),
     secondary_foreground: z.string().optional(),
     card: z.string().optional(),
@@ -67,3 +74,5 @@ export type Feedback = Omit<z.infer<typeof FeedbackSchema>, "response_id">;
 export type StyleConfig = z.infer<typeof ConfigurationSchema>["style_config"];
 
 export type SessionHashData = z.infer<typeof SessionHashDataSchema>;
+
+export type BottomBarType = z.infer<typeof BottomBarConfigSchema>;

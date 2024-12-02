@@ -4,11 +4,10 @@ import BotIndicator from '@breakout/design-system/components/layout/bot-indicato
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { useChatStore } from '../../../stores/useChatStore.ts';
 
 interface IProps {
-  isChatOpen: boolean;
-  suggestedQuestions: string[];
-  hasFirstUserMessageBeenSent: boolean;
   handleSendUserMessage: (message: string) => void;
   handleOpenChat: () => void;
 }
@@ -42,16 +41,20 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
 };
 
 const BottomBar = (props: IProps) => {
-  const { isChatOpen, suggestedQuestions, hasFirstUserMessageBeenSent, handleSendUserMessage, handleOpenChat } = props;
+  const { handleSendUserMessage, handleOpenChat } = props;
+
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
+  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
+  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
 
   const showSuggestedQuestions =
-    suggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
+    initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
   const placeholderText = hasFirstUserMessageBeenSent
-    ? 'Have a question? Ask here'
-    : 'Ready to explore skills or hackathons?';
+    ? (bottomBarConfig?.primary_placeholder ?? 'Have a question? Ask here')
+    : (bottomBarConfig?.secondary_placeholder ?? 'Have a question? Ask here');
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
@@ -71,7 +74,6 @@ const BottomBar = (props: IProps) => {
       className={cn(
         'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
-          hidden: isChatOpen,
           'w-10/12': !hasFirstUserMessageBeenSent,
           'w-[400px]': hasFirstUserMessageBeenSent,
         },
@@ -97,13 +99,16 @@ const BottomBar = (props: IProps) => {
           </div>
 
           <div
-            className={cn('flex items-center gap-1 overflow-hidden transition-[width] duration-150 ease-in-out', {
-              'w-0': !showSuggestedQuestions,
-              'w-[710px]': showSuggestedQuestions,
-            })}
+            className={cn(
+              'flex items-center justify-end gap-1 overflow-hidden transition-[width] duration-150 ease-in-out',
+              {
+                'w-0': !showSuggestedQuestions,
+                'w-[710px]': showSuggestedQuestions,
+              },
+            )}
           >
             {!inputValue &&
-              suggestedQuestions.map((question) => (
+              initialSuggestedQuestions.map((question) => (
                 <div key={question} className="rounded-full bg-white">
                   <button
                     type="button"

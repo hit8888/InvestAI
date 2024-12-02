@@ -30,7 +30,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-screen w-full items-center justify-center align-middle">
       <div className="flex flex-col items-center space-y-8">
         <div className="rounded-full shadow-2xl shadow-primary">
           <WrappedLogo size="lg" />

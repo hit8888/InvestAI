@@ -1,23 +1,22 @@
 import Button from '@breakout/design-system/components/layout/button';
 import { ArrowLeftIcon, XIcon } from 'lucide-react'; //TODO: Expos this for design system
-import { useChatStore } from '../../../stores/useChatStore';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 interface IProps {
   handlePrimaryCta: () => void;
-  handleCloseChat: () => void;
+  handleCloseChat?: () => void;
   handleFinishDemo: () => void;
-  // handleToggleWidth: () => void;
 }
 
 const ChatHeader = (props: IProps) => {
   const { handlePrimaryCta, handleFinishDemo, handleCloseChat } = props;
 
-  const isChatMaximized = useChatStore((state) => state.isChatMaximized);
+  const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
 
   return (
-    <div className="flex items-center justify-between bg-gray-50 bg-opacity-20 p-2 backdrop-blur-lg">
+    <div className="flex items-center justify-between border-b border-white/10 p-2">
       <div>
-        {isChatMaximized ? (
+        {isArtifactMaximized ? (
           <Button
             size="sm"
             onClick={handleFinishDemo}
@@ -31,7 +30,7 @@ const ChatHeader = (props: IProps) => {
             <Button
               size="sm"
               onClick={handlePrimaryCta}
-              className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40"
+              className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40 text-white"
             >
               Contact Sales
             </Button>
@@ -40,15 +39,11 @@ const ChatHeader = (props: IProps) => {
       </div>
 
       <div className="flex items-center gap-2">
-        {/* <Button
-          size="icon"
-          className="rounded-xl border-2 border-gray-300 bg-transparent p-1 transition-colors duration-300 ease-in-out hover:border-primary"
-        >
-          <EllipsisVerticalIcon className="text-primary" />
-        </Button> */}
-        <Button size="icon" className="bg-transparent p-0" onClick={handleCloseChat}>
-          <XIcon className="text-primary" />
-        </Button>
+        {!!handleCloseChat && (
+          <Button size="icon" className="bg-transparent p-0" onClick={handleCloseChat}>
+            <XIcon className="text-primary" />
+          </Button>
+        )}
       </div>
     </div>
   );

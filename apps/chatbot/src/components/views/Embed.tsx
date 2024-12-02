@@ -27,10 +27,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const [initialSuggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
 
   useEffect(() => {
-    const suggestedQuestions: string[] = unifiedConfigurationResponseManager.getInitialSuggestedQuestions({
-      isAdmin: false,
-      isReadOnly: false,
-    });
+    const suggestedQuestions: string[] = unifiedConfigurationResponseManager.getInitialSuggestedQuestions();
     setSuggestedQuestions(suggestedQuestions);
     const chatHistory = unifiedConfigurationResponseManager.getFormattedChatHistory({
       isAdmin: false,

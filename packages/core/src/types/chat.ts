@@ -107,3 +107,7 @@ export type SplitScreenArtifactType = z.infer<
 >;
 
 export type ChatBoxArtifactType = z.infer<typeof ChatBoxArtifactEnumSchema>;
+
+export type AnalyticsType = z.infer<typeof AnalyticsSchema>;
+
+export type DataSourceType = z.infer<typeof DataSourceSchema>;
