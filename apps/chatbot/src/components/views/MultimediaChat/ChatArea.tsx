@@ -55,7 +55,7 @@ const ChatArea = (props: IProps) => {
     >
       <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
         <ChatHeader
-          handlePrimaryCta={() => handleSendMessage('I want to book a demo for the product.')}
+          handleSendMessage={handleSendMessage}
           handleCloseChat={handleCloseChat}
           handleFinishDemo={handleFinishDemo}
         />

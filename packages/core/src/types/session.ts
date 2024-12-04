@@ -40,6 +40,13 @@ export const ConfigurationSchema = z.object({
     bottom_bar_config: BottomBarConfigSchema.optional(),
     disclaimer_message: z.string().optional(),
     show_cta: z.boolean().optional(),
+    cta_config: z
+      .object({
+        text: z.string().optional(),
+        url: z.string().optional(),
+        message: z.string().optional(),
+      })
+      .optional(),
   }),
   style_config: z.object({
     primary: z.string().optional(),
