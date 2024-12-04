@@ -42,11 +42,11 @@ export const ConfigurationSchema = z.object({
     show_cta: z.boolean().optional(),
     cta_config: z
       .object({
-        text: z.string().optional(),
-        url: z.string().optional(),
-        message: z.string().optional(),
+        text: z.string().nullish(),
+        url: z.string().nullish(),
+        message: z.string().nullish(),
       })
-      .optional(),
+      .nullish(),
   }),
   style_config: z.object({
     primary: z.string().optional(),
