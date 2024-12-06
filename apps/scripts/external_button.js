@@ -1,14 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("notifyButton"); // TODO: Change the id as per your use
+  const buttons = document.querySelectorAll(".notifyBreakoutButton"); // Use this shared class for all buttons
 
   const waitForIframe = (retryCount = 0) => {
     const iframe = document.getElementById("breakout-agent");
     if (iframe) {
-      button.addEventListener("click", () => {
-        iframe.contentWindow.postMessage(
-          { type: "open-breakout-button", payload: "Button was clicked!" },
-          "*",
-        );
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const payload = {
+            type: "open-breakout-button",
+            data: {
+              buttonId: button.id,
+              message: `Button ${button.id} was clicked!`,
+            },
+          };
+
+          iframe.contentWindow.postMessage(payload, "*");
+        });
       });
     } else if (retryCount < 5) {
       const delay = Math.pow(2, retryCount) * 100;
@@ -22,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  if (button) {
+  if (buttons.length > 0) {
     waitForIframe();
   } else {
-    console.error("Button not found.");
+    console.error("No breakout buttons found.");
   }
 });

@@ -1,17 +1,36 @@
 import Button from '@breakout/design-system/components/layout/button';
 import { ArrowLeftIcon, XIcon } from 'lucide-react'; //TODO: Expos this for design system
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { useMemo } from 'react';
 
 interface IProps {
-  handlePrimaryCta: () => void;
+  handleSendMessage: (message: string) => void;
   handleCloseChat?: () => void;
   handleFinishDemo: () => void;
 }
 
 const ChatHeader = (props: IProps) => {
-  const { handlePrimaryCta, handleFinishDemo, handleCloseChat } = props;
+  const { handleSendMessage, handleFinishDemo, handleCloseChat } = props;
 
   const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
+  const ctaConfig = useUnifiedConfigurationResponseManager().getCTAConfig();
+
+  const ctaText = useMemo(() => {
+    if (ctaConfig?.text) {
+      return ctaConfig.text;
+    }
+    return 'Contact Sales';
+  }, [ctaConfig]);
+
+  const ctaMessage = useMemo(() => {
+    if (ctaConfig?.message) {
+      return ctaConfig.message;
+    }
+    return 'I want to book a demo for the product.';
+  }, [ctaConfig]);
+
+  const handlePrimaryCta = () => handleSendMessage(ctaMessage);
 
   return (
     <div className="flex items-center justify-between border-b border-white/10 p-2">
@@ -32,7 +51,7 @@ const ChatHeader = (props: IProps) => {
               onClick={handlePrimaryCta}
               className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40 text-white"
             >
-              Contact Sales
+              {ctaText}
             </Button>
           </div>
         )}

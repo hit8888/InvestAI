@@ -179,6 +179,10 @@ class UnifiedSessionConfigResponseManager {
     return this.config.body.bottom_bar_config;
   }
 
+  getCTAConfig() {
+    return this.config.body.cta_config;
+  }
+
   getConfig() {
     const config = this.config;
     const isOrgC2FO = config.org_name === "C2FO";
