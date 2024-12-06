@@ -9,6 +9,7 @@ const useHandleAppStateOnUnmount = () => {
       handleUpdateSessionData({ isChatOpen: false });
       const payload = {
         chatOpen: false,
+        tooltipOpen: false,
       };
 
       window.parent.postMessage(payload, '*');
