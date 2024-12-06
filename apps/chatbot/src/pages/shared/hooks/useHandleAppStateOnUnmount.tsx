@@ -7,6 +7,11 @@ const useHandleAppStateOnUnmount = () => {
   useEffect(() => {
     return () => {
       handleUpdateSessionData({ isChatOpen: false });
+      const payload = {
+        chatOpen: false,
+      };
+
+      window.parent.postMessage(payload, '*');
     };
   }, []);
 };
