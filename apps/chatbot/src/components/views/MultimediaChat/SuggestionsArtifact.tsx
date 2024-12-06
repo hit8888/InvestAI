@@ -21,7 +21,7 @@ const SuggestionsArtifact = (props: IProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col items-end gap-3">
       {artifact.suggested_questions.map((question) => (
         <div key={question}>
           <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
