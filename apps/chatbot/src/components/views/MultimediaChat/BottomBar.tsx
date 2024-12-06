@@ -1,11 +1,11 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
-import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { useChatStore } from '../../../stores/useChatStore.ts';
+import { Suggestion } from './Suggestion.tsx';
 
 interface IProps {
   handleSendUserMessage: (message: string) => void;
@@ -104,14 +104,7 @@ const BottomBar = (props: IProps) => {
             {!inputValue &&
               initialSuggestedQuestions.map((question) => (
                 <div key={question} className="rounded-full bg-white">
-                  <button
-                    type="button"
-                    onClick={() => handleSuggestedQuestionOnClick(question)}
-                    className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary-50 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary-100"
-                  >
-                    <SparkleIcon className="ransition-colors !h-4 !w-4 fill-primary-400 duration-300 ease-in-out group-hover:fill-white/60" />
-                    <span className="min-w-max text-sm font-medium">{question}</span>
-                  </button>
+                  <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
                 </div>
               ))}
           </div>
