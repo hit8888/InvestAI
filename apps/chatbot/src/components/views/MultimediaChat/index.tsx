@@ -40,7 +40,6 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       chatOpen: isChatOpen,
       tooltipOpen: showTooltip,
     };
-    console.log({ payload });
     window.parent.postMessage(payload, '*');
   }, [isChatOpen, showTooltip]);
 
