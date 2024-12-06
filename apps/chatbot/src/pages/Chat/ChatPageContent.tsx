@@ -8,7 +8,7 @@ import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedCo
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '../shared/ApiProvider/Context';
 import { useArtifactStore } from '../../stores/useArtifactStore';
-import { useHandleAppStateOnUnmount } from '../shared/hooks/useHandleAppStateOnUnmount';
+// import { useHandleAppStateOnUnmount } from '../shared/hooks/useHandleAppStateOnUnmount';
 
 const Widget = lazy(() => import('../../components/views/Widget'));
 const Embed = lazy(() => import('../../components/views/Embed'));
@@ -37,7 +37,7 @@ const Chat = () => {
 
   useUpdateSessionOnSessionInit();
 
-  useHandleAppStateOnUnmount();
+  // useHandleAppStateOnUnmount();
 
   const chatConfig = (searchParams.get('config')?.toLowerCase() as ChatConfig) || ChatConfig.EMBED;
 

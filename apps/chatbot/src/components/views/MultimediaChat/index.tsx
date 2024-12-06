@@ -3,6 +3,7 @@ import { memo, useEffect } from 'react';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
 import BottomBar from './BottomBar';
 import ChatArea from './ChatArea';
+import { useHandleAppStateOnUnmount } from '../../../pages/shared/hooks/useHandleAppStateOnUnmount';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -12,7 +13,11 @@ interface IProps {
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
 
+  useHandleAppStateOnUnmount();
+
   const isChatOpen = sessionData.isChatOpen;
+
+  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true);
 
   const handleOpenChat = () => {
     handleUpdateSessionData({ isChatOpen: true });
@@ -33,10 +38,10 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   useEffect(() => {
     const payload = {
       chatOpen: isChatOpen,
+      tooltipOpen: showTooltip,
     };
-
     window.parent.postMessage(payload, '*');
-  }, [isChatOpen]);
+  }, [isChatOpen, showTooltip]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
