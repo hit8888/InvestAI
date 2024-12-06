@@ -107,9 +107,9 @@ const BottomBar = (props: IProps) => {
                   <button
                     type="button"
                     onClick={() => handleSuggestedQuestionOnClick(question)}
-                    className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
+                    className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary-50 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary-100"
                   >
-                    <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
+                    <SparkleIcon className="ransition-colors !h-4 !w-4 fill-primary-400 duration-300 ease-in-out group-hover:fill-white/60" />
                     <span className="min-w-max text-sm font-medium">{question}</span>
                   </button>
                 </div>
