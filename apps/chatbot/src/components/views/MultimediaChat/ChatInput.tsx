@@ -60,10 +60,10 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
       <form className="relative flex-1" onSubmit={handleSubmission}>
-        <div className="z-10 rounded-2xl bg-white p-4">
+        <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
             ref={textAreaRef}
-            className=" w-full rounded-xl border-2 border-gray-200 p-4"
+            className="border-2 p-4"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
@@ -73,7 +73,7 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
         {!isSubmissionDisabled && (
           <Button
             type="submit"
-            className="absolute bottom-[26px] right-5 flex h-12 w-12 transform items-center justify-center !p-0"
+            className="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
             disabled={isSubmissionDisabled}
           >
             <SendIcon className="text-primary-foreground" />

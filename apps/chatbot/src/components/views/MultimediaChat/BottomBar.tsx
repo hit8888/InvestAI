@@ -17,24 +17,18 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
   const displayText = useMemo(() => text.slice(0, index), [index, text]);
 
   useEffect(() => {
-    if (index >= text.length) {
-      // Wait for a delay before resetting the index to repeat the typing
-      const timeoutId = setTimeout(() => {
-        setIndex(0); // Reset to start the typing effect again
-      }, repeatDelay);
+    const handleTyping = () => {
+      if (index >= text.length) {
+        const resetTimeout = setTimeout(() => setIndex(0), repeatDelay);
+        return () => clearTimeout(resetTimeout);
+      }
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-
-    const timeoutId = setTimeout(() => {
-      setIndex((i) => i + 1); // Move to next character
-    }, speed);
-
-    return () => {
-      clearTimeout(timeoutId);
+      const typingTimeout = setTimeout(() => setIndex((i) => i + 1), speed);
+      return () => clearTimeout(typingTimeout);
     };
+
+    const cleanup = handleTyping();
+    return cleanup;
   }, [index, text, speed, repeatDelay]);
 
   return displayText;
@@ -92,7 +86,7 @@ const BottomBar = (props: IProps) => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className={cn(
-                'w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+                'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
               )}
               placeholder={useTypewriter(placeholderText)}
             />
