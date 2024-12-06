@@ -23,7 +23,6 @@ const Feedback = () => {
   };
 
   const handleSendMessage = (message: string) => {
-    fetchSessionData();
     handleSendUserMessage(message);
   };
 
