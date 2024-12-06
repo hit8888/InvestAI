@@ -31,13 +31,6 @@ const config: Omit<Config, "content"> = {
           DEFAULT: "rgb(var(--primary))",
           foreground: "rgb(var(--primary-foreground))",
           textColor: "rgb(var(--primary-text))",
-          50: "#F4F3FF",
-          100: "#EBE9FE",
-          200: "#D9D6FE",
-          300: "#BDB4FE",
-          400: "#A7B2D2",
-          500: "#A6A2ED",
-          1000: "#4E46DC",
         },
         secondary: {
           DEFAULT: "rgb(var(--secondary))",
@@ -48,10 +41,6 @@ const config: Omit<Config, "content"> = {
           foreground: "rgb(var(--card-foreground))",
         },
         link: "#2E90FA",
-        alerts: {
-          50: "#FEF3F2",
-          500: "#F04438",
-        },
         success: {
           50: "#ECFDF3",
           600: "#039855",
