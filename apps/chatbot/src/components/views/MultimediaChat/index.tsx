@@ -17,6 +17,8 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const isChatOpen = sessionData.isChatOpen;
 
+  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true);
+
   const handleOpenChat = () => {
     handleUpdateSessionData({ isChatOpen: true });
   };
@@ -36,10 +38,10 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   useEffect(() => {
     const payload = {
       chatOpen: isChatOpen,
+      tooltipOpen: showTooltip,
     };
-
     window.parent.postMessage(payload, '*');
-  }, [isChatOpen]);
+  }, [isChatOpen, showTooltip]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
