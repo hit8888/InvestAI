@@ -11,7 +11,7 @@ interface IProps {
   messages: Message[];
 }
 
-const INITIAL_INPUT_HEIGHT = 40; // px
+const INITIAL_INPUT_HEIGHT = 56; // px
 const MAX_INPUT_HEIGHT = 100; // px
 
 const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
@@ -60,22 +60,25 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
       <form className="relative flex-1" onSubmit={handleSubmission}>
-        <TextArea
-          ref={textAreaRef}
-          className="w-full"
-          placeholder="Type your message here..."
-          value={inputValue}
-          onChange={handleInputValueChange}
-          onKeyDown={handleKeyDown}
-          autoFocus
-        />
-        <Button
-          type="submit"
-          className="absolute bottom-[11px] right-1 flex h-8 w-8 transform items-center justify-center !p-0"
-          disabled={isSubmissionDisabled}
-        >
-          <SendIcon className="text-primary-foreground" />
-        </Button>
+        <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
+          <TextArea
+            ref={textAreaRef}
+            className="border-2 p-4"
+            placeholder="Type your message here..."
+            value={inputValue}
+            onChange={handleInputValueChange}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        {!isSubmissionDisabled && (
+          <Button
+            type="submit"
+            className="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
+            disabled={isSubmissionDisabled}
+          >
+            <SendIcon className="text-primary-foreground" />
+          </Button>
+        )}
       </form>
     </div>
   );
