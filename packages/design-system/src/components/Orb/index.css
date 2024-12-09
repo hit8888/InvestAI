@@ -8,7 +8,7 @@
       0px 0px 36px 4px #fff,
       0px 12px 24px 4px rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, #acb2eb) 100%);
+    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
   }
 
   /* animate-taking-input Starts */
@@ -16,9 +16,7 @@
   .animate-taking-input {
     animation:
       animation-taking-input1 720ms linear 1ms,
-      animation-taking-input2 1.6s linear 720ms infinite,
-      animation-taking-input3 2s linear 2.32s infinite;
-    animation-delay: 1ms;
+      animation-taking-input2 1.6s linear 720ms infinite;
   }
 
   .shining {
@@ -27,11 +25,11 @@
   }
 
   .taking-input-thinking-2 {
-    background: radial-gradient(42.71% 42.71% at 50% 50%, #fff 4%, var(--input-color, #acb2eb) 56.5%);
+    background: radial-gradient(42.71% 42.71% at 50% 50%, #fff 4%, var(--input-color, --fallback-color) 56.5%);
   }
 
   .taking-input-3 {
-    background: radial-gradient(50% 50% at 50% 50%, #fff 8%, var(--input-color, #acb2eb) 56%);
+    background: radial-gradient(50% 50% at 50% 50%, #fff 8%, var(--input-color, --fallback-color) 56%);
   }
 
   @keyframes animation-taking-input1 {
@@ -52,15 +50,6 @@
     }
   }
 
-  @keyframes animation-taking-input3 {
-    0% {
-      @apply taking-input-3;
-    }
-    100% {
-      @apply taking-input-thinking-2;
-    }
-  }
-
   /* animate-taking-input Ends */
 
   /* animate-thinking Starts */
@@ -68,13 +57,11 @@
   .animate-thinking {
     animation:
       animation-thinking1 720ms linear 1ms,
-      animation-thinking2 1.6s linear 720ms infinite,
-      animation-thinking3 2s linear 2.32s infinite;
-    animation-delay: 1ms;
+      animation-thinking2 1600ms linear 720ms infinite;
   }
 
   .thinking-3 {
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 0%, var(--input-color, #acb2eb) 55%);
+    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 0%, var(--input-color, --fallback-color) 55%);
   }
 
   @keyframes animation-thinking1 {
@@ -95,46 +82,37 @@
     }
   }
 
-  @keyframes animation-thinking3 {
-    0% {
-      @apply thinking-3;
-    }
-    100% {
-      @apply taking-input-thinking-2;
-    }
-  }
-
   /* animate-thinking Ends */
 
-  /* animate-impatient Starts */
+  /* animate-waiting Starts */
 
   .orb-container-shiny {
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 24%, var(--input-color, #acb2eb) 100%);
+    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 24%, var(--input-color, --fallback-color) 100%);
     box-shadow:
       0px 0px 36px 16px rgba(255, 255, 255, 0.64),
       0px 12px 24px 4px rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
   }
 
-  .animate-impatient {
+  .animate-waiting {
     animation:
-      animation-impatient-part1 1s cubic-bezier(0.3, -0.05, 0.7, -0.5) 1ms infinite,
-      animation-impatient-part2 1.2s cubic-bezier(0.45, 1.45, 0.8, 1) 1s infinite;
+      animation-waiting-part1 1s cubic-bezier(0.3, -0.05, 0.7, -0.5) 1ms infinite,
+      animation-waiting-part2 1.2s cubic-bezier(0.45, 1.45, 0.8, 1) 1s infinite;
   }
 
-  .impatient-1 {
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, #acb2eb) 100%);
+  .waiting-1 {
+    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
   }
 
   /* Keyframes for the first part of the animation */
-  @keyframes animation-impatient-part1 {
+  @keyframes animation-waiting-part1 {
     0% {
       transform: translateY(0);
       @apply orb-container-shiny;
     }
     50% {
       transform: translateY(-10px);
-      @apply impatient-1;
+      @apply waiting-1;
     }
     100% {
       transform: translateY(0);
@@ -143,10 +121,10 @@
   }
 
   /* Keyframes for the second part of the animation */
-  @keyframes animation-impatient-part2 {
+  @keyframes animation-waiting-part2 {
     0% {
       transform: translateY(0);
-      @apply impatient-1;
+      @apply waiting-1;
     }
     50% {
       transform: translateY(-10px);
@@ -154,9 +132,83 @@
     }
     100% {
       transform: translateY(0);
-      @apply impatient-1;
+      @apply waiting-1;
     }
   }
 
-  /* animate-impatient Ends */
+  /* animate-waiting Ends */
+
+  /* animate-responding Starts */
+
+  .orb-container-responding-1 {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    fill: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 48%, var(--input-color, --fallback-color) 100%);
+    filter: drop-shadow(0px 12px 24px rgba(0, 0, 0, 0.36)) drop-shadow(0px 0px 36px rgba(255, 255, 255, 0.64));
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .orb-container-responding-2 {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    fill: radial-gradient(61.46% 61.46% at 50% 38.54%, rgba(172, 178, 235, 0.5) 23%, #f5f5ff 72.5%);
+    filter: drop-shadow(0px 12px 24px rgba(0, 0, 0, 0.36)) drop-shadow(0px 0px 36px #fff);
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .orb-container-responding-3 {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    fill: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 0%, #f5f5ff 100%);
+    filter: drop-shadow(0px 12px 24px rgba(0, 0, 0, 0.36)) drop-shadow(0px 0px 36px #fff);
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .orb-container-responding-4 {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    fill: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
+    filter: drop-shadow(0px 12px 24px rgba(0, 0, 0, 0.36)) drop-shadow(0px 0px 36px #fff);
+    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .animate-responding {
+    animation:
+      animation-responding-part1 100ms linear 1ms infinite,
+      animation-responding-part2 400ms ease-out 100ms infinite,
+      animation-responding-part3 1200ms ease-out 500ms infinite;
+  }
+
+  @keyframes animation-responding-part1 {
+    0% {
+      @apply orb-container-responding-1;
+    }
+    100% {
+      @apply orb-container-responding-2;
+    }
+  }
+
+  @keyframes animation-responding-part2 {
+    0% {
+      @apply orb-container-responding-2;
+    }
+    100% {
+      @apply orb-container-responding-3;
+    }
+  }
+
+  @keyframes animation-responding-part3 {
+    0% {
+      @apply orb-container-responding-3;
+    }
+    100% {
+      @apply orb-container-responding-4;
+    }
+  }
+
+  /* animate-responding Ends */
 }
