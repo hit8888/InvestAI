@@ -11,6 +11,9 @@
       0px 0px 36px 4px #fff,
       0px 12px 24px 4px rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+  }
+
+  .initial-background {
     background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
   }
 
@@ -20,10 +23,107 @@
 
   @keyframes initial-animation {
     0% {
-      @apply orb-container;
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
+    }
+    5% {
+      background: radial-gradient(
+        60.32% 60.32% at 50% 39.27%,
+        #f6f6ff 0.2%,
+        var(--input-color, --fallback-color) 97.8%
+      );
+    }
+    10% {
+      background: radial-gradient(59.18% 59.18% at 50% 40%, #f6f6ff 0.4%, var(--input-color, --fallback-color) 95.6%);
+    }
+    15% {
+      background: radial-gradient(
+        58.04% 58.04% at 50% 40.73%,
+        #f7f7ff 0.6%,
+        var(--input-color, --fallback-color) 93.4%
+      );
+    }
+    20% {
+      background: radial-gradient(56.9% 56.9% at 50% 41.46%, #f7f7ff 0.8%, var(--input-color, --fallback-color) 91.2%);
+    }
+    25% {
+      background: radial-gradient(55.76% 55.76% at 50% 42.19%, #f8f8ff 1%, var(--input-color, --fallback-color) 89%);
+    }
+    30% {
+      background: radial-gradient(
+        54.62% 54.62% at 50% 42.92%,
+        #f8f8ff 1.2%,
+        var(--input-color, --fallback-color) 86.8%
+      );
+    }
+    35% {
+      background: radial-gradient(
+        53.48% 53.48% at 50% 43.65%,
+        #f9f9ff 1.4%,
+        var(--input-color, --fallback-color) 84.6%
+      );
+    }
+    40% {
+      background: radial-gradient(
+        52.34% 52.34% at 50% 44.38%,
+        #f9f9ff 1.6%,
+        var(--input-color, --fallback-color) 82.4%
+      );
+    }
+    45% {
+      background: radial-gradient(51.2% 51.2% at 50% 45.11%, #fafafa 1.8%, var(--input-color, --fallback-color) 80.2%);
+    }
+    50% {
+      background: radial-gradient(50.06% 50.06% at 50% 45.84%, #fafafa 2%, var(--input-color, --fallback-color) 78%);
+    }
+    55% {
+      background: radial-gradient(
+        48.92% 48.92% at 50% 46.57%,
+        #fbfbfb 2.2%,
+        var(--input-color, --fallback-color) 75.8%
+      );
+    }
+    60% {
+      background: radial-gradient(47.78% 47.78% at 50% 47.3%, #fbfbfb 2.4%, var(--input-color, --fallback-color) 73.6%);
+    }
+    65% {
+      background: radial-gradient(
+        46.64% 46.64% at 50% 48.03%,
+        #fcfcfc 2.6%,
+        var(--input-color, --fallback-color) 71.4%
+      );
+    }
+    70% {
+      background: radial-gradient(45.5% 45.5% at 50% 48.76%, #fcfcfc 2.8%, var(--input-color, --fallback-color) 69.2%);
+    }
+    75% {
+      background: radial-gradient(44.36% 44.36% at 50% 49.49%, #fdfdfd 3%, var(--input-color, --fallback-color) 67%);
+    }
+    80% {
+      background: radial-gradient(
+        43.22% 43.22% at 50% 49.49%,
+        #fefefe 3.2%,
+        var(--input-color, --fallback-color) 64.8%
+      );
+    }
+    85% {
+      background: radial-gradient(
+        43.08% 43.08% at 50% 49.66%,
+        #fefefe 3.4%,
+        var(--input-color, --fallback-color) 62.6%
+      );
+    }
+    90% {
+      background: radial-gradient(
+        42.94% 42.94% at 50% 49.83%,
+        #ffffff 3.6%,
+        var(--input-color, --fallback-color) 60.4%
+      );
+    }
+    95% {
+      background: radial-gradient(42.8% 42.8% at 50% 49.91%, #ffffff 3.8%, var(--input-color, --fallback-color) 58.2%);
     }
     100% {
-      @apply taking-input-thinking-2;
+      background: radial-gradient(42.71% 42.71% at 50% 50%, #ffffff 4%, var(--input-color, --fallback-color) 56.5%);
     }
   }
 
