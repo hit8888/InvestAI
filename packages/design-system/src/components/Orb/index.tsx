@@ -21,6 +21,7 @@ const Orb = ({ color, state }: IProps) => {
         'animate-taking-input': state === OrbStatusEnum.takingInput,
         'animate-thinking': state === OrbStatusEnum.thinking,
         'animate-waiting': state === OrbStatusEnum.waiting,
+        'animate-responding': state === OrbStatusEnum.responding,
       })}
       style={{ '--input-color': color, '--fallback-color': '#acb2eb' } as React.CSSProperties}
     >
