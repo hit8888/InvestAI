@@ -14,7 +14,6 @@ import { ENV } from '../config/env';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
-import { useChatStore } from '../stores/useChatStore';
 
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
@@ -26,8 +25,8 @@ const useWebSocketChat = () => {
 
   const isAdmin = useIsAdmin();
 
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
-  const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);

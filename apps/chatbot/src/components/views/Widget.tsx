@@ -6,7 +6,6 @@ import TriggerButton from '@breakout/design-system/components/layout/trigger-but
 import { cn } from '@breakout/design-system/lib/cn';
 import { memo, useEffect, useState } from 'react';
 import useLocalStorageSession from '../../hooks/useLocalStorageSession';
-import { useChatStore } from '../../stores/useChatStore';
 import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 
@@ -17,7 +16,7 @@ interface IProps {
 
 const Widget = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 

@@ -16,6 +16,8 @@ interface State {
   handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
   handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
   handleRemoveMessages: (messageIds: string[]) => void;
+  hasFirstUserMessageBeenSent: boolean;
+  setHasFirstUserMessageBeenSent: (value: boolean) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -118,6 +120,11 @@ export const useMessageStore = create<State>()(
       handleRemoveMessages: (messageIds) =>
         set((draft) => {
           draft.messages = draft.messages.filter((message) => !messageIds.includes(message.id as string));
+        }),
+      hasFirstUserMessageBeenSent: false,
+      setHasFirstUserMessageBeenSent: (value) =>
+        set((draft) => {
+          draft.hasFirstUserMessageBeenSent = value;
         }),
     })),
   ),

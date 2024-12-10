@@ -4,7 +4,6 @@ import UnifiedSessionConfigResponseManager, {
   SessionConfigResponseType,
 } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { useChatStore } from '../../../stores/useChatStore';
 import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
@@ -17,7 +16,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   const { handleUpdateSessionData } = useLocalStorageSession();
 
   const setMessages = useMessageStore((state) => state.setMessages);
-  const setHasFirstUserMessageBeenSent = useChatStore((state) => state.setHasFirstUserMessageBeenSent);
+  const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const prospectId = unifiedConfigurationResponseManager.getProspectId();

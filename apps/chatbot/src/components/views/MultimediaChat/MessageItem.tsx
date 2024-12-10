@@ -33,7 +33,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 
 const MessageItem = (props: IProps) => {
   const { message, messageIndex, totalMessages } = props;
-
+  console.log({ message });
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
