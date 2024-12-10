@@ -17,7 +17,7 @@ interface IProps {
 const Orb = ({ color, state }: IProps) => {
   return (
     <div
-      className={cn('orb-container justify-center rounded-custom-56 p-1', {
+      className={cn('orb-container p-1', {
         'animate-taking-input': state === OrbStatusEnum.takingInput,
         'animate-thinking': state === OrbStatusEnum.thinking,
         'animate-waiting': state === OrbStatusEnum.waiting,

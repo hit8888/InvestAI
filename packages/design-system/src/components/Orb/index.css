@@ -7,10 +7,14 @@
     display: flex;
     height: 48px;
     width: 48px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
     box-shadow:
       0px 0px 36px 4px #fff,
       0px 12px 24px 4px rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
+    border-radius: 56px;
   }
 
   .initial-background {
