@@ -18,107 +18,97 @@
     background: radial-gradient(42.71% 42.71% at 50% 50%, #fff 4%, var(--input-color, --fallback-color) 56.5%);
   }
 
+  @keyframes initial-animation {
+    0% {
+      @apply orb-container;
+    }
+    100% {
+      @apply taking-input-thinking-2;
+    }
+  }
+
   /* animate-taking-input Starts */
   .animate-taking-input {
     animation:
-      animation-taking-input1 720ms linear 1ms,
-      animation-taking-input2 1.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) 720ms infinite alternate;
+      initial-animation 720ms linear 1ms,
+      animation-taking-input2 1.6s linear 720ms infinite alternate;
   }
 
   .taking-input-3 {
     background: radial-gradient(50% 50% at 50% 50%, #fff 8%, var(--input-color, --fallback-color) 56%);
   }
 
-  @keyframes animation-taking-input1 {
-    0% {
-      @apply orb-container;
-    }
-    100% {
-      @apply taking-input-thinking-2;
-    }
-  }
-
   @keyframes animation-taking-input2 {
     0% {
-      @apply taking-input-thinking-2;
+      background: radial-gradient(42.71% 42.71% at 50% 50%, #fff 4%, var(--input-color, --fallback-color) 56.5%);
     }
     5% {
-      background: radial-gradient(43.09% 43.09% at 50% 50%, #fff 4.21%, var(--input-color, --fallback-color) 56.47%);
+      background: radial-gradient(43.6% 43.6% at 50% 50%, #fff 4.25%, var(--input-color, --fallback-color) 56.47%);
     }
     10% {
-      background: radial-gradient(43.47% 43.47% at 50% 50%, #fff 4.42%, var(--input-color, --fallback-color) 56.44%);
+      background: radial-gradient(44.5% 44.5% at 50% 50%, #fff 4.5%, var(--input-color, --fallback-color) 56.44%);
     }
     15% {
-      background: radial-gradient(43.85% 43.85% at 50% 50%, #fff 4.63%, var(--input-color, --fallback-color) 56.41%);
+      background: radial-gradient(45.4% 45.4% at 50% 50%, #fff 4.75%, var(--input-color, --fallback-color) 56.41%);
     }
     20% {
-      background: radial-gradient(44.23% 44.23% at 50% 50%, #fff 4.84%, var(--input-color, --fallback-color) 56.38%);
+      background: radial-gradient(46.3% 46.3% at 50% 50%, #fff 5%, var(--input-color, --fallback-color) 56.38%);
     }
     25% {
-      background: radial-gradient(44.61% 44.61% at 50% 50%, #fff 5.05%, var(--input-color, --fallback-color) 56.35%);
+      background: radial-gradient(47.2% 47.2% at 50% 50%, #fff 5.25%, var(--input-color, --fallback-color) 56.35%);
     }
     30% {
-      background: radial-gradient(44.99% 44.99% at 50% 50%, #fff 5.26%, var(--input-color, --fallback-color) 56.32%);
+      background: radial-gradient(48.1% 48.1% at 50% 50%, #fff 5.5%, var(--input-color, --fallback-color) 56.32%);
     }
     35% {
-      background: radial-gradient(45.37% 45.37% at 50% 50%, #fff 5.47%, var(--input-color, --fallback-color) 56.29%);
+      background: radial-gradient(49% 49% at 50% 50%, #fff 5.75%, var(--input-color, --fallback-color) 56.29%);
     }
     40% {
-      background: radial-gradient(45.75% 45.75% at 50% 50%, #fff 5.68%, var(--input-color, --fallback-color) 56.26%);
+      background: radial-gradient(49.9% 49.9% at 50% 50%, #fff 6%, var(--input-color, --fallback-color) 56.26%);
     }
     45% {
-      background: radial-gradient(46.13% 46.13% at 50% 50%, #fff 5.89%, var(--input-color, --fallback-color) 56.23%);
+      background: radial-gradient(50.8% 50.8% at 50% 50%, #fff 6.25%, var(--input-color, --fallback-color) 56.23%);
     }
     50% {
-      background: radial-gradient(46.51% 46.51% at 50% 50%, #fff 6.1%, var(--input-color, --fallback-color) 56.2%);
+      background: radial-gradient(51.7% 51.7% at 50% 50%, #fff 6.5%, var(--input-color, --fallback-color) 56.2%);
     }
     55% {
-      background: radial-gradient(46.89% 46.89% at 50% 50%, #fff 6.31%, var(--input-color, --fallback-color) 56.17%);
+      background: radial-gradient(52.6% 52.6% at 50% 50%, #fff 6.75%, var(--input-color, --fallback-color) 56.17%);
     }
     60% {
-      background: radial-gradient(47.27% 47.27% at 50% 50%, #fff 6.52%, var(--input-color, --fallback-color) 56.14%);
+      background: radial-gradient(53.5% 53.5% at 50% 50%, #fff 7%, var(--input-color, --fallback-color) 56.14%);
     }
     65% {
-      background: radial-gradient(47.65% 47.65% at 50% 50%, #fff 6.73%, var(--input-color, --fallback-color) 56.11%);
+      background: radial-gradient(54.4% 54.4% at 50% 50%, #fff 7.25%, var(--input-color, --fallback-color) 56.11%);
     }
     70% {
-      background: radial-gradient(48.03% 48.03% at 50% 50%, #fff 6.94%, var(--input-color, --fallback-color) 56.08%);
+      background: radial-gradient(55.3% 55.3% at 50% 50%, #fff 7.5%, var(--input-color, --fallback-color) 56.08%);
     }
     75% {
-      background: radial-gradient(48.41% 48.41% at 50% 50%, #fff 7.15%, var(--input-color, --fallback-color) 56.05%);
+      background: radial-gradient(56.2% 56.2% at 50% 50%, #fff 7.75%, var(--input-color, --fallback-color) 56.05%);
     }
     80% {
-      background: radial-gradient(48.79% 48.79% at 50% 50%, #fff 7.36%, var(--input-color, --fallback-color) 56.02%);
+      background: radial-gradient(57.1% 57.1% at 50% 50%, #fff 8%, var(--input-color, --fallback-color) 56.02%);
     }
     85% {
-      background: radial-gradient(49.17% 49.17% at 50% 50%, #fff 7.57%, var(--input-color, --fallback-color) 56.01%);
+      background: radial-gradient(58% 58% at 50% 50%, #fff 8.25%, var(--input-color, --fallback-color) 56.01%);
     }
     90% {
-      background: radial-gradient(49.55% 49.55% at 50% 50%, #fff 7.78%, var(--input-color, --fallback-color) 56%);
+      background: radial-gradient(59% 59% at 50% 50%, #fff 8.5%, var(--input-color, --fallback-color) 56%);
     }
     100% {
-      background: radial-gradient(50% 50% at 50% 50%, #fff 8%, var(--input-color, --fallback-color) 56%);
+      background: radial-gradient(60% 60% at 50% 50%, #fff 9%, var(--input-color, --fallback-color) 56%);
     }
   }
-
   /* animate-taking-input Ends */
 
   /* animate-thinking Starts */
-
   .animate-thinking {
     animation:
-      animation-thinking1 720ms linear 1ms,
-      animation-thinking2 1600ms ease-in-out 720ms infinite alternate;
+      initial-animation 720ms linear 1ms,
+      animation-thinking2 1600ms linear 720ms infinite alternate;
   }
 
-  @keyframes animation-thinking1 {
-    0% {
-      @apply orb-container;
-    }
-    100% {
-      @apply taking-input-thinking-2;
-    }
-  }
   @keyframes animation-thinking2 {
     0% {
       @apply taking-input-thinking-2;
