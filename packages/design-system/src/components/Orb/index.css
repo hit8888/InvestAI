@@ -285,51 +285,101 @@
 
   .orb-container-shiny {
     background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 24%, var(--input-color, --fallback-color) 100%);
-    box-shadow:
-      0px 0px 36px 16px rgba(255, 255, 255, 0.64),
-      0px 12px 24px 4px rgba(0, 0, 0, 0.36);
-    backdrop-filter: blur(calc(var(--sds-size-blur-100) / 2));
-  }
-
-  .animate-waiting {
-    animation:
-      animation-waiting-part1 1s cubic-bezier(0.3, -0.05, 0.7, -0.5) 1ms infinite,
-      animation-waiting-part2 1.2s cubic-bezier(0.45, 1.45, 0.8, 1) 1s infinite;
   }
 
   .waiting-1 {
     background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
   }
 
+  .animate-waiting {
+    animation: animation-waiting-part1 1200ms cubic-bezier(0.42, 0, 0, 1) 1ms infinite alternate;
+  }
+
   /* Keyframes for the first part of the animation */
   @keyframes animation-waiting-part1 {
     0% {
-      transform: translateY(0);
-      @apply orb-container-shiny;
+      transform: translateY(0px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 24%, var(--input-color, --fallback-color) 100%);
+    }
+    5% {
+      transform: translateY(-0.3px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 22.8%, var(--input-color, --fallback-color) 100%);
+    }
+    10% {
+      transform: translateY(-0.6px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 21.6%, var(--input-color, --fallback-color) 100%);
+    }
+    15% {
+      transform: translateY(-0.9px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 20.4%, var(--input-color, --fallback-color) 100%);
+    }
+    20% {
+      transform: translateY(-1.2px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 19.2%, var(--input-color, --fallback-color) 100%);
+    }
+    25% {
+      transform: translateY(-1.5px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 18%, var(--input-color, --fallback-color) 100%);
+    }
+    30% {
+      transform: translateY(-1.8px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 16.8%, var(--input-color, --fallback-color) 100%);
+    }
+    35% {
+      transform: translateY(-2.1px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 15.6%, var(--input-color, --fallback-color) 100%);
+    }
+    40% {
+      transform: translateY(-2.4px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 14.4%, var(--input-color, --fallback-color) 100%);
+    }
+    45% {
+      transform: translateY(-2.7px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 13.2%, var(--input-color, --fallback-color) 100%);
     }
     50% {
-      transform: translateY(-6px);
-      @apply waiting-1;
+      transform: translateY(-3px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 12%, var(--input-color, --fallback-color) 100%);
+    }
+    55% {
+      transform: translateY(-3.3px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 10.8%, var(--input-color, --fallback-color) 100%);
+    }
+    60% {
+      transform: translateY(-3.6px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 9.6%, var(--input-color, --fallback-color) 100%);
+    }
+    65% {
+      transform: translateY(-3.9px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 8.4%, var(--input-color, --fallback-color) 100%);
+    }
+    70% {
+      transform: translateY(-4.2px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 7.2%, var(--input-color, --fallback-color) 100%);
+    }
+    75% {
+      transform: translateY(-4.5px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 6%, var(--input-color, --fallback-color) 100%);
+    }
+    80% {
+      transform: translateY(-4.8px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 4.8%, var(--input-color, --fallback-color) 100%);
+    }
+    85% {
+      transform: translateY(-5.1px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 3.6%, var(--input-color, --fallback-color) 100%);
+    }
+    90% {
+      transform: translateY(-5.4px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 2.4%, var(--input-color, --fallback-color) 100%);
+    }
+    95% {
+      transform: translateY(-5.7px);
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 1.2%, var(--input-color, --fallback-color) 100%);
     }
     100% {
-      transform: translateY(0);
-      @apply orb-container-shiny;
-    }
-  }
-
-  /* Keyframes for the second part of the animation */
-  @keyframes animation-waiting-part2 {
-    0% {
-      transform: translateY(0);
-      @apply waiting-1;
-    }
-    50% {
       transform: translateY(-6px);
-      @apply orb-container-shiny;
-    }
-    100% {
-      transform: translateY(0);
-      @apply waiting-1;
+      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
     }
   }
 
