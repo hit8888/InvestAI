@@ -17,11 +17,10 @@ interface IProps {
 const Orb = ({ color, state }: IProps) => {
   return (
     <div
-      className={cn('shining flex h-12 w-12 justify-center rounded-custom-56 p-1', {
-        'animate-taking-input orb-container': state === OrbStatusEnum.takingInput,
-        'animate-thinking orb-container': state === OrbStatusEnum.thinking,
+      className={cn('orb-container justify-center rounded-custom-56 p-1', {
+        'animate-taking-input': state === OrbStatusEnum.takingInput,
+        'animate-thinking': state === OrbStatusEnum.thinking,
         'animate-waiting': state === OrbStatusEnum.waiting,
-        'animate-responding': state === OrbStatusEnum.responding,
       })}
       style={{ '--input-color': color, '--fallback-color': '#acb2eb' } as React.CSSProperties}
     >
