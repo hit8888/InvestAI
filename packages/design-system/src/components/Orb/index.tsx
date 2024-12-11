@@ -20,8 +20,8 @@ const Orb = ({ color, state }: IProps) => {
       })}
       style={
         {
-          '--input-color': 'rgb(var(--primary))',
-          '--fallback-color': 'rgb(var(--primary))',
+          '--input-color': color ?? 'rgb(var(--primary))',
+          '--fallback-color': color ?? 'rgb(var(--primary))',
         } as React.CSSProperties
       }
     >
