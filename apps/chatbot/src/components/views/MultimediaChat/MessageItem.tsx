@@ -1,5 +1,6 @@
 import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import { cn } from '@breakout/design-system/lib/cn';
+import Orb from '@breakout/design-system/components/Orb/index';
 import { Message } from '@meaku/core/types/chat';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
@@ -14,11 +15,13 @@ import MessageFeedback from './MessageFeedback.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 interface IProps {
   message: Message;
   messageIndex: number;
   totalMessages: number;
+  orbState: OrbStatusEnum;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -32,8 +35,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
-  const { message, messageIndex, totalMessages } = props;
-
+  const { message, messageIndex, totalMessages, orbState } = props;
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
@@ -86,11 +88,8 @@ const MessageItem = (props: IProps) => {
             'mr-10 flex gap-7 p-6 pl-0': isSenderBot,
           })}
         >
-          {isSenderBot && (
-            <>
-              <BotIndicator />
-            </>
-          )}
+          {isSenderBot && <>{isLastMessage ? <Orb state={orbState} color="#acb2eb" /> : <BotIndicator />}</>}
+
           <div className="flex-col">
             <div
               className={cn('prose max-w-full flex-1', {

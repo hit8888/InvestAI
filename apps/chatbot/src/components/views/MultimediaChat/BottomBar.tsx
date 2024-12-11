@@ -4,8 +4,8 @@ import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
-import { useChatStore } from '../../../stores/useChatStore.ts';
 import { Suggestion } from './Suggestion.tsx';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   handleSendUserMessage: (message: string) => void;
@@ -39,7 +39,7 @@ const BottomBar = (props: IProps) => {
 
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
 
