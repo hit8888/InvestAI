@@ -57,16 +57,21 @@
    * @param {boolean} isChatOpen - Whether the chat is open.
    * @param {boolean} isTooltipOpen - Whether the tooltip is open.
    */
-  const adjustResponsiveStyles = (container, isChatOpen, isTooltipOpen) => {
+  const adjustResponsiveStyles = (
+    container,
+    isChatOpen,
+    isTooltipOpen,
+    hideBottomBar,
+  ) => {
     let width, height;
 
     if (!isChatOpen && isTooltipOpen) {
-      width = COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
-      height = COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
+      width = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
+      height = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
     } else if (!isChatOpen) {
       // Default desktop view with chat closed
-      width = COLLAPSED_SIZE_WIDTH;
-      height = `${COLLAPSED_SIZE_HEIGHT_PX}px`;
+      width = hideBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
+      height = hideBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
     } else {
       // Default full desktop size
       width = DEFAULT_WIDTH;
@@ -166,6 +171,8 @@
   //   const parentUrl = document.currentScript.dataset.param1;
   const tenantId = document.currentScript?.getAttribute("tenant-id");
   const agentId = document.currentScript?.getAttribute("agent-id") || "1";
+  const hideBottomBar =
+    document.currentScript?.getAttribute("hide-bottom-bar") === "true";
 
   if (!tenantId || !agentId || isMobile()) {
     return;
@@ -173,7 +180,6 @@
 
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
-
   let isChatOpen = false;
   let isTooltipOpen = checkSessionExists();
   let iFrameSource = null;
@@ -181,7 +187,7 @@
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
+  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen, hideBottomBar);
 
   console.log("sets up the container and iframe");
 
@@ -205,6 +211,7 @@
         utmParams,
         http_referrer,
         url,
+        hideBottomBar,
       },
       "*",
     );

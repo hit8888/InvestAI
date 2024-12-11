@@ -19,7 +19,7 @@ const useLocalStorageArtifact = () => {
     listenStorageChange: true,
   });
 
-  const handleUpdateArtifact = async (newArtifact: Partial<LocalStorageArtifact>) => {
+  const handleUpdateArtifact = async (newArtifact: Partial<LocalStorageArtifact | undefined>) => {
     try {
       const updatedArtifact: LocalStorageArtifact = {
         ...artifact,

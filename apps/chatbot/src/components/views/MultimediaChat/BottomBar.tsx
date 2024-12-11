@@ -1,15 +1,16 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
-import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
-import { useChatStore } from '../../../stores/useChatStore.ts';
+import { Suggestion } from './Suggestion.tsx';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   handleSendUserMessage: (message: string) => void;
   handleOpenChat: () => void;
+  hideBottomBar: boolean;
 }
 
 const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
@@ -17,35 +18,27 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
   const displayText = useMemo(() => text.slice(0, index), [index, text]);
 
   useEffect(() => {
-    if (index >= text.length) {
-      // Wait for a delay before resetting the index to repeat the typing
-      const timeoutId = setTimeout(() => {
-        setIndex(0); // Reset to start the typing effect again
-      }, repeatDelay);
+    const handleTyping = () => {
+      if (index >= text.length) {
+        const resetTimeout = setTimeout(() => setIndex(0), repeatDelay);
+        return () => clearTimeout(resetTimeout);
+      }
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-
-    const timeoutId = setTimeout(() => {
-      setIndex((i) => i + 1); // Move to next character
-    }, speed);
-
-    return () => {
-      clearTimeout(timeoutId);
+      const typingTimeout = setTimeout(() => setIndex((i) => i + 1), speed);
+      return () => clearTimeout(typingTimeout);
     };
+
+    const cleanup = handleTyping();
+    return cleanup;
   }, [index, text, speed, repeatDelay]);
 
   return displayText;
 };
 
-const BottomBar = (props: IProps) => {
-  const { handleSendUserMessage, handleOpenChat } = props;
-
+const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
-  const hasFirstUserMessageBeenSent = useChatStore((state) => state.hasFirstUserMessageBeenSent);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -76,6 +69,7 @@ const BottomBar = (props: IProps) => {
         {
           'w-10/12': !hasFirstUserMessageBeenSent,
           'w-[400px]': hasFirstUserMessageBeenSent,
+          hidden: hideBottomBar,
         },
       )}
       style={{
@@ -92,7 +86,7 @@ const BottomBar = (props: IProps) => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className={cn(
-                'w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+                'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
               )}
               placeholder={useTypewriter(placeholderText)}
             />
@@ -110,14 +104,7 @@ const BottomBar = (props: IProps) => {
             {!inputValue &&
               initialSuggestedQuestions.map((question) => (
                 <div key={question} className="rounded-full bg-white">
-                  <button
-                    type="button"
-                    onClick={() => handleSuggestedQuestionOnClick(question)}
-                    className="group flex items-center justify-center gap-1 rounded-full border-2 border-primary/10 bg-primary/15 p-2 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white"
-                  >
-                    <SparkleIcon className="!h-4 !w-4 fill-primary/60 transition-colors duration-300 ease-in-out group-hover:fill-white/60" />
-                    <span className="min-w-max text-sm font-medium">{question}</span>
-                  </button>
+                  <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
                 </div>
               ))}
           </div>

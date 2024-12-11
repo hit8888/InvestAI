@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { ChatBoxArtifactEnumSchema } from '@meaku/core/types/artifact';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 interface State {
   messages: Message[];
@@ -16,6 +17,10 @@ interface State {
   handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
   handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
   handleRemoveMessages: (messageIds: string[]) => void;
+  hasFirstUserMessageBeenSent: boolean;
+  setHasFirstUserMessageBeenSent: (value: boolean) => void;
+  orbState: OrbStatusEnum;
+  handleUpdateOrbState: (selectedOrbState: OrbStatusEnum) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -118,6 +123,16 @@ export const useMessageStore = create<State>()(
       handleRemoveMessages: (messageIds) =>
         set((draft) => {
           draft.messages = draft.messages.filter((message) => !messageIds.includes(message.id as string));
+        }),
+      hasFirstUserMessageBeenSent: false,
+      setHasFirstUserMessageBeenSent: (value) =>
+        set((draft) => {
+          draft.hasFirstUserMessageBeenSent = value;
+        }),
+      orbState: OrbStatusEnum.idle,
+      handleUpdateOrbState: (selectedOrbState) =>
+        set((draft) => {
+          draft.orbState = selectedOrbState;
         }),
     })),
   ),

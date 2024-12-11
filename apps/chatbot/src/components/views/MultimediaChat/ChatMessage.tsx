@@ -2,6 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { Message } from '@meaku/core/types/chat';
 import { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem';
+import { useMessageStore } from '../../../stores/useMessageStore';
 
 interface IProps {
   messages: Message[];
@@ -13,6 +14,8 @@ const ChatMessage = (props: IProps) => {
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+
+  const orbState = useMessageStore((state) => state.orbState);
 
   const handleScrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -48,7 +51,13 @@ const ChatMessage = (props: IProps) => {
           })}
         >
           {messages.map((message, idx) => (
-            <MessageItem key={message.id} message={message} messageIndex={idx} totalMessages={messages.length} />
+            <MessageItem
+              key={message.id}
+              message={message}
+              messageIndex={idx}
+              totalMessages={messages.length}
+              orbState={orbState}
+            />
           ))}
         </div>
 

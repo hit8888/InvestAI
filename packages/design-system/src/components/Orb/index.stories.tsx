@@ -1,38 +1,47 @@
 import { Meta } from '@storybook/react';
-import Orb, { OrbStatusEnum } from './index';
+import Orb from './index';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 export default {
-    title: 'Components/Orb',
-    component: Orb,
-    argTypes: {
-        color: { control: 'color' },
-    },
+  title: 'Components/Orb',
+  component: Orb,
+  argTypes: {
+    color: { control: 'color' },
+  },
 } as Meta;
 
-
-
-const Template = (args) => <div className='flex justify-center items-center'><Orb {...args} /></div>;
+const Template = (args) => (
+  <div className="flex items-center justify-center">
+    <Orb {...args} />
+  </div>
+);
 
 export const TakingInput = Template.bind({});
 TakingInput.args = {
-    color: '#acb2eb',
-    state: OrbStatusEnum.takingInput,
+  color: '#acb2eb',
+  state: OrbStatusEnum.takingInput,
 };
 
 export const Thinking = Template.bind({});
 Thinking.args = {
-    color: '#acb2eb',
-    state: OrbStatusEnum.thinking,
+  color: '#acb2eb',
+  state: OrbStatusEnum.thinking,
 };
 
 export const Responding = Template.bind({});
 Responding.args = {
-    color: '#acb2eb',
-    state: OrbStatusEnum.responding,
+  color: '#acb2eb',
+  state: OrbStatusEnum.responding,
 };
 
-export const Impatient = Template.bind({});
-Impatient.args = {
-    color: '#acb2eb',
-    state: OrbStatusEnum.impatient,
+export const Waiting = Template.bind({});
+Waiting.args = {
+  color: '#acb2eb',
+  state: OrbStatusEnum.waiting,
+};
+
+export const Idle = Template.bind({});
+Idle.args = {
+  color: '#acb2eb',
+  state: OrbStatusEnum.idle,
 };

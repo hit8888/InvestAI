@@ -1,12 +1,12 @@
-import { ChatConfig } from "@meaku/core/types/config";
-import { CopyIcon, MessageCircleIcon, XIcon } from "lucide-react";
-import { memo, useMemo } from "react";
-import { cn } from "../../lib/cn";
-import Ripple from "../animation/ripple";
-import Logo from "../icons/logo";
-import RefreshChatIcon from "../icons/refresh";
-import WrappedLogo from "../icons/wrapped-logo";
-import Button from "./button";
+import { ChatConfig } from '@meaku/core/types/config';
+import { CopyIcon, MessageCircleIcon, XIcon } from 'lucide-react';
+import { memo, useMemo } from 'react';
+import { cn } from '../../lib/cn';
+import Ripple from '../animation/ripple';
+import Logo from '../icons/logo';
+import RefreshChatIcon from '../icons/refresh';
+import WrappedLogo from '../icons/wrapped-logo';
+import Button from './button';
 
 type Props = {
   config: ChatConfig;
@@ -37,24 +37,16 @@ const ChatHeader = ({
   handleCopySession,
   handlePrimaryCta,
 }: Props) => {
-
-
   const isConfigWidget = config === ChatConfig.WIDGET;
   const showHeaderText = !isConfigWidget || !showMinimizedHeader;
-  const showOrgLogoInHeader =
-    !isConfigWidget && !!logoURL && !showMinimizedHeader;
-  const showCtaInWidgetMode =
-    isConfigWidget &&
-    showMinimizedHeader &&
-    typeof handlePrimaryCta === "function";
-  const showCtaInEmbedMode =
-    !isConfigWidget && typeof handlePrimaryCta === "function";
+  const showOrgLogoInHeader = !isConfigWidget && !!logoURL && !showMinimizedHeader;
+  const showCtaInWidgetMode = isConfigWidget && showMinimizedHeader && typeof handlePrimaryCta === 'function';
+  const showCtaInEmbedMode = !isConfigWidget && typeof handlePrimaryCta === 'function';
 
   const headerText = useMemo(() => {
     if (subtitle) return subtitle;
 
-    if (isConfigWidget)
-      return `Need help navigating ${orgName}? Our AI assistant is here to answer your questions.`;
+    if (isConfigWidget) return `Need help navigating ${orgName}? Our AI assistant is here to answer your questions.`;
     return `You’re now talking to ${agentName}, our Smart Agent at ${orgName}.`;
   }, [orgName, subtitle, isConfigWidget]);
 
@@ -63,18 +55,14 @@ const ChatHeader = ({
       {isConfigWidget && (
         <div>
           <div
-            className={cn("flex items-center", {
-              "justify-between": showMinimizedHeader,
-              "justify-end": !showMinimizedHeader,
+            className={cn('flex items-center', {
+              'justify-between': showMinimizedHeader,
+              'justify-end': !showMinimizedHeader,
             })}
           >
-            {showMinimizedHeader && (
-              <WrappedLogo inverted showRippleAnimation />
-            )}
+            {showMinimizedHeader && <WrappedLogo inverted showRippleAnimation />}
 
-            {showOrgLogoInHeader && (
-              <img src={logoURL} alt="Organization Logo" className="w-8" />
-            )}
+            {showOrgLogoInHeader && <img src={logoURL} alt="Organization Logo" className="w-8" />}
 
             <div className="flex items-center gap-6">
               {showCtaInWidgetMode && (
@@ -101,25 +89,23 @@ const ChatHeader = ({
                   <Ripple />
                 </div>
               </div>
-              <h2 className="text-center text-lg font-medium">
-                {title ?? "Hello!"}
-              </h2>
+              <h2 className="text-center text-lg font-medium">{title ?? 'Hello!'}</h2>
             </div>
           )}
         </div>
       )}
 
       <div
-        className={cn("flex items-center", {
-          "justify-center": isConfigWidget,
-          "justify-between": !isConfigWidget,
+        className={cn('flex items-center', {
+          'justify-center': isConfigWidget,
+          'justify-between': !isConfigWidget,
         })}
       >
         {showHeaderText && (
           <h2
             className={cn({
-              "mt-2 text-center": isConfigWidget,
-              "text-sm": !isConfigWidget,
+              'mt-2 text-center': isConfigWidget,
+              'text-sm': !isConfigWidget,
             })}
           >
             {headerText}
@@ -128,18 +114,10 @@ const ChatHeader = ({
 
         {showRestartButton && (
           <div className="flex items-center gap-1">
-            <Button
-              onClick={handleCopySession}
-              size="icon"
-              className="rounded-md bg-primary-foreground/70 p-2"
-            >
+            <Button onClick={handleCopySession} size="icon" className="rounded-md bg-primary-foreground/70 p-2">
               <CopyIcon className="h-5 w-5 text-primary " />
             </Button>
-            <Button
-              onClick={handleRestart}
-              size="icon"
-              className="rounded-md bg-primary-foreground/70 p-1"
-            >
+            <Button onClick={handleRestart} size="icon" className="rounded-md bg-primary-foreground/70 p-1">
               <RefreshChatIcon className="text-primary" />
             </Button>
           </div>
