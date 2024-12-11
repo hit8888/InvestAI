@@ -18,7 +18,12 @@ const Orb = ({ color, state }: IProps) => {
         'animate-responding': state === OrbStatusEnum.responding,
         'initial-background': state === OrbStatusEnum.idle,
       })}
-      style={{ '--input-color': color ?? '#acb2eb', '--fallback-color': '#acb2eb' } as React.CSSProperties}
+      style={
+        {
+          '--input-color': 'rgb(var(--primary))',
+          '--fallback-color': 'rgb(var(--primary))',
+        } as React.CSSProperties
+      }
     >
       <ShiningRectangle width="33" height="17" />
     </div>
