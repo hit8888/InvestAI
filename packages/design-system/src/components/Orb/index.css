@@ -26,7 +26,7 @@
 
   @keyframes initial-animation {
     0% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
+      @apply initial-background;
     }
     5% {
       background: radial-gradient(
@@ -283,14 +283,6 @@
 
   /* animate-waiting Starts */
 
-  .orb-container-shiny {
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #fff 24%, var(--input-color, --fallback-color) 100%);
-  }
-
-  .waiting-1 {
-    background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
-  }
-
   .animate-waiting {
     animation: animation-waiting-part1 1000ms cubic-bezier(0.42, 0, 0, 1) 1ms infinite alternate;
   }
@@ -379,7 +371,7 @@
     }
     100% {
       transform: translateY(-6px);
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
+      @apply initial-background;
     }
   }
 
@@ -388,7 +380,7 @@
   /* animate-responding Starts */
 
   .animate-responding {
-    animation: animation-responding-part1 640ms linear 1ms infinite alternate;
+    animation: animation-responding-part1 2000ms linear 1ms infinite alternate;
   }
 
   @keyframes animation-responding-part1 {

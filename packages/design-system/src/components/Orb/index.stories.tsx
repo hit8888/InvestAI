@@ -1,5 +1,6 @@
 import { Meta } from '@storybook/react';
-import Orb, { OrbStatusEnum } from './index';
+import Orb from './index';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 export default {
   title: 'Components/Orb',
@@ -37,4 +38,10 @@ export const Waiting = Template.bind({});
 Waiting.args = {
   color: '#acb2eb',
   state: OrbStatusEnum.waiting,
+};
+
+export const Idle = Template.bind({});
+Idle.args = {
+  color: '#acb2eb',
+  state: OrbStatusEnum.idle,
 };

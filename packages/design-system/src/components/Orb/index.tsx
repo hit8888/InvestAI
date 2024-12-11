@@ -1,13 +1,7 @@
+import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '../../lib/cn';
 import ShiningRectangle from '../icons/ShiningRectangle';
 import './index.css';
-
-export enum OrbStatusEnum {
-  takingInput = 'takingInput',
-  thinking = 'thinking',
-  responding = 'responding',
-  waiting = 'waiting',
-}
 
 interface IProps {
   color: string;
@@ -22,6 +16,7 @@ const Orb = ({ color, state }: IProps) => {
         'animate-thinking': state === OrbStatusEnum.thinking,
         'animate-waiting': state === OrbStatusEnum.waiting,
         'animate-responding': state === OrbStatusEnum.responding,
+        'initial-background': state === OrbStatusEnum.idle,
       })}
       style={{ '--input-color': color, '--fallback-color': '#acb2eb' } as React.CSSProperties}
     >
