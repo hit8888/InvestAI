@@ -1,5 +1,5 @@
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
-import { ChatParams } from '@meaku/core/types/config';
+import { ChatParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
 import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -27,6 +27,7 @@ const useWebSocketChat = () => {
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
+  const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
@@ -71,6 +72,8 @@ const useWebSocketChat = () => {
         setHasFirstUserMessageBeenSent(true);
       }
 
+      handleUpdateOrbState(OrbStatusEnum.thinking);
+
       const messageId = nanoid();
       setIsAMessageBeingProcessed(true);
 
@@ -109,6 +112,7 @@ const useWebSocketChat = () => {
 
     try {
       handleStopOrbAnimation();
+      handleUpdateOrbState(OrbStatusEnum.responding);
       const response = JSON.parse(lastMessage.data) as AIResponse;
       response.showFeedbackOptions = isAdmin;
       handleAddAIMessage(response);
