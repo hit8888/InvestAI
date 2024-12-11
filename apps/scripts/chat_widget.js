@@ -175,7 +175,7 @@
   }
 
   // Set the script URL based on the environment
-  const IFRAME_SRC = `http://localhost:5173/org/hackerearth/agent/2?config=multimedia&showGlass=true`;
+  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
 
   let isChatOpen = false;
   let isTooltipOpen = checkSessionExists();
