@@ -119,6 +119,7 @@ const useWebSocketChat = () => {
 
       if (response.is_complete) {
         setIsAMessageBeingProcessed(false);
+        handleUpdateOrbState(OrbStatusEnum.idle);
       }
 
       const { artifacts } = response;

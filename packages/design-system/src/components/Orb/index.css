@@ -381,8 +381,8 @@
 
   .animate-responding {
     animation:
-      animation-responding-part1 2000ms linear 1ms,
-      animation-responding-part2 800ms linear 1200ms;
+      animation-responding-part1 2000ms linear 1ms forwards,
+      animation-responding-part2 800ms cubic-bezier(0.2, 0, 0, 1) 1400ms forwards;
   }
 
   @keyframes animation-responding-part1 {
@@ -465,69 +465,11 @@
 
   @keyframes animation-responding-part2 {
     0% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 0%, #f5f5ff 100%);
-    }
-    5% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 5%, #f5f5ff 95%);
-    }
-    10% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 10%, #f5f5ff 90%);
-    }
-    15% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 15%, #f5f5ff 85%);
-    }
-    20% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 20%, #f5f5ff 80%);
-    }
-    25% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 25%, #f5f5ff 75%);
-    }
-    30% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 30%, #f5f5ff 70%);
-    }
-    35% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 35%, #f5f5ff 65%);
-    }
-    40% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 40%, #f5f5ff 60%);
-    }
-    45% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 45%, #f5f5ff 55%);
-    }
-    50% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 50%, #f5f5ff 50%);
-    }
-    55% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 55%, #f5f5ff 45%);
-    }
-    60% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 60%, #f5f5ff 40%);
-    }
-    65% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 65%, #f5f5ff 35%);
-    }
-    70% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 70%, #f5f5ff 30%);
-    }
-    75% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 75%, #f5f5ff 25%);
-    }
-    80% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 80%, #f5f5ff 20%);
-    }
-    85% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 85%, #f5f5ff 15%);
-    }
-    90% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 90%, #f5f5ff 10%);
-    }
-    95% {
-      background: radial-gradient(61.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 95%, #f5f5ff 5%);
+      background: radial-gradient(60.46% 61.46% at 50% 38.54%, var(--input-color, --fallback-color) 0%, #f5f5ff 100%);
     }
     100% {
       background: radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, --fallback-color) 100%);
     }
   }
-
   /* animate-responding Ends */
 }
