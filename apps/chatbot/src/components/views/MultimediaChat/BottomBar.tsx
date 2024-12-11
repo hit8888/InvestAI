@@ -10,7 +10,7 @@ import { useMessageStore } from '../../../stores/useMessageStore.ts';
 interface IProps {
   handleSendUserMessage: (message: string) => void;
   handleOpenChat: () => void;
-  shouldShowBottomBar: boolean;
+  hideBottomBar: boolean;
 }
 
 const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
@@ -35,7 +35,7 @@ const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
   return displayText;
 };
 
-const BottomBar = ({ shouldShowBottomBar, handleSendUserMessage, handleOpenChat }: IProps) => {
+const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -69,7 +69,7 @@ const BottomBar = ({ shouldShowBottomBar, handleSendUserMessage, handleOpenChat 
         {
           'w-10/12': !hasFirstUserMessageBeenSent,
           'w-[400px]': hasFirstUserMessageBeenSent,
-          hidden: !shouldShowBottomBar,
+          hidden: hideBottomBar,
         },
       )}
       style={{

@@ -12,7 +12,7 @@ interface IProps {
 
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
-  const [shouldShowBottomBar, setShouldShowBottomBar] = useState(true);
+  const [hideBottomBar, setHideBottomBar] = useState(false);
   useHandleAppStateOnUnmount();
 
   const isChatOpen = sessionData.isChatOpen;
@@ -47,8 +47,8 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     const handleParentWindowMessages = (event: MessageEvent) => {
       const { type } = event.data;
 
-      if (event.data.shouldShowBottomBar === 'false') {
-        setShouldShowBottomBar(false);
+      if (event.data.hideBottomBar) {
+        setHideBottomBar(true);
       }
 
       if (type === 'open-breakout-button') {
@@ -75,7 +75,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         <BottomBar
           handleSendUserMessage={handleSendMessage}
           handleOpenChat={handleOpenChat}
-          shouldShowBottomBar={shouldShowBottomBar}
+          hideBottomBar={hideBottomBar}
         />
       )}
     </div>

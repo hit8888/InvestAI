@@ -61,17 +61,17 @@
     container,
     isChatOpen,
     isTooltipOpen,
-    shouldShowBottomBar,
+    hideBottomBar,
   ) => {
     let width, height;
 
     if (!isChatOpen && isTooltipOpen) {
-      width = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
-      height = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
+      width = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
+      height = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
     } else if (!isChatOpen) {
       // Default desktop view with chat closed
-      width = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
-      height = shouldShowBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
+      width = hideBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
+      height = hideBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
     } else {
       // Default full desktop size
       width = DEFAULT_WIDTH;
@@ -171,9 +171,8 @@
   //   const parentUrl = document.currentScript.dataset.param1;
   const tenantId = document.currentScript?.getAttribute("tenant-id");
   const agentId = document.currentScript?.getAttribute("agent-id") || "1";
-
-  const shouldShowBottomBar =
-    document.currentScript?.getAttribute("show-bottom-bar");
+  const hideBottomBar =
+    document.currentScript?.getAttribute("hide-bottom-bar") === "true";
 
   if (!tenantId || !agentId || isMobile()) {
     return;
@@ -188,12 +187,7 @@
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(
-    container,
-    isChatOpen,
-    isTooltipOpen,
-    shouldShowBottomBar,
-  );
+  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen, hideBottomBar);
 
   console.log("sets up the container and iframe");
 
@@ -217,7 +211,7 @@
         utmParams,
         http_referrer,
         url,
-        shouldShowBottomBar,
+        hideBottomBar,
       },
       "*",
     );
