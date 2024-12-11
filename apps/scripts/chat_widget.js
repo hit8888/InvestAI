@@ -57,16 +57,21 @@
    * @param {boolean} isChatOpen - Whether the chat is open.
    * @param {boolean} isTooltipOpen - Whether the tooltip is open.
    */
-  const adjustResponsiveStyles = (container, isChatOpen, isTooltipOpen) => {
+  const adjustResponsiveStyles = (
+    container,
+    isChatOpen,
+    isTooltipOpen,
+    shouldShowBottomBar,
+  ) => {
     let width, height;
 
     if (!isChatOpen && isTooltipOpen) {
-      width = COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
-      height = COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
+      width = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
+      height = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
     } else if (!isChatOpen) {
       // Default desktop view with chat closed
-      width = COLLAPSED_SIZE_WIDTH;
-      height = `${COLLAPSED_SIZE_HEIGHT_PX}px`;
+      width = shouldShowBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
+      height = shouldShowBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
     } else {
       // Default full desktop size
       width = DEFAULT_WIDTH;
@@ -176,7 +181,6 @@
 
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
-
   let isChatOpen = false;
   let isTooltipOpen = checkSessionExists();
   let iFrameSource = null;
@@ -184,7 +188,12 @@
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
+  adjustResponsiveStyles(
+    container,
+    isChatOpen,
+    isTooltipOpen,
+    shouldShowBottomBar,
+  );
 
   console.log("sets up the container and iframe");
 
