@@ -35,6 +35,10 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = (props: IProps) => {
+  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+  const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
+  const primaryColor = styleConfig?.primary ?? null;
+
   const { message, messageIndex, totalMessages, orbState } = props;
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
@@ -88,7 +92,7 @@ const MessageItem = (props: IProps) => {
             'mr-10 flex gap-7 p-6 pl-0': isSenderBot,
           })}
         >
-          {isSenderBot && <>{isLastMessage ? <Orb state={orbState} color="#acb2eb" /> : <BotIndicator />}</>}
+          {isSenderBot && <>{isLastMessage ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>}
 
           <div className="flex-col">
             <div

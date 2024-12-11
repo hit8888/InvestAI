@@ -4,7 +4,7 @@ import ShiningRectangle from '../icons/ShiningRectangle';
 import './index.css';
 
 interface IProps {
-  color: string;
+  color: string | null;
   state: OrbStatusEnum;
 }
 
@@ -18,7 +18,7 @@ const Orb = ({ color, state }: IProps) => {
         'animate-responding': state === OrbStatusEnum.responding,
         'initial-background': state === OrbStatusEnum.idle,
       })}
-      style={{ '--input-color': color, '--fallback-color': '#acb2eb' } as React.CSSProperties}
+      style={{ '--input-color': color ?? '#acb2eb', '--fallback-color': '#acb2eb' } as React.CSSProperties}
     >
       <ShiningRectangle width="33" height="17" />
     </div>
