@@ -46,15 +46,14 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   useEffect(() => {
     const handleParentWindowMessages = (event: MessageEvent) => {
       const { type } = event.data;
-      console.log({ type });
+
+      if (event.data.shouldShowBottomBar === 'false') {
+        setShouldShowBottomBar(false);
+      }
 
       if (type === 'open-breakout-button') {
         fetchSessionData();
         handleOpenChat();
-      }
-
-      if (type === 'show-bottom-bar') {
-        setShouldShowBottomBar(true);
       }
     };
     window.addEventListener('message', handleParentWindowMessages);
