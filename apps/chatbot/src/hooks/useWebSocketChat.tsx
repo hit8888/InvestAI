@@ -67,12 +67,12 @@ const useWebSocketChat = () => {
   );
   const handleSendUserMessage = useCallback(
     async (message: string, eventType?: string, eventData?: Record<string, unknown>) => {
+      handleUpdateOrbState(OrbStatusEnum.thinking);
+
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         setHasFirstUserMessageBeenSent(true);
       }
-
-      handleUpdateOrbState(OrbStatusEnum.thinking);
 
       const messageId = nanoid();
       setIsAMessageBeingProcessed(true);
@@ -119,7 +119,6 @@ const useWebSocketChat = () => {
 
       if (response.is_complete) {
         setIsAMessageBeingProcessed(false);
-        handleUpdateOrbState(OrbStatusEnum.idle);
       }
 
       const { artifacts } = response;
