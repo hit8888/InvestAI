@@ -30,8 +30,9 @@ const useAnimateDifferentOrbStates = () => {
   const handleAnimatedOrb = (messageId: string) => {
     let messageIndex = 0;
 
+    const aiMessage = getAIMessage(messageIndex, messageId);
     // Send first message immediately
-    handleAddAIMessage(getAIMessage(messageIndex, messageId));
+    handleAddAIMessage(aiMessage);
 
     messageIndex++; // Increment for subsequent messages
 
@@ -42,7 +43,7 @@ const useAnimateDifferentOrbStates = () => {
         return;
       }
 
-      handleAddAIMessage(getAIMessage(messageIndex, messageId));
+      handleAddAIMessage(aiMessage);
 
       messageIndex++;
     }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
