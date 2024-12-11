@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
 import BottomBar from './BottomBar';
 import ChatArea from './ChatArea';
@@ -12,7 +12,7 @@ interface IProps {
 
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
-
+  const [hideBottomBar, setHideBottomBar] = useState(false);
   useHandleAppStateOnUnmount();
 
   const isChatOpen = sessionData.isChatOpen;
@@ -44,18 +44,22 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   }, [isChatOpen, showTooltip]);
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
+    const handleParentWindowMessages = (event: MessageEvent) => {
       const { type } = event.data;
+
+      if (event.data.hideBottomBar) {
+        setHideBottomBar(true);
+      }
 
       if (type === 'open-breakout-button') {
         fetchSessionData();
         handleOpenChat();
       }
     };
-    window.addEventListener('message', handleMessage);
+    window.addEventListener('message', handleParentWindowMessages);
 
     return () => {
-      window.removeEventListener('message', handleMessage);
+      window.removeEventListener('message', handleParentWindowMessages);
     };
   }, []);
 
@@ -68,7 +72,11 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       {isChatOpen ? (
         <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
       ) : (
-        <BottomBar handleSendUserMessage={handleSendMessage} handleOpenChat={handleOpenChat} />
+        <BottomBar
+          handleSendUserMessage={handleSendMessage}
+          handleOpenChat={handleOpenChat}
+          hideBottomBar={hideBottomBar}
+        />
       )}
     </div>
   );
