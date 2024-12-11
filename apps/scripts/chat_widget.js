@@ -125,25 +125,39 @@
     );
   };
 
-  const handleExternalBreakoutButton = () => {
+  const handleDomContentLoaded = () => {
     const buttons = document.querySelectorAll(".notifyBreakoutButton"); // Use this shared class for all buttons
 
+    const addButtonEventListeners = () => {
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const payload = {
+            type: "open-breakout-button",
+            data: {
+              buttonId: button.id,
+              message: `Button ${button.id} was clicked!`,
+            },
+          };
+
+          iframe.contentWindow.postMessage(payload, "*");
+        });
+      });
+    };
+
+    const sendBottomBarConfig = () => {
+      const shouldShowBottomBar =
+        document.currentScript?.getAttribute("show-bottom-bar") || true;
+      const message = {
+        type: "show-bottom-bar",
+        payload: shouldShowBottomBar,
+      };
+      iframe.contentWindow.postMessage(message, "*");
+    };
     const waitForIframe = (retryCount = 0) => {
       const iframe = document.getElementById("breakout-agent");
       if (iframe) {
-        buttons.forEach((button) => {
-          button.addEventListener("click", () => {
-            const payload = {
-              type: "open-breakout-button",
-              data: {
-                buttonId: button.id,
-                message: `Button ${button.id} was clicked!`,
-              },
-            };
-
-            iframe.contentWindow.postMessage(payload, "*");
-          });
-        });
+        addButtonEventListeners();
+        sendBottomBarConfig();
       } else if (retryCount < 5) {
         const delay = Math.pow(2, retryCount) * 100;
         console.warn(
@@ -232,6 +246,6 @@
     return;
   }
   document.addEventListener("DOMContentLoaded", () => {
-    handleExternalBreakoutButton();
+    handleDomContentLoaded();
   });
 })();
