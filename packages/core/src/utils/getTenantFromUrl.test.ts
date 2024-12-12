@@ -2,21 +2,30 @@
 import { getTenantFromUrl } from "./getTenantFromUrl";
 
 describe("getTenantFromUrl", () => {
-  const originalWindow = global.window;
+  const originalWindow = window;
 
   beforeEach(() => {
-    // Mock window object
-    delete global.window;
-    global.window = { ...originalWindow };
+    Object.defineProperty(globalThis, "window", {
+      value: {
+        location: {
+          pathname: "",
+        },
+      },
+      writable: true,
+    });
   });
 
   afterEach(() => {
-    global.window = originalWindow;
+    Object.defineProperty(globalThis, "window", {
+      value: originalWindow,
+      writable: true,
+    });
   });
 
   it("extracts tenant name when org is present in URL", () => {
     Object.defineProperty(window, "location", {
       value: { pathname: "/org/tenant123/dashboard" },
+      writable: true,
     });
     expect(getTenantFromUrl()).toBe("tenant123");
   });
@@ -24,6 +33,7 @@ describe("getTenantFromUrl", () => {
   it("returns empty string when org is not in URL", () => {
     Object.defineProperty(window, "location", {
       value: { pathname: "/dashboard/settings" },
+      writable: true,
     });
     expect(getTenantFromUrl()).toBe("");
   });
@@ -31,6 +41,7 @@ describe("getTenantFromUrl", () => {
   it("handles multiple org occurrences in URL", () => {
     Object.defineProperty(window, "location", {
       value: { pathname: "/org/tenant123/org/nested" },
+      writable: true,
     });
     expect(getTenantFromUrl()).toBe("tenant123");
   });
@@ -38,6 +49,7 @@ describe("getTenantFromUrl", () => {
   it("handles trailing slashes", () => {
     Object.defineProperty(window, "location", {
       value: { pathname: "/org/tenant123/" },
+      writable: true,
     });
     expect(getTenantFromUrl()).toBe("tenant123");
   });
