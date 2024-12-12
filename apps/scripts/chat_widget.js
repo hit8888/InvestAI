@@ -131,7 +131,7 @@
   };
 
   const handleExternalBreakoutButton = () => {
-    const buttons = document.querySelectorAll(".notifyBreakoutButton"); // Use this shared class for all buttons
+    const buttons = document.querySelectorAll(".notify-breakout-button"); // Use this shared class for all buttons
 
     const waitForIframe = (retryCount = 0) => {
       const iframe = document.getElementById("breakout-agent");
