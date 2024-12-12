@@ -25,7 +25,7 @@ const Orb = ({ color, state }: IProps) => {
         } as React.CSSProperties
       }
     >
-      <ShiningRectangle width="33" height="17" />
+      <ShiningRectangle width="25" height="13" />
     </div>
   );
 };

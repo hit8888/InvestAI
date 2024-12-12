@@ -5,8 +5,8 @@
 @layer base {
   .orb-container {
     display: flex;
-    height: 48px;
-    width: 48px;
+    height: 36px;
+    width: 36px;
     justify-content: center;
     flex-shrink: 0;
     box-shadow:
@@ -381,8 +381,8 @@
 
   .animate-responding {
     animation:
-      animation-responding-part1 2000ms linear 1ms forwards,
-      animation-responding-part2 800ms cubic-bezier(0.2, 0, 0, 1) 1400ms forwards;
+      animation-responding-part1 1200ms linear 1ms forwards,
+      animation-responding-part2 400ms cubic-bezier(0.2, 0, 0, 1) 1200ms forwards;
   }
 
   @keyframes animation-responding-part1 {
