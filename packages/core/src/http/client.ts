@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { ENV } from "../../../../apps/chatbot/src/config/env"; //TODO: Move the env file to the core package in next PR
+import { getTenantFromUrl } from "../utils/getTenantFromUrl";
 
 const apiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
@@ -12,7 +13,7 @@ const apiClient = axios.create({
 // Add request interceptor to set x-tenant-name header before each request
 apiClient.interceptors.request.use(
   (config) => {
-    config.headers["x-tenant-name"] = localStorage.getItem("x-tenant-name");
+    config.headers["x-tenant-name"] = getTenantFromUrl();
     return config;
   },
   (error) => {
