@@ -10,8 +10,6 @@ import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
 import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSessionDataQuery';
 import { getBrowserSignature } from '../../../utils/tracking';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
-import { useInitializeRequestHeaderfromUrl } from '../../../useInitializeRequestHeaderfromUrl';
-import { useLocalStorageState } from 'ahooks';
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
 
@@ -23,18 +21,12 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<ChatParams>();
   const { sessionData } = useLocalStorageSession();
 
-  useInitializeRequestHeaderfromUrl();
-  const isRequestHeaderSet = useLocalStorageState('x-tenant-name', {
-    listenStorageChange: true,
-    deserializer: (value) => value,
-  });
-
   const isAdmin = useIsAdmin();
   const isReadOnly = useAreMessagesReadonly();
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: isRequestHeaderSet && (isReadOnly || !sessionData?.sessionId) },
+    queryOptions: { enabled: isReadOnly || !sessionData?.sessionId },
     //for ReadOnly routes session ID is ignored and config is fetched directly
   });
 
@@ -48,7 +40,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: isRequestHeaderSet && !isReadOnly && !!agentId && !!sessionData.sessionId },
+    queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId },
   });
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
