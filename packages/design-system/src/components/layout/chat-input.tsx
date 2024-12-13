@@ -1,8 +1,8 @@
-import { memo, useState } from "react";
-import useAutoResizeTextArea from "../../hooks/useAutoResizeTextArea";
-import SendIcon from "../icons/send";
-import UserAvatarIcon from "../icons/user";
-import WrappedLogo from "../icons/wrapped-logo";
+import { memo, useState } from 'react';
+import useAutoResizeTextArea from '../../hooks/useAutoResizeTextArea';
+import SendIcon from '../icons/send';
+import UserAvatarIcon from '../icons/user';
+import WrappedLogo from '../icons/wrapped-logo';
 
 type Props = {
   disclaimerText?: string;
@@ -11,9 +11,6 @@ type Props = {
   handleChatInputOnChangeCallback?: () => void;
   handleSendUserMessage: (message: string) => void;
 };
-
-const INITIAL_INPUT_HEIGHT = 40; // px
-const MAX_INPUT_HEIGHT = 100; // px
 
 const ChatInput = (props: Props) => {
   const {
@@ -24,22 +21,14 @@ const ChatInput = (props: Props) => {
     handleSendUserMessage,
   } = props;
 
-  const [inputValue, setInputValue] = useState<string>("");
-  const textAreaRef = useAutoResizeTextArea({
-    textAreaValue: inputValue,
-    initialHeight: INITIAL_INPUT_HEIGHT,
-    maxHeight: MAX_INPUT_HEIGHT,
-  });
+  const [inputValue, setInputValue] = useState<string>('');
 
-  const isSubmissionDisabled =
-    isAMessageBeingProcessed || inputValue?.length === 0;
+  const isSubmissionDisabled = isAMessageBeingProcessed || inputValue?.length === 0;
 
-  const handleInputValueChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
 
-    if (typeof handleChatInputOnChangeCallback === "function") {
+    if (typeof handleChatInputOnChangeCallback === 'function') {
       handleChatInputOnChangeCallback();
     }
   };
@@ -47,12 +36,12 @@ const ChatInput = (props: Props) => {
   const handleSubmission = () => {
     if (isSubmissionDisabled) return;
     handleSendUserMessage(inputValue);
-    setInputValue("");
+    setInputValue('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isShiftKeyPressed = e.shiftKey;
-    const isEnterKeyPressed = e.key === "Enter" || e.key === "Return";
+    const isEnterKeyPressed = e.key === 'Enter' || e.key === 'Return';
 
     if (!isShiftKeyPressed && isEnterKeyPressed) {
       e.preventDefault();
@@ -69,7 +58,6 @@ const ChatInput = (props: Props) => {
         </div>
         <textarea
           disabled={disabled}
-          ref={textAreaRef}
           value={inputValue}
           onChange={handleInputValueChange}
           onKeyDown={handleKeyDown}
