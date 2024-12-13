@@ -16,6 +16,8 @@ import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   message: Message;
@@ -40,6 +42,8 @@ const MessageItem = (props: IProps) => {
   const primaryColor = styleConfig?.primary ?? null;
 
   const { message, messageIndex, totalMessages, orbState } = props;
+
+  const { trackEvent } = useAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
@@ -68,6 +72,18 @@ const MessageItem = (props: IProps) => {
     strong: MessageStrong,
   };
 
+  const handleMessageClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const isLink = target.tagName === 'A';
+
+    if (isLink && isSenderBot) {
+      trackEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
+        link: (target as HTMLAnchorElement).href,
+        message: message.message,
+      });
+    }
+  };
+
   useEffect(() => {
     if (messageRef.current) {
       const lineHeight = parseFloat(getComputedStyle(messageRef.current).lineHeight);
@@ -78,6 +94,17 @@ const MessageItem = (props: IProps) => {
       setIsSingleLineMessage(height <= lineHeight);
     }
   }, [message.message, isSingleLineMessage]);
+
+  useEffect(() => {
+    const messageContent = message.message;
+    const doesMessageContainLink = messageContent.includes('http');
+
+    if (doesMessageContainLink && isSenderBot) {
+      trackEvent(ANALYTICS_EVENT_NAMES.LINK_VIEWED, {
+        message: messageContent,
+      });
+    }
+  }, [message.message, isSenderBot]);
 
   return (
     <div ref={inViewRef}>
@@ -102,6 +129,7 @@ const MessageItem = (props: IProps) => {
                 'animate-pulse': isLoading,
               })}
               ref={messageRef}
+              onClick={handleMessageClick}
             >
               <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
                 {message.message}
