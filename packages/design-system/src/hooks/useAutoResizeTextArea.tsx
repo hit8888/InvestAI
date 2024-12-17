@@ -6,22 +6,20 @@ type Props = {
   maxHeight: number;
 };
 
-const useAutoResizeTextArea = (props: Props) => {
-  const { textAreaValue: value, initialHeight: INITIAL_INPUT_HEIGHT, maxHeight: MAX_INPUT_HEIGHT } = props;
-
+const useAutoResizeTextArea = ({ textAreaValue, initialHeight, maxHeight }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (textAreaRef.current) {
-      textAreaRef.current.style.height = `${INITIAL_INPUT_HEIGHT}px`;
+      textAreaRef.current.style.height = `${initialHeight}px`;
       const padding = textAreaRef.current.offsetHeight - textAreaRef.current.clientHeight;
 
       const scrollHeight = textAreaRef.current.scrollHeight;
-      const newHeight = Math.min(Math.max(scrollHeight - padding, INITIAL_INPUT_HEIGHT), MAX_INPUT_HEIGHT);
+      const newHeight = Math.min(Math.max(scrollHeight - padding, initialHeight), maxHeight);
 
       textAreaRef.current.style.height = `${newHeight}px`;
     }
-  }, [value]);
+  }, [textAreaValue]);
 
   return textAreaRef;
 };

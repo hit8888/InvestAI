@@ -1,0 +1,14 @@
+{
+  "artifact_id": "54b7f895-4eb1-425a-9d7b-9d2ac49b583d",
+  "content": {
+    "suggested_questions": [
+      "Can I customize test questions?",
+      "What is the ROI of using assessments?",
+      "How does it impact business outcomes?"
+    ],
+    "suggested_questions_type": "STAR"
+  },
+  "artifact_type": "SUGGESTIONS",
+  "metadata": {},
+  "error": null
+}

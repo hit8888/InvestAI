@@ -1,8 +1,7 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
-import useAutoResizeTextArea from '@breakout/design-system/hooks/useAutoResizeTextArea';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Message } from '@meaku/core/types/chat';
 
 interface IProps {
@@ -11,16 +10,10 @@ interface IProps {
   messages: Message[];
 }
 
-const INITIAL_INPUT_HEIGHT = 56; // px
-const MAX_INPUT_HEIGHT = 100; // px
-
 const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const textAreaRef = useAutoResizeTextArea({
-    textAreaValue: inputValue,
-    initialHeight: INITIAL_INPUT_HEIGHT,
-    maxHeight: MAX_INPUT_HEIGHT,
-  });
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const isSubmissionDisabled = isAMessageBeingProcessed || inputValue?.length === 0;
 
@@ -62,12 +55,12 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
-            ref={textAreaRef}
             className="border-2 p-4"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
             onKeyDown={handleKeyDown}
+            ref={textAreaRef}
           />
         </div>
         {!isSubmissionDisabled && (
