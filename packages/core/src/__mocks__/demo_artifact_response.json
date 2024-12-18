@@ -1,0 +1,93 @@
+{
+  "artifact_id": "3982528e-c0d2-4b8c-acb7-7c7bb4cf156e",
+  "content": {
+    "introduction": "Our Test Creation feature allows you to easily create customized assessments on HackerEarth. You can select the role you're hiring for, and the system will automatically identify the necessary skills, allowing you to tailor the test to your specific needs. This ensures that you can effectively evaluate candidates while maintaining the integrity of the assessment process.",
+    "features": [
+      {
+        "id": 1,
+        "feature_name": "Test Creation",
+        "feature_description": "In this Feature, I'll show you how to create a test on HackerEarth using our assessments feature.",
+        "feature_interval": 6,
+        "feature_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Feature_Test_Creation.mp3",
+        "feature_type": "CUSTOM",
+        "frames": [
+          {
+            "id": 1,
+            "frame_name": "Creation Home Page",
+            "frame_description": "Select assessments tab in the nav bar. You'll land on the assessments page where all the present assessments are listed. Click on Create Test button in the top right hand side.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Creation_Home_Page.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Creation+Home+Page1.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 13
+          },
+          {
+            "id": 2,
+            "frame_name": "Test Creation Modal",
+            "frame_description": "The test creation Modal opens up. Here you can see a drop down where you can select the role you want to hire for.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Test_Creation_Modal.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Creation+Modal2.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 8
+          },
+          {
+            "id": 3,
+            "frame_name": "Select Role",
+            "frame_description": "From the dropdown, you can search for the role that you're hiring for. Let's say you're hiring for a Java proficient Backend Developer. You can just select the role from the available options.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Select_Role.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Select+Role3.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 13
+          },
+          {
+            "id": 4,
+            "frame_name": "Select Skill",
+            "frame_description": "Once you've selected the role, the system automatically identifies the skills needed for the role. The assessment will be created to evaluate these skills. You can also add or remove the skills as per your requirement. The test will be customised to accommodate your need. Once you're done, click continue.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Select_Skill.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Select+Skill4.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 21
+          },
+          {
+            "id": 5,
+            "frame_name": "Test Properties",
+            "frame_description": "Here you've the Test Configuration page. You can specify the years of experience here as well as the duration you want for the test. Once you've configured the Test properties, You click on Create Test.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Test_Properties.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Test+Props5.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 14
+          },
+          {
+            "id": 6,
+            "frame_name": "Test Created",
+            "frame_description": "And Voila!, there you have it. A customised Test is created and configured as per your requirement and added to the Hackerearth assessments page. You can now share the test with your prospective candidates. Feel free to ask any doubts you may have.",
+            "frame_audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Frames_Test_Created.mp3",
+            "frame_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/feature-frames/Test+Created6.png",
+            "frame_type": "IMAGE",
+            "frame_data": {
+              "abc": "abc"
+            },
+            "frame_interval": 18
+          }
+        ]
+      }
+    ]
+  },
+  "artifact_type": "DEMO",
+  "metadata": {},
+  "error": null
+}
