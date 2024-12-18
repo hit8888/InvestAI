@@ -1,17 +1,17 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import { SamRespondingText } from './index';
+import { AiResponseLoadingText } from './index';
 
 export default {
-  title: 'Components/SamRespondingText',
-  component: SamRespondingText,
+  title: 'Components/AiResponseLoadingText',
+  component: AiResponseLoadingText,
   argTypes: {
     color: { control: 'color' },
     text: { control: 'text' },
   },
 } as Meta;
 
-const Template: StoryFn<{ color: string | null; text: string }> = (args) => <SamRespondingText {...args} />;
+const Template: StoryFn<{ color: string | null; text: string }> = (args) => <AiResponseLoadingText {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
