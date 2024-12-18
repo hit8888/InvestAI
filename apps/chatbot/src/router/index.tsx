@@ -1,7 +1,6 @@
 import { wrapCreateBrowserRouter } from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import Chat from '../pages/Chat';
-import DebugTool from '../pages/InternalAdmin/';
 import FeedbackAdmin from '../pages/FeedbackAdmin';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
@@ -18,10 +17,6 @@ const router = sentryCreateBrowserRouter([
   {
     path: '/demo/org/:orgName/agent/:agentId',
     element: <FeedbackAdmin />,
-  },
-  {
-    path: '/debug/org/:orgName/agent/:agentId',
-    element: <DebugTool />,
   },
 ]);
 
