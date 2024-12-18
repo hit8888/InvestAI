@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .text-container {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--input-color, var(--fallback-color));
+  }
+
+  .text-state {
+    opacity: 0.5;
+    background: linear-gradient(90deg, var(--input-color, --fallback-color) 0%, #e0e5ea 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-animation 1000ms linear infinite alternate-reverse;
+    background-size: 200% 100%; /* Adjust this value as needed */
+  }
+
+  @keyframes text-animation {
+    0% {
+      background-position: 0% 0%;
+    }
+    12.5% {
+      background-position: 12.5% 0%;
+    }
+    25% {
+      background-position: 25% 0%;
+    }
+    37.5% {
+      background-position: 37.5% 0%;
+    }
+    50% {
+      background-position: 50% 0%;
+    }
+    62.5% {
+      background-position: 62.5% 0%;
+    }
+    75% {
+      background-position: 75% 0%;
+    }
+    87.5% {
+      background-position: 87.5% 0%;
+    }
+    100% {
+      background-position: 100% 0%;
+    }
+  }
+}

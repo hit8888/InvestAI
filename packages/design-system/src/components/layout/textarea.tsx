@@ -1,16 +1,25 @@
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { cn } from '../../lib/cn';
+import useAutoResizeTextArea from '../../hooks/useAutoResizeTextArea';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, parentRef) => {
   const { className, ...restProps } = props;
+  const autoResizeRef = useAutoResizeTextArea({
+    textAreaValue: props.value as string,
+    initialHeight: 56,
+    maxHeight: 100,
+  });
+
+  // Combine refs
+  useImperativeHandle(parentRef, () => autoResizeRef.current!);
 
   return (
     <textarea
-      ref={ref}
+      ref={autoResizeRef}
       className={cn(
-        'h-10 w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-primary/40 disabled:opacity-60',
+        'w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-primary/40 disabled:opacity-60',
         className,
       )}
       {...restProps}
