@@ -37,12 +37,10 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
   return <strong className="text-primary-textColor" {...props} />;
 };
 
-const MessageItem = (props: IProps) => {
+const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
   const primaryColor = styleConfig?.primary ?? null;
-
-  const { message, messageIndex, totalMessages, orbState } = props;
 
   const { trackEvent } = useAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
