@@ -5,7 +5,7 @@ interface IProps {
   text: string;
 }
 
-const SamRespondingText = ({ color, text }: IProps) => {
+const AiResponseLoadingText = ({ color, text }: IProps) => {
   return (
     <span
       className="text-container text-state"
@@ -21,4 +21,4 @@ const SamRespondingText = ({ color, text }: IProps) => {
   );
 };
 
-export { SamRespondingText };
+export { AiResponseLoadingText };

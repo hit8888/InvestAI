@@ -31,7 +31,7 @@ export const capitalizeString = (string: string) => {
 
 export const getProcessingMessageSequence = () => {
   return [
-    `Sam is thinking...`,
+    `Thinking...`,
     `Putting together my answer..`,
     `Getting it ready..`,
     `Working on it..`,

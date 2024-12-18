@@ -18,7 +18,7 @@ import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { SamRespondingText } from '@breakout/design-system/components/SamRespondingText/index';
+import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 
 interface IProps {
   message: Message;
@@ -133,7 +133,7 @@ const MessageItem = (props: IProps) => {
             >
               {isLoading ? (
                 <div className="flex h-8 items-center">
-                  <SamRespondingText color={primaryColor} text={message.message} />
+                  <AiResponseLoadingText color={primaryColor} text={message.message} />
                 </div>
               ) : (
                 <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
