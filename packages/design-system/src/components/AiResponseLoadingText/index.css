@@ -16,7 +16,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: text-animation 1000ms linear infinite alternate;
+    animation: text-animation 1000ms linear infinite alternate-reverse;
     background-size: 200% 100%; /* Adjust this value as needed */
   }
 
