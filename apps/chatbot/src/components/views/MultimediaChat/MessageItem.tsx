@@ -18,6 +18,7 @@ import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 
 interface IProps {
   message: Message;
@@ -126,14 +127,19 @@ const MessageItem = (props: IProps) => {
               className={cn('prose max-w-full flex-1', {
                 'text-white': !isSenderBot,
                 'leading-snug text-primary-textColor': isSenderBot,
-                'animate-pulse': isLoading,
               })}
               ref={messageRef}
               onClick={handleMessageClick}
             >
-              <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
-                {message.message}
-              </ReactMarkdown>
+              {isLoading ? (
+                <div className="flex h-8 items-center">
+                  <AiResponseLoadingText color={primaryColor} text={message.message} />
+                </div>
+              ) : (
+                <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
+                  {message.message}
+                </ReactMarkdown>
+              )}
             </div>
             <div className="flex flex-col items-start">
               {message.chatArtifact && message.chatArtifact.artifact_type == 'FORM' && (
