@@ -101,7 +101,7 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
               },
             )}
           >
-            {!inputValue &&
+            {showSuggestedQuestions &&
               initialSuggestedQuestions.map((question) => (
                 <div key={question} className="rounded-full bg-white">
                   <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
