@@ -31,10 +31,10 @@ export const capitalizeString = (string: string) => {
 
 export const getProcessingMessageSequence = () => {
   return [
-    `Thinking...`,
-    `Hang tight, working on it...`,
-    'Just a few more seconds...',
-    `Almost there, getting everything in place...`,
-    `Almost done...`,
+    `Sam is thinking...`,
+    `Putting together my answer..`,
+    `Getting it ready..`,
+    `Working on it..`,
+    `Forming a complete response..`,
   ];
 };
