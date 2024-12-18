@@ -1,5 +1,4 @@
 import { memo, useState } from 'react';
-import useAutoResizeTextArea from '../../hooks/useAutoResizeTextArea';
 import SendIcon from '../icons/send';
 import UserAvatarIcon from '../icons/user';
 import WrappedLogo from '../icons/wrapped-logo';

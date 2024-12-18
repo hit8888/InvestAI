@@ -1,7 +1,6 @@
 import { DetailedFeedbackPayload } from '@meaku/core/types/feedback';
 import { XIcon } from 'lucide-react';
 import { memo, useState } from 'react';
-import useAutoResizeTextArea from '../../hooks/useAutoResizeTextArea';
 import { cn } from '../../lib/cn';
 import Button from './button';
 import FeedbackRating from './feedback-rating';
