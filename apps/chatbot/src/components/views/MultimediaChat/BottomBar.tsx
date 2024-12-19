@@ -56,11 +56,10 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.INITIAL_SUGGESTED_QUESTION_CLICKED, {
       message: msg,
       isChatOpen: false,
       initialSuggestedQuestion: true,
-      artifact: null,
     });
   };
 
