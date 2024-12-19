@@ -20,7 +20,6 @@ const SuggestionsArtifact = (props: IProps) => {
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
       message: msg,
       isChatOpen: true,
-      initialSuggestedQuestion: false,
       artifact,
     });
   };
