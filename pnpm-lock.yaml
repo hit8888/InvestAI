@@ -250,12 +250,18 @@ importers:
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.13
+      '@types/node':
+        specifier: ^22.5.4
+        version: 22.8.7
       '@types/react':
         specifier: ^19.0.2
         version: 19.0.2
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.1
+      '@vitejs/plugin-react':
+        specifier: ^4.3.1
+        version: 4.3.1(vite@5.4.10(@types/node@22.8.7)(terser@5.36.0))
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.8.7)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.8.7)(typescript@5.6.3))
@@ -2281,9 +2287,6 @@ packages:
 
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
-
-  '@types/node@22.5.4':
-    resolution: {integrity: sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==}
 
   '@types/node@22.8.7':
     resolution: {integrity: sha512-LidcG+2UeYIWcMuMUpBKOnryBWG/rnmOHQR5apjn8myTQcx3rinFRn7DcIFhMnS0PPFSC6OafdIKEad0lj6U0Q==}
@@ -8031,7 +8034,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 22.5.4
+      '@types/node': 22.8.7
 
   '@types/graceful-fs@4.1.9':
     dependencies:
@@ -8079,10 +8082,6 @@ snapshots:
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@0.7.34': {}
-
-  '@types/node@22.5.4':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/node@22.8.7':
     dependencies:
