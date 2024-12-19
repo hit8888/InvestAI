@@ -4,7 +4,7 @@ import { Message } from '@meaku/core/types/chat';
 import { FeedbackEnum, InitialFeedbackPayload } from '@meaku/core/types/feedback';
 import isUndefined from 'lodash/isUndefined';
 import { CirclePlayIcon } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import { cn } from '../../lib/cn';
@@ -73,17 +73,6 @@ const MessageItem = (props: Props) => {
       });
     }
   };
-
-  useEffect(() => {
-    const messageContent = message.message;
-    const doesMessageContainLink = messageContent.includes('http');
-
-    if (doesMessageContainLink) {
-      trackEvent(ANALYTICS_EVENT_NAMES.LINK_VIEWED, {
-        message: messageContent,
-      });
-    }
-  }, [message.message]);
 
   return (
     <div
