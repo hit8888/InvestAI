@@ -65,9 +65,9 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
         </div>
         {!isSubmissionDisabled && (
           <Button
-            type="submit"
             className="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
             disabled={isSubmissionDisabled}
+            onClick={handleSubmission}
           >
             <SendIcon className="text-primary-foreground" />
           </Button>
