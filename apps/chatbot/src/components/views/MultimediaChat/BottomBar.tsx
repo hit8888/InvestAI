@@ -1,11 +1,12 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
-import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useMemo, useState } from 'react';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { Suggestion } from './Suggestion.tsx';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
+import Orb from '@breakout/design-system/components/Orb/index';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 interface IProps {
   handleSendUserMessage: (message: string) => void;
@@ -110,7 +111,7 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
           </div>
 
           <div className="flex items-center justify-center">
-            {hasFirstUserMessageBeenSent && <BotIndicator size="md" />}
+            {hasFirstUserMessageBeenSent && <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />}
             {inputValue && (
               <button
                 type="submit"
