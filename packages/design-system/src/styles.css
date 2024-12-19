@@ -19,12 +19,12 @@
 
   .bottom-bar-shadow {
     box-shadow:
-      0px 2px 80px 0px rgba(49, 135, 247, 0.07),
-      0px 1.296px 46.852px 0px rgba(49, 135, 247, 0.05),
-      0px 0.77px 25.481px 0px rgba(49, 135, 247, 0.04),
-      0px 0.4px 13px 0px rgba(49, 135, 247, 0.04),
-      0px 0.163px 6.519px 0px rgba(49, 135, 247, 0.03),
-      0px 0.037px 3.148px 0px rgba(49, 135, 247, 0.02);
+      0px 2px 80px 0px rgb(var(--primary) / 0.07),
+      0px 1.296px 46.852px 0px rgb(var(--primary) / 0.05),
+      0px 0.77px 25.481px 0px rgb(var(--primary) / 0.04),
+      0px 0.4px 13px 0px rgb(var(--primary) / 0.04),
+      0px 0.163px 6.519px 0px rgb(var(--primary) / 0.03),
+      0px 0.037px 3.148px 0px rgb(var(--primary) / 0.02);
   }
 
   .bot-indicator {
