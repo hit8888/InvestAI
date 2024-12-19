@@ -4,6 +4,8 @@ import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
 import BottomBar from './BottomBar';
 import ChatArea from './ChatArea';
 import { useHandleAppStateOnUnmount } from '../../../pages/shared/hooks/useHandleAppStateOnUnmount';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -13,6 +15,7 @@ interface IProps {
 const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
   const [hideBottomBar, setHideBottomBar] = useState(false);
+  const { trackChatbotEvent } = useChatbotAnalytics();
   useHandleAppStateOnUnmount();
 
   const isChatOpen = sessionData.isChatOpen;
@@ -21,10 +24,12 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
 
   const handleOpenChat = () => {
     handleUpdateSessionData({ isChatOpen: true });
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isChatOpen, showTooltip });
   };
 
   const handleCloseChat = () => {
     handleUpdateSessionData({ isChatOpen: false });
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isChatOpen, showTooltip });
   };
 
   const handleSendMessage = (message: string) => {
@@ -33,6 +38,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       handleUpdateSessionData({ isChatOpen: true });
     }
     handleSendUserMessage(message);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.MESSAGE_SENT, { message });
   };
 
   useEffect(() => {
@@ -54,6 +60,7 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       if (type === 'open-breakout-button') {
         fetchSessionData();
         handleOpenChat();
+        trackChatbotEvent(ANALYTICS_EVENT_NAMES.EXTERNAL_BUTTON_CLICKED, { ...event.data });
       }
     };
     window.addEventListener('message', handleParentWindowMessages);

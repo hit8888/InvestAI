@@ -1,21 +1,58 @@
-import * as amplitude from "@amplitude/analytics-browser";
-import { useParams } from "react-router-dom";
-import { ChatParams } from "../types/config";
+import { useCallback, useRef } from "react";
+import debounce from "lodash/debounce";
+import apiClient from "../http/client";
+import { isProduction } from "../../../../apps/chatbot/src/utils/common.ts";
+import { ENV } from "../../../../apps/chatbot/src/config/env.ts";
+
+interface AnalyticsEvent {
+  event_name: string;
+  properties: {
+    timestamp: number;
+    [key: string]: unknown;
+  };
+}
 
 const useAnalytics = () => {
-  const { orgName = "", agentId = "" } = useParams<ChatParams>();
+  const eventQueueRef = useRef<AnalyticsEvent[]>([]);
 
-  const commonPayload = { orgName, agentId };
+  const commonProperties = { environment: ENV.VITE_APP_ENV };
+
+  const sendBatchEvents = useCallback(
+    debounce(async () => {
+      if (eventQueueRef.current.length === 0) return;
+      if (!isProduction) return;
+
+      try {
+        await apiClient.post("/tenant/chat/api/track/batch/", {
+          batch_timestamp: Date.now(),
+          events: eventQueueRef.current,
+        });
+        // Clear the queue after successful send
+        eventQueueRef.current = [];
+      } catch (error) {
+        console.error("Failed to send analytics events:", error);
+      }
+    }, 10000),
+    [],
+  );
 
   const trackEvent = (
     eventName: string,
-    payload: Record<string, unknown> = {}
+    properties: Record<string, unknown> = {},
   ) => {
-    if (orgName?.toLowerCase() !== "c2fo") return;
-
     try {
-      amplitude.track(eventName, { ...commonPayload, ...payload });
-    } catch (error) {}
+      eventQueueRef.current.push({
+        event_name: eventName,
+        properties: {
+          ...commonProperties,
+          ...properties,
+          timestamp: Date.now(),
+        },
+      });
+      sendBatchEvents();
+    } catch (error) {
+      console.error("Error queueing analytics event:", error);
+    }
   };
 
   return { trackEvent };
