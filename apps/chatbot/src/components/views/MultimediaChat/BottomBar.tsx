@@ -7,6 +7,8 @@ import { Suggestion } from './Suggestion.tsx';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   handleSendUserMessage: (message: string) => void;
@@ -43,6 +45,8 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
 
   const [inputValue, setInputValue] = useState('');
 
+  const { trackChatbotEvent } = useChatbotAnalytics();
+
   const showSuggestedQuestions =
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
@@ -52,6 +56,12 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
+      message: msg,
+      isChatOpen: false,
+      initialSuggestedQuestion: true,
+      artifact: null,
+    });
   };
 
   const handleFormSubmission = (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,6 +72,10 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
     handleSendUserMessage(trimmedInputValue);
     setInputValue('');
   };
+
+  useEffect(() => {
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.SHOW_BOTTOM_BAR);
+  }, []);
 
   return (
     <div

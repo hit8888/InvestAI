@@ -5,6 +5,8 @@ import { useSearchParams } from 'react-router-dom';
 import useWebSocketChat from '../../../hooks/useWebSocketChat';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import ArtifactControls from './ArtifactControls';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   videoUrl: string;
@@ -17,6 +19,8 @@ type QueryParams = {
 
 const VideoArtifact = (props: IProps) => {
   const { videoUrl, artifactId } = props;
+
+  const { trackChatbotEvent } = useChatbotAnalytics();
 
   const [searchParams] = useSearchParams();
   const { expandVideo }: QueryParams = {
@@ -41,6 +45,7 @@ const VideoArtifact = (props: IProps) => {
     };
     handleSendUserMessage('', 'ARTIFACT_CONSUMED', payload);
     setIsArtifactPlaying(false);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };
 
   const handlePlayPauseVideo = () => {
@@ -51,8 +56,10 @@ const VideoArtifact = (props: IProps) => {
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsArtifactPlaying(true);
+      trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
     } else {
       videoRef.current.pause();
+      trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PAUSE);
     }
   };
 
@@ -63,6 +70,7 @@ const VideoArtifact = (props: IProps) => {
     videoRef.current.play();
     setIsPlaying(true);
     setIsArtifactPlaying(true);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
   };
 
   useEffect(() => {

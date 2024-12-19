@@ -3,6 +3,8 @@ import { ArrowLeftIcon, XIcon } from 'lucide-react'; //TODO: Expos this for desi
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { useMemo } from 'react';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -12,6 +14,7 @@ interface IProps {
 
 const ChatHeader = (props: IProps) => {
   const { handleSendMessage, handleFinishDemo, handleCloseChat } = props;
+  const { trackChatbotEvent } = useChatbotAnalytics();
 
   const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
   const ctaConfig = useUnifiedConfigurationResponseManager().getCTAConfig();
@@ -30,7 +33,10 @@ const ChatHeader = (props: IProps) => {
     return 'I want to book a demo for the product.';
   }, [ctaConfig]);
 
-  const handlePrimaryCta = () => handleSendMessage(ctaMessage);
+  const handlePrimaryCta = () => {
+    handleSendMessage(ctaMessage);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CTA_BUTTON_CLICKED, { ctaMessage, ctaText });
+  };
 
   return (
     <div className="flex items-center justify-between border-b border-white/10 p-2">
