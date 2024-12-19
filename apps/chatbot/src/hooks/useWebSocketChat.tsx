@@ -3,7 +3,6 @@ import { ChatParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
 import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import { SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
 import { AIResponse, SplitScreenArtifactType } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
@@ -14,6 +13,7 @@ import { ENV } from '../config/env';
 import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
+import useChatbotAnalytics from './useChatbotAnalytics.tsx';
 
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
@@ -43,7 +43,7 @@ const useWebSocketChat = () => {
   >([]);
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-  const { trackEvent } = useAnalytics();
+  const { trackChatbotEvent: trackEvent } = useChatbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
   const artifact = useLocalStorageArtifact();
 

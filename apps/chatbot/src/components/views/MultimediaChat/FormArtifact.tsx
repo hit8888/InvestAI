@@ -11,6 +11,8 @@ import ChatFormField from './ChatFormField.tsx';
 import CardTitle from '@breakout/design-system/components/layout/card-title';
 import { useState } from 'react';
 import CardDescription from '@breakout/design-system/components/layout/card-description';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IFormProps {
   artifactId?: string;
@@ -39,6 +41,7 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 const FormArtifact = (props: IFormProps) => {
   const { artifactId, artifact, artifactMetadata, handleSendUserMessage } = props;
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
+  const { trackChatbotEvent } = useChatbotAnalytics();
 
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
 
@@ -54,6 +57,7 @@ const FormArtifact = (props: IFormProps) => {
     };
     handleSendUserMessage('', 'FORM_FILLED', response_data);
     setSubmitted(true);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });
   }
 
   if (!artifact) {

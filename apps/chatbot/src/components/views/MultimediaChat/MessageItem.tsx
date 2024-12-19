@@ -16,9 +16,9 @@ import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
+import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 
 interface IProps {
   message: Message;
@@ -42,7 +42,7 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
   const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
   const primaryColor = styleConfig?.primary ?? null;
 
-  const { trackEvent } = useAnalytics();
+  const { trackChatbotEvent } = useChatbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
 
   const messageRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
     const isLink = target.tagName === 'A';
 
     if (isLink && isSenderBot) {
-      trackEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
+      trackChatbotEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
         link: (target as HTMLAnchorElement).href,
         message: message.message,
       });
@@ -93,17 +93,6 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
       setIsSingleLineMessage(height <= lineHeight);
     }
   }, [message.message, isSingleLineMessage]);
-
-  useEffect(() => {
-    const messageContent = message.message;
-    const doesMessageContainLink = messageContent.includes('http');
-
-    if (doesMessageContainLink && isSenderBot) {
-      trackEvent(ANALYTICS_EVENT_NAMES.LINK_VIEWED, {
-        message: messageContent,
-      });
-    }
-  }, [message.message, isSenderBot]);
 
   return (
     <div ref={inViewRef}>
