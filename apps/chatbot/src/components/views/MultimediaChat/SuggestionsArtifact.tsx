@@ -17,7 +17,12 @@ const SuggestionsArtifact = (props: IProps) => {
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage(msg);
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, { message: msg, isChatOpen: true, artifact });
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
+      message: msg,
+      isChatOpen: true,
+      initialSuggestedQuestion: false,
+      artifact,
+    });
   };
 
   if (!artifact || !showSuggestionsArtifact) {

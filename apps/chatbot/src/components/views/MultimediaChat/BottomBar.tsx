@@ -60,6 +60,7 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
       message: msg,
       isChatOpen: false,
       initialSuggestedQuestion: true,
+      artifact: null,
     });
   };
 
