@@ -15,7 +15,7 @@ const useAnimateDifferentOrbStates = () => {
     (messageIndex: number, messageId: string) => {
       return {
         response_id: messageId,
-        message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+        message: messageIndex === -1 ? `Thinking` : PROCESSING_MESSAGE_SEQUENCE[messageIndex],
         documents: [],
         is_complete: false,
         is_loading: true,
@@ -28,7 +28,7 @@ const useAnimateDifferentOrbStates = () => {
   );
 
   const handleAnimatedOrb = (messageId: string) => {
-    let messageIndex = 0;
+    let messageIndex = -1;
 
     // Send first message immediately
     handleAddAIMessage(getAIMessage(messageIndex, messageId));
