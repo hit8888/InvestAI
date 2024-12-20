@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { getProcessingMessageSequence } from '../utils/common';
+import { getProcessingMessageSequence, setMessageIndexForAddingAIMessage } from '../utils/common';
 import { useMessageStore } from '../stores/useMessageStore';
 
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 4000;
@@ -15,7 +15,7 @@ const useAnimateDifferentOrbStates = () => {
     (messageIndex: number, messageId: string) => {
       return {
         response_id: messageId,
-        message: PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+        message: messageIndex === -1 ? `Thinking` : PROCESSING_MESSAGE_SEQUENCE[messageIndex],
         documents: [],
         is_complete: false,
         is_loading: true,
@@ -28,12 +28,10 @@ const useAnimateDifferentOrbStates = () => {
   );
 
   const handleAnimatedOrb = (messageId: string) => {
-    let messageIndex = 0;
+    let messageIndex = -1;
 
     // Send first message immediately
     handleAddAIMessage(getAIMessage(messageIndex, messageId));
-
-    messageIndex++; // Increment for subsequent messages
 
     // Start interval for remaining messages
     processingMessageInterval.current = setInterval(() => {
@@ -41,10 +39,8 @@ const useAnimateDifferentOrbStates = () => {
         clearInterval(processingMessageInterval.current as NodeJS.Timeout);
         return;
       }
-
+      messageIndex = setMessageIndexForAddingAIMessage();
       handleAddAIMessage(getAIMessage(messageIndex, messageId));
-
-      messageIndex++;
     }, PROCESSING_MESSAGE_CHANGE_INTERVAL);
   };
 

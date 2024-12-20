@@ -29,12 +29,11 @@ export const capitalizeString = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+export const setMessageIndexForAddingAIMessage = () => {
+  const PROCESSING_MESSAGE_SEQUENCE = getProcessingMessageSequence();
+  return Math.floor(Math.random() * PROCESSING_MESSAGE_SEQUENCE.length);
+};
+
 export const getProcessingMessageSequence = () => {
-  return [
-    `Thinking...`,
-    `Putting together my answer..`,
-    `Getting it ready..`,
-    `Working on it..`,
-    `Forming a complete response..`,
-  ];
+  return [`Putting together my answer`, `Getting it ready`, `Working on it`, `Forming a complete response`];
 };
