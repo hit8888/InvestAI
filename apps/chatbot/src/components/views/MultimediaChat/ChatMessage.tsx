@@ -13,17 +13,17 @@ const ChatMessage = (props: IProps) => {
   const { messages, showArtifact = false } = props;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
 
   const orbState = useMessageStore((state) => state.orbState);
 
   const handleScrollToBottom = () => {
     if (chatContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-      const isAtBottom = scrollHeight - scrollTop <= clientHeight + 1;
+      const { scrollTop } = chatContainerRef.current;
+      const isAtTop = scrollTop <= 1;
 
-      if (isAtBottom) {
-        endRef.current?.scrollIntoView({ behavior: 'instant' });
+      if (isAtTop) {
+        currentMessageScrollToTop.current?.scrollIntoView({ behavior: 'instant' });
       }
     }
   };
@@ -31,12 +31,6 @@ const ChatMessage = (props: IProps) => {
   useEffect(() => {
     handleScrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      handleScrollToBottom();
-    }, 1000);
-  }, []);
 
   return (
     <div
@@ -51,17 +45,20 @@ const ChatMessage = (props: IProps) => {
           })}
         >
           {messages.map((message, idx) => (
-            <MessageItem
-              key={message.id}
-              message={message}
-              messageIndex={idx}
-              totalMessages={messages.length}
-              orbState={orbState}
-            />
+            <>
+              {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
+              <MessageItem
+                key={message.id}
+                message={message}
+                messageIndex={idx}
+                totalMessages={messages.length}
+                orbState={orbState}
+              />
+            </>
           ))}
         </div>
 
-        <div ref={endRef} className="p-1" />
+        <div className="p-1" />
       </div>
     </div>
   );
