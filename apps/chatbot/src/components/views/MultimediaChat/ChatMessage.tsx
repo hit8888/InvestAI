@@ -13,7 +13,7 @@ const ChatMessage = (props: IProps) => {
   const { messages, showArtifact = false } = props;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const startRef = useRef<HTMLDivElement>(null);
+  const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
 
   const orbState = useMessageStore((state) => state.orbState);
 
@@ -23,7 +23,7 @@ const ChatMessage = (props: IProps) => {
       const isAtTop = scrollTop <= 1;
 
       if (isAtTop) {
-        startRef.current?.scrollIntoView({ behavior: 'instant' });
+        currentMessageScrollToTop.current?.scrollIntoView({ behavior: 'instant' });
       }
     }
   };
@@ -46,7 +46,7 @@ const ChatMessage = (props: IProps) => {
         >
           {messages.map((message, idx) => (
             <>
-              {message?.role !== 'ai' ? <div ref={startRef} className="p-2" /> : null}
+              {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
               <MessageItem
                 key={message.id}
                 message={message}
