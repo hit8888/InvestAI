@@ -22,6 +22,8 @@ const useAnimateDifferentOrbStates = () => {
         suggested_questions: [],
         analytics: {},
         artifacts: [],
+        demo_available: false,
+        role: 'ai' as 'user' | 'ai',
       };
     },
     [PROCESSING_MESSAGE_SEQUENCE],

@@ -5,7 +5,12 @@ import {
   SessionApiResponse,
   SessionSchema,
 } from "../types/session";
-import { ChatBoxArtifactType, Message } from "../types/chat";
+import {
+  AIResponse,
+  ChatBoxArtifactType,
+  Message,
+  ScriptStepDTO,
+} from "../types/chat";
 import { ChatBoxArtifactEnumSchema } from "../types/artifact";
 
 export type SessionConfigResponseType =
@@ -31,7 +36,7 @@ class UnifiedSessionConfigResponseManager {
   }
 
   private isSession(
-    response: SessionConfigResponseType,
+    response: SessionConfigResponseType
   ): response is SessionApiResponse {
     return "session_id" in response;
   }
@@ -41,7 +46,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedSession.success) {
       throw new Error(
-        validatedSession.error.errors.map((error) => error.message).join(", "),
+        validatedSession.error.errors.map((error) => error.message).join(", ")
       );
     }
 
@@ -56,7 +61,7 @@ class UnifiedSessionConfigResponseManager {
 
     if (!validatedConfig.success) {
       throw new Error(
-        validatedConfig.error.errors.map((error) => error.message).join(", "),
+        validatedConfig.error.errors.map((error) => error.message).join(", ")
       );
     }
 
@@ -87,6 +92,39 @@ class UnifiedSessionConfigResponseManager {
     return this.config.logo;
   }
 
+  public static convertServerMessageToClientMessage(
+    response: AIResponse
+  ): Message {
+    const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
+
+    const messageArtifact = response.artifacts.find(
+      (artifact) =>
+        !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
+        artifact.artifact_id
+    );
+
+    const chatBoxArtifact = response.artifacts.find((artifact) =>
+      ChatBoxArtifactEnumSchema.options.includes(
+        artifact.artifact_type as ChatBoxArtifactType
+      )
+    );
+
+    return {
+      message: response.message,
+      documents: response.documents,
+      is_loading: response.is_loading,
+      is_complete: response.is_complete,
+      showFeedbackOptions: response.showFeedbackOptions,
+      analytics: response.analytics,
+      artifact: messageArtifact,
+      chatArtifact: chatBoxArtifact,
+      scriptStep: response.script_step,
+      demoAvailable: response.demo_available,
+      role: response.role,
+      id: response.response_id,
+    };
+  }
+
   getFormattedChatHistory({
     isAdmin,
     isReadOnly,
@@ -101,7 +139,6 @@ class UnifiedSessionConfigResponseManager {
       id: nanoid(),
       message: this.config.body.welcome_message.message,
       role: "ai",
-      isPartOfHistory: false,
       is_complete: true,
       showFeedbackOptions: false,
       documents: [],
@@ -114,38 +151,19 @@ class UnifiedSessionConfigResponseManager {
         const messageFeedback = feedbacks.find(
           (feedback) =>
             feedback.response_id === message.response_id ||
-            feedback.response_id === message.message_id.toString(),
-        );
-
-        // TODO: Replace this with the chat artifact enums created by Amogh
-        const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
-        const messageArtifact = message.artifacts.find(
-          (artifact) =>
-            ArtifactTypesToIgnore.indexOf(artifact.artifact_type) === -1 &&
-            artifact.artifact_id,
-        );
-
-        const chatBoxArtifact = message.artifacts.find(
-          (artifact) =>
-            Array.from(ChatBoxArtifactEnumSchema.options).indexOf(
-              artifact.artifact_type as ChatBoxArtifactType,
-            ) !== -1,
+            feedback.response_id === message.message_id.toString()
         );
 
         return {
-          id: message.message_id,
-          message: message.message,
-          documents: message.documents,
-          role: message.role,
+          ...UnifiedSessionConfigResponseManager.convertServerMessageToClientMessage(
+            message
+          ),
           suggested_questions: message.suggested_questions,
-          isPartOfHistory: true,
           is_complete: true,
+          is_loading: false,
           showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
           feedback: messageFeedback,
           isReadOnly,
-          analytics: message.analytics,
-          artifact: messageArtifact,
-          chatArtifact: chatBoxArtifact,
         };
       });
 

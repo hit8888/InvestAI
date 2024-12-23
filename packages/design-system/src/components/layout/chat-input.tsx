@@ -11,15 +11,13 @@ type Props = {
   handleSendUserMessage: (message: string) => void;
 };
 
-const ChatInput = (props: Props) => {
-  const {
-    disclaimerText,
-    disabled = false,
-    isAMessageBeingProcessed,
-    handleChatInputOnChangeCallback,
-    handleSendUserMessage,
-  } = props;
-
+const ChatInput = ({
+  disclaimerText,
+  disabled = false,
+  isAMessageBeingProcessed,
+  handleChatInputOnChangeCallback,
+  handleSendUserMessage,
+}: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const isSubmissionDisabled = isAMessageBeingProcessed || inputValue?.length === 0;

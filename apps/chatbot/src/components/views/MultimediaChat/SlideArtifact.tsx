@@ -9,11 +9,7 @@ interface IProps {
   artifact: SlideArtifactType;
 }
 
-const SlideArtifact = (props: IProps) => {
-  const {
-    artifact: { title, items, sub_title },
-  } = props;
-
+const SlideArtifact = ({ artifact: { title, items, sub_title } }: IProps) => {
   const logoUrl = useUnifiedConfigurationResponseManager().getLogoUrl();
 
   return (

@@ -1,0 +1,23 @@
+{
+  "session_id": "1c2ed699-1cce-46d3-9e0c-807186697d30",
+  "response_id": "ha46KDyU28QAVbmw9scaK",
+  "role": "ai",
+  "message": "Hello! 😊\n\nCreating tests on HackerEarth is straightforward. Here's a quick guide:\n\n1. **Log in** to your HackerEarth account.\n2. Navigate to the **Tests** section.\n3. Click on **Create Test**.\n4. Choose a role from the standard list, extract skills from a job description, select skills from the list, or build a test from scratch.\n5. Customize the test by adding, editing, or removing questions as needed.\n\nThis process allows you to tailor assessments to your specific needs, ensuring they align with the roles you're hiring for.\n\nFor detailed guidance, feel free to reach out to our support team at [contact@hackerearth.com](mailto:contact@hackerearth.com).",
+  "is_complete": true,
+  "artifacts": [
+    {
+      "artifact_type": "DEMO",
+      "artifact_id": "284e9142-35a8-40c5-a8e2-2b1f3f0d3a78"
+    },
+    {
+      "artifact_type": "SUGGESTIONS",
+      "artifact_id": "0058c837-8958-417d-bfdf-9bcca1f6d654"
+    }
+  ],
+  "documents": [],
+  "analytics": null,
+  "script_step": {
+    "message": "Hello! 😊\n\nCreating tests on HackerEarth is straightforward. Here's a quick guide:\n\n1. **Log in** to your HackerEarth account.\n2. Navigate to the **Tests** section.\n3. Click on **Create Test**.\n4. Choose a role from the standard list, extract skills from a job description, select skills from the list, or build a test from scratch.\n5. Customize the test by adding, editing, or removing questions as needed.\n\nThis process allows you to tailor assessments to your specific needs, ensuring they align with the roles you're hiring for.\n\nFor detailed guidance, feel free to reach out to our support team at [contact@hackerearth.com](mailto:contact@hackerearth.com).",
+    "audio_url": "https://meaku-companydataset.s3.us-west-1.amazonaws.com/hackerearth/audios/Feature_Test_Creation.mp3"
+  }
+}

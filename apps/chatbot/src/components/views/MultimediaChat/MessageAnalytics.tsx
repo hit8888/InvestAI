@@ -5,9 +5,7 @@ interface IProps {
   analytics: AnalyticsType;
 }
 
-const MessageAnalytics = (props: IProps) => {
-  const { analytics } = props;
-
+const MessageAnalytics = ({ analytics }: IProps) => {
   if (!analytics || !analytics.buyer_intent_score) {
     return null;
   }

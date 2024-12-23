@@ -1,20 +1,33 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
-import BottomBar from './BottomBar';
+import EntryPointBottomBar from './EntryPointBottomBar';
 import ChatArea from './ChatArea';
 import { useHandleAppStateOnUnmount } from '../../../pages/shared/hooks/useHandleAppStateOnUnmount';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
+import { useEmbedAppEvents } from '../../../hooks/useEmbedAppEvents.ts';
 
 interface IProps {
   fetchSessionData: () => void;
-  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
+const Multimedia = ({ fetchSessionData }: IProps) => {
+  const { handleSendUserMessage } = useWebSocketChat();
+
+  const handleSendMessage = (data: IWebSocketHandleMessage) => {
+    fetchSessionData();
+    if (!isChatOpen) {
+      handleUpdateSessionData({ isChatOpen: true });
+    }
+
+    handleSendUserMessage(data);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.MESSAGE_SENT, { message: data.message });
+  };
+
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
-  const [hideBottomBar, setHideBottomBar] = useState(false);
+
   const { trackChatbotEvent } = useChatbotAnalytics();
   useHandleAppStateOnUnmount();
 
@@ -27,48 +40,12 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isChatOpen, showTooltip });
   };
 
+  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenChat });
+
   const handleCloseChat = () => {
     handleUpdateSessionData({ isChatOpen: false });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isChatOpen, showTooltip });
   };
-
-  const handleSendMessage = (message: string) => {
-    fetchSessionData();
-    if (!isChatOpen) {
-      handleUpdateSessionData({ isChatOpen: true });
-    }
-    handleSendUserMessage(message);
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.MESSAGE_SENT, { message });
-  };
-
-  useEffect(() => {
-    const payload = {
-      chatOpen: isChatOpen,
-      tooltipOpen: showTooltip,
-    };
-    window.parent.postMessage(payload, '*');
-  }, [isChatOpen, showTooltip]);
-
-  useEffect(() => {
-    const handleParentWindowMessages = (event: MessageEvent) => {
-      const { type } = event.data;
-
-      if (event.data.hideBottomBar) {
-        setHideBottomBar(true);
-      }
-
-      if (type === 'open-breakout-button') {
-        fetchSessionData();
-        handleOpenChat();
-        trackChatbotEvent(ANALYTICS_EVENT_NAMES.EXTERNAL_BUTTON_CLICKED, { ...event.data });
-      }
-    };
-    window.addEventListener('message', handleParentWindowMessages);
-
-    return () => {
-      window.removeEventListener('message', handleParentWindowMessages);
-    };
-  }, []);
 
   return (
     <div
@@ -79,10 +56,10 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       {isChatOpen ? (
         <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
       ) : (
-        <BottomBar
+        <EntryPointBottomBar
           handleSendUserMessage={handleSendMessage}
           handleOpenChat={handleOpenChat}
-          hideBottomBar={hideBottomBar}
+          hideBottomBar={shouldHideBottomBar}
         />
       )}
     </div>

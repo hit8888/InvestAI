@@ -33,12 +33,12 @@ const useAnalytics = () => {
         console.error("Failed to send analytics events:", error);
       }
     }, 10000),
-    [],
+    []
   );
 
   const trackEvent = (
     eventName: string,
-    properties: Record<string, unknown> = {},
+    properties: Record<string, unknown> = {}
   ) => {
     try {
       eventQueueRef.current.push({

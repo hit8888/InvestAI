@@ -1,3 +1,4 @@
+import { GetArtifactPayload } from '@meaku/core/types/api';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -7,14 +8,19 @@ interface State {
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   shouldEndArtifactImmediately: boolean;
   setShouldEndArtifactImmediately: (shouldEnd: boolean) => void;
-  isArtifactMaximized: boolean;
-  setIsArtifactMaximized: (value: boolean | ((prevState: boolean) => boolean)) => void;
-  handleToggleMaximizeArtifact: () => void;
+  activeArtifact: GetArtifactPayload | null;
+  setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
 }
-//TODO: Remove useArtifactStore;
+
 export const useArtifactStore = create<State>()(
   devtools(
     immer((set) => ({
+      activeArtifact: null,
+      setActiveArtifact: (artifact) => {
+        set((state) => {
+          state.activeArtifact = artifact;
+        });
+      },
       isArtifactPlaying: false,
       setIsArtifactPlaying: (isPlaying) => {
         set((state) => {
@@ -27,15 +33,6 @@ export const useArtifactStore = create<State>()(
           state.shouldEndArtifactImmediately = shouldEnd;
         });
       },
-      isArtifactMaximized: false,
-      setIsArtifactMaximized: (value) =>
-        set((draft) => {
-          draft.isArtifactMaximized = typeof value === 'function' ? value(draft.isArtifactMaximized) : value;
-        }),
-      handleToggleMaximizeArtifact: () =>
-        set((draft) => {
-          draft.isArtifactMaximized = !draft.isArtifactMaximized;
-        }),
     })),
   ),
 );

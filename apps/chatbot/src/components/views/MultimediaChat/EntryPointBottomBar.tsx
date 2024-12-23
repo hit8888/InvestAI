@@ -1,7 +1,8 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
+import { useTypewriter } from '@breakout/design-system/hooks/useTypewriter';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { Suggestion } from './Suggestion.tsx';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
@@ -9,36 +10,15 @@ import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 
 interface IProps {
-  handleSendUserMessage: (message: string) => void;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   handleOpenChat: () => void;
   hideBottomBar: boolean;
 }
 
-const useTypewriter = (text: string, speed = 50, repeatDelay = 3000) => {
-  const [index, setIndex] = useState(0);
-  const displayText = useMemo(() => text.slice(0, index), [index, text]);
-
-  useEffect(() => {
-    const handleTyping = () => {
-      if (index >= text.length) {
-        const resetTimeout = setTimeout(() => setIndex(0), repeatDelay);
-        return () => clearTimeout(resetTimeout);
-      }
-
-      const typingTimeout = setTimeout(() => setIndex((i) => i + 1), speed);
-      return () => clearTimeout(typingTimeout);
-    };
-
-    const cleanup = handleTyping();
-    return cleanup;
-  }, [index, text, speed, repeatDelay]);
-
-  return displayText;
-};
-
-const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IProps) => {
+const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -55,7 +35,7 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
     : (bottomBarConfig?.secondary_placeholder ?? 'Have a question? Ask here');
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
-    handleSendUserMessage(msg);
+    handleSendUserMessage({ message: msg });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.INITIAL_SUGGESTED_QUESTION_CLICKED, {
       message: msg,
       isChatOpen: false,
@@ -68,7 +48,7 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
     const trimmedInputValue = inputValue.trim();
     if (trimmedInputValue.length <= 0) return;
 
-    handleSendUserMessage(trimmedInputValue);
+    handleSendUserMessage({ message: trimmedInputValue });
     setInputValue('');
   };
 
@@ -144,4 +124,4 @@ const BottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenChat }: IPr
   );
 };
 
-export default BottomBar;
+export default EntryPointBottomBar;

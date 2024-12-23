@@ -2,10 +2,10 @@ import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
 import { ArtifactEnum } from '@meaku/core/types/chat';
 import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import { useMemo } from 'react';
-import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact';
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { cn } from '@breakout/design-system/lib/cn';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 interface IProps {
   artifactId: string;
@@ -20,8 +20,6 @@ const truncateText = (text: string, limit: number): string => {
 };
 
 const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
-  const localStorageArtifact = useLocalStorageArtifact();
-
   const { data, isError, isFetching } = useArtifactDataQuery({
     artifactId: artifactId,
     artifactType: artifactType ?? 'NONE',
@@ -30,6 +28,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
     },
   });
 
+  const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   const manager = useMemo(() => {
     if (!data) return null;
 
@@ -40,13 +39,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   const description = manager?.getArtifactDescription();
 
   const handleArtifactOnClick = () => {
-    if (!localStorageArtifact) {
-      return;
-    }
-    localStorageArtifact.handleUpdateArtifact({
-      activeArtifactId: artifactId,
-      activeArtifactType: artifactType,
-    });
+    setActiveArtifact({ artifactId, artifactType: artifactType ?? 'NONE' });
   };
 
   if (isError) return null;

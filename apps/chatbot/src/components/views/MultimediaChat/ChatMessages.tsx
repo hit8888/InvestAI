@@ -3,15 +3,15 @@ import { Message } from '@meaku/core/types/chat';
 import { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem';
 import { useMessageStore } from '../../../stores/useMessageStore';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 
 interface IProps {
   messages: Message[];
   showArtifact?: boolean;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
-const ChatMessage = (props: IProps) => {
-  const { messages, showArtifact = false } = props;
-
+const ChatMessages = ({ messages, showArtifact = false, handleSendUserMessage }: IProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
 
@@ -53,6 +53,7 @@ const ChatMessage = (props: IProps) => {
                 messageIndex={idx}
                 totalMessages={messages.length}
                 orbState={orbState}
+                handleSendUserMessage={handleSendUserMessage}
               />
             </>
           ))}
@@ -64,4 +65,4 @@ const ChatMessage = (props: IProps) => {
   );
 };
 
-export default ChatMessage;
+export default ChatMessages;

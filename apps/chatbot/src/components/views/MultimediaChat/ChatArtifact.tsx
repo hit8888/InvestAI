@@ -6,7 +6,7 @@ import {
 } from '@meaku/core/types/chat';
 import { memo, useMemo } from 'react';
 import { z } from 'zod';
-import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 import FormArtifact from './FormArtifact.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
@@ -16,11 +16,10 @@ interface IProps {
   artifact?: z.infer<typeof MessageArtifactSchema>;
   messageIndex: number;
   totalMessages: number;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
-const ChatArtifact = ({ artifact, messageIndex, totalMessages }: IProps) => {
-  const { handleSendUserMessage } = useWebSocketChat();
-
+const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMessage }: IProps) => {
   const artifactType = artifact?.artifact_type;
 
   const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;

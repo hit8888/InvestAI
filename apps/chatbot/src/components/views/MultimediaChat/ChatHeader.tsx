@@ -1,10 +1,10 @@
 import Button from '@breakout/design-system/components/layout/button';
 import { ArrowLeftIcon, XIcon } from 'lucide-react'; //TODO: Expos this for design system
-import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { useMemo } from 'react';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -12,11 +12,10 @@ interface IProps {
   handleFinishDemo: () => void;
 }
 
-const ChatHeader = (props: IProps) => {
-  const { handleSendMessage, handleFinishDemo, handleCloseChat } = props;
+const ChatHeader = ({ handleSendMessage, handleFinishDemo, handleCloseChat }: IProps) => {
   const { trackChatbotEvent } = useChatbotAnalytics();
 
-  const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
+  const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const ctaConfig = useUnifiedConfigurationResponseManager().getCTAConfig();
 
   const ctaText = useMemo(() => {
@@ -41,7 +40,7 @@ const ChatHeader = (props: IProps) => {
   return (
     <div className="flex items-center justify-between border-b border-white/10 p-2 shadow-sm ">
       <div>
-        {isArtifactMaximized ? (
+        {isMediaTakingFullWidth ? (
           <Button
             size="sm"
             onClick={handleFinishDemo}

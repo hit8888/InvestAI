@@ -1,20 +1,20 @@
 {
-  "agent_id": 1,
-  "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-  "prospect_id": "1548fafc-34ee-4d3c-9b6a-218ffc78ebc7",
+  "agent_id": 2,
+  "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+  "prospect_id": "98fb8ce6-7838-45a5-8a3d-8f6afc3de5ac",
   "configuration": {
-    "agent_id": 1,
+    "agent_id": 2,
     "agent_name": "Sam",
     "org_name": "Hacker Earth",
-    "logo": "https://meaku-static-files.s3.us-west-1.amazonaws.com/hackerearth-tenant/HE_identity_white.png",
+    "logo": null,
     "header": {
-      "title": "Hello !",
-      "sub_title": "Need help navigating HackerEarth? Our AI assistant is here to answer your questions."
+      "title": "",
+      "sub_title": ""
     },
     "body": {
-      "default_error_message": "\ud83d\udea8 An error occurred, and the chat was unexpectedly disrupted. Please contact us at support@hackerearth.com or +1-650-461-4192.",
+      "default_error_message": "",
       "welcome_message": {
-        "message": "Good afternoon, welcome to HackerEarth! I am Sam, I'm here to make your HackerEarth experience 100% more AI and 200% more fun. You can ask me anything.",
+        "message": "Welcome to HackerEarth! I am Sam, an AI rep. I can answer any questions you have about HackerEarth and our products and even show you demos. Give it a try, ask me anything!",
         "suggested_questions": [
           "How does HackerEarth prevent cheating?",
           "What kind of coding skills can HackerEarth assess?"
@@ -22,48 +22,297 @@
       },
       "disclaimer": null,
       "cta_config": {
-        "text": null,
-        "url": null,
-        "message": null
+        "text": "Book a demo"
       },
       "chat_history": [
         {
-          "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-          "response_id": "LF52fiwgRbb2dC-IgllzF",
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "1-P_DbJ2IdEBDB5ytxJoQ",
           "role": "user",
-          "message": "What does hackerearth do",
-          "timestamp": "2024-11-07T02:07:12.654",
-          "message_id": 11092,
+          "message": "How does HackerEarth prevent cheating?",
+          "timestamp": "2024-12-21T07:28:39.662",
+          "message_id": 17355,
           "documents": [],
           "analytics": {
             "buyer_intent_score": null
           },
-          "suggested_questions": []
+          "suggested_questions": [],
+          "artifacts": [],
+          "type": "text"
         },
         {
-          "session_id": "b989fe38-21f3-403f-8f73-1230f2f48692",
-          "response_id": "LF52fiwgRbb2dC-IgllzF",
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "1-P_DbJ2IdEBDB5ytxJoQ",
           "role": "ai",
-          "message": "HackerEarth is an AI-powered developer assessment platform that helps organizations evaluate a developer's skills through online coding tests. It offers a skill-based approach, allowing companies to generate standardized tests based on various skills and accurately measure performance. \n\nAdditionally, HackerEarth hosts a community of over 7.6 million developers, providing opportunities for skill enhancement and job discovery. The platform also facilitates virtual hackathons, enabling organizations to engage with developers globally and drive innovation.\n\nFor more details, you can visit [HackerEarth's coding assessments page](https://www.hackerearth.com/recruit/coding-assessments) or [hackathons page](https://www.hackerearth.com/recruit/hackathons). \ud83d\ude80\n\n---\nTo help me answer you in a personalized way, do you mind sharing your name? \ud83d\ude0a",
-          "timestamp": "2024-11-07T02:07:15.036",
-          "message_id": 11093,
+          "message": "Good afternoon! \ud83d\ude0a HackerEarth employs advanced proctoring settings to ensure the integrity of assessments. These include:\n\n- **Webcam Monitoring**: Observes candidates during tests to prevent external assistance.\n- **Screen Recording**: Captures screen activity to detect unauthorized software usage.\n- **Keystroke Tracking**: Monitors keystrokes to identify suspicious behavior.\n\nThese features collectively ensure a fair and unbiased testing environment. For more details, you can visit our [overview page](https://help.hackerearth.com/hc/en-us/articles/360003266273-overview).",
+          "timestamp": "2024-12-21T07:28:39.662",
+          "message_id": 17356,
+          "documents": [
+            {
+              "id": 6546,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Overview\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/360003266273-overview",
+              "text": "<>\n<title>\n      Overview\n    </title>\n<body>\n#### 3. Diverse platform\n\nHackerEarth Assessment is a versatile platform that allows you to assess candidates in over 38 different programming languages. This feature makes it easier for you to find candidates with the specific technical skills that your organization needs. The diverse platform also includes a range of question types and difficulty levels, enabling you to create customized tests that accurately assess a candidate's skills. Additionally, you can upload your own questions to create a tailor-made test that meets your specific requirements. The diverse platform ensures that candidates are evaluated based on their technical skills, making it easier for you to identify the right fit for your team.\n\n#### 4. Advanced proctoring settings for assessments\n\nAdvanced proctoring settings for assessments ensure that the tests are conducted in a fair and unbiased manner. HackerEarth Assessment provides best-in-class proctoring mechanisms to prevent cheating and ensure the integrity of the tests. These mechanisms include features such as webcam monitoring, screen recording, and keystroke tracking.\n\nWebcam monitoring allows you to monitor the candidate's actions during the test. This ensures that the candidate is not looking at external resources, talking to someone else, or using any other unfair means during the test. The screen recording feature captures the candidate's screen activity during the test. This helps you identify any suspicious activity or unauthorized software usage. Keystroke tracking records the keystrokes made by the candidate during the test. This feature helps you identify any suspicious activity or unauthorized software usage.\n</body>\n</>",
+              "similarity_score": 0.6362005309819587
+            },
+            {
+              "id": 5458,
+              "data_source_id": 1,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "The Science Behind HackerEarth Assessments - Resources for technical recruitment",
+              "url": "https://www.hackerearth.com/recruit/science",
+              "text": "<>\n<title>The Science Behind HackerEarth Assessments - Resources for technical recruitment</title>\n<body>\n##### FAQs\n\n#### Does HackerEarth provide support for local validation and ongoing test maintenance?\n\nYes! Our experienced team of partner I/O psychologists can guide you through local validation studies and assist in maintaining your assessment programs over time.\n\n#### Does HackerEarth provide support in conducting a criterion study?\n\nYes! HackerEarth's Customer Success Manager works with its partner I/O psychologists to guide you on how to put together a criterion study, including appropriate test setup, collecting survey results and publishing reports.\n\n#### Do you assist with adverse impact analyses?\n\nAbsolutely! We have experts to advise on methodology, conduct statistical significance tests (like Z-tests to check for pass rates of different genders to understand how assessments are affecting diversity hiring), and support you through the entire analysis process.\n\n#### Can I customize your certified assessments?\n\nDefinitely! You can adjust them by adding/removing skills. For more specific question selection, work with our Customer Success and Professional Services teams.\n\n#### How do you ensure the integrity of test scores?\n\nWe prioritize both deterrence and monitoring. Our proctoring and plagiarism features promote fairness, and certified assessments actively replace leaked questions, minimizing opportunities for outside help.\n</body>\n</>",
+              "similarity_score": 0.6317322254181088
+            },
+            {
+              "id": 5457,
+              "data_source_id": 1,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "The Science Behind HackerEarth Assessments - Resources for technical recruitment",
+              "url": "https://www.hackerearth.com/recruit/science",
+              "text": "<>\n<title>The Science Behind HackerEarth Assessments - Resources for technical recruitment</title>\n<body>\n##### Meet our test validation and certification partners - ioPredict\n\nHackerEarth has partnered with ioPredict, a California-based company specializing in psychometric analysis and test validation, to ensure the highest level of validity and reliability in our coding tests. ioPredict's advanced statistical models and psychometric analysis tools assess the difficulty, discrimination power, and overall effectiveness of our coding assessments.\n\nThe process helps identify and address any potential biases in the questions, ensuring fair and equitable assessments for all candidates.\n\nLet our certified assessments beat your tech hiring blues\n\n#### Proven methodology\n\n- All tests are frameworked using established test theory principles and regularly vetted by experts\n- Industry-specific content that is rigorously tested for relevance and accuracy\n\n#### Continuous improvement\n\n- Advanced statistical algorithms analyze key indicators for regular improvement\n- Metrics like Cronbach's alpha track the consistency of questions\n\n#### Job success prediction\n\n- Test content is verified to ensure it measures the relevant skills for the specified job role\n- Customer feedback on hired candidates informs the predictive validity of each test\n\n##### Code doesn't know any bias\n\nAn adverse impact study of HackerEarth assessments revealed that our tests do not carry any implicit biases. The test revealed that there were no statistically significant differences in test performances between test takers of different genders, ages, pedigree or ethnicity.\n\n##### FAQs\n\n#### Does HackerEarth provide support for local validation and ongoing test maintenance?\n</body>\n</>",
+              "similarity_score": 0.629953704479126
+            }
+          ],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [
+            {
+              "artifact_type": "SLIDE_IMAGE",
+              "artifact_id": "acaa5003-2ca0-4caa-80ae-90151b99013a"
+            },
+            {
+              "artifact_type": "SUGGESTIONS",
+              "artifact_id": "cdcb9488-ef8d-4b90-ad4d-21e8136df39f"
+            }
+          ],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "AU9vfs-4JHL8yv1F56AXK",
+          "role": "user",
+          "message": "Can I customize the proctoring settings?",
+          "timestamp": "2024-12-21T07:28:50.254",
+          "message_id": 17357,
           "documents": [],
           "analytics": {
             "buyer_intent_score": null
           },
-          "suggested_questions": []
+          "suggested_questions": [],
+          "artifacts": [],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "AU9vfs-4JHL8yv1F56AXK",
+          "role": "ai",
+          "message": "Absolutely! HackerEarth allows you to customize proctoring settings to suit your specific needs. You can enable features like the Smart Browser, random question shuffling, ID verification, and more. These settings can be adjusted in the Proctoring Settings section of your test setup. For detailed steps on enabling these settings, you can refer to our [guide on enabling proctoring settings](https://help.hackerearth.com/hc/en-us/articles/360003097113-enabling-proctoring-settings).\n\nHere\u2019s a video that might be relevant. In this video, you will get to know about the anti-cheating settings available for online tests, including features like smart browser restrictions, ID verification, and more.",
+          "timestamp": "2024-12-21T07:28:50.254",
+          "message_id": 17358,
+          "documents": [
+            {
+              "id": 6353,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Proctoring settings\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/360002987633-proctoring-settings",
+              "text": "<>\n<title>\n      Proctoring settings\n    </title>\n<body>\n# Proctoring settings\n\nYou can enable one or all of the following proctoring settings to ensure that your test is plagiarism-free.\n\n## Smart Browser \n\nYou can enable Smart Browser to enforce stricter proctoring settings in your assessments. Smart Browser provides various features that will help you enable stricter proctoring settings in your assessments. When you select the Smart Browser setting, some of the settings are selected by default, along with the addition of new ones.\n\n## Random questions shuffling\n\nYou can enable random question shuffling in the proctoring settings. This will change the order of the questions for each candidate when they start the assessment, making it difficult for candidates to use unfair practices.\n\n## Surprise question\n\nYou can enable Surprise question in the proctoring settings. The surprise question will be randomly generated based on the questions that the candidate attempted during the assessment. Candidates will be shown the surprise question only when they have attempted or skipped all other questions in the test. Candidates must answer the question by writing a subjective-type text answer. This feature helps to determine if candidates truly understand the approach to the questions they have answered, aiding in detecting any potential unfair practices they may have used.\n\n## Disable the Copy and Paste feature in the code editor\n\nWhen this setting is enabled, a candidate cannot copy the code (for example, from the Web or a local computer) and paste it into the code editor.\n</body>\n</>",
+              "similarity_score": 0.669554075207681
+            },
+            {
+              "id": 6902,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Enabling proctoring settings\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/360003097113-enabling-proctoring-settings",
+              "text": "<>\n<title>\n      Enabling proctoring settings\n    </title>\n<body>\n# Enabling proctoring settings\n\nEnabling proctoring settings\n============================\n\nTo enable proctoring settings, follow these steps:\n\n1. In the **Test Details** section, click **Overview.**\n2. Navigate to the **Proctoring Settings** section. Click **Edit.**\n3. Select the proctoring setting that you want to enable for the test.\n4. Click **Save.**\n\nYou have successfully enabled proctoring settings for your test.\n</body>\n</>",
+              "similarity_score": 0.6683891217940534
+            },
+            {
+              "id": 6697,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Advanced proctoring settings - Smart Browser\n    ",
+              "url": "https://help.hackerearth.com/advanced-proctoring-settings-smart-browser",
+              "text": "<>\n<title>\n      Advanced proctoring settings - Smart Browser\n    </title>\n<body>\n# Advanced proctoring settings - Smart Browser\n\n### Overview\n\nHackerEarth has introduced advanced proctoring settings that force candidates to attempt a test in a HackerEarth desktop application with stricter proctoring features than those provided by our browser test environment. This is done to offer stricter proctoring settings that can be instilled in the platform so that you can be assured about the proctoring of the tests you are conducting on our platform. \n\n### Benefits of Smart Browser\n\nSeveral new proctoring settings have been introduced in the smart browser to incorporate stricter proctoring settings in the test. The smart browser or desktop application will prevent the following candidate actions:\n\n* Screensharing the test window\n* Keeping other applications open during the test\n* Resizing the test window\n* Using multiple monitors during the test\n* Taking screenshots of the test window\n* Recording the test window\n* Restrict keystrokes that are as follows:\n    * All function keys and combos involving these keys ex: F1, F5 + Alt\n    * Alt + Tab\n    * Ctrl + Alt + Delete\n    * Ctrl + V\n    * Ctrl + C\n    * OS superkeys and combos involving these keys ex: Windows Key, Mac Command Key, Windows Key + C\n* Viewing OS notifications\n* Running the test window within a Virtual Machine\n* Usage of browser developer tools\n</body>\n</>",
+              "similarity_score": 0.6351402619397495
+            }
+          ],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [
+            {
+              "artifact_type": "VIDEO",
+              "artifact_id": "652a079f-0a5c-4261-a68a-d74c21105d65"
+            },
+            {
+              "artifact_type": "SUGGESTIONS",
+              "artifact_id": "7c46f317-c43a-42c7-8bca-ff0b350efdaa"
+            }
+          ],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "Ll5JTa-y_Aw1W9p9aevhS",
+          "role": "user",
+          "message": "How to create tests?",
+          "timestamp": "2024-12-21T07:29:08.291",
+          "message_id": 17359,
+          "documents": [],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "Ll5JTa-y_Aw1W9p9aevhS",
+          "role": "ai",
+          "message": "Creating tests on HackerEarth is straightforward. Here's a quick guide:\n\n1. Log in to your HackerEarth account.\n2. Click on **Assessments**.\n3. Select **Create a new test**.\n4. Choose a job role or create a new one to tailor the test to specific skills.\n5. Decide how to add questions: automatically or manually.\n6. Adjust settings like test name, experience level, and duration.\n7. Click **Create test** to finalize.\n\nHackerEarth will automatically select questions based on the chosen skills, ensuring a comprehensive assessment.\n\nHere\u2019s a video that might be relevant. In this video, you will get to know the step-by-step process of creating a test on HackerEarth, including selecting roles, skills, and setting test parameters.",
+          "timestamp": "2024-12-21T07:29:08.291",
+          "message_id": 17360,
+          "documents": [
+            {
+              "id": 6742,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating custom tests\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/360003687953-creating-custom-tests",
+              "text": "<>\n<title>\n      Creating custom tests\n    </title>\n<body>\n# Creating custom tests\n\nTo create a new custom test, follow these steps:\n\n1. Log in to your HackerEarth account.\n\n2. Click **Assessments**.\n\n3. Click **Create a new test**.\n\n4. Select the job role for which you want to create the test. Selecting the job role is important because it helps us to create a relevant test for the selected job role. For example, you select **Backend Developer - Spring** as the job role.\n\n**Note**: You can also create a new role by clicking **Create new role.** If you create a new role, you can customize the skills for the test. This role can be reused later.\n\n5. You will be asked to select how would you like to add questions. Select Manually to create a Custom test that will help you to create a customized test where you can add the questions on your own.\n\n6. Click **Create test.** Your custom test will be created.\n</body>\n</>",
+              "similarity_score": 0.6533872278563527
+            },
+            {
+              "id": 6229,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating a new test\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/12337541167513-creating-a-new-test",
+              "text": "<>\n<title>\n      Creating a new test\n    </title>\n<body>\n# Creating a new test\n\nHackerEarth has introduced an improved process to create a new test. This will help you to create tests in a simple and quick manner. HackerEarth provides you with the following ways to create a test:\n\n1. Test based on job role\n2. Test based on the job description\n3. Custom test\n\nThe new process combines all three ways into one and makes the test creation process easy and quick.\n\n### Creating a new test\n\nTo create a new test, follow these steps:\n\n1. Log in to your HackerEarth account.\n2. Click **Assessments**.\n3. Click **Create a new test**.\n\n4. Select the job role for which you want to create the test. Selecting the job role is important because it helps us to create a relevant test for the selected job role. For example, you select **Backend Developer - Spring** as the job role.\n\nYou can also create a new role by clicking **Create new role.** If you create a new role, you can customize the skills for the test. This role can be reused later.\n\n5. You will be asked to select how would you like to add questions. If you select **Automatically,** the **recommended skills for the job role** will be auto-selected which can be modified by you. You can select a maximum of 5 skills.\n</body>\n</>",
+              "similarity_score": 0.6250831075037455
+            },
+            {
+              "id": 6230,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating a new test\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/12337541167513-creating-a-new-test",
+              "text": "<>\n<title>\n      Creating a new test\n    </title>\n<body>\nIf you select Manually (Custom test), you can directly click **Create test to create** a customized test where you can add the questions on your own.\n\n6. You can also add more skills by clicking.\n\nYou can create tests where the skills are directly imported from the job description. Click **Import skills from Job description.** You can either upload the Job description or enter the Job description in the text area. We will automatically import skills for the relevant job role from the given job description. If more than 5 skills are detected in the Job description, you will need to choose 5 skills to create the test before proceeding to the next step.\n\n7. Click **Continue.**\n8. You can modify the settings of your assessment by entering the test name, Experience, test duration, and the relevant tags for the test.\n\n9. Click **Create test.** Your test will be created.\n\nHackerEarth will try to create the test with questions from the HackerEarth library. If we are unable to find enough questions for the test from our library then you can contact support@hackerearth.com to request additional content.\n</body>\n</>",
+              "similarity_score": 0.5906284099442725
+            }
+          ],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [
+            {
+              "artifact_type": "VIDEO",
+              "artifact_id": "62c3b0c5-abbd-41bc-b918-ad396fa5712c"
+            },
+            {
+              "artifact_type": "SUGGESTIONS",
+              "artifact_id": "bd68777a-ad4c-4533-a047-3085241d947f"
+            }
+          ],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "CWRWtHPhJYw5jnLxVN9XB",
+          "role": "user",
+          "message": "How to create tests?",
+          "timestamp": "2024-12-21T07:31:25.684",
+          "message_id": 17361,
+          "documents": [],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [],
+          "type": "text"
+        },
+        {
+          "session_id": "cbff95ca-5dea-4931-8e1e-f78ccfaa28b8",
+          "response_id": "CWRWtHPhJYw5jnLxVN9XB",
+          "role": "ai",
+          "message": "Creating tests on HackerEarth is simple and efficient. Here's how you can do it:\n\n1. Log in to your HackerEarth account.\n2. Navigate to **Assessments**.\n3. Click on **Create a new test**.\n4. Select a job role or create a new one to customize the test.\n5. Choose how to add questions: automatically or manually.\n6. Set the test name, experience level, and duration.\n7. Click **Create test** to complete the process.\n\nHackerEarth will automatically select questions based on the skills chosen, ensuring a comprehensive test.\n\nHere\u2019s a video that might be relevant. In this video, you will get to know the step-by-step process of creating a test on HackerEarth, including selecting roles, skills, and setting test parameters.",
+          "timestamp": "2024-12-21T07:31:25.684",
+          "message_id": 17362,
+          "documents": [
+            {
+              "id": 6742,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating custom tests\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/360003687953-creating-custom-tests",
+              "text": "<>\n<title>\n      Creating custom tests\n    </title>\n<body>\n# Creating custom tests\n\nTo create a new custom test, follow these steps:\n\n1. Log in to your HackerEarth account.\n\n2. Click **Assessments**.\n\n3. Click **Create a new test**.\n\n4. Select the job role for which you want to create the test. Selecting the job role is important because it helps us to create a relevant test for the selected job role. For example, you select **Backend Developer - Spring** as the job role.\n\n**Note**: You can also create a new role by clicking **Create new role.** If you create a new role, you can customize the skills for the test. This role can be reused later.\n\n5. You will be asked to select how would you like to add questions. Select Manually to create a Custom test that will help you to create a customized test where you can add the questions on your own.\n\n6. Click **Create test.** Your custom test will be created.\n</body>\n</>",
+              "similarity_score": 0.6533872278563527
+            },
+            {
+              "id": 6229,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating a new test\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/12337541167513-creating-a-new-test",
+              "text": "<>\n<title>\n      Creating a new test\n    </title>\n<body>\n# Creating a new test\n\nHackerEarth has introduced an improved process to create a new test. This will help you to create tests in a simple and quick manner. HackerEarth provides you with the following ways to create a test:\n\n1. Test based on job role\n2. Test based on the job description\n3. Custom test\n\nThe new process combines all three ways into one and makes the test creation process easy and quick.\n\n### Creating a new test\n\nTo create a new test, follow these steps:\n\n1. Log in to your HackerEarth account.\n2. Click **Assessments**.\n3. Click **Create a new test**.\n\n4. Select the job role for which you want to create the test. Selecting the job role is important because it helps us to create a relevant test for the selected job role. For example, you select **Backend Developer - Spring** as the job role.\n\nYou can also create a new role by clicking **Create new role.** If you create a new role, you can customize the skills for the test. This role can be reused later.\n\n5. You will be asked to select how would you like to add questions. If you select **Automatically,** the **recommended skills for the job role** will be auto-selected which can be modified by you. You can select a maximum of 5 skills.\n</body>\n</>",
+              "similarity_score": 0.6250831075037455
+            },
+            {
+              "id": 6230,
+              "data_source_id": 2,
+              "data_source_type": "WEB_PAGE",
+              "data_source_name": null,
+              "title": "\n      Creating a new test\n    ",
+              "url": "https://help.hackerearth.com/hc/en-us/articles/12337541167513-creating-a-new-test",
+              "text": "<>\n<title>\n      Creating a new test\n    </title>\n<body>\nIf you select Manually (Custom test), you can directly click **Create test to create** a customized test where you can add the questions on your own.\n\n6. You can also add more skills by clicking.\n\nYou can create tests where the skills are directly imported from the job description. Click **Import skills from Job description.** You can either upload the Job description or enter the Job description in the text area. We will automatically import skills for the relevant job role from the given job description. If more than 5 skills are detected in the Job description, you will need to choose 5 skills to create the test before proceeding to the next step.\n\n7. Click **Continue.**\n8. You can modify the settings of your assessment by entering the test name, Experience, test duration, and the relevant tags for the test.\n\n9. Click **Create test.** Your test will be created.\n\nHackerEarth will try to create the test with questions from the HackerEarth library. If we are unable to find enough questions for the test from our library then you can contact support@hackerearth.com to request additional content.\n</body>\n</>",
+              "similarity_score": 0.5906284099442725
+            }
+          ],
+          "analytics": {
+            "buyer_intent_score": null
+          },
+          "suggested_questions": [],
+          "artifacts": [
+            {
+              "artifact_type": "VIDEO",
+              "artifact_id": "7b97a71f-43f0-45cb-a96f-7ae5474c2006"
+            },
+            {
+              "artifact_type": "SUGGESTIONS",
+              "artifact_id": "c0c9427a-d33c-41ef-9b17-ca004cca68db"
+            }
+          ],
+          "type": "text"
         }
       ],
-      "feedback": []
+      "feedback": [],
+      "bottom_bar_config": {
+        "primary_placeholder": "Have a question? Ask here",
+        "secondary_placeholder": "Ready to explore skills or hackathons?"
+      }
     },
-    "style_config": {
-      "card": "#DBDEE8",
-      "primary": "#262B4B",
-      "secondary": "#f8f9fa",
-      "card_foreground": "#2D3355",
-      "primary_foreground": "#FEFEFE",
-      "secondary_foreground": "#000"
-    },
+    "style_config": {},
     "whitelisted_domains": []
   }
 }

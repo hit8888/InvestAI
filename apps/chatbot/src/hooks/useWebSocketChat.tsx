@@ -1,10 +1,8 @@
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { ChatParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
-import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
-import { AIResponse, SplitScreenArtifactType } from '@meaku/core/types/chat';
+import { AIResponse } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -19,6 +17,12 @@ import useChatbotAnalytics from './useChatbotAnalytics.tsx';
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
+
+export interface IWebSocketHandleMessage {
+  message: string;
+  eventType?: string;
+  eventData?: Record<string, unknown>;
+}
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
@@ -45,7 +49,6 @@ const useWebSocketChat = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { trackChatbotEvent: trackEvent } = useChatbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
-  const artifact = useLocalStorageArtifact();
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
@@ -66,7 +69,7 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
   const handleSendUserMessage = useCallback(
-    async (message: string, eventType?: string, eventData?: Record<string, unknown>) => {
+    async ({ message, eventType, eventData }: IWebSocketHandleMessage) => {
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
       if (!hasFirstUserMessageBeenSent) {
@@ -105,8 +108,9 @@ const useWebSocketChat = () => {
   );
 
   const handlePrimaryCta = () => {
-    handleSendUserMessage('I want to book a demo for the product.');
+    handleSendUserMessage({ message: 'I want to book a demo for the product.' });
   };
+
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -119,21 +123,6 @@ const useWebSocketChat = () => {
 
       if (response.is_complete) {
         setIsAMessageBeingProcessed(false);
-      }
-
-      const { artifacts } = response;
-
-      const activeArtifact = artifacts.find((artifact) =>
-        SplitScreenArtifactEnumSchema.options.includes(artifact.artifact_type as SplitScreenArtifactType),
-      );
-
-      if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
-        if (artifact.handleUpdateArtifact) {
-          artifact.handleUpdateArtifact({
-            activeArtifactId: activeArtifact.artifact_id,
-            activeArtifactType: activeArtifact.artifact_type,
-          });
-        }
       }
     } catch (error) {
       trackError(error, {
@@ -177,7 +166,7 @@ const useWebSocketChat = () => {
     };
   }, []); //Cleanup effect
 
-  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage };
+  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage, lastMessage };
 };
 
 export default useWebSocketChat;
