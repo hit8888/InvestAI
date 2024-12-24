@@ -2,7 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import DemoContent from './DemoContent';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import Button from '@breakout/design-system/components/layout/button';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
@@ -28,8 +28,7 @@ const Demo = ({
   setDemoPlayingStatus,
   activeArtifact,
 }: IProps) => {
-  const [isGeneratingDemo, setIsGeneratingDemo] = useState<boolean>(false);
-  const isFirstStep = !demoDetails && isDemoAvailable; //case when BE just sends demo_available and no demo_details.FE sends back DEMO_NEXT to get the subsequent step
+  console.log({ demoDetails });
 
   const handleStepEnd = () => {
     if (demoDetails?.is_end) {
@@ -40,34 +39,41 @@ const Demo = ({
   };
 
   const onBookDemoClick = () => {
-    setIsGeneratingDemo(true);
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: {} });
+    setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
   };
 
   useEffect(() => {
-    if (demoDetails && isGeneratingDemo) {
-      setIsGeneratingDemo(false);
+    if (demoDetails && demoPlayingStatus === DemoPlayingStatus.GENRATING_DEMO) {
+      setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
     }
   }, [demoDetails]);
 
-  if (activeArtifact) {
+  if (activeArtifact || !isDemoAvailable) {
     return null;
   }
+  console.log({ demoPlayingStatus, demoDetails });
 
-  if (isFirstStep || demoPlayingStatus === DemoPlayingStatus.FINISHED) {
+  if (demoPlayingStatus === DemoPlayingStatus.INITIAL) {
     return (
       <div className="col-span-2 mr-2 pl-2">
         <div className="flex h-full w-full items-center justify-center">
-          {isGeneratingDemo ? (
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-primary">Hold on. Creating demo</span>
-              <div className=" animate-spin ">
-                <Loader color="rgb(var(--primary)" />
-              </div>
+          <Button onClick={onBookDemoClick}>Show demo</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (demoPlayingStatus === DemoPlayingStatus.GENRATING_DEMO) {
+    return (
+      <div className="col-span-2 mr-2 pl-2">
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-primary">Hold on. Creating demo</span>
+            <div className=" animate-spin ">
+              <Loader color="rgb(var(--primary)" />
             </div>
-          ) : (
-            <Button onClick={onBookDemoClick}>Show demo</Button>
-          )}
+          </div>
         </div>
       </div>
     );

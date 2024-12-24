@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, memo, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import { DemoQuestions } from './DemoQuestions';
@@ -15,6 +15,7 @@ interface IProps {
 const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd }: IProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isQueryRaisedRef = useRef(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleAudioEnd = () => {
     if (isQueryRaisedRef.current) {
@@ -28,21 +29,22 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
+    if (!audio) return;
 
-    if (audio) {
-      if (audio.paused) {
-        audio
-          .play()
-          .then(() => {
-            setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-          })
-          .catch((error) => {
-            console.error('Error playing audio:', error);
-          });
-      } else {
-        audio.pause();
-        setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
-      }
+    if (audio.paused) {
+      setDemoPlayingStatus(DemoPlayingStatus.PLAYING); // This might be premature
+      audio
+        .play()
+        .then(() => {
+          setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
+        })
+        .catch((error) => {
+          console.error('Error playing audio:', error);
+          setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+        });
+    } else {
+      audio.pause();
+      setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }
   };
 
@@ -57,36 +59,39 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   };
 
   useEffect(() => {
-    if (!demoDetails?.audio_url) {
+    if (!demoDetails?.audio_url || (demoDetails.asset_url && !isImageLoaded)) {
       return;
     }
-    if (audioRef.current && audioRef.current.src === demoDetails?.audio_url) {
+
+    if (audioRef.current?.src === demoDetails.audio_url && !audioRef.current.paused) {
       return;
     }
-    setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
 
     const newAudio = new Audio(demoDetails.audio_url);
-
     audioRef.current = newAudio;
+
+    // Add ended event listener right after creating audio
+    newAudio.addEventListener('ended', handleAudioEnd);
 
     newAudio.load();
     newAudio.currentTime = 0;
-    newAudio.play().catch((error) => {
-      console.error('Error playing audio:', error);
-      onStepEnd();
-    });
-  }, [demoDetails?.audio_url]);
+    newAudio
+      .play()
+      .then(() => {
+        setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
+      })
+      .catch((error) => {
+        console.error('Error playing audio:', error);
+        setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+        onStepEnd();
+      });
 
-  useEffect(() => {
-    const audioElement = audioRef.current;
-    if (audioElement) {
-      audioElement.addEventListener('ended', handleAudioEnd);
-
-      return () => {
-        audioElement.removeEventListener('ended', handleAudioEnd);
-      };
-    }
-  }, [audioRef.current]);
+    return () => {
+      newAudio.removeEventListener('ended', handleAudioEnd);
+      newAudio.pause();
+      audioRef.current = null;
+    };
+  }, [demoDetails?.audio_url, isImageLoaded]);
 
   const handleRaiseDemoQuery = (queryRaised: boolean) => {
     isQueryRaisedRef.current = queryRaised;
@@ -99,8 +104,16 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   return (
     <>
-      <div className={'relative h-[90%] w-full max-w-full transition-all duration-300 ease-in-out'}>
-        <img className="h-full w-full object-cover" src={demoDetails.asset_url} alt={demoDetails.message} />
+      <div className={'relative aspect-video h-[90%] w-full max-w-full'}>
+        <img
+          className={`h-full w-full object-cover transition-opacity duration-300 ease-in-out ${
+            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          src={demoDetails.asset_url}
+          alt={demoDetails.message}
+          loading="lazy"
+          onLoad={() => setIsImageLoaded(true)}
+        />
       </div>
       <ArtifactControls
         isPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}

@@ -25,14 +25,14 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
-  const [demoPlayingStatus, setDemoPlayingStatus] = useState<DemoPlayingStatus>(DemoPlayingStatus.PAUSED);
+  const [demoPlayingStatus, setDemoPlayingStatus] = useState<DemoPlayingStatus>(DemoPlayingStatus.INITIAL);
 
   const messages = useMessageStore((state) => state.messages);
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);
-    setDemoPlayingStatus(DemoPlayingStatus.FINISHED);
+    setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
 
