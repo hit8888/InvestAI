@@ -7,18 +7,18 @@ import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 
 interface IProps {
   messages: Message[];
-  showArtifact?: boolean;
+  showRightPanel?: boolean;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   initialSuggestedQuestions: string[];
-  allowFullWidthForMesages: boolean;
+  allowFullWidthForText: boolean;
 }
 
 const ChatMessages = ({
   messages,
-  showArtifact = false,
+  showRightPanel = false,
   handleSendUserMessage,
   initialSuggestedQuestions,
-  allowFullWidthForMesages,
+  allowFullWidthForText,
 }: IProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -43,13 +43,13 @@ const ChatMessages = ({
   return (
     <div
       className={cn('col-span-3 flex-1 overflow-y-auto', {
-        'col-span-1': showArtifact,
+        'col-span-1': showRightPanel,
       })}
     >
       <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto p-2">
         <div
           className={cn('mx-auto h-full w-full', {
-            'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showArtifact && !allowFullWidthForMesages,
+            'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
           })}
         >
           {messages.map((message, idx) => (

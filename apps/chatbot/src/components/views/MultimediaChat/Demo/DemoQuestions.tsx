@@ -139,10 +139,10 @@ export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat
           </div>
           <ChatMessages
             messages={messages}
-            showArtifact={false}
+            showRightPanel={false}
             handleSendUserMessage={handleSendUserMessage}
             initialSuggestedQuestions={[]}
-            allowFullWidthForMesages={true}
+            allowFullWidthForText={true}
           />
           <ChatInput
             handleSendMessage={(message) => handleSendUserMessage({ message })}

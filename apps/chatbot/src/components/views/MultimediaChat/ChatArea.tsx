@@ -37,13 +37,14 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
   };
 
   const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
-  console.log({ activeArtifact });
+
+  const showMediaPanel = !!activeArtifact || isDemoAvailable || !!demoDetails;
   return (
     <div
       className={cn(
         'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
         {
-          'w-full': activeArtifact,
+          'w-full': showMediaPanel,
         },
       )}
     >
@@ -55,16 +56,16 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
         />
         <div
           className={cn('flex-1 overflow-y-auto', {
-            'grid grid-cols-3 gap-8': !!activeArtifact,
+            'grid grid-cols-3 gap-8': showMediaPanel,
           })}
         >
           {!isMediaTakingFullWidth && (
             <ChatMessages
               messages={messages}
-              showArtifact={!!activeArtifact}
+              showRightPanel={showMediaPanel}
               handleSendUserMessage={handleSendMessage}
               initialSuggestedQuestions={initialSuggestedQuestions}
-              allowFullWidthForMesages={false}
+              allowFullWidthForText={false}
             />
           )}
 

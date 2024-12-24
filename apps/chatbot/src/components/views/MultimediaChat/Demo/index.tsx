@@ -49,17 +49,19 @@ const Demo = ({
 
   if (isFirstStep || demoPlayingStatus === DemoPlayingStatus.FINISHED) {
     return (
-      <div className="col-span-2 flex h-full w-full items-center justify-center">
-        {isGeneratingDemo ? (
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-primary">Hold on. Creating demo</span>
-            <div className=" animate-spin ">
-              <Loader color="rgb(var(--primary)" />
+      <div className="col-span-2 mr-2 pl-2">
+        <div className="flex h-full w-full items-center justify-center">
+          {isGeneratingDemo ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-primary">Hold on. Creating demo</span>
+              <div className=" animate-spin ">
+                <Loader color="rgb(var(--primary)" />
+              </div>
             </div>
-          </div>
-        ) : (
-          <Button onClick={onBookDemoClick}>Show demo</Button>
-        )}
+          ) : (
+            <Button onClick={onBookDemoClick}>Show demo</Button>
+          )}
+        </div>
       </div>
     );
   }
