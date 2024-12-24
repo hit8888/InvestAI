@@ -7,6 +7,7 @@ import { ScriptStepType } from '@meaku/core/types/chat';
 import Button from '@breakout/design-system/components/layout/button';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { Loader } from 'lucide-react';
+import { GetArtifactPayload } from '@meaku/core/types/api';
 
 interface IProps {
   handleFinishDemo: () => void;
@@ -15,6 +16,7 @@ interface IProps {
   isDemoAvailable: boolean;
   demoPlayingStatus: DemoPlayingStatus;
   setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
+  activeArtifact: GetArtifactPayload | null;
 }
 
 const Demo = ({
@@ -24,6 +26,7 @@ const Demo = ({
   isDemoAvailable,
   demoPlayingStatus,
   setDemoPlayingStatus,
+  activeArtifact,
 }: IProps) => {
   const [isGeneratingDemo, setIsGeneratingDemo] = useState<boolean>(false);
   const isFirstStep = !demoDetails && isDemoAvailable; //case when BE just sends demo_available and no demo_details.FE sends back DEMO_NEXT to get the subsequent step
@@ -46,6 +49,10 @@ const Demo = ({
       setIsGeneratingDemo(false);
     }
   }, [demoDetails]);
+
+  if (activeArtifact) {
+    return null;
+  }
 
   if (isFirstStep || demoPlayingStatus === DemoPlayingStatus.FINISHED) {
     return (

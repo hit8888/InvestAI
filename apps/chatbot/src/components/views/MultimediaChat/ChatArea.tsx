@@ -85,6 +85,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
             handleSendMessage={handleSendMessage}
             demoPlayingStatus={demoPlayingStatus}
             setDemoPlayingStatus={setDemoPlayingStatus}
+            activeArtifact={activeArtifact}
           />
         </div>
         {!isMediaTakingFullWidth && (
