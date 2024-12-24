@@ -10,6 +10,9 @@ import { DemoEvent } from '@meaku/core/types/webSocket';
 import { useUpdateActiveArtifactOnNewMessage } from '../../../hooks/useUpdateActiveArtifactOnNewMessage.ts';
 import { Demo } from './Demo/index.tsx';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { useState } from 'react';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -22,10 +25,14 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const [demoPlayingStatus, setDemoPlayingStatus] = useState<DemoPlayingStatus>(DemoPlayingStatus.PAUSED);
+
   const messages = useMessageStore((state) => state.messages);
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);
+    setDemoPlayingStatus(DemoPlayingStatus.FINISHED);
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
 
@@ -56,10 +63,12 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
               messages={messages}
               showArtifact={!!activeArtifact}
               handleSendUserMessage={handleSendMessage}
+              initialSuggestedQuestions={initialSuggestedQuestions}
+              allowFullWidthForMesages={false}
             />
           )}
 
-          {!isDemoAvailable && !!activeArtifact && (
+          {!isDemoAvailable && !demoDetails && !!activeArtifact && (
             <Artifact
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               handleSendUserMessage={handleSendMessage}
@@ -68,10 +77,13 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
             />
           )}
           <Demo
+            key={demoDetails?.audio_url}
             handleFinishDemo={handleFinishDemo}
-            handleSendMessage={handleSendMessage}
             isDemoAvailable={isDemoAvailable}
             demoDetails={demoDetails}
+            handleSendMessage={handleSendMessage}
+            demoPlayingStatus={demoPlayingStatus}
+            setDemoPlayingStatus={setDemoPlayingStatus}
           />
         </div>
         {!isMediaTakingFullWidth && (

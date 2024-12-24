@@ -9,19 +9,22 @@ import RaiseHandDisabled from '@breakout/design-system/components/icons/RaiseHan
 import { nanoid } from 'nanoid';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import useWebSocketChat, { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
-import useUnifiedConfigurationResponseManager from '../../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { useAnimateDifferentOrbStates } from '../../../../hooks/useAnimateDifferentOrbStates';
 import { AIResponse, Message } from '@meaku/core/types/chat';
 import { useIsAdmin } from '../../../../shared/UrlDerivedDataProvider';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import ChatMessages from '../ChatMessages';
+import { X } from 'lucide-react';
+import useGetMessagePayload from '../../../../hooks/useGetMessagePayload';
 
 interface IProps {
   isDemoPlaying: boolean;
+  onRaiseDemoQuery: (queryRaised: boolean) => void;
+  onCloseDemoChat: () => void;
 }
 
-export function DemoQuestions({ isDemoPlaying }: IProps) {
+export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat }: IProps) {
   const { sendMessage, lastMessage } = useWebSocketChat();
 
   const [isChatOpenEnabled, setShowDemoChat] = useState(false);
@@ -29,36 +32,35 @@ export function DemoQuestions({ isDemoPlaying }: IProps) {
 
   const isAdmin = useIsAdmin();
 
+  const getMessagePayload = useGetMessagePayload();
+
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
 
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState); //Fix this next PR.Ideally we would not want to put anything in store for this flow
 
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
 
-  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
-
   const handleToggleDemoChat = () => {
-    setShowDemoChat(!isChatOpenEnabled);
+    const currentState = !isChatOpenEnabled;
+    setShowDemoChat(currentState);
+    if (currentState) {
+      onRaiseDemoQuery(currentState);
+    }
+  };
+
+  const handleCloseDemoChat = () => {
+    setShowDemoChat(false);
+    onRaiseDemoQuery(false);
   };
 
   const showPopover = !isDemoPlaying && isChatOpenEnabled;
   const showWaitDemoCompleteNotification = isDemoPlaying && isChatOpenEnabled;
 
-  const handleSendUserMessage = useCallback(async ({ message, eventData }: IWebSocketHandleMessage) => {
+  const handleSendUserMessage = useCallback(({ message, eventData }: IWebSocketHandleMessage) => {
     handleUpdateOrbState(OrbStatusEnum.thinking);
 
     const messageId = nanoid();
     setIsAMessageBeingProcessed(true);
-
-    const payload = {
-      session_id: sessionId,
-      message: message ?? '',
-      response_id: messageId,
-      event_type: DemoEvent.DEMO_QUESTION,
-      event_data: eventData ?? {},
-      is_admin: isAdmin,
-    };
 
     setMessages([
       ...messages,
@@ -70,7 +72,9 @@ export function DemoQuestions({ isDemoPlaying }: IProps) {
         analytics: {},
       },
     ]);
-    sendMessage(JSON.stringify(payload));
+    sendMessage(
+      JSON.stringify(getMessagePayload({ message, eventType: DemoEvent.DEMO_QUESTION, eventData, messageId })),
+    );
     handleAnimatedOrb(messageId);
 
     setIsAMessageBeingProcessed(false);
@@ -113,7 +117,7 @@ export function DemoQuestions({ isDemoPlaying }: IProps) {
           {isChatOpenEnabled ? (
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[50%] bg-primary/60"
-              onClick={handleToggleDemoChat}
+              onClick={handleCloseDemoChat}
             >
               <RaiseHandDisabled height={24} width={24} color="white" />
             </div>
@@ -121,17 +125,29 @@ export function DemoQuestions({ isDemoPlaying }: IProps) {
             <AskQuestion onClick={handleToggleDemoChat} />
           )}
         </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <div className="flex items-center justify-between p-2">
-            <span className="text-base font-semibold text-gray-700">Questions</span>
+        <PopoverContent className="flex h-[620px] w-[512px] flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
+          <div className="ml-2 flex items-center justify-between border-b  border-white border-opacity-60 p-2">
+            <span className="text-base font-semibold text-primary">Session Questions</span>
+            <div
+              className="flex cursor-pointer
+ items-center rounded-lg border-2 border-[rgb(var(--primary))] border-opacity-60 p-3"
+              onClick={onCloseDemoChat}
+            >
+              <span className="text-primary">Close & Resume Demo</span>
+              <X height={24} width={24} color="rgb(var(--primary)/ 0.6)" />
+            </div>
           </div>
-          <ChatMessages messages={messages} showArtifact={false} handleSendUserMessage={handleSendUserMessage} />
+          <ChatMessages
+            messages={messages}
+            showArtifact={false}
+            handleSendUserMessage={handleSendUserMessage}
+            initialSuggestedQuestions={[]}
+            allowFullWidthForMesages={true}
+          />
           <ChatInput
-            handleSendMessage={() => {
-              handleSendUserMessage({ message: '' });
-            }}
+            handleSendMessage={(message) => handleSendUserMessage({ message })}
             isAMessageBeingProcessed={false}
-            messages={[]}
+            messages={messages}
           />
         </PopoverContent>
       </Popover>

@@ -2,38 +2,70 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import DemoContent from './DemoContent';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import Button from '@breakout/design-system/components/layout/button';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { Loader } from 'lucide-react';
 
 interface IProps {
   handleFinishDemo: () => void;
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
   demoDetails: ScriptStepType | null;
   isDemoAvailable: boolean;
+  demoPlayingStatus: DemoPlayingStatus;
+  setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
 }
 
-const Demo = ({ handleFinishDemo, handleSendMessage, demoDetails, isDemoAvailable }: IProps) => {
-  const [isDemoPlaying, setIsDemoPlaying] = useState<boolean>(false);
-  const handleGetNextDemoFrame = () => {
+const Demo = ({
+  handleFinishDemo,
+  handleSendMessage,
+  demoDetails,
+  isDemoAvailable,
+  demoPlayingStatus,
+  setDemoPlayingStatus,
+}: IProps) => {
+  const [isGeneratingDemo, setIsGeneratingDemo] = useState<boolean>(false);
+  const isFirstStep = !demoDetails && isDemoAvailable; //case when BE just sends demo_available and no demo_details.FE sends back DEMO_NEXT to get the subsequent step
+
+  const handleStepEnd = () => {
+    if (demoDetails?.is_end) {
+      handleFinishDemo();
+      return;
+    }
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: {} });
   };
 
-  const handleOnDemoFinish = () => {
-    handleFinishDemo();
-    setIsDemoPlaying(false);
+  const onBookDemoClick = () => {
+    setIsGeneratingDemo(true);
+    handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: {} });
   };
 
-  if (!isDemoAvailable) {
-    return null;
+  useEffect(() => {
+    if (demoDetails && isGeneratingDemo) {
+      setIsGeneratingDemo(false);
+    }
+  }, [demoDetails]);
+
+  if (isFirstStep || demoPlayingStatus === DemoPlayingStatus.FINISHED) {
+    return (
+      <div className="col-span-2 flex h-full w-full items-center justify-center">
+        {isGeneratingDemo ? (
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-primary">Hold on. Creating demo</span>
+            <div className=" animate-spin ">
+              <Loader color="rgb(var(--primary)" />
+            </div>
+          </div>
+        ) : (
+          <Button onClick={onBookDemoClick}>Show demo</Button>
+        )}
+      </div>
+    );
   }
 
   if (!demoDetails) {
-    return (
-      <div className="col-span-2 flex h-full w-full items-center justify-center">
-        <Button onClick={handleGetNextDemoFrame}>Book demo</Button>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -41,10 +73,9 @@ const Demo = ({ handleFinishDemo, handleSendMessage, demoDetails, isDemoAvailabl
       <DemoContent
         demoDetails={demoDetails}
         key={demoDetails?.asset_url}
-        onDemoFinish={handleOnDemoFinish}
-        setIsDemoPlaying={setIsDemoPlaying}
-        isDemoPlaying={isDemoPlaying}
-        handleGetNextDemoFrame={handleGetNextDemoFrame}
+        setDemoPlayingStatus={setDemoPlayingStatus}
+        demoPlayingStatus={demoPlayingStatus}
+        onStepEnd={handleStepEnd}
       />
     </div>
   );

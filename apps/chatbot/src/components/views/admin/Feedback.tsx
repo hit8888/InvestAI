@@ -13,7 +13,6 @@ import Button from '@breakout/design-system/components/layout/button';
 import { CopyIcon } from 'lucide-react';
 import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
-import React from 'react';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);

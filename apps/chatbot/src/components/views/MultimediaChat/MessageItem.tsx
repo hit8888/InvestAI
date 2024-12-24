@@ -26,6 +26,7 @@ interface IProps {
   totalMessages: number;
   orbState: OrbStatusEnum;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  initialSuggestedQuestions: string[];
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -38,7 +39,14 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
   return <strong className="text-primary-textColor" {...props} />;
 };
 
-const MessageItem = ({ message, messageIndex, totalMessages, orbState, handleSendUserMessage }: IProps) => {
+const MessageItem = ({
+  message,
+  messageIndex,
+  totalMessages,
+  orbState,
+  handleSendUserMessage,
+  initialSuggestedQuestions,
+}: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
   const primaryColor = styleConfig?.primary ?? null;
@@ -48,8 +56,6 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState, handleSen
 
   const messageRef = useRef<HTMLDivElement>(null);
   const { isInView, ref: inViewRef } = useInView(0, true);
-
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;

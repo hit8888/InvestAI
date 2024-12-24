@@ -46,7 +46,7 @@ const ChatInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IP
     if (textAreaRef.current && lastMessage && lastMessage.is_complete) {
       textAreaRef.current.focus();
     }
-  }, [messages, textAreaRef, isSubmissionDisabled]);
+  }, [messages.length, textAreaRef, isSubmissionDisabled]);
 
   return (
     <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg p-2">

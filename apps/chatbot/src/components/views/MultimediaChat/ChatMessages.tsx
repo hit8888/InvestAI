@@ -9,9 +9,17 @@ interface IProps {
   messages: Message[];
   showArtifact?: boolean;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  initialSuggestedQuestions: string[];
+  allowFullWidthForMesages: boolean;
 }
 
-const ChatMessages = ({ messages, showArtifact = false, handleSendUserMessage }: IProps) => {
+const ChatMessages = ({
+  messages,
+  showArtifact = false,
+  handleSendUserMessage,
+  initialSuggestedQuestions,
+  allowFullWidthForMesages,
+}: IProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
 
@@ -41,7 +49,7 @@ const ChatMessages = ({ messages, showArtifact = false, handleSendUserMessage }:
       <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto p-2">
         <div
           className={cn('mx-auto h-full w-full', {
-            'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showArtifact,
+            'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showArtifact && !allowFullWidthForMesages,
           })}
         >
           {messages.map((message, idx) => (
@@ -54,6 +62,7 @@ const ChatMessages = ({ messages, showArtifact = false, handleSendUserMessage }:
                 totalMessages={messages.length}
                 orbState={orbState}
                 handleSendUserMessage={handleSendUserMessage}
+                initialSuggestedQuestions={initialSuggestedQuestions}
               />
             </>
           ))}

@@ -8,6 +8,7 @@ import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 import { useEmbedAppEvents } from '../../../hooks/useEmbedAppEvents.ts';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -15,9 +16,12 @@ interface IProps {
 
 const Multimedia = ({ fetchSessionData }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
-    fetchSessionData();
+    if (!hasFirstUserMessageBeenSent) {
+      fetchSessionData();
+    }
     if (!isChatOpen) {
       handleUpdateSessionData({ isChatOpen: true });
     }

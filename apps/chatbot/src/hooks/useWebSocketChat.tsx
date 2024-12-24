@@ -12,6 +12,7 @@ import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
 import useChatbotAnalytics from './useChatbotAnalytics.tsx';
+import useGetMessagePayload from './useGetMessagePayload.tsx';
 
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
@@ -26,6 +27,8 @@ export interface IWebSocketHandleMessage {
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
+
+  const getMessagePayload = useGetMessagePayload();
 
   const isAdmin = useIsAdmin();
 
@@ -70,6 +73,14 @@ const useWebSocketChat = () => {
   );
   const handleSendUserMessage = useCallback(
     async ({ message, eventType, eventData }: IWebSocketHandleMessage) => {
+      const messageId = nanoid();
+
+      const payload = getMessagePayload({ message, eventType, eventData, messageId });
+      if (eventType && eventData) {
+        sendMessage(JSON.stringify(payload));
+        return;
+      }
+
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
       if (!hasFirstUserMessageBeenSent) {
@@ -77,22 +88,7 @@ const useWebSocketChat = () => {
         setHasFirstUserMessageBeenSent(true);
       }
 
-      const messageId = nanoid();
       setIsAMessageBeingProcessed(true);
-
-      const payload = {
-        session_id: sessionId,
-        message: message ?? '',
-        response_id: messageId,
-        event_type: eventType ?? '',
-        event_data: eventData ?? {},
-        is_admin: isAdmin,
-      };
-
-      if (eventType && eventData) {
-        sendMessage(JSON.stringify(payload));
-        return;
-      }
 
       if (!sessionId) {
         messageQueue.current.push({ message, messageId });
@@ -115,15 +111,21 @@ const useWebSocketChat = () => {
     if (!lastMessage) return;
 
     try {
-      handleStopOrbAnimation();
-      handleUpdateOrbState(OrbStatusEnum.responding);
       const response = JSON.parse(lastMessage.data) as AIResponse;
+      handleStopOrbAnimation();
+
+      if (!response.message || response.script_step) {
+        return;
+      }
+
+      handleUpdateOrbState(OrbStatusEnum.responding);
       response.showFeedbackOptions = isAdmin;
-      handleAddAIMessage(response);
 
       if (response.is_complete) {
         setIsAMessageBeingProcessed(false);
       }
+
+      handleAddAIMessage(response);
     } catch (error) {
       trackError(error, {
         action: 'useEffect | handleAddAIMessage',

@@ -1,23 +1,25 @@
-import last from 'lodash/last';
 import { useMessageStore } from '../stores/useMessageStore';
 import { useEffect, useState } from 'react';
-import { ScriptStepType } from '@meaku/core/types/chat';
+import { AIResponse, ScriptStepType } from '@meaku/core/types/chat';
+import useWebSocketChat from './useWebSocketChat';
 
 const useDemoDetails = () => {
-  const messages = useMessageStore((state) => state.messages);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
+  const { lastMessage } = useWebSocketChat();
 
-  const lastMessage = last(messages.filter((message) => message.role === 'ai'));
-  const [isDemoAvailable, setIsDemoAvailable] = useState(false);
+  const parsedLastMessage = lastMessage ? (JSON.parse(lastMessage.data) as AIResponse) : null;
+
   const [draftDemoDetails, setDemoDetails] = useState<ScriptStepType | null>(null);
-  const demoDetails = lastMessage?.scriptStep;
+  const [isDemoAvailable, setIsDemoAvailable] = useState(false);
 
-  const demoAvailable = lastMessage?.demoAvailable ?? false;
+  const demoDetails = parsedLastMessage ? parsedLastMessage.script_step : null;
+
+  const demo_available = parsedLastMessage ? !!parsedLastMessage.demo_available : false;
 
   useEffect(() => {
-    setIsDemoAvailable(demoAvailable);
-  }, [demoAvailable]);
+    setIsDemoAvailable(demo_available);
+  }, [demo_available]);
 
   useEffect(() => {
     if (demoDetails) {
@@ -26,7 +28,7 @@ const useDemoDetails = () => {
         setMediaTakeFullScreenWidth(true);
       }
     }
-  }, [demoDetails?.asset_url]);
+  }, [demoDetails?.audio_url]);
 
   return {
     draftDemoDetails,

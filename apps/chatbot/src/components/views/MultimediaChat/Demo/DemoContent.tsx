@@ -1,34 +1,27 @@
 import { Dispatch, memo, SetStateAction, useEffect, useRef } from 'react';
-import { PauseIcon, PlayIcon } from 'lucide-react';
-import { cn } from '@breakout/design-system/lib/cn';
 import { useMessageStore } from '../../../../stores/useMessageStore';
-import ArtifactControls from '../ArtifactControls';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import { DemoQuestions } from './DemoQuestions';
+import ArtifactControls from '../ArtifactControls';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
 
 interface IProps {
   demoDetails: ScriptStepType;
-  onDemoFinish: () => void;
-  isDemoPlaying: boolean;
-  setIsDemoPlaying: Dispatch<SetStateAction<boolean>>;
-  handleGetNextDemoFrame: () => void;
+  demoPlayingStatus: DemoPlayingStatus;
+  setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
+  onStepEnd: () => void;
 }
 
-const DemoContent = ({
-  demoDetails,
-  isDemoPlaying,
-  setIsDemoPlaying,
-  handleGetNextDemoFrame,
-  onDemoFinish,
-}: IProps) => {
+const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd }: IProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isQueryRaisedRef = useRef(false);
 
   const handleAudioEnd = () => {
-    if (demoDetails.is_end) {
-      onDemoFinish();
+    if (isQueryRaisedRef.current) {
+      setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
       return;
     }
-    handleGetNextDemoFrame();
+    onStepEnd();
   };
 
   const handleToggleFullScreen = useMessageStore((state) => state.handleToggleFullScreen);
@@ -36,20 +29,19 @@ const DemoContent = ({
   const handlePlayPause = () => {
     const audio = audioRef.current;
 
-    setIsDemoPlaying((prevState) => !prevState);
-
     if (audio) {
       if (audio.paused) {
         audio
           .play()
           .then(() => {
-            setIsDemoPlaying(true);
+            setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
           })
           .catch((error) => {
             console.error('Error playing audio:', error);
           });
       } else {
         audio.pause();
+        setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
       }
     }
   };
@@ -58,30 +50,32 @@ const DemoContent = ({
     if (!audioRef.current) return;
 
     audioRef.current.currentTime = 0;
-    audioRef.current.play();
-    setIsDemoPlaying(true);
+    audioRef.current.play().catch((error) => {
+      console.error('Error playing audio:', error);
+    });
+    setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
   };
 
   useEffect(() => {
-    setIsDemoPlaying(true);
+    if (!demoDetails?.audio_url) {
+      return;
+    }
+    if (audioRef.current && audioRef.current.src === demoDetails?.audio_url) {
+      return;
+    }
+    setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
 
     const newAudio = new Audio(demoDetails.audio_url);
-
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
 
     audioRef.current = newAudio;
 
     newAudio.load();
+    newAudio.currentTime = 0;
     newAudio.play().catch((error) => {
       console.error('Error playing audio:', error);
+      onStepEnd();
     });
-
-    return () => {
-      newAudio.pause();
-    };
-  }, []);
+  }, [demoDetails?.audio_url]);
 
   useEffect(() => {
     const audioElement = audioRef.current;
@@ -92,34 +86,34 @@ const DemoContent = ({
         audioElement.removeEventListener('ended', handleAudioEnd);
       };
     }
-  }, []);
+  }, [audioRef.current]);
+
+  const handleRaiseDemoQuery = (queryRaised: boolean) => {
+    isQueryRaisedRef.current = queryRaised;
+  };
+
+  const handleCloseDemoChat = () => {
+    onStepEnd();
+    isQueryRaisedRef.current = false;
+  };
 
   return (
     <>
-      <div className={'relative h-[90%] w-full max-w-full'}>
-        <img className="h-full w-full object-contain" src={demoDetails.asset_url} alt={demoDetails.message} />
-        <div
-          className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
-            'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isDemoPlaying,
-          })}
-          onClick={handlePlayPause}
-        >
-          {isDemoPlaying ? (
-            <PauseIcon className="fill-white text-white" size={60} />
-          ) : (
-            <PlayIcon className="fill-white text-white" size={60} />
-          )}
-        </div>
-
-        <ArtifactControls
-          isPlaying={isDemoPlaying}
-          handlePause={handlePlayPause}
-          handleRestart={handleRestart}
-          handleToggleFullScreen={handleToggleFullScreen}
-        />
+      <div className={'relative h-[90%] w-full max-w-full transition-all duration-300 ease-in-out'}>
+        <img className="h-full w-full object-cover" src={demoDetails.asset_url} alt={demoDetails.message} />
       </div>
-      <div className="h-10% flex flex-1 items-center py-4">
-        <DemoQuestions isDemoPlaying={isDemoPlaying} />
+      <ArtifactControls
+        isPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
+        handlePause={handlePlayPause}
+        handleRestart={handleRestart}
+        handleToggleFullScreen={handleToggleFullScreen}
+      />
+      <div className="flex h-[10%] flex-1 items-center py-4">
+        <DemoQuestions
+          isDemoPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
+          onRaiseDemoQuery={handleRaiseDemoQuery}
+          onCloseDemoChat={handleCloseDemoChat}
+        />
       </div>
     </>
   );
