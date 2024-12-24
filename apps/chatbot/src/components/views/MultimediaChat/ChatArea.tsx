@@ -37,7 +37,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
   };
 
   const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
-
+  console.log({ activeArtifact });
   return (
     <div
       className={cn(
@@ -68,7 +68,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
             />
           )}
 
-          {!isDemoAvailable && !demoDetails && !!activeArtifact && (
+          {!!activeArtifact && (
             <Artifact
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               handleSendUserMessage={handleSendMessage}

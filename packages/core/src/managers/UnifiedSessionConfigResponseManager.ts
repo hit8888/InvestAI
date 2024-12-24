@@ -111,7 +111,7 @@ class UnifiedSessionConfigResponseManager {
       is_complete: response.is_complete,
       showFeedbackOptions: response.showFeedbackOptions,
       analytics: response.analytics,
-      artifact: messageArtifact,
+      artifact: !response.demo_available ? messageArtifact : undefined,
       chatArtifact: chatBoxArtifact,
       scriptStep: response.script_step,
       demoAvailable: response.demo_available,

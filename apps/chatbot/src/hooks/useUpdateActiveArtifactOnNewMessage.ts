@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const useUpdateActiveArtifactOnNewMessage = () => {
   const messages = useMessageStore((state) => state.messages);
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
-  const lastMessage = last(messages.filter((message) => message.role === 'ai' && message.artifact));
+  const lastMessage = last(messages.filter((message) => message.role === 'ai'));
   const artifactId = lastMessage?.artifact?.artifact_id;
   const artifactType = lastMessage?.artifact?.artifact_type;
 
