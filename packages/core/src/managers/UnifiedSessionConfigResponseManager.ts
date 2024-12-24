@@ -5,12 +5,7 @@ import {
   SessionApiResponse,
   SessionSchema,
 } from "../types/session";
-import {
-  AIResponse,
-  ChatBoxArtifactType,
-  Message,
-  ScriptStepDTO,
-} from "../types/chat";
+import { AIResponse, ChatBoxArtifactType, Message } from "../types/chat";
 import { ChatBoxArtifactEnumSchema } from "../types/artifact";
 
 export type SessionConfigResponseType =
