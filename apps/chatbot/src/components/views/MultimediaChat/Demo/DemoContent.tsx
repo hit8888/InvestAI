@@ -106,8 +106,8 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
     <>
       <div className={'relative aspect-video h-[90%] w-full max-w-full'}>
         <img
-          className={`h-full w-full object-cover transition-opacity duration-300 ease-in-out ${
-            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          className={`ease-[cubic-bezier(0.34, 1.56, 0.64, 1)] duration-400 h-full w-full transform object-cover transition-all ${
+            isImageLoaded ? 'translate-x-0 scale-100 opacity-100' : 'translate-x-full scale-95 opacity-0'
           }`}
           src={demoDetails.asset_url}
           alt={demoDetails.message}
