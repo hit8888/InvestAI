@@ -9,6 +9,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 import { useEmbedAppEvents } from '../../../hooks/useEmbedAppEvents.ts';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -17,6 +18,7 @@ interface IProps {
 const Multimedia = ({ fetchSessionData }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const activeArtifact = useArtifactStore((state) => state.activeArtifact);
 
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
     if (!hasFirstUserMessageBeenSent) {
@@ -52,20 +54,42 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   };
 
   return (
-    <div
-      className={cn('flex h-screen flex-col font-inter', {
-        'rounded-2xl': isChatOpen,
-      })}
-    >
-      {isChatOpen ? (
-        <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
-      ) : (
-        <EntryPointBottomBar
-          handleSendUserMessage={handleSendMessage}
-          handleOpenChat={handleOpenChat}
-          hideBottomBar={shouldHideBottomBar}
-        />
-      )}
+    <div className={isChatOpen ? 'flex h-screen w-full items-end justify-center pb-12' : ''}>
+      <div
+        className={cn('flex h-screen flex-col font-inter', {
+          'rounded-2xl': isChatOpen,
+          'hd:h-[90%] hd:w-[95%]': isChatOpen,
+          'mac-air:h-[90%] mac-air:w-[95%]': isChatOpen,
+          'hd-ready:h-[90%] hd-ready:w-[95%]': isChatOpen,
+          'desktop:h-[90%] desktop:w-[95%]': isChatOpen,
+          'mac-pro-14:h-[90%] mac-pro-14:w-[95%]': isChatOpen,
+          'hd-plus:h-[90%] hd-plus:w-[95%]': isChatOpen,
+          'mac-pro-16:h-[85%] mac-pro-16:w-[90%]': isChatOpen,
+          'full-hd:h-[85%] full-hd:w-[90%]': isChatOpen,
+          'qhd:h-[80%] qhd:w-[90%]': isChatOpen,
+        })}
+        style={
+          activeArtifact
+            ? {
+                padding: '11px',
+                borderRadius: '24px',
+                border: '1px solid var(--Primary-scale-for-Hackerearth-Grey-300, #D0D5DD)',
+                background: 'rgba(255, 255, 255, 0.32)',
+                backdropFilter: 'blur(12px)',
+              }
+            : {}
+        }
+      >
+        {isChatOpen ? (
+          <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
+        ) : (
+          <EntryPointBottomBar
+            handleSendUserMessage={handleSendMessage}
+            handleOpenChat={handleOpenChat}
+            hideBottomBar={shouldHideBottomBar}
+          />
+        )}
+      </div>
     </div>
   );
 };

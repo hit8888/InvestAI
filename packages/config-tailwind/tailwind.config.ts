@@ -8,6 +8,17 @@ import colors from "tailwindcss/colors";
 const config: Omit<Config, "content"> = {
   theme: {
     extend: {
+      screens: {
+        'hd': '1280px', // HD - 1280x720
+        'mac-air': '1280px', // MacBook Air - 1280x832
+        'hd-ready': '1366px', // HD Ready - 1366x768
+        'desktop': '1440px', // Desktop - 1440x1024
+        'mac-pro-14': '1512px', // MacBook Pro 14 - 1512x982
+        'hd-plus': '1536px', // HD Plus - 1536x864
+        'mac-pro-16': '1728px', // MacBook Pro 16 - 1728x1117
+        'full-hd': '1920px', // Full HD Desktop - 1920x1080
+        'qhd': '2560px', // QHD Desktop - 2560x1440
+      },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
         rubik: ["Rubik", "sans-serif"],
