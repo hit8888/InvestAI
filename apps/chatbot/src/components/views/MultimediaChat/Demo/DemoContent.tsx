@@ -115,8 +115,8 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
           />
         )}
         <img
-          className={`h-full w-full object-cover transition-opacity duration-300 ease-in-out ${
-            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          className={`h-full w-full object-cover transition-all duration-500 ease-out ${
+            isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
           src={demoDetails.asset_url}
           alt={demoDetails.message}
