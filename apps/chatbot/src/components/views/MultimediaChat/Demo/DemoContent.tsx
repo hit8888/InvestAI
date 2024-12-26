@@ -105,6 +105,15 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   return (
     <>
       <div className={'relative aspect-video h-[90%] w-full max-w-full'}>
+        {!isImageLoaded && (
+          <div
+            className="absolute inset-0 scale-95 
+    bg-gray-200 opacity-0 blur-sm
+    transition-all duration-500
+    ease-in-out hover:scale-100
+    hover:opacity-100 hover:blur-none"
+          />
+        )}
         <img
           className={`h-full w-full object-cover transition-opacity duration-300 ease-in-out ${
             isImageLoaded ? 'opacity-100' : 'opacity-0'

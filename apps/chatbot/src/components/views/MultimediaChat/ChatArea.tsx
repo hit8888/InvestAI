@@ -29,6 +29,10 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
 
   const messages = useMessageStore((state) => state.messages);
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
+  const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
+
+  const hasArtifactOrDemoInMessageHistory =
+    messages.findIndex((message) => message.role === 'ai' && !!message.artifact?.artifact_id) !== -1 || isDemoAvailable;
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);
@@ -36,15 +40,12 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
 
-  const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
-
-  const showMediaPanel = !!activeArtifact || isDemoAvailable || !!demoDetails;
   return (
     <div
       className={cn(
         'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
         {
-          'w-full': showMediaPanel,
+          'w-full': hasArtifactOrDemoInMessageHistory,
         },
       )}
     >
@@ -56,13 +57,13 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
         />
         <div
           className={cn('flex-1 overflow-y-auto', {
-            'grid grid-cols-3 gap-8': showMediaPanel,
+            'grid grid-cols-3 gap-8': hasArtifactOrDemoInMessageHistory,
           })}
         >
           {!isMediaTakingFullWidth && (
             <ChatMessages
               messages={messages}
-              showRightPanel={showMediaPanel}
+              showRightPanel={hasArtifactOrDemoInMessageHistory}
               handleSendUserMessage={handleSendMessage}
               initialSuggestedQuestions={initialSuggestedQuestions}
               allowFullWidthForText={false}
