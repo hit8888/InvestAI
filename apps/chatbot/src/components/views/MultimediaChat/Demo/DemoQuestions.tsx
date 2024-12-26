@@ -125,9 +125,14 @@ export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat
             <AskQuestion onClick={handleToggleDemoChat} />
           )}
         </PopoverTrigger>
-        <PopoverContent className="flex h-[620px] w-[512px] flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
-          <div className="ml-2 flex items-center justify-between border-b  border-white border-opacity-60 p-2">
-            <span className="text-base font-semibold text-primary">Session Questions</span>
+        <PopoverContent
+          className="text-popover-foreground relative z-50 flex h-[580px] w-[440px] flex-1 flex-col overflow-hidden  rounded-lg border bg-primary-foreground/60 px-2 py-4 shadow-md outline-none backdrop-blur-lg"
+          align="start"
+          side="top"
+          sideOffset={10}
+          alignOffset={10}
+        >
+          <div className="ml-2 flex items-end justify-end  p-2">
             <div
               className="flex cursor-pointer
  items-center rounded-lg border-2 border-[rgb(var(--primary))] border-opacity-60 p-3"

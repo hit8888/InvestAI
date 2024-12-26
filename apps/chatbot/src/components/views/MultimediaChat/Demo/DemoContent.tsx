@@ -1,9 +1,9 @@
 import { Dispatch, memo, SetStateAction, useEffect, useRef, useState } from 'react';
-import { useMessageStore } from '../../../../stores/useMessageStore';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import { DemoQuestions } from './DemoQuestions';
-import ArtifactControls from '../ArtifactControls';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { cn } from '@breakout/design-system/lib/cn';
+import { PauseIcon, PlayIcon } from 'lucide-react';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -25,8 +25,6 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
     onStepEnd();
   };
 
-  const handleToggleFullScreen = useMessageStore((state) => state.handleToggleFullScreen);
-
   const handlePlayPause = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -46,16 +44,6 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
       audio.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }
-  };
-
-  const handleRestart = () => {
-    if (!audioRef.current) return;
-
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch((error) => {
-      console.error('Error playing audio:', error);
-    });
-    setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
   };
 
   useEffect(() => {
@@ -104,7 +92,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   return (
     <>
-      <div className={'relative aspect-video h-[90%] w-full max-w-full'}>
+      <div className={'relative flex h-[90%] w-full items-center justify-center'}>
         {!isImageLoaded && (
           <div
             className="absolute inset-0 scale-95 
@@ -115,7 +103,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
           />
         )}
         <img
-          className={`h-full w-full object-cover transition-all duration-500 ease-out ${
+          className={`max-h-full w-full object-fill transition-all duration-500 ease-out ${
             isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
           src={demoDetails.asset_url}
@@ -124,12 +112,23 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
           onLoad={() => setIsImageLoaded(true)}
         />
       </div>
-      <ArtifactControls
-        isPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
-        handlePause={handlePlayPause}
-        handleRestart={handleRestart}
-        handleToggleFullScreen={handleToggleFullScreen}
-      />
+      <div
+        className={cn(
+          'absolute bottom-[72px] left-2 right-2 top-[58px] z-10 flex cursor-pointer items-center justify-center bg-black/30',
+          {
+            'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100':
+              demoPlayingStatus === DemoPlayingStatus.PLAYING,
+          },
+        )}
+        onClick={handlePlayPause}
+      >
+        {demoPlayingStatus === DemoPlayingStatus.PLAYING ? (
+          <PauseIcon className="fill-white text-white" size={60} />
+        ) : (
+          <PlayIcon className="fill-white text-white" size={60} />
+        )}
+      </div>
+
       <div className="flex h-[10%] flex-1 items-center py-4">
         <DemoQuestions
           isDemoPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
