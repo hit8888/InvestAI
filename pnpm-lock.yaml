@@ -88,10 +88,10 @@ importers:
         version: 19.0.2(@types/react@19.0.2)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.3.4(vite@6.0.6(@types/node@22.8.7)(jiti@1.21.6)(terser@5.36.0)(yaml@2.6.0))
+        version: 4.3.4(vite@6.0.5(@types/node@22.8.7)(jiti@1.21.6)(terser@5.36.0)(yaml@2.6.0))
       autoprefixer:
         specifier: ^10.4.18
-        version: 10.4.20(postcss@8.4.47)
+        version: 10.4.20(postcss@8.4.49)
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@1.21.6)
@@ -112,10 +112,10 @@ importers:
         version: 9.0.0
       postcss:
         specifier: ^8.4.35
-        version: 8.4.47
+        version: 8.4.49
       postcss-import:
         specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.47)
+        version: 16.1.0(postcss@8.4.49)
       prettier:
         specifier: ^3.2.5
         version: 3.3.3
@@ -136,7 +136,7 @@ importers:
         version: 8.18.2(eslint@9.17.0(jiti@1.21.6))(typescript@5.6.3)
       vite:
         specifier: ^6.0.5
-        version: 6.0.6(@types/node@22.8.7)(jiti@1.21.6)(terser@5.36.0)(yaml@2.6.0)
+        version: 6.0.5(@types/node@22.8.7)(jiti@1.21.6)(terser@5.36.0)(yaml@2.6.0)
 
   apps/chatbot:
     dependencies:
@@ -8872,6 +8872,14 @@ snapshots:
   '@tanstack/react-query@5.56.2(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.56.2
+<<<<<<< HEAD
+=======
+      react: 19.0.0
+
+  '@tanstack/react-query@5.56.2(react@19.0.0)':
+    dependencies:
+      '@tanstack/query-core': 5.56.2
+>>>>>>> 27af8c8 (Leads Page UI & Authentication flow..)
       react: 18.3.1
 
   '@tanstack/react-table@8.20.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
@@ -12674,6 +12682,28 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
+<<<<<<< HEAD
+=======
+  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      goober: 2.1.14(csstype@3.1.3)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    transitivePeerDependencies:
+      - csstype
+
+<<<<<<< HEAD
+=======
+  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      goober: 2.1.14(csstype@3.1.3)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    transitivePeerDependencies:
+      - csstype
+
+>>>>>>> 7e3c175 (Leads Page UI & Authentication flow..)
+>>>>>>> 27af8c8 (Leads Page UI & Authentication flow..)
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
