@@ -28,8 +28,6 @@ const Demo = ({
   setDemoPlayingStatus,
   activeArtifact,
 }: IProps) => {
-  console.log({ demoDetails });
-
   const handleStepEnd = () => {
     if (demoDetails?.is_end) {
       handleFinishDemo();

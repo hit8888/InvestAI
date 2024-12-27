@@ -23,8 +23,6 @@ const VideoArtifact = ({ videoUrl, artifactId, handleSendUserMessage, isMediaTak
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const shouldEndArtifactImmediately = useArtifactStore((state) => state.shouldEndArtifactImmediately);
-  const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
 
   const handleVideoOnEnd = () => {
@@ -63,22 +61,6 @@ const VideoArtifact = ({ videoUrl, artifactId, handleSendUserMessage, isMediaTak
     setIsArtifactPlaying(true);
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
   };
-
-  useEffect(() => {
-    if (shouldEndArtifactImmediately) {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        try {
-          videoRef.current.currentTime = videoRef.current.duration;
-        } catch (error) {
-          console.log('🚀 ~ file: VideoArtifact.tsx:83 ~ useEffect ~ error:', error);
-        }
-      }
-      handleVideoOnEnd();
-      setShouldEndArtifactImmediately(false);
-      setIsArtifactPlaying(false);
-    }
-  }, [shouldEndArtifactImmediately]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
