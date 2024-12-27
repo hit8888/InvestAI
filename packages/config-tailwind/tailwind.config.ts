@@ -64,6 +64,8 @@ const config: Omit<Config, "content"> = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
+        numberOfLeadsOuter: 'numberOfLeadsOuter 5s infinite', // Outer background animation
+        numberOfLeadsInner: 'numberOfLeadsInner 5s infinite', // Inner background animation
       },
       keyframes: {
         ripple: {
@@ -107,6 +109,14 @@ const config: Omit<Config, "content"> = {
           "100%": {
             backgroundPosition: "0% 50%",
           },
+        },
+        numberOfLeadsOuter: {
+          '0%': { backgroundColor: '#FFFFFF' }, // Starting from white
+          '100%': { backgroundColor: '#DCDAF8' }, // Ending with the given color
+        },
+        numberOfLeadsInner: {
+          '0%': { backgroundColor: '#4E46DC', opacity: 1 }, // Starting color and full opacity
+          '100%': { backgroundColor: '#4E46DC', opacity: 0.3 }, // Ending with 30% opacity
         },
       },
       borderRadius: {

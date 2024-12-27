@@ -4,6 +4,9 @@ import {
   PostResponseFeedbackPayload,
   UpdateProspectPayload,
   UpdateSessionDataPayload,
+  GenerateOtpPayload,
+  LoginWithEmailPasswordPayload,
+  VerifyOtpPayload,
 } from "../types/api";
 import apiClient from "./client";
 
@@ -45,3 +48,13 @@ export const updateProspect = (
   payload: UpdateProspectPayload,
 ) =>
   apiClient.put(`/tenant/chat/prospect/${prospectId}/update/`, payload);
+  
+export const loginWithEmailPassword = (
+  payload: LoginWithEmailPasswordPayload
+) => apiClient.post(`/core/api/login/`, payload);
+
+export const generateOtp = (payload: GenerateOtpPayload) =>
+  apiClient.post(`/core/api/generate-code/`, payload);
+
+export const verifyOtp = (payload: VerifyOtpPayload) =>
+  apiClient.post(`/core/api/verify-code/`, payload);
