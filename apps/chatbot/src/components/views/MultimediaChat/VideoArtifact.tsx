@@ -1,39 +1,28 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import useWebSocketChat from '../../../hooks/useWebSocketChat';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import ArtifactControls from './ArtifactControls';
+import { SalesEvent } from '@meaku/core/types/webSocket';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   videoUrl: string;
   artifactId: string;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  isMediaTakingFullWidth: boolean;
 }
 
-type QueryParams = {
-  expandVideo?: boolean;
-};
-
-const VideoArtifact = (props: IProps) => {
-  const { videoUrl, artifactId } = props;
-
+const VideoArtifact = ({ videoUrl, artifactId, handleSendUserMessage, isMediaTakingFullWidth }: IProps) => {
   const { trackChatbotEvent } = useChatbotAnalytics();
-
-  const [searchParams] = useSearchParams();
-  const { expandVideo }: QueryParams = {
-    expandVideo: searchParams.get('expandVideo') === 'true',
-  };
 
   const [isPlaying, setIsPlaying] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const { handleSendUserMessage } = useWebSocketChat();
-
-  const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
   const shouldEndArtifactImmediately = useArtifactStore((state) => state.shouldEndArtifactImmediately);
   const setShouldEndArtifactImmediately = useArtifactStore((state) => state.setShouldEndArtifactImmediately);
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
@@ -43,10 +32,12 @@ const VideoArtifact = (props: IProps) => {
       artifact_type: 'VIDEO',
       artifact_id: artifactId,
     };
-    handleSendUserMessage('', 'ARTIFACT_CONSUMED', payload);
+    handleSendUserMessage({ message: '', eventType: SalesEvent.ARTIFACT_CONSUMED, eventData: payload });
     setIsArtifactPlaying(false);
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };
+
+  const handleToggleFullScreen = useMessageStore((state) => state.handleToggleFullScreen);
 
   const handlePlayPauseVideo = () => {
     if (!videoRef.current) return;
@@ -105,15 +96,14 @@ const VideoArtifact = (props: IProps) => {
   return (
     <div
       className={cn('group relative', {
-        'h-full w-full': !isArtifactMaximized,
-        'h-screen w-auto': isArtifactMaximized,
+        'h-full w-full': !isMediaTakingFullWidth,
+        'h-screen w-auto': isMediaTakingFullWidth,
       })}
     >
       <video
         ref={videoRef}
         className={cn('absolute inset-0 h-full max-h-full w-full max-w-full', {
-          'object-cover': expandVideo,
-          'object-contain': !isArtifactMaximized,
+          'object-contain': !isMediaTakingFullWidth,
         })}
         // controls
         autoPlay={false}
@@ -135,7 +125,12 @@ const VideoArtifact = (props: IProps) => {
         )}
       </div>
 
-      <ArtifactControls isPlaying={isPlaying} handlePause={handlePlayPauseVideo} handleRestart={handleRestartVideo} />
+      <ArtifactControls
+        isPlaying={isPlaying}
+        handlePause={handlePlayPauseVideo}
+        handleRestart={handleRestartVideo}
+        handleToggleFullScreen={handleToggleFullScreen}
+      />
     </div>
   );
 };

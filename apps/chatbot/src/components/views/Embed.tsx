@@ -1,17 +1,18 @@
-import { ChatConfig } from '@meaku/core/types/config';
 import ChatHeader from '@breakout/design-system/components/layout/chat-header';
 import ChatInput from '@breakout/design-system/components/layout/chat-input';
 import ChatMessage from '@breakout/design-system/components/layout/chat-message';
 import { memo, useEffect, useState } from 'react';
 import { useMessageStore } from '../../stores/useMessageStore';
 import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import useWebSocketChat from '../../hooks/useWebSocketChat';
 
 interface IProps {
   fetchSessionData: () => void;
-  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
+const Embed = ({ fetchSessionData }: IProps) => {
+  const { handleSendUserMessage } = useWebSocketChat();
+
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
 
   const orgName = unifiedConfigurationResponseManager.getOrgName();
@@ -41,10 +42,10 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
       <ChatHeader
         agentName={agentName}
         orgName={orgName ?? ''}
-        config={ChatConfig.EMBED}
         subtitle={configuration?.header.sub_title ?? ''}
-        title={configuration?.header.title ?? ''}
-        handlePrimaryCta={showCta ? () => handleSendUserMessage('I want to book a demo for the product.') : undefined}
+        handlePrimaryCta={
+          showCta ? () => handleSendUserMessage({ message: 'I want to book a demo for the product.' }) : undefined
+        }
       />
       <ChatMessage
         agentName={agentName}
@@ -53,7 +54,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         handleSuggestedQuestionOnClick={(selectedMessage) => {
           fetchSessionData();
           setSuggestedQuestions([]);
-          handleSendUserMessage(selectedMessage);
+          handleSendUserMessage({ message: selectedMessage });
         }}
       />
       <ChatInput
@@ -63,7 +64,7 @@ const Embed = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
         handleSendUserMessage={(selectedMessage) => {
           fetchSessionData();
           setSuggestedQuestions([]);
-          handleSendUserMessage(selectedMessage);
+          handleSendUserMessage({ message: selectedMessage });
         }}
       />
     </div>

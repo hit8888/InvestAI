@@ -11,14 +11,16 @@ import ChatFormField from './ChatFormField.tsx';
 import CardTitle from '@breakout/design-system/components/layout/card-title';
 import { useState } from 'react';
 import CardDescription from '@breakout/design-system/components/layout/card-description';
+import { SalesEvent } from '@meaku/core/types/webSocket';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 
 interface IFormProps {
   artifactId?: string;
   artifact?: FormArtifactType;
   artifactMetadata: FormArtifactMetadataType;
-  handleSendUserMessage: (message: string, event_type: string, event_data: Record<string, unknown>) => void;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
@@ -38,8 +40,7 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
   return z.object(schemaShape);
 };
 
-const FormArtifact = (props: IFormProps) => {
-  const { artifactId, artifact, artifactMetadata, handleSendUserMessage } = props;
+const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage }: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
   const { trackChatbotEvent } = useChatbotAnalytics();
 
@@ -55,7 +56,7 @@ const FormArtifact = (props: IFormProps) => {
       artifact_id: artifactId,
       form_data: values,
     };
-    handleSendUserMessage('', 'FORM_FILLED', response_data);
+    handleSendUserMessage({ message: '', eventType: SalesEvent.FORM_FILLED, eventData: response_data });
     setSubmitted(true);
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });
   }

@@ -13,18 +13,20 @@ import MessageAnalytics from './MessageAnalytics';
 import MessageDataSources from './MessageDataSources.tsx';
 import MessageFeedback from './MessageFeedback.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
-import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 
 interface IProps {
   message: Message;
   messageIndex: number;
   totalMessages: number;
   orbState: OrbStatusEnum;
+  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  initialSuggestedQuestions: string[];
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -37,7 +39,14 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
   return <strong className="text-primary-textColor" {...props} />;
 };
 
-const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps) => {
+const MessageItem = ({
+  message,
+  messageIndex,
+  totalMessages,
+  orbState,
+  handleSendUserMessage,
+  initialSuggestedQuestions,
+}: IProps) => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
   const primaryColor = styleConfig?.primary ?? null;
@@ -47,10 +56,6 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
 
   const messageRef = useRef<HTMLDivElement>(null);
   const { isInView, ref: inViewRef } = useInView(0, true);
-
-  const { handleSendUserMessage } = useWebSocketChat();
-
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
 
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
@@ -131,6 +136,7 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
             <div className="flex flex-col items-start">
               {message.chatArtifact && message.chatArtifact.artifact_type == 'FORM' && (
                 <ChatArtifact
+                  handleSendUserMessage={handleSendUserMessage}
                   artifact={message.chatArtifact}
                   messageIndex={messageIndex}
                   totalMessages={totalMessages}
@@ -161,7 +167,12 @@ const MessageItem = ({ message, messageIndex, totalMessages, orbState }: IProps)
           />
         )}
         {message.chatArtifact && message.chatArtifact.artifact_type == 'SUGGESTIONS' && (
-          <ChatArtifact artifact={message.chatArtifact} messageIndex={messageIndex} totalMessages={totalMessages} />
+          <ChatArtifact
+            artifact={message.chatArtifact}
+            messageIndex={messageIndex}
+            totalMessages={totalMessages}
+            handleSendUserMessage={handleSendUserMessage}
+          />
         )}
       </div>
     </div>

@@ -1,76 +1,97 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import ChatHeader from './ChatHeader.tsx';
-import ChatMessage from './ChatMessage.tsx';
+import ChatMessages from './ChatMessages.tsx';
 import Artifact from './Artifact.tsx';
 import ChatInput from './ChatInput.tsx';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
-import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact.tsx';
-import { useEffect, useState } from 'react';
+import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
+import { DemoEvent } from '@meaku/core/types/webSocket';
+import { useUpdateActiveArtifactOnNewMessage } from '../../../hooks/useUpdateActiveArtifactOnNewMessage.ts';
+import { Demo } from './Demo/index.tsx';
+import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
+import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { useState } from 'react';
 
 interface IProps {
-  handleSendMessage: (message: string) => void;
+  handleSendMessage: (data: IWebSocketHandleMessage) => void;
   handleCloseChat?: () => void;
 }
 
-const ChatArea = (props: IProps) => {
-  const { handleSendMessage, handleCloseChat } = props;
-
-  const { artifact } = useLocalStorageArtifact();
-  const { activeArtifactId } = artifact ?? {};
-
-  const [showArtifact, setShowArtifact] = useState(false);
-
-  const isArtifactMaximized = useArtifactStore((state) => state.isArtifactMaximized);
-  const setIsArtifactMaximized = useArtifactStore((state) => state.setIsArtifactMaximized);
-
+const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
+  useUpdateActiveArtifactOnNewMessage();
+  const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
+  const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
+  const activeArtifact = useArtifactStore((state) => state.activeArtifact);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const [demoPlayingStatus, setDemoPlayingStatus] = useState<DemoPlayingStatus>(DemoPlayingStatus.INITIAL);
 
   const messages = useMessageStore((state) => state.messages);
+  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
+  const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
+
+  const hasArtifactOrDemoInMessageHistory =
+    messages.findIndex((message) => message.role === 'ai' && !!message.artifact?.artifact_id) !== -1 || isDemoAvailable;
 
   const handleFinishDemo = () => {
-    setIsArtifactMaximized(false);
+    setMediaTakeFullScreenWidth(false);
+    setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
+    handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
-
-  const handleExpandWidth = () => {
-    setShowArtifact(true);
-  };
-
-  useEffect(() => {
-    if (showArtifact) return;
-
-    if (activeArtifactId) {
-      handleExpandWidth();
-    }
-  }, [activeArtifactId, showArtifact]);
 
   return (
     <div
       className={cn(
         'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
         {
-          'w-full': showArtifact,
+          'w-full': hasArtifactOrDemoInMessageHistory,
         },
       )}
     >
       <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
         <ChatHeader
-          handleSendMessage={handleSendMessage}
+          handleSendMessage={(message) => handleSendMessage({ message })}
           handleCloseChat={handleCloseChat}
           handleFinishDemo={handleFinishDemo}
         />
         <div
           className={cn('flex-1 overflow-y-auto', {
-            'grid grid-cols-3 gap-8': showArtifact,
+            'grid grid-cols-3 gap-8': hasArtifactOrDemoInMessageHistory,
           })}
         >
-          {!isArtifactMaximized && <ChatMessage messages={messages} showArtifact={showArtifact} />}
+          {!isMediaTakingFullWidth && (
+            <ChatMessages
+              messages={messages}
+              showRightPanel={hasArtifactOrDemoInMessageHistory}
+              handleSendUserMessage={handleSendMessage}
+              initialSuggestedQuestions={initialSuggestedQuestions}
+              allowFullWidthForText={false}
+            />
+          )}
 
-          {showArtifact && <Artifact isArtifactMaximized={isArtifactMaximized} />}
-        </div>
-        {!isArtifactMaximized && (
-          <ChatInput
+          {!!activeArtifact && (
+            <Artifact
+              isMediaTakingFullWidth={isMediaTakingFullWidth}
+              handleSendUserMessage={handleSendMessage}
+              activeArtifactId={activeArtifact.artifactId}
+              activeArtifactType={activeArtifact.artifactType}
+            />
+          )}
+          <Demo
+            key={demoDetails?.audio_url}
+            handleFinishDemo={handleFinishDemo}
+            isDemoAvailable={isDemoAvailable}
+            demoDetails={demoDetails}
             handleSendMessage={handleSendMessage}
+            demoPlayingStatus={demoPlayingStatus}
+            setDemoPlayingStatus={setDemoPlayingStatus}
+            activeArtifact={activeArtifact}
+          />
+        </div>
+        {!isMediaTakingFullWidth && (
+          <ChatInput
+            handleSendMessage={(message) => handleSendMessage({ message })}
             isAMessageBeingProcessed={isAMessageBeingProcessed}
             messages={messages}
           />

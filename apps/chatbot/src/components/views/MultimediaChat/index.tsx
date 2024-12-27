@@ -1,20 +1,37 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
-import BottomBar from './BottomBar';
+import EntryPointBottomBar from './EntryPointBottomBar';
 import ChatArea from './ChatArea';
 import { useHandleAppStateOnUnmount } from '../../../pages/shared/hooks/useHandleAppStateOnUnmount';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
+import { useEmbedAppEvents } from '../../../hooks/useEmbedAppEvents.ts';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface IProps {
   fetchSessionData: () => void;
-  handleSendUserMessage: (message: string) => Promise<void>;
 }
 
-const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
+const Multimedia = ({ fetchSessionData }: IProps) => {
+  const { handleSendUserMessage } = useWebSocketChat();
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+
+  const handleSendMessage = (data: IWebSocketHandleMessage) => {
+    if (!hasFirstUserMessageBeenSent) {
+      fetchSessionData();
+    }
+    if (!isChatOpen) {
+      handleUpdateSessionData({ isChatOpen: true });
+    }
+
+    handleSendUserMessage(data);
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.MESSAGE_SENT, { message: data.message });
+  };
+
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
-  const [hideBottomBar, setHideBottomBar] = useState(false);
+
   const { trackChatbotEvent } = useChatbotAnalytics();
   useHandleAppStateOnUnmount();
 
@@ -27,64 +44,39 @@ const Multimedia = ({ fetchSessionData, handleSendUserMessage }: IProps) => {
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isChatOpen, showTooltip });
   };
 
+  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenChat });
+
   const handleCloseChat = () => {
     handleUpdateSessionData({ isChatOpen: false });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isChatOpen, showTooltip });
   };
 
-  const handleSendMessage = (message: string) => {
-    fetchSessionData();
-    if (!isChatOpen) {
-      handleUpdateSessionData({ isChatOpen: true });
-    }
-    handleSendUserMessage(message);
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.MESSAGE_SENT, { message });
-  };
-
-  useEffect(() => {
-    const payload = {
-      chatOpen: isChatOpen,
-      tooltipOpen: showTooltip,
-    };
-    window.parent.postMessage(payload, '*');
-  }, [isChatOpen, showTooltip]);
-
-  useEffect(() => {
-    const handleParentWindowMessages = (event: MessageEvent) => {
-      const { type } = event.data;
-
-      if (event.data.hideBottomBar) {
-        setHideBottomBar(true);
-      }
-
-      if (type === 'open-breakout-button') {
-        fetchSessionData();
-        handleOpenChat();
-        trackChatbotEvent(ANALYTICS_EVENT_NAMES.EXTERNAL_BUTTON_CLICKED, { ...event.data });
-      }
-    };
-    window.addEventListener('message', handleParentWindowMessages);
-
-    return () => {
-      window.removeEventListener('message', handleParentWindowMessages);
-    };
-  }, []);
-
   return (
-    <div
-      className={cn('flex h-screen flex-col font-inter', {
-        'rounded-2xl': isChatOpen,
-      })}
-    >
-      {isChatOpen ? (
-        <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
-      ) : (
-        <BottomBar
-          handleSendUserMessage={handleSendMessage}
-          handleOpenChat={handleOpenChat}
-          hideBottomBar={hideBottomBar}
-        />
-      )}
+    <div className={isChatOpen ? 'flex h-screen w-full items-end justify-center pb-12' : ''}>
+      <div
+        className={cn('flex h-screen flex-col font-inter', {
+          'rounded-2xl': isChatOpen,
+          'hd:h-[95%] hd:w-[95%]': isChatOpen,
+          'mac-air:h-[95%] mac-air:w-[95%]': isChatOpen,
+          'hd-ready:h-[95%] hd-ready:w-[95%]': isChatOpen,
+          'desktop:h-[95%] desktop:w-[95%]': isChatOpen,
+          'mac-pro-14:h-[95%] mac-pro-14:w-[95%]': isChatOpen,
+          'hd-plus:h-[95%] hd-plus:w-[95%]': isChatOpen,
+          'mac-pro-16:h-[95%] mac-pro-16:w-[95%]': isChatOpen,
+          'full-hd:h-[95%] full-hd:w-[95%]': isChatOpen,
+          'qhd:h-[95%] qhd:w-[95%]': isChatOpen,
+        })}
+      >
+        {isChatOpen ? (
+          <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
+        ) : (
+          <EntryPointBottomBar
+            handleSendUserMessage={handleSendMessage}
+            handleOpenChat={handleOpenChat}
+            hideBottomBar={shouldHideBottomBar}
+          />
+        )}
+      </div>
     </div>
   );
 };

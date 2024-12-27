@@ -1,7 +1,6 @@
 import { ArtifactSchema } from "../types/artifact";
 import {
   ArtifactResponse,
-  DemoArtifactType,
   SlideArtifactType,
   SlideImageArtifactType,
   VideoArtifactType,
@@ -49,10 +48,6 @@ class ArtifactManager {
 
   getArtifactTitle() {
     switch (this.artifact.artifact_type) {
-      case "DEMO":
-        return (this.artifact.content as DemoArtifactType).features[0]
-          ?.feature_name;
-
       case "SLIDE":
         return (this.artifact.content as SlideArtifactType).title;
 
@@ -69,13 +64,6 @@ class ArtifactManager {
 
   getArtifactDescription() {
     switch (this.artifact.artifact_type) {
-      case "DEMO":
-        return (
-          (this.artifact.content as DemoArtifactType).features[0]
-            ?.feature_description ?? ""
-        );
-
-      // TODO: Add description when backend adds it to the schema
       case "SLIDE":
         return (this.artifact.content as SlideArtifactType).title;
 

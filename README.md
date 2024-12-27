@@ -1,57 +1,122 @@
-# Turborepo Tailwind CSS starter
+# Meaku
 
-This is an official starter Turborepo.
+A monorepo built with Turborepo containing a chatbot application and shared packages.
 
-## Using this example
+## What's Inside
 
-Run the following command:
+### Apps
 
-```sh
-npx create-turbo@latest -e with-tailwind
+- `chatbot` - React application built with Vite and TypeScript
+- `scripts` - Utility scripts for the project
+
+### Packages
+
+- `core` - Shared business logic and utilities
+- `design-system` - React component library with Storybook
+- `config-eslint` - Shared ESLint configurations
+- `config-tailwind` - Shared Tailwind CSS configuration
+- `config-typescript` - Shared TypeScript configurations
+
+## Tech Stack
+
+- **Build Tool**: [Turborepo](https://turbo.build/) for monorepo management
+- **Package Manager**: [pnpm](https://pnpm.io/) v8.15.6
+- **UI Framework**: React 18.3 with TypeScript
+- **Styling**: Tailwind CSS with custom configurations
+- **Testing**: Jest
+- **Code Quality**:
+  - ESLint with custom configurations
+  - Prettier for code formatting
+  - Husky for Git hooks
+  - lint-staged for pre-commit checks
+- **Documentation**: Storybook 8.x for component documentation
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 18
+- pnpm 8.15.6
+
+### Setup
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server for chatbot and related packages
+pnpm dev:chat
+
+# Build all packages and apps
+pnpm build
+
+# Run tests
+pnpm test
+
+# Run type checking
+pnpm type-check
+
+# Format code
+pnpm format
+
+# Lint code
+pnpm lint
+
+
 ```
 
-## What's inside?
+### Scripts
+dev - Start development servers
+build - Build all packages and apps
+test - Run tests
+test:watch - Run tests in watch mode
+lint - Run ESLint
+type-check - Run TypeScript type checking
+format - Format code with Prettier
+clean - Clean build artifacts
 
-This Turborepo includes the following packages/apps:
 
-### Apps and Packages
+```bash
+.
+├── apps/
+│   ├── chatbot/           # Main chatbot application
+│   └── scripts/           # Utility scripts
+├── packages/
+│   ├── core/              # Shared business logic
+│   ├── design-system/     # React component library
+│   ├── config-eslint/     # ESLint configurations
+│   ├── config-tailwind/   # Tailwind CSS configuration
+│   └── config-typescript/ # TypeScript configurations
 
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
-- `@meaku/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@meaku/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Building packages/ui
-
-This example is set up to produce compiled styles for `ui` components into the `dist` directory. The component `.tsx` files are consumed by the Next.js apps directly using `transpilePackages` in `next.config.js`. This was chosen for several reasons:
-
-- Make sharing one `tailwind.config.js` to apps and packages as easy as possible.
-- Make package compilation simple by only depending on the Next.js Compiler and `tailwindcss`.
-- Maintain clear package export boundaries.
-
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update the `tailwind.config.js` in your apps to be aware of your package locations, so it can find all usages of the `tailwindcss` class names for CSS compilation.
-
-For example, in [tailwind.config.js](packages/tailwind-config/tailwind.config.js):
-
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
 ```
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer` dependencies from the `ui` package.
 
-### Utilities
+## Technical Decisions
 
-This Turborepo has some additional tools already setup for you:
+### Why This Stack?
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **Turborepo**: Chosen for efficient monorepo management offering:
+  - Incremental builds and caching for faster development
+  - Parallel task execution across packages
+  - Intelligent dependency graph handling
+  - Built-in task pipelines perfect for our React/TypeScript workflow
+
+- **Vite**: Selected as the build tool for the chatbot app because of:
+  - Lightning-fast HMR (Hot Module Replacement)
+  - Out-of-the-box TypeScript support
+  - Better development performance through ES modules
+  - Optimized production builds with automatic code-splitting
+
+- **pnpm**: Preferred over npm/yarn for:
+  - Efficient disk space usage through content-addressable storage
+  - Strict dependency resolution
+  - Built-in monorepo support
+  - Superior performance in package operations
+
+- **React**: 
+  - Concurrent rendering features
+  - Automatic batching for better performance
+  - Transitions API for improved UX
+  - Strong TypeScript integration
+
+## We have used React19 for admin dahboard  

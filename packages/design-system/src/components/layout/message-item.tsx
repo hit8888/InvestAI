@@ -37,8 +37,6 @@ const MessageItem = (props: Props) => {
   const isSenderBot = message.role === 'ai';
   const isLoading = message.is_loading;
   const isComplete = message.is_complete;
-  // TODO Remove videoURL move to Artifacts
-  const videoURL = '';
   const showFeedbackButtons = message.showFeedbackOptions && isSenderBot && isComplete;
   const showDocuments = showFeedbackButtons && message.documents?.length > 0;
   const showBuyerIntentScore = showFeedbackButtons && Boolean(message.analytics.buyer_intent_score);
@@ -174,13 +172,6 @@ const MessageItem = (props: Props) => {
               </AccordionItem>
             </Accordion>
           </div>
-        )}
-
-        {videoURL && (
-          <video className="w-full" controls autoPlay={!message.isPartOfHistory}>
-            <source src={videoURL} type="video/mp4" />
-            Your browser does not support viewing this video.
-          </video>
         )}
       </div>
 

@@ -1,11 +1,11 @@
-import { AIResponse, ChatBoxArtifactType, Message } from '@meaku/core/types/chat';
+import { AIResponse, Message } from '@meaku/core/types/chat';
 import { Feedback } from '@meaku/core/types/session';
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { ChatBoxArtifactEnumSchema } from '@meaku/core/types/artifact';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 
 interface State {
   messages: Message[];
@@ -21,6 +21,9 @@ interface State {
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
   orbState: OrbStatusEnum;
   handleUpdateOrbState: (selectedOrbState: OrbStatusEnum) => void;
+  isMediaTakingFullWidth: boolean;
+  handleToggleFullScreen: () => void;
+  setMediaTakeFullScreenWidth: (value: boolean | ((prevState: boolean) => boolean)) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -41,42 +44,16 @@ export const useMessageStore = create<State>()(
           const messageId = response.response_id; //AI response
 
           const existingMessageIndex = draft.messages.findIndex((message) => message.id === messageId);
-          // TODO: Replace this with the chat artifact enums created by Amogh
-          const ArtifactTypesToIgnore = ['SUGGESTIONS', 'FORM', 'NONE'];
 
-          const messageArtifact = response.artifacts.find(
-            (artifact) => !ArtifactTypesToIgnore.includes(artifact.artifact_type) && artifact.artifact_id,
-          );
-
-          const chatBoxArtifact = response.artifacts.find((artifact) =>
-            ChatBoxArtifactEnumSchema.options.includes(artifact.artifact_type as ChatBoxArtifactType),
-          );
+          const messageInterface = UnifiedSessionConfigResponseManager.convertServerMessageToClientMessage(response);
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
               ...draft.messages[existingMessageIndex],
-              message: response.message,
-              documents: response.documents,
-              is_loading: response.is_loading,
-              is_complete: response.is_complete,
-              showFeedbackOptions: response.showFeedbackOptions,
-              analytics: response.analytics,
-              artifact: messageArtifact,
-              chatArtifact: chatBoxArtifact,
+              ...messageInterface,
             };
           } else {
-            draft.messages.push({
-              id: messageId,
-              role: 'ai',
-              message: response.message,
-              documents: response.documents,
-              is_loading: response.is_loading,
-              is_complete: response.is_complete,
-              showFeedbackOptions: response.showFeedbackOptions,
-              analytics: response.analytics,
-              artifact: messageArtifact,
-              chatArtifact: chatBoxArtifact,
-            });
+            draft.messages.push(messageInterface);
           }
         }),
       handleAddUserMessage: (message) =>
@@ -88,6 +65,15 @@ export const useMessageStore = create<State>()(
             documents: [],
             analytics: {},
           });
+        }),
+      isMediaTakingFullWidth: false,
+      setMediaTakeFullScreenWidth: (value) =>
+        set((draft) => {
+          draft.isMediaTakingFullWidth = typeof value === 'function' ? value(draft.isMediaTakingFullWidth) : value;
+        }),
+      handleToggleFullScreen: () =>
+        set((draft) => {
+          draft.isMediaTakingFullWidth = !draft.isMediaTakingFullWidth;
         }),
       handleAddMessageFeedback: (messageId, feedback) =>
         set((draft) => {
@@ -109,6 +95,7 @@ export const useMessageStore = create<State>()(
             feedback: updatedFeedback,
           };
         }),
+
       handleRemoveMessageFeedback: (messageId, previousState) =>
         set((draft) => {
           const messageIndex = draft.messages.findIndex((message) => message.id == messageId);

@@ -10,3 +10,10 @@ export const DataSourceSchema = z.object({
   text: z.string().nullable(),
   similarity_score: z.number().optional().nullable(),
 });
+
+export enum DemoPlayingStatus {
+  PLAYING = "PLAYING",
+  PAUSED = "PAUSED",
+  INITIAL = "INITIAL",
+  GENRATING_DEMO = "GENRATING_DEMO",
+}

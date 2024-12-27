@@ -1,10 +1,8 @@
 import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { ChatParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
-import useLocalStorageArtifact from './useLocalStorageArtifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { SplitScreenArtifactEnumSchema } from '@meaku/core/types/artifact';
-import { AIResponse, SplitScreenArtifactType } from '@meaku/core/types/chat';
+import { AIResponse } from '@meaku/core/types/chat';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,14 +12,23 @@ import { useMessageStore } from '../stores/useMessageStore';
 import { trackError } from '../utils/error';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
 import useChatbotAnalytics from './useChatbotAnalytics.tsx';
+import useGetMessagePayload from './useGetMessagePayload.tsx';
 
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
 
+export interface IWebSocketHandleMessage {
+  message: string;
+  eventType?: string;
+  eventData?: Record<string, unknown>;
+}
+
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<ChatParams>();
+
+  const getMessagePayload = useGetMessagePayload();
 
   const isAdmin = useIsAdmin();
 
@@ -45,7 +52,6 @@ const useWebSocketChat = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { trackChatbotEvent: trackEvent } = useChatbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
-  const artifact = useLocalStorageArtifact();
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
@@ -66,7 +72,15 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
   const handleSendUserMessage = useCallback(
-    async (message: string, eventType?: string, eventData?: Record<string, unknown>) => {
+    async ({ message, eventType, eventData }: IWebSocketHandleMessage) => {
+      const messageId = nanoid();
+
+      const payload = getMessagePayload({ message, eventType, eventData, messageId });
+      if (eventType && eventData) {
+        sendMessage(JSON.stringify(payload));
+        return;
+      }
+
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
       if (!hasFirstUserMessageBeenSent) {
@@ -74,22 +88,7 @@ const useWebSocketChat = () => {
         setHasFirstUserMessageBeenSent(true);
       }
 
-      const messageId = nanoid();
       setIsAMessageBeingProcessed(true);
-
-      const payload = {
-        session_id: sessionId,
-        message: message ?? '',
-        response_id: messageId,
-        event_type: eventType ?? '',
-        event_data: eventData ?? {},
-        is_admin: isAdmin,
-      };
-
-      if (eventType && eventData) {
-        sendMessage(JSON.stringify(payload));
-        return;
-      }
 
       if (!sessionId) {
         messageQueue.current.push({ message, messageId });
@@ -105,36 +104,28 @@ const useWebSocketChat = () => {
   );
 
   const handlePrimaryCta = () => {
-    handleSendUserMessage('I want to book a demo for the product.');
+    handleSendUserMessage({ message: 'I want to book a demo for the product.' });
   };
+
   useEffect(() => {
     if (!lastMessage) return;
 
     try {
-      handleStopOrbAnimation();
-      handleUpdateOrbState(OrbStatusEnum.responding);
       const response = JSON.parse(lastMessage.data) as AIResponse;
+      handleStopOrbAnimation();
+
+      if (!response.message || response.script_step) {
+        return;
+      }
+
+      handleUpdateOrbState(OrbStatusEnum.responding);
       response.showFeedbackOptions = isAdmin;
-      handleAddAIMessage(response);
 
       if (response.is_complete) {
         setIsAMessageBeingProcessed(false);
       }
 
-      const { artifacts } = response;
-
-      const activeArtifact = artifacts.find((artifact) =>
-        SplitScreenArtifactEnumSchema.options.includes(artifact.artifact_type as SplitScreenArtifactType),
-      );
-
-      if (activeArtifact && activeArtifact.artifact_type !== 'NONE') {
-        if (artifact.handleUpdateArtifact) {
-          artifact.handleUpdateArtifact({
-            activeArtifactId: activeArtifact.artifact_id,
-            activeArtifactType: activeArtifact.artifact_type,
-          });
-        }
-      }
+      handleAddAIMessage(response);
     } catch (error) {
       trackError(error, {
         action: 'useEffect | handleAddAIMessage',
@@ -177,7 +168,7 @@ const useWebSocketChat = () => {
     };
   }, []); //Cleanup effect
 
-  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage };
+  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage, lastMessage };
 };
 
 export default useWebSocketChat;

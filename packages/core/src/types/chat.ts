@@ -3,7 +3,6 @@ import {
   ArtifactEnumSchema,
   ArtifactSchema,
   ChatBoxArtifactEnumSchema,
-  DemoArtifactSchema,
   FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
@@ -30,17 +29,29 @@ export const MessageArtifactSchema = z.object({
   artifact_id: z.string(),
 });
 
+export const ScriptStepDTO = z.object({
+  message: z.string(),
+  asset_url: z.string().optional(),
+  audio_url: z.string().optional(),
+  is_end: z.boolean(),
+});
+
+export type ScriptStepType = z.infer<typeof ScriptStepDTO>;
+
 export const MessageSchema = z.object({
   message_id: z.number(),
-  response_id: z.string().nullable(),
+  response_id: z.string(),
   session_id: z.string(),
   role: z.enum(["user", "ai"]),
   message: z.string(),
   documents: z.array(DataSourceSchema),
   suggested_questions: z.array(z.string()),
   analytics: AnalyticsSchema,
+  script_step: ScriptStepDTO.optional(),
+  demo_available: z.boolean().optional(),
   artifacts: z.array(MessageArtifactSchema),
   type: z.enum(["text", "event"]),
+  is_complete: z.boolean().optional(),
 });
 
 export const WebSocketArtifactsSchema = z.object({
@@ -51,19 +62,20 @@ export const WebSocketArtifactsSchema = z.object({
 export const AIResponseSchema = z.object({
   response_id: z.string(),
   message: z.string(),
-  is_complete: z.boolean(),
+  role: z.enum(["user", "ai"]),
+  is_complete: z.boolean().optional(),
   documents: z.array(DataSourceSchema),
   is_loading: z.boolean().optional(),
   suggested_questions: z.array(z.string()),
   showFeedbackOptions: z.boolean().optional(),
   analytics: AnalyticsSchema,
   artifacts: z.array(WebSocketArtifactsSchema),
+  demo_available: z.boolean().optional(),
+  script_step: ScriptStepDTO.optional(),
 });
 
 export type SlideArtifactType = z.infer<typeof SlideArtifactSchema>;
 export type SlideImageArtifactType = z.infer<typeof SlideImageArtifactSchema>;
-
-export type DemoArtifactType = z.infer<typeof DemoArtifactSchema>;
 
 export type VideoArtifactType = z.infer<typeof VideoArtifactSchema>;
 
@@ -77,13 +89,10 @@ export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
 
 export type Message = {
   id: number | string;
-  // response_id: string | null;
-  // id: number | string | null; // temporary to accomodate backend changes
   message: string;
   documents: z.infer<typeof DataSourceSchema>[];
   role: z.infer<typeof MessageSchema>["role"];
   suggested_questions?: string[];
-  isPartOfHistory?: boolean;
   is_loading?: boolean;
   is_complete?: boolean;
   feedback?: Feedback;
@@ -92,6 +101,8 @@ export type Message = {
   analytics: z.infer<typeof AnalyticsSchema>;
   artifact?: z.infer<typeof MessageArtifactSchema>;
   chatArtifact?: z.infer<typeof MessageArtifactSchema>;
+  scriptStep?: z.infer<typeof ScriptStepDTO>;
+  demoAvailable?: boolean;
   type?: z.infer<typeof MessageSchema>["type"];
 };
 

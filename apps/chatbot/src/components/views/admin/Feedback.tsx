@@ -1,6 +1,6 @@
 import { ApiProviderContext } from '../../../pages/shared/ApiProvider/Context';
 import { useContextSelector } from 'use-context-selector';
-import useWebSocketChat from '../../../hooks/useWebSocketChat';
+import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { useSearchParams } from 'react-router-dom';
 import ChatArea from '../MultimediaChat/ChatArea.tsx';
@@ -12,7 +12,7 @@ import useLocalStorageSession from '../../../hooks/useLocalStorageSession.tsx';
 import Button from '@breakout/design-system/components/layout/button';
 import { CopyIcon } from 'lucide-react';
 import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
-import useLocalStorageArtifact from '../../../hooks/useLocalStorageArtifact.tsx';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
@@ -22,14 +22,14 @@ const Feedback = () => {
   const manager = useUnifiedConfigurationResponseManager();
 
   const { handleUpdateSessionData } = useLocalStorageSession();
-  const { handleUpdateArtifact } = useLocalStorageArtifact();
+  const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
 
   const handleRefreshChat = () => {
     handleUpdateSessionData({
       sessionId: undefined,
       prospectId: undefined,
     });
-    handleUpdateArtifact(undefined);
+    setActiveArtifact(null);
     window.location.reload();
   };
 
@@ -41,8 +41,8 @@ const Feedback = () => {
     sessionQuery.refetch();
   };
 
-  const handleSendMessage = (message: string) => {
-    handleSendUserMessage(message);
+  const handleSendMessage = (data: IWebSocketHandleMessage) => {
+    handleSendUserMessage(data);
   };
 
   const handleCopySession = () => {

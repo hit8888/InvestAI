@@ -7,9 +7,7 @@ interface IProps {
   title?: string;
 }
 
-const SlideArtifactPreview = (props: IProps) => {
-  const { handleArtifactOnClick, isFetching, title } = props;
-
+const SlideArtifactPreview = ({ handleArtifactOnClick, isFetching, title }: IProps) => {
   return (
     <button
       onClick={handleArtifactOnClick}
