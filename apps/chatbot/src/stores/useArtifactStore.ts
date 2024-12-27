@@ -6,8 +6,6 @@ import { immer } from 'zustand/middleware/immer';
 interface State {
   isArtifactPlaying: boolean;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
-  shouldEndArtifactImmediately: boolean;
-  setShouldEndArtifactImmediately: (shouldEnd: boolean) => void;
   activeArtifact: GetArtifactPayload | null;
   setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
 }
@@ -25,12 +23,6 @@ export const useArtifactStore = create<State>()(
       setIsArtifactPlaying: (isPlaying) => {
         set((state) => {
           state.isArtifactPlaying = isPlaying;
-        });
-      },
-      shouldEndArtifactImmediately: false,
-      setShouldEndArtifactImmediately: (shouldEnd) => {
-        set((state) => {
-          state.shouldEndArtifactImmediately = shouldEnd;
         });
       },
     })),

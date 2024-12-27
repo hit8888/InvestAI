@@ -9,8 +9,6 @@
   const DEFAULT_HEIGHT = "90vh";
   const COLLAPSED_SIZE_WIDTH = "90vw";
   const COLLAPSED_SIZE_HEIGHT_PX = 90;
-  const COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX = 1400;
-  const COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX = 340;
 
   /**
    * Creates and styles the container for the chat widget.
@@ -55,20 +53,11 @@
    * Adjusts the responsive styles of the container.
    * @param {HTMLElement} container - The container element to adjust.
    * @param {boolean} isChatOpen - Whether the chat is open.
-   * @param {boolean} isTooltipOpen - Whether the tooltip is open.
    */
-  const adjustResponsiveStyles = (
-    container,
-    isChatOpen,
-    isTooltipOpen,
-    hideBottomBar,
-  ) => {
+  const adjustResponsiveStyles = (container, isChatOpen, hideBottomBar) => {
     let width, height;
 
-    if (!isChatOpen && isTooltipOpen) {
-      width = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_WIDTH_PX;
-      height = hideBottomBar ? 0 : COLLAPSED_SIZE_WITH_TOOLTIP_HEIGHT_PX;
-    } else if (!isChatOpen) {
+    if (!isChatOpen) {
       // Default desktop view with chat closed
       width = hideBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
       height = hideBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
@@ -109,18 +98,6 @@
       params[key] = getQueryParameter(key);
       return params;
     }, {});
-  };
-
-  /**
-   * Checks if a chat session exists in local storage.
-   * @returns {boolean} True if a chat session exists, false otherwise.
-   */
-  const checkSessionExists = () => {
-    try {
-      return JSON.parse(localStorage.getItem("chatSession")) !== null;
-    } catch (error) {
-      return false;
-    }
   };
 
   const isMobile = () => {
@@ -181,13 +158,11 @@
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
   let isChatOpen = false;
-  let isTooltipOpen = checkSessionExists();
   let iFrameSource = null;
 
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen, hideBottomBar);
 
   console.log("sets up the container and iframe");
 
@@ -216,20 +191,15 @@
       "*",
     );
 
-    if (
-      event.data &&
-      typeof event.data.chatOpen === "boolean" &&
-      typeof event.data.tooltipOpen === "boolean"
-    ) {
+    if (event.data && typeof event.data.chatOpen === "boolean") {
       isChatOpen = event.data.chatOpen;
-      isTooltipOpen = event.data.tooltipOpen;
-      adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
+      adjustResponsiveStyles(container, isChatOpen, hideBottomBar);
     }
   });
 
   // Event listener for window resize
   window.addEventListener("resize", () => {
-    adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
+    adjustResponsiveStyles(container, isChatOpen, hideBottomBar);
   });
 
   // Event listener for External buttons

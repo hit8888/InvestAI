@@ -74,7 +74,7 @@ const Artifact = ({ isMediaTakingFullWidth, handleSendUserMessage, activeArtifac
     }
   };
 
-  if (activeArtifactType === 'NONE' || !activeArtifactId || !artifactData) return null;
+  if (activeArtifactType === 'NONE') return null;
 
   if (isError) {
     return <></>;

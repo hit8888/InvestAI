@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import MessageItem from './MessageItem';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
+import SuggestionsArtifact from './SuggestionsArtifact';
 
 interface IProps {
   messages: Message[];
@@ -66,6 +67,17 @@ const ChatMessages = ({
               />
             </>
           ))}
+          {messages.length < 1 && (
+            <div className="pt-4">
+              <SuggestionsArtifact
+                handleSendUserMessage={handleSendUserMessage}
+                artifact={{
+                  suggested_questions: initialSuggestedQuestions,
+                  suggested_questions_type: 'BUBBLE',
+                }}
+              />
+            </div>
+          )}
         </div>
 
         <div className="p-1" />

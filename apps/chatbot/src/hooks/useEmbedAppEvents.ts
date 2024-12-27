@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import useLocalStorageSession from './useLocalStorageSession';
 import useChatbotAnalytics from './useChatbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useSearchParams } from 'react-router-dom';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -9,23 +9,20 @@ interface IProps {
 }
 
 export const useEmbedAppEvents = ({ fetchSessionData, handleOpenChat }: IProps) => {
-  const { sessionData } = useLocalStorageSession();
-
   const { trackChatbotEvent } = useChatbotAnalytics();
 
-  const isChatOpen = sessionData.isChatOpen;
+  const [searchParams] = useSearchParams();
 
-  const showTooltip = !isChatOpen && (sessionData?.showTooltip ?? true);
+  const isChatOpen = searchParams.get('isChatOpen') === 'true';
 
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
 
   useEffect(() => {
     const payload = {
       chatOpen: isChatOpen,
-      tooltipOpen: showTooltip,
     };
     window.parent.postMessage(payload, '*');
-  }, [isChatOpen, showTooltip]);
+  }, [isChatOpen]);
 
   useEffect(() => {
     const handleParentWindowMessages = (event: MessageEvent) => {

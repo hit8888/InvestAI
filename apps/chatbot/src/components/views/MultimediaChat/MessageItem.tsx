@@ -157,7 +157,7 @@ const MessageItem = ({
         </div>
       </div>
       <div className="ml-auto">
-        {totalMessages <= 1 && (
+        {totalMessages < 1 && (
           <SuggestionsArtifact
             handleSendUserMessage={handleSendUserMessage}
             artifact={{

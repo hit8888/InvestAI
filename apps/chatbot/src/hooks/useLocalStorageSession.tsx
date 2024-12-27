@@ -7,8 +7,6 @@ import { ChatParams } from '@meaku/core/types/config';
 type Session = {
   sessionId?: string;
   prospectId?: string;
-  showTooltip: boolean;
-  isChatOpen: boolean;
 };
 
 const useLocalStorageSession = () => {
@@ -21,8 +19,6 @@ const useLocalStorageSession = () => {
   const sessionData: Session = {
     sessionId: localStorageSessionData?.sessionId,
     prospectId: localStorageSessionData?.prospectId,
-    showTooltip: localStorageSessionData?.showTooltip ?? false,
-    isChatOpen: localStorageSessionData?.isChatOpen ?? false,
   };
 
   const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {
@@ -30,7 +26,6 @@ const useLocalStorageSession = () => {
       const updatedSessionData = {
         ...sessionData,
         ...newSessionData,
-        isChatOpen: newSessionData.isChatOpen ?? sessionData.isChatOpen ?? true,
       };
 
       setLocalStorageSessionData(updatedSessionData);
