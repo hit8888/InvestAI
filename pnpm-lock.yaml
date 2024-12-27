@@ -12366,25 +12366,6 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
-    dependencies:
-      goober: 2.1.14(csstype@3.1.3)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    transitivePeerDependencies:
-      - csstype
-
-<<<<<<< HEAD
-=======
-  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
-    dependencies:
-      goober: 2.1.14(csstype@3.1.3)
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-    transitivePeerDependencies:
-      - csstype
-
->>>>>>> 7e3c175 (Leads Page UI & Authentication flow..)
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
