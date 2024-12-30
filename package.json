@@ -25,21 +25,23 @@
   "engines": {
     "node": ">=18"
   },
-  "pnpm": {
+"pnpm": {
+    "overrides": {
+      "agent-admin>react": "^19.0.0",
+      "agent-admin>react-dom": "^19.0.0",
+      "chatbot>react": "^18.3.1",
+      "chatbot>react-dom": "^18.3.1"
+    },
     "packageExtensions": {
       "agent-admin": {
-        "dependencies": {
-          "react": "^19.0.0",
-          "react-dom": "^19.0.0"
-        }
-      },
-      "chatbot": {
-        "dependencies": {
-          "react": "^18.3.1",
-          "react-dom": "^18.3.1"
+        "peerDependencies": {
+          "react": ">=19.0.0",
+          "react-dom": ">=19.0.0"
         }
       }
-    }
+    },
+    "shamefullyHoist": false,
+    "strictPeerDependencies": true
   },
   "lint-staged": {
     "apps/**/*.{js,jsx,ts,tsx}": [
