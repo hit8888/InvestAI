@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import leadsicon from '../assets/leads-icons.svg';
@@ -9,6 +9,7 @@ import actionDots from '../assets/dots.svg';
 import defaultProfile from '../assets/default-profile.jpg';
 import AdminLogoSVG from './AdminLogoSVG';
 import { useAuth } from '../context/AuthProvider';
+import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
 
 type NavLinkProps = {
   navUrl: string;
@@ -63,7 +64,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className={`flex h-screen flex-col items-start border-r border-[#EDECFB] ${isOpen ? 'w-[22%] 2xl:w-[15%]' : 'w-[75px] 2xl:w-[4%]'}`}
+      className={`flex flex-col items-start border-r border-[#EDECFB] 2xl:h-screen ${isOpen ? 'w-[22%] 2xl:w-[15%]' : 'w-[75px] 2xl:w-[4%]'}`}
       style={{
         transition: 'width 0.3s',
       }}
@@ -110,25 +111,51 @@ const Sidebar: React.FC = () => {
                   className="bg-lightgray flex h-8 w-8 flex-col items-start gap-[10px] rounded-full border border-[rgba(255,255,255,0.32)] bg-cover bg-center bg-no-repeat p-[10px]"
                   style={{ backgroundImage: `url(${profilePic})` }}
                 ></div>
+                {isOpen ? (
+                  <div className="flex w-[164px] flex-col items-start justify-center gap-0.5">
+                    <p className="line-clamp-1 self-stretch overflow-hidden text-ellipsis font-inter text-[14px] font-semibold leading-[18px] text-[#4E46DC]">
+                      {userName}
+                    </p>
+                  </div>
+                ) : null}
               </div>
-              <button
-                type="button"
-                aria-label="action-btn"
-                className="flex cursor-pointer items-center gap-2 rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2"
-              >
-                <img src={actionDots} alt="action-btn" />
-              </button>
+              <ThreeDotActionButton />
             </div>
-            {isOpen ? (
-              <div className="flex w-[164px] flex-col items-start justify-center gap-0.5">
-                <p className="line-clamp-1 self-stretch overflow-hidden text-ellipsis font-inter text-[14px] font-semibold leading-[18px] text-[#4E46DC]">
-                  {userName}
-                </p>
-              </div>
-            ) : null}
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const ThreeDotActionButton = () => {
+  const { logout } = useAuth();
+  const actionBtnRef = useRef(null);
+  const [isActionBtnClicked, setActionBtnClicked] = useState(false);
+
+  // Use the custom hook to close the dropdown when clicking outside
+  useClickOutside(actionBtnRef, () => setActionBtnClicked(false));
+  return (
+    <div className="relative">
+      <button
+        ref={actionBtnRef}
+        onClick={() => setActionBtnClicked(!isActionBtnClicked)}
+        type="button"
+        aria-label="action-btn"
+        className="flex cursor-pointer items-center gap-2 rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2"
+      >
+        <img src={actionDots} alt="action-btn" />
+      </button>
+      {isActionBtnClicked ? (
+        <button
+          onClick={() => logout()}
+          type="button"
+          aria-label="logout-btn"
+          className="absolute bottom-8 z-10 cursor-pointer rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2 text-[16px] leading-[20px] text-[#4E46DC]"
+        >
+          Logout
+        </button>
+      ) : null}
     </div>
   );
 };

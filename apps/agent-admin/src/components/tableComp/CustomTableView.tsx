@@ -1,18 +1,17 @@
-import React from 'react';
+import { useState } from 'react';
 
 import ColumnSortIcon from '@breakout/design-system/components/icons/columnsort-icon';
-import { LeadsTableViewProps } from '@meaku/core/types/admintable';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDefinition } from '@meaku/core/types/admintable';
 
-type TableViewProps = {
-  tabularData: LeadsTableViewProps[];
+interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  columnHeaderData: any; // NEED TO ADD TYPE
-};
+  tabularData: any[];
+  columnHeaderData: ColumnDefinition[];
+}
 
 const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, _setData] = React.useState(() => [...tabularData]);
+  const [data] = useState(() => [...tabularData, ...tabularData, ...tabularData]);
 
   const table = useReactTable({
     data,
@@ -21,18 +20,19 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
   });
 
   return (
-    <div className="w-full">
-      <table className="flex w-[1573px] flex-col items-start self-stretch">
-        <thead className="w-full">
+    <div className="max-h-[400px] w-full overflow-auto">
+      <table className="flex w-full flex-col items-start self-stretch">
+        <thead className="sticky top-0 z-10 w-full">
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="flex w-full items-start self-stretch ">
+            <tr key={headerGroup.id} className="flex w-full items-start self-stretch">
               {headerGroup.headers.map((header) => {
                 const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
                 const isColumnEmail = header.id === 'email';
+                const isColumnProductOfInterest = header.id === 'productOfInterest';
                 return (
                   <th
                     key={header.id}
-                    className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'}  border-b border-[#B8B5F1] bg-[#DCDAF8]`}
+                    className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-[115px] truncate 2xl:w-[158px]' : ''}  border-b border-[#B8B5F1] bg-[#DCDAF8]`}
                   >
                     <span
                       className={`text-left text-[#101828] ${isColumnEmail ? 'w-[158px]' : 'flex-1'} font-inter text-[12px] font-medium leading-[18px] tracking-[0.12px]`}

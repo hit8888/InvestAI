@@ -4,12 +4,13 @@ import CustomTableView from './CustomTableView';
 
 import {
   EmailCellValueProps,
-  LeadsTableRowData,
   LeadsTableViewProps,
+  ColumnDefinition,
   LocationCellValueProps,
-  TableHeaderColumn,
   TimestampCellValueProps,
+  ProductOfInterestCellValueProps,
 } from '@meaku/core/types/admintable';
+import TablePagination from './TablePagination';
 
 const defaultData: LeadsTableViewProps[] = [
   {
@@ -105,58 +106,88 @@ const defaultData: LeadsTableViewProps[] = [
 ];
 
 const EmailCellValue: React.FC<EmailCellValueProps> = ({ value }: { value: string }) => {
-  return <span className="w-[158px] truncate">{value}</span>;
+  return (
+    <span title={value} className="w-[187px] truncate 2xl:w-[158px]">
+      {value}
+    </span>
+  );
 };
+
 const LocationCellValue: React.FC<LocationCellValueProps> = ({ value }: { value: string }) => {
   return <span>{value}</span>;
 };
+
 const TimestampCellValue: React.FC<TimestampCellValueProps> = ({ value }: { value: string }) => {
   return <span>{value}</span>;
 };
 
-const columns: TableHeaderColumn<LeadsTableRowData>[] = [
+const ProductOfInterestCellValue: React.FC<ProductOfInterestCellValueProps> = ({ value }: { value: string }) => {
+  return (
+    <span title={value} className="w-[115px] truncate 2xl:w-[158px]">
+      {value}
+    </span>
+  );
+};
+
+const columns: ColumnDefinition[] = [
   {
-    accessor: 'email',
+    id: 'email',
+    accessorKey: 'email',
     header: 'Email',
     cell: (info) => <EmailCellValue value={info.getValue()} />,
   },
   {
-    accessor: (row) => row.name,
+    accessorKey: 'name',
     id: 'name',
-    cell: (info) => <strong>{info.getValue()}</strong>,
+    cell: (info) => <span>{info.getValue()}</span>,
     header: 'Name',
   },
   {
-    accessor: 'company',
-    header: () => 'Company',
+    id: 'company',
+    accessorKey: 'company',
+    header: 'Company',
     cell: (info) => info.getValue(), // Assuming renderValue is a method of info
   },
   {
-    accessor: 'role',
+    id: 'role',
+    accessorKey: 'role',
     header: 'Role',
   },
   {
-    accessor: 'productOfInterest',
+    id: 'productOfInterest',
+    accessorKey: 'productOfInterest',
     header: 'Product Of Interest',
+    cell: (info) => <ProductOfInterestCellValue value={info.getValue()} />,
   },
   {
-    accessor: 'timestamp',
+    id: 'timestamp',
+    accessorKey: 'timestamp',
     header: 'Timestamp',
     cell: (info) => <TimestampCellValue value={info.getValue()} />,
   },
   {
-    accessor: 'location',
+    id: 'location',
+    accessorKey: 'location',
     header: 'Location',
     cell: (info) => <LocationCellValue value={info.getValue()} />,
   },
 ];
 
 const TableContainer = () => {
+  const totalItems = 1234; // Total number of items
+  const itemsPerPage = 50; // Items per page
+
+  // Handle page changes
+  const handlePageChange = (page: number) => {
+    console.log(`Page changed to: ${page}`); // Example action
+  };
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
         <TableViewWrapper />
-        <TablePagination />
+        <div className="flex items-center justify-end gap-4 self-stretch">
+          <TablePagination totalItems={totalItems} itemsPerPage={itemsPerPage} onPageChange={handlePageChange} />
+        </div>
       </div>
     </div>
   );
@@ -168,7 +199,7 @@ const TableViewWrapper = () => {
   const HighIntentOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
   const ShortestSessionOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
   return (
-    <div className="flex h-[547px] flex-col items-start gap-4 self-stretch">
+    <div className="flex flex-col items-start gap-4 self-stretch">
       <div className="flex items-center gap-6 self-stretch">
         <p className="flex-1 font-inter text-[24px] font-semibold leading-normal tracking-[0.24px] text-[#101828]">
           {'Table of leads'}
@@ -186,10 +217,6 @@ const TableViewWrapper = () => {
       <CustomTableView tabularData={defaultData} columnHeaderData={columns} />
     </div>
   );
-};
-
-const TablePagination = () => {
-  return <div className="flex items-center justify-end gap-4 self-stretch"></div>;
 };
 
 export default TableContainer;
