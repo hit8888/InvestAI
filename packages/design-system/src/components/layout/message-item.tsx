@@ -3,7 +3,6 @@ import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import { Message } from '@meaku/core/types/chat';
 import { FeedbackEnum, InitialFeedbackPayload } from '@meaku/core/types/feedback';
 import isUndefined from 'lodash/isUndefined';
-import { CirclePlayIcon } from 'lucide-react';
 import { useCallback } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -15,6 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './
 import Button from './button';
 import FaviconImage from './favicon-image';
 import FeedbackButton from './feedback-button';
+import { CirclePlayIcon } from 'lucide-react';
 
 type Props = {
   agentName: string;
