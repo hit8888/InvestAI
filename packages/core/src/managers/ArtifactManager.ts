@@ -1,9 +1,11 @@
 import { ArtifactSchema } from "../types/artifact";
 import {
   ArtifactResponse,
-  SlideArtifactType,
-  SlideImageArtifactType,
-  VideoArtifactType,
+  FormArtifactContent,
+  SlideArtifactContent,
+  SlideImageArtifactContent,
+  SuggestionArtifactContent,
+  VideoArtifactContent,
 } from "@meaku/core/types/chat";
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
@@ -38,7 +40,12 @@ class ArtifactManager {
   }
 
   //Refactor this code to use different methods
-  getArtifactContent() {
+  getArtifactContent():
+    | SlideImageArtifactContent
+    | SlideArtifactContent
+    | VideoArtifactContent
+    | FormArtifactContent
+    | SuggestionArtifactContent {
     return this.artifact.content;
   }
 
@@ -49,13 +56,13 @@ class ArtifactManager {
   getArtifactTitle() {
     switch (this.artifact.artifact_type) {
       case "SLIDE":
-        return (this.artifact.content as SlideArtifactType).title;
+        return (this.artifact.content as SlideArtifactContent).title;
 
       case "SLIDE_IMAGE":
-        return (this.artifact.content as SlideImageArtifactType).title;
+        return (this.artifact.content as SlideImageArtifactContent).title;
 
       case "VIDEO":
-        return (this.artifact.content as VideoArtifactType).title;
+        return (this.artifact.content as VideoArtifactContent).title;
 
       default:
         return "";
@@ -65,13 +72,13 @@ class ArtifactManager {
   getArtifactDescription() {
     switch (this.artifact.artifact_type) {
       case "SLIDE":
-        return (this.artifact.content as SlideArtifactType).title;
+        return (this.artifact.content as SlideArtifactContent).title;
 
       case "SLIDE_IMAGE":
-        return (this.artifact.content as SlideImageArtifactType).description;
+        return (this.artifact.content as SlideImageArtifactContent).description;
 
       case "VIDEO":
-        return (this.artifact.content as VideoArtifactType).description;
+        return (this.artifact.content as VideoArtifactContent).description;
 
       default:
         return "";

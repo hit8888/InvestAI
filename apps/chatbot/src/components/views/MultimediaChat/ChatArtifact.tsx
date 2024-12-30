@@ -1,8 +1,8 @@
 import {
   FormArtifactMetadataType,
-  FormArtifactType,
+  FormArtifactContent,
   MessageArtifactSchema,
-  SuggestionArtifactType,
+  SuggestionArtifactContent,
 } from '@meaku/core/types/chat';
 import { memo, useMemo } from 'react';
 import { z } from 'zod';
@@ -56,7 +56,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
         if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
-            artifact={artifactContent as SuggestionArtifactType}
+            artifact={artifactContent as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}
           />
         );
@@ -64,7 +64,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
         return (
           <FormArtifact
             artifactId={artifact?.artifact_id}
-            artifact={artifactContent as FormArtifactType}
+            artifact={artifactContent as FormArtifactContent}
             artifactMetadata={artifactMetadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
           />

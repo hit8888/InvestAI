@@ -21,7 +21,7 @@ const router = sentryCreateBrowserRouter([
   },
   {
     path: '*',
-    element: <Custom404 errorMessage={'An unexpected error occurred'} />,
+    element: <Custom404 />,
   },
 ]);
 
