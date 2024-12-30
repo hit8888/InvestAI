@@ -1,13 +1,13 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
-import { useArtifactStore } from '../../../stores/useArtifactStore';
-import ArtifactControls from './ArtifactControls';
+import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat.tsx';
+import { useArtifactStore } from '../../../../stores/useArtifactStore.ts';
+import ArtifactControls from '../ArtifactControls.tsx';
 import { SalesEvent } from '@meaku/core/types/webSocket';
-import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
+import useChatbotAnalytics from '../../../../hooks/useChatbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { useMessageStore } from '../../../stores/useMessageStore.ts';
+import { useMessageStore } from '../../../../stores/useMessageStore.ts';
 
 interface IProps {
   videoUrl: string;

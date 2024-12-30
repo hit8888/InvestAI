@@ -74,16 +74,27 @@ export const AIResponseSchema = z.object({
   script_step: ScriptStepDTO.optional(),
 });
 
-export type SlideArtifactType = z.infer<typeof SlideArtifactSchema>;
-export type SlideImageArtifactType = z.infer<typeof SlideImageArtifactSchema>;
+export type SlideArtifactContent = z.infer<typeof SlideArtifactSchema>;
+export type SlideImageArtifactContent = z.infer<
+  typeof SlideImageArtifactSchema
+>;
 
-export type VideoArtifactType = z.infer<typeof VideoArtifactSchema>;
+export type VideoArtifactContent = z.infer<typeof VideoArtifactSchema>;
 
-export type SuggestionArtifactType = z.infer<typeof SuggestionArtifactSchema>;
+export type SuggestionArtifactContent = z.infer<
+  typeof SuggestionArtifactSchema
+>;
 
-export type FormArtifactType = z.infer<typeof FormArtifactSchema>;
+export type FormArtifactContent = z.infer<typeof FormArtifactSchema>;
 
 export type FormFieldType = z.infer<typeof FormFieldSchema>;
+
+export type ArtifactContent =
+  | SlideImageArtifactContent
+  | SlideArtifactContent
+  | VideoArtifactContent
+  | FormArtifactContent
+  | SuggestionArtifactContent;
 
 export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
 

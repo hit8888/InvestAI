@@ -62,8 +62,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     trackError(internalAPIError, { action: 'internalAPIError', component: 'PreloadContainer' });
 
     if (isDemoURL && configQuery?.isError) {
-      const errorMessage = (configQuery?.error as AxiosError<{ error: string }>)?.response?.data?.error;
-      return <Custom404 errorMessage={errorMessage || 'An unexpected error occurred'} />;
+      return <Custom404 />;
     }
     return null;
   }

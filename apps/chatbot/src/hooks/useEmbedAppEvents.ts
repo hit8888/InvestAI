@@ -20,6 +20,7 @@ export const useEmbedAppEvents = ({ fetchSessionData, handleOpenChat }: IProps) 
   useEffect(() => {
     const payload = {
       chatOpen: isChatOpen,
+      tooltipOpen: false,
     };
     window.parent.postMessage(payload, '*');
   }, [isChatOpen]);

@@ -1,7 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import ChatHeader from './ChatHeader.tsx';
 import ChatMessages from './ChatMessages.tsx';
-import Artifact from './Artifact.tsx';
 import ChatInput from './ChatInput.tsx';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
@@ -13,6 +12,7 @@ import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { useState } from 'react';
+import Artifact from './Artifact/index.tsx';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
