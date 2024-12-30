@@ -27,7 +27,7 @@
     "chromatic": "npx chromatic --project-token=chpt_1f8853b88848365"
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": ">=18.0.0 <20.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
