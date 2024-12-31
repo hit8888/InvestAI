@@ -4,5 +4,5 @@ export const getTenantFromUrl = (): string => {
 
   // If org is not present in the path, return a default tenant name
   // Make a organisation tenant using backend application in localhost and use the same tenant name here.
-  return orgIndex !== -1 ? pathSegments[orgIndex + 1] : "test123";
+  return orgIndex !== -1 ? pathSegments[orgIndex + 1] : "";
 };

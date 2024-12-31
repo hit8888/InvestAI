@@ -1,5 +1,5 @@
 import { loginWithEmailPassword } from "../../http/api";
-import { LoginWithEmailPasswordPayload } from "../../types/api";
+import { LoginWithEmailPasswordPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
 type LoginWithEmailPasswordResult =
@@ -20,7 +20,6 @@ const useLoginWithEmailPassword = (
   >
 ) => {
   const mutation = useMutation({
-    mutationKey: ["login-with-email-password"],
     mutationFn: async (payload) => {
       const response = await loginWithEmailPassword(payload);
 

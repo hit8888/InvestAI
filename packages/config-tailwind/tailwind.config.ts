@@ -9,15 +9,15 @@ const config: Omit<Config, "content"> = {
   theme: {
     extend: {
       screens: {
-        'hd': '1280px', // HD - 1280x720
-        'mac-air': '1280px', // MacBook Air - 1280x832
-        'hd-ready': '1366px', // HD Ready - 1366x768
-        'desktop': '1440px', // Desktop - 1440x1024
-        'mac-pro-14': '1512px', // MacBook Pro 14 - 1512x982
-        'hd-plus': '1536px', // HD Plus - 1536x864
-        'mac-pro-16': '1728px', // MacBook Pro 16 - 1728x1117
-        'full-hd': '1920px', // Full HD Desktop - 1920x1080
-        'qhd': '2560px', // QHD Desktop - 2560x1440
+        hd: "1280px", // HD - 1280x720
+        "mac-air": "1280px", // MacBook Air - 1280x832
+        "hd-ready": "1366px", // HD Ready - 1366x768
+        desktop: "1440px", // Desktop - 1440x1024
+        "mac-pro-14": "1512px", // MacBook Pro 14 - 1512x982
+        "hd-plus": "1536px", // HD Plus - 1536x864
+        "mac-pro-16": "1728px", // MacBook Pro 16 - 1728x1117
+        "full-hd": "1920px", // Full HD Desktop - 1920x1080
+        qhd: "2560px", // QHD Desktop - 2560x1440
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
@@ -38,10 +38,20 @@ const config: Omit<Config, "content"> = {
           800: "#1D2939",
           900: "#101828",
         },
+        // TODOS: IF NEEDED, WILL REMOVE IT IN NEXT PR - All Keys after textColor
+        // TODOS: NEED TO Add HandleColorConfig For Admin Dashboard Pages
         primary: {
           DEFAULT: "rgb(var(--primary))",
           foreground: "rgb(var(--primary-foreground))",
           textColor: "rgb(var(--primary-text))",
+          adminBg: "var(--admin-primary-bg)",
+          bgHeader: "var(--admin-primary-bg-header)",
+          bgGray: "var(--admin-primary-bggray)",
+          border: "var(--admin-primary-border)",
+          textBlack: "var(--admin-primary-text-black)",
+          textCompany: "var(--admin-primary-text-company)",
+          textGray: "var(--admin-primary-text-gray)",
+          textMain: "var(--admin-primary-text-main)",
         },
         secondary: {
           DEFAULT: "rgb(var(--secondary))",
@@ -64,8 +74,8 @@ const config: Omit<Config, "content"> = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
-        numberOfLeadsOuter: 'numberOfLeadsOuter 5s infinite', // Outer background animation
-        numberOfLeadsInner: 'numberOfLeadsInner 5s infinite', // Inner background animation
+        numberOfLeadsOuter: "numberOfLeadsOuter 5s infinite", // Outer background animation
+        numberOfLeadsInner: "numberOfLeadsInner 5s infinite", // Inner background animation
       },
       keyframes: {
         ripple: {
@@ -111,12 +121,12 @@ const config: Omit<Config, "content"> = {
           },
         },
         numberOfLeadsOuter: {
-          '0%': { backgroundColor: '#FFFFFF' }, // Starting from white
-          '100%': { backgroundColor: '#DCDAF8' }, // Ending with the given color
+          "0%": { backgroundColor: "#FFFFFF" }, // TODOS: Add THEMING COLORS - Starting from white
+          "100%": { backgroundColor: "#DCDAF8" }, // TODOS: Add THEMING COLORS - Ending with the given color
         },
         numberOfLeadsInner: {
-          '0%': { backgroundColor: '#4E46DC', opacity: 1 }, // Starting color and full opacity
-          '100%': { backgroundColor: '#4E46DC', opacity: 0.3 }, // Ending with 30% opacity
+          "0%": { backgroundColor: "#4E46DC", opacity: 1 }, // TODOS: Add THEMING COLORS - Starting color and full opacity
+          "100%": { backgroundColor: "#4E46DC", opacity: 0.3 }, // TODOS: Add THEMING COLORS - Ending with 30% opacity
         },
       },
       borderRadius: {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CustomFilterDropdown from './CustomFilterDropdown';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
+import NavigationArrowButton from './NavigationArrowButton';
 
 interface PaginationProps {
   totalItems: number; // Total number of items
@@ -33,6 +34,8 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
   };
 
   const PerPageOptions = ['10', '20', '50'];
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
 
   return (
     <div className="flex items-center justify-end gap-4">
@@ -47,7 +50,7 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
 
         {/* Page range and total items */}
         <div className="flex items-center gap-2 rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2">
-          <p className="font-inter text-[14px] font-semibold leading-[20px] text-[#667085]">
+          <p className="text-sm font-semibold text-[#667085]">
             {(currentPage - 1) * Number(itemsPerPageValue) + 1}-
             {Math.min(currentPage * Number(itemsPerPageValue), totalItems)}
             <span className="font-normal">{` of ${totalItems}`}</span>
@@ -57,34 +60,16 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
 
       {/* Navigation buttons */}
       <div className="flex items-center gap-2">
-        <div className="flex items-start gap-2">
-          <div
-            className={`flex h-9 w-9 items-center justify-center gap-2 rounded-lg border-[1.5px] 
-            ${currentPage === 1 ? 'cursor-not-allowed border-gray-300' : 'border-[#4E46DC]'} p-2`}
-          >
-            <button
-              onClick={() => handleCurrentPage(currentPage - 1)}
-              className={`flex items-center gap-2 ${currentPage === 1 ? 'cursor-not-allowed' : ''}`}
-              disabled={currentPage === 1}
-            >
-              <PaginationPreviousArrow svgColor={currentPage === 1 ? '#9ca3af' : '#4E46DC'} />
-            </button>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div
-            className={`flex h-9 w-9 items-center justify-center gap-2 rounded-lg border-[1.5px] 
-            ${currentPage === totalPages ? 'cursor-not-allowed border-gray-300' : 'border-[#4E46DC]'} p-2`}
-          >
-            <button
-              onClick={() => handleCurrentPage(currentPage + 1)}
-              className={`flex items-center gap-2 ${currentPage === totalPages ? 'cursor-not-allowed' : ''}`}
-              disabled={currentPage === totalPages}
-            >
-              <PaginationNextArrow svgColor={currentPage === totalPages ? '#9ca3af' : '#4E46DC'} />
-            </button>
-          </div>
-        </div>
+        <NavigationArrowButton
+          conditionOnBtn={isFirstPage}
+          onButtonClick={() => handleCurrentPage(currentPage - 1)}
+          PaginationArrow={PaginationPreviousArrow}
+        />
+        <NavigationArrowButton
+          conditionOnBtn={isLastPage}
+          onButtonClick={() => handleCurrentPage(currentPage + 1)}
+          PaginationArrow={PaginationNextArrow}
+        />
       </div>
     </div>
   );

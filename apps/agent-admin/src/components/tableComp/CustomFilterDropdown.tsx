@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { cn } from '@breakout/design-system/lib/cn';
 import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
 import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
+import { DROPDOWN_ARROW_ICONS } from '../../utils/constants';
 
 // Define the type for the options
 interface DropdownProps {
@@ -20,7 +22,7 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
   const [dropdownMenuPosition, setDropdownMenuPosition] = useState<'top' | 'bottom'>('bottom');
 
   // Ref to track the dropdown element
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null!);
   const dropdownOptionMenuRef = useRef<HTMLDivElement>(null);
   const buttonTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -35,23 +37,6 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
   const toggleDropdown = () => {
     setIsOpen((prevState) => !prevState);
   };
-
-  // Handle clicking outside the dropdown to close it
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    // Add event listener for outside click
-    document.addEventListener('click', handleOutsideClick);
-
-    // Cleanup event listener
-    return () => {
-      document.removeEventListener('click', handleOutsideClick);
-    };
-  }, [setIsOpen]);
 
   // Use the custom hook to close the dropdown when clicking outside
   useClickOutside(dropdownRef, () => setIsOpen(false));
@@ -79,7 +64,9 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
       <button
         type="button"
         ref={buttonTriggerRef}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2 font-inter text-[14px] font-semibold leading-[20px] text-[#667085] shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg 
+        border border-[#DCDAF8] bg-[#FBFBFE] p-2 text-sm font-semibold text-[#667085] shadow-sm 
+        focus:outline-none focus:ring-2 focus:ring-indigo-500"
         id="options-menu"
         onClick={toggleDropdown} // Toggle dropdown visibility
         aria-expanded="true"
@@ -87,8 +74,13 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
       >
         {selectedOption || filterLabel}
         <span className="font-normal">{staticValue ? `  ${staticValue}` : ''}</span>
-        <span className="h-[20px] w-[20px]">
-          <DropdownIcon />
+        <span
+          className={cn('h-5 w-5', {
+            'rotate-0': !isOpen,
+            'translate-x-1 translate-y-1 rotate-180': isOpen,
+          })}
+        >
+          <DropdownIcon {...DROPDOWN_ARROW_ICONS} />
         </span>
       </button>
 
@@ -108,11 +100,10 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
               <button
                 key={option}
                 onClick={() => handleOptionClick(option)}
-                className={`${
-                  selectedOption === option
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-gray-700 hover:bg-indigo-600 hover:text-white'
-                } block w-full px-4 py-2 text-left text-sm`}
+                className={cn(`block w-full px-4 py-2 text-left text-sm hover:bg-indigo-600 hover:text-white`, {
+                  'text-indigo-600': selectedOption === option,
+                  'text-gray-700': !(selectedOption === option),
+                })}
                 role="menuitem"
               >
                 {option}
