@@ -15,14 +15,14 @@ const NavLinkSingleItem = ({ navUrl, navItem, isActive, navImg, isPanelOpen }: N
     <NavLink to={navUrl} className={`flex w-full cursor-pointer flex-col items-start gap-[10px] bg-[#FBFBFE] p-2`}>
       <div
         className={cn(`flex w-full items-center gap-2 rounded-lg px-4 py-2`, {
-          'bg-primary-adminBg': isActive,
+          'bg-[#EDECFB]': isActive,
           'bg-[#FBFBFE]': !isActive,
         })}
       >
         <div
           className={cn(`flex items-center gap-[10px] rounded-lg p-1`, {
             'bg-[#FBFBFE]': isActive,
-            'bg-primary-adminBg': !isActive,
+            'bg-[#EDECFB]': !isActive,
           })}
         >
           {navImg}
