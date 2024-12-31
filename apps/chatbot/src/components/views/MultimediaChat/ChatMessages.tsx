@@ -5,6 +5,7 @@ import MessageItem from './MessageItem';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 import SuggestionsArtifact from './SuggestionsArtifact';
+import { PreDemoQuestion } from './Demo/PreDemoQuestion';
 
 interface IProps {
   messages: Message[];
@@ -12,6 +13,7 @@ interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   initialSuggestedQuestions: string[];
   allowFullWidthForText: boolean;
+  showDemoPreQuestions: boolean;
 }
 
 const ChatMessages = ({
@@ -20,6 +22,7 @@ const ChatMessages = ({
   handleSendUserMessage,
   initialSuggestedQuestions,
   allowFullWidthForText,
+  showDemoPreQuestions,
 }: IProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -36,7 +39,6 @@ const ChatMessages = ({
       }
     }
   };
-
   useEffect(() => {
     handleScrollToBottom();
   }, [messages]);
@@ -54,10 +56,9 @@ const ChatMessages = ({
           })}
         >
           {messages.map((message, idx) => (
-            <>
+            <div key={idx}>
               {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
               <MessageItem
-                key={message.id}
                 message={message}
                 messageIndex={idx}
                 totalMessages={messages.length}
@@ -65,7 +66,7 @@ const ChatMessages = ({
                 handleSendUserMessage={handleSendUserMessage}
                 initialSuggestedQuestions={initialSuggestedQuestions}
               />
-            </>
+            </div>
           ))}
           {messages.length < 1 && (
             <div className="pt-4">
@@ -78,6 +79,7 @@ const ChatMessages = ({
               />
             </div>
           )}
+          {showDemoPreQuestions && <PreDemoQuestion handleSendUserMessage={handleSendUserMessage} />}
         </div>
 
         <div className="p-1" />

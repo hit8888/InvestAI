@@ -96,8 +96,6 @@ const useWebSocketChat = () => {
         handleAddUserMessage(message);
         sendMessage(JSON.stringify(payload));
         handleAnimatedOrb(messageId);
-
-        setIsAMessageBeingProcessed(false);
       }
     },
     [readyState, sessionId],

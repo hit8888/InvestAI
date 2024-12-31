@@ -64,6 +64,7 @@ export const useMessageStore = create<State>()(
             message,
             documents: [],
             analytics: {},
+            features: [],
           });
         }),
       isMediaTakingFullWidth: false,
