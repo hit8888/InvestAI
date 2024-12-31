@@ -52,7 +52,7 @@ const SelectDemoFeatures = ({ demoFeatures, handleSendMessage, setDemoPlayingSta
           </div>
           <Button onClick={onBookDemoClick}>
             <div className="flex items-center justify-center gap-2">
-              <span>Book Demo</span>
+              <span>View Topics Demo</span>
               <ArrowRight width={16} height={17} color="white" />
             </div>
           </Button>
