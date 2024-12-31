@@ -25,22 +25,6 @@
   "engines": {
     "node": ">=18"
   },
-  "pnpm": {
-    "packageExtensions": {
-      "agent-admin": {
-        "dependencies": {
-          "react": "^19.0.0",
-          "react-dom": "^19.0.0"
-        }
-      },
-      "chatbot": {
-        "dependencies": {
-          "react": "^18.3.1",
-          "react-dom": "^18.3.1"
-        }
-      }
-    }
-  },
   "lint-staged": {
     "apps/**/*.{js,jsx,ts,tsx}": [
       "eslint --config apps/chatbot/eslint.config.js --fix",

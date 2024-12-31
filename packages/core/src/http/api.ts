@@ -1,12 +1,14 @@
+import { 
+  VerifyOtpPayload, 
+  GenerateOtpPayload, 
+  LoginWithEmailPasswordPayload, 
+} from "../types/admin/api";
 import {
   GetArtifactPayload,
   InitializationPayload,
   PostResponseFeedbackPayload,
   UpdateProspectPayload,
   UpdateSessionDataPayload,
-  GenerateOtpPayload,
-  LoginWithEmailPasswordPayload,
-  VerifyOtpPayload,
 } from "../types/api";
 import apiClient from "./client";
 

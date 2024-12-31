@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import ColumnSortIcon from '@breakout/design-system/components/icons/columnsort-icon';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { ColumnDefinition } from '@meaku/core/types/admintable';
+import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
+import { TABLE_SORT_ICON_PROPS } from '../../utils/constants';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -35,11 +36,13 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                     className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-[115px] truncate 2xl:w-[158px]' : ''}  border-b border-[#B8B5F1] bg-[#DCDAF8]`}
                   >
                     <span
-                      className={`text-left text-[#101828] ${isColumnEmail ? 'w-[158px]' : 'flex-1'} font-inter text-[12px] font-medium leading-[18px] tracking-[0.12px]`}
+                      className={`text-left text-[#101828] ${isColumnEmail ? 'w-[158px]' : 'flex-1'} text-xs font-medium tracking-[0.12px]`}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </span>
-                    <ColumnSortIcon />
+                    <span className="flex cursor-pointer items-start rounded-lg bg-[#CAC7F5] p-1">
+                      <ColumnSortIcon {...TABLE_SORT_ICON_PROPS} color="#837EE7" />
+                    </span>
                   </th>
                 );
               })}
@@ -56,9 +59,7 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                     key={cell.id}
                     className={`flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch p-2 ${isLastColumn ? '' : 'border-r'} border-b border-[#DCDAF8] bg-[#FBFBFE]`}
                   >
-                    <p
-                      className={`flex items-center gap-2 self-stretch font-inter text-[14px] font-normal leading-[20px] text-[#667085]`}
-                    >
+                    <p className={`flex items-center gap-2 self-stretch text-sm font-normal text-[#667085]`}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </p>
                   </td>

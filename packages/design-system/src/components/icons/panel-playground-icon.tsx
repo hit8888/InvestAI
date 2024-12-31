@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const PlaygroundIcons = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const PanelPlaygroundIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
@@ -22,4 +22,4 @@ const PlaygroundIcons = ({ className = 'text-primary', width, height, color, vie
   );
 };
 
-export default PlaygroundIcons;
+export default PanelPlaygroundIcon;

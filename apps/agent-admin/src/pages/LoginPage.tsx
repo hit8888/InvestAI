@@ -11,8 +11,8 @@ const LoginPage = () => {
         </div>
         <div className="absolute flex items-center justify-center">
           <div className="text-center">
-            <h1 className="font-bold 2xl:text-[96px]">Login to the Admin Dashboard</h1>
-            <div className="flex w-full min-w-[360px] flex-col items-center justify-center gap-12 py-6">
+            <h1 className="font-bold 2xl:text-8xl">Login to the Admin Dashboard</h1>
+            <div className="flex w-full min-w-96 flex-col items-center justify-center gap-12 py-6">
               <LoginForm />
             </div>
           </div>

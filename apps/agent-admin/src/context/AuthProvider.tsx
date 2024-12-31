@@ -1,17 +1,23 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import axios from 'axios';
-import { ENV } from '../../../../apps/chatbot/src/config/env';
+// import axios from 'axios';
+// import { ENV } from '../../../../apps/chatbot/src/config/env';
+
+import { AuthResponse } from '@meaku/core/types/admin/auth';
+import {
+  // ACCESS_TOKEN_EXPIRATION_TIME,
+  DefaultAuthResponse,
+} from '../utils/constants';
 
 interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
-  isAuthenticated: boolean /* eslint-disable @typescript-eslint/no-explicit-any */;
-  apiCall?: (config: any) => Promise<any> /* eslint-disable @typescript-eslint/no-explicit-any */;
-  saveTokens?: (newAccessToken: string, newRefreshToken: string, userData?: any) => void;
+  isAuthenticated: boolean;
+  // apiCall?: (config: any) => Promise<any>;
+  saveTokens?: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
   clearTokens?: () => void;
   login: () => void;
-  logout: () => void /* eslint-disable @typescript-eslint/no-explicit-any */;
-  userInfo?: any;
+  logout: () => void;
+  userInfo?: AuthResponse;
 }
 
 interface AuthProviderProps {
@@ -23,34 +29,34 @@ const defaultContext: AuthContextType = {
   refreshToken: null,
   isAuthenticated: false,
   saveTokens: () => {},
-  apiCall: () => Promise.resolve(),
+  // apiCall: () => Promise.resolve(),
   clearTokens: () => {},
   login: () => {},
   logout: () => {},
-  userInfo: {},
+  userInfo: DefaultAuthResponse,
 };
 
-const api = axios.create({
-  baseURL: ENV.VITE_BASE_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-  withCredentials: true, // Important for cookies
-});
+// const api = axios.create({
+//   baseURL: ENV.VITE_BASE_API_URL,
+//   headers: {
+//     'Content-Type': 'application/json',
+//     Accept: 'application/json',
+//   },
+//   withCredentials: true, // Important for cookies
+// });
 
 // Create Auth Context
 export const AuthContext = createContext<AuthContextType>(defaultContext);
 
 // AuthProvider Component
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState(DefaultAuthResponse);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   // Save tokens and update state
-  const saveTokens = (newAccessToken: string, newRefreshToken: string, userData?: any) => {
+  const saveTokens = (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     if (userData) {
@@ -76,45 +82,45 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // API call with auto-refresh token logic
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const apiCall = async (config: any) => {
-    try {
-      // Add Authorization header to the request
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${accessToken}`,
-      };
 
-      const response = await api(config);
-      return response.data;
-    } catch (error) {
-      // Check if the error is 401 (unauthorized)
-      if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
-        try {
-          // Attempt to refresh the token
-          const refreshResponse = await api.post('api/token/refresh/', {
-            refreshToken,
-          });
+  // const apiCall = async (config: any) => {
+  //   try {
+  //     // Add Authorization header to the request
+  //     config.headers = {
+  //       ...config.headers,
+  //       Authorization: `Bearer ${accessToken}`,
+  //     };
 
-          // Save the new tokens
-          const { access: newAccessToken, refresh: newRefreshToken, user } = refreshResponse.data;
-          saveTokens(newAccessToken, newRefreshToken, user);
+  //     const response = await api(config);
+  //     return response.data;
+  //   } catch (error) {
+  //     // Check if the error is 401 (unauthorized)
+  //     if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
+  //       try {
+  //         // Attempt to refresh the token
+  //         const refreshResponse = await api.post('api/token/refresh/', {
+  //           refreshToken,
+  //         });
 
-          // Retry the original request with the new access token
-          config.headers.Authorization = `Bearer ${newAccessToken}`;
-          const retryResponse = await api(config);
-          return retryResponse.data;
-        } catch (refreshError) {
-          // If refreshing fails, clear tokens and throw an error
-          clearTokens();
-          throw new Error('Session expired. Please log in again.' + refreshError);
-        }
-      }
+  //         // Save the new tokens
+  //         const { access: newAccessToken, refresh: newRefreshToken, user } = refreshResponse.data;
+  //         saveTokens(newAccessToken, newRefreshToken, user);
 
-      // If the error is not 401, rethrow it
-      throw error;
-    }
-  };
+  //         // Retry the original request with the new access token
+  //         config.headers.Authorization = `Bearer ${newAccessToken}`;
+  //         const retryResponse = await api(config);
+  //         return retryResponse.data;
+  //       } catch (refreshError) {
+  //         // If refreshing fails, clear tokens and throw an error
+  //         clearTokens();
+  //         throw new Error('Session expired. Please log in again.' + refreshError);
+  //       }
+  //     }
+
+  //     // If the error is not 401, rethrow it
+  //     throw error;
+  //   }
+  // };
 
   // Function to set authentication status
   const login = () => setIsAuthenticated(true);
@@ -124,11 +130,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ accessToken, refreshToken, saveTokens, clearTokens, apiCall, isAuthenticated, login, logout, userInfo }}
+    <AuthContext
+      value={{
+        accessToken,
+        refreshToken,
+        saveTokens,
+        clearTokens,
+        // apiCall,
+        isAuthenticated,
+        login,
+        logout,
+        userInfo,
+      }}
     >
       {children}
-    </AuthContext.Provider>
+    </AuthContext>
   );
 };
 

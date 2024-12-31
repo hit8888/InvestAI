@@ -1,5 +1,5 @@
 import { verifyOtp } from "../../http/api";
-import { VerifyOtpPayload } from "../../types/api";
+import { VerifyOtpPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
 type VerifyOtpResult =
@@ -14,7 +14,6 @@ const useVerifyOtp = (
   >
 ) => {
   const mutation = useMutation({
-    mutationKey: ["verify-otp"],
     mutationFn: async (payload: any) => {
       const response = await verifyOtp(payload);
 

@@ -8,6 +8,7 @@ import OtpInput from './OtpInput';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
+import { URL_ROUTE_LEADS_PAGE } from '../utils/constants';
 
 const LoginForm = () => {
   const { login, saveTokens } = useAuth();
@@ -27,7 +28,7 @@ const LoginForm = () => {
     {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       onSuccess: (data: any) => {
-        console.log('🚀 ~ file: LoginForm.tsx:33 ~ }=useLoginWithEmailPassword ~ data:', data);
+        // console.log('🚀 ~ file: LoginForm.tsx:33 ~ }=useLoginWithEmailPassword ~ data:', data);
         if (saveTokens) {
           saveTokens(data.access, data.refresh, data.user);
         }
@@ -45,7 +46,7 @@ const LoginForm = () => {
   const { mutateAsync: verifyOtp, isPending: isVerifyOtpPending } = useVerifyOtp({
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
-      console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
+      // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
       if (saveTokens) {
         saveTokens(data.access, data.refresh);
       }
@@ -93,7 +94,7 @@ const LoginForm = () => {
     login();
     setEmail('');
     setOtp('');
-    navigate('/leads');
+    navigate(URL_ROUTE_LEADS_PAGE);
   };
 
   const handleToggleShowOtpLogin = () => {
@@ -116,7 +117,7 @@ const LoginForm = () => {
       <form className="flex w-full flex-col gap-2" onSubmit={handleLogin}>
         <div className="flex w-full flex-col gap-10 text-left">
           <div className="flex w-full flex-col items-start justify-center gap-2 2xl:gap-8">
-            <label htmlFor="email" className="text-sm font-bold 2xl:text-[64px]">
+            <label htmlFor="email" className="text-sm font-bold 2xl:text-6xl">
               Email Address
             </label>
             <input
@@ -126,7 +127,7 @@ const LoginForm = () => {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full py-3 text-lg 2xl:py-4 2xl:text-[32px]"
+              className="w-full py-3 text-lg 2xl:py-4 2xl:text-3xl"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
             />
@@ -143,7 +144,7 @@ const LoginForm = () => {
                   },
                 )}
               >
-                <label htmlFor="password" className="text-sm font-bold 2xl:text-[64px]">
+                <label htmlFor="password" className="text-sm font-bold 2xl:text-6xl">
                   Password
                 </label>
                 <input
@@ -151,7 +152,7 @@ const LoginForm = () => {
                   id="password"
                   type="password"
                   placeholder="********"
-                  className="w-full py-3 text-lg placeholder:pt-2 2xl:py-4 2xl:text-[32px]"
+                  className="w-full py-3 text-lg placeholder:pt-2 2xl:py-4 2xl:text-3xl"
                   value={password}
                   onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setPassword(ev.target.value)}
                 />

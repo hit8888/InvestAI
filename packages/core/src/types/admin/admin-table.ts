@@ -1,3 +1,5 @@
+import { JSX } from 'react';
+
 export type LeadsTableViewProps = {
     email: string;
     name: string;

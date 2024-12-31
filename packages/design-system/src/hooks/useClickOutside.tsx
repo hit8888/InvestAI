@@ -6,7 +6,7 @@ import { useEffect, RefObject } from "react";
  * @param ref - React ref object pointing to the element
  * @param onOutsideClick - Callback function to invoke when clicking outside the element
  */
-const useClickOutside = (ref: RefObject<HTMLElement>, onOutsideClick: () => void) => {
+const useClickOutside = (ref: RefObject<HTMLButtonElement | HTMLDivElement>, onOutsideClick: () => void) => {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {

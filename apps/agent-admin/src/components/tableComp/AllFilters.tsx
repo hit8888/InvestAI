@@ -3,8 +3,10 @@ import AllFiltersIcon from '@breakout/design-system/components/icons/all-filters
 const AllFilters = () => {
   return (
     <div className="flex items-center gap-1 self-stretch rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2">
-      <AllFiltersIcon />
-      <p className="font-inter text-[14px] font-medium leading-[20px] text-[#4E46DC]">All Filters</p>
+      <span className="h-5 w-5">
+        <AllFiltersIcon />
+      </span>
+      <p className="text-sm font-medium text-[#4E46DC]">All Filters</p>
     </div>
   );
 };

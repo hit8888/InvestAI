@@ -1,5 +1,5 @@
 import { generateOtp } from "../../http/api";
-import { GenerateOtpPayload } from "../../types/api";
+import { GenerateOtpPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
 type GenerateOtpResult =
@@ -14,7 +14,6 @@ const useGenerateOtp = (
   >
 ) => {
   const mutation = useMutation({
-    mutationKey: ["generate-otp"],
     mutationFn: async (payload) => {
       const response = await generateOtp(payload);
 

@@ -6,8 +6,14 @@ import LoginPage from '../pages/LoginPage';
 import LeadsPage from '../pages/LeadsPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import PlaygroundPage from '../pages/PlaygroundPage';
-import ProtectedRoute from '../pages/protectedRoutes';
+import ProtectedRoute from '../pages/ProtectedRoutes';
 import withPageViewWrapper from '../pages/PageViewWrapper';
+import {
+  URL_ROUTE_CONVERSATIONS_PAGE,
+  URL_ROUTE_LEADS_PAGE,
+  URL_ROUTE_LOGIN_PAGE,
+  URL_ROUTE_PLAYGROUND_PAGE,
+} from '../utils/constants';
 
 const WrapDashboard = withPageViewWrapper(Dashboard);
 const WrapLeadsPage = withPageViewWrapper(LeadsPage);
@@ -27,22 +33,22 @@ const routes = [
         children: [],
       },
       {
-        path: '/login',
+        path: URL_ROUTE_LOGIN_PAGE,
         element: <LoginPage />,
         children: [],
       },
       {
-        path: '/leads',
+        path: URL_ROUTE_LEADS_PAGE,
         element: <ProtectedRoute element={<WrapLeadsPage />} />,
         children: [],
       },
       {
-        path: '/conversations',
+        path: URL_ROUTE_CONVERSATIONS_PAGE,
         element: <ProtectedRoute element={<WrapConversationsPage />} />,
         children: [],
       },
       {
-        path: '/playground',
+        path: URL_ROUTE_PLAYGROUND_PAGE,
         element: <ProtectedRoute element={<WrapPlaygroundPage />} />,
         children: [],
       },
