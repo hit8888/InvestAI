@@ -1,4 +1,4 @@
-import { SparkleIcon } from 'lucide-react';
+import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {

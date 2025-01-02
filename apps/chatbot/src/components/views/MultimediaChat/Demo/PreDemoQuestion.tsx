@@ -1,4 +1,3 @@
-import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import useUnifiedConfigurationResponseManager from '../../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { useState } from 'react';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
@@ -29,8 +28,7 @@ const PreDemoQuestion = ({ handleSendUserMessage }: IProps) => {
         Would you like to explore specific features of the {tenantName} product that might interest you?
       </span>
 
-      <div className="mt-4 flex items-center gap-4 pr-4">
-        <BotIndicator />
+      <div className="mt-4 flex items-center gap-2 pr-4">
         <ActionButton
           buttonText="Yes, lets do that!"
           onClick={() => {
