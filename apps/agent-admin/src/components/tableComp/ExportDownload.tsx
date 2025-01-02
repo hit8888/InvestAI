@@ -39,8 +39,8 @@ const ExportDownload: React.FC<DownloadProps> = () => {
       <button
         type="button"
         className="inline-flex w-full items-center justify-center gap-2 rounded-lg 
-        border border-[#DCDAF8] bg-[#FBFBFE] p-2 text-sm font-semibold text-[#667085] shadow-sm 
-        focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm 
+        focus:outline-none focus:ring-2 focus:ring-primary/60"
         id="options-menu"
         onClick={toggleDropdown} // Toggle dropdown visibility
         aria-expanded="true"

@@ -21,9 +21,9 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
   });
 
   return (
-    <div className="max-h-[400px] w-full overflow-auto">
+    <div className="w-full">
       <table className="flex w-full flex-col items-start self-stretch">
-        <thead className="sticky top-0 z-10 w-full">
+        <thead className="sticky top-0 z-10 w-full bg-primary/20">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id} className="flex w-full items-start self-stretch">
               {headerGroup.headers.map((header) => {
@@ -33,14 +33,14 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                 return (
                   <th
                     key={header.id}
-                    className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-[115px] truncate 2xl:w-[158px]' : ''}  border-b border-[#B8B5F1] bg-[#DCDAF8]`}
+                    className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-[115px] truncate 2xl:w-[158px]' : ''}  border-b border-primary/40 bg-primary/20`}
                   >
                     <span
-                      className={`text-left text-[#101828] ${isColumnEmail ? 'w-[158px]' : 'flex-1'} text-xs font-medium tracking-[0.12px]`}
+                      className={`text-left text-gray-900 ${isColumnEmail ? 'w-[158px]' : 'flex-1'} text-xs font-medium`}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </span>
-                    <span className="flex cursor-pointer items-start rounded-lg bg-[#CAC7F5] p-1">
+                    <span className="flex cursor-pointer items-start rounded-lg bg-primary/30 p-1">
                       <ColumnSortIcon {...TABLE_SORT_ICON_PROPS} color="#837EE7" />
                     </span>
                   </th>
@@ -49,7 +49,7 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
             </tr>
           ))}
         </thead>
-        <tbody className="w-full">
+        <tbody className="max-h-[400px] w-full overflow-auto">
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="flex w-full items-start self-stretch ">
               {row.getVisibleCells().map((cell) => {
@@ -57,9 +57,9 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                 return (
                   <td
                     key={cell.id}
-                    className={`flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch p-2 ${isLastColumn ? '' : 'border-r'} border-b border-[#DCDAF8] bg-[#FBFBFE]`}
+                    className={`flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch p-2 ${isLastColumn ? '' : 'border-r'} border-b border-primary/20 bg-primary/2.5`}
                   >
-                    <p className={`flex items-center gap-2 self-stretch text-sm font-normal text-[#667085]`}>
+                    <p className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </p>
                   </td>

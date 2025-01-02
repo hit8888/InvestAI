@@ -5,27 +5,17 @@
 @layer base {
   :root {
     /* --primary: 102 120 176; */
-    --primary: 32 62 142;
-    --primary-foreground: 255 255 255;
-    /* --primary: 78 70 220;
+    /* --primary: 32 62 142;
     --primary-foreground: 255 255 255; */
+    --primary: 78 70 220;
+    --primary-foreground: 255 255 255;
+    --primary-foreground-comma: 255, 255, 255;
 
     --secondary: 254 202 81;
     --secondary-foreground: 255 255 255;
 
     --card: 239 241 245;
     --card-foreground: 45 52 84;
-
-    /* Admin Dashboard Colors: TODOS- NEED TO REMOVE THIS AFTER THEMING IS DONE, 
-    IT IS HEERE FOR EASY ACCESS AND FOR CHECKING */
-    --admin-primary-bg: #edecfb;
-    --admin-primary-bg-header: #f6f6fd;
-    --admin-primary-bggray: #fbfbfe;
-    --admin-primary-border: #dcdaf8;
-    --admin-primary-text-black: #101828;
-    --admin-primary-text-company: #599ad9;
-    --admin-primary-text-gray: #667085;
-    --admin-primary-text-main: #4e46dc;
   }
 
   .bottom-bar-shadow {

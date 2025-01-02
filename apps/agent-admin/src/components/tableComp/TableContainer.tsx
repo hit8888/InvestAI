@@ -113,9 +113,7 @@ const TableViewWrapper = () => {
   const ByLocationOptions = FILTER_DEFAULT_OPTIONS;
   return (
     <div className="flex flex-col items-start gap-4 self-stretch">
-      <div className="flex items-center gap-6 self-stretch">
-        <p className="flex-1 text-2xl font-semibold tracking-[0.24px] text-[#101828]">{'Table of leads'}</p>
-      </div>
+      <p className="flex-1 text-2xl font-semibold text-gray-900">{'Table of leads'}</p>
       <div className="flex items-start gap-4">
         <AllFilters />
         <ExportDownload />

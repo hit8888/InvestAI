@@ -21,19 +21,20 @@ export const NAV_LINK_ICON_PROPS = {
   width: '16',
   height: '16',
   viewBox: '0 0 16 16',
-  color: '#4E46DC',
+  color: 'rgb(var(--primary))',
 };
 
 export const PAGE_HEADER_TITLE_ICON_PROPS = {
   width: '24',
   height: '25',
   viewBox: '0 0 24 25',
-  color: '#4E46DC',
+  color: 'rgb(var(--primary))',
 };
 
 export const TABLE_SORT_ICON_PROPS = NAV_LINK_ICON_PROPS;
 export const PAGINATION_ARROW_ICONS = NAV_LINK_ICON_PROPS;
 export const DROPDOWN_ARROW_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
+export const ALL_FILTERS_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
 
 export const DEFAULT_USERNAME = 'Kymberly Abestango';
 export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';

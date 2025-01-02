@@ -20,7 +20,7 @@ const ProfilePicActionButton = () => {
         onClick={() => setActionBtnClicked(!isActionBtnClicked)}
         type="button"
         aria-label="profile-btn"
-        className="flex h-8 w-8 flex-col items-start gap-[10px] rounded-full border border-[rgba(255,255,255,0.32)] bg-cover bg-center bg-no-repeat p-[10px]"
+        className="flex h-8 w-8 rounded-full border border-[rgba(var(--primary-foreground-comma),0.32)] bg-cover bg-center bg-no-repeat p-[6px]"
         style={{ backgroundImage: `url(${profilePic})` }}
       ></button>
       {isActionBtnClicked ? (
@@ -28,7 +28,7 @@ const ProfilePicActionButton = () => {
           onClick={() => logout()}
           type="button"
           aria-label="logout-btn"
-          className="absolute bottom-8 z-10 cursor-pointer rounded-lg border border-[#DCDAF8] bg-[#FBFBFE] p-2 text-base text-[#4E46DC]"
+          className="absolute bottom-8 z-10 cursor-pointer rounded-lg border border-primary/20 bg-primary/2.5 p-2 text-base text-primary"
         >
           {LOGOUT_BUTTON_TITLE}
         </button>

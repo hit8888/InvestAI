@@ -44,14 +44,6 @@ const config: Omit<Config, "content"> = {
           DEFAULT: "rgb(var(--primary))",
           foreground: "rgb(var(--primary-foreground))",
           textColor: "rgb(var(--primary-text))",
-          adminBg: "var(--admin-primary-bg)",
-          bgHeader: "var(--admin-primary-bg-header)",
-          bgGray: "var(--admin-primary-bggray)",
-          border: "var(--admin-primary-border)",
-          textBlack: "var(--admin-primary-text-black)",
-          textCompany: "var(--admin-primary-text-company)",
-          textGray: "var(--admin-primary-text-gray)",
-          textMain: "var(--admin-primary-text-main)",
         },
         secondary: {
           DEFAULT: "rgb(var(--secondary))",
@@ -63,6 +55,7 @@ const config: Omit<Config, "content"> = {
         },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
+        adminLogoText: '#599ad9',
         link: "#2E90FA",
         success: {
           50: "#ECFDF3",
@@ -76,8 +69,6 @@ const config: Omit<Config, "content"> = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
-        numberOfLeadsOuter: "numberOfLeadsOuter 5s infinite", // Outer background animation
-        numberOfLeadsInner: "numberOfLeadsInner 5s infinite", // Inner background animation
       },
       keyframes: {
         ripple: {
@@ -122,17 +113,12 @@ const config: Omit<Config, "content"> = {
             backgroundPosition: "0% 50%",
           },
         },
-        numberOfLeadsOuter: {
-          "0%": { backgroundColor: "#FFFFFF" }, // TODOS: Add THEMING COLORS - Starting from white
-          "100%": { backgroundColor: "#DCDAF8" }, // TODOS: Add THEMING COLORS - Ending with the given color
-        },
-        numberOfLeadsInner: {
-          "0%": { backgroundColor: "#4E46DC", opacity: 1 }, // TODOS: Add THEMING COLORS - Starting color and full opacity
-          "100%": { backgroundColor: "#4E46DC", opacity: 0.3 }, // TODOS: Add THEMING COLORS - Ending with 30% opacity
-        },
       },
       borderRadius: {
         "custom-56": "56px",
+      },
+      opacity: {
+        '2.5': '0.025', // Add 2.5% opacity
       },
     },
   },

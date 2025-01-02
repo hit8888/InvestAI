@@ -10,7 +10,7 @@ const PlaygroundPage = () => {
           headerTitle="Playground Page"
           headerIcon={<PlaygroundIcons {...PAGE_HEADER_TITLE_ICON_PROPS} />}
         />
-        <div className="flex h-64 flex-col items-start gap-4 self-stretch rounded-2xl border border-[#EDECFB] p-4"></div>
+        <div className="flex h-64 flex-col items-start gap-4 self-stretch rounded-2xl border border-primary/10 p-4"></div>
       </div>
       <div></div>
     </div>

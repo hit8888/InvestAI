@@ -13,7 +13,7 @@ const NavigationArrowButton = ({ conditionOnBtn, onButtonClick, PaginationArrow 
     <div
       className={cn(`flex h-9 w-9 items-center justify-center gap-2 rounded-lg border-[1.5px] p-2`, {
         'cursor-not-allowed border-gray-300': conditionOnBtn,
-        'border-[#4E46DC]': !conditionOnBtn,
+        'border-primary': !conditionOnBtn,
       })}
     >
       <button
@@ -23,7 +23,8 @@ const NavigationArrowButton = ({ conditionOnBtn, onButtonClick, PaginationArrow 
         })}
         disabled={conditionOnBtn}
       >
-        <PaginationArrow {...PAGINATION_ARROW_ICONS} color={conditionOnBtn ? '#9ca3af' : '#4E46DC'} />
+        {/* Static Color used below ('#D0D5DD') for disable condition - which will be applicable for all clients */}
+        <PaginationArrow {...PAGINATION_ARROW_ICONS} color={conditionOnBtn ? '#D0D5DD' : 'rgb(var(--primary))'} />
       </button>
     </div>
   );

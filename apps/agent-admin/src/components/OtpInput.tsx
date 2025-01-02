@@ -60,7 +60,7 @@ const OtpInput = ({ id = '', length = 4, onOtpSubmit = (_: string) => {} }) => {
             onChange={(e) => handleChange(index, e)}
             onClick={() => handleClick(index)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            className="h-10 w-10 rounded border-2 text-center text-lg outline-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-10 w-10 rounded border-2 text-center text-lg outline-none focus:outline-none focus:ring-2 focus:ring-primary/60"
           />
         );
       })}

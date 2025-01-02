@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 const LoginPage = () => {
   return (
     <>
-      <div className="relative flex h-screen w-full items-center justify-center bg-indigo-200">
+      <div className="relative flex h-screen w-full items-center justify-center bg-primary/20">
         <div className="flex items-center justify-center gap-2 text-white">
           <BreakoutLogoWhite className="mx-auto w-10/12 opacity-40" />
         </div>

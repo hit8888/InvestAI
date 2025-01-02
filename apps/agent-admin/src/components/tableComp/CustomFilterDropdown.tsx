@@ -3,6 +3,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
 import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
 import { DROPDOWN_ARROW_ICONS } from '../../utils/constants';
+import FilterMenuOption from './FilterMenuOption';
 
 // Define the type for the options
 interface DropdownProps {
@@ -58,6 +59,8 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
       }
     }
   }, [isOpen]);
+
+  const isDropdownMenuPositionTop = dropdownMenuPosition === 'top';
   return (
     <div className="relative z-20 inline-block text-left" ref={dropdownRef}>
       {/* Dropdown button */}
@@ -65,8 +68,8 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
         type="button"
         ref={buttonTriggerRef}
         className="inline-flex w-full items-center justify-center gap-2 rounded-lg 
-        border border-[#DCDAF8] bg-[#FBFBFE] p-2 text-sm font-semibold text-[#667085] shadow-sm 
-        focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm 
+        focus:outline-none focus:ring-2 focus:ring-primary/60"
         id="options-menu"
         onClick={toggleDropdown} // Toggle dropdown visibility
         aria-expanded="true"
@@ -88,27 +91,25 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
       {isOpen && (
         <div
           ref={dropdownOptionMenuRef}
-          className={`absolute right-0 z-20 mt-2 w-full ${
-            dropdownMenuPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
-          } rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          className={cn(
+            `absolute right-0 z-20 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`,
+            {
+              'bottom-full mb-2': isDropdownMenuPositionTop,
+              'top-full mt-2': !isDropdownMenuPositionTop,
+            },
+          )}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
         >
           <div className="py-1" role="none">
             {options.map((option) => (
-              <button
+              <FilterMenuOption
                 key={option}
-                onClick={() => handleOptionClick(option)}
-                className={cn(`block w-full px-4 py-2 text-left text-sm hover:bg-indigo-600 hover:text-white`, {
-                  'text-indigo-600': selectedOption === option,
-                  'text-gray-700': !(selectedOption === option),
-                })}
-                role="menuitem"
-              >
-                {option}
-                {selectedOption === option && <span className="ml-2 text-indigo-500">✔</span>}
-              </button>
+                menuOptionTitle={option}
+                onMenuOptionClicked={() => handleOptionClick(option)}
+                isSelectedOption={selectedOption === option}
+              />
             ))}
           </div>
         </div>

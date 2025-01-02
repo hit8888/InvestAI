@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className={cn('flex flex-col items-start border-r border-[#EDECFB] 2xl:h-screen', {
+      className={cn('flex flex-col items-start border-r border-primary/10 2xl:h-screen', {
         'w-[22%] 2xl:w-[15%]': isOpen,
         'w-[75px] 2xl:w-[4%]': !isOpen,
       })}
@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
       }}
     >
       <div
-        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgba(255,255,255,0.32)] bg-[#FBFBFE] px-2 pb-0 pt-4`}
+        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgba(var(--primary-foreground-comma),0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
       >
         <div
           className={cn(`flex w-full items-center justify-between gap-4 px-2`, {
@@ -82,15 +82,12 @@ const Sidebar: React.FC = () => {
           <div className="flex items-center gap-2 pl-2">
             <AdminLogoSVG width={'30'} height={'35'} />
             {isOpen ? (
-              <span className="text-base font-bold tracking-[-0.16px] text-[#599AD9] transition-all duration-300">
+              <span className="text-base font-bold text-adminLogoText transition-all duration-300">
                 {ADMIN_DASHBOARD_COMPANY_NAME}
               </span>
             ) : null}
           </div>
-          <button
-            onClick={toggleSidebar}
-            className="flex items-center justify-center gap-[10px] rounded-lg bg-[#FBFBFE] pt-2"
-          >
+          <button onClick={toggleSidebar} className="flex items-center justify-center gap-[10px] rounded-lg pt-2">
             <PanelCloseIcon
               {...NAV_LINK_ICON_PROPS}
               className={cn(`h-8 w-8 transition-transform duration-300 `, {
@@ -102,12 +99,12 @@ const Sidebar: React.FC = () => {
         </div>
         <Separator className="px-8" />
       </div>
-      <div className="flex w-full flex-col items-start">
+      <div className="flex w-full flex-col items-start bg-primary/2.5">
         {NAV_LINK_ITEMS.map((navItem) => (
           <NavLinkSingleItem key={navItem?.navItem} {...navItem} isPanelOpen={isOpen} />
         ))}
       </div>
-      <div className="flex flex-1 flex-col items-start gap-4 self-stretch border border-[rgba(255,255,255,0.32)] bg-[#FBFBFE] px-2 py-4 pb-2">
+      <div className="flex flex-1 flex-col items-start gap-4 self-stretch border border-[rgba(var(--primary-foreground-comma),0.32)] bg-primary/2.5 px-2 py-4 pb-2">
         <div className="flex flex-1 flex-col items-start justify-end gap-2 self-stretch">
           <Separator />
           <div className="flex flex-col items-start justify-center gap-2 self-stretch rounded-2xl p-2">
@@ -120,7 +117,7 @@ const Sidebar: React.FC = () => {
                 <ProfilePicActionButton />
                 {isOpen ? (
                   <div className="flex w-full flex-col items-start justify-center gap-0.5">
-                    <p className="w-[90%] truncate text-sm font-semibold text-[#4E46DC]">{userName}</p>
+                    <p className="w-[90%] truncate text-sm font-semibold text-primary">{userName}</p>
                   </div>
                 ) : null}
               </div>
