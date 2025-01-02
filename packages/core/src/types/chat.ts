@@ -38,6 +38,14 @@ export const ScriptStepDTO = z.object({
 
 export type ScriptStepType = z.infer<typeof ScriptStepDTO>;
 
+export const FeatureSelectionDTOSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+});
+
+export type FeatureSelectionDTOType = z.infer<typeof FeatureSelectionDTOSchema>;
+
 export const MessageSchema = z.object({
   message_id: z.number(),
   response_id: z.string(),
@@ -49,6 +57,7 @@ export const MessageSchema = z.object({
   analytics: AnalyticsSchema,
   script_step: ScriptStepDTO.optional(),
   demo_available: z.boolean().optional(),
+  features: z.array(FeatureSelectionDTOSchema).optional(),
   artifacts: z.array(MessageArtifactSchema),
   type: z.enum(["text", "event"]),
   is_complete: z.boolean().optional(),
@@ -71,6 +80,7 @@ export const AIResponseSchema = z.object({
   analytics: AnalyticsSchema,
   artifacts: z.array(WebSocketArtifactsSchema),
   demo_available: z.boolean().optional(),
+  features: z.array(FeatureSelectionDTOSchema).optional(),
   script_step: ScriptStepDTO.optional(),
 });
 
@@ -114,6 +124,7 @@ export type Message = {
   chatArtifact?: z.infer<typeof MessageArtifactSchema>;
   scriptStep?: z.infer<typeof ScriptStepDTO>;
   demoAvailable?: boolean;
+  features: z.infer<typeof FeatureSelectionDTOSchema>[];
   type?: z.infer<typeof MessageSchema>["type"];
 };
 

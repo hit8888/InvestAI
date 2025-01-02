@@ -17,14 +17,17 @@ import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSes
 import ChatMessages from '../ChatMessages';
 import { X } from 'lucide-react';
 import useGetMessagePayload from '../../../../hooks/useGetMessagePayload';
+import Button from '@breakout/design-system/components/layout/button';
+import ExitIcon from '@breakout/design-system/components/icons/ExitIcon';
 
 interface IProps {
   isDemoPlaying: boolean;
   onRaiseDemoQuery: (queryRaised: boolean) => void;
   onCloseDemoChat: () => void;
+  onFinishDemo: () => void;
 }
 
-export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat }: IProps) {
+export function DemoFooter({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat, onFinishDemo }: IProps) {
   const { sendMessage, lastMessage } = useWebSocketChat();
 
   const [isChatOpenEnabled, setShowDemoChat] = useState(false);
@@ -70,6 +73,7 @@ export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat
         message,
         documents: [],
         analytics: {},
+        features: [],
       },
     ]);
     sendMessage(
@@ -114,16 +118,26 @@ export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat
     <div className="flex w-full items-center gap-8">
       <Popover open={showPopover}>
         <PopoverTrigger asChild>
-          {isChatOpenEnabled ? (
-            <div
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[50%] bg-primary/60"
-              onClick={handleCloseDemoChat}
-            >
-              <RaiseHandDisabled height={24} width={24} color="white" />
-            </div>
-          ) : (
-            <AskQuestion onClick={handleToggleDemoChat} />
-          )}
+          <div className="flex w-full items-center justify-between">
+            {isChatOpenEnabled ? (
+              <div
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[50%] bg-primary/60"
+                onClick={handleCloseDemoChat}
+              >
+                <RaiseHandDisabled height={24} width={24} color="white" />
+              </div>
+            ) : (
+              <div>
+                <AskQuestion onClick={handleToggleDemoChat} />
+              </div>
+            )}
+            <Button className="bg-rose-600" onClick={onFinishDemo}>
+              <div className="flex items-center justify-center gap-2">
+                <span>Finish Demo</span>
+                <ExitIcon width={16} height={16} color="white" />
+              </div>
+            </Button>
+          </div>
         </PopoverTrigger>
         <PopoverContent
           className="text-popover-foreground relative z-50 flex h-[580px] w-[440px] flex-1 flex-col overflow-hidden  rounded-lg border bg-primary-foreground/60 px-2 py-4 shadow-md outline-none backdrop-blur-lg"
@@ -148,6 +162,7 @@ export function DemoQuestions({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoChat
             handleSendUserMessage={handleSendUserMessage}
             initialSuggestedQuestions={[]}
             allowFullWidthForText={true}
+            showDemoPreQuestions={false}
           />
           <ChatInput
             handleSendMessage={(message) => handleSendUserMessage({ message })}

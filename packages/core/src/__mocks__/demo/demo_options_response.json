@@ -1,0 +1,27 @@
+{
+  "session_id": "94706379-713c-4fd1-885f-a141ee78b216",
+  "response_id": "AsoqDRCf96Lmqq1zljGA8",
+  "role": "ai",
+  "message": null,
+  "is_complete": false,
+  "artifacts": [],
+  "documents": [],
+  "analytics": {
+    "buyer_intent_score": null
+  },
+  "script_step": null,
+  "artifact": null,
+  "demo_available": true,
+  "features": [
+    {
+      "id": 2,
+      "name": "Test Creation",
+      "description": "In this Feature, I'll show you how to create a test on HackerEarth using our assessments feature."
+    },
+    {
+      "id": 5,
+      "name": "Proctoring setting",
+      "description": "In this Feature, I'll show you how to create a test on HackerEarth using our assessments feature."
+    }
+  ]
+}

@@ -61,6 +61,8 @@ const config: Omit<Config, "content"> = {
           DEFAULT: "rgb(var(--card))",
           foreground: "rgb(var(--card-foreground))",
         },
+        customPrimaryText: "#2D3454",
+        customSecondaryText: "#5E6583",
         link: "#2E90FA",
         success: {
           50: "#ECFDF3",

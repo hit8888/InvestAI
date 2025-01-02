@@ -115,6 +115,7 @@ class UnifiedSessionConfigResponseManager {
       chatArtifact: chatBoxArtifact,
       scriptStep: response.script_step,
       demoAvailable: response.demo_available,
+      features: response.features ?? [],
       role: response.role,
       id: response.response_id,
     };
@@ -138,6 +139,7 @@ class UnifiedSessionConfigResponseManager {
       showFeedbackOptions: false,
       documents: [],
       analytics: {},
+      features: [],
     };
 
     const formattedChatHistory = chatHistory

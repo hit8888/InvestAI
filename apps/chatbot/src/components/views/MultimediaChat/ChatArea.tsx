@@ -13,6 +13,7 @@ import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { useState } from 'react';
 import Artifact from './Artifact/index.tsx';
+import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -21,6 +22,8 @@ interface IProps {
 
 const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
   useUpdateActiveArtifactOnNewMessage();
+  useExpandWidthOnDemoFrame();
+
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
@@ -29,7 +32,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
 
   const messages = useMessageStore((state) => state.messages);
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
-  const { draftDemoDetails: demoDetails, isDemoAvailable } = useDemoDetails();
+  const { isDemoAvailable, demoDetails, demoFeatures } = useDemoDetails();
 
   const hasArtifactOrDemoInMessageHistory =
     messages.findIndex((message) => message.role === 'ai' && !!message.artifact?.artifact_id) !== -1 || isDemoAvailable;
@@ -40,6 +43,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
 
+  const hideChatHeader = demoPlayingStatus !== DemoPlayingStatus.INITIAL;
   return (
     <div
       className={cn(
@@ -53,7 +57,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
         <ChatHeader
           handleSendMessage={(message) => handleSendMessage({ message })}
           handleCloseChat={handleCloseChat}
-          handleFinishDemo={handleFinishDemo}
+          isHidden={hideChatHeader}
         />
         <div
           className={cn('flex-1 overflow-y-auto', {
@@ -67,6 +71,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
               handleSendUserMessage={handleSendMessage}
               initialSuggestedQuestions={initialSuggestedQuestions}
               allowFullWidthForText={false}
+              showDemoPreQuestions={isDemoAvailable && !demoDetails}
             />
           )}
 
@@ -81,12 +86,13 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
           <Demo
             key={demoDetails?.audio_url}
             handleFinishDemo={handleFinishDemo}
-            isDemoAvailable={isDemoAvailable}
             demoDetails={demoDetails}
             handleSendMessage={handleSendMessage}
             demoPlayingStatus={demoPlayingStatus}
             setDemoPlayingStatus={setDemoPlayingStatus}
             activeArtifact={activeArtifact}
+            demoFeatures={demoFeatures}
+            isDemoAvailable={isDemoAvailable}
           />
         </div>
         {!isMediaTakingFullWidth && (
