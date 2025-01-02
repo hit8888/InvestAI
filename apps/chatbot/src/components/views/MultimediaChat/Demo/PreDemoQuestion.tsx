@@ -28,7 +28,7 @@ const PreDemoQuestion = ({ handleSendUserMessage }: IProps) => {
         Would you like to explore specific features of the {tenantName} product that might interest you?
       </span>
 
-      <div className="mt-4 flex items-center gap-2 pr-4">
+      <div className="mt-4 flex flex-col gap-4 pr-4">
         <ActionButton
           buttonText="Yes, lets do that!"
           onClick={() => {

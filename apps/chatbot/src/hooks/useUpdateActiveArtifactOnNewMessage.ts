@@ -1,18 +1,26 @@
-import last from 'lodash/last';
-import { useArtifactStore } from '../stores/useArtifactStore';
-import { useMessageStore } from '../stores/useMessageStore';
 import { useEffect } from 'react';
+import useWebSocketChat from './useWebSocketChat';
+import { AIResponse } from '@meaku/core/types/chat';
+import { useArtifactStore } from '../stores/useArtifactStore';
 
 const useUpdateActiveArtifactOnNewMessage = () => {
-  const messages = useMessageStore((state) => state.messages);
+  const { lastMessage } = useWebSocketChat();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
-  const lastMessage = last(messages.filter((message) => message.role === 'ai'));
-  const artifactId = lastMessage?.artifact?.artifact_id;
-  const artifactType = lastMessage?.artifact?.artifact_type;
 
   useEffect(() => {
+    if (!lastMessage) return;
+
     const artifactTypesNotToCache = ['NONE', 'SUGGESTIONS', 'FORM'];
-    if (artifactId && artifactType && !artifactTypesNotToCache.includes(artifactType)) {
+
+    const response = JSON.parse(lastMessage.data) as AIResponse;
+
+    const selectedArtifact = response?.artifacts?.find(
+      (artifact) => !artifactTypesNotToCache.includes(artifact?.artifact_type),
+    );
+    const artifactType = selectedArtifact?.artifact_type;
+    const artifactId = selectedArtifact?.artifact_id;
+
+    if (artifactId && artifactType) {
       setActiveArtifact({
         artifactId,
         artifactType,
@@ -20,7 +28,7 @@ const useUpdateActiveArtifactOnNewMessage = () => {
       return;
     }
     setActiveArtifact(null);
-  }, [artifactId, artifactType, setActiveArtifact]);
+  }, [lastMessage, setActiveArtifact]);
 };
 
 export { useUpdateActiveArtifactOnNewMessage };
