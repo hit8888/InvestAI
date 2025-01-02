@@ -1,8 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { cn } from '@breakout/design-system/lib/cn';
-import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
+import TooltipArrowIcon from '@breakout/design-system/components/icons/tooltip-arrow';
+import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
-import { DROPDOWN_ARROW_ICONS, EXPORT_DOWNLOAD_LABEL } from '../../utils/constants';
+import {
+  XSLS_LABEL,
+  CSV_LABEL,
+  EXPORT_DOWNLOAD_ICONS,
+  EXPORT_DOWNLOAD_LABEL,
+  DOWNLOAD_ITEM_EXPORT_CSV_LABEL,
+  DOWNLOAD_ITEM_EXPORT_XSLS_LABEL,
+} from '../../utils/constants';
+import ExportDownloadButton from './ExportDownloadButton';
+import { handleDownload } from '../../utils/common';
+import RadioButtonWithLabel from './RadioButtonWithLabel';
+import DropdownTriggerButton from './DropdownTriggerButton';
 
 // Define the type for the options
 interface DownloadProps {
@@ -11,7 +22,7 @@ interface DownloadProps {
 
 const ExportDownload: React.FC<DownloadProps> = () => {
   // State to track the selected options
-  //   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>(XSLS_LABEL);
 
   // State to toggle dropdown visibility
   const [isOpen, setIsOpen] = useState(false);
@@ -19,16 +30,20 @@ const ExportDownload: React.FC<DownloadProps> = () => {
   // Ref to track the dropdown element
   const dropdownRef = useRef<HTMLDivElement>(null!);
 
-  // Handle option toggle (select/deselect)
-  //   const handleOptionClick = (option: string) => {
-  //     setSelectedOption((prevSelected) => (prevSelected === option ? null : option));
-  //     onCallback?.(option); // Call the parent-provided callback
-  //     setIsOpen(false);
-  //   };
-
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsOpen((prevState) => !prevState);
+  };
+
+  const handleDownloadButton = () => {
+    const fileTypeLowercase = selectedOption.toLowerCase() as 'xsls' | 'csv';
+    console.log(`Downloaded file local.${fileTypeLowercase}`);
+    const apiUrls = {
+      xsls: 'https://example.com/api/download/file.xsls', // TODOS: Replace with actual URL
+      csv: 'https://example.com/api/download/file.csv', // TODOS: Replace with actual URL
+    };
+    // TODOS: Pass actual Parameter for Integration
+    handleDownload(fileTypeLowercase, apiUrls[fileTypeLowercase], 'example');
   };
 
   // Use the custom hook to close the dropdown when clicking outside
@@ -36,35 +51,47 @@ const ExportDownload: React.FC<DownloadProps> = () => {
   return (
     <div className="relative z-20 inline-block text-left" ref={dropdownRef}>
       {/* Dropdown button */}
-      <button
-        type="button"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg 
-        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm 
-        focus:outline-none focus:ring-2 focus:ring-primary/60"
-        id="options-menu"
-        onClick={toggleDropdown} // Toggle dropdown visibility
-        aria-expanded="true"
-        aria-haspopup="true"
-      >
-        {EXPORT_DOWNLOAD_LABEL}
-        <span
-          className={cn('h-5 w-5', {
-            'rotate-0': !isOpen,
-            'translate-x-1 translate-y-1 rotate-180': isOpen,
-          })}
-        >
-          <DropdownIcon {...DROPDOWN_ARROW_ICONS} />
-        </span>
-      </button>
+      <DropdownTriggerButton
+        btnLabel={EXPORT_DOWNLOAD_LABEL}
+        onToggleDropdown={toggleDropdown}
+        isDropdownOpen={isOpen}
+      />
 
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className={`absolute right-0 z-20 mt-2 h-52 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          className={`download-boxshadow absolute z-20 mt-4 flex w-80 flex-col items-start rounded-lg bg-white`}
           role="popper"
           aria-orientation="vertical"
           aria-labelledby="download-content-popper"
-        ></div>
+        >
+          <div className=" absolute -top-3 flex items-center px-8">
+            <span className="h-6 w-6">
+              <TooltipArrowIcon width={'18'} height={'16'} color="white" viewBox="0 0 18 16" />
+            </span>
+          </div>
+          <div className="flex w-full items-start justify-between p-[12px_16px]">
+            <p className="text-lg font-semibold text-gray-900">{EXPORT_DOWNLOAD_LABEL}</p>
+            <CrossIcon className="cursor-pointer" {...EXPORT_DOWNLOAD_ICONS} onClick={() => setIsOpen(false)} />
+          </div>
+          <div className="flex flex-col items-start gap-6 self-stretch px-4 py-6">
+            <RadioButtonWithLabel
+              key={XSLS_LABEL}
+              radioLabel={DOWNLOAD_ITEM_EXPORT_XSLS_LABEL}
+              isRadioSelected={selectedOption === XSLS_LABEL}
+              onRadioClicked={() => setSelectedOption(XSLS_LABEL)}
+            />
+            <RadioButtonWithLabel
+              key={CSV_LABEL}
+              radioLabel={DOWNLOAD_ITEM_EXPORT_CSV_LABEL}
+              isRadioSelected={selectedOption === CSV_LABEL}
+              onRadioClicked={() => setSelectedOption(CSV_LABEL)}
+            />
+          </div>
+          <div className="flex w-full items-start border-t border-dashed border-gray-200 p-4">
+            <ExportDownloadButton btnLabel={EXPORT_DOWNLOAD_LABEL} onDownloadBtnClicked={handleDownloadButton} />
+          </div>
+        </div>
       )}
     </div>
   );

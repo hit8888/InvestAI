@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { cn } from '@breakout/design-system/lib/cn';
 
 import ColumnSortIcon from '@breakout/design-system/components/icons/columnsort-icon';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
@@ -33,10 +34,19 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                 return (
                   <th
                     key={header.id}
-                    className={`flex flex-1 items-center gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-28 truncate 2xl:w-40' : ''}  border-b border-primary/40 bg-primary/20`}
+                    className={cn(
+                      `flex flex-1 items-center gap-2 border-b border-t border-primary/40 bg-primary/20 p-[10px]`,
+                      {
+                        'border-r': !isLastColumn,
+                        'w-28 truncate 2xl:w-40': isColumnProductOfInterest,
+                      },
+                    )}
                   >
                     <span
-                      className={`text-left text-gray-900 ${isColumnEmail ? 'w-40' : 'flex-1'} text-xs font-medium`}
+                      className={cn(`text-left text-xs font-medium text-gray-900`, {
+                        'w-40': isColumnEmail,
+                        'flex-1': !isColumnEmail,
+                      })}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </span>
@@ -57,7 +67,12 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                 return (
                   <td
                     key={cell.id}
-                    className={`flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch p-2 ${isLastColumn ? '' : 'border-r'} border-b border-primary/20 bg-primary/2.5`}
+                    className={cn(
+                      `flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
+                      {
+                        'border-r': !isLastColumn,
+                      },
+                    )}
                   >
                     <p className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

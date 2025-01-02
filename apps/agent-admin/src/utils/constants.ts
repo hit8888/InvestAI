@@ -31,9 +31,15 @@ export const PAGE_HEADER_TITLE_ICON_PROPS = {
   color: 'rgb(var(--primary))',
 };
 
+export const DOWNLOAD_ITEM_EXPORT_XSLS_LABEL = 'Export to XSLS';
+export const DOWNLOAD_ITEM_EXPORT_CSV_LABEL = 'Export to CSV';
+export const XSLS_LABEL = 'XSLS';
+export const CSV_LABEL = 'CSV';
+
 export const TABLE_SORT_ICON_PROPS = NAV_LINK_ICON_PROPS;
 export const PAGINATION_ARROW_ICONS = NAV_LINK_ICON_PROPS;
 export const DROPDOWN_ARROW_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
+export const EXPORT_DOWNLOAD_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
 export const ALL_FILTERS_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
 
 export const DEFAULT_USERNAME = 'Kymberly Abestango';
@@ -152,6 +158,10 @@ export const DEFAULT_DATA_FOR_LEADS_PAGE = [
   ...LEADS_TABLE_MOCK_DATA,
   ...LEADS_TABLE_MOCK_DATA,
 ];
+
+// LEADS Page
+
+export const LEADS_TABLE_HEADER_TITLE = 'Table of leads';
 
 // Filters
 export const FILTER_DEFAULT_OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];

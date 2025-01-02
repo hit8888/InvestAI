@@ -17,6 +17,7 @@ import {
   BY_LOCATION_FILTER_LABEL,
   DEFAULT_DATA_FOR_LEADS_PAGE,
   FILTER_DEFAULT_OPTIONS,
+  LEADS_TABLE_HEADER_TITLE,
 } from '../../utils/constants';
 
 const EmailCellValue: React.FC<EmailCellValueProps> = ({ value }: { value: string }) => {
@@ -88,7 +89,7 @@ const columns: ColumnDefinition[] = [
 ];
 
 const TableContainer = () => {
-  const totalItems = 1234; // Total number of items
+  const totalItems = 200; // Total number of items
   const itemsPerPage = 50; // Items per page
 
   // Handle page changes
@@ -113,7 +114,7 @@ const TableViewWrapper = () => {
   const ByLocationOptions = FILTER_DEFAULT_OPTIONS;
   return (
     <div className="flex flex-col items-start gap-4 self-stretch">
-      <p className="flex-1 text-2xl font-semibold text-gray-900">{'Table of leads'}</p>
+      <p className="flex-1 text-2xl font-semibold text-gray-900">{LEADS_TABLE_HEADER_TITLE}</p>
       <div className="flex items-start gap-4">
         <AllFilters />
         <ExportDownload />

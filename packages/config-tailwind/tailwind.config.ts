@@ -38,8 +38,6 @@ const config: Omit<Config, "content"> = {
           800: "#1D2939",
           900: "#101828",
         },
-        // TODOS: IF NEEDED, WILL REMOVE IT IN NEXT PR - All Keys after textColor
-        // TODOS: NEED TO Add HandleColorConfig For Admin Dashboard Pages
         primary: {
           DEFAULT: "rgb(var(--primary))",
           foreground: "rgb(var(--primary-foreground))",
