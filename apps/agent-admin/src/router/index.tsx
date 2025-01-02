@@ -6,41 +6,56 @@ import LoginPage from '../pages/LoginPage';
 import LeadsPage from '../pages/LeadsPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import PlaygroundPage from '../pages/PlaygroundPage';
+import ProtectedRoute from '../pages/ProtectedRoutes';
+import withPageViewWrapper from '../pages/PageViewWrapper';
+import {
+  URL_ROUTE_CONVERSATIONS_PAGE,
+  URL_ROUTE_LEADS_PAGE,
+  URL_ROUTE_LOGIN_PAGE,
+  URL_ROUTE_PLAYGROUND_PAGE,
+} from '../utils/constants';
+
+const WrapDashboard = withPageViewWrapper(Dashboard);
+const WrapLeadsPage = withPageViewWrapper(LeadsPage);
+const WrapConversationsPage = withPageViewWrapper(ConversationsPage);
+const WrapPlaygroundPage = withPageViewWrapper(PlaygroundPage);
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
-const router = sentryCreateBrowserRouter([
+const routes = [
   {
     path: '',
     element: <Root />,
     children: [
       {
         path: '',
-        element: <Dashboard />,
+        element: <ProtectedRoute element={<WrapDashboard />} />,
         children: [],
       },
       {
-        path: '/login',
+        path: URL_ROUTE_LOGIN_PAGE,
         element: <LoginPage />,
         children: [],
       },
       {
-        path: '/leads',
-        element: <LeadsPage />,
+        path: URL_ROUTE_LEADS_PAGE,
+        element: <ProtectedRoute element={<WrapLeadsPage />} />,
         children: [],
       },
       {
-        path: '/conversations',
-        element: <ConversationsPage />,
+        path: URL_ROUTE_CONVERSATIONS_PAGE,
+        element: <ProtectedRoute element={<WrapConversationsPage />} />,
         children: [],
       },
       {
-        path: '/playground',
-        element: <PlaygroundPage />,
+        path: URL_ROUTE_PLAYGROUND_PAGE,
+        element: <ProtectedRoute element={<WrapPlaygroundPage />} />,
         children: [],
       },
     ],
   },
-]);
+];
+
+const router = sentryCreateBrowserRouter(routes);
 
 export default router;

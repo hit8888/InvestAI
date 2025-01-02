@@ -53,6 +53,7 @@ const config: Omit<Config, "content"> = {
         },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
+        adminLogoText: '#599ad9',
         link: "#2E90FA",
         success: {
           50: "#ECFDF3",
@@ -113,6 +114,9 @@ const config: Omit<Config, "content"> = {
       },
       borderRadius: {
         "custom-56": "56px",
+      },
+      opacity: {
+        '2.5': '0.025', // Add 2.5% opacity
       },
     },
   },

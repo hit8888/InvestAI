@@ -1,0 +1,16 @@
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczNTM3NDk2NSwiaWF0IjoxNzM1Mjg4NTY1LCJqdGkiOiJmN2YwY2EyN2ZlZjI0ZDQ0YWIwOWE4ZWE3NTUxODVmMCIsInVzZXJfaWQiOjEsInVzZXJuYW1lIjoibWVha3Vwd24ifQ.9-p_TcOh-S5uYrnLIc84jwjPep1JOaI2xmhXht0Gpnk",
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM1MjkwMzY1LCJpYXQiOjE3MzUyODg1NjUsImp0aSI6IjRjMTM1MjEwYzI2NjQ1NzY5ZjBlNWNkZjQzNjgyMGY5IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJtZWFrdXB3biJ9.OveixNXTi1tDlOPgT1M2AOlOMp-vFpIvuvh1vJQ3vzA",
+  "user": {
+    "id": 1,
+    "username": "meakupwn",
+    "email": "meaku@getbreakout.ai",
+    "first_name": "",
+    "last_name": "",
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2024-12-26T09:21:27.282793Z",
+    "last_login": "2024-12-26T12:14:52.716477Z",
+    "organizations": []
+  }
+}

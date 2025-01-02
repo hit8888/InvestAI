@@ -4,9 +4,21 @@
 
 @layer base {
   body {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Inter', sans-serif;
     /* font-family: "Inter", sans-serif; */
     font-optical-sizing: auto;
     font-style: normal;
   }
+}
+
+.download-boxshadow {
+  box-shadow:
+    0px 0px 51px 0px rgba(0, 0, 0, 0.05),
+    0px 0px 34.375px 0px rgba(0, 0, 0, 0.04),
+    0px 0px 22.233px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 13.796px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 8.288px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 4.931px 0px rgba(0, 0, 0, 0.02),
+    0px 0px 2.948px 0px rgba(0, 0, 0, 0.02),
+    0px 0px 1.564px 0px rgba(0, 0, 0, 0.01);
 }
