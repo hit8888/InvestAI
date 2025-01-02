@@ -7,19 +7,17 @@ const useUpdateActiveArtifactOnNewMessage = () => {
   const { lastMessage } = useWebSocketChat();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
 
+  const artifactTypesNotToCache = ['NONE', 'SUGGESTIONS', 'FORM'];
+
+  const response = lastMessage ? (JSON.parse(lastMessage.data) as AIResponse) : null;
+
+  const selectedArtifact = response
+    ? response?.artifacts?.find((artifact) => !artifactTypesNotToCache.includes(artifact?.artifact_type))
+    : null;
+  const artifactType = selectedArtifact?.artifact_type;
+  const artifactId = selectedArtifact?.artifact_id;
+
   useEffect(() => {
-    if (!lastMessage) return;
-
-    const artifactTypesNotToCache = ['NONE', 'SUGGESTIONS', 'FORM'];
-
-    const response = JSON.parse(lastMessage.data) as AIResponse;
-
-    const selectedArtifact = response?.artifacts?.find(
-      (artifact) => !artifactTypesNotToCache.includes(artifact?.artifact_type),
-    );
-    const artifactType = selectedArtifact?.artifact_type;
-    const artifactId = selectedArtifact?.artifact_id;
-
     if (artifactId && artifactType) {
       setActiveArtifact({
         artifactId,
@@ -28,7 +26,7 @@ const useUpdateActiveArtifactOnNewMessage = () => {
       return;
     }
     setActiveArtifact(null);
-  }, [lastMessage, setActiveArtifact]);
+  }, [artifactId]);
 };
 
 export { useUpdateActiveArtifactOnNewMessage };
