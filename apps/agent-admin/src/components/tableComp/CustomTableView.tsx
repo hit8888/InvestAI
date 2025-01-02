@@ -35,7 +35,7 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                   <th
                     key={header.id}
                     className={cn(
-                      `flex flex-1 items-center gap-2 border-b border-t border-primary/40 bg-primary/20 p-[10px]`,
+                      `flex flex-1 items-center gap-2 border-b border-t border-primary/40 bg-primary/20 p-2.5`,
                       {
                         'border-r': !isLastColumn,
                         'w-28 truncate 2xl:w-40': isColumnProductOfInterest,
@@ -68,7 +68,7 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                   <td
                     key={cell.id}
                     className={cn(
-                      `flex flex-1 flex-col items-start justify-center gap-[10px] self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
+                      `flex flex-1 flex-col items-start justify-center self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
                       {
                         'border-r': !isLastColumn,
                       },

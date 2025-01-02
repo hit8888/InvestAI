@@ -70,7 +70,7 @@ const ExportDownload: React.FC<DownloadProps> = () => {
               <TooltipArrowIcon width={'18'} height={'16'} color="white" viewBox="0 0 18 16" />
             </span>
           </div>
-          <div className="flex w-full items-start justify-between p-[12px_16px]">
+          <div className="flex w-full items-start justify-between px-4 py-3">
             <p className="text-lg font-semibold text-gray-900">{EXPORT_DOWNLOAD_LABEL}</p>
             <CrossIcon className="cursor-pointer" {...EXPORT_DOWNLOAD_ICONS} onClick={() => setIsOpen(false)} />
           </div>

@@ -87,7 +87,7 @@ const Sidebar: React.FC = () => {
               </span>
             ) : null}
           </div>
-          <button onClick={toggleSidebar} className="flex items-center justify-center gap-[10px] rounded-lg pt-2">
+          <button onClick={toggleSidebar} className="flex items-center justify-center rounded-lg pt-2">
             <PanelCloseIcon
               {...NAV_LINK_ICON_PROPS}
               className={cn(`h-8 w-8 transition-transform duration-300 `, {
@@ -113,7 +113,7 @@ const Sidebar: React.FC = () => {
                 'flex-col': !isOpen,
               })}
             >
-              <div className="flex flex-1 items-center gap-[10px]">
+              <div className="flex flex-1 items-center gap-3">
                 <ProfilePicActionButton />
                 {isOpen ? (
                   <div className="flex w-full flex-col items-start justify-center gap-0.5">

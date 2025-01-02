@@ -20,7 +20,7 @@ const ProfilePicActionButton = () => {
         onClick={() => setActionBtnClicked(!isActionBtnClicked)}
         type="button"
         aria-label="profile-btn"
-        className="flex h-8 w-8 rounded-full border border-[rgb(var(--primary-foreground)/0.32)] bg-cover bg-center bg-no-repeat p-[6px]"
+        className="flex h-8 w-8 rounded-full border border-[rgb(var(--primary-foreground)/0.32)] bg-cover bg-center bg-no-repeat p-2"
         style={{ backgroundImage: `url(${profilePic})` }}
       ></button>
       {isActionBtnClicked ? (
