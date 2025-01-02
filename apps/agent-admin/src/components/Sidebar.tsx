@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
       }}
     >
       <div
-        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgba(var(--primary-foreground-comma),0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
+        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
       >
         <div
           className={cn(`flex w-full items-center justify-between gap-4 px-2`, {
@@ -104,7 +104,7 @@ const Sidebar: React.FC = () => {
           <NavLinkSingleItem key={navItem?.navItem} {...navItem} isPanelOpen={isOpen} />
         ))}
       </div>
-      <div className="flex flex-1 flex-col items-start gap-4 self-stretch border border-[rgba(var(--primary-foreground-comma),0.32)] bg-primary/2.5 px-2 py-4 pb-2">
+      <div className="flex flex-1 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 py-4 pb-2">
         <div className="flex flex-1 flex-col items-start justify-end gap-2 self-stretch">
           <Separator />
           <div className="flex flex-col items-start justify-center gap-2 self-stretch rounded-2xl p-2">
