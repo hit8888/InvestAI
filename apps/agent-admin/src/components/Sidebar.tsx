@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
     <div
       className={cn('flex flex-col items-start border-r border-primary/10 2xl:h-screen', {
         'w-[22%] 2xl:w-[15%]': isOpen,
-        'w-[75px] 2xl:w-[4%]': !isOpen,
+        'w-20 2xl:w-[4%]': !isOpen,
       })}
       style={{
         transition: 'width 0.3s',

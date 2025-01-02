@@ -21,7 +21,7 @@ import {
 
 const EmailCellValue: React.FC<EmailCellValueProps> = ({ value }: { value: string }) => {
   return (
-    <span title={value} className="w-[187px] truncate 2xl:w-[158px]">
+    <span title={value} className="w-48 truncate 2xl:w-40">
       {value}
     </span>
   );
@@ -37,7 +37,7 @@ const TimestampCellValue: React.FC<TimestampCellValueProps> = ({ value }: { valu
 
 const ProductOfInterestCellValue: React.FC<ProductOfInterestCellValueProps> = ({ value }: { value: string }) => {
   return (
-    <span title={value} className="w-[115px] truncate 2xl:w-[158px]">
+    <span title={value} className="w-28 truncate 2xl:w-40">
       {value}
     </span>
   );

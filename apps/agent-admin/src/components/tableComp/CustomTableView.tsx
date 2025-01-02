@@ -33,10 +33,10 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
                 return (
                   <th
                     key={header.id}
-                    className={`flex flex-1 gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-[115px] truncate 2xl:w-[158px]' : ''}  border-b border-primary/40 bg-primary/20`}
+                    className={`flex flex-1 items-center gap-2 border-t p-[10px] ${isLastColumn ? '' : 'border-r'} ${isColumnProductOfInterest ? 'w-28 truncate 2xl:w-40' : ''}  border-b border-primary/40 bg-primary/20`}
                   >
                     <span
-                      className={`text-left text-gray-900 ${isColumnEmail ? 'w-[158px]' : 'flex-1'} text-xs font-medium`}
+                      className={`text-left text-gray-900 ${isColumnEmail ? 'w-40' : 'flex-1'} text-xs font-medium`}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </span>
@@ -49,7 +49,7 @@ const CustomTableView = ({ tabularData, columnHeaderData }: TableViewProps) => {
             </tr>
           ))}
         </thead>
-        <tbody className="max-h-[400px] w-full overflow-auto">
+        <tbody className="max-h-96 w-full overflow-auto">
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="flex w-full items-start self-stretch ">
               {row.getVisibleCells().map((cell) => {
