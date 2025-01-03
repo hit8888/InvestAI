@@ -13,17 +13,17 @@ export const useEmbedAppEvents = ({ fetchSessionData, handleOpenChat }: IProps) 
 
   const [searchParams] = useSearchParams();
 
-  const isChatOpen = searchParams.get('isChatOpen') === 'true';
+  const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
 
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
 
   useEffect(() => {
     const payload = {
-      chatOpen: isChatOpen,
+      chatOpen: isAgentOpen,
       tooltipOpen: false,
     };
     window.parent.postMessage(payload, '*');
-  }, [isChatOpen]);
+  }, [isAgentOpen]);
 
   useEffect(() => {
     const handleParentWindowMessages = (event: MessageEvent) => {

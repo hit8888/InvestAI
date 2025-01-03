@@ -1,7 +1,7 @@
 import ArrowRight from '@breakout/design-system/components/icons/ArrowRight';
 import Button from '@breakout/design-system/components/layout/button';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { FeatureSelectionDTOType } from '@meaku/core/types/chat';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
@@ -10,7 +10,7 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
-  setDemoPlayingStatus: (value: SetStateAction<DemoPlayingStatus>) => void;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
 }
 
 const SelectDemoFeatures = ({ demoFeatures, handleSendMessage, setDemoPlayingStatus }: IProps) => {

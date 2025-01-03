@@ -18,7 +18,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
     handleSendUserMessage({ message });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
       message,
-      isChatOpen: true,
+      isAgentOpen: true,
       artifact,
     });
   };

@@ -4,6 +4,7 @@ import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import { ActionButton } from './ActionButton';
 import { useMessageStore } from '../../../../stores/useMessageStore';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
@@ -11,6 +12,7 @@ interface IProps {
 
 const PreDemoQuestion = ({ handleSendUserMessage }: IProps) => {
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
 
   const [showPreDemoQuestions, setShowPreDemoQuestions] = useState(true);
   const [showDemoTopics, setShowDemoTopics] = useState(false);
@@ -34,6 +36,7 @@ const PreDemoQuestion = ({ handleSendUserMessage }: IProps) => {
           onClick={() => {
             handleSendUserMessage({ message: '', eventType: DemoEvent.DEMO_OPTIONS, eventData: {} });
             setShowDemoTopics(true);
+            setDemoPlayingStatus(DemoPlayingStatus.STARTED);
           }}
           isClicked={showDemoTopics}
         />

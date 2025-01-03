@@ -112,9 +112,12 @@ const useWebSocketChat = () => {
       const response = JSON.parse(lastMessage.data) as AIResponse;
       handleStopOrbAnimation();
 
-      if (!response.message || response.script_step) {
+      if (
+        response.demo_available &&
+        (response.script_step || (response.features && !!response.features.length) || response.artifacts.length < 0)
+      ) {
         return;
-      }
+      } //Don't track demo flow here(In global context)
 
       handleUpdateOrbState(OrbStatusEnum.responding);
       response.showFeedbackOptions = isAdmin;

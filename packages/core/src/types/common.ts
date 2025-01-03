@@ -13,6 +13,7 @@ export const DataSourceSchema = z.object({
 
 export enum DemoPlayingStatus {
   PLAYING = "PLAYING",
+  STARTED = "STARTED",
   PAUSED = "PAUSED",
   INITIAL = "INITIAL",
   GENRATING_DEMO = "GENRATING_DEMO",

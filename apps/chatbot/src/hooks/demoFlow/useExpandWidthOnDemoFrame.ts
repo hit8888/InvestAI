@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { useDemoDetails } from '../useDemoDetails';
 import { useMessageStore } from '../../stores/useMessageStore';
+import { ScriptStepType } from '@meaku/core/types/chat';
 
-const useExpandWidthOnDemoFrame = () => {
-  const { demoDetails } = useDemoDetails();
+const useExpandWidthOnDemoFrame = (demoDetails: ScriptStepType | null) => {
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
 

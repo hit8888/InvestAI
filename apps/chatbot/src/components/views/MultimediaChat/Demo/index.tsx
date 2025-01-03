@@ -2,12 +2,11 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import DemoContent from './DemoContent';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FeatureSelectionDTOType, ScriptStepType } from '@meaku/core/types/chat';
 
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { Loader } from 'lucide-react';
-import { GetArtifactPayload } from '@meaku/core/types/api';
 import { SelectDemoFeatures } from './SelectDemoFeatures';
 
 interface IProps {
@@ -15,8 +14,7 @@ interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
   demoDetails: ScriptStepType | null;
   demoPlayingStatus: DemoPlayingStatus;
-  setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
-  activeArtifact: GetArtifactPayload | null;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   demoFeatures: FeatureSelectionDTOType[];
   isDemoAvailable: boolean;
 }
@@ -27,7 +25,6 @@ const Demo = ({
   demoDetails,
   demoPlayingStatus,
   setDemoPlayingStatus,
-  activeArtifact,
   demoFeatures,
   isDemoAvailable,
 }: IProps) => {
@@ -36,7 +33,6 @@ const Demo = ({
   };
 
   const onFinishDemo = () => {
-    console.log('aaaaaaaaa');
     handleFinishDemo();
   };
   useEffect(() => {
@@ -45,21 +41,28 @@ const Demo = ({
     }
   }, [demoDetails]);
 
-  if (activeArtifact) {
-    return null;
-  } //This is explicitly specified for cases where the use selects an artifact using artifact preview
-
   if (!isDemoAvailable) {
     return null;
   }
 
-  if (demoPlayingStatus === DemoPlayingStatus.INITIAL && demoFeatures.length > 0) {
+  if (demoPlayingStatus === DemoPlayingStatus.STARTED) {
+    if (demoFeatures.length > 0) {
+      return (
+        <SelectDemoFeatures
+          demoFeatures={demoFeatures}
+          handleSendMessage={handleSendMessage}
+          setDemoPlayingStatus={setDemoPlayingStatus}
+        />
+      );
+    }
     return (
-      <SelectDemoFeatures
-        demoFeatures={demoFeatures}
-        handleSendMessage={handleSendMessage}
-        setDemoPlayingStatus={setDemoPlayingStatus}
-      />
+      <div className="col-span-2 mr-2 pl-2">
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="animate-spin ">
+            <Loader color="rgb(var(--primary)" size={40} />
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -69,7 +72,7 @@ const Demo = ({
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
             <span className="text-primary">Hold on. Creating demo</span>
-            <div className=" animate-spin ">
+            <div className="animate-spin ">
               <Loader color="rgb(var(--primary)" />
             </div>
           </div>

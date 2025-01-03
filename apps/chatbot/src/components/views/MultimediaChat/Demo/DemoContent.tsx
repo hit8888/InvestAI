@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ScriptStepType } from '@meaku/core/types/chat';
 import { DemoFooter } from './DemoFooter';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
@@ -8,7 +8,7 @@ import { PauseIcon, PlayIcon } from 'lucide-react';
 interface IProps {
   demoDetails: ScriptStepType;
   demoPlayingStatus: DemoPlayingStatus;
-  setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   onStepEnd: () => void;
   onFinishDemo: () => void;
 }
@@ -49,6 +49,13 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
       audio.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }
+  };
+
+  const handlePause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
   };
 
   useEffect(() => {
@@ -97,7 +104,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   return (
     <>
-      <div className={'relative flex h-[90%] w-full items-center justify-center'}>
+      <div className={'relative flex h-[92%] w-full items-center justify-center'}>
         {!isImageLoaded && (
           <div
             className="absolute inset-0 scale-95 
@@ -134,12 +141,13 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
         )}
       </div>
 
-      <div className="flex h-[10%] flex-1 items-center py-4">
+      <div className="flex h-[8%] flex-1 items-center py-4">
         <DemoFooter
           isDemoPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
           onRaiseDemoQuery={handleRaiseDemoQuery}
           onCloseDemoChat={handleCloseDemoChat}
           onFinishDemo={onFinishDemo}
+          onPause={handlePause}
         />
       </div>
     </>

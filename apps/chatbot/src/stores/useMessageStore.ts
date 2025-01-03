@@ -6,6 +6,7 @@ import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
 
 interface State {
   messages: Message[];
@@ -24,6 +25,8 @@ interface State {
   isMediaTakingFullWidth: boolean;
   handleToggleFullScreen: () => void;
   setMediaTakeFullScreenWidth: (value: boolean | ((prevState: boolean) => boolean)) => void;
+  demoPlayingStatus: DemoPlayingStatus;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
 }
 
 export const useMessageStore = create<State>()(
@@ -38,6 +41,11 @@ export const useMessageStore = create<State>()(
       setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>
         set((draft) => {
           draft.isAMessageBeingProcessed = isAMessageBeingProcessed;
+        }),
+      demoPlayingStatus: DemoPlayingStatus.INITIAL,
+      setDemoPlayingStatus: (demoPlayingStatus) =>
+        set((draft) => {
+          draft.demoPlayingStatus = demoPlayingStatus;
         }),
       handleAddAIMessage: (response) =>
         set((draft) => {

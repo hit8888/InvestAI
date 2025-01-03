@@ -11,7 +11,6 @@ import { Demo } from './Demo/index.tsx';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { useState } from 'react';
 import Artifact from './Artifact/index.tsx';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
 
@@ -21,18 +20,21 @@ interface IProps {
 }
 
 const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
+  const { isDemoAvailable, demoDetails, demoFeatures } = useDemoDetails();
+
   useUpdateActiveArtifactOnNewMessage();
-  useExpandWidthOnDemoFrame();
+  useExpandWidthOnDemoFrame(demoDetails);
 
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
-  const [demoPlayingStatus, setDemoPlayingStatus] = useState<DemoPlayingStatus>(DemoPlayingStatus.INITIAL);
 
   const messages = useMessageStore((state) => state.messages);
+  const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
+  const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
+
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
-  const { isDemoAvailable, demoDetails, demoFeatures } = useDemoDetails();
 
   const hasArtifactOrDemoInMessageHistory =
     messages.findIndex((message) => message.role === 'ai' && !!message.artifact?.artifact_id) !== -1 || isDemoAvailable;
@@ -43,7 +45,9 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
 
-  const hideChatHeader = demoPlayingStatus !== DemoPlayingStatus.INITIAL;
+  const hideChatHeader =
+    demoPlayingStatus !== DemoPlayingStatus.INITIAL && demoPlayingStatus !== DemoPlayingStatus.STARTED;
+
   return (
     <div
       className={cn(
@@ -75,7 +79,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
             />
           )}
 
-          {!!activeArtifact && (
+          {!!activeArtifact && demoPlayingStatus === DemoPlayingStatus.INITIAL && (
             <Artifact
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               handleSendUserMessage={handleSendMessage}
@@ -90,7 +94,6 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
             handleSendMessage={handleSendMessage}
             demoPlayingStatus={demoPlayingStatus}
             setDemoPlayingStatus={setDemoPlayingStatus}
-            activeArtifact={activeArtifact}
             demoFeatures={demoFeatures}
             isDemoAvailable={isDemoAvailable}
           />

@@ -52,12 +52,12 @@
   /**
    * Adjusts the responsive styles of the container.
    * @param {HTMLElement} container - The container element to adjust.
-   * @param {boolean} isChatOpen - Whether the chat is open.
+   * @param {boolean} isAgentOpen - Whether the chat is open.
    */
-  const adjustResponsiveStyles = (container, isChatOpen, hideBottomBar) => {
+  const adjustResponsiveStyles = (container, isAgentOpen, hideBottomBar) => {
     let width, height;
 
-    if (!isChatOpen) {
+    if (!isAgentOpen) {
       // Default desktop view with chat closed
       width = hideBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
       height = hideBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
@@ -157,7 +157,7 @@
 
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
-  let isChatOpen = false;
+  let isAgentOpen = false;
   let iFrameSource = null;
 
   // Main execution
@@ -192,14 +192,14 @@
     );
 
     if (event.data && typeof event.data.chatOpen === "boolean") {
-      isChatOpen = event.data.chatOpen;
-      adjustResponsiveStyles(container, isChatOpen, hideBottomBar);
+      isAgentOpen = event.data.chatOpen;
+      adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
     }
   });
 
   // Event listener for window resize
   window.addEventListener("resize", () => {
-    adjustResponsiveStyles(container, isChatOpen, hideBottomBar);
+    adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
   });
 
   // Event listener for External buttons

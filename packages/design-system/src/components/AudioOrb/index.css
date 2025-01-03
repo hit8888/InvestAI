@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .audio-orb {
+    width: var(--width);
+    width: var(--height);
+    flex-shrink: 0;
+  }
+
+  .initial-background {
+    box-shadow:
+      0.131px -3.998px 9px 0px rgba(48, 134, 247, 0.17),
+      0.085px -2.591px 5.271px 0px rgba(48, 134, 247, 0.13),
+      0.05px -1.54px 2.867px 0px rgba(48, 134, 247, 0.1),
+      0.026px -0.8px 1.462px 0px rgba(48, 134, 247, 0.09),
+      0.011px -0.326px 0.733px 0px rgba(48, 134, 247, 0.07),
+      0.002px -0.074px 0.354px 0px rgba(48, 134, 247, 0.04);
+  }
+
+  .animate-audio {
+  }
+}

@@ -47,11 +47,11 @@ const createIframe = (container: HTMLElement, IFRAME_SRC: string): void => {
 /**
  * Adjusts the responsive styles of the container.
  * @param {HTMLElement} container - The container element to adjust.
- * @param {boolean} isChatOpen - Whether the chat is open.
+ * @param {boolean} isAgenttOpen - Whether the chat is open.
  */
 const adjustResponsiveStyles = (
   container: HTMLElement,
-  isChatOpen: boolean,
+  isAgenttOpen: boolean,
 ): void => {
   const isMobile =
     window.innerWidth < DEFAULT_WIDTH_PX ||
@@ -59,7 +59,7 @@ const adjustResponsiveStyles = (
 
   let width: number, height: number;
 
-  if (isChatOpen && isMobile) {
+  if (isAgenttOpen && isMobile) {
     width = Math.min(
       window.innerWidth * (DEFAULT_MOBILE_WIDTH_VH / 100),
       DEFAULT_WIDTH_PX,
@@ -68,7 +68,7 @@ const adjustResponsiveStyles = (
       window.innerHeight * (DEFAULT_MOBILE_HEIGHT_VH / 100),
       DEFAULT_HEIGHT_PX,
     );
-  } else if (!isChatOpen) {
+  } else if (!isAgenttOpen) {
     width = COLLAPSED_SIZE_WIDTH_PX;
     height = COLLAPSED_SIZE_HEIGHT_PX;
   } else {
@@ -121,7 +121,7 @@ const getUtmParameters = (): Record<string, string | null> => {
   // Set the script URL based on the environment
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=widget`;
 
-  let isChatOpen = false;
+  let isAgenttOpen = false;
   let iFrameSource: Window | MessageEventSource | null = null;
 
   // Main execution
@@ -153,13 +153,13 @@ const getUtmParameters = (): Record<string, string | null> => {
     );
 
     if (event.data && typeof event.data.chatOpen === "boolean") {
-      isChatOpen = event.data.chatOpen;
-      adjustResponsiveStyles(container, isChatOpen);
+      isAgenttOpen = event.data.chatOpen;
+      adjustResponsiveStyles(container, isAgenttOpen);
     }
   });
 
   // Event listener for window resize
   window.addEventListener("resize", () => {
-    adjustResponsiveStyles(container, isChatOpen);
+    adjustResponsiveStyles(container, isAgenttOpen);
   });
 })();

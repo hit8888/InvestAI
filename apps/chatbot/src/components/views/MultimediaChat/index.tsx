@@ -13,19 +13,34 @@ interface IProps {
   fetchSessionData: () => void;
 }
 
+const DEFAULT_HEIGHT = '96%';
+const BASE_WIDTH = '98%';
+
+// Breakpoint screens
+const BREAKPOINTS = ['hd', 'mac-air', 'hd-ready', 'desktop', 'mac-pro-14', 'hd-plus', 'mac-pro-16', 'full-hd', 'qhd'];
+
 const Multimedia = ({ fetchSessionData }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
   const { getParam, setParam } = useUrlParams();
+  const isAgentOpen = getParam('isAgentOpen') === 'true';
 
-  const isChatOpen = getParam('isChatOpen') === 'true';
+  const getBreakpointStyles = (height: string) => {
+    return BREAKPOINTS.reduce(
+      (acc, breakpoint) => ({
+        ...acc,
+        [`${breakpoint}:h-[${height}] ${breakpoint}:w-[${BASE_WIDTH}]`]: isAgentOpen,
+      }),
+      {},
+    );
+  };
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();
     }
-    if (!isChatOpen) {
-      setParam('isChatOpen', 'true');
+    if (!isAgentOpen) {
+      setParam('isAgentOpen', 'true');
     }
 
     handleSendUserMessage(data);
@@ -35,34 +50,26 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   const { trackChatbotEvent } = useChatbotAnalytics();
 
   const handleOpenChat = () => {
-    setParam('isChatOpen', 'true');
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isChatOpen });
+    setParam('isAgentOpen', 'true');
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
   const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenChat });
 
   const handleCloseChat = () => {
-    setParam('isChatOpen', 'false');
-    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isChatOpen });
+    setParam('isAgentOpen', 'false');
+    trackChatbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isAgentOpen });
   };
 
   return (
-    <div className={isChatOpen ? 'flex h-screen w-full items-end justify-center pb-12' : ''}>
+    <div className={isAgentOpen ? 'flex h-screen w-full items-end justify-center pb-12' : ''}>
       <div
         className={cn('flex h-screen flex-col font-inter', {
-          'rounded-2xl': isChatOpen,
-          'hd:h-[95%] hd:w-[95%]': isChatOpen,
-          'mac-air:h-[95%] mac-air:w-[95%]': isChatOpen,
-          'hd-ready:h-[95%] hd-ready:w-[95%]': isChatOpen,
-          'desktop:h-[95%] desktop:w-[95%]': isChatOpen,
-          'mac-pro-14:h-[95%] mac-pro-14:w-[95%]': isChatOpen,
-          'hd-plus:h-[95%] hd-plus:w-[95%]': isChatOpen,
-          'mac-pro-16:h-[95%] mac-pro-16:w-[95%]': isChatOpen,
-          'full-hd:h-[95%] full-hd:w-[95%]': isChatOpen,
-          'qhd:h-[95%] qhd:w-[95%]': isChatOpen,
+          'rounded-2xl': isAgentOpen,
+          ...getBreakpointStyles(DEFAULT_HEIGHT),
         })}
       >
-        {isChatOpen ? (
+        {isAgentOpen ? (
           <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
         ) : (
           <EntryPointBottomBar
