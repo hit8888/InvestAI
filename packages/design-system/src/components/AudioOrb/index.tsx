@@ -1,6 +1,4 @@
 import React from 'react';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { cn } from '../../lib/cn';
 import './index.css';
 
 interface IProps {
