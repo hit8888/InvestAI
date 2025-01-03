@@ -6,6 +6,8 @@ import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { cn } from '@breakout/design-system/lib/cn';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
 
 interface IProps {
   artifactId: string;
@@ -28,6 +30,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
     },
   });
 
+  const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   const manager = useMemo(() => {
     if (!data) return null;
@@ -39,6 +42,7 @@ const ArtifactPreview = ({ artifactId, artifactType }: IProps) => {
   const description = manager?.getArtifactDescription();
 
   const handleArtifactOnClick = () => {
+    setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
     setActiveArtifact({ artifactId, artifactType: artifactType ?? 'NONE' });
   };
 

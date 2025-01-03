@@ -1,4 +1,4 @@
-import { FormArtifactMetadataType, FormArtifactType, FormFieldType } from '@meaku/core/types/chat';
+import { FormArtifactMetadataType, FormArtifactContent, FormFieldType } from '@meaku/core/types/chat';
 import Card from '@breakout/design-system/components/layout/card';
 import CardContent from '@breakout/design-system/components/layout/card-content';
 import CardHeader from '@breakout/design-system/components/layout/card-header';
@@ -18,7 +18,7 @@ import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 
 interface IFormProps {
   artifactId?: string;
-  artifact?: FormArtifactType;
+  artifact?: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }

@@ -11,6 +11,9 @@ const useUpdateActiveArtifactOnNewMessage = () => {
   const artifactType = lastMessage?.artifact?.artifact_type;
 
   useEffect(() => {
+    if (!artifactId) {
+      return;
+    }
     const artifactTypesNotToCache = ['NONE', 'SUGGESTIONS'];
     if (artifactId && artifactType && !artifactTypesNotToCache.includes(artifactType)) {
       setActiveArtifact({
@@ -19,7 +22,6 @@ const useUpdateActiveArtifactOnNewMessage = () => {
       });
       return;
     }
-    setActiveArtifact(null);
   }, [artifactId, artifactType, setActiveArtifact]);
 };
 

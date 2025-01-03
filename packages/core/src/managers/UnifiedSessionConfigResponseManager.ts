@@ -111,10 +111,11 @@ class UnifiedSessionConfigResponseManager {
       is_complete: response.is_complete,
       showFeedbackOptions: response.showFeedbackOptions,
       analytics: response.analytics,
-      artifact: !response.demo_available ? messageArtifact : undefined,
+      artifact: messageArtifact,
       chatArtifact: chatBoxArtifact,
       scriptStep: response.script_step,
       demoAvailable: response.demo_available,
+      features: response.features ?? [],
       role: response.role,
       id: response.response_id,
     };
@@ -138,6 +139,7 @@ class UnifiedSessionConfigResponseManager {
       showFeedbackOptions: false,
       documents: [],
       analytics: {},
+      features: [],
     };
 
     const formattedChatHistory = chatHistory

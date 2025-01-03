@@ -1,6 +1,6 @@
-import { Dispatch, memo, SetStateAction, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ScriptStepType } from '@meaku/core/types/chat';
-import { DemoQuestions } from './DemoQuestions';
+import { DemoFooter } from './DemoFooter';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
@@ -8,11 +8,12 @@ import { PauseIcon, PlayIcon } from 'lucide-react';
 interface IProps {
   demoDetails: ScriptStepType;
   demoPlayingStatus: DemoPlayingStatus;
-  setDemoPlayingStatus: Dispatch<SetStateAction<DemoPlayingStatus>>;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   onStepEnd: () => void;
+  onFinishDemo: () => void;
 }
 
-const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd }: IProps) => {
+const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd, onFinishDemo }: IProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isQueryRaisedRef = useRef(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -20,6 +21,10 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   const handleAudioEnd = () => {
     if (isQueryRaisedRef.current) {
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+      return;
+    }
+    if (demoDetails?.is_end) {
+      onFinishDemo();
       return;
     }
     onStepEnd();
@@ -44,6 +49,13 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
       audio.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }
+  };
+
+  const handlePause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
   };
 
   useEffect(() => {
@@ -92,7 +104,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   return (
     <>
-      <div className={'relative flex h-[90%] w-full items-center justify-center'}>
+      <div className={'relative flex h-[92%] w-full items-center justify-center'}>
         {!isImageLoaded && (
           <div
             className="absolute inset-0 scale-95 
@@ -129,11 +141,13 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
         )}
       </div>
 
-      <div className="flex h-[10%] flex-1 items-center py-4">
-        <DemoQuestions
+      <div className="flex h-[8%] flex-1 items-center py-4">
+        <DemoFooter
           isDemoPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
           onRaiseDemoQuery={handleRaiseDemoQuery}
           onCloseDemoChat={handleCloseDemoChat}
+          onFinishDemo={onFinishDemo}
+          onPause={handlePause}
         />
       </div>
     </>

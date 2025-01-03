@@ -1,10 +1,10 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { SlideArtifactType } from '@meaku/core/types/chat';
+import { SlideArtifactContent } from '@meaku/core/types/chat';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import SlideItem from './SlideItem';
 
 interface IProps {
-  items: SlideArtifactType['items'];
+  items: SlideArtifactContent['items'];
 }
 
 //TODO: KK: Move this to design system

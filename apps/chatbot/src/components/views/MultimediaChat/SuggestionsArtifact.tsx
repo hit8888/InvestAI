@@ -1,11 +1,11 @@
-import { SuggestionArtifactType } from '@meaku/core/types/chat';
+import { SuggestionArtifactContent } from '@meaku/core/types/chat';
 import { Suggestion } from './Suggestion';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useChatbotAnalytics from '../../../hooks/useChatbotAnalytics.tsx';
 import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 
 interface IProps {
-  artifact?: SuggestionArtifactType;
+  artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
@@ -18,7 +18,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
     handleSendUserMessage({ message });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
       message,
-      isChatOpen: true,
+      isAgentOpen: true,
       artifact,
     });
   };

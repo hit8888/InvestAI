@@ -38,7 +38,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenC
     handleSendUserMessage({ message: msg });
     trackChatbotEvent(ANALYTICS_EVENT_NAMES.INITIAL_SUGGESTED_QUESTION_CLICKED, {
       message: msg,
-      isChatOpen: false,
+      isAgentOpen: false,
       initialSuggestedQuestion: true,
     });
   };

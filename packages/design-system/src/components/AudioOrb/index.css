@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .audio-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--height);
+    width: var(--width);
+    box-shadow:
+      0px 0px 56px 4px #fff,
+      0px 12px 24px 4px rgba(0, 0, 0, 0.36);
+    background: var(--input-color, --fallback-color);
+    border-radius: 50%;
+  }
+
+  .audio-loader {
+    --size: var(--waveSize);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--size) / 2);
+    height: calc(var(--size) * 3);
+  }
+
+  .audio-loader div {
+    width: calc(var(--size) / 2);
+    height: var(--size);
+    border-radius: var(--size);
+    background-color: #ffffff;
+    animation: wave-animation-audio 2s infinite ease-in-out;
+  }
+
+  @keyframes wave-animation-audio {
+    25% {
+      height: calc(var(--size) * 4);
+      background-color: #ffffff;
+    }
+
+    50% {
+      height: var(--size);
+      background-color: #ffffff;
+    }
+  }
+
+  .audio-loader :nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .audio-loader :nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .audio-loader :nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  .audio-loader :nth-child(5) {
+    animation-delay: 0.8s;
+  }
+}

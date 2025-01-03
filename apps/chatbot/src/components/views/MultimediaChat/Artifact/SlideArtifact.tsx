@@ -1,12 +1,12 @@
-import { SlideArtifactType } from '@meaku/core/types/chat';
-import SlideHeader from './SlideHeader';
-import SlideItems from './SlideItems';
-import SlideSubTitle from './SlideSubTitle';
+import { SlideArtifactContent } from '@meaku/core/types/chat';
+import SlideHeader from '../SlideHeader.tsx';
+import SlideItems from '../SlideItems.tsx';
+import SlideSubTitle from '../SlideSubTitle.tsx';
 import { cn } from '@breakout/design-system/lib/cn';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import useUnifiedConfigurationResponseManager from '../../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
 
 interface IProps {
-  artifact: SlideArtifactType;
+  artifact: SlideArtifactContent;
 }
 
 const SlideArtifact = ({ artifact: { title, items, sub_title } }: IProps) => {

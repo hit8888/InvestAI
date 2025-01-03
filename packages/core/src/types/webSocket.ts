@@ -8,6 +8,7 @@ export enum DemoEvent {
   DEMO_NEXT = "DEMO_NEXT",
   DEMO_END = "DEMO_END",
   DEMO_QUESTION = "DEMO_QUESTION",
+  DEMO_OPTIONS = "DEMO_OPTIONS",
 }
 
 export enum ArtifactEvent {
