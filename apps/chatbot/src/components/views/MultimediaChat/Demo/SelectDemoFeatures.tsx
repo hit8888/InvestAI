@@ -31,7 +31,7 @@ const SelectDemoFeatures = ({ demoFeatures, handleSendMessage, setDemoPlayingSta
                 Choose the features you’d like to learn more about. We’ll tailor the demo to your interests.
               </span>
             </div>
-            <div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {demoFeatures.map((feature) => (
                 <span
                   className="flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary px-4 py-2 text-primary/80"
