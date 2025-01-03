@@ -47,7 +47,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
 
   return (
     <div
-      className={cn('mx-auto mt-2 flex h-[97vh] w-[98vw] justify-center font-inter', {
+      className={cn('mx-auto mt-2 flex h-[95vh] w-[98vw] justify-center font-inter', {
         'rounded-2xl': isAgentOpen,
       })}
     >
