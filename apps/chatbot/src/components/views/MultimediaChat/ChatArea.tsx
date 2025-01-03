@@ -49,14 +49,7 @@ const ChatArea = ({ handleSendMessage, handleCloseChat }: IProps) => {
     demoPlayingStatus !== DemoPlayingStatus.INITIAL && demoPlayingStatus !== DemoPlayingStatus.STARTED;
 
   return (
-    <div
-      className={cn(
-        'mx-auto flex w-10/12 flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out',
-        {
-          'w-full': hasArtifactOrDemoInMessageHistory,
-        },
-      )}
-    >
+    <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out">
       <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
         <ChatHeader
           handleSendMessage={(message) => handleSendMessage({ message })}

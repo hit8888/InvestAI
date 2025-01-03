@@ -13,26 +13,10 @@ interface IProps {
   fetchSessionData: () => void;
 }
 
-const DEFAULT_HEIGHT = '96%';
-const BASE_WIDTH = '98%';
-
-// Breakpoint screens
-const BREAKPOINTS = ['hd', 'mac-air', 'hd-ready', 'desktop', 'mac-pro-14', 'hd-plus', 'mac-pro-16', 'full-hd', 'qhd'];
-
 const Multimedia = ({ fetchSessionData }: IProps) => {
   const { handleSendUserMessage } = useWebSocketChat();
   const { getParam, setParam } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
-
-  const getBreakpointStyles = (height: string) => {
-    return BREAKPOINTS.reduce(
-      (acc, breakpoint) => ({
-        ...acc,
-        [`${breakpoint}:h-[${height}] ${breakpoint}:w-[${BASE_WIDTH}]`]: isAgentOpen,
-      }),
-      {},
-    );
-  };
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
@@ -62,23 +46,20 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   };
 
   return (
-    <div className={isAgentOpen ? 'flex h-screen w-full items-end justify-center pb-12' : ''}>
-      <div
-        className={cn('flex h-screen flex-col font-inter', {
-          'rounded-2xl': isAgentOpen,
-          ...getBreakpointStyles(DEFAULT_HEIGHT),
-        })}
-      >
-        {isAgentOpen ? (
-          <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
-        ) : (
-          <EntryPointBottomBar
-            handleSendUserMessage={handleSendMessage}
-            handleOpenChat={handleOpenChat}
-            hideBottomBar={shouldHideBottomBar}
-          />
-        )}
-      </div>
+    <div
+      className={cn('mx-auto mt-2 flex h-[97vh] w-[98vw] justify-center font-inter', {
+        'rounded-2xl': isAgentOpen,
+      })}
+    >
+      {isAgentOpen ? (
+        <ChatArea handleSendMessage={handleSendMessage} handleCloseChat={handleCloseChat} />
+      ) : (
+        <EntryPointBottomBar
+          handleSendUserMessage={handleSendMessage}
+          handleOpenChat={handleOpenChat}
+          hideBottomBar={shouldHideBottomBar}
+        />
+      )}
     </div>
   );
 };
