@@ -1,29 +1,36 @@
+import React from 'react';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '../../lib/cn';
-import ShiningRectangle from '../icons/ShiningRectangle';
 import './index.css';
 
 interface IProps {
   color: string | null;
-  state: OrbStatusEnum;
-  width: number;
   height: number;
+  width: number;
+  waveSize: number;
 }
 
-const AudioOrb = ({ color, width, height }: IProps) => {
+const AudioOrb = ({ color, height, waveSize, width }: IProps) => {
   return (
     <div
-      className={cn('audio-orb p-1', {})}
+      className="audio-container"
       style={
         {
           '--input-color': color ?? 'rgb(var(--primary))',
           '--fallback-color': color ?? 'rgb(var(--primary))',
-          '--width': `${width}px`,
           '--height': `${height}px`,
+          '--width': `${width}px`,
+          '--waveSize': `${waveSize}px`,
         } as React.CSSProperties
       }
     >
-      <ShiningRectangle width="25" height="13" />
+      <div className="audio-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   );
 };

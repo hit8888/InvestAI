@@ -163,6 +163,7 @@
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
+  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
 
   console.log("sets up the container and iframe");
 

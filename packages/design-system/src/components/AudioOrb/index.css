@@ -3,22 +3,61 @@
 @tailwind utilities;
 
 @layer base {
-  .audio-orb {
+  .audio-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--height);
     width: var(--width);
-    width: var(--height);
-    flex-shrink: 0;
-  }
-
-  .initial-background {
     box-shadow:
-      0.131px -3.998px 9px 0px rgba(48, 134, 247, 0.17),
-      0.085px -2.591px 5.271px 0px rgba(48, 134, 247, 0.13),
-      0.05px -1.54px 2.867px 0px rgba(48, 134, 247, 0.1),
-      0.026px -0.8px 1.462px 0px rgba(48, 134, 247, 0.09),
-      0.011px -0.326px 0.733px 0px rgba(48, 134, 247, 0.07),
-      0.002px -0.074px 0.354px 0px rgba(48, 134, 247, 0.04);
+      0px 0px 56px 4px #fff,
+      0px 12px 24px 4px rgba(0, 0, 0, 0.36);
+    background: var(--input-color, --fallback-color);
+    border-radius: 50%;
   }
 
-  .animate-audio {
+  .audio-loader {
+    --size: var(--waveSize);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--size) / 2);
+    height: calc(var(--size) * 3);
+  }
+
+  .audio-loader div {
+    width: calc(var(--size) / 2);
+    height: var(--size);
+    border-radius: var(--size);
+    background-color: #ffffff;
+    animation: wave-animation-audio 2s infinite ease-in-out;
+  }
+
+  @keyframes wave-animation-audio {
+    25% {
+      height: calc(var(--size) * 4);
+      background-color: #ffffff;
+    }
+
+    50% {
+      height: var(--size);
+      background-color: #ffffff;
+    }
+  }
+
+  .audio-loader :nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .audio-loader :nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .audio-loader :nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  .audio-loader :nth-child(5) {
+    animation-delay: 0.8s;
   }
 }
