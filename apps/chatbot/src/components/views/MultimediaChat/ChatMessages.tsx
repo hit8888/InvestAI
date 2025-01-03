@@ -25,7 +25,6 @@ const ChatMessages = ({
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
 
   const orbState = useMessageStore((state) => state.orbState);
-
   const handleScrollToBottom = () => {
     if (chatContainerRef.current) {
       const { scrollTop } = chatContainerRef.current;
@@ -41,6 +40,7 @@ const ChatMessages = ({
     handleScrollToBottom();
   }, [messages]);
 
+  const aiMessages = messages.filter((message) => message.role === 'ai');
   return (
     <div
       className={cn('col-span-3 flex-1 overflow-y-auto', {
@@ -67,7 +67,7 @@ const ChatMessages = ({
               />
             </>
           ))}
-          {messages.length < 1 && (
+          {aiMessages.length <= 1 && (
             <div className="pt-4">
               <SuggestionsArtifact
                 handleSendUserMessage={handleSendUserMessage}

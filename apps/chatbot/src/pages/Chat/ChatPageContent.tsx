@@ -2,7 +2,6 @@ import { ChatConfig } from '@meaku/core/types/config';
 import { lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
-import { useUpdateSessionOnSessionInit } from '../shared/hooks/useUpdateSessionOnSessionInit';
 import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedConfigurationResponseManager';
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '../shared/ApiProvider/Context';
@@ -24,8 +23,6 @@ const Chat = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
-
-  useUpdateSessionOnSessionInit();
 
   const chatConfig = (searchParams.get('config')?.toLowerCase() as ChatConfig) || ChatConfig.EMBED;
 
