@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { ENV } from '../config/env.ts';
+import { ENV } from '@meaku/core/types/env';
 import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
 import { useIsAdmin } from '../shared/UrlDerivedDataProvider/index.tsx';
