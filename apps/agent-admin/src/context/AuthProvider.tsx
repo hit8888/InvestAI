@@ -1,6 +1,4 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-// import axios from 'axios';
-// import { ENV } from '../../../../apps/chatbot/src/config/env';
 
 import { AuthResponse } from '@meaku/core/types/admin/auth';
 import {

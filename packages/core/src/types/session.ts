@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MessageSchema } from "./chat";
+import { MessageSchema } from "./agent";
 import { DataSourceSchema } from "./common";
 
 export const FeedbackSchema = z.object({

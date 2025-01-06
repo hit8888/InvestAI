@@ -1,4 +1,4 @@
-import { ArtifactEnum } from "@meaku/core/types/chat";
+import { ArtifactEnum } from "./agent";
 import { z } from "zod";
 
 export type BrowserSignature = {

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getArtifact } from "../http/api";
 import { BreakoutQueryOptions } from "../types/queries";
-import { ArtifactEnum, ArtifactResponse } from "../types/chat";
+import { ArtifactEnum, ArtifactResponse } from "../types/agent";
 
 const getArtifactKey = (
   artifactId: string,

@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import apiClient from "../http/client";
-import { isProduction } from "../../../../apps/chatbot/src/utils/common.ts";
-import { ENV } from "../../../../apps/chatbot/src/config/env.ts";
+import { isProduction } from "../../../../apps/agent/src/utils/common.ts";
+import { ENV } from "../../../../apps/agent/src/config/env.ts";
 import { debounce } from "lodash";
 
 interface AnalyticsEvent {
