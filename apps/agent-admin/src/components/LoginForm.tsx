@@ -8,13 +8,16 @@ import OtpInput from './OtpInput';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
-import { URL_ROUTE_LEADS_PAGE } from '../utils/constants';
+import { AppRoutesEnum } from '../utils/constants';
+import usePageRouteState from '../hooks/usePageRouteState';
 
 const LoginForm = () => {
   const { login, saveTokens } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
+
+  const { pathUptoAdmin } = usePageRouteState();
 
   const navigate = useNavigate();
 
@@ -94,7 +97,7 @@ const LoginForm = () => {
     login();
     setEmail('');
     setOtp('');
-    navigate(URL_ROUTE_LEADS_PAGE);
+    navigate(`${pathUptoAdmin}/${AppRoutesEnum.LEADS}`);
   };
 
   const handleToggleShowOtpLogin = () => {

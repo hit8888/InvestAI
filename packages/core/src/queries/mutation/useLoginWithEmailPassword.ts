@@ -1,4 +1,4 @@
-import { loginWithEmailPassword } from "../../http/api";
+import { loginWithEmailPassword } from "../../http/admin/api";
 import { LoginWithEmailPasswordPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 

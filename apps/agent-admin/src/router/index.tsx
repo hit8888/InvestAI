@@ -1,5 +1,7 @@
 import { wrapCreateBrowserRouter } from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
+import Custom404 from '@breakout/design-system/components/layout/Custom404';
+
 import Root from '../layout';
 import Dashboard from '../pages/Dashboard';
 import LoginPage from '../pages/LoginPage';
@@ -8,12 +10,8 @@ import ConversationsPage from '../pages/ConversationsPage';
 import PlaygroundPage from '../pages/PlaygroundPage';
 import ProtectedRoute from '../pages/ProtectedRoutes';
 import withPageViewWrapper from '../pages/PageViewWrapper';
-import {
-  URL_ROUTE_CONVERSATIONS_PAGE,
-  URL_ROUTE_LEADS_PAGE,
-  URL_ROUTE_LOGIN_PAGE,
-  URL_ROUTE_PLAYGROUND_PAGE,
-} from '../utils/constants';
+
+import { AppRoutesEnum } from '../utils/constants';
 
 const WrapDashboard = withPageViewWrapper(Dashboard);
 const WrapLeadsPage = withPageViewWrapper(LeadsPage);
@@ -22,9 +20,15 @@ const WrapPlaygroundPage = withPageViewWrapper(PlaygroundPage);
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
+const { LOGIN, LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
+
 const routes = [
   {
-    path: '',
+    path: '/',
+    element: <>👋</>,
+  },
+  {
+    path: '/org/:orgName/admin',
     element: <Root />,
     children: [
       {
@@ -33,26 +37,30 @@ const routes = [
         children: [],
       },
       {
-        path: URL_ROUTE_LOGIN_PAGE,
+        path: LOGIN,
         element: <LoginPage />,
         children: [],
       },
       {
-        path: URL_ROUTE_LEADS_PAGE,
+        path: LEADS,
         element: <ProtectedRoute element={<WrapLeadsPage />} />,
         children: [],
       },
       {
-        path: URL_ROUTE_CONVERSATIONS_PAGE,
+        path: CONVERSATIONS,
         element: <ProtectedRoute element={<WrapConversationsPage />} />,
         children: [],
       },
       {
-        path: URL_ROUTE_PLAYGROUND_PAGE,
+        path: PLAYGROUND,
         element: <ProtectedRoute element={<WrapPlaygroundPage />} />,
         children: [],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Custom404 />,
   },
 ];
 

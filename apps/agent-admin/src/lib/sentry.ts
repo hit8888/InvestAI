@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
-import { ENV } from '../config/env';
+import { ENV } from '@meaku/core/types/env';
 import { isDev } from '../utils/common';
 
 Sentry.init({

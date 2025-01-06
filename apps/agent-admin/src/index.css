@@ -22,3 +22,13 @@
     0px 0px 2.948px 0px rgba(0, 0, 0, 0.02),
     0px 0px 1.564px 0px rgba(0, 0, 0, 0.01);
 }
+
+.pinnedColumnShadow {
+  box-shadow:
+    29px 0.161px 136px 0px rgb(var(--primary) / 0.05),
+    18.796px 0.104px 79.648px 0px rgb(var(--primary) / 0.04),
+    11.17px 0.062px 43.319px 0px rgb(var(--primary) / 0.03),
+    5.8px 0.032px 22.1px 0px rgb(var(--primary) / 0.03),
+    2.363px 0.013px 11.081px 0px rgb(var(--primary) / 0.02),
+    0.537px 0.003px 5.352px 0px rgb(var(--primary) / 0.01);
+}

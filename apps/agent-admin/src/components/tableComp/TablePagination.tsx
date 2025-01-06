@@ -1,39 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CustomFilterDropdown from './CustomFilterDropdown';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import NavigationArrowButton from './NavigationArrowButton';
+import { PAGINATION_PER_PAGE_OPTIONS } from '../../utils/constants';
 
 interface PaginationProps {
   totalItems: number; // Total number of items
+  totalPages: number; // Total number of pages
   itemsPerPage: number; // Items per page
-  onPageChange: (page: number) => void; // Callback function to handle page changes
+  currentPage: number; // Current page
+  handlePageChange: (page: number) => void; // Callback function to handle page changes
+  onItemsPerPageChange: (page: number) => void; // Callback function to handle ItemsPerPage changes
 }
 
-const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, onPageChange }) => {
-  const [itemsPerPageValue, setItemsPerPageValue] = useState<string | null>(`${itemsPerPage}`);
-  const [currentPage, setCurrentPage] = useState<number>(1); // Current page state
-  const totalPages = Math.ceil(totalItems / Number(itemsPerPageValue)); // Total number of pages
-
+const TablePagination: React.FC<PaginationProps> = ({
+  totalItems,
+  totalPages,
+  itemsPerPage,
+  onItemsPerPageChange,
+  handlePageChange,
+  currentPage,
+}) => {
   const handlePerPageOperation = (selectedOption: string | null) => {
-    if (selectedOption) {
-      //   console.log('Selected Option:', selectedOption);
-      setItemsPerPageValue(selectedOption);
-    } else {
-      //   console.log('No option selected');
-      setItemsPerPageValue(`${itemsPerPage}`);
-    }
-    setCurrentPage(1);
+    onItemsPerPageChange(Number(selectedOption));
   };
 
-  const handleCurrentPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-      onPageChange(page);
-    }
-  };
-
-  const PerPageOptions = ['10', '20', '50'];
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
@@ -42,8 +34,8 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
       <div className="flex items-start gap-2">
         {/* Items per page dropdown */}
         <CustomFilterDropdown
-          options={PerPageOptions}
-          filterLabel={`${itemsPerPageValue}`}
+          options={PAGINATION_PER_PAGE_OPTIONS}
+          filterLabel={`${itemsPerPage}`}
           staticValue="per page"
           onCallback={handlePerPageOperation}
         />
@@ -51,8 +43,7 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
         {/* Page range and total items */}
         <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/2.5 p-2">
           <p className="text-sm font-semibold text-gray-500">
-            {(currentPage - 1) * Number(itemsPerPageValue) + 1}-
-            {Math.min(currentPage * Number(itemsPerPageValue), totalItems)}
+            {(currentPage - 1) * Number(itemsPerPage) + 1}-{Math.min(currentPage * Number(itemsPerPage), totalItems)}
             <span className="font-normal">{` of ${totalItems}`}</span>
           </p>
         </div>
@@ -62,12 +53,12 @@ const TablePagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, 
       <div className="flex items-center gap-2">
         <NavigationArrowButton
           conditionOnBtn={isFirstPage}
-          onButtonClick={() => handleCurrentPage(currentPage - 1)}
+          onButtonClick={() => handlePageChange(currentPage - 1)}
           PaginationArrow={PaginationPreviousArrow}
         />
         <NavigationArrowButton
           conditionOnBtn={isLastPage}
-          onButtonClick={() => handleCurrentPage(currentPage + 1)}
+          onButtonClick={() => handlePageChange(currentPage + 1)}
           PaginationArrow={PaginationNextArrow}
         />
       </div>

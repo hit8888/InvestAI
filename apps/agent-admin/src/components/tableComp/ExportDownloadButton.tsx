@@ -11,7 +11,7 @@ const ExportDownloadButton = ({ btnLabel, onDownloadBtnClicked }: ExportDownload
       type="button"
       aria-label="export-download-button"
       name="export-download-button"
-      className="flex flex-[1_0_0] items-center justify-center rounded-lg border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary p-3"
+      className="flex items-center justify-center rounded-lg border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary p-3"
       onClick={onDownloadBtnClicked}
     >
       <div className="flex items-center gap-2">

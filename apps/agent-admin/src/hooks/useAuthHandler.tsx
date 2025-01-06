@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
-import { URL_ROUTE_LEADS_PAGE, URL_ROUTE_LOGIN_PAGE } from '../utils/constants';
+import { AppRoutesEnum } from '../utils/constants';
 
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
   const navigate = useNavigate();
+  const { pathUptoAdmin, isLoginPage, pathURL } = usePageRouteState();
 
   useEffect(() => {
     // Check for tokens in local storage on page load
@@ -20,9 +22,13 @@ const useAuthHandler = () => {
         saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
       }
       login(); // Set isAuthenticated to true
-      navigate(URL_ROUTE_LEADS_PAGE); // Redirect to leads page
+      if (isLoginPage) {
+        navigate(`${pathUptoAdmin}/${AppRoutesEnum.LEADS}`);
+      } else {
+        navigate(pathURL);
+      }
     } else {
-      navigate(URL_ROUTE_LOGIN_PAGE); // Redirect to login if tokens are not present
+      navigate(`${pathUptoAdmin}/${AppRoutesEnum.LOGIN}`); // Redirect to login if tokens are not present
     }
   }, [navigate]);
 };

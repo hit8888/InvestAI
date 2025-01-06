@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import useSidebarAndPageState from '../hooks/useSidebarAndPageState';
+import usePageRouteState from '../hooks/usePageRouteState';
 import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
 
 const Root = () => {
-  const { isLoginPage } = useSidebarAndPageState();
+  const { isLoginPage } = usePageRouteState();
   useAuthHandler();
 
   return (
