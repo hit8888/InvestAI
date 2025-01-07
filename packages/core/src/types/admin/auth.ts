@@ -1,6 +1,8 @@
-type Organization = {
+export type organizationDetails = {
   id?: number;
   name?: string;
+  role?: string;
+  "tenant-name"?: string;
 };
 
 export type AuthResponse = {
@@ -13,5 +15,5 @@ export type AuthResponse = {
   is_staff: boolean;
   date_joined: string; // ISO 8601 format
   last_login: string; // ISO 8601 format
-  organizations: Organization[];
+  organizations: organizationDetails[];
 };

@@ -22,9 +22,9 @@ import PanelCloseIcon from '@breakout/design-system/components/icons/panel-close
 import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
 
 const Sidebar: React.FC = () => {
-  const { isLoginPage, isLeadsPage, isConversationsPage, isPlaygroundPage, pathUptoAdmin } = usePageRouteState();
+  const { isLoginPage, isLeadsPage, isConversationsPage, isPlaygroundPage } = usePageRouteState();
   const { isSidebarOpen: isOpen, toggleSidebar } = useSidebar();
-  const { userInfo } = useAuth();
+  const { userInfo, getTenantIdentifier } = useAuth();
 
   const { LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
   const { LEADS_LABEL, CONVERSATIONS_LABEL, PLAYGROUND_LABEL } = SidebarNavItemsEnum;
@@ -33,25 +33,21 @@ const Sidebar: React.FC = () => {
     return null;
   }
 
-  const getNavURL = (path: string) => {
-    return `${pathUptoAdmin}/${path}`;
-  };
-
   const NAV_LINK_ITEMS = [
     {
-      navUrl: getNavURL(LEADS),
+      navUrl: LEADS,
       navItem: LEADS_LABEL,
       navImg: <PanelLeadsIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isLeadsPage,
     },
     {
-      navUrl: getNavURL(CONVERSATIONS),
+      navUrl: CONVERSATIONS,
       navItem: CONVERSATIONS_LABEL,
       navImg: <PanelConversationIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isConversationsPage,
     },
     {
-      navUrl: getNavURL(PLAYGROUND),
+      navUrl: PLAYGROUND,
       navItem: PLAYGROUND_LABEL,
       navImg: <PanelPlaygroundIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isPlaygroundPage,
@@ -59,6 +55,7 @@ const Sidebar: React.FC = () => {
   ];
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
+  const TENANT_NAME = (getTenantIdentifier && getTenantIdentifier()?.['name']) ?? ADMIN_DASHBOARD_COMPANY_NAME;
 
   return (
     <div
@@ -81,9 +78,7 @@ const Sidebar: React.FC = () => {
           <div className="flex items-center gap-2">
             <AdminLogoSVG width={'30'} height={'35'} />
             {isOpen ? (
-              <span className="text-base font-bold text-adminLogoText transition-all duration-300">
-                {ADMIN_DASHBOARD_COMPANY_NAME}
-              </span>
+              <span className="text-base font-bold text-adminLogoText transition-all duration-300">{TENANT_NAME}</span>
             ) : null}
           </div>
           <button onClick={toggleSidebar} className="flex items-center justify-center rounded-lg pt-2">

@@ -25,10 +25,6 @@ const { LOGIN, LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
 const routes = [
   {
     path: '/',
-    element: <>👋</>,
-  },
-  {
-    path: '/org/:orgName/admin',
     element: <Root />,
     children: [
       {

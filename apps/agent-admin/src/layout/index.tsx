@@ -5,12 +5,14 @@ import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
 
 const Root = () => {
-  const { isLoginPage } = usePageRouteState();
+  const { isDashboardPage, isLoginPage } = usePageRouteState();
   useAuthHandler();
+
+  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage;
 
   return (
     <div className="flex w-full">
-      {!isLoginPage ? <Sidebar /> : null}
+      {notShowingSidebarCondition ? <Sidebar /> : null}
       <div
         className={cn({
           'w-full': isLoginPage,

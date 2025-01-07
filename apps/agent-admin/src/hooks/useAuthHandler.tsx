@@ -7,7 +7,8 @@ import { AppRoutesEnum } from '../utils/constants';
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
   const navigate = useNavigate();
-  const { pathUptoAdmin, isLoginPage, pathURL } = usePageRouteState();
+  const { isLoginPage, pathURL } = usePageRouteState();
+  const { LOGIN, LEADS } = AppRoutesEnum;
 
   useEffect(() => {
     // Check for tokens in local storage on page load
@@ -23,12 +24,12 @@ const useAuthHandler = () => {
       }
       login(); // Set isAuthenticated to true
       if (isLoginPage) {
-        navigate(`${pathUptoAdmin}/${AppRoutesEnum.LEADS}`);
+        navigate(LEADS);
       } else {
         navigate(pathURL);
       }
     } else {
-      navigate(`${pathUptoAdmin}/${AppRoutesEnum.LOGIN}`); // Redirect to login if tokens are not present
+      navigate(LOGIN); // Redirect to login if tokens are not present
     }
   }, [navigate]);
 };

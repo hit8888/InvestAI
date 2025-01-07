@@ -58,10 +58,10 @@ export const EXPORT_DOWNLOAD_LABEL = 'Download';
 // Routes
 
 export enum AppRoutesEnum {
-  LEADS = 'leads',
-  LOGIN = 'login',
-  CONVERSATIONS = 'conversations',
-  PLAYGROUND = 'playground',
+  LEADS = '/leads',
+  LOGIN = '/login',
+  CONVERSATIONS = '/conversations',
+  PLAYGROUND = '/playground',
 }
 
 export enum SidebarNavItemsEnum {

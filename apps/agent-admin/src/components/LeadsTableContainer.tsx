@@ -1,4 +1,9 @@
-import { useState } from 'react';
+// TODOS: Commented Code Are for Leads Page API Integration - NEED TO DO - Will be Covered In Next PR
+
+import {
+  // useEffect,
+  useState,
+} from 'react';
 import { usePagination } from '../hooks/usePagination';
 import { useSidebar } from '../context/SidebarContext';
 
@@ -16,13 +21,17 @@ import { getFormattedColumnsList } from '../utils/common';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import SortFilter from './tableComp/SortFilter';
+// import fetchLeads from '../lib/fetchLeads';
 
 // import { useAuth } from '../context/AuthProvider';
 
 const LeadsTableContainer = () => {
-  // const { accessToken } = useAuth();
+  // const { accessToken, getTenantIdentifier } = useAuth();
   const { isSidebarOpen } = useSidebar();
-  const [leads] = useState(DEFAULT_DATA_FOR_LEADS_PAGE);
+  const [
+    leads,
+    // setLeads
+  ] = useState(DEFAULT_DATA_FOR_LEADS_PAGE);
 
   const { paginatedData, currentPage, totalPages, itemsPerPage, handlePageChange, handleItemsPerPageChange } =
     usePagination({
@@ -32,6 +41,25 @@ const LeadsTableContainer = () => {
 
   const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 160);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
+
+  // const tenantName = getTenantIdentifier ? getTenantIdentifier()?.['tenant-name'] : undefined;
+
+  // useEffect(() => {
+  //   const getLeads = async () => {
+  //     try {
+  //       if (tenantName) {
+  //         const data = await fetchLeads(accessToken, tenantName);
+  //         setLeads(data?.results);
+  //       } else {
+  //         console.error('Tenant name is undefined');
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to load leads:', error);
+  //     }
+  //   };
+
+  //   getLeads();
+  // }, []);
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
