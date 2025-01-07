@@ -76,7 +76,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
         >
           <div className="relative flex-1">
-            {!hasFirstUserMessageBeenSent && (
+            {!hasFirstUserMessageBeenSent && !inputValue && (
               <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
                 <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
               </div>
