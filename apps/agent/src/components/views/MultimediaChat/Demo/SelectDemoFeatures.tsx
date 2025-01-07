@@ -6,6 +6,8 @@ import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
 import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
+import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
@@ -15,8 +17,11 @@ interface IProps {
 
 const SelectDemoFeatures = ({ demoFeatures, handleSendMessage, setDemoPlayingStatus }: IProps) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
+
   const onBookDemoClick = () => {
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: { feature_ids: selectedIds } });
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SELECT_TOPIC, { feature_ids: selectedIds });
     setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
   };
 

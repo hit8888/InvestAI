@@ -4,6 +4,8 @@ import { DemoFooter } from './DemoFooter';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
+import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -17,6 +19,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isQueryRaisedRef = useRef(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const handleAudioEnd = () => {
     if (isQueryRaisedRef.current) {
@@ -24,6 +27,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
       return;
     }
     if (demoDetails?.is_end) {
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_COMPLETED);
       onFinishDemo();
       return;
     }
@@ -46,6 +50,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
           setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
         });
     } else {
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_INTERUPTED);
       audio.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }

@@ -2,6 +2,8 @@ import Button from '@breakout/design-system/components/layout/button';
 import { Dialog, DialogContent } from '@breakout/design-system/components/layout/dialog';
 import { EndFlag } from '@breakout/design-system/components/icons/EndFlag';
 import { useState } from 'react';
+import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   onFinishDemo: () => void;
@@ -9,10 +11,17 @@ interface IProps {
 }
 
 const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => {
     onPause();
     setIsModalOpen(true);
+  };
+
+  const handleFinishDemo = () => {
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_ABANDONED);
+    onFinishDemo();
   };
 
   return (
@@ -38,7 +47,7 @@ const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
           >
             <span className="text-customSecondaryText">Cancel</span>
           </Button>
-          <Button className="flex-1 border-2 border-red-400 bg-customRed1 px-12" onClick={onFinishDemo}>
+          <Button className="flex-1 border-2 border-red-400 bg-customRed1 px-12" onClick={handleFinishDemo}>
             <span>End Demo</span>
           </Button>
         </div>

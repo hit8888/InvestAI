@@ -5,6 +5,8 @@ import AudioOrb from '@breakout/design-system/components/AudioOrb/index';
 
 import { AskQuestionContainer } from './AskQuestionContainer';
 import { FinishDemo } from './FinishDemo';
+import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   isDemoPlaying: boolean;
@@ -16,8 +18,14 @@ interface IProps {
 
 export function DemoFooter({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoAgent, onFinishDemo, onPause }: IProps) {
   const [isAgentEnabled, setShowDemoAgent] = useState(false);
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const showWaitDemoCompleteNotification = isDemoPlaying && isAgentEnabled;
+
+  const handleRaiseDemoQuery = (selectedValue: boolean) => {
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_CONVERSATION_INITIATED);
+    onRaiseDemoQuery(selectedValue);
+  };
 
   return (
     <div className="flex w-full items-center justify-between">
@@ -25,7 +33,7 @@ export function DemoFooter({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoAgent, 
         <AskQuestionContainer
           isAgentEnabled={isAgentEnabled}
           setShowDemoAgent={setShowDemoAgent}
-          onRaiseDemoQuery={onRaiseDemoQuery}
+          onRaiseDemoQuery={handleRaiseDemoQuery}
           onCloseDemoAgent={onCloseDemoAgent}
           isDemoPlaying={isDemoPlaying}
         />
