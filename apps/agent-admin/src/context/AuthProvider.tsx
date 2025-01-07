@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
-import { AuthResponse, OrganizationProps } from '@meaku/core/types/admin/auth';
+import { AuthResponse, organizationDetails } from '@meaku/core/types/admin/auth';
 import {
   // ACCESS_TOKEN_EXPIRATION_TIME,
   DefaultAuthResponse,
@@ -17,8 +17,8 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
-  setTenantIdentifier?: (tenantObj: OrganizationProps) => void;
-  getTenantIdentifier?: () => OrganizationProps | null;
+  setTenantIdentifier?: (tenantObj: organizationDetails) => void;
+  getTenantIdentifier?: () => organizationDetails | null;
 }
 
 interface AuthProviderProps {
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('userInfo');
   };
 
-  const setTenantIdentifier = (tenantObj: OrganizationProps) => {
+  const setTenantIdentifier = (tenantObj: organizationDetails) => {
     localStorage.setItem('tenant_identifier', JSON.stringify(tenantObj));
   };
 
