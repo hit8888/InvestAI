@@ -5,10 +5,10 @@
 */
 // Main function
 (function () {
-  const DEFAULT_WIDTH = "90vw";
+  const DEFAULT_WIDTH = "95vw";
   const DEFAULT_HEIGHT = "90vh";
-  const COLLAPSED_SIZE_WIDTH = "90vw";
-  const COLLAPSED_SIZE_HEIGHT_PX = 90;
+  const COLLAPSED_SIZE_WIDTH = "95vw";
+  const COLLAPSED_SIZE_HEIGHT_PX = 180;
 
   /**
    * Creates and styles the container for the chat widget.
@@ -19,7 +19,7 @@
     container.id = "chat-widget-container";
     Object.assign(container.style, {
       position: "fixed",
-      bottom: "20px", // Position 20px from the bottom
+      bottom: "10px", // Position 20px from the bottom
       left: "50%", // Center horizontally
       zIndex: "10000",
       width: DEFAULT_WIDTH,
@@ -53,6 +53,7 @@
    * Adjusts the responsive styles of the container.
    * @param {HTMLElement} container - The container element to adjust.
    * @param {boolean} isAgentOpen - Whether the chat is open.
+   * @param {boolean} isTooltipOpen - Whether the tooltip is open.
    */
   const adjustResponsiveStyles = (container, isAgentOpen, hideBottomBar) => {
     let width, height;
@@ -163,7 +164,7 @@
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC);
-  adjustResponsiveStyles(container, isChatOpen, isTooltipOpen);
+  adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
 
   console.log("sets up the container and iframe");
 

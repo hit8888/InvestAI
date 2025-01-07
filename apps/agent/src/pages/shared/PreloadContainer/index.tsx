@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
 import useLocalStorageSession from '../../../hooks/useLocalStorageSession.tsx';
 import { useLocation, useParams } from 'react-router-dom';
-import { AgentParams } from '@meaku/core/types/config';
+import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
 import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSessionDataQuery';
 import { getBrowserSignature } from '../../../utils/tracking.ts';
@@ -14,6 +14,7 @@ import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionCo
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider/index.tsx';
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
+import Orb from '@breakout/design-system/components/Orb/index';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -80,7 +81,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   return (
     <div className="flex h-screen animate-spin items-center justify-center">
-      <Loader />
+      {/*Current Lavender (Good baseline for any theme color)*/}
+      <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
     </div>
   );
 };
