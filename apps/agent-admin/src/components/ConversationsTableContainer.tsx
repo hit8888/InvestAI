@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useSidebar } from '../context/SidebarContext';
-import { usePagination } from '../hooks/usePagination';
+// import { usePagination } from '../hooks/usePagination';
 
 import CustomTableView from './tableComp/CustomTableView';
-import TablePagination from './tableComp/TablePagination';
+// import TablePagination from './tableComp/TablePagination';
 import AllFilters from './tableComp/AllFilters';
 
 import {
   CONVERSATIONS_PAGE_COLUMN_LISTS,
   DEFAULT_DATA_FOR_CONVERSATIONS_PAGE,
-  PAGINATION_DEFAULT_ITEMS_PER_PAGE,
+  // PAGINATION_DEFAULT_ITEMS_PER_PAGE,
 } from '../utils/constants';
 import { getFormattedColumnsList } from '../utils/common';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
@@ -23,11 +23,11 @@ const ConversationsTableContainer = () => {
   const { isSidebarOpen } = useSidebar();
   const [conversations] = useState(DEFAULT_DATA_FOR_CONVERSATIONS_PAGE);
 
-  const { paginatedData, currentPage, totalPages, itemsPerPage, handlePageChange, handleItemsPerPageChange } =
-    usePagination({
-      data: conversations,
-      initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
-    });
+  // const { paginatedData, currentPage, totalPages, itemsPerPage, handlePageChange, handleItemsPerPageChange } =
+  //   usePagination({
+  //     data: conversations,
+  //     initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
+  //   });
 
   const conversationsPageColumns: ColumnDefinition[] = getFormattedColumnsList(CONVERSATIONS_PAGE_COLUMN_LISTS, 200);
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
@@ -40,19 +40,19 @@ const ConversationsTableContainer = () => {
           <CustomTableView
             isConversationsPage={true}
             isSidebarOpen={isSidebarOpen}
-            tabularData={paginatedData.length > 0 ? paginatedData : []}
+            tabularData={conversations?.length > 0 ? conversations : []}
             columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          <TablePagination
+          {/* <TablePagination
             totalPages={totalPages}
             totalItems={conversations.length}
             itemsPerPage={itemsPerPage}
             onItemsPerPageChange={handleItemsPerPageChange}
             handlePageChange={handlePageChange}
             currentPage={currentPage}
-          />
+          /> */}
         </div>
       </div>
     </div>

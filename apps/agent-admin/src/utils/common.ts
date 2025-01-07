@@ -20,9 +20,22 @@ export const handleDownload = (fileType: string, linkUrl: string, downloadedFile
   }
 };
 
-export const getPathUpToAdmin = (path: string) => {
-  const match = path.match(/^(\/.*?\/admin)/);
-  return match ? match[1] : null;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const getMappedDataFromResponse = (response: any) => {
+  // Mapping logic
+  const mappedData = {
+    email: response.email,
+    name: response.name || 'N/A', // Fallback if name is null
+    role: response.role !== 'Unknown' ? response.role : 'N/A', // Handle 'Unknown' role
+    company: response.company || 'N/A', // Fallback if company is null
+    location: response.country ? `🇪🇸 ${response.country}` : 'Location not specified',
+    timestamp: response.created_on
+      ? new Date(response.created_on).toISOString().replace('T', ' ').split('.')[0]
+      : 'N/A',
+    product_of_interest: response.product_interest || 'N/A',
+  };
+
+  return mappedData;
 };
 
 // TODOS: ( MUST BE DELETED WHEN API INTEGRATIONS ARE DONE ) Function to create MOCK DATA

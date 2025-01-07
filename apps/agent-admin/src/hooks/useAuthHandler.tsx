@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
-import { AppRoutesEnum } from '../utils/constants';
+import { AppRoutesEnum, ACCESS_TOKEN_EXPIRATION_TIME } from '../utils/constants';
+import { regenerateTokens, getUserDataFromMeAPI } from '../../../../packages/core/src/http/admin/api';
+import { APIHeaders } from '@meaku/core/types/admin/api';
 
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
@@ -10,10 +12,57 @@ const useAuthHandler = () => {
   const { isLoginPage, pathURL } = usePageRouteState();
   const { LOGIN, LEADS } = AppRoutesEnum;
 
+  // Helper function to refresh tokens
+  const refreshTokens = async () => {
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+
+    if (!storedRefreshToken) {
+      navigate(LOGIN);
+      return;
+    }
+
+    try {
+      const response = await regenerateTokens({ refresh: storedRefreshToken });
+      const { access } = response.data;
+
+      const userHeaderForMeAPI: APIHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${access}`,
+      };
+
+      const userResponse = await getUserDataFromMeAPI(userHeaderForMeAPI);
+      const { data: userInfo } = userResponse;
+
+      if (saveTokens) {
+        saveTokens(access, storedRefreshToken, userInfo);
+      }
+
+      startAccessTokenTimer(ACCESS_TOKEN_EXPIRATION_TIME);
+    } catch (error) {
+      console.error('Failed to refresh token', error);
+      navigate(LOGIN);
+    }
+  };
+
+  // Helper function to start a timer for access token expiration
+  const startAccessTokenTimer = (expiryInSeconds: number) => {
+    setTimeout(() => {
+      localStorage.removeItem('accessToken');
+      const refreshTokenExpiry = parseInt(localStorage.getItem('refreshTokenExpiry') || '0');
+
+      if (Date.now() > refreshTokenExpiry) {
+        navigate(LOGIN); // Refresh token also expired
+      } else {
+        refreshTokens(); // Refresh tokens using the valid refresh token
+      }
+    }, expiryInSeconds * 1000); // Convert to milliseconds
+  };
+
   useEffect(() => {
     // Check for tokens in local storage on page load
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');
+    const storedAccessTokenExpiry = parseInt(localStorage.getItem('accessTokenExpiry') || '0');
     const storedUserInfo = localStorage.getItem('userInfo')
       ? JSON.parse(localStorage.getItem('userInfo') as string)
       : null;
@@ -23,6 +72,13 @@ const useAuthHandler = () => {
         saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
       }
       login(); // Set isAuthenticated to true
+
+      if (Date.now() > storedAccessTokenExpiry) {
+        refreshTokens(); // Access token expired, attempt to refresh
+      } else {
+        startAccessTokenTimer((storedAccessTokenExpiry - Date.now()) / 1000); // Remaining time in seconds
+      }
+
       if (isLoginPage) {
         navigate(LEADS);
       } else {

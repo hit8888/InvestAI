@@ -4,7 +4,8 @@ import { getDefaultDataForLeadsPage } from './common';
 
 // Authentication
 
-export const ACCESS_TOKEN_EXPIRATION_TIME = 1; // MINUTES
+export const ACCESS_TOKEN_EXPIRATION_TIME = 300; // SECONDS ( 5 * 60 )
+export const REFRESH_TOKEN_EXPIRATION_TIME = 1800; // SECONDS ( 30 * 60 )
 export const DefaultAuthResponse: AuthResponse = {
   id: 0,
   username: '',
@@ -20,7 +21,7 @@ export const DefaultAuthResponse: AuthResponse = {
 
 // Pagination
 export const PAGINATION_PER_PAGE_OPTIONS = ['10', '20', '50'];
-export const PAGINATION_DEFAULT_ITEMS_PER_PAGE = 50;
+export const PAGINATION_DEFAULT_ITEMS_PER_PAGE = 10;
 
 // ICON Props
 
@@ -43,7 +44,6 @@ export const DOWNLOAD_ITEM_EXPORT_CSV_LABEL = 'Export to CSV';
 export const XSLS_LABEL = 'XSLS';
 export const CSV_LABEL = 'CSV';
 
-export const TABLE_SORT_ICON_PROPS = NAV_LINK_ICON_PROPS;
 export const PAGINATION_ARROW_ICONS = NAV_LINK_ICON_PROPS;
 export const DROPDOWN_ARROW_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
 export const EXPORT_DOWNLOAD_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;

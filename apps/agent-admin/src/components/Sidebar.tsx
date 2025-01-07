@@ -55,7 +55,7 @@ const Sidebar: React.FC = () => {
   ];
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
-  const TENANT_NAME = (getTenantIdentifier && getTenantIdentifier()?.['name']) ?? ADMIN_DASHBOARD_COMPANY_NAME;
+  const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
 
   return (
     <div

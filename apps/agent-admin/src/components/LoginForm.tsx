@@ -102,9 +102,7 @@ const LoginForm = () => {
     // based on the selection, user would move to 'leads' page.
     const org = userInfo?.organizations;
     if (org && org.length === 1) {
-      if (setTenantIdentifier) {
-        setTenantIdentifier(org[0]);
-      }
+      setTenantIdentifier(org[0]);
       navigate(AppRoutesEnum.LEADS);
     } else {
       navigate('/');

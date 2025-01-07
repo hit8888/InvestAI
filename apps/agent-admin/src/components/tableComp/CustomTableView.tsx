@@ -1,10 +1,9 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 
-import ColumnSortIcon from '@breakout/design-system/components/icons/columnsort-icon';
 import { flexRender, getCoreRowModel, useReactTable, Column } from '@tanstack/react-table';
 import { ColumnDefinition, ConversationsTableViewProps } from '@meaku/core/types/admin/admin-table';
-import { CONVERSATIONS_PINNED_COLUMNS, TABLE_SORT_ICON_PROPS } from '../../utils/constants';
+import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -52,7 +51,7 @@ const CustomTableView = ({
   // TODOS: WHEN using cn - vertical scroll gets affected
   return (
     <div
-      className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative max-h-96 overflow-hidden overflow-x-scroll overflow-y-scroll`}
+      className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative overflow-hidden overflow-x-scroll`}
     >
       <table
         style={{
@@ -85,9 +84,6 @@ const CustomTableView = ({
                   >
                     <span className={cn(`flex-1 text-left text-xs font-medium text-gray-900`, {})}>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </span>
-                    <span className="flex cursor-pointer items-start rounded-lg bg-primary/30 p-1">
-                      <ColumnSortIcon {...TABLE_SORT_ICON_PROPS} color="rgb(var(--primary/700))" />
                     </span>
                     <div
                       {...{
@@ -123,9 +119,9 @@ const CustomTableView = ({
                     )}
                     style={{ ...getCommonPinningStyles(cell.column) }}
                   >
-                    <p className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
+                    <div className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </p>
+                    </div>
                   </td>
                 );
               })}
