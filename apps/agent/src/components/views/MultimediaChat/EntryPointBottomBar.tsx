@@ -75,12 +75,20 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
           onSubmit={handleFormSubmission}
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
         >
-          <div className="flex-1">
+          <div className="relative flex-1">
+            {!hasFirstUserMessageBeenSent && (
+              <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
+                <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
+              </div>
+            )}
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className={cn(
                 'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+                {
+                  'placeholder:pl-12': !hasFirstUserMessageBeenSent,
+                },
               )}
               placeholder={useTypewriter(placeholderText)}
             />
