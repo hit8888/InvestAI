@@ -1,7 +1,10 @@
 import { 
     VerifyOtpPayload, 
     GenerateOtpPayload, 
-    LoginWithEmailPasswordPayload, 
+    LoginWithEmailPasswordPayload,
+    LeadsPayload,
+    APIHeaders,
+    GenerateTokens,
 } from "../../types/admin/api";
 import adminApiClient from "./client";
 
@@ -14,3 +17,12 @@ export const generateOtp = (payload: GenerateOtpPayload) =>
 
 export const verifyOtp = (payload: VerifyOtpPayload) =>
   adminApiClient.post(`/core/api/verify-code/`, payload);
+
+export const regenerateTokens = (payload: GenerateTokens) =>
+  adminApiClient.post(`/core/api/token/refresh/`, payload);
+
+export const getUserDataFromMeAPI = (headers: APIHeaders) =>
+  adminApiClient.get(`/core/api/me/`, {headers});
+
+export const getLeadsRowData = (payload: LeadsPayload, headers: APIHeaders) =>
+  adminApiClient.post(`/tenant/api/search/leads/`, payload, {headers});

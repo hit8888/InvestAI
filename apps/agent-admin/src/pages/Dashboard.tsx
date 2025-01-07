@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   const handleSelectOrganization = (option: string | null) => {
     const orgItem = organizationsList?.find((item) => item?.['tenant-name'] === option);
-    if (setTenantIdentifier && orgItem) {
+    if (orgItem) {
       setTenantIdentifier(orgItem);
     }
     navigate(AppRoutesEnum.LEADS);

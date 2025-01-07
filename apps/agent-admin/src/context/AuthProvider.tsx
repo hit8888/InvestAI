@@ -1,24 +1,19 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
 import { AuthResponse, organizationDetails } from '@meaku/core/types/admin/auth';
-import {
-  // ACCESS_TOKEN_EXPIRATION_TIME,
-  DefaultAuthResponse,
-} from '../utils/constants';
-// import { formattedUserData } from '../utils/common';
+import { ACCESS_TOKEN_EXPIRATION_TIME, DefaultAuthResponse, REFRESH_TOKEN_EXPIRATION_TIME } from '../utils/constants';
 
 interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  // apiCall?: (config: any) => Promise<any>;
   saveTokens?: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
   clearTokens?: () => void;
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
-  setTenantIdentifier?: (tenantObj: organizationDetails) => void;
-  getTenantIdentifier?: () => organizationDetails | null;
+  setTenantIdentifier: (tenantObj: organizationDetails) => void;
+  getTenantIdentifier: () => organizationDetails | null;
 }
 
 interface AuthProviderProps {
@@ -35,16 +30,9 @@ const defaultContext: AuthContextType = {
   login: () => {},
   logout: () => {},
   userInfo: DefaultAuthResponse,
+  setTenantIdentifier: () => {},
+  getTenantIdentifier: () => null,
 };
-
-// const api = axios.create({
-//   baseURL: ENV.VITE_BASE_API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//     Accept: 'application/json',
-//   },
-//   withCredentials: true, // Important for cookies
-// });
 
 // Create Auth Context
 export const AuthContext = createContext<AuthContextType>(defaultContext);
@@ -67,6 +55,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Store tokens in local storage
     localStorage.setItem('accessToken', newAccessToken);
     localStorage.setItem('refreshToken', newRefreshToken);
+    localStorage.setItem('accessTokenExpiry', JSON.stringify(Date.now() + ACCESS_TOKEN_EXPIRATION_TIME * 1000)); // in ms
+    localStorage.setItem('refreshTokenExpiry', JSON.stringify(Date.now() + REFRESH_TOKEN_EXPIRATION_TIME * 1000)); // in ms
     localStorage.setItem('userInfo', JSON.stringify(userData));
   };
 
@@ -80,6 +70,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('accessTokenExpiry');
+    localStorage.removeItem('refreshTokenExpiry');
+    localStorage.removeItem('tenant_identifier');
   };
 
   const setTenantIdentifier = (tenantObj: organizationDetails) => {
@@ -89,47 +82,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const getTenantIdentifier = () => {
     return JSON.parse(localStorage.getItem('tenant_identifier') || 'null');
   };
-
-  // API call with auto-refresh token logic
-
-  // const apiCall = async (config: any) => {
-  //   try {
-  //     // Add Authorization header to the request
-  //     config.headers = {
-  //       ...config.headers,
-  //       Authorization: `Bearer ${accessToken}`,
-  //     };
-
-  //     const response = await api(config);
-  //     return response.data;
-  //   } catch (error) {
-  //     // Check if the error is 401 (unauthorized)
-  //     if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
-  //       try {
-  //         // Attempt to refresh the token
-  //         const refreshResponse = await api.post('api/token/refresh/', {
-  //           refreshToken,
-  //         });
-
-  //         // Save the new tokens
-  //         const { access: newAccessToken, refresh: newRefreshToken, user } = refreshResponse.data;
-  //         saveTokens(newAccessToken, newRefreshToken, user);
-
-  //         // Retry the original request with the new access token
-  //         config.headers.Authorization = `Bearer ${newAccessToken}`;
-  //         const retryResponse = await api(config);
-  //         return retryResponse.data;
-  //       } catch (refreshError) {
-  //         // If refreshing fails, clear tokens and throw an error
-  //         clearTokens();
-  //         throw new Error('Session expired. Please log in again.' + refreshError);
-  //       }
-  //     }
-
-  //     // If the error is not 401, rethrow it
-  //     throw error;
-  //   }
-  // };
 
   // Function to set authentication status
   const login = () => setIsAuthenticated(true);
