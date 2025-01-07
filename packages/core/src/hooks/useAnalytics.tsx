@@ -14,6 +14,7 @@ interface AnalyticsEvent {
 
 const useAnalytics = () => {
   const eventQueueRef = useRef<AnalyticsEvent[]>([]);
+  const distinct_id = localStorage.getItem("distinct_id");
 
   const commonProperties = { environment: ENV.VITE_APP_ENV };
 
@@ -47,6 +48,7 @@ const useAnalytics = () => {
           ...commonProperties,
           ...properties,
           timestamp: Date.now(),
+          distinct_id,
         },
       });
       sendBatchEvents();
