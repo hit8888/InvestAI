@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import apiClient from "../http/client";
-import { isProduction } from "../../../../apps/chatbot/src/utils/common.ts";
-import { ENV } from "../../../../apps/chatbot/src/config/env.ts";
+import { isProduction } from "../../../../apps/agent/src/utils/common.ts";
+import { ENV } from "../types/env.ts";
 import { debounce } from "lodash";
 
 interface AnalyticsEvent {
@@ -14,6 +14,7 @@ interface AnalyticsEvent {
 
 const useAnalytics = () => {
   const eventQueueRef = useRef<AnalyticsEvent[]>([]);
+  const distinct_id = localStorage.getItem("distinct_id");
 
   const commonProperties = { environment: ENV.VITE_APP_ENV };
 
@@ -47,6 +48,7 @@ const useAnalytics = () => {
           ...commonProperties,
           ...properties,
           timestamp: Date.now(),
+          distinct_id,
         },
       });
       sendBatchEvents();

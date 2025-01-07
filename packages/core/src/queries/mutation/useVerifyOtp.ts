@@ -1,4 +1,4 @@
-import { verifyOtp } from "../../http/api";
+import { verifyOtp } from "../../http/admin/api";
 import { VerifyOtpPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 

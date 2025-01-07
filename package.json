@@ -5,7 +5,7 @@
     "lint-staged": "lint-staged",
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:chat": "turbo run dev --filter=chatbot --filter=@breakout/design-system --filter=@meaku/core",
+    "dev:agent": "turbo run dev --filter=agent --filter=@breakout/design-system --filter=@meaku/core",
     "dev:admin": "turbo run dev --filter=agent-admin --filter=@breakout/design-system --filter=@meaku/core",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
@@ -27,7 +27,7 @@
   },
   "lint-staged": {
     "apps/**/*.{js,jsx,ts,tsx}": [
-      "eslint --config apps/chatbot/eslint.config.js --fix",
+      "eslint --config apps/agent/eslint.config.js --fix",
       "eslint --config apps/agent-admin/eslint.config.js --fix",
       "prettier --write"
     ],

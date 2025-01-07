@@ -1,9 +1,9 @@
-export enum ChatConfig {
+export enum AgentConfig {
   EMBED = "embed",
   MULTIMEDIA = "multimedia",
 }
 
-export type ChatParams = {
+export type AgentParams = {
   orgName: string;
   agentId: string;
 };

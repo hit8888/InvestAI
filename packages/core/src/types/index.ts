@@ -1,3 +1,3 @@
-export * from "./chat";
+export * from "./agent";
 export * from "./config";
 export * from "./session";

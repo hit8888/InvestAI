@@ -6,7 +6,7 @@ import {
   SlideImageArtifactContent,
   SuggestionArtifactContent,
   VideoArtifactContent,
-} from "@meaku/core/types/chat";
+} from "../types/agent";
 
 //TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
 class ArtifactManager {

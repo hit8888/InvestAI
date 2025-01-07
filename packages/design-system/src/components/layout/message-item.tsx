@@ -1,6 +1,6 @@
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
-import { Message } from '@meaku/core/types/chat';
+import { Message } from '@meaku/core/types/agent';
 import { FeedbackEnum, InitialFeedbackPayload } from '@meaku/core/types/feedback';
 import isUndefined from 'lodash/isUndefined';
 import { useCallback } from 'react';

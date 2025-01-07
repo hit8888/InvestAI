@@ -53,8 +53,19 @@ const config: Omit<Config, "content"> = {
         },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
+
+        // TODOS: NEED TO ADDRESS BELOW COLORS IN A SEPARATE CONFIG - ( Line 58 - 69)
         customRed1: "#F04438",
+        customGreen1: '#12B76A',
         adminLogoText: "#599ad9",
+        customGreenBg: '#D1FADF',
+        customGreenText: '#027A48',
+        customPinkBg: '#FCE7F6',
+        customPinkText: '#DD2590',
+        customOrangeBg: '#FEF0C7',
+        customOrangeText: '#B54708',
+        customBlueBg: '#EAECF5',
+        customBlueText: '#4E5BA6',
         link: "#2E90FA",
         success: {
           50: "#ECFDF3",
@@ -115,6 +126,7 @@ const config: Omit<Config, "content"> = {
       },
       borderRadius: {
         "custom-56": "56px",
+        "custom-50": "50px",
       },
       opacity: {
         "2.5": "0.025", // Add 2.5% opacity

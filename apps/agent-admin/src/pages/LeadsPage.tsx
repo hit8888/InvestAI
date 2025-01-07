@@ -1,6 +1,6 @@
 import CustomPageHeader from '../components/CustomPageHeader';
 import LeadsIcon from '@breakout/design-system/components/icons/leads-icon';
-import TableContainer from '../components/tableComp/TableContainer';
+import LeadsTableContainer from '../components/LeadsTableContainer';
 import { PAGE_HEADER_TITLE_ICON_PROPS } from '../utils/constants';
 
 const LeadsPage = () => {
@@ -31,7 +31,7 @@ const LeadsPage = () => {
           </div>
         </div>
       </div>
-      <TableContainer />
+      <LeadsTableContainer />
     </>
   );
 };

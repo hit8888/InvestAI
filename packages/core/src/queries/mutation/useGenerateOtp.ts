@@ -1,4 +1,4 @@
-import { generateOtp } from "../../http/api";
+import { generateOtp } from "../../http/admin/api";
 import { GenerateOtpPayload } from "../../types/admin/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 

@@ -1,12 +1,11 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-// import axios from 'axios';
-// import { ENV } from '../../../../apps/chatbot/src/config/env';
 
-import { AuthResponse } from '@meaku/core/types/admin/auth';
+import { AuthResponse, organizationDetails } from '@meaku/core/types/admin/auth';
 import {
   // ACCESS_TOKEN_EXPIRATION_TIME,
   DefaultAuthResponse,
 } from '../utils/constants';
+// import { formattedUserData } from '../utils/common';
 
 interface AuthContextType {
   accessToken: string | null;
@@ -18,6 +17,8 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
+  setTenantIdentifier?: (tenantObj: organizationDetails) => void;
+  getTenantIdentifier?: () => organizationDetails | null;
 }
 
 interface AuthProviderProps {
@@ -81,6 +82,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('userInfo');
   };
 
+  const setTenantIdentifier = (tenantObj: organizationDetails) => {
+    localStorage.setItem('tenant_identifier', JSON.stringify(tenantObj));
+  };
+
+  const getTenantIdentifier = () => {
+    return JSON.parse(localStorage.getItem('tenant_identifier') || 'null');
+  };
+
   // API call with auto-refresh token logic
 
   // const apiCall = async (config: any) => {
@@ -138,6 +147,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         clearTokens,
         // apiCall,
         isAuthenticated,
+        setTenantIdentifier,
+        getTenantIdentifier,
         login,
         logout,
         userInfo,

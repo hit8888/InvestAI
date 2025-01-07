@@ -1,12 +1,12 @@
 # Meaku
 
-A monorepo built with Turborepo containing a chatbot application and shared packages.
+A monorepo built with Turborepo containing an agent application and shared packages.
 
 ## What's Inside
 
 ### Apps
 
-- `chatbot` - React application built with Vite and TypeScript
+- `agent` - React application built with Vite and TypeScript
 - `scripts` - Utility scripts for the project
 
 ### Packages
@@ -44,8 +44,8 @@ A monorepo built with Turborepo containing a chatbot application and shared pack
 # Install dependencies
 pnpm install
 
-# Start development server for chatbot and related packages
-pnpm dev:chat
+# Start development server for agent and related packages
+pnpm dev:agents
 
 # Build all packages and apps
 pnpm build
@@ -79,7 +79,7 @@ clean - Clean build artifacts
 ```bash
 .
 ├── apps/
-│   ├── chatbot/           # Main chatbot application
+│   ├── agent/           # Main agent application
 │   └── scripts/           # Utility scripts
 ├── packages/
 │   ├── core/              # Shared business logic
@@ -101,7 +101,7 @@ clean - Clean build artifacts
   - Intelligent dependency graph handling
   - Built-in task pipelines perfect for our React/TypeScript workflow
 
-- **Vite**: Selected as the build tool for the chatbot app because of:
+- **Vite**: Selected as the build tool for the agent app because of:
   - Lightning-fast HMR (Hot Module Replacement)
   - Out-of-the-box TypeScript support
   - Better development performance through ES modules

@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import TooltipArrowIcon from '@breakout/design-system/components/icons/tooltip-arrow';
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
+import DownloadIcon from '@breakout/design-system/components/icons/download-icon';
+
 import {
   XSLS_LABEL,
   CSV_LABEL,
@@ -52,7 +54,8 @@ const ExportDownload: React.FC<DownloadProps> = () => {
     <div className="relative z-20 inline-block text-left" ref={dropdownRef}>
       {/* Dropdown button */}
       <DropdownTriggerButton
-        btnLabel={EXPORT_DOWNLOAD_LABEL}
+        btnLabel={<DownloadIcon width={'24'} height={'24'} viewBox="0 0 24 24" />}
+        btnID="download-trigger-button"
         onToggleDropdown={toggleDropdown}
         isDropdownOpen={isOpen}
       />
@@ -60,12 +63,12 @@ const ExportDownload: React.FC<DownloadProps> = () => {
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className={`download-boxshadow absolute z-20 mt-4 flex w-80 flex-col items-start rounded-lg bg-white`}
+          className={`download-boxshadow absolute -left-6 z-20 mt-4 flex w-80 flex-col items-start rounded-lg bg-white`}
           role="popper"
           aria-orientation="vertical"
           aria-labelledby="download-content-popper"
         >
-          <div className=" absolute -top-3 flex items-center px-8">
+          <div className="absolute -top-3 flex items-center px-8">
             <span className="h-6 w-6">
               <TooltipArrowIcon width={'18'} height={'16'} color="white" viewBox="0 0 18 16" />
             </span>
@@ -88,7 +91,7 @@ const ExportDownload: React.FC<DownloadProps> = () => {
               onRadioClicked={() => setSelectedOption(CSV_LABEL)}
             />
           </div>
-          <div className="flex w-full items-start border-t border-dashed border-gray-200 p-4">
+          <div className="flex items-start justify-end self-stretch border-t border-dashed border-gray-200 p-4">
             <ExportDownloadButton btnLabel={EXPORT_DOWNLOAD_LABEL} onDownloadBtnClicked={handleDownloadButton} />
           </div>
         </div>

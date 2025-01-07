@@ -1,19 +1,17 @@
 import { cn } from '@breakout/design-system/lib/cn';
 
 import { useAuth } from '../context/AuthProvider';
-import useSidebarAndPageState from '../hooks/useSidebarAndPageState';
+import { useSidebar } from '../context/SidebarContext';
+
+import usePageRouteState from '../hooks/usePageRouteState';
 import ProfilePicActionButton from './ProfilePicActionButton';
 import NavLinkSingleItem from './NavLinkSingleItem';
 import {
   ADMIN_DASHBOARD_COMPANY_NAME,
   DEFAULT_USERNAME,
   NAV_LINK_ICON_PROPS,
-  NAVITEM_CONVERSATIONS_PAGE,
-  NAVITEM_LEADS_PAGE,
-  NAVITEM_PLAYGROUND_PAGE,
-  URL_ROUTE_CONVERSATIONS_PAGE,
-  URL_ROUTE_LEADS_PAGE,
-  URL_ROUTE_PLAYGROUND_PAGE,
+  AppRoutesEnum,
+  SidebarNavItemsEnum,
 } from '../utils/constants';
 
 import Separator from '@breakout/design-system/components/layout/separator';
@@ -24,15 +22,12 @@ import PanelCloseIcon from '@breakout/design-system/components/icons/panel-close
 import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
 
 const Sidebar: React.FC = () => {
-  const {
-    isSidebarOpen: isOpen,
-    toggleSidebar,
-    isLoginPage,
-    isLeadsPage,
-    isConversationsPage,
-    isPlaygroundPage,
-  } = useSidebarAndPageState();
-  const { userInfo } = useAuth();
+  const { isLoginPage, isLeadsPage, isConversationsPage, isPlaygroundPage } = usePageRouteState();
+  const { isSidebarOpen: isOpen, toggleSidebar } = useSidebar();
+  const { userInfo, getTenantIdentifier } = useAuth();
+
+  const { LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
+  const { LEADS_LABEL, CONVERSATIONS_LABEL, PLAYGROUND_LABEL } = SidebarNavItemsEnum;
 
   if (isLoginPage) {
     return null;
@@ -40,26 +35,27 @@ const Sidebar: React.FC = () => {
 
   const NAV_LINK_ITEMS = [
     {
-      navUrl: URL_ROUTE_LEADS_PAGE,
-      navItem: NAVITEM_LEADS_PAGE,
+      navUrl: LEADS,
+      navItem: LEADS_LABEL,
       navImg: <PanelLeadsIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isLeadsPage,
     },
     {
-      navUrl: URL_ROUTE_CONVERSATIONS_PAGE,
-      navItem: NAVITEM_CONVERSATIONS_PAGE,
+      navUrl: CONVERSATIONS,
+      navItem: CONVERSATIONS_LABEL,
       navImg: <PanelConversationIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isConversationsPage,
     },
     {
-      navUrl: URL_ROUTE_PLAYGROUND_PAGE,
-      navItem: NAVITEM_PLAYGROUND_PAGE,
+      navUrl: PLAYGROUND,
+      navItem: PLAYGROUND_LABEL,
       navImg: <PanelPlaygroundIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isPlaygroundPage,
     },
   ];
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
+  const TENANT_NAME = (getTenantIdentifier && getTenantIdentifier()?.['name']) ?? ADMIN_DASHBOARD_COMPANY_NAME;
 
   return (
     <div
@@ -79,12 +75,10 @@ const Sidebar: React.FC = () => {
             'flex-col': !isOpen,
           })}
         >
-          <div className="flex items-center gap-2 pl-2">
+          <div className="flex items-center gap-2">
             <AdminLogoSVG width={'30'} height={'35'} />
             {isOpen ? (
-              <span className="text-base font-bold text-adminLogoText transition-all duration-300">
-                {ADMIN_DASHBOARD_COMPANY_NAME}
-              </span>
+              <span className="text-base font-bold text-adminLogoText transition-all duration-300">{TENANT_NAME}</span>
             ) : null}
           </div>
           <button onClick={toggleSidebar} className="flex items-center justify-center rounded-lg pt-2">

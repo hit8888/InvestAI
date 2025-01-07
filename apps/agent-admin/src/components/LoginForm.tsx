@@ -8,10 +8,10 @@ import OtpInput from './OtpInput';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
-import { URL_ROUTE_LEADS_PAGE } from '../utils/constants';
+import { AppRoutesEnum } from '../utils/constants';
 
 const LoginForm = () => {
-  const { login, saveTokens } = useAuth();
+  const { userInfo, login, saveTokens, setTenantIdentifier } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
@@ -48,7 +48,7 @@ const LoginForm = () => {
     onSuccess: (data: any) => {
       // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
       if (saveTokens) {
-        saveTokens(data.access, data.refresh);
+        saveTokens(data.access, data.refresh, data.user);
       }
     },
   });
@@ -94,7 +94,21 @@ const LoginForm = () => {
     login();
     setEmail('');
     setOtp('');
-    navigate(URL_ROUTE_LEADS_PAGE);
+
+    // If the User have single organization,
+    // we would set this as our tenant_identifier and navigate to 'leads' page.
+    // If the User have multiple organizations ,
+    // user would navigate to 'dashboard page' to select single organization ,
+    // based on the selection, user would move to 'leads' page.
+    const org = userInfo?.organizations;
+    if (org && org.length === 1) {
+      if (setTenantIdentifier) {
+        setTenantIdentifier(org[0]);
+      }
+      navigate(AppRoutesEnum.LEADS);
+    } else {
+      navigate('/');
+    }
   };
 
   const handleToggleShowOtpLogin = () => {
