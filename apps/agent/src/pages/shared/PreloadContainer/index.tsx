@@ -13,6 +13,7 @@ import { getBrowserSignature } from '../../../utils/tracking.ts';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider/index.tsx';
+import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -33,6 +34,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     queryOptions: { enabled: isReadOnly || !sessionData?.sessionId, retry: 1 },
     //for ReadOnly routes session ID is ignored and config is fetched directly
   });
+
+  useSetDistinctIdOnAppMount();
 
   const initializeSessionPayload = {
     is_admin: isAdmin,
