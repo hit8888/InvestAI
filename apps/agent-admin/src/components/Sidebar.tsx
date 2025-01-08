@@ -71,12 +71,14 @@ const Sidebar: React.FC = () => {
         className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
       >
         <div
-          className={cn(`flex w-full items-center justify-between gap-4 px-2`, {
+          className={cn(`flex w-full items-center justify-between px-2`, {
             'flex-col': !isOpen,
           })}
         >
           <div className="flex items-center gap-2">
-            <AdminLogoSVG width={'30'} height={'35'} />
+            <span className="h-8 w-8">
+              <AdminLogoSVG width={'30'} height={'35'} />
+            </span>
             {isOpen ? (
               <span className="text-base font-bold text-adminLogoText transition-all duration-300">{TENANT_NAME}</span>
             ) : null}

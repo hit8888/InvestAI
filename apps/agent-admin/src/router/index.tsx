@@ -13,6 +13,7 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 
 import { AppRoutesEnum } from '../utils/constants';
 
+//TODO: Move to a separate file(Fixes eslint(react-refresh/only-export-components))
 const WrapDashboard = withPageViewWrapper(Dashboard);
 const WrapLeadsPage = withPageViewWrapper(LeadsPage);
 const WrapConversationsPage = withPageViewWrapper(ConversationsPage);

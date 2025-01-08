@@ -7,8 +7,8 @@ interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  saveTokens?: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
-  clearTokens?: () => void;
+  saveTokens: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
+  clearTokens: () => void;
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Clear tokens
   const clearTokens = () => {
+    setUserInfo(DefaultAuthResponse);
     setAccessToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);

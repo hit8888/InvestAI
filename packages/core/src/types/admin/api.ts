@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type LoginWithEmailPasswordPayload = {
   email: string;
   password: string;
@@ -49,42 +51,66 @@ export type LeadsPayload = {
   sort: Sort[];
   search: string;
   page: number;
+  page_size?: number;
+};
+
+export type ConversationsPayload = {
+  filters: Filter[];
+  sort: Sort[];
+  search?: string;
+  page: number;
+  page_size?: number;
 };
 
 // Type for individual result item
-export type LeadResult = {
-  id: number;
-  external_id: string | null;
-  prospect_id: string | null;
-  name: string | null;
-  email: string;
-  phone: string | null;
-  role: string | null;
-  country: string | null;
-  company: string | null;
-  company_size: string | null;
-  company_industry: string | null;
-  budget: string | null;
-  timeline: string | null;
-  product_interest: string | null;
-  additional_info: Record<string, unknown>; // Generic object for additional info
-  created_on: string; // ISO date string
-  updated_on: string; // ISO date string
-};
+export const LeadResultSchema = z.object({
+  id: z.number(),
+  external_id: z.string().nullable(),
+  prospect_id: z.string().nullable(),
+  name: z.string().nullable(),
+  email: z.string(),
+  phone: z.string().nullable(),
+  role: z.string().nullable(),
+  country: z.string().nullable(),
+  company: z.string().nullable(),
+  company_size: z.string().nullable(),
+  company_industry: z.string().nullable(),
+  budget: z.string().nullable(),
+  timeline: z.string().nullable(),
+  product_interest: z.string().nullable(),
+  additional_info: z.record(z.unknown()),
+  created_on: z.string(), // ISO date string
+  updated_on: z.string(), // ISO date string
+});
 
-// Type for the entire response object
-export type LeadsTableResponse = {
-  total_pages: number;
-  total_records: number;
-  current_page: number;
-  page_size: number;
-  results: LeadResult[];
-};
+export const ConversationsResponseResultSchema = z.object({
+  session_id: z.string(),
+  timestamp: z.string(), // ISO date-time string
+  summary: z.string().nullable(),
+  ip_address: z.string(),
+  budget: z.string().nullable(),
+  timeline: z.string().nullable(),
+  product_of_interest: z.string().nullable(),
+  company: z.string().nullable(),
+  name: z.string().nullable(),
+  email: z.string().nullable(),
+  role: z.string().nullable(),
+  country: z.string().nullable(),
+  user_message_count: z.number(),
+});
 
+export const PaginationDataSchema = z.object({
+  current_page: z.number().nonnegative(), // Current page number, must be >= 0
+  page_size: z.number().positive(),       // Items per page, must be > 0
+  total_pages: z.number().nonnegative(),  // Total number of pages, must be >= 0
+  total_records: z.number().nonnegative() // Total number of records, must be >= 0
+});
 
-export type APIHeaders = {
-  'x-tenant-name'?: string; // Represents the tenant name
-  'Content-Type': 'application/json'; // Fixed value
-  'Authorization': `Bearer ${string}`; // Template literal to enforce "Bearer " prefix followed by a string
-};
+export const LeadsTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(LeadResultSchema) // Array of lead results
+});
+
+export const ConversationsTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(ConversationsResponseResultSchema) // Array of conversation results
+});
 

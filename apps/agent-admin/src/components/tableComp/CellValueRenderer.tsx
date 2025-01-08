@@ -14,6 +14,8 @@ export type CellValueRendererProps = {
 
 const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   email: EmailCellValue,
+  role: ConversationPreviewCellValue,
+  company: EmailCellValue,
   product_of_interest: ProductOfInterestCellValue,
   timestamp: TimestampCellValue,
   location: LocationCellValue,

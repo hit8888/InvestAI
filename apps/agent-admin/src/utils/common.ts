@@ -1,5 +1,11 @@
 import { ENV } from '@meaku/core/types/env';
 import { UPPERCASE_COLUMN_WORDS } from './constants';
+import {
+  ConversationsTableDisplayContent,
+  ConversationsTableViewContent,
+  LeadsTableDisplayContent,
+  LeadsTableViewContent,
+} from '@meaku/core/types/admin/admin';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -20,15 +26,21 @@ export const handleDownload = (fileType: string, linkUrl: string, downloadedFile
   }
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const getMappedDataFromResponse = (response: any) => {
-  // Mapping logic
-  const mappedData = {
+export const getTenantFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem('tenant_identifier') || 'null')?.['tenant-name'];
+};
+
+export const getAccessTokenFromLocalStorage = () => {
+  return localStorage.getItem('accessToken');
+};
+
+export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
+  const mappedData: LeadsTableDisplayContent = {
     email: response.email,
     name: response.name || 'N/A', // Fallback if name is null
-    role: response.role !== 'Unknown' ? response.role : 'N/A', // Handle 'Unknown' role
+    role: response.role !== 'Unknown' ? response.role || 'N/A' : 'N/A', // Handle 'Unknown' role
     company: response.company || 'N/A', // Fallback if company is null
-    location: response.country ? `🇪🇸 ${response.country}` : 'Location not specified',
+    location: response.country || 'N/A',
     timestamp: response.created_on
       ? new Date(response.created_on).toISOString().replace('T', ' ').split('.')[0]
       : 'N/A',
@@ -38,10 +50,24 @@ export const getMappedDataFromResponse = (response: any) => {
   return mappedData;
 };
 
-// TODOS: ( MUST BE DELETED WHEN API INTEGRATIONS ARE DONE ) Function to create MOCK DATA
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const getDefaultDataForLeadsPage = (repeatCount: number, mockData: any[]) => {
-  return Array(repeatCount).fill(mockData).flat();
+export const getMappedDataFromResponseForConversationsTableView = (response: ConversationsTableViewContent) => {
+  const mappedData: ConversationsTableDisplayContent = {
+    company: response.company || 'Unknown Company',
+    name: response.name || 'Anonymous',
+    email: response.email || 'Not provided',
+    timestamp: response.timestamp ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0] : 'N/A',
+    conversation_preview: response.summary || 'No conversation preview',
+    location: response.country || 'N/A',
+    buyer_intent: 'N/A', // Need to Find Logic or Directly getting from api
+    bant_analysis: 'N/A', // Need to Find Logic or Directly getting from api
+    number_of_user_messages: `${response.user_message_count || 0}`,
+    meeting_status: 'N/A', // Static for now, can be dynamic if additional info is provided
+    product_of_interest: response.product_of_interest || 'No product specified',
+    ip_address: response.ip_address || 'IP not available',
+    session_id: response.session_id || 'Session ID missing',
+  };
+
+  return mappedData;
 };
 
 // Helper function to capitalize specific words

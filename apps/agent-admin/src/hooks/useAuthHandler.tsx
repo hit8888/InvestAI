@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum, ACCESS_TOKEN_EXPIRATION_TIME } from '../utils/constants';
-import { regenerateTokens, getUserDataFromMeAPI } from '../../../../packages/core/src/http/admin/api';
-import { APIHeaders } from '@meaku/core/types/admin/api';
+import { getUserDataFromMeAPI, regenerateTokens } from '../admin/api';
 
 const useAuthHandler = () => {
-  const { login, saveTokens } = useAuth();
+  const { login, saveTokens, clearTokens } = useAuth();
   const navigate = useNavigate();
   const { isLoginPage, pathURL } = usePageRouteState();
   const { LOGIN, LEADS } = AppRoutesEnum;
@@ -25,17 +24,12 @@ const useAuthHandler = () => {
       const response = await regenerateTokens({ refresh: storedRefreshToken });
       const { access } = response.data;
 
-      const userHeaderForMeAPI: APIHeaders = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${access}`,
-      };
+      localStorage.setItem('accessToken', access);
 
-      const userResponse = await getUserDataFromMeAPI(userHeaderForMeAPI);
+      const userResponse = await getUserDataFromMeAPI();
       const { data: userInfo } = userResponse;
 
-      if (saveTokens) {
-        saveTokens(access, storedRefreshToken, userInfo);
-      }
+      saveTokens(access, storedRefreshToken, userInfo);
 
       startAccessTokenTimer(ACCESS_TOKEN_EXPIRATION_TIME);
     } catch (error) {
@@ -51,6 +45,7 @@ const useAuthHandler = () => {
       const refreshTokenExpiry = parseInt(localStorage.getItem('refreshTokenExpiry') || '0');
 
       if (Date.now() > refreshTokenExpiry) {
+        clearTokens();
         navigate(LOGIN); // Refresh token also expired
       } else {
         refreshTokens(); // Refresh tokens using the valid refresh token
@@ -68,9 +63,7 @@ const useAuthHandler = () => {
       : null;
 
     if (storedAccessToken && storedRefreshToken) {
-      if (saveTokens) {
-        saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
-      }
+      saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
       login(); // Set isAuthenticated to true
 
       if (Date.now() > storedAccessTokenExpiry) {
