@@ -55,7 +55,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     <div
       className={cn('mx-auto mt-2 flex h-[95vh] w-[98vw] justify-center font-inter', {
         'rounded-2xl': isAgentOpen,
-        'rounded-2xl bg-gray-300': isShowingBGCover,
+        'rounded-2xl bg-gray-300 bg-contain': isShowingBGCover,
       })}
       style={{
         backgroundImage: isShowingBGCover ? `url(${CDN_URL_FOR_ASSETS}${orgName}.png)` : undefined,
