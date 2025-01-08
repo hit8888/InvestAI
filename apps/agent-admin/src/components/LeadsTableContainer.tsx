@@ -1,106 +1,94 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
+
+import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination';
 import { useSidebar } from '../context/SidebarContext';
-
 import { useAuth } from '../context/AuthProvider';
-import useLeadsTableAPI from '../../../../packages/core/src/queries/mutation/admin/useLeadsTableAPI';
-import { APIHeaders, LeadsTableResponse } from '@meaku/core/types/admin/api';
+import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
 
-import CustomTableView from './tableComp/CustomTableView';
+import SortFilter from './tableComp/SortFilter';
+import TableViewContent from './TableViewContent';
+import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import AllFilters from './tableComp/AllFilters';
 import ExportDownload from './tableComp/ExportDownload';
 
-import {
-  DEFAULT_DATA_FOR_LEADS_PAGE,
-  LEADS_PAGE_COLUMN_LISTS,
-  PAGINATION_DEFAULT_ITEMS_PER_PAGE,
-} from '../utils/constants';
-import { getFormattedColumnsList, getMappedDataFromResponse } from '../utils/common';
+import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_DEFAULT_ITEMS_PER_PAGE } from '../utils/constants';
+import { getFormattedColumnsList, getMappedDataFromResponseForLeadsTableView } from '../utils/common';
+
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { useFormattedColumns } from '../hooks/useFormattedColumns';
-import SortFilter from './tableComp/SortFilter';
+import { LeadsPayload } from '@meaku/core/types/admin/api';
+import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
 
 const LeadsTableContainer = () => {
-  const { accessToken, getTenantIdentifier } = useAuth();
+  const { getTenantIdentifier } = useAuth();
   const { isSidebarOpen } = useSidebar();
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [leads, setLeads] = useState(DEFAULT_DATA_FOR_LEADS_PAGE);
 
-  const {
-    currentPage,
-    itemsPerPage,
-    handlePageChange,
-    // handleItemsPerPageChange
-  } = usePagination({
-    totalPages,
+  const tenantName = getTenantIdentifier()?.['tenant-name'];
+
+  const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
   });
+
+  const payloadData: LeadsPayload = {
+    filters: [],
+    sort: [],
+    search: '',
+    page: currentPage,
+    page_size: itemsPerPage,
+  };
+
+  const { data, isLoading, isError } = useLeadsTableQuery({
+    payload: payloadData,
+    tenantName: tenantName || '',
+    queryOptions: {
+      enabled: !!tenantName,
+      placeholderData: keepPreviousData,
+    },
+  });
+
+  const tableManager = useMemo(() => {
+    if (!data) return null;
+
+    return new TableDataManager(data);
+  }, [data]);
+
+  const leadsData: LeadsTableDisplayContent[] = (tableManager?.getTableDataResults() ?? []).map((item) =>
+    getMappedDataFromResponseForLeadsTableView(item as LeadsTableViewContent),
+  );
+  const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1 };
+  const { total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
   const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 160);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
-  const tenantName = getTenantIdentifier()?.['tenant-name'];
-
-  const headers: APIHeaders = {
-    'x-tenant-name': tenantName || '',
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  const { mutateAsync: getLeadsRowData } = useLeadsTableAPI(headers);
-
-  useEffect(() => {
-    const payloadData = {
-      filters: [],
-      sort: [],
-      search: '',
-      page: currentPage,
-    };
-    const getLeads = async () => {
-      try {
-        if (tenantName) {
-          const response = await getLeadsRowData(payloadData);
-          const data: LeadsTableResponse = response.data;
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          const updatedData = data?.results?.map((item: any) => getMappedDataFromResponse(item));
-          if (currentPage === 1) {
-            setTotalRecords(data?.total_records);
-            setTotalPages(data?.total_pages);
-          }
-          setLeads(updatedData);
-        } else {
-          console.error('Tenant name is undefined');
-        }
-      } catch (error) {
-        console.error('Failed to load leads:', error);
-      }
-    };
-
-    getLeads();
-  }, [currentPage]);
+  if (isError) return null;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start gap-4 self-stretch">
           <TableFiltersWithHeaderLabel />
-          <CustomTableView
-            isSidebarOpen={isSidebarOpen}
-            tabularData={leads?.length > 0 ? leads : []}
+          <TableViewContent
+            isLoading={isLoading}
+            totalRecords={totalRecords}
+            tableData={leadsData}
             columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
+            isSidebarOpen={isSidebarOpen}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          <TablePagination
-            totalPages={totalPages}
-            totalItems={totalRecords}
-            itemsPerPage={itemsPerPage}
-            // onItemsPerPageChange={handleItemsPerPageChange}
-            handlePageChange={handlePageChange}
-            currentPage={currentPage}
-          />
+          {!isLoading && (
+            <TablePagination
+              totalPages={totalPages}
+              totalItems={totalRecords}
+              itemsPerPage={itemsPerPage}
+              onItemsPerPageChange={handleItemsPerPageChange}
+              handlePageChange={handlePageChange}
+              currentPage={currentPage}
+            />
+          )}
         </div>
       </div>
     </div>

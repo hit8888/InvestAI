@@ -1,9 +1,9 @@
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useState } from 'react';
-import useLoginWithEmailPassword from '../../../../packages/core/src/queries/mutation/useLoginWithEmailPassword';
-import useGenerateOtp from '../../../../packages/core/src/queries/mutation/useGenerateOtp';
-import useVerifyOtp from '../../../../packages/core/src/queries/mutation/useVerifyOtp';
+import useLoginWithEmailPassword from '../queries/mutation/useLoginWithEmailPassword';
+import useGenerateOtp from '../queries/mutation/useGenerateOtp';
+import useVerifyOtp from '../queries/mutation/useVerifyOtp';
 import OtpInput from './OtpInput';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -29,9 +29,7 @@ const LoginForm = () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       onSuccess: (data: any) => {
         // console.log('🚀 ~ file: LoginForm.tsx:33 ~ }=useLoginWithEmailPassword ~ data:', data);
-        if (saveTokens) {
-          saveTokens(data.access, data.refresh, data.user);
-        }
+        saveTokens(data.access, data.refresh, data.user);
       },
     },
   );
@@ -47,9 +45,7 @@ const LoginForm = () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
       // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
-      if (saveTokens) {
-        saveTokens(data.access, data.refresh, data.user);
-      }
+      saveTokens(data.access, data.refresh, data.user);
     },
   });
 

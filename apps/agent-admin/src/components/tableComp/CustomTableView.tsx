@@ -1,9 +1,10 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 
-import { flexRender, getCoreRowModel, useReactTable, Column } from '@tanstack/react-table';
-import { ColumnDefinition, ConversationsTableViewProps } from '@meaku/core/types/admin/admin-table';
+import { Column, flexRender, useReactTable, getCoreRowModel } from '@tanstack/react-table';
+import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
+import { LeadsTableDisplayContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -36,7 +37,9 @@ const CustomTableView = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const getCommonPinningStyles = (column: Column<ConversationsTableViewProps>): CSSProperties => {
+  const getCommonPinningStyles = (
+    column: Column<ConversationsTableDisplayContent | LeadsTableDisplayContent>,
+  ): CSSProperties => {
     const isPinned = column.getIsPinned();
     return {
       left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
@@ -58,7 +61,7 @@ const CustomTableView = ({
           width: isConversationsPage ? table.getTotalSize() : '100%',
         }}
       >
-        <thead className="sticky top-0 z-10 w-full">
+        <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id} className="flex w-full items-start">
               {headerGroup.headers.map((header) => {

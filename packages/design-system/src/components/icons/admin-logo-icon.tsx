@@ -27,8 +27,8 @@ const AdminLogoSVG = ({ className = 'text-primary', width, height, color, viewBo
             y2="56.2777"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#8FFFAB" />
-            <stop offset="1" stop-color="#2F4EFA" />
+            <stop stopColor="#8FFFAB" />
+            <stop offset="1" stopColor="#2F4EFA" />
           </linearGradient>
         </defs>
       </svg>
