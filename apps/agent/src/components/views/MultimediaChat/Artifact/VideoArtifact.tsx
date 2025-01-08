@@ -30,6 +30,7 @@ const VideoArtifact = ({ videoUrl, artifactId, handleSendUserMessage, isMediaTak
       artifact_type: 'VIDEO',
       artifact_id: artifactId,
     };
+    console.log('handleVideoOnEnd');
     handleSendUserMessage({ message: '', eventType: SalesEvent.ARTIFACT_CONSUMED, eventData: payload });
     setIsArtifactPlaying(false);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
