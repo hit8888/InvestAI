@@ -101,7 +101,7 @@ export const ConversationsResponseResultSchema = z.object({
 
 export const PaginationDataSchema = z.object({
   current_page: z.number().nonnegative(), // Current page number, must be >= 0
-  page_size: z.number().positive(),       // Items per page, must be > 0
+  page_size: z.number().nonnegative(),       // Items per page, must be >= 0
   total_pages: z.number().nonnegative(),  // Total number of pages, must be >= 0
   total_records: z.number().nonnegative() // Total number of records, must be >= 0
 });
