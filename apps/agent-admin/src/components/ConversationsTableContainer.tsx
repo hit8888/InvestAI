@@ -1,10 +1,9 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { useSidebar } from '../context/SidebarContext';
 import { usePagination } from '../hooks/usePagination';
-import { useAuth } from '../context/AuthProvider';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
 
 import SortFilter from './tableComp/SortFilter';
@@ -20,11 +19,12 @@ import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { ConversationsPayload } from '@meaku/core/types/admin/api';
 import { ConversationsTableViewContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 
-const ConversationsTableContainer = () => {
-  const { getTenantIdentifier } = useAuth();
-  const { isSidebarOpen } = useSidebar();
+type IProps = {
+  tenantName: string;
+};
 
-  const tenantName = getTenantIdentifier()?.['tenant-name'];
+const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
+  const { isSidebarOpen } = useSidebar();
 
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
@@ -102,7 +102,7 @@ const ConversationsTableContainer = () => {
 const TableFiltersWithHeaderLabel = () => {
   return (
     <>
-      <p className="flex-1 text-2xl font-semibold text-gray-900">Table of conversations</p>
+      {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of conversations</p> */}
       <div className="flex w-full items-start justify-between self-stretch">
         <AllFilters />
         <SortFilter />

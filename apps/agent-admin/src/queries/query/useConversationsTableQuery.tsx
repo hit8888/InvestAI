@@ -15,7 +15,7 @@ const getConversationsTableKey = (payload: ConversationTableVariables, tenantNam
 
 type ConversationsTableDataKey = ReturnType<typeof getConversationsTableKey>;
 
-interface Iprops {
+interface IProps {
   payload: ConversationTableVariables;
   tenantName: string;
   queryOptions: BreakoutQueryOptions<ConversationsTableResponse, ConversationsTableDataKey>;
@@ -25,7 +25,7 @@ const useConversationsTableQuery = ({
   payload,
   tenantName,
   queryOptions,
-}: Iprops): UseQueryResult<ConversationsTableResponse> => {
+}: IProps): UseQueryResult<ConversationsTableResponse> => {
   const conversationsQuery = useQuery({
     queryKey: getConversationsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<ConversationsTableResponse> => {

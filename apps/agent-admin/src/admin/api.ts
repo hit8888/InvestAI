@@ -24,3 +24,5 @@ export const getLeadsRowData = (payload: LeadsPayload) => adminApiClient.post(`/
 
 export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/`, payload);
+
+export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/analytics/funnels/conversations`);

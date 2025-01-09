@@ -115,33 +115,6 @@ export interface FunnelData {
   funnelKey: string;
 }
 
-export const CONVERSATIONS_PAGE_FUNNEL_DATA: FunnelData[] = [
-  {
-    funnelChipType: ConversationChipLabelEnum.TOTAL_TRAFFIC,
-    funnelChipLabel: 'Total traffic',
-    funnelNumericLabel: '1,256',
-    funnelKey: ConversationChipLabelEnum.TOTAL_TRAFFIC,
-  },
-  {
-    funnelChipType: ConversationChipLabelEnum.TOTAL_CONVERSATIONS,
-    funnelChipLabel: 'Total Conversations',
-    funnelNumericLabel: '1,256',
-    funnelKey: ConversationChipLabelEnum.TOTAL_CONVERSATIONS,
-  },
-  {
-    funnelChipType: ConversationChipLabelEnum.HIGH_INTENT_CONVERSATIONS,
-    funnelChipLabel: 'High-Intent Conversations',
-    funnelNumericLabel: '803',
-    funnelKey: ConversationChipLabelEnum.HIGH_INTENT_CONVERSATIONS,
-  },
-  {
-    funnelChipType: ConversationChipLabelEnum.LEAD_GENERATED,
-    funnelChipLabel: 'Lead generated',
-    funnelNumericLabel: '432',
-    funnelKey: ConversationChipLabelEnum.LEAD_GENERATED,
-  },
-];
-
 // Filters
 export const FILTER_DEFAULT_OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
