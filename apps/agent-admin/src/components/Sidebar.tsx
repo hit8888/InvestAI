@@ -1,4 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthProvider';
 import { useSidebar } from '../context/SidebarContext';
@@ -76,9 +77,9 @@ const Sidebar: React.FC = () => {
           })}
         >
           <div className="flex items-center gap-2">
-            <span className="h-8 w-8">
+            <Link to={'/'} className="h-8 w-8">
               <AdminLogoSVG width={'30'} height={'35'} />
-            </span>
+            </Link>
             {isOpen ? (
               <span className="text-base font-bold text-adminLogoText transition-all duration-300">{TENANT_NAME}</span>
             ) : null}
