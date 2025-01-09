@@ -98,7 +98,7 @@ const LeadsTableContainer = () => {
 const TableFiltersWithHeaderLabel = () => {
   return (
     <>
-      <p className="flex-1 text-2xl font-semibold text-gray-900">Table of leads</p>
+      {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of leads</p> */}
       <div className="flex w-full items-start justify-between self-stretch">
         <div className="flex items-start gap-4">
           <ExportDownload />

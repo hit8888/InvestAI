@@ -3,7 +3,7 @@ import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon
 import { DROPDOWN_ARROW_ICONS } from '../../utils/constants';
 import { cn } from '@breakout/design-system/lib/cn';
 
-type Iprops = {
+type IProps = {
   btnLabel: string | JSX.Element;
   btnRef?: RefObject<HTMLButtonElement | null>;
   onToggleDropdown: () => void;
@@ -19,7 +19,7 @@ const DropdownTriggerButton = ({
   staticValue,
   isDropdownOpen,
   onToggleDropdown,
-}: Iprops) => {
+}: IProps) => {
   const isTypeOfBtnLabelString = typeof btnLabel === 'string';
   return (
     <button

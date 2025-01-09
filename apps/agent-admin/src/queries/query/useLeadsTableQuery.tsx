@@ -15,13 +15,13 @@ const getLeadsTableKey = (payload: LeadsTableVariables, tenantName: string): unk
 
 type LeadsTableDataKey = ReturnType<typeof getLeadsTableKey>;
 
-interface Iprops {
+interface IProps {
   payload: LeadsTableVariables;
   tenantName: string;
   queryOptions: BreakoutQueryOptions<LeadsTableResponse, LeadsTableDataKey>;
 }
 
-const useLeadsTableQuery = ({ payload, tenantName, queryOptions }: Iprops): UseQueryResult<LeadsTableResponse> => {
+const useLeadsTableQuery = ({ payload, tenantName, queryOptions }: IProps): UseQueryResult<LeadsTableResponse> => {
   const leadsQuery = useQuery({
     queryKey: getLeadsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<LeadsTableResponse> => {

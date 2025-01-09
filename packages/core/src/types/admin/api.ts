@@ -68,7 +68,7 @@ export const LeadResultSchema = z.object({
   external_id: z.string().nullable(),
   prospect_id: z.string().nullable(),
   name: z.string().nullable(),
-  email: z.string(),
+  email: z.string().nullable(),
   phone: z.string().nullable(),
   role: z.string().nullable(),
   country: z.string().nullable(),
@@ -84,10 +84,10 @@ export const LeadResultSchema = z.object({
 });
 
 export const ConversationsResponseResultSchema = z.object({
-  session_id: z.string(),
-  timestamp: z.string(), // ISO date-time string
+  session_id: z.string().nullable(),
+  timestamp: z.string().nullable(), // ISO date-time string
   summary: z.string().nullable(),
-  ip_address: z.string(),
+  ip_address: z.string().nullable(),
   budget: z.string().nullable(),
   timeline: z.string().nullable(),
   product_of_interest: z.string().nullable(),
@@ -112,5 +112,21 @@ export const LeadsTableResponseSchema = PaginationDataSchema.extend({
 
 export const ConversationsTableResponseSchema = PaginationDataSchema.extend({
   results: z.array(ConversationsResponseResultSchema) // Array of conversation results
+});
+
+// Schema for individual step
+export const FunnelStepSchema = z.object({
+  name: z.string(),               // Name of the step
+  count: z.number(),              // Count of items in the step
+  conversion_rate: z.number(),    // Conversion rate for the step
+});
+
+// Schema for the entire funnel
+export const ConversationFunnelResponseSchema = z.object({
+  funnel_id: z.number(),           // Unique ID for the funnel
+  funnel_name: z.string(),         // Name of the funnel
+  steps: z.array(FunnelStepSchema), // Array of funnel steps
+  total_conversion_rate: z.number(), // Total conversion rate
+  analyzed_at: z.string(),         // ISO date-time string when analyzed
 });
 
