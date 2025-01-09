@@ -34,7 +34,7 @@ const AskQuestionContainer = ({
   const { sendMessage, lastMessage } = useWebSocketChat();
 
   const [messages, setMessages] = useState<Message[]>([]);
-
+  console.log({ messages });
   const isAdmin = useIsAdmin();
 
   const getMessagePayload = useGetMessagePayload();
@@ -96,8 +96,8 @@ const AskQuestionContainer = ({
     const messageId = nanoid();
     setIsAMessageBeingProcessed(true);
 
-    setMessages([
-      ...messages,
+    setMessages((prevMessages) => [
+      ...prevMessages,
       {
         id: nanoid(),
         role: 'user',
@@ -107,6 +107,7 @@ const AskQuestionContainer = ({
         features: [],
       },
     ]);
+
     sendMessage(
       JSON.stringify(getMessagePayload({ message, eventType: DemoEvent.DEMO_QUESTION, eventData, messageId })),
     );

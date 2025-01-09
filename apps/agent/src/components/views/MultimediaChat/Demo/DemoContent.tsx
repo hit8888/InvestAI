@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import { ScriptStepType } from '@meaku/core/types/agent';
 import { DemoFooter } from './DemoFooter';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
@@ -6,6 +6,8 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
 import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useAudioController } from '../../../../hooks/useAudioController';
+import { useAudioVisualizer } from '../../../../hooks/useAudioVisualizer';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -16,7 +18,6 @@ interface IProps {
 }
 
 const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd, onFinishDemo }: IProps) => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const isQueryRaisedRef = useRef(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -34,69 +35,54 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
     onStepEnd();
   };
 
-  const handlePlayPause = () => {
+  const { audioRef, playPromiseRef, analyserNode } = useAudioController(
+    demoDetails?.audio_url,
+    handleAudioEnd,
+    Boolean(demoDetails?.audio_url),
+  );
+
+  const canvasRef = useAudioVisualizer({
+    analyserNode,
+    audioUrl: demoDetails.audio_url ?? '',
+  });
+
+  const handlePlayPause = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (audio.paused) {
-      setDemoPlayingStatus(DemoPlayingStatus.PLAYING); // This might be premature
-      audio
-        .play()
-        .then(() => {
-          setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-        })
-        .catch((error) => {
-          console.error('Error playing audio:', error);
-          setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
-        });
-    } else {
-      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_INTERUPTED);
-      audio.pause();
+    try {
+      if (audio.paused) {
+        setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
+        playPromiseRef.current = audio.play();
+        await playPromiseRef.current;
+      } else {
+        if (playPromiseRef.current) {
+          await playPromiseRef.current;
+        }
+        trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_INTERUPTED);
+        audio.pause();
+        setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+      }
+    } catch (error) {
+      console.error('Error handling play/pause:', error);
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     }
   };
 
-  const handlePause = () => {
+  const handlePause = async () => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.pause();
-    setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+
+    try {
+      if (playPromiseRef.current) {
+        await playPromiseRef.current;
+      }
+      audio.pause();
+      setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
+    } catch (error) {
+      console.error('Error handling pause:', error);
+    }
   };
-
-  useEffect(() => {
-    if (!demoDetails?.audio_url || (demoDetails.asset_url && !isImageLoaded)) {
-      return;
-    }
-
-    if (audioRef.current?.src === demoDetails.audio_url && !audioRef.current.paused) {
-      return;
-    }
-
-    const newAudio = new Audio(demoDetails.audio_url);
-    audioRef.current = newAudio;
-
-    // Add ended event listener right after creating audio
-    newAudio.addEventListener('ended', handleAudioEnd);
-
-    newAudio.load();
-    newAudio.currentTime = 0;
-    newAudio
-      .play()
-      .then(() => {
-        setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-      })
-      .catch((error) => {
-        console.error('Error playing audio:', error);
-        setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
-        onStepEnd();
-      });
-
-    return () => {
-      newAudio.removeEventListener('ended', handleAudioEnd);
-      newAudio.pause();
-      audioRef.current = null;
-    };
-  }, [demoDetails?.audio_url, isImageLoaded]);
 
   const handleRaiseDemoQuery = (queryRaised: boolean) => {
     isQueryRaisedRef.current = queryRaised;
@@ -110,24 +96,39 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   return (
     <>
       <div className={'relative flex h-[92%] w-full items-center justify-center'}>
-        {!isImageLoaded && (
-          <div
-            className="absolute inset-0 scale-95 
-    bg-gray-200 opacity-0 blur-sm
-    transition-all duration-500
-    ease-in-out hover:scale-100
-    hover:opacity-100 hover:blur-none"
-          />
+        {demoDetails.asset_url ? (
+          <div className={'relative flex h-[92%] w-full items-center justify-center'}>
+            {!isImageLoaded && (
+              <div className="absolute inset-0 scale-95 bg-gray-200 opacity-0 blur-sm transition-all duration-500 ease-in-out hover:scale-100 hover:opacity-100 hover:blur-none" />
+            )}
+            <img
+              className={`max-h-full w-full object-fill transition-all duration-500 ease-out ${
+                isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+              }`}
+              src={demoDetails.asset_url}
+              alt={demoDetails.message}
+              loading="lazy"
+              onLoad={() => setIsImageLoaded(true)}
+            />
+          </div>
+        ) : (
+          <div className={'flex h-[92%] w-full flex-col items-center justify-center'}>
+            <div className="fixed inset-0 h-screen w-screen bg-primary-foreground"></div>
+            <canvas
+              ref={canvasRef}
+              className="h-[72px] w-[72px] rounded-full"
+              style={{
+                background:
+                  'radial-gradient(circle at 25% 0%, rgba(255, 255, 255, 0.2), rgb(var(--primary)/ 0.8) 50%, rgba(0, 0, 0, 1) 100%)',
+                boxShadow: 'inset -4px -4px 8px rgba(0, 0, 0, 0.2), inset 4px 4px 8px rgba(255, 255, 255, 0.2)',
+                transform: 'perspective(500px) rotateX(10deg)',
+              }}
+            />
+            <div className="z-10 mx-[20%] mt-8">
+              <span className="text-primary/70">{demoDetails.message}</span>
+            </div>
+          </div>
         )}
-        <img
-          className={`max-h-full w-full object-fill transition-all duration-500 ease-out ${
-            isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-          }`}
-          src={demoDetails.asset_url}
-          alt={demoDetails.message}
-          loading="lazy"
-          onLoad={() => setIsImageLoaded(true)}
-        />
       </div>
       <div
         className={cn(
@@ -146,7 +147,20 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
         )}
       </div>
 
-      <div className="flex h-[8%] flex-1 items-center py-4">
+      <div className="relative flex h-[8%] w-full flex-1 items-center py-4">
+        {demoDetails.asset_url && (
+          <canvas
+            ref={canvasRef}
+            className="absolute bottom-1 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full"
+            style={{
+              background:
+                'radial-gradient(circle at 25% 0%, rgba(255, 255, 255, 0.2), rgb(var(--primary)/ 0.7) 50%, rgba(0, 0, 0, 1) 100%)',
+              boxShadow: 'inset -4px -4px 8px rgba(0, 0, 0, 0.2), inset 4px 4px 8px rgba(255, 255, 255, 0.2)',
+              transform: 'perspective(500px) rotateX(10deg)',
+              cursor: 'pointer',
+            }}
+          />
+        )}
         <DemoFooter
           isDemoPlaying={DemoPlayingStatus.PLAYING === demoPlayingStatus}
           onRaiseDemoQuery={handleRaiseDemoQuery}
