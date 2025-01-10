@@ -93,6 +93,7 @@
       "utm_campaign",
       "utm_term",
       "utm_content",
+      "isAgentOpen",
     ];
 
     return utmParams.reduce((params, key) => {
