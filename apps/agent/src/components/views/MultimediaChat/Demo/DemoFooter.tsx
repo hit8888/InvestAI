@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import WaitDemoCompleteNotification from './WaitDemoCompleteNotification';
-import AudioOrb from '@breakout/design-system/components/AudioOrb/index';
 
 import { AskQuestionContainer } from './AskQuestionContainer';
 import { FinishDemo } from './FinishDemo';
@@ -38,9 +37,6 @@ export function DemoFooter({ isDemoPlaying, onRaiseDemoQuery, onCloseDemoAgent, 
           isDemoPlaying={isDemoPlaying}
         />
         {showWaitDemoCompleteNotification && <WaitDemoCompleteNotification />}
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <AudioOrb color="rgb(var(--primary))" height={44} width={44} waveSize={6} />
-        </div>
       </div>
       <FinishDemo onFinishDemo={onFinishDemo} onPause={onPause} />
     </div>
