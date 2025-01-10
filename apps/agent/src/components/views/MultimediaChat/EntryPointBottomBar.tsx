@@ -11,12 +11,59 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import useAgentbotAnalytics from '../../../hooks/useAgentbotAnalytics.tsx';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
+import { motion } from 'framer-motion';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   handleOpenAgent: () => void;
   hideBottomBar: boolean;
 }
+
+const floatingAnimation = {
+  initial: {
+    y: 0,
+    opacity: 0,
+  },
+  animate: {
+    y: [-4, 0, -4],
+    opacity: 1,
+    transition: {
+      y: {
+        repeat: Infinity,
+        duration: 2,
+        ease: [0.4, 0, 0.6, 1],
+        times: [0, 0.5, 1],
+      },
+      opacity: {
+        duration: 0.3,
+      },
+    },
+  },
+};
+
+const suggestionContainerAnimation = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const suggestionItemAnimation = {
+  initial: { x: -20, opacity: 0 },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 12,
+    },
+  },
+};
 
 const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenAgent }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
@@ -94,22 +141,27 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
             />
           </div>
 
-          <div
-            className={cn(
-              'flex items-center justify-end gap-1 overflow-hidden transition-[width] duration-150 ease-in-out',
-              {
-                'w-0': !showSuggestedQuestions,
-                'w-[710px]': showSuggestedQuestions,
-              },
-            )}
-          >
-            {showSuggestedQuestions &&
-              initialSuggestedQuestions.map((question) => (
-                <div key={question} className="rounded-full bg-white">
-                  <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
-                </div>
-              ))}
-          </div>
+          <motion.div variants={floatingAnimation} initial="initial" animate="animate">
+            <motion.div
+              variants={suggestionContainerAnimation}
+              initial="initial"
+              animate="animate"
+              className={cn(
+                'flex items-center justify-end gap-1 overflow-hidden transition-[width] duration-150 ease-in-out',
+                {
+                  'w-0': !showSuggestedQuestions,
+                  'w-[710px]': showSuggestedQuestions,
+                },
+              )}
+            >
+              {showSuggestedQuestions &&
+                initialSuggestedQuestions.map((question) => (
+                  <motion.div key={question} variants={suggestionItemAnimation} className="rounded-full bg-white">
+                    <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
+                  </motion.div>
+                ))}
+            </motion.div>
+          </motion.div>
 
           <div className="flex items-center justify-center">
             {hasFirstUserMessageBeenSent && <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />}
