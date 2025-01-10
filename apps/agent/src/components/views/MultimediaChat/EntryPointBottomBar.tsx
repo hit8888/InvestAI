@@ -35,7 +35,7 @@ const floatingAnimation = {
         times: [0, 0.5, 1],
       },
       opacity: {
-        duration: 0.3,
+        duration: 0.8,
       },
     },
   },
