@@ -33,7 +33,7 @@ export const useEmbedAppEvents = ({ fetchSessionData, handleOpenAgent }: IProps)
         setHideBottomBar(true);
       }
 
-      if (event.data.utmParams.isAgentOpen === 'true') {
+      if (event.data?.utmParams?.isAgentOpen === 'true') {
         fetchSessionData();
         handleOpenAgent();
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.AGENT_OPENED_VIA_UTM_PARAMS, { ...event.data });

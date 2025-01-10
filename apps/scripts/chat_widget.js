@@ -4,6 +4,17 @@
  Invalidate cloudfront cache
 */
 // Main function
+
+const updateParentUrlParam = (key, value) => {
+  const url = new URL(window.parent.location.href);
+  if (value === null || value === "") {
+    url.searchParams.delete(key);
+  } else {
+    url.searchParams.set(key, value);
+  }
+  window.parent.history.replaceState({}, "", url);
+};
+
 (function () {
   const DEFAULT_WIDTH = "95vw";
   const DEFAULT_HEIGHT = "90vh";
@@ -196,6 +207,9 @@
 
     if (event.data && typeof event.data.chatOpen === "boolean") {
       isAgentOpen = event.data.chatOpen;
+      if (!isAgentOpen && utmParams?.isAgentOpen === "true") {
+        updateParentUrlParam("isAgentOpen", "false");
+      }
       adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
     }
   });
