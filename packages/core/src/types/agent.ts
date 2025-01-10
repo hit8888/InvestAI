@@ -34,6 +34,7 @@ export const ScriptStepDTO = z.object({
   asset_url: z.string().optional(),
   audio_url: z.string().optional(),
   is_end: z.boolean(),
+  asset_type: z.enum(["IMAGE", "VIDEO"]).nullable(),
 });
 
 export type ScriptStepType = z.infer<typeof ScriptStepDTO>;
