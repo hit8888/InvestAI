@@ -124,8 +124,8 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
                 transform: 'perspective(500px) rotateX(10deg)',
               }}
             />
-            <div className="z-10 mx-[20%] mt-8">
-              <span className="text-primary/70">{demoDetails.message}</span>
+            <div className="z-10 mx-[25%] mt-8">
+              <span className="font-medium text-primary/70">{demoDetails.message}</span>
             </div>
           </div>
         )}
