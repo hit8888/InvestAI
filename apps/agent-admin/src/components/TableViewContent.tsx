@@ -9,7 +9,6 @@ interface TableContentProps {
   isLoading: boolean;
   totalRecords: number;
   columnHeaderData: ColumnDefinition[];
-  isSidebarOpen: boolean;
 }
 
 const TableViewContent: React.FC<TableContentProps> = ({
@@ -18,10 +17,13 @@ const TableViewContent: React.FC<TableContentProps> = ({
   totalRecords,
   tableData,
   columnHeaderData,
-  isSidebarOpen,
 }) => {
   if (isLoading) {
-    return <p className="w-full text-center text-lg font-semibold text-gray-900">Loading conversations...</p>;
+    return (
+      <p className="w-full text-center text-2xl font-semibold text-gray-900">
+        {isConversationTable ? 'Loading conversations...' : 'Loading leads...'}
+      </p>
+    );
   }
 
   if (!totalRecords) {
@@ -31,7 +33,6 @@ const TableViewContent: React.FC<TableContentProps> = ({
   return (
     <CustomTableView
       isConversationsPage={isConversationTable}
-      isSidebarOpen={isSidebarOpen}
       tabularData={tableData?.length > 0 ? tableData : []}
       columnHeaderData={columnHeaderData}
     />

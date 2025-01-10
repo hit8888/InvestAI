@@ -1,4 +1,5 @@
 import CustomPageHeader from '../components/CustomPageHeader';
+import withPageViewWrapper from '../pages/PageViewWrapper';
 import LeadsIcon from '@breakout/design-system/components/icons/leads-icon';
 import LeadsTableContainer from '../components/LeadsTableContainer';
 import { PAGE_HEADER_TITLE_ICON_PROPS } from '../utils/constants';
@@ -38,4 +39,4 @@ const LeadsPage = () => {
   );
 };
 
-export default LeadsPage;
+export default withPageViewWrapper(LeadsPage);

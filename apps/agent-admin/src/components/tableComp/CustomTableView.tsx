@@ -1,25 +1,25 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 
-import { Column, flexRender, useReactTable, getCoreRowModel } from '@tanstack/react-table';
+import { Column, flexRender, useReactTable, getCoreRowModel, Row } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
 import { LeadsTableDisplayContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { useNavigate } from 'react-router-dom';
+import { useConversationDetails } from '../../context/ConversationDetailsContext';
+import { useSidebar } from '../../context/SidebarContext';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   tabularData: any[];
   columnHeaderData: ColumnDefinition[];
   isConversationsPage?: boolean;
-  isSidebarOpen?: boolean;
 }
 
-const CustomTableView = ({
-  tabularData,
-  columnHeaderData,
-  isConversationsPage = false,
-  isSidebarOpen,
-}: TableViewProps) => {
+const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = false }: TableViewProps) => {
+  const navigate = useNavigate();
+  const { isSidebarOpen } = useSidebar();
+  const { handleSetConversationDetails } = useConversationDetails();
   const [data, setData] = useState(tabularData);
 
   useEffect(() => {
@@ -51,7 +51,51 @@ const CustomTableView = ({
     };
   };
 
-  // TODOS: WHEN using cn - vertical scroll gets affected
+  const handleRowItemClick = (row: ConversationsTableDisplayContent) => {
+    const detailsPageURL = row.session_id;
+    handleSetConversationDetails(row as ConversationsTableDisplayContent);
+    navigate(`${detailsPageURL}`);
+  };
+
+  const getSingleRowItem = (row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>) => {
+    const detailsPageURL = 'session_id' in row.original ? row.original.session_id : null;
+    return (
+      <tr
+        onClick={
+          detailsPageURL ? () => handleRowItemClick(row.original as ConversationsTableDisplayContent) : undefined
+        }
+        key={row.id}
+        className={cn('flex w-full items-start self-stretch', {
+          'cursor-pointer': detailsPageURL,
+        })}
+      >
+        {row.getVisibleCells().map((cell) => {
+          const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
+          const isColumnNumberOfUserMessages = cell.column.id === 'number_of_user_messages';
+          const isColumnPinnedLeftForName = cell.column.getIsPinned() === 'left' && cell.column.id === 'name';
+          return (
+            <td
+              key={cell.id}
+              className={cn(
+                `flex flex-1 flex-col items-start justify-center self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
+                {
+                  'border-r': !isLastColumn,
+                  'min-w-56': isColumnNumberOfUserMessages,
+                  pinnedColumnShadow: isColumnPinnedLeftForName,
+                },
+              )}
+              style={{ ...getCommonPinningStyles(cell.column) }}
+            >
+              <div className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </div>
+            </td>
+          );
+        })}
+      </tr>
+    );
+  };
+
   return (
     <div
       className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative overflow-hidden overflow-x-scroll`}
@@ -102,35 +146,7 @@ const CustomTableView = ({
             </tr>
           ))}
         </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="flex w-full items-start self-stretch ">
-              {row.getVisibleCells().map((cell) => {
-                const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
-                const isColumnNumberOfUserMessages = cell.column.id === 'number_of_user_messages';
-                const isColumnPinnedLeftForName = cell.column.getIsPinned() === 'left' && cell.column.id === 'name';
-                return (
-                  <td
-                    key={cell.id}
-                    className={cn(
-                      `flex flex-1 flex-col items-start justify-center self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
-                      {
-                        'border-r': !isLastColumn,
-                        'min-w-56': isColumnNumberOfUserMessages,
-                        pinnedColumnShadow: isColumnPinnedLeftForName,
-                      },
-                    )}
-                    style={{ ...getCommonPinningStyles(cell.column) }}
-                  >
-                    <div className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </div>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{table.getRowModel().rows.map((row) => getSingleRowItem(row))}</tbody>
       </table>
     </div>
   );

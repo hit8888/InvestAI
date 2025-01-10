@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
-import { useSidebar } from '../context/SidebarContext';
 import { usePagination } from '../hooks/usePagination';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
 
@@ -24,8 +23,6 @@ type IProps = {
 };
 
 const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
-  const { isSidebarOpen } = useSidebar();
-
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
   });
@@ -79,7 +76,6 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
             totalRecords={totalRecords}
             tableData={conversationsData}
             columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
-            isSidebarOpen={isSidebarOpen}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">

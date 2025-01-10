@@ -17,6 +17,7 @@ import FeedbackButton from './feedback-button';
 import { CirclePlayIcon } from 'lucide-react';
 
 type Props = {
+  forAgentChatbot?: boolean;
   agentName: string;
   message: Message;
   handleShareInitialFeedback?: (payload: InitialFeedbackPayload) => void;
@@ -30,7 +31,7 @@ const MesageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
 };
 
 const MessageItem = (props: Props) => {
-  const { agentName, message, handleShareInitialFeedback, handleShowFeedback } = props;
+  const { forAgentChatbot, agentName, message, handleShareInitialFeedback, handleShowFeedback } = props;
 
   const { trackEvent } = useAnalytics();
 
@@ -72,6 +73,8 @@ const MessageItem = (props: Props) => {
     }
   };
 
+  const messageTimestamp = new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0];
+
   return (
     <div
       id={`message-${message.id}`}
@@ -82,32 +85,42 @@ const MessageItem = (props: Props) => {
       })}
     >
       {isSenderBot ? (
-        <div className="mb-2 flex items-center gap-2">
-          <div className="max-w-min">
-            <WrappedLogo className="!h-4 !w-4" />
+        forAgentChatbot ? (
+          <div className="mb-2 flex items-center gap-2">
+            <div className="max-w-min">
+              <WrappedLogo className="!h-4 !w-4" />
+            </div>
+            <h3 className="font-medium text-gray-800">{agentName}</h3>
           </div>
-          <h3 className="font-medium text-gray-800">{agentName}</h3>
-        </div>
-      ) : (
+        ) : null
+      ) : forAgentChatbot ? (
         <div className="flex items-center justify-end gap-2">
           <p className="text-sm text-gray-500">You</p>
           <UserAvatarIcon />
         </div>
+      ) : (
+        <p className="w-full self-stretch text-right text-xs font-medium text-gray-500">User</p>
       )}
 
       <div
         className={cn(
           'w-11/12 max-w-fit overflow-hidden rounded-2xl border text-gray-700 md:w-5/6 lg:w-5/6 2xl:w-4/6',
           {
-            'flex flex-col items-start rounded-tl-none border-primary/25 bg-primary/10': isSenderBot,
-            'border-gray-200': !isSenderBot,
+            'flex flex-col items-start rounded-tl-none border-primary/25 bg-primary/10': (forAgentChatbot && isSenderBot),
+            'border-gray-200': (forAgentChatbot && !isSenderBot),
+            'flex flex-col items-start border-none': (!forAgentChatbot && isSenderBot),
+            'text-white bg-primary/70': (!forAgentChatbot && !isSenderBot),
           },
         )}
       >
-        <div className="prose max-w-full p-4" onClick={handleMessageClick}>
+        <div className={cn("prose max-w-full", {
+          'p-4': (forAgentChatbot && !isSenderBot),
+          'py-2 flex flex-col -gap-2 items-start px-4 text-white': (!forAgentChatbot && !isSenderBot)
+        })} onClick={handleMessageClick}>
           <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
             {message.message}
           </ReactMarkdown>
+          {(!forAgentChatbot && !isSenderBot) && <p className='w-full text-primary/30 !-mt-4 text-right text-xs font-medium'>{messageTimestamp}</p>}
         </div>
 
         {showBuyerIntentScore && (
@@ -123,7 +136,9 @@ const MessageItem = (props: Props) => {
           <div className="w-full">
             <Accordion type="single" collapsible>
               <AccordionItem value="sources" className="border-0 border-none">
-                <AccordionTrigger className="w-full px-4 py-1 hover:no-underline [&[data-state=open]_svg]:!-rotate-0">
+                <AccordionTrigger className={cn("w-full px-4 py-1 hover:no-underline [&[data-state=open]_svg]:!-rotate-0", {
+                  'rounded-none bg-primary/30': !forAgentChatbot
+                })}>
                   <div className="flex w-full items-center justify-between">
                     <h4 className="text-x[13px] font-medium text-gray-700">Show sources:</h4>
                     <div className="flex items-center justify-center rounded-lg bg-primary/20 p-[1px] transition-colors duration-300 ease-in-out hover:bg-primary/30">
@@ -174,6 +189,8 @@ const MessageItem = (props: Props) => {
           </div>
         )}
       </div>
+
+      {(!forAgentChatbot && isSenderBot) && <p className='w-full text-primary/30 mt-2 text-xs font-medium'>{messageTimestamp}</p>}
 
       {showFeedbackButtons && (
         <div className="mt-2 flex items-center gap-2">

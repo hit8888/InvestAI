@@ -5,7 +5,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
+import { convertServerMessageToClientMessage } from '@meaku/core/transformers/common';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 
 interface State {
@@ -53,7 +53,7 @@ export const useMessageStore = create<State>()(
 
           const existingMessageIndex = draft.messages.findIndex((message) => message.id === messageId);
 
-          const messageInterface = UnifiedSessionConfigResponseManager.convertServerMessageToClientMessage(response);
+          const messageInterface = convertServerMessageToClientMessage(response);
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {

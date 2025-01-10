@@ -26,3 +26,12 @@ export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/`, payload);
 
 export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/analytics/funnels/conversations`);
+export const getConversationDetailsData = (sessionId: string, fetchAll?: boolean) => {
+  const url = new URL(`tenant/api/conversations/${sessionId}`, adminApiClient.defaults.baseURL);
+
+  if (fetchAll !== undefined) {
+    url.searchParams.append('fetch_all', String(fetchAll));
+  }
+
+  return adminApiClient.get(url.toString());
+};

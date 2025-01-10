@@ -171,6 +171,7 @@ const LoginForm = () => {
                 <label htmlFor="otp" className="text-lg">
                   Enter OTP sent to {email}
                 </label>
+                {/* TODOS NEED TO ADD THE INPUT-OTP COMPONENT - SHADCN UI COMPONENT */}
                 <OtpInput id={'otp'} length={6} onOtpSubmit={onOtpSubmit} />
               </div>
             ) : null}

@@ -4,8 +4,10 @@ import debounce from 'lodash/debounce';
 import { useEffect, useRef } from 'react';
 import MessageItem from './message-item';
 import SuggestedQuestion from './suggested-question';
+import { cn } from '../../lib/cn';
 
 type Props = {
+  forAgentChatbot?: boolean;
   agentName: string;
   messages: Message[];
   suggestedQuestions: string[];
@@ -17,6 +19,7 @@ type Props = {
 
 const AgentMessage = (props: Props) => {
   const {
+    forAgentChatbot = true,
     agentName,
     messages,
     suggestedQuestions,
@@ -74,10 +77,14 @@ const AgentMessage = (props: Props) => {
   }, [messages.length]);
 
   return (
-    <div ref={containerRef} className="flex-1 space-y-4 overflow-y-auto bg-white p-4">
+    <div ref={containerRef} className={cn("flex-1 space-y-4 overflow-y-auto p-4", {
+      'bg-white': forAgentChatbot,
+      'bg-primary/2.5': !forAgentChatbot,
+    })}>
       {messages.map((message) => (
         <MessageItem
           agentName={agentName}
+          forAgentChatbot={forAgentChatbot}
           message={message}
           handleShareInitialFeedback={handleShareInitialFeedback}
           handleShowFeedback={handleShowFeedback}

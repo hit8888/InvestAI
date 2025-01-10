@@ -62,6 +62,7 @@ export const MessageSchema = z.object({
   artifacts: z.array(MessageArtifactSchema),
   type: z.enum(["text", "event"]),
   is_complete: z.boolean().optional(),
+  timestamp: z.string().optional(),
 });
 
 export const WebSocketArtifactsSchema = z.object({
@@ -83,6 +84,7 @@ export const AIResponseSchema = z.object({
   demo_available: z.boolean().optional(),
   features: z.array(FeatureSelectionDTOSchema).optional(),
   script_step: ScriptStepDTO.optional(),
+  timestamp: z.string().optional(),
 });
 
 export type SlideArtifactContent = z.infer<typeof SlideArtifactSchema>;
@@ -112,6 +114,7 @@ export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
 export type Message = {
   id: number | string;
   message: string;
+  timestamp?: string;
   documents: z.infer<typeof DataSourceSchema>[];
   role: z.infer<typeof MessageSchema>["role"];
   suggested_questions?: string[];

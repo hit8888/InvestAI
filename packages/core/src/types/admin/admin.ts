@@ -5,6 +5,7 @@ import {
     TableDataSchema, 
 } from "./admin-table";
 import { 
+    ConversationDetailsResponseSchema,
     ConversationFunnelResponseSchema,
     ConversationsResponseResultSchema, 
     ConversationsTableResponseSchema, 
@@ -26,3 +27,4 @@ export type LeadsTableResponse = z.infer<typeof LeadsTableResponseSchema>;
 export type ConversationsTableResponse = z.infer<typeof ConversationsTableResponseSchema>;
 
 export type ConversationsFunnelDataResponse = z.infer<typeof ConversationFunnelResponseSchema>;
+export type ConversationDetailsDataResponse = z.infer<typeof ConversationDetailsResponseSchema>;

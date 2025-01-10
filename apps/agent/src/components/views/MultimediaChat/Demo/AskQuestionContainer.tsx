@@ -10,7 +10,7 @@ import useGetMessagePayload from '../../../../hooks/useGetMessagePayload';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { useAnimateDifferentOrbStates } from '../../../../hooks/useAnimateDifferentOrbStates';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import UnifiedSessionConfigResponseManager from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
+import { convertServerMessageToClientMessage } from '@meaku/core/transformers/common';
 import { nanoid } from 'nanoid';
 import { DemoEvent } from '@meaku/core/types/webSocket';
 import useWebSocketChat, { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
@@ -63,7 +63,7 @@ const AskQuestionContainer = ({
 
     const existingMessageIndex = messages.findIndex((message) => message.id === messageId);
 
-    const messageInterface = UnifiedSessionConfigResponseManager.convertServerMessageToClientMessage(response);
+    const messageInterface = convertServerMessageToClientMessage(response);
 
     const draftMessages = [...messages];
 

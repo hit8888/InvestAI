@@ -19,6 +19,27 @@ export const BottomBarConfigSchema = z.object({
   secondary_placeholder: z.string(),
 });
 
+export const ConfigurationBodySchema = z.object({
+  default_error_message: z.string(),
+  welcome_message: z.object({
+    message: z.string(),
+    suggested_questions: z.array(z.string()),
+  }),
+  chat_history: z.array(MessageSchema),
+  feedback: z.array(FeedbackSchema).optional(),
+  documents: z.array(DataSourceSchema).optional(),
+  bottom_bar_config: BottomBarConfigSchema.optional(),
+  disclaimer_message: z.string().optional(),
+  show_cta: z.boolean().optional(),
+  cta_config: z
+    .object({
+      text: z.string().nullish(),
+      url: z.string().nullish(),
+      message: z.string().nullish(),
+    })
+    .nullish(),
+})
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -28,26 +49,7 @@ export const ConfigurationSchema = z.object({
     title: z.string().nullable(),
     sub_title: z.string().nullable(),
   }),
-  body: z.object({
-    default_error_message: z.string(),
-    welcome_message: z.object({
-      message: z.string(),
-      suggested_questions: z.array(z.string()),
-    }),
-    chat_history: z.array(MessageSchema),
-    feedback: z.array(FeedbackSchema).optional(),
-    documents: z.array(DataSourceSchema).optional(),
-    bottom_bar_config: BottomBarConfigSchema.optional(),
-    disclaimer_message: z.string().optional(),
-    show_cta: z.boolean().optional(),
-    cta_config: z
-      .object({
-        text: z.string().nullish(),
-        url: z.string().nullish(),
-        message: z.string().nullish(),
-      })
-      .nullish(),
-  }),
+  body: ConfigurationBodySchema,
   style_config: z.object({
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),
@@ -73,6 +75,7 @@ export const SessionHashDataSchema = z.object({
 });
 
 export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
+export type ConfigurationBodyApiResponse = z.infer<typeof ConfigurationBodySchema>;
 
 export type SessionApiResponse = z.infer<typeof SessionSchema>;
 

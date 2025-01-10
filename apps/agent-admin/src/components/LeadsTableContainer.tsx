@@ -3,7 +3,6 @@ import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination';
-import { useSidebar } from '../context/SidebarContext';
 import { useAuth } from '../context/AuthProvider';
 import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
 
@@ -23,8 +22,6 @@ import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/typ
 
 const LeadsTableContainer = () => {
   const { getTenantIdentifier } = useAuth();
-  const { isSidebarOpen } = useSidebar();
-
   const tenantName = getTenantIdentifier()?.['tenant-name'];
 
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
@@ -75,7 +72,6 @@ const LeadsTableContainer = () => {
             totalRecords={totalRecords}
             tableData={leadsData}
             columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
-            isSidebarOpen={isSidebarOpen}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
