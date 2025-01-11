@@ -17,10 +17,10 @@ const ColorFullChipLabel = ({ chipType, chipLabel }: ChipProps) => {
   return (
     <p
       className={cn('flex items-center justify-center rounded-custom-50 px-2 py-1 text-sm font-medium', {
-        'bg-customBlueBg text-customBlueText': isTotalTraffic,
-        'bg-customPinkBg text-customPinkText': isTotalConversations,
-        'bg-customOrangeBg text-customOrangeText': isHighIntentConversations,
-        'bg-customGreenBg text-customGreenText': isLeadGenerated,
+        'bg-bluegray-100 text-bluegray-1000': isTotalTraffic,
+        'bg-pink_sec-100 text-pink_sec-1000': isTotalConversations,
+        'bg-orange_sec-100 text-orange_sec-1000': isHighIntentConversations,
+        'bg-bluelight-100 text-blue_sec-1000': isLeadGenerated,
       })}
     >
       {chipLabel}

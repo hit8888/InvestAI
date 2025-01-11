@@ -14,13 +14,12 @@ import { Message } from '@meaku/core/types/agent';
 
 const ConversationDetailsPage = () => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails } = useConversationDetails();
-  const sessionIDFromContext = conversation?.session_id ?? '';
+  const { sessionID } = useParams<string>();
   const companyName = conversation?.company ?? '';
   const navigatedHeaderDynamicValues = {
     companyName,
-    sessionIDFromContext,
+    sessionID: sessionID || '',
   };
-  const { sessionID } = useParams<string>();
   const { getTenantIdentifier } = useAuth();
 
   const tenantName = getTenantIdentifier()?.['tenant-name'];
@@ -28,7 +27,6 @@ const ConversationDetailsPage = () => {
 
   const { data, isLoading, isError } = useConversationDetailsDataQuery({
     sessionID: sessionID || '',
-    sessionIDFromContext: sessionIDFromContext || '',
     tenantName: tenantName || '',
     queryOptions: {
       enabled: !!tenantName,
@@ -46,10 +44,8 @@ const ConversationDetailsPage = () => {
     if (!detailsManager || isLoading) return;
 
     try {
-      if (sessionID?.length && !sessionIDFromContext.length) {
-        const conversationData = detailsManager.getFormattedConversationData() ?? {};
-        handleSetConversationDetails(conversationData as ConversationsTableDisplayContent);
-      }
+      const conversationData = detailsManager.getFormattedConversationData() ?? {};
+      handleSetConversationDetails(conversationData as ConversationsTableDisplayContent);
 
       const chatHistoryMessages =
         detailsManager.getFormattedChatHistory({
@@ -66,7 +62,7 @@ const ConversationDetailsPage = () => {
       handleSetConversationDetails(null);
       handleSetChatHistoryDetails(null);
     };
-  }, [detailsManager, sessionID, sessionIDFromContext]);
+  }, [isLoading]);
 
   if (isError) {
     console.error('Error while fetching conversation details');

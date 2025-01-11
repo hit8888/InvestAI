@@ -18,7 +18,7 @@ export const DefaultAuthResponse: AuthResponse = {
 };
 
 // Pagination
-export const PAGINATION_PER_PAGE_OPTIONS = ['10', '20', '50'];
+export const PAGINATION_PER_PAGE_OPTIONS = ['10', '25', '50', '75', '100'];
 export const PAGINATION_DEFAULT_ITEMS_PER_PAGE = 50;
 
 // ICON Props

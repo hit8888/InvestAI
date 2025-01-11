@@ -8,7 +8,6 @@ type IProps = {
   handleTabClick: () => void;
 };
 
-// TODOS: NEED TO USE Tabs Panel Component- Shadcn UI Component
 const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }: IProps) => {
   return (
     <div

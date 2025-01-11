@@ -6,7 +6,7 @@ import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
 import { LeadsTableDisplayContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
-import { useConversationDetails } from '../../context/ConversationDetailsContext';
+// import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import { useSidebar } from '../../context/SidebarContext';
 
 interface TableViewProps {
@@ -19,7 +19,7 @@ interface TableViewProps {
 const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = false }: TableViewProps) => {
   const navigate = useNavigate();
   const { isSidebarOpen } = useSidebar();
-  const { handleSetConversationDetails } = useConversationDetails();
+  // const { handleSetConversationDetails } = useConversationDetails();
   const [data, setData] = useState(tabularData);
 
   useEffect(() => {
@@ -29,7 +29,8 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
   const table = useReactTable({
     initialState: {
       columnPinning: {
-        left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : [],
+        // left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : [],
+        left: CONVERSATIONS_PINNED_COLUMNS,
       },
     },
     data,
@@ -47,17 +48,17 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
       opacity: isPinned ? 0.95 : 1,
       position: isPinned ? 'sticky' : 'relative',
       width: column.getSize(),
-      zIndex: isPinned ? 1 : 0,
+      zIndex: isPinned ? 100 : 0,
     };
   };
 
   const handleRowItemClick = (row: ConversationsTableDisplayContent) => {
     const detailsPageURL = row.session_id;
-    handleSetConversationDetails(row as ConversationsTableDisplayContent);
+    // handleSetConversationDetails(row as ConversationsTableDisplayContent);
     navigate(`${detailsPageURL}`);
   };
 
-  const getSingleRowItem = (row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>) => {
+  const getSingleRowItem = (row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>, index: number) => {
     const detailsPageURL = 'session_id' in row.original ? row.original.session_id : null;
     return (
       <tr
@@ -65,7 +66,9 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
           detailsPageURL ? () => handleRowItemClick(row.original as ConversationsTableDisplayContent) : undefined
         }
         key={row.id}
-        className={cn('flex w-full items-start self-stretch', {
+        className={cn('flex w-full items-start self-stretch bg-gray-600', {
+          'bg-white': index % 2 === 0, // White background for even rows
+          'bg-gray-25': index % 2 !== 0, // Gray background for odd rows
           'cursor-pointer': detailsPageURL,
         })}
       >
@@ -77,7 +80,7 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
             <td
               key={cell.id}
               className={cn(
-                `flex flex-1 flex-col items-start justify-center self-stretch border-b border-primary/20 bg-primary/2.5 p-2 `,
+                `border-gray/20 flex flex-1 flex-col items-start justify-center self-stretch border-b p-2 `,
                 {
                   'border-r': !isLastColumn,
                   'min-w-56': isColumnNumberOfUserMessages,
@@ -98,7 +101,7 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
 
   return (
     <div
-      className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative overflow-hidden overflow-x-scroll`}
+      className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative overflow-x-auto`}
     >
       <table
         style={{
@@ -146,7 +149,7 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
             </tr>
           ))}
         </thead>
-        <tbody>{table.getRowModel().rows.map((row) => getSingleRowItem(row))}</tbody>
+        <tbody>{table.getRowModel().rows.map((row, index) => getSingleRowItem(row, index))}</tbody>
       </table>
     </div>
   );

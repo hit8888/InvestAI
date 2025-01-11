@@ -57,7 +57,7 @@ const LeadsTableContainer = () => {
   const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1 };
   const { total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
-  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 160);
+  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 200);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
   if (isError) return null;

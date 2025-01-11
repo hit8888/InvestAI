@@ -26,8 +26,8 @@ const DropdownTriggerButton = ({
       type="button"
       ref={btnRef}
       className="inline-flex w-full items-center justify-center gap-2 rounded-lg 
-        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm 
-        focus:outline-none focus:ring-2 focus:ring-primary/60"
+        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary/10 
+        focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
       id={btnID}
       onClick={onToggleDropdown} // Toggle dropdown visibility
       aria-expanded={isDropdownOpen ? 'true' : 'false'}

@@ -25,10 +25,24 @@
 
 .pinnedColumnShadow {
   box-shadow:
-    29px 0.161px 136px 0px rgb(var(--primary) / 0.05),
-    18.796px 0.104px 79.648px 0px rgb(var(--primary) / 0.04),
-    11.17px 0.062px 43.319px 0px rgb(var(--primary) / 0.03),
-    5.8px 0.032px 22.1px 0px rgb(var(--primary) / 0.03),
-    2.363px 0.013px 11.081px 0px rgb(var(--primary) / 0.02),
-    0.537px 0.003px 5.352px 0px rgb(var(--primary) / 0.01);
+    29px 0.161px 136px 0px rgba(28, 27, 86, 0.05),
+    18.796px 0.104px 79.648px 0px rgba(28, 27, 86, 0.04),
+    5.8px 0.032px 22.1px 0px rgba(28, 27, 86, 0.03),
+    0.537px 0.003px 5.352px 0px rgba(28, 27, 86, 0.01);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #3b82f6, #9333ea); /* Blue to purple */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* For modern browsers */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }

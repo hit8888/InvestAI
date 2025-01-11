@@ -41,7 +41,7 @@ const TablePagination: React.FC<PaginationProps> = ({
         />
 
         {/* Page range and total items */}
-        <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/2.5 p-2">
+        <div className="flex items-center gap-2 rounded-lg p-2">
           <p className="text-sm font-semibold text-gray-500">
             {(currentPage - 1) * Number(itemsPerPage) + 1}-{Math.min(currentPage * Number(itemsPerPage), totalItems)}
             <span className="font-normal">{` of ${totalItems}`}</span>

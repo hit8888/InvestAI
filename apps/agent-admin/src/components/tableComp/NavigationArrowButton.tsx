@@ -13,7 +13,7 @@ const NavigationArrowButton = ({ conditionOnBtn, onButtonClick, PaginationArrow 
     <div
       className={cn(`flex h-9 w-9 items-center justify-center gap-2 rounded-lg border-[1.5px] p-2`, {
         'cursor-not-allowed border-gray-300': conditionOnBtn,
-        'border-primary': !conditionOnBtn,
+        'border-primary hover:bg-primary/10 focus:bg-primary/10': !conditionOnBtn,
       })}
     >
       <button

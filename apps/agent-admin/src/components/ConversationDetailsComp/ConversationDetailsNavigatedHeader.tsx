@@ -6,12 +6,12 @@ import ConversationDetailsNavigationButtons from './ConversationDetailsNavigatio
 
 type IProps = {
   companyName: string;
-  sessionIDFromContext: string;
+  sessionID: string;
 };
-const ConversationDetailsNavigatedHeader = ({ companyName, sessionIDFromContext }: IProps) => {
+const ConversationDetailsNavigatedHeader = ({ companyName, sessionID }: IProps) => {
   return (
     <div className="flex max-h-14 w-full items-center gap-6">
-      <SingleDetailsWithIconHeaderValue headerLabel="Session ID:" itemValue={sessionIDFromContext}>
+      <SingleDetailsWithIconHeaderValue headerLabel="Session ID:" itemValue={sessionID}>
         <SessionIDIcon width={'24'} height={'24'} />
       </SingleDetailsWithIconHeaderValue>
       <div className="h-10">

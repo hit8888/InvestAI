@@ -8,14 +8,14 @@ const MeetingStatusCellValue: React.FC<CellValueProps> = ({ value }: { value: st
     <div className="flex items-center gap-2">
       <span
         className={cn('h-2 w-2 rounded-full', {
-          'bg-customGreen1': isStatusBooked,
-          'bg-customRed1': isStatusNotBooked,
+          'bg-positive-1000': isStatusBooked,
+          'bg-destructive-1000': isStatusNotBooked,
         })}
       ></span>
       <span
         className={cn('text-sm font-normal capitalize', {
-          'text-customGreen1': isStatusBooked,
-          'text-customRed1': isStatusNotBooked,
+          'text-positive-1000': isStatusBooked,
+          'text-destructive-1000': isStatusNotBooked,
         })}
       >
         {value}
