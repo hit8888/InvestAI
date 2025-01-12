@@ -117,6 +117,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         backgroundSize: '200% 200%',
       }}
     >
+      <span className="absolute -left-4 -top-8 animate-wave text-4xl">👋</span>
       <div className="w-full rounded-xl bg-gray-50 p-1.5">
         <form
           onSubmit={handleFormSubmission}
