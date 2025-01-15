@@ -7,11 +7,11 @@ const LoginPage = () => {
       <div className="flex h-screen w-full bg-primary/10">
         <div className="relative flex w-2/3 flex-col justify-center gap-4 px-4 py-20">
           <div className="absolute top-0 w-full opacity-10">
-            <img src="/logo.svg" width={'95%'} />
+            <img src="/logo.svg" width={'95%'} className="2xl:w-[85%]" />
             {/* <span className="text-[156px] text-white">reakout</span> */}
           </div>
-          <div className="flex w-full flex-col items-center justify-center gap-20 p-6 text-center">
-            <h2 className="text-[72px] font-bold">
+          <div className="flex w-full flex-col items-start justify-start gap-20 text-center">
+            <h2 className="w-[90%] text-center text-8xl font-bold">
               <span className="gradient-text">Buyers want to buy their way not your way</span>
             </h2>
           </div>
@@ -28,7 +28,7 @@ const LoginPage = () => {
               </p>
             </div>
             <div className="flex w-full flex-col items-center justify-center gap-6 px-16">
-              <h1 className="gradient-text text-4xl font-bold 2xl:text-8xl">Login to Dashboard</h1>
+              <h1 className="gradient-text text-4xl font-bold !leading-[80px] 2xl:text-6xl">Login to Dashboard</h1>
               <div className="flex w-full flex-col items-center justify-center gap-12 rounded-2xl border border-primary/10 bg-primary/2.5 py-6 shadow-2xl">
                 <LoginForm />
               </div>

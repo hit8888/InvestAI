@@ -5,24 +5,26 @@ import ConversationDetailsNavigatedHeader from '../components/ConversationDetail
 import ConversationDetailsMultipleTabContainer from '../components/ConversationDetailsComp/ConversationDetailsMultipleTabContainer';
 
 import { useConversationDetails } from '../context/ConversationDetailsContext';
-import { useAuth } from '../context/AuthProvider';
 import useConversationDetailsDataQuery from '../queries/query/useConversationDetailsDataQuery';
 import { useEffect, useMemo } from 'react';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
 import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { Message } from '@meaku/core/types/agent';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantFromLocalStorage } from '../utils/common';
 
 const ConversationDetailsPage = () => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails } = useConversationDetails();
   const { sessionID } = useParams<string>();
   const companyName = conversation?.company ?? '';
+  // TODOS: NEED To Add handling for CompanyLogoURL
   const navigatedHeaderDynamicValues = {
     companyName,
     sessionID: sessionID || '',
+    companyLogoUrl: '',
   };
-  const { getTenantIdentifier } = useAuth();
 
-  const tenantName = getTenantIdentifier()?.['tenant-name'];
+  const tenantName = getTenantFromLocalStorage();
   const isAdminRole = getTenantIdentifier()?.['role'] === 'admin';
 
   const { data, isLoading, isError } = useConversationDetailsDataQuery({

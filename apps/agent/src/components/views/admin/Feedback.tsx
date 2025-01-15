@@ -1,18 +1,19 @@
-import { ApiProviderContext } from '../../../pages/shared/ApiProvider/Context.tsx';
+import { ApiProviderContext } from '@meaku/core/contexts/Context';
 import { useContextSelector } from 'use-context-selector';
-import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { useSearchParams } from 'react-router-dom';
 import AgentInOpenState from '../MultimediaChat/AgentInOpenState.tsx';
 import Backdrop from '@breakout/design-system/components/layout/backdrop';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-import useLocalStorageSession from '../../../hooks/useLocalStorageSession.tsx';
+import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import Button from '@breakout/design-system/components/layout/button';
 import { CopyIcon } from 'lucide-react';
 import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
+import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);

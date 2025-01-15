@@ -5,11 +5,11 @@ import Custom404 from '@breakout/design-system/components/layout/Custom404';
 import Root from '../layout';
 import Dashboard from '../pages/Dashboard';
 import LoginPage from '../pages/LoginPage';
-import LeadsPage from '../pages/LeadsPage';
-import ConversationsPage from '../pages/ConversationsPage';
+import LeadsPageContainer from '../pages/LeadsPageContainer';
+import ConversationsPageContainer from '../pages/ConversationsPageContainer';
 import PlaygroundPage from '../pages/PlaygroundPage';
 import ProtectedRoute from '../pages/ProtectedRoutes';
-import ConversationDetailsPage from '../pages/ConversationDetailsPage';
+import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
 
 import { AppRoutesEnum } from '../utils/constants';
 
@@ -34,16 +34,16 @@ const routes = [
       },
       {
         path: LEADS,
-        element: <ProtectedRoute element={<LeadsPage />} />,
+        element: <ProtectedRoute element={<LeadsPageContainer />} />,
         children: [],
       },
       {
         path: CONVERSATIONS,
-        element: <ProtectedRoute element={<ConversationsPage />} />,
+        element: <ProtectedRoute element={<ConversationsPageContainer />} />,
       },
       {
         path: `${CONVERSATIONS}/:sessionID`, // Dynamic route for individual conversations
-        element: <ProtectedRoute element={<ConversationDetailsPage />} />,
+        element: <ProtectedRoute element={<ConversationDetailsPageContainer />} />,
       },
       {
         path: PLAYGROUND,

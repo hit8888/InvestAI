@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import useLocalStorageSession from '../../../hooks/useLocalStorageSession';
+import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import UnifiedSessionConfigResponseManager, {
   SessionConfigResponseType,
 } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider';
+import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   unifiedConfigurationResponse: SessionConfigResponseType,

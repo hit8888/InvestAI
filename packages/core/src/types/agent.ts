@@ -123,9 +123,9 @@ export type Message = {
   feedback?: Feedback;
   showFeedbackOptions?: boolean;
   isReadOnly?: boolean;
-  analytics: z.infer<typeof AnalyticsSchema>;
-  artifact?: z.infer<typeof MessageArtifactSchema>;
-  chatArtifact?: z.infer<typeof MessageArtifactSchema>;
+  analytics: AnalyticsType;
+  artifact?: MessageArtifactType;
+  chatArtifact?: MessageArtifactType;
   scriptStep?: z.infer<typeof ScriptStepDTO>;
   demoAvailable?: boolean;
   features: z.infer<typeof FeatureSelectionDTOSchema>[];
@@ -145,5 +145,7 @@ export type SplitScreenArtifactType = z.infer<
 export type ChatBoxArtifactType = z.infer<typeof ChatBoxArtifactEnumSchema>;
 
 export type AnalyticsType = z.infer<typeof AnalyticsSchema>;
+
+export type MessageArtifactType = z.infer<typeof MessageArtifactSchema>;
 
 export type DataSourceType = z.infer<typeof DataSourceSchema>;

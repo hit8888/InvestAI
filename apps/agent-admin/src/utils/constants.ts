@@ -30,7 +30,9 @@ export const NAV_LINK_ICON_PROPS = {
   color: 'rgb(var(--primary))',
 };
 
-export const PAGE_HEADER_TITLE_ICON_PROPS = {
+export const PAGE_HEADER_TITLE_ICON_PROPS = NAV_LINK_ICON_PROPS;
+
+export const COMMON_ICON_PROPS = {
   width: '24',
   height: '25',
   viewBox: '0 0 24 25',
@@ -43,10 +45,10 @@ export const XSLS_LABEL = 'XSLS';
 export const CSV_LABEL = 'CSV';
 
 export const PAGINATION_ARROW_ICONS = NAV_LINK_ICON_PROPS;
-export const DROPDOWN_ARROW_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
-export const EXPORT_DOWNLOAD_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
-export const ALL_FILTERS_ICONS = PAGE_HEADER_TITLE_ICON_PROPS;
-export const SORT_FILTER_ICON = PAGE_HEADER_TITLE_ICON_PROPS;
+export const DROPDOWN_ARROW_ICONS = COMMON_ICON_PROPS;
+export const EXPORT_DOWNLOAD_ICONS = COMMON_ICON_PROPS;
+export const ALL_FILTERS_ICONS = COMMON_ICON_PROPS;
+export const SORT_FILTER_ICON = COMMON_ICON_PROPS;
 
 export const DEFAULT_USERNAME = 'Kymberly Abestango';
 export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';

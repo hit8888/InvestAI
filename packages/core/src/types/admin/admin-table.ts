@@ -31,6 +31,23 @@ export const ConversationsTableViewSchema = z.object({
   session_id: z.string(),
 })
 
+export const TransformedProspectAndCompanyDetailsSchema = z.object({
+  prospect: z.object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    location: z.string().optional(),
+  }),
+  company: z.object({
+    name: z.string().optional(),
+    logoUrl: z.string().optional(), // Optional or empty string as placeholder
+    location: z.string().optional(),
+    revenue: z.string().optional(), // Optional or empty string as placeholder
+    employees: z.string().optional(), // Optional or empty string as placeholder
+    domain: z.string().optional(), // Optional or empty string as placeholder
+    foundationDate: z.string().optional(), // Optional or empty string as placeholder
+  }),
+});
+
 // Assuming these are the types for your custom cell components:
 
 export interface CellValueProps {

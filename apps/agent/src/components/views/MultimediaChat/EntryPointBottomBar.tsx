@@ -3,15 +3,15 @@ import { useTypewriter } from '@breakout/design-system/hooks/useTypewriter';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useState } from 'react';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
-import { Suggestion } from './Suggestion.tsx';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
+import { Suggestion } from '@breakout/design-system/components/layout/Suggestion';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import useAgentbotAnalytics from '../../../hooks/useAgentbotAnalytics.tsx';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
 import { motion } from 'framer-motion';
+import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;

@@ -6,7 +6,7 @@ import { memo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import useAdminUserEmail from '../../../hooks/useAdminUserEmail';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();

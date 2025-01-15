@@ -1,0 +1,51 @@
+import { useState } from 'react';
+
+import WaitDemoCompleteNotification from './WaitDemoCompleteNotification';
+
+import { FinishDemo } from './FinishDemo';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+
+interface IProps {
+  isDemoPlaying: boolean;
+  onRaiseDemoQuery: (queryRaised: boolean) => void;
+  onCloseDemoAgent: () => void;
+  onFinishDemo: () => void;
+  onPause: () => void;
+  askQuestionContainer: React.ElementType;
+}
+
+export function DemoFooter({ 
+  isDemoPlaying, 
+  onRaiseDemoQuery, 
+  onCloseDemoAgent, 
+  onFinishDemo, 
+  onPause,
+  askQuestionContainer: AskQuestionContainer,
+}: IProps) {
+  const [isAgentEnabled, setShowDemoAgent] = useState(false);
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
+
+  const showWaitDemoCompleteNotification = isDemoPlaying && isAgentEnabled;
+
+  const handleRaiseDemoQuery = (selectedValue: boolean) => {
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_CONVERSATION_INITIATED);
+    onRaiseDemoQuery(selectedValue);
+  };
+
+  return (
+    <div className="flex w-full items-center justify-between">
+      <div className="flex items-center gap-8">
+        <AskQuestionContainer
+          isAgentEnabled={isAgentEnabled}
+          setShowDemoAgent={setShowDemoAgent}
+          onRaiseDemoQuery={handleRaiseDemoQuery}
+          onCloseDemoAgent={onCloseDemoAgent}
+          isDemoPlaying={isDemoPlaying}
+        />
+        {showWaitDemoCompleteNotification && <WaitDemoCompleteNotification />}
+      </div>
+      <FinishDemo onFinishDemo={onFinishDemo} onPause={onPause} />
+    </div>
+  );
+}

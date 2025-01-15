@@ -1,20 +1,21 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
-import AskQuestion from './AskQuestion';
+import AskQuestion from '@breakout/design-system/components/Demo/AskQuestion';
 import RaiseHandDisabled from '@breakout/design-system/components/icons/RaiseHandDisabled';
-import AgentMessages from '../AgentMessages';
+import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import { X } from 'lucide-react';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { AIResponse, Message } from '@meaku/core/types/agent';
-import { useIsAdmin } from '../../../../shared/UrlDerivedDataProvider';
-import useGetMessagePayload from '../../../../hooks/useGetMessagePayload';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { useMessageStore } from '../../../../stores/useMessageStore';
-import { useAnimateDifferentOrbStates } from '../../../../hooks/useAnimateDifferentOrbStates';
+import { useAnimateDifferentOrbStates } from '@meaku/core/hooks/useAnimateDifferentOrbStates';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { convertServerMessageToClientMessage } from '@meaku/core/transformers/common';
 import { nanoid } from 'nanoid';
-import { DemoEvent } from '@meaku/core/types/webSocket';
-import useWebSocketChat, { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
-import AgentInput from '../AgentInput';
+import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import useWebSocketChat from '../../../../hooks/useWebSocketChat';
+import AgentInput from '@breakout/design-system/components/layout/AgentInput';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
   isAgentEnabled: boolean;
@@ -34,16 +35,24 @@ const AskQuestionContainer = ({
   const { sendMessage, lastMessage } = useWebSocketChat();
 
   const [messages, setMessages] = useState<Message[]>([]);
-  console.log({ messages });
+  // console.log({ messages });
   const isAdmin = useIsAdmin();
 
   const getMessagePayload = useGetMessagePayload();
 
+  const responseManager = useUnifiedConfigurationResponseManager();
+
+  const tenantName = responseManager.getOrgName() ?? '';
+  const styleConfig = responseManager.getStyleConfig();
+  const sessionId = responseManager.getSessionId() ?? '';
+  const primaryColor = styleConfig.primary ?? 'rgb(var(--primary))';
+
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
+  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState); //Fix this next PR.Ideally we would not want to put anything in store for this flow
-
-  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
+  const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
   const handleToggleAgent = () => {
     const currentState = !isAgentEnabled;
@@ -152,9 +161,18 @@ items-center rounded-lg border-2 border-[rgb(var(--primary))] border-opacity-60 
           </div>
         </div>
         <AgentMessages
+          tenantName={tenantName}
+          sessionId={sessionId}
+          orbState={OrbStatusEnum.idle}
           messages={messages}
           showRightPanel={false}
-          handleSendUserMessage={handleSendUserMessage}
+          isAMessageBeingProcessed={isAMessageBeingProcessed}
+          setActiveArtifact={() => {}}
+          setDemoPlayingStatus={() => {}}
+          handleSendUserMessage={() => {}}
+          handleAddMessageFeedback={() => {}}
+          handleRemoveMessageFeedback={() => {}}
+          primaryColor={primaryColor}
           initialSuggestedQuestions={[]}
           allowFullWidthForText={true}
           showDemoPreQuestions={false}

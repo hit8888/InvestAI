@@ -2,10 +2,10 @@ import { AgentConfig } from '@meaku/core/types/config';
 import { lazy, Suspense } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
-import useUnifiedConfigurationResponseManager from '../shared/hooks/useUnifiedConfigurationResponseManager';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { useContextSelector } from 'use-context-selector';
-import { ApiProviderContext } from '../shared/ApiProvider/Context';
-import { useUrlParams } from '../../hooks/useUrlParams';
+import { ApiProviderContext } from '@meaku/core/contexts/Context';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { CDN_URL_FOR_ASSETS } from '../../constants/chat';
 
 const Embed = lazy(() => import('../../components/views/Embed'));

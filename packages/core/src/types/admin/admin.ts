@@ -2,7 +2,8 @@ import { z } from "zod";
 import { 
     ConversationsTableViewSchema,
     LeadsTableViewSchema,
-    TableDataSchema, 
+    TableDataSchema,
+    TransformedProspectAndCompanyDetailsSchema, 
 } from "./admin-table";
 import { 
     ConversationDetailsResponseSchema,
@@ -21,6 +22,7 @@ export type LeadsTableDisplayContent = z.infer<typeof LeadsTableViewSchema>;
 
 export type ConversationsTableViewContent = z.infer<typeof ConversationsResponseResultSchema>;
 export type ConversationsTableDisplayContent = z.infer<typeof ConversationsTableViewSchema>;
+export type TransformedProspectAndCompanyDetailsContent = z.infer<typeof TransformedProspectAndCompanyDetailsSchema>;
 
 export type PaginationData = z.infer<typeof PaginationDataSchema>;
 export type LeadsTableResponse = z.infer<typeof LeadsTableResponseSchema>;

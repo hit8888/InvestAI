@@ -3,7 +3,7 @@ import AgentInput from '@breakout/design-system/components/layout/agent-input';
 import AgentMessage from '@breakout/design-system/components/layout/agent-message';
 import { memo, useEffect, useState } from 'react';
 import { useMessageStore } from '../../stores/useMessageStore';
-import useUnifiedConfigurationResponseManager from '../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import useWebSocketChat from '../../hooks/useWebSocketChat';
 
 interface IProps {

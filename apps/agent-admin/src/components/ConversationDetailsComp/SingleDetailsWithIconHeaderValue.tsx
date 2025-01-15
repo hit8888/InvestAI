@@ -20,8 +20,9 @@ const SingleDetailsWithIconHeaderValue = ({ isTakingFullWidth = false, headerLab
         <p className="text-sm font-normal text-gray-500">{headerLabel}</p>
         <p
           className={cn('text-base font-medium text-primary/60', {
-            'max-w-40 overflow-hidden text-ellipsis whitespace-nowrap': !isTakingFullWidth,
+            'max-w-40 overflow-hidden text-ellipsis whitespace-nowrap': isTakingFullWidth,
           })}
+          title={itemValue}
         >
           {itemValue}
         </p>

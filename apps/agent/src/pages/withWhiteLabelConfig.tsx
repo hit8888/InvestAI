@@ -1,7 +1,7 @@
 // withWhiteLabelConfig.tsx
 import React, { useEffect } from 'react';
 import { handleColorConfig } from '../utils/common';
-import useUnifiedConfigurationResponseManager from './shared/hooks/useUnifiedConfigurationResponseManager';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 
 export const withWhiteLabelConfig = (WrappedComponent: React.ComponentType) => {
   return function WithWhiteLabelConfigComponent() {
