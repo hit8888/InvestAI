@@ -5,7 +5,7 @@ import MessageItem from './MessageItem';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat';
 import SuggestionsArtifact from './SuggestionsArtifact';
-import { PreDemoQuestion } from './Demo/PreDemoQuestion';
+// import { PreDemoQuestion } from './Demo/PreDemoQuestion';
 
 interface IProps {
   messages: Message[];
@@ -79,7 +79,7 @@ const AgentMessages = ({
               />
             </div>
           )}
-          {showDemoPreQuestions && <PreDemoQuestion handleSendUserMessage={handleSendUserMessage} />}
+          {showDemoPreQuestions && <></>} {/*Temorary fix to avoid predemo question*/}
         </div>
 
         <div className="p-1" />
