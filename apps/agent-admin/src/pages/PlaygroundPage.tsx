@@ -1,4 +1,5 @@
 import CustomPageHeader from '../components/CustomPageHeader';
+import withPageViewWrapper from '../pages/PageViewWrapper';
 import PlaygroundIcons from '@breakout/design-system/components/icons/playground-icons';
 import { PAGE_HEADER_TITLE_ICON_PROPS } from '../utils/constants';
 
@@ -17,4 +18,4 @@ const PlaygroundPage = () => {
   );
 };
 
-export default PlaygroundPage;
+export default withPageViewWrapper(PlaygroundPage);

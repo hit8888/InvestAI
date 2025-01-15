@@ -18,8 +18,12 @@ interface IProps {
 }
 
 const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd, onFinishDemo }: IProps) => {
+  const assetType = demoDetails?.asset_type;
   const isQueryRaisedRef = useRef(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const handleAudioEnd = () => {
@@ -38,7 +42,8 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   const { audioRef, playPromiseRef, analyserNode } = useAudioController(
     demoDetails?.audio_url,
     handleAudioEnd,
-    Boolean(demoDetails?.audio_url),
+    (Boolean(demoDetails?.audio_url) && !demoDetails.asset_url) ||
+      (Boolean(demoDetails?.audio_url) && (isImageLoaded || isVideoLoaded)),
   );
 
   const canvasRef = useAudioVisualizer({
@@ -48,19 +53,24 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   const handlePlayPause = async () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const video = videoRef.current;
+
+    if (!audio && !video) return;
 
     try {
-      if (audio.paused) {
+      if (audio && audio.paused) {
         setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
         playPromiseRef.current = audio.play();
         await playPromiseRef.current;
+      } else if (video && video.paused) {
+        video.play();
       } else {
         if (playPromiseRef.current) {
           await playPromiseRef.current;
         }
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_INTERUPTED);
-        audio.pause();
+        if (audio) audio.pause();
+        if (video) video.pause();
         setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
       }
     } catch (error) {
@@ -71,13 +81,16 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   const handlePause = async () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const video = videoRef.current;
+
+    if (!audio && !video) return;
 
     try {
       if (playPromiseRef.current) {
         await playPromiseRef.current;
       }
-      audio.pause();
+      if (audio) audio.pause();
+      if (video) video.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     } catch (error) {
       console.error('Error handling pause:', error);
@@ -97,19 +110,44 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
     <>
       <div className={'relative flex h-[92%] w-full items-center justify-center'}>
         {demoDetails.asset_url ? (
-          <div className={'relative flex h-[92%] w-full items-center justify-center'}>
-            {!isImageLoaded && (
-              <div className="absolute inset-0 scale-95 bg-gray-200 opacity-0 blur-sm transition-all duration-500 ease-in-out hover:scale-100 hover:opacity-100 hover:blur-none" />
+          <div className={'relative h-full w-full'}>
+            {assetType === 'IMAGE' && (
+              <>
+                {!isImageLoaded && (
+                  <div className="absolute inset-0 scale-95 bg-gray-200 opacity-0 blur-sm transition-all duration-500 ease-in-out hover:scale-100 hover:opacity-100 hover:blur-none" />
+                )}
+                <img
+                  className={`aspect-[16/9] h-full w-full object-contain transition-all duration-500 ease-out ${
+                    isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+                  }`}
+                  src={demoDetails.asset_url}
+                  alt={demoDetails.message}
+                  loading="lazy"
+                  onLoad={() => setIsImageLoaded(true)}
+                />
+              </>
             )}
-            <img
-              className={`max-h-full w-full object-fill transition-all duration-500 ease-out ${
-                isImageLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-              }`}
-              src={demoDetails.asset_url}
-              alt={demoDetails.message}
-              loading="lazy"
-              onLoad={() => setIsImageLoaded(true)}
-            />
+            {assetType === 'VIDEO' && (
+              <>
+                {!isVideoLoaded && (
+                  <div className="absolute inset-0 scale-95 bg-gray-200 opacity-0 blur-sm transition-all duration-500 ease-in-out" />
+                )}
+                <video
+                  ref={videoRef}
+                  className={`aspect-[16/9] h-full w-full object-contain transition-all duration-500 ease-out ${
+                    isVideoLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+                  }`}
+                  preload="metadata"
+                  playsInline
+                  autoPlay={true}
+                  onLoadedData={() => setIsVideoLoaded(true)}
+                  muted={true}
+                >
+                  <source src={demoDetails.asset_url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </>
+            )}
           </div>
         ) : (
           <div className={'flex h-[92%] w-full flex-col items-center justify-center'}>

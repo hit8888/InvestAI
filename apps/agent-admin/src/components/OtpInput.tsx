@@ -1,70 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@breakout/design-system/components/shadcn-ui/input-otp';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OtpInput = ({ id = '', length = 4, onOtpSubmit = (_: string) => {} }) => {
-  const [otp, setOtp] = useState(new Array(length).fill(''));
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+const OtpInput = ({ length = 4, onOtpSubmit = (_: string) => {} }) => {
+  const [value, setValue] = useState('');
 
-  useEffect(() => {
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
-    }
-  }, []);
-
-  const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (isNaN(Number(value))) return;
-
-    const newOtp = [...otp];
-    // allow only one input
-    newOtp[index] = value.substring(value.length - 1);
-    setOtp(newOtp);
-
-    // submit trigger
-    const combinedOtp = newOtp.join('');
-    if (combinedOtp.length === length) onOtpSubmit(combinedOtp);
-
-    // Move to next input if current field is filled
-    if (value && index < length - 1 && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  const handleClick = (index: number) => {
-    inputRefs.current[index]?.setSelectionRange(1, 1);
-
-    // optional
-    if (index > 0 && !otp[index - 1]) {
-      inputRefs.current[otp.indexOf('')]?.focus();
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0 && inputRefs.current[index - 1]) {
-      // Move focus to the previous input field on backspace
-      inputRefs.current[index - 1]?.focus();
-    }
+  const handleOTPSubmit = (value: string) => {
+    setValue(value);
+    onOtpSubmit(value);
   };
 
   return (
-    <div className="flex gap-2">
-      {otp.map((value, index) => {
-        return (
-          <input
-            id={id}
+    <InputOTP
+      maxLength={length}
+      value={value}
+      onChange={(value) => handleOTPSubmit(value)}
+      className="flex justify-center gap-3"
+    >
+      <InputOTPGroup className="flex gap-2">
+        {Array.from({ length }, (_, index) => (
+          <InputOTPSlot
             key={index}
-            type="text"
-            ref={(input) => {
-              inputRefs.current[index] = input;
-            }}
-            value={value}
-            onChange={(e) => handleChange(index, e)}
-            onClick={() => handleClick(index)}
-            onKeyDown={(e) => handleKeyDown(index, e)}
-            className="h-10 w-10 rounded border-2 text-center text-lg outline-none focus:outline-none focus:ring-2 focus:ring-primary/60"
+            index={index}
+            className="h-12 w-12 rounded-lg border-2 border-primary/30 text-center 
+              text-lg font-medium transition 
+              hover:shadow-md focus:border-primary/50 focus:!outline-none focus:ring-2 focus:ring-primary/50"
           />
-        );
-      })}
-    </div>
+        ))}
+      </InputOTPGroup>
+    </InputOTP>
   );
 };
 

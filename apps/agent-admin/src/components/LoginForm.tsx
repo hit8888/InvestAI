@@ -41,6 +41,7 @@ const LoginForm = () => {
       setAuthMode('enterOtp');
     },
   });
+
   const { mutateAsync: verifyOtp, isPending: isVerifyOtpPending } = useVerifyOtp({
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
@@ -121,9 +122,9 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
-      <form className="flex w-full flex-col gap-2" onSubmit={handleLogin}>
-        <div className="flex w-full flex-col gap-10 text-left">
+    <div className="w-full">
+      <form className="flex w-full flex-col gap-6 px-6" onSubmit={handleLogin}>
+        <div className="flex w-full flex-col gap-6 text-left">
           <div className="flex w-full flex-col items-start justify-center gap-2 2xl:gap-8">
             <label htmlFor="email" className="text-sm font-bold 2xl:text-6xl">
               Email Address
@@ -135,49 +136,62 @@ const LoginForm = () => {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              className="w-full py-3 text-lg 2xl:py-4 2xl:text-3xl"
+              className="w-full rounded-xl border border-primary py-3 text-lg focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/30 2xl:py-4 2xl:text-3xl"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
             />
           </div>
 
-          <div className={cn('w-full px-1 transition-all duration-300')}>
-            {showPasswordField ? (
-              <div
-                className={cn(
-                  'flex w-full transform flex-col items-start justify-center gap-2 transition-all duration-300 ease-in-out 2xl:gap-8',
-                  {
-                    'translate-y-0 opacity-100': showPasswordField,
-                    '-translate-y-full opacity-0': !showPasswordField,
-                  },
-                )}
-              >
-                <label htmlFor="password" className="text-sm font-bold 2xl:text-6xl">
-                  Password
-                </label>
-                <input
-                  disabled={!showPasswordField}
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  className="w-full py-3 text-lg placeholder:pt-2 2xl:py-4 2xl:text-3xl"
-                  value={password}
-                  onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setPassword(ev.target.value)}
-                />
-              </div>
-            ) : null}
-            {showOtpField ? (
-              <div className={cn('flex transform flex-col items-center transition-all duration-300 ease-in-out')}>
-                <label htmlFor="otp" className="text-lg">
-                  Enter OTP sent to {email}
-                </label>
-                <OtpInput id={'otp'} length={6} onOtpSubmit={onOtpSubmit} />
-              </div>
-            ) : null}
-          </div>
+          {showPasswordField || showOtpField ? (
+            <div className={cn('w-full px-1 transition-all duration-300')}>
+              {showPasswordField ? (
+                <div
+                  className={cn(
+                    'flex w-full transform flex-col items-start justify-center gap-2 transition-all duration-300 ease-in-out 2xl:gap-8',
+                    {
+                      'translate-y-0 opacity-100': showPasswordField,
+                      '-translate-y-full opacity-0': !showPasswordField,
+                    },
+                  )}
+                >
+                  <label htmlFor="password" className="text-sm font-bold 2xl:text-6xl">
+                    Password
+                  </label>
+                  <input
+                    disabled={!showPasswordField}
+                    id="password"
+                    type="password"
+                    placeholder="********"
+                    className="w-full rounded-xl border border-primary py-3 text-lg focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/30 2xl:py-4 2xl:text-3xl"
+                    value={password}
+                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setPassword(ev.target.value)}
+                  />
+                </div>
+              ) : null}
+              {showOtpField ? (
+                <div
+                  className={cn('flex transform flex-col items-center gap-4 transition-all duration-300 ease-in-out')}
+                >
+                  <label htmlFor="otp" className="text-lg">
+                    Enter OTP sent to {email}
+                  </label>
+                  {/* TODOS NEED TO ADD THE INPUT-OTP COMPONENT - SHADCN UI COMPONENT */}
+                  <OtpInput length={6} onOtpSubmit={onOtpSubmit} />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <button
-          className={cn('flex items-center justify-center gap-1 text-lg font-normal 2xl:text-3xl')}
+          className={cn(
+            'flex items-center justify-center gap-1 text-lg font-normal 2xl:text-3xl',
+            'rounded-lg bg-primary/80 px-6 py-3 text-white', // Base styles
+            'hover:bg-primary', // Hover state
+            'focus:ring-primary-300 focus:outline-none focus:ring-4 focus:ring-offset-2', // Focus styles
+            {
+              'disabled:cursor-not-allowed disabled:bg-primary/30': isLoading,
+            }, // Disabled state
+          )}
           disabled={isLoading}
         >
           {isLoading && <SpinnerIcon className="!h-5 !w-5 text-white" />}
@@ -195,11 +209,11 @@ const LoginForm = () => {
       <div>
         <button
           //   variant="secondary"
-          className={cn('w-full text-lg font-normal 2xl:text-3xl')}
+          className={cn('gradient-text w-full text-lg font-normal 2xl:text-3xl')}
           onClick={handleToggleShowOtpLogin}
           disabled={isLoading}
         >
-          {authMode === 'password' ? 'Login with a Code' : 'Login with Password'}
+          {authMode === 'password' ? 'Login with OTP' : 'Login with Password'}
         </button>
       </div>
     </div>

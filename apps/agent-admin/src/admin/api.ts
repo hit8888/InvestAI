@@ -26,3 +26,6 @@ export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/`, payload);
 
 export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/analytics/funnels/conversations`);
+
+export const getConversationDetailsData = (sessionId: string) =>
+  adminApiClient.get(`tenant/api/conversations/${sessionId}/?fetch_all=true`);

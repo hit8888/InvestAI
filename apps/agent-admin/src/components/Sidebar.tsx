@@ -60,8 +60,8 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className={cn('flex flex-col items-start border-r border-primary/10 2xl:h-screen', {
-        'w-[22%] 2xl:w-[15%]': isOpen,
+      className={cn('flex h-screen flex-col items-start border-r border-primary/10', {
+        'w-72 2xl:w-[15%]': isOpen,
         'w-20 2xl:w-[4%]': !isOpen,
       })}
       style={{
@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
         className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
       >
         <div
-          className={cn(`flex w-full items-center justify-between px-2`, {
+          className={cn(`flex w-full items-center justify-between px-2 pb-4`, {
             'flex-col': !isOpen,
           })}
         >
@@ -81,22 +81,28 @@ const Sidebar: React.FC = () => {
               <AdminLogoSVG width={'30'} height={'35'} />
             </Link>
             {isOpen ? (
-              <span className="text-base font-bold text-adminLogoText transition-all duration-300">{TENANT_NAME}</span>
+              <span className="text-lg font-bold text-gray-900 transition-all duration-300">{TENANT_NAME}</span>
             ) : null}
           </div>
-          <button onClick={toggleSidebar} className="flex items-center justify-center rounded-lg pt-2">
+        </div>
+        <div className="relative w-full">
+          <button
+            onClick={toggleSidebar}
+            className="absolute -right-6 -top-4 z-50 flex h-8 w-8 items-center justify-center  rounded-lg border border-white/50 bg-primary "
+          >
             <PanelCloseIcon
               {...NAV_LINK_ICON_PROPS}
-              className={cn(`h-8 w-8 transition-transform duration-300 `, {
+              color="#fff"
+              className={cn(`z-50 h-6 w-6 transition-transform duration-300 `, {
                 'rotate-0': isOpen,
                 'rotate-180': !isOpen,
               })}
             />
           </button>
+          <Separator className="w-[95%]" />
         </div>
-        <Separator className="px-8" />
       </div>
-      <div className="flex w-full flex-col items-start bg-primary/2.5">
+      <div className="flex w-full flex-col items-start bg-primary/2.5 pt-4">
         {NAV_LINK_ITEMS.map((navItem) => (
           <NavLinkSingleItem key={navItem?.navItem} {...navItem} isPanelOpen={isOpen} />
         ))}

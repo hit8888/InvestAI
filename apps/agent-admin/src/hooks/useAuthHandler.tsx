@@ -58,6 +58,7 @@ const useAuthHandler = () => {
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');
     const storedAccessTokenExpiry = parseInt(localStorage.getItem('accessTokenExpiry') || '0');
+    const refreshTokenExpiry = parseInt(localStorage.getItem('refreshTokenExpiry') || '0');
     const storedUserInfo = localStorage.getItem('userInfo')
       ? JSON.parse(localStorage.getItem('userInfo') as string)
       : null;
@@ -68,6 +69,9 @@ const useAuthHandler = () => {
 
       if (Date.now() > storedAccessTokenExpiry) {
         refreshTokens(); // Access token expired, attempt to refresh
+      } else if (Date.now() > refreshTokenExpiry) {
+        clearTokens();
+        navigate(LOGIN); // Refresh token also expired
       } else {
         startAccessTokenTimer((storedAccessTokenExpiry - Date.now()) / 1000); // Remaining time in seconds
       }
@@ -81,6 +85,8 @@ const useAuthHandler = () => {
       navigate(LOGIN); // Redirect to login if tokens are not present
     }
   }, [navigate]);
+
+  return { refreshTokens };
 };
 
 export default useAuthHandler;

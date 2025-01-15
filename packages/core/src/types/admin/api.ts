@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { MessageSchema } from "../agent";
+import { FeedbackSchema } from "../session";
 
 export type LoginWithEmailPasswordPayload = {
   email: string;
@@ -130,3 +132,9 @@ export const ConversationFunnelResponseSchema = z.object({
   analyzed_at: z.string(),         // ISO date-time string when analyzed
 });
 
+// Schema for the Entire Conversation Details Schema
+export const ConversationDetailsResponseSchema = z.object({
+  chat_history: z.array(MessageSchema),
+  conversation: ConversationsResponseResultSchema.nullable(),
+  feedback: z.array(FeedbackSchema).optional(),
+});

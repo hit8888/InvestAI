@@ -26,7 +26,7 @@ const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Button className="bg-customRed1" onClick={handleOpen}>
+      <Button className="bg-destructive-1000" onClick={handleOpen}>
         <div className="flex items-center gap-2">
           <span>Finish Demo</span>
         </div>
@@ -47,7 +47,7 @@ const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
           >
             <span className="text-customSecondaryText">Cancel</span>
           </Button>
-          <Button className="flex-1 border-2 border-red-400 bg-customRed1 px-12" onClick={handleFinishDemo}>
+          <Button className="flex-1 border-2 border-red-400 bg-destructive-1000 px-12" onClick={handleFinishDemo}>
             <span>End Demo</span>
           </Button>
         </div>

@@ -9,15 +9,9 @@ import LeadsPage from '../pages/LeadsPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import PlaygroundPage from '../pages/PlaygroundPage';
 import ProtectedRoute from '../pages/ProtectedRoutes';
-import withPageViewWrapper from '../pages/PageViewWrapper';
+import ConversationDetailsPage from '../pages/ConversationDetailsPage';
 
 import { AppRoutesEnum } from '../utils/constants';
-
-//TODO: Move to a separate file(Fixes eslint(react-refresh/only-export-components))
-const WrapDashboard = withPageViewWrapper(Dashboard);
-const WrapLeadsPage = withPageViewWrapper(LeadsPage);
-const WrapConversationsPage = withPageViewWrapper(ConversationsPage);
-const WrapPlaygroundPage = withPageViewWrapper(PlaygroundPage);
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -30,7 +24,7 @@ const routes = [
     children: [
       {
         path: '',
-        element: <ProtectedRoute element={<WrapDashboard />} />,
+        element: <ProtectedRoute element={<Dashboard />} />,
         children: [],
       },
       {
@@ -40,17 +34,20 @@ const routes = [
       },
       {
         path: LEADS,
-        element: <ProtectedRoute element={<WrapLeadsPage />} />,
+        element: <ProtectedRoute element={<LeadsPage />} />,
         children: [],
       },
       {
         path: CONVERSATIONS,
-        element: <ProtectedRoute element={<WrapConversationsPage />} />,
-        children: [],
+        element: <ProtectedRoute element={<ConversationsPage />} />,
+      },
+      {
+        path: `${CONVERSATIONS}/:sessionID`, // Dynamic route for individual conversations
+        element: <ProtectedRoute element={<ConversationDetailsPage />} />,
       },
       {
         path: PLAYGROUND,
-        element: <ProtectedRoute element={<WrapPlaygroundPage />} />,
+        element: <ProtectedRoute element={<PlaygroundPage />} />,
         children: [],
       },
     ],

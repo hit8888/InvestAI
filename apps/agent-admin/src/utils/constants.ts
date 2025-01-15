@@ -2,8 +2,8 @@ import { AuthResponse } from '@meaku/core/types/admin/auth';
 
 // Authentication
 
-export const ACCESS_TOKEN_EXPIRATION_TIME = 300; // SECONDS ( 5 * 60 )
-export const REFRESH_TOKEN_EXPIRATION_TIME = 1800; // SECONDS ( 30 * 60 )
+export const ACCESS_TOKEN_EXPIRATION_TIME = 300; // SECONDS ( 5 Minutes * 60 )
+export const REFRESH_TOKEN_EXPIRATION_TIME = 1800; // SECONDS ( 30 Minutes * 60 )
 export const DefaultAuthResponse: AuthResponse = {
   id: 0,
   username: '',
@@ -18,7 +18,7 @@ export const DefaultAuthResponse: AuthResponse = {
 };
 
 // Pagination
-export const PAGINATION_PER_PAGE_OPTIONS = ['10', '20', '50'];
+export const PAGINATION_PER_PAGE_OPTIONS = ['10', '25', '50', '75', '100'];
 export const PAGINATION_DEFAULT_ITEMS_PER_PAGE = 50;
 
 // ICON Props
@@ -87,6 +87,18 @@ export enum ConversationChipLabelEnum {
   TOTAL_CONVERSATIONS = 'TOTAL_CONVERSATIONS',
   HIGH_INTENT_CONVERSATIONS = 'HIGH_INTENT_CONVERSATIONS',
   LEAD_GENERATED = 'LEAD_GENERATED',
+}
+
+export enum ConversationDetailsTabsValueEnum {
+  LOG_TAB = 'log',
+  SUMMARY_TAB = 'summary',
+  ACTIVITY_TAB = 'activity',
+}
+
+export enum ConversationDetailsTabsLabelEnum {
+  LOG_TAB_LABEL = 'Log',
+  SUMMARY_TAB_LABEL = 'Summary',
+  ACTIVITY_TAB_LABEL = 'Activity',
 }
 
 export const CONVERSATIONS_PAGE_COLUMN_LISTS = [

@@ -1,6 +1,7 @@
 // TODOS: COMMENTED CODE WILL BE USED LATER ON
 
 import ConversationsIcon from '@breakout/design-system/components/icons/conversations-icon';
+import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomPageHeader from '../components/CustomPageHeader';
 import ConversationsTableContainer from '../components/ConversationsTableContainer';
 import {
@@ -92,4 +93,4 @@ const ConversationsPage = () => {
 //   );
 // };
 
-export default ConversationsPage;
+export default withPageViewWrapper(ConversationsPage);

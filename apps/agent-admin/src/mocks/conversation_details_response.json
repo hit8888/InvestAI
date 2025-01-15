@@ -1,0 +1,282 @@
+{
+  "conversation": {
+    "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+    "timestamp": "2025-01-07T11:37:52.194676Z",
+    "summary": null,
+    "ip_address": "103.163.65.90",
+    "budget": null,
+    "timeline": null,
+    "product_of_interest": null,
+    "company": null,
+    "name": null,
+    "email": "fveqtq@fveqtg.df",
+    "role": null,
+    "country": null,
+    "user_message_count": 5
+  },
+  "chat_history": [
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "p0T5QYM-NjbRXRBQ94bvr",
+      "role": "user",
+      "message": "What kind of coding skills can HackerEarth assess?",
+      "timestamp": "2025-01-07T11:38:04.675566Z",
+      "message_id": 19251,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "p0T5QYM-NjbRXRBQ94bvr",
+      "role": "ai",
+      "message": "Hey there! 😊 HackerEarth can assess a wide range of coding skills. We support over 80 developer skills, including:\n\n- **Programming Languages**: Over 40 languages like Python, Java, C++, etc.\n- **Full Stack Development**: Frontend and backend tasks.\n- **Data Science & Machine Learning**: Algorithm development and data inference.\n- **SQL**: Database query skills.\n- **DevOps**: Linux and system operations.\n\nOur platform is designed to evaluate hands-on coding skills, ensuring candidates are tested on real-world tasks. You can explore more about our [coding assessments here](https://www.hackerearth.com/recruit/assessments). 🚀",
+      "timestamp": "2025-01-07T11:38:04.680457Z",
+      "message_id": 19252,
+      "documents": [
+        {
+          "id": 4116,
+          "data_source_id": 4,
+          "data_source_type": "PDF",
+          "data_source_name": null,
+          "title": "[2.7.2] [HackerEarth Inc.] [Question creation process]",
+          "url": "",
+          "text": "Question creation process | HackerEarth question types Overview HackerEarth Assessment is a technical skill-assessment software that allows you to automatically evaluate applicants' technical skills using online tests. Organizations use these assessments for pre-screening of candidates in their hiring process, skill-mapping, talent benchmarking, and supporting upskilling journeys for learners. HackerEarth assessments are skill-based assessments and they are designed such that the test-taker is tested on their hands-on coding skills. The questions in the assessments are built to emulate what a software developer would do on the job. HackerEarth Assessment contains an exhaustive question library with question types that include multiple choice questions, coding tasks that can be taken in over 40 languages, SQL, Machine Learning, Data Science, and Fullstack tasks. All these questions are automatically evaluated on the HackerEarth platform. This document describes the question-creation process followed at HackerEarth for multiple-choice questions, coding questions, and SQL questions. © HackerEarth, 2023 2",
+          "similarity_score": null
+        },
+        {
+          "id": 4151,
+          "data_source_id": 7,
+          "data_source_type": "PDF",
+          "data_source_name": null,
+          "title": "Appendix A - NielsenIQ -  HackerEarth Inc.",
+          "url": "",
+          "text": "The platform also provides flexibility to create your own questions from scratch from a simple multiple choice to a complex project, fullstack type questions which are proprietary only to the customer in their private library and not in HackerEarth’s public library. Additionally, HackerEarth also offers test creation service, where our subject matter experts can create tests for NIQ from the existing library of questions or create new questions as well. 3. Scalability: Ability to manage a large volume of candidates; advanced question pooling to randomize tests if mass assessments are happening simultaneously - HackerEarth platform is hosted in the cloud. HackerEarth follows auto-scaling and business aware scaling methods to provide scalability and high availability. HackerEarth uses APMs to monitor Apdex scores for all pages and ensure optimal performance. - HackerEarth is scalable and we have had 10,000+ candidates concurrently taking up assessments.. HackerEarth administers 1.2M+ assessments annually. - Question Pooling: HackerEarth has advanced question pooling that allows a random set of questions to be shown to the candidate, picked from a list of pre-selected questions (or the complete library). The pool can be specified in a manner such that each candidate sees a specific count of each type of question added to the pool. 4. Assessment types: Quantity and quality of assessment types (i.e. MCQ, coding, case studies, etc.) - Multiple Choice - Total 21,001 Questions: Multiple choice questions are a form of a question in which candidates are asked to select only correct answers from the choices offered as a list. - Programming (Coding) Total 329 Questions: Test algorithmic and code writing skills on over 44 programing languages - Full Stack - Total 162 questions: Ask candidates to build an entire application by configuring the front end and backend - SQL - Total 194 questions - SQL question type can be used to test a candidate's knowledge of queries used to retrieve relevant data from a specific database. - Data Science - Total 56 Questions - Data science involves data inference, algorithm development, and solving complex problems to understand and mine detailed data, revealing insights for informed business decisions. - Machine Learning - Total 66 Questions: ML problems provide you with a platform that enables you to assess the skills of candidates such as relational databases and big data platforms. These questions also assess the knowledge of building models based on predictive analysis. - DevOps - Total 76 Questions: DevOps questions that can be used to assess the skills of a candidate in Linux. These questions are useful when you",
+          "similarity_score": null
+        },
+        {
+          "id": 5526,
+          "data_source_id": 1,
+          "data_source_type": "WEB_PAGE",
+          "data_source_name": null,
+          "title": "Coding Assessment Platform - Coding Tests to Screen Developers",
+          "url": "https://www.hackerearth.com/recruit/assessments",
+          "text": "<>\n<title>Coding Assessment Platform - Coding Tests to Screen Developers</title>\n<body>\n### Automated invigilation with robust proctoring\n\nHackerEarth Assessments eliminate impersonation with powerful image processing. The coding assessments also report tab switching, prevent copy-pasting code, and give you the ability to customize the stringency of proctoring, making sure that your assessments are completely fair.\n\n### An experience that hiring managers like and developers love\n\nWith the ability to code in up to 40+ programming languages, a real-time code editor, and integration with Jupyter Notebooks, HackerEarth Assessments is highly dev-friendly.\n\nSolutions\n### We’re experienced at helping companies hire across experience levels\n\n### Detailed reports on each candidate’s performance\n\nWith insight-rich reports on a developer’s performance and the code replay feature, HackerEarth lets you get a deeper insight into a candidate’s capabilities.\n\n### Data-driven insights to help finetune the hiring funnel\n\nThe HackerEarth Assessments dashboard gives you a deeper analysis of your hiring funnel, enabling you to constantly improve your coding tests and create an industry-leading hiring process.\n\n### A coding assessment platform that is built for enterprises and loved by everyone\n\nHackerEarth offers industry-leading compliance, security, and scalability, so you can build a tech team with no worries, regardless of the size of your organization.\n\nWe're better than every alternative online code assessment platform\n-------------------------------------------------------------------\n\n* HackerRank\n* Codility\n* Mercer Mettl\n</body>\n</>",
+          "similarity_score": null
+        },
+        {
+          "id": 5527,
+          "data_source_id": 1,
+          "data_source_type": "WEB_PAGE",
+          "data_source_name": null,
+          "title": "Coding Assessment Platform - Coding Tests to Screen Developers",
+          "url": "https://www.hackerearth.com/recruit/assessments",
+          "text": "<>\n<title>Coding Assessment Platform - Coding Tests to Screen Developers</title>\n<body>\n* HackerRank\n* Codility\n* Mercer Mettl\n\n| Features | HackerEarth | HackerRank | Codility | Mercer Mettl |\n| --- | --- | --- | --- | --- |\n| AI-powered proctoring | Yes | No | No | Yes |\n| Automated test creation by job description | Yes | No | No | No |\n| Masking personally identifiable information in video interviews | Yes | No | No | No |\n| Automated test creation by skill | Yes | No | Yes | No |\n| Support for international languages | Yes | No | Yes | Yes |\n| No. of questions in the library | 17000 | 2500+ | 500+ | 100000+ |\n| Developer skills supported | 80+ | NA | NA | 600+ |\n\nWhat Our Customers Say About our Online Coding Screening Tools\n-------------------------------------------------------------\n\nBy using HackerEarth Assessments, we are giving our candidates an equal opportunity to prove their technical knowledge and skills, making the recruiting process fairer.\n\nAli Ghasemkhani  \nHR Director at Snapp!\n\nIntroducing HackerEarth in our recruitment process has helped us remove any false negatives while hiring top technical talent. The platform also integrates with a lot of ATSs, hence making the entire recruiting process smooth and seamless.\n\nDillon Provost  \nRecruiter at May Mobility\n</body>\n</>",
+          "similarity_score": null
+        },
+        {
+          "id": 5529,
+          "data_source_id": 1,
+          "data_source_type": "WEB_PAGE",
+          "data_source_name": null,
+          "title": "Coding Assessment Platform - Coding Tests to Screen Developers",
+          "url": "https://www.hackerearth.com/recruit/assessments",
+          "text": "<>\n<title>Coding Assessment Platform - Coding Tests to Screen Developers</title>\n<body>\n#### What programming languages are supported by HackerEarth's coding assessments?\n\nHackerEarth's coding assessments support a wide range of programming languages, with over 40+ options available. This allows you to tailor your assessments to the specific skills required for the position you're hiring for.\n\n#### Does HackerEarth offer any integration with applicant tracking systems (ATS) for a smoother workflow?\n\nYes, HackerEarth integrates with many popular Applicant Tracking Systems (ATS) to streamline your workflow. This allows you to seamlessly transfer candidate information and assessment results between platforms, saving you time and effort.\n\n#### How can I customize the difficulty level of the coding assessments for different positions?\n\nHackerEarth allows you to customize the difficulty level of your coding assessments in several ways. You can choose from a library of pre-built questions with varying difficulty levels, or create your own custom questions with specific difficulty parameters. Additionally, you can set the time limit for each assessment to further tailor the challenge to the experience level you're seeking.\n\n#### What security measures does HackerEarth have in place to prevent cheating during coding assessments?\n\nHackerEarth implements a variety of security measures to ensure the integrity of your assessments. These include:\n</body>\n</>",
+          "similarity_score": null
+        }
+      ],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [
+        {
+          "artifact_type": "VIDEO",
+          "artifact_id": "afc8d317-eba6-40f9-b252-2213f010f581"
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "Uh6Oqd6o4mQ3Zc1VK-9cl",
+      "role": "user",
+      "message": "",
+      "timestamp": "2025-01-07T11:38:49.712702Z",
+      "message_id": 19253,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "event"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "Uh6Oqd6o4mQ3Zc1VK-9cl",
+      "role": "ai",
+      "message": "Hope you liked the VIDEO! Feel free to ask me any questions",
+      "timestamp": "2025-01-07T11:38:49.717468Z",
+      "message_id": 19254,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "MOPWuRK75xEIxZkyW0HIo",
+      "role": "user",
+      "message": "scrutiny ?",
+      "timestamp": "2025-01-07T11:41:20.363513Z",
+      "message_id": 19255,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "MOPWuRK75xEIxZkyW0HIo",
+      "role": "ai",
+      "message": "Hi there! If you're referring to the scrutiny process at HackerEarth, it involves a thorough review of questions to ensure quality and accuracy. Each question undergoes both a technical and language review. The technical review checks for correctness, relevance, and optimality, while the language review ensures clarity, grammatical accuracy, and neutrality. This rigorous process helps maintain high standards for our assessments. If you have more specific questions, feel free to ask! 😊",
+      "timestamp": "2025-01-07T11:41:20.368052Z",
+      "message_id": 19256,
+      "documents": [
+        {
+          "id": 4129,
+          "data_source_id": 4,
+          "data_source_type": "PDF",
+          "data_source_name": null,
+          "title": "[2.7.2] [HackerEarth Inc.] [Question creation process]",
+          "url": "",
+          "text": "Question creation process | HackerEarth question types Question review Every question goes through a technical review and a language review. Technical review For coding and SQL questions there is an automated review followed by a manual review. Automated review An evaluation script is run to check the following: ● Does the question have all the required components? ● Are the test cases correct? (validated using the correct solution) ● Is the boilerplate code correct? (validated using the correct solution) Manual review The contributors who create new content also review new questions created by other contributors. ● For multiple choice questions, a reviewer checks the following: ○ Whether the question is plagiarized ○ Formatting of the question and the code ○ Correctness of the question ○ Ambiguity in the given scenarios ○ Code by running it and checking for errors (for code-based MCQs) ○ Whether the question and the database match (for query-based MCQs) ○ Whether the imported image is clear, complete, and of a high resolution ● For a Programming question, a reviewer checks the following: ○ Whether the question is plagiarized ○ Relevance of the problem statement, readability, and formatting ○ Complexity based on the skills, topics, and test cases ○ Code snippet ○ Test cases to ensure that: ■ The first five test cases are written in a way that brute force works on them. In this, the first two test cases are manually solvable as they are visible to candidates © HackerEarth, 2023 15",
+          "similarity_score": null
+        },
+        {
+          "id": 4130,
+          "data_source_id": 4,
+          "data_source_type": "PDF",
+          "data_source_name": null,
+          "title": "[2.7.2] [HackerEarth Inc.] [Question creation process]",
+          "url": "",
+          "text": "Question creation process | HackerEarth question types ■ The last five 5 test cases are larger file where all corner cases are covered ○ Solution optimality to ensure that the solution is optimal for the given test cases and complexity ● For SQL questions, a reviewer checks the following: ○ Whether the question is plagiarized ○ The problem statement for relevance, databases used, format, and relevant table details ○ Whether the output is in line with the question ○ Correctness of schema files and the format of input and output tables. Language review After the questions are technically verified, they are reviewed for language errors. This testing includes: ● Removing grammatical errors in the questions ● Ensuring that the flow of information is accurate ● Formatting the question properly to enhance its readability ● Checking whether the content adheres to the following rules that were set to ensure that there is no bias in the questions: ○ Gender-neutral content by using words such as they and their instead of his, hers, etc. ○ No geography-specific backstory or specific names, places, and events that are not familiar or are offensive to a global audience (audiences that include both native and non-native English speakers) ○ All cultural references from specific territories must be avoided ○ Sexist, racist, or religiously offensive remarks, as well as lines that promote any kind of political ideology, regionalism, or community-based generalization, are avoided ○ All references to politics, religion, and other controversial topics are not written or included in the content © HackerEarth, 2023 16",
+          "similarity_score": null
+        },
+        {
+          "id": 4156,
+          "data_source_id": 7,
+          "data_source_type": "PDF",
+          "data_source_name": null,
+          "title": "Appendix A - NielsenIQ -  HackerEarth Inc.",
+          "url": "",
+          "text": "plagiarism, question wise performance, code play back, multiple submission report, code quality report and more 3. Test analytics - Test reliability score, candidate hiring funnel, score distribution charts, time distribution chart 4. Question analytics - question wise success rate vs candidates who attempted the respective question correctly vs incorrectly 5. Candidate feedback and all the above features are included in the overall price The platform allows similar grouping level as Red / yellow Green under our categories as Invited, taken, shortlisted, archived, cleared cut off vs not cleared cut off 8. Security and fraud prevention: Checks in place to prevent fraud and cheating Our product has over 10 proctoring settings which limits the need for human intervention. Some of our key proctoring features are ● automated analysis of candidate snapshots to detect misrepresentation ● disable copy and paste, ● disable tab switches or limit them, ● fullscreen mode, ● geographic IP restriction, ● random question shuffling, ● randomised question pooling We have recently introduced a Smart Browser feature - it's a desktop based application that provides a fully proctored environment for the candidate and ensures that candidates cannot cheat. With this candidates are not allowed to navigate away from the test window and/or use any other application while the test is running. The product also does an extensive plagiarism check to keep malpractice at bay. The candidate's code is checked against code submitted by all other candidates, as well as some common sources from the open web. All the instances of multiple tab switches, plagiarism, and candidate snapshots are available in the report under the \"key observations\" section where these instances are tagged. 9. Integration with application tracking system (ATS): We have open apis for integration and our platform does integrate with all the major applicant tracking systems. We integrate with Smart Recruiters, Greenhouse, ICIMS, Bullhorn, SAP Success Factors, Linkedin Talent Hub, Bullhorn, Zoho and more. 10. Cost: Clarity on base cost and any optional or add-on costs: The pricing has been added in Appendix C.",
+          "similarity_score": null
+        },
+        {
+          "id": 5424,
+          "data_source_id": 1,
+          "data_source_type": "WEB_PAGE",
+          "data_source_name": null,
+          "title": "Glossary Pages Archive - Resources for technical recruitment",
+          "url": "https://www.hackerearth.com/recruit/glossary",
+          "text": "<>\n<title>Glossary Pages Archive - Resources for technical recruitment</title>\n<body>\n*   [Pre-Screening](#)\n    *   [Presenteeism](#)\n    *   [Proactive Recruiting](#)\n    *   [Probationary](#)\n    *   [Probationary Period](#)\n    *   [Proctor](#)\n    *   [Proctor Management System](#)\n    *   [Proctoring Software](#)\n    *   [Programming Projects](#)\n    *   [Programming Simulator](#)\n    *   [Programming Skills Test](#)\n    *   [Promotion in Job](#)\n    *   [Proof of Concept](#)\n    *   [Proproctor Meaning & Definition](#)\n    *   [Provident Fund](#)\n    *   [Psychometric Analysis](#)\n    *   [Psychometric Assessment](#)\n    *   [Psychometric Assessment – What is Psychometric Assessment?](#)\n    *   [Psychometric Evaluation](#)\n    *   [Psychometric Intelligence](#)\n    *   [Psychometric Personality Assessment Test](#)\n    *   [Psychometric Profiling](#)\n    *   [Psychometric Properties](#)\n    *   [Psychometric Psychology](#)\n    *   [Psychometric Validity](#)\n</body>\n</>",
+          "similarity_score": null
+        },
+        {
+          "id": 5429,
+          "data_source_id": 1,
+          "data_source_type": "WEB_PAGE",
+          "data_source_name": null,
+          "title": "Glossary Pages Archive - Resources for technical recruitment",
+          "url": "https://www.hackerearth.com/recruit/glossary",
+          "text": "<>\n<title>Glossary Pages Archive - Resources for technical recruitment</title>\n<body>\n*   #### S\n    *   [Safe Exam Browser (SEB)](#)\n    *   [Salaried](#)\n    *   [Salary on Hold](#)\n    *   [Salary Revision Meaning](#)\n    *   [Scala](#)\n    *   [Secure Exam Browser](#)\n    *   [Selection Ratio](#)\n    *   [Senior Level](#)\n    *   [Sensitivity Training](#)\n    *   [Severance Pay](#)\n    *   [Shift Differential](#)\n    *   [Shortlisted Candidates](#)\n    *   [Sign-On Bonus](#)\n    *   [Signatory](#)\n    *   [Situational Interview](#)\n    *   [Skill Based Pay](#)\n    *   [Skill Gap](#)\n    *   [Skill Mapping](#)\n    *   [Skill Matrix](#)\n    *   [Skills Assessment Tests](#)\n    *   [Skills Gap Analysis](#)\n    *   [Small Business Hiring](#)\n    *   [Smart Proctoring](#)\n    *   [Social Media Background Screening](#)\n    *   [Social Recruiting](#)\n    *   [Source of Hire](#)\n    *   [Sourcing](#)\n</body>\n</>",
+          "similarity_score": null
+        }
+      ],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [
+        {
+          "artifact_type": "VIDEO",
+          "artifact_id": "4d8b5455-6d2c-46da-9890-fed0a998db96"
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "FkTgZO5KW1BXPhlpYiw4-",
+      "role": "user",
+      "message": "",
+      "timestamp": "2025-01-07T11:43:10.027460Z",
+      "message_id": 19257,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "event"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "FkTgZO5KW1BXPhlpYiw4-",
+      "role": "ai",
+      "message": "Hope you liked the VIDEO! Feel free to ask me any questions",
+      "timestamp": "2025-01-07T11:43:10.032335Z",
+      "message_id": 19258,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "text"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "7BN85SH-hKnk8THESIvoF",
+      "role": "user",
+      "message": "",
+      "timestamp": "2025-01-07T11:45:53.264720Z",
+      "message_id": 19259,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "event"
+    },
+    {
+      "session_id": "36078c4a-d9f4-42fa-9270-503390740a79",
+      "response_id": "7BN85SH-hKnk8THESIvoF",
+      "role": "ai",
+      "message": "Hope you liked the VIDEO! Feel free to ask me any questions",
+      "timestamp": "2025-01-07T11:45:53.269142Z",
+      "message_id": 19260,
+      "documents": [],
+      "analytics": {
+        "buyer_intent_score": 0
+      },
+      "suggested_questions": [],
+      "artifacts": [],
+      "type": "text"
+    }
+  ],
+  "feedback": []
+}

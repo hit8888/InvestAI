@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomFilterDropdown from '../components/tableComp/CustomFilterDropdown';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
@@ -33,4 +34,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withPageViewWrapper(Dashboard);

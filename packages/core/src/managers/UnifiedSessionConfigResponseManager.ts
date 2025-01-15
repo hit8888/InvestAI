@@ -1,12 +1,11 @@
-import { nanoid } from "nanoid";
 import {
   ConfigurationApiResponse,
   ConfigurationSchema,
   SessionApiResponse,
   SessionSchema,
 } from "../types/session";
-import { AIResponse, ChatBoxArtifactType, Message } from "../types/agent";
-import { ChatBoxArtifactEnumSchema } from "../types/artifact";
+import { Message } from "../types/agent";
+import { convertServerChatHistoryToClientChatHistory } from "../transformers/common";
 
 export type SessionConfigResponseType =
   | ConfigurationApiResponse
@@ -87,40 +86,6 @@ class UnifiedSessionConfigResponseManager {
     return this.config.logo;
   }
 
-  public static convertServerMessageToClientMessage(
-    response: AIResponse
-  ): Message {
-    const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
-
-    const messageArtifact = response.artifacts.find(
-      (artifact) =>
-        !ArtifactTypesToIgnore.includes(artifact.artifact_type) &&
-        artifact.artifact_id
-    );
-
-    const chatBoxArtifact = response.artifacts.find((artifact) =>
-      ChatBoxArtifactEnumSchema.options.includes(
-        artifact.artifact_type as ChatBoxArtifactType
-      )
-    );
-
-    return {
-      message: response.message,
-      documents: response.documents,
-      is_loading: response.is_loading,
-      is_complete: response.is_complete,
-      showFeedbackOptions: response.showFeedbackOptions,
-      analytics: response.analytics,
-      artifact: messageArtifact,
-      chatArtifact: chatBoxArtifact,
-      scriptStep: response.script_step,
-      demoAvailable: response.demo_available,
-      features: response.features ?? [],
-      role: response.role,
-      id: response.response_id,
-    };
-  }
-
   getFormattedChatHistory({
     isAdmin,
     isReadOnly,
@@ -128,43 +93,7 @@ class UnifiedSessionConfigResponseManager {
     isAdmin: boolean;
     isReadOnly: boolean;
   }): Message[] {
-    const chatHistory = this.config.body.chat_history ?? [];
-    const feedbacks = this.config.body.feedback ?? [];
-
-    const welcomeMessage: Message = {
-      id: nanoid(),
-      message: this.config.body.welcome_message.message,
-      role: "ai",
-      is_complete: true,
-      showFeedbackOptions: false,
-      documents: [],
-      analytics: {},
-      features: [],
-    };
-
-    const formattedChatHistory = chatHistory
-      .filter((message) => message.type === "text")
-      .map((message, idx) => {
-        const messageFeedback = feedbacks.find(
-          (feedback) =>
-            feedback.response_id === message.response_id ||
-            feedback.response_id === message.message_id.toString()
-        );
-
-        return {
-          ...UnifiedSessionConfigResponseManager.convertServerMessageToClientMessage(
-            message
-          ),
-          suggested_questions: message.suggested_questions,
-          is_complete: true,
-          is_loading: false,
-          showFeedbackOptions: isAdmin && message.role === "ai" && idx > 0,
-          feedback: messageFeedback,
-          isReadOnly,
-        };
-      });
-
-    return [welcomeMessage, ...formattedChatHistory];
+    return convertServerChatHistoryToClientChatHistory({isAdmin, isReadOnly,responseObject: this.config.body, ForAgentChatbot: true});
   }
 
   getDefaultErrorMessage() {
