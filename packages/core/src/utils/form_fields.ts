@@ -1,4 +1,4 @@
-import { z, ZodSchema, infer as zodInfer } from "zod";
+import { z, ZodSchema } from "zod";
 
 const getZodType = (dataType: string) => {
   switch (dataType) {

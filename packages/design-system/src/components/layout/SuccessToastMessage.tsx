@@ -13,7 +13,8 @@ type IProps = {
 const SuccessToastMessage = ({
   title,
   subtitle = '',
-  className, style, icon, iconClassName, iconStyle
+  className, 
+  style,
 }: IProps) => {
   return (
     <div style={style} className={cn('flex items-center p-4 gap-4 rounded-2xl border-2 border-positive-1000 bg-positive-25 success-toast-shadow', className)}>
