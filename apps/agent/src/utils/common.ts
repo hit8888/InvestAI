@@ -6,10 +6,14 @@ import { trackError } from './error';
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
 
+type HexColorKeys = {
+  [K in keyof StyleConfig]: StyleConfig[K] extends string ? K : never;
+}[keyof StyleConfig];
+
 export const handleColorConfig = (styleConfig: StyleConfig) => {
   Object.keys(styleConfig).forEach((key) => {
     const formattedKey = key.replace(/_/g, '-');
-    const hexValue = styleConfig[key as keyof typeof styleConfig];
+    const hexValue = styleConfig[key as keyof HexColorKeys];
 
     if (!hexValue) return;
 

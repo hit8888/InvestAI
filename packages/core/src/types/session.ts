@@ -58,6 +58,7 @@ export const ConfigurationSchema = z.object({
     secondary_foreground: z.string().optional(),
     card: z.string().optional(),
     card_foreground: z.string().optional(),
+    show_banner: z.boolean().optional(),
   }),
   whitelisted_domains: z.array(z.string()),
 });

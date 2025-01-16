@@ -12,6 +12,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { motion } from 'framer-motion';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import PopupWithBubblesContainer from './PopupWithBubblesContainer.tsx';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
@@ -68,9 +69,15 @@ const suggestionItemAnimation = {
 const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenAgent }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
+  const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
+  const orgName = useUnifiedConfigurationResponseManager().getOrgName();
+  const agentName = useUnifiedConfigurationResponseManager().getAgentName();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
+
+  const [showBubbles, setShowBubbles] = useState(false);
+  const [showPopupContent, setShowPopupContent] = useState(false);
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -108,7 +115,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
       className={cn(
         'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
-          'w-10/12': !hasFirstUserMessageBeenSent,
+          'w-8/12': !hasFirstUserMessageBeenSent,
           'w-[400px]': hasFirstUserMessageBeenSent,
           hidden: hideBottomBar,
         },
@@ -117,14 +124,23 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         backgroundSize: '200% 200%',
       }}
     >
-      <span className="absolute -left-4 -top-8 animate-wave text-4xl">👋</span>
+      {show_banner ? (
+        <PopupWithBubblesContainer
+          orgName={orgName}
+          agentName={agentName}
+          showBubbles={showBubbles}
+          setShowBubbles={setShowBubbles}
+          showPopupContent={showPopupContent}
+          setShowPopupContent={setShowPopupContent}
+        />
+      ) : null}
       <div className="w-full rounded-xl bg-gray-50 p-1.5">
         <form
           onSubmit={handleFormSubmission}
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
         >
           <div className="relative flex-1">
-            {!hasFirstUserMessageBeenSent && !inputValue && (
+            {!hasFirstUserMessageBeenSent && !inputValue && !showBubbles && !showPopupContent && (
               <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
                 <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
               </div>
@@ -135,7 +151,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
               className={cn(
                 'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
                 {
-                  'placeholder:pl-12': !hasFirstUserMessageBeenSent,
+                  'pl-16': !hasFirstUserMessageBeenSent && !showBubbles && !showPopupContent,
                 },
               )}
               placeholder={useTypewriter(placeholderText)}
@@ -148,10 +164,10 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
               initial="initial"
               animate="animate"
               className={cn(
-                'flex items-center justify-end gap-1 overflow-hidden transition-[width] duration-150 ease-in-out',
+                'flex items-center justify-end gap-4 overflow-hidden transition-[width] duration-150 ease-in-out',
                 {
                   'w-0': !showSuggestedQuestions,
-                  'w-[710px]': showSuggestedQuestions,
+                  'max-w-[800px]': showSuggestedQuestions,
                 },
               )}
             >

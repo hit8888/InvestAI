@@ -17,4 +17,23 @@
   .prose h2 {
     font-size: 1.2rem;
   }
+
+  .popupGradient-container {
+    width: 401px;
+    height: 100px;
+    border-radius: 24px;
+    background: radial-gradient(circle at 5% -10%, rgb(var(--secondary) / 0.8) 0%, rgb(var(--primary) / 0.6) 30%);
+  }
+
+  .entryPointPopupBoxShadow {
+    box-shadow:
+      0px 11px 71px 0px rgb(var(--primary) / 0.14),
+      0px 7.13px 41.581px 0px rgb(var(--primary) / 0.11),
+      0px 4.237px 22.615px 0px rgb(var(--primary) / 0.09),
+      0px 2.2px 11.538px 0px rgb(var(--primary) / 0.07),
+      0px 0.896px 5.785px 0px rgb(var(--primary) / 0.05),
+      0px 0.204px 2.794px 0px rgb(var(--primary) / 0.03);
+
+    backdrop-filter: blur(2.5px);
+  }
 }
