@@ -33,7 +33,7 @@ const useAnalytics = () => {
       } catch (error) {
         console.error("Failed to send analytics events:", error);
       }
-    }, 10000),
+    }, 2000),
     []
   );
 
