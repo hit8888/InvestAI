@@ -49,7 +49,7 @@ const AudioRecorder = ({
 
   const normalizeTranscript = (text: string) => text.trim().toLowerCase();
 
-  const SPEECH_COMPLETION_DELAY = 1500; // 1.5s delay after speech ends
+  const SPEECH_COMPLETION_DELAY = 2000; // 2s delay after speech ends
 
   // Modified error handling
   useEffect(() => {

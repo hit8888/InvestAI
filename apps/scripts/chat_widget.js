@@ -47,7 +47,7 @@ const updateParentUrlParam = (key, value) => {
    * @param {HTMLElement} container - The container element to append the iframe to.
    * @param {string} IFRAME_SRC - The source URL for the iframe.
    */
-  const createIframe = (container, IFRAME_SRC) => {
+  const createIframe = (container, IFRAME_SRC, retryCount = 0) => {
     const iframe = document.createElement("iframe");
     Object.assign(iframe.style, {
       width: "100%",
@@ -57,7 +57,34 @@ const updateParentUrlParam = (key, value) => {
     iframe.allow = "geolocation *";
     iframe.src = IFRAME_SRC;
     iframe.id = "breakout-agent";
+
+    // Add load error handling
+    iframe.onerror = () => handleIframeError(container, IFRAME_SRC, retryCount);
+    iframe.onload = () => {
+      console.log("Iframe loaded successfully");
+    };
+
     container.appendChild(iframe);
+  };
+
+  const handleIframeError = (container, IFRAME_SRC, retryCount) => {
+    const maxRetries = 3;
+    if (retryCount < maxRetries) {
+      console.warn(
+        `Iframe load failed. Retrying... (${retryCount + 1}/${maxRetries})`,
+      );
+      setTimeout(
+        () => {
+          container.innerHTML = ""; // Clear previous iframe
+          createIframe(container, IFRAME_SRC, retryCount + 1);
+        },
+        Math.pow(2, retryCount) * 1000,
+      ); // Exponential backoff
+    } else {
+      console.error("Failed to load iframe after maximum retries");
+      container.style.display = "none"; // Silently hide the container
+      container.innerHTML = "";
+    }
   };
 
   /**
@@ -175,7 +202,7 @@ const updateParentUrlParam = (key, value) => {
 
   // Main execution
   const container = createContainer();
-  createIframe(container, IFRAME_SRC);
+  createIframe(container, IFRAME_SRC, 0);
   adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
 
   console.log("sets up the container and iframe");
