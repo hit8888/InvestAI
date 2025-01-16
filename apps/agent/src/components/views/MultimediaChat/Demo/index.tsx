@@ -16,7 +16,6 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   demoFeatures: FeatureSelectionDTOType[];
   isDemoAvailable: boolean;
-  askQuestionContainer: React.ElementType;
 }
 
 const Demo = ({
@@ -27,7 +26,6 @@ const Demo = ({
   setDemoPlayingStatus,
   demoFeatures,
   isDemoAvailable,
-  askQuestionContainer
 }: IProps) => {
   const handleStepEnd = () => {
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: {} });
@@ -99,7 +97,6 @@ const Demo = ({
         demoPlayingStatus={demoPlayingStatus}
         onStepEnd={handleStepEnd}
         onFinishDemo={onFinishDemo}
-        askQuestionContainer={askQuestionContainer}
       />
     </div>
   );

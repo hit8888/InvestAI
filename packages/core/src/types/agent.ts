@@ -14,6 +14,7 @@ import {
 } from "./artifact";
 import { DataSourceSchema } from "./common";
 import { Feedback } from "./session";
+import { DemoEvent } from "./webSocket";
 
 export const MediaSchema = z.object({
   type: z.enum(["IMAGE", "VIDEO"]),
@@ -84,6 +85,16 @@ export const AIResponseSchema = z.object({
   demo_available: z.boolean().optional(),
   features: z.array(FeatureSelectionDTOSchema).optional(),
   script_step: ScriptStepDTO.optional(),
+  response_audio_url: z.string().optional(),
+  event_type: z
+    .enum([
+      "DEMO_PREPARE",
+      "DEMO_NEXT",
+      "DEMO_END",
+      "DEMO_QUESTION",
+      "DEMO_OPTIONS",
+    ])
+    .optional(),
   timestamp: z.string().optional(),
 });
 
@@ -129,6 +140,8 @@ export type Message = {
   scriptStep?: z.infer<typeof ScriptStepDTO>;
   demoAvailable?: boolean;
   features: z.infer<typeof FeatureSelectionDTOSchema>[];
+  response_audio_url?: string;
+  event_type?: DemoEvent;
   type?: z.infer<typeof MessageSchema>["type"];
 };
 

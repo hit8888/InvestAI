@@ -2,7 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { Message } from '@meaku/core/types/agent';
 import { useEffect, useRef } from 'react';
 import SuggestionsArtifact from './SuggestionsArtifact';
-import { PreDemoQuestion } from '../Demo/PreDemoQuestion';
+import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/MultimediaChat/Demo/PreDemoQuestion';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
@@ -61,7 +61,7 @@ const AgentMessages = ({
     }
   };
   useEffect(() => {
-    if(usingForAgent) {
+    if (usingForAgent) {
       handleScrollToBottom();
     }
   }, [messages, usingForAgent]);

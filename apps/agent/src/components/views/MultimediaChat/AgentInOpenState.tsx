@@ -5,14 +5,13 @@ import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { useUpdateActiveArtifactOnNewMessage } from '../../../hooks/useUpdateActiveArtifactOnNewMessage.ts';
-import { Demo } from '@breakout/design-system/components/Demo/index';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
-import { AskQuestionContainer } from './Demo/AskQuestionContainer.tsx';
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
+import { Demo } from './Demo/index.tsx';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -89,7 +88,6 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
             setDemoPlayingStatus={setDemoPlayingStatus}
             demoFeatures={demoFeatures}
             isDemoAvailable={isDemoAvailable}
-            askQuestionContainer={AskQuestionContainer}
           />
         </div>
         {!isMediaTakingFullWidth && (

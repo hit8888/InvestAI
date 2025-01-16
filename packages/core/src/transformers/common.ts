@@ -5,7 +5,11 @@ import {
   ConfigurationBodyApiResponse,
   Message,
 } from "../types";
-import { ConversationDetailsDataResponse, ConversationsTableDisplayContent, ConversationsTableViewContent } from "../types/admin/admin";
+import {
+  ConversationDetailsDataResponse,
+  ConversationsTableDisplayContent,
+  ConversationsTableViewContent,
+} from "../types/admin/admin";
 import { ChatBoxArtifactEnumSchema } from "../types/artifact";
 
 const ArtifactTypesToIgnore = ["SUGGESTIONS", "FORM", "NONE"];
@@ -40,6 +44,7 @@ export const convertServerMessageToClientMessage = (
     role: response.role,
     id: response.response_id,
     timestamp: response.timestamp,
+    response_audio_url: response.response_audio_url,
   };
 };
 
@@ -61,7 +66,8 @@ export const convertServerChatHistoryToClientChatHistory = ({
 
   const welcomeMessage: Message = {
     id: nanoid(),
-    message: (responseObject as ConfigurationBodyApiResponse)?.welcome_message?.message,
+    message: (responseObject as ConfigurationBodyApiResponse)?.welcome_message
+      ?.message,
     role: "ai",
     is_complete: true,
     showFeedbackOptions: false,
@@ -80,9 +86,7 @@ export const convertServerChatHistoryToClientChatHistory = ({
       );
 
       return {
-        ...convertServerMessageToClientMessage(
-          message
-        ),
+        ...convertServerMessageToClientMessage(message),
         suggested_questions: message.suggested_questions,
         is_complete: true,
         is_loading: false,
@@ -91,32 +95,35 @@ export const convertServerChatHistoryToClientChatHistory = ({
         isReadOnly,
       };
     });
-  
-  if(ForAgentChatbot) {
-    return [welcomeMessage, ...formattedChatHistory]
+
+  if (ForAgentChatbot) {
+    return [welcomeMessage, ...formattedChatHistory];
   } else {
     return [...formattedChatHistory];
   }
 };
 
 export const convertServerConversationDataToClientConversationData = (
-    response: ConversationsTableViewContent,
-  ): ConversationsTableDisplayContent => {
-    return {
-      company: response.company || 'Unknown Company',
-      name: response.name || 'Anonymous',
-      email: response.email || 'Not provided',
-      timestamp: response.timestamp
-        ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0]
-        : 'N/A',
-      conversation_preview: response.summary || 'No conversation preview',
-      location: response.country || 'N/A',
-      buyer_intent: 'N/A', // Need to Find Logic or Directly getting from api
-      bant_analysis: 'N/A', // Need to Find Logic or Directly getting from api
-      number_of_user_messages: `${response.user_message_count || 0}`,
-      meeting_status: 'N/A', // Static for now, can be dynamic if additional info is provided
-      product_of_interest: response.product_of_interest || 'No product specified',
-      ip_address: response.ip_address || 'IP not available',
-      session_id: response.session_id || 'Session ID missing',
-    };
-  }
+  response: ConversationsTableViewContent
+): ConversationsTableDisplayContent => {
+  return {
+    company: response.company || "Unknown Company",
+    name: response.name || "Anonymous",
+    email: response.email || "Not provided",
+    timestamp: response.timestamp
+      ? new Date(response.timestamp)
+          .toISOString()
+          .replace("T", " ")
+          .split(".")[0]
+      : "N/A",
+    conversation_preview: response.summary || "No conversation preview",
+    location: response.country || "N/A",
+    buyer_intent: "N/A", // Need to Find Logic or Directly getting from api
+    bant_analysis: "N/A", // Need to Find Logic or Directly getting from api
+    number_of_user_messages: `${response.user_message_count || 0}`,
+    meeting_status: "N/A", // Static for now, can be dynamic if additional info is provided
+    product_of_interest: response.product_of_interest || "No product specified",
+    ip_address: response.ip_address || "IP not available",
+    session_id: response.session_id || "Session ID missing",
+  };
+};

@@ -13,8 +13,8 @@ export const useAudioController = (audioUrl: string | undefined, onEnd: () => vo
       const context = new AudioContext();
       const source = context.createMediaElementSource(audioRef.current);
       const analyser = context.createAnalyser();
-
-      analyser.fftSize = 128;
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.5;
       source.connect(analyser);
       analyser.connect(context.destination);
 

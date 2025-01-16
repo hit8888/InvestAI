@@ -12,11 +12,11 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
 }
 
-const PreDemoQuestion = ({ 
-  handleSendUserMessage, 
-  isAMessageBeingProcessed, 
+const PreDemoQuestion = ({
+  handleSendUserMessage,
+  isAMessageBeingProcessed,
   tenantName,
-  setDemoPlayingStatus 
+  setDemoPlayingStatus,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
