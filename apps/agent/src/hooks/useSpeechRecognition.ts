@@ -1,5 +1,28 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+interface SpeechRecognitionType extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  onerror: (event: { error: string }) => void;
+  onend: () => void;
+  onresult: (event: { results: SpeechRecognitionResult[] }) => void;
+}
+
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [index: number]: { transcript: string };
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognitionType;
+    webkitSpeechRecognition: new () => SpeechRecognitionType;
+  }
+}
+
 interface SpeechRecognitionOptions {
   continuous?: boolean;
   interimResults?: boolean;
@@ -16,7 +39,7 @@ export const useSpeechRecognition = (options: SpeechRecognitionOptions = {}) => 
   const [transcript, setTranscript] = useState('');
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionType | null>(null);
   const retryCountRef = useRef(0);
 
   // Add command matching
