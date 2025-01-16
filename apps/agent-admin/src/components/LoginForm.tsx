@@ -9,9 +9,10 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
+import { setTenantIdentifier } from '@meaku/core/utils/index';
 
 const LoginForm = () => {
-  const { userInfo, login, saveTokens, setTenantIdentifier } = useAuth();
+  const { userInfo, login, saveTokens } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
@@ -93,7 +94,7 @@ const LoginForm = () => {
     setOtp('');
 
     // If the User have single organization,
-    // we would set this as our tenant_identifier and navigate to 'leads' page.
+    // we would set this as our admin_tenant_identifier and navigate to 'leads' page.
     // If the User have multiple organizations ,
     // user would navigate to 'dashboard page' to select single organization ,
     // based on the selection, user would move to 'leads' page.

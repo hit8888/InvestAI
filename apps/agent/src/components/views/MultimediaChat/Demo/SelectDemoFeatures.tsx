@@ -3,10 +3,9 @@ import Button from '@breakout/design-system/components/layout/button';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
 import { useState } from 'react';
 import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
-import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
-import { DemoEvent } from '@meaku/core/types/webSocket';
+import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {

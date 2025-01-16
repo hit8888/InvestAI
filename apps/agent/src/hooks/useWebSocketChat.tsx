@@ -1,6 +1,6 @@
-import useUnifiedConfigurationResponseManager from '../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
-import { useAnimateDifferentOrbStates } from './useAnimateDifferentOrbStates.ts';
+import { useAnimateDifferentOrbStates } from '@meaku/core/hooks/useAnimateDifferentOrbStates';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { AIResponse } from '@meaku/core/types/agent';
 import { nanoid } from 'nanoid';
@@ -10,20 +10,15 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '@meaku/core/types/env';
 import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
-import { useIsAdmin } from '../shared/UrlDerivedDataProvider/index.tsx';
-import useAgentbotAnalytics from './useAgentbotAnalytics.tsx';
-import useGetMessagePayload from './useGetMessagePayload.tsx';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
+import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 
 //TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
-
-export interface IWebSocketHandleMessage {
-  message: string;
-  eventType?: string;
-  eventData?: Record<string, unknown>;
-}
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
@@ -51,7 +46,7 @@ const useWebSocketChat = () => {
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
-  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates();
+  const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
   const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
@@ -113,8 +108,11 @@ const useWebSocketChat = () => {
       handleStopOrbAnimation();
 
       if (
-        response.demo_available &&
-        (response.script_step || (response.features && !!response.features.length) || response.artifacts.length < 0)
+        (response.demo_available &&
+          (response.script_step ||
+            (response.features && !!response.features.length) ||
+            response.artifacts.length < 0)) ||
+        response.response_audio_url
       ) {
         return;
       } //Don't track demo flow here(In global context)

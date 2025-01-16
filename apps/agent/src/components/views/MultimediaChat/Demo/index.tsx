@@ -1,6 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
-import { DemoEvent } from '@meaku/core/types/webSocket';
+import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import DemoContent from './DemoContent';
 import { useEffect } from 'react';
 import { FeatureSelectionDTOType, ScriptStepType } from '@meaku/core/types/agent';

@@ -1,10 +1,15 @@
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import {
+  ConversationsTableDisplayContent,
+  TransformedProspectAndCompanyDetailsContent,
+} from '@meaku/core/types/admin/admin';
 import { Message } from '@meaku/core/types/agent';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { getProspectAndCompanyDetailsData } from '../utils/common';
 
 interface ConversationDetailsContextType {
   conversation: ConversationsTableDisplayContent | null;
   chatHistory: Message[] | null;
+  ProspectAndCompanyDetails: TransformedProspectAndCompanyDetailsContent | null;
   handleSetConversationDetails: (conversation: ConversationsTableDisplayContent | null) => void;
   handleSetChatHistoryDetails: (conversation: Message[] | null) => void;
 }
@@ -22,12 +27,13 @@ export const ConversationDetailsProvider: React.FC<{ children: ReactNode }> = ({
   const handleSetChatHistoryDetails = (history: Message[] | null) => {
     setChatHistory(history);
   };
-
+  const ProspectAndCompanyDetails = conversation ? getProspectAndCompanyDetailsData(conversation) : null;
   return (
     <ConversationDetailsContext
       value={{
         conversation,
         chatHistory,
+        ProspectAndCompanyDetails,
         handleSetConversationDetails,
         handleSetChatHistoryDetails,
       }}

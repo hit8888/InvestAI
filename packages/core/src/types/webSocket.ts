@@ -15,4 +15,10 @@ export enum ArtifactEvent {
   ARTIFACT_RETRIEVE = "ARTIFACT_RETRIEVE",
 }
 
+export interface IWebSocketHandleMessage {
+  message: string;
+  eventType?: string;
+  eventData?: Record<string, unknown>;
+}
+
 export type WebSocketEvents = SalesEvent | DemoEvent | ArtifactEvent;

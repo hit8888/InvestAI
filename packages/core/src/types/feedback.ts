@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export enum FeedbackEnum {
   THUMBS_UP = "thumbs_up",
   THUMBS_DOWN = "thumbs_down",
@@ -12,3 +14,10 @@ export type DetailedFeedbackPayload = {
   feedbackOption?: string;
   feedback?: string;
 };
+
+export const feedbackFormSchema = z.object({
+  category: z.string().optional(),
+  remarks: z.string().optional(),
+});
+
+export type FeedbackFormSchemaType = z.infer<typeof feedbackFormSchema>;

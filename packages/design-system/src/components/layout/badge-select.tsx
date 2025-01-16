@@ -16,10 +16,10 @@ const BadgeSelectOption = <TFieldValues extends FieldValues, TFieldName extends 
     <Badge
       variant="outline"
       className={cn(
-        'rounded-full border border-primary px-4 py-2 font-inter',
+        'rounded-full cursor-pointer border-2 border-primary/60 px-4 py-2 font-inter',
         field.value === children
           ? 'bg-primary text-primary-foreground'
-          : 'text-primary hover:bg-primary/70 hover:text-primary-foreground',
+          : 'text-primary hover:bg-primary/10',
         { className },
       )}
       onClick={() => field.onChange(children)}
@@ -38,7 +38,7 @@ interface IBadgeSelectProps {
 const BadgeSelect = (props: IBadgeSelectProps) => {
   const { children, className, ...restProps } = props;
   return (
-    <div className={cn('flex gap-2', { className })} {...restProps}>
+    <div className={cn('flex flex-wrap justify-center gap-2', { className })} {...restProps}>
       {children}
     </div>
   );

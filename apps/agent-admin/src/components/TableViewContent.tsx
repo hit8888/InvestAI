@@ -1,6 +1,8 @@
 import React from 'react';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import CustomTableView from './tableComp/CustomTableView';
+import Orb from '@breakout/design-system/components/Orb/index';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 interface TableContentProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -20,14 +22,17 @@ const TableViewContent: React.FC<TableContentProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <p className="w-full text-center text-2xl font-semibold text-gray-900">
-        {isConversationTable ? 'Loading conversations...' : 'Loading leads...'}
-      </p>
+      <div className="flex h-screen w-full animate-spin items-center justify-center">
+        {/*Current Lavender (Good baseline for any theme color)*/}
+        <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
+      </div>
     );
   }
 
   if (!totalRecords) {
-    return <p className="w-full text-center text-2xl font-semibold text-gray-900">No Data to Show</p>;
+    return (
+      <p className="w-full text-center text-2xl font-semibold text-gray-900">{`There are No ${isConversationTable ? 'Conversations' : 'Leads'} Yet !!!`}</p>
+    );
   }
 
   return (

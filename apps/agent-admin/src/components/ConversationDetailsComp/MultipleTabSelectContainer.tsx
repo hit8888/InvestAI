@@ -23,27 +23,30 @@ type TabConfig = {
 };
 
 const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
+  const { SUMMARY_TAB, LOG_TAB, ACTIVITY_TAB } = ConversationDetailsTabsValueEnum;
+  const { SUMMARY_TAB_LABEL, LOG_TAB_LABEL, ACTIVITY_TAB_LABEL } = ConversationDetailsTabsLabelEnum;
+
   const tabs: TabConfig[] = [
     {
-      value: ConversationDetailsTabsValueEnum.SUMMARY_TAB,
-      label: ConversationDetailsTabsLabelEnum.SUMMARY_TAB_LABEL,
+      value: SUMMARY_TAB,
+      label: SUMMARY_TAB_LABEL,
       icon: SummaryTabIcon,
       content: <SummaryTabDisplayContent />,
-      isActive: currentTab === ConversationDetailsTabsValueEnum.SUMMARY_TAB,
+      isActive: currentTab === SUMMARY_TAB,
     },
     {
-      value: ConversationDetailsTabsValueEnum.LOG_TAB,
-      label: ConversationDetailsTabsLabelEnum.LOG_TAB_LABEL,
+      value: LOG_TAB,
+      label: LOG_TAB_LABEL,
       icon: LogTabIcon,
       content: <LogTabDisplayContent />,
-      isActive: currentTab === ConversationDetailsTabsValueEnum.LOG_TAB,
+      isActive: currentTab === LOG_TAB,
     },
     {
-      value: ConversationDetailsTabsValueEnum.ACTIVITY_TAB,
-      label: ConversationDetailsTabsLabelEnum.ACTIVITY_TAB_LABEL,
+      value: ACTIVITY_TAB,
+      label: ACTIVITY_TAB_LABEL,
       icon: ActivityTabIcon,
       content: <ActivityTabDisplayContent />,
-      isActive: currentTab === ConversationDetailsTabsValueEnum.ACTIVITY_TAB,
+      isActive: currentTab === ACTIVITY_TAB,
     },
   ];
 
@@ -68,7 +71,14 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
           </SingleTabDisplay>
         ))}
       </div>
-      {tabs.map(({ content, isActive }) => isActive && <>{content}</>)}
+      {tabs.map(
+        ({ content, isActive, value }) =>
+          isActive && (
+            <div className="w-full" key={value}>
+              {content}
+            </div>
+          ),
+      )}
     </div>
   );
 };

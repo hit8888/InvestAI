@@ -8,16 +8,10 @@ import {
   // FunnelData,
   PAGE_HEADER_TITLE_ICON_PROPS,
 } from '../utils/constants';
-// import ColorFullChipLabel from '../components/ColorFullChipLabel';
-import { useAuth } from '../context/AuthProvider';
-// import useConversationsFunnelDataQuery from '../queries/query/useConversationFunnelDataQuery';
-// import { ConversationFunnelResponseSchema } from '@meaku/core/types/admin/api';
-// import { transformFunnelData } from '../utils/common';
+import { getTenantFromLocalStorage } from '../utils/common';
 
 const ConversationsPage = () => {
-  const { getTenantIdentifier } = useAuth();
-
-  const tenantName = getTenantIdentifier()?.['tenant-name'];
+  const tenantName = getTenantFromLocalStorage();
 
   // const { data, isLoading, isError } = useConversationsFunnelDataQuery({
   //   tenantName: tenantName || '',
@@ -58,7 +52,7 @@ const ConversationsPage = () => {
     <>
       <div className="flex flex-col items-start gap-6 self-stretch">
         <CustomPageHeader
-          headerTitle="Conversations Page"
+          headerTitle="Conversations"
           headerIcon={<ConversationsIcon {...PAGE_HEADER_TITLE_ICON_PROPS} />}
         />
         {/* <div className="flex h-64 w-full flex-col items-start gap-4 self-stretch rounded-2xl border p-4">

@@ -2,7 +2,7 @@ import { UpdateSessionDataPayloadSchema } from '@meaku/core/types/api';
 import { trackError } from '../../../utils/error';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import useUnifiedConfigurationResponseManager from './useUnifiedConfigurationResponseManager';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import useUpdateSession from '@meaku/core/queries/mutation/useUpdateSession';
 import { AgentParams } from '@meaku/core/types/config';
 

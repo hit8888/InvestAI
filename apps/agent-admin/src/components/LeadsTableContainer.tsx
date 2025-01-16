@@ -3,7 +3,6 @@ import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination';
-import { useAuth } from '../context/AuthProvider';
 import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
 
 import SortFilter from './tableComp/SortFilter';
@@ -14,15 +13,18 @@ import AllFilters from './tableComp/AllFilters';
 import ExportDownload from './tableComp/ExportDownload';
 
 import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_DEFAULT_ITEMS_PER_PAGE } from '../utils/constants';
-import { getFormattedColumnsList, getMappedDataFromResponseForLeadsTableView } from '../utils/common';
+import {
+  getFormattedColumnsList,
+  getTenantFromLocalStorage,
+  getMappedDataFromResponseForLeadsTableView,
+} from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { LeadsPayload } from '@meaku/core/types/admin/api';
 import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
 
 const LeadsTableContainer = () => {
-  const { getTenantIdentifier } = useAuth();
-  const tenantName = getTenantIdentifier()?.['tenant-name'];
+  const tenantName = getTenantFromLocalStorage();
 
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,

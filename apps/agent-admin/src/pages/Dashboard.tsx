@@ -3,9 +3,10 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomFilterDropdown from '../components/tableComp/CustomFilterDropdown';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
+import { setTenantIdentifier } from '@meaku/core/utils/index';
 
 const Dashboard = () => {
-  const { userInfo, setTenantIdentifier } = useAuth();
+  const { userInfo } = useAuth();
   const navigate = useNavigate();
   const organizationsList = userInfo?.organizations;
   const organizationsOptions = organizationsList

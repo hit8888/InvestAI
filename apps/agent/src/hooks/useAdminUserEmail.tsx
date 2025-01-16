@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import useUpdateProspect from '@meaku/core/queries/mutation/useUpdateProspect';
-import useLocalStorageSession from './useLocalStorageSession';
+import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import { AgentParams } from '@meaku/core/types/config';
-import { useIsAdmin } from '../shared/UrlDerivedDataProvider';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 const useAdminUserEmail = () => {
   const { orgName = '', agentId = '' } = useParams<AgentParams>();

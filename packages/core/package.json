@@ -18,16 +18,17 @@
     "./hooks/*": "./src/hooks/*.tsx",
     "./queries/*": "./src/queries/*.ts",
     "./managers/*": "./src/managers/*.ts",
-    "./transformers/*": "./src/transformers/*.ts"
+    "./transformers/*": "./src/transformers/*.ts",
+    "./contexts/*": "./src/contexts/*.tsx"
   },
   "type": "module",
   "devDependencies": {
     "@meaku/typescript-config": "workspace:*",
     "@types/jest": "^29.5.12",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
     "@types/lodash": "^4.17.9",
     "@types/node": "^22.5.4",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -36,12 +37,15 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@sentry/react": "^8.30.0",
     "@tanstack/react-query": "^5.56.2",
+    "ahooks": "^3.8.1",
     "axios": "^1.7.7",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.7",
     "react": "^19.0.0",
     "react-router-dom": "^6.26.2",
+    "use-context-selector": "^2.0.0",
     "zod": "^3.23.8"
   }
 }

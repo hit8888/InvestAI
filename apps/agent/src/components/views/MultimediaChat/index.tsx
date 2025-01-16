@@ -2,13 +2,14 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { memo } from 'react';
 
 import EntryPointBottomBar from './EntryPointBottomBar.tsx';
-import useAgentbotAnalytics from '../../../hooks/useAgentbotAnalytics.tsx';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useWebSocketChat, { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
-import { useEmbedAppEvents } from '../../../hooks/useEmbedAppEvents.ts';
+import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
+import { useEmbedAppEvents } from '@meaku/core/hooks/useEmbedAppEvents';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
-import { useUrlParams } from '../../../hooks/useUrlParams.ts';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import AgentInOpenState from './AgentInOpenState.tsx';
+import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 
 interface IProps {
   fetchSessionData: () => void;

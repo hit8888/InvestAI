@@ -1,8 +1,8 @@
 import CustomPageHeader from '../components/CustomPageHeader';
 import withPageViewWrapper from '../pages/PageViewWrapper';
-import LeadsIcon from '@breakout/design-system/components/icons/leads-icon';
 import LeadsTableContainer from '../components/LeadsTableContainer';
 import { PAGE_HEADER_TITLE_ICON_PROPS } from '../utils/constants';
+import PanelLeadsIcon from '@breakout/design-system/components/icons/panel-leads-icon';
 
 // TODOS: COMMENTED CODE WILL BE USED LATER ON
 
@@ -11,7 +11,7 @@ const LeadsPage = () => {
   return (
     <>
       <div className="flex flex-col items-start gap-6 self-stretch">
-        <CustomPageHeader headerTitle="Leads Page" headerIcon={<LeadsIcon {...PAGE_HEADER_TITLE_ICON_PROPS} />} />
+        <CustomPageHeader headerTitle="Leads" headerIcon={<PanelLeadsIcon {...PAGE_HEADER_TITLE_ICON_PROPS} />} />
         {/* <div className="flex h-64 w-full rounded-2xl border border-primary/10 p-4">
           <div className="flex w-full flex-col items-start gap-4 self-stretch">
             <div className="flex w-full items-center gap-6 self-stretch">

@@ -1,27 +1,27 @@
-import useUnifiedConfigurationResponseManager from '../../../../pages/shared/hooks/useUnifiedConfigurationResponseManager';
 import { useEffect, useState } from 'react';
-import { IWebSocketHandleMessage } from '../../../../hooks/useWebSocketChat';
-import { DemoEvent } from '@meaku/core/types/webSocket';
+import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { ActionButton } from './ActionButton';
-import { useMessageStore } from '../../../../stores/useMessageStore';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import useAgentbotAnalytics from '../../../../hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  isAMessageBeingProcessed: boolean;
+  tenantName: string;
+  setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
 }
 
-const PreDemoQuestion = ({ handleSendUserMessage }: IProps) => {
+const PreDemoQuestion = ({
+  handleSendUserMessage,
+  isAMessageBeingProcessed,
+  tenantName,
+  setDemoPlayingStatus,
+}: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-
-  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
-  const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
 
   const [showPreDemoQuestions, setShowPreDemoQuestions] = useState(true);
   const [showDemoTopics, setShowDemoTopics] = useState(false);
-
-  const tenantName = useUnifiedConfigurationResponseManager().getOrgName();
 
   useEffect(() => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_OPTION_AVAILABLE);

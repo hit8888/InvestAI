@@ -7,6 +7,7 @@ import {
   LeadsTableViewContent,
 } from '@meaku/core/types/admin/admin';
 import { FunnelData, FunnelStep } from './admin-types';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -28,7 +29,7 @@ export const handleDownload = (fileType: string, linkUrl: string, downloadedFile
 };
 
 export const getTenantFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem('tenant_identifier') || 'null')?.['tenant-name'];
+  return getTenantIdentifier()?.['tenant-name'];
 };
 
 export const getAccessTokenFromLocalStorage = () => {
@@ -69,6 +70,26 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
   };
 
   return mappedData;
+};
+
+export const getProspectAndCompanyDetailsData = (conversation: ConversationsTableDisplayContent) => {
+  const transformedData = {
+    prospect: {
+      name: conversation.name ?? '-',
+      email: conversation.email ?? '-',
+      location: conversation.location ?? '-',
+    },
+    company: {
+      name: conversation.company ?? '-',
+      logoUrl: '', // Placeholder; replace with actual logo if available
+      location: conversation.location ?? '-', // Adjust if different from prospect's location
+      revenue: '-', // Placeholder
+      employees: '-', // Placeholder
+      domain: '-', // Placeholder
+      foundationDate: '-', // Placeholder
+    },
+  };
+  return transformedData;
 };
 
 // Helper function to capitalize specific words

@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { ApiProviderContext } from './Context';
-import { IAllApiResponsesWithQuery } from './types';
+import { ApiProviderContext } from '@meaku/core/contexts/Context';
 import { BaseApiProvider, IChildrenWithApiResponse } from '../../../shared/BaseApiProvider';
 import { useSetClientStoreAndLocalStorageUsingConfigSessionData } from '../hooks/useSetClientStoreAndLocalStorageUsingConfigSessionData';
+import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 
 export const ApiProvider: FC<IChildrenWithApiResponse<IAllApiResponsesWithQuery>> = (props) => {
   useSetClientStoreAndLocalStorageUsingConfigSessionData(props.unifiedConfigurationResponse); //update local storage with sessionId and ProspectId

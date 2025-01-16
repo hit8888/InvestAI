@@ -21,11 +21,12 @@ import PanelConversationIcon from '@breakout/design-system/components/icons/pane
 import PanelPlaygroundIcon from '@breakout/design-system/components/icons/panel-playground-icon';
 import PanelCloseIcon from '@breakout/design-system/components/icons/panel-close-icon';
 import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
 
 const Sidebar: React.FC = () => {
   const { isLoginPage, isLeadsPage, isConversationsPage, isPlaygroundPage } = usePageRouteState();
   const { isSidebarOpen: isOpen, toggleSidebar } = useSidebar();
-  const { userInfo, getTenantIdentifier } = useAuth();
+  const { userInfo } = useAuth();
 
   const { LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
   const { LEADS_LABEL, CONVERSATIONS_LABEL, PLAYGROUND_LABEL } = SidebarNavItemsEnum;

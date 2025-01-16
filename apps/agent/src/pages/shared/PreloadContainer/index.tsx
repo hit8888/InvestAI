@@ -1,10 +1,9 @@
 import { FC, ReactElement } from 'react';
-import { IAllApiResponsesWithQuery } from '../ApiProvider/types.ts';
 import { Loader } from 'lucide-react';
 import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
-import useLocalStorageSession from '../../../hooks/useLocalStorageSession.tsx';
+import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import { useLocation, useParams } from 'react-router-dom';
 import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
@@ -12,9 +11,10 @@ import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSess
 import { getBrowserSignature } from '../../../utils/tracking.ts';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { trackError } from '../../../utils/error.ts';
-import { useAreMessagesReadonly, useIsAdmin } from '../../../shared/UrlDerivedDataProvider/index.tsx';
+import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
+import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;

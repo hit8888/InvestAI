@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
-import { AuthResponse, organizationDetails } from '@meaku/core/types/admin/auth';
+import { AuthResponse } from '@meaku/core/types/admin/auth';
 import { ACCESS_TOKEN_EXPIRATION_TIME, DefaultAuthResponse, REFRESH_TOKEN_EXPIRATION_TIME } from '../utils/constants';
 
 interface AuthContextType {
@@ -12,8 +12,6 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
-  setTenantIdentifier: (tenantObj: organizationDetails) => void;
-  getTenantIdentifier: () => organizationDetails | null;
 }
 
 interface AuthProviderProps {
@@ -30,8 +28,6 @@ const defaultContext: AuthContextType = {
   login: () => {},
   logout: () => {},
   userInfo: DefaultAuthResponse,
-  setTenantIdentifier: () => {},
-  getTenantIdentifier: () => null,
 };
 
 // Create Auth Context
@@ -73,15 +69,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('accessTokenExpiry');
     localStorage.removeItem('refreshTokenExpiry');
-    localStorage.removeItem('tenant_identifier');
-  };
-
-  const setTenantIdentifier = (tenantObj: organizationDetails) => {
-    localStorage.setItem('tenant_identifier', JSON.stringify(tenantObj));
-  };
-
-  const getTenantIdentifier = () => {
-    return JSON.parse(localStorage.getItem('tenant_identifier') || 'null');
+    localStorage.removeItem('admin_tenant_identifier');
   };
 
   // Function to set authentication status
@@ -100,8 +88,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         clearTokens,
         // apiCall,
         isAuthenticated,
-        setTenantIdentifier,
-        getTenantIdentifier,
         login,
         logout,
         userInfo,

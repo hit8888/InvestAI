@@ -1,18 +1,17 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import AgentHeader from './AgentHeader.tsx';
-import AgentMessages from './AgentMessages.tsx';
-import AgentInput from './AgentInput.tsx';
+import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
+import AgentInput from '@breakout/design-system/components/layout/AgentInput';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
-import { IWebSocketHandleMessage } from '../../../hooks/useWebSocketChat.tsx';
-import { DemoEvent } from '@meaku/core/types/webSocket';
+import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { useUpdateActiveArtifactOnNewMessage } from '../../../hooks/useUpdateActiveArtifactOnNewMessage.ts';
-import { Demo } from './Demo/index.tsx';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
-import useUnifiedConfigurationResponseManager from '../../../pages/shared/hooks/useUnifiedConfigurationResponseManager.ts';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import Artifact from './Artifact/index.tsx';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
+import AgentMessagesContainer from './AgentMessagesContainer.tsx';
+import ArtifactContainer from './ArtifactContainer.tsx';
+import { Demo } from './Demo/index.tsx';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -34,7 +33,10 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
 
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
+  const responseManager = useUnifiedConfigurationResponseManager();
+
+  const ctaConfig = responseManager.getCTAConfig();
+  const logoURL = responseManager.getLogoUrl() ?? '';
 
   const hasArtifactOrDemoInMessageHistory =
     messages.findIndex((message) => message.role === 'ai' && !!message.artifact?.artifact_id) !== -1 || isDemoAvailable;
@@ -44,6 +46,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
     setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
     handleSendMessage({ message: '', eventType: DemoEvent.DEMO_END, eventData: {} });
   };
+
+  const showArtifactContent = !!activeArtifact && demoPlayingStatus === DemoPlayingStatus.INITIAL;
 
   const hideAgentHeader =
     demoPlayingStatus !== DemoPlayingStatus.INITIAL && demoPlayingStatus !== DemoPlayingStatus.STARTED;
@@ -55,31 +59,26 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
           handleSendMessage={(message) => handleSendMessage({ message })}
           handleCloseAgent={handleCloseAgent}
           isHidden={hideAgentHeader}
+          ctaConfig={ctaConfig}
         />
         <div
           className={cn('flex-1 overflow-y-auto', {
             'grid grid-cols-3 gap-8': hasArtifactOrDemoInMessageHistory,
           })}
         >
-          {!isMediaTakingFullWidth && (
-            <AgentMessages
-              messages={messages}
-              showRightPanel={hasArtifactOrDemoInMessageHistory}
-              handleSendUserMessage={handleSendMessage}
-              initialSuggestedQuestions={initialSuggestedQuestions}
-              allowFullWidthForText={false}
-              showDemoPreQuestions={isDemoAvailable && !demoDetails}
-            />
-          )}
+          <AgentMessagesContainer
+            handleSendMessage={handleSendMessage}
+            hasArtifactOrDemoInMessageHistory={hasArtifactOrDemoInMessageHistory}
+            isMediaTakingFullWidth={isMediaTakingFullWidth}
+          />
 
-          {!!activeArtifact && demoPlayingStatus === DemoPlayingStatus.INITIAL && (
-            <Artifact
-              isMediaTakingFullWidth={isMediaTakingFullWidth}
-              handleSendUserMessage={handleSendMessage}
-              activeArtifactId={activeArtifact.artifactId}
-              activeArtifactType={activeArtifact.artifactType}
-            />
-          )}
+          <ArtifactContainer
+            showArtifactContent={showArtifactContent}
+            logoURL={logoURL}
+            isMediaTakingFullWidth={isMediaTakingFullWidth}
+            handleSendMessage={handleSendMessage}
+          />
+
           <Demo
             key={demoDetails?.audio_url}
             handleFinishDemo={handleFinishDemo}
