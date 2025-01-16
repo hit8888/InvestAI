@@ -1,8 +1,3 @@
-export enum AgentConfig {
-  EMBED = "embed",
-  MULTIMEDIA = "multimedia",
-}
-
 export type AgentParams = {
   orgName: string;
   agentId: string;

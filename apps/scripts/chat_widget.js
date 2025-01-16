@@ -196,7 +196,7 @@ const updateParentUrlParam = (key, value) => {
   }
 
   // Set the script URL based on the environment
-  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
+  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?`;
   let isAgentOpen = false;
   let iFrameSource = null;
 
