@@ -22,7 +22,7 @@
     width: 401px;
     height: 100px;
     border-radius: 24px;
-    background: radial-gradient(circle at 5% -10%, rgb(var(--secondary) / 0.8) 0%, rgb(var(--primary) / 0.6) 30%);
+    background: radial-gradient(circle at 13% 45%, rgb(var(--secondary) / 0.2) 0%, rgb(var(--primary)) 18%);
   }
 
   .entryPointPopupBoxShadow {
@@ -35,5 +35,30 @@
       0px 0.204px 2.794px 0px rgb(var(--primary) / 0.03);
 
     backdrop-filter: blur(2.5px);
+  }
+
+  .popup-banner-border-gradient-animation {
+    position: relative;
+    display: inline-block;
+    padding: 4px;
+    border-radius: 24px;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--primary) / 0.8),
+      rgb(var(--secondary) / 0.5),
+      rgb(var(--primary) / 0.2)
+    );
+    background-size: 200% 200%;
+    animation: gradient-rotate 3s linear infinite;
+  }
+
+  .popup-banner-border-gradient-animation::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+    background-clip: padding-box;
   }
 }

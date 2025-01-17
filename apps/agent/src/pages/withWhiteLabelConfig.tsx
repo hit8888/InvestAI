@@ -6,10 +6,7 @@ import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnified
 export const withWhiteLabelConfig = (WrappedComponent: React.ComponentType) => {
   return function WithWhiteLabelConfigComponent() {
     const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-    const rawStyleConfig = unifiedConfigurationResponseManager.getStyleConfig();
-
-    // Filter out show_banner from styleConfig
-    const styleConfig = Object.fromEntries(Object.entries(rawStyleConfig).filter(([key]) => key !== 'show_banner'));
+    const styleConfig = unifiedConfigurationResponseManager.getStyleConfig();
 
     useEffect(() => {
       handleColorConfig(styleConfig);

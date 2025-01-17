@@ -12,7 +12,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { motion } from 'framer-motion';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
-import PopupWithBubblesContainer from './PopupWithBubblesContainer.tsx';
+import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
@@ -124,7 +124,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         backgroundSize: '200% 200%',
       }}
     >
-      {show_banner ? (
+      {show_banner && !hasFirstUserMessageBeenSent ? (
         <PopupWithBubblesContainer
           orgName={orgName}
           agentName={agentName}

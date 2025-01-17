@@ -7,6 +7,7 @@ import { trackError } from '../utils/error';
 type Session = {
   sessionId?: string;
   prospectId?: string;
+  popupLastClosed?: string;
 };
 
 const useLocalStorageSession = () => {
@@ -19,6 +20,7 @@ const useLocalStorageSession = () => {
   const sessionData: Session = {
     sessionId: localStorageSessionData?.sessionId,
     prospectId: localStorageSessionData?.prospectId,
+    popupLastClosed: localStorageSessionData?.popupLastClosed,
   };
 
   const handleUpdateSessionData = useCallback(async (newSessionData: Partial<Session>) => {

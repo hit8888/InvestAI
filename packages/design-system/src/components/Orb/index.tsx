@@ -1,3 +1,4 @@
+import React, { CSSProperties } from 'react';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '../../lib/cn';
 import ShiningRectangle from '../icons/ShiningRectangle';
@@ -6,9 +7,10 @@ import './index.css';
 interface IProps {
   color: string | null;
   state: OrbStatusEnum;
+  style?: CSSProperties;
 }
 
-const Orb = ({ color, state }: IProps) => {
+const Orb = ({ color, state, style={} }: IProps) => {
   return (
     <div
       className={cn('orb-container p-1', {
@@ -22,6 +24,7 @@ const Orb = ({ color, state }: IProps) => {
         {
           '--input-color': color ?? 'rgb(var(--primary))',
           '--fallback-color': color ?? 'rgb(var(--primary))',
+          ...style
         } as React.CSSProperties
       }
     >
