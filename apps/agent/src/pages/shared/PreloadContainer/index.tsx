@@ -11,7 +11,7 @@ import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSess
 import { getBrowserSignature } from '../../../utils/tracking.ts';
 import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { trackError } from '../../../utils/error.ts';
-import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
@@ -28,11 +28,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const isDemoURL = pathname.includes('demo');
 
   const isAdmin = useIsAdmin();
-  const isReadOnly = useAreMessagesReadonly();
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: isReadOnly || !sessionData?.sessionId, retry: 1 },
+    queryOptions: { enabled: !sessionData?.sessionId, retry: 1 },
     //for ReadOnly routes session ID is ignored and config is fetched directly
   });
 
@@ -48,7 +47,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId, retry: 1 },
+    queryOptions: { enabled: !!agentId && !!sessionData.sessionId, retry: 1 },
   });
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);

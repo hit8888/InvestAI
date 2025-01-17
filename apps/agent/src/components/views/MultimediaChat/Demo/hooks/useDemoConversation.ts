@@ -13,7 +13,7 @@ const useDemoConversation = () => {
   const { sendMessage, lastMessage } = useWebSocketChat();
 
   const [message, setMessage] = useState<Message>();
-  const isAdmin = useIsAdmin();
+  const allowFeedback = useIsAdmin();
 
   const getMessagePayload = useGetMessagePayload();
 
@@ -23,7 +23,7 @@ const useDemoConversation = () => {
     if (!lastMessage) return;
 
     const response = JSON.parse(lastMessage.data) as AIResponse;
-    response.showFeedbackOptions = isAdmin;
+    response.showFeedbackOptions = allowFeedback;
 
     const messageInterface = convertServerMessageToClientMessage(response);
 

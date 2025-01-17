@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import useInView from '@meaku/core/hooks/useInView';
-import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -23,7 +22,8 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { GetArtifactPayload } from '@meaku/core/types/api';
 
 interface IProps {
-  usingForAgent: boolean;
+  usingForAgent: boolean; //isAgent app
+  allowFeedback: boolean;
   message: Message;
   sessionId: string;
   primaryColor: string | null;
@@ -50,6 +50,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 
 const MessageItem = ({
   usingForAgent,
+  allowFeedback,
   message,
   sessionId,
   primaryColor,
@@ -80,13 +81,8 @@ const MessageItem = ({
 
   const hasValidArtifact = !!messageArtifactId && messageArtifactType !== 'NONE';
 
-  const showMessageArtifactPreview = hasValidArtifact && (
-    usingForAgent
-      ? !isLastMessage && (showArtifactPreview || isInView)
-      : true
-  );
-
-  const allowFeedback = useAllowFeedback();
+  const showMessageArtifactPreview =
+    hasValidArtifact && (usingForAgent ? !isLastMessage && (showArtifactPreview || isInView) : true);
 
   const reactMarkdownComponents: Partial<Components> = {
     a: MessageLink,
