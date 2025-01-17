@@ -4,6 +4,7 @@ import { useMessageStore } from '../../../stores/useMessageStore';
 import { useDemoDetails } from '../../../hooks/useDemoDetails';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
+import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -35,6 +36,7 @@ const AgentMessagesContainer = ({
   const sessionId = responseManager.getSessionId() ?? '';
   const primaryColor = styleConfig.primary ?? null;
 
+  const allowFeedback = useAllowFeedback();
   if (isMediaTakingFullWidth) return null;
 
   return (
@@ -54,6 +56,7 @@ const AgentMessagesContainer = ({
       allowFullWidthForText={false}
       showDemoPreQuestions={isDemoAvailable && !demoDetails}
       primaryColor={primaryColor}
+      allowFeedback={allowFeedback}
     />
   );
 };
