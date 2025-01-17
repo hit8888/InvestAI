@@ -16,7 +16,7 @@ const Agent = () => {
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const sessionId = unifiedConfigurationResponseManager.getSessionId();
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
-  const isShowingBGCover = getParam('bc') === 'true';
+  const isShowingBGCover = getParam('bc') === 'true' || getParam('showBackgroundCover') === 'true';
 
   const handleOnFirstMessageSend = () => {
     if (sessionId) return;
