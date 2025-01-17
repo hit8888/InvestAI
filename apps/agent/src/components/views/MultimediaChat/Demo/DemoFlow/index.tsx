@@ -47,12 +47,16 @@ const DemoFlow = ({
     if (!audio && !video) return;
 
     try {
-      if (audio && audio.paused) {
+      if (audio?.paused || video?.paused) {
         setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-        playPromiseRef.current = audio.play();
-        await playPromiseRef.current;
-      } else if (video && video.paused) {
-        video.play();
+        if (audio) {
+          playPromiseRef.current = audio.play();
+          await playPromiseRef.current;
+        }
+        if (video) {
+          const videoPlayPromise = video.play();
+          await videoPlayPromise;
+        }
       } else {
         if (playPromiseRef.current) {
           await playPromiseRef.current;
@@ -78,8 +82,14 @@ const DemoFlow = ({
       if (playPromiseRef.current) {
         await playPromiseRef.current;
       }
+      if (video) {
+        const videoPlayPromise = video.play();
+        if (videoPlayPromise !== undefined) {
+          await videoPlayPromise;
+        }
+        video.pause();
+      }
       if (audio) audio.pause();
-      if (video) video.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     } catch (error) {
       console.error('Error handling pause:', error);

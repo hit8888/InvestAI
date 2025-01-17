@@ -24,6 +24,8 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
   const [showContinueDialog, setShowContinueDialog] = useState(false);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resumeDemoRef = useRef<boolean>(false);
+
   const hasPlayedResponseRef = useRef(false);
   const messageSentRef = useRef(false);
 
@@ -107,17 +109,35 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
   // Better handling of response audio
   useEffect(() => {
     if (message?.response_audio_url) {
-      // First ensure recording is stopped
       stopRecording();
-      setIsRecording(false); // Double ensure recording is stopped
-
-      // Then update states
+      setIsRecording(false);
       setIsWaitingForResponse(false);
       setShowContinueDialog(false);
       setIsPlayingResponse(true);
 
+      // Define handleResponsePlayEnd before try block so it's accessible in cleanup
+      const handleResponsePlayEnd = () => {
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+          audioContextRef.current = null;
+        }
+        setAnalyserNode(null);
+        messageSentRef.current = false;
+        setIsPlayingResponse(false);
+        hasPlayedResponseRef.current = true;
+
+        if (resumeDemoRef.current) {
+          isQueryRaisedRef.current = false;
+        }
+
+        setTimeout(() => {
+          if (!isPlayingResponse && !isWaitingForResponse) {
+            startRecording();
+          }
+        }, RECORDING_RESTART_DELAY);
+      };
+
       try {
-        // Create new audio element each time
         const audio = new Audio();
         audio.crossOrigin = 'anonymous';
         audioRef.current = audio;
@@ -149,9 +169,8 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
           }
         };
 
-        audio.addEventListener('ended', () => {
-          handleResponsePlayEnd();
-        });
+        // Only need one event listener for audio end
+        audio.addEventListener('ended', handleResponsePlayEnd);
       } catch (error) {
         console.error('Error setting up audio:', error);
       }
@@ -165,35 +184,10 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
     }
   }, [message?.response_audio_url]);
 
-  const handleResponsePlayEnd = () => {
-    // Clear audio resources first
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    setAnalyserNode(null);
-
-    // Reset flags
-    messageSentRef.current = false;
-    setIsPlayingResponse(false);
-    hasPlayedResponseRef.current = true;
-
-    // Delay starting recording to ensure clean state
-    setTimeout(() => {
-      if (!isPlayingResponse && !isWaitingForResponse) {
-        startRecording();
-      }
-    }, RECORDING_RESTART_DELAY);
-  };
-
-  const handleCloseDemoAgent = () => {
-    handleResumeDemo();
-    isQueryRaisedRef.current = false;
-  };
-
   const handleContinueDemo = () => {
+    handleResumeDemo();
     setShowContinueDialog(false);
-    handleCloseDemoAgent();
+    resumeDemoRef.current = true;
   };
 
   // Add a key counter for AudioRecorder remounting
@@ -233,7 +227,7 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
 
   return (
     <div className="relative flex h-full w-full items-center justify-center">
-      <ResumeDemo onResume={handleContinueDemo} />
+      <ResumeDemo onResume={handleContinueDemo} isPlayingResponse={isPlayingResponse} />
       <div className="relative flex h-[92%] w-full flex-col items-center justify-center">
         <AudioWithTextPlayer
           message={
@@ -241,7 +235,6 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
           }
           transcription={transcription}
           canvasRef={canvasRef}
-          onPlayEnd={handleResponsePlayEnd}
           isRecording={isRecording && !isPlayingResponse && !isWaitingForResponse}
           isLoading={isWaitingForResponse}
         />

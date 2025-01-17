@@ -3,11 +3,13 @@ import { useRef, useState } from 'react';
 interface VideoPlayerProps {
   url: string;
   onLoadComplete?: () => void;
+  ref?: React.RefObject<HTMLVideoElement>;
 }
 
-export const VideoPlayer = ({ url, onLoadComplete }: VideoPlayerProps) => {
+export const VideoPlayer = ({ url, onLoadComplete, ref }: VideoPlayerProps) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const localVideoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = ref || localVideoRef;
 
   const handleLoadComplete = () => {
     setIsVideoLoaded(true);
@@ -21,9 +23,7 @@ export const VideoPlayer = ({ url, onLoadComplete }: VideoPlayerProps) => {
       )}
       <video
         ref={videoRef}
-        className={`aspect-[16/9] h-full w-full object-contain transition-all duration-500 ease-out ${
-          isVideoLoaded ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-        }`}
+        className={'aspect-[16/9] h-full w-full object-fill'}
         preload="metadata"
         playsInline
         autoPlay={true}

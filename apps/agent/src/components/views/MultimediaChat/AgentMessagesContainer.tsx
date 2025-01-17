@@ -1,7 +1,6 @@
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { useDemoDetails } from '../../../hooks/useDemoDetails';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
@@ -10,15 +9,15 @@ interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
   hasArtifactOrDemoInMessageHistory: boolean;
   isMediaTakingFullWidth: boolean;
+  showDemoPreQuestions: boolean;
 }
 
 const AgentMessagesContainer = ({
   handleSendMessage,
   hasArtifactOrDemoInMessageHistory,
   isMediaTakingFullWidth,
+  showDemoPreQuestions,
 }: IProps) => {
-  const { isDemoAvailable, demoDetails } = useDemoDetails();
-
   const messages = useMessageStore((state) => state.messages);
   const orbState = useMessageStore((state) => state.orbState);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
@@ -54,7 +53,7 @@ const AgentMessagesContainer = ({
       handleRemoveMessageFeedback={handleRemoveMessageFeedback}
       initialSuggestedQuestions={initialSuggestedQuestions}
       allowFullWidthForText={false}
-      showDemoPreQuestions={isDemoAvailable && !demoDetails}
+      showDemoPreQuestions={showDemoPreQuestions}
       primaryColor={primaryColor}
       allowFeedback={allowFeedback}
     />

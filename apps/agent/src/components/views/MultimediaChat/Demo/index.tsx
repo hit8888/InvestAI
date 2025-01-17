@@ -1,5 +1,4 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import DemoContent from './DemoContent';
 import { useEffect } from 'react';
 import { FeatureSelectionDTOType, ScriptStepType } from '@meaku/core/types/agent';
@@ -10,27 +9,25 @@ import { SelectDemoFeatures } from './SelectDemoFeatures';
 
 interface IProps {
   handleFinishDemo: () => void;
-  handleSendMessage: (data: IWebSocketHandleMessage) => void;
   demoDetails: ScriptStepType | null;
   demoPlayingStatus: DemoPlayingStatus;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   demoFeatures: FeatureSelectionDTOType[];
   isDemoAvailable: boolean;
+  onStepEnd: () => void;
+  switchToDemo: () => void;
 }
 
 const Demo = ({
   handleFinishDemo,
-  handleSendMessage,
   demoDetails,
   demoPlayingStatus,
   setDemoPlayingStatus,
   demoFeatures,
   isDemoAvailable,
+  onStepEnd,
+  switchToDemo,
 }: IProps) => {
-  const handleStepEnd = () => {
-    handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: {} });
-  };
-
   const onFinishDemo = () => {
     handleFinishDemo();
   };
@@ -49,8 +46,8 @@ const Demo = ({
       return (
         <SelectDemoFeatures
           demoFeatures={demoFeatures}
-          handleSendMessage={handleSendMessage}
           setDemoPlayingStatus={setDemoPlayingStatus}
+          switchToDemo={switchToDemo}
         />
       );
     }
@@ -95,8 +92,9 @@ const Demo = ({
         key={demoDetails?.asset_url}
         setDemoPlayingStatus={setDemoPlayingStatus}
         demoPlayingStatus={demoPlayingStatus}
-        onStepEnd={handleStepEnd}
+        onStepEnd={onStepEnd}
         onFinishDemo={onFinishDemo}
+        switchToDemo={switchToDemo}
       />
     </div>
   );

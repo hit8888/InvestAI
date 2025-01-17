@@ -4,7 +4,6 @@ import { TranscriptionResult } from './types';
 interface AudioWithTextPlayerProps {
   message: string;
   canvasRef: RefObject<HTMLCanvasElement | null>;
-  onPlayEnd?: () => void;
   isRecording?: boolean;
   isLoading?: boolean;
   transcription?: TranscriptionResult; // Add this prop
@@ -13,7 +12,6 @@ interface AudioWithTextPlayerProps {
 export const AudioWithTextPlayer = ({
   message,
   canvasRef,
-  onPlayEnd,
   isRecording,
   isLoading,
   transcription, // Add this to destructuring
@@ -30,13 +28,11 @@ export const AudioWithTextPlayer = ({
     }
 
     if (audio) {
-      audio.addEventListener('ended', onPlayEnd || (() => {}));
       return () => {
         audio.pause();
-        audio.removeEventListener('ended', onPlayEnd || (() => {}));
       };
     }
-  }, [message, isRecording, isLoading, onPlayEnd]);
+  }, [message, isRecording, isLoading]);
 
   const displayText = () => {
     if (isLoading) return 'Processing your question...';
