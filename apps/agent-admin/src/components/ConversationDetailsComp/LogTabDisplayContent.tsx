@@ -27,6 +27,7 @@ const LogTabDisplayContent = () => {
           allowFullWidthForText={true}
           showDemoPreQuestions={false}
           primaryColor={'rgb(var(--primary))'}
+          allowFeedback={true}
         />
       ) : (
         <p className="w-full text-center text-2xl font-semibold text-gray-900">
