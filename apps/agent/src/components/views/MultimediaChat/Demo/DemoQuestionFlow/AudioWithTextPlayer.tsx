@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject } from 'react';
 import { TranscriptionResult } from './types';
 
 interface AudioWithTextPlayerProps {
@@ -16,24 +16,6 @@ export const AudioWithTextPlayer = ({
   isLoading,
   transcription, // Add this to destructuring
 }: AudioWithTextPlayerProps) => {
-  // Add audio element and control it
-  useEffect(() => {
-    const audio = document.querySelector('audio');
-
-    // If there's a message and we're not recording or loading, play the audio
-    if (message && !isRecording && !isLoading) {
-      if (audio) {
-        audio.play().catch(console.error);
-      }
-    }
-
-    if (audio) {
-      return () => {
-        audio.pause();
-      };
-    }
-  }, [message, isRecording, isLoading]);
-
   const displayText = () => {
     if (isLoading) return 'Processing your question...';
     if (message) return message;

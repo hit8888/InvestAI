@@ -22,12 +22,9 @@ const useDemoDetails = () => {
 
   useEffect(() => {
     if (draftDemoDetails) {
-      console.log('Queue before:', [...queueRef.current]);
       queueRef.current.push(draftDemoDetails);
-      console.log('Queue after:', [...queueRef.current]);
 
       if (!demoDetails) {
-        console.log('Setting initial demoDetails:', draftDemoDetails);
         setDemoDetails(draftDemoDetails);
       }
 
@@ -43,10 +40,8 @@ const useDemoDetails = () => {
   }, [draftDemoDetails?.audio_url]);
 
   const onStepEnd = () => {
-    console.log('Step ended. Queue before shift:', [...queueRef.current]);
     queueRef.current.shift();
     const nextStep = queueRef.current[0];
-    console.log('Next step:', nextStep);
     setDemoDetails(nextStep || null);
 
     // Request next demo if queue has less than 2 elements and current step is not the last

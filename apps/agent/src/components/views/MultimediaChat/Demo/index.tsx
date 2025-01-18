@@ -86,7 +86,7 @@ const Demo = ({
   }
 
   return (
-    <div className={cn('col-span-3 mr-2 overflow-hidden pl-2')}>
+    <div className={cn('col-span-3 mr-2 overflow-hidden pl-8 pr-12')}>
       <DemoContent
         demoDetails={demoDetails}
         key={demoDetails?.asset_url}

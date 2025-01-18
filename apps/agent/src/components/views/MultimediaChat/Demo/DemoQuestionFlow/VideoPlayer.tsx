@@ -1,38 +1,47 @@
-import { useRef, useState } from 'react';
+import { useState, useEffect, RefObject } from 'react';
+import ReactPlayer from 'react-player';
 
-interface VideoPlayerProps {
+interface Props {
   url: string;
-  onLoadComplete?: () => void;
-  ref?: React.RefObject<HTMLVideoElement>;
+  onLoadComplete: () => void;
+  videoRef: RefObject<ReactPlayer | null>;
+  playing: boolean;
 }
 
-export const VideoPlayer = ({ url, onLoadComplete, ref }: VideoPlayerProps) => {
+export const VideoPlayer: React.FC<Props> = ({ url, onLoadComplete, videoRef, playing }) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const localVideoRef = useRef<HTMLVideoElement | null>(null);
-  const videoRef = ref || localVideoRef;
 
-  const handleLoadComplete = () => {
-    setIsVideoLoaded(true);
-    onLoadComplete?.();
-  };
+  useEffect(() => {
+    if (videoRef.current) {
+      setIsVideoLoaded(true);
+      onLoadComplete();
+    }
+  }, [onLoadComplete, videoRef]);
 
   return (
-    <>
+    <div className="flex h-full w-full">
       {!isVideoLoaded && (
         <div className="absolute inset-0 scale-95 bg-gray-200 opacity-0 blur-sm transition-all duration-500 ease-in-out" />
       )}
-      <video
+      <ReactPlayer
         ref={videoRef}
-        className={'aspect-[16/9] h-full w-full object-fill'}
-        preload="metadata"
-        playsInline
-        autoPlay={true}
-        onLoadedData={handleLoadComplete}
+        url={url}
+        playing={playing}
         muted={true}
-      >
-        <source src={url} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </>
+        width="100%"
+        height="100%"
+        config={{
+          file: {
+            attributes: {
+              style: {
+                width: '100%',
+                height: '100%',
+                objectFit: 'fill',
+              },
+            },
+          },
+        }}
+      />
+    </div>
   );
 };
