@@ -44,6 +44,12 @@ importers:
       '@types/md5':
         specifier: ^2.3.5
         version: 2.3.5
+      '@xstate/inspect':
+        specifier: ^0.8.0
+        version: 0.8.0(ws@8.18.0)(xstate@5.19.2)
+      '@xstate/react':
+        specifier: ^5.0.2
+        version: 5.0.2(@types/react@19.0.2)(react@19.0.0)(xstate@5.19.2)
       ahooks:
         specifier: ^3.8.1
         version: 3.8.1(react@19.0.0)
@@ -98,12 +104,15 @@ importers:
       use-context-selector:
         specifier: ^2.0.0
         version: 2.0.0(react@19.0.0)(scheduler@0.25.0)
+      xstate:
+        specifier: ^5.19.2
+        version: 5.19.2
       zod:
         specifier: ^3.23.8
         version: 3.23.8
       zustand:
         specifier: 5.0.0-rc.2
-        version: 5.0.0-rc.2(@types/react@19.0.2)(immer@10.1.1)(react@19.0.0)
+        version: 5.0.0-rc.2(@types/react@19.0.2)(immer@10.1.1)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
     devDependencies:
       '@breakout/design-system':
         specifier: workspace:*
@@ -2968,6 +2977,25 @@ packages:
   '@vitest/utils@2.1.4':
     resolution: {integrity: sha512-MXDnZn0Awl2S86PSNIim5PWXgIAx8CIkzu35mBdSApUip6RFOGXBCf3YFyeEu8n1IHk4bWD46DeYFu9mQlFIRg==}
 
+  '@xstate/inspect@0.8.0':
+    resolution: {integrity: sha512-wSkFeOnp+7dhn+zTThO0M4D2FEqZN9lGIWowJu5JLa2ojjtlzRwK8SkjcHZ4rLX8VnMev7kGjgQLrGs8kxy+hw==}
+    peerDependencies:
+      '@types/ws': ^8.0.0
+      ws: ^8.0.0
+      xstate: ^4.37.0
+    peerDependenciesMeta:
+      '@types/ws':
+        optional: true
+
+  '@xstate/react@5.0.2':
+    resolution: {integrity: sha512-x5GOrE0ZYjU2ba986u0CCp7SaPwzElSn1SW0mZ9MuBgsZ+BW7vTLVOvGmURynwojdso8d6nVbK3c2+MRVqGVgA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-0
+      xstate: ^5.19.2
+    peerDependenciesMeta:
+      xstate:
+        optional: true
+
   abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
     deprecated: Use your platform's native atob() and btoa() methods instead
@@ -3980,6 +4008,9 @@ packages:
 
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+
+  fast-safe-stringify@2.1.1:
+    resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
 
   fastq@1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
@@ -6338,6 +6369,15 @@ packages:
       react: '>=18.0.0'
       scheduler: '>=0.19.0'
 
+  use-isomorphic-layout-effect@1.2.0:
+    resolution: {integrity: sha512-q6ayo8DWoPZT0VdG4u3D3uxcgONP3Mevx2i2b0434cwWBoL+aelL1DzkXI6w3PhTZzUeR2kaVlZn70iCiseP6w==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   use-sidecar@1.1.2:
     resolution: {integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==}
     engines: {node: '>=10'}
@@ -6347,6 +6387,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  use-sync-external-store@1.4.0:
+    resolution: {integrity: sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -6548,6 +6593,9 @@ packages:
 
   xmlchars@2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
+
+  xstate@5.19.2:
+    resolution: {integrity: sha512-B8fL2aP0ogn5aviAXFzI5oZseAMqN00fg/TeDa3ZtatyDcViYLIfuQl4y8qmHCiKZgGEzmnTyNtNQL9oeJE2gw==}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -9167,6 +9215,22 @@ snapshots:
       loupe: 3.1.2
       tinyrainbow: 1.2.0
 
+  '@xstate/inspect@0.8.0(ws@8.18.0)(xstate@5.19.2)':
+    dependencies:
+      fast-safe-stringify: 2.1.1
+      ws: 8.18.0
+      xstate: 5.19.2
+
+  '@xstate/react@5.0.2(@types/react@19.0.2)(react@19.0.0)(xstate@5.19.2)':
+    dependencies:
+      react: 19.0.0
+      use-isomorphic-layout-effect: 1.2.0(@types/react@19.0.2)(react@19.0.0)
+      use-sync-external-store: 1.4.0(react@19.0.0)
+    optionalDependencies:
+      xstate: 5.19.2
+    transitivePeerDependencies:
+      - '@types/react'
+
   abab@2.0.6: {}
 
   acorn-globals@7.0.1:
@@ -10403,6 +10467,8 @@ snapshots:
   fast-json-stable-stringify@2.1.0: {}
 
   fast-levenshtein@2.0.6: {}
+
+  fast-safe-stringify@2.1.1: {}
 
   fastq@1.17.1:
     dependencies:
@@ -13195,6 +13261,12 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
+  use-isomorphic-layout-effect@1.2.0(@types/react@19.0.2)(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.2
+
   use-sidecar@1.1.2(@types/react@19.0.2)(react@19.0.0):
     dependencies:
       detect-node-es: 1.1.0
@@ -13202,6 +13274,10 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.2
+
+  use-sync-external-store@1.4.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
 
   util-deprecate@1.0.2: {}
 
@@ -13377,6 +13453,8 @@ snapshots:
 
   xmlchars@2.2.0: {}
 
+  xstate@5.19.2: {}
+
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
@@ -13405,10 +13483,11 @@ snapshots:
 
   zod@3.23.8: {}
 
-  zustand@5.0.0-rc.2(@types/react@19.0.2)(immer@10.1.1)(react@19.0.0):
+  zustand@5.0.0-rc.2(@types/react@19.0.2)(immer@10.1.1)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0)):
     optionalDependencies:
       '@types/react': 19.0.2
       immer: 10.1.1
       react: 19.0.0
+      use-sync-external-store: 1.4.0(react@19.0.0)
 
   zwitch@2.0.4: {}

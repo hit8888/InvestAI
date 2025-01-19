@@ -3,7 +3,6 @@ import { useSpeechRecognition } from '../../../../../hooks/useSpeechRecognition'
 
 interface AudioRecorderProps {
   setAnalyserNode: React.Dispatch<React.SetStateAction<AnalyserNode | null>>;
-  setIsRecording: React.Dispatch<React.SetStateAction<boolean>>;
   setTranscription: React.Dispatch<React.SetStateAction<TranscriptionResult>>;
   isTranscribing: boolean;
   disabled: boolean;
@@ -20,7 +19,6 @@ interface TranscriptionResult {
 
 const AudioRecorder = ({
   setAnalyserNode,
-  setIsRecording,
   setTranscription,
   disabled,
   onStartRecording,
@@ -142,7 +140,6 @@ const AudioRecorder = ({
 
       resetTranscript();
       await startListening();
-      setIsRecording(true);
       onStartRecording?.();
     } catch (error) {
       console.error('Error starting recording:', error);
@@ -162,22 +159,25 @@ const AudioRecorder = ({
       transcriptionTimeoutRef.current = null;
     }
 
+    // Enhanced stream cleanup
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+        streamRef.current?.removeTrack(track);
+      });
+      streamRef.current = null;
+    }
+
     if (audioContextRef.current?.state !== 'closed') {
       try {
-        audioContextRef.current?.close();
+        await audioContextRef.current?.close();
       } catch (e) {
         console.error('Error closing audioContext:', e);
       }
       audioContextRef.current = null;
     }
 
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-
     setAnalyserNode(null);
-    setIsRecording(false);
     onStopRecording?.();
   };
 
@@ -199,6 +199,13 @@ const AudioRecorder = ({
 
     handleDisabled();
   }, [disabled]);
+
+  // Add cleanup effect
+  useEffect(() => {
+    return () => {
+      stopRecording();
+    };
+  }, []);
 
   // Pass interim transcript to parent
   useEffect(() => {
