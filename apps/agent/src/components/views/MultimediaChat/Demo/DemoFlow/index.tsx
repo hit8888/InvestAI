@@ -5,12 +5,12 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { VideoPlayer } from '../DemoQuestionFlow/VideoPlayer';
 import { DemoControls } from '../DemoQuestionFlow/DemoControls';
-import { AudioWithTextPlayer } from '../DemoQuestionFlow/AudioWithTextPlayer';
 import { FinishDemo } from '../FinishDemo';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { useAudioVisualizer } from '@meaku/core/hooks/useAudioVisualizer';
 import { useAudioController } from '@meaku/core/hooks/useAudioController';
 import ReactPlayer from 'react-player';
+import { ResponsePlayer } from '../DemoQuestionFlow/components/ResponsePlayer';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -34,7 +34,7 @@ const DemoFlow = ({
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<ReactPlayer>(null);
 
-  const { audioRef, playPromiseRef, analyserNode } = useAudioController(
+  const { audioRef, playPromiseRef, analyserNode, duration } = useAudioController(
     demoDetails?.audio_url,
     handleDemoAudioEnd,
     (Boolean(demoDetails?.audio_url) && !demoDetails.asset_url) ||
@@ -115,7 +115,12 @@ const DemoFlow = ({
           )}
         </>
       ) : (
-        <AudioWithTextPlayer message={demoDetails.message} canvasRef={canvasRef} />
+        <ResponsePlayer
+          message={demoDetails.message}
+          canvasRef={canvasRef}
+          audioDuration={duration}
+          isPlaying={demoPlayingStatus === DemoPlayingStatus.PLAYING}
+        />
       )}
       <DemoControls playingStatus={demoPlayingStatus} onPlayPause={handlePlayPause} />
       {demoDetails.asset_url && (

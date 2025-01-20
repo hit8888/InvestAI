@@ -1,14 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from "react";
 
-export const useAudioController = (audioUrl: string | undefined, onEnd: () => void, shouldInitialize: boolean) => {
+export const useAudioController = (
+  audioUrl: string | undefined,
+  onEnd: () => void,
+  shouldInitialize: boolean
+) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playPromiseRef = useRef<Promise<void> | null>(null);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
+  const [duration, setDuration] = useState<number>(0);
 
   const initializeAudioContext = async () => {
     try {
-      if (!audioRef.current) throw new Error('Audio element not initialized');
+      if (!audioRef.current) throw new Error("Audio element not initialized");
 
       const context = new AudioContext();
       const source = context.createMediaElementSource(audioRef.current);
@@ -28,7 +33,7 @@ export const useAudioController = (audioUrl: string | undefined, onEnd: () => vo
 
       return analyser;
     } catch (error) {
-      console.error('Error initializing audio context:', error);
+      console.error("Error initializing audio context:", error);
       throw error;
     }
   };
@@ -37,10 +42,16 @@ export const useAudioController = (audioUrl: string | undefined, onEnd: () => vo
     if (!audioUrl || !shouldInitialize) return;
 
     const newAudio = new Audio();
-    newAudio.crossOrigin = 'anonymous';
+    newAudio.crossOrigin = "anonymous";
     newAudio.src = audioUrl;
     audioRef.current = newAudio;
-    newAudio.addEventListener('ended', onEnd);
+
+    const handleLoadedMetadata = () => {
+      setDuration(newAudio.duration);
+    };
+
+    newAudio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    newAudio.addEventListener("ended", onEnd);
 
     initializeAudioContext().catch(() => {
       // Error handling is done in the function
@@ -57,7 +68,8 @@ export const useAudioController = (audioUrl: string | undefined, onEnd: () => vo
             /* Ignore cleanup errors */
           });
       }
-      newAudio.removeEventListener('ended', onEnd);
+      newAudio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      newAudio.removeEventListener("ended", onEnd);
       audioRef.current = null;
     };
   }, [audioUrl, shouldInitialize]);
@@ -67,5 +79,6 @@ export const useAudioController = (audioUrl: string | undefined, onEnd: () => vo
     playPromiseRef,
     analyserNode,
     audioContext,
+    duration,
   };
 };

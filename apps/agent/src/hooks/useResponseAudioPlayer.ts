@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface UseResponseAudioPlayerProps {
   audioUrl: string | undefined;
@@ -19,6 +19,7 @@ export const useResponseAudioPlayer = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
   const playPromiseRef = useRef<Promise<void> | null>(null);
+  const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
     if (audioUrl) {
@@ -38,6 +39,13 @@ export const useResponseAudioPlayer = ({
         const audio = new Audio();
         audio.crossOrigin = 'anonymous';
         audioRef.current = audio;
+
+        // Add duration handler
+        const handleLoadedMetadata = () => {
+          setDuration(audio.duration);
+        };
+
+        audio.addEventListener('loadedmetadata', handleLoadedMetadata);
 
         const context = new AudioContext();
         audioContextRef.current = context;
@@ -63,6 +71,7 @@ export const useResponseAudioPlayer = ({
 
         audio.addEventListener('ended', handleResponsePlayEnd);
         return () => {
+          audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
           audio.removeEventListener('ended', handleResponsePlayEnd);
         };
       } catch (error) {
@@ -76,5 +85,6 @@ export const useResponseAudioPlayer = ({
     audioRef,
     audioSourceRef,
     playPromiseRef,
+    duration, // Add duration to return object
   };
 };
