@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { useDemoConversation } from '../hooks/useDemoConversation';
 import AudioRecorder from './AudioRecorder';
-import { AudioWithTextPlayer } from './AudioWithTextPlayer';
+import { ResponsePlayer } from './components/ResponsePlayer';
+import { RecordingPlayer } from './components/RecordingPlayer';
 import { useAudioVisualizer } from '@meaku/core/hooks/useAudioVisualizer';
 import { ResumeDemo } from './ResumeDemo';
 import { useAudioCleanup } from '../../../../../hooks/useAudioCleanup';
@@ -27,7 +28,7 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
   const [recorderKey, setRecorderKey] = useState(0);
   const { handleSendUserMessage, message } = useDemoConversation();
 
-  const { audioContextRef, audioRef, audioSourceRef, playPromiseRef } = useResponseAudioPlayer({
+  const { audioContextRef, audioRef, audioSourceRef, playPromiseRef, duration } = useResponseAudioPlayer({
     audioUrl: message?.response_audio_url,
     onReceiveResponse: () => send({ type: 'RECEIVE_RESPONSE' }),
     onPlaybackComplete: () => {
@@ -104,13 +105,20 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
     <div className="relative flex h-full w-full items-center justify-center">
       <ResumeDemo onResume={handleContinueDemo} isPlayingResponse={isPlaying} />
       <div className="relative flex h-[92%] w-full flex-col items-center justify-center">
-        <AudioWithTextPlayer
-          message={isProcessing ? 'Processing your question...' : isPlaying ? message?.message || '' : ''}
-          transcription={transcription}
-          canvasRef={canvasRef}
-          isRecording={isRecording}
-          isLoading={isProcessing}
-        />
+        <div className="relative flex h-full w-full flex-col items-center justify-center">
+          <div className="absolute inset-0 bg-primary-foreground" />
+          {isRecording ? (
+            <RecordingPlayer transcription={transcription} canvasRef={canvasRef} />
+          ) : (
+            <ResponsePlayer
+              message={isProcessing ? 'Processing your question...' : message?.message || ''}
+              canvasRef={canvasRef}
+              isLoading={isProcessing}
+              audioDuration={duration}
+              isPlaying={isPlaying}
+            />
+          )}
+        </div>
       </div>
       <AudioRecorder
         key={recorderKey}
