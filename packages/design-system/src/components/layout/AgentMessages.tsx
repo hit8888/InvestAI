@@ -2,7 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { Message } from '@meaku/core/types/agent';
 import { useEffect, useRef } from 'react';
 import SuggestionsArtifact from './SuggestionsArtifact';
-// import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/MultimediaChat/Demo/PreDemoQuestion';
+import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/MultimediaChat/Demo/PreDemoQuestion';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
@@ -34,8 +34,10 @@ const AgentMessages = ({
   usingForAgent = true,
   messages,
   sessionId,
+  tenantName,
   orbState,
   showRightPanel = false,
+  isAMessageBeingProcessed,
   setDemoPlayingStatus,
   setActiveArtifact,
   handleSendUserMessage,
@@ -111,8 +113,16 @@ const AgentMessages = ({
               />
             </div>
           )}
-          {showDemoPreQuestions && <></>} {/*Temorary fix to avoid predemo question*/}
+          {showDemoPreQuestions && (
+            <PreDemoQuestion
+              tenantName={tenantName}
+              isAMessageBeingProcessed={isAMessageBeingProcessed}
+              setDemoPlayingStatus={setDemoPlayingStatus}
+              handleSendUserMessage={handleSendUserMessage}
+            />
+          )}
         </div>
+
         <div className="p-1" />
       </div>
     </div>
