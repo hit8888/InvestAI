@@ -70,7 +70,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
             handleSendMessage={handleSendMessage}
             hasArtifactOrDemoInMessageHistory={hasArtifactOrDemoInMessageHistory}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
-            showDemoPreQuestions={false}
+            showDemoPreQuestions={isDemoAvailable && !demoDetails}
           />
 
           <ArtifactContainer
