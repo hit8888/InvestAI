@@ -70,6 +70,7 @@ const LeadsTableContainer = () => {
         <div className="flex flex-col items-start gap-4 self-stretch">
           <TableFiltersWithHeaderLabel />
           <TableViewContent
+            key={'leads-table-container'}
             isLoading={isLoading}
             totalRecords={totalRecords}
             tableData={leadsData}

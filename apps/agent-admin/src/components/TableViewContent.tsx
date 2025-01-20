@@ -37,6 +37,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
 
   return (
     <CustomTableView
+      key={isConversationTable ? 'conversation-table-view' : 'leads-table-view'}
       isConversationsPage={isConversationTable}
       tabularData={tableData?.length > 0 ? tableData : []}
       columnHeaderData={columnHeaderData}
