@@ -75,9 +75,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
-
-  const [showBubbles, setShowBubbles] = useState(false);
-  const [showPopupContent, setShowPopupContent] = useState(false);
+  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(false);
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -128,10 +126,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         <PopupWithBubblesContainer
           orgName={orgName}
           agentName={agentName}
-          showBubbles={showBubbles}
-          setShowBubbles={setShowBubbles}
-          showPopupContent={showPopupContent}
-          setShowPopupContent={setShowPopupContent}
+          setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
         />
       ) : null}
       <div className="w-full rounded-xl bg-gray-50 p-1.5">
@@ -140,7 +135,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
         >
           <div className="relative flex-1">
-            {!hasFirstUserMessageBeenSent && !inputValue && !showBubbles && !showPopupContent && (
+            {!hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear && (
               <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
                 <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
               </div>
@@ -151,7 +146,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
               className={cn(
                 'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
                 {
-                  'pl-16': !hasFirstUserMessageBeenSent && !showBubbles && !showPopupContent,
+                  'pl-14': !hasFirstUserMessageBeenSent && showOrbAfterBubblesDisappear,
                 },
               )}
               placeholder={useTypewriter(placeholderText)}

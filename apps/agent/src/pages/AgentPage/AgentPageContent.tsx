@@ -30,7 +30,7 @@ const Agent = () => {
           <div
             className="absolute inset-0 h-full w-full bg-contain bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('${CDN_URL_FOR_ASSETS}${orgName}.png')`,
+              backgroundImage: `url('${CDN_URL_FOR_ASSETS}/agents-website-SS/${orgName}.png')`,
             }}
           ></div>
         </div>

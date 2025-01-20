@@ -1,5 +1,5 @@
 import useSound from '@meaku/core/hooks/useSound';
-import popupsound from '../../../../assets/popup-chime.mp4';
+import popupsound from '../../../../assets/popup-sound.mp4';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Orb from '@breakout/design-system/components/Orb/index';

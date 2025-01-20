@@ -6,20 +6,12 @@ import PopupContent, { PopupContentProps } from './PopupContent';
 import PopupBubble from './PopupBubble';
 
 interface ContainerProps extends PopupContentProps {
-  showBubbles: boolean;
-  setShowBubbles: (value: boolean) => void;
-  showPopupContent: boolean;
-  setShowPopupContent: (value: boolean) => void;
+  setShowOrbAfterBubblesDisappear: (value: boolean) => void;
 }
 
-const PopupWithBubblesContainer = ({
-  agentName,
-  orgName,
-  showBubbles,
-  setShowBubbles,
-  showPopupContent,
-  setShowPopupContent,
-}: ContainerProps) => {
+const PopupWithBubblesContainer = ({ agentName, orgName, setShowOrbAfterBubblesDisappear }: ContainerProps) => {
+  const [showBubbles, setShowBubbles] = useState(false);
+  const [showPopupContent, setShowPopupContent] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [hasShownOnce, setHasShownOnce] = useState(false);
 
@@ -55,7 +47,12 @@ const PopupWithBubblesContainer = ({
         setShowBubbles(false);
         setHasShownOnce(true);
       }, 500); // Match popup exit duration
-    }, 10000); // 10 + 1 seconds initial delay
+
+      // Show Orb Inside Entry bar After Bubbles Disappear
+      setTimeout(() => {
+        setShowOrbAfterBubblesDisappear(true);
+      }, 1500); // 1.5 seconds delay
+    }, 10000); // 10 seconds initial delay
 
     return () => {
       clearTimeout(popupTimer);
