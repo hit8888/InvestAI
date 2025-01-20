@@ -1,13 +1,15 @@
-import { CSSProperties, useEffect, useState } from 'react';
-import { cn } from '@breakout/design-system/lib/cn';
+import { useRef, useState } from 'react';
 
-import { Column, flexRender, useReactTable, getCoreRowModel, Row } from '@tanstack/react-table';
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
-import { LeadsTableDisplayContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
-// import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import { useSidebar } from '../../context/SidebarContext';
+import { useScrollSync } from '../../hooks/useScrollSync';
+import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
+import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
+import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -19,138 +21,123 @@ interface TableViewProps {
 const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = false }: TableViewProps) => {
   const navigate = useNavigate();
   const { isSidebarOpen } = useSidebar();
-  // const { handleSetConversationDetails } = useConversationDetails();
-  const [data, setData] = useState(tabularData);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
-  useEffect(() => {
-    setData(tabularData);
-  }, [tabularData]);
+  const tableBodyRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  const table = useReactTable({
-    initialState: {
-      columnPinning: {
-        // left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : [],
-        left: CONVERSATIONS_PINNED_COLUMNS,
-      },
-    },
-    data,
-    columns: columnHeaderData,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const lastScrollPosition = useRef(0); // ref to store scroll position
 
-  const getCommonPinningStyles = (
-    column: Column<ConversationsTableDisplayContent | LeadsTableDisplayContent>,
-  ): CSSProperties => {
-    const isPinned = column.getIsPinned();
-    return {
-      left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-      // right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-      opacity: isPinned ? 0.95 : 1,
-      position: isPinned ? 'sticky' : 'relative',
-      width: column.getSize(),
-      zIndex: isPinned ? 100 : 0,
-    };
+  const handleHeaderStickyLogic = (value: boolean) => {
+    setIsHeaderSticky(value);
+  };
+
+  const handleSyncScrolledValue = (scrollLeft: number) => {
+    setIsScrolled(scrollLeft > 0);
   };
 
   const handleRowItemClick = (row: ConversationsTableDisplayContent) => {
     const detailsPageURL = row.session_id;
-    // handleSetConversationDetails(row as ConversationsTableDisplayContent);
     navigate(`${detailsPageURL}`);
   };
 
-  const getSingleRowItem = (row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>, index: number) => {
-    const detailsPageURL = 'session_id' in row.original ? row.original.session_id : null;
-    return (
-      <tr
-        onClick={
-          detailsPageURL ? () => handleRowItemClick(row.original as ConversationsTableDisplayContent) : undefined
-        }
-        key={row.id}
-        className={cn('flex w-full items-start self-stretch bg-gray-600', {
-          'bg-white': index % 2 === 0, // White background for even rows
-          'bg-gray-25': index % 2 !== 0, // Gray background for odd rows
-          'cursor-pointer': detailsPageURL,
-        })}
-      >
-        {row.getVisibleCells().map((cell) => {
-          const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
-          const isColumnNumberOfUserMessages = cell.column.id === 'number_of_user_messages';
-          const isColumnPinnedLeftForName = cell.column.getIsPinned() === 'left' && cell.column.id === 'name';
-          return (
-            <td
-              key={cell.id}
-              className={cn(
-                `border-gray/20 flex flex-1 flex-col items-start justify-center self-stretch border-b p-2 `,
-                {
-                  'border-r': !isLastColumn,
-                  'min-w-56': isColumnNumberOfUserMessages,
-                  pinnedColumnShadow: isColumnPinnedLeftForName,
-                },
-              )}
-              style={{ ...getCommonPinningStyles(cell.column) }}
-            >
-              <div className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </div>
-            </td>
-          );
-        })}
-      </tr>
-    );
-  };
+  // Scroll Sync Handler for table header and body
+  useScrollSync({
+    tableBodyRef,
+    headerRef,
+    isHeaderSticky,
+    lastScrollPosition,
+    onScroll: handleSyncScrolledValue,
+  });
+
+  // Intersection observer for header stickiness
+  // And preserve the scroll position during the sticky transition.
+  useHeaderIntersection({
+    headerRef,
+    tableBodyRef,
+    lastScrollPosition,
+    onIntersectionChange: handleHeaderStickyLogic,
+  });
+
+  const table = useReactTable({
+    initialState: {
+      columnPinning: {
+        left: CONVERSATIONS_PINNED_COLUMNS,
+      },
+    },
+    data: tabularData,
+    columns: columnHeaderData,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
-    <div
-      className={`w-full ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  relative overflow-x-auto`}
-    >
-      <table
-        style={{
-          width: isConversationsPage ? table.getTotalSize() : '100%',
-        }}
+    <div className="relative w-full">
+      <div className="header-sentinel" style={{ height: '1px', width: '100%' }} />
+      {/* Sticky Header Container */}
+      {isHeaderSticky && (
+        <div
+          className={`sticky left-0 right-0 top-0 z-[1000] bg-white ${
+            isSidebarOpen ? 'w-[1200px] 2xl:w-[1600px]' : 'w-[1400px] 2xl:w-[1800px]'
+          }`}
+        >
+          <div ref={headerRef} className="hide-scrollbar overflow-x-auto">
+            <table
+              style={{
+                width: isConversationsPage ? table.getTotalSize() : '100%',
+                position: 'relative',
+              }}
+            >
+              <thead className="w-full">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <CustomSingleHeaderRowItem
+                    key={headerGroup.id}
+                    headerGroup={headerGroup}
+                    isScrolled={isScrolled}
+                    isHeaderSticky={isHeaderSticky}
+                  />
+                ))}
+              </thead>
+            </table>
+          </div>
+        </div>
+      )}
+      <div
+        ref={tableBodyRef}
+        className={`table-container w-full 
+          ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  
+          relative overflow-x-auto`}
       >
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="flex w-full items-start">
-              {headerGroup.headers.map((header) => {
-                const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
-                const isColumnName = header.id === 'name';
-                const isColumnNumberOfUserMessages = header.id === 'number_of_user_messages';
-                const isColumnProductOfInterest = header.id === 'product_of_interest';
-                const isColumnPinnedLeftForName = header.column.getIsPinned() === 'left' && isColumnName;
-                return (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    className={cn(
-                      `relative flex flex-1 items-center gap-2 border-b border-t border-primary/40 bg-primary/20 p-2.5`,
-                      {
-                        'border-r': !isLastColumn,
-                        'w-28 truncate 2xl:w-40': isColumnProductOfInterest,
-                        'min-w-56': isColumnNumberOfUserMessages,
-                        pinnedColumnShadow: isColumnPinnedLeftForName,
-                      },
-                    )}
-                    style={{ ...getCommonPinningStyles(header.column) }}
-                  >
-                    <span className={cn(`flex-1 text-left text-xs font-medium text-gray-900`, {})}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </span>
-                    <div
-                      {...{
-                        onDoubleClick: () => header.column.resetSize(),
-                        onMouseDown: header.getResizeHandler(),
-                        onTouchStart: header.getResizeHandler(),
-                        className: `resizer ${header.column.getIsResizing() ? 'isResizing' : ''}`,
-                      }}
-                    />
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>{table.getRowModel().rows.map((row, index) => getSingleRowItem(row, index))}</tbody>
-      </table>
+        <table
+          style={{
+            width: isConversationsPage ? table.getTotalSize() : '100%',
+            position: 'relative',
+          }}
+        >
+          <thead
+            className="w-full"
+            style={{
+              display: isHeaderSticky ? 'none' : 'block',
+              position: 'relative',
+              zIndex: 4,
+            }}
+          >
+            {table.getHeaderGroups().map((headerGroup) => (
+              <CustomSingleHeaderRowItem
+                key={headerGroup.id}
+                headerGroup={headerGroup}
+                isScrolled={isScrolled}
+                isHeaderSticky={isHeaderSticky}
+              />
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row, index) => (
+              <CustomSingleBodyRowItem key={row?.id} row={row} index={index} handleRowItemClick={handleRowItemClick} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

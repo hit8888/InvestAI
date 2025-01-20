@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { TranscriptionResult } from './types';
+import { useRef, useState } from 'react';
 import { useDemoConversation } from '../hooks/useDemoConversation';
 import AudioRecorder from './AudioRecorder';
 import { AudioWithTextPlayer } from './AudioWithTextPlayer';
-import { Dialog, DialogContent } from '@breakout/design-system/components/layout/dialog';
-import Button from '@breakout/design-system/components/layout/button';
 import { useAudioVisualizer } from '@meaku/core/hooks/useAudioVisualizer';
 import { ResumeDemo } from './ResumeDemo';
 import { useAudioCleanup } from '../../../../../hooks/useAudioCleanup';
+import { IdleStateDialog } from './IdleStateDialog';
+import { useDemoFlowState } from '../../../../../hooks/useDemoFlowState';
+import { useResponseAudioPlayer } from '../../../../../hooks/useResponseAudioPlayer';
+import { TranscriptionResult } from './types';
+import { useTranscriptionHandler } from '../../../../../hooks/useTranscriptionHandler';
 
 interface Props {
   handleResumeDemo: () => void;
@@ -15,193 +17,50 @@ interface Props {
 }
 
 const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
-  const RECORDING_RESTART_DELAY = 500; // 500ms before restarting recording
-
-  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const RECORDING_RESTART_DELAY = 500;
+  const { isRecording, isProcessing, isPlaying, isAskingToContinue, send } = useDemoFlowState();
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
-  const [isPlayingResponse, setIsPlayingResponse] = useState(false);
-  const [showSpeakingWarning, setShowSpeakingWarning] = useState(false);
-  const [showContinueDialog, setShowContinueDialog] = useState(false);
-  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
   const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const hasPlayedResponseRef = useRef(false);
+  const resumeDemoRef = useRef<boolean>(false);
   const messageSentRef = useRef(false);
 
+  const [recorderKey, setRecorderKey] = useState(0);
   const { handleSendUserMessage, message } = useDemoConversation();
+
+  const { audioContextRef, audioRef, audioSourceRef, playPromiseRef } = useResponseAudioPlayer({
+    audioUrl: message?.response_audio_url,
+    onReceiveResponse: () => send({ type: 'RECEIVE_RESPONSE' }),
+    onPlaybackComplete: () => {
+      send({ type: 'PLAYBACK_COMPLETE' });
+      messageSentRef.current = false;
+      if (resumeDemoRef.current) {
+        isQueryRaisedRef.current = false;
+      }
+      send({ type: 'START_RECORDING' });
+    },
+    setAnalyserNode,
+    recordingRestartDelay: RECORDING_RESTART_DELAY,
+  });
 
   const [transcription, setTranscription] = useState<TranscriptionResult>({
     transcript: '',
     isLoading: false,
   });
 
-  const canvasRef = useAudioVisualizer({
-    analyserNode,
-    audioUrl: message?.response_audio_url || '',
-  });
-
-  // Ensure recording only starts when appropriate
-  const startRecording = () => {
-    if (!isPlayingResponse && !isWaitingForResponse) {
-      messageSentRef.current = false;
-      setIsRecording(true);
-    }
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-  // Modified transcription handler to handle the full error string
-  useEffect(() => {
-    if (transcription.transcript && !transcription.isLoading && !isWaitingForResponse && !messageSentRef.current) {
-      // Mark message as sent
-      messageSentRef.current = true;
-
-      // Stop recording first
-      stopRecording();
-      setIsRecording(false);
-
-      // Then update UI state
-      setIsWaitingForResponse(true);
-      hasPlayedResponseRef.current = false;
-
-      // Send message and clear transcription
-      handleSendUserMessage({ message: transcription.transcript });
-
-      // Clear transcription after sending
-      setTranscription((prev) => ({ ...prev, transcript: '' }));
-    } else if (
-      (transcription.error?.includes('no-speech') || transcription.error === 'Speech recognition error: no-speech') &&
-      !showContinueDialog &&
-      !isPlayingResponse
-    ) {
-      // Show continue dialog when no-speech error occurs
-      console.log('Showing continue dialog due to no speech');
-      setShowContinueDialog(true);
-      stopRecording();
-      // Reset transcription error state
-      setTranscription((prev) => ({
-        ...prev,
-        error: undefined,
-      }));
-    }
-  }, [transcription, isWaitingForResponse, isPlayingResponse]);
-
-  // Modified autostart effect to be more strict
-  useEffect(() => {
-    if (!isPlayingResponse && !isWaitingForResponse) {
-      startRecording();
-    } else {
-      stopRecording(); // Ensure recording stops in both states
-    }
-  }, [isPlayingResponse, isWaitingForResponse]);
-
-  // Add a ref to track active silence detection
-  const silenceDetectionActiveRef = useRef(false);
-
-  // Add audioContext ref for visualizer
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const audioSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const playPromiseRef = useRef<Promise<void> | null>(null);
-
-  // Better handling of response audio
-  useEffect(() => {
-    if (message?.response_audio_url) {
-      // First ensure recording is stopped
-      stopRecording();
-      setIsRecording(false); // Double ensure recording is stopped
-
-      // Then update states
-      setIsWaitingForResponse(false);
-      setShowContinueDialog(false);
-      setIsPlayingResponse(true);
-
-      try {
-        // Create new audio element each time
-        const audio = new Audio();
-        audio.crossOrigin = 'anonymous';
-        audioRef.current = audio;
-
-        // Create new audio context
-        const context = new AudioContext();
-        audioContextRef.current = context;
-
-        const analyzer = context.createAnalyser();
-        analyzer.fftSize = 256;
-
-        audio.src = message.response_audio_url;
-        audio.load();
-
-        // Set up audio pipeline when ready
-        audio.oncanplaythrough = () => {
-          if (audio && context) {
-            // Disconnect old source if it exists
-            if (audioSourceRef.current) {
-              audioSourceRef.current.disconnect();
-            }
-
-            audioSourceRef.current = context.createMediaElementSource(audio);
-            audioSourceRef.current.connect(analyzer);
-            analyzer.connect(context.destination);
-            setAnalyserNode(analyzer);
-
-            playPromiseRef.current = audio.play();
-          }
-        };
-
-        audio.addEventListener('ended', () => {
-          handleResponsePlayEnd();
-        });
-      } catch (error) {
-        console.error('Error setting up audio:', error);
-      }
-
-      // Simplified cleanup that only handles event listener
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.removeEventListener('ended', handleResponsePlayEnd);
-        }
-      };
-    }
-  }, [message?.response_audio_url]);
-
-  const handleResponsePlayEnd = () => {
-    // Clear audio resources first
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    setAnalyserNode(null);
-
-    // Reset flags
-    messageSentRef.current = false;
-    setIsPlayingResponse(false);
-    hasPlayedResponseRef.current = true;
-
-    // Delay starting recording to ensure clean state
-    setTimeout(() => {
-      if (!isPlayingResponse && !isWaitingForResponse) {
-        startRecording();
-      }
-    }, RECORDING_RESTART_DELAY);
-  };
-
-  const handleCloseDemoAgent = () => {
-    handleResumeDemo();
-    isQueryRaisedRef.current = false;
-  };
+  const startRecording = () => send({ type: 'START_RECORDING' });
+  const stopRecording = () => send({ type: 'STOP_RECORDING' });
 
   const handleContinueDemo = () => {
-    setShowContinueDialog(false);
-    handleCloseDemoAgent();
+    handleResumeDemo();
+    resumeDemoRef.current = true;
+    send({ type: 'CONTINUE_DEMO' });
   };
 
-  // Add a key counter for AudioRecorder remounting
-  const [recorderKey, setRecorderKey] = useState(0);
-
   const handleContinueSpeaking = () => {
-    setShowContinueDialog(false);
-    // Reset error state and transcription
+    // First reset the recorder key to force a new instance
+    setRecorderKey((prev) => prev + 1);
+
+    // Then reset transcription state
     setTranscription((prev) => ({
       ...prev,
       error: undefined,
@@ -210,70 +69,65 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
       isLoading: false,
     }));
 
-    // Increment key to force remount of AudioRecorder
-    setRecorderKey((prev) => prev + 1);
-
     // Small delay before starting recording on new instance
     setTimeout(() => {
-      startRecording();
+      send({ type: 'CONTINUE_SPEAKING' });
     }, 100);
   };
 
-  // Replace multiple cleanup effects with single hook
+  useTranscriptionHandler({
+    transcription,
+    messageSentRef,
+    onSendMessage: (message) => handleSendUserMessage({ message }),
+    onStopRecording: () => send({ type: 'STOP_RECORDING' }),
+    onNoSpeechDetected: () => send({ type: 'NO_SPEECH_DETECTED' }),
+    setTranscription,
+  });
+
+  const canvasRef = useAudioVisualizer({
+    analyserNode,
+    audioUrl: message?.response_audio_url || '',
+  });
+
   useAudioCleanup({
     playPromiseRef,
     audioRef,
     audioContextRef,
     audioSourceRef,
     silenceTimeoutRef,
-    stopRecording,
+    stopRecording: () => send({ type: 'STOP_RECORDING' }),
     messageSentRef,
-    silenceDetectionActiveRef,
+    silenceDetectionActiveRef: useRef(false),
   });
 
   return (
     <div className="relative flex h-full w-full items-center justify-center">
-      <ResumeDemo onResume={handleContinueDemo} />
+      <ResumeDemo onResume={handleContinueDemo} isPlayingResponse={isPlaying} />
       <div className="relative flex h-[92%] w-full flex-col items-center justify-center">
         <AudioWithTextPlayer
-          message={
-            isWaitingForResponse ? 'Processing your question...' : isPlayingResponse ? message?.message || '' : '' // Change this to empty string to let component handle display logic
-          }
+          message={isProcessing ? 'Processing your question...' : isPlaying ? message?.message || '' : ''}
           transcription={transcription}
           canvasRef={canvasRef}
-          onPlayEnd={handleResponsePlayEnd}
-          isRecording={isRecording && !isPlayingResponse && !isWaitingForResponse}
-          isLoading={isWaitingForResponse}
+          isRecording={isRecording}
+          isLoading={isProcessing}
         />
       </div>
       <AudioRecorder
-        key={recorderKey} // Add key prop to force remount
+        key={recorderKey}
         setAnalyserNode={setAnalyserNode}
-        setIsRecording={setIsRecording}
         setTranscription={setTranscription}
         isTranscribing={transcription.isLoading}
-        disabled={isPlayingResponse || isWaitingForResponse}
+        disabled={isPlaying || isProcessing}
         onStartRecording={startRecording}
         onStopRecording={stopRecording}
       />
-      {/* Warning Dialog - Position at top */}
-      <Dialog open={showSpeakingWarning} onOpenChange={setShowSpeakingWarning}>
-        <DialogContent className="fixed left-1/2 top-4 w-[420px] -translate-x-1/2 bg-white p-4">
-          <div className="p-4">Please wait for the current message to finish playing</div>
-        </DialogContent>
-      </Dialog>
-      {/* Continue Demo Dialog - Style it as a modal */}
-      <Dialog open={showContinueDialog && !isPlayingResponse} onOpenChange={setShowContinueDialog}>
-        <DialogContent className="fixed left-1/2 top-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2 bg-white p-4">
-          <div className="p-4">
-            <h3 className="mb-4 text-xl font-semibold">Would you like to continue the demo?</h3>
-            <div className="mt-4 flex justify-end gap-2">
-              <Button onClick={handleContinueSpeaking}>Continue Speaking</Button>
-              <Button onClick={handleContinueDemo}>Continue Demo</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <IdleStateDialog
+        showContinueDialog={isAskingToContinue}
+        setShowContinueDialog={() => send({ type: 'CONTINUE_DEMO' })}
+        isPlayingResponse={isPlaying}
+        handleContinueSpeaking={handleContinueSpeaking}
+        handleContinueDemo={handleContinueDemo}
+      />
     </div>
   );
 };

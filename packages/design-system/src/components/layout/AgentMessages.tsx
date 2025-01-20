@@ -27,6 +27,7 @@ interface IProps {
   allowFullWidthForText: boolean;
   showDemoPreQuestions: boolean;
   primaryColor: string | null;
+  allowFeedback: boolean;
 }
 
 const AgentMessages = ({
@@ -44,6 +45,7 @@ const AgentMessages = ({
   allowFullWidthForText,
   showDemoPreQuestions,
   primaryColor,
+  allowFeedback,
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -94,6 +96,7 @@ const AgentMessages = ({
                 handleAddMessageFeedback={handleAddMessageFeedback}
                 handleRemoveMessageFeedback={handleRemoveMessageFeedback}
                 initialSuggestedQuestions={initialSuggestedQuestions}
+                allowFeedback={allowFeedback}
               />
             </div>
           ))}

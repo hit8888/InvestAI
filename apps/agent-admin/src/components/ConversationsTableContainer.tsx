@@ -71,6 +71,7 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
         <div className="flex flex-col items-start gap-4 self-stretch">
           <TableFiltersWithHeaderLabel />
           <TableViewContent
+            key={'conversations-table-container'}
             isConversationTable={true}
             isLoading={isLoading}
             totalRecords={totalRecords}

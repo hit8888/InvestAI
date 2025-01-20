@@ -10,6 +10,8 @@ import { FinishDemo } from '../FinishDemo';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { useAudioVisualizer } from '@meaku/core/hooks/useAudioVisualizer';
 import { useAudioController } from '@meaku/core/hooks/useAudioController';
+import ReactPlayer from 'react-player';
+
 interface IProps {
   demoDetails: ScriptStepType;
   assetType: 'IMAGE' | 'VIDEO' | null;
@@ -29,7 +31,8 @@ const DemoFlow = ({
 }: IProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<ReactPlayer>(null);
 
   const { audioRef, playPromiseRef, analyserNode } = useAudioController(
     demoDetails?.audio_url,
@@ -47,19 +50,20 @@ const DemoFlow = ({
     if (!audio && !video) return;
 
     try {
-      if (audio && audio.paused) {
+      if (audio?.paused || !isVideoPlaying) {
         setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-        playPromiseRef.current = audio.play();
-        await playPromiseRef.current;
-      } else if (video && video.paused) {
-        video.play();
+        setIsVideoPlaying(true);
+        if (audio) {
+          playPromiseRef.current = audio.play();
+          await playPromiseRef.current;
+        }
       } else {
         if (playPromiseRef.current) {
           await playPromiseRef.current;
         }
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_INTERUPTED);
         if (audio) audio.pause();
-        if (video) video.pause();
+        setIsVideoPlaying(false);
         setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
       }
     } catch (error) {
@@ -70,16 +74,15 @@ const DemoFlow = ({
 
   const handlePause = async () => {
     const audio = audioRef.current;
-    const video = videoRef.current;
 
-    if (!audio && !video) return;
+    if (!audio) return;
 
     try {
       if (playPromiseRef.current) {
         await playPromiseRef.current;
       }
+      setIsVideoPlaying(false);
       if (audio) audio.pause();
-      if (video) video.pause();
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
     } catch (error) {
       console.error('Error handling pause:', error);
@@ -103,7 +106,12 @@ const DemoFlow = ({
             />
           )}
           {assetType === 'VIDEO' && (
-            <VideoPlayer url={demoDetails.asset_url} onLoadComplete={() => setIsVideoLoaded(true)} />
+            <VideoPlayer
+              url={demoDetails.asset_url}
+              onLoadComplete={() => setIsVideoLoaded(true)}
+              videoRef={videoRef}
+              playing={isVideoPlaying}
+            />
           )}
         </>
       ) : (

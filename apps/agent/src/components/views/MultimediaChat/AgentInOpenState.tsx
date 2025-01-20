@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
-  const { isDemoAvailable, demoDetails, demoFeatures } = useDemoDetails();
+  const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
 
   useUpdateActiveArtifactOnNewMessage();
   useExpandWidthOnDemoFrame(demoDetails);
@@ -70,6 +70,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
             handleSendMessage={handleSendMessage}
             hasArtifactOrDemoInMessageHistory={hasArtifactOrDemoInMessageHistory}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
+            showDemoPreQuestions={isDemoAvailable && !demoDetails}
           />
 
           <ArtifactContainer
@@ -83,11 +84,12 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
             key={demoDetails?.audio_url}
             handleFinishDemo={handleFinishDemo}
             demoDetails={demoDetails}
-            handleSendMessage={handleSendMessage}
             demoPlayingStatus={demoPlayingStatus}
             setDemoPlayingStatus={setDemoPlayingStatus}
             demoFeatures={demoFeatures}
             isDemoAvailable={isDemoAvailable}
+            onStepEnd={onStepEnd}
+            switchToDemo={switchToDemo}
           />
         </div>
         {!isMediaTakingFullWidth && (

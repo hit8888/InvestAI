@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
+import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 
 const LoginForm = () => {
   const { userInfo, login, saveTokens } = useAuth();
@@ -38,7 +39,9 @@ const LoginForm = () => {
   const { mutateAsync: generateOtp, isPending: isGenerateOtpPending } = useGenerateOtp({
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
-      console.log('🚀 ~ file: LoginForm.tsx:44 ~ data:', data);
+      toast.custom(<SuccessToastMessage title={data.message} />, {
+        position: 'top-center',
+      });
       setAuthMode('enterOtp');
     },
   });

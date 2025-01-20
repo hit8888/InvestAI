@@ -3,23 +3,22 @@ import Button from '@breakout/design-system/components/layout/button';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
 import { useState } from 'react';
 import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
-import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
-  handleSendMessage: (data: IWebSocketHandleMessage) => void;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
+  switchToDemo: ({ feature_ids }: { feature_ids: number[] }) => void;
 }
 
-const SelectDemoFeatures = ({ demoFeatures, handleSendMessage, setDemoPlayingStatus }: IProps) => {
+const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }: IProps) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const onBookDemoClick = () => {
-    handleSendMessage({ message: '', eventType: DemoEvent.DEMO_NEXT, eventData: { feature_ids: selectedIds } });
+    switchToDemo({ feature_ids: selectedIds });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SELECT_TOPIC, { feature_ids: selectedIds });
     setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
   };

@@ -58,6 +58,7 @@ const Sidebar: React.FC = () => {
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
   const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
+  const TENANT_LOGO_URL = getTenantIdentifier()?.['logo'] ?? '';
 
   return (
     <div
@@ -78,8 +79,12 @@ const Sidebar: React.FC = () => {
           })}
         >
           <div className="flex items-center gap-2">
-            <Link to={'/'} className="h-8 w-8">
-              <AdminLogoSVG width={'30'} height={'35'} />
+            <Link to={'/'} className="h-8 w-8 object-contain">
+              {TENANT_LOGO_URL.length > 0 ? (
+                <img src={TENANT_LOGO_URL} width={'30'} height={'35'} alt={`${TENANT_NAME} logo`} />
+              ) : (
+                <AdminLogoSVG width={'30'} height={'35'} />
+              )}
             </Link>
             {isOpen ? (
               <span className="text-lg font-bold text-gray-900 transition-all duration-300">{TENANT_NAME}</span>

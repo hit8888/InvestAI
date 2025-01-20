@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 
 interface IProps {
   analyserNode: AnalyserNode | null;
@@ -14,7 +14,7 @@ export const useAudioVisualizer = ({ analyserNode, audioUrl }: IProps) => {
     const canvas = canvasRef.current;
     if (!canvas || !analyserNode) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = canvas.offsetWidth;
@@ -25,7 +25,7 @@ export const useAudioVisualizer = ({ analyserNode, audioUrl }: IProps) => {
     const smoothingFactor = 0.2;
 
     // Move constants outside draw loop since they don't change
-    const targetWidth = canvas.width * 0.8;
+    const targetWidth = canvas.width * 0.6;
     const barWidth = Math.max(2, Math.floor(canvas.width / 50));
     const barGap = barWidth / 2;
     const numBars = Math.floor(targetWidth / (barWidth + barGap));
@@ -34,9 +34,10 @@ export const useAudioVisualizer = ({ analyserNode, audioUrl }: IProps) => {
     const frequencyStep = Math.floor(bufferLength / numBars);
     const centerY = canvas.height / 2;
     const maxBarHeight = canvas.width / 2;
-
     // Pre-calculate bar positions
-    const barPositions = new Array(numBars).fill(0).map((_, i) => Math.floor(startX + i * (barWidth + barGap)));
+    const barPositions = new Array(numBars)
+      .fill(0)
+      .map((_, i) => Math.floor(startX + i * (barWidth + barGap)));
 
     const draw = () => {
       animationFrameRef.current = requestAnimationFrame(draw);
@@ -60,12 +61,21 @@ export const useAudioVisualizer = ({ analyserNode, audioUrl }: IProps) => {
         }
 
         // Optimize sin calculation
-        const naturalMovement = Math.sin((Date.now() * 0.002 + i * 0.2) % (Math.PI * 2)) * 2;
-        const barHeight = Math.min((value / 255) * maxBarHeight + naturalMovement, maxBarHeight);
+        const naturalMovement =
+          Math.sin((Date.now() * 0.002 + i * 0.2) % (Math.PI * 2)) * 2;
+        const barHeight = Math.min(
+          (value / 255) * maxBarHeight + naturalMovement,
+          maxBarHeight
+        );
 
         ctx.beginPath();
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fillRect(barPositions[i], centerY - barHeight / 2, barWidth, barHeight);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.fillRect(
+          barPositions[i],
+          centerY - barHeight / 2,
+          barWidth,
+          barHeight
+        );
       }
 
       prevDataRef.current = new Uint8Array(dataArray);

@@ -16,10 +16,10 @@ const updateParentUrlParam = (key, value) => {
 };
 
 (function () {
-  const DEFAULT_WIDTH = "95vw";
+  const DEFAULT_WIDTH = "100vw";
   const DEFAULT_HEIGHT = "90vh";
-  const COLLAPSED_SIZE_WIDTH = "95vw";
-  const COLLAPSED_SIZE_HEIGHT_PX = 180;
+  const COLLAPSED_SIZE_WIDTH = "100vw";
+  const COLLAPSED_SIZE_HEIGHT_PX = 320;
 
   /**
    * Creates and styles the container for the chat widget.
@@ -30,7 +30,7 @@ const updateParentUrlParam = (key, value) => {
     container.id = "chat-widget-container";
     Object.assign(container.style, {
       position: "fixed",
-      bottom: "10px", // Position 20px from the bottom
+      bottom: "10px", // Position 10px from the bottom
       left: "50%", // Center horizontally
       zIndex: "10000",
       width: DEFAULT_WIDTH,
@@ -196,7 +196,7 @@ const updateParentUrlParam = (key, value) => {
   }
 
   // Set the script URL based on the environment
-  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?config=multimedia`;
+  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?`;
   let isAgentOpen = false;
   let iFrameSource = null;
 

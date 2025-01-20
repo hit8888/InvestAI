@@ -14,9 +14,17 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   onStepEnd: () => void;
   onFinishDemo: () => void;
+  switchToDemo: () => void;
 }
 
-const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onStepEnd, onFinishDemo }: IProps) => {
+const DemoContent = ({
+  demoDetails,
+  demoPlayingStatus,
+  setDemoPlayingStatus,
+  onStepEnd,
+  onFinishDemo,
+  switchToDemo,
+}: IProps) => {
   const assetType = demoDetails?.asset_type;
   const isQueryRaisedRef = useRef(false);
 
@@ -32,7 +40,7 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
   };
 
   const showWaitDemoCompleteNotification = isDemoPlaying && shouldShowDemoAgent;
-  const showDemoQuestionsFlow = !isDemoPlaying && shouldShowDemoAgent;
+  const showDemoQuestionsFlow = !isDemoPlaying && shouldShowDemoAgent && isQueryRaisedRef;
 
   const handleAudioEnd = () => {
     if (isQueryRaisedRef.current) {
@@ -49,9 +57,8 @@ const DemoContent = ({ demoDetails, demoPlayingStatus, setDemoPlayingStatus, onS
 
   const handleResumeDemo = () => {
     setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
-    onStepEnd();
+    switchToDemo();
   };
-
   return (
     <>
       {showDemoQuestionsFlow ? (

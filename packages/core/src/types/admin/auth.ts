@@ -3,6 +3,7 @@ export type organizationDetails = {
   name?: string;
   role?: string;
   "tenant-name"?: string;
+  logo?: string;
 };
 
 export type AuthResponse = {
