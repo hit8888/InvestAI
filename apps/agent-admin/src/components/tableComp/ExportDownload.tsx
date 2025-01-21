@@ -1,7 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from '@breakout/design-system/components/Popover/index';
 import TooltipArrowIcon from '@breakout/design-system/components/icons/tooltip-arrow';
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
-import useClickOutside from '@breakout/design-system/hooks/useClickOutside';
 import DownloadIcon from '@breakout/design-system/components/icons/download-icon';
 
 import {
@@ -13,9 +18,9 @@ import {
   DOWNLOAD_ITEM_EXPORT_XSLS_LABEL,
 } from '../../utils/constants';
 import ExportDownloadButton from './ExportDownloadButton';
-import { handleDownload } from '../../utils/common';
+// import { handleDownload } from '../../utils/common';
 import RadioButtonWithLabel from './RadioButtonWithLabel';
-import DropdownTriggerButton from './DropdownTriggerButton';
+import { RadioGroup } from '@breakout/design-system/components/shadcn-ui/radio-group';
 
 // Define the type for the options
 interface DownloadProps {
@@ -26,77 +31,72 @@ const ExportDownload: React.FC<DownloadProps> = () => {
   // State to track the selected options
   const [selectedOption, setSelectedOption] = useState<string>(XSLS_LABEL);
 
-  // State to toggle dropdown visibility
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Ref to track the dropdown element
-  const dropdownRef = useRef<HTMLDivElement>(null!);
-
-  // Toggle dropdown visibility
-  const toggleDropdown = () => {
-    setIsOpen((prevState) => !prevState);
-  };
-
   const handleDownloadButton = () => {
-    const fileTypeLowercase = selectedOption.toLowerCase() as 'xsls' | 'csv';
-    console.log(`Downloaded file local.${fileTypeLowercase}`);
-    const apiUrls = {
-      xsls: 'https://example.com/api/download/file.xsls', // TODOS: Replace with actual URL
-      csv: 'https://example.com/api/download/file.csv', // TODOS: Replace with actual URL
-    };
-    // TODOS: Pass actual Parameter for Integration
-    handleDownload(fileTypeLowercase, apiUrls[fileTypeLowercase], 'example');
+    return;
+    // const fileTypeLowercase = selectedOption.toLowerCase() as 'xsls' | 'csv';
+    // console.log(`Downloaded file local.${fileTypeLowercase}`);
+    // const apiUrls = {
+    //   xsls: 'https://example.com/api/download/file.xsls', // TODOS: Replace with actual URL
+    //   csv: 'https://example.com/api/download/file.csv', // TODOS: Replace with actual URL
+    // };
+    // // TODOS: Pass actual Parameter for Integration
+    // handleDownload(fileTypeLowercase, apiUrls[fileTypeLowercase], 'example');
   };
 
-  // Use the custom hook to close the dropdown when clicking outside
-  useClickOutside(dropdownRef, () => setIsOpen(false));
-  return (
-    <div className="relative z-20 inline-block text-left" ref={dropdownRef}>
-      {/* Dropdown button */}
-      <DropdownTriggerButton
-        btnLabel={<DownloadIcon width={'24'} height={'24'} viewBox="0 0 24 24" />}
-        btnID="download-trigger-button"
-        onToggleDropdown={toggleDropdown}
-        isDropdownOpen={isOpen}
-      />
+  const handleRadioOptions = (option: string) => {
+    setSelectedOption(option);
+  };
 
-      {/* Dropdown menu */}
-      {isOpen && (
-        <div
-          className={`download-boxshadow absolute -left-6 z-20 mt-4 flex w-80 flex-col items-start rounded-lg bg-white`}
-          role="popper"
-          aria-orientation="vertical"
-          aria-labelledby="download-content-popper"
-        >
-          <div className="absolute -top-3 flex items-center px-8">
-            <span className="h-6 w-6">
-              <TooltipArrowIcon width={'18'} height={'16'} color="white" viewBox="0 0 18 16" />
-            </span>
-          </div>
-          <div className="flex w-full items-start justify-between px-4 py-3">
-            <p className="text-lg font-semibold text-gray-900">{EXPORT_DOWNLOAD_LABEL}</p>
-            <CrossIcon className="cursor-pointer" {...EXPORT_DOWNLOAD_ICONS} onClick={() => setIsOpen(false)} />
-          </div>
-          <div className="flex flex-col items-start gap-6 self-stretch px-4 py-6">
-            <RadioButtonWithLabel
-              key={XSLS_LABEL}
-              radioLabel={DOWNLOAD_ITEM_EXPORT_XSLS_LABEL}
-              isRadioSelected={selectedOption === XSLS_LABEL}
-              onRadioClicked={() => setSelectedOption(XSLS_LABEL)}
-            />
-            <RadioButtonWithLabel
-              key={CSV_LABEL}
-              radioLabel={DOWNLOAD_ITEM_EXPORT_CSV_LABEL}
-              isRadioSelected={selectedOption === CSV_LABEL}
-              onRadioClicked={() => setSelectedOption(CSV_LABEL)}
-            />
-          </div>
-          <div className="flex items-start justify-end self-stretch border-t border-dashed border-gray-200 p-4">
-            <ExportDownloadButton btnLabel={EXPORT_DOWNLOAD_LABEL} onDownloadBtnClicked={handleDownloadButton} />
-          </div>
+  return (
+    <Popover>
+      {/* Dropdown button */}
+      <PopoverTrigger
+        className="inline-flex items-center justify-center gap-2 rounded-lg 
+      border border-primary/20 bg-primary/2.5 !p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary/10 
+      focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+      >
+        <DownloadIcon width={'24'} height={'24'} viewBox="0 0 24 24" />
+      </PopoverTrigger>
+
+      <PopoverContent
+        className="download-boxshadow z-20 w-80 rounded-lg bg-white p-0"
+        align="start"
+        side="top"
+        sideOffset={15}
+        alignOffset={-20}
+      >
+        <div className="absolute -top-3 flex items-center px-8">
+          <span className="h-6 w-6">
+            <TooltipArrowIcon width={'18'} height={'16'} color="white" viewBox="0 0 18 16" />
+          </span>
         </div>
-      )}
-    </div>
+        <div className="flex w-full items-start justify-between px-4 py-3">
+          <p className="text-lg font-semibold text-gray-900">{EXPORT_DOWNLOAD_LABEL}</p>
+          <PopoverClose>
+            <CrossIcon className="cursor-pointer" {...EXPORT_DOWNLOAD_ICONS} />
+          </PopoverClose>
+        </div>
+        <RadioGroup
+          value={selectedOption}
+          onValueChange={handleRadioOptions}
+          className="flex flex-col items-start gap-6 self-stretch px-4 py-6"
+        >
+          <RadioButtonWithLabel
+            value={XSLS_LABEL}
+            radioLabel={DOWNLOAD_ITEM_EXPORT_XSLS_LABEL}
+            isRadioSelected={selectedOption === XSLS_LABEL}
+          />
+          <RadioButtonWithLabel
+            value={CSV_LABEL}
+            radioLabel={DOWNLOAD_ITEM_EXPORT_CSV_LABEL}
+            isRadioSelected={selectedOption === CSV_LABEL}
+          />
+        </RadioGroup>
+        <div className="flex items-start justify-end self-stretch border-t border-dashed border-gray-200 p-4">
+          <ExportDownloadButton btnLabel={EXPORT_DOWNLOAD_LABEL} onDownloadBtnClicked={handleDownloadButton} />
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
