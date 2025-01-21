@@ -1,6 +1,6 @@
-import { organizationDetails } from "../types/admin/auth";
+import { OrganizationDetails } from "../types/admin/auth";
 
-export const setTenantIdentifier = (tenantObj: organizationDetails) => {
+export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
   localStorage.setItem("admin_tenant_identifier", JSON.stringify(tenantObj));
 };
 
