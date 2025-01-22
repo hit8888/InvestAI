@@ -18,23 +18,27 @@ interface IProps {
   queryOptions: BreakoutQueryOptions<ArtifactResponse, ArtifactDataKey>;
 }
 const useArtifactDataQuery = ({
-  role = 'agent',
+  role = "agent",
   artifactId,
   artifactType,
   queryOptions,
 }: IProps): UseQueryResult<ArtifactResponse> => {
   const query = useQuery({
     queryFn: async () => {
-      const response = await getArtifact({
-        artifactId: artifactId ?? "",
-        artifactType: artifactType ?? "NONE",
-      },role);
+      const response = await getArtifact(
+        {
+          artifactId: artifactId ?? "",
+          artifactType: artifactType ?? "NONE",
+        },
+        role
+      );
 
       const data = response.data as ArtifactResponse;
       return data;
     },
     ...queryOptions,
     queryKey: getArtifactKey(artifactId ?? "", artifactType ?? "", role),
+    retry: 7,
   });
 
   return query;

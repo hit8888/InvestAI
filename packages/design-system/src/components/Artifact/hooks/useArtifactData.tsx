@@ -14,14 +14,12 @@ export const useArtifactData = ({
   activeArtifact,
   previousArtifact,
   setActiveArtifact,
-  setPreviousActiveArtifact
+  setPreviousActiveArtifact,
 }: UseArtifactDataProps) => {
-
   const mainQuery = useArtifactDataQuery({
     artifactId: activeArtifact?.artifactId ?? '',
     artifactType: activeArtifact?.artifactType ?? 'NONE',
     queryOptions: {
-      refetchInterval: (data) => (data ? false : 1000),
       enabled: !!activeArtifact?.artifactId && !!activeArtifact?.artifactType,
     },
   });
