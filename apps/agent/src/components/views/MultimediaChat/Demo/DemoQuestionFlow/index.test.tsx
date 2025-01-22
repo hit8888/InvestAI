@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { render, screen, act, waitFor } from '@testing-library/react';
 import { DemoQuestionFlow } from './index';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
@@ -37,7 +38,7 @@ const mockCanvasContext = {
 };
 
 // Mock canvas element and its context
-HTMLCanvasElement.prototype.getContext = vi.fn(() => mockCanvasContext);
+HTMLCanvasElement.prototype.getContext = vi.fn(() => mockCanvasContext as any);
 HTMLCanvasElement.prototype.toDataURL = vi.fn(() => '');
 
 // Mock AnalyserNode
@@ -125,12 +126,6 @@ class MockSpeechRecognition {
 
 global.SpeechRecognition = MockSpeechRecognition;
 global.webkitSpeechRecognition = MockSpeechRecognition;
-
-// Add helper function for transcription updates
-const mockTranscriptionUpdate = (text: string) => {
-  const recognition = new MockSpeechRecognition();
-  recognition.simulateResult(text, true);
-};
 
 const queryClient = new QueryClient({
   defaultOptions: {
