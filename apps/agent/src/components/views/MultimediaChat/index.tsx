@@ -43,7 +43,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
-  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenAgent, showBanner });
+  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenAgent, showBanner: !!showBanner });
 
   const handleCloseAgent = () => {
     setParam('isAgentOpen', 'false');
