@@ -3,6 +3,7 @@ import apiClient from "../http/client";
 import { isProduction } from "../../../../apps/agent/src/utils/common.ts";
 import { ENV } from "../types/env.ts";
 import { debounce } from "lodash";
+import useLocalStorageSession from "./useLocalStorageSession.tsx";
 
 interface AnalyticsEvent {
   event_name: string;
@@ -15,6 +16,7 @@ interface AnalyticsEvent {
 const useAnalytics = () => {
   const eventQueueRef = useRef<AnalyticsEvent[]>([]);
   const distinct_id = localStorage.getItem("distinct_id");
+  const { sessionData } = useLocalStorageSession();
 
   const commonProperties = { environment: ENV.VITE_APP_ENV };
 
@@ -49,6 +51,7 @@ const useAnalytics = () => {
           ...properties,
           timestamp: Date.now(),
           distinct_id,
+          utmParams: sessionData.utmParams,
         },
       });
       sendBatchEvents();

@@ -132,6 +132,7 @@ const updateParentUrlParam = (key, value) => {
       "utm_term",
       "utm_content",
       "isAgentOpen",
+      "source",
     ];
 
     return utmParams.reduce((params, key) => {
