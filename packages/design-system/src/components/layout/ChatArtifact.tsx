@@ -31,11 +31,6 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
     artifactId: artifact?.artifact_id ?? null,
     artifactType: artifactType ?? null,
     queryOptions: {
-      refetchInterval: (data) => {
-        if (data) return false;
-
-        return 1000;
-      },
       enabled: shouldGetArtifactData,
     },
   });

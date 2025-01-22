@@ -100,6 +100,7 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef }: Props) => {
     messageSentRef,
     silenceDetectionActiveRef: useRef(false),
   });
+  console.log({ isRecording });
 
   return (
     <div className="relative flex h-full w-full items-center justify-center">

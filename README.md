@@ -23,7 +23,7 @@ A monorepo built with Turborepo containing an agent application and shared packa
 - **Package Manager**: [pnpm](https://pnpm.io/) v8.15.6
 - **UI Framework**: React 18.3 with TypeScript
 - **Styling**: Tailwind CSS with custom configurations
-- **Testing**: Jest
+- **Testing**: Vitest
 - **Code Quality**:
   - ESLint with custom configurations
   - Prettier for code formatting

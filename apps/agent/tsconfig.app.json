@@ -21,11 +21,13 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "../../packages/core/src/http",
     "../../packages/core/src/types/api.ts",
     "../../packages/core/src/types/msc.ts",
     "../../packages/core/src/managers",
     "../../packages/core/src/queries/mutation"
-  ]
+  ],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/*", "src/**/__mocks__/*", "node_modules"]
 }

@@ -5,11 +5,11 @@ import CardHeader from '@breakout/design-system/components/layout/card-header';
 import { Form, useForm } from '@breakout/design-system/components/layout/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@breakout/design-system/components/layout/button';
-import { 
-  getZodType, 
-  schemaShape, 
-  getFormSchemaTypeDefinition, 
-  getschemaShapeValidatedByZode, 
+import {
+  getZodType,
+  schemaShape,
+  getFormSchemaTypeDefinition,
+  getschemaShapeValidatedByZode,
 } from '@meaku/core/utils/form_fields';
 import CardTitle from '@breakout/design-system/components/layout/card-title';
 import { useState } from 'react';
@@ -27,7 +27,6 @@ interface IFormProps {
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
-
   form_fields.forEach((field) => {
     const fieldSchema = getZodType(field.data_type);
 
