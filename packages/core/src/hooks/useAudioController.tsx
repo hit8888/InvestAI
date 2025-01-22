@@ -18,8 +18,8 @@ export const useAudioController = (
       const context = new AudioContext();
       const source = context.createMediaElementSource(audioRef.current);
       const analyser = context.createAnalyser();
-      analyser.fftSize = 256;
-      analyser.smoothingTimeConstant = 0.5;
+      analyser.fftSize = 2048; // Increased for better resolution
+      analyser.smoothingTimeConstant = 0.8; // Smoother transitions
       source.connect(analyser);
       analyser.connect(context.destination);
 

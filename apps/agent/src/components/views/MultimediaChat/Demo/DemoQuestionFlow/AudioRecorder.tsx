@@ -28,7 +28,6 @@ const AudioRecorder = ({
   const streamRef = useRef<MediaStream | null>(null);
   const transcriptionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasSentTranscriptRef = useRef(false);
-  const lastSendTimeRef = useRef<number>(0);
   const [interimTranscript, setInterimTranscript] = useState(''); // Add state for interim transcription
 
   const {
@@ -108,32 +107,59 @@ const AudioRecorder = ({
   }, [transcript, disabled]);
 
   // Reset state when starting recording
+  const getMicrophoneStream = async (): Promise<MediaStream> => {
+    try {
+      const constraints = {
+        audio: {
+          // These are the key settings that allow shared access
+          echoCancellation: true,
+          autoGainControl: true,
+          channelCount: 1,
+          latency: 0,
+        },
+      };
+      // This is the key line that enables shared access
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      return stream;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.warn('Microphone access issue:', error);
+        throw new Error(
+          'Microphone access issue:\n' +
+            '1. Make sure microphone permissions are enabled in browser settings\n' +
+            '2. Select the correct microphone if multiple are available',
+        );
+      }
+      // Handle non-Error objects
+      throw new Error('Unknown error occurred while accessing microphone');
+    }
+  };
+
   const startRecording = async () => {
     try {
       hasSentTranscriptRef.current = false;
-      lastSendTimeRef.current = 0;
       setTranscription((prev) => ({
         ...prev,
         transcript: '',
         error: undefined,
         isLoading: false,
       }));
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-      });
 
+      const stream = await getMicrophoneStream();
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
       const analyserNode = audioContext.createAnalyser();
 
-      analyserNode.fftSize = 256;
-      analyserNode.smoothingTimeConstant = 0.5;
+      // Configure analyzer for better visualization
+      analyserNode.fftSize = 2048; // Increased for better resolution
+      analyserNode.smoothingTimeConstant = 0.8; // Smoother transitions
 
+      // Connect the audio graph properly
       source.connect(analyserNode);
+      // Create a silent destination to keep the audio context active
+      const destination = audioContext.createMediaStreamDestination();
+      analyserNode.connect(destination);
+
       audioContextRef.current = audioContext;
       streamRef.current = stream;
       setAnalyserNode(analyserNode);
@@ -141,11 +167,11 @@ const AudioRecorder = ({
       resetTranscript();
       await startListening();
       onStartRecording?.();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error starting recording:', error);
       setTranscription((prev) => ({
         ...prev,
-        error: 'Failed to start recording',
+        error: error instanceof Error ? error.message : 'Failed to start recording',
       }));
     }
   };
@@ -181,6 +207,13 @@ const AudioRecorder = ({
     onStopRecording?.();
   };
 
+  // Add cleanup effect
+  useEffect(() => {
+    return () => {
+      stopRecording();
+    };
+  }, []);
+
   // Handle disabled state immediately
   useEffect(() => {
     const handleDisabled = async () => {
@@ -199,13 +232,6 @@ const AudioRecorder = ({
 
     handleDisabled();
   }, [disabled]);
-
-  // Add cleanup effect
-  useEffect(() => {
-    return () => {
-      stopRecording();
-    };
-  }, []);
 
   // Pass interim transcript to parent
   useEffect(() => {
