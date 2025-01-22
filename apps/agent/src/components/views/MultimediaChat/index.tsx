@@ -29,6 +29,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
       fetchSessionData();
     }
     if (!isAgentOpen) {
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen: true });
       setParam('isAgentOpen', 'true');
     }
 

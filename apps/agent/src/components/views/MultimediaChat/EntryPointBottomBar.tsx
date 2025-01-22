@@ -99,14 +99,13 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
     e.preventDefault();
     const trimmedInputValue = inputValue.trim();
     if (trimmedInputValue.length <= 0) return;
-
     handleSendUserMessage({ message: trimmedInputValue });
     setInputValue('');
   };
 
   useEffect(() => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SHOW_BOTTOM_BAR);
-  }, []);
+  }, [agentName]);
 
   const showBanner = show_banner && !hasFirstUserMessageBeenSent;
 
