@@ -50,7 +50,8 @@ export const useResponseAudioPlayer = ({
         const context = new AudioContext();
         audioContextRef.current = context;
         const analyzer = context.createAnalyser();
-        analyzer.fftSize = 256;
+        analyzer.fftSize = 2048; // Increased for better resolution
+        analyzer.smoothingTimeConstant = 0.8; // Smoother transitions
 
         audio.src = audioUrl;
         audio.load();
