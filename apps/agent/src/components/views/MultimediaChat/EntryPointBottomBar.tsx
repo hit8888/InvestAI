@@ -108,6 +108,8 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SHOW_BOTTOM_BAR);
   }, []);
 
+  const showBanner = show_banner && !hasFirstUserMessageBeenSent;
+
   return (
     <div
       className={cn(
@@ -122,7 +124,7 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         backgroundSize: '200% 200%',
       }}
     >
-      {show_banner && !hasFirstUserMessageBeenSent ? (
+      {showBanner ? (
         <PopupWithBubblesContainer
           orgName={orgName}
           agentName={agentName}

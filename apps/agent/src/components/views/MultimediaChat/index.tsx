@@ -10,6 +10,7 @@ import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import AgentInOpenState from './AgentInOpenState.tsx';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -20,7 +21,9 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   const { getParam, setParam } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
+  const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const showBanner = show_banner && !hasFirstUserMessageBeenSent;
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();
@@ -40,7 +43,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
-  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenAgent });
+  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenAgent, showBanner });
 
   const handleCloseAgent = () => {
     setParam('isAgentOpen', 'false');

@@ -19,7 +19,8 @@ const updateParentUrlParam = (key, value) => {
   const DEFAULT_WIDTH = "100vw";
   const DEFAULT_HEIGHT = "90vh";
   const COLLAPSED_SIZE_WIDTH = "100vw";
-  const COLLAPSED_SIZE_HEIGHT_PX = 320;
+  const COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX = 320;
+  const COLLAPSED_SIZE_HEIGHT_PX = 180;
 
   /**
    * Creates and styles the container for the chat widget.
@@ -93,13 +94,22 @@ const updateParentUrlParam = (key, value) => {
    * @param {boolean} isAgentOpen - Whether the chat is open.
    * @param {boolean} isTooltipOpen - Whether the tooltip is open.
    */
-  const adjustResponsiveStyles = (container, isAgentOpen, hideBottomBar) => {
+  const adjustResponsiveStyles = (
+    container,
+    isAgentOpen,
+    hideBottomBar,
+    showBanner,
+  ) => {
     let width, height;
 
     if (!isAgentOpen) {
       // Default desktop view with chat closed
       width = hideBottomBar ? 0 : COLLAPSED_SIZE_WIDTH;
-      height = hideBottomBar ? 0 : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
+      height = hideBottomBar
+        ? 0
+        : showBanner
+          ? `${COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX}px`
+          : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
     } else {
       // Default full desktop size
       width = DEFAULT_WIDTH;
@@ -200,11 +210,12 @@ const updateParentUrlParam = (key, value) => {
   const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?`;
   let isAgentOpen = false;
   let iFrameSource = null;
+  let showBanner = false;
 
   // Main execution
   const container = createContainer();
   createIframe(container, IFRAME_SRC, 0);
-  adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
+  adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
 
   console.log("sets up the container and iframe");
 
@@ -235,16 +246,17 @@ const updateParentUrlParam = (key, value) => {
 
     if (event.data && typeof event.data.chatOpen === "boolean") {
       isAgentOpen = event.data.chatOpen;
+      showBanner = event.data.showBanner;
       if (!isAgentOpen && utmParams?.isAgentOpen === "true") {
         updateParentUrlParam("isAgentOpen", "false");
       }
-      adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
+      adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
     }
   });
 
   // Event listener for window resize
   window.addEventListener("resize", () => {
-    adjustResponsiveStyles(container, isAgentOpen, hideBottomBar);
+    adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
   });
 
   // Event listener for External buttons

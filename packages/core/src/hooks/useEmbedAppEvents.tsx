@@ -3,15 +3,18 @@ import useAgentbotAnalytics from "./useAgentbotAnalytics";
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import { useSearchParams } from "react-router-dom";
 import useLocalStorageSession from "./useLocalStorageSession";
+import useUnifiedConfigurationResponseManager from "./useUnifiedConfigurationResponseManager";
 
 interface IProps {
   fetchSessionData: () => void;
   handleOpenAgent: () => void;
+  showBanner: boolean;
 }
 
 export const useEmbedAppEvents = ({
   fetchSessionData,
   handleOpenAgent,
+  showBanner,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { handleUpdateSessionData } = useLocalStorageSession();
@@ -26,9 +29,10 @@ export const useEmbedAppEvents = ({
     const payload = {
       chatOpen: isAgentOpen,
       tooltipOpen: false,
+      showBanner,
     };
     window.parent.postMessage(payload, "*");
-  }, [isAgentOpen]);
+  }, [isAgentOpen, showBanner]);
 
   useEffect(() => {
     const handleParentWindowMessages = (event: MessageEvent) => {
