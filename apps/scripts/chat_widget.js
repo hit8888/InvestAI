@@ -17,7 +17,7 @@ const updateParentUrlParam = (key, value) => {
 
 (function () {
   const DEFAULT_WIDTH = "100vw";
-  const DEFAULT_HEIGHT = "90vh";
+  const DEFAULT_HEIGHT = "88vh";
   const COLLAPSED_SIZE_WIDTH = "100vw";
   const COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX = 320;
   const COLLAPSED_SIZE_HEIGHT_PX = 180;
