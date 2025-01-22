@@ -3,14 +3,13 @@ import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 import { setupSpeechRecognitionMock } from './speechRecognitionMock';
 
-// Make vi available globally
-global.vi = vi;
+// Extend global types
 
 // Setup Speech Recognition mock
 setupSpeechRecognitionMock();
 
 // Mock window.AudioContext
-window.AudioContext = vi.fn().mockImplementation(() => ({
+global.AudioContext = vi.fn().mockImplementation(() => ({
   createAnalyser: vi.fn().mockReturnValue({
     connect: vi.fn(),
     disconnect: vi.fn(),
