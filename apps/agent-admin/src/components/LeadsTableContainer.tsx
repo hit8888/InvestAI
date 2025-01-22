@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
-import { usePagination } from '../hooks/usePagination';
+import { usePagination } from '../hooks/usePagination.tsx';
 import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
 
 import SortFilter from './tableComp/SortFilter';

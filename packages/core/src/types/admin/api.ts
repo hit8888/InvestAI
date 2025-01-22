@@ -2,67 +2,93 @@ import { z } from "zod";
 import { MessageSchema } from "../agent";
 import { FeedbackSchema } from "../session";
 
-export type LoginWithEmailPasswordPayload = {
-  email: string;
-  password: string;
-};
+// LoginWithEmailPasswordPayload
+export const LoginWithEmailPasswordPayloadSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+export type LoginWithEmailPasswordPayload = z.infer<typeof LoginWithEmailPasswordPayloadSchema>;
 
-export type GenerateOtpPayload = {
-  email: string;
-};
+// GenerateOtpPayload
+export const GenerateOtpPayloadSchema = z.object({
+  email: z.string().email(),
+});
+export type GenerateOtpPayload = z.infer<typeof GenerateOtpPayloadSchema>;
 
-export type GenerateTokens = {
-  refresh: string;
-};
+// GenerateTokens
+export const GenerateTokensSchema = z.object({
+  refresh: z.string(),
+});
+export type GenerateTokens = z.infer<typeof GenerateTokensSchema>;
 
-export type VerifyOtpPayload = {
-  email: string;
-  code: string;
-};
+// VerifyOtpPayload
+export const VerifyOtpPayloadSchema = z.object({
+  email: z.string().email(),
+  code: z.string(),
+});
+export type VerifyOtpPayload = z.infer<typeof VerifyOtpPayloadSchema>;
 
-export type Operator = 
-      "eq"
-    | "neq"
-    | "gt"
-    | "gte"
-    | "lt"
-    | "lte"
-    | "contains"
-    | "icontains"
-    | "in"
-    | "not_in"
-    | "is_null"
-    | "is_not_null"
-    | "exists"
-    | "not_exists"
-    | "between";
+// Operator
+export const OperatorSchema = z.enum([
+  "eq",
+  "neq",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "contains",
+  "icontains",
+  "in",
+  "not_in",
+  "is_null",
+  "is_not_null",
+  "exists",
+  "not_exists",
+  "between",
+]);
+export type Operator = z.infer<typeof OperatorSchema>;
 
-export type Filter = {
-  field: string;
-  operator: Operator;
-  value: string | number | boolean | (string | number)[] | null; // Supports array for 'in', 'not_in', and range for 'between'
-};
+// Filter
+export const FilterSchema = z.object({
+  field: z.string(),
+  operator: OperatorSchema,
+  value: z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.array(z.union([z.string(), z.number()])),
+    z.null(),
+  ]),
+});
+export type Filter = z.infer<typeof FilterSchema>;
 
-export type Sort = {
-  field: string;
-  order: "asc" | "desc";
-};
+// Sort
+export const SortSchema = z.object({
+  field: z.string(),
+  order: z.enum(["asc", "desc"]),
+});
+export type Sort = z.infer<typeof SortSchema>;
 
-export type LeadsPayload = {
-  filters: Filter[];
-  sort: Sort[];
-  search: string;
-  page: number;
-  page_size?: number;
-};
+// LeadsPayload
+export const LeadsPayloadSchema = z.object({
+  filters: z.array(FilterSchema),
+  sort: z.array(SortSchema),
+  search: z.string(),
+  page: z.number(),
+  page_size: z.number().optional(),
+});
+export type LeadsPayload = z.infer<typeof LeadsPayloadSchema>;
 
-export type ConversationsPayload = {
-  filters: Filter[];
-  sort: Sort[];
-  search?: string;
-  page: number;
-  page_size?: number;
-};
+// ConversationsPayload
+export const ConversationsPayloadSchema = z.object({
+  filters: z.array(FilterSchema),
+  sort: z.array(SortSchema),
+  search: z.string().optional(),
+  page: z.number(),
+  page_size: z.number().optional(),
+});
+export type ConversationsPayload = z.infer<typeof ConversationsPayloadSchema>;
+
 
 // Type for individual result item
 export const LeadResultSchema = z.object({

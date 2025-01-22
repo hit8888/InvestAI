@@ -1,22 +1,21 @@
-import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
+import AdminLoginForm, { AdminLoginFormRef } from '@breakout/design-system/components/layout/AdminLoginForm';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useLoginWithEmailPassword from '../queries/mutation/useLoginWithEmailPassword';
 import useGenerateOtp from '../queries/mutation/useGenerateOtp';
 import useVerifyOtp from '../queries/mutation/useVerifyOtp';
-import OtpInput from './OtpInput';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
+import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
 
 const LoginForm = () => {
   const { userInfo, login, saveTokens } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
+
+  const formRef = useRef<AdminLoginFormRef>(null);
 
   const navigate = useNavigate();
 
@@ -56,36 +55,38 @@ const LoginForm = () => {
 
   const isLoading = isLoginWithEmailPasswordPending || isGenerateOtpPending || isVerifyOtpPending;
 
-  const handleLogin = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-
-    // console.log("handlelogin", authMode);
-
+  const handleResetForm = () => {
+    // Instead of directly setting state, passing a reset callback to AdminLoginForm
+    if (formRef.current) {
+      formRef.current?.reset();
+    }
+  };
+  const handleLogin = async (values: LoginFormValues) => {
     switch (authMode) {
       case 'password':
-        if (!email || !password) {
+        if (!values.email || !values.password) {
           toast.error('Please enter email and password.');
           return;
         }
 
-        await loginWithEmailPassword({ email, password });
+        await loginWithEmailPassword({ email: values.email, password: values.password });
         handleLoginAndRedirection();
         break;
       case 'generateOtp':
-        if (!email) {
+        if (!values.email) {
           toast.error('Please enter email.');
           return;
         }
 
-        await generateOtp({ email });
+        await generateOtp({ email: values.email });
         setHasOtpBeenSent(true);
         break;
       case 'enterOtp':
-        if (!email || !otp) {
+        if (!values.email || !values.otp) {
           toast.error('Please enter email and OTP.');
           return;
         }
-        await verifyOtp({ email, code: otp });
+        await verifyOtp({ email: values.email, code: values.otp });
         handleLoginAndRedirection();
         break;
     }
@@ -93,8 +94,7 @@ const LoginForm = () => {
 
   const handleLoginAndRedirection = async () => {
     login();
-    setEmail('');
-    setOtp('');
+    handleResetForm();
 
     // If the User have single organization,
     // we would set this as our admin_tenant_identifier and navigate to 'leads' page.
@@ -119,89 +119,20 @@ const LoginForm = () => {
       /* eslint-disable @typescript-eslint/no-unused-expressions */
       hasOtpBeenSent ? setAuthMode('enterOtp') : setAuthMode('generateOtp');
     }
-  };
-
-  const onOtpSubmit = (otp: string) => {
-    setOtp(otp);
+    handleResetForm();
+    setHasOtpBeenSent(false);
   };
 
   return (
     <div className="w-full">
-      <form className="flex w-full flex-col gap-6 px-6" onSubmit={handleLogin}>
-        <div className="flex w-full flex-col gap-6 text-left">
-          <div className="flex w-full flex-col items-start justify-center gap-2 2xl:gap-8">
-            <label htmlFor="email" className="text-sm font-bold 2xl:text-6xl">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="username@org.com"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              className="w-full rounded-xl border border-primary py-3 text-lg focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/30 2xl:py-4 2xl:text-3xl"
-              value={email}
-              onChange={(ev) => setEmail(ev.target.value)}
-            />
-          </div>
-
-          {showPasswordField || showOtpField ? (
-            <div className={cn('w-full px-1 transition-all duration-300')}>
-              {showPasswordField ? (
-                <div
-                  className={cn(
-                    'flex w-full transform flex-col items-start justify-center gap-2 transition-all duration-300 ease-in-out 2xl:gap-8',
-                    {
-                      'translate-y-0 opacity-100': showPasswordField,
-                      '-translate-y-full opacity-0': !showPasswordField,
-                    },
-                  )}
-                >
-                  <label htmlFor="password" className="text-sm font-bold 2xl:text-6xl">
-                    Password
-                  </label>
-                  <input
-                    disabled={!showPasswordField}
-                    id="password"
-                    type="password"
-                    placeholder="********"
-                    className="w-full rounded-xl border border-primary py-3 text-lg focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/30 2xl:py-4 2xl:text-3xl"
-                    value={password}
-                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setPassword(ev.target.value)}
-                  />
-                </div>
-              ) : null}
-              {showOtpField ? (
-                <div
-                  className={cn('flex transform flex-col items-center gap-4 transition-all duration-300 ease-in-out')}
-                >
-                  <label htmlFor="otp" className="text-lg">
-                    Enter OTP sent to {email}
-                  </label>
-                  {/* TODOS NEED TO ADD THE INPUT-OTP COMPONENT - SHADCN UI COMPONENT */}
-                  <OtpInput length={6} onOtpSubmit={onOtpSubmit} />
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-        <button
-          className={cn(
-            'flex items-center justify-center gap-1 text-lg font-normal 2xl:text-3xl',
-            'rounded-lg bg-primary/80 px-6 py-3 text-white', // Base styles
-            'hover:bg-primary', // Hover state
-            'focus:ring-primary-300 focus:outline-none focus:ring-4 focus:ring-offset-2', // Focus styles
-            {
-              'disabled:cursor-not-allowed disabled:bg-primary/30': isLoading,
-            }, // Disabled state
-          )}
-          disabled={isLoading}
-        >
-          {isLoading && <SpinnerIcon className="!h-5 !w-5 text-white" />}
-          {authMode === 'generateOtp' ? 'Generate a Code' : 'Login'}
-        </button>
-      </form>
+      <AdminLoginForm
+        ref={formRef}
+        handleLogin={handleLogin}
+        showOtpField={showOtpField}
+        showPasswordField={showPasswordField}
+        isLoading={isLoading}
+        submitBtnLabel={authMode === 'generateOtp' ? 'Generate a Code' : 'Login'}
+      />
       <div className="relative py-8">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />

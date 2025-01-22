@@ -1,13 +1,13 @@
 import { ConversationDetailsTabsLabelEnum, ConversationDetailsTabsValueEnum } from '../../utils/constants';
 import SingleTabDisplay from './SingleTabDisplay';
 
-import ActivityTabIcon from '@breakout/design-system/components/icons/activity-tab-icon';
+// import ActivityTabIcon from '@breakout/design-system/components/icons/activity-tab-icon';
 import SummaryTabIcon from '@breakout/design-system/components/icons/summary-tab-icon';
 import LogTabIcon from '@breakout/design-system/components/icons/log-tab-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import SummaryTabDisplayContent from './SummaryTabDisplayContent';
 import LogTabDisplayContent from './LogTabDisplayContent';
-import ActivityTabDisplayContent from './ActivityTabDisplayContent';
+// import ActivityTabDisplayContent from './ActivityTabDisplayContent';
 
 type IProps = {
   currentTab: ConversationDetailsTabsValueEnum;
@@ -23,8 +23,16 @@ type TabConfig = {
 };
 
 const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
-  const { SUMMARY_TAB, LOG_TAB, ACTIVITY_TAB } = ConversationDetailsTabsValueEnum;
-  const { SUMMARY_TAB_LABEL, LOG_TAB_LABEL, ACTIVITY_TAB_LABEL } = ConversationDetailsTabsLabelEnum;
+  const {
+    SUMMARY_TAB,
+    LOG_TAB,
+    // ACTIVITY_TAB
+  } = ConversationDetailsTabsValueEnum;
+  const {
+    SUMMARY_TAB_LABEL,
+    LOG_TAB_LABEL,
+    // ACTIVITY_TAB_LABEL
+  } = ConversationDetailsTabsLabelEnum;
 
   const tabs: TabConfig[] = [
     {
@@ -41,13 +49,13 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
       content: <LogTabDisplayContent />,
       isActive: currentTab === LOG_TAB,
     },
-    {
-      value: ACTIVITY_TAB,
-      label: ACTIVITY_TAB_LABEL,
-      icon: ActivityTabIcon,
-      content: <ActivityTabDisplayContent />,
-      isActive: currentTab === ACTIVITY_TAB,
-    },
+    // {
+    //   value: ACTIVITY_TAB,
+    //   label: ACTIVITY_TAB_LABEL,
+    //   icon: ActivityTabIcon,
+    //   content: <ActivityTabDisplayContent />,
+    //   isActive: currentTab === ACTIVITY_TAB,
+    // },
   ];
 
   return (
