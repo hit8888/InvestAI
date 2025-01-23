@@ -21,6 +21,8 @@ const updateParentUrlParam = (key, value) => {
   const COLLAPSED_SIZE_WIDTH = "100vw";
   const COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX = 320;
   const COLLAPSED_SIZE_HEIGHT_PX = 180;
+  const height =
+    document.currentScript?.getAttribute("max-height") || DEFAULT_HEIGHT;
 
   /**
    * Creates and styles the container for the chat widget.
@@ -35,7 +37,7 @@ const updateParentUrlParam = (key, value) => {
       left: "50%", // Center horizontally
       zIndex: "10000",
       width: DEFAULT_WIDTH,
-      height: DEFAULT_HEIGHT,
+      height: height,
       maxHeight: "100%",
       transform: "translateX(-50%)",
     });
