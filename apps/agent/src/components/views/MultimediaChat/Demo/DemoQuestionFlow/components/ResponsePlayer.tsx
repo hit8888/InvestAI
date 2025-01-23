@@ -1,7 +1,6 @@
 import { RefObject, useState, useEffect } from 'react';
 import { VisualizerCanvas } from './VisualizerCanvas';
 import { useTypeWords } from '@breakout/design-system/hooks/useTypeWords';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface ResponsePlayerProps {
   message: string;
@@ -9,6 +8,7 @@ interface ResponsePlayerProps {
   isLoading?: boolean;
   audioDuration?: number; // in seconds
   isPlaying?: boolean; // Add this prop
+  orientation?: 'row' | 'column';
 }
 
 export const ResponsePlayer = ({
@@ -17,6 +17,7 @@ export const ResponsePlayer = ({
   isLoading,
   audioDuration = 0,
   isPlaying = true,
+  orientation = 'column',
 }: ResponsePlayerProps) => {
   const wordCount = message.split(' ').length;
 
@@ -45,38 +46,12 @@ export const ResponsePlayer = ({
   const displayedMessage = useTypeWords(message, typingSpeed, shouldStartTyping);
 
   return (
-    <div className="relative z-10 flex flex-col items-center">
+    <div className={`flex w-full items-center ${orientation === 'row' ? 'gap-6 px-4' : 'flex-col gap-6'}`}>
       <VisualizerCanvas canvasRef={canvasRef} isLoading={isLoading} />
-      <div className="mx-auto mt-8 w-[75%] overflow-hidden">
-        <div className="typewriter-container relative">
-          <AnimatePresence>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isPlaying ? 1 : 0.9 }}
-              transition={{
-                duration: 0.2,
-                ease: [0.4, 0.0, 0.2, 1], // Custom easing for smoother animation
-              }}
-              className={`
-                block
-                font-medium 
-                leading-relaxed 
-                tracking-normal
-                text-primary/70
-              `}
-              style={{
-                minHeight: '2em',
-                wordSpacing: '0.025em', // Reduced word spacing
-                whiteSpace: 'pre-wrap',
-                fontKerning: 'normal',
-                textRendering: 'optimizeLegibility',
-                letterSpacing: '-0.01em', // Slightly tighter letter spacing
-              }}
-            >
-              {isLoading ? message : displayedMessage}
-            </motion.span>
-          </AnimatePresence>
-        </div>
+      <div className={`${orientation === 'row' ? 'max-w-[70%] flex-1' : 'w-[50%]'} text-left`}>
+        <span className={`line-clamp-none ${isLoading ? 'text-primary/50' : 'text-primary/70'}`}>
+          {isLoading ? message : displayedMessage}
+        </span>
       </div>
     </div>
   );

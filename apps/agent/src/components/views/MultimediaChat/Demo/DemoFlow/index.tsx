@@ -95,7 +95,7 @@ const DemoFlow = ({
   });
 
   return (
-    <div className={'relative flex h-[92%] w-full items-center justify-center'}>
+    <div className={'relative flex h-[90%] w-full items-center justify-center'}>
       {demoDetails.asset_url ? (
         <>
           {assetType === 'IMAGE' && (
@@ -120,19 +120,20 @@ const DemoFlow = ({
           canvasRef={canvasRef}
           audioDuration={duration}
           isPlaying={demoPlayingStatus === DemoPlayingStatus.PLAYING}
+          orientation="column"
         />
       )}
       <DemoControls playingStatus={demoPlayingStatus} onPlayPause={handlePlayPause} />
       {demoDetails.asset_url && (
         <canvas
           ref={canvasRef}
-          className="fixed bottom-1 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full"
+          className="fixed bottom-2 left-1/2 flex h-[64px] w-[64px] -translate-x-1/2 items-center justify-center rounded-full"
           style={{
             background:
-              'radial-gradient(circle at 25% 0%, rgba(255, 255, 255, 0.2), rgb(var(--primary)/ 0.7) 50%, rgba(0, 0, 0, 1) 100%)',
-            boxShadow: 'inset -4px -4px 8px rgba(0, 0, 0, 0.2), inset 4px 4px 8px rgba(255, 255, 255, 0.2)',
-            transform: 'perspective(500px) rotateX(10deg)',
-            cursor: 'pointer',
+              'radial-gradient(61.46% 61.46% at 50% 38.54%, #f5f5ff 0%, var(--input-color, rgb(var(--primary))) 100%)',
+            boxShadow: '0px 0px 12px 1px #fff, 0px 4px 8px 0px rgba(0, 0, 0, 0.12)',
+            backdropFilter: 'blur(7px)',
+            borderRadius: '96px',
           }}
         />
       )}

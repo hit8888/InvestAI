@@ -8,10 +8,12 @@ interface RecordingPlayerProps {
 }
 
 export const RecordingPlayer = ({ transcription, canvasRef }: RecordingPlayerProps) => (
-  <div className="relative z-10 flex flex-col items-center">
+  <div className="flex w-full items-center gap-4 px-4">
     <VisualizerCanvas canvasRef={canvasRef} isRecording={true} />
-    <div className="mx-auto mt-8 max-w-[75%] text-center">
-      <span className="font-medium text-primary/70">{transcription.interimTranscript || 'Listening...'}</span>
+    <div className="max-w-[70%] flex-1">
+      <span className="line-clamp-2 text-left text-primary/70">
+        {transcription.interimTranscript || 'Go ahead, I am listening!'}
+      </span>
     </div>
   </div>
 );

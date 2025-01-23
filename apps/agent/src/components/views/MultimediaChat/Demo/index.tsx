@@ -67,7 +67,7 @@ const Demo = ({
       <div className="col-span-2 mr-2 pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
-            <span className="text-primary">Hold on. Creating demo</span>
+            <span className="text-primary">Hold on a moment, we’re preparing your demo!</span>
             <div className="animate-spin ">
               <Loader color="rgb(var(--primary)" />
             </div>

@@ -28,12 +28,12 @@ export const useAudioVisualizer = ({ analyserNode, audioUrl }: IProps) => {
     const targetWidth = canvas.width * 0.6;
     const barWidth = Math.max(2, Math.floor(canvas.width / 50));
     const barGap = barWidth / 2;
-    const numBars = Math.floor(targetWidth / (barWidth + barGap));
+    const numBars = Math.floor(targetWidth / (barWidth + barGap)) + 5;
     const totalWidth = Math.floor(numBars * barWidth + (numBars - 1) * barGap);
     const startX = Math.floor((canvas.width - totalWidth) / 2);
     const frequencyStep = Math.floor(bufferLength / numBars);
     const centerY = canvas.height / 2;
-    const maxBarHeight = canvas.width / 2;
+    const maxBarHeight = canvas.width / 1.5;
     // Pre-calculate bar positions
     const barPositions = new Array(numBars)
       .fill(0)
