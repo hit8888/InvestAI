@@ -3,17 +3,11 @@ import { SortFilterConfig } from '@meaku/core/types/admin/sort';
 import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@meaku/core/types/admin/filters';
 import FilterProductOfInterestIcon from '@breakout/design-system/components/icons/filter-productofinterest-icon';
 import FilterLocationIcon from '@breakout/design-system/components/icons/filter-location-icon';
-// import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
-// import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
+import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
+import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
 
-const {
-  DateRange,
-  IntentScore,
-  // MeetingBooked,
-  Location,
-  ProductOfInterest,
-} = FilterType;
+const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
 // Authentication
@@ -128,7 +122,7 @@ export const SORT_FILTER_CONFIG: SortFilterConfig[] = [
 
 // ALL FILTERS FEATURE SUPPORT VARIABLES
 
-export const CONVERSATIONS_TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
+export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   {
     filterIcon: FilterDateIcon,
     filterLabel: 'By date range',
@@ -137,14 +131,14 @@ export const CONVERSATIONS_TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
     filterKey: DateRange,
     filterType: DateRange,
   },
-  // {
-  //   filterIcon: FilterIntentScoreIcon,
-  //   filterLabel: 'By intent score range',
-  //   filterValue: '',
-  //   filterApplied: false,
-  //   filterKey: IntentScore,
-  //   filterType: IntentScore,
-  // },
+  {
+    filterIcon: FilterIntentScoreIcon,
+    filterLabel: 'By intent score range',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: IntentScore,
+    filterType: IntentScore,
+  },
   {
     filterIcon: FilterLocationIcon,
     filterLabel: 'By location',
@@ -153,14 +147,14 @@ export const CONVERSATIONS_TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
     filterKey: Location,
     filterType: Location,
   },
-  // {
-  //   filterIcon: FilterMeetingBookedIcon,
-  //   filterLabel: 'Meeting booked',
-  //   filterValue: '',
-  //   filterApplied: false,
-  //   filterKey: MeetingBooked,
-  //   filterType: MeetingBooked,
-  // },
+  {
+    filterIcon: FilterMeetingBookedIcon,
+    filterLabel: 'Meeting booked',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: MeetingBooked,
+    filterType: MeetingBooked,
+  },
   {
     filterIcon: FilterProductOfInterestIcon,
     filterLabel: 'Product of Interest',
@@ -203,8 +197,12 @@ export const DATE_RANGE_PRESET_OPTIONS = [
   { value: '0', label: CustomRange },
 ];
 
-export const LEADS_TABLE_FILTERS_CONFIG = CONVERSATIONS_TABLE_FILTERS_CONFIG.slice(0, 3).filter(
+export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filter(
   (item) => item.filterType !== IntentScore,
+);
+
+export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
+  (item) => ![IntentScore, MeetingBooked].includes(item.filterType),
 );
 
 // Routes
