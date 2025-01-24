@@ -20,6 +20,7 @@ import ChatArtifact from './ChatArtifact.tsx';
 import { Feedback } from '@meaku/core/types/session';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { GetArtifactPayload } from '@meaku/core/types/api';
+import { getMessageTimestamp } from '@meaku/core/utils/index';
 
 interface IProps {
   usingForAgent: boolean;
@@ -115,8 +116,9 @@ const MessageItem = ({
   }, [message.message, isSingleLineMessage]);
 
   const conditionSpecificForDashboard = !usingForAgent && !isSenderBot;
-
-  const messageTimestamp = new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0]
+  
+  const timestamp = message?.timestamp;
+  const formattedTimestamp = getMessageTimestamp(timestamp);
 
   return (
     <div ref={inViewRef}>
@@ -156,7 +158,7 @@ const MessageItem = ({
                 </ReactMarkdown>
               )}
               {conditionSpecificForDashboard ? (
-                <p className="!-mt-4 w-full text-right text-xs font-medium text-primary/50">{messageTimestamp}</p>
+                <p className="!-mt-4 w-full text-right text-xs font-medium text-primary/50">{formattedTimestamp}</p>
               ) : null}
             </div>
             <div className="flex flex-col items-start">
@@ -183,7 +185,7 @@ const MessageItem = ({
               <>
                 <MessageAnalytics analytics={message.analytics} />
                 <MessageDataSources dataSources={message.documents} />
-                {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{messageTimestamp}</p>}
+                {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
                 <MessageFeedback
                   sessionId={sessionId}
                   message={message}
