@@ -32,6 +32,7 @@ const AgentMessagesContainer = ({
   const tenantName = responseManager.getOrgName() ?? '';
   const initialSuggestedQuestions = responseManager.getInitialSuggestedQuestions();
   const styleConfig = responseManager.getStyleConfig();
+  const logoURL = responseManager.getLogoUrl();
   const sessionId = responseManager.getSessionId() ?? '';
   const primaryColor = styleConfig.primary ?? null;
 
@@ -55,6 +56,7 @@ const AgentMessagesContainer = ({
       allowFullWidthForText={false}
       showDemoPreQuestions={showDemoPreQuestions}
       primaryColor={primaryColor}
+      logoURL={logoURL}
       allowFeedback={allowFeedback}
     />
   );
