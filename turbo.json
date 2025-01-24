@@ -18,6 +18,10 @@
     "test:watch": {
       "cache": false, 
       "persistent": true
+    },
+    "e2e": {
+      "passThroughEnv": ["PLAYWRIGHT_*"],
+      "dependsOn": ["^build"] 
     }
   }
 }

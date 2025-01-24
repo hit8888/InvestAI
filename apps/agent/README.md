@@ -48,3 +48,31 @@ export default tseslint.config({
   },
 });
 ```
+
+## Running Playwright Tests
+
+The following commands are available for running tests:
+
+### Run All Tests
+
+```bash
+pnpm exec playwright test
+```
+
+This command runs all Playwright tests in headless mode.
+
+### View Test Report
+
+```bash
+npx playwright show-report
+```
+
+Opens the HTML report of the last test run in your default browser. This report shows detailed test results, including screenshots and traces for failed tests.
+
+### Run Tests in UI Mode
+
+```bash
+npx playwright test --ui
+```
+
+Launches Playwright's UI mode, which provides an interactive interface for running and debugging tests. This mode is particularly useful during test development and debugging.
