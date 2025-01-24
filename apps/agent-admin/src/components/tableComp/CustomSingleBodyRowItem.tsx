@@ -31,16 +31,13 @@ const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingl
         return (
           <td
             key={cell.id}
-            className={cn(
-              `border-gray/20 flex h-14 flex-1 flex-col items-start justify-center self-stretch border-b p-2 `,
-              {
-                'border-r': !isLastColumn,
-                'min-w-56': isColumnNumberOfUserMessages,
-                pinnedColumnShadow: isColumnPinnedLeftForName,
-                'bg-white': isPinned && index % 2 === 0,
-                'bg-gray-25': isPinned && index % 2 !== 0,
-              },
-            )}
+            className={cn(`border-gray/20 flex flex-1 flex-col items-start justify-center self-stretch border-b p-2 `, {
+              'border-r': !isLastColumn,
+              'min-w-56': isColumnNumberOfUserMessages,
+              pinnedColumnShadow: isColumnPinnedLeftForName,
+              'bg-white': isPinned && index % 2 === 0,
+              'bg-gray-25': isPinned && index % 2 !== 0,
+            })}
             style={{ ...getCommonPinningStyles(cell.column) }}
           >
             <div className={`flex items-center gap-2 self-stretch text-sm font-normal text-gray-500`}>

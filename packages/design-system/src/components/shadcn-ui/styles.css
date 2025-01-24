@@ -1,16 +1,16 @@
 /* Default Width for radix-ui dropdown component */
-.dropdown-menu-content {
+.dropdownMenuContent {
   width: var(--radix-dropdown-menu-trigger-width);
   max-height: var(--radix-dropdown-menu-content-available-height);
   animation-duration: 0.6s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dropdown-menu-content[data-side='top'] {
+.dropdownMenuContent[data-side='top'] {
   animation-name: slideUp;
 }
 
-.dropdown-menu-content[data-side='bottom'] {
+.dropdownMenuContent[data-side='bottom'] {
   animation-name: slideDown;
 }
 

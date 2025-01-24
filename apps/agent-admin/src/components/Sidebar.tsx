@@ -10,7 +10,7 @@ import NavLinkSingleItem from './NavLinkSingleItem';
 import {
   ADMIN_DASHBOARD_COMPANY_NAME,
   DEFAULT_USERNAME,
-  COMMON_SMALL_ICON_PROPS,
+  NAV_LINK_ICON_PROPS,
   AppRoutesEnum,
   SidebarNavItemsEnum,
 } from '../utils/constants';
@@ -39,19 +39,19 @@ const Sidebar: React.FC = () => {
     {
       navUrl: LEADS,
       navItem: LEADS_LABEL,
-      navImg: <PanelLeadsIcon {...COMMON_SMALL_ICON_PROPS} />,
+      navImg: <PanelLeadsIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isLeadsPage,
     },
     {
       navUrl: CONVERSATIONS,
       navItem: CONVERSATIONS_LABEL,
-      navImg: <PanelConversationIcon {...COMMON_SMALL_ICON_PROPS} />,
+      navImg: <PanelConversationIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isConversationsPage,
     },
     {
       navUrl: PLAYGROUND,
       navItem: PLAYGROUND_LABEL,
-      navImg: <PanelPlaygroundIcon {...COMMON_SMALL_ICON_PROPS} />,
+      navImg: <PanelPlaygroundIcon {...NAV_LINK_ICON_PROPS} />,
       isActive: isPlaygroundPage,
     },
   ];
@@ -59,11 +59,10 @@ const Sidebar: React.FC = () => {
   const userName = userInfo?.username || DEFAULT_USERNAME;
   const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
   const TENANT_LOGO_URL = getTenantIdentifier()?.['logo'] ?? '';
-  const isTenantLogoUrlPresent = TENANT_LOGO_URL.length > 0;
 
   return (
     <div
-      className={cn('sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10', {
+      className={cn('flex h-screen flex-col items-start border-r border-primary/10', {
         'w-72 2xl:w-[15%]': isOpen,
         'w-20 2xl:w-[4%]': !isOpen,
       })}
@@ -75,28 +74,19 @@ const Sidebar: React.FC = () => {
         className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
       >
         <div
-          className={cn(`flex w-full items-center justify-between px-2 pb-2`, {
+          className={cn(`flex w-full items-center justify-between px-2 pb-4`, {
             'flex-col': !isOpen,
           })}
         >
-          <div
-            className={cn('flex items-center gap-2', {
-              'w-full justify-center': isTenantLogoUrlPresent,
-            })}
-          >
-            <Link
-              to={'/'}
-              className={cn('flex w-full items-center object-contain', {
-                'w-20 justify-center': isOpen && isTenantLogoUrlPresent,
-              })}
-            >
-              {isTenantLogoUrlPresent ? (
-                <img src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
+          <div className="flex items-center gap-2">
+            <Link to={'/'} className="h-8 w-8 object-contain">
+              {TENANT_LOGO_URL.length > 0 ? (
+                <img src={TENANT_LOGO_URL} width={'30'} height={'35'} alt={`${TENANT_NAME} logo`} />
               ) : (
                 <AdminLogoSVG width={'30'} height={'35'} />
               )}
             </Link>
-            {isOpen && !isTenantLogoUrlPresent ? (
+            {isOpen ? (
               <span className="text-lg font-bold text-gray-900 transition-all duration-300">{TENANT_NAME}</span>
             ) : null}
           </div>
@@ -104,12 +94,12 @@ const Sidebar: React.FC = () => {
         <div className="relative w-full">
           <button
             onClick={toggleSidebar}
-            className="absolute -right-6 -top-4 z-50 flex h-7 w-7 items-center justify-center  rounded-lg border border-white/50 bg-primary "
+            className="absolute -right-6 -top-4 z-50 flex h-8 w-8 items-center justify-center  rounded-lg border border-white/50 bg-primary "
           >
             <PanelCloseIcon
-              {...COMMON_SMALL_ICON_PROPS}
+              {...NAV_LINK_ICON_PROPS}
               color="#fff"
-              className={cn(`z-50 h-4 w-4 transition-transform duration-300 `, {
+              className={cn(`z-50 h-6 w-6 transition-transform duration-300 `, {
                 'rotate-0': isOpen,
                 'rotate-180': !isOpen,
               })}

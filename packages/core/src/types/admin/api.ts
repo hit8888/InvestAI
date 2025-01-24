@@ -60,14 +60,14 @@ export const FilterSchema = z.object({
     z.null(),
   ]),
 });
-export type FilterItem = z.infer<typeof FilterSchema>;
+export type Filter = z.infer<typeof FilterSchema>;
 
 // Sort
 export const SortSchema = z.object({
   field: z.string(),
   order: z.enum(["asc", "desc"]),
 });
-export type SortItem = z.infer<typeof SortSchema>;
+export type Sort = z.infer<typeof SortSchema>;
 
 // LeadsPayload
 export const LeadsPayloadSchema = z.object({
@@ -112,7 +112,6 @@ export const LeadResultSchema = z.object({
 });
 
 export const ConversationsResponseResultSchema = z.object({
-  buyer_intent_score: z.number().nullable(),
   session_id: z.string().nullable(),
   timestamp: z.string().nullable(), // ISO date-time string
   summary: z.string().nullable(),
@@ -165,18 +164,3 @@ export const ConversationDetailsResponseSchema = z.object({
   conversation: ConversationsResponseResultSchema.nullable(),
   feedback: z.array(FeedbackSchema).optional(),
 });
-
-// Schema for Filter Options - Payload & Response
-export const FilterOptionsPayloadSchema = z.object({
-  field: z.string(),
-  filters: z.array(FilterSchema),
-  search: z.string(),
-});
-
-export const FilterOptionsResponseSchema = z.object({
-  field: z.string(),
-  values: z.array(z.string()),
-});
-
-export type FilterOptionsPayload = z.infer<typeof FilterOptionsPayloadSchema>;
-export type FilterOptionsResponse = z.infer<typeof FilterOptionsResponseSchema>;

@@ -36,7 +36,6 @@ interface IProps {
   handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
   initialSuggestedQuestions: string[];
   allowFeedback: boolean;
-  logoURL: string | null;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -64,7 +63,6 @@ const MessageItem = ({
   handleRemoveMessageFeedback,
   initialSuggestedQuestions,
   allowFeedback,
-  logoURL,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -116,7 +114,9 @@ const MessageItem = ({
 
   const conditionSpecificForDashboard = !usingForAgent && !isSenderBot;
 
-  const messageTimestamp = new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0]
+  const messageTimestamp = conditionSpecificForDashboard
+    ? new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0]
+    : '';
 
   return (
     <div ref={inViewRef}>
@@ -171,7 +171,6 @@ const MessageItem = ({
             </div>
             {showMessageArtifactPreview && (
               <ArtifactPreview
-                logoURL={logoURL}
                 usingForAgent={usingForAgent}
                 setDemoPlayingStatus={setDemoPlayingStatus}
                 setActiveArtifact={setActiveArtifact}

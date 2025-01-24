@@ -16,7 +16,6 @@ import { forwardRef, useImperativeHandle, useMemo } from 'react';
 
 export interface AdminLoginFormRef {
   reset: () => void;
-  resetOTP: () => void;
 }
 
 type AdminLoginFormProps = {
@@ -53,7 +52,6 @@ const AdminLoginForm = forwardRef<AdminLoginFormRef, AdminLoginFormProps>(
 
     useImperativeHandle(ref, () => ({
       reset: () => form.reset(),
-      resetOTP: () => form.setValue('otp', ''),
     }));
 
     // Handle errors during submission
@@ -145,7 +143,6 @@ const AdminLoginForm = forwardRef<AdminLoginFormRef, AdminLoginFormProps>(
                         <FormControl>
                           <OtpInput
                             length={6}
-                            otpValue={field.value}
                             onOtpSubmit={(otp) => {
                               field.onChange(otp);
                             }}

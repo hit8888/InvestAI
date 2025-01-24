@@ -27,7 +27,6 @@ interface IProps {
   allowFullWidthForText: boolean;
   showDemoPreQuestions: boolean;
   primaryColor: string | null;
-  logoURL: string | null;
   allowFeedback: boolean;
 }
 
@@ -48,7 +47,6 @@ const AgentMessages = ({
   allowFullWidthForText,
   showDemoPreQuestions,
   primaryColor,
-  logoURL,
   allowFeedback,
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +85,6 @@ const AgentMessages = ({
             <div key={idx}>
               {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
               <MessageItem
-                logoURL={logoURL}
                 usingForAgent={usingForAgent}
                 sessionId={sessionId}
                 primaryColor={primaryColor}

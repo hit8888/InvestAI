@@ -20,14 +20,12 @@
     "@tanstack/react-table": "^8.20.6",
     "axios": "^1.7.7",
     "country-flags-svg": "2.0.0-beta.1",
-    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.26.2",
-    "zod": "^3.23.8",
-    "zustand": "5.0.0-rc.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@breakout/design-system": "workspace:*",

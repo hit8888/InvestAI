@@ -7,7 +7,6 @@ export const ArtifactEnumSchema = z.enum([
   "NONE",
   "SUGGESTIONS",
   "FORM",
-  "DEMO",
 ]);
 
 // Derive these enums from Backend ArtifactEnumSchema

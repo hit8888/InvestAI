@@ -21,6 +21,7 @@ interface TableViewProps {
 const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = false }: TableViewProps) => {
   const navigate = useNavigate();
   const { isSidebarOpen } = useSidebar();
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
   const tableBodyRef = useRef<HTMLDivElement>(null);
@@ -32,11 +33,13 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
     setIsHeaderSticky(value);
   };
 
+  const handleSyncScrolledValue = (scrollLeft: number) => {
+    setIsScrolled(scrollLeft > 0);
+  };
+
   const handleRowItemClick = (row: ConversationsTableDisplayContent) => {
     const detailsPageURL = row.session_id;
-    navigate(`${detailsPageURL}`, {
-      state: { from: 'table' },
-    });
+    navigate(`${detailsPageURL}`);
   };
 
   // Scroll Sync Handler for table header and body
@@ -45,6 +48,7 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
     headerRef,
     isHeaderSticky,
     lastScrollPosition,
+    onScroll: handleSyncScrolledValue,
   });
 
   // Intersection observer for header stickiness
@@ -86,7 +90,12 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
             >
               <thead className="w-full">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />
+                  <CustomSingleHeaderRowItem
+                    key={headerGroup.id}
+                    headerGroup={headerGroup}
+                    isScrolled={isScrolled}
+                    isHeaderSticky={isHeaderSticky}
+                  />
                 ))}
               </thead>
             </table>
@@ -114,7 +123,12 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
             }}
           >
             {table.getHeaderGroups().map((headerGroup) => (
-              <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />
+              <CustomSingleHeaderRowItem
+                key={headerGroup.id}
+                headerGroup={headerGroup}
+                isScrolled={isScrolled}
+                isHeaderSticky={isHeaderSticky}
+              />
             ))}
           </thead>
           <tbody>

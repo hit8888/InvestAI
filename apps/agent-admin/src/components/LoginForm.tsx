@@ -51,12 +51,6 @@ const LoginForm = () => {
       // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
       saveTokens(data.access, data.refresh, data.user);
     },
-    onError: (error) => {
-      setHasOtpBeenSent(false);
-      setAuthMode('generateOtp');
-      handleResetForm();
-      toast.error((error as any)?.response?.data?.error);
-    },
   });
 
   const isLoading = isLoginWithEmailPasswordPending || isGenerateOtpPending || isVerifyOtpPending;
@@ -65,7 +59,6 @@ const LoginForm = () => {
     // Instead of directly setting state, passing a reset callback to AdminLoginForm
     if (formRef.current) {
       formRef.current?.reset();
-      formRef.current.resetOTP();
     }
   };
   const handleLogin = async (values: LoginFormValues) => {

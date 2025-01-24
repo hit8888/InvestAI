@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
@@ -9,22 +9,14 @@ import SortFilter from './tableComp/SortFilter';
 import TableViewContent from './TableViewContent';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
-import AllFiltersContainer from './tableComp/AllFilters';
+import AllFilters from './tableComp/AllFilters';
 
-import { CONVERSATIONS_PAGE_COLUMN_LISTS } from '../utils/constants';
-import {
-  getSortingAppliedValues,
-  getFormattedColumnsList,
-  getMappedDataFromResponseForConversationsTableView,
-  getAllFilterAppliedValues,
-} from '../utils/common';
+import { CONVERSATIONS_PAGE_COLUMN_LISTS, PAGINATION_DEFAULT_ITEMS_PER_PAGE } from '../utils/constants';
+import { getFormattedColumnsList, getMappedDataFromResponseForConversationsTableView } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { ConversationsPayload } from '@meaku/core/types/admin/api';
 import { ConversationsTableViewContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
-import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
-import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
-import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
 
 type IProps = {
   tenantName: string;
@@ -32,20 +24,17 @@ type IProps = {
 
 const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
-    pageType: CONVERSATIONS_PAGE,
+    initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
   });
 
-  const sortState = useSortFilterStore((state) => state.conversations);
-  const filterState = useAllFilterStore((state) => state.conversations);
-
-  // Reset to page 1 when filters or sorting changes
-  useEffect(() => {
-    handlePageChange(1);
-  }, [filterState]);
-
   const payloadData: ConversationsPayload = {
-    filters: getAllFilterAppliedValues(filterState, CONVERSATIONS_PAGE),
-    sort: getSortingAppliedValues(sortState, CONVERSATIONS_PAGE),
+    filters: [],
+    sort: [
+      {
+        field: 'timestamp',
+        order: 'desc',
+      },
+    ],
     page: currentPage,
     page_size: itemsPerPage,
   };
@@ -112,8 +101,8 @@ const TableFiltersWithHeaderLabel = () => {
     <>
       {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of conversations</p> */}
       <div className="flex w-full items-start justify-between self-stretch">
-        <AllFiltersContainer page={CONVERSATIONS_PAGE} />
-        <SortFilter page={CONVERSATIONS_PAGE} key="Conversations Sort" />
+        <AllFilters />
+        <SortFilter />
       </div>
     </>
   );

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@breakout/design-system/components/shadcn-ui/input-otp';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OtpInput = ({otpValue = '', length = 4, onOtpSubmit = (_: string) => {} }) => {
-  const [value, setValue] = useState(otpValue ||'');
+const OtpInput = ({ length = 4, onOtpSubmit = (_: string) => {} }) => {
+  const [value, setValue] = useState('');
 
   const handleOTPSubmit = (value: string) => {
     setValue(value);

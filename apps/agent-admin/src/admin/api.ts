@@ -5,7 +5,6 @@ import {
   LeadsPayload,
   ConversationsPayload,
   GenerateTokens,
-  FilterOptionsPayload,
 } from '@meaku/core/types/admin/api';
 
 import adminApiClient from './client';
@@ -25,9 +24,6 @@ export const getLeadsRowData = (payload: LeadsPayload) => adminApiClient.post(`/
 
 export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/`, payload);
-
-export const getFilterOptionsData = (payload: FilterOptionsPayload, pageType: string) =>
-  adminApiClient.post(`tenant/api/search/${pageType}/filterset/`, payload);
 
 export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/analytics/funnels/conversations`);
 
