@@ -11,7 +11,7 @@ const ProfilePicActionButton = () => {
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label="profile-btn"
+          aria-label="Profile Button"
           className="flex h-8 w-8 rounded-full border border-[rgb(var(--primary-foreground)/0.32)] bg-cover bg-center bg-no-repeat p-2"
           style={{ backgroundImage: `url(${profilePic})` }}
         />
@@ -20,7 +20,7 @@ const ProfilePicActionButton = () => {
         <button
           onClick={() => logout()}
           type="button"
-          aria-label="logout-btn"
+          aria-label="Logout Button"
           className="cursor-pointer rounded-lg border border-primary/20 bg-primary/2.5 p-2 text-base text-primary"
         >
           {LOGOUT_BUTTON_TITLE}

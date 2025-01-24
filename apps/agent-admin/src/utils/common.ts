@@ -1,5 +1,15 @@
 import { ENV } from '@meaku/core/types/env';
-import { ConversationChipLabelEnum, UPPERCASE_COLUMN_WORDS } from './constants';
+import {
+  BANTItem,
+  CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
+  ConversationChipLabelEnum,
+  // INTENT_SCORE_VALUES,
+  SortByIntentScore,
+  SortBySessionLength,
+  SortByTimestamp,
+  SummaryTabContentList,
+  UPPERCASE_COLUMN_WORDS,
+} from './constants';
 import {
   ConversationsTableDisplayContent,
   ConversationsTableViewContent,
@@ -7,10 +17,17 @@ import {
   LeadsTableViewContent,
 } from '@meaku/core/types/admin/admin';
 import { FunnelData, FunnelStep } from './admin-types';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
+import { DateRangeProp } from '@meaku/core/types/admin/filters';
+import { addDays, format } from 'date-fns';
+import { FilterValues, FilterType } from '@meaku/core/types/admin/filters';
+import { SortValues } from '@meaku/core/types/admin/sort';
+import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
+import { Message } from '@meaku/core/types/agent';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
+const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest } = FilterType;
 
 // Function to trigger the download
 export const handleDownload = (fileType: string, linkUrl: string, downloadedFileName: string) => {
@@ -38,15 +55,13 @@ export const getAccessTokenFromLocalStorage = () => {
 
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
   const mappedData: LeadsTableDisplayContent = {
-    email: response.email || 'N/A',
-    name: response.name || 'N/A', // Fallback if name is null
-    role: response.role !== 'Unknown' ? response.role || 'N/A' : 'N/A', // Handle 'Unknown' role
-    company: response.company || 'N/A', // Fallback if company is null
-    location: response.country || 'N/A',
-    timestamp: response.created_on
-      ? new Date(response.created_on).toISOString().replace('T', ' ').split('.')[0]
-      : 'N/A',
-    product_of_interest: response.product_interest || 'N/A',
+    email: response.email || '-',
+    name: response.name || '-', // Fallback if name is null
+    role: response.role !== 'Unknown' ? response.role || '-' : '-', // Handle 'Unknown' role
+    company: response.company || '-', // Fallback if company is null
+    location: response.country || '-',
+    timestamp: response.created_on ? new Date(response.created_on).toISOString().replace('T', ' ').split('.')[0] : '-',
+    product_of_interest: response.product_interest || '-',
   };
 
   return mappedData;
@@ -54,19 +69,23 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
 
 export const getMappedDataFromResponseForConversationsTableView = (response: ConversationsTableViewContent) => {
   const mappedData: ConversationsTableDisplayContent = {
-    company: response.company || 'Unknown Company',
-    name: response.name || 'Anonymous',
-    email: response.email || 'Not provided',
-    timestamp: response.timestamp ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0] : 'N/A',
-    conversation_preview: response.summary || 'No conversation preview',
-    location: response.country || 'N/A',
-    buyer_intent: 'N/A', // Need to Find Logic or Directly getting from api
-    bant_analysis: 'N/A', // Need to Find Logic or Directly getting from api
+    company: response.company || '-',
+    name: response.name || '-',
+    email: response.email || '-',
+    timestamp: response.timestamp ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0] : '-',
+    conversation_preview: response.summary || '-',
+    location: response.country || '-',
+    budget: response.budget || '-',
+    role: response.role || '-',
+    authority: response.role || '-',
+    timeline: response.timeline || '-',
+    buyer_intent: '-', // Need to Find Logic or Directly getting from api
+    bant_analysis: '-', // Need to Find Logic or Directly getting from api
     number_of_user_messages: `${response.user_message_count || 0}`,
-    meeting_status: 'N/A', // Static for now, can be dynamic if additional info is provided
-    product_of_interest: response.product_of_interest || 'No product specified',
-    ip_address: response.ip_address || 'IP not available',
-    session_id: response.session_id || 'Session ID missing',
+    meeting_status: '-', // Static for now, can be dynamic if additional info is provided
+    product_of_interest: response.product_of_interest || '-',
+    ip_address: response.ip_address || '-',
+    session_id: response.session_id || '-',
   };
 
   return mappedData;
@@ -154,9 +173,320 @@ export const transformFunnelData = (steps: FunnelStep[]): FunnelData[] => {
   const totalTrafficItem: FunnelData = {
     funnelChipType: ConversationChipLabelEnum.TOTAL_TRAFFIC,
     funnelChipLabel: 'Total Traffic',
-    funnelNumericLabel: 'N/A', // No count for traffic
+    funnelNumericLabel: '-', // No count for traffic
     funnelKey: ConversationChipLabelEnum.TOTAL_TRAFFIC,
   };
 
   return [totalTrafficItem, ...mappedSteps];
 };
+
+export const getFilterHeaderLabel = (filterState: string) => {
+  switch (filterState) {
+    case AllFilters:
+      return {
+        label: 'Filters',
+        width: '424px',
+      };
+    case DateRange:
+      return {
+        label: '',
+        width: '100%',
+      };
+    case IntentScore:
+      return {
+        label: 'Intent score',
+        width: '284px',
+      };
+    case Location:
+      return {
+        label: 'Location',
+        width: '334px',
+      };
+    case MeetingBooked:
+      return {
+        label: 'Meeting booked',
+        width: '254px',
+      };
+    case ProductOfInterest:
+      return {
+        label: 'Product of Interest',
+        width: '324px',
+      };
+    default:
+      return {
+        label: 'Filters',
+        width: '424px',
+      };
+  }
+};
+
+export const formatDateDisplay = (date: DateRangeProp | undefined) => {
+  if (!date?.from) return 'Pick date';
+
+  if (!date.to || date.from === date.to) {
+    return format(date.from, 'LLL dd, y');
+  }
+
+  return `${format(date.from, 'LLL dd, y')} - ${format(date.to, 'LLL dd, y')}`;
+};
+
+const convertDateToAppliedFilterValue = (dateRange: string) => {
+  // there's a timezone issue in the date conversion.
+  // When you create a new Date from the string "Jan 15, 2025",
+  // it uses the local timezone (in this case IST/GMT+0530),
+  // but when converting to ISO string, it adjusts to UTC,
+  // causing the date to appear as January 14th in the UTC timezone.
+  const startDateStr = dateRange.split(' - ')[0];
+  const startDate = addDays(new Date(startDateStr), 1); // Explained Above
+  startDate.setUTCHours(0, 0, 0, 0);
+  const formattedStartDate = startDate.toISOString();
+
+  return `${formattedStartDate}`;
+
+  // Split the date range into start and end dates
+  // const [startDateStr, endDateStr] = dateRange.split(" - ");
+
+  // // Parse the start and end dates
+  // const startDate = new Date(startDateStr);
+  // const endDate = new Date(endDateStr);
+
+  // // Set the end date to the end of the day (23:59:59.999)
+  // endDate.setHours(23, 59, 59, 999);
+
+  // // Format the dates into ISO 8601 format
+  // const formattedStartDate = startDate.toISOString(); // "2025-01-03T00:00:00.000Z"
+  // const formattedEndDate = endDate.toISOString(); // "2025-01-23T23:59:59.999Z"
+
+  // return [`${formattedStartDate}`, `${formattedEndDate}`];
+};
+
+export const getSortingAppliedValues = (sortState: SortValues, page: string) => {
+  const isLeadsPage = page === LEADS_PAGE;
+  const sortApplied: SortItem[] = [];
+  const { timestampSort, sessionLengthSort, intentScoreSort } = sortState;
+  if (timestampSort) {
+    sortApplied.push({
+      field: isLeadsPage ? 'created_on' : 'timestamp',
+      order: timestampSort ? (timestampSort === SortByTimestamp.NEWEST_FIRST ? 'desc' : 'asc') : 'desc',
+    });
+  }
+  if (sessionLengthSort) {
+    sortApplied.push({
+      field: 'user_message_count',
+      order: sessionLengthSort === SortBySessionLength.LONG_FIRST ? 'desc' : 'asc',
+    });
+  }
+  if (intentScoreSort) {
+    sortApplied.push({
+      field: 'buyer_intent_score',
+      order: intentScoreSort === SortByIntentScore.HIGHEST_FIRST ? 'desc' : 'asc',
+    });
+  }
+
+  if (sortApplied.length === 0) {
+    sortApplied.push({
+      field: isLeadsPage ? 'created_on' : 'timestamp',
+      order: 'desc',
+    });
+  }
+
+  return sortApplied;
+};
+export const getAllFilterAppliedValues = (filterState: FilterValues, page: string) => {
+  const filterApplied: FilterItem[] = [];
+  const isLeadsPage = page === LEADS_PAGE;
+  const {
+    dateRange,
+    // intentScore,
+    location,
+    productOfInterest,
+    // meetingBooked,
+  } = filterState;
+
+  // TODOS: NEED TO FIX THE LOGIC FOR DATE RANGE FILTER
+  if (dateRange) {
+    filterApplied.push({
+      field: isLeadsPage ? 'created_on' : 'timestamp',
+      value: convertDateToAppliedFilterValue(formatDateDisplay(dateRange)),
+      operator: 'gte',
+      // operator: 'between',
+    });
+  }
+  // if(intentScore.length > 0) {
+  //   // Get the minimum score from selected intent levels
+  //   const minScore = Math.min(
+  //     ...intentScore.map(level => INTENT_SCORE_VALUES[level as keyof typeof INTENT_SCORE_VALUES])
+  //   );
+  //   filterApplied.push({
+  //     field: 'buyer_intent_score', // Field 'buyer_intent_score' expected a number but got 'lead'.
+  //     value: minScore,
+  //     operator: 'gte'
+  //   })
+  // }
+  if (location.length > 0) {
+    filterApplied.push({
+      field: 'country',
+      value: location,
+      operator: 'in',
+    });
+  }
+  if (productOfInterest.length > 0) {
+    filterApplied.push({
+      field: 'product_of_interest',
+      value: productOfInterest,
+      operator: 'in',
+    });
+  }
+
+  // if (meetingBooked) {
+  //   filterApplied.push({
+  //     field: 'meeting_status',
+  //     value: meetingBooked, // e.g., 'all' or 'yes' or 'no'
+  //     operator: 'eq',
+  //   });
+  // }
+
+  return filterApplied;
+};
+
+export const collectAppliedFilters = (filters: FilterValues) => {
+  const appliedFilters: { key: string; label: string; value: string | string[] }[] = [];
+
+  if (filters.dateRange) {
+    appliedFilters.push({
+      key: DateRange,
+      label: 'Date',
+      value: formatDateDisplay(filters.dateRange),
+    });
+  }
+
+  if (filters.intentScore.length > 0) {
+    appliedFilters.push({
+      key: IntentScore,
+      label: 'Intent Score',
+      value: filters.intentScore.join(', '),
+    });
+  }
+
+  if (filters.location.length > 0) {
+    appliedFilters.push({
+      key: Location,
+      label: 'Location',
+      value: filters.location,
+    });
+  }
+
+  if (filters.productOfInterest.length > 0) {
+    appliedFilters.push({
+      key: ProductOfInterest,
+      label: 'Product',
+      value: filters.productOfInterest.join(', '),
+    });
+  }
+
+  if (filters.meetingBooked) {
+    appliedFilters.push({
+      key: MeetingBooked,
+      label: 'Meeting booked',
+      value: filters.meetingBooked,
+    });
+  }
+
+  return appliedFilters;
+};
+
+const getBantItemsValue = (bantValue: BANTItem[], sessionData: ConversationsTableDisplayContent) => {
+  const bantItems = (bantValue as BANTItem[]).map((bantItem) => {
+    switch (bantItem.itemKey) {
+      case 'budget':
+        return {
+          ...bantItem,
+          itemValue: sessionData.budget || '-',
+        };
+      case 'authority':
+        return {
+          ...bantItem,
+          itemValue: sessionData.role || '-',
+        };
+      case 'need':
+        return {
+          ...bantItem,
+          itemValue: '-', // You can update this dynamically if needed
+        };
+      case 'timeline':
+        return {
+          ...bantItem,
+          itemValue: sessionData.timeline || '-',
+        };
+      default:
+        return bantItem;
+    }
+  });
+
+  return bantItems;
+};
+
+export function generateConversationSummaryContent(
+  chatHistory: Message[],
+  sessionData: ConversationsTableDisplayContent,
+): SummaryTabContentList[] {
+  // Calculate session duration
+  const firstMessage = new Date(chatHistory[0]?.timestamp as string);
+  const lastMessage = new Date(chatHistory[chatHistory.length - 1]?.timestamp as string);
+  const sessionDuration = Math.ceil((lastMessage.getTime() - firstMessage.getTime()) / (1000 * 60)); // in minutes
+
+  // Calculate highest intent score
+  const highestIntentScore = Math.max(...chatHistory.map((msg) => msg.analytics.buyer_intent_score || 0));
+
+  // Count messages
+  const aiMessageCount = chatHistory.filter((msg) => msg.role === 'ai').length;
+  const userMessageCount = chatHistory.filter((msg) => msg.role === 'user').length;
+
+  // Dynamically update CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST
+  return CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST.map((item) => {
+    switch (item.listKey) {
+      case 'summary':
+        return {
+          ...item,
+          listValue: sessionData.conversation_preview || 'No summary available',
+        };
+      case 'intentScore':
+        return {
+          ...item,
+          listValue: highestIntentScore,
+        };
+      case 'bantAnalysis':
+        return {
+          ...item,
+          listValue: getBantItemsValue(item.listValue as BANTItem[], sessionData),
+        };
+      case 'productOfInterest':
+        return {
+          ...item,
+          listValue: sessionData.product_of_interest || '-',
+        };
+      case 'lengthOfConversation':
+        return {
+          ...item,
+          listValue: `${chatHistory.length} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`,
+        };
+      // case 'entryPoint':
+      //   return {
+      //     ...item,
+      //     listValue: sessionData.entry_point || 'Not available',
+      //   };
+      case 'ipAddress':
+        return {
+          ...item,
+          listValue: sessionData.ip_address || '-',
+        };
+      case 'sessionDuration':
+        return {
+          ...item,
+          listValue: `${sessionDuration} minutes`,
+        };
+      default:
+        return item;
+    }
+  });
+}

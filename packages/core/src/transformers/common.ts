@@ -107,23 +107,27 @@ export const convertServerConversationDataToClientConversationData = (
   response: ConversationsTableViewContent
 ): ConversationsTableDisplayContent => {
   return {
-    company: response.company || "Unknown Company",
-    name: response.name || "Anonymous",
-    email: response.email || "Not provided",
+    company: response.company || "-",
+    name: response.name || "-",
+    email: response.email || "-",
     timestamp: response.timestamp
       ? new Date(response.timestamp)
           .toISOString()
           .replace("T", " ")
           .split(".")[0]
-      : "N/A",
-    conversation_preview: response.summary || "No conversation preview",
-    location: response.country || "N/A",
-    buyer_intent: "N/A", // Need to Find Logic or Directly getting from api
-    bant_analysis: "N/A", // Need to Find Logic or Directly getting from api
+      : "-",
+    role: response.role || "-",
+    budget: response.budget || "-",
+    authority: response.role || "-",
+    timeline: response.timeline || "-",
+    conversation_preview: response.summary || "-",
+    location: response.country || "-",
+    buyer_intent: response.buyer_intent_score || "-", // Need to Find Logic or Directly getting from api
+    bant_analysis: "-", // Need to Find Logic or Directly getting from api
     number_of_user_messages: `${response.user_message_count || 0}`,
-    meeting_status: "N/A", // Static for now, can be dynamic if additional info is provided
-    product_of_interest: response.product_of_interest || "No product specified",
-    ip_address: response.ip_address || "IP not available",
-    session_id: response.session_id || "Session ID missing",
+    meeting_status: "-", // Static for now, can be dynamic if additional info is provided
+    product_of_interest: response.product_of_interest || "-",
+    ip_address: response.ip_address || "-",
+    session_id: response.session_id || "-",
   };
 };

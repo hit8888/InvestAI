@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
+import { usePaginationStore } from '../stores/usePaginationStore';
+import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from '@meaku/core/types/admin/admin';
 
 interface UsePaginationProps {
-  initialItemsPerPage?: number; // Default items per page
+  pageType: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
 }
 
 interface UsePaginationResult {
@@ -11,22 +13,23 @@ interface UsePaginationResult {
   handleItemsPerPageChange: (value: number) => void; // Function to change items per page
 }
 
-export const usePagination = ({ initialItemsPerPage = 50 }: UsePaginationProps): UsePaginationResult => {
-  const [itemsPerPage, setItemsPerPage] = useState<number>(initialItemsPerPage);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+export const usePagination = ({ pageType }: UsePaginationProps): UsePaginationResult => {
+  const paginationState = usePaginationStore();
+  const { currentPage, itemsPerPage } = paginationState[pageType];
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1) {
-      setCurrentPage(page);
-    }
-  };
+  const handlePageChange = useCallback(
+    (page: number) => {
+      paginationState.setPaginationValue(pageType, 'currentPage', page);
+    },
+    [paginationState],
+  );
 
-  const handleItemsPerPageChange = (value: number) => {
-    if (value > 0) {
-      setItemsPerPage(value);
-      setCurrentPage(1); // Reset page
-    }
-  };
+  const handleItemsPerPageChange = useCallback(
+    (pageSize: number) => {
+      paginationState.setPaginationValue(pageType, 'itemsPerPage', pageSize);
+    },
+    [paginationState],
+  );
 
   return {
     currentPage,

@@ -1,5 +1,8 @@
 import { OrganizationDetails } from "../types/admin/auth";
 
+export const CONVERSATIONS_PAGE = 'conversations';
+export const LEADS_PAGE = 'leads';
+
 export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
   localStorage.setItem("admin_tenant_identifier", JSON.stringify(tenantObj));
 };

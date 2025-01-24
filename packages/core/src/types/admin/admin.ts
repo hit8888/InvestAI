@@ -14,6 +14,10 @@ import {
     LeadsTableResponseSchema, 
     PaginationDataSchema 
 } from "./api";
+import { CONVERSATIONS_PAGE, LEADS_PAGE } from "../../utils";
+
+export type CONVERSATIONS_PAGE_TYPE = typeof CONVERSATIONS_PAGE;
+export type LEADS_PAGE_TYPE = typeof LEADS_PAGE;
 
 export type TableDataResponse = z.infer<typeof TableDataSchema>;
 

@@ -56,7 +56,7 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
       <DropdownMenuContent
         asChild
         align="start"
-        className="dropdownMenuContent z-20 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        className="dropdown-menu-content hide-scrollbar z-20 mt-2 max-h-96 overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <DropdownMenuGroup>
           {options.map((option) => (
