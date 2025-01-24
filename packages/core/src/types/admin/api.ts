@@ -112,6 +112,7 @@ export const LeadResultSchema = z.object({
 });
 
 export const ConversationsResponseResultSchema = z.object({
+  buyer_intent_score: z.number().nullable(),
   session_id: z.string().nullable(),
   timestamp: z.string().nullable(), // ISO date-time string
   summary: z.string().nullable(),

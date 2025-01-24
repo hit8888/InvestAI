@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <div
-      className={cn('flex h-screen flex-col items-start border-r border-primary/10', {
+      className={cn('sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10', {
         'w-72 2xl:w-[15%]': isOpen,
         'w-20 2xl:w-[4%]': !isOpen,
       })}
@@ -104,12 +104,12 @@ const Sidebar: React.FC = () => {
         <div className="relative w-full">
           <button
             onClick={toggleSidebar}
-            className="absolute -right-6 -top-4 z-50 flex h-8 w-8 items-center justify-center  rounded-lg border border-white/50 bg-primary "
+            className="absolute -right-6 -top-4 z-50 flex h-7 w-7 items-center justify-center  rounded-lg border border-white/50 bg-primary "
           >
             <PanelCloseIcon
               {...COMMON_SMALL_ICON_PROPS}
               color="#fff"
-              className={cn(`z-50 h-6 w-6 transition-transform duration-300 `, {
+              className={cn(`z-50 h-4 w-4 transition-transform duration-300 `, {
                 'rotate-0': isOpen,
                 'rotate-180': !isOpen,
               })}

@@ -1,10 +1,13 @@
 import { ENV } from '@meaku/core/types/env';
 import {
+  BANTItem,
+  CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
   // INTENT_SCORE_VALUES,
   SortByIntentScore,
   SortBySessionLength,
   SortByTimestamp,
+  SummaryTabContentList,
   UPPERCASE_COLUMN_WORDS,
 } from './constants';
 import {
@@ -20,6 +23,7 @@ import { addDays, format } from 'date-fns';
 import { FilterValues, FilterType } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
 import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
+import { Message } from '@meaku/core/types/agent';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -71,6 +75,10 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     timestamp: response.timestamp ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0] : '-',
     conversation_preview: response.summary || '-',
     location: response.country || '-',
+    budget: response.budget || '-',
+    role: response.role || '-',
+    authority: response.role || '-',
+    timeline: response.timeline || '-',
     buyer_intent: '-', // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
     number_of_user_messages: `${response.user_message_count || 0}`,
@@ -386,3 +394,99 @@ export const collectAppliedFilters = (filters: FilterValues) => {
 
   return appliedFilters;
 };
+
+const getBantItemsValue = (bantValue: BANTItem[], sessionData: ConversationsTableDisplayContent) => {
+  const bantItems = (bantValue as BANTItem[]).map((bantItem) => {
+    switch (bantItem.itemKey) {
+      case 'budget':
+        return {
+          ...bantItem,
+          itemValue: sessionData.budget || '-',
+        };
+      case 'authority':
+        return {
+          ...bantItem,
+          itemValue: sessionData.role || '-',
+        };
+      case 'need':
+        return {
+          ...bantItem,
+          itemValue: '-', // You can update this dynamically if needed
+        };
+      case 'timeline':
+        return {
+          ...bantItem,
+          itemValue: sessionData.timeline || '-',
+        };
+      default:
+        return bantItem;
+    }
+  });
+
+  return bantItems;
+};
+
+export function generateConversationSummaryContent(
+  chatHistory: Message[],
+  sessionData: ConversationsTableDisplayContent,
+): SummaryTabContentList[] {
+  // Calculate session duration
+  const firstMessage = new Date(chatHistory[0]?.timestamp as string);
+  const lastMessage = new Date(chatHistory[chatHistory.length - 1]?.timestamp as string);
+  const sessionDuration = Math.ceil((lastMessage.getTime() - firstMessage.getTime()) / (1000 * 60)); // in minutes
+
+  // Calculate highest intent score
+  const highestIntentScore = Math.max(...chatHistory.map((msg) => msg.analytics.buyer_intent_score || 0));
+
+  // Count messages
+  const aiMessageCount = chatHistory.filter((msg) => msg.role === 'ai').length;
+  const userMessageCount = chatHistory.filter((msg) => msg.role === 'user').length;
+
+  // Dynamically update CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST
+  return CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST.map((item) => {
+    switch (item.listKey) {
+      case 'summary':
+        return {
+          ...item,
+          listValue: sessionData.conversation_preview || 'No summary available',
+        };
+      case 'intentScore':
+        return {
+          ...item,
+          listValue: highestIntentScore,
+        };
+      case 'bantAnalysis':
+        return {
+          ...item,
+          listValue: getBantItemsValue(item.listValue as BANTItem[], sessionData),
+        };
+      case 'productOfInterest':
+        return {
+          ...item,
+          listValue: sessionData.product_of_interest || '-',
+        };
+      case 'lengthOfConversation':
+        return {
+          ...item,
+          listValue: `${chatHistory.length} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`,
+        };
+      // case 'entryPoint':
+      //   return {
+      //     ...item,
+      //     listValue: sessionData.entry_point || 'Not available',
+      //   };
+      case 'ipAddress':
+        return {
+          ...item,
+          listValue: sessionData.ip_address || '-',
+        };
+      case 'sessionDuration':
+        return {
+          ...item,
+          listValue: `${sessionDuration} minutes`,
+        };
+      default:
+        return item;
+    }
+  });
+}

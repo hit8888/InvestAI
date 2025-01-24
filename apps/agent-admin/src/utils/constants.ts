@@ -6,13 +6,20 @@ import FilterLocationIcon from '@breakout/design-system/components/icons/filter-
 import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
+import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
+import SummarySessionDurationIcon from '@breakout/design-system/components/icons/summary-sessionduration-icon';
+// import SummaryEntryPointIcon from '@breakout/design-system/components/icons/summary-entrypoint-icon';
+import SummaryProductOfInterestIcon from '@breakout/design-system/components/icons/summary-product-icon';
+import SummaryIntentScoreIcon from '@breakout/design-system/components/icons/summary-intentscore-icon';
+import SummaryLengthOfConvIcon from '@breakout/design-system/components/icons/summary-lengthofconv-icon';
+import SummaryIpAddressIcon from '@breakout/design-system/components/icons/summary-ipaddress-icon';
 
 const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
 // Authentication
 
-export const ACCESS_TOKEN_EXPIRATION_TIME = 24 * 60 * 60; // SECONDS ( 30 Days * 60 )
+export const ACCESS_TOKEN_EXPIRATION_TIME = 5 * 60; // SECONDS ( 30 Days * 60 )
 export const REFRESH_TOKEN_EXPIRATION_TIME = 30 * 24 * 60 * 60; // SECONDS ( 30 Days * 60 )
 export const DefaultAuthResponse: AuthResponse = {
   id: 0,
@@ -279,9 +286,92 @@ export interface FunnelData {
   funnelKey: string;
 }
 
-// Filters
-export const FILTER_DEFAULT_OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+export interface SummaryTabContentList {
+  listKey: string;
+  listLabel: string;
+  listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  listValue: string | number | BANTItem[];
+}
 
-export const BY_INTENT_SCORE_FILTER_LABEL = 'By intent score';
-export const BY_DATE_RANGE_FILTER_LABEL = 'By date range';
-export const BY_LOCATION_FILTER_LABEL = 'By location';
+export interface BANTItem {
+  itemKey: string;
+  itemLabel: string;
+  itemIcon: string;
+  itemValue: string | number;
+}
+
+export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabContentList[] = [
+  {
+    listKey: 'summary',
+    listLabel: 'Summary of the conversation:',
+    listIcon: SummaryBantAnalysisIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'intentScore',
+    listLabel: 'Intent Score:',
+    listIcon: SummaryIntentScoreIcon,
+    listValue: 0,
+  },
+  {
+    listKey: 'bantAnalysis',
+    listLabel: 'BANT Analysis:',
+    listIcon: SummaryBantAnalysisIcon,
+    listValue: [
+      {
+        itemKey: 'budget',
+        itemLabel: 'Budget:',
+        itemIcon: '💰',
+        itemValue: '',
+      },
+      {
+        itemKey: 'authority',
+        itemLabel: 'Authority:',
+        itemIcon: '👨‍💼',
+        itemValue: '',
+      },
+      {
+        itemKey: 'need',
+        itemLabel: 'Need:',
+        itemIcon: '🤲',
+        itemValue: '',
+      },
+      {
+        itemKey: 'timeline',
+        itemLabel: 'Timeline:',
+        itemIcon: '⏱️',
+        itemValue: '',
+      },
+    ],
+  },
+  {
+    listKey: 'productOfInterest',
+    listLabel: 'Product of Interest:',
+    listIcon: SummaryProductOfInterestIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'lengthOfConversation',
+    listLabel: 'Length of conversation:',
+    listIcon: SummaryLengthOfConvIcon,
+    listValue: '',
+  },
+  // {
+  //   listKey: 'entryPoint',
+  //   listLabel: 'Entry Point:',
+  //   listIcon: SummaryEntryPointIcon,
+  //   listValue: 'www.example.com/products/ai',
+  // },
+  {
+    listKey: 'ipAddress',
+    listLabel: 'IP Address:',
+    listIcon: SummaryIpAddressIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'sessionDuration',
+    listLabel: 'Session Duration:',
+    listIcon: SummarySessionDurationIcon,
+    listValue: '',
+  },
+];

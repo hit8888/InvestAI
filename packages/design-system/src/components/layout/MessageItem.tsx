@@ -116,9 +116,7 @@ const MessageItem = ({
 
   const conditionSpecificForDashboard = !usingForAgent && !isSenderBot;
 
-  const messageTimestamp = conditionSpecificForDashboard
-    ? new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0]
-    : '';
+  const messageTimestamp = new Date(message?.timestamp ?? '').toISOString().replace('T', ' ').split('.')[0]
 
   return (
     <div ref={inViewRef}>
