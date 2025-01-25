@@ -5,16 +5,9 @@ interface UseScrollSyncProps {
   headerRef: RefObject<HTMLDivElement | null>;
   isHeaderSticky: boolean;
   lastScrollPosition: { current: number };
-  onScroll?: (scrollLeft: number) => void;
 }
 
-export const useScrollSync = ({
-  tableBodyRef,
-  headerRef,
-  isHeaderSticky,
-  lastScrollPosition,
-  onScroll,
-}: UseScrollSyncProps) => {
+export const useScrollSync = ({ tableBodyRef, headerRef, isHeaderSticky, lastScrollPosition }: UseScrollSyncProps) => {
   useEffect(() => {
     const handleTableScroll = (event: Event) => {
       const target = event.target as HTMLDivElement;
@@ -27,8 +20,6 @@ export const useScrollSync = ({
       } else if (event.target === headerRef.current && tableBodyRef.current) {
         tableBodyRef.current.scrollLeft = scrollLeft;
       }
-
-      onScroll?.(scrollLeft);
     };
 
     tableBodyRef.current?.addEventListener('scroll', handleTableScroll);
@@ -50,5 +41,5 @@ export const useScrollSync = ({
       tableBodyRef.current?.removeEventListener('scroll', handleTableScroll);
       headerRef.current?.removeEventListener('scroll', handleTableScroll);
     };
-  }, [tableBodyRef, headerRef, isHeaderSticky, lastScrollPosition, onScroll]);
+  }, [tableBodyRef, headerRef, isHeaderSticky, lastScrollPosition]);
 };

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
@@ -9,30 +9,42 @@ import SortFilter from './tableComp/SortFilter';
 import TableViewContent from './TableViewContent';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
-import AllFilters from './tableComp/AllFilters';
-import ExportDownload from './tableComp/ExportDownload';
+import AllFiltersContainer from './tableComp/AllFilters';
 
-import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_DEFAULT_ITEMS_PER_PAGE } from '../utils/constants';
+import { LEADS_PAGE_COLUMN_LISTS } from '../utils/constants';
 import {
   getFormattedColumnsList,
   getTenantFromLocalStorage,
   getMappedDataFromResponseForLeadsTableView,
+  getAllFilterAppliedValues,
+  getSortingAppliedValues,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { LeadsPayload } from '@meaku/core/types/admin/api';
 import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
+import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
+import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
+import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 const LeadsTableContainer = () => {
   const tenantName = getTenantFromLocalStorage();
 
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
-    initialItemsPerPage: PAGINATION_DEFAULT_ITEMS_PER_PAGE,
+    pageType: LEADS_PAGE,
   });
 
+  const sortState = useSortFilterStore((state) => state.leads);
+  const filterState = useAllFilterStore((state) => state.leads);
+
+  // Reset to page 1 when filters changes
+  useEffect(() => {
+    handlePageChange(1);
+  }, [filterState]);
+
   const payloadData: LeadsPayload = {
-    filters: [],
-    sort: [],
+    filters: getAllFilterAppliedValues(filterState, LEADS_PAGE),
+    sort: getSortingAppliedValues(sortState, LEADS_PAGE),
     search: '',
     page: currentPage,
     page_size: itemsPerPage,
@@ -99,11 +111,8 @@ const TableFiltersWithHeaderLabel = () => {
     <>
       {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of leads</p> */}
       <div className="flex w-full items-start justify-between self-stretch">
-        <div className="flex items-start gap-4">
-          <ExportDownload />
-          <AllFilters />
-        </div>
-        <SortFilter />
+        <AllFiltersContainer page={LEADS_PAGE} />
+        <SortFilter page={LEADS_PAGE} key="Leads Sort" />
       </div>
     </>
   );

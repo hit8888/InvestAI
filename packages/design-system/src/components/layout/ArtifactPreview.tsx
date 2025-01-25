@@ -23,6 +23,7 @@ import CustomVideoPlayer from './CustomVideoPlayer.tsx';
 interface IProps {
   usingForAgent: boolean;
   artifactId: string;
+  logoURL: string | null;
   artifactType?: ArtifactEnum;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
@@ -41,6 +42,7 @@ const ArtifactPreview = ({
   artifactType,
   setDemoPlayingStatus,
   setActiveArtifact,
+  logoURL,
 }: IProps) => {
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
   const { data, isError, isFetching } = useArtifactDataQuery({
@@ -76,7 +78,7 @@ const ArtifactPreview = ({
     return (
       <SlideArtifactPreview
         artifactType={artifactType}
-        logoURL=""
+        logoURL={logoURL ?? ""}
         artifactContent={artifactContent as SlideImageArtifactContent | SlideArtifactContent}
         usingForAgent={usingForAgent}
         isFetching={isFetching}

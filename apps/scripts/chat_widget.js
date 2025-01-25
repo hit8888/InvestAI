@@ -16,33 +16,57 @@ const updateParentUrlParam = (key, value) => {
 };
 
 (function () {
+  // Capture script attributes immediately
+  const scriptElement = document.currentScript;
+  const config = {
+    tenantId: scriptElement?.getAttribute("tenant-id"),
+    agentId: scriptElement?.getAttribute("agent-id") || "1",
+    hideBottomBar: scriptElement?.getAttribute("hide-bottom-bar") === "true",
+    height: scriptElement?.getAttribute("max-height") || DEFAULT_HEIGHT,
+    allowExternalButtons:
+      scriptElement?.getAttribute("allow-external-buttons") || false,
+  };
+
   const DEFAULT_WIDTH = "100vw";
   const DEFAULT_HEIGHT = "88vh";
   const COLLAPSED_SIZE_WIDTH = "100vw";
   const COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX = 320;
   const COLLAPSED_SIZE_HEIGHT_PX = 180;
-  const height =
-    document.currentScript?.getAttribute("max-height") || DEFAULT_HEIGHT;
 
   /**
    * Creates and styles the container for the chat widget.
    * @returns {HTMLElement} The container element.
    */
   const createContainer = () => {
-    const container = document.createElement("div");
-    container.id = "chat-widget-container";
-    Object.assign(container.style, {
-      position: "fixed",
-      bottom: "10px", // Position 10px from the bottom
-      left: "50%", // Center horizontally
-      zIndex: "10000",
-      width: DEFAULT_WIDTH,
-      height: height,
-      maxHeight: "100%",
-      transform: "translateX(-50%)",
-    });
-    document.body.appendChild(container);
-    return container;
+    try {
+      const container = document.createElement("div");
+      if (!container) {
+        throw new Error("Failed to create div element");
+      }
+
+      container.id = "chat-widget-container";
+      Object.assign(container.style, {
+        position: "fixed",
+        bottom: "10px",
+        left: "50%",
+        zIndex: "10000",
+        width: DEFAULT_WIDTH,
+        height: config.height,
+        maxHeight: "100%",
+        transform: "translateX(-50%)",
+      });
+
+      // Check if document.body exists
+      if (!document.body) {
+        throw new Error("Document body not available");
+      }
+
+      document.body.appendChild(container);
+      return container;
+    } catch (error) {
+      console.error("Error in createContainer:", error);
+      return null;
+    }
   };
 
   /**
@@ -198,76 +222,114 @@ const updateParentUrlParam = (key, value) => {
     }
   };
 
-  //   const parentUrl = document.currentScript.dataset.param1;
-  const tenantId = document.currentScript?.getAttribute("tenant-id");
-  const agentId = document.currentScript?.getAttribute("agent-id") || "1";
   const hideBottomBar =
     document.currentScript?.getAttribute("hide-bottom-bar") === "true";
 
-  if (!tenantId || !agentId || isMobile()) {
-    return;
-  }
-
-  // Set the script URL based on the environment
-  const IFRAME_SRC = `https://agent.getbreakout.ai/org/${tenantId}/agent/${agentId}?`;
-  let isAgentOpen = false;
-  let iFrameSource = null;
-  let showBanner = false;
-
-  // Main execution
-  const container = createContainer();
-  createIframe(container, IFRAME_SRC, 0);
-  adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
-
-  console.log("sets up the container and iframe");
-
-  const url =
-    window.location != window.parent.location
-      ? document.referrer
-      : document.location.href;
-
-  // Event listener for messages from the iframe
-  window.addEventListener("message", (event) => {
-    // Check if the message is from the same domain
-    if (event.origin.split(".")?.[1] !== IFRAME_SRC?.split(".")?.[1]) {
+  // Add a function to initialize the widget
+  const initializeWidget = () => {
+    if (!config.tenantId || !config.agentId || isMobile()) {
       return;
     }
 
-    const utmParams = getUtmParameters();
-    const http_referrer = document.referrer;
-    iFrameSource = event.source;
-    iFrameSource?.postMessage(
-      {
-        utmParams,
-        http_referrer,
-        url,
-        hideBottomBar,
-      },
-      "*",
-    );
+    // Set the script URL based on the environment
+    const IFRAME_SRC = `https://agent.getbreakout.ai/org/${config.tenantId}/agent/${config.agentId}?`;
+    let isAgentOpen = false;
+    let iFrameSource = null;
+    let showBanner = false;
 
-    if (event.data && typeof event.data.chatOpen === "boolean") {
-      isAgentOpen = event.data.chatOpen;
-      showBanner = event.data.showBanner;
-      if (!isAgentOpen && utmParams?.isAgentOpen === "true") {
-        updateParentUrlParam("isAgentOpen", "false");
+    try {
+      // Main execution with error handling
+      const container = createContainer();
+      if (!container) {
+        console.error("Failed to create container");
+        return;
       }
-      adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
+
+      createIframe(container, IFRAME_SRC, 0);
+      adjustResponsiveStyles(
+        container,
+        isAgentOpen,
+        config.hideBottomBar,
+        showBanner,
+      );
+
+      console.log("sets up the container and iframe");
+
+      const url =
+        window.location != window.parent.location
+          ? document.referrer
+          : document.location.href;
+
+      // Event listener for messages from the iframe
+      window.addEventListener("message", (event) => {
+        // Check if the message is from the same domain
+        if (event.origin.split(".")?.[1] !== IFRAME_SRC?.split(".")?.[1]) {
+          return;
+        }
+
+        const utmParams = getUtmParameters();
+        const http_referrer = document.referrer;
+        iFrameSource = event.source;
+        iFrameSource?.postMessage(
+          {
+            utmParams,
+            http_referrer,
+            url,
+            hideBottomBar,
+          },
+          "*",
+        );
+
+        if (event.data && typeof event.data.chatOpen === "boolean") {
+          isAgentOpen = event.data.chatOpen;
+          showBanner = event.data.showBanner;
+          if (!isAgentOpen && utmParams?.isAgentOpen === "true") {
+            updateParentUrlParam("isAgentOpen", "false");
+          }
+          adjustResponsiveStyles(
+            container,
+            isAgentOpen,
+            config.hideBottomBar,
+            showBanner,
+          );
+        }
+      });
+
+      // Event listener for window resize
+      window.addEventListener("resize", () => {
+        adjustResponsiveStyles(
+          container,
+          isAgentOpen,
+          config.hideBottomBar,
+          showBanner,
+        );
+      });
+    } catch (error) {
+      console.error("Error initializing widget:", error);
     }
-  });
+  };
 
-  // Event listener for window resize
-  window.addEventListener("resize", () => {
-    adjustResponsiveStyles(container, isAgentOpen, hideBottomBar, showBanner);
-  });
+  // Wait for document to be ready
+  const documentReady = () => {
+    return new Promise((resolve) => {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", resolve);
+      } else {
+        resolve();
+      }
+    });
+  };
 
-  // Event listener for External buttons
-  const allowExternalButtons =
-    document.currentScript?.getAttribute("allow-external-buttons") || false;
-  if (allowExternalButtons === false) {
-    return;
-  }
-  document.addEventListener("DOMContentLoaded", () => {
-    handleExternalBreakoutButton();
-  });
+  // Initialize everything with proper error handling
+  documentReady()
+    .then(() => {
+      initializeWidget();
+
+      if (config.allowExternalButtons !== false) {
+        handleExternalBreakoutButton();
+      }
+    })
+    .catch((error) => {
+      console.error("Error during initialization:", error);
+    });
 })();

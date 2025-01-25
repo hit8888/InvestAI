@@ -14,6 +14,8 @@ const ConversationDetailsMultipleTabContainer = () => {
     setCurrentTab(tabValue);
   };
 
+  // TODO: NEED TO Resolve the Prospect and Company Details
+  // Make the RightSideTabDisplayContainer Stick on Top of the viewport
   return (
     <div className="flex w-full flex-1 items-start self-stretch">
       <MultipleTabSelectContainer currentTab={currentTab} handleTabClick={handleTabClick} />
