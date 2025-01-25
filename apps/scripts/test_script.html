@@ -1,16 +1,22 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
-    <title>Parent Site</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Widget Test</title>
   </head>
   <body>
+    <h1>Chat Widget Test Page</h1>
+
+    <!-- Add a test button to trigger errors -->
     <button id="button1" class="notify-breakout-button">Click Me</button>
     <button id="button2" class="notify-breakout-button">Click Me 2</button>
+
+    <!-- Add your chat widget script -->
     <script
-      src="./chat_widget.js"
+      src="chat_widget.js"
       tenant-id="hackerearth"
-      agent-id="2"
-      allow-external-buttons="true"
+      agent-id="1"
       async
     ></script>
   </body>
