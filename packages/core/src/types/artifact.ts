@@ -35,6 +35,8 @@ export const SlideArtifactSchema = z.object({
   items: z.array(SlideItemSchema),
 });
 
+export type ISlideItem = z.infer<typeof SlideItemSchema>;
+
 export const VideoArtifactSchema = z.object({
   video_url: z.string(),
   description: z.string(),

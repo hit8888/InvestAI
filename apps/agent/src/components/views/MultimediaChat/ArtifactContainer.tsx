@@ -8,9 +8,16 @@ type IProps = {
   showArtifactContent: boolean;
   isMediaTakingFullWidth: boolean;
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
+  onSlideItemClick: (title: string) => void;
 };
 
-const ArtifactContainer = ({ logoURL, showArtifactContent, isMediaTakingFullWidth, handleSendMessage }: IProps) => {
+const ArtifactContainer = ({
+  logoURL,
+  showArtifactContent,
+  isMediaTakingFullWidth,
+  handleSendMessage,
+  onSlideItemClick,
+}: IProps) => {
   const handleToggleFullScreen = useMessageStore((state) => state.handleToggleFullScreen);
 
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
@@ -32,6 +39,7 @@ const ArtifactContainer = ({ logoURL, showArtifactContent, isMediaTakingFullWidt
       previousArtifact={previousArtifact}
       setActiveArtifact={setActiveArtifact}
       setPreviousActiveArtifact={setPreviousActiveArtifact}
+      onSlideItemClick={onSlideItemClick}
     />
   );
 };

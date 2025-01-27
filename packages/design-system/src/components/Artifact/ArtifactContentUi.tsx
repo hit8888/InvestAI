@@ -17,6 +17,7 @@ interface Props {
   isMediaTakingFullWidth: boolean;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
+  onSlideItemClick: (title: string) => void;
 }
 
 export const ArtifactContentUi = ({
@@ -27,7 +28,8 @@ export const ArtifactContentUi = ({
   handleSendUserMessage,
   isMediaTakingFullWidth,
   handleToggleFullScreen,
-  setIsArtifactPlaying
+  setIsArtifactPlaying,
+  onSlideItemClick,
 }: Props) => {
   switch (artifactType) {
     case 'SLIDE':
@@ -36,6 +38,7 @@ export const ArtifactContentUi = ({
           logoURL={logoURL}
           artifact={artifactContent as SlideArtifactContent}
           key={(artifactContent as SlideArtifactContent).title}
+          onItemClick={onSlideItemClick}
         />
       );
     case 'SLIDE_IMAGE':
@@ -57,7 +60,6 @@ export const ArtifactContentUi = ({
           setIsArtifactPlaying={setIsArtifactPlaying}
           handleSendUserMessage={handleSendUserMessage}
           isMediaTakingFullWidth={isMediaTakingFullWidth}
-          
         />
       );
     default:

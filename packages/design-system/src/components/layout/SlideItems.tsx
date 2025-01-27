@@ -5,11 +5,10 @@ import SlideItem from './SlideItem';
 
 interface IProps {
   items: SlideArtifactContent['items'];
+  onItemClick: (title: string) => void;
 }
 
-//TODO: KK: Move this to design system
-const SlideItems = (props: IProps) => {
-  const { items } = props;
+const SlideItems = ({ items, onItemClick }: IProps) => {
   const itemsLength = items.length;
 
   return (
@@ -32,7 +31,7 @@ const SlideItems = (props: IProps) => {
             })}
             key={item.title}
           >
-            <SlideItem title={item.title} icon={item.icon as keyof typeof dynamicIconImports} />
+            <SlideItem title={item.title} icon={item.icon as keyof typeof dynamicIconImports} onClick={onItemClick} />
           </div>
         ))}
       </div>

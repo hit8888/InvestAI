@@ -52,6 +52,10 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
   const hideAgentHeader =
     demoPlayingStatus !== DemoPlayingStatus.INITIAL && demoPlayingStatus !== DemoPlayingStatus.STARTED;
 
+  const handleSlideItemClick = (title: string) => {
+    handleSendMessage({ message: `Can you elaborate more on ${title}` });
+  };
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 bg-white/10 p-2 backdrop-blur-lg transition-all duration-300 ease-in-out">
       <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60 backdrop-blur-lg">
@@ -78,6 +82,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
             logoURL={logoURL}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
             handleSendMessage={handleSendMessage}
+            onSlideItemClick={handleSlideItemClick}
           />
 
           <Demo

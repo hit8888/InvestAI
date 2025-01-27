@@ -44,6 +44,9 @@ const SlideArtifactPreview = ({
             logoURL={logoURL}
             artifact={artifactContent as SlideArtifactContent}
             key={(artifactContent as SlideArtifactContent).title}
+            onItemClick={() => {
+              //Do nothing
+            }}
           />
         );
         break;
@@ -98,7 +101,7 @@ const SlideArtifactPreview = ({
     <Dialog>
       <DialogTrigger asChild>{showButtonDisplay()}</DialogTrigger>
       <DialogContent className="bg-primary-foreground/80 sm:min-w-[1200px]">
-        <DialogTitle className='text-primary text-lg font-semibold'>{title}</DialogTitle>
+        <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>
         {openDialog ? <div className="h-full w-full rounded-lg">{getArtifactContent()}</div> : null}
       </DialogContent>
     </Dialog>

@@ -16,6 +16,7 @@ export interface ArtifactProps {
   setPreviousActiveArtifact: (artifact: GetArtifactPayload | null) => void;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
+  onSlideItemClick: (title: string) => void;
 }
 
 const Artifact = ({
@@ -27,9 +28,9 @@ const Artifact = ({
   setPreviousActiveArtifact,
   previousArtifact,
   handleToggleFullScreen,
-  setIsArtifactPlaying
+  setIsArtifactPlaying,
+  onSlideItemClick,
 }: ArtifactProps) => {
-
   const activeArtifactId = activeArtifact?.artifactId ?? '';
   const activeArtifactType = activeArtifact?.artifactType;
 
@@ -37,7 +38,7 @@ const Artifact = ({
     activeArtifact,
     previousArtifact,
     setActiveArtifact,
-    setPreviousActiveArtifact
+    setPreviousActiveArtifact,
   });
 
   if (activeArtifactType === 'NONE' || isError) return null;
@@ -59,6 +60,7 @@ const Artifact = ({
                 activeArtifactId={activeArtifactId}
                 handleSendUserMessage={handleSendUserMessage}
                 isMediaTakingFullWidth={isMediaTakingFullWidth}
+                onSlideItemClick={onSlideItemClick}
               />
             )}
           </div>
