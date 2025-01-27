@@ -1,11 +1,14 @@
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
-import LocationCellValue from './tableCellComp/LocationCellValue';
+import TooltipAddedAppliedFilter from './TooltipAddedAppliedFilter';
 import { COMMON_ICON_PROPS } from '../../utils/constants';
+import { FilterType } from '@meaku/core/types/admin/filters';
 
 type SingleAppliedFilterProps = {
   filter: { key: string; label: string; value: string | string[] };
   handleRemove: () => void;
 };
+
+const { Location, ProductOfInterest } = FilterType;
 
 const SingleAppliedFilter = ({ filter, handleRemove }: SingleAppliedFilterProps) => {
   return (
@@ -14,14 +17,8 @@ const SingleAppliedFilter = ({ filter, handleRemove }: SingleAppliedFilterProps)
       className="flex items-center justify-center gap-2 rounded-lg border border-primary/60 bg-primary/10 p-2"
     >
       <span className="text-xs font-normal text-gray-500">{filter.label}:</span>
-      {filter.key === 'location' ? (
-        <>
-          {(filter.value as string[]).map((location: string, index: number) => (
-            <span key={index} className="text-sm font-semibold capitalize text-primary">
-              <LocationCellValue value={location + (index < (filter.value as string[]).length - 1 ? ', ' : '')} />
-            </span>
-          ))}
-        </>
+      {[Location, ProductOfInterest].includes(filter.key as FilterType) ? (
+        <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
       ) : (
         <span className="text-sm font-semibold capitalize text-primary">{filter.value}</span>
       )}

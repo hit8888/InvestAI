@@ -26,7 +26,7 @@ export const ConversationsTableViewSchema = z.object({
   authority: z.string(),
   timeline: z.string(),
   role: z.string(),
-  buyer_intent: z.string().or(z.number()),
+  buyer_intent: z.string().or(z.number()).nullable(),
   bant_analysis: z.string(),
   number_of_user_messages: z.string(),
   meeting_status: z.string(),

@@ -33,8 +33,8 @@ const LogTabDisplayContent = () => {
           allowFeedback={true}
         />
       ) : (
-        <p className="w-full text-center text-2xl font-semibold text-gray-900">
-          There is No Log Data for this Session.
+        <p className="gradient-text mt-20 w-full text-center text-4xl font-semibold">
+          There is No Log for this Session.
         </p>
       )}
     </div>

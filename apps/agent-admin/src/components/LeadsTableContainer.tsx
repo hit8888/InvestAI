@@ -18,6 +18,7 @@ import {
   getMappedDataFromResponseForLeadsTableView,
   getAllFilterAppliedValues,
   getSortingAppliedValues,
+  collectAppliedFilters,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
@@ -39,16 +40,25 @@ const LeadsTableContainer = () => {
 
   // Reset to page 1 when filters changes
   useEffect(() => {
-    handlePageChange(1);
-  }, [filterState]);
+    const appliedFilters = collectAppliedFilters(filterState);
+    if (appliedFilters.length > 0) {
+      if (currentPage !== 1) {
+        handlePageChange(1);
+      }
+    } else {
+      handlePageChange(currentPage);
+    }
+  }, [filterState, currentPage]);
 
-  const payloadData: LeadsPayload = {
-    filters: getAllFilterAppliedValues(filterState, LEADS_PAGE),
-    sort: getSortingAppliedValues(sortState, LEADS_PAGE),
-    search: '',
-    page: currentPage,
-    page_size: itemsPerPage,
-  };
+  const payloadData: LeadsPayload = useMemo(() => {
+    return {
+      filters: getAllFilterAppliedValues(filterState, LEADS_PAGE),
+      sort: getSortingAppliedValues(sortState, LEADS_PAGE),
+      search: '',
+      page: currentPage,
+      page_size: itemsPerPage,
+    };
+  }, [filterState, sortState, currentPage, itemsPerPage]);
 
   const { data, isLoading, isError } = useLeadsTableQuery({
     payload: payloadData,

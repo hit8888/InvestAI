@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import { PageTypeProps } from '../../utils/admin-types';
@@ -15,8 +16,12 @@ const ProductOfInterestFilterContent = ({
   const filters = useAllFilterStore();
   const { ProductOfInterest } = FilterType;
 
+  const filtersOptionsPayload = useMemo(() => {
+    return getAllFilterAppliedValues(filters[page], page).filter((filter) => filter.field !== 'product_of_interest');
+  }, [filters[page], page]);
+
   const payloadData: FilterOptionsPayload = {
-    filters: getAllFilterAppliedValues(filters[page], page),
+    filters: filtersOptionsPayload,
     field: 'product_of_interest',
     search: '',
   };
