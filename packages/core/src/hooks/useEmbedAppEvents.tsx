@@ -3,6 +3,7 @@ import useAgentbotAnalytics from "./useAgentbotAnalytics";
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import { useSearchParams } from "react-router-dom";
 import useLocalStorageSession from "./useLocalStorageSession";
+import { useUrlParams } from "./useUrlParams";
 
 interface IProps {
   fetchSessionData: () => void;
@@ -17,6 +18,7 @@ export const useEmbedAppEvents = ({
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { handleUpdateSessionData } = useLocalStorageSession();
+  const { setParam } = useUrlParams();
 
   const [searchParams] = useSearchParams();
 
@@ -52,6 +54,10 @@ export const useEmbedAppEvents = ({
               ...event.data,
             }
           );
+        }
+        if (event.data.is_test === "true") {
+          setParam("is_test", "true");
+          setParam("test_type", event.data.test_type);
         }
       }
 

@@ -15,6 +15,7 @@ import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDeri
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -24,6 +25,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { pathname = '' } = useLocation();
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
+
+  const { getParam } = useUrlParams();
+  const is_test = getParam('is_test') === 'true';
+  const test_type = getParam('test_type') ?? undefined;
 
   const isDemoURL = pathname.includes('demo');
 
@@ -43,6 +48,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     session_id: sessionData.sessionId,
     prospect_id: sessionData.prospectId,
     browser_signature: getBrowserSignature(),
+    is_test,
+    test_type,
   };
 
   const sessionQuery = useInitializeSessionDataQuery({

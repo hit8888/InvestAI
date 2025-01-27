@@ -284,6 +284,8 @@
       "utm_content",
       "isAgentOpen",
       "source",
+      "is_test",
+      "test_type",
     ];
 
     return utmParams.reduce((params, key) => {

@@ -36,6 +36,8 @@ export type InitializationPayload = {
   prospect_id?: string;
   browser_signature?: Partial<BrowserSignature>;
   is_admin?: boolean;
+  is_test?: boolean;
+  test_type?: "automated" | "manual";
 };
 
 export const UpdateSessionDataPayloadSchema = z.object({
