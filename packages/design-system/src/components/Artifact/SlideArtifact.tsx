@@ -7,10 +7,10 @@ import SlideItems from '../layout/SlideItems';
 interface IProps {
   artifact: SlideArtifactContent;
   logoURL: string;
+  onItemClick: (title: string) => void;
 }
 
-const SlideArtifact = ({ artifact: { title, items, sub_title }, logoURL }: IProps) => {
-
+const SlideArtifact = ({ artifact: { title, items, sub_title }, logoURL, onItemClick }: IProps) => {
   return (
     <svg
       className="h-auto w-full"
@@ -25,7 +25,7 @@ const SlideArtifact = ({ artifact: { title, items, sub_title }, logoURL }: IProp
           <div className="grid h-full grid-cols-6 px-8 ">
             {sub_title && <SlideSubTitle text={sub_title} />}
             <div className={cn('col-span-6 h-full', { 'col-span-3': sub_title })}>
-              <SlideItems items={items} />
+              <SlideItems items={items} onItemClick={onItemClick} />
             </div>
           </div>
 
