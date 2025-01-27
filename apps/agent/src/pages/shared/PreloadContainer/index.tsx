@@ -16,6 +16,8 @@ import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnApp
 import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
+import { InitializationPayload } from '@meaku/core/types/api';
+
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -43,15 +45,16 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   useSetDistinctIdOnAppMount();
 
-  const initializeSessionPayload = {
+  const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
     session_id: sessionData.sessionId,
     prospect_id: sessionData.prospectId,
     browser_signature: getBrowserSignature(),
     is_test,
-    test_type,
+    test_type: test_type as 'automated' | 'manual' | undefined,
   };
 
+  //test build
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
