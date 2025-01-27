@@ -1,5 +1,4 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { Link } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthProvider';
 import { useSidebar } from '../context/SidebarContext';
@@ -70,9 +69,15 @@ const Sidebar: React.FC = () => {
   ];
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
+  const orgList = userInfo?.organizations;
+  const isUserSuperAdmin = (orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin');
+
   const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
   const TENANT_LOGO_URL = getTenantIdentifier()?.['logo'] ?? '';
   const isTenantLogoUrlPresent = TENANT_LOGO_URL.length > 0;
+
+  const Container = isUserSuperAdmin ? 'a' : 'div';
+  const containerProps = isUserSuperAdmin ? { href: '/' } : {};
 
   return (
     <div
@@ -97,8 +102,8 @@ const Sidebar: React.FC = () => {
               'w-full justify-center': isTenantLogoUrlPresent,
             })}
           >
-            <Link
-              to={'/'}
+            <Container
+              {...containerProps}
               className={cn('flex items-center object-contain', {
                 'justify-center': isOpen && isTenantLogoUrlPresent,
               })}
@@ -108,7 +113,7 @@ const Sidebar: React.FC = () => {
               ) : (
                 <AdminLogoSVG width={'30'} height={'35'} />
               )}
-            </Link>
+            </Container>
             {isOpen && !isTenantLogoUrlPresent ? (
               <span className="text-lg font-bold text-gray-900 transition-all duration-300">{TENANT_NAME}</span>
             ) : null}

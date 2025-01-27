@@ -10,11 +10,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const organizationsList = userInfo?.organizations;
   const organizationsOptions = organizationsList
-    ?.map((item) => item?.['tenant-name'])
-    .filter((name): name is string => !!name) || [''];
+    ?.map((item) => item?.name)
+    .filter((name): name is string => !!name)
+    .sort() || [''];
 
   const handleSelectOrganization = (option: string | null) => {
-    const orgItem = organizationsList?.find((item) => item?.['tenant-name'] === option);
+    const orgItem = organizationsList?.find((item) => item?.name === option);
     if (orgItem) {
       setTenantIdentifier(orgItem);
     }
