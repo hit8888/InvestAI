@@ -9,16 +9,21 @@ type CustomDateRangePickerProps = PageTypeProps & {
   date: DateRangeProp | undefined;
   onDateChange: (dateRange: DateRangeProp | undefined) => void;
 };
+
 const CustomDateRangePicker = ({ page, date, onDateChange }: CustomDateRangePickerProps) => {
   const { setFilter, [page]: pageFilters } = useAllFilterStore();
+
   const { CustomRange } = PresetDateLabel;
   const { PresetDate: PresetDateType } = FilterType;
   const currentPreset = (pageFilters?.presetDate as PresetDateLabel) ?? PresetDateLabel.CustomRange;
+
   const isCustomRange = currentPreset === CustomRange;
+
   const onPresetAndCustomDateChange = (newDate: DateRangeProp | undefined, presetLabel: string) => {
     setFilter(page, PresetDateType, presetLabel);
     onDateChange(newDate);
   };
+
   return (
     <div className={cn('flex w-full p-4')}>
       <ChoosePresetsDateValue currentPreset={currentPreset} onDateChange={onPresetAndCustomDateChange} />

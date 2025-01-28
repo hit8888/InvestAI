@@ -1,4 +1,3 @@
-import { DateRange } from "react-day-picker";
 import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from "./admin";
 
 export interface TableAllFilterConfig {
@@ -11,10 +10,14 @@ export interface TableAllFilterConfig {
   filterType: FilterType;
 }
 
-export type DateRangeProp = DateRange;
+export type DateRangeProp = {
+  startDate: Date | undefined;
+  endDate?: Date | undefined;
+};
+
 export type DateRangePickerProps = {
-  date: DateRange | undefined;
-  onDateChange: (dateRange: DateRange | undefined) => void;
+  date: DateRangeProp | undefined;
+  onDateChange: (dateRange: DateRangeProp | undefined) => void;
   isCustomRange: boolean;
 };
 

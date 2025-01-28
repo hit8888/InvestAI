@@ -18,9 +18,8 @@ import {
 } from '@meaku/core/types/admin/admin';
 import { FunnelData, FunnelStep } from './admin-types';
 import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
-import { DateRangeProp } from '@meaku/core/types/admin/filters';
-import { addDays, format } from 'date-fns';
-import { FilterValues, FilterType } from '@meaku/core/types/admin/filters';
+import DateUtil from '@meaku/core/utils/dateUtils';
+import { FilterValues, FilterType, DateRangeProp } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
 import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
 import { Message } from '@meaku/core/types/agent';
@@ -28,6 +27,8 @@ import { Message } from '@meaku/core/types/agent';
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
 const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest } = FilterType;
+
+const { convertDateToAppliedFilterValue, getDateDisplayForDateRange, getDateValueInISOString } = DateUtil;
 
 // Function to trigger the download
 export const handleDownload = (fileType: string, linkUrl: string, downloadedFileName: string) => {
@@ -60,7 +61,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     role: response.role !== 'Unknown' ? response.role || '-' : '-', // Handle 'Unknown' role
     company: response.company || '-', // Fallback if company is null
     location: response.country || '-',
-    timestamp: response.created_on ? new Date(response.created_on).toISOString().replace('T', ' ').split('.')[0] : '-',
+    timestamp: response.created_on ? getDateValueInISOString(response.created_on) : '-',
     product_of_interest: response.product_interest || '-',
   };
 
@@ -72,7 +73,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     company: response.company || '-',
     name: response.name || '-',
     email: response.email || '-',
-    timestamp: response.timestamp ? new Date(response.timestamp).toISOString().replace('T', ' ').split('.')[0] : '-',
+    timestamp: response.timestamp ? getDateValueInISOString(response.timestamp) : '-',
     conversation_preview: response.summary || '-',
     location: response.country || '-',
     budget: response.budget || '-',
@@ -220,47 +221,6 @@ export const getFilterHeaderLabel = (filterState: string) => {
   }
 };
 
-export const formatDateDisplay = (date: DateRangeProp | undefined) => {
-  if (!date?.from) return 'Pick date';
-
-  if (!date.to || date.from === date.to) {
-    return format(date.from, 'LLL dd, y');
-  }
-
-  return `${format(date.from, 'LLL dd, y')} - ${format(date.to, 'LLL dd, y')}`;
-};
-
-const convertDateToAppliedFilterValue = (dateRange: string) => {
-  // there's a timezone issue in the date conversion.
-  // When you create a new Date from the string "Jan 15, 2025",
-  // it uses the local timezone (in this case IST/GMT+0530),
-  // but when converting to ISO string, it adjusts to UTC,
-  // causing the date to appear as January 14th in the UTC timezone.
-  // const startDateStr = dateRange.split(' - ')[0];
-  // const startDate = addDays(new Date(startDateStr), 1); // Explained Above
-  // startDate.setUTCHours(0, 0, 0, 0);
-  // const formattedStartDate = startDate.toISOString();
-
-  // return `${formattedStartDate}`;
-
-  // Split the date range into start and end dates
-  const [startDateStr, endDateStr] = dateRange.split(' - ');
-
-  // Parse the start and end dates
-  const startDate = addDays(new Date(startDateStr), 1); // Explained Above
-  startDate.setUTCHours(0, 0, 0, 0);
-  const endDate = new Date(!endDateStr ? startDateStr : endDateStr);
-
-  // Set the end date to the end of the day (23:59:59.999)
-  endDate.setHours(23, 59, 59, 999);
-
-  // Format the dates into ISO 8601 format
-  const formattedStartDate = startDate.toISOString(); // "2025-01-03T00:00:00.000Z"
-  const formattedEndDate = endDate.toISOString(); // "2025-01-23T23:59:59.999Z"
-
-  return [`${formattedStartDate}`, `${formattedEndDate}`];
-};
-
 export const getSortingAppliedValues = (sortState: SortValues, page: string) => {
   const isLeadsPage = page === LEADS_PAGE;
   const sortApplied: SortItem[] = [];
@@ -293,6 +253,24 @@ export const getSortingAppliedValues = (sortState: SortValues, page: string) => 
 
   return sortApplied;
 };
+
+export const getDateAppliedValue = (dateRange: DateRangeProp) => {
+  const { startDate, endDate } = dateRange;
+  if (!startDate) return '';
+
+  const startDateFormatted = getDateDisplayForDateRange(startDate);
+
+  // If the range includes only one date, format and return it
+  if (!endDate || startDate === endDate) {
+    return startDateFormatted; // Example: "Jan 15, 2025"
+  }
+  const endDateFormatted = getDateDisplayForDateRange(endDate);
+
+  // Format and return the full date range
+  return `${startDateFormatted} - ${endDateFormatted}`;
+  // Example: "Jan 15, 2025 - Jan 20, 2025"
+};
+
 export const getAllFilterAppliedValues = (filterState: FilterValues, page: string) => {
   const filterApplied: FilterItem[] = [];
   const isLeadsPage = page === LEADS_PAGE;
@@ -305,12 +283,11 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   } = filterState;
 
   // TODOS: NEED TO FIX THE LOGIC FOR DATE RANGE FILTER
-  if (dateRange) {
+  if (dateRange?.startDate || dateRange?.endDate) {
     filterApplied.push({
       field: isLeadsPage ? 'created_on' : 'timestamp',
-      value: convertDateToAppliedFilterValue(formatDateDisplay(dateRange)),
-      operator: 'gte',
-      // operator: 'between',
+      value: convertDateToAppliedFilterValue(dateRange.startDate!, dateRange.endDate!),
+      operator: 'between',
     });
   }
   // if(intentScore.length > 0) {
@@ -357,7 +334,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     appliedFilters.push({
       key: DateRange,
       label: 'Date',
-      value: formatDateDisplay(filters.dateRange),
+      value: getDateAppliedValue(filters.dateRange),
     });
   }
 

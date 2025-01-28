@@ -41,14 +41,15 @@ const LeadsTableContainer = () => {
   // Reset to page 1 when filters changes
   useEffect(() => {
     const appliedFilters = collectAppliedFilters(filterState);
-    if (appliedFilters.length > 0) {
-      if (currentPage !== 1) {
-        handlePageChange(1);
-      }
+    if (!appliedFilters.length) {
+      return;
     } else {
-      handlePageChange(currentPage);
+      handlePageChange(1);
     }
-  }, [filterState, currentPage]);
+    if (!appliedFilters.length && currentPage !== 1) {
+      handlePageChange(1);
+    }
+  }, [filterState]);
 
   const payloadData: LeadsPayload = useMemo(() => {
     return {

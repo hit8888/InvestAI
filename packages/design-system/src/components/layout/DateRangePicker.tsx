@@ -1,9 +1,12 @@
-import { DateRange } from 'react-day-picker';
+import { SelectRangeEventHandler } from 'react-day-picker';
 import { Calendar } from '../shadcn-ui/calendar';
-import { DateRangePickerProps } from '@meaku/core/types/admin/filters';
+import { DateRangePickerProps, DateRangeProp } from '@meaku/core/types/admin/filters';
 
 const DateRangePicker = ({ date, onDateChange }: DateRangePickerProps) => {
-  const handleSelect = (value: DateRange | undefined) => {
+  const handleSelect: SelectRangeEventHandler = (range) => {
+    const value: DateRangeProp | undefined = range
+      ? { startDate: range.from, endDate: range.to }
+      : undefined;
     onDateChange(value);
   };
   return (
@@ -11,8 +14,8 @@ const DateRangePicker = ({ date, onDateChange }: DateRangePickerProps) => {
       className="!p-0"
       initialFocus
       mode="range"
-      defaultMonth={date?.from}
-      selected={date}
+      defaultMonth={date?.startDate}
+      selected={date ? { from: date.startDate, to: date.endDate } : undefined}
       onSelect={handleSelect}
       numberOfMonths={2}
       formatters={{

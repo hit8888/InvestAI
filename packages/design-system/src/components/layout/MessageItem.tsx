@@ -158,7 +158,7 @@ const MessageItem = ({
                 </ReactMarkdown>
               )}
               {conditionSpecificForDashboard ? (
-                <p className="!-mt-4 w-full text-right text-xs font-medium text-primary/50">{formattedTimestamp}</p>
+                <p className="!-mt-4 w-full text-right text-xs font-medium text-gray-100">{formattedTimestamp}</p>
               ) : null}
             </div>
             <div className="flex flex-col items-start">

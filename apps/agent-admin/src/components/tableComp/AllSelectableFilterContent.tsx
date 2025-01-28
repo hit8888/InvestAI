@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { CONVERSATIONS_TABLE_FILTERS_CONFIG, LEADS_TABLE_FILTERS_CONFIG } from '../../utils/constants';
-import { formatDateDisplay } from '../../utils/common';
+import { getDateAppliedValue } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { PageTypeProps } from '../../utils/admin-types';
@@ -49,7 +49,7 @@ const AllSelectableFilterContent = ({
   const getCurrentValue = (filterKey: string) => {
     switch (filterKey) {
       case DateRange:
-        return filters[page].dateRange ? formatDateDisplay(filters[page].dateRange) : 'Any';
+        return filters[page].dateRange ? getDateAppliedValue(filters[page].dateRange) : 'Any';
       case IntentScore:
         return filters[page].intentScore.length > 0 ? `${filters[page].intentScore.length} selected` : 'Any';
       case Location:
