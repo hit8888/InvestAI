@@ -1,28 +1,20 @@
 .custom-blur {
-  /* Base fallback for all browsers */
-  background-color: rgba(255, 255, 255, 0.1);
+  /* Base background with slight transparency */
+  background-color: rgba(255, 255, 255, 0.2);
 
-  /* Modern browsers - Chrome, Safari, newer Firefox */
-  --tw-backdrop-blur: blur(16px);
-  -webkit-backdrop-filter: var(--tw-backdrop-blur);
-  backdrop-filter: var(--tw-backdrop-blur);
+  /* Direct blur properties */
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
 }
 
-/* Firefox specific fallback */
+/* Firefox fallback */
 @-moz-document url-prefix() {
   .custom-blur {
     background-color: rgba(255, 255, 255, 0.8);
   }
 }
 
-/* IE and Edge legacy fallback */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .custom-blur {
-    background-color: rgba(255, 255, 255, 0.8);
-  }
-}
-
-/* General fallback for any browser without backdrop-filter */
+/* Legacy browsers fallback */
 @supports not (backdrop-filter: blur(0)) {
   .custom-blur {
     background-color: rgba(255, 255, 255, 0.9);
