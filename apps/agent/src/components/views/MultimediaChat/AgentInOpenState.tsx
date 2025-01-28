@@ -61,8 +61,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
       className={cn(
         'flex flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20',
         'bg-white/10 p-2 transition-all duration-300 ease-in-out',
-        // Add fallback background for browsers that don't support backdrop-blur
-        'backdrop-blur-lg [@supports_not_(backdrop-filter:blur(0))]:bg-white/90',
+        'custom-blur [@supports_not_(backdrop-filter:blur(0))]:bg-white/90',
       )}
     >
       <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
