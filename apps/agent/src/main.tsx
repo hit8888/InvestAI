@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import './lib/sentry.ts';
+import './styles/custom.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
