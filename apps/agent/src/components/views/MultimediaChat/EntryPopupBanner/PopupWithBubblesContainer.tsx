@@ -7,10 +7,17 @@ import PopupBubble from './PopupBubble';
 
 interface ContainerProps extends PopupContentProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
+  showBubbles: boolean;
+  setShowBubbles: (value: boolean) => void;
 }
 
-const PopupWithBubblesContainer = ({ agentName, orgName, setShowOrbAfterBubblesDisappear }: ContainerProps) => {
-  const [showBubbles, setShowBubbles] = useState(false);
+const PopupWithBubblesContainer = ({
+  agentName,
+  orgName,
+  setShowOrbAfterBubblesDisappear,
+  showBubbles,
+  setShowBubbles,
+}: ContainerProps) => {
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [hasShownOnce, setHasShownOnce] = useState(false);
@@ -65,6 +72,7 @@ const PopupWithBubblesContainer = ({ agentName, orgName, setShowOrbAfterBubblesD
     handleUpdateSessionData({
       popupLastClosed: Date.now().toString(),
     });
+    setShowOrbAfterBubblesDisappear(true);
     setShowPopupContent(false);
     setShowBubbles(false);
   };

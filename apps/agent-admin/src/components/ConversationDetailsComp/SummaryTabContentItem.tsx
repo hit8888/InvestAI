@@ -2,6 +2,7 @@ import { BANTItem, COMMON_SMALL_ICON_PROPS, SummaryTabContentList } from '../../
 import IntentScoreStockupIcon from '@breakout/design-system/components/icons/intent-score-stockup-icon';
 import SummaryListChildrenItem from './SummaryListChildrenItem';
 import { Link } from 'react-router-dom';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listLabel === 'Intent Score:';
@@ -44,10 +45,28 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
 };
 
 const SummaryValueForIntentScore = ({ score }: { score: number }) => {
+  const isPositiveScore = score > 0;
   return (
-    <div className="flex h-8 items-center justify-end gap-2 rounded-full bg-positive-100 py-1 pl-4 pr-2">
-      <p className="text-base font-medium text-positive-1000">{score}</p>
-      <IntentScoreStockupIcon className="h-5 w-5 text-positive-1000" />
+    <div
+      className={cn(`flex h-8 items-center justify-end gap-2 rounded-full py-1 pl-4 pr-2`, {
+        'bg-positive-100': isPositiveScore,
+        'bg-destructive-100': !isPositiveScore,
+      })}
+    >
+      <p
+        className={cn(`text-base font-medium`, {
+          'text-positive-1000': isPositiveScore,
+          'text-destructive-1000': !isPositiveScore,
+        })}
+      >
+        {score}
+      </p>
+      <IntentScoreStockupIcon
+        className={cn(`h-5 w-5`, {
+          'text-positive-1000': isPositiveScore,
+          'rotate-90 text-destructive-1000': !isPositiveScore,
+        })}
+      />
     </div>
   );
 };

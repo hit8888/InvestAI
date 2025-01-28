@@ -79,7 +79,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     role: response.role || '-',
     authority: response.role || '-',
     timeline: response.timeline || '-',
-    buyer_intent: '-', // Need to Find Logic or Directly getting from api
+    buyer_intent: response.buyer_intent_score ?? '-', // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
     number_of_user_messages: `${response.user_message_count || 0}`,
     meeting_status: '-', // Static for now, can be dynamic if additional info is provided
@@ -236,28 +236,29 @@ const convertDateToAppliedFilterValue = (dateRange: string) => {
   // it uses the local timezone (in this case IST/GMT+0530),
   // but when converting to ISO string, it adjusts to UTC,
   // causing the date to appear as January 14th in the UTC timezone.
-  const startDateStr = dateRange.split(' - ')[0];
-  const startDate = addDays(new Date(startDateStr), 1); // Explained Above
-  startDate.setUTCHours(0, 0, 0, 0);
-  const formattedStartDate = startDate.toISOString();
+  // const startDateStr = dateRange.split(' - ')[0];
+  // const startDate = addDays(new Date(startDateStr), 1); // Explained Above
+  // startDate.setUTCHours(0, 0, 0, 0);
+  // const formattedStartDate = startDate.toISOString();
 
-  return `${formattedStartDate}`;
+  // return `${formattedStartDate}`;
 
   // Split the date range into start and end dates
-  // const [startDateStr, endDateStr] = dateRange.split(" - ");
+  const [startDateStr, endDateStr] = dateRange.split(' - ');
 
-  // // Parse the start and end dates
-  // const startDate = new Date(startDateStr);
-  // const endDate = new Date(endDateStr);
+  // Parse the start and end dates
+  const startDate = addDays(new Date(startDateStr), 1); // Explained Above
+  startDate.setUTCHours(0, 0, 0, 0);
+  const endDate = new Date(!endDateStr ? startDateStr : endDateStr);
 
-  // // Set the end date to the end of the day (23:59:59.999)
-  // endDate.setHours(23, 59, 59, 999);
+  // Set the end date to the end of the day (23:59:59.999)
+  endDate.setHours(23, 59, 59, 999);
 
-  // // Format the dates into ISO 8601 format
-  // const formattedStartDate = startDate.toISOString(); // "2025-01-03T00:00:00.000Z"
-  // const formattedEndDate = endDate.toISOString(); // "2025-01-23T23:59:59.999Z"
+  // Format the dates into ISO 8601 format
+  const formattedStartDate = startDate.toISOString(); // "2025-01-03T00:00:00.000Z"
+  const formattedEndDate = endDate.toISOString(); // "2025-01-23T23:59:59.999Z"
 
-  // return [`${formattedStartDate}`, `${formattedEndDate}`];
+  return [`${formattedStartDate}`, `${formattedEndDate}`];
 };
 
 export const getSortingAppliedValues = (sortState: SortValues, page: string) => {
@@ -380,7 +381,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     appliedFilters.push({
       key: ProductOfInterest,
       label: 'Product',
-      value: filters.productOfInterest.join(', '),
+      value: filters.productOfInterest,
     });
   }
 
@@ -430,13 +431,20 @@ export function generateConversationSummaryContent(
   chatHistory: Message[],
   sessionData: ConversationsTableDisplayContent,
 ): SummaryTabContentList[] {
+  const isChatHistoryAvailable = chatHistory.length > 0;
   // Calculate session duration
   const firstMessage = new Date(chatHistory[0]?.timestamp as string);
   const lastMessage = new Date(chatHistory[chatHistory.length - 1]?.timestamp as string);
-  const sessionDuration = Math.ceil((lastMessage.getTime() - firstMessage.getTime()) / (1000 * 60)); // in minutes
+  const sessionDuration = isChatHistoryAvailable
+    ? Math.ceil((lastMessage.getTime() - firstMessage.getTime()) / (1000 * 60))
+    : 0; // in minutes
 
   // Calculate highest intent score
-  const highestIntentScore = Math.max(...chatHistory.map((msg) => msg.analytics.buyer_intent_score || 0));
+  const highestIntentScore =
+    sessionData?.buyer_intent ??
+    (isChatHistoryAvailable && Array.isArray(chatHistory) && chatHistory.length > 0
+      ? Math.max(...chatHistory.map((msg) => msg.analytics?.buyer_intent_score ?? 0))
+      : 0);
 
   // Count messages
   const aiMessageCount = chatHistory.filter((msg) => msg.role === 'ai').length;
@@ -468,7 +476,9 @@ export function generateConversationSummaryContent(
       case 'lengthOfConversation':
         return {
           ...item,
-          listValue: `${chatHistory.length} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`,
+          listValue: isChatHistoryAvailable
+            ? `${chatHistory.length} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`
+            : '-',
         };
       // case 'entryPoint':
       //   return {

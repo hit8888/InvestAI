@@ -17,6 +17,7 @@ import {
   getFormattedColumnsList,
   getMappedDataFromResponseForConversationsTableView,
   getAllFilterAppliedValues,
+  collectAppliedFilters,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
@@ -38,17 +39,26 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
   const sortState = useSortFilterStore((state) => state.conversations);
   const filterState = useAllFilterStore((state) => state.conversations);
 
-  // Reset to page 1 when filters or sorting changes
+  // Reset to page 1 when filters changes
   useEffect(() => {
-    handlePageChange(1);
-  }, [filterState]);
+    const appliedFilters = collectAppliedFilters(filterState);
+    if (appliedFilters.length > 0) {
+      if (currentPage !== 1) {
+        handlePageChange(1);
+      }
+    } else {
+      handlePageChange(currentPage);
+    }
+  }, [filterState, currentPage]);
 
-  const payloadData: ConversationsPayload = {
-    filters: getAllFilterAppliedValues(filterState, CONVERSATIONS_PAGE),
-    sort: getSortingAppliedValues(sortState, CONVERSATIONS_PAGE),
-    page: currentPage,
-    page_size: itemsPerPage,
-  };
+  const payloadData: ConversationsPayload = useMemo(() => {
+    return {
+      filters: getAllFilterAppliedValues(filterState, CONVERSATIONS_PAGE),
+      sort: getSortingAppliedValues(sortState, CONVERSATIONS_PAGE),
+      page: currentPage,
+      page_size: itemsPerPage,
+    };
+  }, [filterState, sortState, currentPage, itemsPerPage]);
 
   const { data, isLoading, isError } = useConversationsTableQuery({
     payload: payloadData,

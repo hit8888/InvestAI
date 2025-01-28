@@ -6,6 +6,7 @@ import FilterLocationIcon from '@breakout/design-system/components/icons/filter-
 import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
+import SummaryConversationIcon from '@breakout/design-system/components/icons/summary-conv-icon';
 import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
 import SummarySessionDurationIcon from '@breakout/design-system/components/icons/summary-sessionduration-icon';
 // import SummaryEntryPointIcon from '@breakout/design-system/components/icons/summary-entrypoint-icon';
@@ -304,7 +305,7 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
   {
     listKey: 'summary',
     listLabel: 'Summary of the conversation:',
-    listIcon: SummaryBantAnalysisIcon,
+    listIcon: SummaryConversationIcon,
     listValue: '',
   },
   {

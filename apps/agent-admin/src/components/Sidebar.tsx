@@ -1,5 +1,4 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { Link } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthProvider';
 import { useSidebar } from '../context/SidebarContext';
@@ -18,18 +17,31 @@ import {
 import Separator from '@breakout/design-system/components/layout/separator';
 import PanelLeadsIcon from '@breakout/design-system/components/icons/panel-leads-icon';
 import PanelConversationIcon from '@breakout/design-system/components/icons/panel-conversation-icon';
-import PanelPlaygroundIcon from '@breakout/design-system/components/icons/panel-playground-icon';
+// import PanelPlaygroundIcon from '@breakout/design-system/components/icons/panel-playground-icon';
 import PanelCloseIcon from '@breakout/design-system/components/icons/panel-close-icon';
 import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 
 const Sidebar: React.FC = () => {
-  const { isLoginPage, isLeadsPage, isConversationsPage, isPlaygroundPage } = usePageRouteState();
+  const {
+    isLoginPage,
+    isLeadsPage,
+    isConversationsPage,
+    // isPlaygroundPage
+  } = usePageRouteState();
   const { isSidebarOpen: isOpen, toggleSidebar } = useSidebar();
   const { userInfo } = useAuth();
 
-  const { LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
-  const { LEADS_LABEL, CONVERSATIONS_LABEL, PLAYGROUND_LABEL } = SidebarNavItemsEnum;
+  const {
+    LEADS,
+    CONVERSATIONS,
+    // PLAYGROUND
+  } = AppRoutesEnum;
+  const {
+    LEADS_LABEL,
+    CONVERSATIONS_LABEL,
+    // PLAYGROUND_LABEL
+  } = SidebarNavItemsEnum;
 
   if (isLoginPage) {
     return null;
@@ -48,18 +60,24 @@ const Sidebar: React.FC = () => {
       navImg: <PanelConversationIcon {...COMMON_SMALL_ICON_PROPS} />,
       isActive: isConversationsPage,
     },
-    {
-      navUrl: PLAYGROUND,
-      navItem: PLAYGROUND_LABEL,
-      navImg: <PanelPlaygroundIcon {...COMMON_SMALL_ICON_PROPS} />,
-      isActive: isPlaygroundPage,
-    },
+    // {
+    //   navUrl: PLAYGROUND,
+    //   navItem: PLAYGROUND_LABEL,
+    //   navImg: <PanelPlaygroundIcon {...COMMON_SMALL_ICON_PROPS} />,
+    //   isActive: isPlaygroundPage,
+    // },
   ];
 
   const userName = userInfo?.username || DEFAULT_USERNAME;
+  const orgList = userInfo?.organizations;
+  const isUserSuperAdmin = (orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin');
+
   const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
   const TENANT_LOGO_URL = getTenantIdentifier()?.['logo'] ?? '';
   const isTenantLogoUrlPresent = TENANT_LOGO_URL.length > 0;
+
+  const Container = isUserSuperAdmin ? 'a' : 'div';
+  const containerProps = isUserSuperAdmin ? { href: '/' } : {};
 
   return (
     <div
@@ -84,10 +102,10 @@ const Sidebar: React.FC = () => {
               'w-full justify-center': isTenantLogoUrlPresent,
             })}
           >
-            <Link
-              to={'/'}
-              className={cn('flex w-full items-center object-contain', {
-                'w-20 justify-center': isOpen && isTenantLogoUrlPresent,
+            <Container
+              {...containerProps}
+              className={cn('flex items-center object-contain', {
+                'justify-center': isOpen && isTenantLogoUrlPresent,
               })}
             >
               {isTenantLogoUrlPresent ? (
@@ -95,7 +113,7 @@ const Sidebar: React.FC = () => {
               ) : (
                 <AdminLogoSVG width={'30'} height={'35'} />
               )}
-            </Link>
+            </Container>
             {isOpen && !isTenantLogoUrlPresent ? (
               <span className="text-lg font-bold text-gray-900 transition-all duration-300">{TENANT_NAME}</span>
             ) : null}

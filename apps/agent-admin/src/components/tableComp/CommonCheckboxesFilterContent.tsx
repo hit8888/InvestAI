@@ -64,6 +64,7 @@ const CommonCheckboxesFilterContent = ({
         ))}
       </div>
       <CustomFooterWithButtons
+        isDisabled={checkboxOptions.length === 0}
         primaryBtnLabel="Clear All"
         secondaryBtnLabel="Select All"
         onPrimaryBtnClicked={handleClearAll}

@@ -15,8 +15,12 @@ const LocationFilterContent = ({ page, handleClosePopover }: PageTypeProps & { h
   const { Location } = FilterType;
   const [searchTerm, setSearchTerm] = useState('');
 
+  const filtersOptionsPayload = useMemo(() => {
+    return getAllFilterAppliedValues(filters[page], page).filter((filter) => filter.field !== 'country');
+  }, [filters[page], page]);
+
   const payloadData: FilterOptionsPayload = {
-    filters: getAllFilterAppliedValues(filters[page], page),
+    filters: filtersOptionsPayload,
     field: 'country',
     search: searchTerm,
   };
@@ -51,6 +55,7 @@ const LocationFilterContent = ({ page, handleClosePopover }: PageTypeProps & { h
     <React.Fragment key={Location}>
       <div className="border-b border-gray-300 px-4 pb-4">
         <Input
+          disabled={locationOptions.length === 0}
           className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3"
           onChange={handleInputChange}
           value={searchTerm}

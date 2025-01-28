@@ -75,7 +75,7 @@ const DemoContent = ({
         isOpen={!!showDemoQuestionsFlow}
       />
 
-      <div className="relative flex h-[10%] w-full flex-1 items-center gap-8 py-4">
+      <div className="relative flex h-[8%] w-full flex-1 items-center gap-8 py-4">
         <RaiseQuestionTrigger
           shouldShowDemoAgent={shouldShowDemoAgent}
           setShowDemoAgent={setShowDemoAgent}

@@ -1,6 +1,6 @@
 import { ScriptStepType } from '@meaku/core/types/agent';
 import { ImagePlayer } from '../DemoQuestionFlow/ImagePlayer';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { VideoPlayer } from '../DemoQuestionFlow/VideoPlayer';
@@ -33,6 +33,13 @@ const DemoFlow = ({
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<ReactPlayer>(null);
+
+  useEffect(() => {
+    if (demoDetails.asset_url && assetType === 'VIDEO') {
+      setIsVideoPlaying(true);
+      setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
+    }
+  }, [demoDetails.asset_url, assetType]);
 
   const { audioRef, playPromiseRef, analyserNode, duration } = useAudioController(
     demoDetails?.audio_url,
@@ -95,7 +102,7 @@ const DemoFlow = ({
   });
 
   return (
-    <div className={'relative flex h-[90%] w-full items-center justify-center'}>
+    <div className={'relative flex h-[92%] w-full items-center justify-center'}>
       {demoDetails.asset_url ? (
         <>
           {assetType === 'IMAGE' && (
