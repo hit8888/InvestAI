@@ -1,4 +1,5 @@
 import { OrganizationDetails } from "../types/admin/auth";
+import DateUtil from "./dateUtils";
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
@@ -38,5 +39,5 @@ export const getMessageTimestamp = (timestamp?: string): string => {
   }
 
   // Convert to ISO string and format it
-  return date.toISOString().replace('T', ' ').split('.')[0];
+  return DateUtil.getDateValueInISOString(timestamp);
 };

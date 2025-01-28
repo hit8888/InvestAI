@@ -1,6 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
-import { addDays } from 'date-fns';
+import DateUtil from '@meaku/core/utils/dateUtils';
 
 const SinglePresetDateValue = ({
   presetValue,
@@ -16,10 +16,7 @@ const SinglePresetDateValue = ({
   return (
     <button
       type="button"
-      onClick={
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        () => onDateChange({ from: addDays(new Date(), parseInt(presetValue) as any), to: new Date() }, presetLabel)
-      }
+      onClick={() => onDateChange(DateUtil.getDateRangeForPresetValue(parseInt(presetValue)), presetLabel)}
       className={cn('flex items-center self-stretch rounded-l-[4px] px-3 py-2 hover:bg-primary/20', {
         'border-r-2 border-primary bg-primary/10 ': currentPreset === presetLabel,
       })}

@@ -30,12 +30,15 @@ const TooltipAddedAppliedFilter = ({ appliedFilterValues }: { appliedFilterValue
               </Button>
             </TooltipTrigger>
             <TooltipContent
-              className="flex max-h-96 flex-col gap-2 overflow-auto bg-white"
+              className="hide-scrollbar flex max-h-96 flex-col overflow-auto bg-white !p-0"
               side="bottom"
               sideOffset={8}
             >
               {allTooltipValues.map((location: string, index: number) => (
-                <span key={index} className="text-sm font-semibold capitalize text-primary">
+                <span
+                  key={index}
+                  className="border-l-2 border-primary/70 bg-primary/10 px-4 py-2 text-sm font-semibold capitalize text-primary"
+                >
                   <LocationCellValue value={location} />
                 </span>
               ))}
