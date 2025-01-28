@@ -42,5 +42,11 @@ export default defineConfig({
         drop_console: true,
       },
     },
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   },
 });

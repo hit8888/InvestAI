@@ -55,9 +55,13 @@ export const useEmbedAppEvents = ({
             }
           );
         }
+
         if (event.data.utmParams.is_test === "true") {
           setParam("is_test", "true");
-          setParam("test_type", event.data.test_type);
+        }
+
+        if (event.data.utmParams.test_type === "automated") {
+          setParam("test_type", "automated");
         }
       }
 
