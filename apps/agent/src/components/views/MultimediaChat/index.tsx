@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
 import EntryPointBottomBar from './EntryPointBottomBar.tsx';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -17,13 +17,15 @@ interface IProps {
 }
 
 const Multimedia = ({ fetchSessionData }: IProps) => {
+  const [showBubbles, setShowBubbles] = useState(false);
+
   const { handleSendUserMessage } = useWebSocketChat();
   const { getParam, setParam } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
-  const showBanner = show_banner && !hasFirstUserMessageBeenSent;
+  const showBanner = show_banner && !hasFirstUserMessageBeenSent && showBubbles;
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();
@@ -64,6 +66,8 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
           handleSendUserMessage={handleSendMessage}
           handleOpenAgent={handleOpenAgent}
           hideBottomBar={shouldHideBottomBar}
+          showBubbles={showBubbles}
+          setShowBubbles={setShowBubbles}
         />
       )}
     </div>

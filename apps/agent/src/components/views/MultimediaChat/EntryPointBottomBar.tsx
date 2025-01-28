@@ -18,6 +18,8 @@ interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   handleOpenAgent: () => void;
   hideBottomBar: boolean;
+  showBubbles: boolean;
+  setShowBubbles: (value: boolean) => void;
 }
 
 const floatingAnimation = {
@@ -66,7 +68,13 @@ const suggestionItemAnimation = {
   },
 };
 
-const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenAgent }: IProps) => {
+const EntryPointBottomBar = ({
+  hideBottomBar,
+  handleSendUserMessage,
+  handleOpenAgent,
+  showBubbles,
+  setShowBubbles,
+}: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
   const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
   const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
@@ -127,6 +135,8 @@ const EntryPointBottomBar = ({ hideBottomBar, handleSendUserMessage, handleOpenA
         <PopupWithBubblesContainer
           orgName={orgName}
           agentName={agentName}
+          showBubbles={showBubbles}
+          setShowBubbles={setShowBubbles}
           setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
         />
       ) : null}
