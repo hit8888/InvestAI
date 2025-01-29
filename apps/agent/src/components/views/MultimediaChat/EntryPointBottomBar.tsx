@@ -117,6 +117,8 @@ const EntryPointBottomBar = ({
 
   const showBanner = show_banner && !hasFirstUserMessageBeenSent;
 
+  const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
+
   return (
     <div
       className={cn(
@@ -146,7 +148,7 @@ const EntryPointBottomBar = ({
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
         >
           <div className="relative flex-1">
-            {!hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear && (
+            {showOrb && (
               <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
                 <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
               </div>
@@ -157,7 +159,7 @@ const EntryPointBottomBar = ({
               className={cn(
                 'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
                 {
-                  'pl-14': !hasFirstUserMessageBeenSent && showOrbAfterBubblesDisappear,
+                  'pl-14': showOrb,
                 },
               )}
               placeholder={useTypewriter(placeholderText)}

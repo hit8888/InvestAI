@@ -1,4 +1,5 @@
 import { z, ZodSchema } from "zod";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 const getZodType = (dataType: string) => {
   switch (dataType) {
@@ -13,7 +14,9 @@ const getZodType = (dataType: string) => {
     case "datetime":
       return z.string().datetime();
     case "phone":
-      return z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"); // E.164 format
+      return z
+        .string()
+        .refine(isValidPhoneNumber, { message: "Invalid phone number" }); // E.164 format
     default:
       return z.string();
   }

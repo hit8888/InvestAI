@@ -9,6 +9,7 @@ import {
 import { FormFieldType } from '@meaku/core/types/agent';
 import Input from '@breakout/design-system/components/layout/input';
 import { getInputType } from '@meaku/core/utils/form_fields';
+import PhoneInputContainer from '../PhoneInput';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
@@ -18,6 +19,8 @@ interface IChatFormFieldProps {
 const ChatFormField = (props: IChatFormFieldProps) => {
   const { form, form_field } = props;
 
+  const isPhoneInputField = form_field.field_name === 'phone_number';
+
   return (
     <FormField
       control={form.control}
@@ -26,7 +29,9 @@ const ChatFormField = (props: IChatFormFieldProps) => {
         <FormItem>
           <FormLabel>{form_field.label}</FormLabel>
           <FormControl>
-            <Input {...field} type={getInputType(form_field.data_type)} />
+            {isPhoneInputField ? (
+              <PhoneInputContainer field={field}/>
+            ) :<Input {...field} type={getInputType(form_field.data_type)} />}
           </FormControl>
           <FormMessage />
         </FormItem>

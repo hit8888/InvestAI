@@ -51,7 +51,7 @@ const MessageDataSources = (props: IProps) => {
                           <a
                             href={doc.url}
                             target="_blank"
-                            className="block max-w-[10ch] overflow-hidden truncate overflow-ellipsis text-primary underline xl:max-w-[20ch]"
+                            className="block max-w-[8ch] overflow-hidden truncate overflow-ellipsis text-primary underline 2xl:max-w-[20ch]"
                             title={doc.title || doc.data_source_name || doc.url}
                           >
                             {doc.title || doc.data_source_name || doc.url}
