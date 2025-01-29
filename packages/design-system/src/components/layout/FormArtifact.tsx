@@ -82,11 +82,13 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
     <Card className="m-4 ml-0 max-w-[350px]">
       <CardContent className="mt-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" data-testid="contact-form">
             {artifact.form_fields.map((field, i) => (
               <ChatFormField key={i} form={form} form_field={field} />
             ))}
-            <Button type="submit">Submit</Button>
+            <Button type="submit" data-testid="submit-form-btn">
+              Submit
+            </Button>
           </form>
         </Form>
       </CardContent>

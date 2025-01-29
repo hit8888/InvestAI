@@ -13,7 +13,7 @@
   const DEFAULT_HEIGHT = "88vh";
   const COLLAPSED_SIZE_WIDTH = "100vw";
   const COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX = 320;
-  const COLLAPSED_SIZE_HEIGHT_PX = 180;
+  const COLLAPSED_SIZE_HEIGHT_PX = 120;
 
   const updateParentUrlParam = (key, value) => {
     const url = new URL(window.parent.location.href);

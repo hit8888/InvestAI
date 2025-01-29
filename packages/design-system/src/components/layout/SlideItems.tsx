@@ -12,7 +12,7 @@ const SlideItems = ({ items, onItemClick }: IProps) => {
   const itemsLength = items.length;
 
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex h-full items-center justify-center" data-testid="slide-container">
       <div
         className={cn('grid w-full grid-cols-6', {
           'gap-7': itemsLength <= 2,

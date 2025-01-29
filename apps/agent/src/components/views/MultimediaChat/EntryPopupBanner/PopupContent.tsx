@@ -18,7 +18,7 @@ const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProp
     className="popup-banner-border-gradient-animation absolute -left-52 -top-32 flex items-center justify-center"
     style={{ zIndex: 20 }}
   >
-    <div className="popupGradient-container flex p-4">
+    <div className="popupGradient-container flex p-4" data-testid="greeting-banner">
       <div className="flex items-center gap-4">
         <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
           <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />

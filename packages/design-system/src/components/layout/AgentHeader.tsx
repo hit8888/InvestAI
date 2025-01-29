@@ -46,6 +46,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig 
             size="sm"
             onClick={handlePrimaryCta}
             className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40 text-white"
+            data-testid="contact-sales-btn"
           >
             {ctaText}
           </Button>
