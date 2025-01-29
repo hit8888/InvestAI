@@ -234,10 +234,10 @@ export const LEADS_PAGE_COLUMN_LISTS = [
   'email',
   'name',
   'company',
-  'role',
   'product_of_interest',
   'timestamp',
   'location',
+  'role',
 ];
 
 // CONVERSATION PAGE
@@ -262,23 +262,24 @@ export enum ConversationDetailsTabsLabelEnum {
 }
 
 export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
-  'company',
-  'name',
-  'email',
-  'timestamp',
   'conversation_preview',
   'location',
+  'timestamp',
+  'product_of_interest',
   'buyer_intent',
   // 'bant_analysis', // TODO: Once its decided to show this column
   'number_of_user_messages',
-  'meeting_status',
-  'product_of_interest',
+  'company',
+  'email',
+  'name',
+  // 'meeting_status',
   'ip_address',
   'session_id',
 ];
 
 export const UPPERCASE_COLUMN_WORDS = ['bant', 'ip', 'id'];
-export const CONVERSATIONS_PINNED_COLUMNS = ['company', 'name'];
+export const CONVERSATIONS_PINNED_COLUMNS = ['conversation_preview', 'location'];
+export const LEADS_PINNED_COLUMNS = ['email', 'name'];
 
 export interface FunnelData {
   funnelChipType: string;

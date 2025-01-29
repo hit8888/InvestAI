@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { CONVERSATIONS_PINNED_COLUMNS } from '../../utils/constants';
+import { CONVERSATIONS_PINNED_COLUMNS, LEADS_PINNED_COLUMNS } from '../../utils/constants';
 import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext';
@@ -59,7 +59,7 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
   const table = useReactTable({
     initialState: {
       columnPinning: {
-        left: CONVERSATIONS_PINNED_COLUMNS,
+        left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : LEADS_PINNED_COLUMNS,
       },
     },
     data: tabularData,

@@ -9,6 +9,7 @@ import CompanyFoundationDate from '@breakout/design-system/components/icons/comp
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import LocationSmallIcon from '@breakout/design-system/components/icons/location-icon';
+import LocationCellValue from '../tableComp/tableCellComp/LocationCellValue';
 
 const IconPropsValue = {
   width: '16',
@@ -51,7 +52,7 @@ const RightSideTabDisplayContainer = ({
             showBottomBorder={false}
             itemLabel="Location:"
             itemIcon={<LocationSmallIcon {...IconPropsValue} />}
-            itemValue={prospect.location}
+            itemValue={<LocationCellValue value={prospect.location} />}
           />
         </div>
       </div>
@@ -68,7 +69,7 @@ const RightSideTabDisplayContainer = ({
           <SingleItemDataDisplay
             itemLabel="Location:"
             itemIcon={<LocationSmallIcon {...IconPropsValue} />}
-            itemValue={company.location}
+            itemValue={<LocationCellValue value={company.location} />}
           />
           <SingleItemDataDisplay
             itemLabel="Revenue:"
@@ -128,7 +129,7 @@ const SingleItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBottomBorde
       {isItemValueString ? (
         <span className="ml-auto text-base font-medium text-gray-900">{itemValue}</span>
       ) : (
-        <>{itemValue}</>
+        <div className="flex w-full justify-end">{itemValue}</div>
       )}
     </div>
   );

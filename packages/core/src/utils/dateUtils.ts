@@ -5,9 +5,9 @@ import {
   HUMAN_READABLE_DATE_LABELS,
 } from "@meaku/core/constants/dateFormat";
 
-const { RECENTLY, FEW_HOURS_BACK, TODAY, YESTERDAY } =
+const { TODAY, YESTERDAY } =
   HUMAN_READABLE_DATE_LABELS;
-const { STANDARD_DATE, ISO_DATE_TIME, STANDARD_DATE_WITH_TIME_WITHOUT_SECOND } =
+const { STANDARD_DATE, STANDARD_TIME, ISO_DATE_TIME, STANDARD_DATE_WITH_TIME_WITHOUT_SECOND } =
   DATE_FORMATS;
 
 class DateUtil {
@@ -21,6 +21,21 @@ class DateUtil {
     return format(date, STANDARD_DATE);
   }
 
+  /**
+   * Format the given timestamp into a readable time string
+   * @param timestamp Timestamp to format
+   * @returns Formatted time string in "hh:mm a" format
+   */
+  static formatTimeWithMeridiem(timestamp: string): string {
+    const date = new Date(timestamp);
+    return format(date, STANDARD_TIME);
+  }
+
+  /**
+   * Format the given timestamp into a readable date & time string
+   * @param timestamp Timestamp to format
+   * @returns Formatted date & time string in "MMM dd, yyyy hh:mm a" format
+   */
   static formatDateTime(timestamp: string): string {
     const date = new Date(timestamp);
     return format(date, STANDARD_DATE_WITH_TIME_WITHOUT_SECOND);
@@ -68,18 +83,16 @@ class DateUtil {
     const date = new Date(timestamp);
     const now = new Date();
 
-    const hoursDiff = differenceInHours(now, date);
+    const hoursDiff = differenceInHours(now.getTime(), date.getTime());
     const isTodayCheck = DateUtil.isToday(timestamp);
     const isYesterdayCheck = DateUtil.isYesterday(timestamp);
 
-    if (hoursDiff < 2) {
-      return RECENTLY;
-    } else if (hoursDiff >= 2 && hoursDiff <= 12) {
-      return FEW_HOURS_BACK;
-    } else if (isTodayCheck) {
-      return TODAY;
-    } else if (isYesterdayCheck) {
+    if (isYesterdayCheck) {
       return YESTERDAY;
+    } else if (isTodayCheck && hoursDiff >= 12) {
+      return TODAY;
+    } else if (hoursDiff <= 12) {
+      return DateUtil.formatTimeWithMeridiem(timestamp)
     } else {
       return DateUtil.formatDate(timestamp);
     }

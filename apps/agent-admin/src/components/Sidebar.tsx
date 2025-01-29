@@ -90,7 +90,7 @@ const Sidebar: React.FC = () => {
       }}
     >
       <div
-        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
+        className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] px-2 pb-0 pt-4`}
       >
         <div
           className={cn(`flex w-full items-center justify-between px-2 pb-2`, {
@@ -104,12 +104,12 @@ const Sidebar: React.FC = () => {
           >
             <Container
               {...containerProps}
-              className={cn('flex items-center object-contain', {
+              className={cn('flex h-16 w-full items-center', {
                 'justify-center': isOpen && isTenantLogoUrlPresent,
               })}
             >
               {isTenantLogoUrlPresent ? (
-                <img src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
+                <img className="h-full w-full" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
               ) : (
                 <AdminLogoSVG width={'30'} height={'35'} />
               )}
