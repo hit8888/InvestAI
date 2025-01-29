@@ -49,7 +49,7 @@ const LeadsTableContainer = () => {
     if (!appliedFilters.length && currentPage !== 1) {
       handlePageChange(1);
     }
-  }, [filterState, currentPage]);
+  }, [filterState]);
 
   const payloadData: LeadsPayload = useMemo(() => {
     return {
