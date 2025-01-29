@@ -29,9 +29,13 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
 
   return (
     <div className="flex w-full flex-col items-end gap-3">
-      {artifact.suggested_questions.map((question) => (
+      {artifact.suggested_questions.map((question, index) => (
         <div key={question} className="max-w-[80%] flex-wrap">
-          <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
+          <Suggestion
+            question={question}
+            onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+            itemIndex={index}
+          />
         </div>
       ))}
     </div>

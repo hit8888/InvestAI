@@ -19,19 +19,64 @@ Only triggers when changes are made to relevant paths, avoiding unnecessary runs
 
 ## Key Components
 
-### 1. Code Quality Checks
+### 1. Workflow Concurrency
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+Prevents multiple deployments running simultaneously and cancels in-progress workflows when new changes are pushed.
+
+### 2. Code Quality Checks
+
+#### ESLint
 ```yaml
 - name: Run ESLint
   run: pnpm lint-staged
 ```
 Uses the same lint-staged configuration as local development for consistency.
 
-### 2. Unit Tests
-Runs tests for core package and agent app with environment-specific variables:
-- Staging environment for main branch
-- Production environment for release branch
+#### TypeScript Checks
+```yaml
+- name: Type Check Changed Files
+  run: |
+    # Run tsc in workspaces with changes
+    pnpm --filter "<workspace>" tsc --noEmit
+```
+Performs TypeScript type checking on modified workspaces:
+- Only checks files in apps/ and packages/ directories
+- Respects workspace-specific tsconfig settings
+- Excludes node_modules and other external files
+- Runs checks in parallel for better performance
 
-### 3. E2E Tests (Playwright)
+### 3. Unit Tests
+Tests are run separately for different packages:
+
+1. **Core Package Tests**
+   ```bash
+   # Run in packages/core directory
+   pnpm test
+   ```
+
+2. **Agent App Tests**
+   ```bash
+   # Run in apps/agent directory with environment variables
+   pnpm test
+   ```
+
+Environment variables are automatically set based on branch:
+- release branch → production variables
+- main branch → staging variables
+
+Variables include:
+- VITE_BASE_API_URL
+- VITE_WEBSOCKET_URL
+- VITE_SENTRY_DSN
+- VITE_SENTRY_AUTH_TOKEN
+- VITE_LOGROCKET_APP_ID
+- VITE_APP_ENV
+
+### 4. E2E Tests (Playwright)
 E2E tests are selectively triggered in two scenarios:
 1. When PR has the "run-e2e" label
 2. On squash and merge commits
@@ -64,19 +109,46 @@ E2E tests are selectively triggered in two scenarios:
      - Minor style changes
      - Backend-only changes
 
-### 4. Script Deployment
-Automatically deploys to S3 when changes are detected in:
-- apps/scripts
-- packages/core
+### 5. Script Deployment
 
-Environment selection:
-- main branch → staging
-- release branch → production
+#### Change Detection
+```bash
+# Automatically checks for changes in:
+- apps/scripts/
+- packages/core/
+```
 
-### 5. Error Handling
+#### Build Process
+Scripts are built using:
+```bash
+pnpm build
+```
+
+#### AWS Configuration
+Uses AWS credentials for S3 upload:
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS region: us-west-1
+
+### 6. Error Handling
 - Detailed error messages
 - GitHub issue comments on failure
 - Artifact retention for test reports
+
+### 7. Failure Notifications
+
+#### GitHub Comments
+Automatically posts comments on PR when workflow fails:
+```
+❌ Workflow failed! Please check the Actions tab for more details.
+```
+
+#### Slack Integration
+Sends detailed Slack notifications on failure including:
+- Repository name
+- Branch name
+- Workflow name
+- Direct link to failed workflow run
 
 ## Usage Guide
 
@@ -140,3 +212,15 @@ For issues:
 1. Check Actions tab logs
 2. Review error notifications
 3. Contact DevOps team 
+
+## Resource Management
+
+### 1. Caching Strategy
+- Implements Playwright browser caching
+- Uses pnpm caching for dependencies
+- Optimizes CI runtime and resource usage
+
+### 2. Timeout Settings
+- Workflow timeout: 60 minutes
+- Prevents hanging builds
+- Conserves CI resources 

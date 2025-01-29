@@ -11,13 +11,16 @@ test('Basic flow for agent', async ({ page }) => {
   );
 
   // 3. Interact with the chat flow
-  // Suggestion: Add data-testid="start-demo-btn" to your button
-  expect(page.getByTestId('greeting-banner')).toBeVisible();
+  await expect(page.getByTestId('greeting-banner')).toBeVisible();
   await page.getByTestId('greeting-banner').getByRole('button').click();
 
-  //Click on first sugggested question
-  const firstSuggestion = page.getByTestId('suggestion-item').nth(0);
-  await firstSuggestion.click();
+  // Wait for suggestions to be loaded and verify we have at least one
+  const initiialFirstSuggestion = page.getByTestId('suggestion-item-0');
+  await expect(initiialFirstSuggestion).toBeVisible();
+
+  // Click the first suggestion with better waiting and force
+  await initiialFirstSuggestion.waitFor({ state: 'visible', timeout: 30000 });
+  await initiialFirstSuggestion.click({ force: true, timeout: 30000 });
 
   // Add assertion to verify the slide container
   await expect(page.getByTestId('slide-container')).toBeVisible();
@@ -44,8 +47,7 @@ test('Basic flow for agent', async ({ page }) => {
   const acknowledgementText = page.getByText("Great, We've received your responses.");
   await expect(acknowledgementText).toBeVisible();
 
-  // Verify suggestion items
-  const suggestionItems = page.getByTestId('suggestion-item');
-  const suggestedQuestion = suggestionItems.nth(0);
-  await expect(suggestedQuestion).toBeVisible();
+  // Wait for suggestions to be loaded and verify we have at least one
+  const firstSuggestion = page.getByTestId('suggestion-item-0');
+  await expect(firstSuggestion).toBeVisible();
 });

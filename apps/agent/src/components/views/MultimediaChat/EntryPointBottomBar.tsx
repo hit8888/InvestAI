@@ -178,9 +178,18 @@ const EntryPointBottomBar = ({
               )}
             >
               {showSuggestedQuestions &&
-                initialSuggestedQuestions.map((question) => (
-                  <motion.div key={question} variants={suggestionItemAnimation} className="rounded-full bg-white">
-                    <Suggestion question={question} onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick} />
+                initialSuggestedQuestions.map((question, index) => (
+                  <motion.div
+                    key={question}
+                    variants={suggestionItemAnimation}
+                    className="rounded-full bg-white"
+                    key-={index}
+                  >
+                    <Suggestion
+                      question={question}
+                      onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+                      itemIndex={index}
+                    />
                   </motion.div>
                 ))}
             </motion.div>

@@ -53,6 +53,31 @@ jobs:
             exit 1
           fi
 
+      # Type Check for changed files
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v42
+        with:
+          files: |
+            apps/**/*.{ts,tsx}
+            packages/**/*.{ts,tsx}
+
+      - name: Type Check Changed Files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "Type checking changed files:"
+          echo "$CHANGED_FILES"
+          # Run tsc in each workspace that has changes
+          if echo "$CHANGED_FILES" | grep -q "^apps/"; then
+            echo "Checking apps..."
+            pnpm --filter "./apps/*" tsc --noEmit
+          fi
+          if echo "$CHANGED_FILES" | grep -q "^packages/"; then
+            echo "Checking packages..."
+            pnpm --filter "./packages/*" tsc --noEmit
+          fi
+
       # Unit Tests
       - name: Run Core Package Tests
         working-directory: packages/core
@@ -72,13 +97,23 @@ jobs:
       # Playwright E2E Tests
       - name: Check if E2E should run
         id: check_e2e
+        env:
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" && "${{ contains(github.event.pull_request.labels.*.name, 'run-e2e') }}" == "true" ]]; then
-            echo "run=true" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if echo "$PR_LABELS" | grep -q "run-e2e"; then
+              echo "run=true" >> $GITHUB_OUTPUT
+              echo "E2E tests will run - 'run-e2e' label detected"
+            else
+              echo "run=false" >> $GITHUB_OUTPUT
+              echo "E2E tests will not run - 'run-e2e' label not found"
+            fi
           elif [[ "${{ github.event_name }}" == "push" && "${{ contains(github.event.head_commit.message, '#') }}" == "true" ]]; then
             echo "run=true" >> $GITHUB_OUTPUT
+            echo "E2E tests will run - '#' found in commit message"
           else
             echo "run=false" >> $GITHUB_OUTPUT
+            echo "E2E tests will not run - not a PR with 'run-e2e' label or push with '#'"
           fi
 
       - name: Cache Playwright browsers
@@ -176,3 +211,35 @@ jobs:
               repo: context.repo.name,
               body: '❌ Workflow failed! Please check the [Actions tab](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more details.'
             })
+
+      - name: Send Slack notification on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "🚨 Workflow failed!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Workflow Failed* ❌\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Workflow:* ${{ github.workflow }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow Run>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+permissions:
+  contents: read
+  pull-requests: read
