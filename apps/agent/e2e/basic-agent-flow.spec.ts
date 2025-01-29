@@ -23,7 +23,7 @@ test('Basic flow for agent', async ({ page }) => {
   await initiialFirstSuggestion.click({ force: true, timeout: 30000 });
 
   // Add assertion to verify the slide container
-  await expect(page.getByTestId('slide-container')).toBeVisible();
+  await expect(page.getByAltText('Slide')).toBeVisible();
 
   const contactButton = page.getByTestId('contact-sales-btn');
   await contactButton.click();
