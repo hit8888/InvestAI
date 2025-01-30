@@ -28,14 +28,16 @@ const SortFilter = ({ page }: PageTypeProps) => {
       border border-primary/20 bg-primary/2.5 p-2 focus:bg-primary/10 focus:outline-none 
       focus:ring-2 focus:ring-primary/60 data-[state=open]:border-2 data-[state=open]:border-primary"
       >
-        <p className="text-sm font-medium text-gray-500">Sort</p>
-        <SortFilterIcon {...COMMON_ICON_PROPS} />
+        <p className="text-sm font-medium text-primary">Sort</p>
+        <span className="h-5 w-5">
+          <SortFilterIcon {...COMMON_ICON_PROPS} />
+        </span>
       </PopoverTrigger>
       <PopoverContent
-        className="popover-boxshadow z-20 w-80 rounded-lg bg-white p-0"
+        className="popover-boxshadow z-50 w-80 rounded-lg bg-white p-0"
         align="end"
         side="bottom"
-        sideOffset={10}
+        sideOffset={20}
       >
         <PopoverHeaderLabelWithCloseIcon headerLabel="Sort by:" />
         {SORT_FEATURE_CONFIG_BASED_ON_PAGE.map((config) => (

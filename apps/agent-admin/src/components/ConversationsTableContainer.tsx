@@ -5,11 +5,10 @@ import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
 
-import SortFilter from './tableComp/SortFilter';
 import TableViewContent from './TableViewContent';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
-import AllFiltersContainer from './tableComp/AllFilters';
+import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
 import { CONVERSATIONS_PAGE_COLUMN_LISTS } from '../utils/constants';
 import {
@@ -26,6 +25,8 @@ import { ConversationsTableViewContent, ConversationsTableDisplayContent } from 
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+
+const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
 
 type IProps = {
   tenantName: string;
@@ -52,14 +53,18 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
     }
   }, [filterState]);
 
+  const allAppliedFilterValues = useMemo(() => {
+    return getAllFilterAppliedValues(filterState, CONVERSATIONS_PAGE);
+  }, [filterState]);
+
   const payloadData: ConversationsPayload = useMemo(() => {
     return {
-      filters: getAllFilterAppliedValues(filterState, CONVERSATIONS_PAGE),
+      filters: allAppliedFilterValues,
       sort: getSortingAppliedValues(sortState, CONVERSATIONS_PAGE),
       page: currentPage,
       page_size: itemsPerPage,
     };
-  }, [filterState, sortState, currentPage, itemsPerPage]);
+  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
 
   const { data, isLoading, isError } = useConversationsTableQuery({
     payload: payloadData,
@@ -87,15 +92,18 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
 
   if (isError) return null;
 
+  const areAllFiltersApplied = allAppliedFilterValues.length === CONVERSATIONS_PAGE_NUMBER_OF_FILTERS;
+
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
-        <div className="flex flex-col items-start gap-4 self-stretch">
-          <TableFiltersWithHeaderLabel />
+        <div className="flex flex-col items-start self-stretch bg-white">
+          <TableFiltersWithHeaderLabel key={CONVERSATIONS_PAGE} page={CONVERSATIONS_PAGE} />
           <TableViewContent
             key={'conversations-table-container'}
             isConversationTable={true}
             isLoading={isLoading}
+            areAllFiltersApplied={areAllFiltersApplied}
             totalRecords={totalRecords}
             tableData={conversationsData}
             columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
@@ -115,18 +123,6 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
         </div>
       </div>
     </div>
-  );
-};
-
-const TableFiltersWithHeaderLabel = () => {
-  return (
-    <>
-      {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of conversations</p> */}
-      <div className="flex w-full items-start justify-between self-stretch">
-        <AllFiltersContainer page={CONVERSATIONS_PAGE} />
-        <SortFilter page={CONVERSATIONS_PAGE} key="Conversations Sort" />
-      </div>
-    </>
   );
 };
 

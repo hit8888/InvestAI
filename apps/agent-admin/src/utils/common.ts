@@ -125,11 +125,12 @@ export const getFormattedColumnsList = (columnsList: string[], sizeGiven?: numbe
   const formattedColumns = columnsList.map((key) => {
     const words = key.split('_');
     const header = words.map((word) => capitalizeWord(word, UPPERCASE_COLUMN_WORDS)).join(' ');
+    const isKeyTimestamp = key === 'timestamp';
 
     const newItem = {
       id: key,
       accessorKey: key,
-      header: header,
+      header: isKeyTimestamp ? 'Date' : header,
     };
 
     return sizeGiven
@@ -282,7 +283,6 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     // meetingBooked,
   } = filterState;
 
-  // TODOS: NEED TO FIX THE LOGIC FOR DATE RANGE FILTER
   if (dateRange?.startDate || dateRange?.endDate) {
     filterApplied.push({
       field: isLeadsPage ? 'created_on' : 'timestamp',

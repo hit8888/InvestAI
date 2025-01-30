@@ -39,10 +39,10 @@ const ExportDownload = ({ onCallback }: DownloadProps) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="popover-boxshadow z-20 w-80 rounded-lg bg-white p-0"
+        className="popover-boxshadow z-50 w-80 rounded-lg bg-white p-0"
         align="start"
         side="top"
-        sideOffset={10}
+        sideOffset={20}
         alignOffset={-15}
       >
         <PopoverHeaderLabelWithCloseIcon headerLabel={EXPORT_DOWNLOAD_LABEL} />

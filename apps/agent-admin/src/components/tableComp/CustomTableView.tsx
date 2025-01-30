@@ -10,15 +10,22 @@ import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
 import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   tabularData: any[];
   columnHeaderData: ColumnDefinition[];
   isConversationsPage?: boolean;
+  areAllFiltersApplied: boolean;
 }
 
-const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = false }: TableViewProps) => {
+const CustomTableView = ({
+  tabularData,
+  columnHeaderData,
+  areAllFiltersApplied,
+  isConversationsPage = false,
+}: TableViewProps) => {
   const navigate = useNavigate();
   const { isSidebarOpen } = useSidebar();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
@@ -70,12 +77,18 @@ const CustomTableView = ({ tabularData, columnHeaderData, isConversationsPage = 
   return (
     <div className="relative w-full">
       <div className="header-sentinel" style={{ height: '1px', width: '100%' }} />
-      {/* Sticky Header Container */}
+      {/* Sticky Header Container: Need Exactly - top-[70px] and top-[134px] */}
       {isHeaderSticky && (
         <div
-          className={`sticky left-0 right-0 top-0 z-[1000] bg-white ${
-            isSidebarOpen ? 'w-[1200px] 2xl:w-[1600px]' : 'w-[1400px] 2xl:w-[1800px]'
-          }`}
+          className={cn(
+            `sticky left-0 right-0 z-50 bg-white ${
+              isSidebarOpen ? 'w-[1200px] 2xl:w-[1600px]' : 'w-[1400px] 2xl:w-[1800px]'
+            }`,
+            {
+              'top-[70px]': !areAllFiltersApplied,
+              'top-[134px] 2xl:top-[70px]': areAllFiltersApplied && isConversationsPage,
+            },
+          )}
         >
           <div ref={headerRef} className="hide-scrollbar overflow-x-auto">
             <table

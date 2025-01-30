@@ -17,8 +17,8 @@ export const useHeaderIntersection = ({
 }: UseHeaderIntersectionProps) => {
   useEffect(() => {
     const options = {
-      threshold: [1.0],
-      rootMargin: '0px',
+      threshold: [0], // Detect as soon as it starts leaving
+      rootMargin: '-72px', // Push top boundary down
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -52,5 +52,5 @@ export const useHeaderIntersection = ({
     }
 
     return () => observer.disconnect();
-  }, [headerRef, tableBodyRef, lastScrollPosition, onIntersectionChange]);
+  }, [onIntersectionChange]);
 };

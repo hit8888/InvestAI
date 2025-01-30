@@ -4,21 +4,18 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
-
-import SortFilter from './tableComp/SortFilter';
 import TableViewContent from './TableViewContent';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
-import AllFiltersContainer from './tableComp/AllFilters';
+import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
 import { LEADS_PAGE_COLUMN_LISTS } from '../utils/constants';
 import {
-  getFormattedColumnsList,
-  getTenantFromLocalStorage,
-  getMappedDataFromResponseForLeadsTableView,
-  getAllFilterAppliedValues,
-  getSortingAppliedValues,
   collectAppliedFilters,
+  getFormattedColumnsList,
+  getSortingAppliedValues,
+  getAllFilterAppliedValues,
+  getMappedDataFromResponseForLeadsTableView,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
@@ -28,9 +25,13 @@ import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 
-const LeadsTableContainer = () => {
-  const tenantName = getTenantFromLocalStorage();
+const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
 
+type IProps = {
+  tenantName: string;
+};
+
+const LeadsTableContainer = ({ tenantName }: IProps) => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: LEADS_PAGE,
   });
@@ -51,15 +52,19 @@ const LeadsTableContainer = () => {
     }
   }, [filterState]);
 
+  const allAppliedFilterValues = useMemo(() => {
+    return getAllFilterAppliedValues(filterState, LEADS_PAGE);
+  }, [filterState]);
+
   const payloadData: LeadsPayload = useMemo(() => {
     return {
-      filters: getAllFilterAppliedValues(filterState, LEADS_PAGE),
+      filters: allAppliedFilterValues,
       sort: getSortingAppliedValues(sortState, LEADS_PAGE),
       search: '',
       page: currentPage,
       page_size: itemsPerPage,
     };
-  }, [filterState, sortState, currentPage, itemsPerPage]);
+  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
 
   const { data, isLoading, isError } = useLeadsTableQuery({
     payload: payloadData,
@@ -87,15 +92,18 @@ const LeadsTableContainer = () => {
 
   if (isError) return null;
 
+  const areAllFiltersApplied = allAppliedFilterValues.length === LEADS_PAGE_NUMBER_OF_FILTERS;
+
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
-        <div className="flex flex-col items-start gap-4 self-stretch">
-          <TableFiltersWithHeaderLabel />
+        <div className="flex flex-col items-start self-stretch bg-white">
+          <TableFiltersWithHeaderLabel key={LEADS_PAGE} page={LEADS_PAGE} />
           <TableViewContent
             key={'leads-table-container'}
             isLoading={isLoading}
             totalRecords={totalRecords}
+            areAllFiltersApplied={areAllFiltersApplied}
             tableData={leadsData}
             columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
           />
@@ -114,18 +122,6 @@ const LeadsTableContainer = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-const TableFiltersWithHeaderLabel = () => {
-  return (
-    <>
-      {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of leads</p> */}
-      <div className="flex w-full items-start justify-between self-stretch">
-        <AllFiltersContainer page={LEADS_PAGE} />
-        <SortFilter page={LEADS_PAGE} key="Leads Sort" />
-      </div>
-    </>
   );
 };
 

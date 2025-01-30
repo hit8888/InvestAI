@@ -9,14 +9,9 @@ import CompanyFoundationDate from '@breakout/design-system/components/icons/comp
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import LocationSmallIcon from '@breakout/design-system/components/icons/location-icon';
+import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import LocationCellValue from '../tableComp/tableCellComp/LocationCellValue';
 
-const IconPropsValue = {
-  width: '16',
-  height: '16',
-  viewBox: '0 0 16 16',
-  color: 'rgb(var(--primary))',
-};
 const RightSideTabDisplayContainer = ({
   prospect,
   company,
@@ -33,74 +28,76 @@ const RightSideTabDisplayContainer = ({
   };
 }) => {
   return (
-    <div className="flex w-[35%] flex-col items-start self-stretch border-b border-l border-t border-primary/10">
-      {/* Prospect Section */}
-      <div className="flex w-full flex-col items-start gap-4 p-4">
-        <p className="self-stretch text-lg font-semibold text-gray-900">Prospect</p>
-        <div className="flex flex-col items-start self-stretch">
-          <SingleItemDataDisplay
-            itemLabel="Name:"
-            itemIcon={<ProspectNameIcon {...IconPropsValue} />}
-            itemValue={prospect.name}
-          />
-          <SingleItemDataDisplay
-            itemLabel="Email:"
-            itemIcon={<ProspectEmailIcon {...IconPropsValue} />}
-            itemValue={prospect.email}
-          />
-          <SingleItemDataDisplay
-            showBottomBorder={false}
-            itemLabel="Location:"
-            itemIcon={<LocationSmallIcon {...IconPropsValue} />}
-            itemValue={<LocationCellValue value={prospect.location} />}
-          />
+    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-t border-primary/10">
+      <div className="hide-scrollbar sticky top-0 flex max-h-screen w-full flex-col items-start overflow-auto">
+        {/* Prospect Section */}
+        <div className="flex w-full flex-col items-start gap-4 p-4">
+          <p className="self-stretch text-lg font-semibold text-gray-900">Prospect</p>
+          <div className="flex flex-col items-start self-stretch">
+            <SingleItemDataDisplay
+              itemLabel="Name:"
+              itemIcon={<ProspectNameIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={prospect.name}
+            />
+            <SingleItemDataDisplay
+              itemLabel="Email:"
+              itemIcon={<ProspectEmailIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={prospect.email}
+            />
+            <SingleItemDataDisplay
+              showBottomBorder={false}
+              itemLabel="Location:"
+              itemIcon={<LocationSmallIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={<LocationCellValue value={prospect.location} />}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Company Section */}
-      <div className="flex w-full flex-col items-start gap-4 border-t border-primary/10 p-4">
-        <p className="self-stretch text-lg font-semibold text-gray-900">Company</p>
-        <div className="flex flex-col items-start self-stretch">
-          <SingleItemDataDisplay
-            itemLabel="Name:"
-            itemIcon={<CompanyNameIcon {...IconPropsValue} />}
-            itemValue={company.name}
-          />
-          <SingleItemDataDisplay
-            itemLabel="Location:"
-            itemIcon={<LocationSmallIcon {...IconPropsValue} />}
-            itemValue={<LocationCellValue value={company.location} />}
-          />
-          <SingleItemDataDisplay
-            itemLabel="Revenue:"
-            itemIcon={<CompanyRevenueIcon {...IconPropsValue} />}
-            itemValue={company.revenue}
-          />
-          <SingleItemDataDisplay
-            itemLabel="Number of employees:"
-            itemIcon={<CompanyNumberOfEmployeesIcon {...IconPropsValue} />}
-            itemValue={company.employees}
-          />
-          <SingleItemDataDisplay
-            itemLabel="Domain:"
-            itemIcon={<CompanyDomainIcon {...IconPropsValue} />}
-            itemValue={
-              <a
-                href={`https://${company.domain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-auto text-blue-600 hover:underline"
-              >
-                {company.domain}
-              </a>
-            }
-          />
-          <SingleItemDataDisplay
-            showBottomBorder={false}
-            itemLabel="Foundation Date:"
-            itemIcon={<CompanyFoundationDate {...IconPropsValue} />}
-            itemValue={company.foundationDate}
-          />
+        {/* Company Section */}
+        <div className="flex w-full flex-col items-start gap-4 border-t border-primary/10 p-4">
+          <p className="self-stretch text-lg font-semibold text-gray-900">Company</p>
+          <div className="flex flex-col items-start self-stretch">
+            <SingleItemDataDisplay
+              itemLabel="Name:"
+              itemIcon={<CompanyNameIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={company.name}
+            />
+            <SingleItemDataDisplay
+              itemLabel="Location:"
+              itemIcon={<LocationSmallIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={<LocationCellValue value={company.location} />}
+            />
+            <SingleItemDataDisplay
+              itemLabel="Revenue:"
+              itemIcon={<CompanyRevenueIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={company.revenue}
+            />
+            <SingleItemDataDisplay
+              itemLabel="Number of employees:"
+              itemIcon={<CompanyNumberOfEmployeesIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={company.employees}
+            />
+            <SingleItemDataDisplay
+              itemLabel="Domain:"
+              itemIcon={<CompanyDomainIcon {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={
+                <a
+                  href={`https://${company.domain}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-auto text-blue-600 hover:underline"
+                >
+                  {company.domain}
+                </a>
+              }
+            />
+            <SingleItemDataDisplay
+              showBottomBorder={false}
+              itemLabel="Foundation Date:"
+              itemIcon={<CompanyFoundationDate {...COMMON_SMALL_ICON_PROPS} />}
+              itemValue={company.foundationDate}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
+import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import Input from '@breakout/design-system/components/layout/input';
 import { PageTypeProps } from '../../utils/admin-types';
 import { FilterType } from '@meaku/core/types/admin/filters';
@@ -48,19 +49,37 @@ const LocationFilterContent = ({ page, handleClosePopover }: PageTypeProps & { h
     setSearchTerm(e.target.value);
   };
 
+  const clearSearchTerm = () => {
+    setSearchTerm('');
+  };
+
+  const hasSearchTermLength = searchTerm.length > 0;
+
   if (!data) return null;
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>No Location data</div>;
   return (
     <React.Fragment key={Location}>
       <div className="border-b border-gray-300 px-4 pb-4">
-        <Input
-          disabled={locationOptions.length === 0}
-          className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3"
-          onChange={handleInputChange}
-          value={searchTerm}
-          placeholder="Enter Country Name..."
-        />
+        <div className="flex">
+          <Input
+            className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3"
+            onChange={handleInputChange}
+            value={searchTerm}
+            maxLength={20}
+            placeholder="Enter Country Name..."
+          />
+          {hasSearchTermLength ? (
+            <button
+              type="button"
+              aria-label="clear button"
+              className="relative right-8 top-1.5 flex h-6 w-6 cursor-pointer items-center justify-center"
+              onClick={clearSearchTerm}
+            >
+              <CrossIcon width={'20'} height={'20'} className="text-primary" />
+            </button>
+          ) : null}
+        </div>
       </div>
       <CommonCheckboxesFilterContent
         handleClosePopover={handleClosePopover}

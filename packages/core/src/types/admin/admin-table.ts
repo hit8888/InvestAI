@@ -37,18 +37,18 @@ export const ConversationsTableViewSchema = z.object({
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({
   prospect: z.object({
-    name: z.string().optional(),
-    email: z.string().optional(),
-    location: z.string().optional(),
+    name: z.string(),
+    email: z.string(),
+    location: z.string(),
   }),
   company: z.object({
-    name: z.string().optional(),
+    name: z.string(),
     logoUrl: z.string().optional(), // Optional or empty string as placeholder
-    location: z.string().optional(),
-    revenue: z.string().optional(), // Optional or empty string as placeholder
-    employees: z.string().optional(), // Optional or empty string as placeholder
-    domain: z.string().optional(), // Optional or empty string as placeholder
-    foundationDate: z.string().optional(), // Optional or empty string as placeholder
+    location: z.string(),
+    revenue: z.string(), // Optional or empty string as placeholder
+    employees: z.string(), // Optional or empty string as placeholder
+    domain: z.string(), // Optional or empty string as placeholder
+    foundationDate: z.string(), // Optional or empty string as placeholder
   }),
 });
 

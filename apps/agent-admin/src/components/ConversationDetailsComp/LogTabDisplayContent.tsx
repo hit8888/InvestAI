@@ -10,7 +10,7 @@ const LogTabDisplayContent = () => {
   const tenantName = getTenantFromLocalStorage();
   const logoURL = getTenantIdentifier()?.['logo'];
   return (
-    <div className="flex max-h-[800px] w-full flex-col">
+    <div className="flex max-h-[800px] w-full flex-col bg-gray-25">
       {chatHistory?.length && conversation?.session_id ? (
         <AgentMessages
           tenantName={tenantName}

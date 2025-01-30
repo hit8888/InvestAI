@@ -104,12 +104,12 @@ const Sidebar: React.FC = () => {
           >
             <Container
               {...containerProps}
-              className={cn('flex h-16 w-full items-center', {
+              className={cn('flex h-12 w-full items-center', {
                 'justify-center': isOpen && isTenantLogoUrlPresent,
               })}
             >
               {isTenantLogoUrlPresent ? (
-                <img className="h-full w-full" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
+                <img className="h-full w-full object-contain" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
               ) : (
                 <AdminLogoSVG width={'30'} height={'35'} />
               )}

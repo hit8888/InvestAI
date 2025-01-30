@@ -17,9 +17,9 @@ const TooltipAddedAppliedFilter = ({ appliedFilterValues }: { appliedFilterValue
   return (
     <TooltipProvider>
       <div className="flex flex-wrap items-center justify-start gap-2">
-        {displayingValues.map((location: string, index: number) => (
+        {displayingValues.map((value: string, index: number) => (
           <span key={index} className="text-sm font-semibold capitalize text-primary">
-            <LocationCellValue value={location + (index < displayingValues.length - 1 ? ', ' : '')} />
+            <LocationCellValue value={value + (index < displayingValues.length - 1 ? ', ' : '')} />
           </span>
         ))}
         {shouldShowTooltip && (
@@ -30,16 +30,13 @@ const TooltipAddedAppliedFilter = ({ appliedFilterValues }: { appliedFilterValue
               </Button>
             </TooltipTrigger>
             <TooltipContent
-              className="hide-scrollbar flex max-h-96 flex-col overflow-auto bg-white !p-0"
+              className="hide-scrollbar flex max-h-96 flex-col overflow-auto rounded-lg border-2 border-primary bg-white !p-0"
               side="bottom"
-              sideOffset={8}
+              sideOffset={16}
             >
-              {allTooltipValues.map((location: string, index: number) => (
-                <span
-                  key={index}
-                  className="border-l-2 border-primary/70 bg-primary/10 px-4 py-2 text-sm font-semibold capitalize text-primary"
-                >
-                  <LocationCellValue value={location} />
+              {allTooltipValues.map((value: string, index: number) => (
+                <span key={index} className="bg-primary/10 px-4 py-2 text-sm font-semibold capitalize text-primary">
+                  <LocationCellValue value={value} showTruncatedText={false} />
                 </span>
               ))}
             </TooltipContent>

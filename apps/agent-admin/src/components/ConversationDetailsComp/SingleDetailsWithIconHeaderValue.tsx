@@ -15,7 +15,13 @@ const SingleDetailsWithIconHeaderValue = ({ isTakingFullWidth = false, headerLab
         'flex-1': isTakingFullWidth,
       })}
     >
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/2.5">{children}</div>
+      <div
+        className={cn('flex h-8 w-8 items-end justify-end rounded-lg bg-primary/2.5', {
+          'items-center justify-center': isTakingFullWidth,
+        })}
+      >
+        {children}
+      </div>
       <div className="flex flex-col items-start gap-1">
         <p className="text-sm font-normal text-gray-500">{headerLabel}</p>
         <p

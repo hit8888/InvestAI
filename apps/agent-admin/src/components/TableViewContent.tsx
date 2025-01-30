@@ -9,6 +9,7 @@ interface TableContentProps {
   tableData: any[];
   isConversationTable?: boolean;
   isLoading: boolean;
+  areAllFiltersApplied: boolean;
   totalRecords: number;
   columnHeaderData: ColumnDefinition[];
 }
@@ -16,6 +17,7 @@ interface TableContentProps {
 const TableViewContent: React.FC<TableContentProps> = ({
   isConversationTable = false,
   isLoading,
+  areAllFiltersApplied,
   totalRecords,
   tableData,
   columnHeaderData,
@@ -41,6 +43,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
       isConversationsPage={isConversationTable}
       tabularData={tableData?.length > 0 ? tableData : []}
       columnHeaderData={columnHeaderData}
+      areAllFiltersApplied={areAllFiltersApplied}
     />
   );
 };
