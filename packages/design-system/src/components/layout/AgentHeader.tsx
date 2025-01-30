@@ -10,9 +10,10 @@ interface IProps {
   handleCloseAgent?: () => void;
   isHidden?: boolean;
   ctaConfig?: CTAConfigType;
+  isCollapsible: boolean;
 }
 
-const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig }: IProps) => {
+const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig, isCollapsible }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const ctaText = useMemo(() => {
@@ -54,7 +55,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig 
       </div>
 
       <div className="flex items-center gap-2">
-        {!!handleCloseAgent && (
+        {!!handleCloseAgent && isCollapsible && (
           <Button size="icon" className="bg-transparent p-0" onClick={handleCloseAgent}>
             <XIcon className="text-primary" />
           </Button>

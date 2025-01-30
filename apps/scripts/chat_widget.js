@@ -31,6 +31,10 @@
     height: scriptElement?.getAttribute("max-height") || DEFAULT_HEIGHT,
     allowExternalButtons:
       scriptElement?.getAttribute("allow-external-buttons") || false,
+    containerId: scriptElement?.getAttribute("container-id"),
+    isCollapsible: scriptElement?.getAttribute("is-collapsible")
+      ? scriptElement?.getAttribute("is-collapsible") !== "false"
+      : true,
   };
 
   const SENTRY_DSN =
@@ -348,6 +352,7 @@
       return;
     }
 
+    // const IFRAME_SRC =`http://localhost:5173/org/hackerearth/agent/2?config=multimedia&showGlass=true`
     const IFRAME_SRC = `https://agent.getbreakout.ai/org/${config.tenantId}/agent/${config.agentId}?`;
     let isAgentOpen = false;
     let iFrameSource = null;
@@ -393,6 +398,7 @@
               http_referrer,
               url,
               hideBottomBar,
+              isCollapsible: config.isCollapsible,
             },
             "*",
           );

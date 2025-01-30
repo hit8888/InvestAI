@@ -16,9 +16,10 @@ import { Demo } from './Demo/index.tsx';
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
   handleCloseAgent?: () => void;
+  isCollapsible: boolean;
 }
 
-const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
+const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }: IProps) => {
   const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
 
   useUpdateActiveArtifactOnNewMessage();
@@ -63,6 +64,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent }: IProps) => {
           handleSendMessage={(message) => handleSendMessage({ message })}
           handleCloseAgent={handleCloseAgent}
           isHidden={hideAgentHeader}
+          isCollapsible={isCollapsible}
           ctaConfig={ctaConfig}
         />
         <div

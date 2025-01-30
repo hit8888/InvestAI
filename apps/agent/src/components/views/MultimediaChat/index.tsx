@@ -46,7 +46,11 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
-  const { shouldHideBottomBar } = useEmbedAppEvents({ fetchSessionData, handleOpenAgent, showBanner: !!showBanner });
+  const { shouldHideBottomBar, isCollapsible } = useEmbedAppEvents({
+    fetchSessionData,
+    handleOpenAgent,
+    showBanner: !!showBanner,
+  });
 
   const handleCloseAgent = () => {
     setParam('isAgentOpen', 'false');
@@ -60,7 +64,11 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
       })}
     >
       {isAgentOpen ? (
-        <AgentInOpenState handleSendMessage={handleSendMessage} handleCloseAgent={handleCloseAgent} />
+        <AgentInOpenState
+          handleSendMessage={handleSendMessage}
+          handleCloseAgent={handleCloseAgent}
+          isCollapsible={isCollapsible}
+        />
       ) : (
         <EntryPointBottomBar
           handleSendUserMessage={handleSendMessage}

@@ -25,7 +25,7 @@ export const useEmbedAppEvents = ({
   const isAgentOpen = searchParams.get("isAgentOpen") === "true";
 
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
-
+  const [isCollapsible, setIsCollapsible] = useState(true);
   useEffect(() => {
     const payload = {
       chatOpen: isAgentOpen,
@@ -41,6 +41,9 @@ export const useEmbedAppEvents = ({
 
       if (event.data.hideBottomBar) {
         setHideBottomBar(true);
+      }
+      if (event.data.isCollapsible === false) {
+        setIsCollapsible(false);
       }
 
       if (event.data?.utmParams) {
@@ -80,5 +83,5 @@ export const useEmbedAppEvents = ({
     };
   }, []);
 
-  return { shouldHideBottomBar };
+  return { shouldHideBottomBar, isCollapsible };
 };
