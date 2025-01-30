@@ -13,7 +13,7 @@ export const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => 
           onResume();
         }
       }}
-      className="flex h-10 min-w-max items-center justify-center gap-2 rounded-md bg-primary px-4 font-semibold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:opacity-50"
+      className="flex h-10 min-w-max items-center justify-center gap-2 rounded-md bg-primary px-4  text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:opacity-50"
       disabled={isPlayingResponse}
     >
       <span className="whitespace-nowrap">Resume the demo</span>

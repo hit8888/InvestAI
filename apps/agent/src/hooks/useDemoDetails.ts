@@ -22,8 +22,22 @@ const useDemoDetails = () => {
 
   useEffect(() => {
     if (draftDemoDetails) {
+      // Add to queue
       queueRef.current.push(draftDemoDetails);
 
+      // Preload the asset if it exists
+      if (draftDemoDetails.asset_url) {
+        if (draftDemoDetails.asset_url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+          const img = new Image();
+          img.src = draftDemoDetails.asset_url;
+        } else if (draftDemoDetails.asset_url.match(/\.(mp4|webm)$/i)) {
+          const video = document.createElement('video');
+          video.src = draftDemoDetails.asset_url;
+          video.preload = 'auto';
+        }
+      }
+
+      // Set demo details immediately if it's the first item
       if (!demoDetails) {
         setDemoDetails(draftDemoDetails);
       }
@@ -40,8 +54,13 @@ const useDemoDetails = () => {
   }, [draftDemoDetails?.audio_url]);
 
   const onStepEnd = () => {
+    // Remove the current item from queue
     queueRef.current.shift();
+
+    // Get the next item
     const nextStep = queueRef.current[0];
+
+    // Set it as current demo details
     setDemoDetails(nextStep || null);
 
     // Request next demo if queue has less than 2 elements and current step is not the last

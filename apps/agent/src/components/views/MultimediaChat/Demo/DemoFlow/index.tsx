@@ -32,6 +32,7 @@ const DemoFlow = ({
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [assetLoadError, setAssetLoadError] = useState(false);
   const videoRef = useRef<ReactPlayer>(null);
 
   useEffect(() => {
@@ -41,11 +42,17 @@ const DemoFlow = ({
     }
   }, [demoDetails.asset_url, assetType]);
 
+  const handleAssetError = () => {
+    console.error('Asset failed to load');
+    setAssetLoadError(true);
+    if (assetType === 'IMAGE') setIsImageLoaded(true);
+    if (assetType === 'VIDEO') setIsVideoLoaded(true);
+  };
+
   const { audioRef, playPromiseRef, analyserNode, duration } = useAudioController(
     demoDetails?.audio_url,
     handleDemoAudioEnd,
-    (Boolean(demoDetails?.audio_url) && !demoDetails.asset_url) ||
-      (Boolean(demoDetails?.audio_url) && (isImageLoaded || isVideoLoaded)),
+    Boolean(demoDetails?.audio_url) && (!demoDetails.asset_url || assetLoadError || isImageLoaded || isVideoLoaded),
   );
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -110,15 +117,23 @@ const DemoFlow = ({
               url={demoDetails.asset_url}
               alt={demoDetails.message}
               onLoadComplete={() => setIsImageLoaded(true)}
+              onError={handleAssetError}
             />
           )}
           {assetType === 'VIDEO' && (
             <VideoPlayer
               url={demoDetails.asset_url}
               onLoadComplete={() => setIsVideoLoaded(true)}
+              onError={handleAssetError}
               videoRef={videoRef}
               playing={isVideoPlaying}
+              audioDuration={duration}
             />
+          )}
+          {assetLoadError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
+              <span className="text-sm text-gray-500">Media content unavailable</span>
+            </div>
           )}
         </>
       ) : (

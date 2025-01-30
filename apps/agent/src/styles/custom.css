@@ -1,6 +1,6 @@
 .custom-blur {
   /* Base background with slight transparency */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
 
   /* Direct blur properties */
   -webkit-backdrop-filter: blur(16px);
@@ -10,7 +10,7 @@
 /* Firefox fallback */
 @-moz-document url-prefix() {
   .custom-blur {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
   }
 }
 
