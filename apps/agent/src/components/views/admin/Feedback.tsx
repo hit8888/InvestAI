@@ -68,7 +68,7 @@ const Feedback = () => {
         </Button>
       </div>
       <div className="flex h-[90vh] w-[90vw]">
-        <AgentInOpenState handleSendMessage={handleSendMessage} />
+        <AgentInOpenState handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
     </Backdrop>
   );
