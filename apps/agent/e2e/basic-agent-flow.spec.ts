@@ -7,7 +7,7 @@ test('Basic flow for agent', async ({ page }) => {
 
   // 2. Navigate to the page
   await page.goto(
-    'https://agent.meaku.ai/org/hackerearth/agent/1/?config=multimedia&showGlass=true?is_test=true&test_type=automated',
+    'https://agent.meaku.ai/org/hackerearth/agent/1/?config=multimedia&showGlass=true&is_test=true&test_type=automated',
   );
 
   // 3. Interact with the chat flow
