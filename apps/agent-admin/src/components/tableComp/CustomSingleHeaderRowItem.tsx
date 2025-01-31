@@ -2,6 +2,7 @@ import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
+import { SHADOW_PINNED_COLUMNS } from '../../utils/constants';
 
 type CustomSingleHeaderRowItemProps = {
   headerGroup: HeaderGroup<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
@@ -15,11 +16,11 @@ const CustomSingleHeaderRowItem = ({ headerGroup }: CustomSingleHeaderRowItemPro
     <tr key={headerGroup.id} className="relative flex w-full items-start">
       {headerGroup.headers.map((header) => {
         const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
-        const isColumnName = header.id === 'name';
+        const isShadowedColumn = SHADOW_PINNED_COLUMNS.includes(header.id);
         const isColumnNumberOfUserMessages = header.id === 'number_of_user_messages';
         const isColumnProductOfInterest = header.id === 'product_of_interest';
         const isPinned = header.column.getIsPinned() === 'left';
-        const isColumnPinnedLeftForName = isPinned && isColumnName;
+        const isColumnPinnedLeftForName = isPinned && isShadowedColumn;
         return (
           <th
             key={header.id}

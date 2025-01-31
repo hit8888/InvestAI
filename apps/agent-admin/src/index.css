@@ -25,10 +25,10 @@
 
 .pinnedColumnShadow {
   box-shadow:
-    4px 0 8px -4px rgba(28, 27, 86, 0.05),
-    8px 0 16px -8px rgba(28, 27, 86, 0.04),
-    12px 0 24px -12px rgba(28, 27, 86, 0.03),
-    16px 0 32px -16px rgba(28, 27, 86, 0.01);
+    4px 0 12px -4px rgba(28, 27, 86, 0.05),
+    8px 0 18px -8px rgba(28, 27, 86, 0.04),
+    12px 0 30px -12px rgba(28, 27, 86, 0.03),
+    16px 0 40px -16px rgba(28, 27, 86, 0.01);
 }
 
 .gradient-text {

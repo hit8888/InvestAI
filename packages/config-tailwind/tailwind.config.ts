@@ -17,6 +17,7 @@ const config: Omit<Config, "content"> = {
         "hd-plus": "1536px", // HD Plus - 1536x864
         "mac-pro-16": "1728px", // MacBook Pro 16 - 1728x1117
         "full-hd": "1920px", // Full HD Desktop - 1920x1080
+        "semi-qhd": "2200px", // Full HD Desktop - 2200x1080
         qhd: "2560px", // QHD Desktop - 2560x1440
       },
       fontFamily: {

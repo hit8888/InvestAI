@@ -74,21 +74,20 @@ const CustomTableView = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const widthDimension = isSidebarOpen
+    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1540px]'
+    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1700px]';
+
   return (
     <div className="relative w-full">
       <div className="header-sentinel" style={{ height: '1px', width: '100%' }} />
       {/* Sticky Header Container: Need Exactly - top-[70px] and top-[134px] */}
       {isHeaderSticky && (
         <div
-          className={cn(
-            `sticky left-0 right-0 z-50 bg-white ${
-              isSidebarOpen ? 'w-[1200px] 2xl:w-[1600px]' : 'w-[1400px] 2xl:w-[1800px]'
-            }`,
-            {
-              'top-[70px]': !areAllFiltersApplied,
-              'top-[134px] 2xl:top-[70px]': areAllFiltersApplied && isConversationsPage,
-            },
-          )}
+          className={cn(`sticky left-0 right-0 z-50 bg-white ${widthDimension}`, {
+            'top-[70px]': !areAllFiltersApplied,
+            'top-[134px] 2xl:top-[70px]': areAllFiltersApplied && isConversationsPage,
+          })}
         >
           <div ref={headerRef} className="hide-scrollbar overflow-x-auto">
             <table
@@ -106,12 +105,7 @@ const CustomTableView = ({
           </div>
         </div>
       )}
-      <div
-        ref={tableBodyRef}
-        className={`table-container w-full 
-          ${isSidebarOpen ? 'max-w-[1200px] 2xl:max-w-[1600px]' : 'max-w-[1400px] 2xl:max-w-[1800px]'}  
-          relative overflow-x-auto`}
-      >
+      <div ref={tableBodyRef} className={`table-container w-full ${widthDimension} relative overflow-x-auto`}>
         <table
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',

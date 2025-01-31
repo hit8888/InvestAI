@@ -2,6 +2,7 @@ import { flexRender, Row } from '@tanstack/react-table';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
+import { SHADOW_PINNED_COLUMNS } from '../../utils/constants';
 
 type CustomSingleBodyRowItemProps = {
   row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
@@ -12,14 +13,15 @@ type CustomSingleBodyRowItemProps = {
 const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingleBodyRowItemProps) => {
   const { getCommonPinningStyles } = useTablePinningStyles();
   const detailsPageURL = 'session_id' in row.original ? row.original.session_id : null;
-
+  const isEvenRow = index % 2 === 0;
+  const isOddRow = !isEvenRow;
   return (
     <tr
       onClick={detailsPageURL ? () => handleRowItemClick(row.original as ConversationsTableDisplayContent) : undefined}
       key={row.id}
       className={cn('flex w-full items-start self-stretch', {
-        'bg-white': index % 2 === 0, // White background for even rows
-        'bg-gray-25': index % 2 !== 0, // Gray background for odd rows
+        'bg-white': isEvenRow, // White background for even rows
+        'bg-gray-25': isOddRow, // Gray background for odd rows
         'cursor-pointer': detailsPageURL,
       })}
     >
@@ -27,7 +29,8 @@ const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingl
         const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
         const isColumnNumberOfUserMessages = cell.column.id === 'number_of_user_messages';
         const isPinned = cell.column.getIsPinned() === 'left';
-        const isColumnPinnedLeftForName = isPinned && cell.column.id === 'name';
+        const isShadowedColumn = SHADOW_PINNED_COLUMNS.includes(cell.column.id);
+        const isColumnPinnedLeftForName = isPinned && isShadowedColumn;
         return (
           <td
             key={cell.id}
@@ -37,8 +40,8 @@ const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingl
                 'border-r': !isLastColumn,
                 'min-w-56': isColumnNumberOfUserMessages,
                 pinnedColumnShadow: isColumnPinnedLeftForName,
-                'bg-white': isPinned && index % 2 === 0,
-                'bg-gray-25': isPinned && index % 2 !== 0,
+                'bg-white': isPinned && isEvenRow,
+                'bg-gray-25': isPinned && isOddRow,
               },
             )}
             style={{ ...getCommonPinningStyles(cell.column) }}

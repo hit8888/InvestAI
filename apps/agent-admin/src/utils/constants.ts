@@ -280,6 +280,7 @@ export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
 export const UPPERCASE_COLUMN_WORDS = ['bant', 'ip', 'id'];
 export const CONVERSATIONS_PINNED_COLUMNS = ['conversation_preview', 'location'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];
+export const SHADOW_PINNED_COLUMNS = ['name', 'location'];
 
 export interface FunnelData {
   funnelChipType: string;
