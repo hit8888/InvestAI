@@ -3,7 +3,6 @@ import useAgentbotAnalytics from "./useAgentbotAnalytics";
 import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
 import { useSearchParams } from "react-router-dom";
 import useLocalStorageSession from "./useLocalStorageSession";
-import { useUrlParams } from "./useUrlParams";
 import { IWebSocketHandleMessage } from "../types/webSocket";
 
 interface IProps {
