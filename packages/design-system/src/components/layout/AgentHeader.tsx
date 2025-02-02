@@ -56,7 +56,16 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
 
       <div className="flex items-center gap-2">
         {!!handleCloseAgent && isCollapsible && (
-          <Button size="icon" className="bg-transparent p-0" onClick={handleCloseAgent}>
+          <Button
+            size="icon"
+            className="bg-transparent p-0"
+            onClick={() => {
+              // Send message to parent to close overlay
+              window.parent.postMessage({ type: 'CLOSE_OVERLAY' }, '*');
+              // Also call the original close handler
+              handleCloseAgent();
+            }}
+          >
             <XIcon className="text-primary" />
           </Button>
         )}

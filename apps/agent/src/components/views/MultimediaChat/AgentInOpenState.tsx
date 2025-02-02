@@ -21,7 +21,6 @@ interface IProps {
 
 const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }: IProps) => {
   const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
-
   useUpdateActiveArtifactOnNewMessage();
   useExpandWidthOnDemoFrame(demoDetails);
 

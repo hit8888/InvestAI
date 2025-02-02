@@ -46,10 +46,11 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
-  const { shouldHideBottomBar, isCollapsible } = useEmbedAppEvents({
+  const { shouldHideBottomBar, isCollapsible, mode } = useEmbedAppEvents({
     fetchSessionData,
     handleOpenAgent,
     showBanner: !!showBanner,
+    handleSendUserMessage,
   });
 
   const handleCloseAgent = () => {
@@ -60,7 +61,8 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   return (
     <div
       className={cn('mx-auto mt-2 flex h-[95vh] w-[90vw] justify-center font-inter', {
-        'rounded-2xl': isAgentOpen,
+        'rounded-3xl': isAgentOpen,
+        'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
       })}
     >
       {isAgentOpen ? (

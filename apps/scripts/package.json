@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc && tsc-alias && esbuild ./dist/**/*.js --minify --outdir=build"
+    "build": "tsc && tsc-alias && esbuild ./dist/**/*.js --minify --outdir=build --format=iife --bundle",
+    "dev": "nodemon --watch . --ignore dist/ --ignore build/ --ext ts --exec 'pnpm build'"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +12,8 @@
   "devDependencies": {
     "@meaku/typescript-config": "workspace:*",
     "esbuild": "^0.24.0",
-    "tsc-alias": "^1.8.10"
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.0.0",
+    "nodemon": "^3.0.0"
   }
 }

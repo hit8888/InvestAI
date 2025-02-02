@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Widget Test</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      section {
+        min-height: 100vh;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      #hero {
+        background-color: #f0f0f0;
+      }
+
+      #middle {
+        background-color: #e0e0e0;
+      }
+
+      #bottom {
+        background-color: #d0d0d0;
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 1200px;
+        height: 600px;
+        margin: 2rem 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        position: relative;
+        z-index: 99998;
+        pointer-events: auto;
+      }
+
+      /* Framer-like form styles */
+      .framer-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 1rem 0;
+        position: relative;
+        display: flex;
+        gap: 8px;
+        background: white;
+        padding: 8px;
+        border-radius: 16px;
+        border: 1px solid rgb(96, 60, 241);
+        box-shadow:
+          rgb(255, 255, 255) 0px 0px 2px 0px inset,
+          rgba(0, 0, 0, 0.05) 0px 8px 12px 0px;
+      }
+
+      .framer-form input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        font-family: "Manrope", sans-serif;
+      }
+
+      .framer-form button {
+        padding: 8px 16px;
+        background-color: rgb(96, 60, 241);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: "Manrope", sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .framer-form button svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      button {
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 1rem;
+        pointer-events: auto;
+        position: relative;
+        z-index: 1000;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #embedded-breakout-agent {
+        position: relative;
+        z-index: 99999;
+        pointer-events: auto !important;
+      }
+
+      /* Ensure the chat widget container doesn't interfere with embedded mode */
+      #chat-widget-container.embedded-mode {
+        z-index: 1;
+        display: none;
+      }
+
+      #chat-widget-overlay {
+        pointer-events: auto !important;
+        z-index: 999999 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="hero">
+      <h1>Welcome to Our Site</h1>
+      <p>This section contains the embedded chat widget:</p>
+      <div id="embedded-breakout-agent" class="chat-container"></div>
+
+      <!-- First Framer-like form -->
+      <form class="framer-form" data-breakout-form>
+        <input
+          type="text"
+          placeholder="Still not convinced? Shoot a question"
+        />
+        <button type="submit">
+          <svg viewBox="0 0 15 15">
+            <path
+              d="M14.5 1.5L0.5 6.5L6.5 8.5L8.5 14.5L14.5 1.5Z"
+              stroke="currentColor"
+              fill="none"
+            />
+          </svg>
+          Show me how
+        </button>
+      </form>
+    </section>
+
+    <section id="middle">
+      <h2>Middle Section</h2>
+
+      <!-- Second Framer-like form -->
+      <form class="framer-form" data-breakout-form>
+        <input type="text" placeholder="Ask me about lead conversion" />
+        <button type="submit">
+          <svg viewBox="0 0 15 15">
+            <path
+              d="M14.5 1.5L0.5 6.5L6.5 8.5L8.5 14.5L14.5 1.5Z"
+              stroke="currentColor"
+              fill="none"
+            />
+          </svg>
+          Show me how
+        </button>
+      </form>
+    </section>
+
+    <section id="bottom">
+      <h2>Bottom Section</h2>
+    </section>
+
+    <!-- Embed the chat widget -->
+    <script
+      src="build/chat_widget.js"
+      agent-id="1"
+      tenant-id="breakout"
+      container-id="embedded-breakout-agent"
+      is-collapsible="false"
+      hide-bottom-bar="true"
+    ></script>
+  </body>
+</html>
