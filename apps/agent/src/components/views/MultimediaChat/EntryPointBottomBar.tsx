@@ -13,6 +13,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { motion } from 'framer-motion';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
+import useDynamicPlaceholder from '../../../hooks/useDynamicPlaceholder.tsx';
 
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
@@ -76,11 +77,11 @@ const EntryPointBottomBar = ({
   setShowBubbles,
 }: IProps) => {
   const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
-  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
   const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
   const orgName = useUnifiedConfigurationResponseManager().getOrgName();
   const agentName = useUnifiedConfigurationResponseManager().getAgentName();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const placeholderText = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
   const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(false);
@@ -89,10 +90,6 @@ const EntryPointBottomBar = ({
 
   const showSuggestedQuestions =
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
-
-  const placeholderText = hasFirstUserMessageBeenSent
-    ? (bottomBarConfig?.primary_placeholder ?? 'Have a question? Ask here')
-    : (bottomBarConfig?.secondary_placeholder ?? 'Have a question? Ask here');
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage({ message: msg });
@@ -124,7 +121,7 @@ const EntryPointBottomBar = ({
       className={cn(
         'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
-          'w-8/12': !hasFirstUserMessageBeenSent,
+          'w-[calc(66.66%+110px)]': !hasFirstUserMessageBeenSent, // for longer placeholder - added extra 120px width
           'w-[400px]': hasFirstUserMessageBeenSent,
           hidden: hideBottomBar,
         },

@@ -15,8 +15,8 @@ export const DocumentSchema = z.object({
 });
 
 export const BottomBarConfigSchema = z.object({
-  primary_placeholder: z.string(),
-  secondary_placeholder: z.string(),
+  primary_placeholder: z.string().or(z.array(z.string())),
+  secondary_placeholder: z.string().or(z.array(z.string())),
 });
 
 const CTAConfigSchema = z.object({

@@ -15,7 +15,7 @@ const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProp
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: 20 }}
     transition={{ duration: 0.5 }}
-    className="popup-banner-border-gradient-animation absolute -left-52 -top-32 flex items-center justify-center"
+    className="popup-banner-border-gradient-animation absolute -left-24 -top-32 flex items-center justify-center"
     style={{ zIndex: 20 }}
   >
     <div className="popupGradient-container flex p-4" data-testid="greeting-banner">
