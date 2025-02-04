@@ -162,3 +162,122 @@ export type AnalyticsType = z.infer<typeof AnalyticsSchema>;
 export type MessageArtifactType = z.infer<typeof MessageArtifactSchema>;
 
 export type DataSourceType = z.infer<typeof DataSourceSchema>;
+
+export const ActorSchema = z.enum(["SALES", "DEMO", "ARTIFACT", "ANALYTICS"]);
+export const MessageTypeSchema = z.enum([
+  "TEXT",
+  "STREAM",
+  "ARTIFACT",
+  "EVENT",
+]);
+
+export const BaseMessageContentSchema = z.object({
+  content: z.string(),
+});
+
+export const StreamMessageContentSchema = BaseMessageContentSchema.extend({
+  is_complete: z.boolean(),
+});
+
+export const ArtifactMessageContentSchema = BaseMessageContentSchema.extend({
+  artifact_type: ArtifactEnumSchema,
+  artifact_data: z.object({
+    artifact_id: z.string(),
+    artifact_type: ArtifactEnumSchema,
+    content: z.union([
+      SlideArtifactSchema,
+      VideoArtifactSchema,
+      SlideImageArtifactSchema,
+      SuggestionArtifactSchema,
+      FormArtifactSchema,
+    ]),
+    metadata: FormArtifactMetadata,
+    error: z.string().nullable(),
+    error_code: z.string().nullable(),
+  }),
+});
+
+export const MessageAnalyticsEventDataSchema = z.object({
+  buyer_intent_score: z.number(),
+});
+
+export const GeneratingArtifactEventDataSchema = z.object({
+  artifact_type: ArtifactEnumSchema,
+});
+
+export const DemoEventDataSchema = z.object({
+  demo_available: z.boolean(),
+  features: z.array(FeatureSelectionDTOSchema),
+  script_step: ScriptStepDTO.nullable(),
+  response: z.string().nullable(),
+  response_audio_url: z.string().nullable(),
+});
+
+export const EventDataSchema = z.discriminatedUnion("event_type", [
+  z.object({
+    event_type: z.literal("MESSAGE_ANALYTICS"),
+    event_data: MessageAnalyticsEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("GENERATING_ARTIFACT"),
+    event_data: GeneratingArtifactEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_AVAILABLE"),
+    event_data: DemoEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_OPTIONS"),
+    event_data: DemoEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_PREPARE"),
+    event_data: DemoEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_QUESTION"),
+    event_data: DemoEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_NEXT"),
+    event_data: DemoEventDataSchema,
+  }),
+  z.object({
+    event_type: z.literal("DEMO_END"),
+    event_data: DemoEventDataSchema,
+  }),
+]);
+
+export const EventMessageContentSchema = BaseMessageContentSchema.extend({
+  event_type: z.enum([
+    "MESSAGE_ANALYTICS",
+    "GENERATING_ARTIFACT",
+    "DEMO_AVAILABLE",
+    "DEMO_OPTIONS",
+    "DEMO_PREPARE",
+    "DEMO_QUESTION",
+    "DEMO_NEXT",
+    "DEMO_END",
+  ]),
+  event_data: z.union([
+    MessageAnalyticsEventDataSchema,
+    GeneratingArtifactEventDataSchema,
+    DemoEventDataSchema,
+  ]),
+});
+
+export const WebSocketResponseSchema = z.object({
+  session_id: z.string(),
+  response_id: z.string(),
+  role: z.enum(["user", "ai"]),
+  actor: ActorSchema,
+  message_type: MessageTypeSchema,
+  message: z.union([
+    BaseMessageContentSchema,
+    StreamMessageContentSchema,
+    ArtifactMessageContentSchema,
+    EventMessageContentSchema,
+  ]),
+  documents: z.array(DataSourceSchema),
+  timestamp: z.string(),
+});
