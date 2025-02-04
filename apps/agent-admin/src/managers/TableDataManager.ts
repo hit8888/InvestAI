@@ -29,8 +29,11 @@ class TableDataManager {
     return validatedTableData.data;
   }
 
-  getTableDataResults(): LeadsTableViewContent[] | ConversationsTableViewContent[] {
-    return this.tableData.results;
+  getTableDataResults() {
+    return this.tableData.results.filter(
+      (item): item is LeadsTableViewContent | (ConversationsTableViewContent & { is_test?: false }) =>
+        !('is_test' in item) || item.is_test === false,
+    );
   }
 
   getPaginatedTableData(): PaginationData {

@@ -89,6 +89,25 @@ export const ConversationsPayloadSchema = z.object({
 });
 export type ConversationsPayload = z.infer<typeof ConversationsPayloadSchema>;
 
+export const AdditionalInfoSchema = z.union([
+  z.object({}).strict(), // Allow empty object `{}`  
+  z.array(z.unknown()).max(0), // Allow empty array `[]`  
+  z.object({
+    loc: z.string(),
+    city: z.string(),
+    region: z.string(),
+    role: z.string().optional().nullable(),
+    budget: z.string().optional().nullable(),
+    timeline: z.string().optional().nullable(),
+    product_interest: z.string().optional().nullable(),
+    summary: z.string().optional(),
+    timezone: z.string().optional(),
+    country: z.string().optional(),
+    last_name: z.string().optional(),
+    first_name: z.string().optional(),
+    ip_address: z.string().optional(),
+  }),
+]);
 
 // Type for individual result item
 export const LeadResultSchema = z.object({
@@ -106,10 +125,47 @@ export const LeadResultSchema = z.object({
   budget: z.string().nullable(),
   timeline: z.string().nullable(),
   product_interest: z.string().nullable(),
-  additional_info: z.record(z.unknown()),
+  additional_info: AdditionalInfoSchema,
   created_on: z.string(), // ISO date string
   updated_on: z.string(), // ISO date string
 });
+
+export const ProspectDetailsSchema = z.union([
+  z.object({}).strict(), // Allow empty object
+  z.array(z.unknown()).max(0), // Allow empty array
+  z.object({
+    loc: z.string(),
+    city: z.string(),
+    region: z.string(),
+    country: z.string(),
+    timezone: z.string(),
+    ip_address: z.string(),
+  }),
+]);
+
+export const CompanyDetailsSchema = z.union([
+  z.object({}).strict(), // Allow empty object
+  z.array(z.unknown()).max(0), // Allow empty array
+  z.object({
+    id: z.number(),
+    keywords: z.string().nullable(),
+    confidence: z.enum(["very low", "low", "medium", "high", "very high"]),
+    ip_address: z.array(z.string()),
+    ip_country: z.string(),
+    competitors: z.array(z.string()),
+    website_url: z.string().nullable(),
+    company_name: z.string().nullable(),
+    company_type: z.string().nullable(),
+    linkedin_url: z.string().nullable(),
+    brief_summary: z.string().nullable(),
+    employee_count: z.string(),
+    company_country: z.string().nullable(),
+    company_revenue: z.string().nullable(),
+    industry_domain: z.string().nullable(),
+    enrichment_provider: z.string().nullable(),
+    operating_countries: z.array(z.string()),
+  }),
+]);
 
 export const ConversationsResponseResultSchema = z.object({
   buyer_intent_score: z.number().nullable(),
@@ -126,6 +182,9 @@ export const ConversationsResponseResultSchema = z.object({
   role: z.string().nullable(),
   country: z.string().nullable(),
   user_message_count: z.number(),
+  is_test: z.boolean(),
+  prospect_details: ProspectDetailsSchema,
+  company_details: CompanyDetailsSchema,
 });
 
 export const PaginationDataSchema = z.object({

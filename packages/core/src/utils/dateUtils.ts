@@ -1,100 +1,112 @@
 import { format, differenceInHours, addDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import {
+  DATE_FORMAT_OPTIONS,
   DATE_FORMATS,
   HUMAN_READABLE_DATE_LABELS,
 } from "@meaku/core/constants/dateFormat";
 
-const { TODAY, YESTERDAY } =
-  HUMAN_READABLE_DATE_LABELS;
-const { STANDARD_DATE, STANDARD_TIME, ISO_DATE_TIME, STANDARD_DATE_WITH_TIME_WITHOUT_SECOND } =
-  DATE_FORMATS;
+const { TODAY, YESTERDAY } = HUMAN_READABLE_DATE_LABELS;
+const { STANDARD_DATE, ISO_DATE_TIME } = DATE_FORMATS;
 
 class DateUtil {
   /**
    * Format the given timestamp into a readable date string
    * @param timestamp Timestamp to format
+   * @param timezone User's timezone (optional)
    * @returns Formatted date string in "MMM dd, yyyy" format
    */
-  static formatDate(timestamp: string): string {
+  static formatDate(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
     const date = new Date(timestamp);
-    return format(date, STANDARD_DATE);
+    return new Intl.DateTimeFormat('en-US', {
+      ...DATE_FORMAT_OPTIONS.STANDARD_DATE,
+      timeZone: timezone,
+    }).format(date);
   }
 
   /**
    * Format the given timestamp into a readable time string
    * @param timestamp Timestamp to format
+   * @param timezone User's timezone (optional)
    * @returns Formatted time string in "hh:mm a" format
    */
-  static formatTimeWithMeridiem(timestamp: string): string {
+  static formatTimeWithMeridiem(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
     const date = new Date(timestamp);
-    return format(date, STANDARD_TIME);
+    return new Intl.DateTimeFormat('en-US', {
+      ...DATE_FORMAT_OPTIONS.STANDARD_TIME,
+      timeZone: timezone,
+    }).format(date);
   }
 
   /**
    * Format the given timestamp into a readable date & time string
    * @param timestamp Timestamp to format
+   * @param timezone User's timezone (optional)
    * @returns Formatted date & time string in "MMM dd, yyyy hh:mm a" format
    */
-  static formatDateTime(timestamp: string): string {
+  static formatDateTime(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
     const date = new Date(timestamp);
-    return format(date, STANDARD_DATE_WITH_TIME_WITHOUT_SECOND);
+    return new Intl.DateTimeFormat('en-US', {
+      ...DATE_FORMAT_OPTIONS.STANDARD_DATE_WITH_TIME_WITHOUT_SECOND,
+      timeZone: timezone,
+    }).format(date);
   }
 
   /**
    * Check if the given timestamp is from today
    * @param timestamp Timestamp to check
+   * @param timezone User's detected timezone
    * @returns True if the date is today, false otherwise
    */
-  static isToday(timestamp: string): boolean {
+  static isToday(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): boolean {
     const date = new Date(timestamp);
     const now = new Date();
 
     return (
-      date.getFullYear() === now.getFullYear() &&
-      date.getMonth() === now.getMonth() &&
-      date.getDate() === now.getDate()
+      date.toLocaleDateString('en-US', { timeZone: timezone }) ===
+      now.toLocaleDateString('en-US', { timeZone: timezone })
     );
   }
 
   /**
    * Check if the given timestamp is from yesterday
    * @param timestamp Timestamp to check
+   * @param timezone User's detected timezone
    * @returns True if the date is yesterday, false otherwise
    */
-  static isYesterday(timestamp: string): boolean {
+  static isYesterday(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): boolean {
     const date = new Date(timestamp);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1); // Subtract one day
 
     return (
-      date.getFullYear() === yesterday.getFullYear() &&
-      date.getMonth() === yesterday.getMonth() &&
-      date.getDate() === yesterday.getDate()
+      date.toLocaleDateString('en-US', { timeZone: timezone }) ===
+      yesterday.toLocaleDateString('en-US', { timeZone: timezone })
     );
   }
 
   /**
    * Get a human-readable description of the given timestamp based on certain conditions
    * @param timestamp Timestamp to convert
-   * @returns Description such as "Today", "Yesterday", or a formatted date
+   * @param timezone User's timezone (optional, defaults to local timezone)
+   * @returns Human-readable date string
    */
-  static getDateInHumanReadableFormat(timestamp: string): string {
+  static getDateInHumanReadableFormat(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
     const date = new Date(timestamp);
     const now = new Date();
 
     const hoursDiff = differenceInHours(now.getTime(), date.getTime());
-    const isTodayCheck = DateUtil.isToday(timestamp);
-    const isYesterdayCheck = DateUtil.isYesterday(timestamp);
+    const isTodayCheck = DateUtil.isToday(timestamp, timezone);
+    const isYesterdayCheck = DateUtil.isYesterday(timestamp, timezone);
 
     if (isYesterdayCheck) {
       return YESTERDAY;
     } else if (isTodayCheck && hoursDiff >= 12) {
       return TODAY;
     } else if (hoursDiff <= 12) {
-      return DateUtil.formatTimeWithMeridiem(timestamp)
+      return DateUtil.formatTimeWithMeridiem(timestamp, timezone)
     } else {
-      return DateUtil.formatDate(timestamp);
+      return DateUtil.formatDate(timestamp, timezone);
     }
   }
 

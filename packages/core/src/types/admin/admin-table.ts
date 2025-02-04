@@ -1,8 +1,10 @@
 import { JSX } from 'react';
 import { z } from 'zod';
 import { 
+  CompanyDetailsSchema,
   ConversationsTableResponseSchema, 
-  LeadsTableResponseSchema 
+  LeadsTableResponseSchema, 
+  ProspectDetailsSchema
 } from './api';
 
 export const LeadsTableViewSchema = z.object({
@@ -33,6 +35,8 @@ export const ConversationsTableViewSchema = z.object({
   product_of_interest: z.string(),
   ip_address: z.string(),
   session_id: z.string(),
+  prospect_details: ProspectDetailsSchema,
+  company_details: CompanyDetailsSchema,
 })
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({

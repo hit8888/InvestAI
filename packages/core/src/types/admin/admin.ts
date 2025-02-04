@@ -6,13 +6,16 @@ import {
     TransformedProspectAndCompanyDetailsSchema, 
 } from "./admin-table";
 import { 
+    LeadResultSchema, 
+    PaginationDataSchema, 
+    ProspectDetailsSchema,
+    AdditionalInfoSchema,
+    CompanyDetailsSchema,
+    LeadsTableResponseSchema, 
     ConversationDetailsResponseSchema,
     ConversationFunnelResponseSchema,
     ConversationsResponseResultSchema, 
     ConversationsTableResponseSchema, 
-    LeadResultSchema, 
-    LeadsTableResponseSchema, 
-    PaginationDataSchema 
 } from "./api";
 import { CONVERSATIONS_PAGE, LEADS_PAGE } from "../../utils";
 
@@ -34,3 +37,7 @@ export type ConversationsTableResponse = z.infer<typeof ConversationsTableRespon
 
 export type ConversationsFunnelDataResponse = z.infer<typeof ConversationFunnelResponseSchema>;
 export type ConversationDetailsDataResponse = z.infer<typeof ConversationDetailsResponseSchema>;
+
+export type ProspectDetails = z.infer<typeof ProspectDetailsSchema>;
+export type CompanyDetails = z.infer<typeof CompanyDetailsSchema>;
+export type AdditionalInfoType = z.infer<typeof AdditionalInfoSchema>;
