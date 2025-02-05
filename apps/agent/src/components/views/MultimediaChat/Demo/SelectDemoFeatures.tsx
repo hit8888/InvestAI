@@ -29,9 +29,8 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
         <div className="flex max-w-[50%] flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">
-              <span className="text-2xl font-semibold text-customPrimaryText">Select Features to Explore</span>
-              <span className="text-base text-customSecondaryText">
-                Choose the features you’d like to learn more about. We’ll tailor the demo to your interests.
+              <span className="text-center text-2xl font-semibold text-customPrimaryText">
+                Select the features that you would like to see in the demo
               </span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -55,7 +54,7 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
           </div>
           <Button onClick={onBookDemoClick}>
             <div className="flex items-center justify-center gap-2">
-              <span>View Topics Demo</span>
+              <span>Start Demo</span>
               <ArrowRight width={16} height={17} color="white" />
             </div>
           </Button>

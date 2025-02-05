@@ -8,16 +8,10 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 interface IProps {
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
   isAMessageBeingProcessed: boolean;
-  tenantName: string;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
 }
 
-const PreDemoQuestion = ({
-  handleSendUserMessage,
-  isAMessageBeingProcessed,
-  tenantName,
-  setDemoPlayingStatus,
-}: IProps) => {
+const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setDemoPlayingStatus }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const [showPreDemoQuestions, setShowPreDemoQuestions] = useState(true);
@@ -34,9 +28,7 @@ const PreDemoQuestion = ({
   return (
     <div className="pl-10 pr-16">
       <div className="mb-4 border-t-2 border-dashed border-primary"></div>
-      <span className="font-medium">
-        Would you like to explore specific features of the {tenantName} product that might interest you?
-      </span>
+      <span className="font-medium">Would you like to see a demo of the product ?</span>
 
       <div className="mt-4 flex flex-col gap-4 pr-4">
         <ActionButton
@@ -50,7 +42,7 @@ const PreDemoQuestion = ({
           isClicked={showDemoTopics}
         />
         <ActionButton
-          buttonText="Not for now."
+          buttonText="Not for now"
           onClick={() => {
             setShowPreDemoQuestions(false);
             trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_IGNORED);

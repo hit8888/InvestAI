@@ -14,7 +14,6 @@ interface IProps {
   usingForAgent?: boolean;
   messages: Message[];
   sessionId: string;
-  tenantName: string;
   orbState: OrbStatusEnum;
   showRightPanel?: boolean;
   isAMessageBeingProcessed: boolean;
@@ -35,7 +34,6 @@ const AgentMessages = ({
   usingForAgent = true,
   messages,
   sessionId,
-  tenantName,
   orbState,
   showRightPanel = false,
   isAMessageBeingProcessed,
@@ -118,7 +116,6 @@ const AgentMessages = ({
           )}
           {showDemoPreQuestions && (
             <PreDemoQuestion
-              tenantName={tenantName}
               isAMessageBeingProcessed={isAMessageBeingProcessed}
               setDemoPlayingStatus={setDemoPlayingStatus}
               handleSendUserMessage={handleSendUserMessage}

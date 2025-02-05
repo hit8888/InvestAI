@@ -29,7 +29,6 @@ const AgentMessagesContainer = ({
 
   const responseManager = useUnifiedConfigurationResponseManager();
 
-  const tenantName = responseManager.getOrgName() ?? '';
   const initialSuggestedQuestions = responseManager.getInitialSuggestedQuestions();
   const styleConfig = responseManager.getStyleConfig();
   const logoURL = responseManager.getLogoUrl();
@@ -41,7 +40,6 @@ const AgentMessagesContainer = ({
 
   return (
     <AgentMessages
-      tenantName={tenantName}
       sessionId={sessionId}
       orbState={orbState}
       messages={messages}
