@@ -7,6 +7,7 @@ import { DemoFlow } from './DemoFlow';
 import { RaiseQuestionTrigger } from './RaiseQuestionTrigger';
 import { DemoQuestionFlow } from './DemoQuestionFlow';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import { CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS } from '../../../../constants/chat';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -42,6 +43,12 @@ const DemoContent = ({
   const showWaitDemoCompleteNotification = isDemoPlaying && shouldShowDemoAgent;
   const showDemoQuestionsFlow = !isDemoPlaying && shouldShowDemoAgent && isQueryRaisedRef;
 
+  const handleOnStepEndWithDelay = () => {
+    setTimeout(() => {
+      onStepEnd();
+    }, CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS);
+  };
+
   const handleAudioEnd = () => {
     if (isQueryRaisedRef.current) {
       setDemoPlayingStatus(DemoPlayingStatus.PAUSED);
@@ -52,7 +59,7 @@ const DemoContent = ({
       onFinishDemo();
       return;
     }
-    onStepEnd();
+    handleOnStepEndWithDelay();
   };
 
   const handleResumeDemo = () => {

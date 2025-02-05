@@ -14,3 +14,5 @@ export const NEGATIVE_FEEDBACK_CATEGORIES = [
 ];
 
 export const CDN_URL_FOR_ASSETS = 'https://meaku-static-files-production.s3.us-west-1.amazonaws.com';
+
+export const CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS = 500;

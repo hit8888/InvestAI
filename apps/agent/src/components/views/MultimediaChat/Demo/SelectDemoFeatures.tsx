@@ -23,6 +23,14 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
     setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
   };
 
+  const handleFeaturesClick = (feature: FeatureSelectionDTOType) => {
+    if (selectedIds.includes(feature.id)) {
+      setSelectedIds(selectedIds.filter((id) => id !== feature.id));
+    } else {
+      setSelectedIds([...selectedIds, feature.id]);
+    }
+  };
+
   return (
     <div className="col-span-2 mr-2 pl-2">
       <div className="flex h-full w-full items-center justify-center">
@@ -38,13 +46,7 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
                 <span
                   className="flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary px-4 py-2 text-primary/80"
                   key={feature.id}
-                  onClick={() => {
-                    if (selectedIds.includes(feature.id)) {
-                      setSelectedIds(selectedIds.filter((id) => id !== feature.id));
-                    } else {
-                      setSelectedIds([...selectedIds, feature.id]);
-                    }
-                  }}
+                  onClick={() => handleFeaturesClick(feature)}
                 >
                   <Checkbox checked={!!selectedIds.includes(feature.id)} />
                   {feature.name}
