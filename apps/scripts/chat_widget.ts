@@ -72,9 +72,8 @@
   // Device Detection Module
   const DeviceManager = {
     isMobile(): boolean {
-      return (
-        Math.min(window.screen.width, window.screen.height) < 768 ||
-        navigator.userAgent.indexOf("Mobi") > -1
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+        navigator.userAgent,
       );
     },
   };
