@@ -61,6 +61,27 @@
     background: inherit;
     background-clip: padding-box;
   }
+
+  .selected-feature-in-demo-flow {
+    background: rgba(249, 253, 251, 0.6);
+    box-shadow:
+      0px 22px 94px 0px rgba(75, 75, 75, 0.08),
+      0px 14.259px 55.051px 0px rgba(75, 75, 75, 0.06);
+  }
+
+  .selected-feature-icon-demo-flow {
+    background: radial-gradient(
+      58.93% 58.93% at 53.57% 41.67%,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(252, 252, 253, 0.8) 75%,
+      rgba(249, 250, 251, 0.8) 100%
+    );
+
+    box-shadow:
+      0px 4.19px 12.938px 0px rgb(var(--secondary-foreground) / 0.14),
+      0px 1.707px 6.487px 0px rgb(var(--secondary-foreground) / 0.11),
+      0px 0.388px 3.133px 0px rgb(var(--secondary-foreground) / 0.07);
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

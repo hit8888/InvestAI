@@ -1,13 +1,12 @@
 import { memo, useRef, useState } from 'react';
 import { ScriptStepType } from '@meaku/core/types/agent';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { WaitDemoCompleteNotification } from './Notifications/WaitDemoCompleteNotification';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { DemoFlow } from './DemoFlow';
-import { RaiseQuestionTrigger } from './RaiseQuestionTrigger';
 import { DemoQuestionFlow } from './DemoQuestionFlow';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS } from '../../../../constants/chat';
+import useSelectedFeatureStore from '../../../../stores/useSelectedFeatureStore';
 
 interface IProps {
   demoDetails: ScriptStepType;
@@ -26,6 +25,7 @@ const DemoContent = ({
   onFinishDemo,
   switchToDemo,
 }: IProps) => {
+  const { setFirstSlideInDemoFlow } = useSelectedFeatureStore();
   const assetType = demoDetails?.asset_type;
   const isQueryRaisedRef = useRef(false);
 
@@ -60,11 +60,13 @@ const DemoContent = ({
       return;
     }
     handleOnStepEndWithDelay();
+    setFirstSlideInDemoFlow(false);
   };
 
   const handleResumeDemo = () => {
     setDemoPlayingStatus(DemoPlayingStatus.PLAYING);
     switchToDemo();
+    setFirstSlideInDemoFlow(false);
   };
   return (
     <>
@@ -75,21 +77,16 @@ const DemoContent = ({
         demoPlayingStatus={demoPlayingStatus}
         onFinishDemo={onFinishDemo}
         handleDemoAudioEnd={handleAudioEnd}
+        shouldShowDemoAgent={shouldShowDemoAgent}
+        setShowDemoAgent={setShowDemoAgent}
+        onRaiseDemoQuery={handleRaiseDemoQuery}
+        showWaitDemoCompleteNotification={showWaitDemoCompleteNotification}
       />
       <DemoQuestionFlow
         handleResumeDemo={handleResumeDemo}
         isQueryRaisedRef={isQueryRaisedRef}
         isOpen={!!showDemoQuestionsFlow}
       />
-
-      <div className="relative flex h-[8%] w-full flex-1 items-center gap-8 py-4">
-        <RaiseQuestionTrigger
-          shouldShowDemoAgent={shouldShowDemoAgent}
-          setShowDemoAgent={setShowDemoAgent}
-          onRaiseDemoQuery={handleRaiseDemoQuery}
-        />
-        {showWaitDemoCompleteNotification && <WaitDemoCompleteNotification variant="default" />}
-      </div>
     </>
   );
 };

@@ -6,6 +6,7 @@ import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useSelectedFeatureStore from '../../../../stores/useSelectedFeatureStore';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
@@ -14,13 +15,17 @@ interface IProps {
 }
 
 const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }: IProps) => {
+  const { setFeatures, setFirstSlideInDemoFlow } = useSelectedFeatureStore();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const onBookDemoClick = () => {
+    const selectedFeatures = demoFeatures.filter((item) => selectedIds.includes(item.id));
+    setFeatures(selectedFeatures);
     switchToDemo({ feature_ids: selectedIds });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SELECT_TOPIC, { feature_ids: selectedIds });
     setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
+    setFirstSlideInDemoFlow(true);
   };
 
   const handleFeaturesClick = (feature: FeatureSelectionDTOType) => {
