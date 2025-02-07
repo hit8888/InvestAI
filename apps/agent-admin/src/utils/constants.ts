@@ -6,6 +6,8 @@ import FilterLocationIcon from '@breakout/design-system/components/icons/filter-
 import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
+import FilterCompanyIcon from '@breakout/design-system/components/icons/filter-company-icon';
+import FilterUserMessagesCountIcon from '@breakout/design-system/components/icons/filter-message-count-icon';
 import SummaryConversationIcon from '@breakout/design-system/components/icons/summary-conv-icon';
 import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
 import SummarySessionDurationIcon from '@breakout/design-system/components/icons/summary-sessionduration-icon';
@@ -14,9 +16,20 @@ import SummaryProductOfInterestIcon from '@breakout/design-system/components/ico
 import SummaryIntentScoreIcon from '@breakout/design-system/components/icons/summary-intentscore-icon';
 import SummaryLengthOfConvIcon from '@breakout/design-system/components/icons/summary-lengthofconv-icon';
 import SummaryIpAddressIcon from '@breakout/design-system/components/icons/summary-ipaddress-icon';
+import ProspectNameIcon from '@breakout/design-system/components/icons/prospect-name-icon';
+import ProspectEmailIcon from '@breakout/design-system/components/icons/prospect-email-icon';
+import LocationSmallIcon from '@breakout/design-system/components/icons/location-icon';
+import CompanyNameIcon from '@breakout/design-system/components/icons/company-name-icon';
+import CompanyDomainIcon from '@breakout/design-system/components/icons/company-domain-icon';
+import CompanyFoundationDate from '@breakout/design-system/components/icons/company-foundation-date';
+import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
+import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
+import { ConversationRightSideDetailsType } from './admin-types';
 
-const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest } = FilterType;
+const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest, Company, UserMessagesCount } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
+
+export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
 // Authentication
 
@@ -133,7 +146,7 @@ export const SORT_FILTER_CONFIG: SortFilterConfig[] = [
 export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   {
     filterIcon: FilterDateIcon,
-    filterLabel: 'By date range',
+    filterLabel: 'Date Range',
     filterValue: 'Nov 21 - Nov 29, 2024',
     filterApplied: true,
     filterKey: DateRange,
@@ -141,7 +154,7 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   },
   {
     filterIcon: FilterIntentScoreIcon,
-    filterLabel: 'By intent score range',
+    filterLabel: 'Buyer Intent',
     filterValue: '',
     filterApplied: false,
     filterKey: IntentScore,
@@ -149,7 +162,7 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   },
   {
     filterIcon: FilterLocationIcon,
-    filterLabel: 'By location',
+    filterLabel: 'Location',
     filterValue: '',
     filterApplied: false,
     filterKey: Location,
@@ -171,6 +184,22 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
     filterKey: ProductOfInterest,
     filterType: ProductOfInterest,
   },
+  {
+    filterIcon: FilterCompanyIcon,
+    filterLabel: 'Company',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: Company,
+    filterType: Company,
+  },
+  {
+    filterIcon: FilterUserMessagesCountIcon,
+    filterLabel: 'User messages count',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: UserMessagesCount,
+    filterType: UserMessagesCount,
+  },
 ];
 
 export enum FilterByMeetingBooked {
@@ -186,15 +215,15 @@ export const FILTER_BY_MEETING_BOOKED_RADIO_OPTIONS = [
 ];
 
 export enum FilterByIntentScore {
-  LEAD = 'lead',
+  LEAD = 'high',
   MEDIUM = 'medium',
   LOW = 'low',
 }
 
 export const FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS = [
-  { value: FilterByIntentScore.LEAD, label: 'Lead' },
-  { value: FilterByIntentScore.MEDIUM, label: 'Medium' },
   { value: FilterByIntentScore.LOW, label: 'Low' },
+  { value: FilterByIntentScore.MEDIUM, label: 'Medium' },
+  { value: FilterByIntentScore.LEAD, label: 'High' },
 ];
 
 export const DATE_RANGE_PRESET_OPTIONS = [
@@ -227,6 +256,23 @@ export enum SidebarNavItemsEnum {
   CONVERSATIONS_LABEL = 'Conversations',
   PLAYGROUND_LABEL = 'Playground',
 }
+
+export const COLUMN_HEADER_LABEL_MAPPING: Record<string, string> = {
+  timestamp: 'Date',
+  number_of_user_messages: 'User Messages',
+  email: 'Email',
+  name: 'Name',
+  company: 'Company',
+  product_of_interest: 'Product Of Interest',
+  location: 'Location',
+  role: 'Role',
+  conversation_preview: 'Conversation Preview',
+  buyer_intent: 'Buyer Intent',
+  bant_analysis: 'BANT Analysis',
+  meeting_status: 'Meeting Status',
+  ip_address: 'IP Address',
+  session_id: 'Session ID',
+};
 
 // LEADS Page
 
@@ -267,7 +313,7 @@ export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
   'timestamp',
   'product_of_interest',
   'buyer_intent',
-  // 'bant_analysis', // TODO: Once its decided to show this column
+  // 'bant_analysis',
   'number_of_user_messages',
   'company',
   'email',
@@ -277,7 +323,6 @@ export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
   'session_id',
 ];
 
-export const UPPERCASE_COLUMN_WORDS = ['bant', 'ip', 'id'];
 export const CONVERSATIONS_PINNED_COLUMNS = ['conversation_preview', 'location'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];
 export const SHADOW_PINNED_COLUMNS = ['name', 'location'];
@@ -376,5 +421,58 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listLabel: 'Session Duration:',
     listIcon: SummarySessionDurationIcon,
     listValue: '',
+  },
+];
+
+export const DEFAULT_LABEL_FOR_SUMMARY_ITEM = '*No information provided';
+
+export const PROSPECT_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
+  {
+    itemLabel: 'Name:',
+    itemKey: 'name',
+    ItemIcon: ProspectNameIcon,
+  },
+  {
+    itemLabel: 'Email:',
+    itemKey: 'email',
+    ItemIcon: ProspectEmailIcon,
+  },
+  {
+    itemLabel: 'Location:',
+    itemKey: 'location',
+    ItemIcon: LocationSmallIcon,
+  },
+];
+
+export const COMPANY_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
+  {
+    itemLabel: 'Name:',
+    itemKey: 'name',
+    ItemIcon: CompanyNameIcon,
+  },
+  {
+    itemLabel: 'Location:',
+    itemKey: 'location',
+    ItemIcon: LocationSmallIcon,
+  },
+  {
+    itemLabel: 'Revenue:',
+    itemKey: 'revenue',
+    ItemIcon: CompanyRevenueIcon,
+  },
+  {
+    itemLabel: 'Number of employees:',
+    itemKey: 'employees',
+    ItemIcon: CompanyNumberOfEmployeesIcon,
+  },
+  {
+    itemLabel: 'Domain:',
+    itemKey: 'domain',
+    ItemIcon: CompanyDomainIcon,
+  },
+  {
+    itemLabel: 'Foundation Date:',
+    itemKey: 'foundationDate',
+    ItemIcon: CompanyFoundationDate,
   },
 ];

@@ -1,9 +1,8 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import DateRangePicker from '@breakout/design-system/components/layout/DateRangePicker';
 import ChoosePresetsDateValue from './ChoosePresetsDateValue';
-import { DateRangeProp, FilterType, PresetDateLabel } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, FilterType, PageTypeProps, PresetDateLabel } from '@meaku/core/types/admin/filters';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
-import { PageTypeProps } from '../utils/admin-types';
 
 type CustomDateRangePickerProps = PageTypeProps & {
   date: DateRangeProp | undefined;

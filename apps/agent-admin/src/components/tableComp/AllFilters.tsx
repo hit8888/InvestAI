@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { FilterValues } from '@meaku/core/types/admin/filters';
+import { FilterValues, PageTypeProps } from '@meaku/core/types/admin/filters';
 
 import FilterContent from './FilterContent';
 import SingleAppliedFilter from './SingleAppliedFilter';
@@ -10,12 +10,11 @@ import AllFiltersIcon from '@breakout/design-system/components/icons/all-filters
 import { ALL_FILTERS_ICONS } from '../../utils/constants';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { collectAppliedFilters, getFilterHeaderLabel } from '../../utils/common';
-import { PageTypeProps } from '../../utils/admin-types';
 import { FilterType } from '@meaku/core/types/admin/filters';
 import ExportDownload from './ExportDownload';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
 
-const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest } = FilterType;
+const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } =
+  FilterType;
 
 const AllFiltersContainer = ({ page }: PageTypeProps) => {
   const filters = useAllFilterStore();
@@ -32,7 +31,7 @@ const AllFiltersContainer = ({ page }: PageTypeProps) => {
     setIsOpen(false);
     setFilterState(AllFilters);
   };
-  const handleFilterRemove = (key: keyof FilterValues, value: string | string[] | undefined) => {
+  const handleFilterRemove = (key: keyof FilterValues, value: string | string[] | number | undefined) => {
     filters.setFilter(page, key, value);
   };
 
@@ -49,8 +48,14 @@ const AllFiltersContainer = ({ page }: PageTypeProps) => {
       case Location:
         handleFilterRemove(key, []);
         break;
+      case Company:
+        handleFilterRemove(key, []);
+        break;
       case ProductOfInterest:
         handleFilterRemove(key, []);
+        break;
+      case UserMessagesCount:
+        handleFilterRemove(key, 0);
         break;
       case MeetingBooked:
         handleFilterRemove(key, '');
@@ -58,12 +63,10 @@ const AllFiltersContainer = ({ page }: PageTypeProps) => {
     }
   };
 
-  const showExportDownload = page === LEADS_PAGE;
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
-        {showExportDownload ? <ExportDownload /> : null}
+        <ExportDownload />
         <PopoverTrigger
           className="flex items-center gap-2 self-stretch rounded-lg 
         border border-primary/20 bg-primary/2.5 p-2 

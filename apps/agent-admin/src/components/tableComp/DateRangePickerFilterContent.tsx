@@ -2,15 +2,10 @@ import CustomDateRangePicker from '../CustomDateRangePicker';
 import FooterButton from './FooterButton';
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { PageTypeProps } from '../../utils/admin-types';
-import { DateRangeProp, FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType, DateRangeProp, CommonFilterContentPropsWithoutFilterState } from '@meaku/core/types/admin/filters';
 import { getDateAppliedValue } from '../../utils/common';
 
-type DateRangePickerFilterContentProps = PageTypeProps & {
-  handleClosePopover: () => void;
-};
-
-const DateRangePickerFilterContent = ({ page, handleClosePopover }: DateRangePickerFilterContentProps) => {
+const DateRangePickerFilterContent = ({ page, handleClosePopover }: CommonFilterContentPropsWithoutFilterState) => {
   const filters = useAllFilterStore();
   const { DateRange } = FilterType;
   const [date, setDate] = React.useState<DateRangeProp | undefined>(filters[page].dateRange);

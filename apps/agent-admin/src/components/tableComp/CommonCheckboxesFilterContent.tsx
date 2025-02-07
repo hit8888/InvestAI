@@ -3,22 +3,31 @@ import CustomCheckboxItem from './CustomCheckboxItem';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import LocationCellValue from './tableCellComp/LocationCellValue';
 import { cn } from '@breakout/design-system/lib/cn';
+import BuyerIntentCellValue from './tableCellComp/BuyerIntentCellValue';
+import FilterSelectAllContainer from './FilterSelectAllContainer';
+import { FilterType } from '@meaku/core/types/admin/filters';
 
 type CommonCheckboxesFilterContent = {
   isLocationFilter?: boolean;
+  isBuyerIntentFilter?: boolean;
   keyValue: string;
   selectedOptions: string[];
   onSelectionChange: (value: string[]) => void;
   checkboxOptions: { value: string; label: string }[];
   handleClosePopover: () => void;
+  filterState: FilterType;
+  checkboxOrientation?: 'right' | 'left';
 };
 const CommonCheckboxesFilterContent = ({
   isLocationFilter = false,
+  isBuyerIntentFilter = false,
   keyValue,
   checkboxOptions,
   selectedOptions,
   onSelectionChange,
   handleClosePopover,
+  filterState,
+  checkboxOrientation = 'left',
 }: CommonCheckboxesFilterContent) => {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState<string[]>(selectedOptions);
   const handleCheckboxToggle = (value: string) => {
@@ -38,37 +47,46 @@ const CommonCheckboxesFilterContent = ({
   const handleSelectAll = () => {
     setSelectedCheckboxes(checkboxOptions.map((option) => option.value));
     onSelectionChange(checkboxOptions.map((option) => option.value));
-    handleClosePopover();
+    // handleClosePopover();
   };
+
+  const areAllSelected = selectedCheckboxes.length === checkboxOptions.length;
 
   return (
     <React.Fragment key={keyValue}>
-      <div className={cn('hide-scrollbar max-h-96 overflow-auto')}>
+      <FilterSelectAllContainer
+        handleSelectAll={handleSelectAll}
+        handleClearAll={handleClearAll}
+        filterState={filterState}
+        areAllSelected={areAllSelected}
+      />
+      <div className={cn('hide-scrollbar max-h-56 overflow-auto')}>
         {checkboxOptions.map((option) => (
           <CustomCheckboxItem
             key={option.value}
             option={option}
             selectedCheckboxes={selectedCheckboxes}
             handleCheckboxToggle={handleCheckboxToggle}
-            checkboxPosition={isLocationFilter ? 'right' : 'left'}
+            checkboxPosition={checkboxOrientation}
             renderLabel={
               isLocationFilter
                 ? (label) => (
-                    <p className="text-base font-normal text-gray-900">
+                    <div className="text-base font-normal text-gray-900">
                       <LocationCellValue value={label} />
-                    </p>
+                    </div>
                   )
-                : undefined
+                : isBuyerIntentFilter
+                  ? (label) => <BuyerIntentCellValue value={`${label.toLowerCase()} Intent`} />
+                  : undefined
             }
           />
         ))}
       </div>
       <CustomFooterWithButtons
         isDisabled={checkboxOptions.length === 0}
+        isPrimaryBtnClearAll={true}
         primaryBtnLabel="Clear All"
-        secondaryBtnLabel="Select All"
         onPrimaryBtnClicked={handleClearAll}
-        onSecondaryBtnClicked={handleSelectAll}
       />
     </React.Fragment>
   );

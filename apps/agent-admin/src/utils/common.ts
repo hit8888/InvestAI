@@ -1,6 +1,7 @@
 import { ENV } from '@meaku/core/types/env';
 import {
   BANTItem,
+  COLUMN_HEADER_LABEL_MAPPING,
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
   // INTENT_SCORE_VALUES,
@@ -8,7 +9,7 @@ import {
   SortBySessionLength,
   SortByTimestamp,
   SummaryTabContentList,
-  UPPERCASE_COLUMN_WORDS,
+  USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
 } from './constants';
 import {
   ConversationsTableDisplayContent,
@@ -16,7 +17,13 @@ import {
   LeadsTableDisplayContent,
   LeadsTableViewContent,
 } from '@meaku/core/types/admin/admin';
-import { FunnelData, FunnelStep } from './admin-types';
+import {
+  CompanyDetailsType,
+  ConversationRightSideDetailsType,
+  FunnelData,
+  FunnelStep,
+  ProspectDetailsType,
+} from './admin-types';
 import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { FilterValues, FilterType, DateRangeProp } from '@meaku/core/types/admin/filters';
@@ -26,9 +33,10 @@ import { Message } from '@meaku/core/types/agent';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
-const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest } = FilterType;
+const { AllFilters, DateRange, IntentScore, Location, Company, MeetingBooked, ProductOfInterest, UserMessagesCount } =
+  FilterType;
 
-const { convertDateToAppliedFilterValue, getDateDisplayForDateRange, getDateValueInISOString } = DateUtil;
+const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
 
 // Function to trigger the download
 export const handleDownload = (fileType: string, linkUrl: string, downloadedFileName: string) => {
@@ -61,7 +69,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     role: response.role !== 'Unknown' ? response.role || '-' : '-', // Handle 'Unknown' role
     company: response.company || '-', // Fallback if company is null
     location: response.country || '-',
-    timestamp: response.created_on ? getDateValueInISOString(response.created_on) : '-',
+    timestamp: response.created_on ? response.created_on : '-',
     product_of_interest: response.product_interest || '-',
   };
 
@@ -73,7 +81,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     company: response.company || '-',
     name: response.name || '-',
     email: response.email || '-',
-    timestamp: response.timestamp ? getDateValueInISOString(response.timestamp) : '-',
+    timestamp: response.timestamp ? response.timestamp : '-',
     conversation_preview: response.summary || '-',
     location: response.country || '-',
     budget: response.budget || '-',
@@ -114,25 +122,13 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
   return transformedData;
 };
 
-// Helper function to capitalize specific words
-const capitalizeWord = (word: string, capitalizeWords: string[]): string => {
-  if (capitalizeWords.includes(word.toLowerCase())) {
-    return word.toUpperCase();
-  }
-  return word.charAt(0).toUpperCase() + word.slice(1);
-};
-
 // Convert column list to the required format
 export const getFormattedColumnsList = (columnsList: string[], sizeGiven?: number) => {
   const formattedColumns = columnsList.map((key) => {
-    const words = key.split('_');
-    const header = words.map((word) => capitalizeWord(word, UPPERCASE_COLUMN_WORDS)).join(' ');
-    const isKeyTimestamp = key === 'timestamp';
-
     const newItem = {
       id: key,
       accessorKey: key,
-      header: isKeyTimestamp ? 'Date' : header,
+      header: COLUMN_HEADER_LABEL_MAPPING[key],
     };
 
     return sizeGiven
@@ -206,6 +202,11 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'Location',
         width: '334px',
       };
+    case Company:
+      return {
+        label: 'Company',
+        width: '434px',
+      };
     case MeetingBooked:
       return {
         label: 'Meeting booked',
@@ -215,6 +216,11 @@ export const getFilterHeaderLabel = (filterState: string) => {
       return {
         label: 'Product of Interest',
         width: '324px',
+      };
+    case UserMessagesCount:
+      return {
+        label: 'User messages count',
+        width: '434px',
       };
     default:
       return {
@@ -283,6 +289,8 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     location,
     productOfInterest,
     // meetingBooked,
+    userMessagesCount,
+    company,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -310,6 +318,23 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       operator: 'in',
     });
   }
+
+  if (company.length > 0) {
+    filterApplied.push({
+      field: 'company',
+      value: company,
+      operator: 'in',
+    });
+  }
+
+  if (!isLeadsPage && userMessagesCount > 0 && userMessagesCount < 100) {
+    filterApplied.push({
+      field: 'user_message_count',
+      value: userMessagesCount,
+      operator: 'lte',
+    });
+  }
+
   if (productOfInterest.length > 0) {
     filterApplied.push({
       field: 'product_of_interest',
@@ -353,6 +378,22 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: Location,
       label: 'Location',
       value: filters.location,
+    });
+  }
+
+  if (filters.company.length > 0) {
+    appliedFilters.push({
+      key: Company,
+      label: 'Company',
+      value: filters.company,
+    });
+  }
+
+  if (filters.userMessagesCount > 0 && filters.userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
+    appliedFilters.push({
+      key: UserMessagesCount,
+      label: 'User messages count',
+      value: `0 - ${filters.userMessagesCount}`,
     });
   }
 
@@ -479,3 +520,28 @@ export function generateConversationSummaryContent(
     }
   });
 }
+
+export const getConversationRightSideDetailsItems = (
+  dataObject: ProspectDetailsType | CompanyDetailsType,
+  detailDataItems: ConversationRightSideDetailsType[],
+) => {
+  const addedValueObject = detailDataItems.map((item) => ({
+    ...item,
+    itemValue: dataObject[item.itemKey as keyof (ProspectDetailsType | CompanyDetailsType)],
+  }));
+  return addedValueObject.filter((item) => item.itemValue !== '-');
+};
+
+export const getDescendingOrderedOptions = (sortedFilterValues: string[], allFilterValues: string[]) => {
+  // Create a set for quick lookup
+  const sortedSet = new Set(sortedFilterValues);
+
+  // Filter out filter values that are already in sortedFilterValues
+  const otherFilterValues = allFilterValues.filter((loc) => !sortedSet.has(loc));
+
+  // Combine sorted filter values first, then the rest of the other filter values
+  const combined = [...sortedFilterValues, ...otherFilterValues];
+
+  // Map each string to an object with value and label
+  return combined.map((item) => ({ value: item, label: item }));
+};

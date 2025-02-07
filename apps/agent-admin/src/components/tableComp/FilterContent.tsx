@@ -4,30 +4,34 @@ import IntentScoreFilterContent from './IntentScoreFilterContent';
 import MeetingBookedFilterContent from './MeetingBookedFilterContent';
 import LocationFilterContent from './LocationFilterContent';
 import ProductOfInterestFilterContent from './ProductOfInterestFilterContent';
-import { PageTypeProps } from '../../utils/admin-types';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import CompanyFilterContent from './CompanyFilterContent';
+import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
 
-type FilterContentProps = PageTypeProps & {
-  filterState: FilterType;
-  handleClosePopover: () => void;
-};
-
-const FilterContent = ({ filterState, handleClosePopover, page }: FilterContentProps) => {
-  const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest } = FilterType;
+const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
+  const { DateRange, Company, IntentScore, MeetingBooked, Location, ProductOfInterest, UserMessagesCount } = FilterType;
   return (
     <React.Fragment>
       {filterState === DateRange ? (
         <DateRangePickerFilterContent page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === IntentScore ? (
-        <IntentScoreFilterContent page={page} handleClosePopover={handleClosePopover} />
+        <IntentScoreFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === MeetingBooked ? (
         <MeetingBookedFilterContent page={page} handleClosePopover={handleClosePopover} />
       ) : null}
-      {filterState === Location ? <LocationFilterContent page={page} handleClosePopover={handleClosePopover} /> : null}
+      {filterState === Location ? (
+        <LocationFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
+      {filterState === Company ? (
+        <CompanyFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
       {filterState === ProductOfInterest ? (
-        <ProductOfInterestFilterContent page={page} handleClosePopover={handleClosePopover} />
+        <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
+      {filterState === UserMessagesCount ? (
+        <UserMessagesCountFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
     </React.Fragment>
   );

@@ -165,9 +165,10 @@ class DateUtil {
  * @param timestamp Timestamp to format
  * @returns Formatted ISO string in UTC time
  */
-static getDateValueInISOString(timestamp: string): string {
-    const date = new Date(timestamp); // Parse the timestamp as a Date object
-    return format(toZonedTime(date, 'UTC'), ISO_DATE_TIME); // Format in UTC without timezone shift
+  static getDateValueInISOString(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+    const date = new Date(timestamp); // Parse timestamp as Date object
+    const zonedDate = toZonedTime(date, timezone); // Convert to the given timezone
+    return format(zonedDate, ISO_DATE_TIME); // Format in that timezone
   }
 }
 

@@ -8,7 +8,7 @@ type SingleAppliedFilterProps = {
   handleRemove: () => void;
 };
 
-const { Location, ProductOfInterest } = FilterType;
+const { Location, ProductOfInterest, Company } = FilterType;
 
 const SingleAppliedFilter = ({ filter, handleRemove }: SingleAppliedFilterProps) => {
   return (
@@ -17,7 +17,7 @@ const SingleAppliedFilter = ({ filter, handleRemove }: SingleAppliedFilterProps)
       className="flex items-center justify-center gap-2 rounded-lg border border-primary/60 bg-primary/10 p-2"
     >
       <span className="text-xs font-normal text-gray-500">{filter.label}:</span>
-      {[Location, ProductOfInterest].includes(filter.key as FilterType) ? (
+      {[Location, ProductOfInterest, Company].includes(filter.key as FilterType) ? (
         <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
       ) : (
         <span className="text-sm font-semibold capitalize text-primary">{filter.value}</span>

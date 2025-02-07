@@ -1,11 +1,14 @@
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { CONVERSATIONS_TABLE_FILTERS_CONFIG, LEADS_TABLE_FILTERS_CONFIG } from '../../utils/constants';
+import {
+  CONVERSATIONS_TABLE_FILTERS_CONFIG,
+  LEADS_TABLE_FILTERS_CONFIG,
+  USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
+} from '../../utils/constants';
 import { getDateAppliedValue } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
-import { PageTypeProps } from '../../utils/admin-types';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 type AllSelectableFilterContentProps = PageTypeProps & {
@@ -19,7 +22,7 @@ const AllSelectableFilterContent = ({
   handleFilterState,
 }: AllSelectableFilterContentProps) => {
   const { resetPageFilters } = useAllFilterStore();
-  const { DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest } = FilterType;
+  const { DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } = FilterType;
 
   const filterConfig = page === LEADS_PAGE ? LEADS_TABLE_FILTERS_CONFIG : CONVERSATIONS_TABLE_FILTERS_CONFIG;
   const handleClearAll = () => {
@@ -30,36 +33,48 @@ const AllSelectableFilterContent = ({
 
   const filters = useAllFilterStore();
   const isFilterApplied = (filterKey: string) => {
+    const { dateRange, intentScore, location, company, productOfInterest, userMessagesCount, meetingBooked } =
+      filters[page];
     switch (filterKey) {
       case DateRange:
-        return !!filters[page].dateRange;
+        return !!dateRange;
       case IntentScore:
-        return filters[page].intentScore.length > 0;
+        return intentScore.length > 0;
       case Location:
-        return filters[page].location.length > 0;
+        return location.length > 0;
+      case Company:
+        return company.length > 0;
       case ProductOfInterest:
-        return filters[page].productOfInterest.length > 0;
+        return productOfInterest.length > 0;
+      case UserMessagesCount:
+        return userMessagesCount > 0 && userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
       case MeetingBooked:
-        return !!filters[page].meetingBooked;
+        return !!meetingBooked;
       default:
         return false;
     }
   };
 
   const getCurrentValue = (filterKey: string) => {
+    const { dateRange, intentScore, location, company, productOfInterest, userMessagesCount, meetingBooked } =
+      filters[page];
     switch (filterKey) {
       case DateRange:
-        return filters[page].dateRange ? getDateAppliedValue(filters[page].dateRange) : 'Any';
+        return dateRange ? getDateAppliedValue(dateRange) : 'Any';
       case IntentScore:
-        return filters[page].intentScore.length > 0 ? `${filters[page].intentScore.length} selected` : 'Any';
+        return intentScore.length > 0 ? `${intentScore.length} selected` : 'Any';
       case Location:
-        return filters[page].location.length > 0 ? `${filters[page].location.length} selected` : 'Any';
-      case ProductOfInterest:
-        return filters[page].productOfInterest.length > 0
-          ? `${filters[page].productOfInterest.length} selected`
+        return location.length > 0 ? `${location.length} selected` : 'Any';
+      case Company:
+        return company.length > 0 ? `${company.length} selected` : 'Any';
+      case UserMessagesCount:
+        return userMessagesCount > 0 && userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
+          ? `upto ${userMessagesCount} messages`
           : 'Any';
+      case ProductOfInterest:
+        return productOfInterest.length > 0 ? `${productOfInterest.length} selected` : 'Any';
       case MeetingBooked:
-        return filters[page].meetingBooked || 'Any';
+        return meetingBooked || 'Any';
       default:
         return 'Any';
     }
@@ -80,9 +95,9 @@ const AllSelectableFilterContent = ({
       ))}
       <CustomFooterWithButtons
         isDisabled={!areFiltersApplied}
-        isSecondaryBtnClearAll={true}
-        secondaryBtnLabel={'Clear All'}
-        onSecondaryBtnClicked={handleClearAll}
+        isPrimaryBtnClearAll={true}
+        primaryBtnLabel={'Clear All'}
+        onPrimaryBtnClicked={handleClearAll}
       />
     </React.Fragment>
   );

@@ -10,20 +10,20 @@ import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQ
 import { keepPreviousData } from '@tanstack/react-query';
 import { useTableStore } from '../../stores/useTableStore';
 
-const LocationFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
+const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const tenantName = getTenantFromLocalStorage();
-  const tableManager = useTableStore((state) => state.tableManager);
   const filters = useAllFilterStore();
-  const { Location } = FilterType;
+  const tableManager = useTableStore((state) => state.tableManager);
+  const { Company } = FilterType;
   const [searchTerm, setSearchTerm] = useState('');
 
   const filtersOptionsPayload = useMemo(() => {
-    return getAllFilterAppliedValues(filters[page], page).filter((filter) => filter.field !== 'country');
+    return getAllFilterAppliedValues(filters[page], page).filter((filter) => filter.field !== 'company');
   }, [filters[page], page]);
 
   const payloadData: FilterOptionsPayload = {
     filters: filtersOptionsPayload,
-    field: 'country',
+    field: 'company',
     search: searchTerm,
   };
 
@@ -37,10 +37,10 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
     },
   });
 
-  const sortedCountries: string[] = tableManager?.getSortedItemsByKey('country') ?? [];
-  const locationValues: string[] = data?.values.filter(Boolean) ?? [];
+  const sortedCompanies: string[] = tableManager?.getSortedItemsByKey('company') ?? [];
+  const companyValues: string[] = data?.values.filter(Boolean) ?? [];
 
-  const resultantOptions = getDescendingOrderedOptions(sortedCountries, locationValues);
+  const resultantOptions = getDescendingOrderedOptions(sortedCompanies, companyValues);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -54,17 +54,17 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
 
   if (!data) return null;
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>No Location data</div>;
+  if (isError) return <div>No Company data</div>;
   return (
-    <React.Fragment key={Location}>
+    <React.Fragment key={Company}>
       <div className="px-4">
         <div className="flex">
           <Input
-            className="w-full min-w-[300px] rounded-lg border border-gray-300 bg-gray-50 px-4 py-3"
+            className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3"
             onChange={handleInputChange}
             value={searchTerm}
             maxLength={20}
-            placeholder="Enter Country Name..."
+            placeholder="Enter Company Name..."
           />
           {hasSearchTermLength ? (
             <button
@@ -81,15 +81,14 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
       <CommonCheckboxesFilterContent
         filterState={filterState}
         handleClosePopover={handleClosePopover}
-        keyValue={Location}
+        keyValue={Company}
         checkboxOptions={resultantOptions || []}
-        isLocationFilter={true}
-        checkboxOrientation={'right'}
-        selectedOptions={filters[page].location}
-        onSelectionChange={(value) => filters.setFilter(page, Location, value)}
+        checkboxOrientation="right"
+        selectedOptions={filters[page].company}
+        onSelectionChange={(value) => filters.setFilter(page, Company, value)}
       />
     </React.Fragment>
   );
 };
 
-export default LocationFilterContent;
+export default CompanyFilterContent;

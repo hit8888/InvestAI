@@ -47,10 +47,7 @@ const ExportDownload = ({ onCallback }: DownloadProps) => {
       >
         <PopoverHeaderLabelWithCloseIcon headerLabel={EXPORT_DOWNLOAD_LABEL} />
         <CustomRadioGroupButtons radioOptions={EXPORT_DOWNLOAD_RADIO_OPTIONS} onCallback={handleRadioOptions} />
-        <CustomFooterWithButtons
-          secondaryBtnLabel={EXPORT_DOWNLOAD_LABEL}
-          onSecondaryBtnClicked={handleDownloadButton}
-        />
+        <CustomFooterWithButtons primaryBtnLabel={EXPORT_DOWNLOAD_LABEL} onPrimaryBtnClicked={handleDownloadButton} />
       </PopoverContent>
     </Popover>
   );

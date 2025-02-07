@@ -10,6 +10,17 @@ export interface TableAllFilterConfig {
   filterType: FilterType;
 }
 
+export type PageTypeProps = {
+  page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
+};
+
+export type CommonFilterContentProps = PageTypeProps & {
+  filterState: FilterType;
+  handleClosePopover: () => void;
+}
+
+export type CommonFilterContentPropsWithoutFilterState = Omit<CommonFilterContentProps, 'filterState'>;
+
 export type DateRangeProp = {
   startDate: Date | undefined;
   endDate?: Date | undefined;
@@ -37,6 +48,8 @@ export enum FilterType {
   MeetingBooked = 'meetingBooked',
   ProductOfInterest = 'productOfInterest',
   AllFilters = 'allFilters',
+  Company = 'company',
+  UserMessagesCount = 'userMessagesCount'
 }
 
 export interface FilterValues {
@@ -44,16 +57,20 @@ export interface FilterValues {
   dateRange?: DateRangeProp;
   intentScore: string[];
   location: string[];
+  company: string[];
   productOfInterest: string[];
   meetingBooked?: string;
+  userMessagesCount: number;
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
   dateRange: undefined,
   intentScore: [],
   location: [],
+  company: [],
   productOfInterest: [],
   meetingBooked: undefined,
+  userMessagesCount: 100,
 };
 
 export interface AllFilterState {
@@ -62,7 +79,7 @@ export interface AllFilterState {
   setFilter: (
     page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
     key: keyof FilterValues,
-    value: DateRangeProp | string | string[] | undefined,
+    value: DateRangeProp | string | string[] | number | undefined,
   ) => void;
   resetPageFilters: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
 }

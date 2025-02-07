@@ -134,12 +134,16 @@ export const ProspectDetailsSchema = z.union([
   z.object({}).strict(), // Allow empty object
   z.array(z.unknown()).max(0), // Allow empty array
   z.object({
-    loc: z.string(),
-    city: z.string(),
-    region: z.string(),
-    country: z.string(),
-    timezone: z.string(),
-    ip_address: z.string(),
+    loc: z.string().optional(),
+    city: z.string().optional(),
+    region: z.string().optional(),
+    country: z.string().optional(),
+    timezone: z.string().optional(),
+    ip_address: z.string().optional(),
+    role: z.string().optional().nullable(),
+    budget: z.string().optional().nullable(),
+    timeline: z.string().optional().nullable(),
+    product_interest: z.string().optional().nullable(),
   }),
 ]);
 
@@ -149,7 +153,7 @@ export const CompanyDetailsSchema = z.union([
   z.object({
     id: z.number(),
     keywords: z.string().nullable(),
-    confidence: z.enum(["very low", "low", "medium", "high", "very high"]),
+    confidence: z.string().nullable(),
     ip_address: z.array(z.string()),
     ip_country: z.string(),
     competitors: z.array(z.string()),
@@ -158,7 +162,7 @@ export const CompanyDetailsSchema = z.union([
     company_type: z.string().nullable(),
     linkedin_url: z.string().nullable(),
     brief_summary: z.string().nullable(),
-    employee_count: z.string(),
+    employee_count: z.string().or(z.string()),
     company_country: z.string().nullable(),
     company_revenue: z.string().nullable(),
     industry_domain: z.string().nullable(),

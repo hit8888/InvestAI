@@ -36,10 +36,28 @@ class TableDataManager {
     );
   }
 
+  getSortedItemsByKey<T extends 'company' | 'country' | 'product_of_interest'>(key: T) {
+    const itemCount: Record<string, number> = {};
+    const filteredResults = this.getTableDataResults();
+
+    filteredResults.forEach((item) => {
+      const value = item[key as keyof typeof item]; // Explicit type assertion
+      if (typeof value === 'string' && value) {
+        itemCount[value] = (itemCount[value] || 0) + 1;
+      }
+    });
+
+    return Object.entries(itemCount)
+      .sort(([, countA], [, countB]) => countB - countA)
+      .map(([item]) => item);
+  }
+
   getPaginatedTableData(): PaginationData {
+    const filteredResults = this.getTableDataResults();
+
     const paginationData = {
       current_page: this.tableData.current_page,
-      page_size: this.tableData.page_size,
+      page_size: filteredResults.length,
       total_pages: this.tableData.total_pages,
       total_records: this.tableData.total_records,
     };

@@ -1,10 +1,8 @@
-import { PageTypeProps } from '../utils/admin-types';
+import { PageTypeProps } from '@meaku/core/types/admin/filters';
 import AllFiltersContainer from './tableComp/AllFilters';
 import SortFilter from './tableComp/SortFilter';
 
-type IProps = PageTypeProps;
-
-const TableFiltersWithHeaderLabel = ({ page }: IProps) => {
+const TableFiltersWithHeaderLabel = ({ page }: PageTypeProps) => {
   return (
     <>
       {/* <p className="flex-1 text-2xl font-semibold text-gray-900">Table of conversations</p> */}

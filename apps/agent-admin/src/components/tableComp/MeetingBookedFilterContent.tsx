@@ -2,13 +2,9 @@ import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import { FILTER_BY_MEETING_BOOKED_RADIO_OPTIONS } from '../../utils/constants';
-import { PageTypeProps } from '../../utils/admin-types';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentPropsWithoutFilterState, FilterType } from '@meaku/core/types/admin/filters';
 
-const MeetingBookedFilterContent = ({
-  page,
-  handleClosePopover,
-}: PageTypeProps & { handleClosePopover: () => void }) => {
+const MeetingBookedFilterContent = ({ page, handleClosePopover }: CommonFilterContentPropsWithoutFilterState) => {
   const filters = useAllFilterStore();
   const { MeetingBooked } = FilterType;
   const handleRadioOptions = (selectedOption: string) => {

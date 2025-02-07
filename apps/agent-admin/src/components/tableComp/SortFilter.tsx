@@ -7,7 +7,7 @@ import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import CategorisedRadioHeaderLabel from './CategorisedRadioHeaderLabel';
 import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
-import { PageTypeProps } from '../../utils/admin-types';
+import { PageTypeProps } from '@meaku/core/types/admin/filters';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 const SortFilter = ({ page }: PageTypeProps) => {

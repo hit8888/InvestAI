@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
 
+import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
@@ -25,6 +26,7 @@ import { ConversationsTableViewContent, ConversationsTableDisplayContent } from 
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+import { useTableStore } from '../stores/useTableStore.ts';
 
 const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
 
@@ -66,14 +68,26 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
     };
   }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
 
+  // Use debounced payload to prevent excessive API calls
+  const debouncedPayloadData = useDebouncedValue(payloadData);
+
   const { data, isLoading, isError } = useConversationsTableQuery({
-    payload: payloadData,
+    payload: debouncedPayloadData,
     tenantName: tenantName || '',
     queryOptions: {
       enabled: !!tenantName,
       placeholderData: keepPreviousData,
     },
   });
+
+  const { setTableData } = useTableStore();
+
+  // When data changes, update the store
+  useEffect(() => {
+    if (data && !(allAppliedFilterValues.length > 0)) {
+      setTableData(data);
+    }
+  }, [data, allAppliedFilterValues, setTableData]);
 
   const tableManager = useMemo(() => {
     if (!data) return null;
@@ -84,8 +98,8 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
   const conversationsData: ConversationsTableDisplayContent[] = (tableManager?.getTableDataResults() ?? []).map(
     (item) => getMappedDataFromResponseForConversationsTableView(item as ConversationsTableViewContent),
   );
-  const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1 };
-  const { total_records: totalRecords, total_pages: totalPages } = paginatedData;
+  const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
+  const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
   const conversationsPageColumns: ColumnDefinition[] = getFormattedColumnsList(CONVERSATIONS_PAGE_COLUMN_LISTS, 200);
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
@@ -113,7 +127,7 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
           {!isLoading && (
             <TablePagination
               totalPages={totalPages}
-              totalItems={totalRecords}
+              totalItems={pageSize === 0 ? pageSize : totalRecords}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={handleItemsPerPageChange}
               handlePageChange={handlePageChange}

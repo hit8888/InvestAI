@@ -1,7 +1,6 @@
 import z from 'zod';
 import { FunnelStepSchema } from '@meaku/core/types/admin/api';
 import { ConversationChipLabelEnum } from './constants';
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from '@meaku/core/types/admin/admin';
 
 // Desired data type for FunnelData
 export type FunnelData = {
@@ -11,8 +10,22 @@ export type FunnelData = {
   funnelKey: ConversationChipLabelEnum;
 };
 
-export type PageTypeProps = {
-  page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
+export type FunnelStep = z.infer<typeof FunnelStepSchema>;
+
+export type ProspectDetailsType = { name: string; email: string; location: string };
+
+export type CompanyDetailsType = {
+  name: string;
+  logoUrl?: string;
+  location: string;
+  revenue: string;
+  employees: string;
+  domain: string;
+  foundationDate: string;
 };
 
-export type FunnelStep = z.infer<typeof FunnelStepSchema>;
+export type ConversationRightSideDetailsType = {
+  itemLabel: string;
+  itemKey: string;
+  ItemIcon: React.ElementType; // If it's a React component
+};

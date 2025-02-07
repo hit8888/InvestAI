@@ -24,6 +24,8 @@ import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/typ
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useTableStore } from '../stores/useTableStore.ts';
 
 const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
 
@@ -66,14 +68,26 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
     };
   }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
 
+  // Use debounced payload to prevent excessive API calls
+  const debouncedPayloadData = useDebouncedValue(payloadData);
+
   const { data, isLoading, isError } = useLeadsTableQuery({
-    payload: payloadData,
+    payload: debouncedPayloadData,
     tenantName: tenantName || '',
     queryOptions: {
       enabled: !!tenantName,
       placeholderData: keepPreviousData,
     },
   });
+
+  const { setTableData } = useTableStore();
+
+  // When data changes, update the store
+  useEffect(() => {
+    if (data && !(allAppliedFilterValues.length > 0)) {
+      setTableData(data);
+    }
+  }, [data, allAppliedFilterValues, setTableData]);
 
   const tableManager = useMemo(() => {
     if (!data) return null;
@@ -84,8 +98,8 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
   const leadsData: LeadsTableDisplayContent[] = (tableManager?.getTableDataResults() ?? []).map((item) =>
     getMappedDataFromResponseForLeadsTableView(item as LeadsTableViewContent),
   );
-  const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1 };
-  const { total_records: totalRecords, total_pages: totalPages } = paginatedData;
+  const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
+  const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
   const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 200);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
@@ -112,7 +126,7 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
           {!isLoading && (
             <TablePagination
               totalPages={totalPages}
-              totalItems={totalRecords}
+              totalItems={pageSize === 0 ? pageSize : totalRecords}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={handleItemsPerPageChange}
               handlePageChange={handlePageChange}
