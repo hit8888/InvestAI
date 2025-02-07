@@ -1,5 +1,4 @@
 import { FC, ReactElement } from 'react';
-import { Loader } from 'lucide-react';
 import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
@@ -17,6 +16,7 @@ import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { InitializationPayload } from '@meaku/core/types/api';
+import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -66,7 +66,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     if (firstQueryWithError.isFetching) {
       return (
         <div className="flex h-screen animate-spin items-center justify-center">
-          <Loader />
+          <SpinLoader />
         </div>
       );
     }

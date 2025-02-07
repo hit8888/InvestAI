@@ -201,6 +201,7 @@ const config: Omit<Config, "content"> = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
+        slowSpin: "spin 4s linear infinite",
       },
       keyframes: {
         ripple: {

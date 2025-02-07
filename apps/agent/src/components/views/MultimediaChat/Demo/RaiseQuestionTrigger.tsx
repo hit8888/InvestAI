@@ -34,8 +34,10 @@ const RaiseQuestionTrigger = ({ shouldShowDemoAgent, setShowDemoAgent, onRaiseDe
           <RaiseHandDisabled height={24} width={24} color="white" />
         </div>
       ) : (
-        <div>
-          <AskQuestion onClick={handleToggleAgent} />
+        <div className="popup-banner-border-gradient-animation rounded-[50px] p-[2px]">
+          <div className="rounded-[50px] bg-white">
+            <AskQuestion onClick={handleToggleAgent} />
+          </div>
         </div>
       )}
     </div>

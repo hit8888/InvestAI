@@ -7,6 +7,8 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useSelectedFeatureStore from '../../../../stores/useSelectedFeatureStore';
+import toast from 'react-hot-toast';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
@@ -20,12 +22,18 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const onBookDemoClick = () => {
-    const selectedFeatures = demoFeatures.filter((item) => selectedIds.includes(item.id));
-    setFeatures(selectedFeatures);
-    switchToDemo({ feature_ids: selectedIds });
-    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SELECT_TOPIC, { feature_ids: selectedIds });
-    setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
-    setFirstSlideInDemoFlow(true);
+    if (selectedIds.length) {
+      const selectedFeatures = demoFeatures.filter((item) => selectedIds.includes(item.id));
+      setFeatures(selectedFeatures);
+      switchToDemo({ feature_ids: selectedIds });
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SELECT_TOPIC, { feature_ids: selectedIds });
+      setDemoPlayingStatus(DemoPlayingStatus.GENRATING_DEMO);
+      setFirstSlideInDemoFlow(true);
+    } else {
+      return toast.error('Please Select atleast one feature', {
+        duration: 1000,
+      });
+    }
   };
 
   const handleFeaturesClick = (feature: FeatureSelectionDTOType) => {
@@ -49,11 +57,17 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
             <div className="flex flex-wrap items-center justify-center gap-2">
               {demoFeatures.map((feature) => (
                 <span
-                  className="flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary px-4 py-2 text-primary/80"
+                  className={cn(
+                    'flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary px-4 py-2 text-customSecondaryText',
+                    {
+                      'bg-primary text-white': selectedIds.includes(feature.id),
+                      'hover:bg-primary/10': !selectedIds.includes(feature.id),
+                    },
+                  )}
                   key={feature.id}
                   onClick={() => handleFeaturesClick(feature)}
                 >
-                  <Checkbox checked={!!selectedIds.includes(feature.id)} />
+                  <Checkbox isCircularCheckbox={true} checked={!!selectedIds.includes(feature.id)} />
                   {feature.name}
                 </span>
               ))}

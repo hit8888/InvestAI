@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { RAISE_HAND_BUTTON_APPEARANCE_THRESHOLD_IN_SECONDS } from '../constants/chat';
 
 type IProps = {
   audioRef: React.RefObject<HTMLAudioElement | null>;
@@ -7,7 +8,7 @@ type IProps = {
 };
 
 const useHalfDurationAudio = ({ audioRef, duration, isFirstSlide }: IProps) => {
-  const [hasHalfDurationPassed, setHasHalfDurationPassed] = useState(isFirstSlide ? false : true);
+  const [hasTimeDurationPassed, setHasTimeDurationPassed] = useState(isFirstSlide ? false : true);
   const [hasOneByFifthDurationPassed, setHasOneByFifthDurationPassed] = useState(isFirstSlide ? false : true);
   useEffect(() => {
     if (!audioRef.current || !duration || !isFirstSlide) return;
@@ -20,12 +21,12 @@ const useHalfDurationAudio = ({ audioRef, duration, isFirstSlide }: IProps) => {
         setHasOneByFifthDurationPassed(true);
       }
 
-      if (!hasHalfDurationPassed && currentTime >= duration / 2) {
-        setHasHalfDurationPassed(true);
+      if (!hasTimeDurationPassed && duration - currentTime <= RAISE_HAND_BUTTON_APPEARANCE_THRESHOLD_IN_SECONDS) {
+        setHasTimeDurationPassed(true);
       }
 
       // Remove listener only if both values are set
-      if (hasOneByFifthDurationPassed && hasHalfDurationPassed) {
+      if (hasOneByFifthDurationPassed && hasTimeDurationPassed) {
         audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
       }
     };
@@ -35,10 +36,10 @@ const useHalfDurationAudio = ({ audioRef, duration, isFirstSlide }: IProps) => {
     return () => {
       audioRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
     };
-  }, [audioRef, duration, hasOneByFifthDurationPassed, hasHalfDurationPassed]);
+  }, [audioRef, duration, hasOneByFifthDurationPassed, hasTimeDurationPassed]);
 
   return {
-    hasHalfDurationPassed,
+    hasTimeDurationPassed,
     hasOneByFifthDurationPassed,
   };
 };

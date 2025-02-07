@@ -22,27 +22,30 @@ const featureVariants = {
 
 type IProps = {
   selectedFeatures: FeatureSelectionDTOType[];
+  showAnimatedSelectedFeaturesList: boolean;
 };
 
-const AnimatedSelectedFeaturesList = ({ selectedFeatures }: IProps) => {
+const AnimatedSelectedFeaturesList = ({ showAnimatedSelectedFeaturesList, selectedFeatures }: IProps) => {
   if (!selectedFeatures.length) return;
 
   return (
     <motion.div
-      className="flex w-[80%] flex-wrap items-center justify-center gap-6"
+      className="flex h-[25%] w-[60%] flex-wrap items-center justify-center gap-6"
       initial="hidden"
       animate="visible"
       exit="hidden"
     >
-      {selectedFeatures.map((item: FeatureSelectionDTOType, index: number) => (
-        <motion.div
-          key={item.id}
-          variants={featureVariants}
-          custom={index} // Pass index for dynamic animation
-        >
-          <SingleFeatureInDemoFlow key={item.id} featureName={item.name} />
-        </motion.div>
-      ))}
+      {showAnimatedSelectedFeaturesList
+        ? selectedFeatures.map((item: FeatureSelectionDTOType, index: number) => (
+            <motion.div
+              key={item.id}
+              variants={featureVariants}
+              custom={index} // Pass index for dynamic animation
+            >
+              <SingleFeatureInDemoFlow key={item.id} featureName={item.name} />
+            </motion.div>
+          ))
+        : null}
     </motion.div>
   );
 };

@@ -1,10 +1,10 @@
 import { cn } from '@breakout/design-system/lib/cn';
+import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import DemoContent from './DemoContent';
 import { useEffect } from 'react';
 import { FeatureSelectionDTOType, ScriptStepType } from '@meaku/core/types/agent';
 
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { Loader } from 'lucide-react';
 import { SelectDemoFeatures } from './SelectDemoFeatures';
 
 interface IProps {
@@ -54,9 +54,7 @@ const Demo = ({
     return (
       <div className="col-span-2 mr-2 pl-2">
         <div className="flex h-full w-full items-center justify-center">
-          <div className="animate-spin ">
-            <Loader color="rgb(var(--primary)" size={40} />
-          </div>
+          <SpinLoader />
         </div>
       </div>
     );
@@ -67,10 +65,8 @@ const Demo = ({
       <div className="col-span-2 mr-2 pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
-            <span className="text-primary">Hold on a moment, we’re preparing your demo!</span>
-            <div className="animate-spin ">
-              <Loader color="rgb(var(--primary)" />
-            </div>
+            <span className="gradient-text">Hold on a moment, we’re preparing your demo!</span>
+            <SpinLoader />
           </div>
         </div>
       </div>

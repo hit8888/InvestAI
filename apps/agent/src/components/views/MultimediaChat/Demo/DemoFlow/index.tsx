@@ -71,7 +71,7 @@ const DemoFlow = ({
     Boolean(demoDetails?.audio_url) && (!demoDetails.asset_url || assetLoadError || isImageLoaded || isVideoLoaded),
   );
 
-  const { hasHalfDurationPassed, hasOneByFifthDurationPassed } = useHalfDurationAudio({
+  const { hasTimeDurationPassed, hasOneByFifthDurationPassed } = useHalfDurationAudio({
     audioRef,
     duration,
     isFirstSlide: isFirstSlideInDemoFlow,
@@ -162,10 +162,11 @@ const DemoFlow = ({
             )}
           </>
         ) : (
-          <div className="flex h-full w-full flex-col items-center gap-12 pt-10">
-            {showAnimatedSelectedFeaturesList ? (
-              <AnimatedSelectedFeaturesList selectedFeatures={selectedFeatures} />
-            ) : null}
+          <div className="flex h-full w-full flex-col items-center gap-12 pt-6">
+            <AnimatedSelectedFeaturesList
+              showAnimatedSelectedFeaturesList={showAnimatedSelectedFeaturesList}
+              selectedFeatures={selectedFeatures}
+            />
             <ResponsePlayer
               message={demoDetails.message}
               canvasRef={canvasRef}
@@ -190,22 +191,22 @@ const DemoFlow = ({
           />
         )}
       </div>
-      <motion.div
-        initial={isFirstSlideInDemoFlow ? { x: '-50%', opacity: 0 } : { x: 0, opacity: 1 }}
-        animate={hasHalfDurationPassed ? { x: 0, opacity: 1 } : {}}
-        transition={{ type: 'spring', stiffness: 80, damping: 15, duration: 3 }}
-        className="relative flex h-[8%] w-full flex-1 items-center justify-between gap-8 py-4"
-      >
-        <div className="flex items-center gap-8">
+      <div className="relative flex h-[8%] w-full flex-1 items-center justify-between gap-8 py-4">
+        <motion.div
+          initial={isFirstSlideInDemoFlow ? { x: '-50%', opacity: 0 } : { x: 0, opacity: 1 }}
+          animate={hasTimeDurationPassed ? { x: 0, opacity: 1 } : {}}
+          transition={{ type: 'spring', stiffness: 80, damping: 15, duration: 3 }}
+          className="flex items-center gap-8"
+        >
           <RaiseQuestionTrigger
             shouldShowDemoAgent={shouldShowDemoAgent}
             setShowDemoAgent={setShowDemoAgent}
             onRaiseDemoQuery={onRaiseDemoQuery}
           />
           {showWaitDemoCompleteNotification && <WaitDemoCompleteNotification variant="default" />}
-        </div>
+        </motion.div>
         <FinishDemo onFinishDemo={onFinishDemo} onPause={handlePause} />
-      </motion.div>
+      </div>
     </>
   );
 };

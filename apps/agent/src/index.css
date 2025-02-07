@@ -76,11 +76,33 @@
       rgba(252, 252, 253, 0.8) 75%,
       rgba(249, 250, 251, 0.8) 100%
     );
+  }
 
-    box-shadow:
-      0px 4.19px 12.938px 0px rgb(var(--secondary-foreground) / 0.14),
-      0px 1.707px 6.487px 0px rgb(var(--secondary-foreground) / 0.11),
-      0px 0.388px 3.133px 0px rgb(var(--secondary-foreground) / 0.07);
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    25% {
+      background-position: 25% 50%;
+    }
+    50% {
+      background-position: 50% 50%;
+    }
+    75% {
+      background-position: 75% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--secondary)), rgb(var(--primary)));
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 5s linear infinite;
   }
 }
 
