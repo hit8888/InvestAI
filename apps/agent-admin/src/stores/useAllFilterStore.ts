@@ -9,7 +9,7 @@ export const useAllFilterStore = create<AllFilterState>((set) => ({
   setFilter: (
     page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
     key: keyof FilterValues,
-    value: DateRangeProp | string | string[] | undefined,
+    value: DateRangeProp | string | number | string[] | undefined,
   ) =>
     set((state) => ({
       ...state,

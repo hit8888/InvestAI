@@ -30,9 +30,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       {filterState === ProductOfInterest ? (
         <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
-      {filterState === UserMessagesCount ? (
-        <UserMessagesCountFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
-      ) : null}
+      {filterState === UserMessagesCount ? <UserMessagesCountFilterContent page={page} /> : null}
     </React.Fragment>
   );
 };
