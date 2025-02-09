@@ -54,14 +54,20 @@ const AgentMessages = ({
 
   const handleScrollToBottom = () => {
     if (agentChatContainerRef.current) {
-      const { scrollTop } = agentChatContainerRef.current;
-      const isAtTop = scrollTop <= 1;
+      const container = agentChatContainerRef.current;
+      const lastUserMessage = currentMessageScrollToTop.current;
 
-      if (isAtTop) {
-        currentMessageScrollToTop.current?.scrollIntoView({ behavior: 'instant' });
+      if (lastUserMessage) {
+        // Get the offset of the last user message relative to the container
+        const containerTop = container.offsetTop;
+        const messageTop = lastUserMessage.offsetTop;
+
+        // Scroll the container
+        container.scrollTop = messageTop - containerTop;
       }
     }
   };
+
   useEffect(() => {
     if (usingForAgent) {
       handleScrollToBottom();
@@ -74,10 +80,15 @@ const AgentMessages = ({
       className={cn('col-span-3 flex-1 overflow-y-auto', {
         'col-span-1': showRightPanel,
       })}
+      onWheel={(e) => e.stopPropagation()}
+      style={{
+        height: '100%',
+        overflow: 'hidden',
+      }}
     >
-      <div ref={agentChatContainerRef} className="flex-1 space-y-4 overflow-y-auto p-2">
+      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2">
         <div
-          className={cn('mx-auto h-full w-full', {
+          className={cn('mx-auto w-full', {
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
           })}
         >
@@ -104,7 +115,7 @@ const AgentMessages = ({
             </div>
           ))}
           {aiMessages.length <= 1 && (
-            <div className="pt-4">
+            <div className="w-full pt-4">
               <SuggestionsArtifact
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{

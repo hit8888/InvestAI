@@ -399,6 +399,9 @@
             height: "100%",
             zIndex: "99999",
             pointerEvents: "auto",
+            overflow: "hidden",
+            contain: "strict",
+            isolation: "isolate",
           });
           targetContainer.appendChild(embeddedContainer);
           iframe = AgentIframeManager.create(embeddedContainer, IFRAME_SRC);

@@ -57,8 +57,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   };
 
   return (
-    <div className="custom-blur flex flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 p-2 transition-all duration-300 ease-in-out">
-      <div className="flex flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
+    <div className="custom-blur flex h-full flex-col overflow-hidden rounded-2xl border border-primary/20 p-2 transition-all duration-300 ease-in-out">
+      <div className="flex h-full flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
         <AgentHeader
           handleSendMessage={(message) => handleSendMessage({ message })}
           handleCloseAgent={handleCloseAgent}
@@ -67,7 +67,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
           ctaConfig={ctaConfig}
         />
         <div
-          className={cn('flex-1 overflow-y-auto', {
+          className={cn('h-full flex-1 overflow-hidden', {
             'grid grid-cols-3 gap-8': hasArtifactOrDemoInMessageHistory,
           })}
         >
