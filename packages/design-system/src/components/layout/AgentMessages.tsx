@@ -83,7 +83,7 @@ const AgentMessages = ({
       onWheel={(e) => e.stopPropagation()}
       style={{
         height: '100%',
-        overflow: 'hidden',
+        overflow: usingForAgent ? 'hidden': 'auto',
       }}
     >
       <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2">
