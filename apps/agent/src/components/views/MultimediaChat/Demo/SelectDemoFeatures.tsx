@@ -1,7 +1,12 @@
 import ArrowRight from '@breakout/design-system/components/icons/ArrowRight';
 import Button from '@breakout/design-system/components/layout/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@breakout/design-system/components/Tooltip/index';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
-import { useState } from 'react';
 import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -9,6 +14,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useSelectedFeatureStore from '../../../../stores/useSelectedFeatureStore';
 import toast from 'react-hot-toast';
 import { cn } from '@breakout/design-system/lib/cn';
+import useAutoSelectDemoFeatures from '../../../../hooks/useAutoSelectDemoFeatures';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
@@ -18,7 +24,7 @@ interface IProps {
 
 const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }: IProps) => {
   const { setFeatures, setFirstSlideInDemoFlow } = useSelectedFeatureStore();
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const { selectedIds, setSelectedIds } = useAutoSelectDemoFeatures(demoFeatures);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const onBookDemoClick = () => {
@@ -58,7 +64,7 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
               {demoFeatures.map((feature) => (
                 <span
                   className={cn(
-                    'flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary px-4 py-2 text-customSecondaryText',
+                    'flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary py-2 pl-2 pr-4 text-customSecondaryText',
                     {
                       'bg-primary text-white': selectedIds.includes(feature.id),
                       'hover:bg-primary/10': !selectedIds.includes(feature.id),
@@ -73,12 +79,25 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
               ))}
             </div>
           </div>
-          <Button onClick={onBookDemoClick}>
-            <div className="flex items-center justify-center gap-2">
-              <span>Start Demo</span>
-              <ArrowRight width={16} height={17} color="white" />
-            </div>
-          </Button>
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div>
+                  <Button onClick={onBookDemoClick} disabled={!selectedIds.length}>
+                    <div className="flex items-center justify-center gap-2">
+                      <span>Start Demo</span>
+                      <ArrowRight width={16} height={17} color="white" />
+                    </div>
+                  </Button>
+                </div>
+              </TooltipTrigger>
+              {!selectedIds.length && (
+                <TooltipContent side="right">
+                  <span className="text-gray-1000 text-base font-medium">Please select features to start demo</span>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </div>

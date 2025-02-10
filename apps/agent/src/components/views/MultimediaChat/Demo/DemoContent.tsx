@@ -25,7 +25,7 @@ const DemoContent = ({
   onFinishDemo,
   switchToDemo,
 }: IProps) => {
-  const { setFirstSlideInDemoFlow } = useSelectedFeatureStore();
+  const { setFirstSlideInDemoFlow, setFeatures } = useSelectedFeatureStore();
   const assetType = demoDetails?.asset_type;
   const isQueryRaisedRef = useRef(false);
 
@@ -61,6 +61,7 @@ const DemoContent = ({
     }
     handleOnStepEndWithDelay();
     setFirstSlideInDemoFlow(false);
+    setFeatures([]);
   };
 
   const handleResumeDemo = () => {

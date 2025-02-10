@@ -6,14 +6,14 @@ const SpinLoader = () => {
           className="relative h-12 w-12 rounded-full p-1 animate-slowSpin"
           style={{
             background: `conic-gradient(
-                rgb(var(--primary)) 0deg, 
-                rgb(var(--primary) / 0.6) 45deg, 
-                rgb(var(--primary) / 0.4) 90deg, 
-                rgb(var(--primary) / 0.2) 135deg, 
-                rgb(var(--primary) / 0.1) 180deg, 
-                rgb(var(--primary) / 0.2) 225deg, 
-                rgb(var(--primary) / 0.4) 270deg, 
-                rgb(var(--primary) / 0.6) 315deg,
+                rgb(var(--primary) / 0.1) 0deg, 
+                rgb(var(--primary) / 0.2) 45deg, 
+                rgb(var(--primary) / 0.3) 90deg, 
+                rgb(var(--primary) / 0.4) 135deg, 
+                rgb(var(--primary) / 0.5) 180deg, 
+                rgb(var(--primary) / 0.6) 225deg, 
+                rgb(var(--primary) / 0.7) 270deg, 
+                rgb(var(--primary) / 0.8) 315deg,
                 rgb(var(--primary)) 360deg
             )`,
           }}
