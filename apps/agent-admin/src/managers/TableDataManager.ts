@@ -19,10 +19,10 @@ class TableDataManager {
     const validatedTableData = TableDataSchema.safeParse(tableData);
 
     if (!validatedTableData.success) {
-      console.error('Validation failed for TableDataManager:', {
-        input: tableData,
-        errors: validatedTableData.error.format(),
-      });
+      // console.error('Validation failed for TableDataManager:', {
+      //   input: tableData,
+      //   errors: validatedTableData.error.format(),
+      // });
       throw new Error(validatedTableData.error.errors.map((error) => error.message).join(', '));
     }
 
