@@ -158,7 +158,7 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
       email: conversation.email || '-',
       location: {
         city: prospectDetails?.city || '',
-        country: conversation.location || prospectDetails?.country || '-',
+        country: (conversation.location as string) || prospectDetails?.country || '-',
       },
       role: conversation.role || prospectDetails?.role || '-',
       budget: conversation.budget || prospectDetails?.budget || '-',
@@ -168,7 +168,7 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
     company: {
       name: conversation.company || companyDetails?.company_name || '-',
       logoUrl: companyDetails?.website_url ? `${companyDetails?.website_url}/favicon.ico` : '',
-      location: conversation.location || companyDetails?.company_country || '-',
+      location: (conversation.location as string) || companyDetails?.company_country || '-',
       revenue: companyDetails?.company_revenue || '-',
       employees: companyDetails?.employee_count || '-',
       domain: companyDetails?.industry_domain || '-',
