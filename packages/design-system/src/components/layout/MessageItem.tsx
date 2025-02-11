@@ -23,6 +23,7 @@ import { GetArtifactPayload } from '@meaku/core/types/api';
 import { getMessageTimestamp } from '@meaku/core/utils/index';
 
 interface IProps {
+  isAMessageBeingProcessed: boolean;
   usingForAgent: boolean;
   message: Message;
   sessionId: string;
@@ -51,6 +52,7 @@ const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
 };
 
 const MessageItem = ({
+  isAMessageBeingProcessed,
   usingForAgent,
   message,
   sessionId,
@@ -164,6 +166,7 @@ const MessageItem = ({
             <div className="flex flex-col items-start">
               {message.chatArtifact && message.chatArtifact.artifact_type == 'FORM' && (
                 <ChatArtifact
+                  isAMessageBeingProcessed={isAMessageBeingProcessed}
                   handleSendUserMessage={handleSendUserMessage}
                   artifact={message.chatArtifact}
                   messageIndex={messageIndex}
@@ -200,6 +203,7 @@ const MessageItem = ({
       <div className="ml-auto">
         {totalMessages < 1 && (
           <SuggestionsArtifact
+            isAMessageBeingProcessed={isAMessageBeingProcessed}
             handleSendUserMessage={handleSendUserMessage}
             artifact={{
               suggested_questions: initialSuggestedQuestions,
@@ -209,6 +213,7 @@ const MessageItem = ({
         )}
         {message.chatArtifact && message.chatArtifact.artifact_type == 'SUGGESTIONS' && (
           <ChatArtifact
+            isAMessageBeingProcessed={isAMessageBeingProcessed}
             artifact={message.chatArtifact}
             messageIndex={messageIndex}
             totalMessages={totalMessages}

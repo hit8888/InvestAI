@@ -12,13 +12,14 @@ import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 
 interface IProps {
+  isAMessageBeingProcessed: boolean;
   artifact?: MessageArtifactType;
   messageIndex: number;
   totalMessages: number;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
-const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMessage }: IProps) => {
+const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMessage, isAMessageBeingProcessed }: IProps) => {
   const artifactType = artifact?.artifact_type;
 
   const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;
@@ -50,6 +51,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
         if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
+            isAMessageBeingProcessed={isAMessageBeingProcessed}
             artifact={artifactContent as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}
           />

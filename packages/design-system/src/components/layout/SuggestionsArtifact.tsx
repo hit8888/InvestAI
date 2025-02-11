@@ -5,11 +5,12 @@ import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 
 interface IProps {
+  isAMessageBeingProcessed: boolean;
   artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
 }
 
-const SuggestionsArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
+const SuggestionsArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcessed }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const showSuggestionsArtifact: boolean =
     (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
@@ -32,6 +33,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
       {artifact.suggested_questions.map((question, index) => (
         <div key={question} className="max-w-[80%] flex-wrap">
           <Suggestion
+            isAMessageBeingProcessed={isAMessageBeingProcessed}
             question={question}
             onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
             itemIndex={index}

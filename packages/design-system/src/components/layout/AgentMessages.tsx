@@ -97,6 +97,7 @@ const AgentMessages = ({
             <div key={idx}>
               {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
               <MessageItem
+                isAMessageBeingProcessed={isAMessageBeingProcessed}
                 logoURL={logoURL}
                 usingForAgent={usingForAgent}
                 sessionId={sessionId}
@@ -118,6 +119,7 @@ const AgentMessages = ({
           {aiMessages.length <= 1 && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
+                isAMessageBeingProcessed={isAMessageBeingProcessed}
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{
                   suggested_questions: initialSuggestedQuestions,

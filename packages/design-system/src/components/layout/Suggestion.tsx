@@ -4,12 +4,18 @@ interface IProps {
   question: string;
   onSuggestedQuestionOnClick: (msg: string) => void;
   itemIndex: number;
+  isAMessageBeingProcessed: boolean;
 }
 
-const Suggestion = ({ question, onSuggestedQuestionOnClick, itemIndex }: IProps) => {
+const Suggestion = ({ question, onSuggestedQuestionOnClick, itemIndex, isAMessageBeingProcessed }: IProps) => {
+
+  const handleClickOnSuggestedQuestion = (question: string) => {
+    if(isAMessageBeingProcessed) return;
+    onSuggestedQuestionOnClick(question)
+  }
   return (
     <div
-      onClick={() => onSuggestedQuestionOnClick(question)}
+      onClick={() => handleClickOnSuggestedQuestion(question)}
       className="ease-in-ou flex w-full cursor-pointer items-center gap-2 text-wrap rounded-full border-2 border-primary/60 bg-primary/80 px-2 py-1 transition-all duration-300 hover:bg-primary/90 focus:bg-primary"
       data-testid={`suggestion-item-${itemIndex}`}
     >
