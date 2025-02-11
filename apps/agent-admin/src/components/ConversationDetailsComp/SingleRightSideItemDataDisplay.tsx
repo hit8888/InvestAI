@@ -3,25 +3,26 @@ import LocationCellValue from '../tableComp/tableCellComp/LocationCellValue';
 import EmailCellValue from '../tableComp/tableCellComp/EmailCellValue';
 import { cn } from '@breakout/design-system/lib/cn';
 import { CONV_RIGHTSIDE_DETAILS_DATA_ITEMS } from '../../utils/constants';
+import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
 
 const { LOCATION, EMAIL, DOMAIN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
 type IProps = {
   itemLabel: string;
   itemIcon: JSX.Element;
-  itemValue: string;
+  itemValue: string | LocationWithCityCountry;
   showBottomBorder?: boolean;
 };
 
 const SingleRightSideItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBottomBorder = true }: IProps) => {
-  let content = <span className="ml-auto text-base font-medium text-gray-900">{itemValue}</span>;
+  let content = <span className="ml-auto text-base font-medium text-gray-900">{itemValue as string}</span>;
   const isEmailField = itemLabel === EMAIL;
   switch (itemLabel) {
     case LOCATION:
-      content = <LocationCellValue value={itemValue as string} />;
+      content = <LocationCellValue value={itemValue} />;
       break;
     case EMAIL:
-      content = <EmailCellValue value={itemValue} valueOrientation="right" />;
+      content = <EmailCellValue value={itemValue as string} valueOrientation="right" />;
       break;
     case DOMAIN:
       content = (

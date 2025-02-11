@@ -15,6 +15,7 @@ import {
   ConversationsTableViewContent,
   LeadsTableDisplayContent,
   LeadsTableViewContent,
+  LocationWithCityCountry,
 } from '@meaku/core/types/admin/admin';
 import {
   CompanyDetailsType,
@@ -66,12 +67,22 @@ export const getUserEmailFromLocalStorage = () => {
 };
 
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
+  const additionalInfoData =
+    response.additional_info && Object.keys(response.additional_info).length > 0
+      ? (response.additional_info as {
+          city?: string;
+          country?: string;
+        })
+      : null;
   const mappedData: LeadsTableDisplayContent = {
     email: response.email || '-',
     name: response.name || '-', // Fallback if name is null
     role: response.role !== 'Unknown' ? response.role || '-' : '-', // Handle 'Unknown' role
     company: response.company || '-', // Fallback if company is null
-    location: response.country || '-',
+    location: {
+      city: additionalInfoData?.city || '-',
+      country: additionalInfoData?.country || response.country || '-',
+    } as LocationWithCityCountry,
     timestamp: response.created_on ? response.created_on : '-',
     product_of_interest: response.product_interest || '-',
   };
@@ -80,13 +91,23 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
 };
 
 export const getMappedDataFromResponseForConversationsTableView = (response: ConversationsTableViewContent) => {
+  const prospectDetailsData =
+    response.prospect_details && Object.keys(response.prospect_details).length > 0
+      ? (response.prospect_details as {
+          city?: string;
+          country?: string;
+        })
+      : null;
   const mappedData: ConversationsTableDisplayContent = {
     company: response.company || '-',
     name: response.name || '-',
     email: response.email || '-',
     timestamp: response.timestamp ? response.timestamp : '-',
     conversation_preview: response.summary || '-',
-    location: response.country || '-',
+    location: {
+      city: prospectDetailsData?.city || '-',
+      country: prospectDetailsData?.country || response.country || '-',
+    } as LocationWithCityCountry,
     budget: response.budget || '-',
     role: response.role || '-',
     authority: response.role || '-',
@@ -106,20 +127,54 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
 };
 
 export const getProspectAndCompanyDetailsData = (conversation: ConversationsTableDisplayContent) => {
+  const prospectDetails =
+    conversation.prospect_details && Object.keys(conversation.prospect_details).length > 0
+      ? (conversation.prospect_details as {
+          city?: string;
+          country?: string;
+          role?: string | null;
+          budget?: string | null;
+          timeline?: string | null;
+          product_interest?: string;
+        })
+      : null;
+  const companyDetails =
+    conversation.company_details && Object.keys(conversation.company_details).length > 0
+      ? (conversation.company_details as {
+          company_name?: string;
+          website_url?: string;
+          company_country?: string;
+          company_revenue?: string;
+          employee_count?: string;
+          industry_domain?: string;
+          operating_countries?: string[];
+          linkedin_url?: string;
+        })
+      : null;
+
   const transformedData = {
     prospect: {
-      name: conversation.name ?? '-',
-      email: conversation.email ?? '-',
-      location: conversation.location ?? '-',
+      name: conversation.name || '-',
+      email: conversation.email || '-',
+      location: {
+        city: prospectDetails?.city || '',
+        country: conversation.location || prospectDetails?.country || '-',
+      },
+      role: conversation.role || prospectDetails?.role || '-',
+      budget: conversation.budget || prospectDetails?.budget || '-',
+      timeline: conversation.timeline || prospectDetails?.timeline || '-',
+      product_interest: conversation.product_of_interest || prospectDetails?.product_interest || '-',
     },
     company: {
-      name: conversation.company ?? '-',
-      logoUrl: '', // Placeholder; replace with actual logo if available
-      location: conversation.location ?? '-', // Adjust if different from prospect's location
-      revenue: '-', // Placeholder
-      employees: '-', // Placeholder
-      domain: '-', // Placeholder
-      foundationDate: '-', // Placeholder
+      name: conversation.company || companyDetails?.company_name || '-',
+      logoUrl: companyDetails?.website_url ? `${companyDetails?.website_url}/favicon.ico` : '',
+      location: conversation.location || companyDetails?.company_country || '-',
+      revenue: companyDetails?.company_revenue || '-',
+      employees: companyDetails?.employee_count || '-',
+      domain: companyDetails?.industry_domain || '-',
+      foundationDate: '-',
+      linkedinUrl: companyDetails?.linkedin_url || '-',
+      websiteUrl: companyDetails?.website_url || '-',
     },
   };
   return transformedData;

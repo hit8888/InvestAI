@@ -1,6 +1,7 @@
 import z from 'zod';
 import { FunnelStepSchema } from '@meaku/core/types/admin/api';
 import { ConversationChipLabelEnum } from './constants';
+import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
 
 // Desired data type for FunnelData
 export type FunnelData = {
@@ -12,7 +13,7 @@ export type FunnelData = {
 
 export type FunnelStep = z.infer<typeof FunnelStepSchema>;
 
-export type ProspectDetailsType = { name: string; email: string; location: string };
+export type ProspectDetailsType = { name: string; email: string; location: LocationWithCityCountry };
 
 export type CompanyDetailsType = {
   name: string;

@@ -72,7 +72,7 @@ const CommonCheckboxesFilterContent = ({
               isLocationFilter
                 ? (label) => (
                     <div className="text-base font-normal text-gray-900">
-                      <LocationCellValue value={label} />
+                      <LocationCellValue value={label} showTruncatedText={false} />
                     </div>
                   )
                 : isBuyerIntentFilter

@@ -5,7 +5,7 @@ import { CellValueProps } from '@meaku/core/types/admin/admin-table';
 const SessionIDCellValue: React.FC<CellValueProps> = ({ value }) => {
   return (
     <div className="flex items-center gap-2">
-      <span title={value} className="line-clamp-2 w-32 2xl:w-40">
+      <span title={value} className="w-32 truncate 2xl:w-40">
         {value}
       </span>
       <CopyToClipboardButton

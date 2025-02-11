@@ -7,12 +7,17 @@ import {
   ProspectDetailsSchema
 } from './api';
 
+export const LocationWithCityCountrySchema = z.object({
+  city: z.string(),
+  country: z.string(),
+})
+
 export const LeadsTableViewSchema = z.object({
   email: z.string(),
   name: z.string(),
   role: z.string(),
   company: z.string(),
-  location: z.string(),
+  location: LocationWithCityCountrySchema,
   timestamp: z.string(),
   product_of_interest: z.string(),
 })
@@ -23,7 +28,7 @@ export const ConversationsTableViewSchema = z.object({
   email: z.string(),
   timestamp: z.string(),
   conversation_preview: z.string(),
-  location: z.string(),
+  location: LocationWithCityCountrySchema,
   budget: z.string(),
   authority: z.string(),
   timeline: z.string(),
@@ -43,7 +48,7 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
   prospect: z.object({
     name: z.string(),
     email: z.string(),
-    location: z.string(),
+    location: LocationWithCityCountrySchema,
   }),
   company: z.object({
     name: z.string(),

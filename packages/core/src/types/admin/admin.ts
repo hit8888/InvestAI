@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { 
-    ConversationsTableViewSchema,
-    LeadsTableViewSchema,
     TableDataSchema,
+    LeadsTableViewSchema,
+    ConversationsTableViewSchema,
+    LocationWithCityCountrySchema,
     TransformedProspectAndCompanyDetailsSchema, 
 } from "./admin-table";
 import { 
@@ -21,6 +22,8 @@ import { CONVERSATIONS_PAGE, LEADS_PAGE } from "../../utils";
 
 export type CONVERSATIONS_PAGE_TYPE = typeof CONVERSATIONS_PAGE;
 export type LEADS_PAGE_TYPE = typeof LEADS_PAGE;
+
+export type LocationWithCityCountry = z.infer<typeof LocationWithCityCountrySchema>;
 
 export type TableDataResponse = z.infer<typeof TableDataSchema>;
 

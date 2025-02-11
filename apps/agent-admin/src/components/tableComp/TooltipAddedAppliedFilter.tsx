@@ -19,7 +19,10 @@ const TooltipAddedAppliedFilter = ({ appliedFilterValues }: { appliedFilterValue
       <div className="flex flex-wrap items-center justify-start gap-2">
         {displayingValues.map((value: string, index: number) => (
           <span key={index} className="text-sm font-semibold capitalize text-primary">
-            <LocationCellValue value={value + (index < displayingValues.length - 1 ? ', ' : '')} />
+            <LocationCellValue
+              value={value + (index < displayingValues.length - 1 ? ', ' : '')}
+              showTruncatedText={false}
+            />
           </span>
         ))}
         {shouldShowTooltip && (

@@ -91,7 +91,6 @@ export type ConversationsPayload = z.infer<typeof ConversationsPayloadSchema>;
 
 export const AdditionalInfoSchema = z.union([
   z.object({}).strict(), // Allow empty object `{}`  
-  z.array(z.unknown()).max(0), // Allow empty array `[]`  
   z.object({
     loc: z.string(),
     city: z.string(),
@@ -132,7 +131,6 @@ export const LeadResultSchema = z.object({
 
 export const ProspectDetailsSchema = z.union([
   z.object({}).strict(), // Allow empty object
-  z.array(z.unknown()).max(0), // Allow empty array
   z.object({
     loc: z.string().optional(),
     city: z.string().optional(),
@@ -149,7 +147,6 @@ export const ProspectDetailsSchema = z.union([
 
 export const CompanyDetailsSchema = z.union([
   z.object({}).strict(), // Allow empty object
-  z.array(z.unknown()).max(0), // Allow empty array
   z.object({
     id: z.number(),
     keywords: z.string().nullable(),
