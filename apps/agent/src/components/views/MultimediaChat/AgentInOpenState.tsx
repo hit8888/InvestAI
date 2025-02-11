@@ -1,6 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
-import AgentInput from '@breakout/design-system/components/layout/AgentInput';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { DemoEvent, IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
@@ -27,7 +26,6 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
-  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
   const messages = useMessageStore((state) => state.messages);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
@@ -98,13 +96,6 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             switchToDemo={switchToDemo}
           />
         </div>
-        {!isMediaTakingFullWidth && (
-          <AgentInput
-            handleSendMessage={(message) => handleSendMessage({ message })}
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
-            messages={messages}
-          />
-        )}
       </div>
     </div>
   );

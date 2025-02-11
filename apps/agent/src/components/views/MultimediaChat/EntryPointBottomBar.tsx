@@ -119,7 +119,7 @@ const EntryPointBottomBar = ({
   return (
     <div
       className={cn(
-        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
+        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
           'w-[calc(66.66%+110px)]': !hasFirstUserMessageBeenSent, // for longer placeholder - added extra 120px width
           'w-[400px]': hasFirstUserMessageBeenSent,
@@ -139,7 +139,7 @@ const EntryPointBottomBar = ({
           setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
         />
       ) : null}
-      <div className="w-full rounded-xl bg-gray-50 p-1.5">
+      <div className="w-full rounded-2xl bg-gray-50 p-2">
         <form
           onSubmit={handleFormSubmission}
           className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"

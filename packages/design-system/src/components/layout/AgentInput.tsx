@@ -49,13 +49,13 @@ const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: I
   }, [messages.length, textAreaRef, isSubmissionDisabled]);
 
   return (
-    <div className="flex w-full items-center gap-2 overflow-hidden rounded-lg p-2">
+    <div className="flex w-full items-center gap-2 overflow-hidden rounded-2xl p-2">
       {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
       {/* <div></div> */}
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
-            className="border-2 p-4"
+            className="border-1 p-4 rounded-xl"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}

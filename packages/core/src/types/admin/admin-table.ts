@@ -28,7 +28,7 @@ export const ConversationsTableViewSchema = z.object({
   email: z.string(),
   timestamp: z.string(),
   conversation_preview: z.string(),
-  location: LocationWithCityCountrySchema,
+  location: LocationWithCityCountrySchema.or(z.string()),
   budget: z.string(),
   authority: z.string(),
   timeline: z.string(),
