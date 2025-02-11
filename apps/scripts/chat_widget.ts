@@ -323,7 +323,7 @@
   const IframeURLManager = {
     getIframeSrc(config: Config): string {
       const AGENT_BASE_URL = config.isStaging
-        ? "https://agent.stg.getbreakout.ai"
+        ? "https://agent-stg.getbreakout.ai"
         : "https://agent.getbreakout.ai";
 
       // const AGENT_BASE_URL = 'http://localhost:5173';
