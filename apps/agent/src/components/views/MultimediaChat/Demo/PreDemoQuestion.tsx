@@ -44,7 +44,7 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
 
       <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-[rgb(var(--primary)/0.18)] p-4">
         <span className="text-base font-semibold text-customPrimaryText">
-          Would you like to see a demo of the product ?
+          Would you like to see an interactive demo?
         </span>
         <div className="flex justify-between">
           <button
