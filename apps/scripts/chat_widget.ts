@@ -275,79 +275,17 @@
         console.log("Agent loaded successfully");
       };
 
-      iframe.onerror = (event) => this.handleError(container, iframeSrc, event);
-
       container.appendChild(iframe);
-      setTimeout(
-        () =>
-          this.checkIframeStatus(iframeLoaded, iframe, container, iframeSrc),
-        3000,
-      );
+      setTimeout(() => this.checkIframeStatus(iframeLoaded, iframe), 3000);
 
       return iframe;
     },
 
-    handleError(
-      container: HTMLElement,
-      iframeSrc: string,
-      event: Event | string,
-      retryCount = 0,
-    ): void {
-      console.error("Chat widget failed to load");
-      if ("Sentry" in window) {
-        window.Sentry.captureException(new Error("Chat widget load failed"), {
-          tags: {
-            tenant_id: ConfigManager.getConfig().tenantId,
-            agent_id: ConfigManager.getConfig().agentId,
-            error_type: "iframe_load_error",
-          },
-          extra: {
-            event: typeof event === "string" ? event : event.type,
-            url: window.location.href,
-          },
-        });
-      }
-      this.retryLoading(container, iframeSrc, retryCount);
-    },
-
-    checkIframeStatus(
-      iframeLoaded: boolean,
-      iframe: HTMLIFrameElement,
-      container: HTMLElement,
-      iframeSrc: string,
-      retryCount = 0,
-    ): void {
+    checkIframeStatus(iframeLoaded: boolean, iframe: HTMLIFrameElement): void {
+      // TODO: Why returning false alarm for Satwik's system @KK
       if (!iframeLoaded && (!iframe.contentWindow || !iframe.contentDocument)) {
-        console.warn("Chat widget is blocked by browser security settings");
-        this.retryLoading(container, iframeSrc, retryCount);
+        console.warn("Breakout Agent is blocked by browser security settings");
       }
-    },
-
-    retryLoading(
-      container: HTMLElement,
-      iframeSrc: string,
-      retryCount: number,
-    ): void {
-      const maxRetries = 3;
-      if (retryCount < maxRetries) {
-        console.warn(
-          `Loading failed. Retrying... (${retryCount + 1}/${maxRetries})`,
-        );
-        setTimeout(
-          () => {
-            container.innerHTML = "";
-            this.create(container, iframeSrc);
-          },
-          Math.pow(2, retryCount) * 1000,
-        );
-      } else {
-        this.handleMaxRetriesReached(container);
-      }
-    },
-
-    handleMaxRetriesReached(container: HTMLElement): void {
-      console.error("Failed to load chat widget");
-      container.style.display = "none";
     },
   };
 
