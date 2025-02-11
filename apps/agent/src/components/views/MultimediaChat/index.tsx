@@ -24,6 +24,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
+  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const showBanner = show_banner && !hasFirstUserMessageBeenSent && showBubbles;
   const handleSendMessage = (data: IWebSocketHandleMessage) => {
@@ -73,6 +74,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
         />
       ) : (
         <EntryPointBottomBar
+          isAMessageBeingProcessed={isAMessageBeingProcessed}
           handleSendUserMessage={handleSendMessage}
           handleOpenAgent={handleOpenAgent}
           hideBottomBar={shouldHideBottomBar}

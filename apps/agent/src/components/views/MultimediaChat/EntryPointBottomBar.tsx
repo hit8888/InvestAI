@@ -20,6 +20,7 @@ interface IProps {
   handleOpenAgent: () => void;
   hideBottomBar: boolean;
   showBubbles: boolean;
+  isAMessageBeingProcessed: boolean;
   setShowBubbles: (value: boolean) => void;
 }
 
@@ -70,6 +71,7 @@ const suggestionItemAnimation = {
 };
 
 const EntryPointBottomBar = ({
+  isAMessageBeingProcessed,
   hideBottomBar,
   handleSendUserMessage,
   handleOpenAgent,
@@ -185,6 +187,7 @@ const EntryPointBottomBar = ({
                     key-={index}
                   >
                     <Suggestion
+                      isAMessageBeingProcessed={isAMessageBeingProcessed}
                       question={question}
                       onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
                       itemIndex={index}
