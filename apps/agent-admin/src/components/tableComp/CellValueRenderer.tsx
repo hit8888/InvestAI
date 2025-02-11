@@ -2,10 +2,12 @@ import BANTAnalysisCellValue from './tableCellComp/BANTAnalysisCellValue';
 import BuyerIntentCellValue from './tableCellComp/BuyerIntentCellValue';
 import ConversationPreviewCellValue from './tableCellComp/ConversationPreviewCellValue';
 import EmailCellValue from './tableCellComp/EmailCellValue';
+import CompanyCellValue from './tableCellComp/CompanyCellValue';
 import LocationCellValue from './tableCellComp/LocationCellValue';
 import MeetingStatusCellValue from './tableCellComp/MeetingStatusCellValue';
 import ProductOfInterestCellValue from './tableCellComp/ProductOfInterestCellValue';
 import TimestampCellValue from './tableCellComp/TimestampCellValue';
+import SessionIDCellValue from './tableCellComp/SessionIDCellValue';
 
 export type CellValueRendererProps = {
   id: string;
@@ -15,7 +17,7 @@ export type CellValueRendererProps = {
 const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   email: EmailCellValue,
   role: ConversationPreviewCellValue,
-  company: EmailCellValue,
+  company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
   timestamp: TimestampCellValue,
   location: LocationCellValue,
@@ -23,6 +25,7 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   bant_analysis: BANTAnalysisCellValue,
   buyer_intent: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
+  session_id: SessionIDCellValue,
 };
 
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {

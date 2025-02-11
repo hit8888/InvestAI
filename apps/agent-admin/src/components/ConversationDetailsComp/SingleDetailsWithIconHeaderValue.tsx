@@ -1,5 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { JSX } from 'react';
+import SessionIDCellValue from '../tableComp/tableCellComp/SessionIDCellValue';
 
 type IProps = {
   isTakingFullWidth?: boolean;
@@ -24,13 +25,8 @@ const SingleDetailsWithIconHeaderValue = ({ isTakingFullWidth = false, headerLab
       </div>
       <div className="flex flex-col items-start gap-1">
         <p className="text-sm font-normal text-gray-500">{headerLabel}</p>
-        <p
-          className={cn('text-base font-medium text-primary/60', {
-            'max-w-40 overflow-hidden text-ellipsis whitespace-nowrap': isTakingFullWidth,
-          })}
-          title={itemValue}
-        >
-          {itemValue}
+        <p className="text-base font-medium text-primary/60" title={itemValue}>
+          {isTakingFullWidth ? <SessionIDCellValue value={itemValue} /> : itemValue}
         </p>
       </div>
     </div>

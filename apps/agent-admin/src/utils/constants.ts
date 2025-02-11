@@ -78,6 +78,11 @@ export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';
 export const LOGOUT_BUTTON_TITLE = 'Logout';
 export const EXPORT_DOWNLOAD_LABEL = 'Download';
 
+export enum COPIED_FIELD_TEXTS {
+  EMAIL = 'Email Copied',
+  SESSION_ID = 'Session ID Copied',
+}
+
 // EXPORT DOWNLOAD FEATURE SUPPORT VARIABLES
 export enum ExportFormat {
   XSLS = 'XSLS',
@@ -426,19 +431,32 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
 
 export const DEFAULT_LABEL_FOR_SUMMARY_ITEM = '*No information provided';
 
+export enum CONV_RIGHTSIDE_DETAILS_DATA_ITEMS {
+  NAME = 'Name:',
+  LOCATION = 'Location:',
+  EMAIL = 'Email:',
+  REVENUE = 'Revenue:',
+  NUMBER_OF_EMPLOYEES = 'Number of employees:',
+  DOMAIN = 'Domain:',
+  FOUNDATION_DATE = 'Foundation Date:',
+}
+
+const { NAME, LOCATION, EMAIL, REVENUE, NUMBER_OF_EMPLOYEES, DOMAIN, FOUNDATION_DATE } =
+  CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
+
 export const PROSPECT_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
   {
-    itemLabel: 'Name:',
+    itemLabel: NAME,
     itemKey: 'name',
     ItemIcon: ProspectNameIcon,
   },
   {
-    itemLabel: 'Email:',
+    itemLabel: EMAIL,
     itemKey: 'email',
     ItemIcon: ProspectEmailIcon,
   },
   {
-    itemLabel: 'Location:',
+    itemLabel: LOCATION,
     itemKey: 'location',
     ItemIcon: LocationSmallIcon,
   },
@@ -446,32 +464,32 @@ export const PROSPECT_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
 
 export const COMPANY_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
   {
-    itemLabel: 'Name:',
+    itemLabel: NAME,
     itemKey: 'name',
     ItemIcon: CompanyNameIcon,
   },
   {
-    itemLabel: 'Location:',
+    itemLabel: LOCATION,
     itemKey: 'location',
     ItemIcon: LocationSmallIcon,
   },
   {
-    itemLabel: 'Revenue:',
+    itemLabel: REVENUE,
     itemKey: 'revenue',
     ItemIcon: CompanyRevenueIcon,
   },
   {
-    itemLabel: 'Number of employees:',
+    itemLabel: NUMBER_OF_EMPLOYEES,
     itemKey: 'employees',
     ItemIcon: CompanyNumberOfEmployeesIcon,
   },
   {
-    itemLabel: 'Domain:',
+    itemLabel: DOMAIN,
     itemKey: 'domain',
     ItemIcon: CompanyDomainIcon,
   },
   {
-    itemLabel: 'Foundation Date:',
+    itemLabel: FOUNDATION_DATE,
     itemKey: 'foundationDate',
     ItemIcon: CompanyFoundationDate,
   },
