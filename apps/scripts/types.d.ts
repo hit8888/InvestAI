@@ -95,6 +95,9 @@ declare global {
     height: string;
     allowExternalButtons: boolean;
     containerId: string | null;
+    feedbackEnabled: boolean;
+    userEmail: string;
+    isStaging: boolean;
   }
 
   interface Constants {

@@ -1,16 +1,12 @@
 import { useLocalStorageState } from 'ahooks';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import useUpdateProspect from '@meaku/core/queries/mutation/useUpdateProspect';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
-import { AgentParams } from '@meaku/core/types/config';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 const useAdminUserEmail = () => {
-  const { orgName = '', agentId = '' } = useParams<AgentParams>();
-
-  const userEmailKey = `${LOCAL_STORAGE_KEYS.USER_EMAIL}-${orgName}-${agentId}`;
+  const userEmailKey = `${LOCAL_STORAGE_KEYS.USER_EMAIL}`;
 
   const isAdmin = useIsAdmin();
   const { mutateAsync: handleUpdateProspect } = useUpdateProspect();
@@ -20,6 +16,14 @@ const useAdminUserEmail = () => {
     listenStorageChange: true,
   });
   const { sessionData } = useLocalStorageSession();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailFromUrl = urlParams.get('email');
+    if (emailFromUrl && userEmail != emailFromUrl) {
+      handleSetUserEmail(emailFromUrl);
+    }
+  }, [userEmail]);
 
   const handleSetUserEmail = async (email: string) => {
     setUserEmail(email);

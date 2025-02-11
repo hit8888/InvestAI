@@ -7,6 +7,7 @@
     "dev": "turbo dev",
     "dev:agent": "turbo run dev --filter=agent --filter=@breakout/design-system --filter=@meaku/core",
     "dev:admin": "turbo run dev --filter=agent-admin --filter=@breakout/design-system --filter=@meaku/core",
+    "dev:scripts": "turbo run dev --filter=scripts",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",
@@ -19,7 +20,8 @@
     "lint-staged": "^15.2.10",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "turbo": "^2.1.1"
+    "turbo": "^2.1.1",
+    "eslint": "^9.20.0"
   },
   "packageManager": "pnpm@10.2.0",
   "engines": {

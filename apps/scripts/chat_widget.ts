@@ -26,6 +26,10 @@
         allowExternalButtons:
           this.scriptElement?.getAttribute("allow-external-buttons") === "true",
         containerId: this.scriptElement?.getAttribute("container-id") ?? null,
+        feedbackEnabled:
+          this.scriptElement?.getAttribute("feedback-enabled") === "true",
+        userEmail: this.scriptElement?.getAttribute("user-email") ?? "",
+        isStaging: this.scriptElement?.getAttribute("is-staging") === "true", // TODO: Move to env based solution
       };
     },
   };
@@ -350,6 +354,14 @@
   // Bottom bar container Manager Module
   const BottomBarContainerManager = {
     createContainer(): HTMLDivElement {
+      // Check if container already exists
+      const existingContainer = document.getElementById(
+        "chat-widget-container",
+      );
+      if (existingContainer) {
+        return existingContainer as HTMLDivElement;
+      }
+
       const container = document.createElement("div");
       container.id = "chat-widget-container";
       Object.assign(container.style, {
@@ -369,12 +381,78 @@
     },
   };
 
+  // Add new IframeURLManager module
+  const IframeURLManager = {
+    getIframeSrc(config: Config): string {
+      const AGENT_BASE_URL = config.isStaging
+        ? "https://agent.stg.getbreakout.ai"
+        : "https://agent.getbreakout.ai";
+
+      // const AGENT_BASE_URL = 'http://localhost:5173';
+      const baseUrl = config.feedbackEnabled
+        ? `${AGENT_BASE_URL}/demo`
+        : AGENT_BASE_URL;
+
+      const emailParam = config.userEmail
+        ? `&email=${encodeURIComponent(config.userEmail)}`
+        : "";
+      return `${baseUrl}/org/${config.tenantId}/agent/${config.agentId}?${emailParam}`;
+    },
+  };
+
+  // Add new EmbeddedContainerManager module
+  const EmbeddedContainerManager = {
+    createContainer(
+      targetId: string,
+      iframeSrc: string,
+    ): {
+      container: HTMLElement | null;
+      iframe?: HTMLIFrameElement;
+    } {
+      const targetContainer = document.getElementById(targetId);
+      if (!targetContainer) return { container: null };
+
+      // Check if embedded container already exists
+      const existingEmbedded = document.getElementById("chat-widget-embedded");
+      if (existingEmbedded) {
+        return { container: existingEmbedded };
+      }
+
+      const container = document.createElement("div");
+      container.id = "chat-widget-embedded";
+      Object.assign(container.style, {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        zIndex: "99999",
+        pointerEvents: "auto",
+        overflow: "hidden",
+        contain: "strict",
+        isolation: "isolate",
+      });
+
+      targetContainer.appendChild(container);
+      const iframe = AgentIframeManager.create(container, iframeSrc);
+
+      // Send initial config for embedded mode
+      if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage(
+          {
+            isCollapsible: false, // Set false for embedded mode
+          },
+          { targetOrigin: "*" },
+        );
+      }
+
+      return { container, iframe };
+    },
+  };
+
   // Widget initialization function
   const initializeWidget = async (): Promise<void> => {
     const config = ConfigManager.getConfig();
-    const IFRAME_SRC = `https://agent.getbreakout.ai/org/${config.tenantId}/agent/${config.agentId}?`;
+    const IFRAME_SRC = IframeURLManager.getIframeSrc(config);
 
-    // const IFRAME_SRC = `http://localhost:5173/org/hackerearth/agent/2?config=multimedia&showGlass=true`;
     let isAgentOpen = false;
     let iFrameSource: MessageEventSource | null = null;
     let showBanner = false;
@@ -389,32 +467,16 @@
 
       // Create embedded container if containerId is provided
       if (config.containerId) {
-        const targetContainer = document.getElementById(config.containerId);
-        if (targetContainer) {
-          embeddedContainer = document.createElement("div");
-          embeddedContainer.id = "chat-widget-embedded";
-          Object.assign(embeddedContainer.style, {
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            zIndex: "99999",
-            pointerEvents: "auto",
-            overflow: "hidden",
-            contain: "strict",
-            isolation: "isolate",
-          });
-          targetContainer.appendChild(embeddedContainer);
-          iframe = AgentIframeManager.create(embeddedContainer, IFRAME_SRC);
-          currentContainer = embeddedContainer;
-
-          // Send initial config for embedded mode
-          if (iframe.contentWindow) {
-            iframe.contentWindow.postMessage(
-              {
-                isCollapsible: false, // Set false for embedded mode
-              },
-              { targetOrigin: "*" },
-            );
+        const { container, iframe: embeddedIframe } =
+          EmbeddedContainerManager.createContainer(
+            config.containerId,
+            IFRAME_SRC,
+          );
+        if (container) {
+          embeddedContainer = container;
+          currentContainer = container;
+          if (embeddedIframe) {
+            iframe = embeddedIframe;
           }
         }
       }

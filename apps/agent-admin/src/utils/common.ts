@@ -4,7 +4,6 @@ import {
   COLUMN_HEADER_LABEL_MAPPING,
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
-  // INTENT_SCORE_VALUES,
   SortByIntentScore,
   SortBySessionLength,
   SortByTimestamp,
@@ -26,9 +25,9 @@ import {
 } from './admin-types';
 import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
-import { FilterValues, FilterType, DateRangeProp } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
-import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
+import { FilterItem, SortItem } from '@meaku/core/types/admin/api';
 import { Message } from '@meaku/core/types/agent';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
@@ -60,6 +59,10 @@ export const getTenantFromLocalStorage = () => {
 
 export const getAccessTokenFromLocalStorage = () => {
   return localStorage.getItem('accessToken');
+};
+
+export const getUserEmailFromLocalStorage = () => {
+  return localStorage.getItem('userEmail');
 };
 
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {

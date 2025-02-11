@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem('accessTokenExpiry', JSON.stringify(Date.now() + ACCESS_TOKEN_EXPIRATION_TIME * 1000)); // in ms
     localStorage.setItem('refreshTokenExpiry', JSON.stringify(Date.now() + REFRESH_TOKEN_EXPIRATION_TIME * 1000)); // in ms
     localStorage.setItem('userInfo', JSON.stringify(userData));
+    localStorage.setItem('userEmail', userData?.email ?? '');
   };
 
   // Clear tokens
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Clear tokens from local storage
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userEmail');
     localStorage.removeItem('userInfo');
     localStorage.removeItem('accessTokenExpiry');
     localStorage.removeItem('refreshTokenExpiry');
