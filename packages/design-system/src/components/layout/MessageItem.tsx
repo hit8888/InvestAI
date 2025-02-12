@@ -126,7 +126,7 @@ const MessageItem = ({
     <div ref={inViewRef}>
       <div
         className={cn('flex items-center', {
-          'justify-end': !isSenderBot,
+          'ml-11 justify-end pr-6': !isSenderBot,
           'flex-col items-end': conditionSpecificForDashboard,
         })}
       >
@@ -135,8 +135,9 @@ const MessageItem = ({
         ) : null}
         <div
           className={cn('max-w-full', {
-            'ml-10 rounded-2xl bg-primary/70 px-3 py-2': !isSenderBot,
-            'mr-10 flex gap-7 p-6 pl-0': isSenderBot,
+            'rounded-2xl bg-primary/70 px-3 py-2': !isSenderBot,
+            'flex gap-4 p-6 pl-0': isSenderBot && isLastMessage,
+            'flex gap-7 p-6 pl-0': isSenderBot && !isLastMessage,
           })}
         >
           {isSenderBot && <>{isLastMessage ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>}
@@ -203,6 +204,7 @@ const MessageItem = ({
       <div className="ml-auto">
         {totalMessages < 1 && (
           <SuggestionsArtifact
+            suggestedQuestionOrientation='left'
             isAMessageBeingProcessed={isAMessageBeingProcessed}
             handleSendUserMessage={handleSendUserMessage}
             artifact={{

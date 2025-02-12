@@ -5,8 +5,8 @@
 @layer base {
   .orb-container {
     display: flex;
-    height: 36px;
-    width: 36px;
+    height: 28px;
+    width: 28px;
     justify-content: center;
     flex-shrink: 0;
     box-shadow:

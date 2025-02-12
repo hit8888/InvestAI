@@ -66,7 +66,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
         />
         <div
           className={cn('h-full flex-1 overflow-hidden', {
-            'grid grid-cols-3 gap-8': hasArtifactOrDemoInMessageHistory,
+            'grid grid-cols-3 gap-2': hasArtifactOrDemoInMessageHistory,
           })}
         >
           <AgentMessagesContainer

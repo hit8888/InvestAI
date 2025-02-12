@@ -51,6 +51,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
         if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
+            suggestedQuestionOrientation='left'
             isAMessageBeingProcessed={isAMessageBeingProcessed}
             artifact={artifactContent as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}

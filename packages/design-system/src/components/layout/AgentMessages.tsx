@@ -79,7 +79,7 @@ const AgentMessages = ({
     <div
       className={cn('col-span-3 flex-1 overflow-y-auto', {
         'col-span-1': showRightPanel,
-        'pb-4': usingForAgent
+        'pb-1': usingForAgent
       })}
       onWheel={(e) => e.stopPropagation()}
       style={{
@@ -87,7 +87,7 @@ const AgentMessages = ({
         overflow: usingForAgent ? 'hidden': 'auto',
       }}
     >
-      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2">
+      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 hide-scrollbar overflow-y-auto p-2">
         <div
           className={cn('mx-auto w-full', {
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
@@ -119,6 +119,7 @@ const AgentMessages = ({
           {aiMessages.length <= 1 && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
+                suggestedQuestionOrientation='right'
                 isAMessageBeingProcessed={isAMessageBeingProcessed}
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{
