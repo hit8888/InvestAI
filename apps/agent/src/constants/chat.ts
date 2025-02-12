@@ -13,7 +13,7 @@ export const NEGATIVE_FEEDBACK_CATEGORIES = [
   'Other..',
 ];
 
-export const CDN_URL_FOR_ASSETS = 'https://meaku-static-files-production.s3.us-west-1.amazonaws.com';
+export const CDN_URL_FOR_ASSETS = 'https://assets.getbreakout.ai';
 
 export const CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS = 1000;
 
