@@ -4,7 +4,6 @@ import { useMessageStore } from '../../../stores/useMessageStore';
 import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
-import AgentInput from '@breakout/design-system/components/layout/AgentInput';
 
 interface IProps {
   handleSendMessage: (data: IWebSocketHandleMessage) => void;
@@ -40,33 +39,24 @@ const AgentMessagesContainer = ({
   if (isMediaTakingFullWidth) return null;
 
   return (
-    <div className="flex h-full flex-col items-stretch overflow-auto">
-      <AgentMessages
-        sessionId={sessionId}
-        orbState={orbState}
-        messages={messages}
-        showRightPanel={hasArtifactOrDemoInMessageHistory}
-        isAMessageBeingProcessed={isAMessageBeingProcessed}
-        setActiveArtifact={setActiveArtifact}
-        setDemoPlayingStatus={setDemoPlayingStatus}
-        handleSendUserMessage={handleSendMessage}
-        handleAddMessageFeedback={handleAddMessageFeedback}
-        handleRemoveMessageFeedback={handleRemoveMessageFeedback}
-        initialSuggestedQuestions={initialSuggestedQuestions}
-        allowFullWidthForText={false}
-        showDemoPreQuestions={showDemoPreQuestions}
-        primaryColor={primaryColor}
-        logoURL={logoURL}
-        allowFeedback={allowFeedback}
-      />
-      {!isMediaTakingFullWidth && (
-        <AgentInput
-          handleSendMessage={(message) => handleSendMessage({ message })}
-          isAMessageBeingProcessed={isAMessageBeingProcessed}
-          messages={messages}
-        />
-      )}
-    </div>
+    <AgentMessages
+      sessionId={sessionId}
+      orbState={orbState}
+      messages={messages}
+      showRightPanel={hasArtifactOrDemoInMessageHistory}
+      isAMessageBeingProcessed={isAMessageBeingProcessed}
+      setActiveArtifact={setActiveArtifact}
+      setDemoPlayingStatus={setDemoPlayingStatus}
+      handleSendUserMessage={handleSendMessage}
+      handleAddMessageFeedback={handleAddMessageFeedback}
+      handleRemoveMessageFeedback={handleRemoveMessageFeedback}
+      initialSuggestedQuestions={initialSuggestedQuestions}
+      allowFullWidthForText={false}
+      showDemoPreQuestions={showDemoPreQuestions}
+      primaryColor={primaryColor}
+      logoURL={logoURL}
+      allowFeedback={allowFeedback}
+    />
   );
 };
 

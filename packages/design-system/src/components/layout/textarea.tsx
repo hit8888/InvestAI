@@ -19,7 +19,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, parentRe
     <textarea
       ref={autoResizeRef}
       className={cn(
-        'w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-primary/40 disabled:opacity-60',
+        'w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:ring-0 focus:border-primary/40 disabled:opacity-60',
         className,
       )}
       {...restProps}

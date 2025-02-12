@@ -79,7 +79,6 @@ const AgentMessages = ({
     <div
       className={cn('col-span-3 flex-1 overflow-y-auto', {
         'col-span-1': showRightPanel,
-        'pb-1': usingForAgent
       })}
       onWheel={(e) => e.stopPropagation()}
       style={{

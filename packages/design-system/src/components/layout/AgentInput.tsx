@@ -55,7 +55,7 @@ const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: I
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
-            className="border-1 p-4 rounded-xl"
+            className="border-1 p-4 pr-16 rounded-xl"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
