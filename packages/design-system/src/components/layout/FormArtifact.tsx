@@ -18,6 +18,8 @@ import { IWebSocketHandleMessage, SalesEvent } from '@meaku/core/types/webSocket
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ChatFormField from './ChatFormField';
+import DemoFormSubmitBtnTickIcon from '../icons/demoform-submit-tick-icon';
+import DemoFormThankYouTickIcon from '../icons/demoform-thankyou-tick-icon';
 
 interface IFormProps {
   artifactId?: string;
@@ -69,26 +71,37 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
 
   if (submitted) {
     return (
-      <Card className="m-4 ml-0 max-w-[350px]">
-        <CardHeader>
-          <CardTitle>Thank You for Sharing Your Details!</CardTitle>
-          <CardDescription>Info submitted! We will reach out soon.</CardDescription>
-        </CardHeader>
+      <Card className="max-w-96 rounded-2xl border-none bg-primary/10">
+        <CardContent className='p-4'>
+          <div className='flex items-center gap-4'>
+            <DemoFormThankYouTickIcon className='text-primary/60 h-14 w-14' />
+            <CardHeader className='p-0 space-y-0 gap-1 max-w-72'>
+              <CardTitle className='text-lg font-semibold text-primary'>Thank You for Sharing Your Details!</CardTitle>
+              <CardDescription className='text-primary/50'>Info submitted! Let me know if you have any questions or need help.</CardDescription>
+            </CardHeader>
+          </div>
+        </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="m-4 ml-0 max-w-[350px]">
-      <CardContent className="mt-6">
+    <Card className="rounded-2xl max-w-96 border-none bg-primary/10">
+      <CardContent className="p-4 flex flex-col gap-4">
+        <p className='text-lg font-semibold text-primary'>Share Your Details</p>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" data-testid="contact-form">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 flex flex-col gap-4 rounded-2xl border border-primary/20 bg-[rgb(var(--primary-foreground)/0.18)]" data-testid="contact-form">
+            <div className='flex flex-col items-center gap-6'>
             {artifact.form_fields.map((field, i) => (
               <ChatFormField key={i} form={form} form_field={field} />
             ))}
-            <Button type="submit" data-testid="submit-form-btn">
-              Submit
-            </Button>
+            </div>
+            <div className='flex justify-end'>
+              <Button type="submit" className='flex px-3 items-center gap-2 border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 hover:bg-primary/80' data-testid="submit-form-btn">
+                Submit
+                <DemoFormSubmitBtnTickIcon className='h-4 w-4'/>
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

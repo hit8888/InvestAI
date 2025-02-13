@@ -8,7 +8,12 @@ import { CountrySelect } from '../layout/CountrySelect';
 import 'react-phone-number-input/style.css';
 import './styles.css';
 
-const PhoneInputContainer = ({ field }: { field: ControllerRenderProps<FieldValues, string> }) => {
+type PhoneInputProps = {
+  field: ControllerRenderProps<FieldValues, string>, 
+  phoneLabel: string,
+}
+
+const PhoneInputContainer = ({ field, phoneLabel }: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const getDefaultCountry = (): CountryCode => {
     // Get the user's language setting
@@ -24,9 +29,10 @@ const PhoneInputContainer = ({ field }: { field: ControllerRenderProps<FieldValu
   return (
     <PhoneInput
       defaultCountry={getDefaultCountry()}
-      className={cn('custom-phone-input group rounded-md border border-gray-300 bg-white text-sm', {
-        'border-2 border-primary': isFocused,
+      className={cn('custom-phone-input group rounded-md border border-gray-300 bg-white text-sm placeholder:text-gray-400', {
+        'ring-0 border-2 border-primary/40 ': isFocused,
       })}
+      placeholder={phoneLabel || "Phone Number"}
       countrySelectComponent={CountrySelect}
       onFocus={() => setIsFocused(true)}
       {...field}
