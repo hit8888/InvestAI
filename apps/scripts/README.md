@@ -13,6 +13,7 @@
 | `feedback-enabled`       | boolean | true       | Enables feedback button                                  |
 | `user-email`             | string  | ""         | User email to identify the user when feedback is enabled |
 | `is-staging`             | boolean | false      | Use staging environment when true                        |
+| `initial-message`        | string  | ""         | Message to send automatically when chat loads            |
 
 ## Integration Methods
 

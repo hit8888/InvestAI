@@ -25,7 +25,7 @@ export const useEmbedAppEvents = ({
   handleSendUserMessage,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const { handleUpdateSessionData } = useLocalStorageSession();
+  const { handleUpdateSessionData, sessionData: { sessionId} } = useLocalStorageSession();
 
   const [searchParams] = useSearchParams();
   const isAgentOpen = searchParams.get("isAgentOpen") === "true";
@@ -115,7 +115,7 @@ export const useEmbedAppEvents = ({
     window.addEventListener("message", handleParentWindowMessages);
 
     // Send ready message to parent
-    window.parent.postMessage({ type: "IFRAME_READY" }, "*");
+    window.parent.postMessage({ type: "IFRAME_READY", sessionId: sessionId }, "*");
 
     return () => {
       window.removeEventListener("message", handleParentWindowMessages);

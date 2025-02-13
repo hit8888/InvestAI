@@ -98,6 +98,7 @@ declare global {
     feedbackEnabled: boolean;
     userEmail: string;
     isStaging: boolean;
+    initialMessage: string;
   }
 
   interface Constants {
@@ -132,6 +133,7 @@ declare global {
     isCollapsible?: boolean;
     chatOpen?: boolean;
     showBanner?: boolean;
+    sessionId?: string;
   }
 
   interface OverlayManager {

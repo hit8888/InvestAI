@@ -30,6 +30,8 @@
           this.scriptElement?.getAttribute("feedback-enabled") === "true",
         userEmail: this.scriptElement?.getAttribute("user-email") ?? "",
         isStaging: this.scriptElement?.getAttribute("is-staging") === "true", // TODO: Move to env based solution
+        initialMessage:
+          this.scriptElement?.getAttribute("initial-message") ?? "",
       };
     },
   };
@@ -397,6 +399,7 @@
     let currentContainer: HTMLElement | null = null;
     let embeddedContainer: HTMLElement | null = null;
     let bottomContainer: HTMLElement | null = null;
+    let initialMessageSent: boolean = false;
 
     try {
       const url = URLManager.getCurrentUrl();
@@ -445,11 +448,11 @@
               // Store iframe source for later use
               iFrameSource = event.source;
 
-              // Send initial config immediately after IFRAME_READY
               if (iFrameSource && "postMessage" in iFrameSource) {
                 const utmParams = URLManager.getUtmParameters();
                 const http_referrer = document.referrer;
 
+                // Send initial config
                 iFrameSource.postMessage(
                   {
                     utmParams,
@@ -464,6 +467,24 @@
                   },
                   { targetOrigin: "*" },
                 );
+
+                // Send initial message if configured
+                if (
+                  config.initialMessage &&
+                  !initialMessageSent &&
+                  !event.data.sessionId
+                ) {
+                  iFrameSource.postMessage(
+                    {
+                      type: "PARENT_FORM_MESSAGE",
+                      data: {
+                        message: config.initialMessage,
+                      },
+                    },
+                    { targetOrigin: "*" },
+                  );
+                  initialMessageSent = true;
+                }
               }
             }
 
