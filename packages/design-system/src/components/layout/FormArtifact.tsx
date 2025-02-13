@@ -75,7 +75,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
         <CardContent className='p-4'>
           <div className='flex items-center gap-4'>
             <DemoFormThankYouTickIcon className='text-primary/60 h-14 w-14' />
-            <CardHeader className='p-0 space-y-0 gap-1 max-w-72'>
+            <CardHeader className='p-0 space-y-0 gap-1 max-w-72 flex-1'>
               <CardTitle className='text-lg font-semibold text-primary'>Thank You for Sharing Your Details!</CardTitle>
               <CardDescription className='text-primary/50'>Info submitted! Let me know if you have any questions or need help.</CardDescription>
             </CardHeader>
