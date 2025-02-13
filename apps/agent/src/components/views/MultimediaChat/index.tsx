@@ -62,8 +62,8 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
 
   return (
     <div
-      className={cn('mx-auto mt-2 flex h-[95vh] w-[90vw] justify-center font-inter', {
-        'rounded-3xl': isAgentOpen,
+      className={cn('mx-auto flex h-[95vh] w-[90vw] justify-center font-inter', {
+        'mt-2 rounded-3xl': isAgentOpen,
         'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
       })}
     >
