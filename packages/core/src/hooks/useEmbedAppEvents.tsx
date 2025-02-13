@@ -9,6 +9,7 @@ interface IProps {
   fetchSessionData: () => void;
   handleOpenAgent: () => void;
   showBanner: boolean;
+  hasFirstUserMessageBeenSent: boolean;
   handleSendUserMessage: ({
     message,
     eventType,
@@ -22,6 +23,7 @@ export const useEmbedAppEvents = ({
   fetchSessionData,
   handleOpenAgent,
   showBanner,
+  hasFirstUserMessageBeenSent,
   handleSendUserMessage,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -40,9 +42,10 @@ export const useEmbedAppEvents = ({
       chatOpen: isAgentOpen,
       tooltipOpen: false,
       showBanner,
+      hasFirstUserMessageBeenSent
     };
     window.parent.postMessage(payload, "*");
-  }, [isAgentOpen, showBanner]);
+  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
     const handleParentWindowMessages = async (event: MessageEvent) => {

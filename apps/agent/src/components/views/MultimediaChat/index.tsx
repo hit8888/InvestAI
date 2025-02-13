@@ -51,6 +51,7 @@ const Multimedia = ({ fetchSessionData }: IProps) => {
     fetchSessionData,
     handleOpenAgent,
     showBanner: !!showBanner,
+    hasFirstUserMessageBeenSent,
     handleSendUserMessage,
   });
 

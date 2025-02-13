@@ -5,7 +5,8 @@
     constants: {
       DEFAULT_WIDTH: "100vw",
       DEFAULT_HEIGHT: "88vh",
-      COLLAPSED_SIZE_WIDTH: "100vw",
+      COLLAPSED_SIZE_WIDTH_INITIAL: "100vw",
+      COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: "25vw",
       COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX: 240,
       COLLAPSED_SIZE_HEIGHT_PX: 120,
       SENTRY_DSN:
@@ -132,18 +133,24 @@
       isAgentOpen: boolean,
       hideBottomBar: boolean,
       showBanner: boolean,
+      hasFirstUserMessageBeenSent: boolean,
     ): void {
       const {
         DEFAULT_WIDTH,
         DEFAULT_HEIGHT,
-        COLLAPSED_SIZE_WIDTH,
+        COLLAPSED_SIZE_WIDTH_INITIAL,
         COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX,
         COLLAPSED_SIZE_HEIGHT_PX,
+        COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT,
       } = ConfigManager.constants;
 
       let width: string, height: string;
       if (!isAgentOpen) {
-        width = hideBottomBar ? "0" : COLLAPSED_SIZE_WIDTH;
+        width = hideBottomBar
+          ? "0"
+          : hasFirstUserMessageBeenSent
+            ? COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT
+            : COLLAPSED_SIZE_WIDTH_INITIAL;
         height = hideBottomBar
           ? "0"
           : showBanner
@@ -396,6 +403,7 @@
     let isAgentOpen = false;
     let iFrameSource: MessageEventSource | null = null;
     let showBanner = false;
+    let hasFirstUserMessageBeenSent = false;
     let currentContainer: HTMLElement | null = null;
     let embeddedContainer: HTMLElement | null = null;
     let bottomContainer: HTMLElement | null = null;
@@ -491,6 +499,8 @@
             if (event.data?.chatOpen !== undefined) {
               isAgentOpen = event.data.chatOpen;
               showBanner = event.data.showBanner ?? false;
+              hasFirstUserMessageBeenSent =
+                event.data.hasFirstUserMessageBeenSent ?? false;
 
               if (
                 !isAgentOpen &&
@@ -505,6 +515,7 @@
                   isAgentOpen,
                   config.hideBottomBar,
                   showBanner,
+                  hasFirstUserMessageBeenSent,
                 );
 
                 // Send updated state back to iframe
@@ -513,6 +524,7 @@
                     {
                       chatOpen: isAgentOpen,
                       showBanner,
+                      hasFirstUserMessageBeenSent,
                       // Only set isCollapsible based on container if not in overlay
                       isCollapsible:
                         currentContainer === overlay?.wrapper
@@ -550,6 +562,7 @@
             isAgentOpen,
             config.hideBottomBar,
             showBanner,
+            hasFirstUserMessageBeenSent,
           );
         }
       });

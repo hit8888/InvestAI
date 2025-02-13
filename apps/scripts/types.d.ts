@@ -104,7 +104,8 @@ declare global {
   interface Constants {
     DEFAULT_WIDTH: string;
     DEFAULT_HEIGHT: string;
-    COLLAPSED_SIZE_WIDTH: string;
+    COLLAPSED_SIZE_WIDTH_INITIAL: string;
+    COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: string;
     COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX: number;
     COLLAPSED_SIZE_HEIGHT_PX: number;
     SENTRY_DSN: string;
@@ -133,6 +134,7 @@ declare global {
     isCollapsible?: boolean;
     chatOpen?: boolean;
     showBanner?: boolean;
+    hasFirstUserMessageBeenSent?: boolean;
     sessionId?: string;
   }
 
