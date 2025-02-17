@@ -43,6 +43,12 @@ const useDemoDetails = () => {
   const isDemoAvailable = messages
     .filter((msg) => msg.response_id === latestResponseId)
     .some((message) => {
+      const hasCompleteMessage = messages
+        .filter((msg) => msg.response_id === latestResponseId)
+        .some((msg) => msg.message_type === 'STREAM' && msg.message.is_complete);
+
+      if (!hasCompleteMessage) return false;
+
       if (message.message_type === 'EVENT' && 'event_type' in message.message) {
         const eventMessage = message.message;
         if (eventMessage.event_type === 'DEMO_AVAILABLE') {
