@@ -2,7 +2,6 @@ import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnified
 import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from '@meaku/core/hooks/useAnimateDifferentOrbStates';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { AIResponse } from '@meaku/core/types/agent';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,12 +9,10 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '@meaku/core/types/env';
 import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
-import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
-import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 
-//TODO: Krishna refactor useEffect logic in next PR
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
@@ -24,8 +21,6 @@ const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
 
   const getMessagePayload = useGetMessagePayload();
-
-  const isAdmin = useIsAdmin();
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
@@ -37,12 +32,7 @@ const useWebSocketChat = () => {
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
-  const messageQueue = useRef<
-    {
-      message: string;
-      messageId: string;
-    }[]
-  >([]);
+  const messageQueue = useRef<WebSocketMessage[]>([]);
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
@@ -67,11 +57,13 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
   const handleSendUserMessage = useCallback(
-    async ({ message, eventType, eventData }: IWebSocketHandleMessage) => {
-      const messageId = nanoid();
+    async ({ message, message_type }: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
+      const response_id = nanoid();
 
-      const payload = getMessagePayload({ message, eventType, eventData, messageId });
-      if (eventType && eventData) {
+      const payload = getMessagePayload({ message, response_id, message_type });
+
+      //This is for event messages where the message_type is EVENT
+      if ('event_type' in message && 'event_data' in message) {
         sendMessage(JSON.stringify(payload));
         return;
       }
@@ -86,44 +78,51 @@ const useWebSocketChat = () => {
       setIsAMessageBeingProcessed(true);
 
       if (!sessionId) {
-        messageQueue.current.push({ message, messageId });
+        messageQueue.current.push(payload);
       } else {
-        handleAddUserMessage(message);
+        handleAddUserMessage(payload);
         sendMessage(JSON.stringify(payload));
-        handleAnimatedOrb(messageId);
+        handleAnimatedOrb(response_id);
       }
     },
     [readyState, sessionId],
   );
 
   const handlePrimaryCta = () => {
-    handleSendUserMessage({ message: 'I want to book a demo for the product.' });
+    handleSendUserMessage({
+      message: { content: 'I want to book a demo for the product.' },
+      message_type: 'TEXT',
+    });
   };
 
   useEffect(() => {
     if (!lastMessage) return;
 
     try {
-      const response = JSON.parse(lastMessage.data) as AIResponse;
+      const response = JSON.parse(lastMessage.data) as WebSocketMessage;
       handleStopOrbAnimation();
 
-      if (
-        (response.demo_available &&
-          (response.script_step ||
-            (response.features && !!response.features.length) ||
-            response.artifacts.length < 0)) ||
-        response.response_audio_url
-      ) {
-        return;
-      } //Don't track demo flow here(In global context)
-
-      handleUpdateOrbState(OrbStatusEnum.responding);
-      response.showFeedbackOptions = isAdmin;
-
-      if (response.is_complete) {
-        setIsAMessageBeingProcessed(false);
+      // First check if it's an event message
+      if (response.message_type === 'EVENT' && 'event_type' in response.message) {
+        const eventMessageContent = response.message as EventMessageContent;
+        if (
+          'event_data' in eventMessageContent &&
+          'demo_available' in eventMessageContent.event_data &&
+          eventMessageContent.event_data.demo_available
+        ) {
+          const demoEventData = eventMessageContent.event_data;
+          if (
+            (demoEventData.demo_available &&
+              (demoEventData.script_step || (demoEventData.features && !!demoEventData.features.length))) ||
+            demoEventData.response_audio_url
+          ) {
+            return;
+          }
+        }
       }
 
+      handleUpdateOrbState(OrbStatusEnum.responding);
+      setIsAMessageBeingProcessed(false);
       handleAddAIMessage(response);
     } catch (error) {
       trackError(error, {
@@ -143,16 +142,15 @@ const useWebSocketChat = () => {
       return;
     }
 
-    messageQueue.current.forEach(({ message, messageId }) => {
-      const payload = {
-        session_id: sessionId,
-        message,
-        response_id: messageId,
-        is_admin: isAdmin,
-      };
-      handleAddUserMessage(message);
-      handleAnimatedOrb(messageId);
-      sendMessage(JSON.stringify(payload));
+    if (!sessionId) {
+      return;
+    }
+
+    messageQueue.current.forEach((payload) => {
+      const updatedPayload = { ...payload, session_id: sessionId };
+      handleAddUserMessage(updatedPayload);
+      handleAnimatedOrb(updatedPayload.response_id);
+      sendMessage(JSON.stringify(updatedPayload));
     });
 
     messageQueue.current = [];

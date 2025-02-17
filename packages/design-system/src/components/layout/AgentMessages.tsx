@@ -1,33 +1,32 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { Message } from '@meaku/core/types/agent';
 import { useEffect, useRef } from 'react';
 import SuggestionsArtifact from './SuggestionsArtifact';
-import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/MultimediaChat/Demo/PreDemoQuestion';
-import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/AgentView/Demo/PreDemoQuestion';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
-import { Feedback } from '@meaku/core/types/session';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { GetArtifactPayload } from '@meaku/core/types/api';
+import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
+import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 
 interface IProps {
   usingForAgent?: boolean;
-  messages: Message[];
+  messages: WebSocketMessage[];
   sessionId: string;
   orbState: OrbStatusEnum;
   showRightPanel?: boolean;
   isAMessageBeingProcessed: boolean;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
-  setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
-  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
-  handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
-  handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
+  setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   initialSuggestedQuestions: string[];
   allowFullWidthForText: boolean;
   showDemoPreQuestions: boolean;
   primaryColor: string | null;
   logoURL: string | null;
   allowFeedback: boolean;
+  feedbackData: FeedbackRequestPayload[];
+  lastMessageResponseId: string;
 }
 
 const AgentMessages = ({
@@ -40,14 +39,14 @@ const AgentMessages = ({
   setDemoPlayingStatus,
   setActiveArtifact,
   handleSendUserMessage,
-  handleAddMessageFeedback,
-  handleRemoveMessageFeedback,
   initialSuggestedQuestions,
   allowFullWidthForText,
   showDemoPreQuestions,
   primaryColor,
   logoURL,
   allowFeedback,
+  feedbackData,
+  lastMessageResponseId,
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -61,7 +60,6 @@ const AgentMessages = ({
         // Get the offset of the last user message relative to the container
         const containerTop = container.offsetTop;
         const messageTop = lastUserMessage.offsetTop;
-
         // Scroll the container
         container.scrollTop = messageTop - containerTop;
       }
@@ -75,6 +73,7 @@ const AgentMessages = ({
   }, [messages, usingForAgent]);
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
+
   return (
     <div
       className={cn('col-span-3 flex-1 overflow-y-auto', {
@@ -83,10 +82,10 @@ const AgentMessages = ({
       onWheel={(e) => e.stopPropagation()}
       style={{
         height: '100%',
-        overflow: usingForAgent ? 'hidden': 'auto',
+        overflow: usingForAgent ? 'hidden' : 'auto',
       }}
     >
-      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 hide-scrollbar overflow-y-auto p-2">
+      <div ref={agentChatContainerRef} className="hide-scrollbar h-full flex-1 space-y-4 overflow-y-auto p-2">
         <div
           className={cn('mx-auto w-full', {
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
@@ -108,17 +107,17 @@ const AgentMessages = ({
                 setActiveArtifact={setActiveArtifact}
                 setDemoPlayingStatus={setDemoPlayingStatus}
                 handleSendUserMessage={handleSendUserMessage}
-                handleAddMessageFeedback={handleAddMessageFeedback}
-                handleRemoveMessageFeedback={handleRemoveMessageFeedback}
                 initialSuggestedQuestions={initialSuggestedQuestions}
                 allowFeedback={allowFeedback}
+                initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
+                lastMessageResponseId={lastMessageResponseId}
               />
             </div>
           ))}
           {aiMessages.length <= 1 && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
-                suggestedQuestionOrientation='right'
+                suggestedQuestionOrientation="right"
                 isAMessageBeingProcessed={isAMessageBeingProcessed}
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{

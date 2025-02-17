@@ -1,14 +1,13 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { postResponseFeedback } from "../../http/api";
-import { PostResponseFeedbackPayload } from "../../types/api";
-
+import { FeedbackRequestPayload } from "../../types/api/feedback_request";
 
 type ResponseFeedbackResult =
   ReturnType<typeof postResponseFeedback> extends Promise<infer T> ? T : never;
 
 type ResponseFeedbackVariables = {
   sessionId: string;
-  payload: PostResponseFeedbackPayload;
+  payload: FeedbackRequestPayload;
 };
 
 const useResponseFeedback = (
@@ -19,9 +18,8 @@ const useResponseFeedback = (
       ResponseFeedbackVariables
     >,
     "mutationFn"
-  >,
+  >
 ) => {
-
   const mutation = useMutation({
     mutationKey: ["post-response-feedback"],
     mutationFn: async ({
@@ -29,7 +27,7 @@ const useResponseFeedback = (
       payload,
     }: {
       sessionId: string;
-      payload: PostResponseFeedbackPayload;
+      payload: FeedbackRequestPayload;
     }) => {
       const response = await postResponseFeedback(sessionId, payload);
 

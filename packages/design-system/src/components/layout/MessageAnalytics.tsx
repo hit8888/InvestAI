@@ -1,8 +1,8 @@
 import { Badge } from '@breakout/design-system/components/layout/badge';
-import { AnalyticsType } from '@meaku/core/types/agent';
+import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
 
 interface IProps {
-  analytics: AnalyticsType;
+  analytics: MessageAnalyticsEventData;
 }
 
 const MessageAnalytics = ({ analytics }: IProps) => {

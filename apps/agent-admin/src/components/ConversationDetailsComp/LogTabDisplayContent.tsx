@@ -1,12 +1,12 @@
-import { Message } from '@meaku/core/types/agent';
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 
 const LogTabDisplayContent = () => {
-  const { chatHistory, conversation } = useConversationDetails();
+  const { chatHistory, conversation, feedbackData } = useConversationDetails();
   const logoURL = getTenantIdentifier()?.['logo'];
+
   return (
     <div className="flex max-h-[800px] w-full flex-col bg-gray-25">
       {chatHistory?.length && conversation?.session_id ? (
@@ -16,10 +16,8 @@ const LogTabDisplayContent = () => {
           isAMessageBeingProcessed={false}
           setActiveArtifact={() => {}}
           setDemoPlayingStatus={() => {}}
-          handleAddMessageFeedback={() => {}}
-          handleRemoveMessageFeedback={() => {}}
           orbState={OrbStatusEnum.idle}
-          messages={chatHistory as Message[]}
+          messages={chatHistory}
           showRightPanel={false}
           handleSendUserMessage={() => {}}
           initialSuggestedQuestions={[]}
@@ -28,6 +26,8 @@ const LogTabDisplayContent = () => {
           primaryColor={'rgb(var(--primary))'}
           logoURL={logoURL}
           allowFeedback={true}
+          feedbackData={feedbackData}
+          lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
         />
       ) : (
         <p className="gradient-text mt-20 w-full text-center text-4xl font-semibold">

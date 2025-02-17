@@ -1,30 +1,35 @@
 import useUnifiedConfigurationResponseManager from './useUnifiedConfigurationResponseManager';
 import { useIsAdmin } from '../contexts/UrlDerivedDataProvider';
+import { WebSocketMessage, BaseMessageContent, EventMessageContent } from '../types';
 
-export interface IUseGetMessagePayload {
-  message: string;
-  eventType?: string;
-  eventData?: Record<string, unknown>;
-  messageId: string;
-}
+type MessagePayloadParams = {
+  message: BaseMessageContent | EventMessageContent;
+  response_id: string;
+  message_type: WebSocketMessage['message_type'];
+};
 
 const useGetMessagePayload = () => {
-  const isAdmin = useIsAdmin();
+  const is_admin = useIsAdmin();
 
   const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
+  const session_id = unifiedConfigurationResponseManager.getSessionId() ?? '';
 
-  const getMessagePayload = ({ message, eventType, eventData, messageId }: IUseGetMessagePayload) => {
-    const payload = {
-      session_id: sessionId,
-      message: message ?? '',
-      response_id: messageId,
-      event_type: eventType ?? '',
-      event_data: eventData ?? {},
-      is_admin: isAdmin,
+  const getMessagePayload = ({ message, response_id, message_type }: MessagePayloadParams): WebSocketMessage => {
+    const basePayload = {
+      session_id,
+      response_id,
+      role: 'user' as const,
+      is_admin,
+      timestamp: new Date().toISOString(),
+      message_type,
+      message,
     };
 
-    return payload;
+    if (message_type === 'EVENT') {
+      return basePayload as WebSocketMessage & { message_type: 'EVENT' };
+    }
+
+    return basePayload as WebSocketMessage & { message_type: typeof message_type };
   };
 
   return getMessagePayload;

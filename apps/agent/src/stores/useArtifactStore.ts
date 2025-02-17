@@ -1,4 +1,4 @@
-import { GetArtifactPayload } from '@meaku/core/types/api';
+import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -6,12 +6,11 @@ import { immer } from 'zustand/middleware/immer';
 interface State {
   isArtifactPlaying: boolean;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
-  activeArtifact: GetArtifactPayload | null;
-  setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
-  previousArtifact: GetArtifactPayload | null;
-  setPreviousActiveArtifact: (artifact: GetArtifactPayload | null) => void;
+  activeArtifact: ArtifactBaseType | null;
+  setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
 }
 
+//This will store  SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent only
 export const useArtifactStore = create<State>()(
   devtools(
     immer((set) => ({
@@ -19,12 +18,6 @@ export const useArtifactStore = create<State>()(
       setActiveArtifact: (artifact) => {
         set((state) => {
           state.activeArtifact = artifact;
-        });
-      },
-      previousArtifact: null,
-      setPreviousActiveArtifact: (artifact) => {
-        set((state) => {
-          state.previousArtifact = artifact;
         });
       },
       isArtifactPlaying: false,

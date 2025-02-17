@@ -1,13 +1,13 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useEffect, useRef, useState } from 'react';
-import { Message } from '@meaku/core/types/agent';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
   isAMessageBeingProcessed: boolean;
-  messages: Message[];
+  messages: WebSocketMessage[];
 }
 
 const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {

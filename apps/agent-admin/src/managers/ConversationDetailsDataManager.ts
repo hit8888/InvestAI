@@ -1,10 +1,8 @@
 import { ConversationDetailsDataResponse, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
 import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
-import {
-  convertServerChatHistoryToClientChatHistory,
-  convertServerConversationDataToClientConversationData,
-} from '@meaku/core/transformers/common';
-import { Message } from '@meaku/core/types/agent';
+import { convertServerConversationDataToClientConversationData } from '@meaku/core/transformers/common';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@meaku/core/types/index';
 
 /**
  * This is an ConversationDetailsDataResponseManager that helps us manage the response for the Conversation Details API.
@@ -23,23 +21,18 @@ class ConversationDetailsDataResponseManager {
     const validateDetailsData = ConversationDetailsResponseSchema.safeParse(convDetailsData);
 
     if (!validateDetailsData.success) {
-      // console.error("Validation failed for ConversationDetailsDataResponseManager:", {
-      //   input: convDetailsData,
-      //   errors: validateDetailsData.error.format(),
-      // });
       throw new Error(validateDetailsData.error.errors.map((error) => error.message).join(', '));
     }
 
     return validateDetailsData.data;
   }
 
-  getFormattedChatHistory({ isAdmin, isReadOnly }: { isAdmin: boolean; isReadOnly: boolean }): Message[] {
-    return convertServerChatHistoryToClientChatHistory({
-      isAdmin,
-      isReadOnly,
-      responseObject: this.convDetailsData,
-      ForAgentChatbot: false,
-    });
+  getFormattedChatHistory(): WebSocketMessage[] {
+    return this.convDetailsData.chat_history;
+  }
+
+  getFeedback(): FeedbackRequestPayload[] {
+    return this.convDetailsData.feedback ?? [];
   }
 
   getFormattedConversationData() {

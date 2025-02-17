@@ -1,7 +1,7 @@
-import { SuggestionArtifactContent } from '@meaku/core/types/agent';
+import { SuggestionArtifactContent } from '@meaku/core/types/artifact';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { Suggestion } from './Suggestion.tsx';
-import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { cn } from '../../lib/cn.ts';
 
@@ -9,7 +9,7 @@ interface IProps {
   isAMessageBeingProcessed: boolean;
   suggestedQuestionOrientation: 'left' | 'right';
   artifact?: SuggestionArtifactContent;
-  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
 const SuggestionsArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcessed, suggestedQuestionOrientation }: IProps) => {
@@ -18,7 +18,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingP
     (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 
   const handleSuggestedQuestionOnClick = (message: string) => {
-    handleSendUserMessage({ message });
+    handleSendUserMessage({ message: { content: message }, message_type: 'TEXT' });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
       message,
       isAgentOpen: true,

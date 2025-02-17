@@ -3,7 +3,7 @@ import { XIcon } from 'lucide-react'; //TODO: Expos this for design system
 import { useMemo } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { CTAConfigType } from '@meaku/core/types/session';
+import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 
 interface IProps {
   handleSendMessage: (message: string) => void;

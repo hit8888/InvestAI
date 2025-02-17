@@ -1,38 +1,29 @@
-import { ArtifactSchema } from "../types/artifact";
-import {
-  ArtifactResponse,
-  FormArtifactContent,
-  SlideArtifactContent,
-  SlideImageArtifactContent,
-  SuggestionArtifactContent,
-  VideoArtifactContent,
-} from "../types/agent";
+import { SlideArtifactContent, SlideImageArtifactContent, VideoArtifactContent } from '../types/artifact';
+import { ArtifactMessageContent, ArtifactMessageContentSchema } from '../types/webSocketData';
 
-//TODO: Krishna Add test for methods in ArtifactManager.Figure ou error bounday in case of error
 class ArtifactManager {
-  private artifact: ArtifactResponse;
+  private artifact: ArtifactMessageContent;
 
-  constructor(artifact: ArtifactResponse) {
+  constructor(artifact: ArtifactMessageContent) {
     const validatedArtifact = this.validateArtifact(artifact);
     this.artifact = validatedArtifact;
   }
 
-  private validateArtifact(artifact: ArtifactResponse) {
-    if (artifact.artifact_type === "FORM") return artifact;
+  validateArtifact(artifact: ArtifactMessageContent) {
+    if (artifact.artifact_type === 'FORM') return artifact;
 
-    const validatedArtifact = ArtifactSchema.safeParse(artifact);
+    const validatedArtifact = ArtifactMessageContentSchema.safeParse(artifact);
 
     if (!validatedArtifact.success) {
-      throw new Error(
-        validatedArtifact.error.errors.map((error) => error.message).join(", ")
-      );
+      console.error('Artifact validation failed:', validatedArtifact.error.errors, artifact);
+      return artifact;
     }
 
     return validatedArtifact.data;
   }
 
   getArtifactId() {
-    return this.artifact.artifact_id;
+    return this.artifact.artifact_data.artifact_id;
   }
 
   getArtifactType() {
@@ -40,48 +31,43 @@ class ArtifactManager {
   }
 
   //Refactor this code to use different methods
-  getArtifactContent():
-    | SlideImageArtifactContent
-    | SlideArtifactContent
-    | VideoArtifactContent
-    | FormArtifactContent
-    | SuggestionArtifactContent {
+  getArtifactContent() {
     return this.artifact.content;
   }
 
   getArtifactMetaData() {
-    return this.artifact.metadata;
+    return this.artifact.artifact_data.metadata;
   }
 
   getArtifactTitle() {
     switch (this.artifact.artifact_type) {
-      case "SLIDE":
-        return (this.artifact.content as SlideArtifactContent).title;
+      case 'SLIDE':
+        return (this.artifact.artifact_data.content as SlideArtifactContent).title;
 
-      case "SLIDE_IMAGE":
-        return (this.artifact.content as SlideImageArtifactContent).title;
+      case 'SLIDE_IMAGE':
+        return (this.artifact.artifact_data.content as SlideImageArtifactContent).title;
 
-      case "VIDEO":
-        return (this.artifact.content as VideoArtifactContent).title;
+      case 'VIDEO':
+        return (this.artifact.artifact_data.content as VideoArtifactContent).title;
 
       default:
-        return "";
+        return '';
     }
   }
 
   getArtifactDescription() {
     switch (this.artifact.artifact_type) {
-      case "SLIDE":
-        return (this.artifact.content as SlideArtifactContent).title;
+      case 'SLIDE':
+        return (this.artifact.artifact_data.content as SlideArtifactContent).title;
 
-      case "SLIDE_IMAGE":
-        return (this.artifact.content as SlideImageArtifactContent).description;
+      case 'SLIDE_IMAGE':
+        return (this.artifact.artifact_data.content as SlideImageArtifactContent).description;
 
-      case "VIDEO":
-        return (this.artifact.content as VideoArtifactContent).description;
+      case 'VIDEO':
+        return (this.artifact.artifact_data.content as VideoArtifactContent).description;
 
       default:
-        return "";
+        return '';
     }
   }
 }

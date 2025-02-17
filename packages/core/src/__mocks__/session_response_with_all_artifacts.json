@@ -1,0 +1,625 @@
+{
+  "agent_id": 2,
+  "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+  "prospect_id": "7421e980-65bf-4030-b0fe-b1ea5ece65dd",
+  "configuration": {
+    "agent_id": 2,
+    "agent_name": "Sam",
+    "org_name": "Hacker Earth",
+    "logo": "https://meaku-static-files.s3.us-west-1.amazonaws.com/hackerearth-tenant/HE_identity_white.png",
+    "header": {
+      "title": "",
+      "sub_title": ""
+    },
+    "body": {
+      "default_error_message": "",
+      "welcome_message": {
+        "message": "Welcome to HackerEarth! I am Sam, an AI rep. I can answer any questions you have about HackerEarth and our products and even show you demos. Give it a try, ask me anything!",
+        "suggested_questions": [
+          "How does HackerEarth prevent cheating?",
+          "What kind of coding skills can HackerEarth assess?"
+        ]
+      },
+      "disclaimer": null,
+      "cta_config": {
+        "text": "Book a demo"
+      },
+      "chat_history": [
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "TEXT",
+          "message": {
+            "content": "How does HackerEarth prevent cheating?",
+            "event_type": null,
+            "event_data": null
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:15.043288"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "ANALYTICS",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "MESSAGE_ANALYTICS",
+            "event_data": {
+              "buyer_intent_score": 15
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:24.009456"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "SALES",
+          "message_type": "STREAM",
+          "message": {
+            "content": "HackerEarth employs advanced proctoring settings to ensure the integrity of assessments. These include:\n\n- **Webcam Monitoring**: Observes the candidate's actions to prevent the use of external resources or communication with others.\n- **Screen Recording**: Captures the candidate's screen activity to identify any unauthorized software usage.\n- **Keystroke Tracking**: Records keystrokes to detect suspicious activities.\n\nThese mechanisms collectively ensure that tests are conducted fairly and without bias. For more details, you can visit [HackerEarth's overview page](https://help.hackerearth.com/hc/en-us/articles/360003266273-overview).",
+            "is_complete": true
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:30.870887"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "GENERATING_ARTIFACT",
+            "event_data": {
+              "artifact_type": "SLIDE"
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:30.871314"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "GENERATING_ARTIFACT",
+            "event_data": {
+              "artifact_type": "SUGGESTIONS"
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:30.893800"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "ARTIFACT",
+          "message": {
+            "content": "",
+            "artifact_type": "SLIDE",
+            "artifact_data": {
+              "artifact_id": "715cfc60-c515-4814-a0ec-f432c43ec72c",
+              "content": {
+                "title": "Ensuring Test Integrity at HackerEarth",
+                "sub_title": "Preventing Cheating and Maintaining Fairness",
+                "items": [
+                  {
+                    "title": "Advanced Proctoring",
+                    "icon": "shield"
+                  },
+                  {
+                    "title": "Webcam Monitoring",
+                    "icon": "camera"
+                  },
+                  {
+                    "title": "Screen Recording",
+                    "icon": "monitor"
+                  },
+                  {
+                    "title": "Keystroke Tracking",
+                    "icon": null
+                  }
+                ]
+              },
+              "artifact_type": "SLIDE",
+              "metadata": {},
+              "error": null,
+              "error_code": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:35.262679"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "MIQmjZVMaDE7WA2YUIlMe",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "ARTIFACT",
+          "message": {
+            "content": "",
+            "artifact_type": "SUGGESTIONS",
+            "artifact_data": {
+              "artifact_id": "bdb93236-4443-4636-8f8f-13b491f18e0f",
+              "content": {
+                "suggested_questions": [
+                  "Can I customize certified assessments?",
+                  "How does proctoring ensure test integrity?",
+                  "What programming languages are supported?"
+                ],
+                "suggested_questions_type": "BUBBLE"
+              },
+              "artifact_type": "SUGGESTIONS",
+              "metadata": {},
+              "error": null,
+              "error_code": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:19:40.676094"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "TEXT",
+          "message": {
+            "content": "Can I customize certified assessments?",
+            "event_type": null,
+            "event_data": null
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:20:48.340601"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "ai",
+          "actor": "ANALYTICS",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "MESSAGE_ANALYTICS",
+            "event_data": {
+              "buyer_intent_score": 55
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:20:58.969249"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "ai",
+          "actor": "SALES",
+          "message_type": "STREAM",
+          "message": {
+            "content": "Absolutely! HackerEarth allows you to customize certified assessments by adding or removing skills. For more specific question selection, you can collaborate with our Customer Success and Professional Services teams to tailor the assessments to your needs. This flexibility ensures that the assessments align perfectly with your company's requirements. For more information, you can visit [HackerEarth's science page](https://www.hackerearth.com/recruit/science).",
+            "is_complete": true
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:05.319304"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "GENERATING_ARTIFACT",
+            "event_data": {
+              "artifact_type": "SLIDE"
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:05.319911"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "ai",
+          "actor": "DEMO",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_AVAILABLE",
+            "event_data": {
+              "script_step": null,
+              "demo_available": true,
+              "features": [],
+              "response": null,
+              "response_audio_url": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:05.344762"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "VA9KAMR-5WHhNxyYbLa4w",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "ARTIFACT",
+          "message": {
+            "content": "",
+            "artifact_type": "SLIDE",
+            "artifact_data": {
+              "artifact_id": "3b294cfc-50c5-452b-a2a3-266f77ea5891",
+              "content": {
+                "title": "Customizing Certified Assessments",
+                "sub_title": "Tailor your assessments to suit specific needs",
+                "items": [
+                  {
+                    "title": "Add or Remove Skills",
+                    "icon": "plus"
+                  },
+                  {
+                    "title": "Edit Questions",
+                    "icon": "edit"
+                  },
+                  {
+                    "title": "Collaborate with Experts",
+                    "icon": "users"
+                  }
+                ]
+              },
+              "artifact_type": "SLIDE",
+              "metadata": {},
+              "error": null,
+              "error_code": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:10.055074"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "fKsBFd9rz_BgPvIFdck2y",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_OPTIONS",
+            "event_data": {}
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:34.435994"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "fKsBFd9rz_BgPvIFdck2y",
+          "role": "ai",
+          "actor": "DEMO",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_OPTIONS",
+            "event_data": {
+              "script_step": null,
+              "demo_available": true,
+              "features": [
+                {
+                  "id": 1,
+                  "name": "Test Creation",
+                  "description": "In this feature, I'll walk you through creating a customized technical assessment on HackerEarth, from selecting job roles to configuring test parameters."
+                },
+                {
+                  "id": 35,
+                  "name": "Form Creation",
+                  "description": "In this demo, we'll see how we can create a form on HubSpot. Forms are the most basic marketing tool that you have in your arsenal. You can embed a form on a page, on one of your marketing pages, or you could create a standalone form where you can direct users to complete an action after they've completed an action."
+                },
+                {
+                  "id": 34,
+                  "name": "Clip_Test_Invitation",
+                  "description": "In this feature, I'll walk you through how to publish test and invite candidates to take your assessment on HackerEarth."
+                }
+              ],
+              "response": null,
+              "response_audio_url": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:34.487216"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "Z9--ZwxDcPORZsXHnLw8S",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_NEXT",
+            "event_data": {
+              "feature_ids": [1, 35, 34]
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:37.269213"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "Z9--ZwxDcPORZsXHnLw8S",
+          "role": "ai",
+          "actor": "DEMO",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_NEXT",
+            "event_data": {
+              "script_step": {
+                "message": "Hey there! I will take you through an interactive demo. In this demo, I will cover features like Test Creation on HackerEarth, Form Creation on HubSpot, and Clip Test Invitation. Since it's an interactive demo, feel free to ask any question in between by pressing the \u2018Raise hand\u2019 button on the bottom left. When you raise your hand, you will be able to ask a question as soon as I complete my sentence.",
+                "asset_url": null,
+                "asset_type": null,
+                "audio_url": null,
+                "current_feature": null,
+                "is_end": false
+              },
+              "demo_available": true,
+              "features": [],
+              "response": null,
+              "response_audio_url": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:38.051858"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "vaPjF5zksGwpLPuXyEugY",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_NEXT",
+            "event_data": {}
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:38.071943"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "vaPjF5zksGwpLPuXyEugY",
+          "role": "ai",
+          "actor": "DEMO",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_NEXT",
+            "event_data": {
+              "script_step": {
+                "message": "In this feature, I'll walk you through creating a customized technical assessment on HackerEarth, from selecting job roles to configuring test parameters.",
+                "asset_url": "http://assets.getbreakout.ai/hackerearth-tenant/feature-frames/Test_Creation_Portal.png",
+                "asset_type": "IMAGE",
+                "audio_url": "http://assets.getbreakout.ai/hackerearth-tenant/audios/features/Clip_Test_Creation.mp3",
+                "current_feature": "Test Creation",
+                "is_end": false
+              },
+              "demo_available": true,
+              "features": [],
+              "response": null,
+              "response_audio_url": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:21:38.074218"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "7FOwVP_OQXS4nY_Z7QBWN",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "DEMO_END",
+            "event_data": {}
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:03.351451"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "KVI3fc6FzRMH82aHBE7t2",
+          "role": "user",
+          "actor": "SALES",
+          "message_type": "TEXT",
+          "message": {
+            "content": "I want to book a demo for the product.",
+            "event_type": null,
+            "event_data": null
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:07.082036"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "KVI3fc6FzRMH82aHBE7t2",
+          "role": "ai",
+          "actor": "ANALYTICS",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "MESSAGE_ANALYTICS",
+            "event_data": {
+              "buyer_intent_score": 85
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:20.568319"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "KVI3fc6FzRMH82aHBE7t2",
+          "role": "ai",
+          "actor": "SALES",
+          "message_type": "STREAM",
+          "message": {
+            "content": "###\r\nI will be happy to connect you with our sales team. Please provide the following details and someone from our sales team will reach out to you on priority. \r\n###",
+            "is_complete": true
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:28.975057"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "KVI3fc6FzRMH82aHBE7t2",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "EVENT",
+          "message": {
+            "content": "",
+            "event_type": "GENERATING_ARTIFACT",
+            "event_data": {
+              "artifact_type": "FORM"
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:28.975295"
+        },
+        {
+          "session_id": "82caf1a5-efc5-4f74-ace7-ae17f642b2f4",
+          "response_id": "KVI3fc6FzRMH82aHBE7t2",
+          "role": "ai",
+          "actor": "ARTIFACT",
+          "message_type": "ARTIFACT",
+          "message": {
+            "content": "",
+            "artifact_type": "FORM",
+            "artifact_data": {
+              "artifact_id": "f6b07605-20eb-4830-98b6-7a6eb59ff049",
+              "content": {
+                "default_message": "",
+                "form_fields": [
+                  {
+                    "label": "Name",
+                    "field_name": "name",
+                    "data_type": "string",
+                    "is_required": true
+                  },
+                  {
+                    "label": "Email",
+                    "field_name": "email",
+                    "data_type": "email",
+                    "is_required": true
+                  }
+                ]
+              },
+              "artifact_type": "FORM",
+              "metadata": {
+                "is_filled": false,
+                "filled_data": {
+                  "name": null,
+                  "email": null,
+                  "role": null,
+                  "team": null,
+                  "company": null
+                }
+              },
+              "error": null,
+              "error_code": null
+            }
+          },
+          "documents": [],
+          "timestamp": "2025-02-15T16:22:28.975877"
+        }
+      ],
+      "feedback": [],
+      "bottom_bar_config": {
+        "primary_placeholder": [
+          "H",
+          "a",
+          "v",
+          "e",
+          " ",
+          "a",
+          " ",
+          "q",
+          "u",
+          "e",
+          "s",
+          "t",
+          "i",
+          "o",
+          "n",
+          "?",
+          " ",
+          "A",
+          "s",
+          "k",
+          " ",
+          "h",
+          "e",
+          "r",
+          "e"
+        ],
+        "secondary_placeholder": [
+          "R",
+          "e",
+          "a",
+          "d",
+          "y",
+          " ",
+          "t",
+          "o",
+          " ",
+          "e",
+          "x",
+          "p",
+          "l",
+          "o",
+          "r",
+          "e",
+          " ",
+          "s",
+          "k",
+          "i",
+          "l",
+          "l",
+          "s",
+          " ",
+          "o",
+          "r",
+          " ",
+          "h",
+          "a",
+          "c",
+          "k",
+          "a",
+          "t",
+          "h",
+          "o",
+          "n",
+          "s",
+          "?"
+        ]
+      }
+    },
+    "style_config": {
+      "function": "agent_personalization",
+      "primary": "#243e8e",
+      "secondary": "#ffca50",
+      "primary_foreground": "#FEFEFE",
+      "secondary_foreground": "#000",
+      "show_banner": true
+    },
+    "whitelisted_domains": []
+  }
+}

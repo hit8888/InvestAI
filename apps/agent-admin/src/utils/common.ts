@@ -28,8 +28,8 @@ import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
-import { FilterItem, SortItem } from '@meaku/core/types/admin/api';
-import { Message } from '@meaku/core/types/agent';
+import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -506,7 +506,7 @@ const getBantItemsValue = (bantValue: BANTItem[], sessionData: ConversationsTabl
 };
 
 export function generateConversationSummaryContent(
-  chatHistory: Message[],
+  chatHistory: WebSocketMessage[],
   sessionData: ConversationsTableDisplayContent,
 ): SummaryTabContentList[] {
   const isChatHistoryAvailable = chatHistory.length > 0;
@@ -521,7 +521,15 @@ export function generateConversationSummaryContent(
   const highestIntentScore =
     sessionData?.buyer_intent ??
     (isChatHistoryAvailable && Array.isArray(chatHistory) && chatHistory.length > 0
-      ? Math.max(...chatHistory.map((msg) => msg.analytics?.buyer_intent_score ?? 0))
+      ? Math.max(
+          ...chatHistory.map((msg) => {
+            const message = msg.message;
+            if (msg.message_type === 'EVENT' && 'event_type' in message && message.event_type === 'MESSAGE_ANALYTICS') {
+              return message.event_data.buyer_intent_score ?? 0;
+            }
+            return 0;
+          }),
+        )
       : 0);
 
   // Count messages

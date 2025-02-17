@@ -1,10 +1,7 @@
-import {
-  GetArtifactPayload,
-  InitializationPayload,
-  PostResponseFeedbackPayload,
-  UpdateProspectPayload,
-  UpdateSessionDataPayload,
-} from "../types/api";
+import { FeedbackRequestPayload } from "../types/api/feedback_request";
+import { InitializationPayload } from "../types/api/session_init_request";
+import { UpdateSessionDataPayload } from "../types/api/session_update_request";
+import { UpdateProspectPayload } from "../types/api/update_prospect_request";
 import { ENV } from "../types/env";
 import apiClient from "./client";
 
@@ -12,26 +9,6 @@ export const ARTIFACT_BASE_API_URL = ENV.VITE_ARTIFACT_BASE_API_URL;
 
 export const getConfig = (agentId: string) =>
   apiClient.get(`/tenant/chat/agent/${agentId}/config/`);
-
-export const getArtifact = (
-  payload: GetArtifactPayload,
-  role: "agent" | "admin" = "agent"
-) => {
-  const originalUrl = apiClient.defaults.baseURL;
-  // console.log("originalUrl", originalUrl);
-  apiClient.defaults.baseURL = role === "admin" 
-    ? ARTIFACT_BASE_API_URL 
-    : originalUrl || '';
-  // console.log("newUrl", apiClient.defaults.baseURL);
-  const response = apiClient.get(
-    `/tenant/chat/message/artifact/${payload.artifactId}?artifact_type=${payload.artifactType}`
-  );
-
-  // Reset back to original base URL
-  apiClient.defaults.baseURL = originalUrl;
-
-  return response;
-};
 
 export const initializeSession = (
   agentId: string,
@@ -50,7 +27,7 @@ export const updateSession = (
 
 export const postResponseFeedback = (
   sessionId: string,
-  payload: PostResponseFeedbackPayload
+  payload: FeedbackRequestPayload
 ) => apiClient.post(`/tenant/chat/session/${sessionId}/feedback/`, payload);
 
 export const updateProspect = (

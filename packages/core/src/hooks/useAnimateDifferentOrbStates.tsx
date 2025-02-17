@@ -1,30 +1,28 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { AIResponse } from '../types';
+import { WebSocketMessage } from '../types';
 import { getProcessingMessageSequence, setMessageIndexForAddingAIMessage } from '../utils';
 
 const PROCESSING_MESSAGE_CHANGE_INTERVAL = 4000;
 
 type useAnimateDifferentOrbStatesProps = {
-  handleAddAIMessage: (response: AIResponse) => void;
-}
-const useAnimateDifferentOrbStates = ({handleAddAIMessage}: useAnimateDifferentOrbStatesProps) => {
+  handleAddAIMessage: (response: WebSocketMessage) => void;
+};
+const useAnimateDifferentOrbStates = ({ handleAddAIMessage }: useAnimateDifferentOrbStatesProps) => {
   const processingMessageInterval = useRef<NodeJS.Timeout | null>(null);
 
   const PROCESSING_MESSAGE_SEQUENCE = getProcessingMessageSequence();
 
   const getAIMessage = useCallback(
-    (messageIndex: number, messageId: string) => {
+    (messageIndex: number, messageId: string): WebSocketMessage => {
       return {
         response_id: messageId,
-        message: messageIndex === -1 ? `Thinking` : PROCESSING_MESSAGE_SEQUENCE[messageIndex],
-        documents: [],
-        is_complete: false,
-        is_loading: true,
-        suggested_questions: [],
-        analytics: {},
-        artifacts: [],
-        demo_available: false,
-        role: 'ai' as 'user' | 'ai',
+        session_id: messageId,
+        timestamp: new Date().toISOString(),
+        message_type: 'TEXT',
+        message: {
+          content: messageIndex === -1 ? 'Thinking' : PROCESSING_MESSAGE_SEQUENCE[messageIndex],
+        },
+        role: 'ai' as const,
       };
     },
     [PROCESSING_MESSAGE_SEQUENCE],

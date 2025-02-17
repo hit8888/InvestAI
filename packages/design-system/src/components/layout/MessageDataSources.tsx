@@ -6,7 +6,7 @@ import {
 } from '@breakout/design-system/components/layout/accordion';
 import { cn } from '@breakout/design-system/lib/cn';
 import FaviconImage from '@breakout/design-system/components/layout/favicon-image';
-import { DataSourceType } from '@meaku/core/types/agent';
+import { DataSourceType } from '@meaku/core/types/webSocketData';
 import { Badge } from '@breakout/design-system/components/layout/badge';
 
 interface IProps {

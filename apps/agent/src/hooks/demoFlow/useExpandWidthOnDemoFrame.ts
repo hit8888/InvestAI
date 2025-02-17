@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useMessageStore } from '../../stores/useMessageStore';
-import { ScriptStepType } from '@meaku/core/types/agent';
+import { ScriptStepType } from '@meaku/core/types/webSocketData';
 
 const useExpandWidthOnDemoFrame = (demoDetails: ScriptStepType | null) => {
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);

@@ -1,27 +1,15 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const ArtifactEnumSchema = z.enum([
-  "SLIDE",
-  "VIDEO",
-  "SLIDE_IMAGE",
-  "NONE",
-  "SUGGESTIONS",
-  "FORM",
-  "DEMO",
-]);
+export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM']);
 
-// Derive these enums from Backend ArtifactEnumSchema
-export const SplitScreenArtifactEnumSchema = z.enum([
-  ArtifactEnumSchema.Enum.VIDEO,
-  ArtifactEnumSchema.Enum.SLIDE,
-  ArtifactEnumSchema.Enum.SLIDE_IMAGE,
-  ArtifactEnumSchema.Enum.NONE,
-]);
-
-export const ChatBoxArtifactEnumSchema = z.enum([
-  ArtifactEnumSchema.Enum.FORM,
-  ArtifactEnumSchema.Enum.SUGGESTIONS,
-]);
+export enum ArtifactEnum {
+  SLIDE = 'SLIDE',
+  VIDEO = 'VIDEO',
+  SLIDE_IMAGE = 'SLIDE_IMAGE',
+  NONE = 'NONE',
+  SUGGESTIONS = 'SUGGESTIONS',
+  FORM = 'FORM',
+}
 
 export const SlideItemSchema = z.object({
   title: z.string(),
@@ -34,8 +22,6 @@ export const SlideArtifactSchema = z.object({
   sub_title: z.string().optional().nullable(),
   items: z.array(SlideItemSchema),
 });
-
-export type ISlideItem = z.infer<typeof SlideItemSchema>;
 
 export const VideoArtifactSchema = z.object({
   video_url: z.string(),
@@ -51,17 +37,10 @@ export const SlideImageArtifactSchema = z.object({
 
 export const SuggestionArtifactSchema = z.object({
   suggested_questions: z.array(z.string()),
-  suggested_questions_type: z.enum(["STAR", "BUBBLE"]),
+  suggested_questions_type: z.enum(['STAR', 'BUBBLE']),
 });
 
-export const FormFieldDataTypeEnumSchema = z.enum([
-  "string",
-  "int",
-  "email",
-  "date",
-  "datetime",
-  "phone",
-]);
+export const FormFieldDataTypeEnumSchema = z.enum(['string', 'int', 'email', 'date', 'datetime', 'phone']);
 
 export const FormFieldSchema = z.object({
   label: z.string(),
@@ -72,21 +51,26 @@ export const FormFieldSchema = z.object({
 
 export const FormArtifactMetadata = z.object({
   is_filled: z.boolean().optional(),
-  filled_data: z.object({
-    default: z.string(),
-  }),
+  filled_data: z.record(z.string(), z.any()).optional(),
 });
 
 export const FormArtifactSchema = z.object({
   form_fields: z.array(FormFieldSchema),
 });
 
-export const ArtifactSchema = z.object({
-  artifact_id: z.string(),
-  content: SlideArtifactSchema.or(SlideImageArtifactSchema)
-    .or(VideoArtifactSchema)
-    .or(SuggestionArtifactSchema)
-    .or(FormArtifactSchema),
-  artifact_type: ArtifactEnumSchema,
-  metadata: FormArtifactMetadata.or(z.any()),
-});
+export type SlideArtifactContent = z.infer<typeof SlideArtifactSchema>;
+
+export type SlideImageArtifactContent = z.infer<typeof SlideImageArtifactSchema>;
+
+export type VideoArtifactContent = z.infer<typeof VideoArtifactSchema>;
+
+export type FormArtifactContent = z.infer<typeof FormArtifactSchema>;
+
+export type SuggestionArtifactContent = z.infer<typeof SuggestionArtifactSchema>;
+
+export type ArtifactContent =
+  | SlideImageArtifactContent
+  | SlideArtifactContent
+  | VideoArtifactContent
+  | FormArtifactContent
+  | SuggestionArtifactContent;

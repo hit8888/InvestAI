@@ -1,15 +1,9 @@
-import {
-  ConfigurationApiResponse,
-  ConfigurationSchema,
-  SessionApiResponse,
-  SessionSchema,
-} from "../types/session";
-import { Message } from "../types/agent";
-import { convertServerChatHistoryToClientChatHistory } from "../transformers/common";
+import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
+import { ConfigurationApiResponse, ConfigurationSchema } from '../types/api/configuration_response';
+import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
+import { filterOutSuggestions } from '../utils/messageUtils';
 
-export type SessionConfigResponseType =
-  | ConfigurationApiResponse
-  | SessionApiResponse;
+export type SessionConfigResponseType = ConfigurationApiResponse | SessionApiResponse;
 
 /**
  * This is an UnifiedResponseManager that helps us manage the response for the initialization api as well as the config api. This has been made into a single manager to avoid code duplication and to make the code more maintainable.
@@ -29,19 +23,16 @@ class UnifiedSessionConfigResponseManager {
     }
   }
 
-  private isSession(
-    response: SessionConfigResponseType
-  ): response is SessionApiResponse {
-    return "session_id" in response;
+  private isSession(response: SessionConfigResponseType): response is SessionApiResponse {
+    return 'session_id' in response;
   }
 
   private validateSession(session: SessionApiResponse) {
     const validatedSession = SessionSchema.safeParse(session);
 
     if (!validatedSession.success) {
-      throw new Error(
-        validatedSession.error.errors.map((error) => error.message).join(", ")
-      );
+      console.error(validatedSession.error.errors);
+      throw new Error(validatedSession.error.errors.map((error) => error.message).join(', '));
     }
 
     return {
@@ -54,9 +45,7 @@ class UnifiedSessionConfigResponseManager {
     const validatedConfig = ConfigurationSchema.safeParse(config);
 
     if (!validatedConfig.success) {
-      throw new Error(
-        validatedConfig.error.errors.map((error) => error.message).join(", ")
-      );
+      throw new Error(validatedConfig.error.errors.map((error) => error.message).join(', '));
     }
 
     return validatedConfig.data;
@@ -67,7 +56,7 @@ class UnifiedSessionConfigResponseManager {
   }
 
   getProspectId() {
-    return this.session?.prospect_id ?? "";
+    return this.session?.prospect_id ?? '';
   }
 
   getAgentId() {
@@ -86,14 +75,11 @@ class UnifiedSessionConfigResponseManager {
     return this.config.logo;
   }
 
-  getFormattedChatHistory({
-    isAdmin,
-    isReadOnly,
-  }: {
-    isAdmin: boolean;
-    isReadOnly: boolean;
-  }): Message[] {
-    return convertServerChatHistoryToClientChatHistory({isAdmin, isReadOnly,responseObject: this.config.body, ForAgentChatbot: true});
+  getFormattedChatHistory(welcomeMessagePayload?: WebSocketMessage): ChatHistory {
+    const history = welcomeMessagePayload
+      ? [welcomeMessagePayload, ...this.config.body.chat_history]
+      : this.config.body.chat_history;
+    return filterOutSuggestions(history);
   }
 
   getDefaultErrorMessage() {
@@ -101,17 +87,6 @@ class UnifiedSessionConfigResponseManager {
   }
 
   getInitialSuggestedQuestions() {
-    // To be  removed when embed/widget are deprecated
-    const chatHistory = this.getFormattedChatHistory({
-      isAdmin: false,
-      isReadOnly: false,
-    });
-
-    if (chatHistory.length > 1) {
-      const lastMessage = chatHistory[chatHistory.length - 1];
-      return lastMessage.suggested_questions ?? [];
-    }
-
     return this.config.body.welcome_message.suggested_questions;
   }
 
@@ -129,15 +104,6 @@ class UnifiedSessionConfigResponseManager {
 
   getConfig() {
     const config = this.config;
-    const isOrgC2FO = config.org_name === "C2FO";
-
-    if (isOrgC2FO) {
-      config.body.disclaimer_message =
-        "If the chat gets disrupted, please fill out the Contact Us form below and our team will reach out to provide continued support.";
-    }
-
-    config.body.show_cta = false;
-
     return config;
   }
 }

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { updateProspect } from "../../http/api";
-import { UpdateProspectPayload } from "../../types/api";
+import { UpdateProspectPayload } from "../../types/api/update_prospect_request";
 
 const useUpdateProspect = () => {
   const mutation = useMutation({

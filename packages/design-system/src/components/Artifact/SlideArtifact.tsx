@@ -1,8 +1,8 @@
-import { SlideArtifactContent } from '@meaku/core/types/agent';
 import { cn } from '@breakout/design-system/lib/cn';
 import SlideHeader from '../layout/SlideHeader';
 import SlideSubTitle from '../layout/SlideSubTitle';
 import SlideItems from '../layout/SlideItems';
+import { SlideArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
   artifact: SlideArtifactContent;

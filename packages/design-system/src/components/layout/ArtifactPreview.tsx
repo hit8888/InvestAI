@@ -1,24 +1,17 @@
-import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
+import { ArrowUpRight, CirclePlay } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@breakout/design-system/lib/cn';
+import { DemoPlayingStatus } from '@meaku/core/types/common';
+import SlideArtifactPreview from './SlideArtifactPreview.tsx';
+import CustomVideoPlayer from './CustomVideoPlayer.tsx';
 import {
   ArtifactEnum,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
-} from '@meaku/core/types/agent';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogTitle, 
-  DialogTrigger 
-} from '@breakout/design-system/components/layout/dialog';
-import { ArrowUpRight, CirclePlay } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import ArtifactManager from '@meaku/core/managers/ArtifactManager';
-import { cn } from '@breakout/design-system/lib/cn';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
-import SlideArtifactPreview from './SlideArtifactPreview.tsx';
-import { GetArtifactPayload } from '@meaku/core/types/api';
-import CustomVideoPlayer from './CustomVideoPlayer.tsx';
+} from '@meaku/core/types/artifact';
+import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 
 interface IProps {
   usingForAgent: boolean;
@@ -26,7 +19,12 @@ interface IProps {
   logoURL: string | null;
   artifactType?: ArtifactEnum;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
-  setActiveArtifact: (artifact: GetArtifactPayload | null) => void;
+  setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
+  title?: string;
+  description?: string;
+  artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent;
+  isError?: boolean;
+  isFetching?: boolean;
 }
 
 const truncateText = (text: string, limit: number): string => {
@@ -43,30 +41,20 @@ const ArtifactPreview = ({
   setDemoPlayingStatus,
   setActiveArtifact,
   logoURL,
+  title,
+  description,
+  artifactContent,
+  isError = false,
+  isFetching = false,
 }: IProps) => {
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
-  const { data, isError, isFetching } = useArtifactDataQuery({
-    role: usingForAgent ? 'agent' : 'admin',
-    artifactId: artifactId,
-    artifactType: artifactType ?? 'NONE',
-    queryOptions: {
-      enabled: !!artifactId && artifactType !== 'NONE',
-    },
-  });
-
-  const manager = useMemo(() => {
-    if (!data) return null;
-
-    return new ArtifactManager(data);
-  }, [data]);
-
-  const title = manager?.getArtifactTitle();
-  const description = manager?.getArtifactDescription();
-  const artifactContent = manager?.getArtifactContent();
 
   const handleArtifactOnClick = () => {
     setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
-    setActiveArtifact({ artifactId, artifactType: artifactType ?? 'NONE' });
+    setActiveArtifact({
+      artifact_id: artifactId,
+      artifact_type: artifactType ?? 'NONE',
+    });
     if (artifactType === 'VIDEO' && !usingForAgent) {
       setIsVideoDialogOpen(true);
     }
@@ -78,7 +66,7 @@ const ArtifactPreview = ({
     return (
       <SlideArtifactPreview
         artifactType={artifactType}
-        logoURL={logoURL ?? ""}
+        logoURL={logoURL ?? ''}
         artifactContent={artifactContent as SlideImageArtifactContent | SlideArtifactContent}
         usingForAgent={usingForAgent}
         isFetching={isFetching}
@@ -102,7 +90,7 @@ const ArtifactPreview = ({
             <ArrowUpRight className="text-primary/70" height={24} width={24} />
           </div>
         </div>
-        <div className=" mt-2 flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-4">
           {isFetching ? (
             <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
           ) : (

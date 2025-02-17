@@ -1,19 +1,19 @@
 import {
-  VideoArtifactContent,
+  ArtifactContent,
   SlideArtifactContent,
   SlideImageArtifactContent,
-  ArtifactContent,
-} from '@meaku/core/types/agent';
+  VideoArtifactContent,
+} from '@meaku/core/types/artifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
-import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface Props {
   artifactType: string | undefined;
-  artifactContent?: ArtifactContent;
+  artifactContent: ArtifactContent | null;
   activeArtifactId: string;
   logoURL: string;
-  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   isMediaTakingFullWidth: boolean;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
@@ -31,6 +31,10 @@ export const ArtifactContentUi = ({
   setIsArtifactPlaying,
   onSlideItemClick,
 }: Props) => {
+  if (!artifactType || !artifactContent) {
+    return null;
+  }
+
   switch (artifactType) {
     case 'SLIDE':
       return (

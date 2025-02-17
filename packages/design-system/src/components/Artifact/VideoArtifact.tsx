@@ -1,27 +1,28 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { PauseIcon, PlayIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { IWebSocketHandleMessage, SalesEvent } from '@meaku/core/types/webSocket';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import ArtifactControls from '../layout/ArtifactControls.tsx';
+import { ArtifactEnum } from '@meaku/core/types/artifact';
 
 interface IProps {
   videoUrl: string;
   artifactId: string;
-  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   isMediaTakingFullWidth: boolean;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
 }
 
-const VideoArtifact = ({ 
-  videoUrl, 
-  artifactId, 
-  handleSendUserMessage, 
+const VideoArtifact = ({
+  videoUrl,
+  artifactId,
+  handleSendUserMessage,
   isMediaTakingFullWidth,
   handleToggleFullScreen,
-  setIsArtifactPlaying 
+  setIsArtifactPlaying,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -31,10 +32,13 @@ const VideoArtifact = ({
 
   const handleVideoOnEnd = () => {
     const payload = {
-      artifact_type: 'VIDEO',
+      artifact_type: ArtifactEnum.VIDEO,
       artifact_id: artifactId,
     };
-    handleSendUserMessage({ message: '', eventType: SalesEvent.ARTIFACT_CONSUMED, eventData: payload });
+    handleSendUserMessage({
+      message: { content: '', event_type: 'ARTIFACT_CONSUMED', event_data: payload },
+      message_type: 'ARTIFACT',
+    });
     setIsArtifactPlaying(false);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };

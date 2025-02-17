@@ -1,13 +1,15 @@
 import { z } from "zod";
-import { MessageSchema } from "../agent";
-import { FeedbackSchema } from "../session";
+import { WebSocketMessageSchema } from "../webSocketData";
+import { FeedbackRequestPayloadSchema } from "../api/feedback_request";
 
 // LoginWithEmailPasswordPayload
 export const LoginWithEmailPasswordPayloadSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
-export type LoginWithEmailPasswordPayload = z.infer<typeof LoginWithEmailPasswordPayloadSchema>;
+export type LoginWithEmailPasswordPayload = z.infer<
+  typeof LoginWithEmailPasswordPayloadSchema
+>;
 
 // GenerateOtpPayload
 export const GenerateOtpPayloadSchema = z.object({
@@ -90,7 +92,7 @@ export const ConversationsPayloadSchema = z.object({
 export type ConversationsPayload = z.infer<typeof ConversationsPayloadSchema>;
 
 export const AdditionalInfoSchema = z.union([
-  z.object({}).strict(), // Allow empty object `{}`  
+  z.object({}).strict(), // Allow empty object `{}`
   z.object({
     loc: z.string(),
     city: z.string(),
@@ -190,40 +192,40 @@ export const ConversationsResponseResultSchema = z.object({
 
 export const PaginationDataSchema = z.object({
   current_page: z.number().nonnegative(), // Current page number, must be >= 0
-  page_size: z.number().nonnegative(),       // Items per page, must be >= 0
-  total_pages: z.number().nonnegative(),  // Total number of pages, must be >= 0
-  total_records: z.number().nonnegative() // Total number of records, must be >= 0
+  page_size: z.number().nonnegative(), // Items per page, must be >= 0
+  total_pages: z.number().nonnegative(), // Total number of pages, must be >= 0
+  total_records: z.number().nonnegative(), // Total number of records, must be >= 0
 });
 
 export const LeadsTableResponseSchema = PaginationDataSchema.extend({
-  results: z.array(LeadResultSchema) // Array of lead results
+  results: z.array(LeadResultSchema), // Array of lead results
 });
 
 export const ConversationsTableResponseSchema = PaginationDataSchema.extend({
-  results: z.array(ConversationsResponseResultSchema) // Array of conversation results
+  results: z.array(ConversationsResponseResultSchema), // Array of conversation results
 });
 
 // Schema for individual step
 export const FunnelStepSchema = z.object({
-  name: z.string(),               // Name of the step
-  count: z.number(),              // Count of items in the step
-  conversion_rate: z.number(),    // Conversion rate for the step
+  name: z.string(), // Name of the step
+  count: z.number(), // Count of items in the step
+  conversion_rate: z.number(), // Conversion rate for the step
 });
 
 // Schema for the entire funnel
 export const ConversationFunnelResponseSchema = z.object({
-  funnel_id: z.number(),           // Unique ID for the funnel
-  funnel_name: z.string(),         // Name of the funnel
+  funnel_id: z.number(), // Unique ID for the funnel
+  funnel_name: z.string(), // Name of the funnel
   steps: z.array(FunnelStepSchema), // Array of funnel steps
   total_conversion_rate: z.number(), // Total conversion rate
-  analyzed_at: z.string(),         // ISO date-time string when analyzed
+  analyzed_at: z.string(), // ISO date-time string when analyzed
 });
 
 // Schema for the Entire Conversation Details Schema
 export const ConversationDetailsResponseSchema = z.object({
-  chat_history: z.array(MessageSchema),
+  chat_history: z.array(WebSocketMessageSchema),
   conversation: ConversationsResponseResultSchema.nullable(),
-  feedback: z.array(FeedbackSchema).optional(),
+  feedback: z.array(FeedbackRequestPayloadSchema).optional(),
 });
 
 // Schema for Filter Options - Payload & Response

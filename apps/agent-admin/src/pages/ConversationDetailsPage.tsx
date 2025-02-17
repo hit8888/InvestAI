@@ -8,13 +8,11 @@ import { useConversationDetails } from '../context/ConversationDetailsContext';
 import useConversationDetailsDataQuery from '../queries/query/useConversationDetailsDataQuery';
 import { useEffect, useMemo } from 'react';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
-import { Message } from '@meaku/core/types/agent';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
 import { getTenantFromLocalStorage } from '../utils/common';
 
 const ConversationDetailsPage = () => {
-  const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails } = useConversationDetails();
+  const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
+    useConversationDetails();
   const { sessionID } = useParams<string>();
   const companyName = conversation?.company ?? '';
   // TODOS: NEED To Add handling for CompanyLogoURL
@@ -25,7 +23,6 @@ const ConversationDetailsPage = () => {
   };
 
   const tenantName = getTenantFromLocalStorage();
-  const isAdminRole = getTenantIdentifier()?.['role'] === 'admin';
 
   const { data, isLoading, isError } = useConversationDetailsDataQuery({
     sessionID: sessionID || '',
@@ -47,14 +44,13 @@ const ConversationDetailsPage = () => {
 
     try {
       const conversationData = detailsManager.getFormattedConversationData() ?? {};
-      handleSetConversationDetails(conversationData as ConversationsTableDisplayContent);
+      handleSetConversationDetails(conversationData);
 
-      const chatHistoryMessages =
-        detailsManager.getFormattedChatHistory({
-          isAdmin: isAdminRole,
-          isReadOnly: false,
-        }) ?? [];
-      handleSetChatHistoryDetails(chatHistoryMessages as Message[]);
+      const chatHistoryMessages = detailsManager.getFormattedChatHistory();
+      handleSetChatHistoryDetails(chatHistoryMessages);
+
+      const feedbackData = detailsManager.getFeedback();
+      handleSetFeedbackDetails(feedbackData);
     } catch (error) {
       console.error('Error while processing conversation details', error);
     }
@@ -62,7 +58,8 @@ const ConversationDetailsPage = () => {
     return () => {
       // Cleanup code here
       handleSetConversationDetails(null);
-      handleSetChatHistoryDetails(null);
+      handleSetChatHistoryDetails([]);
+      handleSetFeedbackDetails([]);
     };
   }, [isLoading]);
 

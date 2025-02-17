@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import useAgentbotAnalytics from "./useAgentbotAnalytics";
-import ANALYTICS_EVENT_NAMES from "@meaku/core/constants/analytics";
-import { useSearchParams } from "react-router-dom";
-import useLocalStorageSession from "./useLocalStorageSession";
-import { IWebSocketHandleMessage } from "../types/webSocket";
+import { useEffect, useState } from 'react';
+import useAgentbotAnalytics from './useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useSearchParams } from 'react-router-dom';
+import useLocalStorageSession from './useLocalStorageSession';
+import { WebSocketMessage } from '../types/webSocketData';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -12,12 +12,11 @@ interface IProps {
   hasFirstUserMessageBeenSent: boolean;
   handleSendUserMessage: ({
     message,
-    eventType,
-    eventData,
-  }: IWebSocketHandleMessage) => Promise<void>;
+    message_type,
+  }: Pick<WebSocketMessage, 'message' | 'message_type'>) => Promise<void>;
 }
 
-type WidgetMode = "embed" | "overlay" | "bottomBar";
+type WidgetMode = 'embed' | 'overlay' | 'bottomBar';
 
 export const useEmbedAppEvents = ({
   fetchSessionData,
@@ -27,14 +26,17 @@ export const useEmbedAppEvents = ({
   handleSendUserMessage,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const { handleUpdateSessionData, sessionData: { sessionId} } = useLocalStorageSession();
+  const {
+    handleUpdateSessionData,
+    sessionData: { sessionId },
+  } = useLocalStorageSession();
 
   const [searchParams] = useSearchParams();
-  const isAgentOpen = searchParams.get("isAgentOpen") === "true";
+  const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
 
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(true);
-  const [mode, setMode] = useState<WidgetMode>("bottomBar");
+  const [mode, setMode] = useState<WidgetMode>('bottomBar');
 
   // Effect for sending chat state to parent
   useEffect(() => {
@@ -42,9 +44,9 @@ export const useEmbedAppEvents = ({
       chatOpen: isAgentOpen,
       tooltipOpen: false,
       showBanner,
-      hasFirstUserMessageBeenSent
+      hasFirstUserMessageBeenSent,
     };
-    window.parent.postMessage(payload, "*");
+    window.parent.postMessage(payload, '*');
   }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent]);
 
   useEffect(() => {
@@ -56,32 +58,34 @@ export const useEmbedAppEvents = ({
       };
 
       switch (type) {
-        case "PARENT_FORM_MESSAGE":
+        case 'PARENT_FORM_MESSAGE':
           setIsCollapsible(true);
-          updateMode("overlay");
+          updateMode('overlay');
           handleOpenAgent();
           if (event.data.data?.message) {
             fetchSessionData();
-            handleSendUserMessage({ message: event.data.data.message });
+            handleSendUserMessage({
+              message: { content: event.data.data.message },
+              message_type: 'TEXT',
+            });
           }
           break;
-
-        case "MODE_CHANGE":
+        case 'MODE_CHANGE':
           if (event.data.isCollapsible === false) {
-            updateMode("embed");
+            updateMode('embed');
             handleOpenAgent();
           } else {
-            updateMode("bottomBar");
+            updateMode('bottomBar');
           }
           fetchSessionData();
           break;
 
         default:
           // Handle isCollapsible changes for all other messages (including IFRAME_READY)
-          if (typeof newIsCollapsible === "boolean") {
+          if (typeof newIsCollapsible === 'boolean') {
             setIsCollapsible(newIsCollapsible);
             if (!newIsCollapsible) {
-              updateMode("embed");
+              updateMode('embed');
               handleOpenAgent();
             }
           }
@@ -94,19 +98,16 @@ export const useEmbedAppEvents = ({
 
       if (event.data?.utmParams) {
         handleUpdateSessionData({ utmParams: event.data.utmParams });
-        if (event.data.utmParams.isAgentOpen === "true") {
+        if (event.data.utmParams.isAgentOpen === 'true') {
           fetchSessionData();
           handleOpenAgent();
-          trackAgentbotEvent(
-            ANALYTICS_EVENT_NAMES.AGENT_OPENED_VIA_UTM_PARAMS,
-            {
-              ...event.data,
-            }
-          );
+          trackAgentbotEvent(ANALYTICS_EVENT_NAMES.AGENT_OPENED_VIA_UTM_PARAMS, {
+            ...event.data,
+          });
         }
       }
 
-      if (type === "open-breakout-button") {
+      if (type === 'open-breakout-button') {
         fetchSessionData();
         handleOpenAgent();
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.EXTERNAL_BUTTON_CLICKED, {
@@ -115,13 +116,13 @@ export const useEmbedAppEvents = ({
       }
     };
 
-    window.addEventListener("message", handleParentWindowMessages);
+    window.addEventListener('message', handleParentWindowMessages);
 
     // Send ready message to parent
-    window.parent.postMessage({ type: "IFRAME_READY", sessionId: sessionId }, "*");
+    window.parent.postMessage({ type: 'IFRAME_READY', sessionId: sessionId }, '*');
 
     return () => {
-      window.removeEventListener("message", handleParentWindowMessages);
+      window.removeEventListener('message', handleParentWindowMessages);
     };
   }, []);
 

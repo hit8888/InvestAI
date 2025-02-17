@@ -1,6 +1,6 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { updateSession } from "../../http/api";
-import { UpdateSessionDataPayload } from "../../types/api";
+import { UpdateSessionDataPayload } from "../../types/api/session_update_request";
 
 type ResponseFeedbackResult =
   ReturnType<typeof updateSession> extends Promise<infer T> ? T : never;
@@ -18,7 +18,7 @@ const useUpdateSession = (
       ResponseFeedbackVariables
     >,
     "mutationFn"
-  >,
+  >
 ) => {
   const mutation = useMutation({
     mutationKey: ["update-session-data"],

@@ -3,8 +3,8 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { useState } from 'react';
 
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/types/agent';
 import SlideArtifact from '../Artifact/SlideArtifact';
+import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
   handleArtifactOnClick: () => void;
@@ -70,7 +70,7 @@ const SlideArtifactPreview = ({
     return (
       <button
         onClick={handleOpenDialog}
-        className="mt-3 w-full flex-col gap-1 rounded-xl border border-primary/20 bg-primary-foreground p-2 transition-colors duration-300 ease-in-out hover:bg-primary/20"
+        className="mt-2 w-full flex-col gap-1 rounded-xl border border-primary/20 bg-primary-foreground p-2 transition-colors duration-300 ease-in-out hover:bg-primary/20"
       >
         <div className="flex items-center justify-between">
           <div className="mr-2 flex h-12 min-h-12 w-12 min-w-12 items-center justify-center rounded-xl bg-primary/10">

@@ -15,8 +15,8 @@ import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnApp
 import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
-import { InitializationPayload } from '@meaku/core/types/api';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
+import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;

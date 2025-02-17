@@ -1,7 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { SlideArtifactContent } from '@meaku/core/types/agent';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import SlideItem from './SlideItem';
+import { SlideArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
   items: SlideArtifactContent['items'];

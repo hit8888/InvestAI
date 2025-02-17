@@ -1,5 +1,5 @@
 import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
-import { BottomBarType } from '@meaku/core/types/session';
+import { BottomBarType } from '@meaku/core/types/api/configuration_response';
 import { useState, useEffect } from 'react';
 
 const getRandomPlaceholder = (placeholders: string | string[]): string => {

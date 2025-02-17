@@ -1,68 +1,52 @@
-import {
-  FormArtifactMetadataType,
-  FormArtifactContent,
-  SuggestionArtifactContent,
-  MessageArtifactType,
-} from '@meaku/core/types/agent';
-import { memo, useMemo } from 'react';
+import { FormArtifactMetadataType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import FormArtifact from './FormArtifact.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
-import useArtifactDataQuery from '@meaku/core/queries/useArtifactDataQuery';
-import ArtifactManager from '@meaku/core/managers/ArtifactManager';
-import { IWebSocketHandleMessage } from '@meaku/core/types/webSocket';
+import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
-  artifact?: MessageArtifactType;
+  artifact: {
+    artifact_type: string;
+    artifact_id: string;
+    content: FormArtifactContent | SuggestionArtifactContent;
+    metadata?: FormArtifactMetadataType;
+    error?: string | null;
+    error_code?: string | null;
+  };
   messageIndex: number;
   totalMessages: number;
-  handleSendUserMessage: (data: IWebSocketHandleMessage) => void;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMessage, isAMessageBeingProcessed }: IProps) => {
+const ChatArtifact = ({
+  artifact,
+  messageIndex,
+  totalMessages,
+  handleSendUserMessage,
+  isAMessageBeingProcessed,
+}: IProps) => {
   const artifactType = artifact?.artifact_type;
-
-  const shouldGetArtifactData = artifactType == 'FORM' || messageIndex === totalMessages - 1;
-
-  const {
-    data: artifactData,
-    isFetching,
-    isError,
-  } = useArtifactDataQuery({
-    artifactId: artifact?.artifact_id ?? null,
-    artifactType: artifactType ?? null,
-    queryOptions: {
-      enabled: shouldGetArtifactData,
-    },
-  });
-
-  const manager = useMemo(() => {
-    if (!artifactData) return;
-
-    return new ArtifactManager(artifactData);
-  }, [artifactData]);
-
-  const artifactContent = manager?.getArtifactContent();
-  const artifactMetadata = manager?.getArtifactMetaData();
+  // Only apply the last message check for FORM artifacts
+  const shouldGetArtifactData = artifactType === 'FORM' ? messageIndex === totalMessages - 1 : true;
 
   const renderArtifact = () => {
     switch (artifactType) {
       case 'SUGGESTIONS':
-        if (!shouldGetArtifactData) return <></>;
         return (
           <SuggestionsArtifact
-            suggestedQuestionOrientation='left'
+            suggestedQuestionOrientation="left"
             isAMessageBeingProcessed={isAMessageBeingProcessed}
-            artifact={artifactContent as SuggestionArtifactContent}
+            artifact={artifact.content as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}
           />
         );
       case 'FORM':
+        if (!shouldGetArtifactData) return <></>;
         return (
           <FormArtifact
-            artifactId={artifact?.artifact_id}
-            artifact={artifactContent as FormArtifactContent}
-            artifactMetadata={artifactMetadata as FormArtifactMetadataType}
+            artifactId={artifact.artifact_id}
+            artifact={artifact.content as FormArtifactContent}
+            artifactMetadata={artifact.metadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
           />
         );
@@ -71,13 +55,7 @@ const ChatArtifact = ({ artifact, messageIndex, totalMessages, handleSendUserMes
     }
   };
 
-  if (!artifact || !artifactData) return <></>;
-
-  if (isError || isFetching) {
-    return <></>;
-  }
-
   return <>{renderArtifact()}</>;
 };
 
-export default memo(ChatArtifact);
+export default ChatArtifact;

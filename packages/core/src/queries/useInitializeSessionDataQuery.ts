@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { initializeSession } from "../http/api";
-import { InitializationPayload } from "../types/api";
 import { BreakoutQueryOptions } from "../types/queries";
-import { SessionApiResponse } from "../types/session";
 import { defaultQueryClient } from "./defaultQueryClient";
+import { SessionApiResponse } from "../types/api/session_init_response";
+import { InitializationPayload } from "../types/api/session_init_request";
 
 const initializeSessionKey = (): unknown[] => ["session-initializer"];
 

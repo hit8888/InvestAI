@@ -1,22 +1,20 @@
-import { AIResponse, Message } from '@meaku/core/types/agent';
-import { Feedback } from '@meaku/core/types/session';
-import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { convertServerMessageToClientMessage } from '@meaku/core/transformers/common';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { isGeneratingArtifactEvent, filterOutSuggestions } from '@meaku/core/utils/messageUtils';
 
 interface State {
-  messages: Message[];
-  setMessages: (messages: Message[]) => void;
-  isAMessageBeingProcessed: boolean;
+  messages: WebSocketMessage[];
+  latestResponseId: string;
+  setLatestResponseId: (latestResponseId: string) => void;
+  setMessages: (messages: WebSocketMessage[]) => void;
+  isAMessageBeingProcessed: false | true;
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
-  handleAddAIMessage: (response: AIResponse) => void;
-  handleAddUserMessage: (message: string) => void;
-  handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
-  handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
+  handleAddAIMessage: (response: WebSocketMessage) => void;
+  handleAddUserMessage: (message: WebSocketMessage) => void;
   handleRemoveMessages: (messageIds: string[]) => void;
   hasFirstUserMessageBeenSent: boolean;
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
@@ -32,12 +30,24 @@ interface State {
 export const useMessageStore = create<State>()(
   devtools(
     immer((set) => ({
-      messages: [],
+      messages: [] as WebSocketMessage[],
+      latestResponseId: '',
+      setLatestResponseId: (latestResponseId: string) =>
+        set((draft) => {
+          draft.latestResponseId = latestResponseId;
+        }),
       setMessages: (messages) =>
         set((draft) => {
-          draft.messages = messages;
+          draft.messages = messages.filter(
+            (message) =>
+              !(
+                message.message_type === 'EVENT' &&
+                'event_type' in message.message &&
+                message.message.event_type === 'GENERATING_ARTIFACT'
+              ),
+          );
         }),
-      isAMessageBeingProcessed: false,
+      isAMessageBeingProcessed: false as const,
       setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>
         set((draft) => {
           draft.isAMessageBeingProcessed = isAMessageBeingProcessed;
@@ -47,33 +57,44 @@ export const useMessageStore = create<State>()(
         set((draft) => {
           draft.demoPlayingStatus = demoPlayingStatus;
         }),
-      handleAddAIMessage: (response) =>
+      handleAddAIMessage: (message: WebSocketMessage) =>
         set((draft) => {
-          const messageId = response.response_id; //AI response
+          // Don't add GENERATING_ARTIFACT event messages
+          if (isGeneratingArtifactEvent(message)) {
+            return;
+          }
 
-          const existingMessageIndex = draft.messages.findIndex((message) => message.id === messageId);
-
-          const messageInterface = convertServerMessageToClientMessage(response);
+          // Find existing message to update
+          const existingMessageIndex = draft.messages.findIndex(
+            (msg) =>
+              msg.role === 'ai' &&
+              msg.response_id === message.response_id &&
+              // For TEXT/STREAM messages, only check response_id to allow replacing orb state text
+              (message.message_type === 'TEXT' || message.message_type === 'STREAM'
+                ? true
+                : // For other message types (like ARTIFACT), check both message_type and artifact_type
+                  msg.message_type === message.message_type &&
+                  (msg.message_type !== 'ARTIFACT' ||
+                    ('artifact_type' in msg.message &&
+                      'artifact_type' in message.message &&
+                      msg.message.artifact_type === message.message.artifact_type))),
+          );
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
               ...draft.messages[existingMessageIndex],
-              ...messageInterface,
+              ...message,
             };
           } else {
-            draft.messages.push(messageInterface);
+            draft.messages.push(message);
           }
         }),
       handleAddUserMessage: (message) =>
         set((draft) => {
-          draft.messages.push({
-            id: nanoid(),
-            role: 'user',
-            message,
-            documents: [],
-            analytics: {},
-            features: [],
-          });
+          // Remove previous suggestions when user sends a message
+          draft.messages = filterOutSuggestions(draft.messages);
+          draft.messages.push(message);
+          draft.latestResponseId = message.response_id;
         }),
       isMediaTakingFullWidth: false,
       setMediaTakeFullScreenWidth: (value) =>
@@ -84,41 +105,9 @@ export const useMessageStore = create<State>()(
         set((draft) => {
           draft.isMediaTakingFullWidth = !draft.isMediaTakingFullWidth;
         }),
-      handleAddMessageFeedback: (messageId, feedback) =>
-        set((draft) => {
-          const messageIndex = draft.messages.findIndex((message) => message.id == messageId);
-
-          if (messageIndex === -1) return;
-
-          const existingFeedback = draft.messages[messageIndex].feedback;
-          const updatedFeedback = {
-            ...existingFeedback,
-            ...feedback,
-            positive_feedback: feedback.positive_feedback ?? false,
-          };
-
-          if (updatedFeedback.positive_feedback) delete updatedFeedback.category;
-
-          draft.messages[messageIndex] = {
-            ...draft.messages[messageIndex],
-            feedback: updatedFeedback,
-          };
-        }),
-
-      handleRemoveMessageFeedback: (messageId, previousState) =>
-        set((draft) => {
-          const messageIndex = draft.messages.findIndex((message) => message.id == messageId);
-
-          if (messageIndex === -1) return;
-
-          draft.messages[messageIndex] = {
-            ...draft.messages[messageIndex],
-            feedback: previousState?.feedback ?? undefined,
-          };
-        }),
       handleRemoveMessages: (messageIds) =>
         set((draft) => {
-          draft.messages = draft.messages.filter((message) => !messageIds.includes(message.id as string));
+          draft.messages = draft.messages.filter((message) => !messageIds.includes(message.response_id));
         }),
       hasFirstUserMessageBeenSent: false,
       setHasFirstUserMessageBeenSent: (value) =>

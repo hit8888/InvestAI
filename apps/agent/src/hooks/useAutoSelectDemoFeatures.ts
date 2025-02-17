@@ -1,4 +1,4 @@
-import { FeatureSelectionDTOType } from '@meaku/core/types/agent';
+import { FeatureSelectionDTOType } from '@meaku/core/types/webSocketData';
 import { useEffect, useState } from 'react';
 
 // when the demoFeatures length is less than or equal to 2 then only auto select features.

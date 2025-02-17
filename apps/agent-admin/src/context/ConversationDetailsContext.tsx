@@ -2,30 +2,37 @@ import {
   ConversationsTableDisplayContent,
   TransformedProspectAndCompanyDetailsContent,
 } from '@meaku/core/types/admin/admin';
-import { Message } from '@meaku/core/types/agent';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { getProspectAndCompanyDetailsData } from '../utils/common';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 
 interface ConversationDetailsContextType {
   conversation: ConversationsTableDisplayContent | null;
-  chatHistory: Message[] | null;
+  chatHistory: WebSocketMessage[];
+  feedbackData: FeedbackRequestPayload[];
   ProspectAndCompanyDetails: TransformedProspectAndCompanyDetailsContent | null;
   handleSetConversationDetails: (conversation: ConversationsTableDisplayContent | null) => void;
-  handleSetChatHistoryDetails: (conversation: Message[] | null) => void;
+  handleSetChatHistoryDetails: (conversation: WebSocketMessage[]) => void;
+  handleSetFeedbackDetails: (feedback: FeedbackRequestPayload[]) => void;
 }
 
 const ConversationDetailsContext = createContext<ConversationDetailsContextType | undefined>(undefined);
 
 export const ConversationDetailsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [conversation, setConversation] = useState<ConversationsTableDisplayContent | null>(null);
-  const [chatHistory, setChatHistory] = useState<Message[] | null>(null);
+  const [chatHistory, setChatHistory] = useState<WebSocketMessage[]>([]);
+  const [feedbackData, setFeedback] = useState<FeedbackRequestPayload[]>([]);
 
   const handleSetConversationDetails = (details: ConversationsTableDisplayContent | null) => {
     setConversation(details);
   };
 
-  const handleSetChatHistoryDetails = (history: Message[] | null) => {
+  const handleSetChatHistoryDetails = (history: WebSocketMessage[]) => {
     setChatHistory(history);
+  };
+  const handleSetFeedbackDetails = (feedback: FeedbackRequestPayload[]) => {
+    setFeedback(feedback);
   };
   const ProspectAndCompanyDetails = conversation ? getProspectAndCompanyDetailsData(conversation) : null;
   return (
@@ -33,9 +40,11 @@ export const ConversationDetailsProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         conversation,
         chatHistory,
+        feedbackData,
         ProspectAndCompanyDetails,
         handleSetConversationDetails,
         handleSetChatHistoryDetails,
+        handleSetFeedbackDetails,
       }}
     >
       {children}

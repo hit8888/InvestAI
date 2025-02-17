@@ -1,15 +1,16 @@
-import { OrganizationDetails } from "../types/admin/auth";
-import DateUtil from "./dateUtils";
+import { OrganizationDetails } from '../types/admin/auth';
+import DateUtil from './dateUtils';
+export { isArtifactMessage, isEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
 
 export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
-  localStorage.setItem("admin_tenant_identifier", JSON.stringify(tenantObj));
+  localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));
 };
 
 export const getTenantIdentifier = () => {
-  return JSON.parse(localStorage.getItem("admin_tenant_identifier") || "null");
+  return JSON.parse(localStorage.getItem('admin_tenant_identifier') || 'null');
 };
 
 export const setMessageIndexForAddingAIMessage = () => {
@@ -18,12 +19,7 @@ export const setMessageIndexForAddingAIMessage = () => {
 };
 
 export const getProcessingMessageSequence = () => {
-  return [
-    `Putting together my answer`,
-    `Getting it ready`,
-    `Working on it`,
-    `Forming a complete response`,
-  ];
+  return [`Putting together my answer`, `Getting it ready`, `Working on it`, `Forming a complete response`];
 };
 
 export const getMessageTimestamp = (timestamp?: string): string => {

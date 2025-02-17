@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { TranscriptionResult } from '../components/views/MultimediaChat/Demo/DemoQuestionFlow/types';
+import { TranscriptionResult } from '../components/views/AgentView/Demo/DemoQuestionFlow/types';
 
 interface UseTranscriptionHandlerProps {
   transcription: TranscriptionResult;

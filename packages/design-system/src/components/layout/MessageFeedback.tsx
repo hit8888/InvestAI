@@ -11,8 +11,14 @@ import {
 import Button from '@breakout/design-system/components/layout/button';
 import Textarea from '@breakout/design-system/components/layout/textarea';
 import FeedbackButton from '@breakout/design-system/components/layout/feedback-button';
-import { Message } from '@meaku/core/types/agent';
-import { FeedbackEnum, feedbackFormSchema, FeedbackFormSchemaType } from '@meaku/core/types/feedback';
+import {
+  FeedbackEnum,
+  FeedbackRequestPayloadSchema,
+  FeedbackRequestPayload,
+} from '@meaku/core/types/api/feedback_request';
+import { NEGATIVE_FEEDBACK_CATEGORIES, POSITIVE_FEEDBACK_CATEGORIES } from '@meaku/core/constants/feedback';
+import useResponseFeedback from '@meaku/core/queries/mutation/useResponseFeedback';
+import { trackError } from '@meaku/core/utils/error';
 import {
   Form,
   FormControl,
@@ -21,39 +27,29 @@ import {
   FormMessage,
   useForm,
 } from '@breakout/design-system/components/layout/form';
+import { BadgeSelect, BadgeSelectOption } from '@breakout/design-system/components/layout/badge-select';
+import MessageSquare from '@breakout/design-system/components/icons/message-square';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { BadgeSelect, BadgeSelectOption } from '@breakout/design-system/components/layout/badge-select';
-import { NEGATIVE_FEEDBACK_CATEGORIES, POSITIVE_FEEDBACK_CATEGORIES } from '@meaku/core/constants/feedback';
-import MessageSquare from '@breakout/design-system/components/icons/message-square';
-import useResponseFeedback from '@meaku/core/queries/mutation/useResponseFeedback';
-import toast from 'react-hot-toast';
-import { trackError } from '@meaku/core/utils/error';
-import { Feedback } from '@meaku/core/types/session';
 import SuccessToastMessage from './SuccessToastMessage';
+import toast from 'react-hot-toast';
 
 interface IProps {
-  message: Message;
   sessionId: string;
-  handleAddMessageFeedback: (messageId: string, feedback: Partial<Feedback>) => void;
-  handleRemoveMessageFeedback: (messageId: string, previousState?: Message) => void;
+  message: WebSocketMessage;
+  feedback?: FeedbackRequestPayload;
+  onAddFeedback: (feedback: Partial<FeedbackRequestPayload>) => void;
+  onRemoveFeedback: () => void;
 }
 
-const MessageFeedback = (props: IProps) => {
-  const { message, sessionId, handleAddMessageFeedback, handleRemoveMessageFeedback } = props;
-
-  const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(message.feedback?.positive_feedback === true));
-  const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(
-    Boolean(message.feedback?.positive_feedback === false),
-  );
+const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemoveFeedback }: IProps) => {
+  const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(feedback?.positive_feedback === true));
+  const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
   const [categories, setCategories] = useState<string[]>([]);
-  const isMessageReadOnly =
-    (message.isReadOnly ?? false) || message.feedback?.category != null || message.feedback?.remarks != null;
 
-  const responseId = message.id.toString();
-
-  const form = useForm<FeedbackFormSchemaType>({
-    resolver: zodResolver(feedbackFormSchema),
+  const form = useForm<FeedbackRequestPayload>({
+    resolver: zodResolver(FeedbackRequestPayloadSchema),
     defaultValues: {
       category: '',
       remarks: '',
@@ -69,18 +65,20 @@ const MessageFeedback = (props: IProps) => {
       });
 
       toast.error('An error occurred while sharing feedback.');
-      handleRemoveMessageFeedback(payload.payload.response_id);
+      onRemoveFeedback();
     },
     onSuccess: (_data, { payload: { category } }) => {
-      if(category?.length) {
+      if (category?.length) {
         toast.custom(
-        <SuccessToastMessage 
-        title='Thanks for your feedback!' 
-        subtitle='We appreciate your input and will use it to improve.'/>, 
-        {
-          position: 'bottom-center',
-          duration: 3000,
-        });
+          <SuccessToastMessage
+            title="Thanks for your feedback!"
+            subtitle="We appreciate your input and will use it to improve."
+          />,
+          {
+            position: 'bottom-center',
+            duration: 3000,
+          },
+        );
       }
     },
   });
@@ -102,23 +100,23 @@ const MessageFeedback = (props: IProps) => {
   };
 
   const handlePrimaryFeedback = async (feedback: FeedbackEnum) => {
-    handleAddMessageFeedback(responseId, {
+    onAddFeedback({
       positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
     });
 
     await handlePostResponseFeedback({
       sessionId,
       payload: {
-        response_id: message.id.toString(),
+        response_id: message.response_id.toString(),
         positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
       },
     });
   };
 
-  const handleShareDetailedFeedback = async (response: FeedbackFormSchemaType) => {
-    const positiveFeedbackValue = isFeedbackThumbUp ? true: isFeedbackThumbDown ? false : false;
+  const handleShareDetailedFeedback = async (response: FeedbackRequestPayload) => {
+    const positiveFeedbackValue = isFeedbackThumbUp ? true : isFeedbackThumbDown ? false : false;
 
-    handleAddMessageFeedback(responseId, {
+    onAddFeedback({
       positive_feedback: positiveFeedbackValue,
       category: response.category,
       remarks: response.remarks,
@@ -127,7 +125,7 @@ const MessageFeedback = (props: IProps) => {
     await handlePostResponseFeedback({
       sessionId,
       payload: {
-        response_id: responseId,
+        response_id: message.response_id.toString(),
         positive_feedback: positiveFeedbackValue,
         category: response.category,
         remarks: response.remarks,
@@ -136,6 +134,7 @@ const MessageFeedback = (props: IProps) => {
   };
 
   const showRemarksField = (form.getValues()?.['category'] ?? '').length > 0;
+  const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks);
 
   return (
     <Dialog>
@@ -181,37 +180,46 @@ const MessageFeedback = (props: IProps) => {
                 </FormItem>
               )}
             />
-            {showRemarksField ? <FormField
-              control={form.control}
-              name="remarks"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea {...field} placeholder="Please provide your detailed feedback" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> : null}
-            <DialogFooter className='w-full flex !justify-between'>
+            {showRemarksField ? (
+              <FormField
+                control={form.control}
+                name="remarks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="Please provide your detailed feedback"
+                        value={field.value ?? ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
+            <DialogFooter className="flex w-full !justify-between">
               <DialogClose asChild>
-                <Button
-                  size="sm"
-                  type="button"
-                  className="!bg-white text-primary font-semibold"
-                >
+                <Button size="sm" type="button" className="!bg-white font-semibold text-primary">
                   Cancel
                 </Button>
               </DialogClose>
-              <DialogClose asChild>
-                <Button
-                  size="sm"
-                  type="submit"
-                  className="border-2 border-secondary-foreground/25 font-semibold"
-                >
-                  Submit
-                </Button>
-              </DialogClose>
+              <div className="flex">
+                <DialogClose>
+                  <Button
+                    size="sm"
+                    type="submit"
+                    className="border-2 border-secondary-foreground/25 font-semibold"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      const values = form.getValues();
+                      await handleShareDetailedFeedback(values);
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </DialogClose>
+              </div>
             </DialogFooter>
           </form>
         </Form>
