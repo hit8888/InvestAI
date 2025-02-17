@@ -24,7 +24,7 @@ const useDemoConversation = () => {
     const response_id = nanoid();
 
     const webSocketMessage = getMessagePayload({
-      message: { content: message, event_type: AgentEventType.DEMO_QUESTION },
+      message: { content: message, event_type: AgentEventType.DEMO_QUESTION, event_data: {} },
       response_id,
       message_type: 'EVENT',
     });
