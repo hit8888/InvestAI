@@ -43,7 +43,11 @@ const MessageArtifactPreview = ({
   const isValidContent = (
     content: any,
   ): content is SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent => {
-    return artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE' || artifactType === 'VIDEO';
+    return (
+      content !== null &&
+      typeof content === 'object' &&
+      (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE' || artifactType === 'VIDEO')
+    );
   };
 
   if (!isValidContent(content)) return null;

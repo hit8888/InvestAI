@@ -10,6 +10,17 @@ interface IProps {
   messages: WebSocketMessage[];
 }
 
+// Type guard for WebSocketMessage with is_complete
+const isCompleteMessage = (message: WebSocketMessage): boolean => {
+  return (
+    'message' in message &&
+    typeof message.message === 'object' &&
+    message.message !== null &&
+    'is_complete' in message.message &&
+    typeof message.message.is_complete === 'boolean'
+  );
+};
+
 const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -43,7 +54,7 @@ const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: I
     if (textAreaRef.current && isSubmissionDisabled) {
       textAreaRef.current.blur();
     }
-    if (textAreaRef.current && lastMessage && lastMessage.is_complete) {
+    if (textAreaRef.current && lastMessage && isCompleteMessage(lastMessage) && lastMessage.message.is_complete) {
       textAreaRef.current.focus();
     }
   }, [messages.length, textAreaRef, isSubmissionDisabled]);
@@ -55,7 +66,7 @@ const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: I
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
-            className="border-1 p-4 pr-16 rounded-xl"
+            className="border-1 rounded-xl p-4 pr-16"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}

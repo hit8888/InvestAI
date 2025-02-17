@@ -1,4 +1,3 @@
-import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import useInView from '@meaku/core/hooks/useInView';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
