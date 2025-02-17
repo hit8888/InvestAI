@@ -6,9 +6,9 @@
       DEFAULT_WIDTH: "100vw",
       DEFAULT_HEIGHT: "88vh",
       COLLAPSED_SIZE_WIDTH_INITIAL: "100vw",
-      COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: "30vw",
+      COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: "28vw",
       COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX: 240,
-      COLLAPSED_SIZE_HEIGHT_PX: 120,
+      COLLAPSED_SIZE_HEIGHT_PX: 100,
       SENTRY_DSN:
         "https://abd92d53cb1a15b17a6c41f3750a5324@o4507977649750016.ingest.us.sentry.io/4507977650733056",
     } as Constants,
@@ -272,6 +272,7 @@
         width: "100%",
         height: "100%",
         border: "none",
+        borderRadius: "36px",
       });
       iframe.allow = "geolocation *; microphone *; camera *";
       iframe.id = "breakout-agent";
