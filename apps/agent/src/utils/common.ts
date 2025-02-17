@@ -1,7 +1,7 @@
-import { StyleConfig } from '@meaku/core/types/session';
 import { hexToRGB } from '@meaku/core/utils/color';
 import { ENV } from '@meaku/core/types/env';
 import { trackError } from './error';
+import { StyleConfig } from '@meaku/core/types/api/session_init_response';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
