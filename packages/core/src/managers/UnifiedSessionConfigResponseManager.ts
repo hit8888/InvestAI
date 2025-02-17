@@ -76,10 +76,28 @@ class UnifiedSessionConfigResponseManager {
   }
 
   getFormattedChatHistory(welcomeMessagePayload?: WebSocketMessage): ChatHistory {
-    const history = welcomeMessagePayload
+    let history = welcomeMessagePayload
       ? [welcomeMessagePayload, ...this.config.body.chat_history]
       : this.config.body.chat_history;
-    return filterOutSuggestions(history);
+
+    // For each response_id where role is 'ai', ensure STREAM comes before TEXT
+    const processedHistory = [...history];
+    for (let i = 0; i < processedHistory.length; i++) {
+      const currentMsg = processedHistory[i];
+      if (currentMsg.role === 'ai' && currentMsg.message_type === 'TEXT') {
+        // Look ahead for a STREAM message with same response_id
+        const streamIndex = processedHistory.findIndex(
+          (msg, index) => index > i && msg.response_id === currentMsg.response_id && msg.message_type === 'STREAM',
+        );
+
+        if (streamIndex !== -1) {
+          // Swap the positions
+          [processedHistory[i], processedHistory[streamIndex]] = [processedHistory[streamIndex], processedHistory[i]];
+        }
+      }
+    }
+
+    return filterOutSuggestions(processedHistory);
   }
 
   getDefaultErrorMessage() {

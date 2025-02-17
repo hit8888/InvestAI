@@ -59,6 +59,7 @@ const MessageItem = ({
   const { isInView, ref: inViewRef } = useInView(0, true);
   const isAiMessage = message.role === 'ai';
   const isTextMessage = message.message_type === 'TEXT' || message.message_type === 'STREAM';
+
   const showArtifactPreview = messageIndex >= totalMessages - 4;
   const isLastQuestionResponse = lastMessageResponseId === message.response_id;
   const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
@@ -105,7 +106,6 @@ const MessageItem = ({
 
       {isAiMessage && allowFeedback && (
         <>
-          {isMessageAnalyticsEvent(message) && <MessageAnalytics analytics={message.message.event_data} />}
           <MessageDataSources dataSources={message.documents ?? []} />
           {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
           {hasMessageStreamed && (
@@ -117,6 +117,7 @@ const MessageItem = ({
               onRemoveFeedback={handleRemoveFeedback}
             />
           )}
+          {isMessageAnalyticsEvent(message) && <MessageAnalytics analytics={message.message.event_data} />}
         </>
       )}
 

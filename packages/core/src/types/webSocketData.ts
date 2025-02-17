@@ -43,7 +43,7 @@ export type ArtifactBaseType = z.infer<typeof ArtifactBaseSchema>;
 
 export type ArtifactFormType = z.infer<typeof ArtifactFormSchema>;
 
-export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS']);
+export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS', 'DISCOVERY_QUESTIONS']);
 export const MessageTypeSchema = z.enum(['TEXT', 'STREAM', 'ARTIFACT', 'EVENT']);
 
 export const BaseMessageContentSchema = z.object({

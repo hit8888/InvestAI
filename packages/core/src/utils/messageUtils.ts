@@ -1,6 +1,7 @@
 import {
   AgentEventType,
   ArtifactMessageContent,
+  BaseMessageContent,
   DemoEventData,
   EventMessageContent,
   StreamMessageContent,
@@ -11,6 +12,12 @@ export const isStreamMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: StreamMessageContent } => {
   return message.message_type === 'STREAM';
+};
+
+export const isTextMessage = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & { message: BaseMessageContent } => {
+  return message.message_type === 'TEXT';
 };
 
 export const isArtifactMessage = (
