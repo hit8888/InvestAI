@@ -54,7 +54,7 @@ const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: I
     if (textAreaRef.current && isSubmissionDisabled) {
       textAreaRef.current.blur();
     }
-    if (textAreaRef.current && lastMessage && isCompleteMessage(lastMessage) && lastMessage.message.is_complete) {
+    if (textAreaRef.current && lastMessage && isCompleteMessage(lastMessage)) {
       textAreaRef.current.focus();
     }
   }, [messages.length, textAreaRef, isSubmissionDisabled]);
