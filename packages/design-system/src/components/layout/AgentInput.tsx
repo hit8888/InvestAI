@@ -2,6 +2,7 @@ import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { isCompleteMessage } from '@meaku/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';
 
 interface IProps {
@@ -9,17 +10,6 @@ interface IProps {
   isAMessageBeingProcessed: boolean;
   messages: WebSocketMessage[];
 }
-
-// Type guard for WebSocketMessage with is_complete
-const isCompleteMessage = (message: WebSocketMessage): boolean => {
-  return (
-    'message' in message &&
-    typeof message.message === 'object' &&
-    message.message !== null &&
-    'is_complete' in message.message &&
-    typeof message.message.is_complete === 'boolean'
-  );
-};
 
 const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');

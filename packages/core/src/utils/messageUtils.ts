@@ -14,6 +14,17 @@ export const isStreamMessage = (
   return message.message_type === 'STREAM';
 };
 
+// Type guard for WebSocketMessage with is_complete
+export const isCompleteMessage = (message: WebSocketMessage): boolean => {
+  return (
+    'message' in message &&
+    typeof message.message === 'object' &&
+    message.message !== null &&
+    'is_complete' in message.message &&
+    typeof message.message.is_complete === 'boolean'
+  );
+};
+
 export const isTextMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: BaseMessageContent } => {

@@ -18,7 +18,7 @@ const useAnimateDifferentOrbStates = ({ handleAddAIMessage }: useAnimateDifferen
         response_id: messageId,
         session_id: messageId,
         timestamp: new Date().toISOString(),
-        message_type: 'TEXT',
+        message_type: 'STREAM',
         message: {
           content: messageIndex === -1 ? 'Thinking' : PROCESSING_MESSAGE_SEQUENCE[messageIndex],
         },

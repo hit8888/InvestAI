@@ -69,6 +69,7 @@ export const useMessageStore = create<State>()(
             (msg) =>
               msg.role === 'ai' &&
               msg.response_id === message.response_id &&
+              msg.message_type === message.message_type &&
               // For TEXT/STREAM messages, only check response_id to allow replacing orb state text
               (message.message_type === 'TEXT' || message.message_type === 'STREAM'
                 ? true

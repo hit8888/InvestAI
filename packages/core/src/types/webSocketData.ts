@@ -51,7 +51,7 @@ export const BaseMessageContentSchema = z.object({
 });
 
 export const StreamMessageContentSchema = BaseMessageContentSchema.extend({
-  is_complete: z.boolean(),
+  is_complete: z.boolean().optional(),
 });
 
 // More specific schema for artifact messages that enforces proper structure

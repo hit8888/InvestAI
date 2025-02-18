@@ -8,6 +8,7 @@ import {
   isMessageAnalyticsEvent,
   getDemoEventData,
   isSuggestionArtifact,
+  isCompleteMessage,
 } from './messageUtils';
 import sessionResponseWithAllArtifacts from '../__mocks__/session_response_with_all_artifacts.json';
 
@@ -252,6 +253,26 @@ describe('messageUtils', () => {
       expect(isSuggestionArtifact(suggestionArtifact)).toBe(true);
       expect(isSuggestionArtifact(slideArtifact)).toBe(false);
       expect(isSuggestionArtifact(textMessage)).toBe(false);
+    });
+  });
+
+  describe('isCompleteMessage', () => {
+    it('should identify complete messages', () => {
+      const completeMessage: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'STREAM',
+        message: { content: 'test content', is_complete: true },
+      };
+      expect(isCompleteMessage(completeMessage)).toBe(true);
+    });
+
+    it('should identify incomplete messages', () => {
+      const incompleteMessage: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'STREAM',
+        message: { content: 'test content' },
+      };
+      expect(isCompleteMessage(incompleteMessage)).toBe(false);
     });
   });
 });

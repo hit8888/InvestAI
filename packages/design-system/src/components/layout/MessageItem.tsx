@@ -3,12 +3,7 @@ import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import ChatArtifact from './ChatArtifact.tsx';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import {
-  getMessageTimestamp,
-  isArtifactMessage,
-  isMessageAnalyticsEvent,
-  isStreamMessage,
-} from '@meaku/core/utils/index';
+import { getMessageTimestamp, isArtifactMessage, isMessageAnalyticsEvent } from '@meaku/core/utils/index';
 import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
@@ -18,11 +13,13 @@ import { useState } from 'react';
 import MessageAnalytics from './MessageAnalytics';
 import MessageDataSources from './MessageDataSources';
 import MessageFeedback from './MessageFeedback';
+import { isCompleteMessage } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
   usingForAgent: boolean;
   message: WebSocketMessage;
+  messages: WebSocketMessage[];
   sessionId: string;
   primaryColor: string | null;
   messageIndex: number;
@@ -42,6 +39,7 @@ const MessageItem = ({
   isAMessageBeingProcessed,
   usingForAgent,
   message,
+  messages,
   sessionId,
   primaryColor,
   messageIndex,
@@ -60,10 +58,13 @@ const MessageItem = ({
   const isAiMessage = message.role === 'ai';
   const isTextMessage = message.message_type === 'TEXT' || message.message_type === 'STREAM';
 
+  const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
+  const streamMessage = messagesWithSameResponseId.find((msg) => msg.message_type === 'STREAM');
+  const hasMessageStreamed = streamMessage ? isCompleteMessage(streamMessage) : true;
+
   const showArtifactPreview = messageIndex >= totalMessages - 4;
-  const isLastQuestionResponse = lastMessageResponseId === message.response_id;
+  const isLastQuestionResponse = lastMessageResponseId === message.response_id && message.message_type === 'STREAM';
   const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
-  const hasMessageStreamed = isStreamMessage(message) ? message.message.is_complete : false;
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
 
@@ -136,7 +137,7 @@ const MessageItem = ({
       )}
 
       {/* Form Artifact */}
-      {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && (
+      {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
         <div className="flex flex-col items-start pl-6">
           <ChatArtifact
             artifact={{
@@ -171,7 +172,7 @@ const MessageItem = ({
         )}
 
         {/* Show suggestion artifacts - store handles filtering */}
-        {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && (
+        {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
           <ChatArtifact
             artifact={{
               artifact_type: message.message.artifact_type,

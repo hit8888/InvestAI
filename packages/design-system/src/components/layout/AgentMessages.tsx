@@ -91,29 +91,32 @@ const AgentMessages = ({
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
           })}
         >
-          {messages.map((message, idx) => (
-            <div key={idx}>
-              {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
-              <MessageItem
-                isAMessageBeingProcessed={isAMessageBeingProcessed}
-                logoURL={logoURL}
-                usingForAgent={usingForAgent}
-                sessionId={sessionId}
-                primaryColor={primaryColor}
-                message={message}
-                messageIndex={idx}
-                totalMessages={messages.length}
-                orbState={orbState}
-                setActiveArtifact={setActiveArtifact}
-                setDemoPlayingStatus={setDemoPlayingStatus}
-                handleSendUserMessage={handleSendUserMessage}
-                initialSuggestedQuestions={initialSuggestedQuestions}
-                allowFeedback={allowFeedback}
-                initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
-                lastMessageResponseId={lastMessageResponseId}
-              />
-            </div>
-          ))}
+          {messages.map((message, idx) => {
+            return (
+              <div key={idx}>
+                {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
+                <MessageItem
+                  isAMessageBeingProcessed={isAMessageBeingProcessed}
+                  logoURL={logoURL}
+                  usingForAgent={usingForAgent}
+                  sessionId={sessionId}
+                  primaryColor={primaryColor}
+                  message={message}
+                  messageIndex={idx}
+                  totalMessages={messages.length}
+                  orbState={orbState}
+                  setActiveArtifact={setActiveArtifact}
+                  setDemoPlayingStatus={setDemoPlayingStatus}
+                  handleSendUserMessage={handleSendUserMessage}
+                  initialSuggestedQuestions={initialSuggestedQuestions}
+                  allowFeedback={allowFeedback}
+                  initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
+                  lastMessageResponseId={lastMessageResponseId}
+                  messages={messages}
+                />
+              </div>
+            );
+          })}
           {aiMessages.length <= 1 && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
