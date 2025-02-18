@@ -38,9 +38,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const logoURL = responseManager.getLogoUrl() ?? '';
 
   const hasArtifactOrDemoInMessageHistory =
-    messages.findIndex(
-      (message) => message.role === 'ai' && message.message_type === 'ARTIFACT' && 'artifact_data' in message.message,
-    ) !== -1 || isDemoAvailable;
+    messages.findIndex((message) => message.role === 'ai' && message.message_type === 'ARTIFACT') !== -1 ||
+    isDemoAvailable;
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);

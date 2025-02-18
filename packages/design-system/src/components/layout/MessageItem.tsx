@@ -125,20 +125,18 @@ const MessageItem = ({
 
       {/* Ai Message Artifact Preview */}
       {showMessageArtifactPreview && (
-        <div className="mb-4 px-6">
-          <MessageArtifactPreview
-            message={message}
-            usingForAgent={usingForAgent}
-            setDemoPlayingStatus={setDemoPlayingStatus}
-            setActiveArtifact={setActiveArtifact}
-            logoURL={logoURL}
-          />
-        </div>
+        <MessageArtifactPreview
+          message={message}
+          usingForAgent={usingForAgent}
+          setDemoPlayingStatus={setDemoPlayingStatus}
+          setActiveArtifact={setActiveArtifact}
+          logoURL={logoURL}
+        />
       )}
 
       {/* Form Artifact */}
       {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
-        <div className="flex flex-col items-start pl-6">
+        <div className="-mt-8 flex flex-col items-start pl-11">
           <ChatArtifact
             artifact={{
               artifact_type: message.message.artifact_type,
@@ -149,8 +147,6 @@ const MessageItem = ({
               error_code: message.message.artifact_data.error_code,
             }}
             handleSendUserMessage={handleSendUserMessage}
-            messageIndex={messageIndex}
-            totalMessages={totalMessages}
             isAMessageBeingProcessed={isAMessageBeingProcessed}
           />
         </div>
@@ -182,8 +178,6 @@ const MessageItem = ({
               error: message.message.artifact_data.error,
               error_code: message.message.artifact_data.error_code,
             }}
-            messageIndex={messageIndex}
-            totalMessages={totalMessages}
             handleSendUserMessage={handleSendUserMessage}
             isAMessageBeingProcessed={isAMessageBeingProcessed}
           />

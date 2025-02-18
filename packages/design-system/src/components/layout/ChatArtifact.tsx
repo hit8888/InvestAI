@@ -13,21 +13,11 @@ interface IProps {
     error?: string | null;
     error_code?: string | null;
   };
-  messageIndex: number;
-  totalMessages: number;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-const ChatArtifact = ({
-  artifact,
-  messageIndex,
-  totalMessages,
-  handleSendUserMessage,
-  isAMessageBeingProcessed,
-}: IProps) => {
+const ChatArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcessed }: IProps) => {
   const artifactType = artifact?.artifact_type;
-  // Only apply the last message check for FORM artifacts
-  const shouldGetArtifactData = artifactType === 'FORM' ? messageIndex === totalMessages - 1 : true;
 
   const renderArtifact = () => {
     switch (artifactType) {
@@ -41,7 +31,6 @@ const ChatArtifact = ({
           />
         );
       case 'FORM':
-        if (!shouldGetArtifactData) return <></>;
         return (
           <FormArtifact
             artifactId={artifact.artifact_id}

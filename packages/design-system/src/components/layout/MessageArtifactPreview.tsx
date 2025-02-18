@@ -53,19 +53,21 @@ const MessageArtifactPreview = ({
   if (!isValidContent(content)) return null;
 
   return (
-    <ArtifactPreview
-      usingForAgent={usingForAgent}
-      artifactId={artifactData.artifact_id}
-      artifactType={artifactType as ArtifactEnum}
-      setDemoPlayingStatus={setDemoPlayingStatus}
-      setActiveArtifact={setActiveArtifact}
-      logoURL={logoURL}
-      title={artifactManager.getArtifactTitle()}
-      description={artifactManager.getArtifactDescription()}
-      artifactContent={content}
-      isError={!!artifactData.error}
-      isFetching={false}
-    />
+    <div className="mb-4 pl-11 pr-6">
+      <ArtifactPreview
+        usingForAgent={usingForAgent}
+        artifactId={artifactData.artifact_id}
+        artifactType={artifactType as ArtifactEnum}
+        setDemoPlayingStatus={setDemoPlayingStatus}
+        setActiveArtifact={setActiveArtifact}
+        logoURL={logoURL}
+        title={artifactManager.getArtifactTitle()}
+        description={artifactManager.getArtifactDescription()}
+        artifactContent={content}
+        isError={!!artifactData.error}
+        isFetching={false}
+      />
+    </div>
   );
 };
 
