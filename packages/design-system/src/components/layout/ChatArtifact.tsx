@@ -4,7 +4,6 @@ import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
-  isAMessageBeingProcessed: boolean;
   artifact: {
     artifact_type: string;
     artifact_id: string;
@@ -16,7 +15,7 @@ interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-const ChatArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcessed }: IProps) => {
+const ChatArtifact = ({ artifact, handleSendUserMessage }: IProps) => {
   const artifactType = artifact?.artifact_type;
 
   const renderArtifact = () => {
@@ -25,7 +24,6 @@ const ChatArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcesse
         return (
           <SuggestionsArtifact
             suggestedQuestionOrientation="left"
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
             artifact={artifact.content as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}
           />

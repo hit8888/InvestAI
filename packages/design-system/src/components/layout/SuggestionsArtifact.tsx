@@ -6,13 +6,12 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { cn } from '../../lib/cn.ts';
 
 interface IProps {
-  isAMessageBeingProcessed: boolean;
   suggestedQuestionOrientation: 'left' | 'right';
   artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-const SuggestionsArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingProcessed, suggestedQuestionOrientation }: IProps) => {
+const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestionOrientation }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const showSuggestionsArtifact: boolean =
     (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
@@ -31,14 +30,15 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, isAMessageBeingP
   }
 
   return (
-    <div className={cn("flex w-full flex-col items-start gap-3", {
-      "items-end": suggestedQuestionOrientation === 'right',
-      "pl-11 pr-6": suggestedQuestionOrientation === 'left'
-    })}>
+    <div
+      className={cn('flex w-full flex-col items-start gap-3', {
+        'items-end': suggestedQuestionOrientation === 'right',
+        'pl-11 pr-6': suggestedQuestionOrientation === 'left',
+      })}
+    >
       {artifact.suggested_questions.map((question, index) => (
         <div key={question} className="max-w-[80%] flex-wrap">
           <Suggestion
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
             question={question}
             onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
             itemIndex={index}

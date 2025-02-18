@@ -4,15 +4,12 @@ interface IProps {
   question: string;
   onSuggestedQuestionOnClick: (msg: string) => void;
   itemIndex: number;
-  isAMessageBeingProcessed: boolean;
 }
 
-const Suggestion = ({ question, onSuggestedQuestionOnClick, itemIndex, isAMessageBeingProcessed }: IProps) => {
-
+const Suggestion = ({ question, onSuggestedQuestionOnClick, itemIndex }: IProps) => {
   const handleClickOnSuggestedQuestion = (question: string) => {
-    if(isAMessageBeingProcessed) return;
-    onSuggestedQuestionOnClick(question)
-  }
+    onSuggestedQuestionOnClick(question);
+  };
   return (
     <div
       onClick={() => handleClickOnSuggestedQuestion(question)}

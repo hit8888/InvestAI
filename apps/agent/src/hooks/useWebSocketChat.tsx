@@ -29,6 +29,7 @@ const useWebSocketChat = () => {
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
+  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
@@ -58,6 +59,10 @@ const useWebSocketChat = () => {
   );
   const handleSendUserMessage = useCallback(
     async ({ message, message_type }: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
+      if (isAMessageBeingProcessed) {
+        return;
+      }
+
       const response_id = nanoid();
 
       const payload = getMessagePayload({ message, response_id, message_type });
@@ -75,17 +80,16 @@ const useWebSocketChat = () => {
         setHasFirstUserMessageBeenSent(true);
       }
 
-      setIsAMessageBeingProcessed(true);
-
       if (!sessionId) {
         messageQueue.current.push(payload);
       } else {
         handleAddUserMessage(payload);
+        setIsAMessageBeingProcessed(true);
         sendMessage(JSON.stringify(payload));
         handleAnimatedOrb(response_id);
       }
     },
-    [readyState, sessionId],
+    [readyState, sessionId, isAMessageBeingProcessed],
   );
 
   const handlePrimaryCta = () => {
@@ -149,6 +153,7 @@ const useWebSocketChat = () => {
     messageQueue.current.forEach((payload) => {
       const updatedPayload = { ...payload, session_id: sessionId };
       handleAddUserMessage(updatedPayload);
+      setIsAMessageBeingProcessed(true);
       handleAnimatedOrb(updatedPayload.response_id);
       sendMessage(JSON.stringify(updatedPayload));
     });

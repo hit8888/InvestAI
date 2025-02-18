@@ -24,7 +24,6 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
-  const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const showBanner = show_banner && !hasFirstUserMessageBeenSent && showBubbles;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
@@ -75,7 +74,6 @@ const AgentView = ({ fetchSessionData }: IProps) => {
         />
       ) : (
         <EntryPointBottomBar
-          isAMessageBeingProcessed={isAMessageBeingProcessed}
           handleSendUserMessage={handleSendMessage}
           handleOpenAgent={handleOpenAgent}
           hideBottomBar={shouldHideBottomBar}

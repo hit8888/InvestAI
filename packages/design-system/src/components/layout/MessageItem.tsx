@@ -136,7 +136,7 @@ const MessageItem = ({
 
       {/* Form Artifact */}
       {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
-        <div className="-mt-8 flex flex-col items-start pl-11">
+        <div className="flex flex-col items-start pl-11">
           <ChatArtifact
             artifact={{
               artifact_type: message.message.artifact_type,
@@ -147,7 +147,6 @@ const MessageItem = ({
               error_code: message.message.artifact_data.error_code,
             }}
             handleSendUserMessage={handleSendUserMessage}
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
           />
         </div>
       )}
@@ -158,7 +157,6 @@ const MessageItem = ({
         {totalMessages < 1 && (
           <SuggestionsArtifact
             suggestedQuestionOrientation="left"
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
             handleSendUserMessage={handleSendUserMessage}
             artifact={{
               suggested_questions: initialSuggestedQuestions,
@@ -179,7 +177,6 @@ const MessageItem = ({
               error_code: message.message.artifact_data.error_code,
             }}
             handleSendUserMessage={handleSendUserMessage}
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
           />
         )}
       </div>

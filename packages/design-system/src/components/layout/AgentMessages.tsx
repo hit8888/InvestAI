@@ -121,7 +121,6 @@ const AgentMessages = ({
             <div className="w-full pt-4">
               <SuggestionsArtifact
                 suggestedQuestionOrientation="right"
-                isAMessageBeingProcessed={isAMessageBeingProcessed}
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{
                   suggested_questions: initialSuggestedQuestions,
