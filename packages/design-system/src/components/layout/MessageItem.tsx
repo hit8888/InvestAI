@@ -101,6 +101,7 @@ const MessageItem = ({
           isLastQuestionResponse={isLastQuestionResponse}
           orbState={orbState}
           primaryColor={primaryColor}
+          isAMessageBeingProcessed={isAMessageBeingProcessed}
         />
       )}
 
@@ -123,7 +124,7 @@ const MessageItem = ({
 
       {/* Ai Message Artifact Preview */}
       {showMessageArtifactPreview && (
-        <div className="mb-4">
+        <div className="mb-4 px-6">
           <MessageArtifactPreview
             message={message}
             usingForAgent={usingForAgent}
@@ -136,7 +137,7 @@ const MessageItem = ({
 
       {/* Form Artifact */}
       {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && (
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start pl-6">
           <ChatArtifact
             artifact={{
               artifact_type: message.message.artifact_type,

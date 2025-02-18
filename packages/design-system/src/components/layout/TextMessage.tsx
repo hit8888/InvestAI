@@ -18,6 +18,7 @@ interface TextMessageProps {
   isLastQuestionResponse: boolean;
   orbState: OrbStatusEnum;
   primaryColor: string | null;
+  isAMessageBeingProcessed: boolean;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -36,15 +37,16 @@ const TextMessage: React.FC<TextMessageProps> = ({
   isLastQuestionResponse,
   orbState,
   primaryColor,
+  isAMessageBeingProcessed,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
   const messageRef = useRef<HTMLDivElement>(null);
 
-  const isLoading = false; //fix later
   const conditionSpecificForDashboard = !usingForAgent && !isAiMessage;
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
+  const isLoading = isAMessageBeingProcessed && isAiMessage && isLastQuestionResponse;
 
   const reactMarkdownComponents: Partial<Components> = {
     a: MessageLink,
