@@ -75,8 +75,8 @@ const CustomTableView = ({
   });
 
   const widthDimension = isSidebarOpen
-    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1540px]'
-    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1700px]';
+    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1500px]'
+    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1650px]';
 
   return (
     <div className="relative w-full">
