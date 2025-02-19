@@ -17,7 +17,10 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
     (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 
   const handleSuggestedQuestionOnClick = (message: string) => {
-    handleSendUserMessage({ message: { content: message }, message_type: 'TEXT' });
+    handleSendUserMessage({
+      message: { content: message, event_data: {}, event_type: 'SUGGESTED_QUESTION_CLICKED' },
+      message_type: 'EVENT',
+    });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SUGGESTED_QUESTION_CLICKED, {
       message,
       isAgentOpen: true,

@@ -93,7 +93,10 @@ const EntryPointBottomBar = ({
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
   const handleSuggestedQuestionOnClick = (msg: string) => {
-    handleSendUserMessage({ message: { content: msg }, message_type: 'TEXT' });
+    handleSendUserMessage({
+      message: { content: msg, event_data: {}, event_type: 'SUGGESTED_QUESTION_CLICKED' },
+      message_type: 'EVENT',
+    });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.INITIAL_SUGGESTED_QUESTION_CLICKED, {
       message: msg,
       isAgentOpen: false,

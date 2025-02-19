@@ -54,7 +54,14 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
     demoPlayingStatus !== DemoPlayingStatus.INITIAL && demoPlayingStatus !== DemoPlayingStatus.STARTED;
 
   const handleSlideItemClick = (title: string) => {
-    handleSendMessage({ message: { content: `Can you elaborate more on ${title}` }, message_type: 'TEXT' });
+    handleSendMessage({
+      message: {
+        content: `Can you elaborate more on ${title}`,
+        event_data: {},
+        event_type: 'SLIDE_ITEM_CLICKED',
+      },
+      message_type: 'EVENT',
+    });
   };
 
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;

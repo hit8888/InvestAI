@@ -69,7 +69,7 @@ const useWebSocketChat = () => {
       const payload = getMessagePayload({ message, response_id, message_type });
 
       //This is for event messages where the message_type is EVENT
-      if ('event_type' in message && 'event_data' in message) {
+      if ('event_type' in message && 'event_data' in message && !message.content) {
         sendMessage(JSON.stringify(payload));
         return;
       }

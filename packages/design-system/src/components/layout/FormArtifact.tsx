@@ -67,7 +67,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
     };
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: response_data },
-      message_type: 'ARTIFACT',
+      message_type: 'EVENT',
     });
     setSubmitted(true);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });

@@ -97,6 +97,16 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   }),
   z.object({
     content: z.string(),
+    event_type: z.literal('SUGGESTED_QUESTION_CLICKED'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('SLIDE_ITEM_CLICKED'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
     event_type: z.literal('GENERATING_ARTIFACT'),
     event_data: GeneratingArtifactEventDataSchema,
   }),
