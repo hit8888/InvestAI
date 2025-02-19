@@ -3,7 +3,6 @@ import { useTypewriter } from '@breakout/design-system/hooks/useTypewriter';
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useState } from 'react';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { Suggestion } from '@breakout/design-system/components/layout/Suggestion';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import Orb from '@breakout/design-system/components/Orb/index';
@@ -14,6 +13,7 @@ import { motion } from 'framer-motion';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import useDynamicPlaceholder from '../../../hooks/useDynamicPlaceholder.tsx';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -76,10 +76,11 @@ const EntryPointBottomBar = ({
   showBubbles,
   setShowBubbles,
 }: IProps) => {
-  const initialSuggestedQuestions = useUnifiedConfigurationResponseManager().getInitialSuggestedQuestions();
-  const { show_banner } = useUnifiedConfigurationResponseManager().getStyleConfig();
-  const orgName = useUnifiedConfigurationResponseManager().getOrgName();
-  const agentName = useUnifiedConfigurationResponseManager().getAgentName();
+  const configurationApiResponseManager = useConfigurationApiResponseManager();
+  const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
+  const { show_banner } = configurationApiResponseManager.getStyleConfig();
+  const orgName = configurationApiResponseManager.getOrgName();
+  const agentName = configurationApiResponseManager.getAgentName();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const placeholderText = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 

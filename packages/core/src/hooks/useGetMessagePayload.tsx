@@ -1,6 +1,6 @@
-import useUnifiedConfigurationResponseManager from './useUnifiedConfigurationResponseManager';
 import { useIsAdmin } from '../contexts/UrlDerivedDataProvider';
 import { WebSocketMessage, BaseMessageContent, EventMessageContent } from '../types';
+import useSessionApiResponseManager from './useSessionApiResponseManager';
 
 type MessagePayloadParams = {
   message: BaseMessageContent | EventMessageContent;
@@ -11,8 +11,8 @@ type MessagePayloadParams = {
 const useGetMessagePayload = () => {
   const is_admin = useIsAdmin();
 
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
-  const session_id = unifiedConfigurationResponseManager.getSessionId() ?? '';
+  const sessionApiResponseManager = useSessionApiResponseManager();
+  const session_id = sessionApiResponseManager ? sessionApiResponseManager.getSessionId() : '';
 
   const getMessagePayload = ({ message, response_id, message_type }: MessagePayloadParams): WebSocketMessage => {
     const basePayload = {

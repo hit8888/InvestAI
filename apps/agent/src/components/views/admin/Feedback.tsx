@@ -1,7 +1,6 @@
 import { ApiProviderContext } from '@meaku/core/contexts/Context';
 import { useContextSelector } from 'use-context-selector';
 import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { useSearchParams } from 'react-router-dom';
 import AgentInOpenState from '../AgentView/AgentInOpenState.tsx';
 import Backdrop from '@breakout/design-system/components/layout/backdrop';
@@ -13,13 +12,13 @@ import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-
+import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
 
   const [searchParams] = useSearchParams();
   const { handleSendUserMessage } = useWebSocketChat();
-  const manager = useUnifiedConfigurationResponseManager();
+  const manager = useSessionApiResponseManager();
 
   const { handleUpdateSessionData } = useLocalStorageSession();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
@@ -34,17 +33,17 @@ const Feedback = () => {
   };
 
   const page_url = searchParams.get('url') || undefined;
-  const sessionId = manager.getSessionId();
-  const prospectId = manager.getProspectId();
+  const sessionId = manager?.getSessionId();
+  const prospectId = manager?.getProspectId();
   const hashedSessionData = `${sessionId}|${prospectId}`;
+
+  const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
+    handleSendUserMessage(data);
+  };
 
   const fetchSessionData = () => {
     if (sessionId) return;
     sessionQuery.refetch();
-  };
-
-  const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
-    handleSendUserMessage(data);
   };
 
   useEffect(() => {

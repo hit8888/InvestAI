@@ -3,7 +3,6 @@ import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
 import AgentInput from '@breakout/design-system/components/layout/AgentInput';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
@@ -11,6 +10,7 @@ import ArtifactContainer from './ArtifactContainer.tsx';
 import { Demo } from './Demo/index.tsx';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -32,10 +32,10 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
 
-  const responseManager = useUnifiedConfigurationResponseManager();
+  const configurationApiResponseManager = useConfigurationApiResponseManager();
 
-  const ctaConfig = responseManager.getCTAConfig();
-  const logoURL = responseManager.getLogoUrl() ?? '';
+  const ctaConfig = configurationApiResponseManager.getCTAConfig();
+  const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
 
   const hasArtifactOrDemoInMessageHistory =
     messages.findIndex((message) => message.role === 'ai' && message.message_type === 'ARTIFACT') !== -1 ||

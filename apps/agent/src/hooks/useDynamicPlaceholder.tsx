@@ -1,4 +1,4 @@
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { BottomBarType } from '@meaku/core/types/api/configuration_response';
 import { useState, useEffect } from 'react';
 
@@ -14,7 +14,7 @@ interface UseDynamicPlaceholderProps {
 }
 
 const useDynamicPlaceholder: UseDynamicPlaceholderProps = (hasFirstUserMessageBeenSent) => {
-  const bottomBarConfig = useUnifiedConfigurationResponseManager().getBottomBarConfig();
+  const bottomBarConfig = useConfigurationApiResponseManager().getBottomBarConfig();
 
   const placeholders: string | string[] = hasFirstUserMessageBeenSent
     ? ((bottomBarConfig?.primary_placeholder as unknown as keyof BottomBarType) ?? ['Have a question? Ask here'])

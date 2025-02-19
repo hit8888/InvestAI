@@ -8,7 +8,6 @@ import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
 import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSessionDataQuery';
 import { getBrowserSignature } from '../../../utils/tracking.ts';
-import { SessionConfigResponseType } from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
@@ -38,8 +37,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   const configQuery = useConfigDataQuery({
     agentId,
-    queryOptions: { enabled: isReadOnly || !sessionData?.sessionId, retry: 1 },
-    //for ReadOnly routes session ID is ignored and config is fetched directly
+    queryOptions: { enabled: true },
   });
 
   useSetDistinctIdOnAppMount();
@@ -80,9 +78,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     return null;
   }
 
-  if (configQuery.data || sessionQuery.data) {
+  if (configQuery.data) {
     return children({
-      unifiedConfigurationResponse: (sessionQuery.data || configQuery.data) as SessionConfigResponseType,
+      configurationApiResponse: configQuery.data,
+      sessionApiResponse: sessionQuery.data ?? null,
       configQuery,
       sessionQuery,
     });

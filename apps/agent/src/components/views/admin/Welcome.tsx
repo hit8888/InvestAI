@@ -6,14 +6,14 @@ import { memo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import useAdminUserEmail from '../../../hooks/useAdminUserEmail';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
 
   const [emailInputValue, setEmailInputValue] = useState<string>('');
 
-  const manager = useUnifiedConfigurationResponseManager();
+  const manager = useConfigurationApiResponseManager();
 
   const agentName = manager.getAgentName();
 

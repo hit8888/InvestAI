@@ -1,4 +1,3 @@
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import { useAnimateDifferentOrbStates } from '@meaku/core/hooks/useAnimateDifferentOrbStates';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -12,6 +11,7 @@ import { trackError } from '../utils/error.ts';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -35,11 +35,11 @@ const useWebSocketChat = () => {
 
   const messageQueue = useRef<WebSocketMessage[]>([]);
 
-  const unifiedConfigurationResponseManager = useUnifiedConfigurationResponseManager();
+  const sessionApiResponseManager = useSessionApiResponseManager();
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
-  const sessionId = unifiedConfigurationResponseManager.getSessionId() ?? '';
+  const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
   const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
@@ -132,7 +132,7 @@ const useWebSocketChat = () => {
       trackError(error, {
         action: 'useEffect | handleAddAIMessage',
         component: 'useWebSocketChat',
-        sessionId: unifiedConfigurationResponseManager.getSessionId(),
+        sessionId: sessionApiResponseManager?.getSessionId(),
       });
     }
   }, [lastMessage]);

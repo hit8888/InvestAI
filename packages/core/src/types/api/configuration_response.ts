@@ -1,7 +1,4 @@
-import { z } from "zod";
-import { WebSocketMessageSchema } from "../webSocketData";
-import { FeedbackRequestPayloadSchema } from "./feedback_request";
-import { DataSourceSchema } from "../common";
+import { z } from 'zod';
 
 export const CTAConfigSchema = z
   .object({
@@ -22,9 +19,6 @@ export const ConfigurationBodySchema = z.object({
     message: z.string(),
     suggested_questions: z.array(z.string()),
   }),
-  chat_history: z.array(WebSocketMessageSchema),
-  feedback: z.array(FeedbackRequestPayloadSchema).optional(),
-  documents: z.array(DataSourceSchema).optional(),
   bottom_bar_config: BottomBarConfigSchema.optional(),
   disclaimer_message: z.string().optional(),
   show_cta: z.boolean().optional(),
@@ -60,6 +54,4 @@ export type BottomBarType = z.infer<typeof BottomBarConfigSchema>;
 
 export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
 
-export type ConfigurationBodyApiResponse = z.infer<
-  typeof ConfigurationBodySchema
->;
+export type ConfigurationBodyApiResponse = z.infer<typeof ConfigurationBodySchema>;

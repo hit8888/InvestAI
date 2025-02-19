@@ -5,7 +5,10 @@ import { useSetClientStoreAndLocalStorageUsingConfigSessionData } from '../hooks
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 
 export const ApiProvider: FC<IChildrenWithApiResponse<IAllApiResponsesWithQuery>> = (props) => {
-  useSetClientStoreAndLocalStorageUsingConfigSessionData(props.unifiedConfigurationResponse); //update local storage with sessionId and ProspectId
+  useSetClientStoreAndLocalStorageUsingConfigSessionData({
+    configurationApiResponse: props.configurationApiResponse,
+    sessionApiResponse: props.sessionApiResponse,
+  }); //update local storage with sessionId and ProspectId
 
   return <BaseApiProvider ApiContext={ApiProviderContext} {...props} />;
 };

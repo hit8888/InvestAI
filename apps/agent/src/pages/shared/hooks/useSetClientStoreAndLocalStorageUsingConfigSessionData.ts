@@ -1,28 +1,35 @@
 import { useEffect } from 'react';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
-import UnifiedSessionConfigResponseManager, {
-  SessionConfigResponseType,
-} from '@meaku/core/managers/UnifiedSessionConfigResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { useAreMessagesReadonly } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { nanoid } from 'nanoid';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { SessionApiResponseManager } from '@meaku/core/managers/SessionApiResponseManager';
+import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
+import { SessionApiResponse } from '@meaku/core/types/api/session_init_response';
+import { ConfigurationApiResponseManager } from '@meaku/core/managers/ConfigurationApiResponseManager';
 
-const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
-  unifiedConfigurationResponse: SessionConfigResponseType,
-) => {
+const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
+  configurationApiResponse,
+  sessionApiResponse,
+}: {
+  configurationApiResponse: ConfigurationApiResponse;
+  sessionApiResponse: SessionApiResponse | null;
+}) => {
   const isReadOnly = useAreMessagesReadonly();
 
-  const unifiedConfigurationResponseManager = new UnifiedSessionConfigResponseManager(unifiedConfigurationResponse);
+  const sessionApiResponseManager = sessionApiResponse ? new SessionApiResponseManager(sessionApiResponse) : null;
+  const configurationApiResponseManager = new ConfigurationApiResponseManager(configurationApiResponse);
+
   const { handleUpdateSessionData } = useLocalStorageSession();
 
   const setMessages = useMessageStore((state) => state.setMessages);
   const setLatestResponseId = useMessageStore((state) => state.setLatestResponseId);
   const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
 
-  const sessionId = unifiedConfigurationResponseManager.getSessionId();
-  const prospectId = unifiedConfigurationResponseManager.getProspectId();
-  const welcomeMessage = unifiedConfigurationResponseManager.getConfig().body.welcome_message.message;
+  const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
+  const prospectId = sessionApiResponseManager?.getProspectId() ?? '';
+  const welcomeMessage = configurationApiResponseManager.getConfig().body.welcome_message.message;
   const welcomeMessagePayload: WebSocketMessage = {
     session_id: sessionId ?? '',
     message: { content: welcomeMessage },
@@ -34,10 +41,12 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = (
   };
 
   useEffect(() => {
-    const messages = unifiedConfigurationResponseManager.getFormattedChatHistory(welcomeMessagePayload);
-    if (isReadOnly) {
+    if (isReadOnly || !sessionApiResponseManager) {
       return;
     }
+
+    const messages = sessionApiResponseManager.getFormattedChatHistory(welcomeMessagePayload);
+
     setMessages(messages);
     setLatestResponseId(messages[messages.length - 1].response_id);
 

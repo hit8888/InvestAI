@@ -1,9 +1,10 @@
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -26,20 +27,22 @@ const AgentMessagesContainer = ({
 
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
 
-  const responseManager = useUnifiedConfigurationResponseManager();
+  const sessionApiResponseManager = useSessionApiResponseManager();
+  const configurationApiResponseManager = useConfigurationApiResponseManager();
   const latestResponseId = useMessageStore((state) => state.latestResponseId);
-
-  const initialSuggestedQuestions = responseManager.getInitialSuggestedQuestions();
-  const styleConfig = responseManager.getStyleConfig();
-  const logoURL = responseManager.getLogoUrl();
-  const sessionId = responseManager.getSessionId() ?? '';
-  const primaryColor = styleConfig.primary ?? null;
-
   const allowFeedback = useAllowFeedback();
 
-  const feedbackData = responseManager.getConfig()?.body.feedback ?? [];
+  const styleConfig = configurationApiResponseManager.getStyleConfig();
+  const logoURL = configurationApiResponseManager.getLogoUrl();
+  const primaryColor = styleConfig.primary ?? null;
 
-  if (isMediaTakingFullWidth) return null;
+  const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
+
+  if (isMediaTakingFullWidth || !sessionApiResponseManager) return null;
+
+  const sessionId = sessionApiResponseManager.getSessionId() ?? '';
+  const feedbackData = sessionApiResponseManager.getFeedback();
+
   return (
     <AgentMessages
       sessionId={sessionId}

@@ -1,17 +1,17 @@
 import { trackError } from '../../../utils/error';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import useUnifiedConfigurationResponseManager from '@meaku/core/hooks/useUnifiedConfigurationResponseManager';
 import useUpdateSession from '@meaku/core/queries/mutation/useUpdateSession';
 import { AgentParams } from '@meaku/core/types/config';
 import { UpdateSessionDataPayloadSchema } from '@meaku/core/types/api/session_update_request';
+import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 
 const useUpdateSessionOnSessionInit = () => {
   const { agentId = '' } = useParams<AgentParams>();
 
-  const manager = useUnifiedConfigurationResponseManager();
+  const manager = useSessionApiResponseManager();
 
-  const sessionId = manager.getSessionId() ?? '';
+  const sessionId = manager?.getSessionId() ?? '';
 
   const { mutateAsync: handleMutateSession } = useUpdateSession({
     onError: (error) => {
