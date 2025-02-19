@@ -33,11 +33,11 @@ export class SessionApiResponseManager {
     const chatHistory = this.session.chat_history;
     let history = welcomeMessagePayload ? [welcomeMessagePayload, ...chatHistory] : chatHistory;
 
-    // For each response_id where role is 'ai', ensure STREAM comes before TEXT
+    // For each response_id where role is 'ai', ensure STREAM comes before TEXT or ARTIFACT
     const processedHistory = [...history];
     for (let i = 0; i < processedHistory.length; i++) {
       const currentMsg = processedHistory[i];
-      if (currentMsg.role === 'ai' && currentMsg.message_type === 'TEXT') {
+      if (currentMsg.role === 'ai' && (currentMsg.message_type === 'TEXT' || currentMsg.message_type === 'ARTIFACT')) {
         // Look ahead for a STREAM message with same response_id
         const streamIndex = processedHistory.findIndex(
           (msg, index) => index > i && msg.response_id === currentMsg.response_id && msg.message_type === 'STREAM',
