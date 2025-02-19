@@ -56,7 +56,11 @@ const MessageItem = ({
 }: IProps) => {
   const { isInView, ref: inViewRef } = useInView(0, true);
   const isAiMessage = message.role === 'ai';
-  const isTextMessage = message.message_type === 'TEXT' || message.message_type === 'STREAM';
+  const isTextMessage =
+    message.message_type === 'TEXT' ||
+    message.message_type === 'STREAM' ||
+    (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
+    (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED');
 
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const streamMessage = messagesWithSameResponseId.find((msg) => msg.message_type === 'STREAM');
@@ -108,7 +112,7 @@ const MessageItem = ({
       )}
 
       {isAiMessage && allowFeedback && isTextMessage && (
-        <div className='pl-11'>
+        <div className="pl-11">
           <MessageDataSources dataSources={message.documents ?? []} />
           {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
           {hasMessageStreamed && (
