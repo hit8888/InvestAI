@@ -106,7 +106,7 @@ const MessageItem = ({
         />
       )}
 
-      {isAiMessage && allowFeedback && (
+      {isAiMessage && allowFeedback && isTextMessage && (
         <>
           <MessageDataSources dataSources={message.documents ?? []} />
           {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
