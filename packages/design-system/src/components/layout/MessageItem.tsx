@@ -72,7 +72,8 @@ const MessageItem = ({
     !isLastQuestionResponse &&
     isArtifactMessage(message) &&
     message.message.artifact_type !== 'NONE' &&
-    (usingForAgent ? showArtifactPreview || isInView : true);
+    (usingForAgent ? showArtifactPreview || isInView : true) &&
+    hasMessageStreamed;
 
   const handleAddFeedback = (newFeedback: Partial<FeedbackRequestPayload>) => {
     const updatedFeedback = {

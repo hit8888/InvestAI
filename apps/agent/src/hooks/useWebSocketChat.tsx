@@ -12,6 +12,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import { isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -104,6 +105,11 @@ const useWebSocketChat = () => {
 
     try {
       const response = JSON.parse(lastMessage.data) as WebSocketMessage;
+
+      if (isMessageAnalyticsEvent(response)) {
+        return;
+      }
+
       handleStopOrbAnimation();
 
       // First check if it's an event message
