@@ -8,11 +8,8 @@ import {
   // FunnelData,
   PAGE_HEADER_TITLE_ICON_PROPS,
 } from '../utils/constants';
-import { getTenantFromLocalStorage } from '../utils/common';
 
 const ConversationsPage = () => {
-  const tenantName = getTenantFromLocalStorage();
-
   // const { data, isLoading, isError } = useConversationsFunnelDataQuery({
   //   tenantName: tenantName || '',
   //   queryOptions: {
@@ -65,7 +62,7 @@ const ConversationsPage = () => {
           </div>
         </div> */}
       </div>
-      <ConversationsTableContainer tenantName={tenantName ?? ''} />
+      <ConversationsTableContainer />
     </>
   );
 };

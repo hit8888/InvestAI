@@ -8,7 +8,7 @@ import { useConversationDetails } from '../context/ConversationDetailsContext';
 import useConversationDetailsDataQuery from '../queries/query/useConversationDetailsDataQuery';
 import { useEffect, useMemo } from 'react';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
-import { getTenantFromLocalStorage } from '../utils/common';
+import { useQueryOptions } from '../hooks/useQueryOptions';
 
 const ConversationDetailsPage = () => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
@@ -22,14 +22,11 @@ const ConversationDetailsPage = () => {
     companyLogoUrl: '',
   };
 
-  const tenantName = getTenantFromLocalStorage();
+  const queryOptions = useQueryOptions();
 
   const { data, isLoading, isError } = useConversationDetailsDataQuery({
     sessionID: sessionID || '',
-    tenantName: tenantName || '',
-    queryOptions: {
-      enabled: !!tenantName,
-    },
+    queryOptions,
   });
 
   const detailsManager = useMemo(() => {

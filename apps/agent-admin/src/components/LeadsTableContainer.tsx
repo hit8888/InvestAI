@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { keepPreviousData } from '@tanstack/react-query';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
@@ -26,14 +25,11 @@ import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useTableStore } from '../stores/useTableStore.ts';
+import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 
 const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
 
-type IProps = {
-  tenantName: string;
-};
-
-const LeadsTableContainer = ({ tenantName }: IProps) => {
+const LeadsTableContainer = () => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: LEADS_PAGE,
   });
@@ -70,14 +66,11 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
+  const queryOptions = useQueryOptions();
 
   const { data, isLoading, isError } = useLeadsTableQuery({
     payload: debouncedPayloadData,
-    tenantName: tenantName || '',
-    queryOptions: {
-      enabled: !!tenantName,
-      placeholderData: keepPreviousData,
-    },
+    queryOptions,
   });
 
   const { setTableData } = useTableStore();
@@ -106,13 +99,16 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
 
   if (isError) return null;
 
+  const hasNoRecords = totalRecords === 0;
+  const showPagination = !isLoading && !hasNoRecords;
+
   const areAllFiltersApplied = allAppliedFilterValues.length === LEADS_PAGE_NUMBER_OF_FILTERS;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
-          <TableFiltersWithHeaderLabel key={LEADS_PAGE} page={LEADS_PAGE} />
+          <TableFiltersWithHeaderLabel disabledState={hasNoRecords} key={LEADS_PAGE} page={LEADS_PAGE} />
           <TableViewContent
             key={'leads-table-container'}
             isLoading={isLoading}
@@ -123,7 +119,7 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          {!isLoading && (
+          {showPagination ? (
             <TablePagination
               totalPages={totalPages}
               totalItems={pageSize === 0 ? pageSize : totalRecords}
@@ -132,7 +128,7 @@ const LeadsTableContainer = ({ tenantName }: IProps) => {
               handlePageChange={handlePageChange}
               currentPage={currentPage}
             />
-          )}
+          ) : null}
         </div>
       </div>
     </div>

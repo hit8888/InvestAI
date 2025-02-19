@@ -3,6 +3,7 @@ import { getFilterOptionsData } from '../../admin/api';
 import { AxiosResponse } from 'axios';
 import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getTenantFromLocalStorage } from '../../utils/common';
 
 type FilterOptionsVariables = FilterOptionsPayload;
 
@@ -17,17 +18,12 @@ type FilterOptionsDataKey = ReturnType<typeof getFilterOptionsDataKey>;
 
 interface IProps {
   payload: FilterOptionsVariables;
-  tenantName: string;
   page: string;
   queryOptions: BreakoutQueryOptions<FilterOptionsResponse, FilterOptionsDataKey>;
 }
 
-const useFilterOptionsDataQuery = ({
-  payload,
-  tenantName,
-  page,
-  queryOptions,
-}: IProps): UseQueryResult<FilterOptionsResponse> => {
+const useFilterOptionsDataQuery = ({ payload, page, queryOptions }: IProps): UseQueryResult<FilterOptionsResponse> => {
+  const tenantName = getTenantFromLocalStorage();
   const filterQuery = useQuery({
     queryKey: getFilterOptionsDataKey(payload, tenantName ?? '', page),
     queryFn: async (): Promise<FilterOptionsResponse> => {

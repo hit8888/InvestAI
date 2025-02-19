@@ -3,12 +3,10 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 import LeadsTableContainer from '../components/LeadsTableContainer';
 import { PAGE_HEADER_TITLE_ICON_PROPS } from '../utils/constants';
 import PanelLeadsIcon from '@breakout/design-system/components/icons/panel-leads-icon';
-import { getTenantFromLocalStorage } from '../utils/common';
 
 // TODOS: COMMENTED CODE WILL BE USED LATER ON
 
 const LeadsPage = () => {
-  const tenantName = getTenantFromLocalStorage();
   // const totalNumberOfLeads = 1;
   return (
     <>
@@ -36,7 +34,7 @@ const LeadsPage = () => {
           </div>
         </div> */}
       </div>
-      <LeadsTableContainer tenantName={tenantName ?? ''} />
+      <LeadsTableContainer />
     </>
   );
 };

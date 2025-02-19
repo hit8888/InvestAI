@@ -5,13 +5,13 @@ import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import Input from '@breakout/design-system/components/layout/input';
 import { FilterType, CommonFilterContentProps } from '@meaku/core/types/admin/filters';
 import { FilterOptionsPayload } from '@meaku/core/types/admin/api';
-import { getAllFilterAppliedValues, getDescendingOrderedOptions, getTenantFromLocalStorage } from '../../utils/common';
+import { getAllFilterAppliedValues, getDescendingOrderedOptions } from '../../utils/common';
 import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQuery';
-import { keepPreviousData } from '@tanstack/react-query';
 import { useTableStore } from '../../stores/useTableStore';
+import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 
 const LocationFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
-  const tenantName = getTenantFromLocalStorage();
   const tableManager = useTableStore((state) => state.tableManager);
   const filters = useAllFilterStore();
   const { Location } = FilterType;
@@ -27,14 +27,14 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
     search: searchTerm,
   };
 
+  // Use debounced payload to prevent excessive API calls
+  const debouncedPayloadData = useDebouncedValue(payloadData);
+  const queryOptions = useQueryOptions();
+
   const { data, isLoading, isError } = useFilterOptionsDataQuery({
-    payload: payloadData,
-    tenantName: tenantName || '',
+    payload: debouncedPayloadData,
     page: page,
-    queryOptions: {
-      enabled: !!tenantName,
-      placeholderData: keepPreviousData,
-    },
+    queryOptions,
   });
 
   const sortedCountries: string[] = tableManager?.getSortedItemsByKey('country') ?? [];

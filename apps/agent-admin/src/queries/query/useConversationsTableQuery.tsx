@@ -4,12 +4,13 @@ import { getConversationRowData } from '../../admin/api';
 import { AxiosResponse } from 'axios';
 import { ConversationsTableResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getTenantFromLocalStorage } from '../../utils/common';
 
 type ConversationTableVariables = ConversationsPayload;
 
 const getConversationsTableKey = (payload: ConversationTableVariables, tenantName: string): unknown[] => [
   'conversations-table',
-  payload,
+  JSON.stringify(payload),
   tenantName,
 ];
 
@@ -17,15 +18,11 @@ type ConversationsTableDataKey = ReturnType<typeof getConversationsTableKey>;
 
 interface IProps {
   payload: ConversationTableVariables;
-  tenantName: string;
   queryOptions: BreakoutQueryOptions<ConversationsTableResponse, ConversationsTableDataKey>;
 }
 
-const useConversationsTableQuery = ({
-  payload,
-  tenantName,
-  queryOptions,
-}: IProps): UseQueryResult<ConversationsTableResponse> => {
+const useConversationsTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<ConversationsTableResponse> => {
+  const tenantName = getTenantFromLocalStorage();
   const conversationsQuery = useQuery({
     queryKey: getConversationsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<ConversationsTableResponse> => {

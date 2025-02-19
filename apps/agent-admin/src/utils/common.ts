@@ -595,7 +595,13 @@ export const getConversationRightSideDetailsItems = (
     ...item,
     itemValue: dataObject[item.itemKey as keyof (ProspectDetailsType | CompanyDetailsType)],
   }));
-  return addedValueObject.filter((item) => item.itemValue !== '-');
+  return addedValueObject.filter((item) => {
+    // For Location object, check if any of the values are not '-'
+    if (typeof item.itemValue === 'object' && item.itemValue !== null) {
+      return Object.values(item.itemValue).some((value) => value !== '-' && value !== '');
+    }
+    return item.itemValue !== '-' && item.itemValue !== '';
+  });
 };
 
 export const getDescendingOrderedOptions = (sortedFilterValues: string[], allFilterValues: string[]) => {

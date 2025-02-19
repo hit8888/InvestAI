@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
-import { keepPreviousData } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
 
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
@@ -27,14 +26,11 @@ import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
 import { useTableStore } from '../stores/useTableStore.ts';
+import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 
 const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
 
-type IProps = {
-  tenantName: string;
-};
-
-const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
+const ConversationsTableContainer = () => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
@@ -70,14 +66,11 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
+  const queryOptions = useQueryOptions();
 
   const { data, isLoading, isError } = useConversationsTableQuery({
     payload: debouncedPayloadData,
-    tenantName: tenantName || '',
-    queryOptions: {
-      enabled: !!tenantName,
-      placeholderData: keepPreviousData,
-    },
+    queryOptions,
   });
 
   const { setTableData } = useTableStore();
@@ -106,13 +99,20 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
 
   if (isError) return null;
 
+  const hasNoRecords = totalRecords === 0;
+  const showPagination = !isLoading && !hasNoRecords;
+
   const areAllFiltersApplied = allAppliedFilterValues.length === CONVERSATIONS_PAGE_NUMBER_OF_FILTERS;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
-          <TableFiltersWithHeaderLabel key={CONVERSATIONS_PAGE} page={CONVERSATIONS_PAGE} />
+          <TableFiltersWithHeaderLabel
+            disabledState={hasNoRecords}
+            key={CONVERSATIONS_PAGE}
+            page={CONVERSATIONS_PAGE}
+          />
           <TableViewContent
             key={'conversations-table-container'}
             isConversationTable={true}
@@ -124,7 +124,7 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          {!isLoading && (
+          {showPagination ? (
             <TablePagination
               totalPages={totalPages}
               totalItems={pageSize === 0 ? pageSize : totalRecords}
@@ -133,7 +133,7 @@ const ConversationsTableContainer: React.FC<IProps> = ({ tenantName }) => {
               handlePageChange={handlePageChange}
               currentPage={currentPage}
             />
-          )}
+          ) : null}
         </div>
       </div>
     </div>

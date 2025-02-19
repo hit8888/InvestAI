@@ -30,7 +30,7 @@ const LogTabDisplayContent = () => {
           lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
         />
       ) : (
-        <p className="gradient-text mt-20 w-full text-center text-4xl font-semibold">
+        <p className="gradient-text mt-20 h-screen w-full text-center text-4xl font-semibold">
           There is No Log for this Session.
         </p>
       )}

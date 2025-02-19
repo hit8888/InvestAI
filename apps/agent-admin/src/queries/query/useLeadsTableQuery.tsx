@@ -4,6 +4,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getLeadsRowData } from '../../admin/api';
 import { AxiosResponse } from 'axios';
 import { LeadsTableResponse } from '@meaku/core/types/admin/admin';
+import { getTenantFromLocalStorage } from '../../utils/common';
 
 type LeadsTableVariables = LeadsPayload;
 
@@ -17,11 +18,11 @@ type LeadsTableDataKey = ReturnType<typeof getLeadsTableKey>;
 
 interface IProps {
   payload: LeadsTableVariables;
-  tenantName: string;
   queryOptions: BreakoutQueryOptions<LeadsTableResponse, LeadsTableDataKey>;
 }
 
-const useLeadsTableQuery = ({ payload, tenantName, queryOptions }: IProps): UseQueryResult<LeadsTableResponse> => {
+const useLeadsTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<LeadsTableResponse> => {
+  const tenantName = getTenantFromLocalStorage();
   const leadsQuery = useQuery({
     queryKey: getLeadsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<LeadsTableResponse> => {

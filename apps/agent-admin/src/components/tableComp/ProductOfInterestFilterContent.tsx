@@ -3,13 +3,13 @@ import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
 import { FilterOptionsPayload } from '@meaku/core/types/admin/api';
-import { getAllFilterAppliedValues, getDescendingOrderedOptions, getTenantFromLocalStorage } from '../../utils/common';
+import { getAllFilterAppliedValues, getDescendingOrderedOptions } from '../../utils/common';
 import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQuery';
-import { keepPreviousData } from '@tanstack/react-query';
 import { useTableStore } from '../../stores/useTableStore';
+import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 
 const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
-  const tenantName = getTenantFromLocalStorage();
   const filters = useAllFilterStore();
   const tableManager = useTableStore((state) => state.tableManager);
   const { ProductOfInterest } = FilterType;
@@ -24,14 +24,14 @@ const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover 
     search: '',
   };
 
+  // Use debounced payload to prevent excessive API calls
+  const debouncedPayloadData = useDebouncedValue(payloadData);
+  const queryOptions = useQueryOptions();
+
   const { data, isLoading, isError } = useFilterOptionsDataQuery({
-    payload: payloadData,
-    tenantName: tenantName || '',
+    payload: debouncedPayloadData,
     page: page,
-    queryOptions: {
-      enabled: !!tenantName,
-      placeholderData: keepPreviousData,
-    },
+    queryOptions,
   });
 
   const sortedProductOfInterest: string[] = tableManager?.getSortedItemsByKey('product_of_interest') ?? [];

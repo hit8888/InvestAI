@@ -3,6 +3,7 @@ import { getConversationDetailsData } from '../../admin/api';
 import { AxiosResponse } from 'axios';
 import { ConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getTenantFromLocalStorage } from '../../utils/common';
 
 const getConversationDetailsDataKey = (tenantName: string, sessionID: string): unknown[] => [
   'conversation-details-data',
@@ -14,15 +15,14 @@ type ConversationDetailsDataKey = ReturnType<typeof getConversationDetailsDataKe
 
 interface IProps {
   sessionID: string;
-  tenantName: string;
   queryOptions: BreakoutQueryOptions<ConversationDetailsDataResponse, ConversationDetailsDataKey>;
 }
 
 const useConversationDetailsDataQuery = ({
   sessionID,
-  tenantName,
   queryOptions,
 }: IProps): UseQueryResult<ConversationDetailsDataResponse> => {
+  const tenantName = getTenantFromLocalStorage();
   const detailsQuery = useQuery({
     queryKey: getConversationDetailsDataKey(tenantName ?? '', sessionID ?? ''),
     queryFn: async (): Promise<ConversationDetailsDataResponse> => {

@@ -9,8 +9,13 @@ import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
 import { PageTypeProps } from '@meaku/core/types/admin/filters';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { cn } from '@breakout/design-system/lib/cn';
 
-const SortFilter = ({ page }: PageTypeProps) => {
+type IProps = PageTypeProps & {
+  disabledState?: boolean;
+};
+
+const SortFilter = ({ page, disabledState }: IProps) => {
   const { setSortValue } = useSortFilterStore();
   const [isOpen, setIsOpen] = useState(false);
   const sortValues = useSortFilterStore((state) => state[page]);
@@ -20,13 +25,22 @@ const SortFilter = ({ page }: PageTypeProps) => {
     setIsOpen(false);
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!disabledState) {
+      setIsOpen(open);
+    }
+  };
+
   const SORT_FEATURE_CONFIG_BASED_ON_PAGE = page === LEADS_PAGE ? SORT_FILTER_CONFIG.slice(0, 1) : SORT_FILTER_CONFIG;
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger
-        className="flex items-center justify-center gap-2 rounded-lg 
-      border border-primary/20 bg-primary/2.5 p-2 focus:bg-primary/10 focus:outline-none 
-      focus:ring-2 focus:ring-primary/60 data-[state=open]:border-2 data-[state=open]:border-primary"
+        className={cn(
+          'flex items-center justify-center gap-2 rounded-lg border border-primary/20 bg-primary/2.5 p-2 focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60 data-[state=open]:border-2 data-[state=open]:border-primary',
+          {
+            'pointer-events-none opacity-50': disabledState,
+          },
+        )}
       >
         <p className="text-sm font-medium text-primary">Sort</p>
         <span className="h-5 w-5">
