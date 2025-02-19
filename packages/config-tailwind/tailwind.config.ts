@@ -30,6 +30,7 @@ const config: Omit<Config, "content"> = {
           ...colors.gray,
           25: "#FCFCFD",
           50: "#F9FAFB",
+          100: "#F2F4F7",
           200: "#EAECF0",
           300: "#D0D5DD",
           400: "#98A2B3",

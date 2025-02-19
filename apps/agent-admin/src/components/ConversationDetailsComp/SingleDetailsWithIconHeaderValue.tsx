@@ -25,9 +25,9 @@ const SingleDetailsWithIconHeaderValue = ({ isTakingFullWidth = false, headerLab
       </div>
       <div className="flex flex-col items-start gap-1">
         <p className="text-sm font-normal text-gray-500">{headerLabel}</p>
-        <p className="text-base font-medium text-primary/60" title={itemValue}>
+        <div className="text-base font-medium text-primary/60" title={itemValue}>
           {isTakingFullWidth ? <SessionIDCellValue value={itemValue} /> : itemValue}
-        </p>
+        </div>
       </div>
     </div>
   );

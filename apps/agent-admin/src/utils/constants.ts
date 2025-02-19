@@ -429,7 +429,7 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
   },
 ];
 
-export const DEFAULT_LABEL_FOR_SUMMARY_ITEM = '*No information provided';
+export const NO_INFORMATION_PROVIDED_LABEL = 'information has not been provided.';
 
 export enum CONV_RIGHTSIDE_DETAILS_DATA_ITEMS {
   NAME = 'Name:',

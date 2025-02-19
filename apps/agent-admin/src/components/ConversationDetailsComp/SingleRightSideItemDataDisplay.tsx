@@ -46,7 +46,7 @@ const SingleRightSideItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBo
         'items-center': isEmailField,
       })}
     >
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex w-full items-center justify-start gap-2">
         <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{itemIcon}</div>
         <span className="text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>

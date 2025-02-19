@@ -1,12 +1,17 @@
-import { BANTItem, DEFAULT_LABEL_FOR_SUMMARY_ITEM, SummaryTabContentList } from '../../utils/constants';
+import { BANTItem, SummaryTabContentList, NO_INFORMATION_PROVIDED_LABEL } from '../../utils/constants';
 import IntentScoreStockupIcon from '@breakout/design-system/components/icons/intent-score-stockup-icon';
+import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
 import SummaryListChildrenItem from './SummaryListChildrenItem';
 import { Link } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
+import { getStringWithBothCommaAND } from '../../utils/common';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
-  const isIntentScore = listLabel === 'Intent Score:';
-  const isEntryPoint = listLabel === 'Entry Point:';
+  const isIntentScore = listKey === 'intentScore';
+  const isEntryPoint = listKey === 'entryPoint';
+  const isSummaryItem = listKey === 'summary';
+  const isBantAnalysisItem = listKey === 'bantAnalysis';
+
   const getSummaryListValueContent = (listValue: string | number | BANTItem[]) => {
     if (isIntentScore) {
       return <SummaryValueForIntentScore score={listValue as number} />;
@@ -21,13 +26,45 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
     return <p className="flex-1 text-base font-normal text-gray-900">{listValue as string}</p>;
   };
 
+  const getNoInformationProvidedLabel = (noInfoString: string) => {
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-lg bg-gray-100 px-2 py-1">
+        <NoInfoProvidedSadFaceIcon className="h-4 w-4 text-gray-500" />
+        <p className="flex-1 text-right text-sm font-medium italic text-gray-500">{noInfoString}</p>
+      </div>
+    );
+  };
+
+  const showBantItemsHavingDashValue = () => {
+    if (Array.isArray(listValue)) {
+      console.log('listValue', listValue);
+      const bantItemsWithDash = listValue
+        .filter((item) => item.itemValue === '-')
+        .map((item) => item.itemLabel.replace(':', ''));
+      const bantItemsWithDashString = getStringWithBothCommaAND(bantItemsWithDash);
+      const isBantItemsWithDashEqualTo4 = bantItemsWithDash.length === 4;
+
+      if (bantItemsWithDashString === '') return null;
+      return (
+        <div
+          className={cn('flex w-full items-center justify-end', {
+            'justify-start': isBantItemsWithDashEqualTo4,
+          })}
+        >
+          {getNoInformationProvidedLabel(`${bantItemsWithDashString} ${NO_INFORMATION_PROVIDED_LABEL}`)}
+        </div>
+      );
+    }
+  };
+
   const isLabelValueDash = listValue === '-';
   return (
     <div
       className={cn(
-        'flex flex-col items-start justify-center gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
+        'flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
         {
           'w-full flex-row items-center justify-between': isLabelValueDash,
+          'flex-col justify-center': (isSummaryItem || isBantAnalysisItem) && !isLabelValueDash,
         },
       )}
       key={listKey}
@@ -60,11 +97,12 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
               isLastItem={index === listValue.length - 1}
             />
           ))}
+          {showBantItemsHavingDashValue()}
         </div>
       ) : isLabelValueDash ? (
-        <p className="flex-1 text-right text-sm font-medium italic text-gray-400">{DEFAULT_LABEL_FOR_SUMMARY_ITEM}</p>
+        <>{getNoInformationProvidedLabel(`This ${NO_INFORMATION_PROVIDED_LABEL}`)}</>
       ) : (
-        <>{getSummaryListValueContent(listValue)}</>
+        <div className="flex justify-end">{getSummaryListValueContent(listValue)}</div>
       )}
     </div>
   );

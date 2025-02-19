@@ -21,6 +21,10 @@ class ConversationDetailsDataResponseManager {
     const validateDetailsData = ConversationDetailsResponseSchema.safeParse(convDetailsData);
 
     if (!validateDetailsData.success) {
+      // console.error('Validation failed for ConversationDetailsDataManager:', {
+      //   input: convDetailsData,
+      //   errors: validateDetailsData.error,
+      // });
       throw new Error(validateDetailsData.error.errors.map((error) => error.message).join(', '));
     }
 

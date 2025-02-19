@@ -17,39 +17,46 @@ const RightSideTabDisplayContainer = ({
   const prospectItemsWithValue = getConversationRightSideDetailsItems(prospect, PROSPECT_DETAILS_DATA_ITEMS);
   const companyItemsWithValue = getConversationRightSideDetailsItems(company, COMPANY_DETAILS_DATA_ITEMS);
 
-  if (!prospectItemsWithValue.length && !companyItemsWithValue.length) return;
+  const isProspectItemsEmpty = !prospectItemsWithValue.length;
+  const isCompanyItemsEmpty = !companyItemsWithValue.length;
+
+  if (isProspectItemsEmpty && isCompanyItemsEmpty) return;
   return (
     <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-t border-primary/10">
       <div className="hide-scrollbar sticky top-0 flex max-h-screen w-full flex-col items-start overflow-auto">
         {/* Prospect Section */}
-        <div className="flex w-full flex-col items-start gap-4 p-4">
-          <p className="self-stretch text-lg font-semibold text-gray-900">Prospect</p>
-          <div className="flex flex-col items-start self-stretch">
-            {prospectItemsWithValue.map((dataItem, index) => (
-              <SingleRightSideItemDataDisplay
-                showBottomBorder={index !== prospectItemsWithValue.length - 1}
-                itemLabel={dataItem.itemLabel}
-                itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
-                itemValue={dataItem.itemValue}
-              />
-            ))}
+        {!isProspectItemsEmpty && (
+          <div className="flex w-full flex-col items-start gap-4 p-4">
+            <p className="self-stretch text-lg font-semibold text-gray-900">Prospect</p>
+            <div className="flex flex-col items-start self-stretch">
+              {prospectItemsWithValue.map((dataItem, index) => (
+                <SingleRightSideItemDataDisplay
+                  showBottomBorder={index !== prospectItemsWithValue.length - 1}
+                  itemLabel={dataItem.itemLabel}
+                  itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
+                  itemValue={dataItem.itemValue}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Company Section */}
-        <div className="flex w-full flex-col items-start gap-4 border-t border-primary/10 p-4">
-          <p className="self-stretch text-lg font-semibold text-gray-900">Company</p>
-          <div className="flex flex-col items-start self-stretch">
-            {companyItemsWithValue.map((dataItem, index) => (
-              <SingleRightSideItemDataDisplay
-                showBottomBorder={index !== companyItemsWithValue.length - 1}
-                itemLabel={dataItem.itemLabel}
-                itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
-                itemValue={dataItem.itemValue}
-              />
-            ))}
+        {!isCompanyItemsEmpty && (
+          <div className="flex w-full flex-col items-start gap-4 border-t border-primary/10 p-4">
+            <p className="self-stretch text-lg font-semibold text-gray-900">Company</p>
+            <div className="flex flex-col items-start self-stretch">
+              {companyItemsWithValue.map((dataItem, index) => (
+                <SingleRightSideItemDataDisplay
+                  showBottomBorder={index !== companyItemsWithValue.length - 1}
+                  itemLabel={dataItem.itemLabel}
+                  itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
+                  itemValue={dataItem.itemValue}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

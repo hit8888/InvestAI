@@ -46,6 +46,7 @@ interface IProps {
 const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemoveFeedback }: IProps) => {
   const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(feedback?.positive_feedback === true));
   const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
+  const [openDialog, setOpenDialog] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
 
   const form = useForm<FeedbackRequestPayload>({
@@ -86,6 +87,7 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
   const onClickThumbUp = () => {
     setIsFeedbackThumbUp(true);
     setIsFeedbackThumbDown(false);
+    setOpenDialog(true);
     handlePrimaryFeedback(FeedbackEnum.THUMBS_UP);
     setCategories(POSITIVE_FEEDBACK_CATEGORIES);
     form.reset();
@@ -94,9 +96,21 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
   const onClickThumbDown = () => {
     setIsFeedbackThumbUp(false);
     setIsFeedbackThumbDown(true);
+    setOpenDialog(true);
     handlePrimaryFeedback(FeedbackEnum.THUMBS_DOWN);
     setCategories(NEGATIVE_FEEDBACK_CATEGORIES);
     form.reset();
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    form.reset();
+  };
+
+  const handleCancelDialog = () => {
+    setIsFeedbackThumbUp(false);
+    setIsFeedbackThumbDown(false);
+    handleCloseDialog();
   };
 
   const handlePrimaryFeedback = async (feedback: FeedbackEnum) => {
@@ -134,10 +148,10 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
   };
 
   const showRemarksField = (form.getValues()?.['category'] ?? '').length > 0;
-  const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks);
+  const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks) || Boolean(categories.length > 0 || form.getValues()?.remarks);
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <div className="mt-2 flex items-center gap-2">
         <DialogTrigger asChild>
           <FeedbackButton disabled={isMessageReadOnly} isFilled={isFeedbackThumbUp} onClick={onClickThumbUp} />
@@ -199,26 +213,23 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
               />
             ) : null}
             <DialogFooter className="flex w-full !justify-between">
-              <DialogClose asChild>
-                <Button size="sm" type="button" className="!bg-white font-semibold text-primary">
-                  Cancel
-                </Button>
-              </DialogClose>
+              <Button size="sm" type="button" className="!bg-white font-semibold text-primary" onClick={handleCancelDialog}>
+                Cancel
+              </Button>
               <div className="flex">
-                <DialogClose>
-                  <Button
-                    size="sm"
-                    type="submit"
-                    className="border-2 border-secondary-foreground/25 font-semibold"
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      const values = form.getValues();
-                      await handleShareDetailedFeedback(values);
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </DialogClose>
+                <Button
+                  size="sm"
+                  type="submit"
+                  className="border-2 border-secondary-foreground/25 font-semibold"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const values = form.getValues();
+                    await handleShareDetailedFeedback(values);
+                    handleCloseDialog();
+                  }}
+                >
+                  Submit
+                </Button>
               </div>
             </DialogFooter>
           </form>

@@ -108,7 +108,7 @@ const MessageItem = ({
       )}
 
       {isAiMessage && allowFeedback && isTextMessage && (
-        <>
+        <div className='pl-11'>
           <MessageDataSources dataSources={message.documents ?? []} />
           {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
           {hasMessageStreamed && (
@@ -121,7 +121,7 @@ const MessageItem = ({
             />
           )}
           {isMessageAnalyticsEvent(message) && <MessageAnalytics analytics={message.message.event_data} />}
-        </>
+        </div>
       )}
 
       {/* Ai Message Artifact Preview */}
@@ -153,7 +153,7 @@ const MessageItem = ({
       )}
 
       {/* Suggestions Section */}
-      <div className="ml-auto">
+      <div className="ml-auto mt-3">
         {/* Only show initial suggestions when no messages */}
         {totalMessages < 1 && (
           <SuggestionsArtifact

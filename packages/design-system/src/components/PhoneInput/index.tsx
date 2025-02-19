@@ -32,7 +32,7 @@ const PhoneInputContainer = ({ field, phoneLabel }: PhoneInputProps) => {
       className={cn('custom-phone-input group rounded-md border border-gray-300 bg-white text-sm placeholder:text-gray-400', {
         'ring-0 border-2 border-primary/40 ': isFocused,
       })}
-      placeholder={phoneLabel || "Phone Number"}
+      placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}
       onFocus={() => setIsFocused(true)}
       {...field}

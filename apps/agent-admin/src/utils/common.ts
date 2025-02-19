@@ -617,3 +617,9 @@ export const getDescendingOrderedOptions = (sortedFilterValues: string[], allFil
   // Map each string to an object with value and label
   return combined.map((item) => ({ value: item, label: item }));
 };
+
+export const getStringWithBothCommaAND = (bantItemsWithDash: string[]) => {
+  return bantItemsWithDash.length > 1
+    ? bantItemsWithDash.slice(0, -1).join(', ') + ' and ' + bantItemsWithDash[bantItemsWithDash.length - 1]
+    : bantItemsWithDash[0] || '';
+};

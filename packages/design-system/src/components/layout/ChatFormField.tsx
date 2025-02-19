@@ -12,7 +12,6 @@ import PhoneInputContainer from '../PhoneInput';
 import DynamicIcon from '../icons/DynamicIcon';
 import DemoFormEmailFieldIcon from '../icons/demoform-email-icon';
 import DemoFormNameFieldIcon from '../icons/demoform-name-icon';
-import { cn } from '../../lib/cn';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
@@ -45,30 +44,16 @@ const ChatFormField = (props: IChatFormFieldProps) => {
         <FormItem className="flex items-center justify-center gap-2 space-y-0">
           <div className="flex items-center rounded-lg bg-primary/20 p-1">{getIconBasedOnField()}</div>
           <FormControl>
-            <div className="relative">
-              {isPhoneInputField ? (
-                <PhoneInputContainer phoneLabel={form_field.label} field={field} />
-              ) : (
-                <Input
-                  {...field}
-                  className="border border-primary/30 bg-white placeholder:text-gray-400 focus:border-2 focus:border-primary/40 focus:ring-0"
-                  placeholder={form_field.label}
-                  type={getInputType(form_field.data_type)}
-                />
-              )}
-              {form_field.is_required && (
-                <span
-                  className={cn(
-                    'absolute right-[calc(100%-12px)] top-3.5 text-[10px] font-medium text-destructive-1000',
-                    {
-                      'right-[calc(100%-68px)]': isPhoneInputField,
-                    },
-                  )}
-                >
-                  *
-                </span>
-              )}
-            </div>
+            {isPhoneInputField ? (
+              <PhoneInputContainer phoneLabel={`${form_field.label} *`} field={field} />
+            ) : (
+              <Input
+                {...field}
+                className="border border-primary/30 bg-white placeholder:text-gray-400 focus:border-2 focus:border-primary/40 focus:ring-0"
+                placeholder={`${form_field.label} *`}
+                type={getInputType(form_field.data_type)}
+              />
+            )}
           </FormControl>
           <FormMessage />
         </FormItem>

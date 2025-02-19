@@ -8,7 +8,7 @@ export const isProduction = ENV.VITE_APP_ENV === 'production';
 
 export const handleColorConfig = (styleConfig: Omit<StyleConfig, 'show_banner'>) => {
   Object.entries(styleConfig)
-    .filter(([key]) => key !== 'show_banner')
+    .filter(([key]) => !['show_banner', 'function'].includes(key))
     .forEach(([key, hexValue]) => {
       const formattedKey = key.replace(/_/g, '-');
 

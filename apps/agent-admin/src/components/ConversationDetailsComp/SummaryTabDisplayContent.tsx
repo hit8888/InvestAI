@@ -4,7 +4,12 @@ import SummaryTabContentItem from './SummaryTabContentItem';
 
 const SummaryTabDisplayContent = () => {
   const { conversation, chatHistory } = useConversationDetails();
-  if (!conversation) return null;
+  if (!conversation)
+    return (
+      <p className="gradient-text h-screen w-full pt-10 text-center text-4xl font-normal text-gray-500">
+        No Summary Data found
+      </p>
+    );
 
   const pageSummaryTabContentList = generateConversationSummaryContent(chatHistory, conversation);
   return (

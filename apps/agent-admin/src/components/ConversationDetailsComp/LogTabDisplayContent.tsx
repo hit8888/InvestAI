@@ -12,7 +12,7 @@ const LogTabDisplayContent = () => {
       {chatHistory?.length && conversation?.session_id ? (
         <AgentMessages
           usingForAgent={false}
-          sessionId={conversation.session_id}
+          sessionId={conversation?.session_id}
           isAMessageBeingProcessed={false}
           setActiveArtifact={() => {}}
           setDemoPlayingStatus={() => {}}

@@ -40,11 +40,11 @@ const ConversationDetailsPage = () => {
     if (!detailsManager || isLoading) return;
 
     try {
-      const conversationData = detailsManager.getFormattedConversationData() ?? {};
-      handleSetConversationDetails(conversationData);
-
       const chatHistoryMessages = detailsManager.getFormattedChatHistory();
       handleSetChatHistoryDetails(chatHistoryMessages);
+
+      const conversationData = detailsManager.getFormattedConversationData() ?? {};
+      handleSetConversationDetails(conversationData);
 
       const feedbackData = detailsManager.getFeedback();
       handleSetFeedbackDetails(feedbackData);
