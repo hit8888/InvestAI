@@ -39,13 +39,14 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
     role: 'ai' as 'user' | 'ai',
     timestamp: new Date().toISOString(),
   };
-
   useEffect(() => {
-    if (isReadOnly || !sessionApiResponseManager) {
+    if (isReadOnly) {
       return;
     }
 
-    const messages = sessionApiResponseManager.getFormattedChatHistory(welcomeMessagePayload);
+    const messages = sessionApiResponseManager
+      ? sessionApiResponseManager.getFormattedChatHistory(welcomeMessagePayload)
+      : [welcomeMessagePayload];
 
     setMessages(messages);
     setLatestResponseId(messages[messages.length - 1].response_id);

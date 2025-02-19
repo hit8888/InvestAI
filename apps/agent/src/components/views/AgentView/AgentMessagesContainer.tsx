@@ -38,10 +38,10 @@ const AgentMessagesContainer = ({
 
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
 
-  if (isMediaTakingFullWidth || !sessionApiResponseManager) return null;
+  if (isMediaTakingFullWidth) return null;
 
-  const sessionId = sessionApiResponseManager.getSessionId() ?? '';
-  const feedbackData = sessionApiResponseManager.getFeedback();
+  const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
+  const feedbackData = sessionApiResponseManager?.getFeedback();
 
   return (
     <AgentMessages
@@ -59,7 +59,7 @@ const AgentMessagesContainer = ({
       primaryColor={primaryColor}
       logoURL={logoURL}
       allowFeedback={allowFeedback}
-      feedbackData={feedbackData}
+      feedbackData={feedbackData ?? []}
       lastMessageResponseId={latestResponseId}
     />
   );
