@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -148,7 +147,8 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
   };
 
   const showRemarksField = (form.getValues()?.['category'] ?? '').length > 0;
-  const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks) || Boolean(categories.length > 0 || form.getValues()?.remarks);
+  const isMessageReadOnly =
+    Boolean(feedback?.category || feedback?.remarks) || Boolean(categories.length > 0 || form.getValues()?.remarks);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -213,7 +213,12 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
               />
             ) : null}
             <DialogFooter className="flex w-full !justify-between">
-              <Button size="sm" type="button" className="!bg-white font-semibold text-primary" onClick={handleCancelDialog}>
+              <Button
+                size="sm"
+                type="button"
+                className="!bg-white font-semibold text-primary"
+                onClick={handleCancelDialog}
+              >
                 Cancel
               </Button>
               <div className="flex">
