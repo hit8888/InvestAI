@@ -2,9 +2,8 @@ import Artifact from '@breakout/design-system/components/Artifact/index';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { WebSocketMessage, ArtifactMessageContent } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { SupportedArtifactType } from '../../../hooks/useSetArtifactOnNewMessage';
 import { ArtifactContent } from '@meaku/core/types/artifact';
-import { isArtifactMessage } from '@meaku/core/utils/messageUtils';
+import { isArtifactMessage, SupportedArtifactType } from '@meaku/core/utils/messageUtils';
 
 type IProps = {
   logoURL: string;
