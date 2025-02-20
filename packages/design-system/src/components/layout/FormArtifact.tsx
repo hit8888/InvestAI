@@ -17,7 +17,7 @@ import {
   getschemaShapeValidatedByZode,
 } from '@meaku/core/utils/form_fields';
 import CardTitle from '@breakout/design-system/components/layout/card-title';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import CardDescription from '@breakout/design-system/components/layout/card-description';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -25,6 +25,7 @@ import ChatFormField from './ChatFormField';
 import DemoFormSubmitBtnTickIcon from '../icons/demoform-submit-tick-icon';
 import DemoFormThankYouTickIcon from '../icons/demoform-thankyou-tick-icon';
 import { FormArtifactContent } from '@meaku/core/types/artifact';
+import { PencilIcon } from 'lucide-react';
 
 interface IFormProps {
   artifactId?: string;
@@ -50,6 +51,7 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
 
 const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage }: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
+  const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
@@ -58,6 +60,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
   const form = useForm<typeof formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: artifactMetadata.filled_data ?? {},
+    mode: 'onChange',
   });
 
   function onSubmit(values: typeof formSchemaType) {
@@ -70,17 +73,34 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
       message_type: 'EVENT',
     });
     setSubmitted(true);
+    setIsEditing(false); // Reset editing state after submit
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });
   }
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setSubmitted(false);
+  };
+
+  // Watch all form fields
+  const formValues = form.watch();
+
+  // check if all fields are filled
+  const areAllFieldsFilled = artifact?.form_fields.every((field) => {
+    const value = formValues[field.field_name];
+    return value !== undefined && value !== '' && value !== null;
+  });
 
   if (!artifact) {
     return <></>;
   }
 
-  if (submitted) {
+  const isSubmitBtnDisabled = !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled;
+
+  if (submitted && !isEditing) {
     return (
       <Card className="max-w-96 rounded-2xl border-none bg-primary/10">
-        <CardContent className="p-4">
+        <CardContent className="flex flex-col gap-6 p-4">
           <div className="flex items-center gap-4">
             <DemoFormThankYouTickIcon className="h-14 w-14 text-primary/60" />
             <CardHeader className="max-w-72 flex-1 gap-1 space-y-0 p-0">
@@ -89,6 +109,24 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
                 Info submitted! Let me know if you have any questions or need help.
               </CardDescription>
             </CardHeader>
+          </div>
+          <div className='flex items-center gap-2 border-dashed border border-primary/40 rounded-lg p-2'>
+            <div className='flex flex-col gap-2 flex-1'>
+              {artifact?.form_fields.map((field) => (
+                <div key={field.field_name} className='flex items-center gap-2'>
+                  <p className='text-sm font-medium text-primary'>{field.label}:</p>
+                  <p className='text-sm text-customSecondaryText'>{formValues[field.field_name]}</p>
+                </div>
+              ))}
+            </div>
+            <Button 
+              onClick={handleEdit}
+              size='md' 
+              className='py-3 pl-4 pr-2 gap-2 flex items-center text-primary font-semibold justify-center bg-transparent border border-primary'
+            >
+              Edit
+              <PencilIcon className='h-4 w-4 text-primary' />
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -113,7 +151,8 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
             <div className="flex justify-end">
               <Button
                 type="submit"
-                className="flex items-center gap-2 border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80"
+                disabled={isSubmitBtnDisabled}
+                className="flex items-center gap-2 border-2 disabled:cursor-not-allowed disabled:opacity-20 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80"
                 data-testid="submit-form-btn"
               >
                 Submit
