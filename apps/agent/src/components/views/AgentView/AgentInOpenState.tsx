@@ -8,9 +8,10 @@ import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidt
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
 import { Demo } from './Demo/index.tsx';
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -38,8 +39,12 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
 
   const hasArtifactOrDemoInMessageHistory =
-    messages.findIndex((message) => message.role === 'ai' && message.message_type === 'ARTIFACT') !== -1 ||
-    isDemoAvailable;
+    messages.findIndex(
+      (message) =>
+        message.role === 'ai' &&
+        message.message_type === 'ARTIFACT' &&
+        isMediaArtifact((message.message as ArtifactMessageContent).artifact_type),
+    ) !== -1 || isDemoAvailable;
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);

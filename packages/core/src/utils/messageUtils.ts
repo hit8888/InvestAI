@@ -72,3 +72,10 @@ export const isSuggestionArtifact = (msg: WebSocketMessage) =>
 
 export const filterOutSuggestions = (messages: WebSocketMessage[]) =>
   messages.filter((msg) => !isSuggestionArtifact(msg));
+
+const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
+export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
+
+export const isMediaArtifact = (type: string): type is SupportedArtifactType => {
+  return SUPPORTED_ARTIFACT_TYPES.includes(type as SupportedArtifactType);
+};

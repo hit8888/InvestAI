@@ -2,13 +2,7 @@ import { useEffect } from 'react';
 import { useArtifactStore } from '../stores/useArtifactStore';
 import { useMessageStore } from '../stores/useMessageStore';
 import { ArtifactMessageContent } from '@meaku/core/types/webSocketData';
-
-const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
-export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
-
-const isArtifactTypeSupported = (type: string): type is SupportedArtifactType => {
-  return SUPPORTED_ARTIFACT_TYPES.includes(type as SupportedArtifactType);
-};
+import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
 
 export const useSetArtifactOnNewMessage = () => {
   const messages = useMessageStore((state) => state.messages);
@@ -22,7 +16,7 @@ export const useSetArtifactOnNewMessage = () => {
         message.response_id === latestResponseId &&
         message.message_type === 'ARTIFACT' &&
         message.role === 'ai' &&
-        isArtifactTypeSupported((message.message as ArtifactMessageContent).artifact_type),
+        isMediaArtifact((message.message as ArtifactMessageContent).artifact_type),
     )
     .pop();
 
