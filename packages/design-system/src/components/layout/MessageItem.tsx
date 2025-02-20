@@ -65,15 +65,25 @@ const MessageItem = ({
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const streamMessage = messagesWithSameResponseId.find((msg) => msg.message_type === 'STREAM');
   const hasMessageStreamed = streamMessage ? isCompleteMessage(streamMessage) : true;
+  const hasTextMessage = messagesWithSameResponseId.some((msg) => msg.message_type === 'TEXT' && msg.role === 'ai');
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
+
   const isLastQuestionResponse = lastMessageResponseId === message.response_id && message.message_type === 'STREAM';
+  const isLoading = isAMessageBeingProcessed && isAiMessage && isLastQuestionResponse;
+
+  const shouldShowActiveOrb =
+    lastMessageResponseId === message.response_id &&
+    ((hasTextMessage && message.message_type === 'TEXT') ||
+      (message.message_type === 'STREAM' && !hasTextMessage) ||
+      isLoading);
+
   const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
 
   const showMessageArtifactPreview =
-    !isLastQuestionResponse &&
+    !lastMessageResponseId &&
     isArtifactMessage(message) &&
     message.message.artifact_type !== 'NONE' &&
     (usingForAgent ? showArtifactPreview || isInView : true) &&
@@ -107,7 +117,8 @@ const MessageItem = ({
           isLastQuestionResponse={isLastQuestionResponse}
           orbState={orbState}
           primaryColor={primaryColor}
-          isAMessageBeingProcessed={isAMessageBeingProcessed}
+          shouldShowActiveOrb={shouldShowActiveOrb}
+          isLoading={isLoading}
         />
       )}
 

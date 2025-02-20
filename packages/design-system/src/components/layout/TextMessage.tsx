@@ -18,7 +18,8 @@ interface TextMessageProps {
   isLastQuestionResponse: boolean;
   orbState: OrbStatusEnum;
   primaryColor: string | null;
-  isAMessageBeingProcessed: boolean;
+  shouldShowActiveOrb: boolean;
+  isLoading: boolean;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -37,7 +38,8 @@ const TextMessage: React.FC<TextMessageProps> = ({
   isLastQuestionResponse,
   orbState,
   primaryColor,
-  isAMessageBeingProcessed,
+  shouldShowActiveOrb,
+  isLoading,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -46,7 +48,6 @@ const TextMessage: React.FC<TextMessageProps> = ({
   const conditionSpecificForDashboard = !usingForAgent && !isAiMessage;
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
-  const isLoading = isAMessageBeingProcessed && isAiMessage && isLastQuestionResponse;
 
   const reactMarkdownComponents: Partial<Components> = {
     a: MessageLink,
@@ -93,9 +94,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
           'flex gap-7 p-6 pl-0': isAiMessage && !isLastQuestionResponse,
         })}
       >
-        {isAiMessage && (
-          <>{isLastQuestionResponse ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>
-        )}
+        {isAiMessage && <>{shouldShowActiveOrb ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>}
 
         <div className="flex-col">
           <div
