@@ -318,8 +318,6 @@
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
         width: ConfigManager.constants.DEFAULT_WIDTH,
-        height: ConfigManager.getConfig().height,
-        maxHeight: "100%",
         transform: "translateX(-50%)",
         pointerEvents: "auto",
         display: ConfigManager.getConfig().containerId ? "none" : "block",
@@ -336,7 +334,7 @@
         ? "https://agent-stg.getbreakout.ai"
         : "https://agent.getbreakout.ai";
 
-      // const AGENT_BASE_URL = 'http://localhost:5173';
+      // const AGENT_BASE_URL = "http://localhost:5173";
       const baseUrl = config.feedbackEnabled
         ? `${AGENT_BASE_URL}/demo`
         : AGENT_BASE_URL;
