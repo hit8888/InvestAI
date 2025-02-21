@@ -21,7 +21,8 @@ export const isCompleteMessage = (message: WebSocketMessage): boolean => {
     typeof message.message === 'object' &&
     message.message !== null &&
     'is_complete' in message.message &&
-    typeof message.message.is_complete === 'boolean'
+    typeof message.message.is_complete === 'boolean' &&
+    message.message.is_complete
   );
 };
 
