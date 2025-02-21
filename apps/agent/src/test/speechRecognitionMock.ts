@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class MockSpeechRecognition {
   continuous = false;
   interimResults = false;
@@ -41,8 +42,8 @@ class MockSpeechRecognition {
 }
 
 export const setupSpeechRecognitionMock = () => {
-  // @ts-ignore
+  // @ts-expect-error: mocking SpeechRecognition for testing purposes
   global.window.SpeechRecognition = MockSpeechRecognition;
-  // @ts-ignore
+  // @ts-expect-error: mocking webkitSpeechRecognition for testing purposes
   global.window.webkitSpeechRecognition = MockSpeechRecognition;
 };
