@@ -4,6 +4,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from './useLocalStorageSession';
 import { WebSocketMessage } from '../types/webSocketData';
+import { useWidgetMode } from '../contexts/WidgetModeProvider';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -15,8 +16,6 @@ interface IProps {
     message_type,
   }: Pick<WebSocketMessage, 'message' | 'message_type'>) => Promise<void>;
 }
-
-type WidgetMode = 'embed' | 'overlay' | 'bottomBar';
 
 export const useEmbedAppEvents = ({
   fetchSessionData,
@@ -31,12 +30,12 @@ export const useEmbedAppEvents = ({
     sessionData: { sessionId },
   } = useLocalStorageSession();
 
-  const [searchParams] = useSearchParams();
-  const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
-
+  const { mode, setMode } = useWidgetMode();
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(true);
-  const [mode, setMode] = useState<WidgetMode>('bottomBar');
+
+  const [searchParams] = useSearchParams();
+  const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
 
   // Effect for sending chat state to parent
   useEffect(() => {
@@ -52,15 +51,11 @@ export const useEmbedAppEvents = ({
   useEffect(() => {
     const handleParentWindowMessages = async (event: MessageEvent) => {
       const { type, isCollapsible: newIsCollapsible } = event.data;
-      const updateMode = (newMode: WidgetMode) => {
-        console.log(`Updating mode from ${mode} to ${newMode}`);
-        setMode(newMode);
-      };
 
       switch (type) {
         case 'PARENT_FORM_MESSAGE':
           setIsCollapsible(true);
-          updateMode('overlay');
+          setMode('overlay');
           handleOpenAgent();
           if (event.data.data?.message) {
             fetchSessionData();
@@ -72,20 +67,19 @@ export const useEmbedAppEvents = ({
           break;
         case 'MODE_CHANGE':
           if (event.data.isCollapsible === false) {
-            updateMode('embed');
+            setMode('embed');
             handleOpenAgent();
           } else {
-            updateMode('bottomBar');
+            setMode('bottomBar');
           }
           fetchSessionData();
           break;
 
         default:
-          // Handle isCollapsible changes for all other messages (including IFRAME_READY)
           if (typeof newIsCollapsible === 'boolean') {
             setIsCollapsible(newIsCollapsible);
             if (!newIsCollapsible) {
-              updateMode('embed');
+              setMode('embed');
               handleOpenAgent();
             }
           }

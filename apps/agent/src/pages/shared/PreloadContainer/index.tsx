@@ -11,11 +11,14 @@ import { getBrowserSignature } from '../../../utils/tracking.ts';
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
-import Orb from '@breakout/design-system/components/Orb/index';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
+import { useWidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
+import { cn } from '@breakout/design-system/lib/cn';
+import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
+import Orb from '@breakout/design-system/components/Orb/index';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -41,6 +44,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   });
 
   useSetDistinctIdOnAppMount();
+
+  const { mode } = useWidgetMode();
 
   const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
@@ -87,10 +92,16 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     });
   }
 
+  if (mode === 'bottomBar') {
+    return (
+      <div className="flex h-screen animate-spin items-center justify-center">
+        <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
+      </div>
+    );
+  }
   return (
-    <div className="flex h-screen animate-spin items-center justify-center">
-      {/*Current Lavender (Good baseline for any theme color)*/}
-      <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
+    <div className={cn('mx-0 mt-0 flex h-[100vh] w-[100vw] justify-center rounded-3xl font-inter')}>
+      <AgentShimmer />
     </div>
   );
 };

@@ -339,10 +339,15 @@
         ? `${AGENT_BASE_URL}/demo`
         : AGENT_BASE_URL;
 
-      const emailParam = config.userEmail
-        ? `&email=${encodeURIComponent(config.userEmail)}`
-        : "";
-      return `${baseUrl}/org/${config.tenantId}/agent/${config.agentId}?${emailParam}`;
+      const params = new URLSearchParams();
+      if (config.userEmail) {
+        params.append("email", config.userEmail);
+      }
+      if (config.containerId) {
+        params.append("container_id", config.containerId);
+      }
+
+      return `${baseUrl}/org/${config.tenantId}/agent/${config.agentId}?${params.toString()}`;
     },
   };
 
