@@ -12,9 +12,15 @@ type FormFilledThankYouContentProps = {
   artifact: FormArtifactContent;
   formValues: Record<string, string>;
   handleEdit: () => void;
+  isformDisabled?: boolean;
 };
 
-const FormFilledThankYouContent = ({ artifact, formValues, handleEdit }: FormFilledThankYouContentProps) => {
+const FormFilledThankYouContent = ({
+  artifact,
+  formValues,
+  handleEdit,
+  isformDisabled,
+}: FormFilledThankYouContentProps) => {
   return (
     <Card className="max-w-96 rounded-2xl border-none bg-primary/10">
       <CardContent className="flex flex-col gap-6 p-4">
@@ -39,6 +45,7 @@ const FormFilledThankYouContent = ({ artifact, formValues, handleEdit }: FormFil
           <Button
             onClick={handleEdit}
             size="md"
+            disabled={isformDisabled}
             className="flex items-center justify-center gap-2 border border-primary bg-transparent py-3 pl-4 pr-2 font-semibold text-primary"
           >
             Edit

@@ -28,6 +28,7 @@ interface IFormProps {
   artifact?: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  isformDisabled?: boolean;
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
@@ -45,21 +46,29 @@ const createFormSchema = (form_fields: FormFieldType[]) => {
   return getschemaShapeValidatedByZode(schemaShape);
 };
 
-const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage }: IFormProps) => {
+const FormArtifact = ({
+  artifactId,
+  artifact,
+  artifactMetadata,
+  handleSendUserMessage,
+  isformDisabled,
+}: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formSchemaType = getFormSchemaTypeDefinition(formSchema);
+  type FormSchemaType = typeof formSchemaType;
 
-  const form = useForm<typeof formSchemaType>({
+  const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: artifactMetadata.filled_data ?? {},
     mode: 'onChange',
   });
 
-  function onSubmit(values: typeof formSchemaType) {
+  function onSubmit(values: FormSchemaType) {
     const response_data = {
       artifact_id: artifactId ?? '',
       form_data: values,
@@ -91,14 +100,16 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
     return <></>;
   }
 
-  const isSubmitBtnDisabled = !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled;
+  const isSubmitBtnDisabled =
+    !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
 
   if (submitted && !isEditing) {
     return (
-      <FormFilledThankYouContent 
-        artifact={artifact} 
-        formValues={formValues} 
-        handleEdit={handleEdit} 
+      <FormFilledThankYouContent
+        artifact={artifact}
+        formValues={formValues}
+        handleEdit={handleEdit}
+        isformDisabled={isformDisabled}
       />
     );
   }
@@ -113,7 +124,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
             className="flex flex-col gap-4 rounded-2xl border border-primary/20 bg-[rgb(var(--primary-foreground)/0.18)] p-4"
             data-testid="contact-form"
           >
-            <div className="flex flex-col items-center gap-6">
+            <div className="flex w-full flex-col items-start gap-6">
               {artifact.form_fields.map((field, i) => (
                 <ChatFormField key={i} form={form} form_field={field} />
               ))}
@@ -122,7 +133,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
               <Button
                 type="submit"
                 disabled={isSubmitBtnDisabled}
-                className="flex items-center gap-2 border-2 disabled:cursor-not-allowed disabled:opacity-20 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80"
+                className="flex items-center gap-2 border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-20"
                 data-testid="submit-form-btn"
               >
                 Submit

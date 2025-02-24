@@ -27,7 +27,7 @@ const MessageDataSources = (props: IProps) => {
   }
 
   return (
-    <div className="my-2 w-full rounded-xl border bg-secondary-foreground bg-opacity-50 backdrop-blur-lg">
+    <div className="my-2 w-full rounded-xl border bg-primary-foreground bg-opacity-50 backdrop-blur-lg">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="sources" className="border-none">
           <AccordionTrigger className={'px-3 py-2 text-primary-textColor'}>Show sources:</AccordionTrigger>

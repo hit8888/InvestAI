@@ -66,7 +66,9 @@ const ConversationDetailsPage = () => {
   }
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-4 self-stretch">
-      <ConversationsBreadCrumb />
+      <div className="sticky top-0 z-10 w-full bg-white pt-2">
+        <ConversationsBreadCrumb />
+      </div>
       {isLoading ? (
         <p className="w-full text-center text-2xl font-semibold text-gray-900">Loading...</p>
       ) : (

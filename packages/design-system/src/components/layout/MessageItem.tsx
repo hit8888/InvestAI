@@ -4,7 +4,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import ChatArtifact from './ChatArtifact.tsx';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { getMessageTimestamp, isArtifactMessage, isMessageAnalyticsEvent } from '@meaku/core/utils/index';
-import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage, ArtifactBaseType, MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
 import MessageArtifactPreview from './MessageArtifactPreview';
@@ -13,7 +13,12 @@ import { useState } from 'react';
 import MessageAnalytics from './MessageAnalytics';
 import MessageDataSources from './MessageDataSources';
 import MessageFeedback from './MessageFeedback';
-import { isCompleteMessage } from '@meaku/core/utils/messageUtils';
+import {
+  isCompleteMessage,
+  isFormArtifactEvent,
+  isFormFilledEvent,
+  isSuggestionArtifact,
+} from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -68,6 +73,34 @@ const MessageItem = ({
   const hasMessageStreamed = streamMessage ? isCompleteMessage(streamMessage) : true;
   const hasTextMessage = messagesWithSameResponseId.some((msg) => msg.message_type === 'TEXT' && msg.role === 'ai');
 
+  const analyticsEvent = messagesWithSameResponseId.find(
+    (msg) => msg.message_type === 'EVENT' && msg.message.event_type === 'MESSAGE_ANALYTICS',
+  );
+
+  const formFilledMessage = messagesWithSameResponseId.find(
+    (msg) => msg.message_type === 'EVENT' && msg.message.event_type === 'FORM_FILLED',
+  );
+
+  const artifactMessage = messagesWithSameResponseId.find(
+    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type !== 'SUGGESTIONS',
+  );
+
+  const suggestionsMessage = messagesWithSameResponseId.find(
+    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'SUGGESTIONS',
+  );
+
+  const formMessage = messagesWithSameResponseId.find(
+    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'FORM',
+  );
+
+  const hasFormArtifactMessage = formMessage && isArtifactMessage(formMessage) && isFormArtifactEvent(formMessage);
+  const hasFormFilledMessage = formFilledMessage && isFormFilledEvent(formFilledMessage);
+  const hasArtifactMessage = artifactMessage && isArtifactMessage(artifactMessage);
+  const hasSuggestionsMessage =
+    suggestionsMessage && isArtifactMessage(suggestionsMessage) && isSuggestionArtifact(suggestionsMessage);
+
+  const isDiscoveryMessage = message.message_type === 'TEXT' && message.actor === 'DISCOVERY_QUESTIONS';
+
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
   const isLastQuestionResponse = lastMessageResponseId === message.response_id && message.message_type === 'STREAM';
@@ -85,7 +118,7 @@ const MessageItem = ({
   const formattedTimestamp = getMessageTimestamp(timestamp);
 
   const showMessageArtifactPreview =
-    !lastMessageResponseId &&
+    (usingForAgent ? !lastMessageResponseId : hasArtifactMessage) &&
     isArtifactMessage(message) &&
     message.message.artifact_type !== 'NONE' &&
     (usingForAgent ? showArtifactPreview || isInView : true) &&
@@ -108,10 +141,54 @@ const MessageItem = ({
     setFeedback(undefined);
   };
 
+  const getMessageArtifactPreviewContent = (message: WebSocketMessage) => {
+    return (
+      <MessageArtifactPreview
+        message={message}
+        usingForAgent={usingForAgent}
+        setDemoPlayingStatus={setDemoPlayingStatus}
+        setActiveArtifact={setActiveArtifact}
+        logoURL={logoURL}
+      />
+    );
+  };
+
+  const getChatArtifactContent = (message: WebSocketMessage, isFormArtifact: boolean) => {
+    return (
+      isArtifactMessage(message) && (
+        <ChatArtifact
+          artifact={{
+            artifact_type: message.message.artifact_type,
+            artifact_id: message.message.artifact_data.artifact_id,
+            content: isFormArtifact
+              ? (message.message.artifact_data.content as FormArtifactContent)
+              : (message.message.artifact_data.content as SuggestionArtifactContent),
+            metadata: {
+              ...message.message.artifact_data.metadata,
+              ...(isFormArtifact &&
+                hasFormFilledMessage &&
+                formFilledMessage.message.event_data &&
+                !usingForAgent && {
+                  is_filled: hasFormFilledMessage,
+                  filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
+                }),
+            },
+            error: message.message.artifact_data.error,
+            error_code: message.message.artifact_data.error_code,
+          }}
+          handleSendUserMessage={handleSendUserMessage}
+          isformDisabled={!usingForAgent && isFormArtifact}
+        />
+      )
+    );
+  };
+
+  const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
+
   return (
     <div ref={inViewRef}>
       {/* Text Message */}
-      {isTextMessage && (
+      {isTextMessage && message.message.content !== '' && (
         <TextMessage
           message={message}
           isAiMessage={isAiMessage}
@@ -136,67 +213,60 @@ const MessageItem = ({
               onRemoveFeedback={handleRemoveFeedback}
             />
           )}
-          {isMessageAnalyticsEvent(message) && <MessageAnalytics analytics={message.message.event_data} />}
+          {analyticsEvent && isMessageAnalyticsEvent(analyticsEvent) && !isDiscoveryMessage && (
+            <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
+          )}
         </div>
       )}
 
-      {/* Ai Message Artifact Preview */}
-      {showMessageArtifactPreview && (
-        <MessageArtifactPreview
-          message={message}
-          usingForAgent={usingForAgent}
-          setDemoPlayingStatus={setDemoPlayingStatus}
-          setActiveArtifact={setActiveArtifact}
-          logoURL={logoURL}
-        />
-      )}
+      {usingForAgent ? (
+        <>
+          {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
-      {/* Form Artifact */}
-      {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
-        <div className="flex flex-col items-start pl-11">
-          <ChatArtifact
-            artifact={{
-              artifact_type: message.message.artifact_type,
-              artifact_id: message.message.artifact_data.artifact_id,
-              content: message.message.artifact_data.content as FormArtifactContent,
-              metadata: message.message.artifact_data.metadata,
-              error: message.message.artifact_data.error,
-              error_code: message.message.artifact_data.error_code,
-            }}
-            handleSendUserMessage={handleSendUserMessage}
-          />
-        </div>
-      )}
+          {/* Form Artifact */}
+          {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
+            <div className="flex flex-col items-start pl-11">{getChatArtifactContent(message, true)}</div>
+          )}
 
-      {/* Suggestions Section */}
-      <div className="ml-auto mt-3">
-        {/* Only show initial suggestions when no messages */}
-        {totalMessages < 1 && (
-          <SuggestionsArtifact
-            suggestedQuestionOrientation="left"
-            handleSendUserMessage={handleSendUserMessage}
-            artifact={{
-              suggested_questions: initialSuggestedQuestions,
-              suggested_questions_type: 'BUBBLE',
-            }}
-          />
-        )}
+          <div className="ml-auto mt-3">
+            {/* Only show initial suggestions when no messages */}
+            {totalMessages < 1 && (
+              <SuggestionsArtifact
+                suggestedQuestionOrientation="left"
+                handleSendUserMessage={handleSendUserMessage}
+                artifact={{
+                  suggested_questions: initialSuggestedQuestions,
+                  suggested_questions_type: 'BUBBLE',
+                }}
+              />
+            )}
 
-        {/* Show suggestion artifacts - store handles filtering */}
-        {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
-          <ChatArtifact
-            artifact={{
-              artifact_type: message.message.artifact_type,
-              artifact_id: message.message.artifact_data.artifact_id,
-              content: message.message.artifact_data.content as SuggestionArtifactContent,
-              metadata: message.message.artifact_data.metadata,
-              error: message.message.artifact_data.error,
-              error_code: message.message.artifact_data.error_code,
-            }}
-            handleSendUserMessage={handleSendUserMessage}
-          />
-        )}
-      </div>
+            {/* Show suggestion artifacts - store handles filtering */}
+            {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
+              <>{getChatArtifactContent(message, false)}</>
+            )}
+          </div>
+        </>
+      ) : null}
+
+      {showingContentForAdmin ? (
+        <>
+          {artifactMessage && !isDiscoveryMessage ? <>{getMessageArtifactPreviewContent(artifactMessage)}</> : null}
+
+          {/* Form Artifact */}
+          {hasFormArtifactMessage && (
+            <div className="flex flex-col items-start pl-11 pt-2">{getChatArtifactContent(formMessage, true)}</div>
+          )}
+
+          {/* Suggestions Section */}
+          {hasSuggestionsMessage && (
+            <div className="ml-auto mt-3">
+              {/* Show suggestion artifacts - store handles filtering */}
+              {getChatArtifactContent(suggestionsMessage, false)}
+            </div>
+          )}
+        </>
+      ) : null}
     </div>
   );
 };

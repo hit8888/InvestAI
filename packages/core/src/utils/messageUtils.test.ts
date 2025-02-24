@@ -9,6 +9,8 @@ import {
   getDemoQuestionData,
   isSuggestionArtifact,
   isCompleteMessage,
+  isFormFilledEvent,
+  isFormArtifactEvent,
 } from './messageUtils';
 import sessionResponseWithAllArtifacts from '../__mocks__/session_response_with_all_artifacts.json';
 
@@ -130,6 +132,108 @@ describe('messageUtils', () => {
 
       expect(isEventMessage(eventMessage)).toBe(true);
       expect(isEventMessage(textMessage)).toBe(false);
+    });
+  });
+
+  describe('isFormArtifactEvent', () => {
+    it('should identify FORM artifacts', () => {
+      const formArtifact: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'ARTIFACT',
+        message: {
+          artifact_type: 'FORM',
+          content: 'Test form content',
+          artifact_data: {
+            artifact_type: 'FORM',
+            content: {
+              form_fields: [
+                {
+                  label: 'Name',
+                  field_name: 'name',
+                  data_type: 'string',
+                  is_required: true,
+                },
+                {
+                  label: 'Email',
+                  field_name: 'email',
+                  data_type: 'email',
+                  is_required: true,
+                },
+              ],
+            },
+            artifact_id: 'test-id',
+            metadata: {},
+            error: null,
+            error_code: null,
+          },
+        },
+      };
+      const slideArtifact: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'ARTIFACT',
+        message: {
+          artifact_type: 'SLIDE',
+          content: 'Test slide content',
+          artifact_data: {
+            artifact_type: 'SLIDE',
+            content: {
+              title: 'Test Slide',
+              items: [],
+            },
+            artifact_id: 'test-id',
+            metadata: {},
+            error: null,
+            error_code: null,
+          },
+        },
+      };
+      const textMessage: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'TEXT',
+        message: { content: 'test content' },
+      };
+
+      expect(isFormArtifactEvent(formArtifact)).toBe(true);
+      expect(isFormArtifactEvent(slideArtifact)).toBe(false);
+      expect(isFormArtifactEvent(textMessage)).toBe(false);
+    });
+  });
+
+  describe('isFormFilledEvent', () => {
+    it('should identify FORM_FILLED events', () => {
+      const formFilledEvent: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'EVENT',
+        message: {
+          event_type: 'FORM_FILLED',
+          content: 'Form has been filled',
+          event_data: {
+            artifact_id: 'test-id',
+            form_data: {
+              name: 'John Doe',
+              email: 'john.doe@example.com',
+            },
+          },
+        },
+      };
+      const otherEvent: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'EVENT',
+        message: {
+          event_type: AgentEventType.DEMO_END,
+          content: 'Demo ended',
+          event_data: {},
+        },
+      };
+      const textMessage: WebSocketMessage = {
+        ...baseMessage,
+        message_type: 'TEXT',
+        message: { content: 'test content' },
+      };
+
+      expect(isFormFilledEvent(formFilledEvent)).toBe(true);
+      expect(isFormFilledEvent(otherEvent)).toBe(false);
+      expect(isFormFilledEvent(textMessage)).toBe(false);
     });
   });
 

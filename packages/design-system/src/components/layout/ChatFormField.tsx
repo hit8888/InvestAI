@@ -41,8 +41,8 @@ const ChatFormField = (props: IChatFormFieldProps) => {
       control={form.control}
       name={form_field.field_name}
       render={({ field }) => (
-        <FormItem className="flex flex-col items-start justify-center">
-          <div className="flex items-center justify-center gap-2 space-y-0">
+        <FormItem className="flex w-full flex-col items-start justify-center">
+          <div className="flex w-full items-center justify-center gap-2 space-y-0">
             <div className="flex items-center rounded-lg bg-primary/20 p-1">{getIconBasedOnField()}</div>
             <FormControl>
               {isPhoneInputField ? (
@@ -57,7 +57,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               )}
             </FormControl>
           </div>
-          <FormMessage className='ml-8'/>
+          <FormMessage className="ml-8" />
         </FormItem>
       )}
     />

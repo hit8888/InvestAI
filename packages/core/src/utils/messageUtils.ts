@@ -52,6 +52,22 @@ export const isMessageAnalyticsEvent = (
   return isEventMessage(message) && message.message.event_type === 'MESSAGE_ANALYTICS';
 };
 
+export const isFormArtifactEvent = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & {
+  message: EventMessageContent & { artifact_type: 'FORM' };
+} => {
+  return isArtifactMessage(message) && message.message.artifact_type === 'FORM';
+};
+
+export const isFormFilledEvent = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & {
+  message: EventMessageContent & { event_type: 'FORM_FILLED' };
+} => {
+  return isEventMessage(message) && message.message.event_type === 'FORM_FILLED';
+};
+
 export const isGeneratingArtifactEvent = (message: WebSocketMessage) =>
   message.message_type === 'EVENT' &&
   'event_type' in message.message &&

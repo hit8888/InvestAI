@@ -75,6 +75,12 @@ export const MessageAnalyticsEventDataSchema = z.object({
   buyer_intent_score: z.number(),
 });
 
+export const ErrorEventDataSchema = z.object({
+  error: z.string(),
+});
+
+export type ErrorEventData = z.infer<typeof ErrorEventDataSchema>;
+
 export type MessageAnalyticsEventData = z.infer<typeof MessageAnalyticsEventDataSchema>;
 
 export const GeneratingArtifactEventDataSchema = z.object({
@@ -93,7 +99,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('MESSAGE_ANALYTICS'),
-    event_data: MessageAnalyticsEventDataSchema,
+    event_data: MessageAnalyticsEventDataSchema.or(ErrorEventDataSchema),
   }),
   z.object({
     content: z.string(),

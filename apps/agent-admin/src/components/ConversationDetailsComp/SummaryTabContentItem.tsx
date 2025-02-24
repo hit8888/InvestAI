@@ -37,7 +37,6 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
 
   const showBantItemsHavingDashValue = () => {
     if (Array.isArray(listValue)) {
-      console.log('listValue', listValue);
       const bantItemsWithDash = listValue
         .filter((item) => item.itemValue === '-')
         .map((item) => item.itemLabel.replace(':', ''));
