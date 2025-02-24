@@ -505,15 +505,13 @@ export function generateConversationSummaryContent(
   const highestIntentScore =
     sessionData?.buyer_intent ??
     (isChatHistoryAvailable && Array.isArray(chatHistory) && chatHistory.length > 0
-      ? Math.max(
-          ...chatHistory.map((msg) => {
-            const message = msg.message;
-            if (msg.message_type === 'EVENT' && 'event_type' in message && message.event_type === 'MESSAGE_ANALYTICS') {
-              return message.event_data.buyer_intent_score ?? 0;
-            }
-            return 0;
-          }),
-        )
+      ? chatHistory.reduce((maxScore, msg) => {
+          if (msg.message_type === 'EVENT' && msg.message?.event_type === 'MESSAGE_ANALYTICS') {
+            const score = (msg.message?.event_data as { buyer_intent_score: number }).buyer_intent_score ?? 0;
+            return Math.max(maxScore, score);
+          }
+          return maxScore;
+        }, 0)
       : 0);
 
   // Count messages

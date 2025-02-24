@@ -1,13 +1,12 @@
-// downloadService.js
 import { toast } from 'react-hot-toast';
 import { downloadLeadsRowData, downloadConversationRowData } from '../../admin/api';
 import { createFilename, triggerDownload } from './downloadUtils';
-import { ConversationsPayload, LeadsPayload } from '@meaku/core/types/admin/api';
+import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@meaku/core/types/admin/api';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 interface DownloadProps {
   page: string;
-  selectedOption: string | null;
+  selectedOption: ExportFormatType | null;
   payloadData: ConversationsPayload | LeadsPayload;
 }
 /**
@@ -18,7 +17,7 @@ interface DownloadProps {
  * @returns {boolean} - Returns true if the download is successful, false otherwise.
  */
 export const downloadTableData = async ({ page, payloadData, selectedOption }: DownloadProps) => {
-  const fileType = selectedOption?.toLowerCase() || 'csv';
+  const fileType = (selectedOption?.toLowerCase() as ExportFormatType) || ExportFormat.CSV;
 
   try {
     const response =
