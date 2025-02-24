@@ -19,7 +19,6 @@ interface TextMessageProps {
   orbState: OrbStatusEnum;
   primaryColor: string | null;
   shouldShowActiveOrb: boolean;
-  isLoading: boolean;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -39,7 +38,6 @@ const TextMessage: React.FC<TextMessageProps> = ({
   orbState,
   primaryColor,
   shouldShowActiveOrb,
-  isLoading,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -94,7 +92,9 @@ const TextMessage: React.FC<TextMessageProps> = ({
           'flex gap-7 p-6 pl-0': isAiMessage && !isLastQuestionResponse,
         })}
       >
-        {isAiMessage && <>{shouldShowActiveOrb ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>}
+        {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
+          <>{shouldShowActiveOrb ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>
+        )}
 
         <div className="flex-col">
           <div
@@ -105,7 +105,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
             ref={messageRef}
             onClick={handleMessageClick}
           >
-            {isLoading ? (
+            {message.message_type === 'LOADING_TEXT' ? (
               <div className="flex h-8 items-center">
                 <AiResponseLoadingText color={primaryColor} text={message.message.content} />
               </div>

@@ -6,7 +6,7 @@ import {
   isArtifactMessage,
   isEventMessage,
   isMessageAnalyticsEvent,
-  getDemoEventData,
+  getDemoQuestionData,
   isSuggestionArtifact,
   isCompleteMessage,
 } from './messageUtils';
@@ -165,42 +165,63 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('getDemoEventData', () => {
-    it('should extract demo event data from DEMO_AVAILABLE events', () => {
-      const demoEvent: WebSocketMessage = {
-        ...baseMessage,
+  describe('getDemoQuestionData', () => {
+    it('should return DemoEventData when message contains valid demo question data', () => {
+      const message: WebSocketMessage = {
+        session_id: '123',
+        response_id: '456',
+        role: 'ai',
+        timestamp: '2024-01-01',
         message_type: 'EVENT',
         message: {
-          event_type: AgentEventType.DEMO_AVAILABLE,
-          content: 'Demo is available',
+          content: '',
+          event_type: 'DEMO_QUESTION',
           event_data: {
-            script_step: null,
             demo_available: true,
             features: [],
+            script_step: null,
             response: null,
             response_audio_url: null,
           },
         },
       };
-      const demoEndEvent: WebSocketMessage = {
-        ...baseMessage,
+
+      const result = getDemoQuestionData(message);
+      expect(result).toEqual(message.message.event_data);
+    });
+
+    it('should return null for empty event_data object', () => {
+      const message: WebSocketMessage = {
+        session_id: '123',
+        response_id: '456',
+        role: 'ai',
+        timestamp: '2024-01-01',
         message_type: 'EVENT',
         message: {
-          event_type: AgentEventType.DEMO_END,
-          content: 'Demo ended',
+          content: '',
+          event_type: 'DEMO_QUESTION',
           event_data: {},
         },
       };
 
-      expect(getDemoEventData(demoEvent)).toEqual({
-        script_step: null,
-        demo_available: true,
-        features: [],
-        response: null,
-        response_audio_url: null,
-      });
-      expect(getDemoEventData(demoEndEvent)).toBeNull();
-      expect(getDemoEventData(undefined)).toBeNull();
+      const result = getDemoQuestionData(message);
+      expect(result).toBeNull();
+    });
+
+    it('should return null for non-demo question messages', () => {
+      const message: WebSocketMessage = {
+        session_id: '123',
+        response_id: '456',
+        role: 'ai',
+        timestamp: '2024-01-01',
+        message_type: 'TEXT',
+        message: {
+          content: 'Hello',
+        },
+      };
+
+      const result = getDemoQuestionData(message);
+      expect(result).toBeNull();
     });
   });
 

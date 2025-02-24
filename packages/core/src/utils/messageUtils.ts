@@ -57,13 +57,15 @@ export const isGeneratingArtifactEvent = (message: WebSocketMessage) =>
   'event_type' in message.message &&
   message.message.event_type === AgentEventType.GENERATING_ARTIFACT;
 
-export const getDemoEventData = (message: WebSocketMessage | undefined): DemoEventData | null => {
+export const getDemoQuestionData = (message: WebSocketMessage | undefined): DemoEventData | null => {
   if (
     message?.message_type === 'EVENT' &&
+    message?.message?.event_type === 'DEMO_QUESTION' &&
     'event_type' in message.message &&
-    message.message.event_type === AgentEventType.DEMO_AVAILABLE
+    message.message.event_data &&
+    'demo_available' in message.message.event_data
   ) {
-    return message.message.event_data;
+    return message.message.event_data as DemoEventData;
   }
   return null;
 };

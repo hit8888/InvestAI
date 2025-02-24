@@ -128,7 +128,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('DEMO_QUESTION'),
-    event_data: z.object({}),
+    event_data: DemoEventDataSchema.or(z.object({})),
   }),
   z.object({
     content: z.string(),
@@ -168,6 +168,10 @@ export const WebSocketMessageSchema = z
     z.discriminatedUnion('message_type', [
       z.object({
         message_type: z.literal('TEXT'),
+        message: BaseMessageContentSchema,
+      }),
+      z.object({
+        message_type: z.literal('LOADING_TEXT'),
         message: BaseMessageContentSchema,
       }),
       z.object({

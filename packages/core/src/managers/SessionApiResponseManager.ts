@@ -8,6 +8,7 @@ export class SessionApiResponseManager {
   constructor(response: SessionApiResponse) {
     const validatedSession = SessionSchema.safeParse(response);
     if (!validatedSession.success) {
+      console.error('Invalid session response:', validatedSession.error.errors);
       throw new Error(validatedSession.error.errors.map((error) => error.message).join(', '));
     }
     this.session = validatedSession.data;
@@ -31,7 +32,7 @@ export class SessionApiResponseManager {
 
   public getFormattedChatHistory(welcomeMessagePayload?: WebSocketMessage): ChatHistory {
     const chatHistory = this.session.chat_history;
-    let history = welcomeMessagePayload ? [welcomeMessagePayload, ...chatHistory] : chatHistory;
+    const history = welcomeMessagePayload ? [welcomeMessagePayload, ...chatHistory] : chatHistory;
 
     // For each response_id where role is 'ai', ensure STREAM comes before TEXT or ARTIFACT
     const processedHistory = [...history];

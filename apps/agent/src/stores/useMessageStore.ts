@@ -69,16 +69,18 @@ export const useMessageStore = create<State>()(
             (msg) =>
               msg.role === 'ai' &&
               msg.response_id === message.response_id &&
-              msg.message_type === message.message_type &&
-              // For TEXT/STREAM messages, only check response_id to allow replacing orb state text
-              (message.message_type === 'TEXT' || message.message_type === 'STREAM'
-                ? true
-                : // For other message types (like ARTIFACT), check both message_type and artifact_type
-                  msg.message_type === message.message_type &&
-                  (msg.message_type !== 'ARTIFACT' ||
-                    ('artifact_type' in msg.message &&
-                      'artifact_type' in message.message &&
-                      msg.message.artifact_type === message.message.artifact_type))),
+              // Replace LOADING_TEXT with TEXT or STREAM messages
+              ((msg.message_type === 'LOADING_TEXT' &&
+                (message.message_type === 'TEXT' || message.message_type === 'STREAM')) ||
+                // For TEXT/STREAM messages, only check response_id to allow replacing orb state text
+                (message.message_type === 'TEXT' || message.message_type === 'STREAM'
+                  ? msg.message_type === message.message_type
+                  : // For other message types (like ARTIFACT), check both message_type and artifact_type
+                    msg.message_type === message.message_type &&
+                    (msg.message_type !== 'ARTIFACT' ||
+                      ('artifact_type' in msg.message &&
+                        'artifact_type' in message.message &&
+                        msg.message.artifact_type === message.message.artifact_type)))),
           );
 
           if (existingMessageIndex !== -1) {

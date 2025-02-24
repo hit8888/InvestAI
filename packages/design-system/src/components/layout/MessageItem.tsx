@@ -60,7 +60,8 @@ const MessageItem = ({
     message.message_type === 'TEXT' ||
     message.message_type === 'STREAM' ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
-    (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED');
+    (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
+    message.message_type === 'LOADING_TEXT';
 
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const streamMessage = messagesWithSameResponseId.find((msg) => msg.message_type === 'STREAM');
@@ -70,13 +71,14 @@ const MessageItem = ({
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
   const isLastQuestionResponse = lastMessageResponseId === message.response_id && message.message_type === 'STREAM';
-  const isLoading = isAMessageBeingProcessed && isAiMessage && isLastQuestionResponse;
+  const isLoading = isAMessageBeingProcessed && isLastQuestionResponse;
 
   const shouldShowActiveOrb =
     lastMessageResponseId === message.response_id &&
     ((hasTextMessage && message.message_type === 'TEXT') ||
       (message.message_type === 'STREAM' && !hasTextMessage) ||
-      isLoading);
+      isLoading ||
+      message.message_type === 'LOADING_TEXT');
 
   const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
   const timestamp = message?.timestamp;
@@ -118,7 +120,6 @@ const MessageItem = ({
           orbState={orbState}
           primaryColor={primaryColor}
           shouldShowActiveOrb={shouldShowActiveOrb}
-          isLoading={isLoading}
         />
       )}
 

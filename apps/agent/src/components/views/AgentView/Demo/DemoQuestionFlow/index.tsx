@@ -12,7 +12,7 @@ import { useResponseAudioPlayer } from '../../../../../hooks/useResponseAudioPla
 import { TranscriptionResult } from './types';
 import { useTranscriptionHandler } from '../../../../../hooks/useTranscriptionHandler';
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
-import { getDemoEventData } from '@meaku/core/utils/messageUtils';
+import { getDemoQuestionData } from '@meaku/core/utils/messageUtils';
 
 interface Props {
   handleResumeDemo: () => void;
@@ -30,17 +30,14 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
 
   const [recorderKey, setRecorderKey] = useState(0);
   const { handleSendUserMessage, message } = useDemoConversation();
+  const demoQuestionData = getDemoQuestionData(message);
+  const audioUrl = demoQuestionData?.response_audio_url || '';
 
   const getMessageContent = () => {
     if (!message) return '';
-    if ('content' in message.message) {
-      return message.message.content;
-    }
-    return '';
-  };
 
-  const demoEventData = getDemoEventData(message);
-  const audioUrl = demoEventData?.response_audio_url || '';
+    return demoQuestionData?.response || '';
+  };
 
   const { audioContextRef, audioRef, audioSourceRef, playPromiseRef, duration } = useResponseAudioPlayer({
     audioUrl,
