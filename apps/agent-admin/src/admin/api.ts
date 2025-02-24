@@ -6,6 +6,7 @@ import {
   ConversationsPayload,
   GenerateTokens,
   FilterOptionsPayload,
+  ExportFormatType,
 } from '@meaku/core/types/admin/api';
 
 import adminApiClient from './client';
@@ -25,6 +26,18 @@ export const getLeadsRowData = (payload: LeadsPayload) => adminApiClient.post(`/
 
 export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/`, payload);
+
+export const downloadLeadsRowData = (payload: LeadsPayload, downloadType: ExportFormatType) => {
+  return adminApiClient.post(`/tenant/api/leads/download/${downloadType}/`, payload, {
+    responseType: 'blob',
+  });
+};
+
+export const downloadConversationRowData = (payload: ConversationsPayload, downloadType: ExportFormatType) => {
+  return adminApiClient.post(`tenant/api/conversations/download/${downloadType}/`, payload, {
+    responseType: 'blob',
+  });
+};
 
 export const getFilterOptionsData = (payload: FilterOptionsPayload, pageType: string) =>
   adminApiClient.post(`tenant/api/search/${pageType}/filterset/`, payload);

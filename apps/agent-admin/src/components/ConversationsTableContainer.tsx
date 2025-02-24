@@ -109,6 +109,7 @@ const ConversationsTableContainer = () => {
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
           <TableFiltersWithHeaderLabel
+            payloadData={debouncedPayloadData}
             disabledState={hasNoRecords}
             key={CONVERSATIONS_PAGE}
             page={CONVERSATIONS_PAGE}

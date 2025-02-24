@@ -108,7 +108,12 @@ const LeadsTableContainer = () => {
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
-          <TableFiltersWithHeaderLabel disabledState={hasNoRecords} key={LEADS_PAGE} page={LEADS_PAGE} />
+          <TableFiltersWithHeaderLabel
+            payloadData={debouncedPayloadData}
+            disabledState={hasNoRecords}
+            key={LEADS_PAGE}
+            page={LEADS_PAGE}
+          />
           <TableViewContent
             key={'leads-table-container'}
             isLoading={isLoading}

@@ -25,6 +25,7 @@ import CompanyFoundationDate from '@breakout/design-system/components/icons/comp
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import { ConversationRightSideDetailsType } from './admin-types';
+import { ExportFormat } from '@meaku/core/types/admin/api';
 
 const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest, Company, UserMessagesCount } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
@@ -83,14 +84,8 @@ export enum COPIED_FIELD_TEXTS {
   SESSION_ID = 'Session ID Copied',
 }
 
-// EXPORT DOWNLOAD FEATURE SUPPORT VARIABLES
-export enum ExportFormat {
-  XSLS = 'XSLS',
-  CSV = 'CSV',
-}
-
 export const EXPORT_DOWNLOAD_RADIO_OPTIONS = [
-  { value: ExportFormat.XSLS, label: 'Export to XSLS' },
+  { value: ExportFormat.XLSX, label: 'Export to XLSX' },
   { value: ExportFormat.CSV, label: 'Export to CSV' },
 ];
 

@@ -1,15 +1,13 @@
-import { z } from "zod";
-import { WebSocketMessageSchema } from "../webSocketData";
-import { FeedbackRequestPayloadSchema } from "../api/feedback_request";
+import { z } from 'zod';
+import { WebSocketMessageSchema } from '../webSocketData';
+import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
 
 // LoginWithEmailPasswordPayload
 export const LoginWithEmailPasswordPayloadSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
-export type LoginWithEmailPasswordPayload = z.infer<
-  typeof LoginWithEmailPasswordPayloadSchema
->;
+export type LoginWithEmailPasswordPayload = z.infer<typeof LoginWithEmailPasswordPayloadSchema>;
 
 // GenerateOtpPayload
 export const GenerateOtpPayloadSchema = z.object({
@@ -32,21 +30,21 @@ export type VerifyOtpPayload = z.infer<typeof VerifyOtpPayloadSchema>;
 
 // Operator
 export const OperatorSchema = z.enum([
-  "eq",
-  "neq",
-  "gt",
-  "gte",
-  "lt",
-  "lte",
-  "contains",
-  "icontains",
-  "in",
-  "not_in",
-  "is_null",
-  "is_not_null",
-  "exists",
-  "not_exists",
-  "between",
+  'eq',
+  'neq',
+  'gt',
+  'gte',
+  'lt',
+  'lte',
+  'contains',
+  'icontains',
+  'in',
+  'not_in',
+  'is_null',
+  'is_not_null',
+  'exists',
+  'not_exists',
+  'between',
 ]);
 export type Operator = z.infer<typeof OperatorSchema>;
 
@@ -54,20 +52,14 @@ export type Operator = z.infer<typeof OperatorSchema>;
 export const FilterSchema = z.object({
   field: z.string(),
   operator: OperatorSchema,
-  value: z.union([
-    z.string(),
-    z.number(),
-    z.boolean(),
-    z.array(z.union([z.string(), z.number()])),
-    z.null(),
-  ]),
+  value: z.union([z.string(), z.number(), z.boolean(), z.array(z.union([z.string(), z.number()])), z.null()]),
 });
 export type FilterItem = z.infer<typeof FilterSchema>;
 
 // Sort
 export const SortSchema = z.object({
   field: z.string(),
-  order: z.enum(["asc", "desc"]),
+  order: z.enum(['asc', 'desc']),
 });
 export type SortItem = z.infer<typeof SortSchema>;
 
@@ -75,11 +67,19 @@ export type SortItem = z.infer<typeof SortSchema>;
 export const LeadsPayloadSchema = z.object({
   filters: z.array(FilterSchema),
   sort: z.array(SortSchema),
-  search: z.string(),
+  search: z.string().optional(),
   page: z.number(),
   page_size: z.number().optional(),
 });
 export type LeadsPayload = z.infer<typeof LeadsPayloadSchema>;
+
+export enum ExportFormat {
+  XLSX = 'XLSX',
+  CSV = 'CSV',
+}
+
+export const ExportFormatSchema = z.enum([ExportFormat.XLSX, ExportFormat.CSV]);
+export type ExportFormatType = z.infer<typeof ExportFormatSchema>;
 
 // ConversationsPayload
 export const ConversationsPayloadSchema = z.object({

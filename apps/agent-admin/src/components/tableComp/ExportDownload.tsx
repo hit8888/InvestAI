@@ -1,35 +1,33 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import DownloadIcon from '@breakout/design-system/components/icons/download-icon';
 import { EXPORT_DOWNLOAD_LABEL, EXPORT_DOWNLOAD_RADIO_OPTIONS } from '../../utils/constants';
-// import { handleDownload } from '../../utils/common';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
-
+import { useState } from 'react';
+import { ConversationsPayload, LeadsPayload, ExportFormatType, ExportFormat } from '@meaku/core/types/admin/api';
+import { downloadTableData } from '../../utils/download/downloadService';
 interface DownloadProps {
-  onCallback?: (selectedOption: string | null) => void;
+  page: string;
+  payloadData: ConversationsPayload | LeadsPayload;
 }
 
-const ExportDownload = ({ onCallback }: DownloadProps) => {
-  const handleDownloadButton = () => {
-    return;
-    // const fileTypeLowercase = selectedOption.toLowerCase() as 'xsls' | 'csv';
-    // console.log(`Downloaded file local.${fileTypeLowercase}`);
-    // const apiUrls = {
-    //   xsls: 'https://example.com/api/download/file.xsls', // TODOS: Replace with actual URL
-    //   csv: 'https://example.com/api/download/file.csv', // TODOS: Replace with actual URL
-    // };
-    // // TODOS: Pass actual Parameter for Integration
-    // handleDownload(fileTypeLowercase, apiUrls[fileTypeLowercase], 'example');
+const ExportDownload = ({ page, payloadData }: DownloadProps) => {
+  const [selectedOption, setSelectedOption] = useState<ExportFormatType | null>(ExportFormat.CSV);
+  const [downloadOpen, setDownloadOpen] = useState<boolean>(false);
+  const handleDownloadButton = async () => {
+    const isDownloadSuccessful = await downloadTableData({ page, payloadData, selectedOption });
+    if (isDownloadSuccessful) {
+      setDownloadOpen(false);
+    }
   };
 
-  const handleRadioOptions = (selectedOption: string) => {
-    // console.log('ExportDownload Selected option:', selectedOption);
-    onCallback?.(selectedOption);
+  const handleRadioOptions = (selectedOption: ExportFormatType | string) => {
+    setSelectedOption(selectedOption as ExportFormatType);
   };
 
   return (
-    <Popover>
+    <Popover open={downloadOpen} onOpenChange={setDownloadOpen}>
       <PopoverTrigger
         className="inline-flex items-center justify-center gap-2 rounded-lg 
       border border-primary/20 bg-primary/2.5 !p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary/10 
@@ -46,8 +44,16 @@ const ExportDownload = ({ onCallback }: DownloadProps) => {
         alignOffset={-15}
       >
         <PopoverHeaderLabelWithCloseIcon headerLabel={EXPORT_DOWNLOAD_LABEL} />
-        <CustomRadioGroupButtons radioOptions={EXPORT_DOWNLOAD_RADIO_OPTIONS} onCallback={handleRadioOptions} />
-        <CustomFooterWithButtons primaryBtnLabel={EXPORT_DOWNLOAD_LABEL} onPrimaryBtnClicked={handleDownloadButton} />
+        <CustomRadioGroupButtons
+          radioOptions={EXPORT_DOWNLOAD_RADIO_OPTIONS}
+          defaultSelected={selectedOption}
+          onCallback={handleRadioOptions}
+        />
+        <CustomFooterWithButtons
+          primaryBtnLabel={EXPORT_DOWNLOAD_LABEL}
+          isDisabled={!selectedOption}
+          onPrimaryBtnClicked={handleDownloadButton}
+        />
       </PopoverContent>
     </Popover>
   );

@@ -12,11 +12,16 @@ import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { collectAppliedFilters, getFilterHeaderLabel } from '../../utils/common';
 import { FilterType } from '@meaku/core/types/admin/filters';
 import ExportDownload from './ExportDownload';
+import { ConversationsPayload, LeadsPayload } from '@meaku/core/types/admin/api';
 
 const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } =
   FilterType;
 
-const AllFiltersContainer = ({ page }: PageTypeProps) => {
+interface AllFiltersContainerProps extends PageTypeProps {
+  payloadData: ConversationsPayload | LeadsPayload;
+}
+
+const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) => {
   const filters = useAllFilterStore();
   const [filterState, setFilterState] = useState(AllFilters);
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +71,7 @@ const AllFiltersContainer = ({ page }: PageTypeProps) => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
-        <ExportDownload />
+        <ExportDownload page={page} payloadData={payloadData} />
         <PopoverTrigger
           className="flex items-center gap-2 self-stretch rounded-lg 
         border border-primary/20 bg-primary/2.5 p-2 

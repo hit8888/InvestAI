@@ -38,22 +38,6 @@ const { AllFilters, DateRange, IntentScore, Location, Company, MeetingBooked, Pr
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
 
-// Function to trigger the download
-export const handleDownload = (fileType: string, linkUrl: string, downloadedFileName: string) => {
-  const url = linkUrl;
-  if (url) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.setAttribute('download', `${downloadedFileName}.${fileType}`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } else {
-    alert('Invalid file type selected');
-  }
-};
-
 export const getTenantFromLocalStorage = () => {
   return getTenantIdentifier()?.['tenant-name'];
 };
