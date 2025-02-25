@@ -1,24 +1,25 @@
-import axios, { AxiosError } from "axios";
-import { ENV } from "../types/env";
-import { getTenantFromUrl } from "../utils/getTenantFromUrl";
+import axios, { AxiosError } from 'axios';
+import { ENV } from '../types/env';
+import { getTenantFromUrl } from '../utils/getTenantFromUrl';
+import { trackError } from '../utils/error';
 
 const apiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
   headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 });
 
 // Add request interceptor to set x-tenant-name header before each request
 apiClient.interceptors.request.use(
   (config) => {
-    config.headers["x-tenant-name"] = getTenantFromUrl();
+    config.headers['x-tenant-name'] = getTenantFromUrl();
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Sometimes the backend throws in a 500 or some other error code when it can't find the session id, in such cases, we are required to clear the session id and prospect id from the local storage and retry the request. This interceptor automatically clears the session id and prospect id from the request and retries the request.
@@ -29,7 +30,18 @@ apiClient.interceptors.response.use(
 
     const apiPath = error.config.url;
 
-    if (apiPath?.includes("/session/init")) {
+    // Track the error in Sentry with relevant context
+    trackError(error, {
+      component: 'ApiClient',
+      action: 'api_request',
+      additionalData: {
+        url: apiPath,
+        status: error.response?.status,
+        method: error.config?.method,
+      },
+    });
+
+    if (apiPath?.includes('/session/init')) {
       const updatedConfig = {
         ...error.config,
         data: {
@@ -43,7 +55,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

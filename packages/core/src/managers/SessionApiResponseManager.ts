@@ -1,6 +1,7 @@
 import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
 import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
 import { filterOutSuggestions } from '../utils/messageUtils';
+import { trackError } from '../utils/error';
 
 export class SessionApiResponseManager {
   private session: SessionApiResponse;
@@ -9,6 +10,10 @@ export class SessionApiResponseManager {
     const validatedSession = SessionSchema.safeParse(response);
     if (!validatedSession.success) {
       console.error('Invalid session response:', validatedSession.error.errors);
+      trackError(validatedSession.error.errors, {
+        component: 'SessionApiResponseManager',
+        action: 'constructor',
+      });
       throw new Error(validatedSession.error.errors.map((error) => error.message).join(', '));
     }
     this.session = validatedSession.data;

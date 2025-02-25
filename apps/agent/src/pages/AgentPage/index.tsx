@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import AgentWithWhiteLabelConfig from './AgentPageContent';
 import PreloadContainer from '../shared/PreloadContainer';
 import { ApiProvider } from '../shared/ApiProvider';
-import ErrorBoundary from '@breakout/design-system/shared/ErrorBoundary';
+import ErrorBoundary from '../../components/ErrorBoundary';
 import UrlDerivedDataProvider from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 const AgentPage: FC = () => {

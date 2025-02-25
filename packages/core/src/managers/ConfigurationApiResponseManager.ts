@@ -1,10 +1,20 @@
-import { ConfigurationApiResponse } from '../types/api/configuration_response';
+import { trackError } from '../../../../apps/agent/src/utils/error';
+import { ConfigurationApiResponse, ConfigurationSchema } from '../types/api/configuration_response';
 
 export class ConfigurationApiResponseManager {
   protected config: ConfigurationApiResponse;
 
-  constructor(config: ConfigurationApiResponse) {
-    this.config = config;
+  constructor(response: ConfigurationApiResponse) {
+    const validatedConfig = ConfigurationSchema.safeParse(response);
+    if (!validatedConfig.success) {
+      console.error('Invalid session response:', validatedConfig.error.errors);
+      trackError(validatedConfig.error.errors, {
+        component: 'ConfigurationApiResponseManager',
+        action: 'constructor',
+      });
+      throw new Error(validatedConfig.error.errors.map((error) => error.message).join(', '));
+    }
+    this.config = validatedConfig.data;
   }
 
   getAgentName() {

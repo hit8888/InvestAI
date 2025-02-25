@@ -19,6 +19,7 @@ import { useWidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
+import Button from '@breakout/design-system/components/layout/button';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -65,6 +66,12 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
 
+  const handleRetry = () => {
+    if (firstQueryWithError) {
+      firstQueryWithError.refetch();
+    }
+  };
+
   if (firstQueryWithError?.error) {
     if (firstQueryWithError.isFetching) {
       return (
@@ -80,7 +87,13 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     if (isDemoURL && configQuery?.isError) {
       return <Custom404 />;
     }
-    return null;
+
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-4">
+        <p className="text-gray-700">Something went wrong. Please try again.</p>
+        <Button onClick={handleRetry}>Reload</Button>
+      </div>
+    );
   }
 
   if (configQuery.data) {

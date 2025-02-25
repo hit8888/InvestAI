@@ -13,6 +13,7 @@ import { useState } from 'react';
 import MessageAnalytics from './MessageAnalytics';
 import MessageDataSources from './MessageDataSources';
 import MessageFeedback from './MessageFeedback';
+import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
   isCompleteMessage,
   isFormArtifactEvent,
@@ -185,88 +186,90 @@ const MessageItem = ({
   const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
 
   return (
-    <div ref={inViewRef}>
-      {/* Text Message */}
-      {isTextMessage && message.message.content !== '' && (
-        <TextMessage
-          message={message}
-          isAiMessage={isAiMessage}
-          usingForAgent={usingForAgent}
-          isLastQuestionResponse={isLastQuestionResponse}
-          orbState={orbState}
-          primaryColor={primaryColor}
-          shouldShowActiveOrb={shouldShowActiveOrb}
-        />
-      )}
+    <MessageItemErrorBoundary messageId={message.response_id}>
+      <div ref={inViewRef}>
+        {/* Text Message */}
+        {isTextMessage && message.message.content !== '' && (
+          <TextMessage
+            message={message}
+            isAiMessage={isAiMessage}
+            usingForAgent={usingForAgent}
+            isLastQuestionResponse={isLastQuestionResponse}
+            orbState={orbState}
+            primaryColor={primaryColor}
+            shouldShowActiveOrb={shouldShowActiveOrb}
+          />
+        )}
 
-      {isAiMessage && allowFeedback && isTextMessage && (
-        <div className="pl-11">
-          <MessageDataSources dataSources={message.documents ?? []} />
-          {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
-          {hasMessageStreamed && (
-            <MessageFeedback
-              sessionId={sessionId}
-              message={message}
-              feedback={feedback}
-              onAddFeedback={handleAddFeedback}
-              onRemoveFeedback={handleRemoveFeedback}
-            />
-          )}
-          {analyticsEvent && isMessageAnalyticsEvent(analyticsEvent) && !isDiscoveryMessage && (
-            <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
-          )}
-        </div>
-      )}
-
-      {usingForAgent ? (
-        <>
-          {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
-
-          {/* Form Artifact */}
-          {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
-            <div className="flex flex-col items-start pl-11">{getChatArtifactContent(message, true)}</div>
-          )}
-
-          <div className="ml-auto mt-3">
-            {/* Only show initial suggestions when no messages */}
-            {totalMessages < 1 && (
-              <SuggestionsArtifact
-                suggestedQuestionOrientation="left"
-                handleSendUserMessage={handleSendUserMessage}
-                artifact={{
-                  suggested_questions: initialSuggestedQuestions,
-                  suggested_questions_type: 'BUBBLE',
-                }}
+        {isAiMessage && allowFeedback && isTextMessage && (
+          <div className="pl-11">
+            <MessageDataSources dataSources={message.documents ?? []} />
+            {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
+            {hasMessageStreamed && (
+              <MessageFeedback
+                sessionId={sessionId}
+                message={message}
+                feedback={feedback}
+                onAddFeedback={handleAddFeedback}
+                onRemoveFeedback={handleRemoveFeedback}
               />
             )}
-
-            {/* Show suggestion artifacts - store handles filtering */}
-            {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
-              <>{getChatArtifactContent(message, false)}</>
+            {analyticsEvent && isMessageAnalyticsEvent(analyticsEvent) && !isDiscoveryMessage && (
+              <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
             )}
           </div>
-        </>
-      ) : null}
+        )}
 
-      {showingContentForAdmin ? (
-        <>
-          {artifactMessage && !isDiscoveryMessage ? <>{getMessageArtifactPreviewContent(artifactMessage)}</> : null}
+        {usingForAgent ? (
+          <>
+            {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
-          {/* Form Artifact */}
-          {hasFormArtifactMessage && (
-            <div className="flex flex-col items-start pl-11 pt-2">{getChatArtifactContent(formMessage, true)}</div>
-          )}
+            {/* Form Artifact */}
+            {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
+              <div className="flex flex-col items-start pl-11">{getChatArtifactContent(message, true)}</div>
+            )}
 
-          {/* Suggestions Section */}
-          {hasSuggestionsMessage && (
             <div className="ml-auto mt-3">
+              {/* Only show initial suggestions when no messages */}
+              {totalMessages < 1 && (
+                <SuggestionsArtifact
+                  suggestedQuestionOrientation="left"
+                  handleSendUserMessage={handleSendUserMessage}
+                  artifact={{
+                    suggested_questions: initialSuggestedQuestions,
+                    suggested_questions_type: 'BUBBLE',
+                  }}
+                />
+              )}
+
               {/* Show suggestion artifacts - store handles filtering */}
-              {getChatArtifactContent(suggestionsMessage, false)}
+              {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
+                <>{getChatArtifactContent(message, false)}</>
+              )}
             </div>
-          )}
-        </>
-      ) : null}
-    </div>
+          </>
+        ) : null}
+
+        {showingContentForAdmin ? (
+          <>
+            {artifactMessage && !isDiscoveryMessage ? <>{getMessageArtifactPreviewContent(artifactMessage)}</> : null}
+
+            {/* Form Artifact */}
+            {hasFormArtifactMessage && (
+              <div className="flex flex-col items-start pl-11 pt-2">{getChatArtifactContent(formMessage, true)}</div>
+            )}
+
+            {/* Suggestions Section */}
+            {hasSuggestionsMessage && (
+              <div className="ml-auto mt-3">
+                {/* Show suggestion artifacts - store handles filtering */}
+                {getChatArtifactContent(suggestionsMessage, false)}
+              </div>
+            )}
+          </>
+        ) : null}
+      </div>
+    </MessageItemErrorBoundary>
   );
 };
 

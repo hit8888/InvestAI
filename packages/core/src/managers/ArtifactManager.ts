@@ -1,5 +1,6 @@
 import { SlideArtifactContent, SlideImageArtifactContent, VideoArtifactContent } from '../types/artifact';
 import { ArtifactMessageContent, ArtifactMessageContentSchema } from '../types/webSocketData';
+import { trackError } from '../utils/error';
 
 class ArtifactManager {
   private artifact: ArtifactMessageContent;
@@ -16,7 +17,11 @@ class ArtifactManager {
 
     if (!validatedArtifact.success) {
       console.error('Artifact validation failed:', validatedArtifact.error.errors, artifact);
-      return artifact;
+      trackError(validatedArtifact.error.errors, {
+        component: 'ArtifactManager',
+        action: 'validateArtifact',
+      });
+      throw new Error('Artifact validation failed');
     }
 
     return validatedArtifact.data;
