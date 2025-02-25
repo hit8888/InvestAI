@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useArtifactStore } from '../stores/useArtifactStore';
 import { ArtifactMessageContent } from '@meaku/core/types/webSocketData';
-import useGetLastMediaArtifactMessage from './useGetlastMediaArtifactMessage';
+import useGetLastMediaArtifactMessage from './useGetLastMediaArtifactMessage';
 
 export const useSetArtifactOnNewMessage = () => {
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
