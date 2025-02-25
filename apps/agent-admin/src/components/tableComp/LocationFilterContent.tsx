@@ -10,6 +10,7 @@ import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQ
 import { useTableStore } from '../../stores/useTableStore';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 
 const LocationFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const tableManager = useTableStore((state) => state.tableManager);
@@ -52,9 +53,9 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
 
   const hasSearchTermLength = searchTerm.length > 0;
 
-  if (!data) return null;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <FilterOptionsShimmer checkboxOrientation="right" isFlagShimmer={true} />;
   if (isError) return <div>No Location data</div>;
+  if (!data) return null;
   return (
     <React.Fragment key={Location}>
       <div className="px-4">

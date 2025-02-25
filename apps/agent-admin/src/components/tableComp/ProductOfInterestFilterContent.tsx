@@ -8,6 +8,7 @@ import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQ
 import { useTableStore } from '../../stores/useTableStore';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 
 const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const filters = useAllFilterStore();
@@ -39,9 +40,10 @@ const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover 
 
   const resultantOptions = getDescendingOrderedOptions(sortedProductOfInterest, productOfInterestValues);
   // console.log("product of interest options data", data)
-  if (!data) return null;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <FilterOptionsShimmer checkboxOrientation="left" isSearchInputShimmer={false} isSelectAllShimmer={false} />;
   if (isError) return <div>No Product data</div>;
+  if (!data) return null;
   return (
     <CommonCheckboxesFilterContent
       filterState={filterState}

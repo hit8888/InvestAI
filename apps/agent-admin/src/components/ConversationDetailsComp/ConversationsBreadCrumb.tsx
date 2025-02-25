@@ -11,8 +11,13 @@ import {
 import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadcrumb-left-arrow';
 import Separator from '@breakout/design-system/components/layout/separator';
 import { AppRoutesEnum } from '../../utils/constants';
+import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
-const ConversationsBreadCrumb = () => {
+type IProps = {
+  isLoading: boolean;
+};
+
+const ConversationsBreadCrumb = ({ isLoading }: IProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,17 +41,29 @@ const ConversationsBreadCrumb = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <div onClick={handleNavigateBack} className="cursor-pointer" role="button" tabIndex={0}>
-              <BreadcrumbLeftArrow width={'16'} height={'16'} className="text-gray-400" />
+              {isLoading ? (
+                <Skeleton className="h-6 w-6" />
+              ) : (
+                <BreadcrumbLeftArrow width={'16'} height={'16'} className="text-gray-400" />
+              )}
             </div>
           </BreadcrumbItem>
           <BreadcrumbItem className="cursor-pointer text-base font-medium text-gray-400">
-            <div onClick={handleNavigateBack} role="button" tabIndex={0}>
-              Conversations
-            </div>
+            {isLoading ? (
+              <Skeleton className="h-6 w-32" />
+            ) : (
+              <div onClick={handleNavigateBack} role="button" tabIndex={0}>
+                Conversations
+              </div>
+            )}
           </BreadcrumbItem>
           <BreadcrumbSeparator className="text-base font-medium text-gray-400">/</BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-base font-semibold text-primary">Prospect</BreadcrumbPage>
+            {isLoading ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
+              <BreadcrumbPage className="text-base font-semibold text-primary">Prospect</BreadcrumbPage>
+            )}
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

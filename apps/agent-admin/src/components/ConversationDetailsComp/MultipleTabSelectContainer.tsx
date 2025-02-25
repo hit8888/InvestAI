@@ -12,6 +12,7 @@ import LogTabDisplayContent from './LogTabDisplayContent';
 type IProps = {
   currentTab: ConversationDetailsTabsValueEnum;
   handleTabClick: (value: ConversationDetailsTabsValueEnum) => void;
+  isLoading: boolean;
 };
 
 type TabConfig = {
@@ -22,7 +23,7 @@ type TabConfig = {
   isActive: boolean; // To determine if the tab is active or not
 };
 
-const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
+const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: IProps) => {
   const {
     SUMMARY_TAB,
     LOG_TAB,
@@ -46,7 +47,7 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
       value: LOG_TAB,
       label: LOG_TAB_LABEL,
       icon: LogTabIcon,
-      content: <LogTabDisplayContent />,
+      content: <LogTabDisplayContent isLoading={isLoading} />,
       isActive: currentTab === LOG_TAB,
     },
     // {
@@ -67,6 +68,7 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick }: IProps) => {
             handleTabClick={() => handleTabClick(value)}
             tabLabel={label}
             isTabSelected={isActive}
+            isLoading={isLoading}
           >
             <Icon
               width="16"

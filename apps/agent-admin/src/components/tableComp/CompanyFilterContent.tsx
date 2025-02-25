@@ -10,6 +10,7 @@ import useFilterOptionsDataQuery from '../../queries/query/useFilterOptionsDataQ
 import { useTableStore } from '../../stores/useTableStore';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
+import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 
 const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const filters = useAllFilterStore();
@@ -52,9 +53,9 @@ const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonF
 
   const hasSearchTermLength = searchTerm.length > 0;
 
-  if (!data) return null;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <FilterOptionsShimmer checkboxOrientation="right" />;
   if (isError) return <div>No Company data</div>;
+  if (!data) return null;
   return (
     <React.Fragment key={Company}>
       <div className="px-4">

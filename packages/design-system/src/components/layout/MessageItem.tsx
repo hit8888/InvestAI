@@ -95,7 +95,6 @@ const MessageItem = ({
 
   const hasFormArtifactMessage = formMessage && isArtifactMessage(formMessage) && isFormArtifactEvent(formMessage);
   const hasFormFilledMessage = formFilledMessage && isFormFilledEvent(formFilledMessage);
-  const hasArtifactMessage = artifactMessage && isArtifactMessage(artifactMessage);
   const hasSuggestionsMessage =
     suggestionsMessage && isArtifactMessage(suggestionsMessage) && isSuggestionArtifact(suggestionsMessage);
 
@@ -118,10 +117,10 @@ const MessageItem = ({
   const formattedTimestamp = getMessageTimestamp(timestamp);
 
   const showMessageArtifactPreview =
-    (usingForAgent ? !lastMessageResponseId : hasArtifactMessage) &&
+    lastMessageResponseId !== message.response_id &&
     isArtifactMessage(message) &&
     message.message.artifact_type !== 'NONE' &&
-    (usingForAgent ? showArtifactPreview || isInView : true) &&
+    (showArtifactPreview || isInView) &&
     hasMessageStreamed;
 
   const handleAddFeedback = (newFeedback: Partial<FeedbackRequestPayload>) => {

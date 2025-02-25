@@ -1,8 +1,7 @@
 import React from 'react';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import CustomTableView from './tableComp/CustomTableView';
-import Orb from '@breakout/design-system/components/Orb/index';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
 
 interface TableContentProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -14,6 +13,9 @@ interface TableContentProps {
   columnHeaderData: ColumnDefinition[];
 }
 
+const DEFAULT_LOADING_ROW_COUNT = 50;
+const DEFAULT_LOADING_COLUMNS_COUNT = 6;
+
 const TableViewContent: React.FC<TableContentProps> = ({
   isConversationTable = false,
   isLoading,
@@ -23,12 +25,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
   columnHeaderData,
 }) => {
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-full animate-spin items-center justify-center">
-        {/*Current Lavender (Good baseline for any theme color)*/}
-        <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
-      </div>
-    );
+    return <TableViewShimmer columnCount={DEFAULT_LOADING_COLUMNS_COUNT} rowCount={DEFAULT_LOADING_ROW_COUNT} />;
   }
 
   if (!totalRecords) {

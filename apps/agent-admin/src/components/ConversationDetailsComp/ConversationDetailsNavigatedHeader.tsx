@@ -8,11 +8,12 @@ type IProps = {
   companyName: string;
   sessionID: string;
   companyLogoUrl: string;
+  isLoading: boolean;
 };
-const ConversationDetailsNavigatedHeader = ({ companyName, sessionID, companyLogoUrl }: IProps) => {
+const ConversationDetailsNavigatedHeader = ({ companyName, sessionID, companyLogoUrl, isLoading }: IProps) => {
   return (
     <div className="flex max-h-14 w-full items-center gap-6">
-      <SingleDetailsWithIconHeaderValue headerLabel="Company name:" itemValue={companyName}>
+      <SingleDetailsWithIconHeaderValue isLoading={isLoading} headerLabel="Company name:" itemValue={companyName}>
         {companyLogoUrl.length > 0 ? (
           <img src={companyLogoUrl} alt={`${companyName}-logo`} />
         ) : (
@@ -22,7 +23,12 @@ const ConversationDetailsNavigatedHeader = ({ companyName, sessionID, companyLog
       <div className="h-10">
         <Separator vertical={true} />
       </div>
-      <SingleDetailsWithIconHeaderValue headerLabel="Session ID:" itemValue={sessionID} isTakingFullWidth={true}>
+      <SingleDetailsWithIconHeaderValue
+        isLoading={isLoading}
+        headerLabel="Session ID:"
+        itemValue={sessionID}
+        isTakingFullWidth={true}
+      >
         <SessionIDIcon width={'24'} height={'24'} />
       </SingleDetailsWithIconHeaderValue>
       {/* <ConversationDetailsNavigationButtons /> */}

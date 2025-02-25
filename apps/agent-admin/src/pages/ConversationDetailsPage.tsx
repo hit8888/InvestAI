@@ -9,6 +9,7 @@ import useConversationDetailsDataQuery from '../queries/query/useConversationDet
 import { useEffect, useMemo } from 'react';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
 import { useQueryOptions } from '../hooks/useQueryOptions';
+// import ConversationDetailsPageShimmer from '../components/ShimmerComponent/ConversationDetailsPageShimmer';
 
 const ConversationDetailsPage = () => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
@@ -67,16 +68,10 @@ const ConversationDetailsPage = () => {
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-4 self-stretch">
       <div className="sticky top-0 z-10 w-full bg-white pt-2">
-        <ConversationsBreadCrumb />
+        <ConversationsBreadCrumb isLoading={isLoading} />
       </div>
-      {isLoading ? (
-        <p className="w-full text-center text-2xl font-semibold text-gray-900">Loading...</p>
-      ) : (
-        <>
-          <ConversationDetailsNavigatedHeader {...navigatedHeaderDynamicValues} />
-          <ConversationDetailsMultipleTabContainer />
-        </>
-      )}
+      <ConversationDetailsNavigatedHeader isLoading={isLoading} {...navigatedHeaderDynamicValues} />
+      <ConversationDetailsMultipleTabContainer isLoading={isLoading} />
     </div>
   );
 };
