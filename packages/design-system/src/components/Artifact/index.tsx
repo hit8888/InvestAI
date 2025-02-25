@@ -38,7 +38,7 @@ const Artifact = ({
         <AspectRatio ratio={16 / 9}>
           <div className="group relative h-full w-full overflow-hidden rounded-xl">
             {isGeneratingArtifact ? (
-              <div className="h-full w-full animate-pulse bg-gray-50" />
+              <div className="h-full w-full animate-pulse bg-gray-400" />
             ) : (
               <ArtifactContentUi
                 logoURL={logoURL}

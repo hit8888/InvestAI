@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isGeneratingArtifactEvent, filterOutSuggestions } from '@meaku/core/utils/messageUtils';
+import { filterOutSuggestions } from '@meaku/core/utils/messageUtils';
 
 interface State {
   messages: WebSocketMessage[];
@@ -59,11 +59,6 @@ export const useMessageStore = create<State>()(
         }),
       handleAddAIMessage: (message: WebSocketMessage) =>
         set((draft) => {
-          // Don't add GENERATING_ARTIFACT event messages
-          if (isGeneratingArtifactEvent(message)) {
-            return;
-          }
-
           // Find existing message to update
           const existingMessageIndex = draft.messages.findIndex(
             (msg) =>

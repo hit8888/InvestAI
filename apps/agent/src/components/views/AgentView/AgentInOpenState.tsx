@@ -8,10 +8,9 @@ import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidt
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
 import { Demo } from './Demo/index.tsx';
-import { AgentEventType, ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
-import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -28,6 +27,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const messages = useMessageStore((state) => state.messages);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
@@ -38,13 +38,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
   const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
 
-  const hasArtifactOrDemoInMessageHistory =
-    messages.findIndex(
-      (message) =>
-        message.role === 'ai' &&
-        message.message_type === 'ARTIFACT' &&
-        isMediaArtifact((message.message as ArtifactMessageContent).artifact_type),
-    ) !== -1 || isDemoAvailable;
+  const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
 
   const handleFinishDemo = () => {
     setMediaTakeFullScreenWidth(false);
@@ -83,16 +77,18 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
         />
         <div
           className={cn('h-full flex-1 overflow-hidden', {
-            'grid grid-cols-3 gap-2': hasArtifactOrDemoInMessageHistory,
+            'grid grid-cols-3 gap-2': showMediaArtifactContainer,
           })}
         >
+          {/* Left Side Chat History */}
           <AgentMessagesContainer
             handleSendMessage={handleSendMessage}
-            hasArtifactOrDemoInMessageHistory={hasArtifactOrDemoInMessageHistory}
+            hasArtifactOrDemoInMessageHistory={showMediaArtifactContainer}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
             showDemoPreQuestions={isDemoAvailable && !demoDetails}
           />
 
+          {/* Right Side Artifact Container */}
           {nonDemoFlow && (
             <ArtifactContainer
               logoURL={logoURL}
@@ -102,6 +98,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             />
           )}
 
+          {/* Right Side Demo Container */}
           <Demo
             key={demoDetails?.audio_url}
             handleFinishDemo={handleFinishDemo}
@@ -114,6 +111,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             switchToDemo={switchToDemo}
           />
         </div>
+        {/* Bottom Bar */}
         {!isMediaTakingFullWidth && (
           <AgentInput
             handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
