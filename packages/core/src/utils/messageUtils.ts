@@ -60,6 +60,18 @@ export const isFormArtifactEvent = (
   return isArtifactMessage(message) && message.message.artifact_type === 'FORM';
 };
 
+export const isGeneratingArtifactFormEvent = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & {
+  message: EventMessageContent & { event_type: 'GENERATING_ARTIFACT' };
+} => {
+  return (
+    isEventMessage(message) &&
+    message.message.event_type === 'GENERATING_ARTIFACT' &&
+    message.message.event_data.artifact_type === 'FORM'
+  );
+};
+
 export const isFormFilledEvent = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & {
