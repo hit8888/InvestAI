@@ -1,10 +1,5 @@
 import { TableDataSchema } from '@meaku/core/types/admin/admin-table';
-import {
-  TableDataResponse,
-  LeadsTableViewContent,
-  ConversationsTableViewContent,
-  PaginationData,
-} from '@meaku/core/types/admin/admin';
+import { TableDataResponse, PaginationData } from '@meaku/core/types/admin/admin';
 import { PaginationDataSchema } from '@meaku/core/types/admin/api';
 
 class TableDataManager {
@@ -30,17 +25,13 @@ class TableDataManager {
   }
 
   getTableDataResults() {
-    return this.tableData.results.filter(
-      (item): item is LeadsTableViewContent | (ConversationsTableViewContent & { is_test?: false }) =>
-        !('is_test' in item) || item.is_test === false,
-    );
+    return this.tableData.results;
   }
 
   getSortedItemsByKey<T extends 'company' | 'country' | 'product_of_interest'>(key: T) {
     const itemCount: Record<string, number> = {};
-    const filteredResults = this.getTableDataResults();
 
-    filteredResults.forEach((item) => {
+    this.tableData.results.forEach((item) => {
       const value = item[key as keyof typeof item]; // Explicit type assertion
       if (typeof value === 'string' && value) {
         itemCount[value] = (itemCount[value] || 0) + 1;
@@ -53,11 +44,9 @@ class TableDataManager {
   }
 
   getPaginatedTableData(): PaginationData {
-    const filteredResults = this.getTableDataResults();
-
     const paginationData = {
       current_page: this.tableData.current_page,
-      page_size: filteredResults.length,
+      page_size: this.tableData.page_size,
       total_pages: this.tableData.total_pages,
       total_records: this.tableData.total_records,
     };

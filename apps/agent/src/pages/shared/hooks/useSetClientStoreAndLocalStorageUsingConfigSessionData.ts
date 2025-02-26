@@ -56,7 +56,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      setHasFirstUserMessageBeenSent(messages.length > 0);
+      setHasFirstUserMessageBeenSent(messages.length > 1);
     }
   }, [handleUpdateSessionData, isReadOnly, prospectId, sessionId]);
 };

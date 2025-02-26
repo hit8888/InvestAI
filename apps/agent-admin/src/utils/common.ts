@@ -30,6 +30,7 @@ import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin
 import { SortValues } from '@meaku/core/types/admin/sort';
 import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { isTextMessage, isStreamMessage } from '@meaku/core/utils/messageUtils';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -393,6 +394,15 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   //   });
   // }
 
+  // For Conversations Page, we need to filter out test conversations
+  if (!isLeadsPage) {
+    filterApplied.push({
+      field: 'is_test',
+      value: false,
+      operator: 'eq',
+    });
+  }
+
   return filterApplied;
 };
 
@@ -515,8 +525,11 @@ export function generateConversationSummaryContent(
       : 0);
 
   // Count messages
-  const aiMessageCount = chatHistory.filter((msg) => msg.role === 'ai').length;
-  const userMessageCount = chatHistory.filter((msg) => msg.role === 'user').length;
+  const aiMessageCount = chatHistory.filter(
+    (msg) => msg.role === 'ai' && (isStreamMessage(msg) || isTextMessage(msg)),
+  ).length;
+  const userMessageCount = Number(sessionData.number_of_user_messages);
+  const totalMessageCount = aiMessageCount + userMessageCount;
 
   // Dynamically update CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST
   return CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST.map((item) => {
@@ -545,7 +558,7 @@ export function generateConversationSummaryContent(
         return {
           ...item,
           listValue: isChatHistoryAvailable
-            ? `${chatHistory.length} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`
+            ? `${totalMessageCount} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`
             : '-',
         };
       // case 'entryPoint':
