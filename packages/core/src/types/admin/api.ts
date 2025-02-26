@@ -186,8 +186,8 @@ export const ConversationsResponseResultSchema = z.object({
   country: z.string().nullable(),
   user_message_count: z.number(),
   is_test: z.boolean(),
-  prospect_details: ProspectDetailsSchema,
-  company_details: CompanyDetailsSchema,
+  prospect_details: ProspectDetailsSchema.nullable(),
+  company_details: CompanyDetailsSchema.nullable(),
 });
 
 export const PaginationDataSchema = z.object({

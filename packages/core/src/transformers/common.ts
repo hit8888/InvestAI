@@ -21,7 +21,7 @@ export const convertServerConversationDataToClientConversationData = (
     product_of_interest: response.product_of_interest || '-',
     ip_address: response.ip_address || '-',
     session_id: response.session_id || '-',
-    prospect_details: response.prospect_details,
-    company_details: response.company_details,
+    prospect_details: response.prospect_details || {},
+    company_details: response.company_details || {},
   };
 };

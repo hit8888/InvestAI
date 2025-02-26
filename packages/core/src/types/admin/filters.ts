@@ -1,4 +1,4 @@
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from "./admin";
+import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from './admin';
 
 export interface TableAllFilterConfig {
   filterIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -17,7 +17,7 @@ export type PageTypeProps = {
 export type CommonFilterContentProps = PageTypeProps & {
   filterState: FilterType;
   handleClosePopover: () => void;
-}
+};
 
 export type CommonFilterContentPropsWithoutFilterState = Omit<CommonFilterContentProps, 'filterState'>;
 
@@ -42,14 +42,19 @@ export enum PresetDateLabel {
 
 export enum FilterType {
   PresetDate = 'presetDate',
-  DateRange = "dateRange",
+  DateRange = 'dateRange',
   IntentScore = 'intentScore',
   Location = 'location',
   MeetingBooked = 'meetingBooked',
   ProductOfInterest = 'productOfInterest',
   AllFilters = 'allFilters',
   Company = 'company',
-  UserMessagesCount = 'userMessagesCount'
+  UserMessagesCount = 'userMessagesCount',
+}
+
+export interface userMessagesCountFilterValues {
+  minCount: number;
+  maxCount: number;
 }
 
 export interface FilterValues {
@@ -60,7 +65,7 @@ export interface FilterValues {
   company: string[];
   productOfInterest: string[];
   meetingBooked?: string;
-  userMessagesCount: number;
+  userMessagesCount: userMessagesCountFilterValues;
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
@@ -70,7 +75,10 @@ export const InitialFilterValues: FilterValues = {
   company: [],
   productOfInterest: [],
   meetingBooked: undefined,
-  userMessagesCount: 100,
+  userMessagesCount: {
+    minCount: 0,
+    maxCount: 100,
+  },
 };
 
 export interface AllFilterState {
@@ -79,7 +87,7 @@ export interface AllFilterState {
   setFilter: (
     page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
     key: keyof FilterValues,
-    value: DateRangeProp | string | string[] | number | undefined,
+    value: DateRangeProp | string | string[] | number | userMessagesCountFilterValues | undefined,
   ) => void;
   resetPageFilters: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
 }

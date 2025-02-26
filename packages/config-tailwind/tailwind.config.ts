@@ -257,7 +257,39 @@ const config: Omit<Config, "content"> = {
       },
     },
   },
-  plugins: [twTypography, twForms, twAnimate],
+  plugins: [
+    twTypography,
+    twForms,
+    twAnimate,
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    function ({
+      addBase,
+      addComponents,
+    }: {
+      addBase: any;
+      addComponents: any;
+    }) {
+      addBase({
+        body: {
+          fontFamily: "Inter, sans-serif",
+          fontOpticalSizing: "auto",
+          fontStyle: "normal",
+        },
+      });
+
+      addComponents({
+        ".popover-styling": {
+          "@apply focus:bg-primary/5 focus:border-2 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10":
+            {},
+          "@apply data-[state=open]:bg-primary/5 data-[state=open]:border-2 data-[state=open]:border-primary data-[state=open]:ring-4 data-[state=open]:ring-primary/10":
+            {},
+        },
+        ".border-primary-20-styling": {
+          "@apply rounded-lg border border-primary/20 bg-primary/2.5 p-2": {},
+        },
+      });
+    },
+  ],
 };
 
 export default config;

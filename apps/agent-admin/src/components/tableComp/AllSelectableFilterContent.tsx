@@ -47,7 +47,7 @@ const AllSelectableFilterContent = ({
       case ProductOfInterest:
         return productOfInterest.length > 0;
       case UserMessagesCount:
-        return userMessagesCount > 0 && userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
+        return userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
       case MeetingBooked:
         return !!meetingBooked;
       default:
@@ -68,8 +68,8 @@ const AllSelectableFilterContent = ({
       case Company:
         return company.length > 0 ? `${company.length} selected` : 'Any';
       case UserMessagesCount:
-        return userMessagesCount > 0 && userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
-          ? `upto ${userMessagesCount} messages`
+        return userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
+          ? `${userMessagesCount.minCount} To ${userMessagesCount.maxCount} messages`
           : 'Any';
       case ProductOfInterest:
         return productOfInterest.length > 0 ? `${productOfInterest.length} selected` : 'Any';

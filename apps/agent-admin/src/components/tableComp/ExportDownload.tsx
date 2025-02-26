@@ -28,11 +28,7 @@ const ExportDownload = ({ page, payloadData }: DownloadProps) => {
 
   return (
     <Popover open={downloadOpen} onOpenChange={setDownloadOpen}>
-      <PopoverTrigger
-        className="inline-flex items-center justify-center gap-2 rounded-lg 
-      border border-primary/20 bg-primary/2.5 !p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary/10 
-      focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60 data-[state=open]:border-2 data-[state=open]:border-primary"
-      >
+      <PopoverTrigger className="popover-styling border-primary-20-styling inline-flex items-center justify-center gap-2">
         <DownloadIcon width={'24'} height={'24'} viewBox="0 0 24 24" />
       </PopoverTrigger>
 

@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import { AllFilterState, DateRangeProp, FilterValues, InitialFilterValues } from '@meaku/core/types/admin/filters';
+import {
+  AllFilterState,
+  DateRangeProp,
+  FilterValues,
+  InitialFilterValues,
+  userMessagesCountFilterValues,
+} from '@meaku/core/types/admin/filters';
 import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from '@meaku/core/types/admin/admin';
 
 export const useAllFilterStore = create<AllFilterState>((set) => ({
@@ -9,7 +15,7 @@ export const useAllFilterStore = create<AllFilterState>((set) => ({
   setFilter: (
     page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
     key: keyof FilterValues,
-    value: DateRangeProp | string | number | string[] | undefined,
+    value: DateRangeProp | string | number | string[] | userMessagesCountFilterValues | undefined,
   ) =>
     set((state) => ({
       ...state,

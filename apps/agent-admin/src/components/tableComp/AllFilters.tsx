@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { FilterValues, PageTypeProps } from '@meaku/core/types/admin/filters';
+import { FilterValues, PageTypeProps, userMessagesCountFilterValues } from '@meaku/core/types/admin/filters';
 
 import FilterContent from './FilterContent';
 import SingleAppliedFilter from './SingleAppliedFilter';
@@ -25,6 +25,7 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
   const filters = useAllFilterStore();
   const [filterState, setFilterState] = useState(AllFilters);
   const [isOpen, setIsOpen] = useState(false);
+
   const handleFilterState = (value: FilterType) => {
     setFilterState(value);
   };
@@ -36,13 +37,23 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     setIsOpen(false);
     setFilterState(AllFilters);
   };
-  const handleFilterRemove = (key: keyof FilterValues, value: string | string[] | number | undefined) => {
+  const handleFilterRemove = (
+    key: keyof FilterValues,
+    value: string | string[] | number | userMessagesCountFilterValues | undefined,
+  ) => {
     filters.setFilter(page, key, value);
+    setIsOpen(false);
+    setFilterState(AllFilters);
+  };
+
+  const handleFilterAppliedClicked = (key: FilterType) => {
+    setFilterState(key);
   };
 
   const appliedFilters = collectAppliedFilters(filters[page]);
 
-  const handleSingleFilterRemove = (key: string) => {
+  const handleSingleFilterRemove = (key: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     switch (key) {
       case DateRange:
         handleFilterRemove(key, undefined);
@@ -60,7 +71,10 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
         handleFilterRemove(key, []);
         break;
       case UserMessagesCount:
-        handleFilterRemove(key, 0);
+        handleFilterRemove(key, {
+          minCount: 0,
+          maxCount: 100,
+        });
         break;
       case MeetingBooked:
         handleFilterRemove(key, '');
@@ -72,12 +86,7 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
         <ExportDownload page={page} payloadData={payloadData} />
-        <PopoverTrigger
-          className="flex items-center gap-2 self-stretch rounded-lg 
-        border border-primary/20 bg-primary/2.5 p-2 
-        focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60 
-        data-[state=open]:border-2 data-[state=open]:border-primary"
-        >
+        <PopoverTrigger className="popover-styling border-primary-20-styling flex items-center gap-2 self-stretch">
           <span className="h-5 w-5">
             <AllFiltersIcon {...ALL_FILTERS_ICONS} />
           </span>
@@ -92,7 +101,13 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
           <SingleAppliedFilter
             key={filter.key}
             filter={filter}
-            handleRemove={() => handleSingleFilterRemove(filter.key)}
+            filterState={filterState}
+            handleClose={handleClose}
+            widthOfPopover={widthOfPopover}
+            currentHeaderLabel={currentHeaderLabel}
+            page={page}
+            handleAppliedFilterClicked={handleFilterAppliedClicked}
+            handleRemove={(e: React.MouseEvent<HTMLButtonElement>) => handleSingleFilterRemove(filter.key, e)}
           />
         ))}
       </div>

@@ -104,8 +104,8 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     product_of_interest: response.product_of_interest || '-',
     ip_address: response.ip_address || '-',
     session_id: response.session_id || '-',
-    prospect_details: response.prospect_details,
-    company_details: response.company_details,
+    prospect_details: response?.prospect_details || {},
+    company_details: response?.company_details || {},
   };
 
   return mappedData;
@@ -370,11 +370,16 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     });
   }
 
-  if (!isLeadsPage && userMessagesCount > 0 && userMessagesCount < 100) {
+  if (
+    !isLeadsPage &&
+    userMessagesCount.minCount > 0 &&
+    userMessagesCount.maxCount <= 100 &&
+    userMessagesCount.minCount < userMessagesCount.maxCount
+  ) {
     filterApplied.push({
       field: 'user_message_count',
-      value: userMessagesCount,
-      operator: 'lte',
+      value: [userMessagesCount.minCount, userMessagesCount.maxCount],
+      operator: 'between',
     });
   }
 
@@ -441,11 +446,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     });
   }
 
-  if (filters.userMessagesCount > 0 && filters.userMessagesCount < USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
+  if (
+    filters.userMessagesCount.minCount > 0 &&
+    filters.userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
+  ) {
     appliedFilters.push({
       key: UserMessagesCount,
       label: 'User messages count',
-      value: `0 - ${filters.userMessagesCount}`,
+      value: `${filters.userMessagesCount.minCount} - ${filters.userMessagesCount.maxCount}`,
     });
   }
 
