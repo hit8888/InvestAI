@@ -55,7 +55,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const handleSlideItemClick = (title: string) => {
     handleSendMessage({
       message: {
-        content: `Can you elaborate more on ${title}`,
+        content: `Can you elaborate more on ${title}?`,
         event_data: {},
         event_type: 'SLIDE_ITEM_CLICKED',
       },

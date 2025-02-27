@@ -1,7 +1,7 @@
 import { WebSocketMessage, AgentEventType } from '../types/webSocketData';
 import {
   filterOutSuggestions,
-  isGeneratingArtifactEvent,
+  isGeneratingMediaArtifactEvent,
   isStreamMessage,
   isArtifactMessage,
   isEventMessage,
@@ -39,7 +39,7 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('isGeneratingArtifactEvent', () => {
+  describe('isGeneratingMediaArtifactEvent', () => {
     it('should identify GENERATING_ARTIFACT events', () => {
       const generatingArtifactMessage = messages.find(
         (msg) =>
@@ -48,15 +48,15 @@ describe('messageUtils', () => {
           msg.message.event_type === 'GENERATING_ARTIFACT',
       );
 
-      expect(isGeneratingArtifactEvent(generatingArtifactMessage!)).toBe(true);
+      expect(isGeneratingMediaArtifactEvent(generatingArtifactMessage!)).toBe(true);
     });
 
     it('should return false for non-GENERATING_ARTIFACT messages', () => {
       const textMessage = messages.find((msg) => msg.message_type === 'TEXT');
       const streamMessage = messages.find((msg) => msg.message_type === 'STREAM');
 
-      expect(isGeneratingArtifactEvent(textMessage!)).toBe(false);
-      expect(isGeneratingArtifactEvent(streamMessage!)).toBe(false);
+      expect(isGeneratingMediaArtifactEvent(textMessage!)).toBe(false);
+      expect(isGeneratingMediaArtifactEvent(streamMessage!)).toBe(false);
     });
   });
 
