@@ -7,16 +7,16 @@ import { useEffect, useRef, useState } from 'react';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
-  isAMessageBeingProcessed: boolean;
+  disableMessageSend: boolean;
   messages: WebSocketMessage[];
 }
 
-const AgentInput = ({ handleSendMessage, isAMessageBeingProcessed, messages }: IProps) => {
+const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const isSubmissionDisabled = isAMessageBeingProcessed || inputValue?.length === 0;
+  const isSubmissionDisabled = disableMessageSend || inputValue?.length === 0;
 
   const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);

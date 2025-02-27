@@ -11,6 +11,7 @@ import { Demo } from './Demo/index.tsx';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useLatestMessageComplete from '../../../hooks/useLatestMessageComplete.ts';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -28,6 +29,9 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const { isMessageComplete } = useLatestMessageComplete();
+
+  const disableMessageSend = isAMessageBeingProcessed || !isMessageComplete();
 
   const messages = useMessageStore((state) => state.messages);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
@@ -115,7 +119,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
         {!isMediaTakingFullWidth && (
           <AgentInput
             handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
-            isAMessageBeingProcessed={isAMessageBeingProcessed}
+            disableMessageSend={disableMessageSend}
             messages={messages}
           />
         )}

@@ -13,6 +13,7 @@ import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import { isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import useLatestMessageComplete from './useLatestMessageComplete.ts';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -31,6 +32,7 @@ const useWebSocketChat = () => {
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const { isMessageComplete } = useLatestMessageComplete();
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
@@ -61,6 +63,11 @@ const useWebSocketChat = () => {
   const handleSendUserMessage = useCallback(
     async ({ message, message_type }: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
       if (isAMessageBeingProcessed) {
+        return;
+      }
+      const isMsgComplete = isMessageComplete();
+
+      if (!isMsgComplete) {
         return;
       }
 
