@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { useAreMessagesReadonly } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { nanoid } from 'nanoid';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { SessionApiResponseManager } from '@meaku/core/managers/SessionApiResponseManager';
@@ -17,6 +17,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   sessionApiResponse: SessionApiResponse | null;
 }) => {
   const isReadOnly = useAreMessagesReadonly();
+  const isAdmin = useIsAdmin();
 
   const sessionApiResponseManager = sessionApiResponse ? new SessionApiResponseManager(sessionApiResponse) : null;
   const configurationApiResponseManager = new ConfigurationApiResponseManager(configurationApiResponse);
@@ -56,9 +57,10 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      setHasFirstUserMessageBeenSent(messages.length > 1);
+      const conditionToSetHasFirstUserMessageBeenSent = isAdmin ? messages.length > 1 : messages.length > 0;
+      setHasFirstUserMessageBeenSent(conditionToSetHasFirstUserMessageBeenSent);
     }
-  }, [handleUpdateSessionData, isReadOnly, prospectId, sessionId]);
+  }, [handleUpdateSessionData, isReadOnly, isAdmin, prospectId, sessionId]);
 };
 
 export { useSetClientStoreAndLocalStorageUsingConfigSessionData };
