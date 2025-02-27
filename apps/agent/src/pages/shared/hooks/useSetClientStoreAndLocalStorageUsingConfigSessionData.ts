@@ -57,8 +57,13 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      const conditionToSetHasFirstUserMessageBeenSent = isAdmin ? messages.length > 1 : messages.length > 0;
-      setHasFirstUserMessageBeenSent(conditionToSetHasFirstUserMessageBeenSent);
+      if (isAdmin) {
+        return;
+      }
+      // The messages lenngth will be always 1 for demo and non demo path
+      // For Demo => sessionID and prospectID is initially generated when the user provides the email address and start the chat
+      // For Non-Demo => sessionID and prospectID will be generated only when the user sends the first message( by clicking on the suggested questions or by typing in the chat)
+      setHasFirstUserMessageBeenSent(messages.length > 0);
     }
   }, [handleUpdateSessionData, isReadOnly, isAdmin, prospectId, sessionId]);
 };

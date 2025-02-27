@@ -13,16 +13,21 @@ const SlideItem = ({ icon, title, onClick }: IProps) => {
   };
 
   return (
-    <div className='group/item slideitem-default-boxshadow rounded-[25px] bg-gray/20'>
-      <div
-          className="flex h-full w-full scale-100 cursor-pointer flex-col items-center gap-8 rounded-xl border border-primary/25 bg-white p-4 text-center shadow-md hover:shadow-2xl  md:scale-95 lg:scale-90"
-          onClick={handleClick}
-        >
-          <div className="flex h-20 w-full group-hover/item:bg-primary/10 group-hover/item:border-primary/40 items-center justify-center rounded-xl border border-primary/10 bg-primary/2.5">
-            <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText group-hover/item:text-primary" />
-          </div>
-          <h4 className="text-3xl font-semibold leading-relaxed text-customSecondaryText group-hover/item:text-primary/80">{title}</h4>
+    <div className="group/item hover:popup-banner-border-gradient-animation w-full rounded-[25px] bg-gray-200 p-0.5 transition-all duration-700 hover:scale-105 hover:p-0.5">
+      <button
+        type="button"
+        className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow active:ring-6 flex h-full w-full cursor-pointer flex-col items-center gap-8 rounded-3xl 
+        bg-white p-4  text-center focus:outline-none focus:ring-4 focus:ring-primary/50 
+    focus:ring-offset-2 active:ring-primary/50 active:ring-offset-2"
+        onClick={handleClick}
+      >
+        <div className="flex h-20 w-full items-center justify-center rounded-xl border border-primary/10 bg-primary/2.5 group-hover/item:border-primary/40 group-hover/item:bg-primary/10">
+          <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText group-hover/item:text-primary" />
         </div>
+        <h4 className="text-3xl font-semibold leading-relaxed text-customSecondaryText group-hover/item:text-primary/80">
+          {title}
+        </h4>
+      </button>
     </div>
   );
 };

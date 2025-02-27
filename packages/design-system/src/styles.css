@@ -41,4 +41,22 @@
       0px 1.793px 7.659px 0px rgb(var(--positive-1000) / 0.03),
       0px 0.407px 3.699px 0px rgb(var(--positive-1000) / 0.02);
   }
+
+  .slideitem-default-boxshadow {
+    box-shadow:
+      0px 27.348px 55.422px 0px rgb(var(--primary) / 0.05),
+      0px 14.2px 28.275px 0px rgb(var(--primary) / 0.04),
+      0px 5.785px 14.178px 0px rgb(var(--primary) / 0.03),
+      0px 1.315px 6.847px 0px rgb(var(--primary) / 0.02);
+  }
+
+  .slideitem-hover-boxshadow {
+    box-shadow:
+      0px 49px 147px 0px rgb(var(--primary) / 0.12),
+      0px 31.759px 86.09px 0px rgb(var(--primary) / 0.09),
+      0px 18.874px 46.822px 0px rgb(var(--primary) / 0.07),
+      0px 9.8px 23.888px 0px rgb(var(--primary) / 0.06),
+      0px 3.993px 11.978px 0px rgb(var(--primary) / 0.05),
+      0px 0.907px 5.785px 0px rgb(var(--primary) / 0.03);
+  }
 }
