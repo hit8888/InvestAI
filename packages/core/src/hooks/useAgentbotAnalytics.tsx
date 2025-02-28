@@ -3,11 +3,14 @@ import { useCallback, useMemo } from 'react';
 import { AgentParams } from '@meaku/core/types/config';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 import useLocalStorageSession from './useLocalStorageSession';
+import { useUrlParams } from './useUrlParams';
 
 const useAgentbotAnalytics = () => {
   const { orgName = '', agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
   const { trackEvent } = useAnalytics();
+  const { getParam } = useUrlParams();
+  const is_test = getParam('is_test') === 'true';
 
   const commonProperties = useMemo(
     () => ({
@@ -21,7 +24,7 @@ const useAgentbotAnalytics = () => {
 
   const trackAgentbotEvent = useCallback(
     (eventName: string, properties: Record<string, unknown> = {}) => {
-      trackEvent(eventName, { ...commonProperties, ...properties });
+      trackEvent(eventName, { ...commonProperties, ...properties }, is_test);
     },
     [trackEvent, commonProperties],
   );
