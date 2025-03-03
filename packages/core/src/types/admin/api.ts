@@ -126,7 +126,7 @@ export const LeadResultSchema = z.object({
   budget: z.string().nullable(),
   timeline: z.string().nullable(),
   product_interest: z.string().nullable(),
-  additional_info: AdditionalInfoSchema,
+  additional_info: AdditionalInfoSchema.optional().nullable(),
   created_on: z.string(), // ISO date string
   updated_on: z.string(), // ISO date string
 });
@@ -186,8 +186,8 @@ export const ConversationsResponseResultSchema = z.object({
   country: z.string().nullable(),
   user_message_count: z.number(),
   is_test: z.boolean(),
-  prospect_details: ProspectDetailsSchema.nullable(),
-  company_details: CompanyDetailsSchema.nullable(),
+  prospect_details: ProspectDetailsSchema.optional().nullable(),
+  company_details: CompanyDetailsSchema.optional().nullable(),
 });
 
 export const PaginationDataSchema = z.object({

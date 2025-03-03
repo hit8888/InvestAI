@@ -626,3 +626,25 @@ export const getStringWithBothCommaAND = (bantItemsWithDash: string[]) => {
     ? bantItemsWithDash.slice(0, -1).join(', ') + ' and ' + bantItemsWithDash[bantItemsWithDash.length - 1]
     : bantItemsWithDash[0] || '';
 };
+
+export const getNavLinkContainerAnimation = (isPanelOpen: boolean) => ({
+  animate: {
+    paddingRight: isPanelOpen ? '1rem' : '0.5rem',
+    width: isPanelOpen ? '100%' : 'auto',
+  },
+  transition: {
+    duration: 0.3,
+    ease: 'easeInOut',
+  },
+});
+
+export const getTransitionAnimation = () => ({
+  transition: { duration: 0.5, ease: 'easeInOut' },
+});
+
+export const getProfileCTAInnerContainerAnimation = (isPanelOpen: boolean) => ({
+  animate: {
+    borderRadius: isPanelOpen ? '1rem' : '9999px',
+  },
+  transition: { duration: 0.5, ease: 'easeInOut' },
+});

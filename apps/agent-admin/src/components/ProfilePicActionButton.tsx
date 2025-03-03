@@ -12,7 +12,7 @@ const ProfilePicActionButton = () => {
         <button
           type="button"
           aria-label="Profile Button"
-          className="flex h-8 w-8 rounded-full border border-[rgb(var(--primary-foreground)/0.32)] bg-cover bg-center bg-no-repeat p-2"
+          className="flex h-8 w-8 rounded-full bg-cover bg-center bg-no-repeat p-2 ring-2 ring-[rgb(var(--primary-foreground)/0.24)] ring-offset-1"
           style={{ backgroundImage: `url(${profilePic})` }}
         />
       </PopoverTrigger>

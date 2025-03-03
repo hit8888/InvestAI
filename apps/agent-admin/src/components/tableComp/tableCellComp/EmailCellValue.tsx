@@ -1,6 +1,7 @@
-import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import { COPIED_FIELD_TEXTS } from '../../../utils/constants';
 import { cn } from '@breakout/design-system/lib/cn';
+import CustomTooltipWithClipboardUsingHover from '../../CustomTooltipWithClipboardUsingHover';
+import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 
 type IProps = {
   value: string;
@@ -10,12 +11,8 @@ type IProps = {
 const EmailCellValue: React.FC<IProps> = ({ value, valueOrientation = 'left' }) => {
   const isValueDash = value === '-';
   const isValueOrientationLeft = valueOrientation === 'left';
-  return (
-    <div
-      className={cn('flex items-center gap-2', {
-        'w-full justify-between': isValueOrientationLeft,
-      })}
-    >
+  const getEmailCellValue = () => {
+    return (
       <span
         title={value}
         className={cn('w-48 truncate 2xl:w-40', {
@@ -24,9 +21,34 @@ const EmailCellValue: React.FC<IProps> = ({ value, valueOrientation = 'left' }) 
       >
         {value}
       </span>
-      {!isValueDash ? (
-        <CopyToClipboardButton copyIconClassname="h-4 w-4" textToCopy={value} toastMessage={COPIED_FIELD_TEXTS.EMAIL} />
-      ) : null}
+    );
+  };
+  return (
+    <div
+      className={cn('flex items-center gap-2', {
+        'w-full justify-between': isValueOrientationLeft,
+      })}
+    >
+      {isValueOrientationLeft ? (
+        <>
+          {getEmailCellValue()}
+          {!isValueDash ? (
+            <CopyToClipboardButton
+              copyIconClassname="h-4 w-4"
+              textToCopy={value}
+              toastMessage={COPIED_FIELD_TEXTS.EMAIL}
+            />
+          ) : null}
+        </>
+      ) : (
+        <CustomTooltipWithClipboardUsingHover
+          tooltipText={value}
+          toastMessage={COPIED_FIELD_TEXTS.EMAIL}
+          showTooltip={!isValueDash}
+        >
+          {getEmailCellValue()}
+        </CustomTooltipWithClipboardUsingHover>
+      )}
     </div>
   );
 };

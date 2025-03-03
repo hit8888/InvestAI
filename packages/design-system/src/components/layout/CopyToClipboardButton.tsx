@@ -1,32 +1,43 @@
-import toast from 'react-hot-toast';
 import Button from './button';
-import { CopyIcon } from 'lucide-react';
 import { cn } from '../../lib/cn';
+import ClipboardCopyIcon from '../icons/ClipboardCopyIcon';
+import { CheckIcon } from 'lucide-react';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 type IProps = {
   textToCopy: string;
   toastMessage?: string;
   handleCopy?: () => void;
   copyIconClassname?: string;
+  btnClassName?: string;
 };
 
-const CopyToClipboardButton = ({ textToCopy, toastMessage='', handleCopy, copyIconClassname }: IProps) => {
-  const handleCopyToClipboard = () => {
-    if(handleCopy) {
-        handleCopy();
-    }
-    navigator.clipboard.writeText(textToCopy);
-    if(toastMessage.length) {
-        toast.success(toastMessage);
-    }
-  };
+const CopyToClipboardButton = ({
+  textToCopy,
+  toastMessage = '',
+  handleCopy,
+  copyIconClassname,
+  btnClassName,
+}: IProps) => {
+  const { isCopied, copy } = useCopyToClipboard(textToCopy, {
+    toastMessage,
+    onCopy: handleCopy,
+  });
 
   return (
-    <Button onClick={(e) => {
+    <Button
+      onClick={(e) => {
         e.stopPropagation(); // Prevents the row click event
-        handleCopyToClipboard();
-      }} size="icon" className="rounded-md bg-primary-foreground/70 p-2 ">
-      <CopyIcon className={cn("h-5 w-5 text-primary ", copyIconClassname)} />
+        copy();
+      }}
+      size="icon"
+      className={cn('rounded-md bg-primary-foreground/70 p-2 ', btnClassName)}
+    >
+      {isCopied ? (
+        <CheckIcon className="h-5 w-5 text-positive-1000" />
+      ) : (
+        <ClipboardCopyIcon className={cn('h-5 w-5 text-primary ', copyIconClassname)} />
+      )}
     </Button>
   );
 };

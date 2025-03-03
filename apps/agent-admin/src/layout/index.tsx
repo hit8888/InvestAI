@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/SidebarComponent/Sidebar';
 import usePageRouteState from '../hooks/usePageRouteState';
 import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';

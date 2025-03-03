@@ -39,7 +39,7 @@ const SingleDetailsWithIconHeaderValue = ({
           {isLoading ? (
             <Skeleton className="h-6 w-32" />
           ) : isTakingFullWidth ? (
-            <SessionIDCellValue value={itemValue} />
+            <SessionIDCellValue value={itemValue} isTooltipWithClipboard={false} />
           ) : (
             itemValue
           )}

@@ -9,7 +9,7 @@ const SlideHeader = ({ title, logoUrl }: IProps) => {
       <div>
         <h1 className="text-2xl font-semibold">{title}</h1>
       </div>
-      {logoUrl && <div>{<img src={logoUrl} alt="logo" className="w-28" />}</div>}
+      {logoUrl && <div>{<img src={logoUrl} alt="logo" className="max-h-10 w-28 object-contain" />}</div>}
     </div>
   );
 };

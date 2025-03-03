@@ -21,17 +21,20 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
   timestamp: TimestampCellValue,
-  location: LocationCellValue,
+  // location: LocationCellValue,
   conversation_preview: ConversationPreviewCellValue,
   bant_analysis: BANTAnalysisCellValue,
   buyer_intent: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
-  session_id: SessionIDCellValue,
+  // session_id: SessionIDCellValue,
 };
 
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {
   if (id === 'location' && typeof info !== 'string') {
     return <LocationCellValue value={info as LocationWithCityCountry} />;
+  }
+  if (id === 'session_id') {
+    return <SessionIDCellValue value={info as string} isTooltipWithClipboard={true} />;
   }
   const Component = cellValueMap[id];
   return Component ? <Component value={info as string} /> : <span>{info as string}</span>;

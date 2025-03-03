@@ -1,12 +1,12 @@
 // TODOS: COMMENTED CODE WILL BE USED LATER ON
 
-import ConversationsIcon from '@breakout/design-system/components/icons/conversations-icon';
+import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomPageHeader from '../components/CustomPageHeader';
 import ConversationsTableContainer from '../components/ConversationsTableContainer';
 import {
+  COMMON_SMALL_ICON_PROPS,
   // FunnelData,
-  PAGE_HEADER_TITLE_ICON_PROPS,
 } from '../utils/constants';
 
 const ConversationsPage = () => {
@@ -50,7 +50,7 @@ const ConversationsPage = () => {
       <div className="flex flex-col items-start gap-6 self-stretch">
         <CustomPageHeader
           headerTitle="Conversations"
-          headerIcon={<ConversationsIcon {...PAGE_HEADER_TITLE_ICON_PROPS} />}
+          headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
         {/* <div className="flex h-64 w-full flex-col items-start gap-4 self-stretch rounded-2xl border p-4">
           <div className="flex w-full flex-col items-start gap-4">

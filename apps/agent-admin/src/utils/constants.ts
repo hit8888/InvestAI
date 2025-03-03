@@ -61,8 +61,6 @@ export const COMMON_SMALL_ICON_PROPS = {
   color: 'rgb(var(--primary))',
 };
 
-export const PAGE_HEADER_TITLE_ICON_PROPS = COMMON_SMALL_ICON_PROPS;
-
 export const COMMON_ICON_PROPS = {
   width: '24',
   height: '25',
@@ -489,3 +487,20 @@ export const COMPANY_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
     ItemIcon: CompanyFoundationDate,
   },
 ];
+
+// FRAMER MOTION PROPS
+
+export const SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS = {
+  initial: { opacity: 0, width: 0 },
+  animate: { opacity: 1, width: 'auto' },
+  exit: { opacity: 0, width: 0 },
+  transition: {
+    duration: 0.2,
+    ease: 'easeInOut',
+    opacity: {
+      duration: 0.1,
+      ease: 'easeInOut',
+      delay: 0.1, // slight delay to wait for container expansion
+    },
+  },
+};
