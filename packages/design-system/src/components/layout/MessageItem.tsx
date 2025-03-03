@@ -18,7 +18,7 @@ import {
   isCompleteMessage,
   isFormArtifactEvent,
   isFormFilledEvent,
-  isSuggestionArtifact,
+  // isSuggestionArtifact,
 } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
@@ -86,9 +86,9 @@ const MessageItem = ({
     (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type !== 'SUGGESTIONS',
   );
 
-  const suggestionsMessage = messagesWithSameResponseId.find(
-    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'SUGGESTIONS',
-  );
+  // const suggestionsMessage = messagesWithSameResponseId.find(
+  //   (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'SUGGESTIONS',
+  // );
 
   const formMessage = messagesWithSameResponseId.find(
     (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'FORM',
@@ -96,8 +96,8 @@ const MessageItem = ({
 
   const hasFormArtifactMessage = formMessage && isArtifactMessage(formMessage) && isFormArtifactEvent(formMessage);
   const hasFormFilledMessage = formFilledMessage && isFormFilledEvent(formFilledMessage);
-  const hasSuggestionsMessage =
-    suggestionsMessage && isArtifactMessage(suggestionsMessage) && isSuggestionArtifact(suggestionsMessage);
+  // const hasSuggestionsMessage =
+  //   suggestionsMessage && isArtifactMessage(suggestionsMessage) && isSuggestionArtifact(suggestionsMessage);
 
   const isDiscoveryMessage = message.message_type === 'TEXT' && message.actor === 'DISCOVERY_QUESTIONS';
 
@@ -259,13 +259,12 @@ const MessageItem = ({
               <div className="flex flex-col items-start pl-11 pt-2">{getChatArtifactContent(formMessage, true)}</div>
             )}
 
-            {/* Suggestions Section */}
-            {hasSuggestionsMessage && (
+            {/* Suggestions Section - disabled for Admin Dashboard */}
+            {/* {hasSuggestionsMessage && (
               <div className="ml-auto mt-3">
-                {/* Show suggestion artifacts - store handles filtering */}
                 {getChatArtifactContent(suggestionsMessage, false)}
               </div>
-            )}
+            )} */}
           </>
         ) : null}
       </div>
