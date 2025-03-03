@@ -330,21 +330,28 @@
   // Add new IframeURLManager module
   const IframeURLManager = {
     getIframeSrc(config: Config): string {
+      // const AGENT_BASE_URL = "http://localhost:5173";
       const AGENT_BASE_URL = config.isStaging
         ? "https://agent-stg.getbreakout.ai"
         : "https://agent.getbreakout.ai";
 
-      // const AGENT_BASE_URL = "http://localhost:5173";
+      const params = new URLSearchParams();
+
       const baseUrl = config.feedbackEnabled
         ? `${AGENT_BASE_URL}/demo`
         : AGENT_BASE_URL;
 
-      const params = new URLSearchParams();
+      if (config.containerId) {
+        params.append("container_id", config.containerId);
+      }
+
       if (config.userEmail) {
         params.append("email", config.userEmail);
       }
-      if (config.containerId) {
-        params.append("container_id", config.containerId);
+
+      if (config.feedbackEnabled) {
+        params.append("is_test", "true");
+        params.append("test_type", "manual");
       }
 
       return `${baseUrl}/org/${config.tenantId}/agent/${config.agentId}?${params.toString()}`;
