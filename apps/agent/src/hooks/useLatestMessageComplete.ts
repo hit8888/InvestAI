@@ -1,5 +1,5 @@
 import { useMessageStore } from '../stores/useMessageStore';
-import { isCompleteMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
+import { isStreamMessageComplete, isTextMessage } from '@meaku/core/utils/messageUtils';
 import { useCallback } from 'react';
 
 const useLatestMessageComplete = () => {
@@ -24,7 +24,7 @@ const useLatestMessageComplete = () => {
     if (currentResponseMessages.length === 0) return false;
 
     // Check if any message is a complete stream message or a text message
-    return currentResponseMessages.some((message) => isCompleteMessage(message) || isTextMessage(message));
+    return currentResponseMessages.some((message) => isStreamMessageComplete(message) || isTextMessage(message));
   }, [store, latestResponseId]);
 
   return {

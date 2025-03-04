@@ -1,18 +1,25 @@
-import { WebSocketMessage, AgentEventType } from '../types/webSocketData';
+import { AgentEventType, ArtifactMessageContent, WebSocketMessage } from '../types/webSocketData';
 import {
+  checkIsArtifactMessage,
+  checkIsDiscoveryMessage,
+  checkIsEventMessage,
+  checkIsMainResponseMessage,
+  checkIsSalesResponseComplete,
   filterOutSuggestions,
-  isGeneratingMediaArtifactEvent,
-  isStreamMessage,
-  isArtifactMessage,
-  isEventMessage,
-  isMessageAnalyticsEvent,
+  getAnalyticsEvent,
   getDemoQuestionData,
+  getFormArtifactMessage,
+  getFormFilledEvent,
+  getSuggestionsArtifactMessage,
+  isGeneratingMediaArtifactEvent,
+  isMessageAnalyticsEvent,
+  isStreamMessage,
+  isStreamMessageComplete,
   isSuggestionArtifact,
-  isCompleteMessage,
-  isFormFilledEvent,
-  isFormArtifactEvent,
 } from './messageUtils';
 import sessionResponseWithAllArtifacts from '../__mocks__/session_response_with_all_artifacts.json';
+import { describe, expect, it } from 'vitest';
+import { FormArtifactContent } from '../types';
 
 describe('messageUtils', () => {
   const baseMessage = {
@@ -81,7 +88,7 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('isArtifactMessage', () => {
+  describe('checkIsArtifactMessage', () => {
     it('should identify ARTIFACT messages', () => {
       const artifactMessage: WebSocketMessage = {
         ...baseMessage,
@@ -108,12 +115,12 @@ describe('messageUtils', () => {
         message: { content: 'test content' },
       };
 
-      expect(isArtifactMessage(artifactMessage)).toBe(true);
-      expect(isArtifactMessage(textMessage)).toBe(false);
+      expect(checkIsArtifactMessage(artifactMessage)).toBe(true);
+      expect(checkIsArtifactMessage(textMessage)).toBe(false);
     });
   });
 
-  describe('isEventMessage', () => {
+  describe('checkIsEventMessage', () => {
     it('should identify EVENT messages', () => {
       const eventMessage: WebSocketMessage = {
         ...baseMessage,
@@ -130,110 +137,8 @@ describe('messageUtils', () => {
         message: { content: 'test content' },
       };
 
-      expect(isEventMessage(eventMessage)).toBe(true);
-      expect(isEventMessage(textMessage)).toBe(false);
-    });
-  });
-
-  describe('isFormArtifactEvent', () => {
-    it('should identify FORM artifacts', () => {
-      const formArtifact: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'ARTIFACT',
-        message: {
-          artifact_type: 'FORM',
-          content: 'Test form content',
-          artifact_data: {
-            artifact_type: 'FORM',
-            content: {
-              form_fields: [
-                {
-                  label: 'Name',
-                  field_name: 'name',
-                  data_type: 'string',
-                  is_required: true,
-                },
-                {
-                  label: 'Email',
-                  field_name: 'email',
-                  data_type: 'email',
-                  is_required: true,
-                },
-              ],
-            },
-            artifact_id: 'test-id',
-            metadata: {},
-            error: null,
-            error_code: null,
-          },
-        },
-      };
-      const slideArtifact: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'ARTIFACT',
-        message: {
-          artifact_type: 'SLIDE',
-          content: 'Test slide content',
-          artifact_data: {
-            artifact_type: 'SLIDE',
-            content: {
-              title: 'Test Slide',
-              items: [],
-            },
-            artifact_id: 'test-id',
-            metadata: {},
-            error: null,
-            error_code: null,
-          },
-        },
-      };
-      const textMessage: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'TEXT',
-        message: { content: 'test content' },
-      };
-
-      expect(isFormArtifactEvent(formArtifact)).toBe(true);
-      expect(isFormArtifactEvent(slideArtifact)).toBe(false);
-      expect(isFormArtifactEvent(textMessage)).toBe(false);
-    });
-  });
-
-  describe('isFormFilledEvent', () => {
-    it('should identify FORM_FILLED events', () => {
-      const formFilledEvent: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'EVENT',
-        message: {
-          event_type: 'FORM_FILLED',
-          content: 'Form has been filled',
-          event_data: {
-            artifact_id: 'test-id',
-            form_data: {
-              name: 'John Doe',
-              email: 'john.doe@example.com',
-            },
-          },
-        },
-      };
-      const otherEvent: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'EVENT',
-        message: {
-          event_type: AgentEventType.DEMO_END,
-          content: 'Demo ended',
-          event_data: {},
-        },
-      };
-      const textMessage: WebSocketMessage = {
-        ...baseMessage,
-        message_type: 'TEXT',
-        message: { content: 'test content' },
-      };
-
-      expect(isFormFilledEvent(formFilledEvent)).toBe(true);
-      expect(isFormFilledEvent(otherEvent)).toBe(false);
-      expect(isFormFilledEvent(textMessage)).toBe(false);
+      expect(checkIsEventMessage(eventMessage)).toBe(true);
+      expect(checkIsEventMessage(textMessage)).toBe(false);
     });
   });
 
@@ -381,14 +286,14 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('isCompleteMessage', () => {
+  describe('isStreamMessageComplete', () => {
     it('should identify complete messages', () => {
       const completeMessage: WebSocketMessage = {
         ...baseMessage,
         message_type: 'STREAM',
         message: { content: 'test content', is_complete: true },
       };
-      expect(isCompleteMessage(completeMessage)).toBe(true);
+      expect(isStreamMessageComplete(completeMessage)).toBe(true);
     });
 
     it('should identify incomplete messages', () => {
@@ -397,7 +302,627 @@ describe('messageUtils', () => {
         message_type: 'STREAM',
         message: { content: 'test content' },
       };
-      expect(isCompleteMessage(incompleteMessage)).toBe(false);
+      expect(isStreamMessageComplete(incompleteMessage)).toBe(false);
+    });
+  });
+
+  describe('getSuggestionsArtifactMessage', () => {
+    it('should return the first artifact message that is not a suggestions artifact', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'FORM',
+            content: 'Form content',
+            artifact_data: {
+              artifact_type: 'FORM',
+              artifact_id: '123',
+              content: {
+                title: 'Form Title',
+                fields: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'SUGGESTIONS',
+            content: 'Suggestions content',
+            artifact_data: {
+              artifact_type: 'SUGGESTIONS',
+              artifact_id: '456',
+              content: {
+                title: 'Suggestions',
+                items: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getSuggestionsArtifactMessage(messages);
+      expect(result).toEqual(messages[1]);
+    });
+
+    it('should return undefined if no non-suggestion artifact message is found', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'SUGGESTIONS',
+            content: 'Suggestions content',
+            artifact_data: {
+              artifact_type: 'SUGGESTIONS',
+              artifact_id: '456',
+              content: {
+                title: 'Suggestions',
+                items: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getSuggestionsArtifactMessage(messages);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getFormArtifactMessage', () => {
+    it('should return the first form artifact message', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'FORM',
+            content: 'Form content',
+            artifact_data: {
+              artifact_type: 'FORM',
+              artifact_id: '123',
+              content: {
+                title: 'Form Title',
+                fields: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'SUGGESTIONS',
+            content: 'Suggestions content',
+            artifact_data: {
+              artifact_type: 'SUGGESTIONS',
+              artifact_id: '456',
+              content: {
+                title: 'Suggestions',
+                items: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getFormArtifactMessage(messages);
+      expect(result).toEqual(messages[1]);
+    });
+
+    it('should return undefined if no form artifact message is found', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'ARTIFACT',
+          message: {
+            artifact_type: 'SUGGESTIONS',
+            content: 'Suggestions content',
+            artifact_data: {
+              artifact_type: 'SUGGESTIONS',
+              artifact_id: '456',
+              content: {
+                title: 'Suggestions',
+                items: [],
+              },
+              metadata: {},
+              error: null,
+              error_code: null,
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getFormArtifactMessage(messages);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getFormFilledEvent', () => {
+    it('should return the form filled event that matches the form artifact id', () => {
+      const formArtifact: WebSocketMessage & {
+        message: ArtifactMessageContent & { artifact_data: FormArtifactContent };
+      } = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai',
+        timestamp: new Date().toISOString(),
+        message_type: 'ARTIFACT',
+        message: {
+          artifact_type: 'FORM',
+          content: 'Form content',
+          artifact_data: {
+            artifact_type: 'FORM',
+            artifact_id: '123',
+            form_fields: [],
+            content: {
+              form_fields: [],
+            },
+            metadata: {},
+            error: null,
+            error_code: null,
+          },
+        },
+      };
+
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'FORM_FILLED',
+            content: 'Form filled',
+            event_data: {
+              artifact_id: '123',
+              form_data: {},
+            },
+          },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'FORM_FILLED',
+            content: 'Form filled',
+            event_data: {
+              artifact_id: '456',
+              form_data: {},
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getFormFilledEvent(messages, formArtifact);
+      expect(result).toEqual(messages[1]);
+    });
+
+    it('should return undefined if no matching form filled event is found', () => {
+      const formArtifact: WebSocketMessage & {
+        message: ArtifactMessageContent & { artifact_data: FormArtifactContent };
+      } = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'ARTIFACT',
+        message: {
+          content: 'Form content',
+          artifact_type: 'FORM',
+          artifact_data: {
+            artifact_id: '123',
+            artifact_type: 'FORM',
+            form_fields: [],
+            content: {
+              form_fields: [],
+            },
+            metadata: {},
+            error: null,
+            error_code: null,
+          },
+        },
+      };
+
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'FORM_FILLED',
+            content: 'Form filled',
+            event_data: {
+              artifact_id: '456',
+              form_data: {},
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getFormFilledEvent(messages, formArtifact);
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined if formArtifactMessage is undefined', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'FORM_FILLED',
+            content: 'Form filled',
+            event_data: {
+              artifact_id: '123',
+              form_data: {},
+            },
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getFormFilledEvent(messages, undefined);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getAnalyticsEvent', () => {
+    it('should return the first message analytics event', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'MESSAGE_ANALYTICS',
+            content: 'Analytics data',
+            event_data: {
+              buyer_intent_score: 0.75,
+            },
+          },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'DEMO_END',
+            content: 'Demo ended',
+            event_data: {},
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getAnalyticsEvent(messages);
+      expect(result).toEqual(messages[1]);
+    });
+
+    it('should return undefined if no message analytics event is found', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          message: { content: 'Hello' },
+        },
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'EVENT',
+          message: {
+            event_type: 'DEMO_END',
+            content: 'Demo ended',
+            event_data: {},
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = getAnalyticsEvent(messages);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('checkIsMainResponseMessage', () => {
+    it('should return true for a sales stream message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'STREAM',
+        actor: 'SALES',
+        message: {
+          content: 'Hello',
+          is_complete: false,
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsMainResponseMessage(message);
+      expect(result).toBe(true);
+    });
+
+    it('should return true for a sales text message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'TEXT',
+        actor: 'SALES',
+        message: {
+          content: 'Hello',
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsMainResponseMessage(message);
+      expect(result).toBe(true);
+    });
+
+    it('should return false for a non-sales message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'user' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'TEXT',
+        message: {
+          content: 'Hello',
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsMainResponseMessage(message);
+      expect(result).toBe(false);
+    });
+
+    it('should return false for a sales message with unsupported type', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        message_type: 'EVENT',
+        actor: 'SALES',
+        message: {
+          content: 'Form content',
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsMainResponseMessage(message);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('checkIsSalesResponseComplete', () => {
+    it('should return true if there is a complete sales stream message', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'STREAM',
+          actor: 'SALES',
+          message: {
+            content: 'Hello',
+            is_complete: true,
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = checkIsSalesResponseComplete(messages);
+      expect(result).toBe(true);
+    });
+
+    it('should return true if there is a sales text message', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'TEXT',
+          actor: 'SALES',
+          message: {
+            content: 'Hello',
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = checkIsSalesResponseComplete(messages);
+      expect(result).toBe(true);
+    });
+
+    it('should return false if there are no complete sales messages', () => {
+      const messages = [
+        {
+          session_id: 'test-session',
+          response_id: 'test-response',
+          role: 'ai' as const,
+          timestamp: new Date().toISOString(),
+          message_type: 'STREAM',
+          actor: 'SALES',
+          message: {
+            content: 'Hello',
+            is_complete: false,
+          },
+        },
+      ] as WebSocketMessage[];
+
+      const result = checkIsSalesResponseComplete(messages);
+      expect(result).toBe(false);
+    });
+
+    it('should return false for empty messages array', () => {
+      const result = checkIsSalesResponseComplete([]);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('checkIsDiscoveryMessage', () => {
+    it('should return true for a discovery questions text message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'TEXT',
+        actor: 'DISCOVERY_QUESTIONS',
+        message: {
+          content: 'Hello',
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsDiscoveryMessage(message);
+      expect(result).toBe(true);
+    });
+
+    it('should return false for a non-discovery questions message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'user' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'TEXT',
+        message: {
+          content: 'Hello',
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsDiscoveryMessage(message);
+      expect(result).toBe(false);
+    });
+
+    it('should return false for a discovery questions non-text message', () => {
+      const message = {
+        session_id: 'test-session',
+        response_id: 'test-response',
+        role: 'ai' as const,
+        timestamp: new Date().toISOString(),
+        message_type: 'STREAM',
+        actor: 'DISCOVERY_QUESTIONS',
+        message: {
+          content: 'Hello',
+          is_complete: false,
+        },
+      } as WebSocketMessage;
+
+      const result = checkIsDiscoveryMessage(message);
+      expect(result).toBe(false);
     });
   });
 });

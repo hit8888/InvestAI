@@ -2,12 +2,11 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useRef } from 'react';
 import SuggestionsArtifact from './SuggestionsArtifact';
 import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/AgentView/Demo/PreDemoQuestion';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 
 interface IProps {
   usingForAgent?: boolean;
@@ -108,7 +107,6 @@ const AgentMessages = ({
                   setActiveArtifact={setActiveArtifact}
                   setDemoPlayingStatus={setDemoPlayingStatus}
                   handleSendUserMessage={handleSendUserMessage}
-                  initialSuggestedQuestions={initialSuggestedQuestions}
                   allowFeedback={allowFeedback}
                   initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
                   lastMessageResponseId={lastMessageResponseId}

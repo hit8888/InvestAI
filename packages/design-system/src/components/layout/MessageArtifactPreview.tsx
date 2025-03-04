@@ -7,7 +7,7 @@ import {
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { isArtifactMessage } from '@meaku/core/utils/index';
+import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
 
 interface MessageArtifactPreviewProps {
@@ -25,7 +25,7 @@ const MessageArtifactPreview = ({
   setActiveArtifact,
   logoURL,
 }: MessageArtifactPreviewProps) => {
-  if (!isArtifactMessage(message)) return null;
+  if (!checkIsArtifactMessage(message)) return null;
 
   const artifactData = message.message?.artifact_data;
   const artifactType = artifactData?.artifact_type;

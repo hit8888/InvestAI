@@ -1,9 +1,9 @@
 import Artifact from '@breakout/design-system/components/Artifact/index';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
-import { WebSocketMessage, ArtifactMessageContent } from '@meaku/core/types/webSocketData';
+import { ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { ArtifactContent } from '@meaku/core/types/artifact';
-import { isArtifactMessage, SupportedArtifactType } from '@meaku/core/utils/messageUtils';
+import { checkIsArtifactMessage, SupportedArtifactType } from '@meaku/core/utils/messageUtils';
 // import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 
 type IProps = {
@@ -24,7 +24,7 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
   // Find the message that corresponds to the active artifact
   const artifactMessage = activeArtifact
     ? messages.find((message) => {
-        if (message.role !== 'ai' || !isArtifactMessage(message)) return false;
+        if (message.role !== 'ai' || !checkIsArtifactMessage(message)) return false;
         const artifactData = (message.message as ArtifactMessageContent).artifact_data;
         return artifactData.artifact_id === activeArtifact.artifact_id;
       })

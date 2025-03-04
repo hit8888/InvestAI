@@ -1,10 +1,14 @@
 import useInView from '@meaku/core/hooks/useInView';
-import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import ChatArtifact from './ChatArtifact.tsx';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { getMessageTimestamp, isArtifactMessage, isMessageAnalyticsEvent } from '@meaku/core/utils/index';
-import { WebSocketMessage, ArtifactBaseType, MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
+import { getMessageTimestamp } from '@meaku/core/utils/index';
+import {
+  ArtifactBaseType,
+  ArtifactMessageContent,
+  MessageAnalyticsEventData,
+  WebSocketMessage,
+} from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
 import MessageArtifactPreview from './MessageArtifactPreview';
@@ -15,10 +19,15 @@ import MessageDataSources from './MessageDataSources';
 import MessageFeedback from './MessageFeedback';
 import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
-  isCompleteMessage,
-  isFormArtifactEvent,
-  isFormFilledEvent,
-  // isSuggestionArtifact,
+  checkIsArtifactMessage,
+  checkIsDiscoveryMessage,
+  checkIsMainResponseMessage,
+  checkIsSalesResponseComplete,
+  getAnalyticsEvent,
+  getFormArtifactMessage,
+  getFormFilledEvent,
+  getSuggestionsArtifactMessage,
+  isDisplayedAsTextMessage,
 } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
@@ -34,7 +43,6 @@ interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
-  initialSuggestedQuestions: string[];
   allowFeedback: boolean;
   logoURL: string | null;
   initialFeedback?: FeedbackRequestPayload;
@@ -54,7 +62,6 @@ const MessageItem = ({
   setDemoPlayingStatus,
   setActiveArtifact,
   handleSendUserMessage,
-  initialSuggestedQuestions,
   allowFeedback,
   logoURL,
   initialFeedback,
@@ -62,67 +69,45 @@ const MessageItem = ({
 }: IProps) => {
   const { isInView, ref: inViewRef } = useInView(0, true);
   const isAiMessage = message.role === 'ai';
-  const isTextMessage =
-    message.message_type === 'TEXT' ||
-    message.message_type === 'STREAM' ||
-    (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
-    (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
-    message.message_type === 'LOADING_TEXT';
+  const isTextMessage = isDisplayedAsTextMessage(message);
+  const isArtifactMessage = checkIsArtifactMessage(message);
+  const isSalesResponseMessage = checkIsMainResponseMessage(message);
+  const isDiscoveryMessage = checkIsDiscoveryMessage(message);
 
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
-  const streamMessage = messagesWithSameResponseId.find((msg) => msg.message_type === 'STREAM');
-  const hasMessageStreamed = streamMessage ? isCompleteMessage(streamMessage) : true;
-  const hasTextMessage = messagesWithSameResponseId.some((msg) => msg.message_type === 'TEXT' && msg.role === 'ai');
+  const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
 
-  const analyticsEvent = messagesWithSameResponseId.find(
-    (msg) => msg.message_type === 'EVENT' && msg.message.event_type === 'MESSAGE_ANALYTICS',
-  );
+  const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
+  const isAnalyticsEvent = !!analyticsEvent;
 
-  const formFilledMessage = messagesWithSameResponseId.find(
-    (msg) => msg.message_type === 'EVENT' && msg.message.event_type === 'FORM_FILLED',
-  );
+  const suggestionsArtifactMessage = getSuggestionsArtifactMessage(messagesWithSameResponseId);
 
-  const artifactMessage = messagesWithSameResponseId.find(
-    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type !== 'SUGGESTIONS',
-  );
+  const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
+  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage);
 
-  // const suggestionsMessage = messagesWithSameResponseId.find(
-  //   (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'SUGGESTIONS',
-  // );
+  const hasFormArtifactMessage = !!formArtifactMessage;
+  const hasFormFilledMessage = !!formFilledMessage;
 
-  const formMessage = messagesWithSameResponseId.find(
-    (msg) => msg.message_type === 'ARTIFACT' && msg.message.artifact_type === 'FORM',
-  );
-
-  const hasFormArtifactMessage = formMessage && isArtifactMessage(formMessage) && isFormArtifactEvent(formMessage);
-  const hasFormFilledMessage = formFilledMessage && isFormFilledEvent(formFilledMessage);
-  // const hasSuggestionsMessage =
-  //   suggestionsMessage && isArtifactMessage(suggestionsMessage) && isSuggestionArtifact(suggestionsMessage);
-
-  const isDiscoveryMessage = message.message_type === 'TEXT' && message.actor === 'DISCOVERY_QUESTIONS';
-
-  const showArtifactPreview = messageIndex >= totalMessages - 4;
-
-  const isLastQuestionResponse = lastMessageResponseId === message.response_id && message.message_type === 'STREAM';
+  const isLastQuestionResponse = lastMessageResponseId === message.response_id && isSalesResponseMessage;
   const isLoading = isAMessageBeingProcessed && isLastQuestionResponse;
 
-  const shouldShowActiveOrb =
-    lastMessageResponseId === message.response_id &&
-    ((hasTextMessage && message.message_type === 'TEXT') ||
-      (message.message_type === 'STREAM' && !hasTextMessage) ||
-      isLoading ||
-      message.message_type === 'LOADING_TEXT');
-
-  const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
 
+  const shouldShowActiveOrb =
+    lastMessageResponseId === message.response_id &&
+    (!isSalesResponseComplete || isLoading || message.message_type === 'LOADING_TEXT');
+
+  const showArtifactPreview = messageIndex >= totalMessages - 4;
+
   const showMessageArtifactPreview =
     lastMessageResponseId !== message.response_id &&
-    isArtifactMessage(message) &&
+    isArtifactMessage &&
     message.message.artifact_type !== 'NONE' &&
     (showArtifactPreview || isInView) &&
-    hasMessageStreamed;
+    isSalesResponseComplete;
+
+  const [feedback, setFeedback] = useState<FeedbackRequestPayload | undefined>(initialFeedback);
 
   const handleAddFeedback = (newFeedback: Partial<FeedbackRequestPayload>) => {
     const updatedFeedback = {
@@ -153,9 +138,20 @@ const MessageItem = ({
     );
   };
 
-  const getChatArtifactContent = (message: WebSocketMessage, isFormArtifact: boolean) => {
+  const getChatArtifactContent = (
+    message: WebSocketMessage & { message: ArtifactMessageContent },
+    isFormArtifact: boolean = false,
+  ) => {
+    const formMetadata = isFormArtifact &&
+      hasFormFilledMessage &&
+      formFilledMessage.message.event_data &&
+      !usingForAgent && {
+        is_filled: hasFormFilledMessage,
+        filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
+      };
+
     return (
-      isArtifactMessage(message) && (
+      isArtifactMessage && (
         <ChatArtifact
           artifact={{
             artifact_type: message.message.artifact_type,
@@ -165,13 +161,7 @@ const MessageItem = ({
               : (message.message.artifact_data.content as SuggestionArtifactContent),
             metadata: {
               ...message.message.artifact_data.metadata,
-              ...(isFormArtifact &&
-                hasFormFilledMessage &&
-                formFilledMessage.message.event_data &&
-                !usingForAgent && {
-                  is_filled: hasFormFilledMessage,
-                  filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
-                }),
+              ...formMetadata,
             },
             error: message.message.artifact_data.error,
             error_code: message.message.artifact_data.error_code,
@@ -189,7 +179,7 @@ const MessageItem = ({
     <MessageItemErrorBoundary messageId={message.response_id}>
       <div ref={inViewRef}>
         {/* Text Message */}
-        {isTextMessage && message.message.content !== '' && (
+        {isTextMessage && message.message.content !== '' && (isDiscoveryMessage ? isSalesResponseComplete : true) && (
           <TextMessage
             message={message}
             isAiMessage={isAiMessage}
@@ -205,7 +195,7 @@ const MessageItem = ({
           <div className="pl-11">
             <MessageDataSources dataSources={message.documents ?? []} />
             {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
-            {hasMessageStreamed && (
+            {isSalesResponseComplete && (
               <MessageFeedback
                 sessionId={sessionId}
                 message={message}
@@ -214,7 +204,7 @@ const MessageItem = ({
                 onRemoveFeedback={handleRemoveFeedback}
               />
             )}
-            {analyticsEvent && isMessageAnalyticsEvent(analyticsEvent) && !isDiscoveryMessage && (
+            {isAnalyticsEvent && !isDiscoveryMessage && (
               <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
             )}
           </div>
@@ -225,26 +215,16 @@ const MessageItem = ({
             {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
             {/* Form Artifact */}
-            {isArtifactMessage(message) && message.message.artifact_type === 'FORM' && hasMessageStreamed && (
-              <div className="flex flex-col items-start pl-11">{getChatArtifactContent(message, true)}</div>
+            {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'FORM' && (
+              <div className="flex flex-col items-start pl-11">
+                {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent }, true)}
+              </div>
             )}
 
             <div className="ml-auto mt-3">
-              {/* Only show initial suggestions when no messages */}
-              {totalMessages < 1 && (
-                <SuggestionsArtifact
-                  suggestedQuestionOrientation="left"
-                  handleSendUserMessage={handleSendUserMessage}
-                  artifact={{
-                    suggested_questions: initialSuggestedQuestions,
-                    suggested_questions_type: 'BUBBLE',
-                  }}
-                />
-              )}
-
               {/* Show suggestion artifacts - store handles filtering */}
-              {isArtifactMessage(message) && message.message.artifact_type === 'SUGGESTIONS' && hasMessageStreamed && (
-                <>{getChatArtifactContent(message, false)}</>
+              {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'SUGGESTIONS' && (
+                <>{getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent })}</>
               )}
             </div>
           </>
@@ -252,19 +232,19 @@ const MessageItem = ({
 
         {showingContentForAdmin ? (
           <>
-            {artifactMessage && !isDiscoveryMessage ? <>{getMessageArtifactPreviewContent(artifactMessage)}</> : null}
+            {suggestionsArtifactMessage && !isDiscoveryMessage && (
+              <>{getMessageArtifactPreviewContent(suggestionsArtifactMessage)}</>
+            )}
 
             {/* Form Artifact */}
             {hasFormArtifactMessage && (
-              <div className="flex flex-col items-start pl-11 pt-2">{getChatArtifactContent(formMessage, true)}</div>
-            )}
-
-            {/* Suggestions Section - disabled for Admin Dashboard */}
-            {/* {hasSuggestionsMessage && (
-              <div className="ml-auto mt-3">
-                {getChatArtifactContent(suggestionsMessage, false)}
+              <div className="flex flex-col items-start pl-11 pt-2">
+                {getChatArtifactContent(
+                  formArtifactMessage as WebSocketMessage & { message: ArtifactMessageContent },
+                  true,
+                )}
               </div>
-            )} */}
+            )}
           </>
         ) : null}
       </div>

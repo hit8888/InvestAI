@@ -1,6 +1,7 @@
 import { OrganizationDetails } from '../types/admin/auth';
 import DateUtil from './dateUtils';
-export { isArtifactMessage, isEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
+
+export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';

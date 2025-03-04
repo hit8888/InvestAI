@@ -2,7 +2,7 @@ import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isCompleteMessage } from '@meaku/core/utils/messageUtils';
+import { isStreamMessageComplete } from '@meaku/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';
 
 interface IProps {
@@ -44,7 +44,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
     if (textAreaRef.current && isSubmissionDisabled) {
       textAreaRef.current.blur();
     }
-    if (textAreaRef.current && lastMessage && isCompleteMessage(lastMessage)) {
+    if (textAreaRef.current && lastMessage && isStreamMessageComplete(lastMessage)) {
       textAreaRef.current.focus();
     }
   }, [messages.length, textAreaRef, isSubmissionDisabled]);
