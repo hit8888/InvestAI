@@ -1,16 +1,16 @@
 import { JSX } from 'react';
 import { z } from 'zod';
-import { 
+import {
   CompanyDetailsSchema,
-  ConversationsTableResponseSchema, 
-  LeadsTableResponseSchema, 
-  ProspectDetailsSchema
+  ConversationsTableResponseSchema,
+  LeadsTableResponseSchema,
+  ProspectDetailsSchema,
 } from './api';
 
 export const LocationWithCityCountrySchema = z.object({
   city: z.string(),
   country: z.string(),
-})
+});
 
 export const LeadsTableViewSchema = z.object({
   email: z.string(),
@@ -20,7 +20,7 @@ export const LeadsTableViewSchema = z.object({
   location: LocationWithCityCountrySchema,
   timestamp: z.string(),
   product_of_interest: z.string(),
-})
+});
 
 export const ConversationsTableViewSchema = z.object({
   company: z.string(),
@@ -42,7 +42,7 @@ export const ConversationsTableViewSchema = z.object({
   session_id: z.string(),
   prospect_details: ProspectDetailsSchema,
   company_details: CompanyDetailsSchema,
-})
+});
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({
   prospect: z.object({
@@ -64,21 +64,23 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
 // Assuming these are the types for your custom cell components:
 
 export interface CellValueProps {
-    value: string;
+  value: string;
 }
 
 export interface CellProps {
-    getValue: () => any;
-    row: {
-      original: any;
-    };
-  }
-  
-  export interface ColumnDefinition {
-    header: string;
-    accessorKey: string;
-    id: string;
-    cell?: (props: CellProps) => JSX.Element;
-  }
+  // eslint-disable-next-line
+  getValue: () => any;
+  row: {
+    // eslint-disable-next-line
+    original: any;
+  };
+}
 
-export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
+export interface ColumnDefinition {
+  header: string;
+  accessorKey: string;
+  id: string;
+  cell?: (props: CellProps) => JSX.Element;
+}
+
+export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema);

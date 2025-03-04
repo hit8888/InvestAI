@@ -18,8 +18,8 @@ export type BrowserSignature = {
   cookieEnabled: boolean;
   online: boolean;
   webGL: {
-    vendor: any;
-    renderer: any;
+    vendor: number;
+    renderer: number;
   } | null;
   canvas: () => string | null;
   localStorage: boolean;
@@ -34,5 +34,5 @@ export type InitializationPayload = {
   browser_signature?: Partial<BrowserSignature>;
   is_admin?: boolean;
   is_test?: boolean;
-  test_type?: "automated" | "manual";
+  test_type?: 'automated' | 'manual';
 };
