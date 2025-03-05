@@ -4,9 +4,10 @@ import { useMemo } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface IProps {
-  handleSendMessage: (message: string) => void;
+  handleSendMessage: (message: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleCloseAgent?: () => void;
   isHidden?: boolean;
   ctaConfig?: CTAConfigType;
@@ -27,11 +28,31 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
     if (ctaConfig?.message) {
       return ctaConfig.message;
     }
+
     return 'I want to book a demo for the product.';
   }, [ctaConfig]);
 
   const handlePrimaryCta = () => {
-    handleSendMessage(ctaMessage);
+    if (ctaConfig?.url) {
+      window.open(ctaConfig.url, '_blank');
+      handleSendMessage({
+        message: {
+          content: '',
+          event_type: 'PRIMARY_GOAL_COMPLETED',
+          event_data: { url: ctaConfig.url },
+        },
+        message_type: 'EVENT',
+      });
+    } else {
+      handleSendMessage({
+        message: {
+          content: ctaMessage,
+          event_type: 'PRIMARY_GOAL_CTA_CLICKED',
+          event_data: {},
+        },
+        message_type: 'EVENT',
+      });
+    }
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CTA_BUTTON_CLICKED, { ctaMessage, ctaText });
   };
 

@@ -100,13 +100,6 @@ const useWebSocketChat = () => {
     [readyState, sessionId, isAMessageBeingProcessed],
   );
 
-  const handlePrimaryCta = () => {
-    handleSendUserMessage({
-      message: { content: 'I want to book a demo for the product.' },
-      message_type: 'TEXT',
-    });
-  };
-
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -183,7 +176,7 @@ const useWebSocketChat = () => {
     };
   }, []); //Cleanup effect
 
-  return { readyState, handleSendUserMessage, handlePrimaryCta, sendMessage, lastMessage };
+  return { readyState, handleSendUserMessage, sendMessage, lastMessage };
 };
 
 export default useWebSocketChat;

@@ -73,7 +73,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
     <div className="custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 p-2 transition-all duration-300 ease-in-out">
       <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
         <AgentHeader
-          handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
+          handleSendMessage={handleSendMessage}
           handleCloseAgent={handleCloseAgent}
           isHidden={hideAgentHeader}
           isCollapsible={isCollapsible}
