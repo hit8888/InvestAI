@@ -12,10 +12,25 @@ type IProps = {
   itemIcon: JSX.Element;
   itemValue: string | LocationWithCityCountry;
   showBottomBorder?: boolean;
+  isKeyValueColumnwise?: boolean;
 };
 
-const SingleRightSideItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBottomBorder = true }: IProps) => {
-  let content = <span className="ml-auto text-base font-medium text-gray-900">{itemValue as string}</span>;
+const SingleRightSideItemDataDisplay = ({
+  itemLabel,
+  itemIcon,
+  itemValue,
+  showBottomBorder = true,
+  isKeyValueColumnwise = false,
+}: IProps) => {
+  let content = (
+    <span
+      className={cn('text-base font-medium text-gray-900', {
+        'text-left': isKeyValueColumnwise,
+      })}
+    >
+      {itemValue as string}
+    </span>
+  );
   const isEmailField = itemLabel === EMAIL;
   switch (itemLabel) {
     case LOCATION:
@@ -30,7 +45,7 @@ const SingleRightSideItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBo
           href={`https://${itemValue as string}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto text-blue-600 hover:underline"
+          className="text-blue-600 hover:underline"
         >
           {itemValue as string}
         </a>
@@ -43,14 +58,22 @@ const SingleRightSideItemDataDisplay = ({ itemLabel, itemIcon, itemValue, showBo
     <div
       className={cn('flex items-start self-stretch px-2 py-4', {
         'border-b border-dashed border-primary/20': showBottomBorder,
+        'border-solid border-gray-200': showBottomBorder && isKeyValueColumnwise,
         'items-center': isEmailField,
+        'flex-col items-center gap-2': isKeyValueColumnwise,
       })}
     >
       <div className="flex w-full items-center justify-start gap-2">
         <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{itemIcon}</div>
         <span className="text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>
-      <div className="flex w-full justify-end">{content}</div>
+      <div
+        className={cn('flex w-full justify-end', {
+          'justify-start': isKeyValueColumnwise,
+        })}
+      >
+        {content}
+      </div>
     </div>
   );
 };

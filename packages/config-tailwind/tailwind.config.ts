@@ -203,6 +203,9 @@ const config: Omit<Config, "content"> = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
         slowSpin: "spin 4s linear infinite",
+        "typing-dot1": "typing-dot 1.2s infinite 0.0s",
+        "typing-dot2": "typing-dot 1.2s infinite 0.2s",
+        "typing-dot3": "typing-dot 1.2s infinite 0.4s",
       },
       keyframes: {
         ripple: {
@@ -247,6 +250,11 @@ const config: Omit<Config, "content"> = {
             backgroundPosition: "0% 50%",
           },
         },
+        "typing-dot": {
+          "0%": { opacity: 0 },
+          "50%": { opacity: 1 },
+          "100%": { opacity: 0 },
+        },
       },
       borderRadius: {
         "custom-56": "56px",
@@ -261,7 +269,7 @@ const config: Omit<Config, "content"> = {
     twTypography,
     twForms,
     twAnimate,
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     function ({
       addBase,
       addComponents,

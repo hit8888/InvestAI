@@ -11,6 +11,15 @@
   }
 }
 
+.active-conversation-card-shadow {
+  box-shadow:
+    0px 4px 31px 0px rgba(78, 91, 166, 0.03),
+    0px 2.593px 18.155px 0px rgba(78, 91, 166, 0.02),
+    0px 1.541px 9.874px 0px rgba(78, 91, 166, 0.02),
+    0px 0.8px 5.037px 0px rgba(78, 91, 166, 0.01),
+    0px 0.326px 2.526px 0px rgba(78, 91, 166, 0.01),
+    0px 0.074px 1.22px 0px rgba(78, 91, 166, 0.01);
+}
 .sidebar-collapsible-btn-shadow {
   box-shadow:
     0px 0px 116px 0px rgba(0, 0, 0, 0.06),

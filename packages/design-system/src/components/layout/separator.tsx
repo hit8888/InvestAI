@@ -3,9 +3,10 @@ import { cn } from '../../lib/cn';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   vertical?: boolean;
+  isDashed?: boolean;
 }
 
-const Separator = ({ className, vertical = false, ...props }: IProps) => {
+const Separator = ({ className, vertical = false, isDashed = false, ...props }: IProps) => {
   return (
     <div
       className={cn(
@@ -13,6 +14,7 @@ const Separator = ({ className, vertical = false, ...props }: IProps) => {
         {
           'h-px w-full': !vertical, // Horizontal separator
           'h-full w-px': vertical, // Vertical separator
+          'border-dashed': isDashed,
         },
         className,
       )}

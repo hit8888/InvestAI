@@ -32,6 +32,12 @@ const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel
 
 export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
+// Used In CustomTableView.tsx , ActiveConversationsLayout.tsx , etc.
+export const UI_LAYOUT_CONTAINER_WIDTH_DIMENSION = {
+  OPEN: 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1500px]',
+  CLOSED:
+    'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1650px]',
+};
 // Authentication
 
 export const ACCESS_TOKEN_EXPIRATION_TIME = 5 * 60; // SECONDS ( 30 Days * 60 )
@@ -50,7 +56,7 @@ export const DefaultAuthResponse: AuthResponse = {
 };
 
 // Pagination
-export const PAGINATION_PER_PAGE_OPTIONS = ['10', '25', '50', '75', '100'];
+export const PAGINATION_PER_PAGE_OPTIONS = ['25', '50', '100', '500', '1000'];
 
 // ICON Props
 
@@ -67,6 +73,9 @@ export const COMMON_ICON_PROPS = {
   viewBox: '0 0 24 25',
   color: 'rgb(var(--primary))',
 };
+
+export const DEFAULT_SUMMARY_VALUE =
+  'The user inquired about integrating the AI tool into their e-commerce website. The AI provided detailed steps for implementation and highlighted potential benefits, such as increased customer engagement and automated query handling. The user expressed interest in testing the tool and asked about available subscription plans. The AI shared pricing information and offered to schedule a demo. The conversation concluded with the user agreeing to explore the demo option.';
 
 export const PAGINATION_ARROW_ICONS = COMMON_SMALL_ICON_PROPS;
 export const DROPDOWN_ARROW_ICONS = COMMON_ICON_PROPS;

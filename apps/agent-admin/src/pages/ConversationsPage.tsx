@@ -8,6 +8,8 @@ import {
   COMMON_SMALL_ICON_PROPS,
   // FunnelData,
 } from '../utils/constants';
+import ActiveConversationsLayout from '../components/ActiveConversationsComp/ActiveConversationsLayout';
+import { ActiveConversationsProvider } from '../context/ActiveConversationsContext';
 
 const ConversationsPage = () => {
   // const { data, isLoading, isError } = useConversationsFunnelDataQuery({
@@ -45,6 +47,10 @@ const ConversationsPage = () => {
   //   return content;
   // };
 
+  // TODO: Toggle below variable for development purposes.
+  // Remove this when the active conversations are implemented and integrated with the backend
+  const showActiveConversations = false;
+
   return (
     <>
       <div className="flex flex-col items-start gap-6 self-stretch">
@@ -52,6 +58,11 @@ const ConversationsPage = () => {
           headerTitle="Conversations"
           headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
+        {showActiveConversations && (
+          <ActiveConversationsProvider>
+            <ActiveConversationsLayout />
+          </ActiveConversationsProvider>
+        )}
         {/* <div className="flex h-64 w-full flex-col items-start gap-4 self-stretch rounded-2xl border p-4">
           <div className="flex w-full flex-col items-start gap-4">
             <div className="flex w-full items-center gap-6">

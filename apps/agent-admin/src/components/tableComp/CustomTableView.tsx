@@ -2,7 +2,11 @@ import { useRef, useState } from 'react';
 
 import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { CONVERSATIONS_PINNED_COLUMNS, LEADS_PINNED_COLUMNS } from '../../utils/constants';
+import {
+  CONVERSATIONS_PINNED_COLUMNS,
+  LEADS_PINNED_COLUMNS,
+  UI_LAYOUT_CONTAINER_WIDTH_DIMENSION,
+} from '../../utils/constants';
 import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext';
@@ -19,6 +23,8 @@ interface TableViewProps {
   isConversationsPage?: boolean;
   areAllFiltersApplied: boolean;
 }
+
+const { OPEN, CLOSED } = UI_LAYOUT_CONTAINER_WIDTH_DIMENSION;
 
 const CustomTableView = ({
   tabularData,
@@ -74,9 +80,7 @@ const CustomTableView = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const widthDimension = isSidebarOpen
-    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1500px]'
-    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1650px]';
+  const widthDimension = isSidebarOpen ? OPEN : CLOSED;
 
   return (
     <div className="relative w-full">

@@ -3,13 +3,13 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 import PanelPlaygroundActiveIcon from '@breakout/design-system/components/icons/panel-playground-active-icon';
 import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
 import { getTenantFromLocalStorage, getUserEmailFromLocalStorage } from '../utils/common';
-import usePlaygroundScript from '../hooks/usePlaygroundScript';
+import useChatAgentScript from '../hooks/useChatAgentScript';
 
 const PlaygroundPage = () => {
   const tenantName = getTenantFromLocalStorage();
   const userEmail = getUserEmailFromLocalStorage() || '';
 
-  usePlaygroundScript(tenantName, userEmail);
+  useChatAgentScript(tenantName, userEmail);
 
   return (
     <div className="w-full">
