@@ -44,6 +44,12 @@ export const ConfigurationSchema = z.object({
     card: z.string().optional(),
     card_foreground: z.string().optional(),
     show_banner: z.boolean().optional(),
+    orb_config: z
+      .object({
+        show_orb: z.boolean().optional().nullable(),
+        logo_url: z.string().optional().nullable(),
+      })
+      .optional(),
   }),
   whitelisted_domains: z.array(z.string()),
 });

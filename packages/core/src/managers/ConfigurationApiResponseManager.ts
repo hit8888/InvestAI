@@ -38,7 +38,16 @@ export class ConfigurationApiResponseManager {
   }
 
   getStyleConfig() {
-    return this.config.style_config;
+    const { style_config } = this.config;
+    const result = { ...style_config };
+    if (result.orb_config) {
+      delete result.orb_config;
+    }
+    return result;
+  }
+
+  getOrbConfig() {
+    return this.config.style_config.orb_config;
   }
 
   getBottomBarConfig() {

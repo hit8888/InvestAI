@@ -29,6 +29,8 @@ const AgentMessagesContainer = ({
 
   const sessionApiResponseManager = useSessionApiResponseManager();
   const configurationApiResponseManager = useConfigurationApiResponseManager();
+  const orbConfig = configurationApiResponseManager.getOrbConfig();
+  const orbLogoUrl = orbConfig?.logo_url;
   const latestResponseId = useMessageStore((state) => state.latestResponseId);
   const allowFeedback = useAllowFeedback();
 
@@ -61,6 +63,7 @@ const AgentMessagesContainer = ({
       allowFeedback={allowFeedback}
       feedbackData={feedbackData ?? []}
       lastMessageResponseId={latestResponseId}
+      orbLogoUrl={orbLogoUrl}
     />
   );
 };

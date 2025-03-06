@@ -8,9 +8,16 @@ interface IProps {
   color: string | null;
   state: OrbStatusEnum;
   style?: CSSProperties;
+  orbLogoUrl?: string | null | undefined;
 }
 
-const Orb = ({ color, state, style={} }: IProps) => {
+const Orb = ({ color, state, style = {}, orbLogoUrl }: IProps) => {
+  if (orbLogoUrl) {
+    return (
+      <img src={orbLogoUrl} alt="orb logo" className="h-7 w-8 rounded-full object-cover shadow-md shadow-primary" />
+    );
+  }
+
   return (
     <div
       className={cn('orb-container p-1', {
@@ -24,7 +31,7 @@ const Orb = ({ color, state, style={} }: IProps) => {
         {
           '--input-color': color ?? 'rgb(var(--primary))',
           '--fallback-color': color ?? 'rgb(var(--primary))',
-          ...style
+          ...style,
         } as React.CSSProperties
       }
     >

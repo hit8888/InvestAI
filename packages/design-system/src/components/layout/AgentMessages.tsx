@@ -26,6 +26,7 @@ interface IProps {
   allowFeedback: boolean;
   feedbackData: FeedbackRequestPayload[];
   lastMessageResponseId: string;
+  orbLogoUrl: string | undefined | null;
 }
 
 const AgentMessages = ({
@@ -46,6 +47,7 @@ const AgentMessages = ({
   allowFeedback,
   feedbackData,
   lastMessageResponseId,
+  orbLogoUrl,
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -111,6 +113,7 @@ const AgentMessages = ({
                   initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
                   lastMessageResponseId={lastMessageResponseId}
                   messages={messages}
+                  orbLogoUrl={orbLogoUrl}
                 />
               </div>
             );

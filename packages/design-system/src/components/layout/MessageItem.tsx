@@ -47,6 +47,7 @@ interface IProps {
   logoURL: string | null;
   initialFeedback?: FeedbackRequestPayload;
   lastMessageResponseId: string;
+  orbLogoUrl: string | undefined | null;
 }
 
 const MessageItem = ({
@@ -66,6 +67,7 @@ const MessageItem = ({
   logoURL,
   initialFeedback,
   lastMessageResponseId,
+  orbLogoUrl,
 }: IProps) => {
   const { isInView, ref: inViewRef } = useInView(0, true);
   const isAiMessage = message.role === 'ai';
@@ -96,7 +98,7 @@ const MessageItem = ({
 
   const shouldShowActiveOrb =
     lastMessageResponseId === message.response_id &&
-    (!isSalesResponseComplete || isLoading || message.message_type === 'LOADING_TEXT');
+    (checkIsMainResponseMessage(message) || isLoading || message.message_type === 'LOADING_TEXT');
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
@@ -188,6 +190,7 @@ const MessageItem = ({
             orbState={orbState}
             primaryColor={primaryColor}
             shouldShowActiveOrb={shouldShowActiveOrb}
+            orbLogoUrl={orbLogoUrl}
           />
         )}
 

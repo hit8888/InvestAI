@@ -19,6 +19,7 @@ interface TextMessageProps {
   orbState: OrbStatusEnum;
   primaryColor: string | null;
   shouldShowActiveOrb: boolean;
+  orbLogoUrl: string | undefined | null;
 }
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
@@ -38,6 +39,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
   orbState,
   primaryColor,
   shouldShowActiveOrb,
+  orbLogoUrl,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
@@ -93,7 +95,13 @@ const TextMessage: React.FC<TextMessageProps> = ({
         })}
       >
         {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
-          <>{shouldShowActiveOrb ? <Orb state={orbState} color={primaryColor} /> : <BotIndicator />}</>
+          <>
+            {shouldShowActiveOrb ? (
+              <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+            ) : (
+              <BotIndicator />
+            )}
+          </>
         )}
 
         <div className="flex-col">

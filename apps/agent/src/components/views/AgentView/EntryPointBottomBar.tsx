@@ -119,6 +119,8 @@ const EntryPointBottomBar = ({
   const showBanner = show_banner && !hasFirstUserMessageBeenSent;
 
   const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
+  const orbConfig = configurationApiResponseManager.getOrbConfig();
+  const orbLogoUrl = orbConfig?.logo_url ?? undefined;
 
   return (
     <div
@@ -151,7 +153,7 @@ const EntryPointBottomBar = ({
           <div className="relative flex-1">
             {showOrb && (
               <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
-                <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
+                <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
               </div>
             )}
             <Input
@@ -199,7 +201,9 @@ const EntryPointBottomBar = ({
           </motion.div>
 
           <div className="flex items-center justify-center">
-            {hasFirstUserMessageBeenSent && <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />}
+            {hasFirstUserMessageBeenSent && (
+              <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
+            )}
             {inputValue && (
               <button
                 type="submit"

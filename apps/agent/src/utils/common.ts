@@ -6,7 +6,7 @@ import { StyleConfig } from '@meaku/core/types/api/session_init_response';
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
 
-export const handleColorConfig = (styleConfig: Omit<StyleConfig, 'show_banner'>) => {
+export const handleColorConfig = (styleConfig: Omit<StyleConfig, 'show_banner' | 'orb_config'>) => {
   Object.entries(styleConfig)
     .filter(([key]) => !['show_banner', 'function'].includes(key))
     .forEach(([key, hexValue]) => {
