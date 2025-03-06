@@ -39,6 +39,14 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
     return demoQuestionData?.response || '';
   };
 
+  const backToDemoFlowAfterResponsePlayback = !!demoQuestionData?.resume_demo;
+
+  const handleContinueDemo = () => {
+    handleResumeDemo();
+    resumeDemoRef.current = true;
+    send({ type: 'CONTINUE_DEMO' });
+  };
+
   const { audioContextRef, audioRef, audioSourceRef, playPromiseRef, duration } = useResponseAudioPlayer({
     audioUrl,
     onReceiveResponse: () => send({ type: 'RECEIVE_RESPONSE' }),
@@ -47,6 +55,10 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
       messageSentRef.current = false;
       if (resumeDemoRef.current) {
         isQueryRaisedRef.current = false;
+      }
+      if (backToDemoFlowAfterResponsePlayback) {
+        handleContinueDemo();
+        return;
       }
       send({ type: 'START_RECORDING' });
     },
@@ -61,12 +73,6 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
 
   const startRecording = () => send({ type: 'START_RECORDING' });
   const stopRecording = () => send({ type: 'STOP_RECORDING' });
-
-  const handleContinueDemo = () => {
-    handleResumeDemo();
-    resumeDemoRef.current = true;
-    send({ type: 'CONTINUE_DEMO' });
-  };
 
   const handleContinueSpeaking = () => {
     // First reset the recorder key to force a new instance
@@ -140,7 +146,7 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
           setAnalyserNode={setAnalyserNode}
           setTranscription={setTranscription}
           isTranscribing={transcription.isLoading}
-          disabled={isPlaying || isProcessing}
+          disabled={isPlaying || isProcessing || backToDemoFlowAfterResponsePlayback}
           onStartRecording={startRecording}
           onStopRecording={stopRecording}
         />

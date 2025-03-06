@@ -93,6 +93,7 @@ export const DemoEventDataSchema = z.object({
   script_step: ScriptStepDTO.nullable(),
   response: z.string().nullable(),
   response_audio_url: z.string().nullable(),
+  resume_demo: z.boolean().nullable(),
 });
 
 export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
