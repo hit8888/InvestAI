@@ -98,7 +98,7 @@ const MessageItem = ({
 
   const shouldShowActiveOrb =
     lastMessageResponseId === message.response_id &&
-    (checkIsMainResponseMessage(message) || isLoading || message.message_type === 'LOADING_TEXT');
+    (isSalesResponseMessage || isDiscoveryMessage || isLoading || message.message_type === 'LOADING_TEXT');
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
