@@ -14,6 +14,10 @@ export const getTenantIdentifier = () => {
   return JSON.parse(localStorage.getItem('admin_tenant_identifier') || 'null');
 };
 
+export const getUserEmailFromLocalStorage = () => {
+  return localStorage.getItem('userEmail');
+};
+
 export const setMessageIndexForAddingAIMessage = () => {
   const PROCESSING_MESSAGE_SEQUENCE = getProcessingMessageSequence();
   return Math.floor(Math.random() * PROCESSING_MESSAGE_SEQUENCE.length);

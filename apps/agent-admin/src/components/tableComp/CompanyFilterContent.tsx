@@ -41,7 +41,7 @@ const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonF
   const sortedCompanies: string[] = tableManager?.getSortedItemsByKey('company') ?? [];
   const companyValues: string[] = data?.values.filter(Boolean) ?? [];
 
-  const resultantOptions = getDescendingOrderedOptions(sortedCompanies, companyValues);
+  const resultantOptions = getDescendingOrderedOptions(searchTerm ? [] : sortedCompanies, companyValues);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

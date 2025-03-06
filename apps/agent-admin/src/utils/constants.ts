@@ -34,9 +34,8 @@ export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
 // Used In CustomTableView.tsx , ActiveConversationsLayout.tsx , etc.
 export const UI_LAYOUT_CONTAINER_WIDTH_DIMENSION = {
-  OPEN: 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1500px]',
-  CLOSED:
-    'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1650px]',
+  OPEN: 'max-w-[calc(100vw-324px)]',
+  CLOSED: 'max-w-[calc(100vw-112px)]',
 };
 // Authentication
 
@@ -56,7 +55,8 @@ export const DefaultAuthResponse: AuthResponse = {
 };
 
 // Pagination
-export const PAGINATION_PER_PAGE_OPTIONS = ['25', '50', '100', '500', '1000'];
+export const PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE = ['10', '25', '50', '75', '100'];
+export const PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE = ['100', '200', '500'];
 
 // ICON Props
 

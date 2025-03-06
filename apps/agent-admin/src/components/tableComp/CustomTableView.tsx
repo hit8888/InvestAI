@@ -89,7 +89,7 @@ const CustomTableView = ({
       {isHeaderSticky && (
         <div
           className={cn(`sticky left-0 right-0 z-50 bg-white ${widthDimension}`, {
-            'top-[70px]': !areAllFiltersApplied,
+            'top-[75px]': !areAllFiltersApplied,
             'top-[134px] 2xl:top-[70px]': areAllFiltersApplied && isConversationsPage,
           })}
         >
@@ -109,7 +109,7 @@ const CustomTableView = ({
           </div>
         </div>
       )}
-      <div ref={tableBodyRef} className={`table-container w-full ${widthDimension} relative overflow-x-auto`}>
+      <div ref={tableBodyRef} className={`table-container ${widthDimension} relative overflow-x-auto`}>
         <table
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',

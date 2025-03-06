@@ -41,7 +41,7 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
   const sortedCountries: string[] = tableManager?.getSortedItemsByKey('country') ?? [];
   const locationValues: string[] = data?.values.filter(Boolean) ?? [];
 
-  const resultantOptions = getDescendingOrderedOptions(sortedCountries, locationValues);
+  const resultantOptions = getDescendingOrderedOptions(searchTerm ? [] : sortedCountries, locationValues);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

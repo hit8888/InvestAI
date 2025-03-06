@@ -3,9 +3,13 @@ import CustomFilterDropdown from './CustomFilterDropdown';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import NavigationArrowButton from './NavigationArrowButton';
-import { PAGINATION_PER_PAGE_OPTIONS } from '../../utils/constants';
+import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { PageType } from '@meaku/core/types/admin/sort';
 
 interface PaginationProps {
+  tableType: PageType;
+  paginationPerPageOptions: string[];
   totalItems: number; // Total number of items
   totalPages: number; // Total number of pages
   itemsPerPage: number; // Items per page
@@ -15,6 +19,8 @@ interface PaginationProps {
 }
 
 const TablePagination: React.FC<PaginationProps> = ({
+  tableType,
+  paginationPerPageOptions,
   totalItems,
   totalPages,
   itemsPerPage,
@@ -22,8 +28,14 @@ const TablePagination: React.FC<PaginationProps> = ({
   handlePageChange,
   currentPage,
 }) => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
+
   const handlePerPageOperation = (selectedOption: string | null) => {
     onItemsPerPageChange(Number(selectedOption));
+    trackAdminEvent(ANALYTICS_EVENT_NAMES.TABLE_PAGINATION_PER_PAGE_CHANGE, {
+      itemsPerPage: Number(selectedOption),
+      tableType,
+    });
   };
 
   const isFirstPage = currentPage === 1;
@@ -34,7 +46,7 @@ const TablePagination: React.FC<PaginationProps> = ({
       <div className="flex items-start gap-2">
         {/* Items per page dropdown */}
         <CustomFilterDropdown
-          options={PAGINATION_PER_PAGE_OPTIONS}
+          options={paginationPerPageOptions}
           filterLabel={`${itemsPerPage}`}
           staticValue="per page"
           onCallback={handlePerPageOperation}

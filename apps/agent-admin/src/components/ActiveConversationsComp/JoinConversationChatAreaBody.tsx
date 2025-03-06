@@ -1,5 +1,6 @@
+import { getUserEmailFromLocalStorage } from '@meaku/core/utils/index';
 import useChatAgentScript from '../../hooks/useChatAgentScript';
-import { getTenantFromLocalStorage, getUserEmailFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '../../utils/common';
 
 const JoinConversationChatAreaBody = () => {
   const tenantName = getTenantFromLocalStorage();

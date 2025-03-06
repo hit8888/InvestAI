@@ -47,10 +47,6 @@ export const getAccessTokenFromLocalStorage = () => {
   return localStorage.getItem('accessToken');
 };
 
-export const getUserEmailFromLocalStorage = () => {
-  return localStorage.getItem('userEmail');
-};
-
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
   const additionalInfoData =
     response.additional_info && Object.keys(response.additional_info).length > 0

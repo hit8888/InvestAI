@@ -2,9 +2,9 @@ import CustomPageHeader from '../components/CustomPageHeader';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import PanelPlaygroundActiveIcon from '@breakout/design-system/components/icons/panel-playground-active-icon';
 import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
-import { getTenantFromLocalStorage, getUserEmailFromLocalStorage } from '../utils/common';
+import { getTenantFromLocalStorage } from '../utils/common';
 import useChatAgentScript from '../hooks/useChatAgentScript';
-
+import { getUserEmailFromLocalStorage } from '@meaku/core/utils/index';
 const PlaygroundPage = () => {
   const tenantName = getTenantFromLocalStorage();
   const userEmail = getUserEmailFromLocalStorage() || '';

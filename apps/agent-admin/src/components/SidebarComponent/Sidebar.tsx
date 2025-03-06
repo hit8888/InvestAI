@@ -4,12 +4,13 @@ import { useSidebar } from '../../context/SidebarContext';
 import CompanyHeaderCTA from './CompanyHeaderCTA';
 import NavigationBodyItems from './NavigationBodyItems';
 import UserProfileCTA from './UserProfileCTA';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
     width: isOpen
-      ? ['5rem', '8rem', '12rem', '15rem', '18rem'] // expanding
-      : ['18rem', '15rem', '12rem', '8rem', '5rem'], // collapsing
+      ? ['80px', '144px', '200px', '256px', '291px'] // expanding
+      : ['291px', '256px', '200px', '144px', '80px'], // collapsing
   },
   transition: {
     duration: 0.5,
@@ -27,7 +28,10 @@ const Sidebar = () => {
   }
   return (
     <motion.div
-      className="sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10"
+      className={cn('sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10', {
+        'w-20': !isOpen,
+        'w-80': isOpen,
+      })}
       {...getSidebarContainerAnimation(isOpen)}
     >
       <CompanyHeaderCTA isOpen={isOpen} toggleSidebar={toggleSidebar} />

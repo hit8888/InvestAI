@@ -8,7 +8,7 @@ import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
-import { LEADS_PAGE_COLUMN_LISTS } from '../utils/constants';
+import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE } from '../utils/constants';
 import {
   collectAppliedFilters,
   getFormattedColumnsList,
@@ -126,12 +126,14 @@ const LeadsTableContainer = () => {
         <div className="flex items-center justify-end gap-4 self-stretch">
           {showPagination ? (
             <TablePagination
+              tableType={LEADS_PAGE}
               totalPages={totalPages}
               totalItems={pageSize === 0 ? pageSize : totalRecords}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={handleItemsPerPageChange}
               handlePageChange={handlePageChange}
               currentPage={currentPage}
+              paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE}
             />
           ) : null}
         </div>

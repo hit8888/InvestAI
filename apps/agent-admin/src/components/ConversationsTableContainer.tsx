@@ -10,7 +10,10 @@ import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
-import { CONVERSATIONS_PAGE_COLUMN_LISTS } from '../utils/constants';
+import {
+  CONVERSATIONS_PAGE_COLUMN_LISTS,
+  PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE,
+} from '../utils/constants';
 import {
   getSortingAppliedValues,
   getFormattedColumnsList,
@@ -127,6 +130,8 @@ const ConversationsTableContainer = () => {
         <div className="flex items-center justify-end gap-4 self-stretch">
           {showPagination ? (
             <TablePagination
+              tableType={CONVERSATIONS_PAGE}
+              paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE}
               totalPages={totalPages}
               totalItems={pageSize === 0 ? pageSize : totalRecords}
               itemsPerPage={itemsPerPage}
