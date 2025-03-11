@@ -1,7 +1,13 @@
 import ActiveConvLiveChatIcon from '@breakout/design-system/components/icons/active-conv-live-chat-icon';
 import Button from '@breakout/design-system/components/layout/button';
+import useJoinConversationStore from '../../stores/useJoinConversationStore';
 
-const JoinConversationChatAreaHeader = ({ showExitButton = false }: { showExitButton?: boolean }) => {
+const JoinConversationChatAreaHeader = () => {
+  const { hasJoinedConversation, setHasJoinedConversation } = useJoinConversationStore();
+
+  const handleExitConversation = () => {
+    setHasJoinedConversation(false);
+  };
   return (
     <div
       className="absolute left-0 top-0 z-50 flex w-full items-center justify-between rounded-t-lg 
@@ -13,8 +19,10 @@ const JoinConversationChatAreaHeader = ({ showExitButton = false }: { showExitBu
         </div>
         <p className="text-base font-medium text-gray-900">Live Chat</p>
       </div>
-      {showExitButton && (
-        <Button className="border-2 border-[rgba(var(--primary-foreground)/0.24)]">Exit Conversation</Button>
+      {hasJoinedConversation && (
+        <Button className="border-2 border-[rgba(var(--primary-foreground)/0.24)]" onClick={handleExitConversation}>
+          Exit Conversation
+        </Button>
       )}
     </div>
   );

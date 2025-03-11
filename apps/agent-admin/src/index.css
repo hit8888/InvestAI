@@ -11,6 +11,28 @@
   }
 }
 
+.ai-response-generator-popover-boxshadow {
+  box-shadow:
+    0px 0px 51px 0px rgba(0, 0, 0, 0.05),
+    0px 0px 34.375px 0px rgba(0, 0, 0, 0.04),
+    0px 0px 22.233px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 13.796px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 8.288px 0px rgba(0, 0, 0, 0.03),
+    0px 0px 4.931px 0px rgba(0, 0, 0, 0.02),
+    0px 0px 2.948px 0px rgba(0, 0, 0, 0.02),
+    0px 0px 1.564px 0px rgba(0, 0, 0, 0.01);
+}
+
+.join-conversation-dialog-admin-details-shadow {
+  box-shadow:
+    0px 0px 33px 0px rgba(17, 48, 88, 0.04),
+    0px 0px 19.326px 0px rgba(17, 48, 88, 0.03),
+    0px 0px 10.511px 0px rgba(17, 48, 88, 0.02),
+    0px 0px 5.363px 0px rgba(17, 48, 88, 0.02),
+    0px 0px 2.689px 0px rgba(17, 48, 88, 0.02),
+    0px 0px 1.299px 0px rgba(17, 48, 88, 0.01);
+}
+
 .active-conversation-card-shadow {
   box-shadow:
     0px 4px 31px 0px rgba(78, 91, 166, 0.03),
@@ -20,6 +42,7 @@
     0px 0.326px 2.526px 0px rgba(78, 91, 166, 0.01),
     0px 0.074px 1.22px 0px rgba(78, 91, 166, 0.01);
 }
+
 .sidebar-collapsible-btn-shadow {
   box-shadow:
     0px 0px 116px 0px rgba(0, 0, 0, 0.06),
@@ -29,6 +52,7 @@
     0px 0px 9.452px 0px rgba(0, 0, 0, 0.02),
     0px 0px 4.565px 0px rgba(0, 0, 0, 0.01);
 }
+
 .popover-boxshadow {
   box-shadow:
     0px 0px 51px 0px rgba(0, 0, 0, 0.05),
@@ -50,17 +74,21 @@
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #3b82f6, #9333ea); /* Blue to purple */
+  background: linear-gradient(90deg, #3b82f6, #9333ea);
+  /* Blue to purple */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* For modern browsers */
 .hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
+  /* Chrome, Safari, Edge */
 }

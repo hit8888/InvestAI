@@ -4,6 +4,8 @@ import ConversationBasicAndBuyerIntentLabelContainer from './ConversationBasicAn
 import ConversationSessionDetailsContainer from './ConversationSessionDetailsContainer';
 import ConversationUserLastInputContainer from './ConversationUserLastInputContainer';
 import JoinConversationDrawerContainerFlow from './JoinConversationDrawerContainerFlow';
+import useJoinConversationStore from '../../stores/useJoinConversationStore';
+import { useAuth } from '../../context/AuthProvider';
 
 const SingleActiveConversation = ({ card }: { card: ActiveConversationCard }) => {
   const {
@@ -21,13 +23,19 @@ const SingleActiveConversation = ({ card }: { card: ActiveConversationCard }) =>
   } = card;
 
   const [isOpen, setIsOpen] = useState(false);
+  const { setHasJoinedConversation, setAdminDisplayName } = useJoinConversationStore();
+  const { userInfo } = useAuth();
+  const adminName = userInfo?.username || '';
 
   const handleOpenJoinConversationDrawer = () => {
     setIsOpen(true);
+    setAdminDisplayName(adminName);
   };
 
   const handleCloseJoinConversationDrawer = () => {
     setIsOpen(false);
+    setHasJoinedConversation(false);
+    setAdminDisplayName('');
   };
 
   // const openJoinConversationDrawer = isOpen && isActive;

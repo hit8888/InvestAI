@@ -18,9 +18,11 @@ import SingleRightSideItemDataDisplay from '../ConversationDetailsComp/SingleRig
 const JoinConversationRightSideBodyContent = ({
   prospect,
   company,
+  hasJoinedConversation,
 }: {
   prospect: ProspectDetailsType;
   company: CompanyDetailsType;
+  hasJoinedConversation: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const prospectItemsWithValue = getConversationRightSideDetailsItems(prospect, PROSPECT_DETAILS_DATA_ITEMS);
@@ -29,6 +31,7 @@ const JoinConversationRightSideBodyContent = ({
   const isProspectItemsEmpty = !prospectItemsWithValue.length;
   const isCompanyItemsEmpty = !companyItemsWithValue.length;
 
+  if (!hasJoinedConversation) return null;
   if (isProspectItemsEmpty && isCompanyItemsEmpty) return;
   return (
     <div

@@ -4,6 +4,8 @@ import JoinConversationChatAreaHeader from './JoinConversationChatAreaHeader';
 import JoinConversationEntryPointInput from './JoinConversationEntryPointInput';
 import JoinConversationRightSideBodyContent from './JoinConversationRightSideBodyContent';
 import JoinConversationChatAreaBody from './JoinConversationChatAreaBody';
+import useJoinConversationStore from '../../stores/useJoinConversationStore';
+import { cn } from '@breakout/design-system/lib/cn';
 
 type JoinConversationDrawerContainerFlowProps = {
   sessionId: string;
@@ -18,7 +20,7 @@ const JoinConversationDrawerContainerFlow = ({
   isOpen,
   handleCloseJoinConversationDrawer,
 }: JoinConversationDrawerContainerFlowProps) => {
-  if (!isOpen) return null;
+  const { hasJoinedConversation } = useJoinConversationStore();
 
   const prospect = {
     name: 'John Doe',
@@ -43,6 +45,8 @@ const JoinConversationDrawerContainerFlow = ({
     foundationDate: '2020-01-01',
   };
 
+  if (!isOpen) return null;
+
   return (
     <Drawer open={isOpen} onOpenChange={handleCloseJoinConversationDrawer} direction="bottom">
       <DrawerOverlay
@@ -52,11 +56,20 @@ const JoinConversationDrawerContainerFlow = ({
         }}
       />
       <DrawerContent className="z-[1000] mx-auto -mb-1 h-[750px] w-full max-w-[calc(100%-24px)] rounded-3xl bg-primary-foreground 2xl:h-[870px]">
-        <JoinConversationHeader buyerIntentLabel={buyerIntentLabel} sessionId={sessionId} />
-        <div className="mt-2 h-[90%] w-full p-2">
-          <div className="flex h-full w-full items-start justify-end gap-2 self-stretch rounded-2xl border border-gray-200 bg-gray-50 p-2">
-            <JoinConversationLeftSideBodyContent />
-            <JoinConversationRightSideBodyContent prospect={prospect} company={company} />
+        {hasJoinedConversation && <JoinConversationHeader buyerIntentLabel={buyerIntentLabel} sessionId={sessionId} />}
+        <div
+          className={cn('w-full p-2', {
+            'mt-2 h-[90%]': hasJoinedConversation,
+            'h-full pt-0': !hasJoinedConversation,
+          })}
+        >
+          <div className="flex h-[98%] w-full items-start justify-end gap-2 self-stretch rounded-2xl border border-gray-200 bg-gray-50 p-2">
+            <JoinConversationLeftSideBodyContent sessionID={sessionId} />
+            <JoinConversationRightSideBodyContent
+              prospect={prospect}
+              company={company}
+              hasJoinedConversation={hasJoinedConversation}
+            />
           </div>
         </div>
       </DrawerContent>
@@ -64,20 +77,26 @@ const JoinConversationDrawerContainerFlow = ({
   );
 };
 
-const JoinConversationLeftSideBodyContent = () => {
+const JoinConversationLeftSideBodyContent = ({ sessionID }: { sessionID: string }) => {
   return (
-    <div className="flex h-full w-full flex-1 flex-col items-start gap-2">
-      <JoinConversationChatAreaContainer />
-      <JoinConversationEntryPointInput />
+    <div className="group relative flex h-full w-full flex-1 flex-col items-start gap-2 self-stretch">
+      <JoinConversationChatAreaContainer sessionID={sessionID} />
+      <div className="absolute bottom-0 left-0 right-0">
+        <JoinConversationEntryPointInput />
+      </div>
     </div>
   );
 };
 
-const JoinConversationChatAreaContainer = () => {
+const JoinConversationChatAreaContainer = ({ sessionID }: { sessionID: string }) => {
+  const { hasJoinedConversation } = useJoinConversationStore();
   return (
-    <div className="relative flex h-full w-full flex-1 flex-col items-start self-stretch rounded-lg">
-      <JoinConversationChatAreaHeader showExitButton={true} />
-      <JoinConversationChatAreaBody />
+    <div className="relative flex h-full w-full flex-1 flex-col items-start self-stretch rounded-lg pt-8">
+      <JoinConversationChatAreaHeader />
+      <JoinConversationChatAreaBody sessionID={sessionID} />
+      {!hasJoinedConversation && (
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
+      )}
     </div>
   );
 };
