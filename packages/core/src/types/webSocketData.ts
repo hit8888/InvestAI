@@ -43,7 +43,7 @@ export type ArtifactBaseType = z.infer<typeof ArtifactBaseSchema>;
 
 export type ArtifactFormType = z.infer<typeof ArtifactFormSchema>;
 
-export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS', 'DISCOVERY_QUESTIONS']);
+export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS', 'DISCOVERY_QUESTIONS', 'EVENT']);
 export const MessageTypeSchema = z.enum(['TEXT', 'STREAM', 'ARTIFACT', 'EVENT']);
 
 export const BaseMessageContentSchema = z.object({
@@ -171,6 +171,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('DEMO_END'),
     event_data: z.object({}),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('USER_INACTIVE'),
+    event_data: z.object({}),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -239,4 +244,5 @@ export enum AgentEventType {
   DEMO_END = 'DEMO_END',
   ARTIFACT_CONSUMED = 'ARTIFACT_CONSUMED',
   FORM_FILLED = 'FORM_FILLED',
+  USER_INACTIVE = 'USER_INACTIVE',
 }
