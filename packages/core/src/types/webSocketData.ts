@@ -105,9 +105,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('PRIMARY_GOAL_COMPLETED'),
-    event_data: z.object({
-      url: z.string(),
-    }),
+    event_data: z
+      .object({
+        url: z.string(),
+      })
+      .or(z.object({})),
   }), //In case of message with url
   z.object({
     content: z.string(),
