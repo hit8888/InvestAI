@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { filterOutSuggestions } from '@meaku/core/utils/messageUtils';
+import { checkIsDiscoveryMessage, filterOutSuggestions } from '@meaku/core/utils/messageUtils';
 
 interface State {
   messages: WebSocketMessage[];
@@ -59,6 +59,13 @@ export const useMessageStore = create<State>()(
         }),
       handleAddAIMessage: (message: WebSocketMessage) =>
         set((draft) => {
+          const isDiscoveryMessage = checkIsDiscoveryMessage(message);
+          const latestResponseId = draft.latestResponseId;
+
+          // If the message is a discovery message and the latest response id is not the same as the message response id, return
+          if (isDiscoveryMessage && latestResponseId !== message.response_id) {
+            return;
+          }
           // Find existing message to update
           const existingMessageIndex = draft.messages.findIndex(
             (msg) =>
