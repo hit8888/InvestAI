@@ -37,10 +37,7 @@ export const UI_LAYOUT_CONTAINER_WIDTH_DIMENSION = {
   OPEN: 'max-w-[calc(100vw-324px)]',
   CLOSED: 'max-w-[calc(100vw-112px)]',
 };
-// Authentication
 
-// export const ACCESS_TOKEN_EXPIRATION_TIME = 5 * 60; // SECONDS ( 30 Days * 60 )
-// export const REFRESH_TOKEN_EXPIRATION_TIME = 30 * 24 * 60 * 60; // SECONDS ( 30 Days * 60 )
 export const DefaultAuthResponse: AuthResponse = {
   id: 0,
   username: '',

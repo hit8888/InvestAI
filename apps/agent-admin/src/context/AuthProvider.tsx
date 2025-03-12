@@ -1,11 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { setAuthInstance } from './AuthInstance';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
-import {
-  DefaultAuthResponse,
-  // ACCESS_TOKEN_EXPIRATION_TIME,
-  // REFRESH_TOKEN_EXPIRATION_TIME
-} from '../utils/constants';
+import { DefaultAuthResponse } from '../utils/constants';
 
 interface AuthContextType {
   accessToken: string | null;
@@ -27,7 +23,6 @@ const defaultContext: AuthContextType = {
   refreshToken: null,
   isAuthenticated: false,
   saveTokens: () => {},
-  // apiCall: () => Promise.resolve(),
   clearTokens: () => {},
   login: () => {},
   logout: () => {},
@@ -55,8 +50,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Store tokens in local storage
     localStorage.setItem('accessToken', newAccessToken);
     localStorage.setItem('refreshToken', newRefreshToken);
-    // localStorage.setItem('accessTokenExpiry', JSON.stringify(Date.now() + ACCESS_TOKEN_EXPIRATION_TIME * 1000)); // in ms
-    // localStorage.setItem('refreshTokenExpiry', JSON.stringify(Date.now() + REFRESH_TOKEN_EXPIRATION_TIME * 1000)); // in ms
     localStorage.setItem('userInfo', JSON.stringify(userData));
     localStorage.setItem('userEmail', userData?.email ?? '');
   };
@@ -73,8 +66,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userInfo');
-    // localStorage.removeItem('accessTokenExpiry');
-    // localStorage.removeItem('refreshTokenExpiry');
     localStorage.removeItem('admin_tenant_identifier');
   };
 
@@ -98,7 +89,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         refreshToken,
         saveTokens,
         clearTokens,
-        // apiCall,
         isAuthenticated,
         login,
         logout,
