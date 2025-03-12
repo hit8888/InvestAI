@@ -474,15 +474,18 @@
                 // Send initial config
                 iFrameSource.postMessage(
                   {
-                    utmParams,
-                    http_referrer,
-                    url,
-                    hideBottomBar: config.hideBottomBar,
-                    // Check if we're in overlay mode
-                    isCollapsible:
-                      currentContainer === overlay?.wrapper
-                        ? true
-                        : !config.containerId,
+                    type: "INIT",
+                    payload: {
+                      utmParams,
+                      http_referrer,
+                      url,
+                      hideBottomBar: config.hideBottomBar,
+                      // Check if we're in overlay mode
+                      isCollapsible:
+                        currentContainer === overlay?.wrapper
+                          ? true
+                          : !config.containerId,
+                    },
                   },
                   { targetOrigin: "*" },
                 );

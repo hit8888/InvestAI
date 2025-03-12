@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
@@ -20,6 +20,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
 import Button from '@breakout/design-system/components/layout/button';
+import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -29,6 +30,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { pathname = '' } = useLocation();
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
+  const [parentUrl, setParentURL] = useState(undefined);
 
   const { getParam } = useUrlParams();
   const is_test = getParam('is_test') === 'true';
@@ -39,8 +41,20 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const isAdmin = useIsAdmin();
   const isReadOnly = useAreMessagesReadonly();
 
+  const getParentURL = async (event: MessageEvent) => {
+    const { type, payload } = event.data;
+
+    if (type !== 'INIT') {
+      return;
+    }
+    setParentURL(payload.url);
+  };
+
+  useAppEventsHook(getParentURL);
+
   const configQuery = useConfigDataQuery({
     agentId,
+    parentUrl,
     queryOptions: { enabled: true },
   });
 
