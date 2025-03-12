@@ -180,6 +180,16 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('USER_INACTIVE'),
     event_data: z.object({}),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('HEARTBEAT'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('HEARTBEAT_ACK'),
+    event_data: z.object({}),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -249,4 +259,6 @@ export enum AgentEventType {
   ARTIFACT_CONSUMED = 'ARTIFACT_CONSUMED',
   FORM_FILLED = 'FORM_FILLED',
   USER_INACTIVE = 'USER_INACTIVE',
+  HEARTBEAT = 'HEARTBEAT',
+  HEARTBEAT_ACK = 'HEARTBEAT_ACK',
 }

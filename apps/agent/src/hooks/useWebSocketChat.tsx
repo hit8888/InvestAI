@@ -56,7 +56,36 @@ const useWebSocketChat = () => {
         setRetryInterval(interval);
         return interval;
       },
-      filter: () => !!sessionId,
+      filter: (message) => {
+        try {
+          const data = JSON.parse(message.data);
+          if (data.message_type === 'EVENT' && data.message?.event_type === 'HEARTBEAT_ACK') {
+            return false;
+          }
+        } catch (e) {
+          console.warn('Failed to parse message', e);
+          // If parsing fails, don't filter the message
+        }
+        return !!sessionId;
+      },
+      heartbeat: {
+        message: () => {
+          const response_id = nanoid();
+          return JSON.stringify(
+            getMessagePayload({
+              message: {
+                content: '',
+                event_data: {},
+                event_type: 'HEARTBEAT',
+              },
+              response_id,
+              message_type: 'EVENT',
+            }),
+          );
+        },
+        timeout: 120000,
+        interval: 60000,
+      },
     },
     !!sessionId,
   );
