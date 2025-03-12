@@ -32,10 +32,9 @@ const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel
 
 export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
-// Used In CustomTableView.tsx , ActiveConversationsLayout.tsx , etc.
 export const UI_LAYOUT_CONTAINER_WIDTH_DIMENSION = {
-  OPEN: 'max-w-[calc(100vw-324px)]',
-  CLOSED: 'max-w-[calc(100vw-112px)]',
+  OPEN: 'max-w-[var(--content-width-sidebar-open)]',
+  CLOSED: 'max-w-[var(--content-width-sidebar-closed)]',
 };
 
 export const DefaultAuthResponse: AuthResponse = {

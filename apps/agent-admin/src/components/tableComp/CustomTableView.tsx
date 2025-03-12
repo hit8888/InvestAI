@@ -24,8 +24,6 @@ interface TableViewProps {
   areAllFiltersApplied: boolean;
 }
 
-const { OPEN, CLOSED } = UI_LAYOUT_CONTAINER_WIDTH_DIMENSION;
-
 const CustomTableView = ({
   tabularData,
   columnHeaderData,
@@ -80,7 +78,10 @@ const CustomTableView = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const widthDimension = isSidebarOpen ? OPEN : CLOSED;
+  // IF somehow not working, try to use the string values from the constants.ts file.
+  const widthDimension = isSidebarOpen
+    ? UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.OPEN
+    : UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.CLOSED;
 
   return (
     <div className="relative w-full">
@@ -109,7 +110,7 @@ const CustomTableView = ({
           </div>
         </div>
       )}
-      <div ref={tableBodyRef} className={`table-container ${widthDimension} relative overflow-x-auto`}>
+      <div ref={tableBodyRef} className={`${widthDimension} relative overflow-x-auto`}>
         <table
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',

@@ -6,7 +6,7 @@ const TableViewShimmer = ({ rowCount = 5, columnCount = 4 }) => {
   const rows = Array(rowCount).fill(0);
 
   return (
-    <div className={`table-container relative w-full overflow-x-auto`}>
+    <div className={`relative w-full overflow-x-auto`}>
       <table className="w-full">
         <thead className="w-full">
           <tr className="flex w-full border-b border-t border-primary/40 bg-[#DCDAF8]">

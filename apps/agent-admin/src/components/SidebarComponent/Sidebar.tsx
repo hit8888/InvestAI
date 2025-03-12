@@ -4,7 +4,6 @@ import { useSidebar } from '../../context/SidebarContext';
 import CompanyHeaderCTA from './CompanyHeaderCTA';
 import NavigationBodyItems from './NavigationBodyItems';
 import UserProfileCTA from './UserProfileCTA';
-import { cn } from '@breakout/design-system/lib/cn';
 
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
@@ -28,10 +27,7 @@ const Sidebar = () => {
   }
   return (
     <motion.div
-      className={cn('sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10', {
-        'w-20': !isOpen,
-        'w-80': isOpen,
-      })}
+      className="sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10"
       {...getSidebarContainerAnimation(isOpen)}
     >
       <CompanyHeaderCTA isOpen={isOpen} toggleSidebar={toggleSidebar} />

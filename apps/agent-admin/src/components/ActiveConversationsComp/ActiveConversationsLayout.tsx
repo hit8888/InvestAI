@@ -1,16 +1,17 @@
 import SingleActiveConversation from './SingleActiveConversation';
-import { UI_LAYOUT_CONTAINER_WIDTH_DIMENSION } from '../../utils/constants';
 import { useSidebar } from '../../context/SidebarContext';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversationsContext } from '../../context/ActiveConversationsContext';
 import { useContext } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
-
-const { OPEN, CLOSED } = UI_LAYOUT_CONTAINER_WIDTH_DIMENSION;
+import { UI_LAYOUT_CONTAINER_WIDTH_DIMENSION } from '../../utils/constants';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
-  const widthDimension = isSidebarOpen ? OPEN : CLOSED;
+  const widthDimension = isSidebarOpen
+    ? UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.OPEN
+    : UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.CLOSED;
+
   const totalActiveChats = 10;
 
   const { cards } = useContext(ActiveConversationsContext);
