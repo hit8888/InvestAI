@@ -12,7 +12,7 @@ const useChatAgentScript = (tenantName: string, userEmail: string) => {
     script.setAttribute('container-id', 'embedded-breakout-agent');
     script.setAttribute('is-collapsible', 'false');
     script.setAttribute('hide-bottom-bar', 'true');
-    script.setAttribute('feedback-enabled', 'false');
+    script.setAttribute('feedback-enabled', 'true');
     script.setAttribute('user-email', userEmail);
     script.setAttribute('is-staging', isStaging ? 'true' : 'false');
     document.body.appendChild(script);
