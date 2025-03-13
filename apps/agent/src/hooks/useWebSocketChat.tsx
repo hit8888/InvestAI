@@ -10,14 +10,20 @@ import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
-import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import { isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
+import { useExponentialBackoff } from './useExponentialBackoff';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
+// Default inactivity threshold: 2 minutes (120000 ms) TODO: Move to Agent Config
+const INITIAL_INACTIVITY_THRESHOLD = 120000; // 2 minutes
+const MAX_INACTIVITY_THRESHOLD = 600000; // 10 minutes
+const BACKOFF_FACTOR = 2;
+const MAX_INACTIVITY_ATTEMPTS = 3; // Maximum number of inactivity messages to send
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
@@ -37,7 +43,7 @@ const useWebSocketChat = () => {
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
   const messageQueue = useRef<WebSocketMessage[]>([]);
-
+  // Inactivity timer reference
   const sessionApiResponseManager = useSessionApiResponseManager();
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
@@ -89,6 +95,38 @@ const useWebSocketChat = () => {
     },
     !!sessionId,
   );
+
+  const { startBackoffTimer, resetBackoff, clearTimer } = useExponentialBackoff({
+    initialThreshold: INITIAL_INACTIVITY_THRESHOLD,
+    maxThreshold: MAX_INACTIVITY_THRESHOLD,
+    backoffFactor: BACKOFF_FACTOR,
+    maxAttempts: MAX_INACTIVITY_ATTEMPTS,
+  });
+
+  // Function to reset the inactivity timer
+  const resetInactivityTimer = useCallback(() => {
+    if (sessionId && readyState === ReadyState.OPEN) {
+      startBackoffTimer((state) => {
+        // Get current page information
+        const currentPage = window.location.pathname;
+
+        // Create and send the USER_INACTIVE event
+        const inactivityMessage = {
+          content: '',
+          event_type: AgentEventType.USER_INACTIVE,
+          event_data: {
+            currentPage,
+            inactivityCount: state.attemptCount,
+            nextThreshold: state.nextThreshold,
+            isLastAttempt: state.isLastAttempt,
+          },
+        };
+
+        handleSendUserMessage({ message: inactivityMessage, message_type: 'EVENT' });
+      });
+    }
+  }, [sessionId, readyState, startBackoffTimer]);
+
   const handleSendUserMessage = useCallback(
     async ({ message, message_type }: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
       if (isAMessageBeingProcessed) {
@@ -109,6 +147,9 @@ const useWebSocketChat = () => {
         sendMessage(JSON.stringify(payload));
         return;
       }
+
+      // Reset backoff for non-event messages
+      resetBackoff();
 
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
@@ -134,6 +175,8 @@ const useWebSocketChat = () => {
 
     try {
       const response = JSON.parse(lastMessage.data) as WebSocketMessage;
+      // Reset inactivity timer on incoming message
+      resetInactivityTimer();
 
       if (isMessageAnalyticsEvent(response)) {
         return;
@@ -196,14 +239,16 @@ const useWebSocketChat = () => {
     messageQueue.current = [];
   }, [readyState, sendMessage, sessionId]);
 
+  // Cleanup effect
   useEffect(() => {
     return () => {
+      clearTimer();
       const ws = getWebSocket();
       if (ws) {
         ws.close();
       }
     };
-  }, []); //Cleanup effect
+  }, [getWebSocket]);
 
   return { readyState, handleSendUserMessage, sendMessage, lastMessage };
 };

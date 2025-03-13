@@ -13,7 +13,6 @@ const useLatestMessageComplete = () => {
   const isMessageComplete = useCallback(() => {
     // Get the latest messages directly from the store when the function is called
     const messages = store.getState().messages;
-    console.log({ messages });
     if (!latestResponseId) return true;
 
     // Get all messages with the latest response ID
