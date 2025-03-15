@@ -7,7 +7,7 @@ import { SHADOW_PINNED_COLUMNS } from '../../utils/constants';
 type CustomSingleBodyRowItemProps = {
   row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
   index: number;
-  handleRowItemClick: (row: ConversationsTableDisplayContent) => void;
+  handleRowItemClick: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
 };
 
 const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingleBodyRowItemProps) => {
@@ -15,9 +15,15 @@ const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingl
   const detailsPageURL = 'session_id' in row.original ? row.original.session_id : null;
   const isEvenRow = index % 2 === 0;
   const isOddRow = !isEvenRow;
+
+  const handleSingleRowItemClick = () => {
+    if (detailsPageURL) {
+      handleRowItemClick(row.original as ConversationsTableDisplayContent | LeadsTableDisplayContent);
+    }
+  };
   return (
     <tr
-      onClick={detailsPageURL ? () => handleRowItemClick(row.original as ConversationsTableDisplayContent) : undefined}
+      onClick={handleSingleRowItemClick}
       key={row.id}
       className={cn('flex w-full items-start self-stretch', {
         'bg-white': isEvenRow, // White background for even rows

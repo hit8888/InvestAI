@@ -9,9 +9,14 @@ import useConversationDetailsDataQuery from '../queries/query/useConversationDet
 import { useEffect, useMemo } from 'react';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
 import { useQueryOptions } from '../hooks/useQueryOptions';
-// import ConversationDetailsPageShimmer from '../components/ShimmerComponent/ConversationDetailsPageShimmer';
 
-const ConversationDetailsPage = () => {
+type IProps = {
+  isDirectAccess: boolean;
+  handleNavigateBasedOnRoute: () => void;
+  isLeadsPage: boolean;
+};
+
+const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, isLeadsPage }: IProps) => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
     useConversationDetails();
   const { sessionID } = useParams<string>();
@@ -22,6 +27,16 @@ const ConversationDetailsPage = () => {
     sessionID: sessionID || '',
     companyLogoUrl: '',
   };
+
+  // If Multiple Tab is enabled, then we need to show the breadcrumb items as per the tab,
+  // Also attaching the tab link to the breadcrumb items
+  // These are for particular use case
+  const breadCrumbItems = useMemo(() => {
+    if (isLeadsPage) {
+      return ['Leads', 'Prospect'];
+    }
+    return ['Conversations', 'Prospect'];
+  }, [isLeadsPage]);
 
   const queryOptions = useQueryOptions();
 
@@ -65,10 +80,16 @@ const ConversationDetailsPage = () => {
     console.error('Error while fetching conversation details');
     return null;
   }
+
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-4 self-stretch">
       <div className="sticky top-0 z-10 w-full bg-white pt-2">
-        <ConversationsBreadCrumb isLoading={isLoading} />
+        <ConversationsBreadCrumb
+          breadCrumbItems={breadCrumbItems}
+          isLoading={isLoading}
+          handleNavigateBasedOnRoute={handleNavigateBasedOnRoute}
+          isDirectAccess={isDirectAccess}
+        />
       </div>
       <ConversationDetailsNavigatedHeader isLoading={isLoading} {...navigatedHeaderDynamicValues} />
       <ConversationDetailsMultipleTabContainer isLoading={isLoading} />

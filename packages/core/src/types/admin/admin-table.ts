@@ -20,6 +20,7 @@ export const LeadsTableViewSchema = z.object({
   location: LocationWithCityCountrySchema,
   timestamp: z.string(),
   product_of_interest: z.string(),
+  session_id: z.string(),
 });
 
 export const ConversationsTableViewSchema = z.object({

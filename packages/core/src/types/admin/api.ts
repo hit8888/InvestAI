@@ -115,6 +115,7 @@ export const LeadResultSchema = z.object({
   id: z.number(),
   external_id: z.string().nullable(),
   prospect_id: z.string().nullable(),
+  session_id: z.string().nullable(),
   name: z.string().nullable(),
   email: z.string().nullable(),
   phone: z.string().nullable(),

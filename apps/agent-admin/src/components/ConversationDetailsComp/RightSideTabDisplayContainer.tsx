@@ -31,6 +31,7 @@ const RightSideTabDisplayContainer = ({
             <div className="flex flex-col items-start self-stretch">
               {prospectItemsWithValue.map((dataItem, index) => (
                 <SingleRightSideItemDataDisplay
+                  key={`prospect-${index}`}
                   showBottomBorder={index !== prospectItemsWithValue.length - 1}
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
@@ -48,6 +49,7 @@ const RightSideTabDisplayContainer = ({
             <div className="flex flex-col items-start self-stretch">
               {companyItemsWithValue.map((dataItem, index) => (
                 <SingleRightSideItemDataDisplay
+                  key={`company-${index}`}
                   showBottomBorder={index !== companyItemsWithValue.length - 1}
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}

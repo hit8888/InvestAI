@@ -7,7 +7,7 @@ import {
   LEADS_PINNED_COLUMNS,
   UI_LAYOUT_CONTAINER_WIDTH_DIMENSION,
 } from '../../utils/constants';
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../../context/SidebarContext';
 import { useScrollSync } from '../../hooks/useScrollSync';
@@ -43,11 +43,13 @@ const CustomTableView = ({
     setIsHeaderSticky(value);
   };
 
-  const handleRowItemClick = (row: ConversationsTableDisplayContent) => {
-    const detailsPageURL = row.session_id;
-    navigate(`${detailsPageURL}`, {
-      state: { from: 'table' },
-    });
+  const handleRowItemClick = (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => {
+    const detailsPageURL = 'session_id' in row ? row.session_id : null;
+    if (detailsPageURL) {
+      navigate(`${detailsPageURL}`, {
+        state: { from: isConversationsPage ? 'conversations' : 'leads' },
+      });
+    }
   };
 
   // Scroll Sync Handler for table header and body

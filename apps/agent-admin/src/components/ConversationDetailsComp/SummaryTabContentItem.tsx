@@ -68,7 +68,7 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       )}
       key={listKey}
     >
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex w-[50%] items-center justify-center gap-2">
         <div className="flex items-center justify-center rounded-lg bg-primary/10 p-1">
           <ItemIcon
             width="16"

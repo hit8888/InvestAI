@@ -66,6 +66,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     } as LocationWithCityCountry,
     timestamp: response.created_on ? response.created_on : '-',
     product_of_interest: response.product_interest || '-',
+    session_id: response.session_id ?? '',
   };
 
   return mappedData;
@@ -139,17 +140,17 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
       email: conversation.email || '-',
       location: {
         city: prospectDetails?.city || '',
-        country: (conversation.location as string) || prospectDetails?.country || '-',
+        country: prospectDetails?.country || (conversation.location as string) || '-',
       },
-      role: conversation.role || prospectDetails?.role || '-',
-      budget: conversation.budget || prospectDetails?.budget || '-',
-      timeline: conversation.timeline || prospectDetails?.timeline || '-',
-      product_interest: conversation.product_of_interest || prospectDetails?.product_interest || '-',
+      role: prospectDetails?.role || conversation.role || '-',
+      budget: prospectDetails?.budget || conversation.budget || '-',
+      timeline: prospectDetails?.timeline || conversation.timeline || '-',
+      product_interest: prospectDetails?.product_interest || conversation.product_of_interest || '-',
     },
     company: {
-      name: conversation.company || companyDetails?.company_name || '-',
+      name: companyDetails?.company_name || conversation.company || '-',
       logoUrl: companyDetails?.website_url ? `${companyDetails?.website_url}/favicon.ico` : '',
-      location: (conversation.location as string) || companyDetails?.company_country || '-',
+      location: companyDetails?.company_country || (conversation.location as string) || '-',
       revenue: companyDetails?.company_revenue || '-',
       employees: companyDetails?.employee_count || '-',
       domain: companyDetails?.industry_domain || '-',

@@ -38,12 +38,16 @@ const routes = [
         children: [],
       },
       {
+        path: `${LEADS}/:sessionID`, // Dynamic route for individual leads
+        element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
+      },
+      {
         path: CONVERSATIONS,
         element: <ProtectedRoute element={<ConversationsPageContainer />} />,
       },
       {
         path: `${CONVERSATIONS}/:sessionID`, // Dynamic route for individual conversations
-        element: <ProtectedRoute element={<ConversationDetailsPageContainer />} />,
+        element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
       },
       {
         path: PLAYGROUND,

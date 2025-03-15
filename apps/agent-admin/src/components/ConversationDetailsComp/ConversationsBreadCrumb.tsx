@@ -1,40 +1,36 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useCallback, useMemo } from 'react';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@breakout/design-system/components/shadcn-ui/breadcrumb';
+import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList } from '@breakout/design-system/components/shadcn-ui/breadcrumb';
 
 import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadcrumb-left-arrow';
 import Separator from '@breakout/design-system/components/layout/separator';
-import { AppRoutesEnum } from '../../utils/constants';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
+import { BreadcrumbItemComponent } from './BreadcrumbItemComponent';
 
 type IProps = {
   isLoading: boolean;
+  breadCrumbItems: string[];
+  handleNavigateBasedOnRoute: () => void;
+  isDirectAccess: boolean;
 };
 
-const ConversationsBreadCrumb = ({ isLoading }: IProps) => {
+const ConversationsBreadCrumb = ({
+  isLoading,
+  handleNavigateBasedOnRoute,
+  isDirectAccess,
+  breadCrumbItems,
+}: IProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const isDirectAccess = useMemo(() => {
-    // Check if we have any state from the previous route
-    return !location.state?.from;
-  }, [location.state]);
 
   const handleNavigateBack = useCallback(() => {
     if (isDirectAccess) {
-      // If directly accessed, go to conversations page
-      navigate(AppRoutesEnum.CONVERSATIONS);
+      handleNavigateBasedOnRoute();
     } else {
       // If came from table view, go back in history
       navigate(-1);
     }
   }, [navigate, isDirectAccess]);
+
   return (
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <Breadcrumb>
@@ -48,23 +44,16 @@ const ConversationsBreadCrumb = ({ isLoading }: IProps) => {
               )}
             </div>
           </BreadcrumbItem>
-          <BreadcrumbItem className="cursor-pointer text-base font-medium text-gray-400">
-            {isLoading ? (
-              <Skeleton className="h-6 w-32" />
-            ) : (
-              <div onClick={handleNavigateBack} role="button" tabIndex={0}>
-                Conversations
-              </div>
-            )}
-          </BreadcrumbItem>
-          <BreadcrumbSeparator className="text-base font-medium text-gray-400">/</BreadcrumbSeparator>
-          <BreadcrumbItem>
-            {isLoading ? (
-              <Skeleton className="h-6 w-24" />
-            ) : (
-              <BreadcrumbPage className="text-base font-semibold text-primary">Prospect</BreadcrumbPage>
-            )}
-          </BreadcrumbItem>
+          {breadCrumbItems.map((item, index) => (
+            <BreadcrumbItemComponent
+              key={item}
+              item={item}
+              isLoading={isLoading}
+              isLast={index === breadCrumbItems.length - 1}
+              showSeparator={index < breadCrumbItems.length - 1}
+              onNavigate={handleNavigateBack}
+            />
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
       <Separator />
