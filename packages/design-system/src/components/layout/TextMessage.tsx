@@ -3,7 +3,7 @@ import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import { cn } from '@breakout/design-system/lib/cn';
 import Orb from '@breakout/design-system/components/Orb/index';
-import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
+// import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
@@ -92,6 +92,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
           'rounded-2xl bg-primary/70 px-3 py-2': !isAiMessage,
           'flex gap-4 p-6 pl-0': isAiMessage && isLastQuestionResponse,
           'flex gap-7 p-6 pl-0': isAiMessage && !isLastQuestionResponse,
+          'pl-11': !shouldShowActiveOrb && isAiMessage,
         })}
       >
         {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
@@ -99,7 +100,8 @@ const TextMessage: React.FC<TextMessageProps> = ({
             {shouldShowActiveOrb ? (
               <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
             ) : (
-              <BotIndicator />
+              // <BotIndicator />
+              <></>
             )}
           </>
         )}
