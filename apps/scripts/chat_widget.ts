@@ -489,24 +489,29 @@
                   },
                   { targetOrigin: "*" },
                 );
+              }
+            }
 
-                // Send initial message if configured
-                if (
-                  config.initialMessage &&
-                  !initialMessageSent &&
-                  !event.data.sessionId
-                ) {
-                  iFrameSource.postMessage(
-                    {
-                      type: "PARENT_FORM_MESSAGE",
-                      data: {
-                        message: config.initialMessage,
-                      },
+            if (event.data.type === "EMBED_READY") {
+              iFrameSource = event.source;
+              // Send initial message if configured
+              if (
+                iFrameSource &&
+                "postMessage" in iFrameSource &&
+                config.initialMessage &&
+                !initialMessageSent &&
+                !event.data.sessionId
+              ) {
+                iFrameSource.postMessage(
+                  {
+                    type: "PARENT_FORM_MESSAGE",
+                    data: {
+                      message: config.initialMessage,
                     },
-                    { targetOrigin: "*" },
-                  );
-                  initialMessageSent = true;
-                }
+                  },
+                  { targetOrigin: "*" },
+                );
+                initialMessageSent = true;
               }
             }
 

@@ -27,6 +27,9 @@ export const useEmbedAppEvents = ({
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { handleUpdateSessionData } = useLocalStorageSession();
+  const {
+    sessionData: { sessionId },
+  } = useLocalStorageSession();
 
   const { mode, setMode } = useWidgetMode();
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
@@ -116,6 +119,10 @@ export const useEmbedAppEvents = ({
     };
     window.parent.postMessage(payload, '*');
   }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent]);
+
+  useEffect(() => {
+    window.parent.postMessage({ type: 'EMBED_READY', sessionId: sessionId }, '*');
+  }, []);
 
   return { shouldHideBottomBar, isCollapsible, mode };
 };
