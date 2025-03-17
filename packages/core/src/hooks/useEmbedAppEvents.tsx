@@ -83,13 +83,11 @@ export const useEmbedAppEvents = ({
               });
             }
           }
-          if (payload.isCollapsible) {
-            if (typeof payload.isCollapsible === 'boolean') {
-              setIsCollapsible(payload.isCollapsible);
-              if (!payload.isCollapsible) {
-                setMode('embed');
-                handleOpenAgent();
-              }
+          if (typeof payload.isCollapsible === 'boolean') {
+            setIsCollapsible(payload.isCollapsible);
+            if (!payload.isCollapsible) {
+              setMode('embed');
+              handleOpenAgent();
             }
           }
         }
