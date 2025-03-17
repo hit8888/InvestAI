@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
@@ -26,11 +26,14 @@ interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
 }
 
+const PARENT_URL_TIMEOUT = 2;
+
 const PreloadContainer: FC<Props> = ({ children }) => {
   const { pathname = '' } = useLocation();
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
-  const [parentUrl, setParentURL] = useState(undefined);
+  const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
+  const [waitingForParentUrl, setWaitingForParentUrl] = useState(true);
 
   const { getParam } = useUrlParams();
   const is_test = getParam('is_test') === 'true';
@@ -48,14 +51,29 @@ const PreloadContainer: FC<Props> = ({ children }) => {
       return;
     }
     setParentURL(payload.url);
+    setWaitingForParentUrl(false);
   };
 
   useAppEventsHook(getParentURL);
 
+  // Set a timeout to stop waiting for parentUrl after PARENT_URL_TIMEOUT
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (parentUrl) {
+        console.log('Parent URL found');
+        setWaitingForParentUrl(false);
+      } else if (!parentUrl && waitingForParentUrl) {
+        setWaitingForParentUrl(false);
+      }
+    }, PARENT_URL_TIMEOUT);
+
+    return () => clearTimeout(timer);
+  }, [waitingForParentUrl]);
+
   const configQuery = useConfigDataQuery({
     agentId,
     parentUrl,
-    queryOptions: { enabled: true },
+    queryOptions: { enabled: !waitingForParentUrl },
   });
 
   useSetDistinctIdOnAppMount();
@@ -75,7 +93,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId, retry: 1 },
+    queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl, retry: 1 },
   });
 
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
@@ -102,12 +120,16 @@ const PreloadContainer: FC<Props> = ({ children }) => {
       return <Custom404 />;
     }
 
-    return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4">
-        <p className="text-gray-700">Something went wrong. Please try again.</p>
-        <Button onClick={handleRetry}>Reload</Button>
-      </div>
-    );
+    if (isDemoURL) {
+      return (
+        <div className="flex h-screen flex-col items-center justify-center gap-4">
+          <p className="text-gray-700">Something went wrong. Please try again.</p>
+          <Button onClick={handleRetry}>Reload</Button>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   if (configQuery.data) {
