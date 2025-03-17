@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AgentParams, OrbStatusEnum } from '@meaku/core/types/config';
 import useConfigDataQuery from '@meaku/core/queries/useConfigDataQuery';
 import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSessionDataQuery';
@@ -29,7 +29,6 @@ interface Props {
 const PARENT_URL_TIMEOUT = 2;
 
 const PreloadContainer: FC<Props> = ({ children }) => {
-  const { pathname = '' } = useLocation();
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
   const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
@@ -38,8 +37,6 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { getParam } = useUrlParams();
   const is_test = getParam('is_test') === 'true';
   const test_type = getParam('test_type') ?? undefined;
-
-  const isDemoURL = pathname.includes('demo');
 
   const isAdmin = useIsAdmin();
   const isReadOnly = useAreMessagesReadonly();
@@ -116,11 +113,11 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     const internalAPIError = firstQueryWithError.error as AxiosError<Error>;
     trackError(internalAPIError, { action: 'internalAPIError', component: 'PreloadContainer' });
 
-    if (isDemoURL && configQuery?.isError) {
+    if (isAdmin && configQuery?.isError) {
       return <Custom404 />;
     }
 
-    if (isDemoURL) {
+    if (isAdmin) {
       return (
         <div className="flex h-screen flex-col items-center justify-center gap-4">
           <p className="text-gray-700">Something went wrong. Please try again.</p>
