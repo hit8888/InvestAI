@@ -4,13 +4,14 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversationsContext } from '../../context/ActiveConversationsContext';
 import { useContext } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
-import { UI_LAYOUT_CONTAINER_WIDTH_DIMENSION } from '../../utils/constants';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
+
+  // Explicitly using the string values.
   const widthDimension = isSidebarOpen
-    ? UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.OPEN
-    : UI_LAYOUT_CONTAINER_WIDTH_DIMENSION.CLOSED;
+    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1520px]'
+    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1680px]';
 
   const totalActiveChats = 10;
 

@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --sidebar-width-open: 324px;
-  --sidebar-width-closed: 112px;
-  --content-width-sidebar-open: calc(100vw - var(--sidebar-width-open));
-  --content-width-sidebar-closed: calc(100vw - var(--sidebar-width-closed));
-}
-
 @layer base {
   body {
     font-family: 'Inter', sans-serif;

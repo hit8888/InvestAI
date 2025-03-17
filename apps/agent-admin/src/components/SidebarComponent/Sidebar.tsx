@@ -8,8 +8,8 @@ import UserProfileCTA from './UserProfileCTA';
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
     width: isOpen
-      ? ['80px', '144px', '200px', '256px', '291px'] // expanding
-      : ['291px', '256px', '200px', '144px', '80px'], // collapsing
+      ? ['80px', '144px', '200px', '256px', '270px'] // expanding
+      : ['270px', '256px', '200px', '144px', '80px'], // collapsing
   },
   transition: {
     duration: 0.5,
