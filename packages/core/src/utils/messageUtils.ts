@@ -93,6 +93,63 @@ export const isSuggestionArtifact = (msg: WebSocketMessage) =>
 export const filterOutSuggestions = (messages: WebSocketMessage[]) =>
   messages.filter((msg) => !isSuggestionArtifact(msg));
 
+export const hasMatchingMessageType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
+  return msg.message_type === message.message_type;
+};
+
+export const isLoadingTextToContentUpdate = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
+  return msg.message_type === 'LOADING_TEXT' && (isTextMessage(message) || isStreamMessage(message));
+};
+
+export const hasMatchingEventType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
+  return (
+    'event_type' in msg.message &&
+    'event_type' in message.message &&
+    msg.message.event_type === message.message.event_type
+  );
+};
+
+export const hasMatchingArtifactType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
+  return (
+    'artifact_type' in msg.message &&
+    'artifact_type' in message.message &&
+    msg.message.artifact_type === message.message.artifact_type
+  );
+};
+
+export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMessage) => {
+  // Basic checks: must be an 'ai' message with matching response_id
+  if (msg.role !== 'ai' || msg.response_id !== message.response_id) {
+    return false;
+  }
+
+  // Case 1: Replace LOADING_TEXT with TEXT or STREAM
+  if (isLoadingTextToContentUpdate(msg, message)) {
+    return true;
+  }
+
+  // Case 2: For TEXT or STREAM new messages
+  if (isTextMessage(message) || isStreamMessage(message)) {
+    return hasMatchingMessageType(msg, message);
+  }
+
+  // Case 3: For other message types
+  // First, check if message types match
+  if (!hasMatchingMessageType(msg, message)) {
+    return false;
+  }
+
+  // At this point, msg.message_type === message.message_type
+  // Additional checks for specific types
+  if (checkIsEventMessage(msg)) {
+    return hasMatchingEventType(msg, message);
+  } else if (checkIsArtifactMessage(msg)) {
+    return hasMatchingArtifactType(msg, message);
+  } else {
+    return true; // For other matching types, no additional checks needed
+  }
+};
+
 const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 

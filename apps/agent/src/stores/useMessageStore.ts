@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { checkIsDiscoveryMessage, filterOutSuggestions } from '@meaku/core/utils/messageUtils';
+import { checkIsDiscoveryMessage, filterOutSuggestions, shouldUpdateMessage } from '@meaku/core/utils/messageUtils';
 
 interface State {
   messages: WebSocketMessage[];
@@ -67,23 +67,7 @@ export const useMessageStore = create<State>()(
             return;
           }
           // Find existing message to update
-          const existingMessageIndex = draft.messages.findIndex(
-            (msg) =>
-              msg.role === 'ai' &&
-              msg.response_id === message.response_id &&
-              // Replace LOADING_TEXT with TEXT or STREAM messages
-              ((msg.message_type === 'LOADING_TEXT' &&
-                (message.message_type === 'TEXT' || message.message_type === 'STREAM')) ||
-                // For TEXT/STREAM messages, only check response_id to allow replacing orb state text
-                (message.message_type === 'TEXT' || message.message_type === 'STREAM'
-                  ? msg.message_type === message.message_type
-                  : // For other message types (like ARTIFACT), check both message_type and artifact_type
-                    msg.message_type === message.message_type &&
-                    (msg.message_type !== 'ARTIFACT' ||
-                      ('artifact_type' in msg.message &&
-                        'artifact_type' in message.message &&
-                        msg.message.artifact_type === message.message.artifact_type)))),
-          );
+          const existingMessageIndex = draft.messages.findIndex((msg) => shouldUpdateMessage(msg, message));
 
           if (existingMessageIndex !== -1) {
             draft.messages[existingMessageIndex] = {
