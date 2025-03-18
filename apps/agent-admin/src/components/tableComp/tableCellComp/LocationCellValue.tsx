@@ -17,9 +17,10 @@ const COUNTRY_WITH_NO_FLAGS = [
 type IProps = {
   value: string | LocationWithCityCountry;
   showTruncatedText?: boolean;
+  isValueOrientationRight?: boolean;
 };
 
-const LocationCellValue = ({ value, showTruncatedText = true }: IProps) => {
+const LocationCellValue = ({ value, showTruncatedText = true, isValueOrientationRight = false }: IProps) => {
   const isTypeOfValueObject = typeof value === 'object';
   const cityValue = isTypeOfValueObject ? value.city : '';
   const countryValue = isTypeOfValueObject ? value.country : value;
@@ -33,17 +34,21 @@ const LocationCellValue = ({ value, showTruncatedText = true }: IProps) => {
   const flagURL = countryValue ? findFlagUrlByCountryName(locationValue) : undefined;
   const isValueBelongToNoCountryFlag = COUNTRY_WITH_NO_FLAGS.includes(locationValue);
   return (
-    <div className="flex gap-1">
+    <div className={cn('flex gap-1', { 'w-full justify-end': isValueOrientationRight })}>
       {flagURL && !isValueBelongToNoCountryFlag ? (
         <img src={flagURL} width={20} height={20} alt={`${locationValue} flag-icon`} />
       ) : null}
       {isTypeOfValueObject && cityValue !== '-' ? (
-        <span title={cityValue} className="max-w-24 truncate text-right">{`${cityValue},`}</span>
+        <span
+          title={cityValue}
+          className={cn('max-w-24 truncate text-right', { 'max-w-full': isValueOrientationRight })}
+        >{`${cityValue},`}</span>
       ) : null}
       <span
         title={locationValue}
         className={cn({
           'max-w-24 truncate': showTruncatedText,
+          'max-w-full': isValueOrientationRight,
         })}
       >
         {locationValue}

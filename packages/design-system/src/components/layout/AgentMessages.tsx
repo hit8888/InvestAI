@@ -7,6 +7,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
+import { shouldMessageScrollToTop } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   usingForAgent?: boolean;
@@ -95,7 +96,7 @@ const AgentMessages = ({
           {messages.map((message, idx) => {
             return (
               <div key={idx}>
-                {message?.role !== 'ai' ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
+                {shouldMessageScrollToTop(message) ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
                 <MessageItem
                   isAMessageBeingProcessed={isAMessageBeingProcessed}
                   logoURL={logoURL}

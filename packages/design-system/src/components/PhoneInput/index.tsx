@@ -9,11 +9,12 @@ import 'react-phone-number-input/style.css';
 import './styles.css';
 
 type PhoneInputProps = {
-  field: ControllerRenderProps<FieldValues, string>, 
-  phoneLabel: string,
-}
+  field: ControllerRenderProps<FieldValues, string>;
+  phoneLabel: string;
+  isArtifactFormFilled: boolean;
+};
 
-const PhoneInputContainer = ({ field, phoneLabel }: PhoneInputProps) => {
+const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled }: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const getDefaultCountry = (): CountryCode => {
     // Get the user's language setting
@@ -24,14 +25,18 @@ const PhoneInputContainer = ({ field, phoneLabel }: PhoneInputProps) => {
 
     // Return region code or default to 'US'
     return (regionCode ? regionCode.toUpperCase() : 'US') as CountryCode;
-};
+  };
 
   return (
     <PhoneInput
       defaultCountry={getDefaultCountry()}
-      className={cn('custom-phone-input group rounded-md border border-gray-300 bg-white text-sm placeholder:text-gray-400', {
-        'ring-0 border-2 border-primary/40 ': isFocused,
-      })}
+      className={cn(
+        'custom-phone-input group rounded-md border border-gray-300 bg-white text-sm placeholder:text-gray-400',
+        {
+          'border-2 border-primary/40 ring-0 ': isFocused,
+        },
+      )}
+      readOnly={isArtifactFormFilled}
       placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}
       onFocus={() => setIsFocused(true)}

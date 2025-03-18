@@ -33,12 +33,17 @@ const FormFilledThankYouContent = ({
             </CardDescription>
           </CardHeader>
         </div>
-        <div className="flex items-center gap-2 rounded-lg border border-dashed border-primary/40 p-2">
-          <div className="flex flex-1 flex-col gap-2">
+        <div className="flex w-full items-center gap-2 rounded-lg border border-dashed border-primary/40 p-2">
+          <div className="flex w-[60%] flex-1 flex-col gap-2">
             {artifact.form_fields.map((field) => (
-              <div key={field.field_name} className="flex items-center gap-2">
+              <div key={field.field_name} className="flex w-full items-center gap-2">
                 <p className="text-sm font-medium text-primary">{field.label}:</p>
-                <p className="text-sm text-customSecondaryText">{formValues[field.field_name]}</p>
+                <p
+                  title={formValues[field.field_name]}
+                  className="max-w-full truncate text-sm text-customSecondaryText"
+                >
+                  {formValues[field.field_name]}
+                </p>
               </div>
             ))}
           </div>

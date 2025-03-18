@@ -57,6 +57,8 @@ const FormArtifact = ({
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
+  const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
+
   const formSchema = createFormSchema(artifact?.form_fields ?? []);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formSchemaType = getFormSchemaTypeDefinition(formSchema);
@@ -103,7 +105,7 @@ const FormArtifact = ({
   const isSubmitBtnDisabled =
     !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
 
-  if (submitted && !isEditing) {
+  if (!isArtifactFormFilled && submitted && !isEditing) {
     return (
       <FormFilledThankYouContent
         artifact={artifact}
@@ -126,7 +128,7 @@ const FormArtifact = ({
           >
             <div className="flex w-full flex-col items-start gap-6">
               {artifact.form_fields.map((field, i) => (
-                <ChatFormField key={i} form={form} form_field={field} />
+                <ChatFormField isArtifactFormFilled={isArtifactFormFilled} key={i} form={form} form_field={field} />
               ))}
             </div>
             <div className="flex justify-end">

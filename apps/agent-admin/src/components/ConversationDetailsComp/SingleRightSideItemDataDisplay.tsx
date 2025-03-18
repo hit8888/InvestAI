@@ -26,6 +26,7 @@ const SingleRightSideItemDataDisplay = ({
     <span
       className={cn('text-base font-medium text-gray-900', {
         'text-left': isKeyValueColumnwise,
+        'w-full max-w-full truncate text-right': !isKeyValueColumnwise,
       })}
     >
       {itemValue as string}
@@ -34,7 +35,7 @@ const SingleRightSideItemDataDisplay = ({
   const isEmailField = itemLabel === EMAIL;
   switch (itemLabel) {
     case LOCATION:
-      content = <LocationCellValue value={itemValue} />;
+      content = <LocationCellValue isValueOrientationRight value={itemValue} />;
       break;
     case EMAIL:
       content = <EmailCellValue value={itemValue as string} valueOrientation="right" />;
@@ -45,7 +46,7 @@ const SingleRightSideItemDataDisplay = ({
           href={`https://${itemValue as string}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline"
+          className="w-full max-w-full truncate text-right text-blue-600 hover:underline"
         >
           {itemValue as string}
         </a>
@@ -56,19 +57,19 @@ const SingleRightSideItemDataDisplay = ({
   }
   return (
     <div
-      className={cn('flex items-start self-stretch px-2 py-4', {
+      className={cn('flex w-full items-start gap-4 self-stretch px-2 py-4', {
         'border-b border-dashed border-primary/20': showBottomBorder,
         'border-solid border-gray-200': showBottomBorder && isKeyValueColumnwise,
         'items-center': isEmailField,
         'flex-col items-center gap-2': isKeyValueColumnwise,
       })}
     >
-      <div className="flex w-full items-center justify-start gap-2">
+      <div className="flex w-[40%] items-center justify-start gap-2">
         <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{itemIcon}</div>
         <span className="text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>
       <div
-        className={cn('flex w-full justify-end', {
+        className={cn('flex w-[60%] justify-end', {
           'justify-start': isKeyValueColumnwise,
         })}
       >

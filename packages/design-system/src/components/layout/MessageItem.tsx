@@ -153,25 +153,23 @@ const MessageItem = ({
       };
 
     return (
-      isArtifactMessage && (
-        <ChatArtifact
-          artifact={{
-            artifact_type: message.message.artifact_type,
-            artifact_id: message.message.artifact_data.artifact_id,
-            content: isFormArtifact
-              ? (message.message.artifact_data.content as FormArtifactContent)
-              : (message.message.artifact_data.content as SuggestionArtifactContent),
-            metadata: {
-              ...message.message.artifact_data.metadata,
-              ...formMetadata,
-            },
-            error: message.message.artifact_data.error,
-            error_code: message.message.artifact_data.error_code,
-          }}
-          handleSendUserMessage={handleSendUserMessage}
-          isformDisabled={!usingForAgent && isFormArtifact}
-        />
-      )
+      <ChatArtifact
+        artifact={{
+          artifact_type: message.message.artifact_type,
+          artifact_id: message.message.artifact_data.artifact_id,
+          content: isFormArtifact
+            ? (message.message.artifact_data.content as FormArtifactContent)
+            : (message.message.artifact_data.content as SuggestionArtifactContent),
+          metadata: {
+            ...message.message.artifact_data.metadata,
+            ...formMetadata,
+          },
+          error: message.message.artifact_data.error,
+          error_code: message.message.artifact_data.error_code,
+        }}
+        handleSendUserMessage={handleSendUserMessage}
+        isformDisabled={!usingForAgent && isFormArtifact}
+      />
     );
   };
 
@@ -224,12 +222,12 @@ const MessageItem = ({
               </div>
             )}
 
-            <div className="ml-auto mt-3">
-              {/* Show suggestion artifacts - store handles filtering */}
-              {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'SUGGESTIONS' && (
-                <>{getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent })}</>
-              )}
-            </div>
+            {/* Show suggestion artifacts - store handles filtering */}
+            {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'SUGGESTIONS' && (
+              <div className="ml-auto mt-3">
+                {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent })}
+              </div>
+            )}
           </>
         ) : null}
 

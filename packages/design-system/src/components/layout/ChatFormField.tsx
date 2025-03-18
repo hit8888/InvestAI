@@ -16,10 +16,11 @@ import DemoFormNameFieldIcon from '../icons/demoform-name-icon';
 interface IChatFormFieldProps {
   form: UseFormReturnType;
   form_field: FormFieldType;
+  isArtifactFormFilled: boolean;
 }
 
 const ChatFormField = (props: IChatFormFieldProps) => {
-  const { form, form_field } = props;
+  const { form, form_field, isArtifactFormFilled } = props;
 
   const isPhoneInputField = form_field.field_name === 'phone_number';
 
@@ -46,9 +47,14 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             <div className="flex items-center rounded-lg bg-primary/20 p-1">{getIconBasedOnField()}</div>
             <FormControl>
               {isPhoneInputField ? (
-                <PhoneInputContainer phoneLabel={`${form_field.label}*`} field={field} />
+                <PhoneInputContainer
+                  isArtifactFormFilled={isArtifactFormFilled}
+                  phoneLabel={`${form_field.label}*`}
+                  field={field}
+                />
               ) : (
                 <Input
+                  readOnly={isArtifactFormFilled}
                   {...field}
                   className="border border-primary/30 bg-white placeholder:text-gray-400 focus:border-2 focus:border-primary/40 focus:ring-0"
                   placeholder={`${form_field.label}*`}

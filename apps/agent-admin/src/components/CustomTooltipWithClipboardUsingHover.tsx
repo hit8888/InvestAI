@@ -24,13 +24,13 @@ const CustomTooltipWithClipboardUsingHover = ({ tooltipText, children, toastMess
         </TooltipTrigger>
         {showTooltip && (
           <TooltipContent
-            sideOffset={-5}
+            sideOffset={5}
             title=""
             align="end"
             side="bottom"
             className="rounded-lg border-none bg-gray-900 px-3 py-2 text-white"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center gap-2">
               <span className="text-xs font-medium">{tooltipText}</span>
               <CopyToClipboardButton
                 copyIconClassname="h-4 w-4 text-white"
@@ -39,7 +39,7 @@ const CustomTooltipWithClipboardUsingHover = ({ tooltipText, children, toastMess
                 btnClassName="h-6 w-6 rounded-lg bg-primary-foreground/25 p-1"
               />
             </div>
-            <TooltipArrow width={12} height={6} className="relative -right-6 2xl:-right-14" />
+            <TooltipArrow width={12} height={6} className="fixed -right-6 2xl:right-14" />
           </TooltipContent>
         )}
       </Tooltip>

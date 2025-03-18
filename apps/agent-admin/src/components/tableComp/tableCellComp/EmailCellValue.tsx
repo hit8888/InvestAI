@@ -14,9 +14,9 @@ const EmailCellValue: React.FC<IProps> = ({ value, valueOrientation = 'left' }) 
   const getEmailCellValue = () => {
     return (
       <span
-        title={value}
+        title={isValueOrientationLeft ? value : ''}
         className={cn('w-48 truncate 2xl:w-40', {
-          'text-right': !isValueOrientationLeft,
+          'w-[90%] text-right 2xl:w-full': !isValueOrientationLeft,
         })}
       >
         {value}
@@ -25,7 +25,7 @@ const EmailCellValue: React.FC<IProps> = ({ value, valueOrientation = 'left' }) 
   };
   return (
     <div
-      className={cn('flex items-center gap-2', {
+      className={cn('flex items-center justify-end gap-2', {
         'w-full justify-between': isValueOrientationLeft,
       })}
     >

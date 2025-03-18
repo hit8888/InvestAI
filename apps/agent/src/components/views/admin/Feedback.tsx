@@ -53,7 +53,11 @@ const Feedback = () => {
   return (
     <Backdrop landingPageUrl={page_url} className="flex h-screen flex-col items-center justify-center font-inter">
       <div className="flex w-[90vw]  justify-end">
-        <CopyToClipboardButton textToCopy={hashedSessionData} toastMessage="Session hash copied." />
+        <CopyToClipboardButton
+          textToCopy={hashedSessionData}
+          toastMessage="Session hash copied."
+          copyIconClassname="h-6 w-6"
+        />
         <Button onClick={handleRefreshChat} size="icon" className="rounded-md bg-primary-foreground/70 p-1">
           <RefreshChatIcon className="text-primary" />
         </Button>

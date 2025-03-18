@@ -3,11 +3,11 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const ClipboardCopyIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const ClipboardCopyIcon = ({ className = 'text-primary', width, height, color, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
-      viewBox={viewBox}
+      viewBox={'0 0 14 14'}
       width={width}
       height={height}
       fill="none"

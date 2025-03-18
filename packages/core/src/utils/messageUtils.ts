@@ -12,6 +12,8 @@ import {
 } from '../types/webSocketData';
 import { FormArtifactContent, SuggestionArtifactContent } from '../types';
 
+export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['PRIMARY_GOAL_COMPLETED', 'PRIMARY_GOAL_CTA_CLICKED', 'FORM_FILLED'];
+
 export const isStreamMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: StreamMessageContent } => {
@@ -233,4 +235,15 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
       };
     } => checkIsArtifactMessage(msg) && msg.message.artifact_type === 'FORM' && 'artifact_data' in msg.message,
   );
+};
+
+export const shouldMessageScrollToTop = (message: WebSocketMessage) => {
+  if (
+    message.role === 'user' &&
+    'event_type' in message.message &&
+    !USER_EVENTS_NOT_FOR_SCROLL_TO_TOP.includes(message.message.event_type)
+  ) {
+    return true;
+  }
+  return false;
 };

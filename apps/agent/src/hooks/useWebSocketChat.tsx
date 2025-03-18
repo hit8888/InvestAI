@@ -14,6 +14,7 @@ import { AgentEventType, EventMessageContent, WebSocketMessage } from '@meaku/co
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import { isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
 
 const MAX_RETRIES = 5;
@@ -27,6 +28,8 @@ const MAX_INACTIVITY_ATTEMPTS = 1; // Maximum number of inactivity messages to s
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
+
+  const isAdmin = useIsAdmin();
 
   const getMessagePayload = useGetMessagePayload();
 
@@ -178,7 +181,7 @@ const useWebSocketChat = () => {
       // Reset inactivity timer on incoming message
       resetInactivityTimer();
 
-      if (isMessageAnalyticsEvent(response)) {
+      if (isMessageAnalyticsEvent(response) && !isAdmin) {
         return;
       }
 
