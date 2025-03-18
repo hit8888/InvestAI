@@ -11,10 +11,10 @@ import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE } from '../utils/constants';
 import {
   collectAppliedFilters,
-  getFormattedColumnsList,
-  getSortingAppliedValues,
   getAllFilterAppliedValues,
+  getFormattedColumnsList,
   getMappedDataFromResponseForLeadsTableView,
+  getSortingAppliedValues,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
@@ -26,6 +26,7 @@ import { LEADS_PAGE } from '@meaku/core/utils/index';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
+import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 
 const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
 
@@ -33,6 +34,8 @@ const LeadsTableContainer = () => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: LEADS_PAGE,
   });
+
+  useInitializeFilterPreferences(LEADS_PAGE);
 
   const sortState = useSortFilterStore((state) => state.leads);
   const filterState = useAllFilterStore((state) => state.leads);

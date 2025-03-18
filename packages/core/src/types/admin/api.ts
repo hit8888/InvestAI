@@ -243,3 +243,15 @@ export const FilterOptionsResponseSchema = z.object({
 
 export type FilterOptionsPayload = z.infer<typeof FilterOptionsPayloadSchema>;
 export type FilterOptionsResponse = z.infer<typeof FilterOptionsResponseSchema>;
+
+export const FilterPreferencesResponseSchema = z.object({
+  id: z.number(),
+  table_name: z.string(),
+  filter_data: z.object({
+    sort: z.array(SortSchema),
+    filters: z.array(FilterSchema),
+  }),
+  source: z.enum(['user', 'organization']),
+});
+
+export type FilterPreferencesResponseType = z.infer<typeof FilterPreferencesResponseSchema>;

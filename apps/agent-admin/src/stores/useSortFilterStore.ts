@@ -28,4 +28,9 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
       ...state,
       [page]: { ...InitialSortValues },
     })),
+  initializeSortValues: (page, sortValues) =>
+    set((state) => ({
+      ...state,
+      [page]: { ...sortValues },
+    })),
 }));

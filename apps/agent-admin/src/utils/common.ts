@@ -28,9 +28,9 @@ import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
-import { SortItem, FilterItem } from '@meaku/core/types/admin/api';
+import { FilterItem, SortItem } from '@meaku/core/types/admin/api';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isTextMessage, isStreamMessage } from '@meaku/core/utils/messageUtils';
+import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -303,6 +303,43 @@ export const getSortingAppliedValues = (sortState: SortValues, page: string) => 
   return sortApplied;
 };
 
+export const getSortValuesFromSortItems = (sortItems: SortItem[]): SortValues => {
+  const sortValues: SortValues = {
+    timestampSort: null,
+    sessionLengthSort: null,
+    intentScoreSort: null,
+  };
+
+  if (sortItems.length === 0) {
+    sortValues.timestampSort = SortByTimestamp.NEWEST_FIRST;
+    return sortValues;
+  }
+
+  sortItems.forEach((item) => {
+    switch (item.field) {
+      case 'created_on':
+      case 'timestamp':
+        sortValues.timestampSort = item.order === 'desc' ? SortByTimestamp.NEWEST_FIRST : SortByTimestamp.OLDEST_FIRST;
+        break;
+      case 'user_message_count':
+        sortValues.sessionLengthSort =
+          item.order === 'desc' ? SortBySessionLength.LONG_FIRST : SortBySessionLength.SHORT_FIRST;
+        break;
+      case 'buyer_intent_score':
+        sortValues.intentScoreSort =
+          item.order === 'desc' ? SortByIntentScore.HIGHEST_FIRST : SortByIntentScore.LOWEST_FIRST;
+        break;
+    }
+  });
+
+  // If no timestamp sort is set, default to the newest first
+  if (!sortValues.timestampSort) {
+    sortValues.timestampSort = SortByTimestamp.NEWEST_FIRST;
+  }
+
+  return sortValues;
+};
+
 export const getDateAppliedValue = (dateRange: DateRangeProp) => {
   const { startDate, endDate } = dateRange;
   if (!startDate) return '';
@@ -403,6 +440,10 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       value: false,
       operator: 'eq',
     });
+  }
+
+  if (filterState.presetFilters) {
+    filterApplied.push(...filterState.presetFilters);
   }
 
   return filterApplied;

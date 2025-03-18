@@ -1,4 +1,5 @@
 import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from './admin';
+import { FilterItem } from './api.ts';
 
 export interface TableAllFilterConfig {
   filterIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -66,6 +67,7 @@ export interface FilterValues {
   productOfInterest: string[];
   meetingBooked?: string;
   userMessagesCount: userMessagesCountFilterValues;
+  presetFilters: FilterItem[];
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
@@ -79,6 +81,7 @@ export const InitialFilterValues: FilterValues = {
     minCount: 0,
     maxCount: 100,
   },
+  presetFilters: [],
 };
 
 export interface AllFilterState {
@@ -90,4 +93,5 @@ export interface AllFilterState {
     value: DateRangeProp | string | string[] | number | userMessagesCountFilterValues | undefined,
   ) => void;
   resetPageFilters: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
+  initializeFilterValues: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE, filters: FilterItem[]) => void;
 }

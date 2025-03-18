@@ -15,21 +15,22 @@ import {
   PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE,
 } from '../utils/constants';
 import {
-  getSortingAppliedValues,
+  collectAppliedFilters,
+  getAllFilterAppliedValues,
   getFormattedColumnsList,
   getMappedDataFromResponseForConversationsTableView,
-  getAllFilterAppliedValues,
-  collectAppliedFilters,
+  getSortingAppliedValues,
 } from '../utils/common';
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { ConversationsPayload } from '@meaku/core/types/admin/api';
-import { ConversationsTableViewContent, ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { ConversationsTableDisplayContent, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
 import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
+import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 
 const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
 
@@ -37,6 +38,8 @@ const ConversationsTableContainer = () => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
+
+  useInitializeFilterPreferences(CONVERSATIONS_PAGE);
 
   const sortState = useSortFilterStore((state) => state.conversations);
   const filterState = useAllFilterStore((state) => state.conversations);

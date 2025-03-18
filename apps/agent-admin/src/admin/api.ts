@@ -1,12 +1,12 @@
 import {
-  VerifyOtpPayload,
-  GenerateOtpPayload,
-  LoginWithEmailPasswordPayload,
-  LeadsPayload,
   ConversationsPayload,
-  GenerateTokens,
-  FilterOptionsPayload,
   ExportFormatType,
+  FilterOptionsPayload,
+  GenerateOtpPayload,
+  GenerateTokens,
+  LeadsPayload,
+  LoginWithEmailPasswordPayload,
+  VerifyOtpPayload,
 } from '@meaku/core/types/admin/api';
 
 import adminApiClient from './client';
@@ -46,3 +46,7 @@ export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/a
 
 export const getConversationDetailsData = (sessionId: string) =>
   adminApiClient.get(`tenant/api/conversations/${sessionId}/?fetch_all=true`);
+
+export const getFilterPreferences = async (tableName: string) => {
+  return adminApiClient.get(`/tenant/api/filter-preferences/?table_name=${tableName}`);
+};
