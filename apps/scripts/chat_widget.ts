@@ -675,7 +675,7 @@
 
             // Wait for iframe to be ready in new container
             const messageHandler = (event: MessageEvent) => {
-              if (event.data.type === "IFRAME_READY") {
+              if (event.data.type === "EMBED_READY") {
                 // Send the message once iframe is ready
                 iframe.contentWindow?.postMessage(
                   {
