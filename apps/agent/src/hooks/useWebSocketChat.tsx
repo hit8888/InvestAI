@@ -21,10 +21,10 @@ const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
 // Default inactivity threshold: 2 minutes (120000 ms) TODO: Move to Agent Config
-const INITIAL_INACTIVITY_THRESHOLD = 30000; // 2 minutes TODO: change back to 2 min
+const INITIAL_INACTIVITY_THRESHOLD = 1500000; // 2 minutes
 const MAX_INACTIVITY_THRESHOLD = 600000; // 10 minutes
 const BACKOFF_FACTOR = 2;
-const MAX_INACTIVITY_ATTEMPTS = 3; // Maximum number of inactivity messages to send
+const MAX_INACTIVITY_ATTEMPTS = 2; // Maximum number of inactivity messages to send
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
@@ -99,7 +99,7 @@ const useWebSocketChat = () => {
     !!sessionId,
   );
 
-  const { startBackoffTimer, resetBackoff, clearTimer } = useExponentialBackoff({
+  const { startBackoffTimer, clearTimer } = useExponentialBackoff({
     initialThreshold: INITIAL_INACTIVITY_THRESHOLD,
     maxThreshold: MAX_INACTIVITY_THRESHOLD,
     backoffFactor: BACKOFF_FACTOR,
@@ -141,9 +141,6 @@ const useWebSocketChat = () => {
 
       const payload = getMessagePayload({ message, response_id, message_type });
 
-      // Reset backoff and attempt counter
-      resetBackoff();
-
       //This is for event messages where the message_type is EVENT
       if ('event_type' in message && 'event_data' in message && !message.content) {
         sendMessage(JSON.stringify(payload));
@@ -164,6 +161,7 @@ const useWebSocketChat = () => {
         setIsAMessageBeingProcessed(true);
         sendMessage(JSON.stringify(payload));
         handleAnimatedOrb(response_id);
+        resetInactivityTimer();
       }
     },
     [readyState, sessionId, isAMessageBeingProcessed],
@@ -175,7 +173,6 @@ const useWebSocketChat = () => {
     try {
       const response = JSON.parse(lastMessage.data) as WebSocketMessage;
       // Reset inactivity timer on incoming message
-      resetInactivityTimer();
 
       if (isMessageAnalyticsEvent(response) && !isAdmin) {
         return;
@@ -233,6 +230,7 @@ const useWebSocketChat = () => {
       setIsAMessageBeingProcessed(true);
       handleAnimatedOrb(updatedPayload.response_id);
       sendMessage(JSON.stringify(updatedPayload));
+      resetInactivityTimer();
     });
 
     messageQueue.current = [];
