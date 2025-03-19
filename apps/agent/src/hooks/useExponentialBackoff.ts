@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 interface ExponentialBackoffOptions {
   initialThreshold: number;
@@ -37,9 +37,8 @@ export const useExponentialBackoff = ({
     };
   }, []);
 
-  const getNextThreshold = useCallback(() => {
-    const backoffTime = initialThreshold * Math.pow(backoffFactor, attemptCountRef.current);
-    return Math.min(backoffTime, maxThreshold);
+  const getNextThreshold = useMemo(() => {
+    return () => Math.min(initialThreshold * Math.pow(backoffFactor, attemptCountRef.current), maxThreshold);
   }, [initialThreshold, maxThreshold, backoffFactor]);
 
   const startBackoffTimer = useCallback(

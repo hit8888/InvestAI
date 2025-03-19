@@ -21,10 +21,10 @@ const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
 // Default inactivity threshold: 2 minutes (120000 ms) TODO: Move to Agent Config
-const INITIAL_INACTIVITY_THRESHOLD = 120000; // 2 minutes
+const INITIAL_INACTIVITY_THRESHOLD = 30000; // 2 minutes TODO: change back to 2 min
 const MAX_INACTIVITY_THRESHOLD = 600000; // 10 minutes
 const BACKOFF_FACTOR = 2;
-const MAX_INACTIVITY_ATTEMPTS = 1; // Maximum number of inactivity messages to send
+const MAX_INACTIVITY_ATTEMPTS = 3; // Maximum number of inactivity messages to send
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
@@ -108,20 +108,16 @@ const useWebSocketChat = () => {
 
   // Function to reset the inactivity timer
   const resetInactivityTimer = useCallback(() => {
-    if (sessionId && readyState === ReadyState.OPEN) {
+    clearTimer();
+    if (sessionId) {
       startBackoffTimer((state) => {
-        // Get current page information
-        const currentPage = window.location.pathname;
-
         // Create and send the USER_INACTIVE event
         const inactivityMessage = {
           content: '',
           event_type: AgentEventType.USER_INACTIVE,
           event_data: {
-            currentPage,
-            inactivityCount: state.attemptCount,
-            nextThreshold: state.nextThreshold,
-            isLastAttempt: state.isLastAttempt,
+            ...state,
+            currentPage: window.location.pathname,
           },
         };
 
@@ -145,14 +141,14 @@ const useWebSocketChat = () => {
 
       const payload = getMessagePayload({ message, response_id, message_type });
 
+      // Reset backoff and attempt counter
+      resetBackoff();
+
       //This is for event messages where the message_type is EVENT
       if ('event_type' in message && 'event_data' in message && !message.content) {
         sendMessage(JSON.stringify(payload));
         return;
       }
-
-      // Reset backoff for non-event messages
-      resetBackoff();
 
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
