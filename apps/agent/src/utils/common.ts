@@ -12,7 +12,7 @@ export const handleColorConfig = (styleConfig: Omit<StyleConfig, 'banner_config'
     .forEach(([key, hexValue]) => {
       const formattedKey = key.replace(/_/g, '-');
 
-      if (!hexValue) return;
+      if (!hexValue || typeof hexValue !== 'string') return;
 
       try {
         const value = hexToRGB(hexValue);
