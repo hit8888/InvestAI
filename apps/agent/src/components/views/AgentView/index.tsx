@@ -11,6 +11,7 @@ import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import AgentInOpenState from './AgentInOpenState.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+
 interface IProps {
   fetchSessionData: () => void;
 }
@@ -22,9 +23,9 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const { getParam, setParam } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
-  const { show_banner } = useConfigurationApiResponseManager().getStyleConfig();
+  const { banner_config } = useConfigurationApiResponseManager().getStyleConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
-  const showBanner = show_banner && !hasFirstUserMessageBeenSent && showBubbles;
+  const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent && showBubbles;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();

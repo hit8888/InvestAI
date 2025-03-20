@@ -30,14 +30,14 @@ const EntryPointBottomBar = ({
 }: IProps) => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
-  const { show_banner } = configurationApiResponseManager.getStyleConfig();
+  const { banner_config } = configurationApiResponseManager.getStyleConfig();
   const orgName = configurationApiResponseManager.getOrgName();
   const agentName = configurationApiResponseManager.getAgentName();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const placeholderText = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
-  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(!show_banner);
+  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(!banner_config?.show_banner);
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -68,7 +68,7 @@ const EntryPointBottomBar = ({
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SHOW_BOTTOM_BAR);
   }, [agentName]);
 
-  const showBanner = show_banner && !hasFirstUserMessageBeenSent;
+  const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent;
 
   const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
   const orbConfig = configurationApiResponseManager.getOrbConfig();
@@ -96,6 +96,8 @@ const EntryPointBottomBar = ({
           showBubbles={showBubbles}
           setShowBubbles={setShowBubbles}
           setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
+          header={banner_config?.header}
+          subheader={banner_config?.subheader}
         />
       ) : null}
       <div className="w-full rounded-2xl bg-gray-50 p-2">

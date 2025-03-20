@@ -618,7 +618,9 @@
       "secondary": "#ffca50",
       "primary_foreground": "#FEFEFE",
       "secondary_foreground": "#000",
-      "show_banner": true
+      "banner_config": {
+        "show_banner": true
+      }
     },
     "whitelisted_domains": []
   }

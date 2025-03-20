@@ -7,10 +7,12 @@ import { motion } from 'framer-motion';
 export type PopupContentProps = {
   agentName: string;
   orgName: string;
+  header: string | undefined | null;
+  subheader: string | undefined | null;
   handleClosePopup?: () => void;
 };
 
-const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProps) => (
+const PopupContent = ({ agentName, orgName, header, subheader, handleClosePopup }: PopupContentProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -27,7 +29,7 @@ const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProp
         <div className="flex flex-col items-start gap-1 pl-12">
           <div className="flex w-full justify-between">
             <p className="flex-1 text-lg font-semibold text-white">
-              Hi! I am {agentName} <span className="absolute animate-wave">👋</span>
+              {header ? header : `Hi! I am ${agentName}`} <span className="absolute animate-wave">👋</span>
             </p>
             <button
               className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground/35"
@@ -37,7 +39,7 @@ const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProp
             </button>
           </div>
           <p className="self-stretch text-sm font-normal text-white">
-            I am an expert on all things {orgName}. How can I help you today?
+            {subheader ? subheader : `I am an expert on all things ${orgName}. How can I help you today?`}
           </p>
         </div>
       </div>

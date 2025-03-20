@@ -9,6 +9,8 @@ interface ContainerProps extends PopupContentProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
   showBubbles: boolean;
   setShowBubbles: (value: boolean) => void;
+  header: string | undefined | null;
+  subheader: string | undefined | null;
 }
 
 const PopupWithBubblesContainer = ({
@@ -17,6 +19,8 @@ const PopupWithBubblesContainer = ({
   setShowOrbAfterBubblesDisappear,
   showBubbles,
   setShowBubbles,
+  header,
+  subheader,
 }: ContainerProps) => {
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -90,7 +94,13 @@ const PopupWithBubblesContainer = ({
 
       <AnimatePresence>
         {showPopupContent && (
-          <PopupContent handleClosePopup={handleClosePopup} agentName={agentName} orgName={orgName} />
+          <PopupContent
+            handleClosePopup={handleClosePopup}
+            agentName={agentName}
+            orgName={orgName}
+            header={header}
+            subheader={subheader}
+          />
         )}
       </AnimatePresence>
     </>

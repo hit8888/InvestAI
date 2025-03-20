@@ -26,6 +26,12 @@ export const ConfigurationBodySchema = z.object({
   cta_config: CTAConfigSchema,
 });
 
+export const BannerConfigSchema = z.object({
+  show_banner: z.boolean().optional(),
+  header: z.string().optional().nullish(),
+  subheader: z.string().optional().nullish(),
+});
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -44,7 +50,7 @@ export const ConfigurationSchema = z.object({
     secondary_foreground: z.string().optional(),
     card: z.string().optional(),
     card_foreground: z.string().optional(),
-    show_banner: z.boolean().optional(),
+    banner_config: BannerConfigSchema.optional().nullish(),
     orb_config: z
       .object({
         show_orb: z.boolean().optional().nullable(),
@@ -58,6 +64,8 @@ export const ConfigurationSchema = z.object({
 export type CTAConfigType = z.infer<typeof CTAConfigSchema>;
 
 export type BottomBarType = z.infer<typeof BottomBarConfigSchema>;
+
+export type BannerConfigType = z.infer<typeof BannerConfigSchema>;
 
 export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
 
