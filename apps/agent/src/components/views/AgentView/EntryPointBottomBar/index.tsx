@@ -12,6 +12,7 @@ import EntryPointChatInput from './EntryPointChatInput.tsx';
 import EntryPointSuggestedQuestions from './EntryPointSuggestedQuestions.tsx';
 import PopupWithBubblesContainer from '../EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import ChatInputSendButton from '@breakout/design-system/components/layout/ChatInputSendButton';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -30,11 +31,14 @@ const EntryPointBottomBar = ({
 }: IProps) => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
-  const { banner_config } = configurationApiResponseManager.getStyleConfig();
+  const { banner_config, shadow_enabled } = configurationApiResponseManager.getStyleConfig();
   const orgName = configurationApiResponseManager.getOrgName();
   const agentName = configurationApiResponseManager.getAgentName();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const placeholderText = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
+
+  const { getParam } = useUrlParams();
+  const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const [inputValue, setInputValue] = useState('');
   const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(!banner_config?.show_banner);
@@ -78,11 +82,12 @@ const EntryPointBottomBar = ({
   return (
     <div
       className={cn(
-        'bottom-bar-shadow absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
+        'absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
         {
           'w-[calc(66.66%+110px)]': !hasFirstUserMessageBeenSent, // for longer placeholder - added extra 120px width
           'w-[400px]': hasFirstUserMessageBeenSent,
           hidden: hideBottomBar,
+          'bottom-bar-shadow': shadow_enabled,
         },
       )}
       style={{
@@ -108,6 +113,7 @@ const EntryPointBottomBar = ({
           <div className="relative flex-1">
             <InputOrb showOrb={showOrb} orbLogoUrl={orbLogoUrl} />
             <EntryPointChatInput
+              shouldInputAutoFocus={isAgentOpen}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               showOrb={showOrb}

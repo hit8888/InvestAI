@@ -58,13 +58,15 @@ export const StreamMessageContentSchema = BaseMessageContentSchema.extend({
 export const ArtifactMessageContentSchema = BaseMessageContentSchema.extend({
   artifact_type: ArtifactEnumSchema,
   artifact_data: ArtifactBaseSchema.extend({
-    content: z.union([
-      SlideArtifactSchema,
-      VideoArtifactSchema,
-      SlideImageArtifactSchema,
-      SuggestionArtifactSchema,
-      FormArtifactSchema,
-    ]),
+    content: z
+      .union([
+        SlideArtifactSchema,
+        VideoArtifactSchema,
+        SlideImageArtifactSchema,
+        SuggestionArtifactSchema,
+        FormArtifactSchema,
+      ])
+      .nullable(),
     metadata: FormArtifactMetadata,
     error: z.string().nullable(),
     error_code: z.string().nullable(),

@@ -12,7 +12,13 @@ import {
 } from '../types/webSocketData';
 import { FormArtifactContent, SuggestionArtifactContent } from '../types';
 
-export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['PRIMARY_GOAL_COMPLETED', 'PRIMARY_GOAL_CTA_CLICKED', 'FORM_FILLED'];
+export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = [
+  'PRIMARY_GOAL_COMPLETED',
+  'PRIMARY_GOAL_CTA_CLICKED',
+  'FORM_FILLED',
+  'HEARTBEAT',
+  'USER_INACTIVE',
+];
 
 export const isStreamMessage = (
   message: WebSocketMessage,

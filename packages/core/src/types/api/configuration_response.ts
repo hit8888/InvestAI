@@ -43,6 +43,7 @@ export const ConfigurationSchema = z.object({
   }),
   body: ConfigurationBodySchema,
   style_config: z.object({
+    shadow_enabled: z.boolean().optional(),
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),
     primary_text: z.string().optional(),

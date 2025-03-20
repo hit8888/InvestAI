@@ -40,13 +40,13 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
-    if (textAreaRef.current && isSubmissionDisabled) {
-      textAreaRef.current.blur();
-    }
+    // if (textAreaRef.current && isSubmissionDisabled) {
+    //   textAreaRef.current.blur();
+    // }
     if (textAreaRef.current && lastMessage && isStreamMessageComplete(lastMessage)) {
       textAreaRef.current.focus();
     }
-  }, [messages.length, textAreaRef, isSubmissionDisabled]);
+  }, [messages.length, textAreaRef]);
 
   return (
     <div className="flex w-full items-center gap-2 overflow-hidden rounded-2xl p-2">
@@ -55,6 +55,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
+            autoFocus
             className="border-1 rounded-xl p-4 pr-16"
             placeholder="Type your message here..."
             value={inputValue}
