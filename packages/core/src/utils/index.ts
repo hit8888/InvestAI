@@ -6,6 +6,8 @@ export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, i
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
 
+export const RGB_PRIMARY_COLOR = 'rgb(var(--primary))';
+
 export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
   localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));
 };

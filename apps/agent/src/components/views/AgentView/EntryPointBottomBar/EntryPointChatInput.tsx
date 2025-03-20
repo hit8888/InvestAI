@@ -1,0 +1,28 @@
+import Input from '@breakout/design-system/components/layout/input';
+import { cn } from '@breakout/design-system/lib/cn';
+import { useTypewriter } from '@breakout/design-system/hooks/useTypewriter';
+
+interface EntryPointChatInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showOrb: boolean;
+  placeholderText: string;
+}
+
+const EntryPointChatInput = ({ value, onChange, showOrb, placeholderText }: EntryPointChatInputProps) => {
+  return (
+    <Input
+      value={value}
+      onChange={onChange}
+      className={cn(
+        'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+        {
+          'pl-14': showOrb,
+        },
+      )}
+      placeholder={useTypewriter(placeholderText)}
+    />
+  );
+};
+
+export default EntryPointChatInput;

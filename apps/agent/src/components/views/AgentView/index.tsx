@@ -1,7 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { useState } from 'react';
 
-import EntryPointBottomBar from './EntryPointBottomBar.tsx';
+import EntryPointBottomBar from './EntryPointBottomBar/index.tsx';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useWebSocketChat from '../../../hooks/useWebSocketChat.tsx';

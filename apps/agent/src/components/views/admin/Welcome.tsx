@@ -1,12 +1,11 @@
-import SendIcon from '@breakout/design-system/components/icons/send';
 import WrappedLogo from '@breakout/design-system/components/icons/wrapped-logo';
-import Button from '@breakout/design-system/components/layout/button';
 import Input from '@breakout/design-system/components/layout/input';
 import { memo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import useAdminUserEmail from '../../../hooks/useAdminUserEmail';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import ChatInputSendButton from '@breakout/design-system/components/layout/ChatInputSendButton';
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
@@ -59,9 +58,12 @@ const Welcome = () => {
             placeholder="Enter your email here"
             type="email"
           />
-          <Button size="icon" disabled={!emailInputValue} onClick={handleEmailSubmission}>
-            <SendIcon className="text-primary-foreground" />
-          </Button>
+          <ChatInputSendButton
+            btnType="submit"
+            showButton={true}
+            disabled={!emailInputValue}
+            onClick={handleEmailSubmission}
+          />
         </form>
       </div>
     </div>

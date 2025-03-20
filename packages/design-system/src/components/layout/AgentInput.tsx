@@ -1,9 +1,8 @@
-import SendIcon from '@breakout/design-system/components/icons/send';
-import Button from '@breakout/design-system/components/layout/button';
 import TextArea from '@breakout/design-system/components/layout/textarea';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessageComplete } from '@meaku/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';
+import ChatInputSendButton from './ChatInputSendButton';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -64,15 +63,12 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
             ref={textAreaRef}
           />
         </div>
-        {!isSubmissionDisabled && (
-          <Button
-            className="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
-            disabled={isSubmissionDisabled}
-            onClick={handleSubmission}
-          >
-            <SendIcon className="text-primary-foreground" />
-          </Button>
-        )}
+        <ChatInputSendButton
+          onClick={handleSubmission}
+          showButton={!isSubmissionDisabled}
+          disabled={isSubmissionDisabled}
+          btnClassName="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
+        />
       </form>
     </div>
   );

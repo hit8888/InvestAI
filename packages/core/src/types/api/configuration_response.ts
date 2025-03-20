@@ -18,6 +18,7 @@ export const ConfigurationBodySchema = z.object({
   welcome_message: z.object({
     message: z.string(),
     suggested_questions: z.array(z.string()),
+    bounce_message: z.boolean(),
   }),
   bottom_bar_config: BottomBarConfigSchema.optional(),
   disclaimer_message: z.string().optional(),

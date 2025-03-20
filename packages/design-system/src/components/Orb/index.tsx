@@ -13,9 +13,7 @@ interface IProps {
 
 const Orb = ({ color, state, style = {}, orbLogoUrl }: IProps) => {
   if (orbLogoUrl) {
-    return (
-      <img src={orbLogoUrl} alt="orb logo" className="h-7 w-8 rounded-full object-cover shadow-md shadow-primary" />
-    );
+    return <img src={orbLogoUrl} alt="orb logo" className="h-8 w-8 rounded-full object-cover" />;
   }
 
   return (

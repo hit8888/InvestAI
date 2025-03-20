@@ -1,6 +1,7 @@
 import PopupCloseIcon from '@breakout/design-system/components/icons/popup-close-icon';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 import { motion } from 'framer-motion';
 
 export type PopupContentProps = {
@@ -21,7 +22,7 @@ const PopupContent = ({ agentName, orgName, handleClosePopup }: PopupContentProp
     <div className="popupGradient-container flex p-4" data-testid="greeting-banner">
       <div className="flex items-center gap-4">
         <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
-          <Orb color="rgb(var(--primary))" state={OrbStatusEnum.waiting} />
+          <Orb color={RGB_PRIMARY_COLOR} state={OrbStatusEnum.waiting} />
         </div>
         <div className="flex flex-col items-start gap-1 pl-12">
           <div className="flex w-full justify-between">

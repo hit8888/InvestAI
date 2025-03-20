@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 
 type IProps = {
   size: number;
@@ -61,7 +62,7 @@ const PopupBubble = ({ size, delay, index, isExiting }: IProps) => {
             height: size,
             zIndex: 10,
           }}
-          color="rgb(var(--primary))"
+          color={RGB_PRIMARY_COLOR}
           state={OrbStatusEnum.waiting}
         />
       </div>
