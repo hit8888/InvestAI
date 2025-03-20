@@ -1,13 +1,8 @@
-// import { getUserEmailFromLocalStorage } from '@meaku/core/utils/index';
-// import useChatAgentScript from '../../hooks/useChatAgentScript';
-// import { getTenantFromLocalStorage } from '../../utils/common';
-
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import useConversationDetailsDataQuery from '../../queries/query/useConversationDetailsDataQuery';
 import ConversationDetailsDataResponseManager from '../../managers/ConversationDetailsDataManager';
 import { useEffect, useMemo } from 'react';
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
-import LogTabDisplayContentShimmer from '../ShimmerComponent/LogTabDisplayContentShimmer';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import { OrbStatusEnum } from '@meaku/core/types/config';
@@ -75,9 +70,7 @@ const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
           'grid grid-cols-3 gap-2': true,
         })}
       >
-        {isLoading ? (
-          <LogTabDisplayContentShimmer />
-        ) : chatHistory?.length && conversation?.session_id ? (
+        {chatHistory?.length && conversation?.session_id ? (
           <AgentMessages
             usingForAgent={true}
             sessionId={conversation?.session_id}

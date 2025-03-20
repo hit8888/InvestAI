@@ -12,7 +12,7 @@ type IProps = {
 };
 
 const ConversationDetailsMultipleTabContainer = ({ isLoading }: IProps) => {
-  const [currentTab, setCurrentTab] = useState(ConversationDetailsTabsValueEnum.LOG_TAB);
+  const [currentTab, setCurrentTab] = useState(ConversationDetailsTabsValueEnum.SUMMARY_TAB);
   const { ProspectAndCompanyDetails } = useConversationDetails();
 
   const handleTabClick = (tabValue: ConversationDetailsTabsValueEnum) => {

@@ -7,6 +7,7 @@ import LogTabIcon from '@breakout/design-system/components/icons/log-tab-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import SummaryTabDisplayContent from './SummaryTabDisplayContent';
 import LogTabDisplayContent from './LogTabDisplayContent';
+import MultipleClickableTabShimmer from '../ShimmerComponent/MultipleClickableTabShimmer';
 // import ActivityTabDisplayContent from './ActivityTabDisplayContent';
 
 type IProps = {
@@ -40,14 +41,14 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
       value: SUMMARY_TAB,
       label: SUMMARY_TAB_LABEL,
       icon: SummaryTabIcon,
-      content: <SummaryTabDisplayContent />,
+      content: <SummaryTabDisplayContent isLoading={isLoading} />,
       isActive: currentTab === SUMMARY_TAB,
     },
     {
       value: LOG_TAB,
       label: LOG_TAB_LABEL,
       icon: LogTabIcon,
-      content: <LogTabDisplayContent isLoading={isLoading} />,
+      content: <LogTabDisplayContent />,
       isActive: currentTab === LOG_TAB,
     },
     // {
@@ -61,25 +62,32 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
 
   return (
     <div className="flex flex-1 flex-col items-start self-stretch border-b border-t border-primary/10 pt-4">
-      <div className="flex items-start self-stretch border-b border-primary/10">
-        {tabs.map(({ value, label, icon: Icon, isActive }) => (
-          <SingleTabDisplay
-            key={value}
-            handleTabClick={() => handleTabClick(value)}
-            tabLabel={label}
-            isTabSelected={isActive}
-            isLoading={isLoading}
-          >
-            <Icon
-              width="16"
-              height="16"
-              className={cn({
-                'text-primary': isActive,
-                'text-primary/60': !isActive,
-              })}
-            />
-          </SingleTabDisplay>
-        ))}
+      <div
+        className={cn('flex items-start self-stretch border-b border-primary/10', {
+          'border-b-0': isLoading,
+        })}
+      >
+        {isLoading ? (
+          <MultipleClickableTabShimmer tabsLength={tabs.length} />
+        ) : (
+          tabs.map(({ value, label, icon: Icon, isActive }) => (
+            <SingleTabDisplay
+              key={value}
+              handleTabClick={() => handleTabClick(value)}
+              tabLabel={label}
+              isTabSelected={isActive}
+            >
+              <Icon
+                width="16"
+                height="16"
+                className={cn({
+                  'text-primary': isActive,
+                  'text-primary/60': !isActive,
+                })}
+              />
+            </SingleTabDisplay>
+          ))
+        )}
       </div>
       {tabs.map(
         ({ content, isActive, value }) =>

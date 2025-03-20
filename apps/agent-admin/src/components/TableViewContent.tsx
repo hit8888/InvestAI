@@ -13,7 +13,7 @@ interface TableContentProps {
   columnHeaderData: ColumnDefinition[];
 }
 
-const DEFAULT_LOADING_ROW_COUNT = 50;
+const DEFAULT_LOADING_ROW_COUNT = 10;
 const DEFAULT_LOADING_COLUMNS_COUNT = 6;
 
 const TableViewContent: React.FC<TableContentProps> = ({

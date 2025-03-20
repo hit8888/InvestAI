@@ -33,11 +33,11 @@ const SingleDetailsWithIconHeaderValue = ({
       </div>
       <div className="flex flex-col items-start gap-1">
         <div className="text-sm font-normal text-gray-500">
-          {isLoading ? <Skeleton className="h-6 w-20" /> : headerLabel}
+          {isLoading ? <Skeleton className="h-3.5 w-28" /> : headerLabel}
         </div>
         <div className="text-base font-medium text-primary/60" title={itemValue}>
           {isLoading ? (
-            <Skeleton className="h-6 w-32" />
+            <Skeleton className="h-3.5 w-28" />
           ) : isTakingFullWidth ? (
             <SessionIDCellValue value={itemValue} isTooltipWithClipboard={false} />
           ) : (

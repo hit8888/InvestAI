@@ -1,4 +1,3 @@
-import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import { cn } from '@breakout/design-system/lib/cn';
 import { JSX } from 'react';
 
@@ -7,10 +6,9 @@ type IProps = {
   tabLabel: string;
   children: JSX.Element;
   handleTabClick: () => void;
-  isLoading: boolean;
 };
 
-const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick, isLoading }: IProps) => {
+const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }: IProps) => {
   return (
     <div
       onClick={handleTabClick}
@@ -28,14 +26,14 @@ const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick, i
             'bg-white': isTabSelected,
           })}
         >
-          {isLoading ? <Skeleton className="h-4 w-4 rounded-lg" /> : children}
+          {children}
         </div>
         <div
           className={cn('text-base font-normal text-gray-500', {
             'font-medium text-primary': isTabSelected,
           })}
         >
-          {isLoading ? <Skeleton className="h-8 w-24 rounded-lg" /> : tabLabel}
+          {tabLabel}
         </div>
       </div>
     </div>

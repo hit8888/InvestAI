@@ -102,9 +102,7 @@ const LeadsTableContainer = () => {
 
   if (isError) return null;
 
-  const hasNoRecords = totalRecords === 0;
-  const showPagination = !isLoading && !hasNoRecords;
-
+  const haveNoRecords = totalRecords === 0;
   const areAllFiltersApplied = allAppliedFilterValues.length === LEADS_PAGE_NUMBER_OF_FILTERS;
 
   return (
@@ -112,8 +110,9 @@ const LeadsTableContainer = () => {
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
           <TableFiltersWithHeaderLabel
+            isLoading={isLoading}
             payloadData={debouncedPayloadData}
-            disabledState={hasNoRecords}
+            disabledState={haveNoRecords}
             key={LEADS_PAGE}
             page={LEADS_PAGE}
           />
@@ -127,18 +126,17 @@ const LeadsTableContainer = () => {
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          {showPagination ? (
-            <TablePagination
-              tableType={LEADS_PAGE}
-              totalPages={totalPages}
-              totalItems={pageSize === 0 ? pageSize : totalRecords}
-              itemsPerPage={itemsPerPage}
-              onItemsPerPageChange={handleItemsPerPageChange}
-              handlePageChange={handlePageChange}
-              currentPage={currentPage}
-              paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE}
-            />
-          ) : null}
+          <TablePagination
+            isLoading={isLoading}
+            tableType={LEADS_PAGE}
+            totalPages={totalPages}
+            totalItems={pageSize === 0 ? pageSize : totalRecords}
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            handlePageChange={handlePageChange}
+            currentPage={currentPage}
+            paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE}
+          />
         </div>
       </div>
     </div>

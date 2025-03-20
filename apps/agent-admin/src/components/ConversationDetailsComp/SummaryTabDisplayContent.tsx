@@ -1,9 +1,17 @@
+import SummaryTabDisplayContentShimmer from '../ShimmerComponent/SummaryTabDisplayContentShimmer';
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import { generateConversationSummaryContent } from '../../utils/common';
 import SummaryTabContentItem from './SummaryTabContentItem';
 
-const SummaryTabDisplayContent = () => {
+type IProps = {
+  isLoading: boolean;
+};
+
+const SummaryTabDisplayContent = ({ isLoading }: IProps) => {
   const { conversation, chatHistory } = useConversationDetails();
+  if (isLoading) {
+    return <SummaryTabDisplayContentShimmer />;
+  }
   if (!conversation)
     return (
       <p className="gradient-text h-screen w-full pt-10 text-center text-4xl font-normal text-gray-500">

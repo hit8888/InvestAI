@@ -2,21 +2,14 @@ import { useConversationDetails } from '../../context/ConversationDetailsContext
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
-import LogTabDisplayContentShimmer from '../ShimmerComponent/LogTabDisplayContentShimmer';
 
-type IProps = {
-  isLoading: boolean;
-};
-
-const LogTabDisplayContent = ({ isLoading }: IProps) => {
+const LogTabDisplayContent = () => {
   const { chatHistory, conversation, feedbackData } = useConversationDetails();
   const logoURL = getTenantIdentifier()?.['logo'];
 
   return (
     <div className="flex max-h-[900px] w-full flex-col bg-gray-25">
-      {isLoading ? (
-        <LogTabDisplayContentShimmer />
-      ) : chatHistory?.length && conversation?.session_id ? (
+      {chatHistory?.length && conversation?.session_id ? (
         <AgentMessages
           usingForAgent={false}
           sessionId={conversation?.session_id}

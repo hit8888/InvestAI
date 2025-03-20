@@ -105,9 +105,7 @@ const ConversationsTableContainer = () => {
 
   if (isError) return null;
 
-  const hasNoRecords = totalRecords === 0;
-  const showPagination = !isLoading && !hasNoRecords;
-
+  const haveNoRecords = totalRecords === 0;
   const areAllFiltersApplied = allAppliedFilterValues.length === CONVERSATIONS_PAGE_NUMBER_OF_FILTERS;
 
   return (
@@ -115,8 +113,9 @@ const ConversationsTableContainer = () => {
       <div className="flex flex-col items-start gap-4 self-stretch">
         <div className="flex flex-col items-start self-stretch bg-white">
           <TableFiltersWithHeaderLabel
+            isLoading={isLoading}
             payloadData={debouncedPayloadData}
-            disabledState={hasNoRecords}
+            disabledState={haveNoRecords}
             key={CONVERSATIONS_PAGE}
             page={CONVERSATIONS_PAGE}
           />
@@ -131,18 +130,17 @@ const ConversationsTableContainer = () => {
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
-          {showPagination ? (
-            <TablePagination
-              tableType={CONVERSATIONS_PAGE}
-              paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE}
-              totalPages={totalPages}
-              totalItems={pageSize === 0 ? pageSize : totalRecords}
-              itemsPerPage={itemsPerPage}
-              onItemsPerPageChange={handleItemsPerPageChange}
-              handlePageChange={handlePageChange}
-              currentPage={currentPage}
-            />
-          ) : null}
+          <TablePagination
+            isLoading={isLoading}
+            tableType={CONVERSATIONS_PAGE}
+            paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE}
+            totalPages={totalPages}
+            totalItems={pageSize === 0 ? pageSize : totalRecords}
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            handlePageChange={handlePageChange}
+            currentPage={currentPage}
+          />
         </div>
       </div>
     </div>

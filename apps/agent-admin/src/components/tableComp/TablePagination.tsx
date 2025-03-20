@@ -6,9 +6,11 @@ import NavigationArrowButton from './NavigationArrowButton';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { PageType } from '@meaku/core/types/admin/sort';
+import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
 
 interface PaginationProps {
   tableType: PageType;
+  isLoading: boolean;
   paginationPerPageOptions: string[];
   totalItems: number; // Total number of items
   totalPages: number; // Total number of pages
@@ -20,6 +22,7 @@ interface PaginationProps {
 
 const TablePagination: React.FC<PaginationProps> = ({
   tableType,
+  isLoading,
   paginationPerPageOptions,
   totalItems,
   totalPages,
@@ -40,6 +43,10 @@ const TablePagination: React.FC<PaginationProps> = ({
 
   const isFirstPage = currentPage === 1;
   const isLastPage = totalPages === 0 || currentPage === totalPages;
+
+  if (isLoading) {
+    return <TablePaginationShimmer />;
+  }
 
   return (
     <div className="flex items-center justify-end gap-4">
