@@ -1,13 +1,13 @@
 import { trackError } from '../../../utils/error';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useCallback, useEffect, useRef } from 'react';
 import useUpdateSession from '@meaku/core/queries/mutation/useUpdateSession';
-import { AgentParams } from '@meaku/core/types/config';
-import { UpdateSessionDataPayloadSchema } from '@meaku/core/types/api/session_update_request';
+import { UpdateSessionDataPayload, UpdateSessionDataPayloadSchema } from '@meaku/core/types/api/session_update_request';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 
 const useUpdateSessionOnSessionInit = () => {
-  const { agentId = '' } = useParams<AgentParams>();
+  const hasUpdatedSession = useRef(false);
+  const pendingPayload = useRef<null | UpdateSessionDataPayload>(null);
 
   const manager = useSessionApiResponseManager();
 
@@ -23,15 +23,40 @@ const useUpdateSessionOnSessionInit = () => {
     },
   });
 
+  // Effect to send mutation when sessionId becomes available
   useEffect(() => {
-    const handleMessagePassing = async (event: MessageEvent) => {
+    const sendPendingUpdate = async () => {
+      if (hasUpdatedSession.current || !sessionId || !pendingPayload.current) return;
+
+      hasUpdatedSession.current = true;
+      await handleMutateSession({
+        sessionId,
+        payload: pendingPayload.current,
+      });
+
+      // Clear the pending payload after successful mutation
+      pendingPayload.current = null;
+    };
+
+    sendPendingUpdate();
+  }, [sessionId, handleMutateSession]);
+
+  const handleMessagePassing = useCallback(
+    async (event: MessageEvent) => {
       const type = event.data?.type;
 
       if (type !== 'INIT') return;
 
+      // Prevent multiple updates
+      if (hasUpdatedSession.current) return;
+
       const payload = event.data.payload;
 
-      const validatedPayload = UpdateSessionDataPayloadSchema.safeParse(payload);
+      const validatedPayload = UpdateSessionDataPayloadSchema.safeParse({
+        query_params: payload?.utmParams,
+        referrer: payload?.http_referrer,
+        parent_url: payload?.url,
+      });
 
       if (!validatedPayload.success) {
         trackError(validatedPayload.error, {
@@ -41,25 +66,20 @@ const useUpdateSessionOnSessionInit = () => {
         return;
       }
 
-      try {
-        window.top?.postMessage({ type: 'CHAT_READY' }, '*');
-      } catch (error) {
-        trackError(error, {
-          action: 'handleMessagePassing | postMessage',
-          component: 'Chat',
-          sessionId,
-        });
+      // Store the validated payload
+      pendingPayload.current = validatedPayload.data;
+
+      // Only send mutation if sessionId is available
+      if (sessionId) {
+        hasUpdatedSession.current = true;
+        await handleMutateSession({ sessionId, payload: validatedPayload.data });
+        pendingPayload.current = null;
       }
+    },
+    [handleMutateSession, sessionId],
+  );
 
-      await handleMutateSession({ sessionId, agentId, payload: validatedPayload.data });
-    };
-
-    window.addEventListener('message', handleMessagePassing);
-
-    return () => {
-      window.removeEventListener('message', handleMessagePassing);
-    };
-  }, [agentId, handleMutateSession, sessionId]);
+  useAppEventsHook(handleMessagePassing);
 };
 
 export { useUpdateSessionOnSessionInit };

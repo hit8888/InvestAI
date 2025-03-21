@@ -14,8 +14,8 @@ export const getConfig = (agentId: string, payload: ConfigPayload) =>
 export const initializeSession = (agentId: string, payload: InitializationPayload) =>
   apiClient.post(`/tenant/chat/agent/${agentId}/session/init/`, payload);
 
-export const updateSession = (sessionId: string, agentId: string, payload: UpdateSessionDataPayload) =>
-  apiClient.put(`/tenant/chat/${agentId}/session/${sessionId}/update/`, payload);
+export const updateSession = (sessionId: string, payload: UpdateSessionDataPayload) =>
+  apiClient.post(`/tenant/chat/session/${sessionId}/update/`, payload);
 
 export const postResponseFeedback = (sessionId: string, payload: FeedbackRequestPayload) =>
   apiClient.post(`/tenant/chat/session/${sessionId}/feedback/`, payload);

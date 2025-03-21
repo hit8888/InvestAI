@@ -7,6 +7,7 @@ import { CDN_URL_FOR_ASSETS } from '../../constants/chat';
 import { Toaster } from 'react-hot-toast';
 import AgentView from '../../components/views/AgentView';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import { useUpdateSessionOnSessionInit } from '../shared/hooks/useUpdateSessionOnSessionInit';
 
 const Agent = () => {
   const { getParam } = useUrlParams();
@@ -16,6 +17,9 @@ const Agent = () => {
   const sessionId = sessionApiResponseManager?.getSessionId();
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
   const isShowingBGCover = getParam('bc') === 'true' || getParam('showBackgroundCover') === 'true';
+
+  // Initialize the session update hook
+  useUpdateSessionOnSessionInit();
 
   const handleOnFirstMessageSend = () => {
     if (sessionId) return;

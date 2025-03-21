@@ -1,9 +1,8 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { updateSession } from "../../http/api";
-import { UpdateSessionDataPayload } from "../../types/api/session_update_request";
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { updateSession } from '../../http/api';
+import { UpdateSessionDataPayload } from '../../types/api/session_update_request';
 
-type ResponseFeedbackResult =
-  ReturnType<typeof updateSession> extends Promise<infer T> ? T : never;
+type ResponseFeedbackResult = ReturnType<typeof updateSession> extends Promise<infer T> ? T : never;
 
 type ResponseFeedbackVariables = {
   sessionId: string;
@@ -11,27 +10,12 @@ type ResponseFeedbackVariables = {
 };
 
 const useUpdateSession = (
-  options?: Omit<
-    UseMutationOptions<
-      ResponseFeedbackResult,
-      Error,
-      ResponseFeedbackVariables
-    >,
-    "mutationFn"
-  >
+  options?: Omit<UseMutationOptions<ResponseFeedbackResult, Error, ResponseFeedbackVariables>, 'mutationFn'>,
 ) => {
   const mutation = useMutation({
-    mutationKey: ["update-session-data"],
-    mutationFn: async ({
-      agentId,
-      sessionId,
-      payload,
-    }: {
-      agentId: string;
-      sessionId: string;
-      payload: UpdateSessionDataPayload;
-    }) => {
-      const response = await updateSession(sessionId, agentId, payload);
+    mutationKey: ['update-session-data'],
+    mutationFn: async ({ sessionId, payload }: { sessionId: string; payload: UpdateSessionDataPayload }) => {
+      const response = await updateSession(sessionId, payload);
 
       return response.data;
     },
