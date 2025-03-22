@@ -290,6 +290,23 @@ export const isAIMessageRespondingToUserMessageWithNotMuchContext = (message: We
   return true;
 };
 
+export const isFormDataFilled = (
+  formFields: FormArtifactContent['form_fields'],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filledData: Record<string, any> | undefined,
+) => {
+  if (!filledData) return false;
+
+  return formFields.every((field) => {
+    // Only check required fields
+    if (!field.is_required) return true;
+
+    const value = filledData[field.field_name];
+    // Check if the value exists and is not null/empty string
+    return value !== null && value !== undefined && value !== '';
+  });
+};
+
 export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
   return messagesWithSameResponseId.find(
     (

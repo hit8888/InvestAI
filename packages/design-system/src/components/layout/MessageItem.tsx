@@ -30,6 +30,7 @@ import {
   hasStreamMessageForForm,
   isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
+  isFormDataFilled,
 } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
@@ -152,7 +153,12 @@ const MessageItem = ({
   ) => {
     const formMetadata = isFormArtifact
       ? {
-          is_filled: message.message.artifact_data.metadata?.filled_data ? true : hasFormFilledMessage,
+          is_filled:
+            hasFormFilledMessage ||
+            isFormDataFilled(
+              (message.message.artifact_data.content as FormArtifactContent).form_fields,
+              message.message.artifact_data.metadata.filled_data,
+            ),
           filled_data: hasFormFilledMessage
             ? formFilledMessage.message.event_data.form_data
             : message.message.artifact_data.metadata?.filled_data,
