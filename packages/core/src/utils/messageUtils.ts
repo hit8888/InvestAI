@@ -52,6 +52,7 @@ export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => 
     message.message_type === 'STREAM' ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
+    (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||
     message.message_type === 'LOADING_TEXT'
   );
 };

@@ -4,22 +4,22 @@ import CardHeader from '@breakout/design-system/components/layout/card-header';
 import CardTitle from './card-title';
 import CardDescription from './card-description';
 import DemoFormThankYouTickIcon from '../icons/demoform-thankyou-tick-icon';
-import { PencilIcon } from 'lucide-react';
-import Button from './button';
+// import { PencilIcon } from 'lucide-react';
+// import Button from './button';
 import { FormArtifactContent } from '@meaku/core/types/artifact';
 
 type FormFilledThankYouContentProps = {
   artifact: FormArtifactContent;
   formValues: Record<string, string>;
-  handleEdit: () => void;
-  isformDisabled?: boolean;
+  // handleEdit: () => void;
+  // isformDisabled?: boolean;
 };
 
 const FormFilledThankYouContent = ({
   artifact,
   formValues,
-  handleEdit,
-  isformDisabled,
+  // handleEdit,
+  // isformDisabled,
 }: FormFilledThankYouContentProps) => {
   return (
     <Card className="max-w-96 rounded-2xl border-none bg-primary/10">
@@ -47,7 +47,7 @@ const FormFilledThankYouContent = ({
               </div>
             ))}
           </div>
-          <Button
+          {/* <Button
             onClick={handleEdit}
             size="md"
             disabled={isformDisabled}
@@ -55,7 +55,7 @@ const FormFilledThankYouContent = ({
           >
             Edit
             <PencilIcon className="h-4 w-4 text-primary" />
-          </Button>
+          </Button> */}
         </div>
       </CardContent>
     </Card>

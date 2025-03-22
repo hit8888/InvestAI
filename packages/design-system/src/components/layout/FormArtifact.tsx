@@ -77,17 +77,17 @@ const FormArtifact = ({
     };
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: response_data },
-      message_type: 'EVENT',
+      message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
     });
     setSubmitted(true);
     setIsEditing(false); // Reset editing state after submit
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });
   }
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setSubmitted(false);
-  };
+  // const handleEdit = () => {
+  //   setIsEditing(true);
+  //   setSubmitted(false);
+  // };
 
   // Watch all form fields
   const formValues = form.watch();
@@ -110,8 +110,8 @@ const FormArtifact = ({
       <FormFilledThankYouContent
         artifact={artifact}
         formValues={formValues}
-        handleEdit={handleEdit}
-        isformDisabled={isformDisabled}
+        // handleEdit={handleEdit}
+        // isformDisabled={isformDisabled}
       />
     );
   }

@@ -144,13 +144,13 @@ const MessageItem = ({
     message: WebSocketMessage & { message: ArtifactMessageContent },
     isFormArtifact: boolean = false,
   ) => {
-    const formMetadata = isFormArtifact &&
-      hasFormFilledMessage &&
-      formFilledMessage.message.event_data &&
-      !usingForAgent && {
-        is_filled: hasFormFilledMessage,
-        filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
-      };
+    const formMetadata =
+      isFormArtifact && hasFormFilledMessage && formFilledMessage.message.event_data
+        ? {
+            is_filled: hasFormFilledMessage,
+            filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
+          }
+        : {};
 
     return (
       <ChatArtifact
@@ -168,7 +168,7 @@ const MessageItem = ({
           error_code: message.message.artifact_data.error_code,
         }}
         handleSendUserMessage={handleSendUserMessage}
-        isformDisabled={!usingForAgent && isFormArtifact}
+        isformDisabled={isFormArtifact && hasFormFilledMessage}
       />
     );
   };

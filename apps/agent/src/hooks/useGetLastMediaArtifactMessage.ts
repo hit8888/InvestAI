@@ -10,8 +10,8 @@ const useGetLastMediaArtifactMessage = () => {
     (message: WebSocketMessage) => message.response_id === latestResponseId,
   );
 
-  // Find the last supported artifact message in the current response sequence
-  const lastArtifactMessage = currentResponseIdMessages
+  // Find the last supported artifact message in the whole message history
+  const lastArtifactMessage = messages
     .filter(
       (message: WebSocketMessage) =>
         message.message_type === 'ARTIFACT' &&

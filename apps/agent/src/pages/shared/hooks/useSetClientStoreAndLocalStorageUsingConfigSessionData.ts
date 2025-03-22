@@ -57,7 +57,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      if (isAdmin) {
+      if (isAdmin && messages.length === 1) {
         return;
       }
       // The messages lenngth will be always 1 for demo and non demo path

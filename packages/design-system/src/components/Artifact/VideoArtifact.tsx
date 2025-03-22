@@ -31,6 +31,14 @@ const VideoArtifact = ({
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleVideoOnEnd = () => {
+    // Add checks to ensure video has actually ended
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+    // Check if we're actually at the end of the video
+    // Adding small buffer (0.1s) to account for floating point precision
+    if (Math.abs(video.currentTime - video.duration) > 0.1) return;
+
     const payload = {
       artifact_type: ArtifactEnum.VIDEO,
       artifact_id: artifactId,
@@ -39,6 +47,7 @@ const VideoArtifact = ({
       message: { content: '', event_type: 'ARTIFACT_CONSUMED', event_data: payload },
       message_type: 'ARTIFACT',
     });
+    setIsPlaying(false);
     setIsArtifactPlaying(false);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };
@@ -77,7 +86,7 @@ const VideoArtifact = ({
         videoElement.removeEventListener('ended', handleVideoOnEnd);
       };
     }
-  }, []);
+  }, [handleVideoOnEnd]);
 
   if (!videoUrl) return null;
 
@@ -85,7 +94,7 @@ const VideoArtifact = ({
     <div
       className={cn('group relative', {
         'h-full w-full': !isMediaTakingFullWidth,
-        'h-screen w-auto': isMediaTakingFullWidth,
+        'h-full w-auto': isMediaTakingFullWidth,
       })}
     >
       <video
@@ -115,6 +124,7 @@ const VideoArtifact = ({
 
       <ArtifactControls
         isPlaying={isPlaying}
+        isMediaTakingFullWidth={isMediaTakingFullWidth}
         handlePause={handlePlayPauseVideo}
         handleRestart={handleRestartVideo}
         handleToggleFullScreen={handleToggleFullScreen}
