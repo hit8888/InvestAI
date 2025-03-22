@@ -27,6 +27,8 @@ import {
   getFormArtifactMessage,
   getFormFilledEvent,
   getSuggestionsArtifactMessage,
+  hasStreamMessageForForm,
+  isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
 } from '@meaku/core/utils/messageUtils';
 
@@ -69,15 +71,19 @@ const MessageItem = ({
   lastMessageResponseId,
   orbLogoUrl,
 }: IProps) => {
+  // TODO: NEED TO REFACTOR THIS COMPONENT into Multiple Components - FOLLOW SINGLE RESPONSIBILITY PRINCIPLE
   const { isInView, ref: inViewRef } = useInView(0, true);
   const isAiMessage = message.role === 'ai';
   const isTextMessage = isDisplayedAsTextMessage(message);
   const isArtifactMessage = checkIsArtifactMessage(message);
   const isSalesResponseMessage = checkIsMainResponseMessage(message);
-  const isDiscoveryMessage = checkIsDiscoveryMessage(message);
 
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
+
+  const discoveryMessage = messagesWithSameResponseId.find((msg) => checkIsDiscoveryMessage(msg));
+
+  const isDiscoveryMessage = !!discoveryMessage;
 
   const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
   const isAnalyticsEvent = !!analyticsEvent;
@@ -98,7 +104,7 @@ const MessageItem = ({
 
   const shouldShowActiveOrb =
     lastMessageResponseId === message.response_id &&
-    (isSalesResponseMessage || isDiscoveryMessage || isLoading || message.message_type === 'LOADING_TEXT');
+    (isSalesResponseMessage || isLoading || message.message_type === 'LOADING_TEXT');
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
@@ -144,13 +150,14 @@ const MessageItem = ({
     message: WebSocketMessage & { message: ArtifactMessageContent },
     isFormArtifact: boolean = false,
   ) => {
-    const formMetadata =
-      isFormArtifact && hasFormFilledMessage && formFilledMessage.message.event_data
-        ? {
-            is_filled: hasFormFilledMessage,
-            filled_data: hasFormFilledMessage ? formFilledMessage.message.event_data.form_data : undefined,
-          }
-        : {};
+    const formMetadata = isFormArtifact
+      ? {
+          is_filled: message.message.artifact_data.metadata?.filled_data ? true : hasFormFilledMessage,
+          filled_data: hasFormFilledMessage
+            ? formFilledMessage.message.event_data.form_data
+            : message.message.artifact_data.metadata?.filled_data,
+        }
+      : {};
 
     return (
       <ChatArtifact
@@ -168,18 +175,49 @@ const MessageItem = ({
           error_code: message.message.artifact_data.error_code,
         }}
         handleSendUserMessage={handleSendUserMessage}
-        isformDisabled={isFormArtifact && hasFormFilledMessage}
+        isformDisabled={isFormArtifact && formMetadata.is_filled}
       />
     );
   };
 
   const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
+  const isAIRespondingWithNotMuchContext = isAIMessageRespondingToUserMessageWithNotMuchContext(message);
+  const isStreamMessageForForm = formArtifactMessage ? hasStreamMessageForForm(message, formArtifactMessage) : false;
+
+  const getMinHeight = () => {
+    if (!isAiMessage || !isLastQuestionResponse) return 'auto';
+    return isAIRespondingWithNotMuchContext || isStreamMessageForForm
+      ? 'calc(-800px + 100dvh)'
+      : 'calc(-400px + 100dvh)';
+  };
+
+  // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
+  const shouldShowTextMessage =
+    isTextMessage && message.message.content !== '' && (isDiscoveryMessage ? isSalesResponseComplete : true);
+
+  // To show the feedback section, the message must be an AI message, the feedback must be allowed, and the message must be a text message
+  const shouldShowFeedbackSection = isAiMessage && allowFeedback && isTextMessage;
+
+  // To show the analytics section, the event must be an analytics event, and the message must not be a discovery message
+  const shouldShowAnalytics = isAnalyticsEvent && !isDiscoveryMessage;
+
+  const hasSalesResponseCompleteAndIsArtifactMessage = isSalesResponseComplete && isArtifactMessage;
+  // For Current Message - To show the form artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be a form
+  const shouldShowFormArtifact =
+    hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'FORM';
+
+  // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
+  const shouldShowSuggestions =
+    hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'SUGGESTIONS';
+
+  // To show the suggestions artifact for admin, the suggestions artifact message must exist, and the message must not be a discovery message
+  const shouldShowSuggestionsForAdmin = suggestionsArtifactMessage && !isDiscoveryMessage;
 
   return (
     <MessageItemErrorBoundary messageId={message.response_id}>
-      <div ref={inViewRef}>
+      <div ref={inViewRef} style={{ minHeight: getMinHeight() }}>
         {/* Text Message */}
-        {isTextMessage && message.message.content !== '' && (isDiscoveryMessage ? isSalesResponseComplete : true) && (
+        {shouldShowTextMessage && (
           <TextMessage
             message={message}
             isAiMessage={isAiMessage}
@@ -192,7 +230,7 @@ const MessageItem = ({
           />
         )}
 
-        {isAiMessage && allowFeedback && isTextMessage && (
+        {shouldShowFeedbackSection && (
           <div className="pl-11">
             <MessageDataSources dataSources={message.documents ?? []} />
             {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
@@ -205,7 +243,7 @@ const MessageItem = ({
                 onRemoveFeedback={handleRemoveFeedback}
               />
             )}
-            {isAnalyticsEvent && !isDiscoveryMessage && (
+            {shouldShowAnalytics && (
               <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
             )}
           </div>
@@ -216,14 +254,14 @@ const MessageItem = ({
             {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
             {/* Form Artifact */}
-            {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'FORM' && (
+            {shouldShowFormArtifact && (
               <div className="flex flex-col items-start pl-11">
                 {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent }, true)}
               </div>
             )}
 
             {/* Show suggestion artifacts - store handles filtering */}
-            {isSalesResponseComplete && isArtifactMessage && message.message.artifact_type === 'SUGGESTIONS' && (
+            {shouldShowSuggestions && (
               <div className="ml-auto mt-3">
                 {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent })}
               </div>
@@ -233,9 +271,7 @@ const MessageItem = ({
 
         {showingContentForAdmin ? (
           <>
-            {suggestionsArtifactMessage && !isDiscoveryMessage && (
-              <>{getMessageArtifactPreviewContent(suggestionsArtifactMessage)}</>
-            )}
+            {shouldShowSuggestionsForAdmin && <>{getMessageArtifactPreviewContent(suggestionsArtifactMessage)}</>}
 
             {/* Form Artifact */}
             {hasFormArtifactMessage && (

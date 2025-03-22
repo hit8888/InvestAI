@@ -12,13 +12,7 @@ import {
 } from '../types/webSocketData';
 import { FormArtifactContent, SuggestionArtifactContent } from '../types';
 
-export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = [
-  'PRIMARY_GOAL_COMPLETED',
-  'PRIMARY_GOAL_CTA_CLICKED',
-  'FORM_FILLED',
-  'HEARTBEAT',
-  'USER_INACTIVE',
-];
+export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['FORM_FILLED', 'HEARTBEAT', 'USER_INACTIVE'];
 
 export const isStreamMessage = (
   message: WebSocketMessage,
@@ -232,6 +226,70 @@ export const getSuggestionsArtifactMessage = (messagesWithSameResponseId: WebSoc
   );
 };
 
+const isAIMessage = (message: WebSocketMessage): boolean => {
+  return message.role === 'ai';
+};
+
+// Check if the messages have the same session_id and response_id
+export const hasMessagesMatchingIds = (msg1: WebSocketMessage, msg2: WebSocketMessage): boolean => {
+  return msg1.session_id === msg2.session_id && msg1.response_id === msg2.response_id;
+};
+
+// Check if the artifact message is a form
+export const isFormArtifact = (message: WebSocketMessage): boolean => {
+  return (
+    checkIsArtifactMessage(message) &&
+    'artifact_data' in message.message &&
+    message.message.artifact_data?.artifact_type === 'FORM' &&
+    !!message.message.artifact_data?.artifact_id
+  );
+};
+
+// Check if the stream message is for a form
+export const hasStreamMessageForForm = (
+  streamMessage: WebSocketMessage,
+  artifactMessage: WebSocketMessage,
+): artifactMessage is WebSocketMessage & { message: ArtifactMessageContent } => {
+  return (
+    hasMessagesMatchingIds(streamMessage, artifactMessage) &&
+    isAIMessage(streamMessage) &&
+    isStreamMessage(streamMessage) &&
+    isAIMessage(artifactMessage) &&
+    isFormArtifact(artifactMessage)
+  );
+};
+
+// This Function checks if AI is responding to a user message having NOT MUCH CONTEXT ABOUT the asked question
+// AI Message responds with - "Great question!" (strict match) - which I am using for defining the min-height of the container
+export const isAIMessageRespondingToUserMessageWithNotMuchContext = (message: WebSocketMessage) => {
+  const requiredKeys = [
+    'session_id',
+    'response_id',
+    'role',
+    'actor',
+    'message_type',
+    'message',
+    'documents',
+    'timestamp',
+  ];
+  if (!requiredKeys.every((key) => key in message)) return false;
+
+  // Validate role, actor, and message_type
+  if (!isAIMessage(message) || message.actor !== 'SALES' || !isStreamMessage(message)) {
+    return false;
+  }
+
+  // Validate message content
+  const content = message.message?.content;
+  if (!content || typeof content !== 'string') return false;
+
+  // Case-insensitive check for "Great question" (strict match)
+  const pattern = /\bgreat\s+question\b/i;
+  if (!pattern.test(content)) return false;
+
+  return true;
+};
+
 export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
   return messagesWithSameResponseId.find(
     (
@@ -240,17 +298,24 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
       message: ArtifactMessageContent & {
         artifact_data: FormArtifactContent;
       };
-    } => checkIsArtifactMessage(msg) && msg.message.artifact_type === 'FORM' && 'artifact_data' in msg.message,
+    } => isFormArtifact(msg),
   );
 };
 
-export const shouldMessageScrollToTop = (message: WebSocketMessage) => {
-  if (
+// User sends a message from Input
+const isUserTextMessage = (message: WebSocketMessage): boolean => {
+  return message.role === 'user' && 'message_type' in message && message.message_type === 'TEXT';
+};
+
+// User clicks on a suggestion or slide item
+const isUserEventMessage = (message: WebSocketMessage): boolean => {
+  return (
     message.role === 'user' &&
     'event_type' in message.message &&
     !USER_EVENTS_NOT_FOR_SCROLL_TO_TOP.includes(message.message.event_type)
-  ) {
-    return true;
-  }
-  return false;
+  );
+};
+
+export const shouldMessageScrollToTop = (message: WebSocketMessage): boolean => {
+  return isUserTextMessage(message) || isUserEventMessage(message);
 };

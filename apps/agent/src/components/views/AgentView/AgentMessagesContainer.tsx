@@ -24,6 +24,7 @@ const AgentMessagesContainer = ({
   const orbState = useMessageStore((state) => state.orbState);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
 
@@ -51,6 +52,7 @@ const AgentMessagesContainer = ({
       orbState={orbState}
       messages={messages}
       showRightPanel={hasArtifactOrDemoInMessageHistory}
+      hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
       isAMessageBeingProcessed={isAMessageBeingProcessed}
       setActiveArtifact={setActiveArtifact}
       setDemoPlayingStatus={setDemoPlayingStatus}

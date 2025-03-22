@@ -15,6 +15,7 @@ interface IProps {
   sessionId: string;
   orbState: OrbStatusEnum;
   showRightPanel?: boolean;
+  hasFirstUserMessageBeenSent?: boolean;
   isAMessageBeingProcessed: boolean;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
@@ -37,6 +38,7 @@ const AgentMessages = ({
   orbState,
   showRightPanel = false,
   isAMessageBeingProcessed,
+  hasFirstUserMessageBeenSent,
   setDemoPlayingStatus,
   setActiveArtifact,
   handleSendUserMessage,
@@ -59,20 +61,23 @@ const AgentMessages = ({
       const lastUserMessage = currentMessageScrollToTop.current;
 
       if (lastUserMessage) {
-        // Get the offset of the last user message relative to the container
-        const containerTop = container.offsetTop;
-        const messageTop = lastUserMessage.offsetTop;
-        // Scroll the container
-        container.scrollTop = messageTop - containerTop;
+        // Add a small delay to ensure content is rendered
+        requestAnimationFrame(() => {
+          // Get the offset of the last user message relative to the container
+          const containerTop = container.offsetTop;
+          const messageTop = lastUserMessage.offsetTop;
+          // Scroll the container
+          container.scrollTop = messageTop - containerTop;
+        });
       }
     }
   };
 
   useEffect(() => {
-    if (usingForAgent) {
+    if (currentMessageScrollToTop.current && usingForAgent) {
       handleScrollToBottom();
     }
-  }, [messages, usingForAgent]);
+  }, [currentMessageScrollToTop.current, usingForAgent, messages.length]);
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
 
@@ -119,7 +124,7 @@ const AgentMessages = ({
               </div>
             );
           })}
-          {aiMessages.length <= 1 && (
+          {aiMessages.length <= 1 && !hasFirstUserMessageBeenSent && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
                 suggestedQuestionOrientation="right"
