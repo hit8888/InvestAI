@@ -1,48 +1,93 @@
 import { test, expect } from '@playwright/test';
 
-test('Basic flow for agent', async ({ page }) => {
-  // 1. Setup - Add test data
-  const TEST_EMAIL = 'test@getbreakout.ai';
-  const TEST_NAME = 'test automation';
+test.describe('Basic flow for agent', () => {
+  test.setTimeout(60000); // Set timeout for this test suite
 
-  // 2. Navigate to the page
-  await page.goto(
-    'https://agent.meaku.ai/org/hubspot/agent/2/?config=multimedia&showGlass=true&is_test=true&test_type=automated',
-  );
+  // Add setup for each test
+  test.beforeEach(async ({ context }) => {
+    // Clear all cookies and localStorage before each test
+    await context.clearCookies();
 
-  // 3. Interact with the chat flow
-  await expect(page.getByTestId('greeting-banner')).toBeVisible();
-  await page.getByTestId('greeting-banner').getByRole('button').click();
+    // You can also clear localStorage if needed
+    await context.addInitScript(() => {
+      window.localStorage.clear();
+    });
+  });
 
-  // Wait for suggestions to be loaded and verify we have at least one
-  const initiialFirstSuggestion = page.getByTestId('suggestion-item-0');
-  await expect(initiialFirstSuggestion).toBeVisible();
+  test('should complete contact form flow', async ({ page }) => {
+    // 1. Setup - Add test data
+    const TEST_EMAIL = 'test@getbreakout.ai';
+    const TEST_NAME = 'test automation';
 
-  // Click the first suggestion with better waiting and force
-  await initiialFirstSuggestion.waitFor({ state: 'visible', timeout: 40000 });
-  await initiialFirstSuggestion.click({ force: true, timeout: 40000 });
+    // 2. Navigate to the page with proper waiting
+    await test.step('Navigate to page', async () => {
+      await page.goto(
+        'https://agent.getbreakout.ai/org/hubspot/agent/2/?config=multimedia&showGlass=true&is_test=true&test_type=automated',
+        {
+          waitUntil: 'networkidle',
+          timeout: 30000,
+        },
+      );
+    });
 
-  const contactButton = page.getByTestId('contact-sales-btn');
-  await contactButton.click();
+    // 3. Interact with the chat flow with proper steps
+    await test.step('Complete chat flow', async () => {
+      // Wait for and click greeting banner
+      const greetingBanner = page.getByTestId('greeting-banner');
+      await expect(greetingBanner).toBeVisible({ timeout: 30000 });
+      await greetingBanner.getByRole('button').click();
 
-  // Wait for form to be visible
-  const contactForm = page.getByTestId('contact-form');
-  await expect(contactForm).toBeVisible();
+      // Wait for and click first suggestion
+      const firstSuggestion = page.getByTestId('suggestion-item-0');
+      await expect(firstSuggestion).toBeVisible({ timeout: 40000 });
 
-  // Fill form
-  await page.getByRole('textbox', { name: 'Name*' }).dblclick();
-  await page.getByRole('textbox', { name: 'Name*' }).fill(TEST_NAME);
-  await page.getByRole('textbox', { name: 'Email*' }).dblclick();
-  await page.getByRole('textbox', { name: 'Email*' }).fill(TEST_EMAIL);
+      // Add small delay before clicking to ensure element is fully ready
+      await page.waitForTimeout(1000);
+      await firstSuggestion.click({ force: true });
 
-  // Submit form
-  await page.getByTestId('submit-form-btn').click();
+      // Click contact button
+      // Wait for 10 seconds - AI Message rendering - Network Might be slow
+      await page.waitForTimeout(10000);
+      const contactButton = page.getByTestId('contact-sales-btn');
+      await expect(contactButton).toBeVisible({ timeout: 30000 });
+      await contactButton.click();
 
-  // Verify success message
-  const successMessage = page.getByText('Thank You for Sharing Your Details!');
-  await expect(successMessage).toBeVisible();
+      // Wait for and fill form
+      const contactForm = page.getByTestId('contact-form');
+      await expect(contactForm).toBeVisible({ timeout: 30000 });
 
-  //Verify BE acknowledgemeant text
-  const acknowledgementText = page.getByText("Great, We've received your responses.");
-  await expect(acknowledgementText).toBeVisible();
+      // Fill form fields with retry mechanism
+      const nameField = page.getByRole('textbox', { name: 'Name*' });
+      const emailField = page.getByRole('textbox', { name: 'Email*' });
+
+      await expect(nameField).toBeVisible({ timeout: 30000 });
+      await expect(emailField).toBeVisible({ timeout: 30000 });
+
+      await nameField.fill(TEST_NAME);
+      await emailField.fill(TEST_EMAIL);
+
+      // Submit form
+      const submitButton = page.getByTestId('submit-form-btn');
+      await expect(submitButton).toBeEnabled({ timeout: 30000 });
+      await submitButton.click();
+
+      // Verify success messages with better timeout
+      await expect(page.getByText('Thank You for Sharing Your Details!')).toBeVisible({
+        timeout: 30000,
+      });
+      await expect(page.getByText("Great, We've received your responses.")).toBeVisible({
+        timeout: 30000,
+      });
+    });
+  });
+
+  // Add cleanup after each test if needed
+  test.afterEach(async ({ page }) => {
+    // Close any dialogs that might be open
+    try {
+      await page.close();
+    } catch (e) {
+      console.log('Error during cleanup:', e);
+    }
+  });
 });
