@@ -8,35 +8,109 @@ interface IProps {
   onItemClick: (title: string) => void;
 }
 
+const getLayoutClass = (totalItems: number) => {
+  return cn(
+    // Base classes that apply to all cases
+    'flex flex-wrap items-center justify-center p-2',
+
+    // Conditional classes based on total items
+    {
+      'flex-col gap-10 max-w-4xl': totalItems <= 2,
+      'gap-6 max-w-5xl': totalItems > 2 && totalItems <= 4,
+      'gap-6 max-w-6xl': totalItems > 4 && totalItems <= 6,
+      'gap-4 max-w-7xl': totalItems > 6, // for 7-10 items
+    },
+  );
+};
+
+const getItemClass = (totalItems: number) => {
+  // Base width for items depending on total count
+  if (totalItems <= 2) return 'w-[calc(100%-1rem)]';
+  if (totalItems <= 4) return 'w-[calc(50.333%-1rem)]';
+  if (totalItems === 5) return 'w-[calc(50.333%-1rem)]';
+  if (totalItems <= 7) return 'w-[calc(33.333%-1rem)]';
+  if (totalItems <= 9) return 'w-[calc(33.333%-1rem)]';
+  return 'w-[20%]'; //  > 10 items
+};
+
 const SlideItems = ({ items, onItemClick }: IProps) => {
   const itemsLength = items.length;
 
+  // Explicitly handle SlideItem layout for 5 items as per figma design
+  // Link:- https://www.figma.com/design/LTtSceISNhOxccfdii2RaC/Breakout---%F0%9F%94%B5-Hackerearth-%F0%9F%94%B5?node-id=6465-53635&t=YwyFtnY1n5T5oep4-0
+  if (itemsLength === 5) {
+    return (
+      <div className="flex h-full items-center justify-center overflow-auto" data-testid="slide-container">
+        <div className="flex w-full max-w-7xl gap-8 px-4">
+          {/* Left Column */}
+          <div className="flex w-1/2 flex-col gap-4">
+            {items.slice(0, 2).map((item, idx) => (
+              <div
+                key={item.title}
+                className={cn(
+                  'w-full',
+                  // Adjust vertical position of first two items
+                  idx === 0 ? 'translate-y-[50%]' : 'translate-y-[70%]',
+                )}
+              >
+                <SlideItem
+                  title={item.title}
+                  icon={item.icon as keyof typeof dynamicIconImports}
+                  onClick={onItemClick}
+                  addLineClamp={false}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Right Column */}
+          <div className="flex w-1/2 flex-col gap-4">
+            {items.slice(2).map((item, idx) => (
+              <div
+                key={item.title}
+                className={cn(
+                  'w-full',
+                  // Adjust vertical position of right column items
+                  idx === 0 ? '-translate-y-[10%]' : '',
+                  idx === 1 ? 'translate-y-0' : '',
+                  idx === 2 ? 'translate-y-[10%]' : '',
+                )}
+              >
+                <SlideItem
+                  title={item.title}
+                  icon={item.icon as keyof typeof dynamicIconImports}
+                  onClick={onItemClick}
+                  addLineClamp={false}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-full items-center justify-center" data-testid="slide-container">
-      <div
-        className={cn('grid w-full grid-cols-6', {
-          'gap-7': itemsLength <= 2,
-          'gap-5': itemsLength > 2,
-        })}
-      >
-        {items.map((item, idx) => (
+    <div className="flex h-full w-full items-center justify-center overflow-auto" data-testid="slide-container">
+      <div className={getLayoutClass(itemsLength)}>
+        {items.map((item) => (
           <div
-            className={cn('col-span-3', {
-              'col-start-4': idx === 0,
-              'col-start-2 row-start-2': idx === 1 && itemsLength <= 3,
-              'col-start-1 row-start-1': idx === 2,
-              'col-start-4 row-start-3': idx === 3 && itemsLength > 4,
-              'translate-y-1/2 transform': (idx === 1 || idx === 2) && itemsLength > 4,
-              'translate-x-[18.5%] transform': idx === 1 && itemsLength === 3,
-            })}
+            className={cn(
+              getItemClass(itemsLength),
+              'min-w-[200px]', // Minimum width to prevent squishing
+              'transition-all duration-300',
+            )}
             key={item.title}
           >
-            <SlideItem title={item.title} icon={item.icon as keyof typeof dynamicIconImports} onClick={onItemClick} />
+            <SlideItem
+              title={item.title}
+              icon={item.icon as keyof typeof dynamicIconImports}
+              onClick={onItemClick}
+              addLineClamp={itemsLength > 5}
+            />
           </div>
         ))}
       </div>
-      {/* DO NOT REMOVE THIS SPAN, THIS IS THERE SO THAT THE TAILWIND CLASSES ARE PRESENT FOR US TO USE THEM DYNAMICALLY */}
-      <span className="hidden grid-cols-2 grid-cols-3 grid-cols-3 grid-cols-4"></span>
     </div>
   );
 };

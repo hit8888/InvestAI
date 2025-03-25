@@ -295,7 +295,7 @@ export const isFormDataFilled = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filledData: Record<string, any> | undefined,
 ) => {
-  if (!filledData) return false;
+  if (!filledData || !formFields) return false;
 
   return formFields.every((field) => {
     // Only check required fields

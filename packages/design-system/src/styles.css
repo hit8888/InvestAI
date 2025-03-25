@@ -52,8 +52,6 @@
 
   .slideitem-hover-boxshadow {
     box-shadow:
-      0px 49px 147px 0px rgb(var(--primary) / 0.12),
-      0px 31.759px 86.09px 0px rgb(var(--primary) / 0.09),
       0px 18.874px 46.822px 0px rgb(var(--primary) / 0.07),
       0px 9.8px 23.888px 0px rgb(var(--primary) / 0.06),
       0px 3.993px 11.978px 0px rgb(var(--primary) / 0.05),

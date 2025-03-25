@@ -1,13 +1,15 @@
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import DynamicIcon from '../icons/DynamicIcon';
+import { cn } from '../../lib/cn';
 
 interface IProps {
   icon: keyof typeof dynamicIconImports;
   title: string;
   onClick: (title: string) => void;
+  addLineClamp?: boolean;
 }
 
-const SlideItem = ({ icon, title, onClick }: IProps) => {
+const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
   const handleClick = () => {
     onClick(title);
   };
@@ -24,7 +26,15 @@ const SlideItem = ({ icon, title, onClick }: IProps) => {
         <div className="flex h-20 w-full items-center justify-center rounded-xl border border-primary/10 bg-primary/2.5 group-hover/item:border-primary/40 group-hover/item:bg-primary/10">
           <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText group-hover/item:text-primary" />
         </div>
-        <h4 className="text-3xl font-semibold leading-relaxed text-customSecondaryText group-hover/item:text-primary/80">
+        <h4
+          className={cn(
+            'w-full text-center text-lg font-semibold leading-tight text-customSecondaryText group-hover/item:text-primary/80 sm:text-xl md:text-3xl',
+            {
+              'line-clamp-1': addLineClamp,
+            },
+          )}
+          title={addLineClamp ? title : ''}
+        >
           {title}
         </h4>
       </button>

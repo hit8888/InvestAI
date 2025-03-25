@@ -156,7 +156,7 @@ const MessageItem = ({
           is_filled:
             hasFormFilledMessage ||
             isFormDataFilled(
-              (message.message.artifact_data.content as FormArtifactContent).form_fields,
+              (message.message.artifact_data.content as FormArtifactContent)?.form_fields,
               message.message.artifact_data.metadata.filled_data,
             ),
           filled_data: hasFormFilledMessage
@@ -190,11 +190,13 @@ const MessageItem = ({
   const isAIRespondingWithNotMuchContext = isAIMessageRespondingToUserMessageWithNotMuchContext(message);
   const isStreamMessageForForm = formArtifactMessage ? hasStreamMessageForForm(message, formArtifactMessage) : false;
 
+  //TODOS: NEED to callibrate the scrolling issue and latest question at the top issue.
+  // For now it works for scroll issue, but not for latest question at the top issue.
   const getMinHeight = () => {
-    if (!isAiMessage || !isLastQuestionResponse) return 'auto';
+    if (!isAiMessage || !isLastQuestionResponse || isDiscoveryMessage) return 'auto';
     return isAIRespondingWithNotMuchContext || isStreamMessageForForm
       ? 'calc(-800px + 100dvh)'
-      : 'calc(-400px + 100dvh)';
+      : 'calc(-600px + 100dvh)';
   };
 
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
