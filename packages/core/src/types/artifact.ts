@@ -40,7 +40,15 @@ export const SuggestionArtifactSchema = z.object({
   suggested_questions_type: z.enum(['STAR', 'BUBBLE']),
 });
 
-export const FormFieldDataTypeEnumSchema = z.enum(['string', 'int', 'email', 'date', 'datetime', 'phone']);
+export const FormFieldDataTypeEnumSchema = z.enum([
+  'string',
+  'int',
+  'email',
+  'business_email',
+  'date',
+  'datetime',
+  'phone',
+]);
 
 export const FormFieldSchema = z.object({
   label: z.string(),

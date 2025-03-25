@@ -1,22 +1,52 @@
-import { z, ZodSchema } from "zod";
-import { isValidPhoneNumber } from "react-phone-number-input";
+import { z, ZodSchema } from 'zod';
+import { isValidPhoneNumber } from 'react-phone-number-input';
+
+// List of common free email providers
+const FREE_EMAIL_DOMAINS = [
+  'gmail.com',
+  'yahoo.com',
+  'hotmail.com',
+  'outlook.com',
+  'aol.com',
+  'icloud.com',
+  'protonmail.com',
+  'mail.com',
+  'yandex.com',
+  'gmx.com',
+  'live.com',
+  'msn.com',
+];
+
+// Function to check if email is a business email (not from common free providers)
+const isBusinessEmail = (email: string) => {
+  const domain = email.split('@')[1]?.toLowerCase();
+  return domain && !FREE_EMAIL_DOMAINS.includes(domain);
+};
 
 const getZodType = (dataType: string) => {
   switch (dataType) {
-    case "string":
+    case 'string':
       return z.string();
-    case "int":
+    case 'int':
       return z.number().int();
-    case "email":
+    case 'email':
       return z.string().email();
-    case "date":
-      return z.date();
-    case "datetime":
-      return z.string().datetime();
-    case "phone":
+    case 'business_email':
       return z
         .string()
-        .refine(isValidPhoneNumber, { message: "Invalid phone number" }); // E.164 format
+        .email()
+        .refine(isBusinessEmail, (email) => {
+          const domain = email.split('@')[1]?.toLowerCase();
+          return {
+            message: `* Please enter a different email address. This form does not accept addresses from ${domain}`,
+          };
+        });
+    case 'date':
+      return z.date();
+    case 'datetime':
+      return z.string().datetime();
+    case 'phone':
+      return z.string().refine(isValidPhoneNumber, { message: 'Invalid phone number' }); // E.164 format
     default:
       return z.string();
   }
@@ -24,34 +54,25 @@ const getZodType = (dataType: string) => {
 
 const getInputType = (dataType: string) => {
   switch (dataType) {
-    case "email":
-      return "email";
-    case "datetime":
-      return "datetime-local";
-    case "date":
-      return "date";
+    case 'email':
+    case 'business_email':
+      return 'email';
+    case 'datetime':
+      return 'datetime-local';
+    case 'date':
+      return 'date';
     default:
-      return "text";
+      return 'text';
   }
 };
 const schemaShape: Record<string, ZodSchema> = {};
 
-const getschemaShapeValidatedByZode = (
-  schemaShape: Record<string, ZodSchema>
-) => {
+const getschemaShapeValidatedByZode = (schemaShape: Record<string, ZodSchema>) => {
   return z.object(schemaShape);
 };
 
-const getFormSchemaTypeDefinition = <T extends ZodSchema>(
-  formSchema: T
-): z.infer<T> => {
+const getFormSchemaTypeDefinition = <T extends ZodSchema>(formSchema: T): z.infer<T> => {
   return formSchema._type;
 };
 
-export {
-  getZodType,
-  getInputType,
-  schemaShape,
-  getschemaShapeValidatedByZode,
-  getFormSchemaTypeDefinition,
-};
+export { getZodType, getInputType, schemaShape, getschemaShapeValidatedByZode, getFormSchemaTypeDefinition };

@@ -29,6 +29,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
       case 'phone_number':
         return <DynamicIcon icon="phone" className="h-3.5 w-3.5 text-primary/60" />;
       case 'email':
+      case 'business_email':
         return <DemoFormEmailFieldIcon className="h-3.5 w-3.5 text-primary/60" />;
       case 'name':
         return <DemoFormNameFieldIcon className="h-3.5 w-3.5 text-primary/60" />;
@@ -63,7 +64,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               )}
             </FormControl>
           </div>
-          <FormMessage className="ml-8" />
+          <FormMessage className="ml-8 font-medium text-red-500" />
         </FormItem>
       )}
     />
