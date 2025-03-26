@@ -27,8 +27,8 @@ import {
   getFormArtifactMessage,
   getFormFilledEvent,
   getSuggestionsArtifactMessage,
-  hasStreamMessageForForm,
-  isAIMessageRespondingToUserMessageWithNotMuchContext,
+  // hasStreamMessageForForm,
+  // isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
   isFormDataFilled,
 } from '@meaku/core/utils/messageUtils';
@@ -187,17 +187,20 @@ const MessageItem = ({
   };
 
   const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
-  const isAIRespondingWithNotMuchContext = isAIMessageRespondingToUserMessageWithNotMuchContext(message);
-  const isStreamMessageForForm = formArtifactMessage ? hasStreamMessageForForm(message, formArtifactMessage) : false;
+
+  // TODO: Commented out for now as it is not being used. Will fix this the coming PR.
+  // const isAIRespondingWithNotMuchContext = isAIMessageRespondingToUserMessageWithNotMuchContext(message);
+  // const isStreamMessageForForm = formArtifactMessage ? hasStreamMessageForForm(message, formArtifactMessage) : false;
 
   //TODOS: NEED to callibrate the scrolling issue and latest question at the top issue.
   // For now it works for scroll issue, but not for latest question at the top issue.
-  const getMinHeight = () => {
-    if (!isAiMessage || !isLastQuestionResponse || isDiscoveryMessage) return 'auto';
-    return isAIRespondingWithNotMuchContext || isStreamMessageForForm
-      ? 'calc(-800px + 100dvh)'
-      : 'calc(-600px + 100dvh)';
-  };
+  // Need to fix this based on number of words and how much space & parent width it would take in the chat widget.
+  // const getMinHeight = () => {
+  //   if (!isAiMessage || !isLastQuestionResponse || isDiscoveryMessage) return 'auto';
+  //   return isAIRespondingWithNotMuchContext || isStreamMessageForForm
+  //     ? 'calc(-800px + 100dvh)'
+  //     : 'calc(-600px + 100dvh)';
+  // };
 
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
   const shouldShowTextMessage =
@@ -223,7 +226,10 @@ const MessageItem = ({
 
   return (
     <MessageItemErrorBoundary messageId={message.response_id}>
-      <div ref={inViewRef} style={{ minHeight: getMinHeight() }}>
+      <div
+        ref={inViewRef}
+        // style={{ minHeight: getMinHeight() }}
+      >
         {/* Text Message */}
         {shouldShowTextMessage && (
           <TextMessage

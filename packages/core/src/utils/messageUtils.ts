@@ -12,7 +12,7 @@ import {
 } from '../types/webSocketData';
 import { FormArtifactContent, SuggestionArtifactContent } from '../types';
 
-export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['FORM_FILLED', 'HEARTBEAT', 'USER_INACTIVE'];
+export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
 export const isStreamMessage = (
   message: WebSocketMessage,
@@ -37,6 +37,12 @@ export const isTextMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: BaseMessageContent } => {
   return message.message_type === 'TEXT';
+};
+
+export const isPrimaryGoalCompletedMessage = (message: WebSocketMessage): boolean => {
+  return (
+    message.role === 'ai' && message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_COMPLETED'
+  );
 };
 
 // Add a new function to check if a message should be displayed as text
@@ -334,5 +340,5 @@ const isUserEventMessage = (message: WebSocketMessage): boolean => {
 };
 
 export const shouldMessageScrollToTop = (message: WebSocketMessage): boolean => {
-  return isUserTextMessage(message) || isUserEventMessage(message);
+  return isUserEventMessage(message) || isUserTextMessage(message);
 };
