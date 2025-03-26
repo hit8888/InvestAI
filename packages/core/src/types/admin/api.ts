@@ -182,6 +182,7 @@ export const ConversationsResponseResultSchema = z.object({
   product_of_interest: z.string().nullable(),
   company: z.string().nullable(),
   name: z.string().nullable(),
+  need: z.string().nullable(),
   email: z.string().nullable(),
   role: z.string().nullable(),
   country: z.string().nullable(),

@@ -32,6 +32,7 @@ export const ConversationsTableViewSchema = z.object({
   location: LocationWithCityCountrySchema.or(z.string()),
   budget: z.string(),
   authority: z.string(),
+  need: z.string(),
   timeline: z.string(),
   role: z.string(),
   buyer_intent: z.string().or(z.number()).nullable(),

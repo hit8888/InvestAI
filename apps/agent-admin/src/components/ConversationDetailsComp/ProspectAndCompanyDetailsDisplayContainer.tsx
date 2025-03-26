@@ -5,9 +5,9 @@ import {
 } from '../../utils/constants';
 import { getConversationRightSideDetailsItems } from '../../utils/common';
 import { CompanyDetailsType, ProspectDetailsType } from '../../utils/admin-types';
-import SingleRightSideItemDataDisplay from './SingleRightSideItemDataDisplay';
+import SingleProspectAndCompanyItemDataDisplay from './SingleProspectAndCompanyItemDataDisplay';
 
-const RightSideTabDisplayContainer = ({
+const ProspectAndCompanyDetailsDisplayContainer = ({
   prospect,
   company,
 }: {
@@ -30,8 +30,9 @@ const RightSideTabDisplayContainer = ({
             <p className="self-stretch text-lg font-semibold text-gray-900">Prospect</p>
             <div className="flex flex-col items-start self-stretch">
               {prospectItemsWithValue.map((dataItem, index) => (
-                <SingleRightSideItemDataDisplay
+                <SingleProspectAndCompanyItemDataDisplay
                   key={`prospect-${index}`}
+                  itemLabelWidth={'w-[20%]'}
                   showBottomBorder={index !== prospectItemsWithValue.length - 1}
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
@@ -48,8 +49,9 @@ const RightSideTabDisplayContainer = ({
             <p className="self-stretch text-lg font-semibold text-gray-900">Company</p>
             <div className="flex flex-col items-start self-stretch">
               {companyItemsWithValue.map((dataItem, index) => (
-                <SingleRightSideItemDataDisplay
+                <SingleProspectAndCompanyItemDataDisplay
                   key={`company-${index}`}
+                  itemLabelWidth={'w-[50%]'}
                   showBottomBorder={index !== companyItemsWithValue.length - 1}
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
@@ -64,4 +66,4 @@ const RightSideTabDisplayContainer = ({
   );
 };
 
-export default RightSideTabDisplayContainer;
+export default ProspectAndCompanyDetailsDisplayContainer;

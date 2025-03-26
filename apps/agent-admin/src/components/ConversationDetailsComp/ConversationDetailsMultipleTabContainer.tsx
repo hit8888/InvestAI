@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import RightSideTabDisplayContainer from './RightSideTabDisplayContainer';
+import ProspectAndCompanyDetailsDisplayContainer from './ProspectAndCompanyDetailsDisplayContainer';
 import MultipleTabSelectContainer from './MultipleTabSelectContainer';
 
 import { ConversationDetailsTabsValueEnum } from '../../utils/constants';
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
-import RightSideTabDisplayContainerShimmer from '../ShimmerComponent/RightSideTabDisplayContainerShimmer';
+import ProspectAndCompanyDetailsDisplayContainerShimmer from '../ShimmerComponent/ProspectAndCompanyDetailsDisplayContainerShimmer';
 
 type IProps = {
   isLoading: boolean;
@@ -23,9 +23,9 @@ const ConversationDetailsMultipleTabContainer = ({ isLoading }: IProps) => {
     <div className="flex w-full flex-1 items-start self-stretch">
       <MultipleTabSelectContainer currentTab={currentTab} handleTabClick={handleTabClick} isLoading={isLoading} />
       {isLoading ? (
-        <RightSideTabDisplayContainerShimmer />
+        <ProspectAndCompanyDetailsDisplayContainerShimmer />
       ) : ProspectAndCompanyDetails ? (
-        <RightSideTabDisplayContainer
+        <ProspectAndCompanyDetailsDisplayContainer
           prospect={{
             ...ProspectAndCompanyDetails.prospect,
           }}

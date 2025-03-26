@@ -13,14 +13,16 @@ type IProps = {
   itemValue: string | LocationWithCityCountry;
   showBottomBorder?: boolean;
   isKeyValueColumnwise?: boolean;
+  itemLabelWidth?: string;
 };
 
-const SingleRightSideItemDataDisplay = ({
+const SingleProspectAndCompanyItemDataDisplay = ({
   itemLabel,
   itemIcon,
   itemValue,
   showBottomBorder = true,
   isKeyValueColumnwise = false,
+  itemLabelWidth,
 }: IProps) => {
   let content = (
     <span
@@ -57,20 +59,23 @@ const SingleRightSideItemDataDisplay = ({
   }
   return (
     <div
-      className={cn('flex w-full items-start gap-4 self-stretch px-2 py-4', {
+      className={cn('flex w-full items-start self-stretch px-2 py-4', {
         'border-b border-dashed border-primary/20': showBottomBorder,
         'border-solid border-gray-200': showBottomBorder && isKeyValueColumnwise,
         'items-center': isEmailField,
         'flex-col items-center gap-2': isKeyValueColumnwise,
       })}
     >
-      <div className="flex w-[40%] items-center justify-start gap-2">
+      <div className={cn('flex items-center justify-start gap-2', itemLabelWidth || 'w-[40%]')}>
         <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{itemIcon}</div>
-        <span className="text-sm font-medium text-gray-500">{itemLabel}</span>
+        <span className="w-full text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>
       <div
         className={cn('flex w-[60%] justify-end', {
           'justify-start': isKeyValueColumnwise,
+          'w-[100%]': !itemLabelWidth,
+          'w-[80%]': itemLabelWidth === 'w-[20%]',
+          'w-[50%]': itemLabelWidth === 'w-[50%]',
         })}
       >
         {content}
@@ -79,4 +84,4 @@ const SingleRightSideItemDataDisplay = ({
   );
 };
 
-export default SingleRightSideItemDataDisplay;
+export default SingleProspectAndCompanyItemDataDisplay;

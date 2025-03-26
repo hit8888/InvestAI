@@ -1,12 +1,15 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
-import SingleRightSideItemDataDisplayShimmer from './SingleRightSideItemDataDisplayShimmer';
+import SingleProspectAndCompanyItemDataDisplayShimmer from './SingleProspectAndCompanyItemDataDisplayShimmer';
 
 type IProps = {
   prospectItemsCount?: number;
   companyItemsCount?: number;
 };
 
-const RightSideTabDisplayContainerShimmer = ({ prospectItemsCount = 3, companyItemsCount = 4 }: IProps) => {
+const ProspectAndCompanyDetailsDisplayContainerShimmer = ({
+  prospectItemsCount = 3,
+  companyItemsCount = 4,
+}: IProps) => {
   return (
     <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-t border-primary/10">
       <div className="hide-scrollbar sticky top-10 flex max-h-screen w-full flex-col items-start overflow-auto">
@@ -17,7 +20,7 @@ const RightSideTabDisplayContainerShimmer = ({ prospectItemsCount = 3, companyIt
             {Array(prospectItemsCount)
               .fill(0)
               .map((_, index) => (
-                <SingleRightSideItemDataDisplayShimmer
+                <SingleProspectAndCompanyItemDataDisplayShimmer
                   itemIndex={index}
                   key={`prospect-${index}`}
                   itemKey={`prospect-${index}`}
@@ -33,7 +36,7 @@ const RightSideTabDisplayContainerShimmer = ({ prospectItemsCount = 3, companyIt
             {Array(companyItemsCount)
               .fill(0)
               .map((_, index) => (
-                <SingleRightSideItemDataDisplayShimmer
+                <SingleProspectAndCompanyItemDataDisplayShimmer
                   itemIndex={index}
                   key={`company-${index}`}
                   itemKey={`company-${index}`}
@@ -46,4 +49,4 @@ const RightSideTabDisplayContainerShimmer = ({ prospectItemsCount = 3, companyIt
   );
 };
 
-export default RightSideTabDisplayContainerShimmer;
+export default ProspectAndCompanyDetailsDisplayContainerShimmer;

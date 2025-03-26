@@ -6,7 +6,7 @@ type IProps = {
   itemIndex: number;
 };
 
-const SingleRightSideItemDataDisplayShimmer = ({ itemKey, itemIndex }: IProps) => {
+const SingleProspectAndCompanyItemDataDisplayShimmer = ({ itemKey, itemIndex }: IProps) => {
   return (
     <div key={itemKey} className={'flex w-full items-start self-stretch px-2 py-4'}>
       <div className="flex w-full items-center justify-start gap-2">
@@ -27,4 +27,4 @@ const SingleRightSideItemDataDisplayShimmer = ({ itemKey, itemIndex }: IProps) =
   );
 };
 
-export default SingleRightSideItemDataDisplayShimmer;
+export default SingleProspectAndCompanyItemDataDisplayShimmer;

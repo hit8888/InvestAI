@@ -13,7 +13,7 @@ import ActiveConvOverviewCollapseIcon from '@breakout/design-system/components/i
 import ActiveConvOverviewExtendIcon from '@breakout/design-system/components/icons/active-conv-overview-extend-icon';
 import ActiveConvSummaryItemIcon from '@breakout/design-system/components/icons/active-conv-summary-item-icon';
 import Separator from '@breakout/design-system/components/layout/separator';
-import SingleRightSideItemDataDisplay from '../ConversationDetailsComp/SingleRightSideItemDataDisplay';
+import SingleProspectAndCompanyItemDataDisplay from '../ConversationDetailsComp/SingleProspectAndCompanyItemDataDisplay';
 
 const JoinConversationRightSideBodyContent = ({
   prospect,
@@ -74,7 +74,7 @@ const JoinConversationRightSideBodyContent = ({
             {!isProspectItemsEmpty && (
               <div className="flex flex-col items-start self-stretch">
                 {prospectItemsWithValue.map((dataItem, index) => (
-                  <SingleRightSideItemDataDisplay
+                  <SingleProspectAndCompanyItemDataDisplay
                     isKeyValueColumnwise={true}
                     showBottomBorder={index !== prospectItemsWithValue.length - 1}
                     itemLabel={dataItem.itemLabel}
@@ -85,7 +85,7 @@ const JoinConversationRightSideBodyContent = ({
               </div>
             )}
             <Separator className="w-full bg-gray-200" />
-            <SingleRightSideItemDataDisplay
+            <SingleProspectAndCompanyItemDataDisplay
               isKeyValueColumnwise={true}
               showBottomBorder={true}
               itemLabel={'Summary:'}
@@ -95,7 +95,7 @@ const JoinConversationRightSideBodyContent = ({
             {!isCompanyItemsEmpty && (
               <div className="flex flex-col items-start self-stretch">
                 {companyItemsWithValue.map((dataItem, index) => (
-                  <SingleRightSideItemDataDisplay
+                  <SingleProspectAndCompanyItemDataDisplay
                     isKeyValueColumnwise={true}
                     showBottomBorder={index !== companyItemsWithValue.length - 1}
                     itemLabel={dataItem.itemLabel}

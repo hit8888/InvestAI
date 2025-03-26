@@ -11,6 +11,7 @@ export const convertServerConversationDataToClientConversationData = (
     role: response.role || '-',
     budget: response.budget || '-',
     authority: response.role || '-',
+    need: response.need || '-',
     timeline: response.timeline || '-',
     conversation_preview: response.summary || '-',
     location: response.country || '-',

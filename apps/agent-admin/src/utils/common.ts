@@ -93,6 +93,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     budget: response.budget || '-',
     role: response.role || '-',
     authority: response.role || '-',
+    need: response.need || '-',
     timeline: response.timeline || '-',
     buyer_intent: response.buyer_intent_score ?? '-', // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
@@ -530,7 +531,7 @@ const getBantItemsValue = (bantValue: BANTItem[], sessionData: ConversationsTabl
       case 'need':
         return {
           ...bantItem,
-          itemValue: '-', // You can update this dynamically if needed
+          itemValue: sessionData.need || '-',
         };
       case 'timeline':
         return {
