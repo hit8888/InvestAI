@@ -2,7 +2,9 @@ import TextArea from '@breakout/design-system/components/layout/textarea';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessageComplete } from '@meaku/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';
+import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
+import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -15,14 +17,14 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const isSubmissionDisabled = disableMessageSend || inputValue?.length === 0;
+  const isSendButtonDisabled = inputValue?.length === 0;
 
   const handleInputValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleSubmission = () => {
-    if (isSubmissionDisabled) return;
+    if (disableMessageSend) return;
 
     handleSendMessage(inputValue);
     setInputValue('');
@@ -40,18 +42,16 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
-    // if (textAreaRef.current && isSubmissionDisabled) {
-    //   textAreaRef.current.blur();
-    // }
     if (textAreaRef.current && lastMessage && isStreamMessageComplete(lastMessage)) {
       textAreaRef.current.focus();
     }
   }, [messages.length, textAreaRef]);
 
+  // This condition is used to show the tooltip and disable the button when the user is typing and the AI messages is streaming
+  const conditionForShowingTooltipAndDisabledButton = !isSendButtonDisabled && disableMessageSend;
+
   return (
-    <div className="flex w-full items-center gap-2 overflow-hidden rounded-2xl p-2">
-      {/* TODO: Add a switch inside this div when we're adding audio capabilities */}
-      {/* <div></div> */}
+    <div className="flex w-full items-center gap-2  rounded-2xl p-2">
       <form className="relative flex-1" onSubmit={handleSubmission}>
         <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
           <TextArea
@@ -64,12 +64,17 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
             ref={textAreaRef}
           />
         </div>
-        <ChatInputSendButton
-          onClick={handleSubmission}
-          showButton={!isSubmissionDisabled}
-          disabled={isSubmissionDisabled}
-          btnClassName="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
-        />
+        <SendButtonWithTooltip
+          showTooltip={conditionForShowingTooltipAndDisabledButton}
+          tooltipText={AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT}
+        >
+          <ChatInputSendButton
+            showButton={!isSendButtonDisabled}
+            onClick={handleSubmission}
+            disabled={conditionForShowingTooltipAndDisabledButton}
+            btnClassName="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
+          />
+        </SendButtonWithTooltip>
       </form>
     </div>
   );

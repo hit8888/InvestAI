@@ -1,12 +1,6 @@
-import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipArrow,
-} from '@breakout/design-system/components/Tooltip/index';
 import React from 'react';
+import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
+import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 
 type IProps = {
   toastMessage: string;
@@ -17,33 +11,21 @@ type IProps = {
 
 const CustomTooltipWithClipboardUsingHover = ({ tooltipText, children, toastMessage, showTooltip = true }: IProps) => {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger title="" className="block cursor-pointer" asChild>
-          {children}
-        </TooltipTrigger>
-        {showTooltip && (
-          <TooltipContent
-            sideOffset={5}
-            title=""
-            align="end"
-            side="bottom"
-            className="rounded-lg border-none bg-gray-900 px-3 py-2 text-white"
-          >
-            <div className="flex w-full items-center gap-2">
-              <span className="text-xs font-medium">{tooltipText}</span>
-              <CopyToClipboardButton
-                copyIconClassname="h-4 w-4 text-white"
-                textToCopy={tooltipText}
-                toastMessage={toastMessage}
-                btnClassName="h-6 w-6 rounded-lg bg-primary-foreground/25 p-1"
-              />
-            </div>
-            <TooltipArrow width={12} height={6} className="fixed -right-6 2xl:right-14" />
-          </TooltipContent>
-        )}
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapperDark
+      trigger={children}
+      showTooltip={showTooltip}
+      content={
+        <div className="flex w-full items-center gap-2">
+          <span className="text-xs font-medium">{tooltipText}</span>
+          <CopyToClipboardButton
+            copyIconClassname="h-4 w-4 text-white"
+            textToCopy={tooltipText}
+            toastMessage={toastMessage}
+            btnClassName="h-6 w-6 rounded-lg bg-primary-foreground/25 p-1"
+          />
+        </div>
+      }
+    />
   );
 };
 

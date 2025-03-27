@@ -14,7 +14,15 @@ const ChatInputSendButton = ({ showButton, onClick, btnType = 'button', disabled
   if (!showButton) return null;
 
   return (
-    <Button size="icon" className={cn('', btnClassName)} type={btnType} onClick={onClick} disabled={disabled}>
+    <Button
+      size="icon"
+      className={cn('', btnClassName, {
+        'disabled:pointer-events-auto disabled:cursor-pointer': disabled,
+      })}
+      type={btnType}
+      onClick={onClick}
+      disabled={disabled}
+    >
       <SendIcon className="text-primary-foreground" />
     </Button>
   );
