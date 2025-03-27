@@ -33,7 +33,7 @@ const CustomSingleBodyRowItem = ({ row, index, handleRowItemClick }: CustomSingl
     >
       {row.getVisibleCells().map((cell) => {
         const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
-        const isColumnNumberOfUserMessages = cell.column.id === 'number_of_user_messages';
+        const isColumnNumberOfUserMessages = cell.column.id === 'user_message_count';
         const isPinned = cell.column.getIsPinned() === 'left';
         const isShadowedColumn = SHADOW_PINNED_COLUMNS.includes(cell.column.id);
         const isColumnPinnedLeftForName = isPinned && isShadowedColumn;

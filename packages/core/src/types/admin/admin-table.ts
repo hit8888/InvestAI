@@ -17,9 +17,9 @@ export const LeadsTableViewSchema = z.object({
   name: z.string(),
   role: z.string(),
   company: z.string(),
-  location: LocationWithCityCountrySchema,
-  timestamp: z.string(),
-  product_of_interest: z.string(),
+  country: LocationWithCityCountrySchema.or(z.string()),
+  timeline: z.string(),
+  product_interest: z.string(),
   session_id: z.string(),
 });
 
@@ -28,16 +28,16 @@ export const ConversationsTableViewSchema = z.object({
   name: z.string(),
   email: z.string(),
   timestamp: z.string(),
-  conversation_preview: z.string(),
-  location: LocationWithCityCountrySchema.or(z.string()),
+  summary: z.string(),
+  country: LocationWithCityCountrySchema.or(z.string()),
   budget: z.string(),
   authority: z.string(),
   need: z.string(),
   timeline: z.string(),
   role: z.string(),
-  buyer_intent: z.string().or(z.number()).nullable(),
+  buyer_intent_score: z.string().or(z.number()).nullable(),
   bant_analysis: z.string(),
-  number_of_user_messages: z.string(),
+  user_message_count: z.string(),
   meeting_status: z.string(),
   product_of_interest: z.string(),
   ip_address: z.string(),
@@ -79,7 +79,7 @@ export interface CellProps {
 }
 
 export interface ColumnDefinition {
-  header: string;
+  header: string | Record<string, string>;
   accessorKey: string;
   id: string;
   cell?: (props: CellProps) => JSX.Element;

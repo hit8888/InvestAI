@@ -31,10 +31,12 @@ import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
+import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 
 const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
 
 const ConversationsTableContainer = () => {
+  const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
@@ -100,7 +102,10 @@ const ConversationsTableContainer = () => {
   const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
-  const conversationsPageColumns: ColumnDefinition[] = getFormattedColumnsList(CONVERSATIONS_PAGE_COLUMN_LISTS, 200);
+  const conversationsPageColumns: ColumnDefinition[] = getFormattedColumnsList(
+    CONVERSATIONS_PAGE_COLUMN_LISTS,
+    transformedEntityMetadata,
+  );
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
 
   if (isError) return null;

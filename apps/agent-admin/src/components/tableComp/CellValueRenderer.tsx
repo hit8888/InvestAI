@@ -20,17 +20,18 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
-  timestamp: TimestampCellValue,
+  timestamp: TimestampCellValue, // For Conversations Table
+  timeline: TimestampCellValue, // For Leads Table
   // location: LocationCellValue,
-  conversation_preview: ConversationPreviewCellValue,
+  summary: ConversationPreviewCellValue,
   bant_analysis: BANTAnalysisCellValue,
-  buyer_intent: BuyerIntentCellValue,
+  buyer_intent_score: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
   // session_id: SessionIDCellValue,
 };
 
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {
-  if (id === 'location' && typeof info !== 'string') {
+  if (id === 'country' && typeof info !== 'string') {
     return <LocationCellValue value={info as LocationWithCityCountry} />;
   }
   if (id === 'session_id') {

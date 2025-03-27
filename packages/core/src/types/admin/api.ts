@@ -256,3 +256,21 @@ export const FilterPreferencesResponseSchema = z.object({
 });
 
 export type FilterPreferencesResponseType = z.infer<typeof FilterPreferencesResponseSchema>;
+
+export const EntityMetadataSchema = z.object({
+  id: z.number(),
+  entity_type: z.string(),
+  source: z.string(),
+  key_name: z.string(),
+  display_name: z.string(),
+  column_name: z.string(),
+  description: z.string(),
+  data_type: z.string(),
+  parent_column: z.string().nullable(),
+});
+
+export type EntityMetadataSchemaType = z.infer<typeof EntityMetadataSchema>;
+
+export const EntityMetadataResponseSchema = z.array(EntityMetadataSchema);
+
+export type EntityMetadataResponseType = z.infer<typeof EntityMetadataResponseSchema>;

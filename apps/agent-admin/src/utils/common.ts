@@ -1,13 +1,13 @@
 import { ENV } from '@meaku/core/types/env';
 import {
   BANTItem,
-  COLUMN_HEADER_LABEL_MAPPING,
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
   SortByIntentScore,
   SortBySessionLength,
   SortByTimestamp,
   SummaryTabContentList,
+  TABLE_COLUMN_WIDTH_SIZE,
   USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
 } from './constants';
 import {
@@ -28,7 +28,12 @@ import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
-import { FilterItem, SortItem } from '@meaku/core/types/admin/api';
+import {
+  EntityMetadataResponseType,
+  EntityMetadataSchemaType,
+  FilterItem,
+  SortItem,
+} from '@meaku/core/types/admin/api';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
 
@@ -60,12 +65,12 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     name: response.name || '-', // Fallback if name is null
     role: response.role !== 'Unknown' ? response.role || '-' : '-', // Handle 'Unknown' role
     company: response.company || '-', // Fallback if company is null
-    location: {
+    country: {
       city: additionalInfoData?.city || '-',
       country: additionalInfoData?.country || response.country || '-',
     } as LocationWithCityCountry,
-    timestamp: response.created_on ? response.created_on : '-',
-    product_of_interest: response.product_interest || '-',
+    timeline: response.created_on ? response.created_on : '-',
+    product_interest: response.product_interest || '-',
     session_id: response.session_id ?? '',
   };
 
@@ -85,8 +90,8 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     name: response.name || '-',
     email: response.email || '-',
     timestamp: response.timestamp ? response.timestamp : '-',
-    conversation_preview: response.summary || '-',
-    location: {
+    summary: response.summary || '-',
+    country: {
       city: prospectDetailsData?.city || '-',
       country: prospectDetailsData?.country || response.country || '-',
     } as LocationWithCityCountry,
@@ -95,9 +100,9 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     authority: response.role || '-',
     need: response.need || '-',
     timeline: response.timeline || '-',
-    buyer_intent: response.buyer_intent_score ?? '-', // Need to Find Logic or Directly getting from api
+    buyer_intent_score: response.buyer_intent_score ?? '-', // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
-    number_of_user_messages: `${response.user_message_count || 0}`,
+    user_message_count: `${response.user_message_count || 0}`,
     meeting_status: '-', // Static for now, can be dynamic if additional info is provided
     product_of_interest: response.product_of_interest || '-',
     ip_address: response.ip_address || '-',
@@ -141,7 +146,7 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
       email: conversation.email || '-',
       location: {
         city: prospectDetails?.city || '',
-        country: prospectDetails?.country || (conversation.location as string) || '-',
+        country: prospectDetails?.country || (conversation.country as string) || '-',
       },
       role: prospectDetails?.role || conversation.role || '-',
       budget: prospectDetails?.budget || conversation.budget || '-',
@@ -151,7 +156,7 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
     company: {
       name: companyDetails?.company_name || conversation.company || '-',
       logoUrl: companyDetails?.website_url ? `${companyDetails?.website_url}/favicon.ico` : '',
-      location: companyDetails?.company_country || (conversation.location as string) || '-',
+      location: companyDetails?.company_country || (conversation.country as string) || '-',
       revenue: companyDetails?.company_revenue || '-',
       employees: companyDetails?.employee_count || '-',
       domain: companyDetails?.industry_domain || '-',
@@ -164,20 +169,19 @@ export const getProspectAndCompanyDetailsData = (conversation: ConversationsTabl
 };
 
 // Convert column list to the required format
-export const getFormattedColumnsList = (columnsList: string[], sizeGiven?: number) => {
+export const getFormattedColumnsList = (
+  columnsList: string[],
+  columnHeaderLabelMapping: Record<string, string | Record<string, string>>,
+) => {
   const formattedColumns = columnsList.map((key) => {
     const newItem = {
       id: key,
       accessorKey: key,
-      header: COLUMN_HEADER_LABEL_MAPPING[key],
+      header: columnHeaderLabelMapping[key],
+      size: TABLE_COLUMN_WIDTH_SIZE, // Default size taken
     };
 
-    return sizeGiven
-      ? {
-          ...newItem,
-          size: sizeGiven,
-        }
-      : newItem;
+    return newItem;
   });
   return formattedColumns;
 };
@@ -560,7 +564,7 @@ export function generateConversationSummaryContent(
 
   // Calculate highest intent score
   const highestIntentScore =
-    sessionData?.buyer_intent ??
+    sessionData?.buyer_intent_score ??
     (isChatHistoryAvailable && Array.isArray(chatHistory) && chatHistory.length > 0
       ? chatHistory.reduce((maxScore, msg) => {
           if (msg.message_type === 'EVENT' && msg.message?.event_type === 'MESSAGE_ANALYTICS') {
@@ -575,7 +579,7 @@ export function generateConversationSummaryContent(
   const aiMessageCount = chatHistory.filter(
     (msg) => msg.role === 'ai' && (isStreamMessage(msg) || isTextMessage(msg)),
   ).length;
-  const userMessageCount = Number(sessionData.number_of_user_messages);
+  const userMessageCount = Number(sessionData.user_message_count);
   const totalMessageCount = aiMessageCount + userMessageCount;
 
   // Dynamically update CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST
@@ -584,7 +588,7 @@ export function generateConversationSummaryContent(
       case 'summary':
         return {
           ...item,
-          listValue: sessionData.conversation_preview || 'No summary available',
+          listValue: sessionData.summary || 'No summary available',
         };
       case 'intentScore':
         return {
@@ -687,3 +691,22 @@ export const getProfileCTAInnerContainerAnimation = (isPanelOpen: boolean) => ({
   },
   transition: { duration: 0.5, ease: 'easeInOut' },
 });
+
+export const transformEntityDataToColumnHeaderLabelMapping = (inputArray: EntityMetadataResponseType) => {
+  const result: Record<string, Record<string, string> | string> = {};
+
+  inputArray.forEach((item: EntityMetadataSchemaType) => {
+    const { parent_column, key_name, display_name } = item;
+
+    if (parent_column) {
+      if (!result[parent_column]) {
+        result[parent_column] = {};
+      }
+      (result[parent_column] as Record<string, string>)[key_name] = display_name;
+    } else {
+      result[key_name] = display_name;
+    }
+  });
+
+  return result;
+};

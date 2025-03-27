@@ -17,7 +17,7 @@ const CustomSingleHeaderRowItem = ({ headerGroup }: CustomSingleHeaderRowItemPro
       {headerGroup.headers.map((header) => {
         const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
         const isShadowedColumn = SHADOW_PINNED_COLUMNS.includes(header.id);
-        const isColumnNumberOfUserMessages = header.id === 'number_of_user_messages';
+        const isColumnNumberOfUserMessages = header.id === 'user_message_count';
         const isColumnProductOfInterest = header.id === 'product_of_interest';
         const isPinned = header.column.getIsPinned() === 'left';
         const isColumnPinnedLeftForName = isPinned && isShadowedColumn;

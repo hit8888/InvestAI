@@ -27,10 +27,12 @@ import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
+import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 
 const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
 
 const LeadsTableContainer = () => {
+  const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: LEADS_PAGE,
   });
@@ -97,7 +99,10 @@ const LeadsTableContainer = () => {
   const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
-  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(LEADS_PAGE_COLUMN_LISTS, 200);
+  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(
+    LEADS_PAGE_COLUMN_LISTS,
+    transformedEntityMetadata,
+  );
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
   if (isError) return null;

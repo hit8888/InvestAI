@@ -30,6 +30,11 @@ import { ExportFormat } from '@meaku/core/types/admin/api';
 const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest, Company, UserMessagesCount } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
+export const CONVERSATION_LABEL_UPPERCASE = 'CONVERSATION';
+export const LEAD_LABEL_UPPERCASE = 'LEAD';
+
+export const TABLE_COLUMN_WIDTH_SIZE = 200;
+
 export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
 export const DefaultAuthResponse: AuthResponse = {
@@ -255,34 +260,9 @@ export enum SidebarNavItemsEnum {
   PLAYGROUND_LABEL = 'Playground',
 }
 
-export const COLUMN_HEADER_LABEL_MAPPING: Record<string, string> = {
-  timestamp: 'Date',
-  number_of_user_messages: 'User Messages',
-  email: 'Email',
-  name: 'Name',
-  company: 'Company',
-  product_of_interest: 'Product Of Interest',
-  location: 'Location',
-  role: 'Role',
-  conversation_preview: 'Conversation Preview',
-  buyer_intent: 'Buyer Intent',
-  bant_analysis: 'BANT Analysis',
-  meeting_status: 'Meeting Status',
-  ip_address: 'IP Address',
-  session_id: 'Session ID',
-};
-
 // LEADS Page
 
-export const LEADS_PAGE_COLUMN_LISTS = [
-  'email',
-  'name',
-  'company',
-  'product_of_interest',
-  'timestamp',
-  'location',
-  'role',
-];
+export const LEADS_PAGE_COLUMN_LISTS = ['email', 'name', 'company', 'product_interest', 'timeline', 'country', 'role'];
 
 // CONVERSATION PAGE
 
@@ -306,13 +286,13 @@ export enum ConversationDetailsTabsLabelEnum {
 }
 
 export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
-  'conversation_preview',
-  'location',
+  'summary',
+  'country',
   'timestamp',
   'product_of_interest',
-  'buyer_intent',
+  'buyer_intent_score',
   // 'bant_analysis',
-  'number_of_user_messages',
+  'user_message_count',
   'company',
   'email',
   'name',
@@ -321,9 +301,9 @@ export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
   'session_id',
 ];
 
-export const CONVERSATIONS_PINNED_COLUMNS = ['conversation_preview', 'location'];
+export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];
-export const SHADOW_PINNED_COLUMNS = ['name', 'location'];
+export const SHADOW_PINNED_COLUMNS = ['name', 'country'];
 
 export interface FunnelData {
   funnelChipType: string;

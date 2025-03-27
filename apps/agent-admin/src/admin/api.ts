@@ -50,3 +50,7 @@ export const getConversationDetailsData = (sessionId: string) =>
 export const getFilterPreferences = async (tableName: string) => {
   return adminApiClient.get(`/tenant/api/filter-preferences/?table_name=${tableName}`);
 };
+
+export const getEntityDataBasedOnType = async (entityType: string) => {
+  return adminApiClient.get(`/tenant/api/entity/?entity_type=${entityType}`);
+};
