@@ -83,6 +83,10 @@ export interface ColumnDefinition {
   accessorKey: string;
   id: string;
   cell?: (props: CellProps) => JSX.Element;
+  // Adding these properties to match TanStack Table's ColumnDef
+  enablePinning?: boolean;
+  enableResizing?: boolean;
+  size?: number;
 }
 
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema);

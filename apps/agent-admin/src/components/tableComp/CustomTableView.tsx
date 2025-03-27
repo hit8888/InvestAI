@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
+import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS, LEADS_PINNED_COLUMNS } from '../../utils/constants';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
@@ -72,7 +72,8 @@ const CustomTableView = ({
       },
     },
     data: tabularData,
-    columns: columnHeaderData,
+
+    columns: columnHeaderData as ColumnDef<any, any>[],
     getCoreRowModel: getCoreRowModel(),
   });
 
