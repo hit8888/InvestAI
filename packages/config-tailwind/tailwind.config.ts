@@ -195,6 +195,7 @@ const config: Omit<Config, "content"> = {
         },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
+        popupBannerBorder: "#F2F4F7",
       },
       animation: {
         ripple: "ripple 1s infinite ease-in-out",

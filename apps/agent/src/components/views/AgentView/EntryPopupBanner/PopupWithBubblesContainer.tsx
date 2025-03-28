@@ -11,6 +11,7 @@ interface ContainerProps extends PopupContentProps {
   setShowBubbles: (value: boolean) => void;
   header: string | undefined | null;
   subheader: string | undefined | null;
+  popupBannerAlignment: 'left' | 'center' | 'right';
 }
 
 const PopupWithBubblesContainer = ({
@@ -21,6 +22,7 @@ const PopupWithBubblesContainer = ({
   setShowBubbles,
   header,
   subheader,
+  popupBannerAlignment,
 }: ContainerProps) => {
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -100,6 +102,7 @@ const PopupWithBubblesContainer = ({
             orgName={orgName}
             header={header}
             subheader={subheader}
+            popupBannerAlignment={popupBannerAlignment}
           />
         )}
       </AnimatePresence>

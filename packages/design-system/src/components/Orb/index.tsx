@@ -3,15 +3,17 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '../../lib/cn';
 import ShiningRectangle from '../icons/ShiningRectangle';
 import './index.css';
+import ThreeStarInsideOrbIcon from '../icons/three-star-inside-orb-icon';
 
 interface IProps {
   color: string | null;
   state: OrbStatusEnum;
+  showThreeStar?: boolean;
   style?: CSSProperties;
   orbLogoUrl?: string | null | undefined;
 }
 
-const Orb = ({ color, state, style = {}, orbLogoUrl }: IProps) => {
+const Orb = ({ color, state, style = {}, orbLogoUrl, showThreeStar = false }: IProps) => {
   if (orbLogoUrl) {
     return <img src={orbLogoUrl} alt="orb logo" className="h-8 w-8 rounded-full object-cover" />;
   }
@@ -33,7 +35,12 @@ const Orb = ({ color, state, style = {}, orbLogoUrl }: IProps) => {
         } as React.CSSProperties
       }
     >
-      <ShiningRectangle width="25" height="13" />
+      {showThreeStar && (
+        <div className="inset-0 flex flex-col items-center  justify-center">
+          <ShiningRectangle width="25" height="13" />
+          <ThreeStarInsideOrbIcon className="relative -top-1" height={'26'} width={'29'} />
+        </div>
+      )}
     </div>
   );
 };

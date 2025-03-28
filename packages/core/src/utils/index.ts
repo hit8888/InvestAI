@@ -7,6 +7,7 @@ export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
 
 export const RGB_PRIMARY_COLOR = 'rgb(var(--primary))';
+export const RGB_WHITE_SHADE_COLOR = 'rgba(255, 255, 255, 0.32)';
 
 export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
   localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));

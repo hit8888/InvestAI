@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EntryPointAlignmentSchema } from '../entryPoint';
 
 export const CTAConfigSchema = z
   .object({
@@ -43,6 +44,7 @@ export const ConfigurationSchema = z.object({
   }),
   body: ConfigurationBodySchema,
   style_config: z.object({
+    entry_point_alignment: EntryPointAlignmentSchema.optional(), // TODO: rename the field according to the backend config key
     shadow_enabled: z.boolean().optional(),
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),

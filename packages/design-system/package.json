@@ -82,6 +82,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^11.16.4",
     "input-otp": "^1.4.2",
     "libphonenumber-js": "^1.11.18",
     "lodash": "^4.17.21",
