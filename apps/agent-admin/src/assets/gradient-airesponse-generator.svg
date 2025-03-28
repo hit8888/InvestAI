@@ -1,7 +1,7 @@
 <svg width="628" height="8" viewBox="0 0 628 8" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_7869_119312)">
-<path d="M0 8C0 3.58172 3.58172 0 8 0H620C624.418 0 628 3.58172 628 8H0Z" fill="#4E46DC"/>
-<circle cx="56" cy="4" r="50" fill="#4E46DC"/>
+<path d="M0 8C0 3.58172 3.58172 0 8 0H620C624.418 0 628 3.58172 628 8H0Z" fill="#603CF1"/>
+<circle cx="56" cy="4" r="50" fill="#603CF1"/>
 <g filter="url(#filter0_f_7869_119312)">
 <ellipse cx="505.908" cy="-32.5384" rx="125.386" ry="50" transform="rotate(28.9915 505.908 -32.5384)" fill="#DCADFC"/>
 </g>

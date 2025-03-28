@@ -29,7 +29,7 @@ const ActiveConvJoinAICopilotIconSmall = ({ className = '', width, height, viewB
         />
       </mask>
       <g mask="url(#mask0_8748_107242)">
-        <circle cx="7.16632" cy="7.63281" r="9" fill="#4E46DC" />
+        <circle cx="7.16632" cy="7.63281" r="9" fill="#603CF1" />
         <g filter="url(#filter0_f_8748_107242)">
           <circle cx="2.66632" cy="3.13281" r="5" fill="#A9A4FF" />
         </g>
