@@ -23,7 +23,7 @@ const EntryPointChatInput = ({
       value={value}
       onChange={onChange}
       className={cn(
-        'h-12 w-full min-w-80 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0',
+        'h-12 w-full min-w-40 border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0 md:min-w-80',
         {
           'pl-14': showOrb,
         },

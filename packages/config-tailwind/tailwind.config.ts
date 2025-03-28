@@ -9,6 +9,7 @@ const config: Omit<Config, "content"> = {
   theme: {
     extend: {
       screens: {
+        extraSmall: "360px",
         hd: "1280px", // HD - 1280x720
         "mac-air": "1280px", // MacBook Air - 1280x832
         "hd-ready": "1366px", // HD Ready - 1366x768

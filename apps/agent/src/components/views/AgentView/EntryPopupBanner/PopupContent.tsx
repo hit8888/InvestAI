@@ -31,14 +31,11 @@ const PopupContent = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }} // border color is #F2F4F7 in figma
-      className={cn(
-        'popup-banner-box-shadow absolute -left-4 -top-28 flex max-w-[500px] items-center justify-center rounded-3xl p-2',
-        {
-          '-top-36 left-6': isEntryPointOnTheBottomLeft,
-          '-left-24 -top-40': isEntryPointOnTheCenterBottom,
-          '-left-4 -top-36': isEntryPointOnTheBottomRight,
-        },
-      )}
+      className={cn('popup-banner-box-shadow absolute flex max-w-[500px] items-center justify-center rounded-3xl p-2', {
+        '-top-36 left-6': isEntryPointOnTheBottomLeft,
+        '-left-24 -top-40 extraSmall:-left-4 sm:-left-8 lg:-left-24': isEntryPointOnTheCenterBottom,
+        '-left-4 -top-36': isEntryPointOnTheBottomRight,
+      })}
       style={{ zIndex: 20 }}
     >
       <div

@@ -55,7 +55,7 @@ const EntryPointContentForBottomCenter = ({
     <div className="w-full rounded-2xl bg-gray-50 p-2">
       <form
         onSubmit={handleFormSubmission}
-        className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
+        className="flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
       >
         <div className="relative flex-1">
           <InputOrb showOrb={showOrb} orbLogoUrl={orbLogoUrl} />

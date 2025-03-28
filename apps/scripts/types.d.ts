@@ -101,13 +101,30 @@ declare global {
     initialMessage: string;
   }
 
+  interface DefaultSizes {
+    WIDTH: string;
+    HEIGHT: string;
+  }
+
+  interface CollapsedSizes {
+    WIDTH_INITIAL: string;
+    WIDTH_MESSAGE_SENT: string;
+    HEIGHT_WITH_BUBBLE: string;
+    HEIGHT: string;
+    HEIGHT_MESSAGE_SENT: string;
+  }
+
   interface Constants {
-    DEFAULT_WIDTH: string;
-    DEFAULT_HEIGHT: string;
-    COLLAPSED_SIZE_WIDTH_INITIAL: string;
-    COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: string;
-    COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX: number;
-    COLLAPSED_SIZE_HEIGHT_PX: number;
+    RESPONSIVE_SIZES: {
+      DESKTOP: {
+        DEFAULT: DefaultSizes;
+        COLLAPSED: CollapsedSizes;
+      };
+      TABLET: {
+        DEFAULT: DefaultSizes;
+        COLLAPSED: CollapsedSizes;
+      };
+    };
     SENTRY_DSN: string;
   }
 

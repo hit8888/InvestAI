@@ -2,6 +2,9 @@ import useSound from '@meaku/core/hooks/useSound';
 import popupsound from '../../../../assets/popup-sound.mp4';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Orb from '@breakout/design-system/components/Orb/index';
+import { OrbStatusEnum } from '@meaku/core/types/config';
+import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 
 type IProps = {
   size: number;
@@ -50,15 +53,19 @@ const PopupBubble = ({ size, delay, index, isExiting }: IProps) => {
         duration: 0.8,
         delay: isExiting ? 0 : delay,
       }}
-      className={'absolute -left-4 bottom-0 -translate-x-1/2'}
+      className={'absolute -left-4 bottom-0 hidden -translate-x-1/2 md:block'}
     >
-      <div
-        className="z-10 rounded-full border-2 border-[#F2F4F7] bg-primary/5 shadow-2xl"
-        style={{
-          width: size,
-          height: size,
-        }}
-      ></div>
+      <div>
+        <Orb
+          style={{
+            width: size,
+            height: size,
+            zIndex: 10,
+          }}
+          color={RGB_PRIMARY_COLOR}
+          state={OrbStatusEnum.waiting}
+        />
+      </div>
     </motion.div>
   );
 };

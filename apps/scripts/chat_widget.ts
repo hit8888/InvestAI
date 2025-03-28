@@ -3,12 +3,34 @@
   const ConfigManager = {
     scriptElement: document.currentScript as HTMLScriptElement | null,
     constants: {
-      DEFAULT_WIDTH: "100vw",
-      DEFAULT_HEIGHT: "88vh",
-      COLLAPSED_SIZE_WIDTH_INITIAL: "100vw",
-      COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT: "28vw",
-      COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX: 240,
-      COLLAPSED_SIZE_HEIGHT_PX: 100,
+      RESPONSIVE_SIZES: {
+        DESKTOP: {
+          DEFAULT: {
+            WIDTH: "max(420px, 100vw)",
+            HEIGHT: "max(700px, 88vh)",
+          },
+          COLLAPSED: {
+            WIDTH_INITIAL: "max(420px, 100vw)",
+            WIDTH_MESSAGE_SENT: "min(430px, 30vw)",
+            HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
+            HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
+            HEIGHT: "max(150px, 10vh)",
+          },
+        },
+        TABLET: {
+          DEFAULT: {
+            WIDTH: "max(380px, 100vw)",
+            HEIGHT: "max(600px, 88vh)",
+          },
+          COLLAPSED: {
+            WIDTH_INITIAL: "max(380px, 100vw)",
+            WIDTH_MESSAGE_SENT: "max(380px, 30vw)",
+            HEIGHT_WITH_BUBBLE: "max(280px, 30vh)",
+            HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
+            HEIGHT: "max(140px, 10vh)",
+          },
+        },
+      },
       SENTRY_DSN:
         "https://abd92d53cb1a15b17a6c41f3750a5324@o4507977649750016.ingest.us.sentry.io/4507977650733056",
     } as Constants,
@@ -23,7 +45,8 @@
           this.scriptElement?.getAttribute("show-bottom-bar") === "true",
         height:
           this.scriptElement?.getAttribute("max-height") ||
-          this.constants.DEFAULT_HEIGHT,
+          this.constants.RESPONSIVE_SIZES[DeviceManager.getDeviceType()].DEFAULT
+            .HEIGHT,
         allowExternalButtons:
           this.scriptElement?.getAttribute("allow-external-buttons") === "true",
         containerId: this.scriptElement?.getAttribute("container-id") ?? null,
@@ -83,6 +106,11 @@
         navigator.userAgent,
       );
     },
+
+    getDeviceType(): "DESKTOP" | "TABLET" {
+      const width = window.innerWidth;
+      return width >= 1024 ? "DESKTOP" : "TABLET";
+    },
   };
 
   // Sentry Module
@@ -128,6 +156,13 @@
 
   // Style Manager Module
   const StyleManager = {
+    getResponsiveSize(
+      deviceType: "DESKTOP" | "TABLET",
+      isCollapsed: boolean,
+    ): DefaultSizes | CollapsedSizes {
+      const sizes = ConfigManager.constants.RESPONSIVE_SIZES[deviceType];
+      return isCollapsed ? sizes.COLLAPSED : sizes.DEFAULT;
+    },
     adjustResponsiveStyles(
       container: HTMLElement,
       isAgentOpen: boolean,
@@ -135,33 +170,47 @@
       showBanner: boolean,
       hasFirstUserMessageBeenSent: boolean,
     ): void {
-      const {
-        DEFAULT_WIDTH,
-        DEFAULT_HEIGHT,
-        COLLAPSED_SIZE_WIDTH_INITIAL,
-        COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX,
-        COLLAPSED_SIZE_HEIGHT_PX,
-        COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT,
-      } = ConfigManager.constants;
+      const deviceType = DeviceManager.getDeviceType();
+      const sizes = StyleManager.getResponsiveSize(deviceType, !isAgentOpen);
 
       let width: string, height: string;
+
       if (!isAgentOpen) {
-        width = hideBottomBar
-          ? "0"
-          : hasFirstUserMessageBeenSent
-            ? COLLAPSED_SIZE_WIDTH_MESSAGE_HAS_BEEN_SENT
-            : COLLAPSED_SIZE_WIDTH_INITIAL;
-        height = hideBottomBar
-          ? "0"
-          : showBanner
-            ? `${COLLAPSED_SIZE_HEIGHT_WITH_BUBBLE_PX}px`
-            : `${COLLAPSED_SIZE_HEIGHT_PX}px`;
+        if (hideBottomBar) {
+          width = "0";
+          height = "0";
+        } else {
+          width = hasFirstUserMessageBeenSent
+            ? (sizes as CollapsedSizes).WIDTH_MESSAGE_SENT
+            : (sizes as CollapsedSizes).WIDTH_INITIAL;
+
+          height = showBanner
+            ? (sizes as CollapsedSizes).HEIGHT_WITH_BUBBLE
+            : hasFirstUserMessageBeenSent
+              ? (sizes as CollapsedSizes).HEIGHT_MESSAGE_SENT
+              : (sizes as DefaultSizes).HEIGHT;
+        }
       } else {
-        width = DEFAULT_WIDTH;
-        height = DEFAULT_HEIGHT;
+        width = (sizes as DefaultSizes).WIDTH;
+        height = (sizes as DefaultSizes).HEIGHT;
       }
 
-      Object.assign(container.style, { width, height });
+      const styles: Partial<CSSStyleDeclaration> = {
+        width,
+        height,
+        transition: "width 0.3s ease, height 0.3s ease",
+        maxWidth: "100vw",
+        maxHeight: "100vh",
+      };
+
+      Object.assign(styles, {
+        bottom: "10px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        borderRadius: "12px",
+      });
+
+      Object.assign(container.style, styles);
     },
   };
 
@@ -312,13 +361,17 @@
 
       const container = document.createElement("div");
       container.id = "chat-widget-container";
+
+      const deviceType = DeviceManager.getDeviceType();
+      const sizes = StyleManager.getResponsiveSize(deviceType, true);
+
       Object.assign(container.style, {
         position: "fixed",
         bottom: "10px",
+        transform: "translateX(-50%)",
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
-        width: ConfigManager.constants.DEFAULT_WIDTH,
-        transform: "translateX(-50%)",
+        width: (sizes as CollapsedSizes).WIDTH_INITIAL,
         pointerEvents: "auto",
         display: ConfigManager.getConfig().containerId ? "none" : "block",
       });

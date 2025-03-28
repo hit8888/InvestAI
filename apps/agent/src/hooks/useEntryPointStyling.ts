@@ -38,7 +38,7 @@ export const useEntryPointStyling = ({
     'absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90 p-0.5',
     {
       'w-[calc(66.66%+110px)]': !hasFirstUserMessageBeenSent,
-      'w-[400px]': hasFirstUserMessageBeenSent,
+      'w-[95%]': hasFirstUserMessageBeenSent,
       hidden: hideBottomBar,
       'bottom-bar-shadow': shadow_enabled,
     },

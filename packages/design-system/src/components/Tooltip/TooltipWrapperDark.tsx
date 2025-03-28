@@ -7,6 +7,7 @@ interface IProps {
   content: React.ReactNode;
   tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
   tooltipAlign?: 'start' | 'center' | 'end';
+  tooltipSideOffsetValue?: number;
 }
 
 const TooltipWrapperDark = ({
@@ -15,6 +16,7 @@ const TooltipWrapperDark = ({
   content,
   tooltipSide = 'bottom',
   tooltipAlign = 'end',
+  tooltipSideOffsetValue = 80,
 }: IProps) => {
   return (
     <TooltipProvider>
@@ -24,7 +26,7 @@ const TooltipWrapperDark = ({
         </TooltipTrigger>
         {showTooltip && (
           <TooltipContent
-            sideOffset={tooltipSide === 'top' ? 80 : 5}
+            sideOffset={tooltipSide === 'top' ? tooltipSideOffsetValue : 5}
             align={tooltipAlign}
             side={tooltipSide}
             className="z-[9999] rounded-lg border-none bg-gray-900 px-3 py-2 text-white"
