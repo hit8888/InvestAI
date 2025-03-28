@@ -171,8 +171,7 @@ jobs:
         if: steps.check_changes.outputs.changes == 'true'
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::381491968321:role/DjangoBackendCIRole
           aws-region: us-west-1
 
       - name: Upload scripts to S3
@@ -243,3 +242,4 @@ jobs:
 permissions:
   contents: read
   pull-requests: read
+  id-token: write
