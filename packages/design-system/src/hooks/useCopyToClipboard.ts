@@ -1,3 +1,4 @@
+import { trackError } from '@meaku/core/utils/error';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -20,8 +21,21 @@ export const useCopyToClipboard = (text: string, options: CopyToClipboardOptions
     }
   }, [isCopied, copyDuration]);
 
-  const copy = () => {
-    navigator.clipboard.writeText(text);
+  const copy = async () => {
+    try {
+      // Try using Clipboard API first
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      trackError(err, {
+        action: 'copy',
+        component: 'useCopyToClipboard',
+        additionalData: {
+          copiedText: text,
+          error: err,
+        },
+      });
+    }
+
     if (onCopy) {
       onCopy();
     }
