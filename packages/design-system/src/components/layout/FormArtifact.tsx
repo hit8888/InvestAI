@@ -92,11 +92,13 @@ const FormArtifact = ({
   // Watch all form fields
   const formValues = form.watch();
 
-  // check if all fields are filled
-  const areAllFieldsFilled = artifact?.form_fields.every((field) => {
-    const value = formValues[field.field_name];
-    return value !== undefined && value !== '' && value !== null;
-  });
+  // check if all required fields are filled
+  const areAllFieldsFilled = artifact?.form_fields
+    .filter((field) => field.is_required)
+    .every((field) => {
+      const value = formValues[field.field_name];
+      return value !== undefined && value !== '' && value !== null;
+    });
 
   if (!artifact) {
     return <></>;

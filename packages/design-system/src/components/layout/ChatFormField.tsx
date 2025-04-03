@@ -19,14 +19,19 @@ interface IChatFormFieldProps {
   isArtifactFormFilled: boolean;
 }
 
+// Helper function to generate label with asterisk for required fields
+const getLabelWithRequiredIndicator = (label: string, isRequired: boolean): string => {
+  return `${label}${isRequired ? '*' : ''}`;
+};
+
 const ChatFormField = (props: IChatFormFieldProps) => {
   const { form, form_field, isArtifactFormFilled } = props;
 
-  const isPhoneInputField = form_field.field_name === 'phone_number';
+  const isPhoneInputField = form_field.field_name === 'phone';
 
   const getIconBasedOnField = () => {
     switch (form_field.field_name) {
-      case 'phone_number':
+      case 'phone':
         return <DynamicIcon icon="phone" className="h-3.5 w-3.5 text-primary/60" />;
       case 'email':
       case 'business_email':
@@ -50,7 +55,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               {isPhoneInputField ? (
                 <PhoneInputContainer
                   isArtifactFormFilled={isArtifactFormFilled}
-                  phoneLabel={`${form_field.label}*`}
+                  phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
                   field={field}
                 />
               ) : (
@@ -58,7 +63,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
                   readOnly={isArtifactFormFilled}
                   {...field}
                   className="border border-primary/30 bg-white placeholder:text-gray-400 focus:border-2 focus:border-primary/40 focus:ring-0"
-                  placeholder={`${form_field.label}*`}
+                  placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
                   type={getInputType(form_field.data_type)}
                 />
               )}
