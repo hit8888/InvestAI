@@ -6,12 +6,14 @@ import useLocalStorageSession from './useLocalStorageSession';
 import { WebSocketMessage } from '../types/webSocketData';
 import { useWidgetMode } from '../contexts/WidgetModeProvider';
 import { useAppEventsHook } from './useAppEventsHook';
+import { EntryPointAlignmentType } from '../types/entryPoint';
 
 interface IProps {
   fetchSessionData: () => void;
   handleOpenAgent: () => void;
   showBanner: boolean;
   hasFirstUserMessageBeenSent: boolean;
+  entryPointAlignment: EntryPointAlignmentType;
   handleSendUserMessage: ({
     message,
     message_type,
@@ -23,6 +25,7 @@ export const useEmbedAppEvents = ({
   handleOpenAgent,
   showBanner,
   hasFirstUserMessageBeenSent,
+  entryPointAlignment,
   handleSendUserMessage,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -116,9 +119,10 @@ export const useEmbedAppEvents = ({
       tooltipOpen: false,
       showBanner,
       hasFirstUserMessageBeenSent,
+      entryPointAlignment,
     };
     window.parent.postMessage(payload, '*');
-  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent]);
+  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment]);
 
   useEffect(() => {
     window.parent.postMessage({ type: 'EMBED_READY', sessionId: sessionId }, '*');

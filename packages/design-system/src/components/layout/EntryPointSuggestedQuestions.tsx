@@ -33,8 +33,8 @@ const EntryPointSuggestedQuestions = ({
   return (
     <motion.div
       className={cn({
-        'flex w-full justify-end': isQuestionAlignmentRight || isQuestionAlignmentCenter,
-        'flex w-full justify-start': isQuestionAlignmentLeft,
+        'flex w-full justify-start': showSuggestedQuestions && (isQuestionAlignmentRight || isQuestionAlignmentLeft),
+        'flex w-full justify-end': showSuggestedQuestions && isQuestionAlignmentCenter,
       })}
       variants={showBouncingEffect ? floatingAnimation : undefined}
       initial="initial"
@@ -44,10 +44,13 @@ const EntryPointSuggestedQuestions = ({
         variants={suggestionContainerAnimation}
         initial="initial"
         animate="animate"
-        className={cn('flex items-center justify-end gap-4 transition-[width] duration-150 ease-in-out', {
+        className={cn('flex items-center gap-4 transition-[width] duration-150 ease-in-out', {
           'w-0': !showSuggestedQuestions,
           'max-w-[800px] overflow-hidden': showSuggestedQuestions && !showOneByOne,
           'w-full': showSuggestedQuestions && showOneByOne,
+          'justify-end': isQuestionAlignmentRight && showSuggestedQuestions,
+          'justify-center': isQuestionAlignmentCenter && showSuggestedQuestions,
+          'justify-start': isQuestionAlignmentLeft && showSuggestedQuestions,
         })}
       >
         {showSuggestedQuestions && (

@@ -107,12 +107,28 @@ declare global {
   }
 
   interface CollapsedSizes {
-    WIDTH_INITIAL: string;
-    WIDTH_MESSAGE_SENT: string;
-    HEIGHT_WITH_BUBBLE: string;
-    HEIGHT: string;
-    HEIGHT_MESSAGE_SENT: string;
+    SIDEWISE_WIDTH_INITIAL: string;
+    SIDEWISE_WIDTH_MESSAGE_SENT: string;
+    SIDEWISE_HEIGHT_WITH_BUBBLE: string;
+    SIDEWISE_HEIGHT: string;
+    SIDEWISE_HEIGHT_MESSAGE_SENT: string;
+    CENTER_WIDTH_INITIAL: string;
+    CENTER_WIDTH_MESSAGE_SENT: string;
+    CENTER_HEIGHT_WITH_BUBBLE: string;
+    CENTER_HEIGHT: string;
+    CENTER_HEIGHT_MESSAGE_SENT: string;
   }
+
+  // Define the enum as a regular object for runtime access
+  const EntryPointAlignment = {
+    LEFT: "left",
+    RIGHT: "right",
+    CENTER: "center",
+  } as const;
+
+  // Type for TypeScript
+  type EntryPointAlignmentType =
+    (typeof EntryPointAlignment)[keyof typeof EntryPointAlignment];
 
   interface Constants {
     RESPONSIVE_SIZES: {
@@ -151,6 +167,7 @@ declare global {
     isCollapsible?: boolean;
     chatOpen?: boolean;
     showBanner?: boolean;
+    entryPointAlignment?: EntryPointAlignmentType;
     hasFirstUserMessageBeenSent?: boolean;
     sessionId?: string;
   }

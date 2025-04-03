@@ -9,6 +9,9 @@ import EntryPointContentForBottomCenter from './EntryPointContentForBottomCenter
 import InsetAgentOpenButton from './InsetAgentOpenButton.tsx';
 import SideWiseEntryPoint from './SideWiseEntryPoint.tsx';
 import { useEntryPointStyling } from '../../../../hooks/useEntryPointStyling';
+import { cn } from '@breakout/design-system/lib/cn';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
+import { useMessageStore } from '../../../../stores/useMessageStore';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -35,18 +38,16 @@ const EntryPointBottomBar = ({
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
-  const {
-    isEntryPointOnTheBottomCenter,
-    isSideWiseEntryPoint,
-    stylingForParentContainerSidewiseEntryPoint,
-    stylingForParentContainerBottomCenterEntryPoint,
-    containerStyle,
-  } = useEntryPointStyling({
-    hideBottomBar,
-    shadow_enabled,
+  const { getParam } = useUrlParams();
+  const isAgentOpen = getParam('isAgentOpen') === 'true';
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+
+  const { isEntryPointOnTheBottomCenter, isSideWiseEntryPoint, containerStyle } = useEntryPointStyling({
     entryPointAlignment,
   });
 
+  const shouldShowOnlySidewiseEntryPointOrb = isSideWiseEntryPoint && !isAgentOpen && hasFirstUserMessageBeenSent;
+  const shouldShowBottombarShadow = isEntryPointOnTheBottomCenter && shadow_enabled;
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage({
       message: { content: msg, event_data: {}, event_type: 'SUGGESTED_QUESTION_CLICKED' },
@@ -65,11 +66,14 @@ const EntryPointBottomBar = ({
 
   return (
     <div
-      className={
-        isEntryPointOnTheBottomCenter
-          ? stylingForParentContainerBottomCenterEntryPoint
-          : stylingForParentContainerSidewiseEntryPoint
-      }
+      className={cn('z-10 flex p-0.5', {
+        'absolute bottom-4 left-1/2 -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90':
+          isEntryPointOnTheBottomCenter,
+        'relative w-full items-end justify-start': !isEntryPointOnTheBottomCenter,
+        hidden: hideBottomBar,
+        'h-20 w-full': shouldShowOnlySidewiseEntryPointOrb,
+        'bottom-bar-shadow': shouldShowBottombarShadow,
+      })}
       style={containerStyle}
     >
       <PopupBannerContent

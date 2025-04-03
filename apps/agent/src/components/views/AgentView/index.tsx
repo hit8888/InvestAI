@@ -50,6 +50,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     handleOpenAgent,
     showBanner: !!showBanner,
     hasFirstUserMessageBeenSent,
+    entryPointAlignment: entry_point_alignment ?? 'center',
     handleSendUserMessage,
   });
 
@@ -58,9 +59,17 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isAgentOpen });
   };
 
+  const isSideWiseEntryPoint = entry_point_alignment !== 'center';
+  const getItemAlignment = () => {
+    if (!hasFirstUserMessageBeenSent) {
+      return isSideWiseEntryPoint ? 'items-end justify-end' : 'items-end justify-center';
+    }
+    return isSideWiseEntryPoint ? 'items-end' : 'items-center';
+  };
+
   return (
     <div
-      className={cn('mx-auto flex h-[95vh] w-[90vw] justify-center font-inter', {
+      className={cn(getItemAlignment(), 'mx-auto flex h-[95vh] w-[90vw] font-inter', {
         'mt-2 rounded-3xl': isAgentOpen,
         'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
       })}

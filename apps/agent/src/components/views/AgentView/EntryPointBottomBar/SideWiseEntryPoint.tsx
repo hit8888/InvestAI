@@ -29,9 +29,9 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
   const getEntryPointOrb = () => {
     return (
       <div
-        className={cn('absolute flex h-16 w-[20%] items-center', {
-          '-right-4': isEntryPointOnTheBottomRight,
-          'left-2': isEntryPointOnTheBottomLeft,
+        className={cn('relative flex h-16 w-16 items-center', {
+          'right-4': isEntryPointOnTheBottomRight && hasFirstUserMessageBeenSent,
+          '-left-2': isEntryPointOnTheBottomLeft && hasFirstUserMessageBeenSent,
         })}
       >
         <InputOrb
@@ -44,7 +44,11 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
     );
   };
   return (
-    <div className="relative flex w-full items-center p-2">
+    <div
+      className={cn('relative flex w-full items-center p-2', {
+        'justify-end': isEntryPointOnTheBottomRight && hasFirstUserMessageBeenSent,
+      })}
+    >
       {isEntryPointOnTheBottomLeft && <>{getEntryPointOrb()}</>}
       {!hasFirstUserMessageBeenSent && (
         <EntryPointSuggestedQuestions

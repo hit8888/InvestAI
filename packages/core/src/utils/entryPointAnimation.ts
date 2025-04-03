@@ -42,13 +42,13 @@ const getSuggestionItemAnimation = (questionAlignment: EntryPointAlignmentType) 
 
   return {
     initial: {
-      x: isQuestionAlignmentRight ? 16 : -40,
+      x: isQuestionAlignmentRight ? 40 : 0,
       opacity: 0,
       scale: 0.8,
       transformOrigin: isQuestionAlignmentRight ? '100%' : '0%',
     },
     animate: {
-      x: isQuestionAlignmentRight ? -gapDistance - 48 : isQuestionAlignmentCenter ? 0 : gapDistance,
+      x: isQuestionAlignmentRight ? -gapDistance + 16 : isQuestionAlignmentCenter ? 0 : gapDistance + 16,
       opacity: 1,
       scale: 1,
       transition: {

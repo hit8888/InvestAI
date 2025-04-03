@@ -10,11 +10,16 @@
             HEIGHT: "max(700px, 88vh)",
           },
           COLLAPSED: {
-            WIDTH_INITIAL: "max(420px, 100vw)",
-            WIDTH_MESSAGE_SENT: "min(430px, 30vw)",
-            HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
-            HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
-            HEIGHT: "max(150px, 10vh)",
+            CENTER_WIDTH_INITIAL: "max(420px, 100vw)",
+            CENTER_WIDTH_MESSAGE_SENT: "max(440px, 25vw)",
+            CENTER_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
+            CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
+            CENTER_HEIGHT: "max(150px, 10vh)",
+            SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
+            SIDEWISE_WIDTH_INITIAL: "500px",
+            SIDEWISE_HEIGHT_WITH_BUBBLE: "250px",
+            SIDEWISE_HEIGHT: "100px",
+            SIDEWISE_HEIGHT_MESSAGE_SENT: "80px",
           },
         },
         TABLET: {
@@ -23,11 +28,16 @@
             HEIGHT: "max(600px, 88vh)",
           },
           COLLAPSED: {
-            WIDTH_INITIAL: "max(380px, 100vw)",
-            WIDTH_MESSAGE_SENT: "max(380px, 30vw)",
-            HEIGHT_WITH_BUBBLE: "max(280px, 30vh)",
-            HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
-            HEIGHT: "max(140px, 10vh)",
+            CENTER_WIDTH_INITIAL: "max(380px, 100vw)",
+            CENTER_WIDTH_MESSAGE_SENT: "max(440px, 30vw)",
+            CENTER_HEIGHT_WITH_BUBBLE: "max(280px, 30vh)",
+            CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
+            CENTER_HEIGHT: "max(140px, 10vh)",
+            SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
+            SIDEWISE_WIDTH_INITIAL: "500px",
+            SIDEWISE_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
+            SIDEWISE_HEIGHT: "100px",
+            SIDEWISE_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
           },
         },
       },
@@ -168,6 +178,7 @@
       isAgentOpen: boolean,
       hideBottomBar: boolean,
       showBanner: boolean,
+      entryPointAlignment: EntryPointAlignmentType,
       hasFirstUserMessageBeenSent: boolean,
     ): void {
       const deviceType = DeviceManager.getDeviceType();
@@ -175,20 +186,31 @@
 
       let width: string, height: string;
 
+      const isSidewiseEntryPoint = entryPointAlignment !== "center";
       if (!isAgentOpen) {
         if (hideBottomBar) {
           width = "0";
           height = "0";
         } else {
           width = hasFirstUserMessageBeenSent
-            ? (sizes as CollapsedSizes).WIDTH_MESSAGE_SENT
-            : (sizes as CollapsedSizes).WIDTH_INITIAL;
+            ? isSidewiseEntryPoint
+              ? (sizes as CollapsedSizes).SIDEWISE_WIDTH_MESSAGE_SENT
+              : (sizes as CollapsedSizes).CENTER_WIDTH_MESSAGE_SENT
+            : isSidewiseEntryPoint
+              ? (sizes as CollapsedSizes).SIDEWISE_WIDTH_INITIAL
+              : (sizes as CollapsedSizes).CENTER_WIDTH_INITIAL;
 
           height = showBanner
-            ? (sizes as CollapsedSizes).HEIGHT_WITH_BUBBLE
+            ? isSidewiseEntryPoint
+              ? (sizes as CollapsedSizes).SIDEWISE_HEIGHT_WITH_BUBBLE
+              : (sizes as CollapsedSizes).CENTER_HEIGHT_WITH_BUBBLE
             : hasFirstUserMessageBeenSent
-              ? (sizes as CollapsedSizes).HEIGHT_MESSAGE_SENT
-              : (sizes as DefaultSizes).HEIGHT;
+              ? isSidewiseEntryPoint
+                ? (sizes as CollapsedSizes).SIDEWISE_HEIGHT_MESSAGE_SENT
+                : (sizes as CollapsedSizes).CENTER_HEIGHT_MESSAGE_SENT
+              : isSidewiseEntryPoint
+                ? (sizes as CollapsedSizes).SIDEWISE_HEIGHT
+                : (sizes as DefaultSizes).HEIGHT;
         }
       } else {
         width = (sizes as DefaultSizes).WIDTH;
@@ -205,12 +227,64 @@
 
       Object.assign(styles, {
         bottom: "10px",
-        left: "50%",
-        transform: "translateX(-50%)",
+        left: StyleManager.getEntryPointLeftKeyValue(
+          entryPointAlignment,
+          isAgentOpen,
+          hasFirstUserMessageBeenSent,
+        ),
+        transform: StyleManager.getEntryPointTransformKeyValue(
+          entryPointAlignment,
+          isAgentOpen,
+          hasFirstUserMessageBeenSent,
+        ),
         borderRadius: "12px",
       });
 
       Object.assign(container.style, styles);
+    },
+    getEntryPointLeftKeyValue(
+      entryPointAlignment: EntryPointAlignmentType,
+      isAgentOpen: boolean,
+      hasFirstUserMessageBeenSent: boolean,
+    ): string {
+      switch (entryPointAlignment) {
+        case "left":
+          return "0";
+        case "right":
+          if (hasFirstUserMessageBeenSent) {
+            if (isAgentOpen) {
+              return "50%";
+            } else {
+              return "100%";
+            }
+          } else return "50%";
+        case "center":
+          return "50%";
+        default:
+          return "50%";
+      }
+    },
+    getEntryPointTransformKeyValue(
+      entryPointAlignment: EntryPointAlignmentType,
+      isAgentOpen: boolean,
+      hasFirstUserMessageBeenSent: boolean,
+    ): string {
+      switch (entryPointAlignment) {
+        case "left":
+          return "translateX(0)";
+        case "right":
+          if (hasFirstUserMessageBeenSent) {
+            if (isAgentOpen) {
+              return "translateX(-50%)";
+            } else {
+              return "translateX(-100%)";
+            }
+          } else return "translateX(50%)";
+        case "center":
+          return "translateX(-50%)";
+        default:
+          return "translateX(-50%)";
+      }
     },
   };
 
@@ -371,7 +445,7 @@
         transform: "translateX(-50%)",
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
-        width: (sizes as CollapsedSizes).WIDTH_INITIAL,
+        width: (sizes as CollapsedSizes).CENTER_WIDTH_INITIAL,
         pointerEvents: "auto",
         display: ConfigManager.getConfig().containerId ? "none" : "block",
       });
@@ -467,6 +541,7 @@
     let isAgentOpen = false;
     let iFrameSource: MessageEventSource | null = null;
     let showBanner = false;
+    let entryPointAlignment: EntryPointAlignmentType | null = null; // default value
     let hasFirstUserMessageBeenSent = false;
     let currentContainer: HTMLElement | null = null;
     let embeddedContainer: HTMLElement | null = null;
@@ -571,6 +646,8 @@
             if (event.data?.chatOpen !== undefined) {
               isAgentOpen = event.data.chatOpen;
               showBanner = event.data.showBanner ?? false;
+              entryPointAlignment =
+                event.data.entryPointAlignment ?? EntryPointAlignment.CENTER;
               hasFirstUserMessageBeenSent =
                 event.data.hasFirstUserMessageBeenSent ?? false;
 
@@ -587,6 +664,7 @@
                   isAgentOpen,
                   config.hideBottomBar,
                   showBanner,
+                  entryPointAlignment,
                   hasFirstUserMessageBeenSent,
                 );
 
@@ -634,6 +712,7 @@
             isAgentOpen,
             config.hideBottomBar,
             showBanner,
+            entryPointAlignment ?? EntryPointAlignment.CENTER,
             hasFirstUserMessageBeenSent,
           );
         }
