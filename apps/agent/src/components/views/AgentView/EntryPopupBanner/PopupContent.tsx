@@ -36,7 +36,7 @@ const PopupContent = ({
         {
           '-top-36 left-2': isEntryPointOnTheBottomLeft,
           '-left-24 -top-40 extraSmall:-left-4 sm:-left-8 lg:-left-24': isEntryPointOnTheCenterBottom,
-          '-top-36 left-12': isEntryPointOnTheBottomRight,
+          '-top-36 right-0': isEntryPointOnTheBottomRight,
         },
       )}
       style={{ zIndex: 20 }}
