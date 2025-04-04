@@ -74,12 +74,18 @@
   const URLManager = {
     updateParentUrlParam(key: string, value: string | null): void {
       const url = new URL(window.parent.location.href);
+      const currentValue = url.searchParams.get(key);
+
+      // Only update if the value is different
       if (value === null || value === "") {
-        url.searchParams.delete(key);
-      } else {
+        if (currentValue !== null) {
+          url.searchParams.delete(key);
+          window.parent.history.replaceState({}, "", url);
+        }
+      } else if (currentValue !== value) {
         url.searchParams.set(key, value);
+        window.parent.history.replaceState({}, "", url);
       }
-      window.parent.history.replaceState({}, "", url);
     },
 
     getQueryParameter(name: string): string | null {
@@ -651,12 +657,10 @@
               hasFirstUserMessageBeenSent =
                 event.data.hasFirstUserMessageBeenSent ?? false;
 
-              if (
-                !isAgentOpen &&
-                URLManager.getQueryParameter("isAgentOpen") === "true"
-              ) {
-                URLManager.updateParentUrlParam("isAgentOpen", "false");
-              }
+              URLManager.updateParentUrlParam(
+                "isAgentOpen",
+                isAgentOpen.toString(),
+              );
 
               if (currentContainer === bottomContainer && bottomContainer) {
                 StyleManager.adjustResponsiveStyles(

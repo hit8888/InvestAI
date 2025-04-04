@@ -9,6 +9,8 @@ import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_re
 import { SessionApiResponse } from '@meaku/core/types/api/session_init_response';
 import { ConfigurationApiResponseManager } from '@meaku/core/managers/ConfigurationApiResponseManager';
 
+const INITIAL_MESSAGES_STATE_LENGTH = 0;
+
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   configurationApiResponse,
   sessionApiResponse,
@@ -57,13 +59,14 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      if (isAdmin && messages.length === 1) {
+      if (isAdmin && messages.length === INITIAL_MESSAGES_STATE_LENGTH) {
         return;
       }
-      // The messages lenngth will be always 1 for demo and non demo path
+      // The messages length will be always INITIAL_MESSAGES_STATE_LENGTH for demo and non demo path
       // For Demo => sessionID and prospectID is initially generated when the user provides the email address and start the chat
-      // For Non-Demo => sessionID and prospectID will be generated only when the user sends the first message( by clicking on the suggested questions or by typing in the chat)
-      setHasFirstUserMessageBeenSent(messages.length > 0);
+      // For Non-Demo agent + chat_widget + isAgentOpen = true => messages.length = INITIAL_MESSAGES_STATE_LENGTH,
+      // Adding the check for messages.length > INITIAL_MESSAGES_STATE_LENGTH to handle the case where the agent view will be open and chat messages does not go on the leftside and suggested questions should be visible
+      setHasFirstUserMessageBeenSent(messages.length > INITIAL_MESSAGES_STATE_LENGTH);
     }
   }, [handleUpdateSessionData, isReadOnly, isAdmin, prospectId, sessionId]);
 };
