@@ -10,6 +10,7 @@ import { SessionApiResponse } from '@meaku/core/types/api/session_init_response'
 import { ConfigurationApiResponseManager } from '@meaku/core/managers/ConfigurationApiResponseManager';
 
 const INITIAL_MESSAGES_STATE_LENGTH = 0;
+const INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS = 1;
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   configurationApiResponse,
@@ -59,7 +60,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
-      if (isAdmin && messages.length === INITIAL_MESSAGES_STATE_LENGTH) {
+      if (isAdmin && messages.length === INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS) {
         return;
       }
       // The messages length will be always INITIAL_MESSAGES_STATE_LENGTH for demo and non demo path
