@@ -42,6 +42,7 @@ export const SuggestedQuestionsShowingInCycle = ({
           onSuggestedQuestionOnClick={onQuestionClick}
           itemIndex={currentQuestionIndex}
           isQuestionInCycle={true} // questions are in cycle
+          isEntryPointQuestion={true}
         />
       </motion.div>
     </div>

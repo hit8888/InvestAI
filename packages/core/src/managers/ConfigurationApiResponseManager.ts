@@ -37,10 +37,6 @@ export class ConfigurationApiResponseManager {
     return this.config.body.welcome_message.suggested_questions;
   }
 
-  getShowBouncingEffectOnSuggestedQuestions() {
-    return this.config.body.welcome_message.bounce_message;
-  }
-
   getStyleConfig() {
     const { style_config } = this.config;
     const result = { ...style_config };

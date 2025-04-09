@@ -48,7 +48,6 @@ const EntryPointContentForBottomCenter = ({
   const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
 
   const orbConfig = configurationApiResponseManager.getOrbConfig();
-  const showBouncingEffect = configurationApiResponseManager.getShowBouncingEffectOnSuggestedQuestions();
   const orbLogoUrl = orbConfig?.logo_url ?? undefined;
 
   return (
@@ -72,7 +71,6 @@ const EntryPointContentForBottomCenter = ({
           showSuggestedQuestions={showSuggestedQuestions}
           initialSuggestedQuestions={initialSuggestedQuestions}
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
-          showBouncingEffect={showBouncingEffect}
           questionAlignment={entryPointAlignment}
         />
 

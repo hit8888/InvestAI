@@ -11,11 +11,11 @@ interface IProps {
 const getLayoutClass = (totalItems: number) => {
   return cn(
     // Base classes that apply to all cases
-    'flex flex-wrap items-center justify-center p-2',
+    'flex flex-wrap items-center justify-center p-4',
 
     // Conditional classes based on total items
     {
-      'flex-col gap-10 max-w-4xl': totalItems <= 2,
+      'w-2/3 flex-col gap-10 max-w-4xl': totalItems <= 2,
       'gap-6 max-w-5xl': totalItems > 2 && totalItems <= 4,
       'gap-6 max-w-6xl': totalItems > 4 && totalItems <= 6,
       'gap-4 max-w-7xl': totalItems > 6, // for 7-10 items
@@ -25,7 +25,7 @@ const getLayoutClass = (totalItems: number) => {
 
 const getItemClass = (totalItems: number) => {
   // Base width for items depending on total count
-  if (totalItems <= 2) return 'w-[calc(100%-1rem)]';
+  if (totalItems <= 2) return 'w-[calc(100%-1rem)] flex-1';
   if (totalItems <= 4) return 'w-[calc(50.333%-1rem)]';
   if (totalItems === 5) return 'w-[calc(50.333%-1rem)]';
   if (totalItems <= 7) return 'w-[calc(33.333%-1rem)]';

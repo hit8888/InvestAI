@@ -197,6 +197,11 @@ const config: Omit<Config, "content"> = {
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
         popupBannerBorder: "#F2F4F7",
+        transparent_gray_3: "rgba(16, 24, 40, 0.03)",
+        transparent_gray_6: "rgba(16, 24, 40, 0.06)",
+        transparent_gray_8: "rgba(16, 24, 40, 0.08)",
+        transparent_white_32: "rgba(255, 255, 255, 0.32)",
+        transparent_white_85: "rgba(255, 255, 255, 0.85)",
       },
       animation: {
         ripple: "ripple 1s infinite ease-in-out",

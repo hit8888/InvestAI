@@ -45,6 +45,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
             question={question}
             onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
             itemIndex={index}
+            isEntryPointQuestion={false}
           />
         </div>
       ))}

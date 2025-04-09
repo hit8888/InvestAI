@@ -17,7 +17,6 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
 
   const showSuggestedQuestions = initialSuggestedQuestions.length > 0 && !hasFirstUserMessageBeenSent;
 
-  const showBouncingEffect = configurationApiResponseManager.getShowBouncingEffectOnSuggestedQuestions();
   const orbConfig = configurationApiResponseManager.getOrbConfig();
   const orbLogoUrl = orbConfig?.logo_url ?? undefined;
   // If we need to show orb, we need to set show_orb to true in the agent server config
@@ -55,7 +54,6 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
           showSuggestedQuestions={showSuggestedQuestions}
           initialSuggestedQuestions={initialSuggestedQuestions}
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
-          showBouncingEffect={showBouncingEffect}
           questionAlignment={entryPointAlignment}
           showOneByOne={isEntryPointOnTheBottomLeft || isEntryPointOnTheBottomRight}
         />

@@ -24,7 +24,7 @@ const ChatArtifact = ({ artifact, handleSendUserMessage, isformDisabled }: IProp
       case 'SUGGESTIONS':
         return (
           <SuggestionsArtifact
-            suggestedQuestionOrientation="left"
+            suggestedQuestionOrientation="right"
             artifact={artifact.content as SuggestionArtifactContent}
             handleSendUserMessage={handleSendUserMessage}
           />
