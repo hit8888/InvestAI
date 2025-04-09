@@ -1,6 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
 import AgentInput from '@breakout/design-system/components/layout/AgentInput';
+import PoweredByBreakout from '@breakout/design-system/components/layout/PoweredByBreakout';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
@@ -123,6 +124,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             messages={messages}
           />
         )}
+        {/* Powered By Breakout - Only visible when the agent is open for all conditions */}
+        <PoweredByBreakout />
       </div>
     </div>
   );
