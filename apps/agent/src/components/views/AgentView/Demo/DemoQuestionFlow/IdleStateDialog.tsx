@@ -22,7 +22,7 @@ export const IdleStateDialog = ({
 
       <DialogContent className="fixed left-1/2 top-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2 bg-white p-4">
         <div className="p-4">
-          <h3 className="mb-4 text-xl font-semibold">Would you like to continue the demo?</h3>
+          <h3 className="mb-4 text-xl font-semibold text-customPrimaryText">Would you like to continue the demo?</h3>
           <div className="mt-4 flex justify-end gap-2">
             <Button onClick={handleContinueSpeaking}>Continue Speaking</Button>
             <Button onClick={handleContinueDemo}>Continue Demo</Button>

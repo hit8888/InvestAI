@@ -64,10 +64,10 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
               {demoFeatures.map((feature) => (
                 <span
                   className={cn(
-                    'flex h-10 cursor-pointer items-center gap-2 rounded-custom-56 border-2 border-primary py-2 pl-2 pr-4 text-customSecondaryText',
+                    'flex h-10 cursor-pointer items-center gap-2.5 rounded-custom-56 border-2 border-gray-400 py-2 pl-2 pr-4 text-customSecondaryText',
                     {
-                      'bg-primary text-white': selectedIds.includes(feature.id),
-                      'hover:bg-primary/10': !selectedIds.includes(feature.id),
+                      'bg-gray-900 font-medium text-white': selectedIds.includes(feature.id),
+                      'hover:bg-transparent_gray_6': !selectedIds.includes(feature.id),
                     },
                   )}
                   key={feature.id}

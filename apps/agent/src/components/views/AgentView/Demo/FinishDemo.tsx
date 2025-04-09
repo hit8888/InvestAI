@@ -1,6 +1,5 @@
 import Button from '@breakout/design-system/components/layout/button';
 import { Dialog, DialogContent } from '@breakout/design-system/components/layout/dialog';
-import { EndFlag } from '@breakout/design-system/components/icons/EndFlag';
 import { useState } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -33,10 +32,11 @@ const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="w-[420px] bg-white p-4">
           <div className="flex w-full flex-col items-center">
-            <EndFlag />
-            <span className="mb-1 mt-4 text-2xl font-semibold">End Demo Early?</span>
-            Are you sure you want to end the demo? You can always restart it later or return to the chat to continue
-            exploring our features.
+            <span className="mb-1 mt-4 text-2xl font-semibold text-customPrimaryText">End Demo Early?</span>
+            <span className="text-base text-customSecondaryText">
+              Are you sure you want to end the demo? You can always restart it later or return to the chat to continue
+              exploring our features.
+            </span>
           </div>
           <div className="mt-4 flex w-full justify-between gap-2">
             <Button

@@ -172,7 +172,7 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
               <DialogTitle>
                 <MessageSquare />
               </DialogTitle>
-              <DialogDescription className="text-lg font-medium text-gray-900">
+              <DialogDescription className="text-lg font-medium text-customPrimaryText">
                 Please provide more details about your rating
               </DialogDescription>
             </DialogHeader>
