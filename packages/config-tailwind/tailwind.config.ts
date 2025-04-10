@@ -194,6 +194,9 @@ const config: Omit<Config, "content"> = {
           DEFAULT: "rgb(var(--secondary))",
           foreground: "rgb(var(--secondary-foreground))",
         },
+        system: {
+          DEFAULT: "rgb(var(--system))",
+        },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
         popupBannerBorder: "#F2F4F7",
@@ -213,6 +216,7 @@ const config: Omit<Config, "content"> = {
         "typing-dot1": "typing-dot 1.2s infinite 0.0s",
         "typing-dot2": "typing-dot 1.2s infinite 0.2s",
         "typing-dot3": "typing-dot 1.2s infinite 0.4s",
+        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         ripple: {

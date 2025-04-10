@@ -33,10 +33,10 @@ const Artifact = ({
   const activeArtifactType = activeArtifact?.artifact_type;
 
   return (
-    <div className={cn('col-span-2 mr-2 pl-2', { 'col-span-3': isMediaTakingFullWidth })}>
-      <div className="flex h-full w-full items-center justify-center">
+    <div className={cn('col-span-2 pl-2 pr-4 pt-4', { 'col-span-3': isMediaTakingFullWidth })}>
+      <div className="flex h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 px-2">
         <AspectRatio ratio={16 / 9}>
-          <div className="group relative h-full w-full overflow-hidden rounded-xl">
+          <div className="group relative h-full w-full overflow-hidden rounded-lg">
             {isGeneratingArtifact ? (
               <div className="h-full w-full animate-pulse bg-primary/10" />
             ) : (

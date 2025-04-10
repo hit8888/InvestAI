@@ -1,22 +1,22 @@
 .custom-blur {
   /* Base background with slight transparency */
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.32);
 
   /* Direct blur properties */
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 /* Firefox fallback */
 @-moz-document url-prefix() {
   .custom-blur {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.32);
   }
 }
 
 /* Legacy browsers fallback */
 @supports not (backdrop-filter: blur(0)) {
   .custom-blur {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.32);
   }
 }

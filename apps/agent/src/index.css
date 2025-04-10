@@ -70,33 +70,6 @@
       rgba(249, 250, 251, 0.8) 100%
     );
   }
-
-  @keyframes gradientAnimation {
-    0% {
-      background-position: 0% 50%;
-    }
-    25% {
-      background-position: 25% 50%;
-    }
-    50% {
-      background-position: 50% 50%;
-    }
-    75% {
-      background-position: 75% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .gradient-text {
-    background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--secondary)), rgb(var(--primary)));
-    background-size: 200% 200%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: gradientAnimation 5s linear infinite;
-  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

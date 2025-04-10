@@ -1,7 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
 import AgentInput from '@breakout/design-system/components/layout/AgentInput';
-import PoweredByBreakout from '@breakout/design-system/components/layout/PoweredByBreakout';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
@@ -71,8 +70,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
 
   return (
-    <div className="custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-2xl border border-primary/20 p-2 transition-all duration-300 ease-in-out">
-      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
+    <div className="custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 transition-all duration-300 ease-in-out">
+      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-primary-foreground/60">
         <AgentHeader
           handleSendMessage={handleSendMessage}
           handleCloseAgent={handleCloseAgent}
@@ -124,8 +123,6 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             messages={messages}
           />
         )}
-        {/* Powered By Breakout - Only visible when the agent is open for all conditions */}
-        <PoweredByBreakout />
       </div>
     </div>
   );

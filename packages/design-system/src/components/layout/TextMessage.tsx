@@ -10,6 +10,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getMessageTimestamp } from '@meaku/core/utils/index';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import UserMessageChatTail from '../icons/user-message-chat-tail';
 
 interface TextMessageProps {
   message: WebSocketMessage;
@@ -80,7 +81,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
   return (
     <div
       className={cn('flex items-center', {
-        'ml-11 justify-end pr-6': !isAiMessage,
+        'ml-16 justify-end py-4 pr-2': !isAiMessage,
         'flex-col items-end': conditionSpecificForDashboard,
       })}
     >
@@ -88,10 +89,10 @@ const TextMessage: React.FC<TextMessageProps> = ({
         <p className="w-full self-stretch pb-2 pr-2 text-right text-xs font-medium text-gray-500">User</p>
       ) : null}
       <div
-        className={cn('max-w-full', {
-          'rounded-2xl bg-primary/70 px-3 py-2': !isAiMessage,
-          'flex gap-4 p-6 pl-0': isAiMessage && isLastQuestionResponse,
-          'flex gap-7 p-6 pl-0': isAiMessage && !isLastQuestionResponse,
+        className={cn('relative max-w-full', {
+          'bg-transparent_gray_6 rounded-2xl px-4 py-2': !isAiMessage,
+          'flex gap-4 py-4 pl-0': isAiMessage && isLastQuestionResponse,
+          'flex gap-7 p-4 pl-0': isAiMessage && !isLastQuestionResponse,
           'pl-11': !shouldShowActiveOrb && isAiMessage,
         })}
       >
@@ -109,8 +110,8 @@ const TextMessage: React.FC<TextMessageProps> = ({
         <div className="flex-col">
           <div
             className={cn('prose max-w-full flex-1', {
-              'text-white': !isAiMessage,
-              'leading-snug text-primary-textColor': isAiMessage,
+              'text-base text-customPrimaryText': !isAiMessage,
+              'text-base leading-snug text-customPrimaryText': isAiMessage,
             })}
             ref={messageRef}
             onClick={handleMessageClick}
@@ -129,6 +130,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
             ) : null}
           </div>
         </div>
+        {!isAiMessage && <UserMessageChatTail />}
       </div>
     </div>
   );

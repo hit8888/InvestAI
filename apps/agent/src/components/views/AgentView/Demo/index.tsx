@@ -65,7 +65,9 @@ const Demo = ({
       <div className="col-span-2 mr-2 pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
-            <span className="gradient-text">Hold on a moment, we’re preparing your demo!</span>
+            <span className="animate-pulse-fast text-base font-medium text-customSecondaryText">
+              Hold on a moment, we’re preparing your demo!
+            </span>
             <SpinLoader />
           </div>
         </div>

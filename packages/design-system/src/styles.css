@@ -7,21 +7,32 @@
     /* --primary: 102 120 176; */
     /* --primary: 32 62 142;
     --primary-foreground: 255 255 255; */
-    --primary: 96 60 241; /* #603CF1 */
+    --primary: 96 60 241;
+    /* #603CF1 */
     --primary-foreground: 255 255 255;
 
     --secondary: 254 202 81;
     --secondary-foreground: 255 255 255;
+
+    --system: 16 24 40;
+    /* #101828 */
   }
 
-  .bottom-bar-shadow {
-    box-shadow:
-      0px 2px 80px 0px rgb(var(--primary) / 0.07),
-      0px 1.296px 46.852px 0px rgb(var(--primary) / 0.05),
-      0px 0.77px 25.481px 0px rgb(var(--primary) / 0.04),
-      0px 0.4px 13px 0px rgb(var(--primary) / 0.04),
-      0px 0.163px 6.519px 0px rgb(var(--primary) / 0.03),
-      0px 0.037px 3.148px 0px rgb(var(--primary) / 0.02);
+  .input-bar-bg {
+    background: linear-gradient(
+      0deg,
+      #fff 89.2%,
+      rgb(var(--primary-foreground) / 0.9) 90.6%,
+      rgb(var(--primary-foreground) / 0.8) 91.69%,
+      rgb(var(--primary-foreground) / 0.7) 92.73%,
+      rgb(var(--primary-foreground) / 0.6) 93.76%,
+      rgb(var(--primary-foreground) / 0.5) 94.8%,
+      rgb(var(--primary-foreground) / 0.4) 95.78%,
+      rgb(var(--primary-foreground) / 0.3) 96.85%,
+      rgb(var(--primary-foreground) / 0.2) 97.89%,
+      rgb(var(--primary-foreground) / 0.1) 98.97%,
+      rgb(var(--primary-foreground) / 0) 100%
+    );
   }
 
   .bot-indicator {
@@ -44,17 +55,18 @@
 
   .slideitem-default-boxshadow {
     box-shadow:
-      0px 27.348px 55.422px 0px rgb(var(--primary) / 0.05),
-      0px 14.2px 28.275px 0px rgb(var(--primary) / 0.04),
-      0px 5.785px 14.178px 0px rgb(var(--primary) / 0.03),
-      0px 1.315px 6.847px 0px rgb(var(--primary) / 0.02);
+      0px 16px 85px 0px rgb(var(--system) / 0.03),
+      0px 9.421px 44.336px 0px rgb(var(--system) / 0.02),
+      0px 4.838px 20.808px 0px rgb(var(--system) / 0.02),
+      0px 1.946px 9.112px 0px rgb(var(--system) / 0.01),
+      0px 0.435px 3.944px 0px rgb(var(--system) / 0.01);
   }
 
   .slideitem-hover-boxshadow {
     box-shadow:
-      0px 18.874px 46.822px 0px rgb(var(--primary) / 0.07),
-      0px 9.8px 23.888px 0px rgb(var(--primary) / 0.06),
-      0px 3.993px 11.978px 0px rgb(var(--primary) / 0.05),
-      0px 0.907px 5.785px 0px rgb(var(--primary) / 0.03);
+      0px 11px 107px 0px rgb(var(--system) / 0.06),
+      0px 7.13px 62.664px 0px rgb(var(--system) / 0.05),
+      0px 4.237px 34.081px 0px rgb(var(--system) / 0.04),
+      0px 0.204px 4.211px 0px rgb(var(--system) / 0.01);
   }
 }

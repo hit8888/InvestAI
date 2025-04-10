@@ -92,7 +92,7 @@ const AgentMessages = ({
         overflow: usingForAgent ? 'hidden' : 'auto',
       }}
     >
-      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2">
+      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2">
         <div
           className={cn('mx-auto w-full', {
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
@@ -101,7 +101,7 @@ const AgentMessages = ({
           {messages.map((message, idx) => {
             return (
               <div key={idx}>
-                {shouldMessageScrollToTop(message) ? <div ref={currentMessageScrollToTop} className="p-2" /> : null}
+                {shouldMessageScrollToTop(message) ? <div ref={currentMessageScrollToTop} className="p-0" /> : null}
                 <MessageItem
                   isAMessageBeingProcessed={isAMessageBeingProcessed}
                   logoURL={logoURL}

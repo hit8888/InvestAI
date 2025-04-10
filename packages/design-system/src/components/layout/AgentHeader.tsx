@@ -61,7 +61,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
   }
 
   return (
-    <div className="flex items-center justify-between border-b border-white/10 p-2 shadow-sm ">
+    <div className="flex items-center justify-between p-2">
       <div>
         <div className="rounded-md bg-primary/60 p-[2px]">
           <Button

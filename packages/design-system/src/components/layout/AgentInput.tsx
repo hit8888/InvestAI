@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
+import PoweredByBreakout from './PoweredByBreakout';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -51,12 +52,12 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
   const conditionForShowingTooltipAndDisabledButton = !isSendButtonDisabled && disableMessageSend;
 
   return (
-    <div className="flex w-full items-center gap-2  rounded-2xl p-2">
-      <form className="relative flex-1" onSubmit={handleSubmission}>
-        <div className="bottom-bar-shadow z-10 flex rounded-2xl bg-white p-2">
+    <div className="input-bar-bg flex w-full flex-col items-center gap-2 rounded-b-2xl p-4 pb-2">
+      <form className="relative w-full flex-1" onSubmit={handleSubmission}>
+        <div className="z-10 flex rounded-[14px] border border-gray-200 bg-white p-1">
           <TextArea
             autoFocus
-            className="border-1 rounded-xl p-4 pr-16"
+            className="rounded-[10px] border py-4 pl-3 pr-16"
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
@@ -76,6 +77,8 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
           />
         </SendButtonWithTooltip>
       </form>
+      {/* Powered By Breakout - Only visible when the agent is open for all conditions */}
+      <PoweredByBreakout />
     </div>
   );
 };

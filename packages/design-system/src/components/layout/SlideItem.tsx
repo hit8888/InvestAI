@@ -15,20 +15,19 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
   };
 
   return (
-    <div className="group/item hover:popup-banner-border-gradient-animation w-full rounded-[25px] bg-gray-200 p-0.5 transition-all duration-700 hover:scale-105 hover:p-0.5">
+    <div className="group/item w-full rounded-2xl transition-all duration-700">
       <button
         type="button"
-        className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow active:ring-6 flex h-full w-full cursor-pointer flex-col items-center gap-8 rounded-3xl 
-        bg-white p-4  text-center focus:outline-none focus:ring-4 focus:ring-primary/50 
-    focus:ring-offset-2 active:ring-primary/50 active:ring-offset-2"
+        className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow flex h-full w-full cursor-pointer flex-col items-center gap-8 rounded-2xl
+        border border-gray-100 bg-white p-4 text-center hover:scale-[101%] hover:border-gray-600 focus:border-gray-600 focus:ring-4 focus:ring-gray-200"
         onClick={handleClick}
       >
-        <div className="flex h-20 w-full items-center justify-center rounded-xl border border-primary/10 bg-primary/2.5 group-hover/item:border-primary/40 group-hover/item:bg-primary/10">
-          <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText group-hover/item:text-primary" />
+        <div className="flex h-20 w-full items-center justify-center rounded-lg border border-gray-100 bg-gray-25 group-hover/item:bg-gray-50">
+          <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText" />
         </div>
         <h4
           className={cn(
-            'w-full text-center text-lg font-semibold leading-tight text-customSecondaryText group-hover/item:text-primary/80 sm:text-xl md:text-3xl',
+            'w-full text-center text-lg font-semibold leading-tight text-customSecondaryText sm:text-xl md:text-3xl',
             {
               'line-clamp-1': addLineClamp,
             },
