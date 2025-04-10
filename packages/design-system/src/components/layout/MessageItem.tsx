@@ -243,7 +243,7 @@ const MessageItem = ({
 
         {shouldShowFeedbackSection && (
           <div className="pl-11">
-            <MessageDataSources dataSources={message.documents ?? []} />
+            <MessageDataSources usingForAgent={usingForAgent} dataSources={message.documents ?? []} />
             {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
             {isSalesResponseComplete && (
               <MessageFeedback
@@ -266,7 +266,7 @@ const MessageItem = ({
 
             {/* Form Artifact */}
             {shouldShowFormArtifact && (
-              <div className="flex flex-col items-start pl-11">
+              <div className="flex flex-col items-start py-4 pl-11">
                 {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent }, true)}
               </div>
             )}
@@ -286,7 +286,7 @@ const MessageItem = ({
 
             {/* Form Artifact */}
             {hasFormArtifactMessage && (
-              <div className="flex flex-col items-start pl-11 pt-2">
+              <div className="flex flex-col items-start py-4 pl-11">
                 {getChatArtifactContent(
                   formArtifactMessage as WebSocketMessage & { message: ArtifactMessageContent },
                   true,

@@ -73,7 +73,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
             showButton={!isSendButtonDisabled}
             onClick={handleSubmission}
             disabled={conditionForShowingTooltipAndDisabledButton}
-            btnClassName="absolute bottom-[12px] right-3 flex h-12 w-12 transform items-center justify-center !p-0"
+            btnClassName="absolute bottom-[12px] right-3 flex h-10 w-10 transform items-center justify-center !p-0"
           />
         </SendButtonWithTooltip>
       </form>

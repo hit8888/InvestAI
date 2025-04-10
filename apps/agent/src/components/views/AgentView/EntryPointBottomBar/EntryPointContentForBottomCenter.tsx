@@ -10,6 +10,7 @@ import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import useDynamicPlaceholder from '../../../../hooks/useDynamicPlaceholder';
 import { useMessageStore } from '../../../../stores/useMessageStore';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 
 interface IProps {
   showOrbAfterBubblesDisappear: boolean;
@@ -57,7 +58,7 @@ const EntryPointContentForBottomCenter = ({
         className="flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
       >
         <div className="relative flex-1">
-          <InputOrb showOrb={showOrb} orbLogoUrl={orbLogoUrl} />
+          <InputOrb state={OrbStatusEnum.waiting} showOrb={showOrb} orbLogoUrl={orbLogoUrl} />
           <EntryPointChatInput
             shouldInputAutoFocus={isAgentOpen}
             value={inputValue}
@@ -75,7 +76,7 @@ const EntryPointContentForBottomCenter = ({
         />
 
         <div className="flex items-center justify-center pr-2">
-          {hasFirstUserMessageBeenSent && <InputWaitingOrb orbLogoUrl={orbLogoUrl} />}
+          {hasFirstUserMessageBeenSent && <InputWaitingOrb state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />}
           <ChatInputSendButton btnType="submit" showButton={!!inputValue} btnClassName="h-9 w-9 hover:bg-primary/80" />
         </div>
       </form>

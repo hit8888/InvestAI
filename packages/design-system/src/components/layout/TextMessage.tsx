@@ -118,7 +118,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
               </ReactMarkdown>
             )}
             {conditionSpecificForDashboard ? (
-              <p className="!-mt-4 w-full text-right text-xs font-medium text-gray-100">{formattedTimestamp}</p>
+              <p className="!-mt-4 w-full text-right text-xs font-medium text-gray-400">{formattedTimestamp}</p>
             ) : null}
           </div>
         </div>

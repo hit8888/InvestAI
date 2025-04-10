@@ -11,6 +11,7 @@ import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import AgentInOpenState from './AgentInOpenState.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import { OrbStatusEnum } from '@meaku/core/types/config';
 interface IProps {
   fetchSessionData: () => void;
 }
@@ -24,6 +25,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   const { banner_config, entry_point_alignment } = useConfigurationApiResponseManager().getStyleConfig();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
+
   const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent && showBubbles;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
     if (!hasFirstUserMessageBeenSent) {
@@ -42,6 +45,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   const handleOpenAgent = () => {
     setParam('isAgentOpen', 'true');
+    handleUpdateOrbState(OrbStatusEnum.idle);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
@@ -56,6 +60,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   const handleCloseAgent = () => {
     setParam('isAgentOpen', 'false');
+    handleUpdateOrbState(OrbStatusEnum.waiting);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isAgentOpen });
   };
 

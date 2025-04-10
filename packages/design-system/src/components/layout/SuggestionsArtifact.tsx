@@ -32,6 +32,8 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
     return <></>;
   }
 
+  const sortedSuggestedQuestions = [...artifact.suggested_questions].sort((a, b) => b.length - a.length);
+
   return (
     <div
       className={cn('flex w-full flex-col items-start gap-2', {
@@ -39,7 +41,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
         'pl-11 pr-6': suggestedQuestionOrientation === 'left',
       })}
     >
-      {artifact.suggested_questions.map((question, index) => (
+      {sortedSuggestedQuestions.map((question, index) => (
         <Suggestion
           key={question}
           question={question}

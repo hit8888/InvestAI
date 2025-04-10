@@ -26,9 +26,9 @@ const ArtifactWhiteBgEllipse = () => {
           width="1717.85"
           height="1499.48"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="162" result="effect1_foregroundBlur_8473_102219" />
         </filter>

@@ -105,12 +105,6 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
     form.reset();
   };
 
-  const handleCancelDialog = () => {
-    setIsFeedbackThumbUp(false);
-    setIsFeedbackThumbDown(false);
-    handleCloseDialog();
-  };
-
   const handleSubmitFeedback = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     const values = form.getValues();
@@ -153,12 +147,11 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
   };
 
   const showRemarksField = (form.getValues()?.['category'] ?? '').length > 0;
-  const isMessageReadOnly =
-    Boolean(feedback?.category || feedback?.remarks) || Boolean(categories.length > 0 || form.getValues()?.remarks);
+  const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks) || Boolean(form.getValues()?.remarks);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="my-4 flex items-center gap-2">
         <DialogTrigger asChild>
           <FeedbackButton disabled={isMessageReadOnly} isFilled={isFeedbackThumbUp} onClick={onClickThumbUp} />
         </DialogTrigger>
@@ -219,7 +212,7 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
               />
             ) : null}
             <div className="flex w-full gap-6">
-              <Button className="w-full" variant="system_secondary" onClick={handleCancelDialog}>
+              <Button className="w-full" variant="system_secondary" onClick={handleCloseDialog}>
                 Cancel
               </Button>
               <Button type="submit" className="w-full" onClick={handleSubmitFeedback}>
