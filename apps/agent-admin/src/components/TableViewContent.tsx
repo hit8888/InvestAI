@@ -8,9 +8,9 @@ interface TableContentProps {
   tableData: any[];
   isConversationTable?: boolean;
   isLoading: boolean;
-  areAllFiltersApplied: boolean;
   totalRecords: number;
   columnHeaderData: ColumnDefinition[];
+  filterContainerHeight?: number;
 }
 
 const DEFAULT_LOADING_ROW_COUNT = 10;
@@ -19,10 +19,10 @@ const DEFAULT_LOADING_COLUMNS_COUNT = 6;
 const TableViewContent: React.FC<TableContentProps> = ({
   isConversationTable = false,
   isLoading,
-  areAllFiltersApplied,
   totalRecords,
   tableData,
   columnHeaderData,
+  filterContainerHeight = 0,
 }) => {
   if (isLoading) {
     return <TableViewShimmer columnCount={DEFAULT_LOADING_COLUMNS_COUNT} rowCount={DEFAULT_LOADING_ROW_COUNT} />;
@@ -40,7 +40,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
       isConversationsPage={isConversationTable}
       tabularData={tableData?.length > 0 ? tableData : []}
       columnHeaderData={columnHeaderData}
-      areAllFiltersApplied={areAllFiltersApplied}
+      filterContainerHeight={filterContainerHeight}
     />
   );
 };

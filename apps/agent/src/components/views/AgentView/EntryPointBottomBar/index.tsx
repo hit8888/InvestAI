@@ -31,7 +31,7 @@ const EntryPointBottomBar = ({
   entryPointAlignment,
 }: IProps) => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
-  const { banner_config, shadow_enabled } = configurationApiResponseManager.getStyleConfig();
+  const { banner_config } = configurationApiResponseManager.getStyleConfig();
   const agentName = configurationApiResponseManager.getAgentName();
 
   const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(!banner_config?.show_banner);
@@ -47,7 +47,6 @@ const EntryPointBottomBar = ({
   });
 
   const shouldShowOnlySidewiseEntryPointOrb = isSideWiseEntryPoint && !isAgentOpen && hasFirstUserMessageBeenSent;
-  const shouldShowBottombarShadow = isEntryPointOnTheBottomCenter && shadow_enabled;
   const handleSuggestedQuestionOnClick = (msg: string) => {
     handleSendUserMessage({
       message: { content: msg, event_data: {}, event_type: 'SUGGESTED_QUESTION_CLICKED' },
@@ -72,7 +71,6 @@ const EntryPointBottomBar = ({
         'relative w-full items-end justify-start': !isEntryPointOnTheBottomCenter,
         hidden: hideBottomBar,
         'h-20 w-full': shouldShowOnlySidewiseEntryPointOrb,
-        'bottom-bar-shadow': shouldShowBottombarShadow,
       })}
       style={containerStyle}
     >

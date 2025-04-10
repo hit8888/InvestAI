@@ -5,34 +5,32 @@ import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { CONVERSATIONS_PINNED_COLUMNS, LEADS_PINNED_COLUMNS } from '../../utils/constants';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
-import { useSidebar } from '../../context/SidebarContext';
 import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
 import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
-import { cn } from '@breakout/design-system/lib/cn';
+import { useTableWidth } from '../../hooks/useTableWidth';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   tabularData: any[];
   columnHeaderData: ColumnDefinition[];
   isConversationsPage?: boolean;
-  areAllFiltersApplied: boolean;
+  filterContainerHeight?: number;
 }
 
 const CustomTableView = ({
   tabularData,
   columnHeaderData,
-  areAllFiltersApplied,
   isConversationsPage = false,
+  filterContainerHeight = 0,
 }: TableViewProps) => {
   const navigate = useNavigate();
-  const { isSidebarOpen } = useSidebar();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
+  const { widthStyle } = useTableWidth();
 
   const tableBodyRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-
   const lastScrollPosition = useRef(0); // ref to store scroll position
 
   const handleHeaderStickyLogic = (value: boolean) => {
@@ -77,21 +75,17 @@ const CustomTableView = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Explicitly using the string values.
-  const widthDimension = isSidebarOpen
-    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1520px]'
-    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1680px]';
-
   return (
     <div className="relative w-full">
       <div className="header-sentinel" style={{ height: '1px', width: '100%' }} />
-      {/* Sticky Header Container: Need Exactly - top-[70px] and top-[134px] */}
+      {/* Sticky Header Container */}
       {isHeaderSticky && (
         <div
-          className={cn(`sticky left-0 right-0 z-50 bg-white ${widthDimension}`, {
-            'top-[75px]': !areAllFiltersApplied,
-            'top-[134px] 2xl:top-[70px]': areAllFiltersApplied && isConversationsPage,
-          })}
+          className="sticky left-0 right-0 z-50 bg-white"
+          style={{
+            ...widthStyle,
+            top: `${filterContainerHeight}px`,
+          }}
         >
           <div ref={headerRef} className="hide-scrollbar overflow-x-auto">
             <table
@@ -109,7 +103,7 @@ const CustomTableView = ({
           </div>
         </div>
       )}
-      <div ref={tableBodyRef} className={`${widthDimension} relative overflow-x-auto`}>
+      <div ref={tableBodyRef} className="relative overflow-x-auto" style={widthStyle}>
         <table
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',

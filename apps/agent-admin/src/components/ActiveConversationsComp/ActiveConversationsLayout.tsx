@@ -1,18 +1,12 @@
 import SingleActiveConversation from './SingleActiveConversation';
-import { useSidebar } from '../../context/SidebarContext';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversationsContext } from '../../context/ActiveConversationsContext';
 import { useContext } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
+import { useTableWidth } from '../../hooks/useTableWidth';
 
 const ActiveConversationsLayout = () => {
-  const { isSidebarOpen } = useSidebar();
-
-  // Explicitly using the string values.
-  const widthDimension = isSidebarOpen
-    ? 'mac-air:max-w-[1050px] mac-pro-14:max-w-[1200px] full-hd:max-w-[1600px] semi-qhd:max-w-[2000px] mac-pro-16:max-w-[1520px]'
-    : 'mac-air:max-w-[1240px] mac-pro-14:max-w-[1400px] full-hd:max-w-[1800px] semi-qhd:max-w-[2170px] mac-pro-16:max-w-[1680px]';
-
+  const { widthStyle } = useTableWidth();
   const totalActiveChats = 10;
 
   const { cards } = useContext(ActiveConversationsContext);
@@ -21,8 +15,8 @@ const ActiveConversationsLayout = () => {
     <div
       className={cn(
         'flex flex-col items-start gap-4 self-stretch rounded-2xl border border-primary/10 bg-primary/2.5 p-4',
-        widthDimension,
       )}
+      style={widthStyle}
     >
       {haveActiveConversations ? (
         <>

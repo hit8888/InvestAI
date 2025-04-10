@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
@@ -29,8 +29,6 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 
-const LEADS_PAGE_NUMBER_OF_FILTERS: number = 2;
-
 const LeadsTableContainer = () => {
   const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
@@ -41,6 +39,8 @@ const LeadsTableContainer = () => {
 
   const sortState = useSortFilterStore((state) => state.leads);
   const filterState = useAllFilterStore((state) => state.leads);
+
+  const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
   // Reset to page 1 when filters changes
   useEffect(() => {
@@ -108,8 +108,6 @@ const LeadsTableContainer = () => {
   if (isError) return null;
 
   const haveNoRecords = totalRecords === 0;
-  const areAllFiltersApplied = allAppliedFilterValues.length === LEADS_PAGE_NUMBER_OF_FILTERS;
-
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
       <div className="flex flex-col items-start gap-4 self-stretch">
@@ -120,14 +118,15 @@ const LeadsTableContainer = () => {
             disabledState={haveNoRecords}
             key={LEADS_PAGE}
             page={LEADS_PAGE}
+            onFiltersContainerHeightChange={setFilterContainerHeight}
           />
           <TableViewContent
             key={'leads-table-container'}
             isLoading={isLoading}
             totalRecords={totalRecords}
-            areAllFiltersApplied={areAllFiltersApplied}
             tableData={leadsData}
             columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
+            filterContainerHeight={filterContainerHeight}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">

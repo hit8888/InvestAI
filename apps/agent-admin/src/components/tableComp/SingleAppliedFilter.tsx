@@ -63,7 +63,7 @@ const SingleAppliedFilter = ({
         </span>
       </PopoverTrigger>
       <PopoverContent
-        className={`popover-boxshadow z-50 rounded-lg bg-white p-0`}
+        className={`popover-boxshadow z-[100] rounded-lg bg-white p-0`}
         align="start"
         style={{ width: widthOfPopover }}
         side="bottom"

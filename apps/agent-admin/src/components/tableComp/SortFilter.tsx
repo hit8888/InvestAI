@@ -45,7 +45,7 @@ const SortFilter = ({ page, disabledState }: IProps) => {
         </span>
       </PopoverTrigger>
       <PopoverContent
-        className="popover-boxshadow z-50 w-80 rounded-lg bg-white p-0"
+        className="popover-boxshadow z-[100] w-80 rounded-lg bg-white p-0"
         align="end"
         side="bottom"
         sideOffset={20}

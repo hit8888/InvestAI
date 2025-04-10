@@ -44,8 +44,8 @@ export const ConfigurationSchema = z.object({
   }),
   body: ConfigurationBodySchema,
   style_config: z.object({
-    entry_point_alignment: EntryPointAlignmentSchema.optional(), // TODO: rename the field according to the backend config key
-    shadow_enabled: z.boolean().optional(),
+    entry_point_alignment: EntryPointAlignmentSchema.optional(),
+    shadow_enabled: z.boolean().optional(), // TODO: remove this field from the response when backend is updated
     primary: z.string().optional(),
     primary_foreground: z.string().optional(),
     primary_text: z.string().optional(),

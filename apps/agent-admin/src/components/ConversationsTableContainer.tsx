@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
@@ -33,8 +33,6 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 
-const CONVERSATIONS_PAGE_NUMBER_OF_FILTERS: number = 3;
-
 const ConversationsTableContainer = () => {
   const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
@@ -45,6 +43,8 @@ const ConversationsTableContainer = () => {
 
   const sortState = useSortFilterStore((state) => state.conversations);
   const filterState = useAllFilterStore((state) => state.conversations);
+
+  const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
   // Reset to page 1 when filters changes
   useEffect(() => {
@@ -111,7 +111,6 @@ const ConversationsTableContainer = () => {
   if (isError) return null;
 
   const haveNoRecords = totalRecords === 0;
-  const areAllFiltersApplied = allAppliedFilterValues.length === CONVERSATIONS_PAGE_NUMBER_OF_FILTERS;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
@@ -123,15 +122,16 @@ const ConversationsTableContainer = () => {
             disabledState={haveNoRecords}
             key={CONVERSATIONS_PAGE}
             page={CONVERSATIONS_PAGE}
+            onFiltersContainerHeightChange={setFilterContainerHeight}
           />
           <TableViewContent
             key={'conversations-table-container'}
             isConversationTable={true}
             isLoading={isLoading}
-            areAllFiltersApplied={areAllFiltersApplied}
             totalRecords={totalRecords}
             tableData={conversationsData}
             columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
+            filterContainerHeight={filterContainerHeight}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">
