@@ -3,7 +3,6 @@ import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import { cn } from '@breakout/design-system/lib/cn';
 import Orb from '@breakout/design-system/components/Orb/index';
-// import BotIndicator from '@breakout/design-system/components/layout/bot-indicator';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
@@ -25,7 +24,7 @@ interface TextMessageProps {
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
   const { href, ...rest } = props;
-  return <a className="text-primary" href={href} {...rest} target="_blank" rel="noreferrer" />;
+  return <a className="text-blue_sec-1000" href={href} {...rest} target="_blank" rel="noreferrer" />;
 };
 
 const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
@@ -90,21 +89,14 @@ const TextMessage: React.FC<TextMessageProps> = ({
       ) : null}
       <div
         className={cn('relative max-w-full', {
-          'bg-transparent_gray_6 rounded-2xl px-4 py-2': !isAiMessage,
+          'rounded-2xl bg-transparent_gray_6 px-4 py-2': !isAiMessage,
           'flex gap-4 py-4 pl-0': isAiMessage && isLastQuestionResponse,
           'flex gap-7 p-4 pl-0': isAiMessage && !isLastQuestionResponse,
           'pl-11': !shouldShowActiveOrb && isAiMessage,
         })}
       >
         {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
-          <>
-            {shouldShowActiveOrb ? (
-              <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
-            ) : (
-              // <BotIndicator />
-              <></>
-            )}
-          </>
+          <>{shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}</>
         )}
 
         <div className="flex-col">

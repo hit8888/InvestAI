@@ -1,5 +1,5 @@
 import ActiveConvLiveChatIcon from '@breakout/design-system/components/icons/active-conv-live-chat-icon';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 
 const JoinConversationChatAreaHeader = () => {

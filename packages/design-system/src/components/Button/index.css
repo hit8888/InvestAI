@@ -1,0 +1,170 @@
+/* Base Button Styles */
+.button {
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  pointer-events: auto;
+}
+
+/* Primary Variants */
+.button--primary {
+  background-color: rgb(36, 62, 142);
+  color: rgb(254, 254, 254);
+  border: 2px solid rgba(254, 254, 254, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.button--primary:hover {
+  background-color: rgba(36, 62, 142, 0.8);
+}
+
+.button--primary:focus {
+  background-color: rgba(36, 62, 142, 0.9);
+  box-shadow: 0 0 0 4px rgba(36, 62, 142, 0.2);
+}
+
+.button--primary:active {
+  background-color: rgba(36, 62, 142, 0.9);
+}
+
+/* Secondary Variants */
+.button--secondary {
+  color: rgb(36, 62, 142);
+  border: 1px solid rgb(36, 62, 142);
+  background: transparent;
+}
+
+.button--secondary:hover {
+  background-color: rgba(36, 62, 142, 0.05);
+}
+
+.button--secondary:focus {
+  background-color: rgba(36, 62, 142, 0.05);
+  box-shadow: 0 0 0 4px rgba(36, 62, 142, 0.2);
+}
+
+.button--secondary:active {
+  background-color: rgba(36, 62, 142, 0.05);
+}
+
+/* Tertiary Variants */
+.button--tertiary {
+  color: rgb(36, 62, 142);
+  border: none;
+  background: transparent;
+}
+
+.button--tertiary:hover {
+  background-color: rgba(36, 62, 142, 0.05);
+}
+
+.button--tertiary:focus {
+  background-color: rgba(36, 62, 142, 0.1);
+}
+
+/* Destructive Variants */
+.button--destructive {
+  background-color: rgb(211, 47, 47);
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+
+.button--destructive:hover {
+  background-color: rgb(185, 28, 28);
+}
+
+.button--destructive:focus {
+  background-color: rgb(211, 47, 47);
+  box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.2);
+}
+
+.button--destructive-secondary {
+  color: rgb(211, 47, 47);
+  border: 1px solid rgb(211, 47, 47);
+  background: transparent;
+}
+
+.button--destructive-secondary:hover {
+  background-color: rgba(211, 47, 47, 0.05);
+}
+
+.button--destructive-tertiary {
+  color: rgb(211, 47, 47);
+  border: none;
+  background: transparent;
+}
+
+.button--destructive-tertiary:hover {
+  background-color: rgba(211, 47, 47, 0.05);
+}
+
+/* System Variants */
+.button--system {
+  background-color: rgb(71, 84, 103);
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+
+.button--system:hover {
+  background-color: rgb(80, 95, 115);
+}
+
+.button--system:focus {
+  background-color: rgb(71, 84, 103);
+  box-shadow: 0 0 0 4px rgba(71, 84, 103, 0.2);
+}
+
+.button--system-secondary {
+  color: rgb(71, 84, 103);
+  border: 1px solid rgb(71, 84, 103);
+  background: transparent;
+}
+
+.button--system-secondary:hover {
+  background-color: rgba(71, 84, 103, 0.05);
+}
+
+.button--system-tertiary {
+  color: rgb(71, 84, 103);
+  border: none;
+  background: transparent;
+}
+
+.button--system-tertiary:hover {
+  background-color: rgba(71, 84, 103, 0.05);
+}
+
+/* Size Variants */
+.button--small {
+  height: 2.5rem;
+  padding: 0.75rem;
+}
+
+.button--medium {
+  height: 3rem;
+  padding: 0.875rem;
+}
+
+.button--regular {
+  height: 3.5rem;
+  padding: 1rem;
+}
+
+.button--icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0;
+}
+
+/* Disabled State */
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

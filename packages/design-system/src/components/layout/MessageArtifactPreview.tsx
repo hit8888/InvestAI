@@ -9,7 +9,6 @@ import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketD
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
-import { cn } from '@breakout/design-system/lib/cn';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
@@ -55,11 +54,7 @@ const MessageArtifactPreview = ({
   if (!isValidContent(content)) return null;
 
   return (
-    <div
-      className={cn('mb-4 pl-11 pr-6', {
-        'mt-4': !usingForAgent,
-      })}
-    >
+    <div className="my-4 pl-11 pr-6">
       <ArtifactPreview
         usingForAgent={usingForAgent}
         artifactId={artifactData.artifact_id}

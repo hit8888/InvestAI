@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import { MaximizeIcon, MinimizeIcon, PauseIcon, PlayIcon, RotateCcwIcon } from 'lucide-react';
 
 interface IProps {
@@ -32,22 +32,14 @@ const ArtifactControls = ({
     >
       <div>
         {!!handlePause && (
-          <Button
-            size="icon"
-            className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-            onClick={handlePause}
-          >
+          <Button buttonStyle="icon" variant="system_secondary" onClick={handlePause}>
             {isPlaying ? <PauseIcon className="h-4 w-4 fill-current" /> : <PlayIcon className="h-4 w-4 fill-current" />}
           </Button>
         )}
       </div>
 
       <div className="flex items-center gap-3">
-        <Button
-          onClick={handleToggleFullScreen}
-          size="icon"
-          className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-        >
+        <Button onClick={handleToggleFullScreen} variant="system_secondary" buttonStyle="icon">
           {isMediaTakingFullWidth ? (
             <MinimizeIcon className="h-4 w-4 stroke-2" />
           ) : (
@@ -55,11 +47,7 @@ const ArtifactControls = ({
           )}
         </Button>
         {!!handleRestart && (
-          <Button
-            size="icon"
-            className="h-8 w-8 border-2 border-gray-50 bg-transparent text-gray-50 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-900"
-            onClick={handleRestart}
-          >
+          <Button buttonStyle="icon" variant="system_secondary" onClick={handleRestart}>
             <RotateCcwIcon className="h-4 w-4 stroke-2" />
           </Button>
         )}

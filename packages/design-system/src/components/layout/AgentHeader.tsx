@@ -1,4 +1,4 @@
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import { XIcon } from 'lucide-react'; //TODO: Expos this for design system
 import { useMemo } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -63,22 +63,16 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
   return (
     <div className="flex items-center justify-between p-2">
       <div>
-        <div className="rounded-md bg-primary/60 p-[2px]">
-          <Button
-            size="sm"
-            onClick={handlePrimaryCta}
-            className="bg-transparent !bg-gradient-to-r !from-primary/70 !to-primary/40 text-white"
-            data-testid="contact-sales-btn"
-          >
-            {ctaText}
-          </Button>
-        </div>
+        <Button variant="primary" onClick={handlePrimaryCta} data-testid="contact-sales-btn">
+          {ctaText}
+        </Button>
       </div>
 
       <div className="flex items-center gap-2">
         {!!handleCloseAgent && isCollapsible && (
           <Button
-            size="icon"
+            buttonStyle="icon"
+            variant="system_tertiary"
             className="bg-transparent p-0"
             onClick={() => {
               // Send message to parent to close overlay
@@ -87,7 +81,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
               handleCloseAgent();
             }}
           >
-            <XIcon className="text-primary" />
+            <XIcon className="text-system" />
           </Button>
         )}
       </div>

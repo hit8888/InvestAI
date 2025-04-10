@@ -1,5 +1,4 @@
-import ArrowRight from '@breakout/design-system/components/icons/ArrowRight';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import {
   Tooltip,
   TooltipContent,
@@ -52,21 +51,23 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
 
   return (
     <div className="col-span-2 mr-2 pl-2">
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="flex max-w-[50%] flex-col items-center gap-6">
+      <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-transparent_gray_3 p-[100px]">
+        <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">
               <span className="text-center text-2xl font-semibold text-customPrimaryText">
                 Select the features that you would like to see in the demo
               </span>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               {demoFeatures.map((feature) => (
                 <span
                   className={cn(
-                    'flex h-10 cursor-pointer items-center gap-2.5 rounded-custom-56 border-2 border-gray-400 py-2 pl-2 pr-4 text-customSecondaryText',
+                    'flex h-10 cursor-pointer items-center gap-2.5 rounded-custom-56 border-2 border-gray-400 py-2 pl-2 pr-4 text-customPrimaryText',
                     {
-                      'bg-gray-900 font-medium text-white': selectedIds.includes(feature.id),
+                      'border-none bg-gray-600 font-medium text-white ring-4 ring-gray-200': selectedIds.includes(
+                        feature.id,
+                      ),
                       'hover:bg-transparent_gray_6': !selectedIds.includes(feature.id),
                     },
                   )}
@@ -84,10 +85,7 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
               <TooltipTrigger asChild>
                 <div>
                   <Button onClick={onBookDemoClick} disabled={!selectedIds.length}>
-                    <div className="flex items-center justify-center gap-2">
-                      <span>Start Demo</span>
-                      <ArrowRight width={16} height={17} color="white" />
-                    </div>
+                    Start Demo
                   </Button>
                 </div>
               </TooltipTrigger>

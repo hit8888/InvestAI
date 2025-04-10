@@ -1,5 +1,5 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
-import Button from './button';
+import Button from '../Button';
 import { cn } from '@breakout/design-system/lib/cn';
 
 interface SendButtonProps {
@@ -15,7 +15,8 @@ const ChatInputSendButton = ({ showButton, onClick, btnType = 'button', disabled
 
   return (
     <Button
-      size="icon"
+      buttonStyle="icon"
+      variant="primary"
       className={cn('', btnClassName, {
         'disabled:pointer-events-auto disabled:cursor-pointer': disabled,
       })}

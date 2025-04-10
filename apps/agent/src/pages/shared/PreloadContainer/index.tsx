@@ -19,7 +19,7 @@ import { useWidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 
 interface Props {

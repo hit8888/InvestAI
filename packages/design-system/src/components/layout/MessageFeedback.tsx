@@ -2,12 +2,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@breakout/design-system/components/layout/dialog';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import Textarea from '@breakout/design-system/components/layout/textarea';
 import FeedbackButton from '@breakout/design-system/components/layout/feedback-button';
 import {
@@ -112,6 +111,13 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
     handleCloseDialog();
   };
 
+  const handleSubmitFeedback = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const values = form.getValues();
+    await handleShareDetailedFeedback(values);
+    handleCloseDialog();
+  };
+
   const handlePrimaryFeedback = async (feedback: FeedbackEnum) => {
     onAddFeedback({
       positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
@@ -165,7 +171,7 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
           />
         </DialogTrigger>
       </div>
-      <DialogContent className="bg-primary-foreground/80 sm:min-w-[436px]">
+      <DialogContent className="bg-primary-foreground sm:min-w-[436px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleShareDetailedFeedback)} className="space-y-8">
             <DialogHeader className="flex items-center gap-2">
@@ -212,31 +218,14 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
                 )}
               />
             ) : null}
-            <DialogFooter className="flex w-full !justify-between">
-              <Button
-                size="sm"
-                type="button"
-                className="!bg-white font-semibold text-primary"
-                onClick={handleCancelDialog}
-              >
+            <div className="flex w-full gap-6">
+              <Button className="w-full" variant="system_secondary" onClick={handleCancelDialog}>
                 Cancel
               </Button>
-              <div className="flex">
-                <Button
-                  size="sm"
-                  type="submit"
-                  className="border-2 border-secondary-foreground/25 font-semibold"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const values = form.getValues();
-                    await handleShareDetailedFeedback(values);
-                    handleCloseDialog();
-                  }}
-                >
-                  Submit
-                </Button>
-              </div>
-            </DialogFooter>
+              <Button type="submit" className="w-full" onClick={handleSubmitFeedback}>
+                Submit
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

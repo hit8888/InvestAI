@@ -8,7 +8,7 @@ import Card from '@breakout/design-system/components/layout/card';
 import CardContent from '@breakout/design-system/components/layout/card-content';
 import { Form, useForm } from '@breakout/design-system/components/layout/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import {
   getZodType,
   schemaShape,

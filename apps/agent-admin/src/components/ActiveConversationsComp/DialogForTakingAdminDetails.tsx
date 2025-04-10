@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from '@breakout/design-system/components/layout/dialog';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import Input from '@breakout/design-system/components/layout/input';
 import ActiveConvJoinAdminDetailsIcon from '@breakout/design-system/components/icons/active-conv-join-admin-details-icon';

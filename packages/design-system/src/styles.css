@@ -55,18 +55,15 @@
 
   .slideitem-default-boxshadow {
     box-shadow:
-      0px 16px 85px 0px rgb(var(--system) / 0.03),
-      0px 9.421px 44.336px 0px rgb(var(--system) / 0.02),
-      0px 4.838px 20.808px 0px rgb(var(--system) / 0.02),
-      0px 1.946px 9.112px 0px rgb(var(--system) / 0.01),
-      0px 0.435px 3.944px 0px rgb(var(--system) / 0.01);
+      16.838px 0px 80.808px 0px rgb(var(--system) / 0.02),
+      8.946px 0px 42.112px 0px rgb(var(--system) / 0.01),
+      4.473px 0px 21.056px 0px rgb(var(--system) / 0.01);
   }
 
   .slideitem-hover-boxshadow {
     box-shadow:
-      0px 11px 107px 0px rgb(var(--system) / 0.06),
-      0px 7.13px 62.664px 0px rgb(var(--system) / 0.05),
-      0px 4.237px 34.081px 0px rgb(var(--system) / 0.04),
-      0px 0.204px 4.211px 0px rgb(var(--system) / 0.01);
+      4.13px 0px 24.664px 0px rgb(var(--system) / 0.05),
+      2.237px 0px 14.081px 0px rgb(var(--system) / 0.04),
+      0.204px 0px 4.211px 0px rgb(var(--system) / 0.01);
   }
 }

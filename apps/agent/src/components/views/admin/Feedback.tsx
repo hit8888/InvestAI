@@ -7,7 +7,7 @@ import Backdrop from '@breakout/design-system/components/layout/backdrop';
 import { useEffect } from 'react';
 
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
@@ -58,7 +58,7 @@ const Feedback = () => {
           toastMessage="Session hash copied."
           copyIconClassname="h-6 w-6"
         />
-        <Button onClick={handleRefreshChat} size="icon" className="rounded-md bg-primary-foreground/70 p-1">
+        <Button onClick={handleRefreshChat} buttonStyle="icon" variant="tertiary">
           <RefreshChatIcon className="text-primary" />
         </Button>
       </div>

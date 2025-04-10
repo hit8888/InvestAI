@@ -3,7 +3,7 @@ import { expect, userEvent, within } from '@storybook/test';
 
 import { Page } from './Page';
 
-const meta = {
+const meta: Meta<typeof Page> = {
   title: 'Example/Page',
   component: Page,
   parameters: {

@@ -62,6 +62,7 @@ const Welcome = () => {
             btnType="submit"
             showButton={true}
             disabled={!emailInputValue}
+            btnClassName="h-10 w-10"
             onClick={handleEmailSubmission}
           />
         </form>

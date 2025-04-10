@@ -1,3 +1,4 @@
+import Button from '@breakout/design-system/components/Button/index';
 import PopupCloseIcon from '@breakout/design-system/components/icons/popup-close-icon';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -68,12 +69,9 @@ const PopupContent = ({
               {subheader ? subheader : `I am an expert on all things ${orgName}. How can I help you today?`}
             </p>
           </div>
-          <button
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F2F4F7]"
-            onClick={handleClosePopup}
-          >
+          <Button className="rounded-full bg-[#F2F4F7] p-1" variant="tertiary" onClick={handleClosePopup}>
             <PopupCloseIcon width={'18'} height={'18'} color="#98A2B3" />
-          </button>
+          </Button>
         </div>
       </div>
     </motion.div>

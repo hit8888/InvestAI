@@ -1,4 +1,4 @@
-import Button from './button';
+import Button from '../Button';
 import { cn } from '../../lib/cn';
 import ClipboardCopyIcon from '../icons/ClipboardCopyIcon';
 import { CheckIcon } from 'lucide-react';
@@ -30,7 +30,8 @@ const CopyToClipboardButton = ({
         e.stopPropagation(); // Prevents the row click event
         copy();
       }}
-      size="icon"
+      buttonStyle="icon"
+      variant="system_tertiary"
       className={cn('rounded-md bg-primary-foreground/70 p-2 ', btnClassName)}
     >
       {isCopied ? (

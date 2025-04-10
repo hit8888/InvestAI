@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ActionButton } from './ActionButton';
+import Button from '@breakout/design-system/components/Button/index';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import HappySmirkIcon from '@breakout/design-system/components/icons/happy-smirk';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface IProps {
@@ -50,17 +49,10 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
           Would you like to see an interactive demo?
         </span>
         <div className="flex justify-between">
-          <button
-            type="button"
-            onClick={handleNotForNowButtonClick}
-            className="cursor-pointer rounded-lg p-3 text-sm font-semibold text-primary/60 hover:bg-primary/50 hover:text-white disabled:cursor-not-allowed"
-            disabled={showDemoTopics}
-          >
+          <Button onClick={handleNotForNowButtonClick} disabled={showDemoTopics} variant="system_tertiary">
             Not for now
-          </button>
-          <ActionButton buttonText="Yes, lets do that!" onClick={handleYesLetsDoItButtonClick}>
-            <HappySmirkIcon />
-          </ActionButton>
+          </Button>
+          <Button onClick={handleYesLetsDoItButtonClick}>Yes, lets do that!</Button>
         </div>
       </div>
     </div>

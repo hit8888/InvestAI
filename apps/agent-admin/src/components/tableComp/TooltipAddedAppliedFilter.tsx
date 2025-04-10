@@ -1,4 +1,4 @@
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import {
   Tooltip,
   TooltipContent,
@@ -28,7 +28,7 @@ const TooltipAddedAppliedFilter = ({ appliedFilterValues }: { appliedFilterValue
         {shouldShowTooltip && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="sm" className="ml-2 h-6">
+              <Button variant="primary" className="ml-2 h-6">
                 +{appliedFilterValues.length - TOOLTIP_THRESHOLD} more
               </Button>
             </TooltipTrigger>

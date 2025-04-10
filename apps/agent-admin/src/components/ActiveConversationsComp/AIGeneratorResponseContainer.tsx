@@ -1,7 +1,7 @@
 import Separator from '@breakout/design-system/components/layout/separator';
 import { PopoverClose } from '@breakout/design-system/components/Popover/index';
 import CloseIcon from '@breakout/design-system/components/icons/popup-close-icon';
-import Button from '@breakout/design-system/components/layout/button';
+import Button from '@breakout/design-system/components/Button/index';
 import AiResponseGenerateGradientButton from '@breakout/design-system/components/icons/ai-response-generate-gradient-button';
 import ActiveConvJoinAICopilotIconSmall from '@breakout/design-system/components/icons/join-conv-aicopilot-icon-small';
 
