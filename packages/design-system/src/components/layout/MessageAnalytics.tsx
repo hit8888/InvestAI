@@ -14,7 +14,7 @@ const MessageAnalytics = ({ analytics }: IProps) => {
     <div className="mt-4 flex items-center gap-3">
       <p className="text-sm font-bold text-primary">Analytics:</p>
       {analytics.buyer_intent_score && (
-        <Badge className={'bg-primary'}>Buyer Intent Score: {analytics.buyer_intent_score}</Badge>
+        <Badge className={'bg-primary'}>Buyer Intent Score: {analytics.buyer_intent_score.toFixed(0)}</Badge>
       )}
     </div>
   );

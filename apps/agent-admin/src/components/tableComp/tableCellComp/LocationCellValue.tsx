@@ -46,7 +46,7 @@ const LocationCellValue = ({ value, showTruncatedText = true, isValueOrientation
       ) : null}
       <span
         title={locationValue}
-        className={cn({
+        className={cn('capitalize', {
           'max-w-24 truncate': showTruncatedText,
           'max-w-full': isValueOrientationRight,
         })}

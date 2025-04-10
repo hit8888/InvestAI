@@ -29,9 +29,9 @@ const Suggestion = ({
     <div
       onClick={() => handleClickOnSuggestedQuestion(question)}
       className={cn(
-        'flex w-full cursor-pointer items-center gap-2 text-wrap rounded-full py-1 transition-all duration-300 ease-in-out',
+        'flex w-fit cursor-pointer items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out',
         {
-          'border border-gray-900 bg-white pl-2 pr-3 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
+          'border border-gray-900 bg-white py-2 pl-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
             !isEntryPointQuestion,
           'border-2 border-primary/60 bg-primary/80 px-2 hover:bg-primary/90 focus:bg-primary': isEntryPointQuestion,
           'max-w-[300px]': isQuestionInCycle,
@@ -41,7 +41,7 @@ const Suggestion = ({
     >
       <div className="!h-4 !w-4">
         {!isEntryPointQuestion ? (
-          <BlackThreeStarIcon width={12} height={13} className="transition-colors duration-300 ease-in-out" />
+          <BlackThreeStarIcon width={14} height={14} className="transition-colors duration-300 ease-in-out" />
         ) : (
           <SparkleIcon
             color="white"

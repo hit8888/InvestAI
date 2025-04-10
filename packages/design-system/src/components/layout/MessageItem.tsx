@@ -209,9 +209,6 @@ const MessageItem = ({
   // To show the feedback section, the message must be an AI message, the feedback must be allowed, and the message must be a text message
   const shouldShowFeedbackSection = isAiMessage && allowFeedback && isTextMessage;
 
-  // To show the analytics section, the event must be an analytics event, and the message must not be a discovery message
-  const shouldShowAnalytics = isAnalyticsEvent && !isDiscoveryMessage;
-
   const hasSalesResponseCompleteAndIsArtifactMessage = isSalesResponseComplete && isArtifactMessage;
   // For Current Message - To show the form artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be a form
   const shouldShowFormArtifact =
@@ -257,7 +254,7 @@ const MessageItem = ({
                 onRemoveFeedback={handleRemoveFeedback}
               />
             )}
-            {shouldShowAnalytics && (
+            {isAnalyticsEvent && (
               <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
             )}
           </div>

@@ -5,7 +5,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { CONV_RIGHTSIDE_DETAILS_DATA_ITEMS } from '../../utils/constants';
 import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
 
-const { LOCATION, EMAIL, DOMAIN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
+const { LOCATION, EMAIL } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
 type IProps = {
   itemLabel: string;
@@ -26,7 +26,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
 }: IProps) => {
   let content = (
     <span
-      className={cn('text-base font-medium text-gray-900', {
+      className={cn('text-base font-medium capitalize text-gray-900', {
         'text-left': isKeyValueColumnwise,
         'w-full max-w-full truncate text-right': !isKeyValueColumnwise,
       })}
@@ -41,18 +41,6 @@ const SingleProspectAndCompanyItemDataDisplay = ({
       break;
     case EMAIL:
       content = <EmailCellValue value={itemValue as string} valueOrientation="right" />;
-      break;
-    case DOMAIN:
-      content = (
-        <a
-          href={`https://${itemValue as string}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full max-w-full truncate text-right text-blue-600 hover:underline"
-        >
-          {itemValue as string}
-        </a>
-      );
       break;
     default:
       break;

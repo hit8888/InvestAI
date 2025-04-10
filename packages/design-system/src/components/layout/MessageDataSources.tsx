@@ -14,7 +14,7 @@ interface IProps {
 }
 
 function truncateToPercentage(number: number) {
-  return (Math.floor(number * 10000) / 100).toString();
+  return (Math.floor(number * 10000) / 100).toFixed(1).toString();
 }
 
 const MessageDataSources = (props: IProps) => {

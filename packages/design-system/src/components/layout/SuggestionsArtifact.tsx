@@ -34,20 +34,19 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
 
   return (
     <div
-      className={cn('flex w-full flex-col items-start gap-3', {
-        'items-end': suggestedQuestionOrientation === 'right',
+      className={cn('flex w-full flex-col items-start gap-2', {
+        'items-end pl-11': suggestedQuestionOrientation === 'right',
         'pl-11 pr-6': suggestedQuestionOrientation === 'left',
       })}
     >
       {artifact.suggested_questions.map((question, index) => (
-        <div key={question} className="max-w-[80%] flex-wrap">
-          <Suggestion
-            question={question}
-            onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
-            itemIndex={index}
-            isEntryPointQuestion={false}
-          />
-        </div>
+        <Suggestion
+          key={question}
+          question={question}
+          onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+          itemIndex={index}
+          isEntryPointQuestion={false}
+        />
       ))}
     </div>
   );
