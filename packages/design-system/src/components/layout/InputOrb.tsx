@@ -7,7 +7,7 @@ interface InputOrbProps {
   orbLogoUrl?: string;
   style?: CSSProperties;
   showThreeStar?: boolean;
-  state: OrbStatusEnum;
+  state?: OrbStatusEnum;
 }
 
 const InputOrb = ({ showOrb, orbLogoUrl, style, showThreeStar, state }: InputOrbProps) => {
@@ -15,7 +15,12 @@ const InputOrb = ({ showOrb, orbLogoUrl, style, showThreeStar, state }: InputOrb
 
   return (
     <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
-      <InputWaitingOrb state={state} style={style} orbLogoUrl={orbLogoUrl} showThreeStar={showThreeStar} />
+      <InputWaitingOrb
+        state={state ?? OrbStatusEnum.waiting}
+        style={style}
+        orbLogoUrl={orbLogoUrl}
+        showThreeStar={showThreeStar}
+      />
     </div>
   );
 };

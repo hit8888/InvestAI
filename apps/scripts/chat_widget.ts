@@ -657,10 +657,15 @@
               hasFirstUserMessageBeenSent =
                 event.data.hasFirstUserMessageBeenSent ?? false;
 
-              URLManager.updateParentUrlParam(
-                "isAgentOpen",
-                isAgentOpen.toString(),
-              );
+              const shouldHideBottomBar =
+                ConfigManager.getConfig()?.hideBottomBar;
+
+              if (!shouldHideBottomBar) {
+                URLManager.updateParentUrlParam(
+                  "isAgentOpen",
+                  isAgentOpen.toString(),
+                );
+              }
 
               if (currentContainer === bottomContainer && bottomContainer) {
                 StyleManager.adjustResponsiveStyles(
