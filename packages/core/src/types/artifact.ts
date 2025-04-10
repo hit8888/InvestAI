@@ -11,6 +11,13 @@ export enum ArtifactEnum {
   FORM = 'FORM',
 }
 
+export enum ArtifactPreviewEnum {
+  SLIDE = 'SLIDE',
+  SLIDE_IMAGE = 'SLIDE_IMAGE',
+  VIDEO = 'VIDEO',
+  DEMO = 'DEMO',
+}
+
 export const SlideItemSchema = z.object({
   title: z.string(),
   description: z.string().optional(),

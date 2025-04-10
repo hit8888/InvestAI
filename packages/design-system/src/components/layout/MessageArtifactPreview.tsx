@@ -9,6 +9,7 @@ import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketD
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
@@ -41,6 +42,7 @@ const MessageArtifactPreview = ({
 
   // Type guard to ensure content is of the correct type
   const isValidContent = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     content: any,
   ): content is SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent => {
     return (
@@ -53,7 +55,11 @@ const MessageArtifactPreview = ({
   if (!isValidContent(content)) return null;
 
   return (
-    <div className="mb-4 pl-11 pr-6">
+    <div
+      className={cn('mb-4 pl-11 pr-6', {
+        'mt-4': !usingForAgent,
+      })}
+    >
       <ArtifactPreview
         usingForAgent={usingForAgent}
         artifactId={artifactData.artifact_id}
@@ -62,7 +68,6 @@ const MessageArtifactPreview = ({
         setActiveArtifact={setActiveArtifact}
         logoURL={logoURL}
         title={artifactManager.getArtifactTitle()}
-        description={artifactManager.getArtifactDescription()}
         artifactContent={content}
         isError={!!artifactData.error}
         isFetching={false}

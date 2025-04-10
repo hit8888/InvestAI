@@ -9,9 +9,6 @@ import { FormFieldType } from '@meaku/core/types/webSocketData';
 import Input from '@breakout/design-system/components/layout/input';
 import { getInputType } from '@meaku/core/utils/form_fields';
 import PhoneInputContainer from '../PhoneInput';
-import DynamicIcon from '../icons/DynamicIcon';
-import DemoFormEmailFieldIcon from '../icons/demoform-email-icon';
-import DemoFormNameFieldIcon from '../icons/demoform-name-icon';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
@@ -29,20 +26,6 @@ const ChatFormField = (props: IChatFormFieldProps) => {
 
   const isPhoneInputField = form_field.field_name === 'phone';
 
-  const getIconBasedOnField = () => {
-    switch (form_field.field_name) {
-      case 'phone':
-        return <DynamicIcon icon="phone" className="h-3.5 w-3.5 text-primary/60" />;
-      case 'email':
-      case 'business_email':
-        return <DemoFormEmailFieldIcon className="h-3.5 w-3.5 text-primary/60" />;
-      case 'name':
-        return <DemoFormNameFieldIcon className="h-3.5 w-3.5 text-primary/60" />;
-      default:
-        return <DynamicIcon icon="check" className="h-3.5 w-3.5 text-primary/60" />;
-    }
-  };
-
   return (
     <FormField
       control={form.control}
@@ -50,7 +33,6 @@ const ChatFormField = (props: IChatFormFieldProps) => {
       render={({ field }) => (
         <FormItem className="flex w-full flex-col items-start justify-center">
           <div className="flex w-full items-center justify-center gap-2 space-y-0">
-            <div className="flex items-center rounded-lg bg-primary/20 p-1">{getIconBasedOnField()}</div>
             <FormControl>
               {isPhoneInputField ? (
                 <PhoneInputContainer
@@ -62,7 +44,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
                 <Input
                   readOnly={isArtifactFormFilled}
                   {...field}
-                  className="border border-primary/30 bg-white placeholder:text-gray-400 focus:border-2 focus:border-primary/40 focus:ring-0"
+                  className="border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
                   placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
                   type={getInputType(form_field.data_type)}
                 />

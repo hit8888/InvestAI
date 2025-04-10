@@ -19,7 +19,6 @@ import { useState } from 'react';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ChatFormField from './ChatFormField';
-import DemoFormSubmitBtnTickIcon from '../icons/demoform-submit-tick-icon';
 import { FormArtifactContent } from '@meaku/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
 
@@ -119,15 +118,10 @@ const FormArtifact = ({
   }
 
   return (
-    <Card className="max-w-96 rounded-2xl border-none bg-primary/10">
+    <Card className="w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3">
       <CardContent className="flex flex-col gap-4 p-4">
-        <p className="text-lg font-semibold text-primary">Share Your Details</p>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4 rounded-2xl border border-primary/20 bg-[rgb(var(--primary-foreground)/0.18)] p-4"
-            data-testid="contact-form"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
             <div className="flex w-full flex-col items-start gap-6">
               {artifact.form_fields.map((field, i) => (
                 <ChatFormField isArtifactFormFilled={isArtifactFormFilled} key={i} form={form} form_field={field} />
@@ -141,7 +135,6 @@ const FormArtifact = ({
                 data-testid="submit-form-btn"
               >
                 Submit
-                <DemoFormSubmitBtnTickIcon className="h-4 w-4" />
               </Button>
             </div>
           </form>

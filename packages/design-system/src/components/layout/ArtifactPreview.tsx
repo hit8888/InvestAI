@@ -1,17 +1,17 @@
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import { ArrowUpRight, CirclePlay } from 'lucide-react';
 import { useState } from 'react';
-import { cn } from '@breakout/design-system/lib/cn';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 import CustomVideoPlayer from './CustomVideoPlayer.tsx';
 import {
   ArtifactEnum,
+  ArtifactPreviewEnum,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
+import CommonArtifactPreview from './CommonArtifactPreview.tsx';
 
 interface IProps {
   usingForAgent: boolean;
@@ -21,18 +21,10 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   title?: string;
-  description?: string;
   artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent;
   isError?: boolean;
   isFetching?: boolean;
 }
-
-const truncateText = (text: string, limit: number): string => {
-  if (text.length <= limit) return text;
-  const truncated = text.slice(0, limit);
-  const lastSpaceIndex = truncated.lastIndexOf(' ');
-  return lastSpaceIndex > -1 ? truncated.slice(0, lastSpaceIndex) + '...' : truncated + '...';
-};
 
 const ArtifactPreview = ({
   usingForAgent,
@@ -42,7 +34,6 @@ const ArtifactPreview = ({
   setActiveArtifact,
   logoURL,
   title,
-  description,
   artifactContent,
   isError = false,
   isFetching = false,
@@ -78,38 +69,12 @@ const ArtifactPreview = ({
 
   const showArtifactPreviewButtonDisplay = () => {
     return (
-      <button
-        onClick={handleArtifactOnClick}
-        className="mt-3 flex-col gap-6 rounded-xl bg-primary/10 p-5 transition-colors duration-300 ease-in-out hover:bg-primary/20"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex h-14 min-h-14 w-14 min-w-14 items-center justify-center rounded-2xl border-2 border-primary-foreground/60 bg-primary/60">
-            <CirclePlay className="text-primary-foreground/90" height={32} width={32} />
-          </div>
-          <div className="flex h-12 min-h-12 w-12 min-w-12 items-center justify-center rounded-full bg-primary/10">
-            <ArrowUpRight className="text-primary/70" height={24} width={24} />
-          </div>
-        </div>
-        <div className="mt-2 flex items-center gap-4">
-          {isFetching ? (
-            <div className="h-4 w-full animate-pulse rounded-lg bg-primary/40" />
-          ) : (
-            <div
-              className={cn('flex flex-1 flex-col items-start text-left', {
-                'space-y-1': title && description,
-                'space-y-6': !title || !description,
-              })}
-            >
-              {title ? (
-                <h4 className="lg:text-md text-base font-semibold text-primary 2xl:text-lg">{title}</h4>
-              ) : (
-                <div className="h-4 w-full animate-pulse rounded-lg bg-primary/30" />
-              )}
-              {description && <p className="text-sm text-primary/60 2xl:text-base">{truncateText(description, 100)}</p>}
-            </div>
-          )}
-        </div>
-      </button>
+      <CommonArtifactPreview
+        title={title}
+        isFetching={isFetching}
+        artifactType={artifactType as keyof typeof ArtifactPreviewEnum}
+        handleClick={handleArtifactOnClick}
+      />
     );
   };
 
@@ -121,7 +86,7 @@ const ArtifactPreview = ({
   return usingForAgent ? (
     <>{showArtifactPreviewButtonDisplay()}</>
   ) : (
-    <Dialog>
+    <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
       <DialogTrigger asChild>{showArtifactPreviewButtonDisplay()}</DialogTrigger>
       <DialogContent className="bg-primary-foreground/80 sm:min-w-[1200px]">
         <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>

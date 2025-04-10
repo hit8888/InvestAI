@@ -340,6 +340,5 @@ const isUserEventMessage = (message: WebSocketMessage): boolean => {
 };
 
 export const shouldMessageScrollToTop = (message: WebSocketMessage): boolean => {
-  const isDiscoveryMessage = checkIsDiscoveryMessage(message);
-  return isUserEventMessage(message) || isUserTextMessage(message) || !isDiscoveryMessage;
+  return isUserEventMessage(message) || isUserTextMessage(message);
 };
