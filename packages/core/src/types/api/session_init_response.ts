@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ConfigurationSchema } from './configuration_response';
-import { FeedbackRequestPayloadSchema, WebSocketMessageSchema } from '../..';
+import { WebSocketMessageSchema } from '../..';
+import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
 
 export const SessionSchema = z.object({
   agent_id: z.number(),

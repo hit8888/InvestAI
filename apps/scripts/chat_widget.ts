@@ -7,7 +7,7 @@
         DESKTOP: {
           DEFAULT: {
             WIDTH: "max(420px, 100vw)",
-            HEIGHT: "max(700px, 88vh)",
+            HEIGHT: "max(700px, 85vh)",
           },
           COLLAPSED: {
             CENTER_WIDTH_INITIAL: "max(420px, 100vw)",
@@ -70,11 +70,24 @@
     },
   };
 
+  // Message Manager Module
+  const MessageManager = {
+    sendMessage(iframe: HTMLIFrameElement, message: object): void {
+      if (iframe.contentWindow && "postMessage" in iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ ...message }, { targetOrigin: "*" });
+      }
+    },
+  };
+
   // URL and Parameters Module
   const URLManager = {
     updateParentUrlParam(key: string, value: string | null): void {
       const url = new URL(window.parent.location.href);
       const currentValue = url.searchParams.get(key);
+
+      if (key === "isAgentOpen" && currentValue === null) {
+        return;
+      }
 
       // Only update if the value is different
       if (value === null || value === "") {
@@ -328,16 +341,13 @@
     ): void {
       buttons.forEach((button) => {
         button.addEventListener("click", () => {
-          iframe.contentWindow?.postMessage(
-            {
-              type: "open-breakout-button",
-              data: {
-                buttonId: button.id,
-                message: `Button ${button.id} was clicked!`,
-              },
+          MessageManager.sendMessage(iframe, {
+            type: "open-breakout-button",
+            data: {
+              buttonId: button.id,
+              message: `Button ${button.id} was clicked!`,
             },
-            { targetOrigin: "*" },
-          );
+          });
         });
       });
     },
@@ -526,14 +536,9 @@
       const iframe = AgentIframeManager.create(container, iframeSrc);
 
       // Send initial config for embedded mode
-      if (iframe.contentWindow) {
-        iframe.contentWindow.postMessage(
-          {
-            isCollapsible: false, // Set false for embedded mode
-          },
-          { targetOrigin: "*" },
-        );
-      }
+      MessageManager.sendMessage(iframe, {
+        isCollapsible: false, // Set false for embedded mode
+      });
 
       return { container, iframe };
     },
@@ -543,6 +548,7 @@
   const initializeWidget = async (): Promise<void> => {
     const config = ConfigManager.getConfig();
     const IFRAME_SRC = IframeURLManager.getIframeSrc(config);
+    const postMessage = MessageManager.sendMessage;
 
     let isAgentOpen = false;
     let iFrameSource: MessageEventSource | null = null;
@@ -657,15 +663,10 @@
               hasFirstUserMessageBeenSent =
                 event.data.hasFirstUserMessageBeenSent ?? false;
 
-              const shouldHideBottomBar =
-                ConfigManager.getConfig()?.hideBottomBar;
-
-              if (!shouldHideBottomBar) {
-                URLManager.updateParentUrlParam(
-                  "isAgentOpen",
-                  isAgentOpen.toString(),
-                );
-              }
+              URLManager.updateParentUrlParam(
+                "isAgentOpen",
+                isAgentOpen.toString(),
+              );
 
               if (currentContainer === bottomContainer && bottomContainer) {
                 StyleManager.adjustResponsiveStyles(
@@ -678,21 +679,16 @@
                 );
 
                 // Send updated state back to iframe
-                if (iframe.contentWindow) {
-                  iframe.contentWindow.postMessage(
-                    {
-                      chatOpen: isAgentOpen,
-                      showBanner,
-                      hasFirstUserMessageBeenSent,
-                      // Only set isCollapsible based on container if not in overlay
-                      isCollapsible:
-                        currentContainer === overlay?.wrapper
-                          ? true
-                          : !config.containerId,
-                    },
-                    { targetOrigin: "*" },
-                  );
-                }
+                postMessage(iframe, {
+                  chatOpen: isAgentOpen,
+                  showBanner,
+                  hasFirstUserMessageBeenSent,
+                  // Only set isCollapsible based on container if not in overlay
+                  isCollapsible:
+                    currentContainer === overlay?.wrapper
+                      ? true
+                      : !config.containerId,
+                });
               }
             }
           } catch (err) {
@@ -736,24 +732,18 @@
               embeddedContainer.appendChild(iframe);
               currentContainer = embeddedContainer;
               // Reset isCollapsible when moving back to embedded mode
-              iframe.contentWindow?.postMessage(
-                {
-                  isCollapsible: false,
-                  type: "MODE_CHANGE",
-                },
-                { targetOrigin: "*" },
-              );
+              postMessage(iframe, {
+                isCollapsible: false,
+                type: "MODE_CHANGE",
+              });
             } else if (bottomContainer) {
               bottomContainer.appendChild(iframe);
               currentContainer = bottomContainer;
               // Reset isCollapsible when moving back to bottom bar mode
-              iframe.contentWindow?.postMessage(
-                {
-                  isCollapsible: true,
-                  type: "MODE_CHANGE",
-                },
-                { targetOrigin: "*" },
-              );
+              postMessage(iframe, {
+                isCollapsible: true,
+                type: "MODE_CHANGE",
+              });
             }
           }
           overlay.hide();
@@ -806,28 +796,22 @@
             overlay.wrapper.appendChild(iframe);
 
             // Immediately send isCollapsible true for overlay mode
-            iframe.contentWindow?.postMessage(
-              {
-                type: "MODE_CHANGE",
-                isCollapsible: true,
-              },
-              { targetOrigin: "*" },
-            );
+            postMessage(iframe, {
+              isCollapsible: true,
+              type: "MODE_CHANGE",
+            });
 
             // Wait for iframe to be ready in new container
             const messageHandler = (event: MessageEvent) => {
               if (event.data.type === "EMBED_READY") {
                 // Send the message once iframe is ready
-                iframe.contentWindow?.postMessage(
-                  {
-                    type: "PARENT_FORM_MESSAGE",
-                    data: {
-                      message: message,
-                    },
-                    isCollapsible: true, // Always true in overlay mode
+                postMessage(iframe, {
+                  type: "PARENT_FORM_MESSAGE",
+                  data: {
+                    message: message,
                   },
-                  { targetOrigin: "*" },
-                );
+                  isCollapsible: true, // Always true in overlay mode
+                });
                 window.removeEventListener("message", messageHandler);
               }
             };
@@ -840,13 +824,10 @@
               currentContainer = overlay.wrapper;
               overlay.wrapper.appendChild(iframe);
               // Still try to set isCollapsible in error case
-              iframe.contentWindow?.postMessage(
-                {
-                  type: "MODE_CHANGE",
-                  isCollapsible: true,
-                },
-                { targetOrigin: "*" },
-              );
+              postMessage(iframe, {
+                type: "MODE_CHANGE",
+                isCollapsible: true,
+              });
             }
           }
         }

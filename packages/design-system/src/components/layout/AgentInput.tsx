@@ -11,9 +11,10 @@ interface IProps {
   handleSendMessage: (message: string) => void;
   disableMessageSend: boolean;
   messages: WebSocketMessage[];
+  isCollapsible: boolean;
 }
 
-const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps) => {
+const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -56,7 +57,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages }: IProps)
       <form className="relative w-full flex-1" onSubmit={handleSubmission}>
         <div className="z-10 flex rounded-[14px] border border-gray-200 bg-white p-1">
           <TextArea
-            autoFocus
+            autoFocus={isCollapsible}
             className="rounded-[10px] border py-4 pl-3 pr-16"
             placeholder="Type your message here..."
             value={inputValue}

@@ -35,10 +35,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const [waitingForParentUrl, setWaitingForParentUrl] = useState(true);
 
   const { getParam } = useUrlParams();
-  const is_test = getParam('is_test') === 'true';
+  const isAdmin = useIsAdmin();
+  const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
 
-  const isAdmin = useIsAdmin();
   const isReadOnly = useAreMessagesReadonly();
 
   const getParentURL = async (event: MessageEvent) => {

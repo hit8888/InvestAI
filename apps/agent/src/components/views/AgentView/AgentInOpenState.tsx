@@ -121,6 +121,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
             disableMessageSend={disableMessageSend}
             messages={messages}
+            isCollapsible={isCollapsible}
           />
         )}
       </div>

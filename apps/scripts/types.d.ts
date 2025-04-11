@@ -8,12 +8,14 @@ declare global {
   interface SentryExtra {
     event: string | { type: string };
     url: string;
+    data?: object;
   }
 
   interface SentryTags {
     tenant_id: string | null;
     agent_id: string;
     error_type: string;
+    component?: string;
   }
 
   interface SentryOptions {
