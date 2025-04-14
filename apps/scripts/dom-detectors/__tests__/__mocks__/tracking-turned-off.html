@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element Click Detection</title>
+  </head>
+  <body>
+    <a
+      id="link1"
+      href="https://twitter.com/HackerEarth?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"
+      >Link with ID</a
+    >
+    <a
+      class="link-group"
+      href="https://example.co/teams/?utm_medium=referral&utm_source=community&utm_campaign=side-bar"
+      >Link with class</a
+    >
+
+    <form id="form-with-named-fields">
+      <p>Registration form - with named form fields</p>
+
+      <p>
+        <label>Name</label>
+        <input placeholder="Enter name" type="text" name="name" />
+      </p>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <script
+      src="./build/chat_widget.js"
+      tenant-id="hackerearth"
+      agent-id="2"
+    ></script>
+
+    <iframe
+      srcdoc="
+        <html>
+          <body>
+            <script>
+              const tracking_config = {
+                track_clicks: false,
+                track_form_submissions: false,
+                element_selectors: ['#link1', '.link-group'],
+              };
+              window.parent.postMessage({ type: 'INIT_CONFIG', config: { tracking_config } }, '*');
+            </script>
+          </body>
+        </html>
+      "
+    />
+  </body>
+</html>

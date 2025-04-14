@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Submission Test</title>
+    <script>
+      function onFormSubmit() {
+        const form = document.getElementById("form-without-submit-button");
+        form.submit();
+      }
+    </script>
+  </head>
+  <body>
+    <form id="form-without-submit-button">
+      <p>Simple form - without submit button</p>
+
+      <p>
+        <label>Name</label>
+        <input placeholder="Enter name" type="text" name="name" />
+      </p>
+
+      <p>
+        <label>Email</label>
+        <input placeholder="Enter email" type="email" name="email" />
+      </p>
+
+      <button type="button" onClick="onFormSubmit()">Submit</button>
+    </form>
+
+    <script
+      src="./build/chat_widget.js"
+      tenant-id="hackerearth"
+      agent-id="2"
+    ></script>
+
+    <iframe
+      srcdoc="
+        <html>
+          <body>
+            <script>
+              const tracking_config = { track_form_submissions: true };
+              window.parent.postMessage({ type: 'INIT_CONFIG', config: { tracking_config } }, '*');
+            </script>
+          </body>
+        </html>
+      "
+    />
+  </body>
+</html>

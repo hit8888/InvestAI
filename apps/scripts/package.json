@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc && tsc-alias && esbuild ./dist/**/*.js --minify --outdir=build --format=iife --bundle",
-    "dev": "nodemon --watch . --ignore dist/ --ignore build/ --ext ts --exec 'pnpm build'"
+    "build": "tsc && tsc-alias && esbuild ./dist/*.js ./dist/**/*.js --minify --outdir=build --format=iife --bundle",
+    "dev": "nodemon --watch . --ignore dist/ --ignore build/ --ext ts --exec 'pnpm build'",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@meaku/typescript-config": "workspace:*",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.5.4",
     "esbuild": "^0.24.0",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.0.0",

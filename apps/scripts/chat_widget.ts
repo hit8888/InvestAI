@@ -1,3 +1,5 @@
+import { initDomDetectors } from "./dom-detectors";
+
 (function () {
   // Config Module
   const ConfigManager = {
@@ -653,6 +655,22 @@
                 );
                 initialMessageSent = true;
               }
+
+              const {
+                prospectId,
+                apiBaseUrl,
+                config: agentConfig,
+              } = event.data;
+
+              // save prospectId for use in tracking dom elements
+              window.__breakout__ = {
+                tenantId: ConfigManager.getConfig().tenantId as string,
+                prospectId,
+                apiBaseUrl,
+              };
+
+              const { tracking_config } = agentConfig;
+              initDomDetectors(tracking_config);
             }
 
             if (event.data?.chatOpen !== undefined) {

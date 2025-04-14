@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Submission Test</title>
+  </head>
+  <body>
+    <div id="content"></div>
+
+    <!-- add form dyamically -->
+    <script>
+      setTimeout(() => {
+        const content = document.getElementById("content");
+        const form = document.createElement("form");
+        form.id = "dynamically-added-form";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = "name";
+        input.placeholder = "Enter name";
+        form.appendChild(input);
+
+        const button = document.createElement("button");
+        button.type = "submit";
+        button.innerText = "Submit";
+        form.appendChild(button);
+
+        content.appendChild(form);
+      }, 200); // add form after some delay
+    </script>
+
+    <script
+      src="./build/chat_widget.js"
+      tenant-id="hackerearth"
+      agent-id="2"
+    ></script>
+
+    <iframe
+      srcdoc="
+        <html>
+          <body>
+            <script>
+              const tracking_config = { track_form_submissions: true };
+              window.parent.postMessage({ type: 'INIT_CONFIG', config: { tracking_config } }, '*');
+            </script>
+          </body>
+        </html>
+      "
+    />
+  </body>
+</html>

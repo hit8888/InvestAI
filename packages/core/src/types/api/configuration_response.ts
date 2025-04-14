@@ -61,6 +61,13 @@ export const ConfigurationSchema = z.object({
       })
       .optional(),
   }),
+  tracking_config: z
+    .object({
+      element_selectors: z.array(z.string()),
+      track_clicks: z.boolean().optional(),
+      track_form_submissions: z.boolean().optional(),
+    })
+    .optional(),
   whitelisted_domains: z.array(z.string()),
 });
 

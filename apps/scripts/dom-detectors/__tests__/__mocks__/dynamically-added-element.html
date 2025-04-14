@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element Click Detection</title>
+  </head>
+  <body>
+    <div id="content"></div>
+
+    <!-- add elements dyamically -->
+    <script>
+      setTimeout(() => {
+        const content = document.getElementById("content");
+        const a = document.createElement("a");
+        a.id = "link-with-id";
+        a.innerText = "Link with ID";
+        a.href =
+          "https://example.co/teams/?utm_medium=external-link&utm_source=group";
+        content.appendChild(a);
+      }, 200); // add elements after some delay
+    </script>
+
+    <script
+      src="./build/chat_widget.js"
+      tenant-id="hackerearth"
+      agent-id="2"
+    ></script>
+
+    <iframe
+      srcdoc="
+        <html>
+          <body>
+            <script>
+              const tracking_config = {
+                track_clicks: true,
+                element_selectors: ['#link-with-id'],
+              };
+              window.parent.postMessage({ type: 'INIT_CONFIG', config: { tracking_config } }, '*');
+            </script>
+          </body>
+        </html>
+      "
+    />
+  </body>
+</html>

@@ -172,6 +172,11 @@ declare global {
     entryPointAlignment?: EntryPointAlignmentType;
     hasFirstUserMessageBeenSent?: boolean;
     sessionId?: string;
+    prospectId?: string;
+    apiBaseUrl?: string;
+    config: {
+      tracking_config: TrackingConfigType;
+    };
   }
 
   interface OverlayManager {
@@ -211,6 +216,39 @@ export interface AgentIframeManager {
 
 export interface BottomBarContainerManager {
   createContainer(): HTMLDivElement;
+}
+
+export type TrackingConfigType = {
+  track_form_submissions: boolean;
+  track_clicks: boolean;
+  element_selectors: string[];
+};
+
+export type FormSubmissionConfigType = Pick<
+  TrackingConfigType,
+  "track_form_submissions"
+>;
+export type DomElementClickConfigType = Pick<
+  TrackingConfigType,
+  "track_clicks" | "element_selectors"
+>;
+
+export interface ProspectRequestData {
+  email?: string;
+  name?: string;
+  external_id?: string;
+  prospect_demographics: unknown;
+  origin?: "WEB_FORM" | "LINK_CLICK";
+}
+
+declare global {
+  interface Window {
+    __breakout__?: {
+      tenantId: string;
+      prospectId?: string;
+      apiBaseUrl?: string;
+    };
+  }
 }
 
 export {};

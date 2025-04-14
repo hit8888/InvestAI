@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useAgentbotAnalytics from './useAgentbotAnalytics';
+import { ENV } from '@meaku/core/types/env';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from './useLocalStorageSession';
@@ -7,6 +8,7 @@ import { WebSocketMessage } from '../types/webSocketData';
 import { useWidgetMode } from '../contexts/WidgetModeProvider';
 import { useAppEventsHook } from './useAppEventsHook';
 import { EntryPointAlignmentType } from '../types/entryPoint';
+import useConfigurationApiResponseManager from './useConfigurationApiResponseManager';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -31,7 +33,7 @@ export const useEmbedAppEvents = ({
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { handleUpdateSessionData } = useLocalStorageSession();
   const {
-    sessionData: { sessionId },
+    sessionData: { sessionId, prospectId },
   } = useLocalStorageSession();
 
   const { mode, setMode } = useWidgetMode();
@@ -111,6 +113,9 @@ export const useEmbedAppEvents = ({
 
   useAppEventsHook(handleParentWindowMessages);
 
+  const manager = useConfigurationApiResponseManager();
+  const config = manager.getConfig();
+
   // Effect for sending chat state to parent
   useEffect(() => {
     const payload = {
@@ -124,7 +129,8 @@ export const useEmbedAppEvents = ({
   }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment]);
 
   useEffect(() => {
-    window.parent.postMessage({ type: 'EMBED_READY', sessionId: sessionId }, '*');
+    const apiBaseUrl = ENV.VITE_BASE_API_URL;
+    window.parent.postMessage({ type: 'EMBED_READY', sessionId, prospectId, apiBaseUrl, config }, '*');
   }, []);
 
   return { shouldHideBottomBar, isCollapsible, mode };

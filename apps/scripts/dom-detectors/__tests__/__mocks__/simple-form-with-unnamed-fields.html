@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Submission Test</title>
+  </head>
+  <body>
+    <form id="form-with-unnamed-fields">
+      <p>Registration form - with unnamed form fields</p>
+
+      <p>
+        <label>Name</label>
+        <input placeholder="Enter name" type="text" />
+      </p>
+
+      <p>
+        <label>Country</label>
+        <select data-testid="country">
+          <option value="India">India</option>
+          <option value="France">France</option>
+          <option value="USA">USA</option>
+        </select>
+      </p>
+
+      <p>
+        <label>Email</label>
+        <input placeholder="Enter email" type="email" />
+      </p>
+
+      <p>
+        <label>Password</label>
+        <input placeholder="Enter password" type="password" />
+      </p>
+
+      <p>
+        <label>About you</label>
+        <textarea placeholder="About you"></textarea>
+      </p>
+
+      <p>
+        <label>Upload photo</label>
+        <input placeholder="Upload photo" type="file" />
+      </p>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <script
+      src="./build/chat_widget.js"
+      tenant-id="hackerearth"
+      agent-id="2"
+    ></script>
+
+    <iframe
+      srcdoc="
+        <html>
+          <body>
+            <script>
+              const tracking_config = { track_form_submissions: true };
+              window.parent.postMessage({ type: 'INIT_CONFIG', config: { tracking_config } }, '*');
+            </script>
+          </body>
+        </html>
+      "
+    />
+  </body>
+</html>
