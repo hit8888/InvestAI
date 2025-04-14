@@ -142,8 +142,8 @@
   /* animate-taking-input Starts */
   .animate-taking-input {
     animation:
-      initial-animation 720ms linear 1ms,
-      animation-taking-input2 1.6s linear 720ms infinite alternate;
+      initial-animation 1s linear 1.4s,
+      animation-taking-input2 2s linear 1s infinite alternate;
   }
 
   .taking-input-3 {
@@ -217,8 +217,8 @@
   /* animate-thinking Starts */
   .animate-thinking {
     animation:
-      initial-animation 720ms linear 1ms,
-      animation-thinking2 1600ms linear 720ms infinite alternate;
+      initial-animation 1s linear 1.4s,
+      animation-thinking2 2s linear 1s infinite alternate;
   }
 
   @keyframes animation-thinking2 {
@@ -293,7 +293,7 @@
   /* animate-waiting Starts */
 
   .animate-waiting {
-    animation: animation-waiting-part1 1000ms cubic-bezier(0.42, 0, 0, 1) 1ms infinite alternate;
+    animation: animation-waiting-part1 2s cubic-bezier(0.42, 0, 0, 1) 1ms infinite alternate;
   }
 
   /* Keyframes for the first part of the animation */
@@ -390,8 +390,8 @@
 
   .animate-responding {
     animation:
-      animation-responding-part1 1200ms linear 1ms forwards,
-      animation-responding-part2 400ms cubic-bezier(0.2, 0, 0, 1) 1200ms forwards;
+      animation-responding-part1 2000ms linear 1ms forwards,
+      animation-responding-part2 1000ms cubic-bezier(0.2, 0, 0, 1) 1600ms forwards;
   }
 
   @keyframes animation-responding-part1 {

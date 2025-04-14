@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import React from 'react';
 import { cn } from '../../lib/cn';
+import './index.css';
 
 export const buttonVariants = cva(
   'rounded-md flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed',
@@ -17,21 +18,21 @@ export const buttonVariants = cva(
       },
       variant: {
         primary:
-          'bg-primary text-white border-2 border-borderStroke hover:bg-primary/80 focus:bg-primary active:bg-primary focus:ring-4 focus:ring-primary/20 disabled:bg-primary/30',
+          'bg-primary text-white border-2 border-borderStroke hover:bg-primary/80 focus:bg-primary active:bg-primary ring-primary disabled:bg-primary/30',
         secondary:
-          'text-primary border border-primary hover:bg-primary/5 focus:bg-primary/5 active:bg-primary/5 focus:ring-4 focus:ring-primary/20 disabled:border-primary/30 disabled:text-primary/30',
-        tertiary: 'text-primary hover:bg-primary/5 focus:bg-primary/10 disabled:text-primary/30',
+          'text-primary border border-primary hover:bg-primary/5 focus:bg-primary/5 active:bg-primary/5 ring-primary disabled:border-primary/30 disabled:text-primary/30',
+        tertiary: 'text-primary hover:bg-primary/5 focus:bg-primary/10 ring-primary disabled:text-primary/30',
         destructive:
-          'bg-destructive-1000 border-2 text-white border-borderStroke hover:bg-destructive-800 focus:bg-destructive-1000 focus:ring-4 focus:ring-destructive-200 disabled:bg-destructive-300',
+          'bg-destructive-1000 border-2 text-white border-borderStroke hover:bg-destructive-800 focus:bg-destructive-1000 ring-destructive disabled:bg-destructive-300',
         destructive_secondary:
-          'text-destructive-1000 border border-destructive-1000 hover:bg-destructive-50 focus:bg-destructive-50 focus:ring-4 focus:ring-destructive-200 disabled:border-destructive-300 disabled:text-destructive-300',
+          'text-destructive-1000 border border-destructive-1000 hover:bg-destructive-50 focus:bg-destructive-50 ring-destructive disabled:border-destructive-300 disabled:text-destructive-300',
         destructive_tertiary:
-          'text-destructive-1000 hover:bg-destructive-50 focus:bg-destructive-100 disabled:text-destructive-300',
+          'text-destructive-1000 hover:bg-destructive-50 focus:bg-destructive-100 ring-destructive disabled:text-destructive-300',
         system:
-          'bg-gray-600 border-2 text-white border-borderStroke hover:bg-gray-500 focus:bg-gray-600 focus:ring-4 focus:ring-gray-200 disabled:bg-gray-300',
+          'bg-gray-600 border-2 text-white border-borderStroke hover:bg-gray-500 focus:bg-gray-600 ring-system disabled:bg-gray-300',
         system_secondary:
-          'text-gray-600 border border-gray-600 hover:bg-gray-50 focus:bg-gray-50 focus:ring-4 focus:ring-gray-200 disabled:border-gray-300 disabled:text-gray-300',
-        system_tertiary: 'text-gray-600 hover:bg-gray-50 focus:bg-gray-100 disabled:text-gray-300',
+          'text-gray-600 border border-gray-600 hover:bg-gray-50 focus:bg-gray-50 ring-system disabled:border-gray-300 disabled:text-gray-300',
+        system_tertiary: 'text-gray-600 hover:bg-gray-50 focus:bg-gray-100 ring-system disabled:text-gray-300',
       },
     },
     compoundVariants: [

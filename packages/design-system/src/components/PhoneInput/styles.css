@@ -14,6 +14,11 @@
   border-radius: 6px;
 }
 
+.custom-phone-input .PhoneInputInput::placeholder {
+  color: #98a2b3;
+  font-size: 14px;
+}
+
 /* Remove default input styles */
 .custom-phone-input .PhoneInputInput:focus {
   box-shadow: none;

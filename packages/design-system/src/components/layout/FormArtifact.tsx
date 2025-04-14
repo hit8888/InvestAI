@@ -106,7 +106,7 @@ const FormArtifact = ({
   const isSubmitBtnDisabled =
     !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
 
-  if (!isArtifactFormFilled && submitted && !isEditing) {
+  if (isArtifactFormFilled && submitted && !isEditing) {
     return (
       <FormFilledThankYouContent
         artifact={artifact}

@@ -168,3 +168,45 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+.ring-primary:focus {
+  animation: focus-ring-primary 2000ms ease-out;
+}
+
+.ring-destructive:focus {
+  animation: focus-ring-destructive 2000ms ease-out;
+}
+
+.ring-system:focus {
+  animation: focus-ring-system 2000ms ease-out;
+}
+
+@keyframes focus-ring-primary {
+  0% {
+    box-shadow: 0 0 0 4px rgba(var(--primary) / 0.2);
+  }
+
+  100% {
+    box-shadow: none;
+  }
+}
+
+@keyframes focus-ring-destructive {
+  0% {
+    box-shadow: 0 0 0 64;
+  }
+
+  100% {
+    box-shadow: none;
+  }
+}
+
+@keyframes focus-ring-system {
+  0% {
+    box-shadow: 0 0 0 4px rgba(var(--system) / 0.2);
+  }
+
+  100% {
+    box-shadow: none;
+  }
+}

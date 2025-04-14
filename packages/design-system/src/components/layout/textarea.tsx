@@ -18,7 +18,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HT
       <textarea
         ref={autoResizeRef}
         className={cn(
-          'w-full flex-1 resize-none overflow-y-auto rounded-md border-gray-300 text-sm focus:border-gray-400 focus:ring-0 disabled:opacity-60',
+          'w-full flex-1 resize-none overflow-y-auto rounded-xl border-gray-300 text-sm focus:border-gray-300 focus:ring-0 disabled:opacity-60',
           className,
         )}
         {...restProps}

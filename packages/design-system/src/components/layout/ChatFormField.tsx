@@ -51,7 +51,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               )}
             </FormControl>
           </div>
-          <FormMessage className="ml-8 font-medium text-red-500" />
+          <FormMessage className="font-medium text-red-500" />
         </FormItem>
       )}
     />

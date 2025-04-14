@@ -32,7 +32,7 @@ const CopyToClipboardButton = ({
       }}
       buttonStyle="icon"
       variant="system_tertiary"
-      className={cn('rounded-md bg-primary-foreground/70 p-2 ', btnClassName)}
+      className={cn('rounded-md bg-primary-foreground/70 p-0', btnClassName)}
     >
       {isCopied ? (
         <CheckIcon className="h-5 w-5 text-positive-1000" />

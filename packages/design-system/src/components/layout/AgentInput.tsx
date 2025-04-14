@@ -6,6 +6,7 @@ import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
 import PoweredByBreakout from './PoweredByBreakout';
+import { cn } from '../../lib/cn';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -55,10 +56,15 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
   return (
     <div className="input-bar-bg flex w-full flex-col items-center gap-2 rounded-b-2xl p-4 pb-2">
       <form className="relative w-full flex-1" onSubmit={handleSubmission}>
-        <div className="z-10 flex rounded-[14px] border border-gray-200 bg-white p-1">
+        <div className="z-10 flex rounded-2xl border border-gray-200 bg-white p-1">
           <TextArea
             autoFocus={isCollapsible}
-            className="rounded-[10px] border py-4 pl-3 pr-16"
+            className={cn(
+              'rounded-xl border py-4 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
+              {
+                'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60': inputValue.length > 0,
+              },
+            )}
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
@@ -74,7 +80,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
             showButton={!isSendButtonDisabled}
             onClick={handleSubmission}
             disabled={conditionForShowingTooltipAndDisabledButton}
-            btnClassName="absolute bottom-[12px] right-3 flex h-10 w-10 transform items-center justify-center !p-0"
+            btnClassName="absolute bottom-2 right-3 flex h-12 w-12 transform items-center justify-center !p-0"
           />
         </SendButtonWithTooltip>
       </form>

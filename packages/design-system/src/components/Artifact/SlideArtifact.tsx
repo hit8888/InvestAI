@@ -28,7 +28,7 @@ const SlideArtifact = ({ artifact: { items, sub_title }, logoURL, onItemClick }:
             minWidth: '1600px',
           }}
         >
-          <div className="relative flex h-full w-full flex-col p-5">
+          <div className="relative flex h-full w-full flex-col p-5 pt-8">
             <SlideHeader logoUrl={logoURL} />
             <div className="flex h-full w-full ">
               {sub_title && <SlideSubTitle text={sub_title} />}
