@@ -32,15 +32,9 @@ const getZodType = (dataType: string) => {
     case 'email':
       return z.string().email();
     case 'business_email':
-      return z
-        .string()
-        .email()
-        .refine(isBusinessEmail, (email) => {
-          const domain = email.split('@')[1]?.toLowerCase();
-          return {
-            message: `* Please enter a different email address. This form does not accept addresses from ${domain}`,
-          };
-        });
+      return z.string().email().refine(isBusinessEmail, {
+        message: '* Please add your work email',
+      });
     case 'date':
       return z.date();
     case 'datetime':
