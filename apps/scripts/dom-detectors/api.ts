@@ -10,21 +10,25 @@ export const submitProspect = (requestData: ProspectRequestData) => {
   }
 };
 
-const createProspect = (requestData: unknown) => {
+const createProspect = (requestData: ProspectRequestData) => {
   const apiBaseUrl = window.__breakout__?.apiBaseUrl ?? "";
   const apiUrl = `${apiBaseUrl}/tenant/chat/prospect/create/`;
 
   safeRequest(apiUrl, requestData);
 };
 
-const updateProspect = (prospectId: string, requestData: unknown) => {
+const updateProspect = (
+  prospectId: string,
+  requestData: ProspectRequestData,
+) => {
   const apiBaseUrl = window.__breakout__?.apiBaseUrl ?? "";
   const apiUrl = `${apiBaseUrl}/tenant/chat/prospect/${prospectId}/update/`;
+  delete requestData.origin;
 
   safeRequest(apiUrl, requestData);
 };
 
-const safeRequest = (apiUrl: string, requestData: unknown) => {
+const safeRequest = (apiUrl: string, requestData: ProspectRequestData) => {
   try {
     fetch(apiUrl, {
       method: "POST",
