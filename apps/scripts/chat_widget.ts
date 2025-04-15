@@ -673,6 +673,13 @@ import { initDomDetectors } from "./dom-detectors";
               initDomDetectors(tracking_config);
             }
 
+            if (event.data.type === "CHAT_INIT") {
+              window.__breakout__ = {
+                ...window.__breakout__,
+                prospectId: event.data.prospectId,
+              };
+            }
+
             if (event.data?.chatOpen !== undefined) {
               isAgentOpen = event.data.chatOpen;
               showBanner = event.data.showBanner ?? false;

@@ -244,7 +244,7 @@ export interface ProspectRequestData {
 declare global {
   interface Window {
     __breakout__?: {
-      tenantId: string;
+      tenantId?: string;
       prospectId?: string;
       apiBaseUrl?: string;
     };

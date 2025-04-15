@@ -2,11 +2,6 @@ import { FormSubmissionConfigType, ProspectRequestData } from "../types";
 import { submitProspect } from "./api";
 import { hasEmail, hasName } from "./util";
 
-interface ElementData {
-  value: string | FileList | null;
-  elementType: string;
-}
-
 interface FormMeta {
   id: string;
   name: string;
@@ -14,7 +9,7 @@ interface FormMeta {
 
 interface FormSubmissionData {
   formMeta: FormMeta;
-  formData: Record<string, ElementData>;
+  formData: Record<string, string>;
 }
 
 export function initFormSubmissionDetection({
@@ -84,7 +79,7 @@ function attachFormListener(form: HTMLFormElement) {
 function processFormSubmission(form: HTMLFormElement) {
   // form fields may not have names, hence it is ncessary to
   // iterate over all elements and collect form data
-  const allFormData: Record<string, ElementData> = {};
+  const allFormData: Record<string, string> = {};
   const formElements: NodeListOf<HTMLElement> = form.querySelectorAll(
     "input, select, textarea, button",
   );
@@ -132,26 +127,14 @@ function processFormSubmission(form: HTMLFormElement) {
       } else if (element.type === "file" || element.type === "button") {
         return;
       } else if (element.type === "password") {
-        allFormData[key] = {
-          value: "*****",
-          elementType: element.type,
-        };
+        allFormData[key] = "*****";
       } else {
-        allFormData[key] = {
-          value: element.value,
-          elementType: element.type,
-        };
+        allFormData[key] = element.value;
       }
     } else if (element instanceof HTMLSelectElement) {
-      allFormData[key] = {
-        value: element.value,
-        elementType: "select",
-      };
+      allFormData[key] = element.value;
     } else if (element instanceof HTMLTextAreaElement) {
-      allFormData[key] = {
-        value: element.value,
-        elementType: "textarea",
-      };
+      allFormData[key] = element.value;
     }
   });
 
@@ -175,17 +158,20 @@ function handleFormSubmission(submissionData: FormSubmissionData) {
   const nameField = formDataKeys.find(hasName);
 
   const requestData = {
-    prospect_demographics: submissionData,
     external_id: formMeta.id || formMeta.name,
     origin: "WEB_FORM",
   } as ProspectRequestData;
 
+  if (submissionData) {
+    requestData.prospect_demographics = submissionData;
+  }
+
   if (emailField) {
-    requestData.email = formData[emailField].value as string;
+    requestData.email = formData[emailField] as string;
   }
 
   if (nameField) {
-    requestData.name = formData[nameField].value as string;
+    requestData.name = formData[nameField] as string;
   }
 
   submitProspect(requestData);

@@ -60,6 +60,9 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
         sessionId,
         prospectId,
       });
+
+      window.parent.postMessage({ type: 'CHAT_INIT', prospectId }, '*');
+
       if (isAdmin && messages.length === INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS) {
         return;
       }

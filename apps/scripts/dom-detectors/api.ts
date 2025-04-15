@@ -1,7 +1,10 @@
 import { ProspectRequestData } from "../types";
 
+const prospectIdKey = "__breakout__prospectId";
+
 export const submitProspect = (requestData: ProspectRequestData) => {
-  const { prospectId } = window.__breakout__ ?? {};
+  const prospectId =
+    window.__breakout__?.prospectId ?? localStorage.getItem(prospectIdKey);
 
   if (prospectId) {
     updateProspect(prospectId, requestData);
@@ -14,7 +17,9 @@ const createProspect = (requestData: ProspectRequestData) => {
   const apiBaseUrl = window.__breakout__?.apiBaseUrl ?? "";
   const apiUrl = `${apiBaseUrl}/tenant/chat/prospect/create/`;
 
-  safeRequest(apiUrl, requestData);
+  safeRequest(apiUrl, requestData)?.then((response) => {
+    localStorage.setItem(prospectIdKey, response.prospect_id);
+  });
 };
 
 const updateProspect = (
@@ -30,14 +35,14 @@ const updateProspect = (
 
 const safeRequest = (apiUrl: string, requestData: ProspectRequestData) => {
   try {
-    fetch(apiUrl, {
+    return fetch(apiUrl, {
       method: "POST",
       headers: {
         "x-tenant-name": window.__breakout__?.tenantId ?? "",
       },
       body: JSON.stringify(requestData),
       keepalive: true,
-    });
+    }).then((res) => res.json());
   } catch (error) {
     // swallow errors if any
     console.log("error while recording prospect", error);
