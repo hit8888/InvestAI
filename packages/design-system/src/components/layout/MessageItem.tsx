@@ -27,11 +27,16 @@ import {
   getFormArtifactMessage,
   getFormFilledEvent,
   getSuggestionsArtifactMessage,
+  isDiscoveryAnswer,
+  isDiscoveryQuestion,
   // hasStreamMessageForForm,
   // isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
   isFormDataFilled,
 } from '@meaku/core/utils/messageUtils';
+import DiscoveryQuestion from './DiscoveryQuestion';
+import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
+import Orb from '../Orb';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -221,6 +226,10 @@ const MessageItem = ({
   // To show the suggestions artifact for admin, the suggestions artifact message must exist, and the message must not be a discovery message
   const shouldShowSuggestionsForAdmin = suggestionsArtifactMessage && !isDiscoveryMessage;
 
+  const hasDiscoveryAnswer = !!messages.find(
+    (m) => isDiscoveryQuestion(message) && isDiscoveryAnswer(m) && m.response_id === message.response_id,
+  );
+
   return (
     <MessageItemErrorBoundary messageId={message.response_id}>
       <div
@@ -240,6 +249,16 @@ const MessageItem = ({
             orbLogoUrl={orbLogoUrl}
           />
         )}
+
+        {isDiscoveryQuestion(message) && !hasDiscoveryAnswer && (
+          <div className="my-5 flex flex-row items-end gap-4">
+            {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
+            {!shouldShowActiveOrb && <div className="pl-7"></div>}
+            <DiscoveryQuestion message={message} onSubmit={handleSendUserMessage} />
+          </div>
+        )}
+
+        {isDiscoveryAnswer(message) && <DiscoveryAnswer message={message} />}
 
         {shouldShowFeedbackSection && (
           <div className="pl-11">

@@ -190,6 +190,40 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('HEARTBEAT_ACK'),
     event_data: z.object({}),
   }),
+  z.object({
+    content: z.string().optional(),
+    event_type: z.literal('DISCOVERY_QUESTIONS'),
+    event_data: z.object({
+      answer_type: z.enum(['SINGLE_SELECT', 'MULTI_SELECT', 'TEXT']),
+      question: z.string(),
+      response_options: z.array(
+        z.discriminatedUnion('type', [
+          z.object({
+            type: z.literal('string'),
+            value: z.string(),
+          }),
+          z.object({
+            type: z.literal('text_box'),
+            value: z.string().optional(),
+            placeholder: z.string().optional(),
+          }),
+        ]),
+      ),
+    }),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('DISCOVERY_ANSWER'),
+    event_data: z.object({
+      question: z.string(),
+      responses: z.array(
+        z.object({
+          type: z.string().optional(),
+          value: z.string().optional(),
+        }),
+      ),
+    }),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -261,4 +295,5 @@ export enum AgentEventType {
   USER_INACTIVE = 'USER_INACTIVE',
   HEARTBEAT = 'HEARTBEAT',
   HEARTBEAT_ACK = 'HEARTBEAT_ACK',
+  DISCOVERY_ANSWER = 'DISCOVERY_ANSWER',
 }

@@ -170,6 +170,14 @@ export const checkIsDiscoveryMessage = (message: WebSocketMessage): boolean => {
   return message.message_type === 'TEXT' && message.actor === 'DISCOVERY_QUESTIONS';
 };
 
+export const isDiscoveryQuestion = (message: WebSocketMessage): boolean => {
+  return message.message_type === 'EVENT' && message.actor === 'DISCOVERY_QUESTIONS';
+};
+
+export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {
+  return message.message_type === 'EVENT' && message.message.event_type === 'DISCOVERY_ANSWER';
+};
+
 export const checkIsMainResponseMessage = (message: WebSocketMessage): boolean => {
   return (
     (message.actor === 'SALES' && (isStreamMessage(message) || isTextMessage(message))) ||
