@@ -226,9 +226,7 @@ const MessageItem = ({
   // To show the suggestions artifact for admin, the suggestions artifact message must exist, and the message must not be a discovery message
   const shouldShowSuggestionsForAdmin = suggestionsArtifactMessage && !isDiscoveryMessage;
 
-  const hasDiscoveryAnswer = !!messages.find(
-    (m) => isDiscoveryQuestion(message) && isDiscoveryAnswer(m) && m.response_id === message.response_id,
-  );
+  const isLastMessage = message.response_id === messages[messages.length - 1].response_id;
 
   return (
     <MessageItemErrorBoundary messageId={message.response_id}>
@@ -250,7 +248,7 @@ const MessageItem = ({
           />
         )}
 
-        {isDiscoveryQuestion(message) && !hasDiscoveryAnswer && (
+        {isLastMessage && isDiscoveryQuestion(message) && (
           <div className="my-5 flex flex-row items-end gap-4">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
@@ -258,7 +256,12 @@ const MessageItem = ({
           </div>
         )}
 
-        {isDiscoveryAnswer(message) && <DiscoveryAnswer message={message} />}
+        {isDiscoveryAnswer(message) && (
+          <div className="my-5 flex flex-row items-end gap-4 pt-4">
+            <div className="pl-7"></div>
+            <DiscoveryAnswer message={message} />
+          </div>
+        )}
 
         {shouldShowFeedbackSection && (
           <div className="pl-11">

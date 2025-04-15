@@ -4,6 +4,7 @@ import { MultiSelectQuestion } from './MultiSelectQuestion';
 import { EventData, OptionType } from './types';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import { useEffect } from 'react';
 import { cn } from '../../../lib/cn';
 import { ReactNode } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
@@ -15,6 +16,26 @@ interface IProps {
 
 export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+
+  useEffect(() => {
+    if (
+      !message.message ||
+      message.message_type !== 'EVENT' ||
+      !('event_type' in message.message) ||
+      message.message.event_type !== 'DISCOVERY_QUESTIONS'
+    ) {
+      return;
+    }
+
+    const { event_data } = message.message;
+    const { answer_type, question, response_options } = event_data;
+
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DISCOVERY_QUESTIONS, {
+      answer_type,
+      question,
+      response_options,
+    });
+  }, [message.message, message.message_type]);
 
   const sendEvent = (eventData: EventData) => {
     onSubmit({
