@@ -60,7 +60,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
           <TextArea
             autoFocus={isCollapsible}
             className={cn(
-              'rounded-xl border py-4 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
+              'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
               {
                 'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60': inputValue.length > 0,
               },
