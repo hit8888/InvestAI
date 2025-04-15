@@ -4,6 +4,9 @@ import { MultiSelectQuestion } from './MultiSelectQuestion';
 import { EventData, OptionType } from './types';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import { cn } from '../../../lib/cn';
+import { ReactNode } from 'react';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 interface IProps {
   message: WebSocketMessage;
@@ -46,6 +49,8 @@ export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.MULTI_SELECT_DISCOVERY_QUESTION_SUBMIT, eventData);
   };
 
+  const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>();
+
   if (
     !message.message ||
     message.message_type !== 'EVENT' ||
@@ -58,30 +63,48 @@ export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
   const { event_data } = message.message;
   const { answer_type, question, response_options } = event_data;
 
-  switch (answer_type) {
-    case 'SINGLE_SELECT':
-      return (
-        <SingleSelectQuestion
-          question={question}
-          response_options={response_options}
-          onSelect={(option) => handleSingleSelectSubmit(question, option)}
-        />
-      );
-    case 'MULTI_SELECT':
-      return (
-        <MultiSelectQuestion
-          question={question}
-          response_options={response_options}
-          onSubmit={(responses) => handleMultiSelectSubmit(question, responses)}
-        />
-      );
-    case 'TEXT':
-      return (
-        <div className="w-full max-w-md rounded-lg bg-gray-50 p-4">
-          <p className="text-md font-semibold text-gray-800">{question}</p>
-        </div>
-      );
-    default:
-      return null;
-  }
+  const isAnswerTypeText = answer_type === 'TEXT';
+
+  const getDiscoveryQuestionContent: ReactNode | null = (() => {
+    let content: ReactNode | null;
+    switch (answer_type) {
+      case 'SINGLE_SELECT':
+        content = (
+          <SingleSelectQuestion
+            question={question}
+            response_options={response_options}
+            onSelect={(option) => handleSingleSelectSubmit(question, option)}
+          />
+        );
+        break;
+      case 'MULTI_SELECT':
+        content = (
+          <MultiSelectQuestion
+            question={question}
+            response_options={response_options}
+            onSubmit={(responses) => handleMultiSelectSubmit(question, responses)}
+          />
+        );
+        break;
+      case 'TEXT':
+        content = <p className="text-md font-semibold text-gray-800">{question}</p>;
+        break;
+      default:
+        content = null;
+    }
+
+    return content;
+  })();
+
+  return (
+    <div
+      ref={discoveryQuestionsRef}
+      className={cn('w-full max-w-md rounded-lg bg-transparent_gray_3', {
+        'p-4': isAnswerTypeText,
+        'p-5': !isAnswerTypeText,
+      })}
+    >
+      {getDiscoveryQuestionContent}
+    </div>
+  );
 }

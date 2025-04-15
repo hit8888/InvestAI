@@ -1,4 +1,3 @@
-import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ArtifactContentUi } from './ArtifactContentUi';
 import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
@@ -33,27 +32,25 @@ const Artifact = ({
   const activeArtifactType = activeArtifact?.artifact_type;
 
   return (
-    <div className={cn('col-span-2 pl-2 pr-4 pt-4', { 'col-span-3': isMediaTakingFullWidth })}>
-      <div className="flex h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 px-2">
-        <AspectRatio ratio={16 / 9}>
-          <div className="group relative h-full w-full overflow-hidden rounded-lg">
-            {isGeneratingArtifact ? (
-              <div className="h-full w-full animate-pulse bg-primary/10" />
-            ) : (
-              <ArtifactContentUi
-                logoURL={logoURL}
-                handleToggleFullScreen={handleToggleFullScreen}
-                setIsArtifactPlaying={setIsArtifactPlaying}
-                artifactType={activeArtifactType}
-                artifactContent={artifactContent}
-                activeArtifactId={activeArtifactId}
-                handleSendUserMessage={handleSendUserMessage}
-                isMediaTakingFullWidth={isMediaTakingFullWidth}
-                onSlideItemClick={onSlideItemClick}
-              />
-            )}
-          </div>
-        </AspectRatio>
+    <div className={cn('col-span-2 pl-2 pr-4 pt-4', { 'col-span-3 overflow-hidden pb-4': isMediaTakingFullWidth })}>
+      <div className="flex h-full max-h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 p-2">
+        <div className="group relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
+          {isGeneratingArtifact ? (
+            <div className="h-full w-full animate-pulse bg-primary/10" />
+          ) : (
+            <ArtifactContentUi
+              logoURL={logoURL}
+              handleToggleFullScreen={handleToggleFullScreen}
+              setIsArtifactPlaying={setIsArtifactPlaying}
+              artifactType={activeArtifactType}
+              artifactContent={artifactContent}
+              activeArtifactId={activeArtifactId}
+              handleSendUserMessage={handleSendUserMessage}
+              isMediaTakingFullWidth={isMediaTakingFullWidth}
+              onSlideItemClick={onSlideItemClick}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -51,7 +51,7 @@ export const ArtifactContentUi = ({
           key={(artifactContent as SlideImageArtifactContent).image_url}
           src={(artifactContent as SlideImageArtifactContent).image_url}
           alt="Slide"
-          className="h-full w-full"
+          className="h-full w-full object-contain"
         />
       );
     case 'VIDEO':

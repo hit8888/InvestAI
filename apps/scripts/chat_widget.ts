@@ -9,7 +9,7 @@ import { initDomDetectors } from "./dom-detectors";
         DESKTOP: {
           DEFAULT: {
             WIDTH: "max(420px, 100vw)",
-            HEIGHT: "max(700px, 85vh)",
+            HEIGHT: "max(700px, 88vh)",
           },
           COLLAPSED: {
             CENTER_WIDTH_INITIAL: "max(420px, 100vw)",

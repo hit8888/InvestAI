@@ -18,6 +18,7 @@ import {
 import { useState } from 'react';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import ChatFormField from './ChatFormField';
 import { FormArtifactContent } from '@meaku/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
@@ -99,14 +100,19 @@ const FormArtifact = ({
       return value !== undefined && value !== '' && value !== null;
     });
 
+  const isSubmitBtnDisabled =
+    !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
+
+  const submitButtonRef = useElementScrollIntoView<HTMLButtonElement>({
+    shouldScroll: isSubmitBtnDisabled,
+    delay: 0,
+  });
+
   if (!artifact) {
     return <></>;
   }
 
-  const isSubmitBtnDisabled =
-    !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
-
-  if (isArtifactFormFilled && submitted && !isEditing) {
+  if (submitted && !isEditing) {
     return (
       <FormFilledThankYouContent
         artifact={artifact}
@@ -129,6 +135,7 @@ const FormArtifact = ({
             </div>
             <div className="flex justify-end">
               <Button
+                ref={submitButtonRef}
                 type="submit"
                 disabled={isSubmitBtnDisabled}
                 className="flex items-center gap-2 border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-20"

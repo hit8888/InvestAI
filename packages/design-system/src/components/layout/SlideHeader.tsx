@@ -7,7 +7,7 @@ const SlideHeader = ({ logoUrl }: IProps) => {
 
   return (
     <div className="flex w-full items-start">
-      <img src={logoUrl} alt="agent-logo" className="h-24 w-64 object-contain" />
+      <img src={logoUrl} alt="agent-logo" className="max-h-16 w-48 object-contain" />
     </div>
   );
 };

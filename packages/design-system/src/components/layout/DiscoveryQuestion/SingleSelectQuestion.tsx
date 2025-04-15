@@ -25,7 +25,7 @@ export const SingleSelectQuestion = ({
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-gray-50 p-5">
+    <>
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
@@ -33,7 +33,7 @@ export const SingleSelectQuestion = ({
           <SingleSelectOption key={option.value} option={option} onSelect={handleSelect} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

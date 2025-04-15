@@ -53,7 +53,7 @@ export const MultiSelectQuestion = ({
   const submitDisabled = selectedOptions.length === 0 && nonEmptyTextBoxes === 0;
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-gray-50 p-5">
+    <>
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
@@ -74,6 +74,6 @@ export const MultiSelectQuestion = ({
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 };

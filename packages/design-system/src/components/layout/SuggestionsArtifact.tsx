@@ -4,6 +4,7 @@ import { Suggestion } from './Suggestion.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { cn } from '../../lib/cn.ts';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 interface IProps {
   suggestedQuestionOrientation: 'left' | 'right';
@@ -28,6 +29,11 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
     });
   };
 
+  const suggestionsRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: showSuggestionsArtifact,
+    delay: 0,
+  });
+
   if (!artifact || !showSuggestionsArtifact) {
     return <></>;
   }
@@ -36,6 +42,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
 
   return (
     <div
+      ref={suggestionsRef}
       className={cn('flex w-full flex-col items-start gap-2', {
         'items-end pl-11': suggestedQuestionOrientation === 'right',
         'pl-11 pr-6': suggestedQuestionOrientation === 'left',

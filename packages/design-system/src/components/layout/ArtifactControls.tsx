@@ -25,7 +25,7 @@ const ArtifactControls = ({
      bg-gradient-to-t from-black/50 to-transparent p-6 pb-2
     text-white opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100`,
         {
-          'translate-y-0 full-hd:-translate-y-[172px]': isMediaTakingFullWidth,
+          '-translate-y-48 full-hd:-translate-y-40': isMediaTakingFullWidth,
           'translate-y-full group-hover:translate-y-0': !isMediaTakingFullWidth,
         },
       )}

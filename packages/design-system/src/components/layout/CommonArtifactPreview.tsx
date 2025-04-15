@@ -36,7 +36,7 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
     <div
       tabIndex={0}
       onClick={handleClick}
-      className="flex w-full max-w-[424px] cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200"
+      className="flex w-full max-w-[424px] cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 pr-4 ring-system hover:bg-transparent_gray_6"
     >
       <div className="flex items-center justify-center rounded-lg bg-transparent_gray_3 p-1">
         <Icon className="text-gray-600" height={18} width={18} />

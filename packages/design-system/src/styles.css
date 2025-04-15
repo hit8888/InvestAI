@@ -66,4 +66,18 @@
       2.237px 0px 14.081px 0px rgb(var(--system) / 0.04),
       0.204px 0px 4.211px 0px rgb(var(--system) / 0.01);
   }
+
+  .ring-system:focus {
+    animation: focus-ring-system 2000ms ease-out;
+  }
+
+  @keyframes focus-ring-system {
+    0% {
+      box-shadow: 0 0 0 4px rgba(var(--system) / 0.2);
+    }
+
+    100% {
+      box-shadow: none;
+    }
+  }
 }

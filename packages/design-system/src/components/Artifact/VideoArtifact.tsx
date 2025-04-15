@@ -6,6 +6,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import ArtifactControls from '../layout/ArtifactControls.tsx';
 import { ArtifactEnum } from '@meaku/core/types/artifact';
+import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 
 interface IProps {
   videoUrl: string;
@@ -92,43 +93,45 @@ const VideoArtifact = ({
 
   return (
     <div
-      className={cn('group relative', {
-        'h-full w-full': !isMediaTakingFullWidth,
-        'h-full w-auto': isMediaTakingFullWidth,
+      className={cn('flex h-full ', {
+        'w-full': !isMediaTakingFullWidth,
+        'w-full max-w-full': isMediaTakingFullWidth,
       })}
     >
-      <video
-        ref={videoRef}
-        className={cn('absolute inset-0 h-full max-h-full w-full max-w-full', {
-          'object-contain': !isMediaTakingFullWidth,
-        })}
-        // controls
-        autoPlay={false}
-      >
-        <source src={videoUrl} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <AspectRatio ratio={16 / 9}>
+        <div className="h-full w-full">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full"
+            // controls
+            autoPlay={false}
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
 
-      <div
-        className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
-          'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
-        })}
-        onClick={handlePlayPauseVideo}
-      >
-        {isPlaying ? (
-          <PauseIcon className="fill-white text-white" size={60} />
-        ) : (
-          <PlayIcon className="fill-white text-white" size={60} />
-        )}
-      </div>
+          <div
+            className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
+              'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
+            })}
+            onClick={handlePlayPauseVideo}
+          >
+            {isPlaying ? (
+              <PauseIcon className="fill-white text-white" size={60} />
+            ) : (
+              <PlayIcon className="fill-white text-white" size={60} />
+            )}
+          </div>
 
-      <ArtifactControls
-        isPlaying={isPlaying}
-        isMediaTakingFullWidth={isMediaTakingFullWidth}
-        handlePause={handlePlayPauseVideo}
-        handleRestart={handleRestartVideo}
-        handleToggleFullScreen={handleToggleFullScreen}
-      />
+          <ArtifactControls
+            isPlaying={isPlaying}
+            isMediaTakingFullWidth={isMediaTakingFullWidth}
+            handlePause={handlePlayPauseVideo}
+            handleRestart={handleRestartVideo}
+            handleToggleFullScreen={handleToggleFullScreen}
+          />
+        </div>
+      </AspectRatio>
     </div>
   );
 };
