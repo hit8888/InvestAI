@@ -627,6 +627,9 @@ import { initDomDetectors } from "./dom-detectors";
                         currentContainer === overlay?.wrapper
                           ? true
                           : !config.containerId,
+                      prospectId: localStorage.getItem(
+                        "__breakout__prospectId",
+                      ),
                     },
                   },
                   { targetOrigin: "*" },
@@ -836,6 +839,7 @@ import { initDomDetectors } from "./dom-detectors";
                     message: message,
                   },
                   isCollapsible: true, // Always true in overlay mode
+                  prospectId: localStorage.getItem("__breakout__prospectId"),
                 });
                 window.removeEventListener("message", messageHandler);
               }

@@ -52,6 +52,10 @@ export const useEmbedAppEvents = ({
         setMode('overlay');
         handleOpenAgent();
         if (event.data.data?.message) {
+          if (event.data?.prospectId) {
+            handleUpdateSessionData({ prospectId: event.data.prospectId });
+          }
+
           fetchSessionData();
           handleSendUserMessage({
             message: { content: event.data.data.message },
@@ -89,6 +93,9 @@ export const useEmbedAppEvents = ({
                 ...event.data,
               });
             }
+          }
+          if (payload?.prospectId) {
+            handleUpdateSessionData({ prospectId: payload.prospectId });
           }
           if (typeof payload.isCollapsible === 'boolean') {
             setIsCollapsible(payload.isCollapsible);
