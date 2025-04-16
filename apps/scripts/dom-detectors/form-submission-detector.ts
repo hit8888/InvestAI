@@ -7,7 +7,7 @@ export function initFormSubmissionDetection({
 }: FormSubmissionConfigType) {
   if (track_form_submissions) {
     detectFormSubmissions();
-    detectProgrammaticSubmissions();
+    // detectProgrammaticSubmissions();
     watchForNewForms();
   }
 }
@@ -17,14 +17,14 @@ function detectFormSubmissions() {
   forms.forEach(attachFormListener);
 }
 
-function detectProgrammaticSubmissions() {
-  const originalSubmit = HTMLFormElement.prototype.submit;
+// function detectProgrammaticSubmissions() {
+//   const originalSubmit = HTMLFormElement.prototype.submit;
 
-  HTMLFormElement.prototype.submit = function (this: HTMLFormElement): void {
-    processFormSubmission(this);
-    return originalSubmit.apply(this);
-  };
-}
+//   HTMLFormElement.prototype.submit = function (this: HTMLFormElement): void {
+//     processFormSubmission(this);
+//     return originalSubmit.apply(this);
+//   };
+// }
 
 function watchForNewForms() {
   const observer = new MutationObserver((mutations: MutationRecord[]) => {
