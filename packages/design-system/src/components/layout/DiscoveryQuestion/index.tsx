@@ -11,10 +11,11 @@ import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView
 
 interface IProps {
   message: WebSocketMessage;
+  isLastMessage?: boolean;
   onSubmit: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
+export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   useEffect(() => {
@@ -83,8 +84,11 @@ export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
 
   const { event_data } = message.message;
   const { answer_type, question, response_options } = event_data;
-
   const isAnswerTypeText = answer_type === 'TEXT';
+
+  if (!isLastMessage && !isAnswerTypeText) {
+    return null;
+  }
 
   const getDiscoveryQuestionContent: ReactNode | null = (() => {
     let content: ReactNode | null;
@@ -108,7 +112,11 @@ export default function DiscoveryQuestion({ message, onSubmit }: IProps) {
         );
         break;
       case 'TEXT':
-        content = <p className="text-md font-semibold text-gray-800">{question}</p>;
+        content = isLastMessage ? (
+          <p className="text-md font-semibold text-gray-800">{question}</p>
+        ) : (
+          <div className="text-md mb-2 text-gray-700">{question}</div>
+        );
         break;
       default:
         content = null;

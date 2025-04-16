@@ -248,11 +248,11 @@ const MessageItem = ({
           />
         )}
 
-        {isLastMessage && isDiscoveryQuestion(message) && (
+        {isDiscoveryQuestion(message) && (
           <div className="my-5 flex flex-row items-end gap-4">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
-            <DiscoveryQuestion message={message} onSubmit={handleSendUserMessage} />
+            <DiscoveryQuestion message={message} onSubmit={handleSendUserMessage} isLastMessage={isLastMessage} />
           </div>
         )}
 
