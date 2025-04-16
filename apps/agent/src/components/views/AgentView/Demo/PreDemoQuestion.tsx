@@ -4,6 +4,7 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -13,6 +14,7 @@ interface IProps {
 
 const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setDemoPlayingStatus }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const preDemoQuestionRef = useElementScrollIntoView<HTMLDivElement>();
 
   const [showPreDemoQuestions, setShowPreDemoQuestions] = useState(true);
   const [showDemoTopics, setShowDemoTopics] = useState(false);
@@ -41,10 +43,10 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
   }
 
   return (
-    <div className="pb-2 pl-10">
-      <div className="mb-4 border-t-2 border-dashed border-primary/30"></div>
+    <div ref={preDemoQuestionRef} className="pb-2 pl-10">
+      <div className="mb-4 border-t-2 border-dashed border-gray-300"></div>
 
-      <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-[rgb(var(--primary)/0.18)] p-4">
+      <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">
         <span className="text-base font-semibold text-customPrimaryText">
           Would you like to see an interactive demo?
         </span>

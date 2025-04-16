@@ -6,10 +6,9 @@ const AgentShimmer = () => {
       <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-primary-foreground/60">
         {/* Header Shimmer */}
         <Skeleton className="h-14" />
-        {/* Content Grid */}
-        <div className="grid h-full flex-1 grid-cols-3 gap-2 p-2">
+        <div className="flex h-full w-full flex-1 gap-2 p-2">
           {/* Messages Section */}
-          <div className="col-span-1 flex flex-col gap-3">
+          <div className="flex w-[35%] flex-col gap-3">
             {/* AI Message */}
             <div className="flex gap-4 p-6 pl-0">
               <Skeleton className="h-8 w-8 shrink-0 rounded-full" /> {/* Orb/Bot indicator */}
@@ -34,7 +33,7 @@ const AgentShimmer = () => {
           </div>
 
           {/* Artifact Section */}
-          <Skeleton className="col-span-2" />
+          <Skeleton className="w-[65%]" />
         </div>
 
         {/* Input Shimmer */}

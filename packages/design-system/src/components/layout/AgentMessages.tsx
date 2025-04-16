@@ -83,8 +83,8 @@ const AgentMessages = ({
 
   return (
     <div
-      className={cn('col-span-3 flex-1 overflow-y-auto', {
-        'col-span-1': showRightPanel,
+      className={cn('w-[35%] overflow-y-auto', {
+        'w-full': !showRightPanel,
       })}
       onWheel={(e) => e.stopPropagation()}
       style={{

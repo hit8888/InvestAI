@@ -55,8 +55,8 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
 
   return (
     <div className="input-bar-bg flex w-full flex-col items-center gap-2 rounded-b-2xl p-4 pb-2">
-      <form className="relative w-full flex-1" onSubmit={handleSubmission}>
-        <div className="z-10 flex rounded-2xl border border-gray-200 bg-white p-1">
+      <form className="flex w-full items-center justify-between" onSubmit={handleSubmission}>
+        <div className="relative z-10 flex w-full rounded-2xl border border-gray-200 bg-white p-1">
           <TextArea
             autoFocus={isCollapsible}
             className={cn(
@@ -71,18 +71,18 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
             onKeyDown={handleKeyDown}
             ref={textAreaRef}
           />
+          <SendButtonWithTooltip
+            showTooltip={conditionForShowingTooltipAndDisabledButton}
+            tooltipText={AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT}
+          >
+            <ChatInputSendButton
+              showButton={!isSendButtonDisabled}
+              onClick={handleSubmission}
+              disabled={conditionForShowingTooltipAndDisabledButton}
+              btnClassName="absolute right-2 top-2 flex h-12 w-12 transform items-center justify-center !p-0"
+            />
+          </SendButtonWithTooltip>
         </div>
-        <SendButtonWithTooltip
-          showTooltip={conditionForShowingTooltipAndDisabledButton}
-          tooltipText={AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT}
-        >
-          <ChatInputSendButton
-            showButton={!isSendButtonDisabled}
-            onClick={handleSubmission}
-            disabled={conditionForShowingTooltipAndDisabledButton}
-            btnClassName="absolute bottom-2 right-3 flex h-12 w-12 transform items-center justify-center !p-0"
-          />
-        </SendButtonWithTooltip>
       </form>
       {/* Powered By Breakout - Only visible when the agent is open for all conditions */}
       <PoweredByBreakout />

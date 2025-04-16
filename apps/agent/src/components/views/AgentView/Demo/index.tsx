@@ -52,7 +52,7 @@ const Demo = ({
       );
     }
     return (
-      <div className="col-span-2 mr-2 pl-2">
+      <div className="mr-2 w-[66%] pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <SpinLoader />
         </div>
@@ -62,7 +62,7 @@ const Demo = ({
 
   if (demoPlayingStatus === DemoPlayingStatus.GENRATING_DEMO) {
     return (
-      <div className="col-span-2 mr-2 pl-2">
+      <div className="mr-2 w-[66%] pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
             <span className="animate-pulse-fast text-base font-medium text-customSecondaryText">
@@ -84,7 +84,7 @@ const Demo = ({
   }
 
   return (
-    <div className={cn('col-span-3 mr-2 overflow-hidden px-8')}>
+    <div className={cn('mr-2 w-full overflow-hidden px-8')}>
       <DemoContent
         demoDetails={demoDetails}
         key={demoDetails?.asset_url}

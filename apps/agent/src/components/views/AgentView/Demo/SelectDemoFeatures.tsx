@@ -50,7 +50,7 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
   };
 
   return (
-    <div className="col-span-2 mr-2 pl-2">
+    <div className="mr-2 w-[66%] pl-2">
       <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-transparent_gray_3 p-[100px]">
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-8">

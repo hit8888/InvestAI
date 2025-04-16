@@ -28,7 +28,7 @@ const EntryPointSuggestedQuestions = ({
     <div
       className={cn({
         'flex w-full justify-start': showSuggestedQuestions && (isQuestionAlignmentRight || isQuestionAlignmentLeft),
-        'flex w-full justify-end': showSuggestedQuestions && isQuestionAlignmentCenter,
+        'flex w-fit justify-end': showSuggestedQuestions && isQuestionAlignmentCenter,
       })}
     >
       <motion.div

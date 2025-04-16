@@ -80,8 +80,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
           ctaConfig={ctaConfig}
         />
         <div
-          className={cn('h-full flex-1 overflow-hidden', {
-            'grid grid-cols-3 gap-2': showMediaArtifactContainer,
+          className={cn('flex h-full w-full flex-1 overflow-hidden', {
+            'gap-2': showMediaArtifactContainer,
           })}
         >
           {/* Left Side Chat History */}

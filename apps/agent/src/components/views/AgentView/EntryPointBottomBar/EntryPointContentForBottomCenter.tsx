@@ -11,6 +11,7 @@ import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurati
 import useDynamicPlaceholder from '../../../../hooks/useDynamicPlaceholder';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface IProps {
   showOrbAfterBubblesDisappear: boolean;
@@ -75,9 +76,17 @@ const EntryPointContentForBottomCenter = ({
           questionAlignment={entryPointAlignment}
         />
 
-        <div className="flex items-center justify-center pr-2">
+        <div
+          className={cn('flex items-center justify-center pr-2', {
+            'pr-1': !hasFirstUserMessageBeenSent,
+          })}
+        >
           {hasFirstUserMessageBeenSent && <InputWaitingOrb state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />}
-          <ChatInputSendButton btnType="submit" showButton={!!inputValue} btnClassName="h-9 w-9 hover:bg-primary/80" />
+          <ChatInputSendButton
+            btnType="submit"
+            showButton={!!inputValue}
+            btnClassName="h-10 w-10 hover:bg-primary/80"
+          />
         </div>
       </form>
     </div>

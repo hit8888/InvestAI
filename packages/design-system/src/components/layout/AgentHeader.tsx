@@ -61,7 +61,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
   }
 
   return (
-    <div className="flex items-center justify-between p-2">
+    <div className="flex items-center justify-between p-2 pb-3">
       <div>
         <Button variant="primary" onClick={handlePrimaryCta} data-testid="contact-sales-btn">
           {ctaText}

@@ -9,14 +9,14 @@ import { initDomDetectors } from "./dom-detectors";
         DESKTOP: {
           DEFAULT: {
             WIDTH: "max(420px, 100vw)",
-            HEIGHT: "max(700px, 88vh)",
+            HEIGHT: "max(700px, 90vh)",
           },
           COLLAPSED: {
             CENTER_WIDTH_INITIAL: "max(420px, 100vw)",
             CENTER_WIDTH_MESSAGE_SENT: "max(440px, 25vw)",
             CENTER_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
             CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
-            CENTER_HEIGHT: "max(150px, 10vh)",
+            CENTER_HEIGHT: "max(100px, 10vh)",
             SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
             SIDEWISE_WIDTH_INITIAL: "500px",
             SIDEWISE_HEIGHT_WITH_BUBBLE: "250px",
@@ -231,7 +231,7 @@ import { initDomDetectors } from "./dom-detectors";
                 : (sizes as CollapsedSizes).CENTER_HEIGHT_MESSAGE_SENT
               : isSidewiseEntryPoint
                 ? (sizes as CollapsedSizes).SIDEWISE_HEIGHT
-                : (sizes as DefaultSizes).HEIGHT;
+                : (sizes as CollapsedSizes).CENTER_HEIGHT;
         }
       } else {
         width = (sizes as DefaultSizes).WIDTH;
@@ -247,7 +247,7 @@ import { initDomDetectors } from "./dom-detectors";
       };
 
       Object.assign(styles, {
-        bottom: "10px",
+        bottom: "-10px",
         left: StyleManager.getEntryPointLeftKeyValue(
           entryPointAlignment,
           isAgentOpen,
