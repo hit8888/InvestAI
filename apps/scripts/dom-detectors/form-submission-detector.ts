@@ -2,16 +2,6 @@ import { FormSubmissionConfigType, ProspectRequestData } from "../types";
 import { submitProspect } from "./api";
 import { hasEmail, hasName } from "./util";
 
-interface FormMeta {
-  id: string;
-  name: string;
-}
-
-interface FormSubmissionData {
-  formMeta: FormMeta;
-  formData: Record<string, string>;
-}
-
 export function initFormSubmissionDetection({
   track_form_submissions,
 }: FormSubmissionConfigType) {
@@ -102,7 +92,8 @@ function processFormSubmission(form: HTMLFormElement) {
 
     if (
       (element instanceof HTMLButtonElement && element.type !== "submit") ||
-      (element instanceof HTMLInputElement && element.type === "button")
+      (element instanceof HTMLInputElement && element.type === "button") ||
+      (element instanceof HTMLInputElement && element.type === "hidden")
     ) {
       return;
     }
@@ -138,40 +129,28 @@ function processFormSubmission(form: HTMLFormElement) {
     }
   });
 
-  const formMeta = {
-    id: form.id,
-    name: form.name,
-  };
-
-  const submissionData: FormSubmissionData = {
-    formMeta,
-    formData: allFormData,
-  };
-
-  handleFormSubmission(submissionData);
+  handleFormSubmission(allFormData);
 }
 
-function handleFormSubmission(submissionData: FormSubmissionData) {
-  const { formData, formMeta } = submissionData;
-  const formDataKeys = Object.keys(formData);
+function handleFormSubmission(allFormData: Record<string, string>) {
+  const formDataKeys = Object.keys(allFormData);
   const emailField = formDataKeys.find(hasEmail);
   const nameField = formDataKeys.find(hasName);
 
   const requestData = {
-    external_id: formMeta.id || formMeta.name,
     origin: "WEB_FORM",
   } as ProspectRequestData;
 
-  if (submissionData) {
-    requestData.prospect_demographics = submissionData;
+  if (allFormData) {
+    requestData.prospect_demographics = allFormData;
   }
 
   if (emailField) {
-    requestData.email = formData[emailField] as string;
+    requestData.email = allFormData[emailField] as string;
   }
 
   if (nameField) {
-    requestData.name = formData[nameField] as string;
+    requestData.name = allFormData[nameField] as string;
   }
 
   submitProspect(requestData);

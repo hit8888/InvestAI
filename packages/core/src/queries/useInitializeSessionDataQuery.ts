@@ -12,11 +12,7 @@ const getProspectIdFromSession = (sessionDataKey: string) => {
   return sessionData?.prospectId || '';
 };
 
-const initializeSessionKey = (sessionDataKey: string): unknown[] => {
-  const prospectId = getProspectIdFromSession(sessionDataKey);
-
-  return ['session-initializer', prospectId];
-};
+const initializeSessionKey = (): unknown[] => ['session-initializer'];
 
 type InitialiseSessionKey = ReturnType<typeof initializeSessionKey>;
 
@@ -27,13 +23,10 @@ interface UseInitializeSessionDataOptions {
 }
 
 export const useInvalidateSessionData = () => {
-  const { orgName = '', agentId = '' } = useParams<AgentParams>();
-  const sessionDataKey = `${orgName?.toLowerCase()}-${agentId}`;
-
   return {
     invalidateSession: async () => {
       await defaultQueryClient.invalidateQueries({
-        queryKey: initializeSessionKey(sessionDataKey),
+        queryKey: initializeSessionKey(),
       });
     },
   };
@@ -46,10 +39,10 @@ const useInitializeSessionDataQuery = ({
 }: UseInitializeSessionDataOptions): UseQueryResult<SessionApiResponse> => {
   const { orgName = '' } = useParams<AgentParams>();
   const sessionDataKey = `${orgName?.toLowerCase()}-${agentId}`;
-  const prospectIdFromSession = getProspectIdFromSession(sessionDataKey);
 
   return useQuery({
     queryFn: async () => {
+      const prospectIdFromSession = getProspectIdFromSession(sessionDataKey);
       const response = await initializeSession(agentId, {
         ...initializeSessionPayload,
         prospect_id: prospectIdFromSession ? prospectIdFromSession : initializeSessionPayload.prospect_id,
@@ -58,7 +51,7 @@ const useInitializeSessionDataQuery = ({
       return session;
     },
     ...queryOptions,
-    queryKey: initializeSessionKey(sessionDataKey),
+    queryKey: initializeSessionKey(),
   });
 };
 

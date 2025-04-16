@@ -247,6 +247,7 @@ declare global {
       tenantId?: string;
       prospectId?: string;
       apiBaseUrl?: string;
+      domDetectionInitialized?: boolean;
     };
   }
 }

@@ -665,11 +665,16 @@ import { initDomDetectors } from "./dom-detectors";
                 config: agentConfig,
               } = event.data;
 
+              if (window.__breakout__?.domDetectionInitialized) {
+                return;
+              }
+
               // save prospectId for use in tracking dom elements
               window.__breakout__ = {
                 tenantId: ConfigManager.getConfig().tenantId as string,
                 prospectId,
                 apiBaseUrl,
+                domDetectionInitialized: true,
               };
 
               const { tracking_config } = agentConfig;
