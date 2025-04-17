@@ -23,13 +23,23 @@ const meta: Meta<typeof Button> = {
         disable: true,
       },
     },
+    rightIcon: {
+      table: {
+        disable: true,
+      },
+    },
+    leftIcon: {
+      table: {
+        disable: true,
+      },
+    },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'regular'],
     },
     buttonStyle: {
       control: { type: 'select' },
-      options: ['default', 'icon'],
+      options: ['default', 'icon', 'rightIcon', 'leftIcon'],
     },
     variant: {
       control: { type: 'select' },
@@ -146,28 +156,64 @@ export const TertiaryRegular: Story = {
   },
 };
 
-// Destructive Button Stories
-export const DestructiveSmall: Story = {
+export const PrimaryWithLeftIcon: Story = {
   args: {
-    children: 'Destructive Small',
+    children: 'Left Icon Button',
     size: 'small',
-    variant: 'destructive',
+    buttonStyle: 'leftIcon',
+    variant: 'primary',
+    leftIcon: '←', // This is just a placeholder, you can use actual icon components
   },
 };
 
-export const DestructiveSecondarySmall: Story = {
+export const PrimaryWithRightIcon: Story = {
   args: {
-    children: 'Destructive Secondary Small',
+    children: 'Right Icon Button',
     size: 'small',
-    variant: 'destructive_secondary',
+    buttonStyle: 'rightIcon',
+    variant: 'primary',
+    rightIcon: '→', // This is just a placeholder, you can use actual icon components
   },
 };
 
-export const DestructiveTertiarySmall: Story = {
+export const SecondaryWithLeftIcon: Story = {
   args: {
-    children: 'Destructive Tertiary Small',
+    children: 'Left Icon Button',
     size: 'small',
-    variant: 'destructive_tertiary',
+    buttonStyle: 'leftIcon',
+    variant: 'secondary',
+    leftIcon: '←',
+  },
+};
+
+export const SecondaryWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'small',
+    buttonStyle: 'rightIcon',
+    variant: 'secondary',
+    rightIcon: '→',
+  },
+};
+
+// Add regular size variants
+export const PrimaryTertiaryRegularWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'regular',
+    buttonStyle: 'leftIcon',
+    variant: 'tertiary',
+    leftIcon: '←',
+  },
+};
+
+export const PrimaryTertiaryRegularWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'regular',
+    buttonStyle: 'rightIcon',
+    variant: 'tertiary',
+    rightIcon: '→',
   },
 };
 
@@ -193,5 +239,182 @@ export const SystemTertiarySmall: Story = {
     children: 'System Tertiary Small',
     size: 'small',
     variant: 'system_tertiary',
+  },
+};
+
+export const SystemMedium: Story = {
+  args: {
+    children: 'System Medium',
+    size: 'medium',
+    variant: 'system',
+  },
+};
+
+export const SystemRegular: Story = {
+  args: {
+    children: 'System Regular',
+    size: 'regular',
+    variant: 'system',
+  },
+};
+
+export const SystemSmallWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'small',
+    buttonStyle: 'leftIcon',
+    variant: 'system',
+    leftIcon: '←',
+  },
+};
+
+export const SystemSmallWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'small',
+    buttonStyle: 'rightIcon',
+    variant: 'system',
+    rightIcon: '→',
+  },
+};
+
+export const SystemSecondaryMediumWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'medium',
+    buttonStyle: 'leftIcon',
+    variant: 'system_secondary',
+    leftIcon: '←',
+  },
+};
+
+export const SystemSecondaryMediumWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'medium',
+    buttonStyle: 'rightIcon',
+    variant: 'system_secondary',
+    rightIcon: '→',
+  },
+};
+
+export const SystemTertiaryRegularWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'regular',
+    buttonStyle: 'leftIcon',
+    variant: 'system_tertiary',
+    leftIcon: '←',
+  },
+};
+
+export const SystemTertiaryRegularWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'regular',
+    buttonStyle: 'rightIcon',
+    variant: 'system_tertiary',
+    rightIcon: '→',
+  },
+};
+
+// Destructive Button Stories
+export const DestructiveSmall: Story = {
+  args: {
+    children: 'Destructive Small',
+    size: 'small',
+    variant: 'destructive',
+  },
+};
+
+export const DestructiveSecondarySmall: Story = {
+  args: {
+    children: 'Destructive Secondary Small',
+    size: 'small',
+    variant: 'destructive_secondary',
+  },
+};
+
+export const DestructiveTertiarySmall: Story = {
+  args: {
+    children: 'Destructive Tertiary Small',
+    size: 'small',
+    variant: 'destructive_tertiary',
+  },
+};
+
+export const DestructiveMedium: Story = {
+  args: {
+    children: 'Destructive Medium',
+    size: 'medium',
+    variant: 'destructive',
+  },
+};
+
+export const DestructiveRegular: Story = {
+  args: {
+    children: 'Destructive Regular',
+    size: 'regular',
+    variant: 'destructive',
+  },
+};
+
+export const DestructiveSmallWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'small',
+    buttonStyle: 'leftIcon',
+    variant: 'destructive',
+    leftIcon: '←',
+  },
+};
+
+export const DestructiveSmallWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'small',
+    buttonStyle: 'rightIcon',
+    variant: 'destructive',
+    rightIcon: '→',
+  },
+};
+
+export const DestructiveSecondaryMediumWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'medium',
+    buttonStyle: 'leftIcon',
+    variant: 'destructive_secondary',
+    leftIcon: '←',
+  },
+};
+
+export const DestructiveSecondaryMediumWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'medium',
+    buttonStyle: 'rightIcon',
+    variant: 'destructive_secondary',
+    rightIcon: '→',
+  },
+};
+
+export const DestructiveTertiaryRegularWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'regular',
+    buttonStyle: 'leftIcon',
+    variant: 'destructive_tertiary',
+    leftIcon: '←',
+  },
+};
+
+export const DestructiveTertiaryRegularWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'regular',
+    buttonStyle: 'rightIcon',
+    variant: 'destructive_tertiary',
+    rightIcon: '→',
   },
 };

@@ -1,10 +1,11 @@
 import Button from '@breakout/design-system/components/Button/index';
+import ResumeIcon from '@breakout/design-system/components/icons/ResumeIcon';
 interface ResumeDemoProps {
   onResume: () => void;
   isPlayingResponse: boolean;
 }
 
-export const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => {
+const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => {
   return (
     <Button
       onClick={() => {
@@ -12,10 +13,14 @@ export const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => 
           onResume();
         }
       }}
+      buttonStyle="rightIcon"
       variant="primary"
       disabled={isPlayingResponse}
+      rightIcon={<ResumeIcon color="white" height={16} width={16} />}
     >
       <span className="whitespace-nowrap">Resume Demo</span>
     </Button>
   );
 };
+
+export default ResumeDemo;

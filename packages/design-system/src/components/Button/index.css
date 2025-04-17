@@ -64,10 +64,6 @@
   background-color: rgba(36, 62, 142, 0.05);
 }
 
-.button--tertiary:focus {
-  background-color: rgba(36, 62, 142, 0.1);
-}
-
 /* Destructive Variants */
 .button--destructive {
   background-color: rgb(211, 47, 47);
@@ -181,6 +177,18 @@
   animation: focus-ring-system 2000ms ease-out;
 }
 
+.bg-tertiary:focus {
+  animation: focus-bg-tertiary 2000ms ease-out;
+}
+
+.bg-destructive-tertiary:focus {
+  animation: focus-bg-destructive-tertiary 2000ms ease-out;
+}
+
+.bg-system-tertiary:focus {
+  animation: focus-bg-system-tertiary 2000ms ease-out;
+}
+
 @keyframes focus-ring-primary {
   0% {
     box-shadow: 0 0 0 4px rgba(var(--primary) / 0.2);
@@ -193,7 +201,7 @@
 
 @keyframes focus-ring-destructive {
   0% {
-    box-shadow: 0 0 0 64;
+    box-shadow: 0 0 0 4px #f6d5d5;
   }
 
   100% {
@@ -208,5 +216,35 @@
 
   100% {
     box-shadow: none;
+  }
+}
+
+@keyframes focus-bg-tertiary {
+  0% {
+    background-color: rgba(var(--primary) / 0.1);
+  }
+
+  100% {
+    background-color: none;
+  }
+}
+
+@keyframes focus-bg-destructive-tertiary {
+  0% {
+    background-color: rgba(211, 47, 47, 0.1);
+  }
+
+  100% {
+    background-color: none;
+  }
+}
+
+@keyframes focus-bg-system-tertiary {
+  0% {
+    background-color: rgba(var(--system) / 0.1);
+  }
+
+  100% {
+    background-color: none;
   }
 }

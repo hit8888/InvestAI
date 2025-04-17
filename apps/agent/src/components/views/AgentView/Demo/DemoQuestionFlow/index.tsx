@@ -4,7 +4,7 @@ import AudioRecorder from './AudioRecorder';
 import { ResponsePlayer } from './components/ResponsePlayer';
 import { RecordingPlayer } from './components/RecordingPlayer';
 import { useAudioVisualizer } from '@meaku/core/hooks/useAudioVisualizer';
-import { ResumeDemo } from './ResumeDemo';
+import ResumeDemo from '@breakout/design-system/components/layout/ResumeDemo';
 import { useAudioCleanup } from '../../../../../hooks/useAudioCleanup';
 import { IdleStateDialog } from './IdleStateDialog';
 import { useDemoFlowState } from '../../../../../hooks/useDemoFlowState';

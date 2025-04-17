@@ -14,17 +14,19 @@ export const buttonVariants = cva('button', {
     buttonStyle: {
       default: '',
       icon: 'aspect-square',
+      leftIcon: '',
+      rightIcon: '',
     },
     variant: {
-      primary: 'button--primary',
-      secondary: 'button--secondary',
-      tertiary: 'button--tertiary',
-      destructive: 'button--destructive',
-      destructive_secondary: 'button--destructive-secondary',
-      destructive_tertiary: 'button--destructive-tertiary',
-      system: 'button--system',
-      system_secondary: 'button--system-secondary',
-      system_tertiary: 'button--system-tertiary',
+      primary: 'button--primary ring-primary',
+      secondary: 'button--secondary ring-primary',
+      tertiary: 'button--tertiary bg-tertiary',
+      destructive: 'button--destructive ring-destructive',
+      destructive_secondary: 'button--destructive-secondary ring-destructive',
+      destructive_tertiary: 'button--destructive-tertiary bg-destructive-tertiary',
+      system: 'button--system ring-system',
+      system_secondary: 'button--system-secondary ring-system',
+      system_tertiary: 'button--system-tertiary bg-system-tertiary',
     },
   },
   defaultVariants: {
@@ -38,13 +40,17 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   label?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, children, size, buttonStyle, variant, label, ...props }, ref) => {
+  ({ className, children, size, buttonStyle, variant, label, leftIcon, rightIcon, ...props }, ref) => {
     return (
       <button className={cn(buttonVariants({ size, buttonStyle, variant, className }))} ref={ref} {...props}>
+        {leftIcon && <span className="flex h-4 w-4 items-center">{leftIcon}</span>}
         {children}
+        {rightIcon && <span className="flex h-4 w-4 items-center">{rightIcon}</span>}
         {label && <span className="sr-only">{label}</span>}
       </button>
     );
