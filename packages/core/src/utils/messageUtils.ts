@@ -10,7 +10,7 @@ import {
   StreamMessageContent,
   WebSocketMessage,
 } from '../types/webSocketData';
-import { FormArtifactContent, SuggestionArtifactContent } from '../types';
+import { FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
 
 export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
@@ -49,7 +49,7 @@ export const isPrimaryGoalCompletedMessage = (message: WebSocketMessage): boolea
 export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => {
   return (
     message.message_type === 'TEXT' ||
-    message.message_type === 'STREAM' ||
+    (message.message_type === 'STREAM' && message.message.is_complete) ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||
@@ -237,6 +237,22 @@ export const getSuggestionsArtifactMessage = (messagesWithSameResponseId: WebSoc
         artifact_data: SuggestionArtifactContent;
       };
     } => checkIsArtifactMessage(msg) && msg.message.artifact_type !== 'SUGGESTIONS' && 'artifact_data' in msg.message,
+  );
+};
+
+export const getMediaArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
+  return messagesWithSameResponseId.find(
+    (
+      msg,
+    ): msg is WebSocketMessage & {
+      message: ArtifactMessageContent & {
+        artifact_data: MediaArtifactContent;
+      };
+    } =>
+      msg.actor === 'ARTIFACT' &&
+      checkIsArtifactMessage(msg) &&
+      isMediaArtifact(msg.message.artifact_type) &&
+      'artifact_data' in msg.message,
   );
 };
 

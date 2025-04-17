@@ -29,7 +29,7 @@ const EntryPointContentForBottomCenter = ({
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
-  const placeholderText = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
+  const placeholderTexts = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -65,7 +65,7 @@ const EntryPointContentForBottomCenter = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             showOrb={showOrb}
-            placeholderText={placeholderText}
+            placeholderText={placeholderTexts}
           />
         </div>
 

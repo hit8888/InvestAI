@@ -26,13 +26,14 @@ import {
   getAnalyticsEvent,
   getFormArtifactMessage,
   getFormFilledEvent,
-  getSuggestionsArtifactMessage,
+  getMediaArtifactMessage,
   isDiscoveryAnswer,
   isDiscoveryQuestion,
   // hasStreamMessageForForm,
   // isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
   isFormDataFilled,
+  isMediaArtifact,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -91,10 +92,12 @@ const MessageItem = ({
 
   const isDiscoveryMessage = !!discoveryMessage;
 
+  const isCurrentDiscoveryMessage = checkIsDiscoveryMessage(message);
+
   const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
   const isAnalyticsEvent = !!analyticsEvent;
 
-  const suggestionsArtifactMessage = getSuggestionsArtifactMessage(messagesWithSameResponseId);
+  const mediaArtifactMessage = getMediaArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
   const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage);
@@ -117,7 +120,7 @@ const MessageItem = ({
   const showMessageArtifactPreview =
     lastMessageResponseId !== message.response_id &&
     isArtifactMessage &&
-    message.message.artifact_type !== 'NONE' &&
+    isMediaArtifact(message.message.artifact_type) &&
     (showArtifactPreview || isInView) &&
     isSalesResponseComplete;
 
@@ -223,8 +226,8 @@ const MessageItem = ({
   const shouldShowSuggestions =
     hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'SUGGESTIONS';
 
-  // To show the suggestions artifact for admin, the suggestions artifact message must exist, and the message must not be a discovery message
-  const shouldShowSuggestionsForAdmin = suggestionsArtifactMessage && !isDiscoveryMessage;
+  // To show the media artifact for admin, the media artifact message must exist, and the current message must not be a discovery message
+  const shouldShowMediaArtifactForAdmin = mediaArtifactMessage && !isCurrentDiscoveryMessage;
 
   const isLastMessage = message.response_id === messages[messages.length - 1].response_id;
 
@@ -304,7 +307,7 @@ const MessageItem = ({
 
         {showingContentForAdmin ? (
           <>
-            {shouldShowSuggestionsForAdmin && <>{getMessageArtifactPreviewContent(suggestionsArtifactMessage)}</>}
+            {shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}
 
             {/* Form Artifact */}
             {hasFormArtifactMessage && (

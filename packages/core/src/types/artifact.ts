@@ -83,9 +83,6 @@ export type FormArtifactContent = z.infer<typeof FormArtifactSchema>;
 
 export type SuggestionArtifactContent = z.infer<typeof SuggestionArtifactSchema>;
 
-export type ArtifactContent =
-  | SlideImageArtifactContent
-  | SlideArtifactContent
-  | VideoArtifactContent
-  | FormArtifactContent
-  | SuggestionArtifactContent;
+export type MediaArtifactContent = SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent;
+
+export type ArtifactContent = MediaArtifactContent | FormArtifactContent | SuggestionArtifactContent;
