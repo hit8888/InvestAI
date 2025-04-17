@@ -32,12 +32,17 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
     return 'I want to book a demo for the product.';
   }, [ctaConfig]);
 
+  const ctaUrl = ctaConfig?.url;
+
   const handlePrimaryCta = () => {
+    if (ctaUrl) {
+      window.open(ctaUrl, '_blank');
+    }
     handleSendMessage({
       message: {
-        content: ctaMessage,
+        content: ctaUrl ? '' : ctaMessage,
         event_type: 'PRIMARY_GOAL_CTA_CLICKED',
-        event_data: {},
+        event_data: { url: ctaUrl },
       },
       message_type: 'EVENT',
     });
