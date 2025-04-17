@@ -33,26 +33,14 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
   }, [ctaConfig]);
 
   const handlePrimaryCta = () => {
-    if (ctaConfig?.url) {
-      window.open(ctaConfig.url, '_blank');
-      handleSendMessage({
-        message: {
-          content: '',
-          event_type: 'PRIMARY_GOAL_COMPLETED',
-          event_data: { url: ctaConfig.url },
-        },
-        message_type: 'EVENT',
-      });
-    } else {
-      handleSendMessage({
-        message: {
-          content: ctaMessage,
-          event_type: 'PRIMARY_GOAL_CTA_CLICKED',
-          event_data: {},
-        },
-        message_type: 'EVENT',
-      });
-    }
+    handleSendMessage({
+      message: {
+        content: ctaMessage,
+        event_type: 'PRIMARY_GOAL_CTA_CLICKED',
+        event_data: {},
+      },
+      message_type: 'EVENT',
+    });
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CTA_BUTTON_CLICKED, { ctaMessage, ctaText });
   };
 
