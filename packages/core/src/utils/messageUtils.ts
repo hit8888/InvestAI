@@ -49,7 +49,7 @@ export const isPrimaryGoalCompletedMessage = (message: WebSocketMessage): boolea
 export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => {
   return (
     message.message_type === 'TEXT' ||
-    (message.message_type === 'STREAM' && message.message.is_complete) ||
+    message.message_type === 'STREAM' ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||

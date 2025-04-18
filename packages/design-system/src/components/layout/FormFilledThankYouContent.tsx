@@ -27,7 +27,7 @@ const FormFilledThankYouContent = ({
         <div className="flex items-center gap-4">
           <CardHeader className="flex-1 gap-1 space-y-0 p-0">
             <CardTitle className="text-lg font-semibold text-customPrimaryText">
-              Thank You for Sharing Your Details!
+              Thank you for sharing your details!
             </CardTitle>
             <CardDescription className="text-sm text-customSecondaryText">
               Info submitted! Let me know if you have any questions or need help.

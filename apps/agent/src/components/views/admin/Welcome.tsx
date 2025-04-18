@@ -43,7 +43,7 @@ const Welcome = () => {
             </Typography>
             <span className="animate-wave">👋</span>
           </div>
-          <Typography variant="body-16" textColor="secondary">
+          <Typography variant="body-16" textColor="gray500">
             Let's start our conversation and see how I can assist you. Please enter your email to begin the dialogue.
           </Typography>
         </div>

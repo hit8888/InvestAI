@@ -116,7 +116,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
           >
             {message.message_type === 'LOADING_TEXT' ? (
               <div className="flex h-8 items-center">
-                <AiResponseLoadingText color={primaryColor} text={message.message.content} />
+                <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
               </div>
             ) : (
               <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>

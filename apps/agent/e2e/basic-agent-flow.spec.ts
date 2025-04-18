@@ -72,7 +72,7 @@ test.describe('Basic flow for agent', () => {
       await submitButton.click();
 
       // Verify success messages with better timeout
-      await expect(page.getByText('Thank You for Sharing Your Details!')).toBeVisible({
+      await expect(page.getByText('Thank you for sharing your details!')).toBeVisible({
         timeout: 30000,
       });
       await expect(page.getByText("Great, We've received your responses.")).toBeVisible({

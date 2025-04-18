@@ -463,7 +463,7 @@ import { initDomDetectors } from "./dom-detectors";
         transform: "translateX(-50%)",
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
-        width: (sizes as CollapsedSizes).CENTER_WIDTH_INITIAL,
+        width: (sizes as CollapsedSizes).CENTER_WIDTH_MESSAGE_SENT,
         pointerEvents: "auto",
         display: ConfigManager.getConfig().containerId ? "none" : "block",
       });

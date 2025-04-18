@@ -14,7 +14,13 @@ export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
 };
 
 export const getTenantIdentifier = () => {
-  return JSON.parse(localStorage.getItem('admin_tenant_identifier') || 'null');
+  try {
+    const tenantIdentifier = localStorage.getItem('admin_tenant_identifier');
+    return tenantIdentifier ? JSON.parse(tenantIdentifier) : null;
+  } catch (error) {
+    console.warn('Error getting tenant identifier from local storage', error);
+    return null;
+  }
 };
 
 export const getUserEmailFromLocalStorage = () => {

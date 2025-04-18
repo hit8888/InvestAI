@@ -23,7 +23,7 @@ export const IdleStateDialog = ({
 
       <DialogContent className="fixed left-1/2 top-1/2 max-w-[450px] -translate-x-1/2 -translate-y-1/2 bg-white p-4">
         <div className="p-4">
-          <Typography as="h3" variant="title-18" textColor="textPrimary">
+          <Typography as="h3" className="mb-4" variant="title-18" textColor="textPrimary">
             Would you like to continue the demo?
           </Typography>
           <div className="mt-8 flex w-full justify-between gap-6">
