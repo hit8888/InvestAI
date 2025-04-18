@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { OptionType } from './types';
-import { SingleSelectAnswer } from '../DiscoveryAnswer/SingleSelectAnswer';
+import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
 export const SingleSelectQuestion = ({
   question,
@@ -21,7 +22,13 @@ export const SingleSelectQuestion = ({
   };
 
   if (submitted && response) {
-    return <SingleSelectAnswer question={question} response={response} />;
+    return (
+      <CommonDiscoveryAnswer
+        question={question}
+        responses={[response]}
+        answerType={DISCOVERY_QUESTION_ANSWER_TYPE.SINGLE_SELECT}
+      />
+    );
   }
 
   return (

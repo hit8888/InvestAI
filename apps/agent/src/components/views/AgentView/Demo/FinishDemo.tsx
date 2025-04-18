@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from '@breakout/design-system/components/layout
 import { useState } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface IProps {
   onFinishDemo: () => void;
@@ -32,11 +33,13 @@ const FinishDemo = ({ onFinishDemo, onPause }: IProps) => {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="w-[420px] bg-white p-4">
           <div className="flex w-full flex-col items-center">
-            <span className="mb-1 mt-4 text-2xl font-semibold text-customPrimaryText">End Demo Early?</span>
-            <span className="text-base text-customSecondaryText">
+            <Typography as="span" className="mb-1 mt-4" variant="title-24" textColor="textPrimary">
+              End Demo Early?
+            </Typography>
+            <Typography as="span" variant="body-16" textColor="textSecondary">
               Are you sure you want to end the demo? You can always restart it later or return to the chat to continue
               exploring our features.
-            </span>
+            </Typography>
           </div>
           <div className="mt-4 flex w-full justify-between gap-6">
             <Button

@@ -6,6 +6,7 @@ import { z } from 'zod';
 import useAdminUserEmail from '../../../hooks/useAdminUserEmail';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import ChatInputSendButton from '@breakout/design-system/components/layout/ChatInputSendButton';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 const Welcome = () => {
   const { setUserEmail } = useAdminUserEmail();
@@ -37,12 +38,14 @@ const Welcome = () => {
 
         <div className="space-y-2 text-center">
           <div className="flex items-start justify-center gap-1">
-            <h1 className="text-2xl font-medium text-gray-800">Hello! I'm {agentName}, your smart assistant.</h1>
+            <Typography as="h1" variant="title-24" textColor="default">
+              Hello! I'm {agentName}, your smart assistant.
+            </Typography>
             <span className="animate-wave">👋</span>
           </div>
-          <p className="text-gray-700">
+          <Typography variant="body-16" textColor="secondary">
             Let's start our conversation and see how I can assist you. Please enter your email to begin the dialogue.
-          </p>
+          </Typography>
         </div>
 
         <form

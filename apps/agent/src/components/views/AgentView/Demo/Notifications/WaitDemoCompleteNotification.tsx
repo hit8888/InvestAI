@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import SendSchedule from '@breakout/design-system/components/icons/SendSchedule';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface NotificationProps {
   variant?: 'default' | 'success';
@@ -38,11 +39,11 @@ export const WaitDemoCompleteNotification = ({ variant = 'default' }: Notificati
       whileTap={{ scale: 0.98 }}
     >
       <SendSchedule height={24} width={24} color="white" className="animate-pulse" />
-      <div className="text-sm font-medium text-white">
+      <Typography as="div" variant="label-14-medium" textColor="white">
         {variant === 'success'
           ? 'Go ahead, I am listening!'
           : "You'll have the chance to ask your question after Sam finishes."}
-      </div>
+      </Typography>
     </motion.div>
   );
 };

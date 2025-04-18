@@ -3,6 +3,7 @@ import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
+import Typography from '../Typography';
 
 interface IProps {
   question: string;
@@ -54,14 +55,14 @@ const Suggestion = ({
         tooltipAlign="end"
         tooltipSideOffsetValue={30}
         trigger={
-          <p
-            className={cn('line-clamp-1 w-full text-left text-sm font-medium lg:line-clamp-2', {
-              'text-white': isEntryPointQuestion,
-              'text-customSecondaryText': !isEntryPointQuestion,
-            })}
+          <Typography
+            variant="label-14-medium"
+            align="left"
+            textColor={isEntryPointQuestion ? 'white' : 'textSecondary'}
+            className="line-clamp-1 w-full lg:line-clamp-2"
           >
             {question}
-          </p>
+          </Typography>
         }
         showTooltip={isQuestionInCycle ? false : isTablet}
         content={<p>{question}</p>}

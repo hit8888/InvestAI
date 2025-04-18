@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo } from 'react';
 import { trackError } from '@meaku/core/utils/error';
+import Typography from '../Typography';
 
 interface Props {
   children: React.ReactNode;
@@ -46,10 +47,12 @@ class MessageItemErrorBoundary extends Component<Props, State> {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Error displaying message</h3>
-              <div className="mt-2 text-sm text-red-700">
-                <p>Something went wrong while displaying this message. The error has been reported.</p>
-              </div>
+              <Typography variant="label-14-medium" textColor="error">
+                Error displaying message
+              </Typography>
+              <Typography className="mt-2" variant="body-14" textColor="error600">
+                Something went wrong while displaying this message. The error has been reported.
+              </Typography>
             </div>
           </div>
         </div>

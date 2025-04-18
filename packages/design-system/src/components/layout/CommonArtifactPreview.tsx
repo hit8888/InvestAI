@@ -2,6 +2,7 @@ import SlidePreviewIcon from '../icons/SlidePreviewIcon';
 import VideoPreviewIcon from '../icons/VideoPreviewIcon';
 import DemoPreviewIcon from '../icons/DemoPreviewIcon';
 import { ArtifactPreviewEnum } from '@meaku/core/types/artifact';
+import Typography from '../Typography';
 
 type CommonArtifactPreviewProps = {
   artifactType: keyof typeof ArtifactPreviewEnum;
@@ -45,14 +46,11 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
         <div className="h-10 w-full animate-pulse rounded-lg bg-gray-400" />
       ) : (
         <div className="flex flex-1 items-center gap-2 text-left">
-          <p className="text-sm text-gray-400">{`${header}: `}</p>
+          <Typography variant="body-14" textColor="gray400">{`${header}: `}</Typography>
           {title && (
-            <h4
-              title={title}
-              className="2xl:text-md line-clamp-1 text-sm font-medium text-customPrimaryText lg:text-sm"
-            >
+            <Typography className="2xl:text-md line-clamp-1" variant="label-14-medium" textColor="textPrimary">
               {title}
-            </h4>
+            </Typography>
           )}
         </div>
       )}

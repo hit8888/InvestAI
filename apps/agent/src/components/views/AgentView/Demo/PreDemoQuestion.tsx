@@ -5,6 +5,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -47,9 +48,9 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
       <div className="mb-4 border-t-2 border-dashed border-gray-300"></div>
 
       <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">
-        <span className="text-base font-semibold text-customPrimaryText">
+        <Typography as="span" variant="label-16-semibold" textColor="textPrimary">
           Would you like to see an interactive demo?
-        </span>
+        </Typography>
         <div className="flex justify-between">
           <Button onClick={handleNotForNowButtonClick} disabled={showDemoTopics} variant="system_tertiary">
             Not for now

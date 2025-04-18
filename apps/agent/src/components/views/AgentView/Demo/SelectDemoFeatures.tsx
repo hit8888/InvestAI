@@ -14,6 +14,7 @@ import useSelectedFeatureStore from '../../../../stores/useSelectedFeatureStore'
 import toast from 'react-hot-toast';
 import { cn } from '@breakout/design-system/lib/cn';
 import useAutoSelectDemoFeatures from '../../../../hooks/useAutoSelectDemoFeatures';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface IProps {
   demoFeatures: FeatureSelectionDTOType[];
@@ -55,9 +56,9 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-2">
-              <span className="text-center text-2xl font-semibold text-customPrimaryText">
+              <Typography align="center" as="span" variant="title-24" textColor="textPrimary">
                 Select the features that you would like to see in the demo
-              </span>
+              </Typography>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
               {demoFeatures.map((feature) => (
@@ -91,7 +92,9 @@ const SelectDemoFeatures = ({ demoFeatures, switchToDemo, setDemoPlayingStatus }
               </TooltipTrigger>
               {!selectedIds.length && (
                 <TooltipContent side="right">
-                  <span className="text-gray-1000 text-base font-medium">Please select features to start demo</span>
+                  <Typography as="span" variant="label-16-medium" textColor="default">
+                    Please select features to start demo
+                  </Typography>
                 </TooltipContent>
               )}
             </Tooltip>

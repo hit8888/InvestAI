@@ -1,6 +1,6 @@
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { MultiSelectAnswer } from './MultiSelectAnswer';
-import { SingleSelectAnswer } from './SingleSelectAnswer';
+import CommonDiscoveryAnswer from './CommonDiscoveryAnswer';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
 export const DiscoveryAnswer = ({ message }: { message: WebSocketMessage }) => {
   if (
@@ -12,12 +12,12 @@ export const DiscoveryAnswer = ({ message }: { message: WebSocketMessage }) => {
     return null;
   }
 
+  const { MULTI_SELECT, SINGLE_SELECT } = DISCOVERY_QUESTION_ANSWER_TYPE;
   const question = message.message.event_data.question;
   const responses = message.message.event_data.responses.map((res) => res.value as string);
 
-  if (responses?.length > 1) {
-    return <MultiSelectAnswer question={question} responses={responses} />;
-  } else {
-    return <SingleSelectAnswer question={question} response={responses[0]} />;
-  }
+  const isMultiSelect = responses?.length > 1;
+  const answerType = isMultiSelect ? MULTI_SELECT : SINGLE_SELECT;
+
+  return <CommonDiscoveryAnswer question={question} responses={responses} answerType={answerType} />;
 };

@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import { cn } from '../../../lib/cn';
 import { ReactNode } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
+import TextBasedDiscoveryQuestion from './TextBasedDiscoveryQuestion';
 
 interface IProps {
   message: WebSocketMessage;
@@ -17,7 +19,12 @@ interface IProps {
 
 export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: isLastMessage,
+  });
 
+  // TODO: Block of code (Line 29-39) is a duplicate of the Code Block (Line 81 - 91)  below.
+  // We should refactor this to use a single check.
   useEffect(() => {
     if (
       !message.message ||
@@ -71,8 +78,6 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.MULTI_SELECT_DISCOVERY_QUESTION_SUBMIT, eventData);
   };
 
-  const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>();
-
   if (
     !message.message ||
     message.message_type !== 'EVENT' ||
@@ -84,7 +89,9 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
 
   const { event_data } = message.message;
   const { answer_type, question, response_options } = event_data;
-  const isAnswerTypeText = answer_type === 'TEXT';
+
+  const { MULTI_SELECT, SINGLE_SELECT, TEXT } = DISCOVERY_QUESTION_ANSWER_TYPE;
+  const isAnswerTypeText = answer_type === TEXT;
 
   if (!isLastMessage && !isAnswerTypeText) {
     return null;
@@ -93,7 +100,7 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
   const getDiscoveryQuestionContent: ReactNode | null = (() => {
     let content: ReactNode | null;
     switch (answer_type) {
-      case 'SINGLE_SELECT':
+      case SINGLE_SELECT:
         content = (
           <SingleSelectQuestion
             question={question}
@@ -102,7 +109,7 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
           />
         );
         break;
-      case 'MULTI_SELECT':
+      case MULTI_SELECT:
         content = (
           <MultiSelectQuestion
             question={question}
@@ -111,12 +118,8 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
           />
         );
         break;
-      case 'TEXT':
-        content = isLastMessage ? (
-          <p className="text-md font-semibold text-gray-800">{question}</p>
-        ) : (
-          <div className="text-md mb-2 text-gray-700">{question}</div>
-        );
+      case TEXT:
+        content = <TextBasedDiscoveryQuestion isLastMessage={isLastMessage} question={question} />;
         break;
       default:
         content = null;

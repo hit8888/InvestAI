@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { OptionType } from './types';
-import { MultiSelectAnswer } from '../DiscoveryAnswer/MultiSelectAnswer';
+import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
 import { MultiSelectResponseOption } from './MultiSelectResponseItem';
 import Button from '../../Button';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
 export const MultiSelectQuestion = ({
   question,
@@ -46,7 +47,13 @@ export const MultiSelectQuestion = ({
   };
 
   if (submitted && responses && responses.length > 0) {
-    return <MultiSelectAnswer question={question} responses={responses} />;
+    return (
+      <CommonDiscoveryAnswer
+        question={question}
+        responses={responses}
+        answerType={DISCOVERY_QUESTION_ANSWER_TYPE.MULTI_SELECT}
+      />
+    );
   }
 
   const nonEmptyTextBoxes = Object.keys(inputTexts).filter((key) => !!inputTexts[Number(key)].value).length;

@@ -38,6 +38,7 @@ import {
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
 import Orb from '../Orb';
+import Typography from '../Typography/index.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -269,7 +270,11 @@ const MessageItem = ({
         {shouldShowFeedbackSection && (
           <div className="pl-11">
             <MessageDataSources usingForAgent={usingForAgent} dataSources={message.documents ?? []} />
-            {!usingForAgent && <p className="mt-2 w-full text-xs font-medium text-gray-400">{formattedTimestamp}</p>}
+            {!usingForAgent && (
+              <Typography className="mt-2 w-full" variant="caption-12-medium" textColor="gray400">
+                {formattedTimestamp}
+              </Typography>
+            )}
             {isSalesResponseComplete && (
               <MessageFeedback
                 sessionId={sessionId}

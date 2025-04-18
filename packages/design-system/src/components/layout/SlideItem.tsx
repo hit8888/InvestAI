@@ -1,6 +1,7 @@
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import DynamicIcon from '../icons/DynamicIcon';
 import { cn } from '../../lib/cn';
+import Typography from '../Typography';
 
 interface IProps {
   icon: keyof typeof dynamicIconImports;
@@ -25,17 +26,18 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
         <div className="flex h-20 w-full items-center justify-center rounded-lg border border-gray-100 bg-gray-25 group-hover/item:bg-gray-50">
           <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText" />
         </div>
-        <h4
-          className={cn(
-            'w-full text-center text-lg font-semibold leading-tight text-customSecondaryText sm:text-xl md:text-3xl',
-            {
-              'line-clamp-1': addLineClamp,
-            },
-          )}
+        <Typography
+          as="h4"
+          variant="title-18"
+          align="center"
+          textColor="textSecondary"
+          className={cn('w-full sm:text-xl md:text-3xl', {
+            'line-clamp-1': addLineClamp,
+          })}
           title={addLineClamp ? title : ''}
         >
           {title}
-        </h4>
+        </Typography>
       </button>
     </div>
   );

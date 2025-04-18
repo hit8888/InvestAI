@@ -6,6 +6,7 @@ import CardDescription from './card-description';
 // import { PencilIcon } from 'lucide-react';
 // import Button from './button';
 import { FormArtifactContent } from '@meaku/core/types/artifact';
+import Typography from '../Typography';
 
 type FormFilledThankYouContentProps = {
   artifact: FormArtifactContent;
@@ -37,13 +38,12 @@ const FormFilledThankYouContent = ({
           <div className="flex w-[60%] flex-1 flex-col gap-2">
             {artifact.form_fields.map((field) => (
               <div key={field.field_name} className="flex w-full items-center gap-2">
-                <p className="text-sm font-medium text-gray-900">{field.label}:</p>
-                <p
-                  title={formValues[field.field_name]}
-                  className="max-w-full truncate text-sm text-customSecondaryText"
-                >
+                <Typography variant="label-14-medium" textColor="default">
+                  {field.label}:
+                </Typography>
+                <Typography variant="body-14" textColor="textSecondary" className="max-w-full truncate">
                   {formValues[field.field_name]}
-                </p>
+                </Typography>
               </div>
             ))}
           </div>

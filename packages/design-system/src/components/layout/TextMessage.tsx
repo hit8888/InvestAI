@@ -10,7 +10,7 @@ import { getMessageTimestamp } from '@meaku/core/utils/index';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import UserMessageChatTail from '../icons/user-message-chat-tail';
-
+import Typography from '../Typography';
 interface TextMessageProps {
   message: WebSocketMessage;
   isAiMessage: boolean;
@@ -85,7 +85,14 @@ const TextMessage: React.FC<TextMessageProps> = ({
       })}
     >
       {conditionSpecificForDashboard ? (
-        <p className="w-full self-stretch pb-2 pr-2 text-right text-xs font-medium text-gray-500">User</p>
+        <Typography
+          variant="caption-12-medium"
+          align="right"
+          textColor="gray500"
+          className="w-full self-stretch pb-2 pr-2"
+        >
+          User
+        </Typography>
       ) : null}
       <div
         className={cn('relative max-w-full', {
@@ -117,7 +124,9 @@ const TextMessage: React.FC<TextMessageProps> = ({
               </ReactMarkdown>
             )}
             {conditionSpecificForDashboard ? (
-              <p className="!-mt-4 w-full text-right text-xs font-medium text-gray-400">{formattedTimestamp}</p>
+              <Typography variant="caption-12-medium" align="right" textColor="gray400" className="!-mt-4 w-full">
+                {formattedTimestamp}
+              </Typography>
             ) : null}
           </div>
         </div>

@@ -6,6 +6,7 @@ import { FeatureSelectionDTOType, ScriptStepType } from '@meaku/core/types/webSo
 
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { SelectDemoFeatures } from './SelectDemoFeatures';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface IProps {
   handleFinishDemo: () => void;
@@ -65,9 +66,9 @@ const Demo = ({
       <div className="mr-2 w-[66%] pl-2">
         <div className="flex h-full w-full items-center justify-center">
           <div className="flex items-center justify-center gap-2">
-            <span className="animate-pulse-fast text-base font-medium text-customSecondaryText">
+            <Typography className="animate-pulse-fast" variant="label-16-medium" textColor="textSecondary">
               Hold on a moment, we’re preparing your demo!
-            </span>
+            </Typography>
             <SpinLoader />
           </div>
         </div>
