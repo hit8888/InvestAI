@@ -32,7 +32,7 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
         })}
       >
         <Check
-          className={cn('h-4 w-4', {
+          className={cn('h-3 w-3 rounded-sm bg-gray-900', {
             'stroke-gray-600': isCircularCheckbox, // Filled checkmark with stroke
           })}
           strokeWidth={4}

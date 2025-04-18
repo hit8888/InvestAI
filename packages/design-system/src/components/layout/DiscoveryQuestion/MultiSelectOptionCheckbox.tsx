@@ -19,7 +19,7 @@ export const MultiSelectOptionCheckbox = ({
     >
       <Checkbox
         checked={isSelected}
-        className={`h-4 w-4 hover:border-gray-900 ${checkBoxClassNames}`}
+        className={`flex h-4 w-4 items-center justify-center border-gray-900 hover:border-gray-900 ${checkBoxClassNames}`}
         onCheckedChange={() => onCheckboxToggle(option, !isSelected)}
       />
       <span className="ml-2 text-sm font-medium text-customPrimaryText">{option.value}</span>
