@@ -32,7 +32,7 @@ export const SingleSelectQuestion = ({
   }
 
   return (
-    <>
+    <div className="w-full max-w-md rounded-lg bg-transparent_gray_3 p-5">
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
@@ -40,7 +40,7 @@ export const SingleSelectQuestion = ({
           <SingleSelectOption key={option.value} option={option} onSelect={handleSelect} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -48,12 +48,14 @@ const SingleSelectOption = ({ option, onSelect }: { option: OptionType; onSelect
   switch (option.type) {
     case 'string':
       return (
-        <button
+        <label
+          className="box-border block flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-4 py-[10px] transition-colors hover:border-gray-400 hover:bg-gray-25 focus:ring-4 focus:ring-gray-300"
           onClick={() => onSelect(option)}
-          className="w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-left text-sm text-gray-700 transition-all duration-200 hover:border-gray-400 focus:ring-4 focus:ring-gray-300"
         >
-          {option.value}
-        </button>
+          {/* TODO: use radio group from design-system */}
+          <input type="radio" className="h-4 w-4 border-gray-400 hover:border-gray-900" />
+          <span className="ml-3 text-sm font-medium text-customPrimaryText">{option.value}</span>
+        </label>
       );
     default:
       return null;

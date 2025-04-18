@@ -253,7 +253,7 @@ const MessageItem = ({
         )}
 
         {isDiscoveryQuestion(message) && (
-          <div className="my-5 flex flex-row items-end gap-4">
+          <div className="my-5 ml-10">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
             <DiscoveryQuestion message={message} onSubmit={handleSendUserMessage} isLastMessage={isLastMessage} />

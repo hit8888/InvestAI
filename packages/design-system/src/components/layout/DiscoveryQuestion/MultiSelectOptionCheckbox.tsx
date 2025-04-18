@@ -10,14 +10,19 @@ export const MultiSelectOptionCheckbox = ({
   isSelected: boolean;
   onCheckboxToggle: (option: OptionType, isSelected: boolean) => void;
 }) => {
-  const labelClassNames = isSelected ? 'border-gray-400 ring-4 ring-gray-300' : '';
+  const labelClassNames = isSelected ? 'border-gray-400 ring-4 ring-gray-200' : '';
+  const checkBoxClassNames = isSelected ? '' : 'border-gray-400';
 
   return (
     <label
-      className={`flex w-full cursor-pointer items-center rounded-md border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 transition-all duration-200 hover:border-gray-400 ${labelClassNames}`}
+      className={`flex w-full cursor-pointer items-center rounded-md border border-gray-300 bg-white p-[10px] px-4 transition-all duration-200 hover:border-gray-400 hover:bg-gray-25 ${labelClassNames}`}
     >
-      <Checkbox checked={isSelected} onCheckedChange={() => onCheckboxToggle(option, !isSelected)} />
-      <span className="ml-2">{option.value}</span>
+      <Checkbox
+        checked={isSelected}
+        className={`h-4 w-4 hover:border-gray-900 ${checkBoxClassNames}`}
+        onCheckedChange={() => onCheckboxToggle(option, !isSelected)}
+      />
+      <span className="ml-2 text-sm font-medium text-customPrimaryText">{option.value}</span>
     </label>
   );
 };

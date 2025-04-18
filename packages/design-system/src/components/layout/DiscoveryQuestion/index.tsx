@@ -5,7 +5,6 @@ import { EventData, OptionType } from './types';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { useEffect } from 'react';
-import { cn } from '../../../lib/cn';
 import { ReactNode } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
@@ -128,15 +127,5 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
     return content;
   })();
 
-  return (
-    <div
-      ref={discoveryQuestionsRef}
-      className={cn('w-full max-w-md rounded-lg bg-transparent_gray_3', {
-        'p-4': isAnswerTypeText,
-        'p-5': !isAnswerTypeText,
-      })}
-    >
-      {getDiscoveryQuestionContent}
-    </div>
-  );
+  return <div ref={discoveryQuestionsRef}>{getDiscoveryQuestionContent}</div>;
 }

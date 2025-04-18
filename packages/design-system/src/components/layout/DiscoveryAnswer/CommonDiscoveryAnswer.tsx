@@ -22,13 +22,13 @@ const CommonDiscoveryAnswer = ({ question, responses, answerType }: IProps) => {
           <ul className="list-disc pl-5">
             {responses.map((response) => (
               <li className="mb-2">
-                <span className="text-gray-800">{response}</span>
+                <span className="text-customPrimaryText">{response}</span>
               </li>
             ))}
           </ul>
         );
       case SINGLE_SELECT:
-        return responses[0];
+        return <span className="text-customPrimaryText">{responses[0]}</span>;
       default:
         return null;
     }
@@ -36,7 +36,7 @@ const CommonDiscoveryAnswer = ({ question, responses, answerType }: IProps) => {
 
   return (
     <div className="w-full max-w-md">
-      <div className="text-md mb-2 text-gray-700">{question}</div>
+      <div className="mb-2 text-customPrimaryText">{question}</div>
       <div
         className={cn('ml-16 flex items-center justify-end', {
           'py-4 pr-2': isMultiSelect,

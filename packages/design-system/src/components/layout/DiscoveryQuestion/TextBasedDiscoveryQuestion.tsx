@@ -5,9 +5,11 @@ interface TextBasedDiscoveryQuestionProps {
 
 const TextBasedDiscoveryQuestion = ({ isLastMessage, question }: TextBasedDiscoveryQuestionProps) => {
   return isLastMessage ? (
-    <p className="text-md font-semibold text-gray-800">{question}</p>
+    <div className="w-full max-w-md rounded-lg bg-transparent_gray_3 p-4">
+      <p className="text-md font-semibold text-customPrimaryText">{question}</p>
+    </div>
   ) : (
-    <div className="text-md mb-2 text-gray-700">{question}</div>
+    <div className="text-customPrimaryText">{question}</div>
   );
 };
 
