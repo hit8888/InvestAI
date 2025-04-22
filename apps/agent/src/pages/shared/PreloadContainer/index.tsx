@@ -21,6 +21,8 @@ import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
 import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -38,6 +40,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const isAdmin = useIsAdmin();
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
+
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const isReadOnly = useAreMessagesReadonly();
 
@@ -73,6 +77,20 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     queryOptions: { enabled: !waitingForParentUrl },
   });
 
+  useEffect(() => {
+    if (!is_test && configQuery.error) {
+      const error = configQuery.error as AxiosError;
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.BOTTOM_BAR_CONFIG_FAILURE, {
+        error_code: error.code,
+        error_message: error.message,
+        error_type: 'config_api_error',
+        agent_id: agentId,
+        parent_url: parentUrl,
+        mode,
+      });
+    }
+  }, [configQuery.error]);
+
   useSetDistinctIdOnAppMount();
 
   const { mode } = useWidgetMode();
@@ -93,6 +111,21 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl, retry: 1 },
   });
 
+  useEffect(() => {
+    if (!is_test && sessionQuery.error) {
+      const error = sessionQuery.error as AxiosError;
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.BOTTOM_BAR_SESSION_FAILURE, {
+        error_code: error.code,
+        error_message: error.message,
+        error_type: 'session_init_api_error',
+        agent_id: agentId,
+        session_id: sessionData.sessionId,
+        prospect_id: sessionData.prospectId,
+        mode,
+      });
+    }
+  }, [sessionQuery.error]);
+
   const firstQueryWithError = [configQuery, sessionQuery].find((query) => query.error);
 
   const handleRetry = () => {
@@ -112,6 +145,21 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
     const internalAPIError = firstQueryWithError.error as AxiosError<Error>;
     trackError(internalAPIError, { action: 'internalAPIError', component: 'PreloadContainer' });
+
+    if (!is_test && !firstQueryWithError.isFetching) {
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.BOTTOM_BAR_LOAD_FAILURE, {
+        error_type: 'api_initialization_error',
+        error_message: internalAPIError.message,
+        error_code: internalAPIError.code,
+        is_admin: isAdmin,
+        agent_id: agentId,
+        mode,
+        failed_query: configQuery.error ? 'config' : 'session_init',
+        parent_url: parentUrl,
+        session_id: sessionData.sessionId,
+        prospect_id: sessionData.prospectId,
+      });
+    }
 
     if (isAdmin && configQuery?.isError) {
       return <Custom404 />;
