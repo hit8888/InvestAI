@@ -58,6 +58,7 @@ interface IProps {
   initialFeedback?: FeedbackRequestPayload;
   lastMessageResponseId: string;
   orbLogoUrl: string | undefined | null;
+  invertTextColor: boolean;
 }
 
 const MessageItem = ({
@@ -78,6 +79,7 @@ const MessageItem = ({
   initialFeedback,
   lastMessageResponseId,
   orbLogoUrl,
+  invertTextColor,
 }: IProps) => {
   // TODO: NEED TO REFACTOR THIS COMPONENT into Multiple Components - FOLLOW SINGLE RESPONSIBILITY PRINCIPLE
   const { isInView, ref: inViewRef } = useInView(0, true);
@@ -282,10 +284,14 @@ const MessageItem = ({
                 feedback={feedback}
                 onAddFeedback={handleAddFeedback}
                 onRemoveFeedback={handleRemoveFeedback}
+                invertTextColor={invertTextColor}
               />
             )}
             {isAnalyticsEvent && (
-              <MessageAnalytics analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData} />
+              <MessageAnalytics
+                invertTextColor={invertTextColor}
+                analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData}
+              />
             )}
           </div>
         )}

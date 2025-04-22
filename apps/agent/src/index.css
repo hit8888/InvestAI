@@ -70,6 +70,19 @@
       rgba(249, 250, 251, 0.8) 100%
     );
   }
+
+  .chat-window-shadow {
+    /* General Chat Shadow */
+    box-shadow:
+      0px 0px 185px 0px rgba(0, 0, 0, 0.02),
+      0px 0px 124.694px 0px rgba(0, 0, 0, 0.02),
+      0px 0px 80.648px 0px rgba(0, 0, 0, 0.01),
+      0px 0px 50.044px 0px rgba(0, 0, 0, 0.01),
+      0px 0px 30.063px 0px rgba(0, 0, 0, 0.01),
+      0px 0px 17.886px 0px rgba(0, 0, 0, 0.01),
+      0px 0px 10.695px 0px rgba(0, 0, 0, 0.01),
+      0px 0px 5.673px 0px rgba(0, 0, 0, 0);
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -79,6 +92,8 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

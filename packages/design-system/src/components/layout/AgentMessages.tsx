@@ -29,6 +29,7 @@ interface IProps {
   feedbackData: FeedbackRequestPayload[];
   lastMessageResponseId: string;
   orbLogoUrl: string | undefined | null;
+  invertTextColor: boolean;
 }
 
 const AgentMessages = ({
@@ -51,6 +52,7 @@ const AgentMessages = ({
   feedbackData,
   lastMessageResponseId,
   orbLogoUrl,
+  invertTextColor,
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
@@ -120,6 +122,7 @@ const AgentMessages = ({
                   lastMessageResponseId={lastMessageResponseId}
                   messages={messages}
                   orbLogoUrl={orbLogoUrl}
+                  invertTextColor={invertTextColor}
                 />
               </div>
             );

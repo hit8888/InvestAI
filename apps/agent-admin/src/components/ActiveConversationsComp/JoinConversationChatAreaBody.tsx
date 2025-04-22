@@ -90,6 +90,7 @@ const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
             feedbackData={feedbackData}
             orbLogoUrl={''}
             lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
+            invertTextColor={false}
           />
         ) : (
           <p className="gradient-text mt-20 h-screen w-full text-center text-4xl font-semibold">

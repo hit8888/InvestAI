@@ -30,6 +30,7 @@ const AgentMessagesContainer = ({
 
   const sessionApiResponseManager = useSessionApiResponseManager();
   const configurationApiResponseManager = useConfigurationApiResponseManager();
+  const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
   const orbConfig = configurationApiResponseManager.getOrbConfig();
   const orbLogoUrl = orbConfig?.logo_url;
   const latestResponseId = useMessageStore((state) => state.latestResponseId);
@@ -66,6 +67,7 @@ const AgentMessagesContainer = ({
       feedbackData={feedbackData ?? []}
       lastMessageResponseId={latestResponseId}
       orbLogoUrl={orbLogoUrl}
+      invertTextColor={invertTextColor ?? false}
     />
   );
 };

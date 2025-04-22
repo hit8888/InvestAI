@@ -3,15 +3,14 @@ import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
 import Typography from '../Typography';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { cn } from '../../lib/cn';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   analytics: MessageAnalyticsEventData;
+  invertTextColor: boolean;
 }
 
-const MessageAnalytics = ({ analytics }: IProps) => {
+const MessageAnalytics = ({ analytics, invertTextColor }: IProps) => {
   const buyerIntentScoreRef = useElementScrollIntoView<HTMLDivElement>();
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   if (!analytics || !analytics.buyer_intent_score) {
     return null;
   }

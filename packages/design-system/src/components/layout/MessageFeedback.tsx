@@ -32,7 +32,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import SuccessToastMessage from './SuccessToastMessage';
 import toast from 'react-hot-toast';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   sessionId: string;
@@ -40,10 +39,17 @@ interface IProps {
   feedback?: FeedbackRequestPayload;
   onAddFeedback: (feedback: Partial<FeedbackRequestPayload>) => void;
   onRemoveFeedback: () => void;
+  invertTextColor: boolean;
 }
 
-const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemoveFeedback }: IProps) => {
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
+const MessageFeedback = ({
+  sessionId,
+  message,
+  feedback,
+  onAddFeedback,
+  onRemoveFeedback,
+  invertTextColor,
+}: IProps) => {
   const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(feedback?.positive_feedback === true));
   const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
   const [openDialog, setOpenDialog] = useState(false);

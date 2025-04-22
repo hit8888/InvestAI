@@ -8,7 +8,7 @@ interface AuthContextType {
   refreshToken: string | null;
   isAuthenticated: boolean;
   saveTokens: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
-  clearTokens: () => void;
+  clearStateValuesAndLocalStorage: () => void;
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
@@ -23,7 +23,7 @@ const defaultContext: AuthContextType = {
   refreshToken: null,
   isAuthenticated: false,
   saveTokens: () => {},
-  clearTokens: () => {},
+  clearStateValuesAndLocalStorage: () => {},
   login: () => {},
   logout: () => {},
   userInfo: DefaultAuthResponse,
@@ -54,14 +54,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem('userEmail', userData?.email ?? '');
   };
 
-  // Clear tokens
-  const clearTokens = () => {
+  const clearStateValues = () => {
     setUserInfo(DefaultAuthResponse);
     setAccessToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);
+  };
 
-    // Clear tokens from local storage
+  const clearAuthValuesFromLocalStorage = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
@@ -69,18 +69,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('admin_tenant_identifier');
   };
 
+  // Clear tokens
+  const clearStateValuesAndLocalStorage = () => {
+    clearStateValues();
+    clearAuthValuesFromLocalStorage();
+  };
+
   // Function to set authentication status
   const login = () => setIsAuthenticated(true);
   const logout = () => {
     setIsAuthenticated(false);
-    clearTokens();
+    clearStateValuesAndLocalStorage();
   };
 
   // Register auth instance
   useEffect(() => {
-    setAuthInstance({ saveTokens });
+    setAuthInstance({ saveTokens, logout, clearAuthValuesFromLocalStorage });
     return () => setAuthInstance(null);
-  }, [saveTokens]);
+  }, [saveTokens, logout, clearAuthValuesFromLocalStorage]);
 
   return (
     <AuthContext
@@ -88,7 +94,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         accessToken,
         refreshToken,
         saveTokens,
-        clearTokens,
+        clearStateValuesAndLocalStorage,
         isAuthenticated,
         login,
         logout,

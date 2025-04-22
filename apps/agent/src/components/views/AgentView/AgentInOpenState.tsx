@@ -71,7 +71,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
 
   return (
     <div className="custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 transition-all duration-300 ease-in-out">
-      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white">
+      <div className="chat-window-shadow flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white">
         <AgentHeader
           handleSendMessage={handleSendMessage}
           handleCloseAgent={handleCloseAgent}

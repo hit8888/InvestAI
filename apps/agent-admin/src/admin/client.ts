@@ -4,9 +4,17 @@ import { authInstance } from '../context/AuthInstance';
 import { getUserDataFromMeAPI, regenerateTokens } from './api';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '../utils/common';
 
-// Add custom type for request config with _retry property
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
+}
+interface TokenError {
+  detail: string;
+  code: string;
+  messages?: Array<{
+    token_class: string;
+    token_type: string;
+    message: string;
+  }>;
 }
 
 const adminApiClient = axios.create({
@@ -61,55 +69,74 @@ adminApiClient.interceptors.response.use(
     const originalRequest = error.config as CustomAxiosRequestConfig;
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers['Authorization'] = `Bearer ${token}`;
-            return adminApiClient(originalRequest);
+      const errorData = error.response.data as TokenError;
+
+      // Check if it's an access token expiration
+      if (errorData.messages?.[0]?.token_type === 'access') {
+        if (isRefreshing) {
+          return new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject });
           })
-          .catch((err) => Promise.reject(err));
+            .then((token) => {
+              originalRequest.headers['Authorization'] = `Bearer ${token}`;
+              return adminApiClient(originalRequest);
+            })
+            .catch((err) => Promise.reject(err));
+        }
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
+        try {
+          const refreshToken = localStorage.getItem('refreshToken');
+          if (!refreshToken) {
+            throw new Error('No refresh token available');
+          }
+
+          const response = await regenerateTokens({ refresh: refreshToken });
+          const { access } = response.data;
+
+          localStorage.setItem('accessToken', access);
+
+          // Get updated user data
+          const userResponse = await getUserDataFromMeAPI();
+          const { data: userInfo } = userResponse;
+
+          // Update tokens and user data using auth context
+          if (authInstance) {
+            authInstance.saveTokens(access, refreshToken, userInfo);
+          }
+
+          // Update authorization header
+          originalRequest.headers['Authorization'] = `Bearer ${access}`;
+
+          // Process pending requests
+          processQueue(null, access);
+
+          return adminApiClient(originalRequest);
+        } catch (refreshError) {
+          processQueue(refreshError, null);
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
+        }
       }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-          throw new Error('No refresh token available');
+      // Check if it's a refresh token expiration
+      else if (errorData.code === 'token_not_valid' && !errorData.messages) {
+        // Clear all tokens and auth state
+        if (authInstance?.logout) {
+          authInstance.logout();
         }
 
-        const response = await regenerateTokens({ refresh: refreshToken });
-        const { access } = response.data;
-
-        localStorage.setItem('accessToken', access);
-
-        // Get updated user data
-        const userResponse = await getUserDataFromMeAPI();
-        const { data: userInfo } = userResponse;
-
-        // Update tokens and user data using auth context
-        if (authInstance) {
-          authInstance.saveTokens(access, refreshToken, userInfo);
+        if (authInstance?.clearAuthValuesFromLocalStorage) {
+          authInstance.clearAuthValuesFromLocalStorage();
         }
 
-        // Update authorization header
-        originalRequest.headers['Authorization'] = `Bearer ${access}`;
-
-        // Process pending requests
-        processQueue(null, access);
-
-        return adminApiClient(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError, null);
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
+        // Process any queued requests with the error
+        processQueue(error, null);
+        return Promise.reject(error);
       }
     }
-
     return Promise.reject(error);
   },
 );

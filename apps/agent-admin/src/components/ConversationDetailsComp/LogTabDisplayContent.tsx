@@ -29,6 +29,7 @@ const LogTabDisplayContent = () => {
           feedbackData={feedbackData}
           lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
           orbLogoUrl={''}
+          invertTextColor={false}
         />
       ) : (
         <p className="gradient-text mt-20 h-screen w-full text-center text-4xl font-semibold">
