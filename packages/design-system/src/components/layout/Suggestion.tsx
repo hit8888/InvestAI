@@ -4,6 +4,7 @@ import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
 import Typography from '../Typography';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   question: string;
@@ -20,6 +21,7 @@ const Suggestion = ({
   isQuestionInCycle = false,
   isEntryPointQuestion,
 }: IProps) => {
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const { isTablet } = useScreenSize();
 
   const handleClickOnSuggestedQuestion = (question: string) => {
@@ -45,8 +47,11 @@ const Suggestion = ({
           <BlackThreeStarIcon width={14} height={14} className="transition-colors duration-300 ease-in-out" />
         ) : (
           <SparkleIcon
-            color="white"
-            className="!h-4 !w-4 transition-colors duration-300 ease-in-out group-hover:fill-white"
+            color={invertTextColor ? 'black' : 'white'}
+            className={cn('!h-4 !w-4 transition-colors duration-300 ease-in-out', {
+              'group-hover:fill-white': !invertTextColor,
+              'group-hover:fill-black': invertTextColor,
+            })}
           />
         )}
       </div>
@@ -58,7 +63,7 @@ const Suggestion = ({
           <Typography
             variant="label-14-medium"
             align="left"
-            textColor={isEntryPointQuestion ? 'white' : 'textSecondary'}
+            textColor={isEntryPointQuestion ? (invertTextColor ? 'default' : 'white') : 'textSecondary'}
             className="line-clamp-1 w-full lg:line-clamp-2"
           >
             {question}

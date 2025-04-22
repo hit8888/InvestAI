@@ -5,6 +5,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   handleSendMessage: (message: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -16,6 +17,7 @@ interface IProps {
 
 const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig, isCollapsible }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
 
   const ctaText = useMemo(() => {
     if (ctaConfig?.text) {
@@ -56,7 +58,11 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
   return (
     <div className="flex items-center justify-between p-2 pb-3">
       <div>
-        <Button variant="primary" onClick={handlePrimaryCta} data-testid="contact-sales-btn">
+        <Button
+          variant={invertTextColor ? 'inverted_primary' : 'primary'}
+          onClick={handlePrimaryCta}
+          data-testid="contact-sales-btn"
+        >
           {ctaText}
         </Button>
       </div>

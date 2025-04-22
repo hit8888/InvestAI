@@ -7,7 +7,7 @@ import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
 import PoweredByBreakout from './PoweredByBreakout';
 import { cn } from '../../lib/cn';
-
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 interface IProps {
   handleSendMessage: (message: string) => void;
   disableMessageSend: boolean;
@@ -16,6 +16,7 @@ interface IProps {
 }
 
 const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible }: IProps) => {
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const [inputValue, setInputValue] = useState<string>('');
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -80,6 +81,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
               onClick={handleSubmission}
               disabled={conditionForShowingTooltipAndDisabledButton}
               btnClassName="absolute right-2 top-2 flex h-12 w-12 transform items-center justify-center !p-0"
+              invertTextColor={invertTextColor}
             />
           </SendButtonWithTooltip>
         </div>

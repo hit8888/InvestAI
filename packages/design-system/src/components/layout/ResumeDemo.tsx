@@ -1,11 +1,14 @@
 import Button from '@breakout/design-system/components/Button/index';
 import ResumeIcon from '@breakout/design-system/components/icons/ResumeIcon';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+
 interface ResumeDemoProps {
   onResume: () => void;
   isPlayingResponse: boolean;
 }
 
 const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => {
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   return (
     <Button
       onClick={() => {
@@ -14,9 +17,9 @@ const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => {
         }
       }}
       buttonStyle="rightIcon"
-      variant="primary"
+      variant={invertTextColor ? 'inverted_primary' : 'primary'}
       disabled={isPlayingResponse}
-      rightIcon={<ResumeIcon color="white" height={16} width={16} />}
+      rightIcon={<ResumeIcon color={invertTextColor ? 'black' : 'white'} height={16} width={16} />}
     >
       <span className="whitespace-nowrap">Resume Demo</span>
     </Button>

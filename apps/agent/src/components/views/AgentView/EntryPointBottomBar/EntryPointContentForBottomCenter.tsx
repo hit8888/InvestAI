@@ -28,6 +28,7 @@ const EntryPointContentForBottomCenter = ({
 }: IProps) => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
+  const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const placeholderTexts = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 
@@ -85,6 +86,7 @@ const EntryPointContentForBottomCenter = ({
           <ChatInputSendButton
             btnType="submit"
             showButton={!!inputValue}
+            invertTextColor={invertTextColor}
             btnClassName="h-10 w-10 hover:bg-primary/80"
           />
         </div>

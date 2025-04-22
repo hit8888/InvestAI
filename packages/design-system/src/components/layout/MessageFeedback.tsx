@@ -32,6 +32,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import SuccessToastMessage from './SuccessToastMessage';
 import toast from 'react-hot-toast';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface IProps {
   sessionId: string;
@@ -42,6 +43,7 @@ interface IProps {
 }
 
 const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemoveFeedback }: IProps) => {
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(feedback?.positive_feedback === true));
   const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
   const [openDialog, setOpenDialog] = useState(false);
@@ -183,7 +185,7 @@ const MessageFeedback = ({ sessionId, message, feedback, onAddFeedback, onRemove
                   <FormControl>
                     <BadgeSelect>
                       {categories.map((category) => (
-                        <BadgeSelectOption key={category} field={field}>
+                        <BadgeSelectOption invertTextColor={invertTextColor} key={category} field={field}>
                           {category}
                         </BadgeSelectOption>
                       ))}

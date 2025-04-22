@@ -46,6 +46,10 @@ export class ConfigurationApiResponseManager {
     return result;
   }
 
+  applyInvertTextColor() {
+    return this.config.style_config.invert_text_color;
+  }
+
   getOrbConfig() {
     return this.config.style_config.orb_config;
   }

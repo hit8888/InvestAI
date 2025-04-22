@@ -8,15 +8,23 @@ interface SendButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   btnClassName?: string;
+  invertTextColor?: boolean;
 }
 
-const ChatInputSendButton = ({ showButton, onClick, btnType = 'button', disabled, btnClassName }: SendButtonProps) => {
+const ChatInputSendButton = ({
+  showButton,
+  onClick,
+  btnType = 'button',
+  disabled,
+  btnClassName,
+  invertTextColor,
+}: SendButtonProps) => {
   if (!showButton) return null;
 
   return (
     <Button
       buttonStyle="icon"
-      variant="primary"
+      variant={invertTextColor ? 'inverted_primary' : 'primary'}
       className={cn('', btnClassName, {
         'disabled:pointer-events-auto disabled:cursor-pointer': disabled,
       })}
@@ -24,7 +32,11 @@ const ChatInputSendButton = ({ showButton, onClick, btnType = 'button', disabled
       onClick={onClick}
       disabled={disabled}
     >
-      <SendIcon className="text-primary-foreground" />
+      <SendIcon
+        className={cn('text-primary-foreground', {
+          'text-black': invertTextColor,
+        })}
+      />
     </Button>
   );
 };

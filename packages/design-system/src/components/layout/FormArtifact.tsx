@@ -134,13 +134,7 @@ const FormArtifact = ({
               ))}
             </div>
             <div className="flex justify-end">
-              <Button
-                ref={submitButtonRef}
-                type="submit"
-                disabled={isSubmitBtnDisabled}
-                className="flex items-center gap-2 border-2 border-[rgb(var(--primary-foreground)/0.24)] bg-primary/70 px-3 hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-20"
-                data-testid="submit-form-btn"
-              >
+              <Button ref={submitButtonRef} type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
                 Submit
               </Button>
             </div>
