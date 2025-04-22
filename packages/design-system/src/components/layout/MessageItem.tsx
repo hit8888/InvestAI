@@ -27,6 +27,7 @@ import {
   getFormArtifactMessage,
   getFormFilledEvent,
   getMediaArtifactMessage,
+  isAIResponseInactiveMessage,
   isDiscoveryAnswer,
   isDiscoveryQuestion,
   // hasStreamMessageForForm,
@@ -113,6 +114,8 @@ const MessageItem = ({
 
   const timestamp = message?.timestamp;
   const formattedTimestamp = getMessageTimestamp(timestamp);
+
+  const isCurrentMsgUserInactiveMessage = isAIResponseInactiveMessage(message);
 
   const shouldShowActiveOrb =
     lastMessageResponseId === message.response_id &&
@@ -246,6 +249,7 @@ const MessageItem = ({
             message={message}
             isAiMessage={isAiMessage}
             usingForAgent={usingForAgent}
+            isCurrentMsgUserInactiveMessage={isCurrentMsgUserInactiveMessage}
             isLastQuestionResponse={isLastQuestionResponse}
             orbState={orbState}
             primaryColor={primaryColor}

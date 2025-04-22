@@ -12,7 +12,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { AgentEventType, EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
-import { isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import { hasUserSentInactiveMessage, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
@@ -36,6 +36,7 @@ const useWebSocketChat = () => {
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
+  const setLatestResponseId = useMessageStore((state) => state.setLatestResponseId);
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
@@ -140,6 +141,11 @@ const useWebSocketChat = () => {
       const response_id = nanoid();
 
       const payload = getMessagePayload({ message, response_id, message_type });
+
+      // set Latest response id for inactive message - checking from payload
+      if (hasUserSentInactiveMessage(payload)) {
+        setLatestResponseId(response_id);
+      }
 
       //This is for event messages where the message_type is EVENT
       if ('event_type' in message && 'event_data' in message && !message.content) {

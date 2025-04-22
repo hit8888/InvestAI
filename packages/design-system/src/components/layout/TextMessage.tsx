@@ -11,6 +11,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import UserMessageChatTail from '../icons/user-message-chat-tail';
 import Typography from '../Typography';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 interface TextMessageProps {
   message: WebSocketMessage;
   isAiMessage: boolean;
@@ -19,6 +20,7 @@ interface TextMessageProps {
   orbState: OrbStatusEnum;
   primaryColor: string | null;
   shouldShowActiveOrb: boolean;
+  isCurrentMsgUserInactiveMessage: boolean;
   orbLogoUrl: string | undefined | null;
 }
 
@@ -39,9 +41,13 @@ const TextMessage: React.FC<TextMessageProps> = ({
   orbState,
   primaryColor,
   shouldShowActiveOrb,
+  isCurrentMsgUserInactiveMessage,
   orbLogoUrl,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const inactivityMessageRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: isCurrentMsgUserInactiveMessage && isLastQuestionResponse,
+  });
   const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
   const messageRef = useRef<HTMLDivElement>(null);
 
@@ -79,6 +85,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
 
   return (
     <div
+      ref={inactivityMessageRef}
       className={cn('flex items-center', {
         'ml-16 justify-end py-4 pr-2': !isAiMessage,
         'flex-col items-end': conditionSpecificForDashboard,

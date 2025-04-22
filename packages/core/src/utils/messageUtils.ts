@@ -20,6 +20,25 @@ export const isStreamMessage = (
   return message.message_type === 'STREAM';
 };
 
+export const isAIResponseInactiveMessage = (message: WebSocketMessage): boolean => {
+  return (
+    'event_type' in message.message &&
+    message.message.event_type === 'USER_INACTIVE' &&
+    message.role === 'ai' &&
+    message.actor === 'EVENT' &&
+    message.message_type === 'TEXT'
+  );
+};
+
+export const hasUserSentInactiveMessage = (message: WebSocketMessage): boolean => {
+  return (
+    message.role === 'user' &&
+    message.message_type === 'EVENT' &&
+    'event_type' in message.message &&
+    message.message.event_type === 'USER_INACTIVE'
+  );
+};
+
 // Type guard for WebSocketMessage with is_complete
 export const isStreamMessageComplete = (message: WebSocketMessage): boolean => {
   return (
