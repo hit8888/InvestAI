@@ -136,6 +136,47 @@
   background-color: rgba(71, 84, 103, 0.05);
 }
 
+/* Inverted Variants */
+/* Just for testing purposes in Storybook: --primary-light-sample: 243, 252, 144; */
+.button--inverted-primary {
+  background-color: rgba(var(--primary-light-sample) / 0.6);
+  color: #2d3454;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+
+.button--inverted-primary:hover {
+  background-color: rgba(var(--primary-light-sample) / 0.5);
+}
+
+.button--inverted-primary:focus {
+  background-color: rgba(var(--primary-light-sample) / 0.6);
+  box-shadow: 0 0 0 4px #eaecf0;
+}
+
+.button--inverted-secondary {
+  color: #2d3454;
+  border: 1px solid rgba(var(--primary-light-sample));
+  background: transparent;
+}
+
+.button--inverted-secondary:hover {
+  background-color: rgba(var(--primary-light-sample) / 0.2);
+}
+
+.button--inverted-secondary:focus {
+  background-color: rgba(var(--primary-light-sample) / 0.3);
+}
+
+.button--inverted-tertiary {
+  color: #2d3454;
+  border: none;
+  background: transparent;
+}
+
+.button--inverted-tertiary:hover {
+  background-color: rgba(var(--primary-light-sample) / 0.2);
+}
+
 /* Size Variants */
 .button--small {
   height: 2.5rem;
@@ -187,6 +228,18 @@
 
 .bg-system-tertiary:focus {
   animation: focus-bg-system-tertiary 2000ms ease-out;
+}
+
+.bg-inverted-tertiary:focus {
+  animation: focus-bg-inverted-tertiary 2000ms ease-out;
+}
+
+.bg-inverted-tertiary-light:focus {
+  animation: focus-bg-inverted-tertiary-light 2000ms ease-out;
+}
+
+.ring-inverted:focus {
+  animation: focus-ring-inverted 2000ms ease-out;
 }
 
 @keyframes focus-ring-primary {
@@ -242,6 +295,36 @@
 @keyframes focus-bg-system-tertiary {
   0% {
     background-color: rgba(var(--system) / 0.1);
+  }
+
+  100% {
+    background-color: none;
+  }
+}
+
+@keyframes focus-ring-inverted {
+  0% {
+    box-shadow: 0 0 0 4px #eaecf0;
+  }
+
+  100% {
+    box-shadow: none;
+  }
+}
+
+@keyframes focus-bg-inverted-tertiary {
+  0% {
+    background-color: rgba(var(--primary) / 0.3);
+  }
+
+  100% {
+    background-color: none;
+  }
+}
+
+@keyframes focus-bg-inverted-tertiary-light {
+  0% {
+    background-color: rgba(var(--primary-light-sample) / 0.3);
   }
 
   100% {

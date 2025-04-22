@@ -418,3 +418,104 @@ export const DestructiveTertiaryRegularWithRightIcon: Story = {
     rightIcon: '→',
   },
 };
+
+// Inverted Button Stories
+export const InvertedSmall: Story = {
+  args: {
+    children: 'Inverted Small',
+    size: 'small',
+    variant: 'inverted_primary',
+  },
+};
+
+export const InvertedSecondarySmall: Story = {
+  args: {
+    children: 'Inverted Secondary Small',
+    size: 'small',
+    variant: 'inverted_secondary',
+  },
+};
+
+export const InvertedTertiarySmall: Story = {
+  args: {
+    children: 'Inverted Tertiary Small',
+    size: 'small',
+    variant: 'inverted_tertiary',
+  },
+};
+
+export const InvertedMedium: Story = {
+  args: {
+    children: 'Inverted Medium',
+    size: 'medium',
+    variant: 'inverted_primary',
+  },
+};
+
+export const InvertedRegular: Story = {
+  args: {
+    children: 'Inverted Regular',
+    size: 'regular',
+    variant: 'inverted_primary',
+  },
+};
+
+export const InvertedSmallWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'small',
+    buttonStyle: 'leftIcon',
+    variant: 'inverted_primary',
+    leftIcon: '←',
+  },
+};
+
+export const InvertedSmallWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'small',
+    buttonStyle: 'rightIcon',
+    variant: 'inverted_primary',
+    rightIcon: '→',
+  },
+};
+
+export const InvertedSecondaryMediumWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'medium',
+    buttonStyle: 'leftIcon',
+    variant: 'inverted_secondary',
+    leftIcon: '←',
+  },
+};
+
+export const InvertedSecondaryMediumWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'medium',
+    buttonStyle: 'rightIcon',
+    variant: 'inverted_secondary',
+    rightIcon: '→',
+  },
+};
+
+export const InvertedTertiaryRegularWithLeftIcon: Story = {
+  args: {
+    children: 'Left Icon Button',
+    size: 'regular',
+    buttonStyle: 'leftIcon',
+    variant: 'inverted_tertiary',
+    leftIcon: '←',
+  },
+};
+
+export const InvertedTertiaryRegularWithRightIcon: Story = {
+  args: {
+    children: 'Right Icon Button',
+    size: 'regular',
+    buttonStyle: 'rightIcon',
+    variant: 'inverted_tertiary',
+    rightIcon: '→',
+  },
+};

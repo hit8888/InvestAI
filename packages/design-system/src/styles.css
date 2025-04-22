@@ -16,6 +16,9 @@
 
     --system: 16 24 40;
     /* #101828 */
+
+    /* Just for testing purposes in Storybook: --primary-light-sample: 243, 252, 144; */
+    --primary-light-sample: 243 252 144;
   }
 
   .input-bar-bg {

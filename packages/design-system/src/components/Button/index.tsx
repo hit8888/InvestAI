@@ -35,6 +35,11 @@ export const buttonVariants = cva(
         system_secondary:
           'text-gray-600 border border-gray-600 hover:bg-gray-50 focus:bg-gray-50 ring-system disabled:border-gray-300 disabled:text-gray-300',
         system_tertiary: 'text-gray-600 hover:bg-gray-50 bg-system-tertiary disabled:text-gray-300',
+        inverted_primary:
+          'bg-primary/60 border-2 text-customPrimaryText border-borderStroke hover:bg-primary/50 focus:bg-primary/60 ring-inverted disabled:bg-primary/30 disabled:text-gray-300',
+        inverted_secondary:
+          'text-customPrimaryText border border-primary hover:bg-primary/20 focus:bg-primary/30 active:bg-primary/30 ring-inverted disabled:border-primary/30 disabled:text-gray-300',
+        inverted_tertiary: 'text-customPrimaryText hover:bg-primary/20 bg-inverted-tertiary disabled:text-gray-300',
       },
     },
     compoundVariants: [

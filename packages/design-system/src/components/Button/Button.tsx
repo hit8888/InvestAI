@@ -27,6 +27,9 @@ export const buttonVariants = cva('button', {
       system: 'button--system ring-system',
       system_secondary: 'button--system-secondary ring-system',
       system_tertiary: 'button--system-tertiary bg-system-tertiary',
+      inverted_primary: 'button--inverted-primary ring-inverted',
+      inverted_secondary: 'button--inverted-secondary ring-inverted',
+      inverted_tertiary: 'button--inverted-tertiary bg-inverted-tertiary-light',
     },
   },
   defaultVariants: {
