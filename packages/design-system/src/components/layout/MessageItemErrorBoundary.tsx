@@ -1,10 +1,11 @@
 import React, { Component, ErrorInfo } from 'react';
 import { trackError } from '@meaku/core/utils/error';
 import Typography from '../Typography';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface Props {
   children: React.ReactNode;
-  messageId: string;
+  message: WebSocketMessage;
 }
 
 interface State {
@@ -26,7 +27,7 @@ class MessageItemErrorBoundary extends Component<Props, State> {
       component: 'MessageItem',
       action: 'render',
       additionalData: {
-        messageId: this.props.messageId,
+        message: this.props.message,
         componentStack: errorInfo.componentStack,
       },
     });

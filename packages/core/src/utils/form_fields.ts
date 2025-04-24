@@ -23,12 +23,23 @@ const isBusinessEmail = (email: string) => {
   return domain && !FREE_EMAIL_DOMAINS.includes(domain);
 };
 
+// Regex pattern to match only numbers
+const numbersOnlyRegex = /^\d*$/;
+
 const getZodType = (dataType: string) => {
   switch (dataType) {
     case 'string':
       return z.string();
     case 'int':
-      return z.number().int();
+      return z
+        .string()
+        .refine((val) => numbersOnlyRegex.test(val), {
+          message: 'Only numbers are allowed',
+        })
+        .transform((val) => {
+          const num = parseInt(val, 10);
+          return num;
+        });
     case 'email':
       return z.string().email();
     case 'business_email':
@@ -55,6 +66,8 @@ const getInputType = (dataType: string) => {
       return 'datetime-local';
     case 'date':
       return 'date';
+    case 'int':
+      return 'number';
     default:
       return 'text';
   }

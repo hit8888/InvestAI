@@ -25,6 +25,21 @@ const ChatFormField = (props: IChatFormFieldProps) => {
   const { form, form_field, isArtifactFormFilled } = props;
 
   const isPhoneInputField = form_field.field_name === 'phone';
+  const isIntField = form_field.data_type === 'int';
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isIntField) {
+      // Array of allowed navigation and editing keys
+      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+      // Prevent input if:
+      // 1. Key is '-' or '.'
+      // 2. Key is not a number and not in allowedKeys array
+      if (e.key === '-' || e.key === '.' || (isNaN(Number(e.key)) && !allowedKeys.includes(e.key))) {
+        e.preventDefault();
+      }
+    }
+  };
 
   return (
     <FormField
@@ -47,6 +62,8 @@ const ChatFormField = (props: IChatFormFieldProps) => {
                   className="border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
                   placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
                   type={getInputType(form_field.data_type)}
+                  onKeyDown={handleKeyDown}
+                  min={isIntField ? '0' : undefined}
                 />
               )}
             </FormControl>

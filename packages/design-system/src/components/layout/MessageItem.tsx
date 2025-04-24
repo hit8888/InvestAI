@@ -239,7 +239,7 @@ const MessageItem = ({
   const isLastMessage = message.response_id === messages[messages.length - 1].response_id;
 
   return (
-    <MessageItemErrorBoundary messageId={message.response_id}>
+    <MessageItemErrorBoundary message={message}>
       <div
         ref={inViewRef}
         // style={{ minHeight: getMinHeight() }}
