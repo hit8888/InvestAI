@@ -196,6 +196,7 @@ const MessageItem = ({
         }}
         handleSendUserMessage={handleSendUserMessage}
         isformDisabled={isFormArtifact && formMetadata.is_filled}
+        usingForAgent={usingForAgent}
       />
     );
   };
@@ -262,7 +263,12 @@ const MessageItem = ({
           <div className="my-5 ml-10">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
-            <DiscoveryQuestion message={message} onSubmit={handleSendUserMessage} isLastMessage={isLastMessage} />
+            <DiscoveryQuestion
+              usingForAgent={usingForAgent}
+              message={message}
+              onSubmit={handleSendUserMessage}
+              isLastMessage={isLastMessage}
+            />
           </div>
         )}
 
@@ -293,6 +299,7 @@ const MessageItem = ({
             )}
             {isAnalyticsEvent && (
               <MessageAnalytics
+                usingForAgent={usingForAgent}
                 invertTextColor={invertTextColor}
                 analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData}
               />

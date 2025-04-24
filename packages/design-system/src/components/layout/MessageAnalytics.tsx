@@ -7,10 +7,13 @@ import { cn } from '../../lib/cn';
 interface IProps {
   analytics: MessageAnalyticsEventData;
   invertTextColor: boolean;
+  usingForAgent: boolean;
 }
 
-const MessageAnalytics = ({ analytics, invertTextColor }: IProps) => {
-  const buyerIntentScoreRef = useElementScrollIntoView<HTMLDivElement>();
+const MessageAnalytics = ({ analytics, invertTextColor, usingForAgent }: IProps) => {
+  const buyerIntentScoreRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: usingForAgent,
+  });
   if (!analytics || !analytics.buyer_intent_score) {
     return null;
   }

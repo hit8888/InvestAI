@@ -44,7 +44,7 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
   }
 
   return (
-    <div ref={preDemoQuestionRef} className="pb-2 pl-10">
+    <div ref={preDemoQuestionRef} className="max-w-[424px] pb-2 pl-10">
       <div className="mb-4 border-t-2 border-dashed border-gray-300"></div>
 
       <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">

@@ -14,9 +14,10 @@ interface IProps {
   };
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   isformDisabled?: boolean;
+  usingForAgent?: boolean;
 }
 
-const ChatArtifact = ({ artifact, handleSendUserMessage, isformDisabled }: IProps) => {
+const ChatArtifact = ({ artifact, handleSendUserMessage, isformDisabled, usingForAgent }: IProps) => {
   const artifactType = artifact?.artifact_type;
 
   const renderArtifact = () => {
@@ -37,6 +38,7 @@ const ChatArtifact = ({ artifact, handleSendUserMessage, isformDisabled }: IProp
             artifactMetadata={artifact.metadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
             isformDisabled={isformDisabled}
+            usingForAgent={usingForAgent}
           />
         );
       default:

@@ -1,12 +1,11 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { PauseIcon, PlayIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import ArtifactControls from '../layout/ArtifactControls.tsx';
 import { ArtifactEnum } from '@meaku/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
+import ReactPlayer from 'react-player';
 
 interface IProps {
   videoUrl: string;
@@ -22,23 +21,20 @@ const VideoArtifact = ({
   artifactId,
   handleSendUserMessage,
   isMediaTakingFullWidth,
-  handleToggleFullScreen,
+  // handleToggleFullScreen,
   setIsArtifactPlaying,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const playerRef = useRef<ReactPlayer | null>(null);
 
   const handleVideoOnEnd = () => {
-    // Add checks to ensure video has actually ended
-    if (!videoRef.current) return;
+    if (!playerRef.current) return;
 
-    const video = videoRef.current;
+    const video = playerRef.current;
     // Check if we're actually at the end of the video
     // Adding small buffer (0.1s) to account for floating point precision
-    if (Math.abs(video.currentTime - video.duration) > 0.1) return;
+    if (Math.abs(video.getCurrentTime() - video.getDuration()) > 0.1) return;
 
     const payload = {
       artifact_type: ArtifactEnum.VIDEO,
@@ -53,41 +49,26 @@ const VideoArtifact = ({
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };
 
-  const handlePlayPauseVideo = () => {
-    if (!videoRef.current) return;
-
-    setIsPlaying((prevState) => !prevState);
-
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      setIsArtifactPlaying(true);
-      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
-    } else {
-      videoRef.current.pause();
-      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PAUSE);
-    }
-  };
-
-  const handleRestartVideo = () => {
-    if (!videoRef.current) return;
-
-    videoRef.current.currentTime = 0;
-    videoRef.current.play();
+  const handlePlay = () => {
     setIsPlaying(true);
     setIsArtifactPlaying(true);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
   };
 
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (videoElement) {
-      videoElement.addEventListener('ended', handleVideoOnEnd);
+  const handlePause = () => {
+    setIsPlaying(false);
+    setIsArtifactPlaying(false);
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PAUSE);
+  };
 
-      return () => {
-        videoElement.removeEventListener('ended', handleVideoOnEnd);
-      };
-    }
-  }, [handleVideoOnEnd]);
+  const handleRestartVideo = () => {
+    if (!playerRef.current) return;
+
+    playerRef.current.seekTo(0);
+    setIsPlaying(true);
+    setIsArtifactPlaying(true);
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
+  };
 
   if (!videoUrl) return null;
 
@@ -100,35 +81,46 @@ const VideoArtifact = ({
     >
       <AspectRatio ratio={16 / 9}>
         <div className="h-full w-full">
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full"
-            // controls
-            autoPlay={false}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
-          <div
-            className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
-              'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
-            })}
-            onClick={handlePlayPauseVideo}
-          >
-            {isPlaying ? (
-              <PauseIcon className="fill-white text-white" size={60} />
-            ) : (
-              <PlayIcon className="fill-white text-white" size={60} />
-            )}
-          </div>
-
-          <ArtifactControls
-            isPlaying={isPlaying}
-            isMediaTakingFullWidth={isMediaTakingFullWidth}
-            handlePause={handlePlayPauseVideo}
-            handleRestart={handleRestartVideo}
-            handleToggleFullScreen={handleToggleFullScreen}
+          <ReactPlayer
+            ref={playerRef}
+            url={videoUrl}
+            playing={isPlaying}
+            width="100%"
+            height="100%"
+            onEnded={handleVideoOnEnd}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            controls={true}
+            style={{ position: 'absolute', top: 0, left: 0 }}
+            // Configuration for the player
+            config={{
+              file: {
+                attributes: {
+                  // Prevent video download through browser's context menu
+                  controlsList: 'nodownload',
+                  // Disable right-click context menu
+                  onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+                },
+              },
+            }}
+            // Disable light mode (preview thumbnail)
+            light={false}
+            // Disable picture-in-picture mode
+            pip={true}
+            // Keep video playing when component unmounts
+            stepOnUnmount={false}
+            // Additional progress tracking for video completion
+            onProgress={({ played }) => {
+              if (played === 1) {
+                handleVideoOnEnd();
+              }
+            }}
+            // Detect when video is seeked to start (restart)
+            onSeek={(seconds) => {
+              if (seconds === 0) {
+                handleRestartVideo();
+              }
+            }}
           />
         </div>
       </AspectRatio>

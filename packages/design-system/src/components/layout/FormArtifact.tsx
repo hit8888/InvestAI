@@ -29,6 +29,7 @@ interface IFormProps {
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   isformDisabled?: boolean;
+  usingForAgent?: boolean;
 }
 
 const createFormSchema = (form_fields: FormFieldType[]) => {
@@ -52,6 +53,7 @@ const FormArtifact = ({
   artifactMetadata,
   handleSendUserMessage,
   isformDisabled,
+  usingForAgent,
 }: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
   const [isEditing, setIsEditing] = useState(false);
@@ -104,7 +106,7 @@ const FormArtifact = ({
     !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
 
   const submitButtonRef = useElementScrollIntoView<HTMLButtonElement>({
-    shouldScroll: isSubmitBtnDisabled,
+    shouldScroll: isSubmitBtnDisabled && usingForAgent,
     delay: 0,
   });
 

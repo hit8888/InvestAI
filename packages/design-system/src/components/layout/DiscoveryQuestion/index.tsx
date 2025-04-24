@@ -14,12 +14,13 @@ interface IProps {
   message: WebSocketMessage;
   isLastMessage?: boolean;
   onSubmit: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  usingForAgent?: boolean;
 }
 
-export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit }: IProps) {
+export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit, usingForAgent }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: isLastMessage,
+    shouldScroll: usingForAgent && isLastMessage,
   });
 
   // TODO: Block of code (Line 29-39) is a duplicate of the Code Block (Line 81 - 91)  below.
