@@ -96,6 +96,17 @@ export const isMessageAnalyticsEvent = (
   return checkIsEventMessage(message) && message.message.event_type === 'MESSAGE_ANALYTICS';
 };
 
+export const isHeartbeatEvent = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & {
+  message: EventMessageContent & { event_type: 'HEARTBEAT_ACK' };
+} => {
+  return (
+    checkIsEventMessage(message) &&
+    (message.message.event_type === 'HEARTBEAT' || message.message.event_type === 'HEARTBEAT_ACK')
+  );
+};
+
 export const isGeneratingMediaArtifactEvent = (message: WebSocketMessage) =>
   message.message_type === 'EVENT' &&
   'event_type' in message.message &&

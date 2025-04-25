@@ -1,16 +1,15 @@
-import SingleActiveConversation from './SingleActiveConversation';
+import ActiveConversationCard from './ActiveConversationCard';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversationsContext } from '../../context/ActiveConversationsContext';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
 import { useTableWidth } from '../../hooks/useTableWidth';
 
 const ActiveConversationsLayout = () => {
   const { widthStyle } = useTableWidth();
-  const totalActiveChats = 10;
+  const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
+  const [showActiveConversations, setShowActiveConversations] = useState(false);
 
-  const { cards } = useContext(ActiveConversationsContext);
-  const haveActiveConversations = cards.length > 0;
   return (
     <div
       className={cn(
@@ -18,24 +17,23 @@ const ActiveConversationsLayout = () => {
       )}
       style={widthStyle}
     >
-      {haveActiveConversations ? (
-        <>
-          <LiveConversationsHeader totalActiveChats={totalActiveChats} />
-          {/* Horizontal Scroll Container */}
+      <>
+        <LiveConversationsHeader
+          isLoading={isLoading}
+          totalActiveChats={activeConversations?.length ?? 0}
+          isExpanded={showActiveConversations}
+          onToggleView={() => setShowActiveConversations((prev) => !prev)}
+        />
+        {showActiveConversations && activeConversations?.length ? (
           <div className="w-full rounded-3xl">
-            <div className="hide-scrollbar flex items-center gap-6 overflow-x-auto px-2 py-1">
-              {cards.map((card) => (
-                <SingleActiveConversation key={card.sessionId} card={card} />
+            <div className="grid grid-cols-3 gap-4 overflow-hidden">
+              {activeConversations.map((activeConversation) => (
+                <ActiveConversationCard key={activeConversation.session_id} conversation={activeConversation} />
               ))}
             </div>
           </div>
-        </>
-      ) : (
-        <div className="flex w-full items-center justify-center gap-4">
-          <span className="h-8 w-8 animate-pulse rounded-full bg-primary"></span>
-          <p className="gradient-text animate-pulse text-2xl">No active conversations right now</p>
-        </div>
-      )}
+        ) : null}
+      </>
     </div>
   );
 };

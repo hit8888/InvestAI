@@ -1,5 +1,7 @@
 // CardContext.jsx
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import useActiveConversationsWebSocket from '../hooks/useActiveConversationsWebSocket';
+import useActiveConversations from '../queries/query/useActiveConversations';
 
 export type ActiveConversationCard = {
   sessionId: string;
@@ -19,14 +21,37 @@ export type ActiveConversationCard = {
   buyerIntentLabel: string;
 };
 
+export interface ActiveConversation {
+  agent_id: number;
+  session_id: string;
+  company?: string;
+  lastMessage?: string;
+  buyerIntent: BuyerIntent;
+  prospect: {
+    name: string;
+    email: string;
+    country: string;
+    company_demographics: {
+      company_logo_url: string;
+    };
+  };
+}
+
+// TODO: might need to update enum keys or move this completely to another file
+export enum BuyerIntent {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW',
+}
+
 type ActiveConversationsContextType = {
-  cards: ActiveConversationCard[];
-  setCards: (newCards: ActiveConversationCard[]) => void;
+  isLoading: boolean;
+  activeConversations: ActiveConversation[] | null;
 };
 
 const defaultContext: ActiveConversationsContextType = {
-  cards: [],
-  setCards: () => {},
+  isLoading: false,
+  activeConversations: [],
 };
 
 // Create the context
@@ -211,13 +236,46 @@ export const ActiveConversationsContext = createContext<ActiveConversationsConte
 export const ActiveConversationsProvider = ({ children }: { children: React.ReactNode }) => {
   // TODO: Uncomment below code for development purposes.
   // const [cards, setCards] = useState<ActiveConversationCard[]>(mockCardsData);
-  const [cards, setCards] = useState<ActiveConversationCard[]>([]);
+  const { lastMessageBySession } = useActiveConversationsWebSocket();
+  const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversations();
+  const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
+
+  useEffect(() => {
+    if (conversations) {
+      setActiveConversations(conversations);
+    }
+  }, [conversations]);
+
+  useEffect(() => {
+    const currentSessionIds = activeConversations?.map((c) => c.session_id) ?? [];
+    const liveSessionIds = Object.keys(lastMessageBySession);
+    const hasNewSession = !!liveSessionIds.find((sessionId) => !currentSessionIds.includes(sessionId));
+
+    if (hasNewSession) {
+      refetchActiveConversations();
+    } else {
+      setActiveConversations((conversations) => {
+        const newConversations: ActiveConversation[] = [];
+        conversations?.forEach((conv) => {
+          const sessionId = liveSessionIds?.find((sessionId) => conv.session_id === sessionId);
+
+          if (sessionId) {
+            conv.lastMessage = lastMessageBySession[sessionId];
+          }
+
+          newConversations.push(conv);
+        });
+
+        return newConversations;
+      });
+    }
+  }, [lastMessageBySession]);
 
   return (
     <ActiveConversationsContext.Provider
       value={{
-        cards,
-        setCards,
+        isLoading: isLoading || !activeConversations,
+        activeConversations,
       }}
     >
       {children}
