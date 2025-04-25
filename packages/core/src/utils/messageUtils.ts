@@ -17,7 +17,7 @@ export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 export const isStreamMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: StreamMessageContent } => {
-  return message.message_type === 'STREAM';
+  return message.message_type === 'STREAM' && message.actor === 'SALES';
 };
 
 export const isAIResponseInactiveMessage = (message: WebSocketMessage): boolean => {
@@ -185,12 +185,12 @@ export const isMediaArtifact = (type: string): type is SupportedArtifactType => 
   return SUPPORTED_ARTIFACT_TYPES.includes(type as SupportedArtifactType);
 };
 
-export const checkIsDiscoveryMessage = (message: WebSocketMessage): boolean => {
-  return message.message_type === 'TEXT' && message.actor === 'DISCOVERY_QUESTIONS';
-};
-
 export const isDiscoveryQuestion = (message: WebSocketMessage): boolean => {
-  return message.message_type === 'EVENT' && message.actor === 'DISCOVERY_QUESTIONS';
+  return (
+    message.message_type === 'EVENT' &&
+    message.actor === 'DISCOVERY_QUESTIONS' &&
+    message.message.event_type === 'DISCOVERY_QUESTIONS'
+  );
 };
 
 export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {
@@ -384,4 +384,41 @@ const isUserEventMessage = (message: WebSocketMessage): boolean => {
 
 export const shouldMessageScrollToTop = (message: WebSocketMessage): boolean => {
   return isUserEventMessage(message) || isUserTextMessage(message);
+};
+
+// This function groups messages by response_id and then sorts them by the first occurrence of response_id
+export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessage[]) => {
+  // Create a map to store the first occurrence index of each response_id
+  const firstOccurrenceMap = new Map<string, number>();
+  messages.forEach((msg, index) => {
+    if (!firstOccurrenceMap.has(msg.response_id)) {
+      firstOccurrenceMap.set(msg.response_id, index);
+    }
+  });
+
+  return messages.slice().sort((a, b) => {
+    // Get the first occurrence index for each response_id
+    const aFirstIndex = firstOccurrenceMap.get(a.response_id) || 0;
+    const bFirstIndex = firstOccurrenceMap.get(b.response_id) || 0;
+
+    // First sort by the first occurrence of response_id
+    if (aFirstIndex !== bFirstIndex) {
+      return aFirstIndex - bFirstIndex;
+    }
+
+    // If same response_id, prioritize stream messages over discovery questions
+    if (aFirstIndex === bFirstIndex) {
+      const aIsStream = isStreamMessage(a);
+      const bIsStream = isStreamMessage(b);
+      const aIsDiscovery = isDiscoveryQuestion(a);
+      const bIsDiscovery = isDiscoveryQuestion(b);
+
+      // If one is stream and other is discovery, stream gets priority
+      if (aIsStream && bIsDiscovery) return -1;
+      if (aIsDiscovery && bIsStream) return 1;
+    }
+
+    // For all other cases, maintain their original order
+    return 0;
+  });
 };

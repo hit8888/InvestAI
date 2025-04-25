@@ -20,7 +20,6 @@ import MessageFeedback from './MessageFeedback';
 import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
   checkIsArtifactMessage,
-  checkIsDiscoveryMessage,
   checkIsMainResponseMessage,
   checkIsSalesResponseComplete,
   getAnalyticsEvent,
@@ -92,11 +91,11 @@ const MessageItem = ({
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
 
-  const discoveryMessage = messagesWithSameResponseId.find((msg) => checkIsDiscoveryMessage(msg));
+  const discoveryMessage = messagesWithSameResponseId.find((msg) => isDiscoveryQuestion(msg));
 
   const isDiscoveryMessage = !!discoveryMessage;
 
-  const isCurrentDiscoveryMessage = checkIsDiscoveryMessage(message);
+  const isCurrentDiscoveryMessage = isDiscoveryQuestion(message);
 
   const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
   const isAnalyticsEvent = !!analyticsEvent;
@@ -231,7 +230,9 @@ const MessageItem = ({
 
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =
-    hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'SUGGESTIONS';
+    lastMessageResponseId === message.response_id &&
+    hasSalesResponseCompleteAndIsArtifactMessage &&
+    message.message.artifact_type === 'SUGGESTIONS';
 
   // To show the media artifact for admin, the media artifact message must exist, and the current message must not be a discovery message
   const shouldShowMediaArtifactForAdmin = mediaArtifactMessage && !isCurrentDiscoveryMessage;

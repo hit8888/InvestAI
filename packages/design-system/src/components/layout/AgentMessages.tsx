@@ -7,7 +7,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
-import { shouldMessageScrollToTop } from '@meaku/core/utils/messageUtils';
+import { messagesGroupedByResponseIdAndTimestamp, shouldMessageScrollToTop } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   usingForAgent?: boolean;
@@ -83,6 +83,8 @@ const AgentMessages = ({
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
 
+  const messagesSortedByResponseIdAndTimestamp = messagesGroupedByResponseIdAndTimestamp(messages);
+
   return (
     <div
       className={cn('w-[35%] overflow-y-auto', {
@@ -100,7 +102,7 @@ const AgentMessages = ({
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
           })}
         >
-          {messages.map((message, idx) => {
+          {messagesSortedByResponseIdAndTimestamp.map((message, idx) => {
             return (
               <div key={idx}>
                 {shouldMessageScrollToTop(message) ? <div ref={currentMessageScrollToTop} className="p-0" /> : null}
@@ -112,7 +114,7 @@ const AgentMessages = ({
                   primaryColor={primaryColor}
                   message={message}
                   messageIndex={idx}
-                  totalMessages={messages.length}
+                  totalMessages={messagesSortedByResponseIdAndTimestamp.length}
                   orbState={orbState}
                   setActiveArtifact={setActiveArtifact}
                   setDemoPlayingStatus={setDemoPlayingStatus}
@@ -120,7 +122,7 @@ const AgentMessages = ({
                   allowFeedback={allowFeedback}
                   initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
                   lastMessageResponseId={lastMessageResponseId}
-                  messages={messages}
+                  messages={messagesSortedByResponseIdAndTimestamp}
                   orbLogoUrl={orbLogoUrl}
                   invertTextColor={invertTextColor}
                 />

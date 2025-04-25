@@ -26,6 +26,8 @@ const MAX_INACTIVITY_THRESHOLD = 600000; // 10 minutes
 const BACKOFF_FACTOR = 2;
 const MAX_INACTIVITY_ATTEMPTS = 2; // Maximum number of inactivity messages to send
 
+const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = ['USER_INACTIVE', 'FORM_FILLED', 'DISCOVERY_ANSWER'];
+
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
 
@@ -149,6 +151,9 @@ const useWebSocketChat = () => {
 
       //This is for event messages where the message_type is EVENT
       if ('event_type' in message && 'event_data' in message && !message.content) {
+        if (UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE.includes(message.event_type)) {
+          handleAddUserMessage(payload);
+        }
         sendMessage(JSON.stringify(payload));
         return;
       }

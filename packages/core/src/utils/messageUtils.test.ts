@@ -1,7 +1,7 @@
 import { AgentEventType, ArtifactMessageContent, WebSocketMessage } from '../types/webSocketData';
 import {
   checkIsArtifactMessage,
-  checkIsDiscoveryMessage,
+  isDiscoveryQuestion,
   checkIsEventMessage,
   checkIsMainResponseMessage,
   checkIsSalesResponseComplete,
@@ -71,6 +71,7 @@ describe('messageUtils', () => {
     it('should identify STREAM messages', () => {
       const streamMessage: WebSocketMessage = {
         ...baseMessage,
+        actor: 'SALES',
         message_type: 'STREAM',
         message: {
           content: 'test content',
@@ -290,6 +291,7 @@ describe('messageUtils', () => {
     it('should identify complete messages', () => {
       const completeMessage: WebSocketMessage = {
         ...baseMessage,
+        actor: 'SALES',
         message_type: 'STREAM',
         message: { content: 'test content', is_complete: true },
       };
@@ -873,21 +875,22 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('checkIsDiscoveryMessage', () => {
+  describe('isDiscoveryQuestion', () => {
     it('should return true for a discovery questions text message', () => {
       const message = {
         session_id: 'test-session',
         response_id: 'test-response',
         role: 'ai' as const,
         timestamp: new Date().toISOString(),
-        message_type: 'TEXT',
+        message_type: 'EVENT',
         actor: 'DISCOVERY_QUESTIONS',
         message: {
           content: 'Hello',
+          event_type: 'DISCOVERY_QUESTIONS',
         },
       } as WebSocketMessage;
 
-      const result = checkIsDiscoveryMessage(message);
+      const result = isDiscoveryQuestion(message);
       expect(result).toBe(true);
     });
 
@@ -903,7 +906,7 @@ describe('messageUtils', () => {
         },
       } as WebSocketMessage;
 
-      const result = checkIsDiscoveryMessage(message);
+      const result = isDiscoveryQuestion(message);
       expect(result).toBe(false);
     });
 
@@ -921,7 +924,7 @@ describe('messageUtils', () => {
         },
       } as WebSocketMessage;
 
-      const result = checkIsDiscoveryMessage(message);
+      const result = isDiscoveryQuestion(message);
       expect(result).toBe(false);
     });
   });

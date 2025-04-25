@@ -16,7 +16,6 @@ const useDemoConversation = () => {
     if (!lastMessage) return;
 
     const response = JSON.parse(lastMessage.data) as WebSocketMessage;
-    console.log({ response });
     setMessage(response);
   }, [lastMessage]);
 

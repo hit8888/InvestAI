@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
@@ -34,15 +34,21 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
   const prospectId = sessionApiResponseManager?.getProspectId() ?? '';
   const welcomeMessage = configurationApiResponseManager.getConfig().body.welcome_message.message;
-  const welcomeMessagePayload: WebSocketMessage = {
-    session_id: sessionId ?? '',
-    message: { content: welcomeMessage },
-    response_id: nanoid(),
-    is_admin: false,
-    message_type: 'TEXT',
-    role: 'ai' as 'user' | 'ai',
-    timestamp: new Date().toISOString(),
-  };
+
+  // Memoizing the welcome message payload to avoid re-rendering the welcome message payload when the sessionId changes
+  const welcomeMessagePayload: WebSocketMessage = useMemo(
+    () => ({
+      session_id: sessionId ?? '',
+      message: { content: welcomeMessage },
+      response_id: nanoid(),
+      is_admin: false,
+      message_type: 'TEXT',
+      role: 'ai' as 'user' | 'ai',
+      timestamp: new Date().toISOString(),
+    }),
+    [welcomeMessage],
+  );
+
   useEffect(() => {
     if (isReadOnly) {
       return;

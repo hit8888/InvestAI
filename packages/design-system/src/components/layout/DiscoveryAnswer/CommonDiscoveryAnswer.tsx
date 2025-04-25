@@ -21,7 +21,7 @@ const CommonDiscoveryAnswer = ({ question, responses, answerType }: IProps) => {
         return (
           <ul className="list-disc pl-5">
             {responses.map((response) => (
-              <li className="mb-2">
+              <li key={response} className="mb-2">
                 <span className="text-customPrimaryText">{response}</span>
               </li>
             ))}
