@@ -25,7 +25,7 @@ const CustomCheckboxItem = ({
   const getCheckboxContainer = () => {
     return (
       <div className="cursor-pointer">
-        <Checkbox checked={isChecked} onChange={() => handleCheckboxToggle(option.value)} />
+        <Checkbox haveBlackBackground={false} checked={isChecked} onChange={() => handleCheckboxToggle(option.value)} />
       </div>
     );
   };

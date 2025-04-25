@@ -15,7 +15,7 @@ export const convertServerConversationDataToClientConversationData = (
     timeline: response.timeline || '-',
     summary: response.summary || '-',
     country: response.country || '-',
-    buyer_intent_score: response.buyer_intent_score, // Need to Find Logic or Directly getting from api
+    buyer_intent_score: response.buyer_intent, // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
     user_message_count: `${response.user_message_count || 0}`,
     meeting_status: '-', // Static for now, can be dynamic if additional info is provided

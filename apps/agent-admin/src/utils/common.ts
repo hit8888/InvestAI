@@ -100,7 +100,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     authority: response.role || '-',
     need: response.need || '-',
     timeline: response.timeline || '-',
-    buyer_intent_score: response.buyer_intent_score ?? '-', // Need to Find Logic or Directly getting from api
+    buyer_intent_score: response.buyer_intent ?? '-', // Need to Find Logic or Directly getting from api
     bant_analysis: '-', // Need to Find Logic or Directly getting from api
     user_message_count: `${response.user_message_count || 0}`,
     meeting_status: '-', // Static for now, can be dynamic if additional info is provided
@@ -293,7 +293,7 @@ export const getSortingAppliedValues = (sortState: SortValues, page: string) => 
   }
   if (intentScoreSort) {
     sortApplied.push({
-      field: 'buyer_intent_score',
+      field: 'buyer_intent_score', // TODO: use buyer_intent
       order: intentScoreSort === SortByIntentScore.HIGHEST_FIRST ? 'desc' : 'asc',
     });
   }
@@ -330,7 +330,7 @@ export const getSortValuesFromSortItems = (sortItems: SortItem[]): SortValues =>
         sortValues.sessionLengthSort =
           item.order === 'desc' ? SortBySessionLength.LONG_FIRST : SortBySessionLength.SHORT_FIRST;
         break;
-      case 'buyer_intent_score':
+      case 'buyer_intent_score': // TODO: use buyer_intent
         sortValues.intentScoreSort =
           item.order === 'desc' ? SortByIntentScore.HIGHEST_FIRST : SortByIntentScore.LOWEST_FIRST;
         break;
@@ -367,7 +367,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const isLeadsPage = page === LEADS_PAGE;
   const {
     dateRange,
-    // intentScore,
+    intentScore,
     location,
     productOfInterest,
     // meetingBooked,
@@ -382,17 +382,16 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       operator: 'between',
     });
   }
-  // if(intentScore.length > 0) {
-  //   // Get the minimum score from selected intent levels
-  //   const minScore = Math.min(
-  //     ...intentScore.map(level => INTENT_SCORE_VALUES[level as keyof typeof INTENT_SCORE_VALUES])
-  //   );
-  //   filterApplied.push({
-  //     field: 'buyer_intent_score', // Field 'buyer_intent_score' expected a number but got 'lead'.
-  //     value: minScore,
-  //     operator: 'gte'
-  //   })
-  // }
+
+  if (intentScore.length > 0) {
+    // Get the minimum score from selected intent levels
+    filterApplied.push({
+      field: 'buyer_intent_score', // TODO: use buyer_intent
+      value: intentScore,
+      operator: 'in',
+    });
+  }
+
   if (location.length > 0) {
     filterApplied.push({
       field: 'country',

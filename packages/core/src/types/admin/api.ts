@@ -173,6 +173,7 @@ export const CompanyDetailsSchema = z.union([
 
 export const ConversationsResponseResultSchema = z.object({
   buyer_intent_score: z.number().nullable(),
+  buyer_intent: z.string().nullable(),
   session_id: z.string().nullable(),
   timestamp: z.string().nullable(), // ISO date-time string
   summary: z.string().nullable(),

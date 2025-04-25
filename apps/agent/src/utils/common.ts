@@ -5,10 +5,13 @@ import { StyleConfig } from '@meaku/core/types/api/session_init_response';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
+const STYLE_CONFIG_KEYS_NOT_TO_CONSIDER = ['banner_config', 'function', 'orb_config', 'entry_point_alignment'] as const;
 
-export const handleColorConfig = (styleConfig: Omit<StyleConfig, 'banner_config' | 'orb_config'>) => {
+type StyleConfigKeysToOmit = (typeof STYLE_CONFIG_KEYS_NOT_TO_CONSIDER)[number];
+
+export const handleColorConfig = (styleConfig: Omit<StyleConfig, StyleConfigKeysToOmit>) => {
   Object.entries(styleConfig)
-    .filter(([key]) => !['banner_config', 'function', 'orb_config'].includes(key))
+    .filter(([key]) => !STYLE_CONFIG_KEYS_NOT_TO_CONSIDER.includes(key as StyleConfigKeysToOmit))
     .forEach(([key, hexValue]) => {
       const formattedKey = key.replace(/_/g, '-');
 

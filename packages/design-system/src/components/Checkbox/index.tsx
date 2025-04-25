@@ -11,10 +11,11 @@ interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof CheckboxPr
    * Defaults to false.
    */
   isCircularCheckbox?: boolean;
+  haveBlackBackground?: boolean;
 }
 
 const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
-  ({ className, isCircularCheckbox = false, ...props }, ref) => (
+  ({ className, haveBlackBackground = true, isCircularCheckbox = false, ...props }, ref) => (
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
@@ -32,7 +33,8 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
         })}
       >
         <Check
-          className={cn('h-3 w-3 rounded-sm bg-gray-900', {
+          className={cn('h-3 w-3 rounded-sm', {
+            'bg-gray-900': haveBlackBackground,
             'bg-inherit stroke-gray-600': isCircularCheckbox, // Filled checkmark with stroke
           })}
           strokeWidth={4}

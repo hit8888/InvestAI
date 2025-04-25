@@ -5,6 +5,7 @@ import SummaryListChildrenItem from './SummaryListChildrenItem';
 import { Link } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
 import { getStringWithBothCommaAND } from '../../utils/common';
+import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
@@ -14,7 +15,12 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
 
   const getSummaryListValueContent = (listValue: string | number | BANTItem[]) => {
     if (isIntentScore) {
-      return <SummaryValueForIntentScore score={listValue as number} />;
+      const isValueNumerical = !isNaN(Number(listValue)) && listValue !== '';
+      return isValueNumerical ? (
+        <SummaryValueForIntentScore score={Number(listValue)} />
+      ) : (
+        <BuyerIntentCellValue value={listValue as string} />
+      );
     }
     if (isEntryPoint) {
       return (
