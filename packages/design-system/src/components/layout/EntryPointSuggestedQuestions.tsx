@@ -4,6 +4,8 @@ import { Suggestion } from '@breakout/design-system/components/layout/Suggestion
 import { suggestionContainerAnimation, getSuggestionItemAnimation } from '@meaku/core/utils/entryPointAnimation';
 import { SuggestedQuestionsShowingInCycle } from './SuggestedQuestionsShowingInCycle';
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 
 type EntryPointSuggestedQuestionsProps = {
   showSuggestedQuestions: boolean;
@@ -20,9 +22,15 @@ const EntryPointSuggestedQuestions = ({
   showOneByOne = false,
   questionAlignment = EntryPointAlignment.LEFT,
 }: EntryPointSuggestedQuestionsProps) => {
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
   const isQuestionAlignmentRight = questionAlignment === EntryPointAlignment.RIGHT;
   const isQuestionAlignmentLeft = questionAlignment === EntryPointAlignment.LEFT;
   const isQuestionAlignmentCenter = questionAlignment === EntryPointAlignment.CENTER;
+
+  const handleSuggestedQuestionOnClickAndTrack = (question: string) => {
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.ENTRY_CLICKED_FIRST_TIME, { isAgentOpen: false });
+    handleSuggestedQuestionOnClick(question);
+  };
 
   return (
     <div
@@ -50,7 +58,7 @@ const EntryPointSuggestedQuestions = ({
               <SuggestedQuestionsShowingInCycle
                 questions={initialSuggestedQuestions}
                 showQuestions={showSuggestedQuestions}
-                onQuestionClick={handleSuggestedQuestionOnClick}
+                onQuestionClick={handleSuggestedQuestionOnClickAndTrack}
                 questionAlignment={questionAlignment}
               />
             ) : (
@@ -62,7 +70,7 @@ const EntryPointSuggestedQuestions = ({
                 >
                   <Suggestion
                     question={question}
-                    onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+                    onSuggestedQuestionOnClick={handleSuggestedQuestionOnClickAndTrack}
                     itemIndex={index}
                     isEntryPointQuestion={true}
                   />

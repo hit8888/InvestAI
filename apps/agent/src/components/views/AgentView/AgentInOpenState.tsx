@@ -12,6 +12,8 @@ import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketDat
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import useLatestMessageComplete from '../../../hooks/useLatestMessageComplete.ts';
+import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
+import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -23,6 +25,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
   useExpandWidthOnDemoFrame(demoDetails);
   useSetArtifactOnNewMessage();
+
+  const isAdmin = useIsAdmin();
 
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
@@ -37,6 +41,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
 
+  const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   const configurationApiResponseManager = useConfigurationApiResponseManager();
 
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
@@ -78,6 +83,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
           isHidden={hideAgentHeader}
           isCollapsible={isCollapsible}
           ctaConfig={ctaConfig}
+          showFeedbackHeader={isAdmin}
+          setActiveArtifact={setActiveArtifact}
         />
         <div
           className={cn('flex h-full w-full flex-1 overflow-hidden', {

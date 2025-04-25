@@ -4,18 +4,28 @@ import { useMemo } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
-
+import FeedbackHeader from './FeedbackHeader';
 interface IProps {
   handleSendMessage: (message: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleCloseAgent?: () => void;
   isHidden?: boolean;
   ctaConfig?: CTAConfigType;
   isCollapsible: boolean;
+  setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
+  showFeedbackHeader: boolean;
 }
 
-const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig, isCollapsible }: IProps) => {
+const AgentHeader = ({
+  handleSendMessage,
+  handleCloseAgent,
+  isHidden,
+  ctaConfig,
+  isCollapsible,
+  setActiveArtifact,
+  showFeedbackHeader,
+}: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
 
@@ -83,6 +93,7 @@ const AgentHeader = ({ handleSendMessage, handleCloseAgent, isHidden, ctaConfig,
             <XIcon className="text-system" />
           </Button>
         )}
+        {showFeedbackHeader ? <FeedbackHeader setActiveArtifact={setActiveArtifact} /> : null}
       </div>
     </div>
   );

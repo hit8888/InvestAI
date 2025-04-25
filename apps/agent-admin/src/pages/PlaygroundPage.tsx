@@ -13,16 +13,15 @@ const PlaygroundPage = () => {
 
   return (
     <div className="w-full">
-      <div className="flex flex-col items-start gap-6 self-stretch">
+      <div className="flex flex-col items-start gap-1 self-stretch">
         <CustomPageHeader
           headerTitle="Playground"
           headerIcon={<PanelPlaygroundActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
-        <div className="flex h-[80vh] flex-col items-start gap-4 self-stretch rounded-2xl border border-primary/10 p-4">
+        <div className="flex h-[80vh] flex-col items-start gap-4 self-stretch">
           <div id="embedded-breakout-agent" className="relative h-full w-full"></div>
         </div>
       </div>
-      <div></div>
     </div>
   );
 };

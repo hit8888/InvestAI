@@ -12,6 +12,8 @@ import useDynamicPlaceholder from '../../../../hooks/useDynamicPlaceholder';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '@breakout/design-system/lib/cn';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   showOrbAfterBubblesDisappear: boolean;
@@ -26,6 +28,7 @@ const EntryPointContentForBottomCenter = ({
   handleSendUserMessage,
   handleSuggestedQuestionOnClick,
 }: IProps) => {
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
   const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
@@ -42,6 +45,7 @@ const EntryPointContentForBottomCenter = ({
     const trimmedInputValue = inputValue.trim();
     if (trimmedInputValue.length <= 0) return;
     handleSendUserMessage({ message: { content: trimmedInputValue }, message_type: 'TEXT' });
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.ENTRY_CLICKED_FIRST_TIME, { isAgentOpen: false });
     setInputValue('');
   };
 
