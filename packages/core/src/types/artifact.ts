@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM']);
+export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM', 'CALENDAR']);
 
 export enum ArtifactEnum {
   SLIDE = 'SLIDE',
@@ -9,6 +9,7 @@ export enum ArtifactEnum {
   NONE = 'NONE',
   SUGGESTIONS = 'SUGGESTIONS',
   FORM = 'FORM',
+  CALENDAR = 'CALENDAR',
 }
 
 export enum ArtifactPreviewEnum {
@@ -83,6 +84,23 @@ export type FormArtifactContent = z.infer<typeof FormArtifactSchema>;
 
 export type SuggestionArtifactContent = z.infer<typeof SuggestionArtifactSchema>;
 
-export type MediaArtifactContent = SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent;
+export enum CalendarTypeEnum {
+  CALENDLY = 'CALENDLY',
+  CAL_COM = 'CAL_COM',
+}
+
+export const CalendarArtifactSchema = z.object({
+  calendar_url: z.string(),
+  calendar_type: z.nativeEnum(CalendarTypeEnum),
+  prefill_data: z.record(z.string(), z.any()).optional(),
+});
+
+export type CalendarArtifactContent = z.infer<typeof CalendarArtifactSchema>;
+
+export type MediaArtifactContent =
+  | SlideImageArtifactContent
+  | SlideArtifactContent
+  | VideoArtifactContent
+  | CalendarArtifactContent;
 
 export type ArtifactContent = MediaArtifactContent | FormArtifactContent | SuggestionArtifactContent;

@@ -1,11 +1,13 @@
 import {
   ArtifactContent,
+  CalendarArtifactContent,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
 } from '@meaku/core/types/artifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
+import { CalendarArtifact } from './CalendarArtifact';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface Props {
@@ -64,6 +66,13 @@ export const ArtifactContentUi = ({
           setIsArtifactPlaying={setIsArtifactPlaying}
           handleSendUserMessage={handleSendUserMessage}
           isMediaTakingFullWidth={isMediaTakingFullWidth}
+        />
+      );
+    case 'CALENDAR':
+      return (
+        <CalendarArtifact
+          key={(artifactContent as CalendarArtifactContent).calendar_url}
+          calendarContent={artifactContent as CalendarArtifactContent}
         />
       );
     default:

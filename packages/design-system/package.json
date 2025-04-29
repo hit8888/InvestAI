@@ -61,6 +61,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@hookform/resolvers": "^3.9.1",
@@ -89,6 +90,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.469.0",
     "nanoid": "^5.0.7",
+    "react-calendly": "^4.3.1",
     "react-day-picker": "8.10.1",
     "react-hook-form": "^7.53.2",
     "react-hot-toast": "^2.4.1",
