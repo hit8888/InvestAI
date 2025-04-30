@@ -3,7 +3,6 @@ export interface OptionType {
   value?: string;
   placeholder?: string;
 }
-
 export interface EventData {
   question: string;
   responses: OptionType[];

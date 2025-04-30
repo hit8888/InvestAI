@@ -13,7 +13,8 @@ class ConversationDetailsDataResponseManager {
   private convDetailsData: ConversationDetailsDataResponse;
 
   constructor(response: ConversationDetailsDataResponse) {
-    const validatedDetailsData = this.validateDetailsData(response);
+    const transformedResponse = this.getTransformedResponse(response);
+    const validatedDetailsData = this.validateDetailsData(transformedResponse);
     this.convDetailsData = validatedDetailsData;
   }
 
@@ -29,6 +30,28 @@ class ConversationDetailsDataResponseManager {
     }
 
     return validateDetailsData.data;
+  }
+
+  private getTransformedResponse(response: ConversationDetailsDataResponse) {
+    return { ...response, chat_history: response.chat_history.map((message) => this.transformMessage(message)) };
+  }
+
+  private transformMessage(message: WebSocketMessage) {
+    // Create a deep copy of the message
+    const transformedMessage = JSON.parse(JSON.stringify(message));
+
+    // Check if it's an EVENT message with DISCOVERY_QUESTIONS
+    if (
+      transformedMessage.message_type === 'EVENT' &&
+      transformedMessage.message?.event_type === 'DISCOVERY_QUESTIONS' &&
+      transformedMessage.message?.event_data?.response_options
+    ) {
+      // Filter out empty strings from response_options
+      transformedMessage.message.event_data.response_options =
+        transformedMessage.message.event_data.response_options.filter((option: string) => option !== '');
+    }
+
+    return transformedMessage;
   }
 
   getFormattedChatHistory(): WebSocketMessage[] {

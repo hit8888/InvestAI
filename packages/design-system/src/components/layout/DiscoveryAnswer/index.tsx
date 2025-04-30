@@ -2,7 +2,12 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import CommonDiscoveryAnswer from './CommonDiscoveryAnswer';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
-export const DiscoveryAnswer = ({ message }: { message: WebSocketMessage }) => {
+type DiscoveryAnswerProps = {
+  message: WebSocketMessage;
+  usingForAgent: boolean;
+};
+
+export const DiscoveryAnswer = ({ message, usingForAgent }: DiscoveryAnswerProps) => {
   if (
     !message.message ||
     message.message_type !== 'EVENT' ||
@@ -19,5 +24,13 @@ export const DiscoveryAnswer = ({ message }: { message: WebSocketMessage }) => {
   const isMultiSelect = responses?.length > 1;
   const answerType = isMultiSelect ? MULTI_SELECT : SINGLE_SELECT;
 
-  return <CommonDiscoveryAnswer question={question} responses={responses} answerType={answerType} />;
+  return (
+    <CommonDiscoveryAnswer
+      timestamp={message.timestamp}
+      usingForAgent={usingForAgent}
+      question={question}
+      responses={responses}
+      answerType={answerType}
+    />
+  );
 };

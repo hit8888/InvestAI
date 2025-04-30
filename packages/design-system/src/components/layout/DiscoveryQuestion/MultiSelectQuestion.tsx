@@ -5,15 +5,20 @@ import { MultiSelectResponseOption } from './MultiSelectResponseItem';
 import Button from '../../Button';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
+type MultiSelectQuestionProps = {
+  question: string;
+  response_options: OptionType[];
+  onSubmit: (option: OptionType[]) => void;
+  timestamp: string;
+  usingForAgent: boolean;
+};
 export const MultiSelectQuestion = ({
   question,
   response_options,
   onSubmit,
-}: {
-  question: string;
-  response_options: OptionType[];
-  onSubmit: (option: OptionType[]) => void;
-}) => {
+  timestamp,
+  usingForAgent,
+}: MultiSelectQuestionProps) => {
   const [selectedOptions, setSelectedOptions] = useState<Array<OptionType>>([]);
   const [inputTexts, setInputTexts] = useState<Record<number, OptionType>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -49,6 +54,8 @@ export const MultiSelectQuestion = ({
   if (submitted && responses && responses.length > 0) {
     return (
       <CommonDiscoveryAnswer
+        timestamp={timestamp}
+        usingForAgent={usingForAgent}
         question={question}
         responses={responses}
         answerType={DISCOVERY_QUESTION_ANSWER_TYPE.MULTI_SELECT}

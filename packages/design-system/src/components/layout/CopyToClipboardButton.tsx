@@ -1,4 +1,4 @@
-import Button from '../Button';
+import Button, { ButtonVariantTypes } from '../Button';
 import { cn } from '../../lib/cn';
 import ClipboardCopyIcon from '../icons/ClipboardCopyIcon';
 import { CheckIcon } from 'lucide-react';
@@ -10,6 +10,7 @@ type IProps = {
   handleCopy?: () => void;
   copyIconClassname?: string;
   btnClassName?: string;
+  btnVariant?: ButtonVariantTypes;
 };
 
 const CopyToClipboardButton = ({
@@ -18,6 +19,7 @@ const CopyToClipboardButton = ({
   handleCopy,
   copyIconClassname,
   btnClassName,
+  btnVariant = 'system_tertiary',
 }: IProps) => {
   const { isCopied, copy } = useCopyToClipboard(textToCopy, {
     toastMessage,
@@ -31,7 +33,7 @@ const CopyToClipboardButton = ({
         copy();
       }}
       buttonStyle="icon"
-      variant="system_tertiary"
+      variant={btnVariant}
       className={cn('rounded-md bg-primary-foreground/70 p-0', btnClassName)}
     >
       {isCopied ? (

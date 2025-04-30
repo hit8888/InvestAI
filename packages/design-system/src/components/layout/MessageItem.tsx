@@ -276,7 +276,7 @@ const MessageItem = ({
         {isDiscoveryAnswer(message) && (
           <div className="my-5 flex flex-row items-end gap-4 pt-4">
             <div className="pl-7"></div>
-            <DiscoveryAnswer message={message} />
+            <DiscoveryAnswer message={message} usingForAgent={usingForAgent} />
           </div>
         )}
 

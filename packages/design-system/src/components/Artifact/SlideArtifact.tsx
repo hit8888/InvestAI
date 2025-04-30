@@ -13,7 +13,7 @@ interface IProps {
   onItemClick: (title: string) => void;
 }
 
-const SlideArtifact = ({ artifact: { items, sub_title }, logoURL, onItemClick }: IProps) => {
+const SlideArtifact = ({ artifact: { items, sub_title, title }, logoURL, onItemClick }: IProps) => {
   const { containerRef, scale } = useSlideArtifactScaleSystem();
   return (
     <AspectRatio ratio={16 / 9}>
@@ -32,8 +32,8 @@ const SlideArtifact = ({ artifact: { items, sub_title }, logoURL, onItemClick }:
           >
             <div className="relative flex h-full w-full flex-col p-5 pt-8">
               <SlideHeader logoUrl={logoURL} />
-              <div className="flex h-full w-full ">
-                {sub_title && <SlideSubTitle text={sub_title} />}
+              <div className="flex h-full w-full items-center justify-center ">
+                {(sub_title || title) && <SlideSubTitle text={sub_title || title} />}
                 <div className="h-full w-2/3">
                   <SlideItems items={items} onItemClick={onItemClick} />
                 </div>

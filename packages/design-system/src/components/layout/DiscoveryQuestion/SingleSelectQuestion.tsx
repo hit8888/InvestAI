@@ -3,15 +3,21 @@ import { OptionType } from './types';
 import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 
+type SingleSelectQuestionProps = {
+  question: string;
+  response_options: OptionType[];
+  onSelect: (option: OptionType) => void;
+  timestamp: string;
+  usingForAgent: boolean;
+};
+
 export const SingleSelectQuestion = ({
   question,
   response_options,
   onSelect,
-}: {
-  question: string;
-  response_options: OptionType[];
-  onSelect: (option: OptionType) => void;
-}) => {
+  timestamp,
+  usingForAgent,
+}: SingleSelectQuestionProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [response, setResponse] = useState<string | undefined>(undefined);
 
@@ -24,6 +30,8 @@ export const SingleSelectQuestion = ({
   if (submitted && response) {
     return (
       <CommonDiscoveryAnswer
+        timestamp={timestamp}
+        usingForAgent={usingForAgent}
         question={question}
         responses={[response]}
         answerType={DISCOVERY_QUESTION_ANSWER_TYPE.SINGLE_SELECT}
@@ -36,7 +44,7 @@ export const SingleSelectQuestion = ({
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
-        {response_options.map((option) => (
+        {response_options.map((option: OptionType) => (
           <SingleSelectOption key={option.value} option={option} onSelect={handleSelect} />
         ))}
       </div>

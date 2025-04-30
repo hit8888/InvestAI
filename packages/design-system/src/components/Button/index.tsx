@@ -3,6 +3,22 @@ import React from 'react';
 import { cn } from '../../lib/cn';
 import './index.css';
 
+export type ButtonVariantTypes =
+  | 'system_tertiary'
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'destructive'
+  | 'destructive_secondary'
+  | 'destructive_tertiary'
+  | 'system'
+  | 'system_secondary'
+  | 'inverted_primary'
+  | 'inverted_secondary'
+  | 'inverted_tertiary'
+  | null
+  | undefined;
+
 export const buttonVariants = cva(
   'rounded-md flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed',
   {

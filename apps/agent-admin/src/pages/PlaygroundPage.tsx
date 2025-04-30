@@ -18,8 +18,11 @@ const PlaygroundPage = () => {
           headerTitle="Playground"
           headerIcon={<PanelPlaygroundActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
-        <div className="-mt-5 h-[80vh] self-stretch">
-          <div id="embedded-breakout-agent" className="h-full w-full"></div>
+        <div className="h-[88vh] self-stretch">
+          <div
+            id="embedded-breakout-agent"
+            className="relative flex h-full w-full flex-col items-start justify-start"
+          ></div>
         </div>
       </div>
     </div>

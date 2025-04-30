@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
-import { ChipWithIcon } from '@breakout/design-system/components/ChipWithIcon';
+import ChipWithIcon from '@breakout/design-system/components/ChipWithIcon/ChipWithIcon';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import JoinConversationDrawer from './JoinConversationDrawer';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';

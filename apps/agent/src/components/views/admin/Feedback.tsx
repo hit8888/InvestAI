@@ -32,7 +32,7 @@ const Feedback = () => {
   return (
     <Backdrop
       landingPageUrl={page_url}
-      className="relative mt-6 flex h-screen flex-col items-center justify-start font-inter"
+      className="relative flex h-screen flex-col items-center justify-center font-inter"
     >
       <div className="flex h-[95vh] w-[98vw]">
         <AgentInOpenState handleSendMessage={handleSendMessage} isCollapsible={true} />

@@ -9,8 +9,13 @@ const Dashboard = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const organizationsList = userInfo?.organizations;
+  // Regex pattern to match the first word character (letter, number, or underscore)
+  const firstCharRegex = /^\w/;
   const organizationsOptions = organizationsList
-    ?.map((item) => item?.name)
+    // Convert to lowercase and capitalize first letter
+    // ^\w matches the first word character at the start of the string
+    // The replacement function converts that character to uppercase
+    ?.map((item) => item?.name?.toLowerCase().replace(firstCharRegex, (c) => c.toUpperCase()))
     .filter((name): name is string => !!name)
     .sort() || [''];
 

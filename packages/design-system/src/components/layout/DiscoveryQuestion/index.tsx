@@ -14,7 +14,7 @@ interface IProps {
   message: WebSocketMessage;
   isLastMessage?: boolean;
   onSubmit: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
-  usingForAgent?: boolean;
+  usingForAgent: boolean;
 }
 
 export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit, usingForAgent }: IProps) {
@@ -63,7 +63,6 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
     };
 
     sendEvent(eventData);
-
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.SINGLE_SELECT_DISCOVERY_QUESTION_SUBMIT, eventData);
   };
 
@@ -74,7 +73,6 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
     };
 
     sendEvent(eventData);
-
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.MULTI_SELECT_DISCOVERY_QUESTION_SUBMIT, eventData);
   };
 
@@ -103,6 +101,8 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
       case SINGLE_SELECT:
         content = (
           <SingleSelectQuestion
+            timestamp={message.timestamp}
+            usingForAgent={usingForAgent}
             question={question}
             response_options={response_options}
             onSelect={(option) => handleSingleSelectSubmit(question, option)}
@@ -112,6 +112,8 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
       case MULTI_SELECT:
         content = (
           <MultiSelectQuestion
+            timestamp={message.timestamp}
+            usingForAgent={usingForAgent}
             question={question}
             response_options={response_options}
             onSubmit={(responses) => handleMultiSelectSubmit(question, responses)}
