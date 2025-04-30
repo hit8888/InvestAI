@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   ArtifactEnumSchema,
+  CalendarArtifactSchema,
   FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
@@ -65,6 +66,7 @@ export const ArtifactMessageContentSchema = BaseMessageContentSchema.extend({
         SlideImageArtifactSchema,
         SuggestionArtifactSchema,
         FormArtifactSchema,
+        CalendarArtifactSchema,
       ])
       .nullable(),
     metadata: FormArtifactMetadata,

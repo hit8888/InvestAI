@@ -189,7 +189,7 @@ export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMes
   }
 };
 
-const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
+const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'CALENDAR'] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 
 export const isMediaArtifact = (type: string): type is SupportedArtifactType => {
