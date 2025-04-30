@@ -56,7 +56,7 @@ jobs:
       # Type Check for changed files
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v42
+        uses: tj-actions/changed-files@v46
         with:
           files: |
             apps/**/*.{ts,tsx}
