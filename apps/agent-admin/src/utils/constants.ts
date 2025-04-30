@@ -16,8 +16,8 @@ import SummaryProductOfInterestIcon from '@breakout/design-system/components/ico
 import SummaryIntentScoreIcon from '@breakout/design-system/components/icons/summary-intentscore-icon';
 import SummaryLengthOfConvIcon from '@breakout/design-system/components/icons/summary-lengthofconv-icon';
 import SummaryIpAddressIcon from '@breakout/design-system/components/icons/summary-ipaddress-icon';
-import ProspectNameIcon from '@breakout/design-system/components/icons/prospect-name-icon';
-import ProspectEmailIcon from '@breakout/design-system/components/icons/prospect-email-icon';
+import ProspectNameIcon from '@breakout/design-system/components/icons/person-icon';
+import ProspectEmailIcon from '@breakout/design-system/components/icons/email-icon';
 import LocationSmallIcon from '@breakout/design-system/components/icons/location-icon';
 import CompanyNameIcon from '@breakout/design-system/components/icons/company-name-icon';
 import CompanyDomainIcon from '@breakout/design-system/components/icons/company-domain-icon';
@@ -477,6 +477,8 @@ export const COMPANY_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
     ItemIcon: CompanyFoundationDate,
   },
 ];
+
+export const CHAT_SUMMARY_TRIM_LENGTH = 100;
 
 // FRAMER MOTION PROPS
 

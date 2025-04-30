@@ -32,7 +32,10 @@ export interface ActiveConversation {
     email: string;
     country: string;
     company_demographics: {
+      company_revenue: string;
+      employee_count: number;
       company_logo_url: string;
+      website_url: string;
     };
   };
 }

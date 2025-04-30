@@ -14,7 +14,7 @@ const buyerIntentClasses: Record<BuyerIntent, string> = {
 
 const BuyerIntentChip = ({ buyerIntent }: { buyerIntent: BuyerIntent }) => {
   return (
-    <div className={`rounded-full px-3 py-1 text-sm font-medium ${buyerIntentClasses[buyerIntent]}`}>
+    <div className={`inline-block rounded-full px-3 py-1 text-sm font-medium ${buyerIntentClasses[buyerIntent]}`}>
       {buyerIntentText[buyerIntent]}
     </div>
   );

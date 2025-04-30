@@ -2,17 +2,12 @@ import { useState } from 'react';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import { ChipWithIcon } from '@breakout/design-system/components/ChipWithIcon';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
-// import ConversationBasicAndBuyerIntentLabelContainer from './ConversationBasicAndBuyerIntentLabelContainer';
-// import ConversationSessionDetailsContainer from './ConversationSessionDetailsContainer';
-// import ConversationUserLastInputContainer from './ConversationUserLastInputContainer';
-import JoinConversationDrawerContainerFlow from './JoinConversationDrawerContainerFlow';
+import JoinConversationDrawer from './JoinConversationDrawer';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
-import { useAuth } from '../../context/AuthProvider';
 import BuyerIntentChip from './BuyerIntentChip';
 
 const ActiveConversationCard = ({ conversation }: { conversation: ActiveConversation }) => {
   const {
-    session_id,
     company,
     lastMessage,
     buyerIntent,
@@ -23,24 +18,19 @@ const ActiveConversationCard = ({ conversation }: { conversation: ActiveConversa
     },
   } = conversation;
 
-  const [isOpen, setIsOpen] = useState(false);
-  const { setHasJoinedConversation, setAdminDisplayName } = useJoinConversationStore();
-  const { userInfo } = useAuth();
-  const adminName = userInfo?.username || '';
+  const [openJoinConversationDrawer, setOpenJoinConversationDrawer] = useState(false);
+  const { setHasJoinedConversation } = useJoinConversationStore();
   const countryFlagUrl = country ? findFlagUrlByCountryName(country) : '';
 
   const handleOpenJoinConversationDrawer = () => {
-    setIsOpen(true);
-    setAdminDisplayName(adminName);
+    setOpenJoinConversationDrawer(true);
   };
 
   const handleCloseJoinConversationDrawer = () => {
-    setIsOpen(false);
+    setOpenJoinConversationDrawer(false);
     setHasJoinedConversation(false);
-    setAdminDisplayName('');
   };
 
-  // const openJoinConversationDrawer = isOpen && isActive;
   return (
     <>
       <div
@@ -67,33 +57,10 @@ const ActiveConversationCard = ({ conversation }: { conversation: ActiveConversa
           </div>
         </div>
       </div>
-      {/* <div
-        className="active-conversation-card-shadow flex min-h-27 flex-1 cursor-pointer flex-col items-start gap-4 rounded-3xl border border-primary/10 bg-white p-4 
-        transition-all duration-300 hover:scale-[102%] hover:shadow-lg hover:shadow-primary/20 hover:ring-2 hover:ring-primary/60"
-        onClick={handleOpenJoinConversationDrawer}
-      >
-        <div className="flex flex-col items-start justify-center gap-4 self-stretch">
-          <ConversationBasicAndBuyerIntentLabelContainer
-            companyLogoUrl={company_logo_url}
-            companyName={company_name}
-            userName={name}
-            buyerIntentLabel={'high'}
-          />
-          <ConversationSessionDetailsContainer sessionDuration={duration} messageCount={messageCount} />
-        </div>
-        <ConversationUserLastInputContainer
-          isTyping={isTyping}
-          isActive={isActive}
-          timePassedAfterInactive={timePassedAfterInactive}
-          userLastInput={lastInput}
-        />
-      </div> */}
-      <JoinConversationDrawerContainerFlow
-        sessionId={session_id}
-        buyerIntentLabel={'high'}
-        // isOpen={openJoinConversationDrawer}
-        isOpen={isOpen}
-        handleCloseJoinConversationDrawer={handleCloseJoinConversationDrawer}
+      <JoinConversationDrawer
+        conversation={conversation}
+        isOpen={openJoinConversationDrawer}
+        onClose={handleCloseJoinConversationDrawer}
       />
     </>
   );

@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const ProspectEmailIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const EmailIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
@@ -22,4 +22,4 @@ const ProspectEmailIcon = ({ className = 'text-primary', width, height, color, v
   );
 };
 
-export default ProspectEmailIcon;
+export default EmailIcon;
