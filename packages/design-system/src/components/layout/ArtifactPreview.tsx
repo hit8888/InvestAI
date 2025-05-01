@@ -6,12 +6,14 @@ import CustomVideoPlayer from './CustomVideoPlayer.tsx';
 import {
   ArtifactEnum,
   ArtifactPreviewEnum,
+  FormArtifactContent,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
+import ArrowRight from '../icons/ArrowRight.tsx';
 
 interface IProps {
   usingForAgent: boolean;
@@ -21,7 +23,7 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   title?: string;
-  artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent;
+  artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent | FormArtifactContent;
   isError?: boolean;
   isFetching?: boolean;
 }
@@ -68,6 +70,9 @@ const ArtifactPreview = ({
   }
 
   const showArtifactPreviewButtonDisplay = () => {
+    if (artifactType === 'FORM') {
+      return <QualificationQuestionFormPreview handleClick={handleArtifactOnClick} />;
+    }
     return (
       <CommonArtifactPreview
         title={title}
@@ -93,6 +98,21 @@ const ArtifactPreview = ({
         {isVideoDialogOpen ? <div className="h-full w-full rounded-lg">{getVideoPlayerContent()}</div> : null}
       </DialogContent>
     </Dialog>
+  );
+};
+
+const QualificationQuestionFormPreview = ({ handleClick }: { handleClick: () => void }) => {
+  return (
+    <div
+      tabIndex={0}
+      onClick={handleClick}
+      className="flex w-full max-w-[424px] cursor-pointer items-center justify-between gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 ring-system hover:bg-transparent_gray_6"
+    >
+      <p className="pl-2 text-base font-semibold text-customPrimaryText">Additional Information</p>
+      <div className="flex items-center justify-center rounded-lg border border-gray-600 p-2">
+        <ArrowRight className="text-gray-600" width="16" height="16" />
+      </div>
+    </div>
   );
 };
 

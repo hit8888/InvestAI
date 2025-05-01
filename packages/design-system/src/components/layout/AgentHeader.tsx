@@ -7,7 +7,10 @@ import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import FeedbackHeader from './FeedbackHeader';
+import { checkIfCTAButtonDisabled } from '@meaku/core/utils/messageUtils';
+
 interface IProps {
+  messages: WebSocketMessage[];
   handleSendMessage: (message: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleCloseAgent?: () => void;
   isHidden?: boolean;
@@ -19,6 +22,7 @@ interface IProps {
 
 const AgentHeader = ({
   handleSendMessage,
+  messages,
   handleCloseAgent,
   isHidden,
   ctaConfig,
@@ -28,6 +32,8 @@ const AgentHeader = ({
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
+
+  const isCTAButtonDisabled = checkIfCTAButtonDisabled(messages);
 
   const ctaText = useMemo(() => {
     if (ctaConfig?.text) {
@@ -72,6 +78,7 @@ const AgentHeader = ({
           variant={invertTextColor ? 'inverted_primary' : 'primary'}
           onClick={handlePrimaryCta}
           data-testid="contact-sales-btn"
+          disabled={isCTAButtonDisabled}
         >
           {ctaText}
         </Button>

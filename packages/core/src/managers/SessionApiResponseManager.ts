@@ -9,7 +9,10 @@ export class SessionApiResponseManager {
   constructor(response: SessionApiResponse) {
     const validatedSession = SessionSchema.safeParse(response);
     if (!validatedSession.success) {
-      console.error('Invalid session response:', validatedSession.error.errors);
+      // console.error('Validation failed for SessionApiResponseManager:', {
+      //   input: response,
+      //   errors: validatedSession.error,
+      // });
       trackError(validatedSession.error.errors, {
         component: 'SessionApiResponseManager',
         action: 'constructor',

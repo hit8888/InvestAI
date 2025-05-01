@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomFilterDropdown from './CustomFilterDropdown';
+import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/CustomFilterDropdown';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import NavigationArrowButton from './NavigationArrowButton';

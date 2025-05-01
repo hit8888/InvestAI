@@ -10,7 +10,7 @@ import {
   StreamMessageContent,
   WebSocketMessage,
 } from '../types/webSocketData';
-import { FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
+import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
 
 export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
@@ -61,6 +61,14 @@ export const isTextMessage = (
 export const isPrimaryGoalCompletedMessage = (message: WebSocketMessage): boolean => {
   return (
     message.role === 'ai' && message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_COMPLETED'
+  );
+};
+
+export const isPrimaryGoalCTAClickedMessage = (message: WebSocketMessage): boolean => {
+  return (
+    message.role === 'user' &&
+    message.message_type === 'EVENT' &&
+    message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED'
   );
 };
 
@@ -188,8 +196,9 @@ export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMes
     return true; // For other matching types, no additional checks needed
   }
 };
-
-const SUPPORTED_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'CALENDAR'] as const;
+export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
+export const MEDIA_ARTIFACT_PREVIEW_TYPES = [...BASE_ARTIFACT_TYPES, 'FORM'] as const;
+export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES, 'CALENDAR'] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 
 export const isMediaArtifact = (type: string): type is SupportedArtifactType => {
@@ -237,8 +246,12 @@ export const getAnalyticsEvent = (messagesWithSameResponseId: WebSocketMessage[]
 export const getFormFilledEvent = (
   messages: WebSocketMessage[],
   formArtifactMessage:
-    | (WebSocketMessage & { message: ArtifactMessageContent & { artifact_data: FormArtifactContent } })
-    | undefined,
+    | (WebSocketMessage & {
+        message: ArtifactMessageContent & { artifact_data: ArtifactContent | FormArtifactContent };
+      })
+    | undefined
+    | null,
+  eventType: 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED',
 ) => {
   if (!formArtifactMessage) {
     return undefined;
@@ -252,9 +265,11 @@ export const getFormFilledEvent = (
       };
     } =>
       checkIsEventMessage(msg) &&
-      msg.message.event_type === 'FORM_FILLED' &&
+      msg.message.event_type === eventType &&
       'event_data' in msg.message &&
-      formArtifactMessage.message.artifact_data.artifact_id === msg.message.event_data.artifact_id,
+      formArtifactMessage.message.artifact_data.artifact_id === msg.message.event_data.artifact_id &&
+      ((eventType === 'FORM_FILLED' && 'form_data' in msg.message.event_data) ||
+        (eventType === 'QUALIFICATION_FORM_FILLED' && 'qualification_responses' in msg.message.event_data)),
   );
 };
 
@@ -296,13 +311,24 @@ export const hasMessagesMatchingIds = (msg1: WebSocketMessage, msg2: WebSocketMe
 };
 
 // Check if the artifact message is a form
-export const isFormArtifact = (message: WebSocketMessage): boolean => {
+export const checkIsFormArtifactBase = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & { message: ArtifactMessageContent } => {
   return (
     checkIsArtifactMessage(message) &&
-    'artifact_data' in message.message &&
-    message.message.artifact_data?.artifact_type === 'FORM' &&
-    !!message.message.artifact_data?.artifact_id
+    message.message.artifact_type === 'FORM' &&
+    !!message.message.artifact_data?.content
   );
+};
+
+export const checkIsQualificationFormArtifact = (message: WebSocketMessage): boolean => {
+  if (!checkIsFormArtifactBase(message)) return false;
+  const content = message.message.artifact_data.content;
+  return content !== null && 'qualification' in content && Boolean(content.qualification);
+};
+
+export const isFormArtifactContent = (content: unknown): content is FormArtifactContent => {
+  return typeof content === 'object' && content !== null && 'form_fields' in content && 'qualification' in content;
 };
 
 // Check if the stream message is for a form
@@ -315,7 +341,7 @@ export const hasStreamMessageForForm = (
     isAIMessage(streamMessage) &&
     isStreamMessage(streamMessage) &&
     isAIMessage(artifactMessage) &&
-    isFormArtifact(artifactMessage)
+    checkIsFormArtifactBase(artifactMessage)
   );
 };
 
@@ -375,7 +401,7 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
       message: ArtifactMessageContent & {
         artifact_data: FormArtifactContent;
       };
-    } => isFormArtifact(msg),
+    } => checkIsFormArtifactBase(msg),
   );
 };
 
@@ -432,4 +458,26 @@ export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessa
     // For all other cases, maintain their original order
     return 0;
   });
+};
+
+export const checkIfCTAButtonDisabled = (messages: WebSocketMessage[]) => {
+  const primaryGoalCtaClickedMessage = messages.find((message) => isPrimaryGoalCTAClickedMessage(message));
+  if (!primaryGoalCtaClickedMessage) return false;
+
+  const qualificationFormMessage = messages.find(
+    (
+      message,
+    ): message is WebSocketMessage & {
+      message: ArtifactMessageContent & { artifact_data: FormArtifactContent };
+    } => checkIsQualificationFormArtifact(message) && message.response_id === primaryGoalCtaClickedMessage.response_id,
+  );
+  if (!qualificationFormMessage) return false;
+
+  const qualificationFormFilledMessage = getFormFilledEvent(
+    messages,
+    qualificationFormMessage,
+    'QUALIFICATION_FORM_FILLED',
+  );
+
+  return !qualificationFormFilledMessage;
 };

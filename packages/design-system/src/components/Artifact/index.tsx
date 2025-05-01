@@ -2,6 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { ArtifactContentUi } from './ArtifactContentUi';
 import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import { ArtifactContent } from '@meaku/core/types/artifact';
+import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
 
 export interface ArtifactProps {
   isMediaTakingFullWidth: boolean;
@@ -14,7 +15,7 @@ export interface ArtifactProps {
   isGeneratingArtifact: boolean;
   title?: string;
   description?: string;
-  artifactContent: ArtifactContent | null;
+  artifactContent: ArtifactContentWithMetadataProps;
 }
 
 const Artifact = ({

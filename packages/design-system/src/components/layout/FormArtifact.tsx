@@ -1,27 +1,18 @@
-import {
-  FormArtifactMetadataType,
-  FormFieldType,
-  AgentEventType,
-  WebSocketMessage,
-} from '@meaku/core/types/webSocketData';
+import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import Card from '@breakout/design-system/components/layout/card';
 import CardContent from '@breakout/design-system/components/layout/card-content';
 import { Form, useForm } from '@breakout/design-system/components/layout/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@breakout/design-system/components/Button/index';
-import {
-  getZodType,
-  schemaShape,
-  getFormSchemaTypeDefinition,
-  getschemaShapeValidatedByZode,
-} from '@meaku/core/utils/form_fields';
+import { getFormSchemaTypeDefinition } from '@meaku/core/utils/form_fields';
 import { useState } from 'react';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import ChatFormField from './ChatFormField';
-import { FormArtifactContent } from '@meaku/core/types/artifact';
+import { FormArtifactContent, FormArtifactMetadataType } from '@meaku/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
+import { createFormSchema } from '../../utils/chat';
 
 interface IFormProps {
   artifactId?: string;
@@ -31,21 +22,6 @@ interface IFormProps {
   isformDisabled?: boolean;
   usingForAgent?: boolean;
 }
-
-const createFormSchema = (form_fields: FormFieldType[]) => {
-  form_fields.forEach((field) => {
-    const fieldSchema = getZodType(field.data_type);
-
-    // Make the field required if is_required is not null or undefined
-    if (field.is_required) {
-      schemaShape[field.field_name] = fieldSchema;
-    } else {
-      schemaShape[field.field_name] = fieldSchema.optional();
-    }
-  });
-
-  return getschemaShapeValidatedByZode(schemaShape);
-};
 
 const FormArtifact = ({
   artifactId,

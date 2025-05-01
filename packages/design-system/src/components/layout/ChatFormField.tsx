@@ -9,11 +9,13 @@ import { FormFieldType } from '@meaku/core/types/webSocketData';
 import Input from '@breakout/design-system/components/layout/input';
 import { getInputType } from '@meaku/core/utils/form_fields';
 import PhoneInputContainer from '../PhoneInput';
+import { cn } from '../../lib/cn';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
   form_field: FormFieldType;
   isArtifactFormFilled: boolean;
+  fieldClassName?: string;
 }
 
 // Helper function to generate label with asterisk for required fields
@@ -22,7 +24,7 @@ const getLabelWithRequiredIndicator = (label: string, isRequired: boolean): stri
 };
 
 const ChatFormField = (props: IChatFormFieldProps) => {
-  const { form, form_field, isArtifactFormFilled } = props;
+  const { form, form_field, isArtifactFormFilled, fieldClassName } = props;
 
   const isPhoneInputField = form_field.field_name === 'phone';
   const isIntField = form_field.data_type === 'int';
@@ -59,7 +61,11 @@ const ChatFormField = (props: IChatFormFieldProps) => {
                 <Input
                   readOnly={isArtifactFormFilled}
                   {...field}
-                  className="border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0"
+                  autoComplete="off"
+                  className={cn(
+                    'border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
+                    fieldClassName,
+                  )}
                   placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
                   type={getInputType(form_field.data_type)}
                   onKeyDown={handleKeyDown}
@@ -68,7 +74,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               )}
             </FormControl>
           </div>
-          <FormMessage className="font-medium text-red-500" />
+          <FormMessage className={cn('!-mb-16 font-medium text-red-500', fieldClassName)} />
         </FormItem>
       )}
     />

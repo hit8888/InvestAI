@@ -576,7 +576,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, formArtifact);
+      const result = getFormFilledEvent(messages, formArtifact, 'FORM_FILLED');
       expect(result).toEqual(messages[1]);
     });
 
@@ -632,7 +632,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, formArtifact);
+      const result = getFormFilledEvent(messages, formArtifact, 'FORM_FILLED');
       expect(result).toBeUndefined();
     });
 
@@ -663,7 +663,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, undefined);
+      const result = getFormFilledEvent(messages, undefined, 'FORM_FILLED');
       expect(result).toBeUndefined();
     });
   });

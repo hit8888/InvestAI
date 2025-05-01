@@ -65,13 +65,52 @@ export const FormFieldSchema = z.object({
   is_required: z.boolean(),
 });
 
+export const QualificationSelectOptionSchema = z.object({
+  type: z.string(),
+  value: z.string(),
+  placeholder: z.string().optional(),
+});
+
+export const QualificationQuestionSchema = z.object({
+  id: z.string().optional(),
+  answer_type: z.literal('DROP_DOWN'),
+  question: z.string(),
+  response_options: z.array(QualificationSelectOptionSchema),
+  is_required: z.boolean(),
+});
+
 export const FormArtifactMetadata = z.object({
   is_filled: z.boolean().optional(),
   filled_data: z.record(z.string(), z.any()).optional(),
 });
 
+export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
+
+export const QualificationResponsesSchema = z.object({
+  id: z.string().optional(),
+  question: z.string(),
+  answer: z.string(),
+  answer_type: z.string(),
+});
+
+export type QualificationResponsesType = z.infer<typeof QualificationResponsesSchema>;
+
+export const QualificationQuestionAnswerSchema = z.object({
+  artifact_id: z.string(),
+  qualification_responses: z.array(QualificationResponsesSchema),
+});
+
+export const QualificationQuestionMetadata = z.object({
+  is_filled: z.boolean(),
+  filled_data: z.array(QualificationResponsesSchema).optional(),
+});
+
+export type QualificationQuestionMetadataType = z.infer<typeof QualificationQuestionMetadata>;
+
 export const FormArtifactSchema = z.object({
   form_fields: z.array(FormFieldSchema),
+  qualification: z.boolean().optional(),
+  qualification_questions: z.array(QualificationQuestionSchema).optional(),
 });
 
 export type SlideArtifactContent = z.infer<typeof SlideArtifactSchema>;

@@ -1,7 +1,7 @@
-import { FormArtifactMetadataType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import FormArtifact from './FormArtifact.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
-import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
+import { FormArtifactContent, FormArtifactMetadataType, SuggestionArtifactContent } from '@meaku/core/types/artifact';
 
 interface IProps {
   artifact: {

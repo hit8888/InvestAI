@@ -1,5 +1,5 @@
 import { ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
+import { checkIsQualificationFormArtifact, isMediaArtifact } from '@meaku/core/utils/messageUtils';
 import { useMessageStore } from '../stores/useMessageStore';
 
 const useGetLastMediaArtifactMessage = () => {
@@ -16,7 +16,8 @@ const useGetLastMediaArtifactMessage = () => {
       (message: WebSocketMessage) =>
         message.message_type === 'ARTIFACT' &&
         message.role === 'ai' &&
-        isMediaArtifact((message.message as ArtifactMessageContent).artifact_type),
+        (isMediaArtifact((message.message as ArtifactMessageContent).artifact_type) ||
+          checkIsQualificationFormArtifact(message)),
     )
     .pop();
 

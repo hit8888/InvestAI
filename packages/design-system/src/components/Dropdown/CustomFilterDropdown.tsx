@@ -9,7 +9,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
-import { DROPDOWN_ARROW_ICONS } from '../../utils/constants';
+
+export const COMMON_ICON_PROPS = {
+  width: '24',
+  height: '25',
+  viewBox: '0 0 24 25',
+  color: 'rgb(var(--primary))',
+};
 
 // Define the type for the options
 interface DropdownProps {
@@ -50,7 +56,7 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
             'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
           })}
         >
-          <DropdownIcon {...DROPDOWN_ARROW_ICONS} />
+          <DropdownIcon {...COMMON_ICON_PROPS} />
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent

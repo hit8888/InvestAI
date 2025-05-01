@@ -1,6 +1,6 @@
 import {
-  ArtifactContent,
   CalendarArtifactContent,
+  FormArtifactContent,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
@@ -9,10 +9,11 @@ import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import { CalendarArtifact } from './CalendarArtifact';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-
+import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
+import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
 interface Props {
   artifactType: string | undefined;
-  artifactContent: ArtifactContent | null;
+  artifactContent: ArtifactContentWithMetadataProps;
   activeArtifactId: string;
   logoURL: string;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -73,6 +74,17 @@ export const ArtifactContentUi = ({
         <CalendarArtifact
           key={(artifactContent as CalendarArtifactContent).calendar_url}
           calendarContent={artifactContent as CalendarArtifactContent}
+        />
+      );
+    case 'FORM':
+      return (
+        <QualificationFlowArtifact
+          artifact={{
+            artifact_id: activeArtifactId,
+            content: artifactContent as FormArtifactContent,
+            metadata: artifactContent.metadata,
+          }}
+          handleSendUserMessage={handleSendUserMessage}
         />
       );
     default:

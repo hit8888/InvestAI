@@ -5,6 +5,7 @@ import {
   FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
+  QualificationQuestionAnswerSchema,
   SlideArtifactSchema,
   SlideImageArtifactSchema,
   SuggestionArtifactSchema,
@@ -167,6 +168,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   }),
   z.object({
     content: z.string(),
+    event_type: z.literal('QUALIFICATION_FORM_FILLED'),
+    event_data: QualificationQuestionAnswerSchema,
+  }),
+  z.object({
+    content: z.string(),
     event_type: z.literal('DEMO_NEXT'),
     event_data: z.object({
       feature_ids: z.array(z.number()).optional(),
@@ -279,8 +285,6 @@ export type ChatHistory = WebSocketMessage[];
 
 export type FormFieldType = z.infer<typeof FormFieldSchema>;
 
-export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;
-
 export type DataSourceType = z.infer<typeof DataSourceSchema>;
 
 export enum AgentEventType {
@@ -294,6 +298,7 @@ export enum AgentEventType {
   DEMO_END = 'DEMO_END',
   ARTIFACT_CONSUMED = 'ARTIFACT_CONSUMED',
   FORM_FILLED = 'FORM_FILLED',
+  QUALIFICATION_FORM_FILLED = 'QUALIFICATION_FORM_FILLED',
   USER_INACTIVE = 'USER_INACTIVE',
   HEARTBEAT = 'HEARTBEAT',
   HEARTBEAT_ACK = 'HEARTBEAT_ACK',

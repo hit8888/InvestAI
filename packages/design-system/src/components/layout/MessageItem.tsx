@@ -34,6 +34,8 @@ import {
   isDisplayedAsTextMessage,
   isFormDataFilled,
   isMediaArtifact,
+  checkIsQualificationFormArtifact,
+  checkIsFormArtifactBase,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -103,7 +105,8 @@ const MessageItem = ({
   const mediaArtifactMessage = getMediaArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage);
+  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
+  const qualifiedFormFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'QUALIFICATION_FORM_FILLED');
 
   const hasFormArtifactMessage = !!formArtifactMessage;
   const hasFormFilledMessage = !!formFilledMessage;
@@ -125,7 +128,7 @@ const MessageItem = ({
   const showMessageArtifactPreview =
     lastMessageResponseId !== message.response_id &&
     isArtifactMessage &&
-    isMediaArtifact(message.message.artifact_type) &&
+    (isMediaArtifact(message.message.artifact_type) || !isFormDataFilled || !!qualifiedFormFilledMessage) &&
     (showArtifactPreview || isInView) &&
     isSalesResponseComplete;
 
@@ -224,9 +227,11 @@ const MessageItem = ({
   const shouldShowFeedbackSection = isAiMessage && allowFeedback && isTextMessage;
 
   const hasSalesResponseCompleteAndIsArtifactMessage = isSalesResponseComplete && isArtifactMessage;
-  // For Current Message - To show the form artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be a form
+
   const shouldShowFormArtifact =
-    hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'FORM';
+    hasSalesResponseCompleteAndIsArtifactMessage &&
+    checkIsFormArtifactBase(message) &&
+    !checkIsQualificationFormArtifact(message);
 
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =

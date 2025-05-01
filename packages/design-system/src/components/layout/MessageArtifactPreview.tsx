@@ -1,6 +1,8 @@
 import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import {
+  ArtifactContent,
   ArtifactEnum,
+  FormArtifactContent,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
@@ -9,6 +11,7 @@ import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketD
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
+import { checkIsQualificationFormArtifact, MEDIA_ARTIFACT_PREVIEW_TYPES } from '@meaku/core/utils/messageUtils';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
@@ -31,23 +34,24 @@ const MessageArtifactPreview = ({
   const artifactType = artifactData?.artifact_type;
 
   // Narrow down the type and ensure it's a valid ArtifactEnum
-  if (artifactType === 'NONE' || !artifactType) return null;
+  if (artifactType === 'NONE' || artifactType === 'SUGGESTIONS' || artifactType === 'CALENDAR' || !artifactType)
+    return null;
 
-  // Only show preview for SLIDE, SLIDE_IMAGE, and VIDEO artifacts
-  if (!['SLIDE', 'SLIDE_IMAGE', 'VIDEO'].includes(artifactType)) return null;
+  // Only show preview for SLIDE, SLIDE_IMAGE, FORM and VIDEO artifacts
+  if (!MEDIA_ARTIFACT_PREVIEW_TYPES.includes(artifactType)) return null;
 
   const artifactManager = new ArtifactManager(message.message);
   const content = artifactData.content;
 
   // Type guard to ensure content is of the correct type
   const isValidContent = (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    content: any,
-  ): content is SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent => {
+    content: ArtifactContent | null,
+  ): content is SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent | FormArtifactContent => {
+    const isQualificationFormArtifactValid = artifactType === 'FORM' && checkIsQualificationFormArtifact(message);
+
+    const isMediaArtifactValid = MEDIA_ARTIFACT_PREVIEW_TYPES.includes(artifactType);
     return (
-      content !== null &&
-      typeof content === 'object' &&
-      (artifactType === 'SLIDE' || artifactType === 'SLIDE_IMAGE' || artifactType === 'VIDEO')
+      content !== null && typeof content === 'object' && (isQualificationFormArtifactValid || isMediaArtifactValid)
     );
   };
 
