@@ -68,6 +68,8 @@ import { initDomDetectors } from "./dom-detectors";
         isStaging: this.scriptElement?.getAttribute("is-staging") === "true", // TODO: Move to env based solution
         initialMessage:
           this.scriptElement?.getAttribute("initial-message") ?? "",
+        startTime: this.scriptElement?.getAttribute("start-time") ?? null,
+        endTime: this.scriptElement?.getAttribute("end-time") ?? null,
       };
     },
   };
@@ -546,6 +548,68 @@ import { initDomDetectors } from "./dom-detectors";
     },
   };
 
+  // Time Manager Module - time-based visibility control for the chat widget
+  const TimeManager = {
+    isWithinTimeRange(
+      startTime: string | null,
+      endTime: string | null,
+      timezone: string = "UTC",
+    ): boolean {
+      if (!startTime && !endTime) return true; // If times not set, always show
+
+      // Use default values if only one time is specified
+      const effectiveStartTime = startTime || "00:00";
+      const effectiveEndTime = endTime || "24:00";
+
+      // Get current time in the specified timezone
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      };
+
+      const currentTimeStr = now.toLocaleTimeString("en-US", options);
+      const [currentHour, currentMinute] = currentTimeStr
+        .split(":")
+        .map(Number);
+
+      // Create a date object with current date but time from current timezone
+      const currentDate = new Date(now);
+      currentDate.setHours(currentHour, currentMinute, 0, 0);
+
+      // Parse start and end times
+      const [startHour, startMinute] = effectiveStartTime
+        .split(":")
+        .map(Number);
+      const [endHour, endMinute] = effectiveEndTime.split(":").map(Number);
+
+      const startDate = new Date(now);
+      startDate.setHours(startHour, startMinute, 0, 0);
+
+      const endDate = new Date(now);
+      endDate.setHours(endHour, endMinute, 0, 0);
+
+      // Handle cases where end time is on the next day
+      if (endDate < startDate) {
+        endDate.setDate(endDate.getDate() + 1);
+      }
+
+      const isWithinRange = currentDate >= startDate && currentDate <= endDate;
+
+      // For testing purposes, log the times
+      // console.log("Time Check:", {
+      //   currentTime: currentTimeStr,
+      //   startTime: `${startHour}:${startMinute}`,
+      //   endTime: `${endHour}:${endMinute}`,
+      //   isWithinRange,
+      // });
+
+      return isWithinRange;
+    },
+  };
+
   // Widget initialization function
   const initializeWidget = async (): Promise<void> => {
     const config = ConfigManager.getConfig();
@@ -882,8 +946,14 @@ import { initDomDetectors } from "./dom-detectors";
   const App = {
     async init(): Promise<void> {
       const config = ConfigManager.getConfig();
+      const { tenantId, agentId, startTime, endTime } = config;
 
-      if (!config.tenantId || !config.agentId || DeviceManager.isMobile()) {
+      if (!tenantId || !agentId || DeviceManager.isMobile()) {
+        return;
+      }
+
+      // Check if current time is within allowed range
+      if (!TimeManager.isWithinTimeRange(startTime, endTime)) {
         return;
       }
 

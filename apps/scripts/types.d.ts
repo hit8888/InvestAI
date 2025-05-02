@@ -101,6 +101,8 @@ declare global {
     userEmail: string;
     isStaging: boolean;
     initialMessage: string;
+    startTime: string | null;
+    endTime: string | null;
   }
 
   interface DefaultSizes {
