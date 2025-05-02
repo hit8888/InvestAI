@@ -66,7 +66,9 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <div className="flex w-full max-w-[40%] flex-col items-center justify-center gap-8">
-        <p className="w-full text-left text-5xl font-semibold text-customPrimaryText">How can we reach you?</p>
+        <p className="w-full text-left text-5xl font-semibold text-customPrimaryText 2xl:text-2xl">
+          How can we reach you?
+        </p>
         <Card className="w-full rounded-2xl border-none bg-inherit shadow-none">
           <CardContent className="flex flex-col gap-4 p-0">
             <Form {...form}>

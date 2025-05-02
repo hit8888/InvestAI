@@ -17,9 +17,14 @@ export const useUrlParams = () => {
     return searchParams.get(key);
   };
 
+  const setAgentOpen = () => {
+    setParam('isAgentOpen', 'true');
+  };
+
   return {
     setParam,
     getParam,
+    setAgentOpen,
     searchParams,
   };
 };

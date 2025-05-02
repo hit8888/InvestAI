@@ -1,3 +1,5 @@
+import { SessionApiResponse, WebSocketMessage } from '../types';
+import { ConversationDetailsDataResponse } from '../types/admin/admin';
 import { OrganizationDetails } from '../types/admin/auth';
 import DateUtil from './dateUtils';
 
@@ -50,4 +52,35 @@ export const getMessageTimestamp = (timestamp?: string): string => {
 
   // Convert to ISO string and format it
   return DateUtil.getDateValueInISOString(timestamp);
+};
+
+export const getTransformedResponse = (response: ConversationDetailsDataResponse | SessionApiResponse) => {
+  return {
+    ...response,
+    chat_history: response.chat_history.map((message) => transformMessage(message)),
+    conversation: 'conversation' in response ? response.conversation : null,
+    feedback: 'feedback' in response ? response.feedback : [],
+  };
+};
+
+export const transformMessage = (message: WebSocketMessage) => {
+  // Create a deep copy of the message
+  const transformedMessage = JSON.parse(JSON.stringify(message));
+
+  // Check if it's an EVENT message with DISCOVERY_QUESTIONS
+  if (transformedMessage.message_type === 'EVENT' && transformedMessage.message?.event_type === 'DISCOVERY_QUESTIONS') {
+    // Handle case where response_options is an empty string or doesn't exist
+    if (
+      !transformedMessage.message?.event_data?.response_options ||
+      transformedMessage.message.event_data.response_options === ''
+    ) {
+      transformedMessage.message.event_data.response_options = [];
+    } else {
+      // Filter out empty strings from response_options if it's an array
+      transformedMessage.message.event_data.response_options =
+        transformedMessage.message.event_data.response_options.filter((option: string) => option !== '');
+    }
+  }
+
+  return transformedMessage;
 };

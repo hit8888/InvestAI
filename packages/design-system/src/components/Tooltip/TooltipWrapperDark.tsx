@@ -1,5 +1,6 @@
 import React from 'react';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent, TooltipArrow } from './index';
+import { cn } from '../../lib/cn';
 
 interface IProps {
   trigger: React.ReactNode;
@@ -18,6 +19,7 @@ const TooltipWrapperDark = ({
   tooltipAlign = 'end',
   tooltipSideOffsetValue = 80,
 }: IProps) => {
+  const isTooltipSideValueTop = tooltipSide === 'top';
   return (
     <TooltipProvider>
       <Tooltip defaultOpen={false}>
@@ -26,13 +28,19 @@ const TooltipWrapperDark = ({
         </TooltipTrigger>
         {showTooltip && (
           <TooltipContent
-            sideOffset={tooltipSide === 'top' ? tooltipSideOffsetValue : 5}
+            sideOffset={isTooltipSideValueTop ? tooltipSideOffsetValue : 5}
             align={tooltipAlign}
             side={tooltipSide}
             className="z-[9999] rounded-lg border-none bg-gray-900 px-3 py-2 text-white"
           >
             {content}
-            <TooltipArrow width={12} height={6} className="fixed -right-6 2xl:right-14" />
+            <TooltipArrow
+              width={12}
+              height={6}
+              className={cn('fixed -right-6 2xl:right-14', {
+                'right-8': isTooltipSideValueTop,
+              })}
+            />
           </TooltipContent>
         )}
       </Tooltip>

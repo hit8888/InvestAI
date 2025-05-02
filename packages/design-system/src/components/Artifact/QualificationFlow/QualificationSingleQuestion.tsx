@@ -24,7 +24,7 @@ const QualificationSingleQuestion = ({
   const answeredValue = sameQuestionAnswered ? sameQuestionAnswered.answer : 'No Answer';
   return (
     <div className="flex w-full flex-col items-start gap-6 self-stretch">
-      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">
+      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText 2xl:text-lg">
         {question}
         {isRequired ? ' (Optional)' : ''}{' '}
       </p>

@@ -10,6 +10,7 @@ import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
+import TestConversationIncludedFilter from './TestConversationIncludedFilter';
 
 type AllSelectableFilterContentProps = PageTypeProps & {
   handleFilterState: (value: FilterType) => void;
@@ -24,7 +25,9 @@ const AllSelectableFilterContent = ({
   const { resetPageFilters } = useAllFilterStore();
   const { DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } = FilterType;
 
-  const filterConfig = page === LEADS_PAGE ? LEADS_TABLE_FILTERS_CONFIG : CONVERSATIONS_TABLE_FILTERS_CONFIG;
+  const isLeadsPage = page === LEADS_PAGE;
+
+  const filterConfig = isLeadsPage ? LEADS_TABLE_FILTERS_CONFIG : CONVERSATIONS_TABLE_FILTERS_CONFIG;
   const handleClearAll = () => {
     resetPageFilters(page);
     handleFilterState(FilterType.AllFilters);
@@ -80,10 +83,12 @@ const AllSelectableFilterContent = ({
     }
   };
 
-  const areFiltersApplied = filterConfig.some((config) => isFilterApplied(config.filterKey));
+  const areFiltersApplied =
+    filterConfig.some((config) => isFilterApplied(config.filterKey)) || filters[page].testConversationsIncluded;
 
   return (
     <React.Fragment key={FilterType.AllFilters}>
+      {!isLeadsPage ? <TestConversationIncludedFilter page={page} /> : null}
       {filterConfig.map((config) => (
         <SingleFilterState
           key={config.filterKey}

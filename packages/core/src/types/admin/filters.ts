@@ -51,6 +51,7 @@ export enum FilterType {
   AllFilters = 'allFilters',
   Company = 'company',
   UserMessagesCount = 'userMessagesCount',
+  TestConversationIncluded = 'testConversationsIncluded',
 }
 
 export interface userMessagesCountFilterValues {
@@ -68,6 +69,7 @@ export interface FilterValues {
   meetingBooked?: string;
   userMessagesCount: userMessagesCountFilterValues;
   presetFilters: FilterItem[];
+  testConversationsIncluded: boolean;
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
@@ -82,7 +84,17 @@ export const InitialFilterValues: FilterValues = {
     maxCount: 100,
   },
   presetFilters: [],
+  testConversationsIncluded: false,
 };
+
+export type FilterValueTypes =
+  | DateRangeProp
+  | string
+  | string[]
+  | number
+  | userMessagesCountFilterValues
+  | boolean
+  | undefined;
 
 export interface AllFilterState {
   leads: FilterValues;
@@ -90,7 +102,7 @@ export interface AllFilterState {
   setFilter: (
     page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
     key: keyof FilterValues,
-    value: DateRangeProp | string | string[] | number | userMessagesCountFilterValues | undefined,
+    value: FilterValueTypes,
   ) => void;
   resetPageFilters: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
   initializeFilterValues: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE, filters: FilterItem[]) => void;

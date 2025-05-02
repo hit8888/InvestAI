@@ -302,7 +302,13 @@ import { initDomDetectors } from "./dom-detectors";
             } else {
               return "translateX(-100%)";
             }
-          } else return "translateX(50%)";
+          } else {
+            if (isAgentOpen) {
+              return "translateX(-50%)";
+            } else {
+              return "translateX(50%)";
+            }
+          }
         case "center":
           return "translateX(-50%)";
         default:

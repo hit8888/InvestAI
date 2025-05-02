@@ -49,16 +49,12 @@ const VideoArtifact = ({
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_COMPLETE);
   };
 
-  const handlePlay = () => {
-    setIsPlaying(true);
-    setIsArtifactPlaying(true);
-    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-    setIsArtifactPlaying(false);
-    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PAUSE);
+  const handlePlayAndPause = () => {
+    setIsPlaying(!isPlaying);
+    setIsArtifactPlaying(!isPlaying);
+    trackAgentbotEvent(
+      !isPlaying ? ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY : ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PAUSE,
+    );
   };
 
   const handleRestartVideo = () => {
@@ -80,7 +76,7 @@ const VideoArtifact = ({
       })}
     >
       <AspectRatio ratio={16 / 9}>
-        <div className="h-full w-full">
+        <div className="relative h-full w-full" onClick={handlePlayAndPause}>
           <ReactPlayer
             ref={playerRef}
             url={videoUrl}
@@ -88,10 +84,8 @@ const VideoArtifact = ({
             width="100%"
             height="100%"
             onEnded={handleVideoOnEnd}
-            onPlay={handlePlay}
-            onPause={handlePause}
             controls={true}
-            style={{ position: 'absolute', top: 0, left: 0 }}
+            style={{ position: 'absolute', top: 0, left: 0, objectFit: 'fill' }}
             // Configuration for the player
             config={{
               file: {

@@ -12,6 +12,7 @@ const SendButtonWithTooltip = ({ children, showTooltip, tooltipText }: IProps) =
     <TooltipWrapperDark
       tooltipSide="top"
       tooltipAlign="end"
+      tooltipSideOffsetValue={10}
       trigger={children}
       showTooltip={showTooltip}
       content={<p>{tooltipText}</p>}

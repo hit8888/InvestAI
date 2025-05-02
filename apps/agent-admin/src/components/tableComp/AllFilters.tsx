@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { FilterValues, PageTypeProps, userMessagesCountFilterValues } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, FilterValues, FilterValueTypes, PageTypeProps } from '@meaku/core/types/admin/filters';
 
 import FilterContent from './FilterContent';
 import SingleAppliedFilter from './SingleAppliedFilter';
@@ -14,8 +14,17 @@ import { FilterType } from '@meaku/core/types/admin/filters';
 import ExportDownload from './ExportDownload';
 import { ConversationsPayload, LeadsPayload } from '@meaku/core/types/admin/api';
 
-const { AllFilters, DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } =
-  FilterType;
+const {
+  AllFilters,
+  DateRange,
+  IntentScore,
+  Location,
+  MeetingBooked,
+  ProductOfInterest,
+  Company,
+  UserMessagesCount,
+  TestConversationIncluded,
+} = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
   payloadData: ConversationsPayload | LeadsPayload;
@@ -37,10 +46,7 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     setIsOpen(false);
     setFilterState(AllFilters);
   };
-  const handleFilterRemove = (
-    key: keyof FilterValues,
-    value: string | string[] | number | userMessagesCountFilterValues | undefined,
-  ) => {
+  const handleFilterRemove = (key: keyof FilterValues, value: Exclude<FilterValueTypes, DateRangeProp>) => {
     filters.setFilter(page, key, value);
     setIsOpen(false);
     setFilterState(AllFilters);
@@ -78,6 +84,9 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
         break;
       case MeetingBooked:
         handleFilterRemove(key, '');
+        break;
+      case TestConversationIncluded:
+        handleFilterRemove(key, false);
         break;
     }
   };

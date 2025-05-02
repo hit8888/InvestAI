@@ -4,6 +4,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import { useMessageStore } from '../../../../stores/useMessageStore';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 
 type SideWiseEntryPointProps = {
   handleSuggestedQuestionOnClick: (question: string) => void;
@@ -14,6 +15,7 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
+  const { setAgentOpen } = useUrlParams();
 
   const showSuggestedQuestions = initialSuggestedQuestions.length > 0 && !hasFirstUserMessageBeenSent;
 
@@ -28,10 +30,11 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
   const getEntryPointOrb = () => {
     return (
       <div
-        className={cn('relative flex h-16 w-16 items-center', {
+        className={cn('relative flex h-16 w-16 cursor-pointer items-center', {
           'right-4': isEntryPointOnTheBottomRight && hasFirstUserMessageBeenSent,
           '-left-2': isEntryPointOnTheBottomLeft && hasFirstUserMessageBeenSent,
         })}
+        onClick={setAgentOpen}
       >
         <InputOrb
           style={{ width: '54px', height: '54px' }}

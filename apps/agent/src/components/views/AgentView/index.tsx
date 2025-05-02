@@ -20,7 +20,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const [showBubbles, setShowBubbles] = useState(false);
 
   const { handleSendUserMessage } = useWebSocketChat();
-  const { getParam, setParam } = useUrlParams();
+  const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const { banner_config, entry_point_alignment } = useConfigurationApiResponseManager().getStyleConfig();
@@ -34,7 +34,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     }
     if (!isAgentOpen) {
       trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
-      setParam('isAgentOpen', 'true');
+      setAgentOpen();
     }
 
     handleSendUserMessage(data);
@@ -44,7 +44,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const handleOpenAgent = () => {
-    setParam('isAgentOpen', 'true');
+    setAgentOpen();
     handleUpdateOrbState(OrbStatusEnum.idle);
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };

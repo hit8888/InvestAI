@@ -3,6 +3,7 @@ import PopupCloseIcon from '@breakout/design-system/components/icons/popup-close
 import Orb from '@breakout/design-system/components/Orb/index';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { cn } from '@breakout/design-system/lib/cn';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 import { motion } from 'framer-motion';
@@ -27,14 +28,18 @@ const PopupContent = ({
   const isEntryPointOnTheCenterBottom = popupBannerAlignment === 'center';
   const isEntryPointOnTheBottomLeft = popupBannerAlignment === 'left';
   const isEntryPointOnTheBottomRight = popupBannerAlignment === 'right';
+
+  const { setAgentOpen } = useUrlParams();
+
   return (
     <motion.div
+      onClick={setAgentOpen}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }} // border color is #F2F4F7 in figma
       className={cn(
-        'popup-banner-box-shadow absolute flex min-w-[400px] max-w-[500px] items-center justify-center rounded-3xl p-2',
+        'popup-banner-box-shadow absolute flex min-w-[400px] max-w-[500px] cursor-pointer items-center justify-center rounded-3xl p-2',
         {
           '-top-36 left-2': isEntryPointOnTheBottomLeft,
           '-left-24 -top-40 extraSmall:-left-4 sm:-left-8 lg:-left-24': isEntryPointOnTheCenterBottom,

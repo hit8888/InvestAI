@@ -9,7 +9,7 @@ import {
   getFormFilledEvent,
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
-// import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
+import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 
 type IProps = {
   logoURL: string;
@@ -24,7 +24,7 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
   const messages = useMessageStore((state) => state.messages);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
 
-  // const { hasGeneratingArtifactEvents } = useGetArtifactLoadingState();
+  const { hasGeneratingArtifactEvents } = useGetArtifactLoadingState();
 
   // Find the message that corresponds to the active artifact
   const artifactMessage = activeArtifact
@@ -81,7 +81,7 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
       setIsArtifactPlaying={setIsArtifactPlaying}
       activeArtifact={artifactWithContent}
       onSlideItemClick={onSlideItemClick}
-      isGeneratingArtifact={false} // TODO: keeping it false for now, there is Too much gap b/w slides ( Linear task:- ENG-1451)
+      isGeneratingArtifact={hasGeneratingArtifactEvents}
       artifactContent={artifactContentWithMetadata}
     />
   );

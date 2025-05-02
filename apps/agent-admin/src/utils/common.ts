@@ -39,8 +39,17 @@ import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
-const { AllFilters, DateRange, IntentScore, Location, Company, MeetingBooked, ProductOfInterest, UserMessagesCount } =
-  FilterType;
+const {
+  AllFilters,
+  DateRange,
+  IntentScore,
+  Location,
+  Company,
+  MeetingBooked,
+  ProductOfInterest,
+  UserMessagesCount,
+  TestConversationIncluded,
+} = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
 
@@ -373,6 +382,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     // meetingBooked,
     userMessagesCount,
     company,
+    testConversationsIncluded,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -438,10 +448,10 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   // }
 
   // For Conversations Page, we need to filter out test conversations
-  if (!isLeadsPage) {
+  if (!isLeadsPage && !testConversationsIncluded) {
     filterApplied.push({
       field: 'is_test',
-      value: false,
+      value: testConversationsIncluded, // Test conversations included only when applied
       operator: 'eq',
     });
   }
@@ -454,13 +464,21 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 };
 
 export const collectAppliedFilters = (filters: FilterValues) => {
-  const appliedFilters: { key: string; label: string; value: string | string[] }[] = [];
+  const appliedFilters: { key: string; label: string; value: string | string[] | boolean }[] = [];
 
   if (filters.dateRange) {
     appliedFilters.push({
       key: DateRange,
       label: 'Date',
       value: getDateAppliedValue(filters.dateRange),
+    });
+  }
+
+  if (filters.testConversationsIncluded) {
+    appliedFilters.push({
+      key: TestConversationIncluded,
+      label: 'Playground Conversations',
+      value: `${filters.testConversationsIncluded}`,
     });
   }
 

@@ -2,12 +2,14 @@ import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
 import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
 import { filterOutSuggestions } from '../utils/messageUtils';
 import { trackError } from '../utils/error';
+import { getTransformedResponse } from '../utils';
 
 export class SessionApiResponseManager {
   private session: SessionApiResponse;
 
   constructor(response: SessionApiResponse) {
-    const validatedSession = SessionSchema.safeParse(response);
+    const transformedResponse = getTransformedResponse(response);
+    const validatedSession = SessionSchema.safeParse(transformedResponse);
     if (!validatedSession.success) {
       // console.error('Validation failed for SessionApiResponseManager:', {
       //   input: response,

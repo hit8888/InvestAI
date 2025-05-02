@@ -9,7 +9,7 @@ import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { PageType } from '@meaku/core/types/admin/sort';
 
 type SingleAppliedFilterProps = {
-  filter: { key: string; label: string; value: string | string[] };
+  filter: { key: string; label: string; value: string | string[] | boolean };
   handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleAppliedFilterClicked: (filter: FilterType) => void;
   filterState: FilterType;
@@ -19,7 +19,7 @@ type SingleAppliedFilterProps = {
   page: PageType;
 };
 
-const { Location, ProductOfInterest, Company, DateRange } = FilterType;
+const { Location, ProductOfInterest, Company, DateRange, TestConversationIncluded } = FilterType;
 
 const SingleAppliedFilter = ({
   filter,
@@ -32,17 +32,27 @@ const SingleAppliedFilter = ({
   page,
 }: SingleAppliedFilterProps) => {
   const [isFilterAppliedClicked, setIsFilterAppliedClicked] = useState(false);
+  const isTestConversationsIncludedFilterApplied = filter.key === TestConversationIncluded;
+
   const handleAppliedFilterClick = () => {
-    handleAppliedFilterClicked(filter.key as FilterType);
-    setIsFilterAppliedClicked(true);
+    if (!isTestConversationsIncludedFilterApplied) {
+      handleAppliedFilterClicked(filter.key as FilterType);
+      setIsFilterAppliedClicked(true);
+    }
   };
 
   const handleClosePopover = () => {
     setIsFilterAppliedClicked(false);
     handleClose();
   };
+
+  const handlePopoverOpen = () => {
+    if (!isTestConversationsIncludedFilterApplied) {
+      setIsFilterAppliedClicked(!isFilterAppliedClicked);
+    }
+  };
   return (
-    <Popover open={isFilterAppliedClicked} onOpenChange={setIsFilterAppliedClicked}>
+    <Popover open={isFilterAppliedClicked} onOpenChange={handlePopoverOpen}>
       <PopoverTrigger
         key={filter.key}
         onClick={handleAppliedFilterClick}
