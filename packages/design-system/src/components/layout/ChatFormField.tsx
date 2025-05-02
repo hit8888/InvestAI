@@ -60,7 +60,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             onCallback={field.onChange}
             className="h-10 rounded-lg p-4 text-base"
             options={form_field.options ?? []}
-            placeholderLabel="Select an option"
+            placeholderLabel={form_field.label}
             {...field}
           />
         );

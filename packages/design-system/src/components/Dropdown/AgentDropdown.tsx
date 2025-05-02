@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
 import DropdownOption from './DropdownOption';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../Tooltip';
 
 // Define the type for the options
 interface DropdownProps {
@@ -49,10 +50,21 @@ const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onC
           className,
         )}
       >
-        {!selectedOption && placeholderLabel ? <span className="text-gray-400">{placeholderLabel}</span> : null}
-        {selectedOption ? <span>{selectedOption}</span> : null}
+        {!selectedOption && placeholderLabel ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="overflow-hidden truncate whitespace-nowrap text-gray-400">{placeholderLabel}</span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white">
+                <p className="text-black">{placeholderLabel}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : null}
+        {selectedOption ? <span className="truncate">{selectedOption}</span> : null}
         <span
-          className={cn('h-5 w-5', {
+          className={cn('h-5 w-5 flex-shrink-0', {
             'rotate-0': !isDropdownOpen,
             'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
           })}
