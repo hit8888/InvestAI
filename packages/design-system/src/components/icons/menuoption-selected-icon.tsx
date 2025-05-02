@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const QualificationMenuOptionSelectedIcon = ({ className = '', width, height, color, ...props }: Props) => {
+const MenuOptionSelectedIcon = ({ className = '', width, height, color, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
@@ -22,4 +22,4 @@ const QualificationMenuOptionSelectedIcon = ({ className = '', width, height, co
   );
 };
 
-export default QualificationMenuOptionSelectedIcon;
+export default MenuOptionSelectedIcon;

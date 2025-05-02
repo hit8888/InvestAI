@@ -5,22 +5,44 @@ import CardTitle from './card-title';
 import CardDescription from './card-description';
 // import { PencilIcon } from 'lucide-react';
 // import Button from './button';
-import { FormArtifactContent } from '@meaku/core/types/artifact';
+import { FormArtifactMetadataType, FormFieldSchemaType } from '@meaku/core/types/artifact';
 import Typography from '../Typography';
+import { useMemo } from 'react';
 
 type FormFilledThankYouContentProps = {
-  artifact: FormArtifactContent;
-  formValues: Record<string, string>;
+  formFields: FormFieldSchemaType[];
+  formValues: FormArtifactMetadataType;
   // handleEdit: () => void;
   // isformDisabled?: boolean;
 };
 
 const FormFilledThankYouContent = ({
-  artifact,
+  formFields,
   formValues,
   // handleEdit,
   // isformDisabled,
 }: FormFilledThankYouContentProps) => {
+  const formFilledLabelAndValues = useMemo(() => {
+    return formFields
+      .map((field) => {
+        const fieldValue = formValues.filled_data?.[field.field_name];
+        const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+
+        if (!hasValue) return null;
+
+        return (
+          <div key={field.field_name} className="flex w-full items-center gap-2">
+            <Typography variant="label-14-medium" textColor="default">
+              {field.label}:
+            </Typography>
+            <Typography variant="body-14" textColor="textSecondary" className="max-w-full truncate">
+              {fieldValue}
+            </Typography>
+          </div>
+        );
+      })
+      .filter(Boolean); // Remove null values
+  }, [formFields, formValues.filled_data]);
   return (
     <Card className="w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3">
       <CardContent className="flex flex-col gap-6 p-4">
@@ -35,18 +57,7 @@ const FormFilledThankYouContent = ({
           </CardHeader>
         </div>
         <div className="flex w-full items-center gap-2 rounded-lg border border-dashed border-primary/40 p-2">
-          <div className="flex w-[60%] flex-1 flex-col gap-2">
-            {artifact.form_fields.map((field) => (
-              <div key={field.field_name} className="flex w-full items-center gap-2">
-                <Typography variant="label-14-medium" textColor="default">
-                  {field.label}:
-                </Typography>
-                <Typography variant="body-14" textColor="textSecondary" className="max-w-full truncate">
-                  {formValues[field.field_name]}
-                </Typography>
-              </div>
-            ))}
-          </div>
+          <div className="flex w-[60%] flex-1 flex-col gap-2">{formFilledLabelAndValues}</div>
           {/* <Button
             onClick={handleEdit}
             size="md"

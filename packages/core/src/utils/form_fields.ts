@@ -30,6 +30,8 @@ const getZodType = (dataType: string) => {
   switch (dataType) {
     case 'string':
       return z.string();
+    case 'picklist':
+      return z.string();
     case 'int':
       return z
         .string()

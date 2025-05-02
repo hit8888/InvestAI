@@ -56,6 +56,7 @@ export const FormFieldDataTypeEnumSchema = z.enum([
   'date',
   'datetime',
   'phone',
+  'picklist',
 ]);
 
 export const FormFieldSchema = z.object({
@@ -63,7 +64,10 @@ export const FormFieldSchema = z.object({
   field_name: z.string(),
   data_type: FormFieldDataTypeEnumSchema,
   is_required: z.boolean(),
+  options: z.array(z.string()).optional().nullable(),
 });
+
+export type FormFieldSchemaType = z.infer<typeof FormFieldSchema>;
 
 export const QualificationSelectOptionSchema = z.object({
   type: z.string(),

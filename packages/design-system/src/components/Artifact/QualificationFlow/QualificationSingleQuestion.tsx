@@ -1,6 +1,6 @@
 import { QualificationQuestionMetadataType } from '@meaku/core/types/artifact';
 import QualificationAnsweredTickIcon from '../../icons/qualification-answered-tick-icon';
-import QualificationQuestionDropdown from '../../Dropdown/QualificationQuestionDropdown';
+import AgentDropdown from '../../Dropdown/AgentDropdown';
 
 type IProps = {
   question: string;
@@ -31,9 +31,9 @@ const QualificationSingleQuestion = ({
       {isQuestionAnswered ? (
         <QualificationSingleQuestionAnswered answer={answeredValue} />
       ) : (
-        <QualificationQuestionDropdown
+        <AgentDropdown
           options={dropdownOptions}
-          filterLabel={`Select an option${addAsterisk}`}
+          placeholderLabel={`Select an option${addAsterisk}`}
           onCallback={handleSetAnswers}
         />
       )}

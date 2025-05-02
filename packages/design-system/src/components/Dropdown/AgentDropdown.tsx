@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
-import QualificationMenuOption from './QualificationMenuOption';
 import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
 
 import {
@@ -9,16 +8,18 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
+import DropdownOption from './DropdownOption';
 
 // Define the type for the options
 interface DropdownProps {
   options: string[];
-  filterLabel: string;
+  placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
+  className?: string;
 }
 
 // Also Add check for is_required key
-const QualificationQuestionDropdown: React.FC<DropdownProps> = ({ options, filterLabel, onCallback }) => {
+const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onCallback, className }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -45,9 +46,10 @@ const QualificationQuestionDropdown: React.FC<DropdownProps> = ({ options, filte
           {
             'ring-4 ring-primary/20': isDropdownOpen,
           },
+          className,
         )}
       >
-        {!selectedOption && filterLabel ? <span className="text-gray-400">{filterLabel}</span> : null}
+        {!selectedOption && placeholderLabel ? <span className="text-gray-400">{placeholderLabel}</span> : null}
         {selectedOption ? <span>{selectedOption}</span> : null}
         <span
           className={cn('h-5 w-5', {
@@ -65,7 +67,7 @@ const QualificationQuestionDropdown: React.FC<DropdownProps> = ({ options, filte
       >
         <DropdownMenuGroup>
           {options.map((option) => (
-            <QualificationMenuOption
+            <DropdownOption
               key={option}
               menuOptionTitle={option}
               onMenuOptionClicked={() => handleOptionClick(option)}
@@ -78,4 +80,4 @@ const QualificationQuestionDropdown: React.FC<DropdownProps> = ({ options, filte
   );
 };
 
-export default QualificationQuestionDropdown;
+export default AgentDropdown;

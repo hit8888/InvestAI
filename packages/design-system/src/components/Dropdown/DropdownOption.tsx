@@ -1,7 +1,7 @@
 import { DropdownMenuItem } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
 import { cn } from '@breakout/design-system/lib/cn';
-import QualificationMenuOptionNotSelectedIcon from '../icons/qualification-menuoption-not-selected-icon';
-import QualificationMenuOptionSelectedIcon from '../icons/qualification-menuoption-selected-icon';
+import MenuOptionNotSelectedIcon from '../icons/menuoption-not-selected-icon';
+import MenuOptionSelectedIcon from '../icons/menuoption-selected-icon';
 
 interface MenuOptionProps {
   menuOptionTitle: string;
@@ -9,7 +9,7 @@ interface MenuOptionProps {
   isSelectedOption: boolean;
 }
 
-const QualificationMenuOption = ({ menuOptionTitle, onMenuOptionClicked, isSelectedOption }: MenuOptionProps) => {
+const DropdownOption = ({ menuOptionTitle, onMenuOptionClicked, isSelectedOption }: MenuOptionProps) => {
   return (
     <DropdownMenuItem
       key={menuOptionTitle}
@@ -28,13 +28,13 @@ const QualificationMenuOption = ({ menuOptionTitle, onMenuOptionClicked, isSelec
       )}
     >
       {isSelectedOption ? (
-        <QualificationMenuOptionSelectedIcon width="24" height="24" className="text-gray-900" />
+        <MenuOptionSelectedIcon width="24" height="24" className="text-gray-900" />
       ) : (
-        <QualificationMenuOptionNotSelectedIcon width="24" height="24" className="text-gray-500" />
+        <MenuOptionNotSelectedIcon width="24" height="24" className="text-gray-500" />
       )}
       {menuOptionTitle}
     </DropdownMenuItem>
   );
 };
 
-export default QualificationMenuOption;
+export default DropdownOption;

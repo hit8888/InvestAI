@@ -36,8 +36,11 @@ const FormArtifact = ({
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
+  const formFields = artifact?.form_fields ?? [];
 
-  const formSchema = createFormSchema(artifact?.form_fields ?? []);
+  const requiredFormFields = formFields.filter((field) => field.is_required) ?? [];
+
+  const formSchema = createFormSchema(requiredFormFields);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formSchemaType = getFormSchemaTypeDefinition(formSchema);
   type FormSchemaType = typeof formSchemaType;
@@ -71,12 +74,10 @@ const FormArtifact = ({
   const formValues = form.watch();
 
   // check if all required fields are filled
-  const areAllFieldsFilled = artifact?.form_fields
-    .filter((field) => field.is_required)
-    .every((field) => {
-      const value = formValues[field.field_name];
-      return value !== undefined && value !== '' && value !== null;
-    });
+  const areAllFieldsFilled = requiredFormFields.every((field) => {
+    const value = formValues[field.field_name];
+    return value !== undefined && value !== '' && value !== null;
+  });
 
   const isSubmitBtnDisabled =
     !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
@@ -93,8 +94,8 @@ const FormArtifact = ({
   if (submitted && !isEditing) {
     return (
       <FormFilledThankYouContent
-        artifact={artifact}
-        formValues={formValues}
+        formFields={formFields}
+        formValues={artifactMetadata}
         // handleEdit={handleEdit}
         // isformDisabled={isformDisabled}
       />
@@ -107,7 +108,7 @@ const FormArtifact = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
             <div className="flex w-full flex-col items-start gap-6">
-              {artifact.form_fields.map((field, i) => (
+              {formFields.map((field, i) => (
                 <ChatFormField isArtifactFormFilled={isArtifactFormFilled} key={i} form={form} form_field={field} />
               ))}
             </div>
