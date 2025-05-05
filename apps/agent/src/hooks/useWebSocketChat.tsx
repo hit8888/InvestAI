@@ -16,6 +16,7 @@ import { hasUserSentInactiveMessage, isMessageAnalyticsEvent } from '@meaku/core
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
+import { sanitizeObject } from '@meaku/core/utils/sanitize';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -147,7 +148,9 @@ const useWebSocketChat = () => {
 
       const response_id = nanoid();
 
-      const payload = getMessagePayload({ message, response_id, message_type });
+      // Sanitize the message content before creating payload
+      const sanitizedMessage = sanitizeObject(message);
+      const payload = getMessagePayload({ message: sanitizedMessage, response_id, message_type });
 
       // set Latest response id for inactive message - checking from payload
       if (hasUserSentInactiveMessage(payload)) {

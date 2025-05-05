@@ -13,6 +13,7 @@ import ChatFormField from './ChatFormField';
 import { FormArtifactContent, FormArtifactMetadataType } from '@meaku/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
 import { createFormSchema } from '../../utils/chat';
+import { sanitizeObject } from '@meaku/core/utils/sanitize';
 
 interface IFormProps {
   artifactId?: string;
@@ -71,7 +72,7 @@ const FormArtifact = ({
   // };
 
   // Watch all form fields
-  const formValues = form.watch();
+  const formValues = sanitizeObject(form.watch());
 
   // check if all required fields are filled
   const areAllFieldsFilled = requiredFormFields.every((field) => {

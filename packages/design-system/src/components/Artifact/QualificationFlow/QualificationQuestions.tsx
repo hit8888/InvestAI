@@ -65,7 +65,9 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
             isRequired={item.is_required}
             question={item.question}
             qualificationMetadata={qualificationMetadata}
-            dropdownOptions={item.response_options.map((item) => item.value)}
+            dropdownOptions={item.response_options
+              .map((item) => item.value)
+              .filter((value): value is string => value !== undefined)}
             handleSetAnswers={(answer) =>
               handleSetAnswers(item.question, answer || '', item.answer_type, item.id ?? '')
             }
