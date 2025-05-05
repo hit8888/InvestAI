@@ -73,16 +73,14 @@ const AgentHeader = ({
 
   return (
     <div className="flex items-center justify-between p-2 pb-3">
-      <div>
-        <Button
-          variant={invertTextColor ? 'inverted_primary' : 'primary'}
-          onClick={handlePrimaryCta}
-          data-testid="contact-sales-btn"
-          disabled={isCTAButtonDisabled}
-        >
-          {ctaText}
-        </Button>
-      </div>
+      <Button
+        variant={invertTextColor ? 'inverted_primary' : 'primary'}
+        onClick={handlePrimaryCta}
+        data-testid="contact-sales-btn"
+        disabled={isCTAButtonDisabled}
+      >
+        {ctaText}
+      </Button>
 
       <div className="flex items-center gap-2 pr-2">
         {!!handleCloseAgent && isCollapsible && (

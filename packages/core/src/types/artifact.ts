@@ -71,7 +71,7 @@ export type FormFieldSchemaType = z.infer<typeof FormFieldSchema>;
 
 export const QualificationSelectOptionSchema = z.object({
   type: z.string(),
-  value: z.string(),
+  value: z.string().optional(),
   placeholder: z.string().optional(),
 });
 

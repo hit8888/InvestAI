@@ -48,7 +48,11 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
         <div className="flex flex-1 items-center gap-2 text-left">
           <Typography variant="body-14" textColor="gray400">{`${header}: `}</Typography>
           {title && (
-            <Typography className="2xl:text-md line-clamp-1" variant="label-14-medium" textColor="textPrimary">
+            <Typography
+              className="2xl:text-md line-clamp-1 break-all"
+              variant="label-14-medium"
+              textColor="textPrimary"
+            >
               {title}
             </Typography>
           )}

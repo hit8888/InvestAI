@@ -20,6 +20,10 @@ const config: Omit<Config, "content"> = {
         "full-hd": "1920px", // Full HD Desktop - 1920x1080
         "semi-qhd": "2200px", // Full HD Desktop - 2200x1080
         qhd: "2560px", // QHD Desktop - 2560x1440
+        "h-xs": { raw: "(max-height: 500px)" },
+        "h-sm": { raw: "(min-height: 501px) and (max-height: 600px)" },
+        "h-md": { raw: "(min-height: 601px) and (max-height: 900px)" },
+        "h-lg": { raw: "(min-height: 901px)" },
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

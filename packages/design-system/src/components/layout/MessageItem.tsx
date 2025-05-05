@@ -111,7 +111,9 @@ const MessageItem = ({
   const hasFormArtifactMessage = !!formArtifactMessage;
   const hasFormFilledMessage = !!formFilledMessage;
 
-  const isLastQuestionResponse = lastMessageResponseId === message.response_id && isSalesResponseMessage;
+  const isLastMessage = lastMessageResponseId === message.response_id;
+
+  const isLastQuestionResponse = isLastMessage && isSalesResponseMessage;
   const isLoading = isAMessageBeingProcessed && isLastQuestionResponse;
 
   const timestamp = message?.timestamp;
@@ -119,14 +121,16 @@ const MessageItem = ({
 
   const isCurrentMsgUserInactiveMessage = isAIResponseInactiveMessage(message);
 
-  const shouldShowActiveOrb =
-    lastMessageResponseId === message.response_id &&
-    (isSalesResponseMessage || isLoading || message.message_type === 'LOADING_TEXT');
+  const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
+  const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
+  const isMessageLoading = isLoading || message.message_type === 'LOADING_TEXT';
+
+  const shouldShowActiveOrb = isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage);
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
   const showMessageArtifactPreview =
-    lastMessageResponseId !== message.response_id &&
+    !isLastMessage &&
     isArtifactMessage &&
     (isMediaArtifact(message.message.artifact_type) || !isFormDataFilled || !!qualifiedFormFilledMessage) &&
     (showArtifactPreview || isInView) &&
@@ -235,14 +239,10 @@ const MessageItem = ({
 
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =
-    lastMessageResponseId === message.response_id &&
-    hasSalesResponseCompleteAndIsArtifactMessage &&
-    message.message.artifact_type === 'SUGGESTIONS';
+    isLastMessage && hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'SUGGESTIONS';
 
   // To show the media artifact for admin, the media artifact message must exist, and the current message must not be a discovery message
   const shouldShowMediaArtifactForAdmin = mediaArtifactMessage && !isCurrentDiscoveryMessage;
-
-  const isLastMessage = message.response_id === messages[messages.length - 1].response_id;
 
   return (
     <MessageItemErrorBoundary message={message}>
@@ -266,9 +266,8 @@ const MessageItem = ({
         )}
 
         {isDiscoveryQuestion(message) && (
-          <div className="my-5 ml-10">
+          <div className="my-5 flex w-full items-start justify-start gap-4">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
-            {!shouldShowActiveOrb && <div className="pl-7"></div>}
             <DiscoveryQuestion
               usingForAgent={usingForAgent}
               message={message}

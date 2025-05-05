@@ -76,7 +76,7 @@ const VideoArtifact = ({
       })}
     >
       <AspectRatio ratio={16 / 9}>
-        <div className="relative h-full w-full" onClick={handlePlayAndPause}>
+        <div className="relative h-full w-full h-xs:max-h-[200px] h-sm:max-h-[300px]" onClick={handlePlayAndPause}>
           <ReactPlayer
             ref={playerRef}
             url={videoUrl}
@@ -85,11 +85,11 @@ const VideoArtifact = ({
             height="100%"
             onEnded={handleVideoOnEnd}
             controls={true}
-            style={{ position: 'absolute', top: 0, left: 0, objectFit: 'fill' }}
-            // Configuration for the player
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
             config={{
               file: {
                 attributes: {
+                  style: { objectFit: 'fill', width: '100%', height: '100%' },
                   // Prevent video download through browser's context menu
                   controlsList: 'nodownload',
                   // Disable right-click context menu

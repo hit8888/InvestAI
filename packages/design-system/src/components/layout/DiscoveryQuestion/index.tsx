@@ -130,5 +130,9 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
     return content;
   })();
 
-  return <div ref={discoveryQuestionsRef}>{getDiscoveryQuestionContent}</div>;
+  return (
+    <div className="w-full" ref={discoveryQuestionsRef}>
+      {getDiscoveryQuestionContent}
+    </div>
+  );
 }
