@@ -12,10 +12,14 @@ import ProtectedRoute from '../pages/ProtectedRoutes';
 import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
 
 import { AppRoutesEnum } from '../utils/constants';
+import DataSourcesPage from '../pages/DataSourcesPage';
+import WorkflowPage from '../pages/WorkflowPage';
+import BrandingPage from '../pages/BrandingPage';
+import EntryPointsPage from '../pages/EntryPointsPage';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
-const { LOGIN, LEADS, CONVERSATIONS, PLAYGROUND } = AppRoutesEnum;
+const { LOGIN, LEADS, CONVERSATIONS, AGENT } = AppRoutesEnum;
 
 const routes = [
   {
@@ -50,9 +54,29 @@ const routes = [
         element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
       },
       {
-        path: PLAYGROUND,
-        element: <ProtectedRoute element={<PlaygroundPage />} />,
-        children: [],
+        path: AGENT,
+        children: [
+          {
+            path: 'playground',
+            element: <ProtectedRoute element={<PlaygroundPage />} />,
+          },
+          {
+            path: 'data-sources',
+            element: <ProtectedRoute element={<DataSourcesPage />} />,
+          },
+          {
+            path: 'workflow',
+            element: <ProtectedRoute element={<WorkflowPage />} />,
+          },
+          {
+            path: 'branding',
+            element: <ProtectedRoute element={<BrandingPage />} />,
+          },
+          {
+            path: 'entrypoints',
+            element: <ProtectedRoute element={<EntryPointsPage />} />,
+          },
+        ],
       },
     ],
   },

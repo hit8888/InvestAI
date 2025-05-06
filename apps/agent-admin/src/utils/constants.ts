@@ -261,13 +261,23 @@ export enum AppRoutesEnum {
   LEADS = '/leads',
   LOGIN = '/login',
   CONVERSATIONS = '/conversations',
-  PLAYGROUND = '/playground',
+  AGENT = '/agent',
+  AGENT_PLAYGROUND = '/agent/playground',
+  AGENT_DATA_SOURCES = '/agent/data-sources',
+  AGENT_WORKFLOW = '/agent/workflow',
+  AGENT_BRANDING = '/agent/branding',
+  AGENT_ENTRYPOINTS = '/agent/entrypoints',
 }
 
 export enum SidebarNavItemsEnum {
   LEADS_LABEL = 'Leads',
   CONVERSATIONS_LABEL = 'Conversations',
-  PLAYGROUND_LABEL = 'Playground',
+  AGENT_LABEL = 'Agent',
+  AGENT_PLAYGROUND_LABEL = 'Playground',
+  AGENT_DATA_SOURCES_LABEL = 'Data Sources',
+  AGENT_BRANDING_LABEL = 'Branding',
+  AGENT_WORKFLOW_LABEL = 'Workflow',
+  AGENT_ENTRYPOINTS_LABEL = 'Entrypoints',
 }
 
 // LEADS Page
