@@ -9,8 +9,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import ArtifactContainer from '@breakout/design-system/components/Artifact/ArtifactContainer';
 import { cn } from '@breakout/design-system/lib/cn';
 
-const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
-  // console.log('sessionID', sessionID);
+const JoinConversationChatArea = ({ sessionID }: { sessionID: string }) => {
   const {
     chatHistory,
     conversation,
@@ -58,18 +57,15 @@ const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
   }, [isLoading]);
 
   if (isError) {
+    // TODO: track this error
     console.error('Error while fetching conversation details');
-    return null;
+    // return null;
   }
   const logoURL = getTenantIdentifier()?.['logo'];
   // const nonDemoFlow = true;
   return (
-    <div className="relative z-0 h-[90%] w-full rounded-2xl border border-gray-200">
-      <div
-        className={cn('flex h-full w-full flex-1 overflow-hidden', {
-          'gap-2': true,
-        })}
-      >
+    <div className="h-full w-full rounded-2xl border border-gray-200">
+      <div className={cn('flex h-full w-full flex-1 gap-2 overflow-hidden')}>
         {chatHistory?.length && conversation?.session_id ? (
           <AgentMessages
             usingForAgent={true}
@@ -93,9 +89,7 @@ const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
             invertTextColor={false}
           />
         ) : (
-          <p className="gradient-text mt-20 h-screen w-full text-center text-4xl font-semibold">
-            There is No Log for this Session.
-          </p>
+          <p className="mt-20 w-full text-center text-2xl font-semibold">There is no log for this session.</p>
         )}
         {/* Right Side Artifact Container */}
         <ArtifactContainer
@@ -105,11 +99,9 @@ const JoinConversationChatAreaBody = ({ sessionID }: { sessionID: string }) => {
           onSlideItemClick={() => {}}
           messages={chatHistory}
         />
-        {/* {nonDemoFlow && (
-      )} */}
       </div>
     </div>
   );
 };
 
-export default JoinConversationChatAreaBody;
+export default JoinConversationChatArea;

@@ -24,13 +24,13 @@ export type ActiveConversationCard = {
 export interface ActiveConversation {
   agent_id: number;
   session_id: string;
-  company?: string;
-  lastMessage?: string;
-  buyerIntent: BuyerIntent;
+  last_user_message?: string;
+  buyer_intent: BuyerIntent;
   prospect: {
     name: string;
     email: string;
     country: string;
+    company?: string;
     company_demographics: {
       company_revenue: string;
       employee_count: number;
@@ -263,7 +263,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
           const sessionId = liveSessionIds?.find((sessionId) => conv.session_id === sessionId);
 
           if (sessionId) {
-            conv.lastMessage = lastMessageBySession[sessionId];
+            conv.last_user_message = lastMessageBySession[sessionId];
           }
 
           newConversations.push(conv);

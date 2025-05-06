@@ -261,6 +261,9 @@ importers:
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@19.0.0)
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.0.9
       react:
         specifier: ^19.0.0
         version: 19.0.0

@@ -1,41 +1,32 @@
-import { useState } from 'react';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import ChipWithIcon from '@breakout/design-system/components/ChipWithIcon/ChipWithIcon';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
-import JoinConversationDrawer from './JoinConversationDrawer';
-import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import BuyerIntentChip from './BuyerIntentChip';
 
-const ActiveConversationCard = ({ conversation }: { conversation: ActiveConversation }) => {
+interface ActiveConversationCardProps {
+  conversation: ActiveConversation;
+  onCardClick: (conversation: ActiveConversation) => void;
+}
+
+const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversationCardProps) => {
   const {
-    company,
-    lastMessage,
-    buyerIntent,
+    last_user_message,
+    buyer_intent,
     prospect: {
       name,
+      company,
       country,
       company_demographics: { company_logo_url },
     },
   } = conversation;
 
-  const [openJoinConversationDrawer, setOpenJoinConversationDrawer] = useState(false);
-  const { setHasJoinedConversation } = useJoinConversationStore();
   const countryFlagUrl = country ? findFlagUrlByCountryName(country) : '';
-
-  const handleOpenJoinConversationDrawer = () => {
-    setOpenJoinConversationDrawer(true);
-  };
-
-  const handleCloseJoinConversationDrawer = () => {
-    setOpenJoinConversationDrawer(false);
-    setHasJoinedConversation(false);
-  };
 
   return (
     <>
       <div
         className="cursor-pointer rounded-xl border border-gray-200 bg-white p-2 hover:border-[rgb(184,181,241)] hover:shadow-md"
-        onClick={handleOpenJoinConversationDrawer}
+        onClick={() => onCardClick(conversation)}
       >
         <div className="flex items-start">
           <div className="flex-1 overflow-hidden">
@@ -46,22 +37,17 @@ const ActiveConversationCard = ({ conversation }: { conversation: ActiveConversa
             )}
 
             <div className="mt-1 h-6 overflow-hidden text-ellipsis whitespace-nowrap px-2 text-sm text-customPrimaryText">
-              {lastMessage}
+              {last_user_message}
             </div>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              <BuyerIntentChip buyerIntent={buyerIntent} />
+              <BuyerIntentChip buyerIntent={buyer_intent} />
               <ChipWithIcon name={country} iconUrl={countryFlagUrl} />
               <ChipWithIcon name={company} iconUrl={company_logo_url} />
             </div>
           </div>
         </div>
       </div>
-      <JoinConversationDrawer
-        conversation={conversation}
-        isOpen={openJoinConversationDrawer}
-        onClose={handleCloseJoinConversationDrawer}
-      />
     </>
   );
 };
