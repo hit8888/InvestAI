@@ -102,6 +102,8 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     browser_signature: getBrowserSignature(),
     is_test,
     test_type: test_type as 'automated' | 'manual' | undefined,
+    referrer: document.referrer,
+    parent_url: is_test ? '' : parentUrl || window.location.href,
   };
 
   //test build

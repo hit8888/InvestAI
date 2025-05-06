@@ -35,4 +35,6 @@ export type InitializationPayload = {
   is_admin?: boolean;
   is_test?: boolean;
   test_type?: 'automated' | 'manual';
+  referrer?: string;
+  parent_url?: string;
 };

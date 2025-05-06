@@ -268,6 +268,7 @@ const MessageItem = ({
         {isDiscoveryQuestion(message) && (
           <div className="my-5 flex w-full items-start justify-start gap-4">
             {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
+            {!shouldShowActiveOrb && <div className="pl-7"></div>}
             <DiscoveryQuestion
               usingForAgent={usingForAgent}
               message={message}
@@ -278,7 +279,7 @@ const MessageItem = ({
         )}
 
         {isDiscoveryAnswer(message) && (
-          <div className="my-5 flex flex-row items-end gap-4 pt-4">
+          <div className="my-5 flex flex-row items-end gap-4">
             <div className="pl-7"></div>
             <DiscoveryAnswer message={message} usingForAgent={usingForAgent} />
           </div>
