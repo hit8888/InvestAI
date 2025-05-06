@@ -130,6 +130,7 @@ export type SuggestionArtifactContent = z.infer<typeof SuggestionArtifactSchema>
 export enum CalendarTypeEnum {
   CALENDLY = 'CALENDLY',
   CAL_COM = 'CAL_COM',
+  IFRAME = 'IFRAME',
 }
 
 export const CalendarArtifactSchema = z.object({

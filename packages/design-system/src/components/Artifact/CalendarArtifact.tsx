@@ -44,6 +44,20 @@ export const CalendarArtifact = ({ calendarContent }: Props) => {
           </div>
         );
 
+      case CalendarTypeEnum.IFRAME:
+        return (
+          <div className="h-full w-full sm:min-h-[600px]">
+            <iframe
+              src={calendarContent.calendar_url}
+              style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '600px',
+              }}
+            />
+          </div>
+        );
+
       default:
         return null;
     }
