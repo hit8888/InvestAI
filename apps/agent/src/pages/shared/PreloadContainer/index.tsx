@@ -23,6 +23,7 @@ import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { isProduction } from '../../../utils/common.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -40,6 +41,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const isAdmin = useIsAdmin();
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
+  const parentUrlParam = getParam('parent_url');
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -95,6 +97,12 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   const { mode } = useWidgetMode();
 
+  const getParentUrlValue = () => {
+    if (!isProduction) return '';
+    if (parentUrlParam) return decodeURIComponent(parentUrlParam);
+    return parentUrl || window.location.href;
+  };
+
   const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
     session_id: sessionData.sessionId,
@@ -103,7 +111,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     is_test,
     test_type: test_type as 'automated' | 'manual' | undefined,
     referrer: document.referrer,
-    parent_url: is_test ? '' : parentUrl || window.location.href,
+    parent_url: getParentUrlValue(),
   };
 
   //test build
