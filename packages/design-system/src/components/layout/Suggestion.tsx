@@ -5,6 +5,7 @@ import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
 import Typography from '../Typography';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import { useTextTruncation } from '../../hooks/useTextTruncation';
 
 interface IProps {
   question: string;
@@ -23,6 +24,10 @@ const Suggestion = ({
 }: IProps) => {
   const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const { isTablet } = useScreenSize();
+  const { textRef, isTextTruncated } = useTextTruncation({
+    text: question,
+    maxWidth: isQuestionInCycle ? 380 : undefined,
+  });
 
   const handleClickOnSuggestedQuestion = (question: string) => {
     onSuggestedQuestionOnClick(question);
@@ -37,7 +42,7 @@ const Suggestion = ({
           'border border-gray-900 bg-white py-2 pl-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
             !isEntryPointQuestion,
           'border-2 border-primary/60 bg-primary/80 px-2 hover:bg-primary/90 focus:bg-primary': isEntryPointQuestion,
-          'max-w-[300px]': isQuestionInCycle,
+          'max-w-[380px]': isQuestionInCycle,
         },
       )}
       data-testid={`suggestion-item-${itemIndex}`}
@@ -58,18 +63,21 @@ const Suggestion = ({
       <TooltipWrapperDark
         tooltipSide="top"
         tooltipAlign="end"
-        tooltipSideOffsetValue={30}
+        tooltipSideOffsetValue={15}
         trigger={
           <Typography
+            ref={textRef}
             variant="label-14-medium"
             align="left"
             textColor={isEntryPointQuestion ? (invertTextColor ? 'default' : 'white') : 'textSecondary'}
-            className="line-clamp-1 w-full lg:line-clamp-2"
+            className={cn('line-clamp-1 lg:line-clamp-2', {
+              'min-w-0 max-w-[350px] flex-1': isQuestionInCycle,
+            })}
           >
             {question}
           </Typography>
         }
-        showTooltip={isQuestionInCycle ? false : isTablet}
+        showTooltip={isQuestionInCycle ? isTextTruncated : isTablet}
         content={<p>{question}</p>}
       />
     </div>

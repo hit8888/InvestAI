@@ -1,5 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { useRef, useState } from 'react';
+import { PauseIcon, PlayIcon } from 'lucide-react';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -77,6 +78,7 @@ const VideoArtifact = ({
     >
       <AspectRatio ratio={16 / 9}>
         <div className="relative h-full w-full h-xs:max-h-[200px] h-sm:max-h-[300px]" onClick={handlePlayAndPause}>
+          <PlayAndPauseIconDisplay handlePlayAndPause={handlePlayAndPause} isPlaying={isPlaying} />
           <ReactPlayer
             ref={playerRef}
             url={videoUrl}
@@ -118,6 +120,28 @@ const VideoArtifact = ({
           />
         </div>
       </AspectRatio>
+    </div>
+  );
+};
+
+type PlayAndPauseIconDisplayProps = {
+  handlePlayAndPause: () => void;
+  isPlaying: boolean;
+};
+
+const PlayAndPauseIconDisplay = ({ handlePlayAndPause, isPlaying }: PlayAndPauseIconDisplayProps) => {
+  return (
+    <div
+      className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
+        'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
+      })}
+      onClick={handlePlayAndPause}
+    >
+      {isPlaying ? (
+        <PauseIcon className="fill-white text-white" size={60} />
+      ) : (
+        <PlayIcon className="fill-white text-white" size={60} />
+      )}
     </div>
   );
 };

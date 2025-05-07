@@ -23,7 +23,6 @@ import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { isProduction } from '../../../utils/common.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -98,7 +97,6 @@ const PreloadContainer: FC<Props> = ({ children }) => {
   const { mode } = useWidgetMode();
 
   const getParentUrlValue = () => {
-    if (!isProduction) return '';
     if (parentUrlParam) return decodeURIComponent(parentUrlParam);
     return parentUrl || window.location.href;
   };

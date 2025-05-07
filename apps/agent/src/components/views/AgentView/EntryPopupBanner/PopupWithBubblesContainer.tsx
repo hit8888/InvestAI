@@ -42,12 +42,15 @@ const PopupWithBubblesContainer = ({
   useEffect(() => {
     if (hasShownOnce || isPopupInCooldown()) return;
 
-    setShowBubbles(true);
+    // Show bubbles after 10 seconds
+    const bubbleTimer = setTimeout(() => {
+      setShowBubbles(true);
+    }, 10000);
 
     // Show popup content after bubbles are fully animated
     const popupTimer = setTimeout(() => {
       setShowPopupContent(true);
-    }, 1000);
+    }, 11000);
 
     // Start exit sequence after 10 seconds
     const exitTimer = setTimeout(() => {
@@ -65,11 +68,12 @@ const PopupWithBubblesContainer = ({
       setTimeout(() => {
         setShowOrbAfterBubblesDisappear(true);
       }, 1500); // 1.5 seconds delay
-    }, 10000); // 10 seconds initial delay
+    }, 20000); // 10 + 10 seconds initial delay
 
     return () => {
       clearTimeout(popupTimer);
       clearTimeout(exitTimer);
+      clearTimeout(bubbleTimer);
     };
   }, [hasShownOnce]);
 

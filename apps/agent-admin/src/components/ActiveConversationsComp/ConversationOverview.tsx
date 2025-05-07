@@ -25,8 +25,8 @@ const ConversationOverview = ({ conversation }: ConversationOverviewProps) => {
   const [hasCompanyData, setHasCompanyData] = useState(false);
 
   const Icon = isExpanded ? ChevronUp : ChevronDown;
-  const { name, email, country, company_demographics } = conversation.prospect;
-  const { company, buyerIntent } = conversation;
+  const { name, email, country, company, company_demographics } = conversation.prospect;
+  const { buyer_intent: buyerIntent } = conversation;
   const { company_revenue, employee_count, website_url } = company_demographics;
 
   const dataItemIcon = (Icon: React.ComponentType<{ width: number; height: number }>) => (

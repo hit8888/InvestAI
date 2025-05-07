@@ -52,7 +52,7 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
   );
 
   return (
-    <div className="flex h-full w-full flex-col justify-between gap-10 pb-10">
+    <div className="flex h-full w-full flex-col justify-start gap-10 pb-10">
       <div
         className={cn('flex flex-col items-start justify-center gap-16 self-stretch pl-4', {
           'max-h-[750px] justify-start overflow-y-auto':

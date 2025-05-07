@@ -20,7 +20,7 @@ import { initDomDetectors } from "./dom-detectors";
             SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
             SIDEWISE_WIDTH_INITIAL: "500px",
             SIDEWISE_HEIGHT_WITH_BUBBLE: "250px",
-            SIDEWISE_HEIGHT: "100px",
+            SIDEWISE_HEIGHT: "120px",
             SIDEWISE_HEIGHT_MESSAGE_SENT: "80px",
           },
         },
@@ -38,7 +38,7 @@ import { initDomDetectors } from "./dom-detectors";
             SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
             SIDEWISE_WIDTH_INITIAL: "500px",
             SIDEWISE_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
-            SIDEWISE_HEIGHT: "100px",
+            SIDEWISE_HEIGHT: "120px",
             SIDEWISE_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
           },
         },
@@ -250,71 +250,32 @@ import { initDomDetectors } from "./dom-detectors";
 
       Object.assign(styles, {
         bottom: "-10px",
-        left: StyleManager.getEntryPointLeftKeyValue(
-          entryPointAlignment,
-          isAgentOpen,
-          hasFirstUserMessageBeenSent,
-        ),
-        transform: StyleManager.getEntryPointTransformKeyValue(
-          entryPointAlignment,
-          isAgentOpen,
-          hasFirstUserMessageBeenSent,
-        ),
+        left: StyleManager.ENTRY_POINT_LEFT_MAP[entryPointAlignment] ?? "50%",
+        right:
+          StyleManager.ENTRY_POINT_RIGHT_MAP[entryPointAlignment] ?? "auto",
+        transform:
+          StyleManager.ENTRY_POINT_TRANSFORM_MAP[entryPointAlignment] ??
+          "translateX(-50%)",
         borderRadius: "12px",
       });
 
       Object.assign(container.style, styles);
     },
-    getEntryPointLeftKeyValue(
-      entryPointAlignment: EntryPointAlignmentType,
-      isAgentOpen: boolean,
-      hasFirstUserMessageBeenSent: boolean,
-    ): string {
-      switch (entryPointAlignment) {
-        case "left":
-          return "0";
-        case "right":
-          if (hasFirstUserMessageBeenSent) {
-            if (isAgentOpen) {
-              return "50%";
-            } else {
-              return "100%";
-            }
-          } else return "50%";
-        case "center":
-          return "50%";
-        default:
-          return "50%";
-      }
-    },
-    getEntryPointTransformKeyValue(
-      entryPointAlignment: EntryPointAlignmentType,
-      isAgentOpen: boolean,
-      hasFirstUserMessageBeenSent: boolean,
-    ): string {
-      switch (entryPointAlignment) {
-        case "left":
-          return "translateX(0)";
-        case "right":
-          if (hasFirstUserMessageBeenSent) {
-            if (isAgentOpen) {
-              return "translateX(-50%)";
-            } else {
-              return "translateX(-100%)";
-            }
-          } else {
-            if (isAgentOpen) {
-              return "translateX(-50%)";
-            } else {
-              return "translateX(50%)";
-            }
-          }
-        case "center":
-          return "translateX(-50%)";
-        default:
-          return "translateX(-50%)";
-      }
-    },
+    ENTRY_POINT_LEFT_MAP: {
+      left: "0",
+      right: "auto",
+      center: "50%",
+    } as const,
+    ENTRY_POINT_RIGHT_MAP: {
+      left: "auto",
+      right: "0",
+      center: "auto",
+    } as const,
+    ENTRY_POINT_TRANSFORM_MAP: {
+      left: "none",
+      right: "none",
+      center: "translateX(-50%)",
+    } as const,
   };
 
   // External Button Manager Module

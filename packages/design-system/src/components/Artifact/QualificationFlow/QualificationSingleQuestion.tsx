@@ -22,11 +22,12 @@ const QualificationSingleQuestion = ({
   const sameQuestionAnswered =
     isQuestionAnswered && qualificationMetadata.filled_data?.find((item) => item.question === question);
   const answeredValue = sameQuestionAnswered ? sameQuestionAnswered.answer : 'No Answer';
+
   return (
     <div className="flex w-full flex-col items-start gap-6 self-stretch">
-      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText 2xl:text-lg">
+      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">
         {question}
-        {isRequired ? ' (Optional)' : ''}{' '}
+        {!isRequired ? ' (Optional)' : ''}{' '}
       </p>
       {isQuestionAnswered ? (
         <QualificationSingleQuestionAnswered answer={answeredValue} />
