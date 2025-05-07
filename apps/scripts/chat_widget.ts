@@ -581,28 +581,27 @@ import { initDomDetectors } from "./dom-detectors";
         .split(":")
         .map(Number);
 
-      // Create a date object with current date but time from current timezone
-      const currentDate = new Date(now);
-      currentDate.setHours(currentHour, currentMinute, 0, 0);
-
       // Parse start and end times
       const [startHour, startMinute] = effectiveStartTime
         .split(":")
         .map(Number);
       const [endHour, endMinute] = effectiveEndTime.split(":").map(Number);
 
-      const startDate = new Date(now);
-      startDate.setHours(startHour, startMinute, 0, 0);
+      // Convert all times to minutes since midnight for easier comparison
+      const currentMinutes = currentHour * 60 + currentMinute;
+      const startMinutes = startHour * 60 + startMinute;
+      const endMinutes = endHour * 60 + endMinute;
 
-      const endDate = new Date(now);
-      endDate.setHours(endHour, endMinute, 0, 0);
-
-      // Handle cases where end time is on the next day
-      if (endDate < startDate) {
-        endDate.setDate(endDate.getDate() + 1);
+      let isWithinRange;
+      if (endMinutes < startMinutes) {
+        // Time range spans across midnight
+        isWithinRange =
+          currentMinutes >= startMinutes || currentMinutes <= endMinutes;
+      } else {
+        // Normal time range within same day
+        isWithinRange =
+          currentMinutes >= startMinutes && currentMinutes <= endMinutes;
       }
-
-      const isWithinRange = currentDate >= startDate && currentDate <= endDate;
 
       // For testing purposes, log the times
       // console.log("Time Check:", {
