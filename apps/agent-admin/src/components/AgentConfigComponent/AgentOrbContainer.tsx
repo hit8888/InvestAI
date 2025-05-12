@@ -84,7 +84,8 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
                 showTooltip={useFaviconDisabled}
                 trigger={getCheckboxElement()}
                 content={getTooltipContentElement()}
-                tooltipAlign="start"
+                tooltipAlign="center"
+                showArrow={false}
               />
               Use favicon.
             </div>

@@ -27,7 +27,7 @@ interface ImagePreviewProps {
 
 const ImagePreviewComponent: React.FC<ImagePreviewProps> = ({ imagePreview, isSquareLogo, isUploading }) => (
   <>
-    <img src={imagePreview} alt="Uploaded logo" className="h-full w-full rounded-lg object-fill" />
+    <img src={imagePreview} alt="Uploaded logo" className="h-full w-full rounded-lg object-contain" />
     <div className="absolute inset-0 flex items-center justify-center gap-2 rounded-md bg-system/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
       {!isSquareLogo && !isUploading && (
         <Typography variant="label-16-medium" className="text-white">
@@ -132,8 +132,9 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   return (
     <div
       className={cn(
-        'group relative flex cursor-pointer items-center justify-center self-stretch rounded-lg border border-primary/60',
+        'group relative flex aspect-square cursor-pointer items-center justify-center self-stretch rounded-lg border border-primary/60',
         {
+          'px-2 py-1': !!imagePreview?.length && !isSquareLogo,
           'border-dashed': !imagePreview?.length,
           'cursor-not-allowed opacity-50': isUploading,
         },

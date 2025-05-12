@@ -1,4 +1,4 @@
-import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
+// import AdminLogoSVG from '@breakout/design-system/components/icons/admin-logo-icon';
 import PanelCloseIcon from '@breakout/design-system/components/icons/panel-close-icon';
 import Separator from '@breakout/design-system/components/layout/separator';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -25,7 +25,7 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
 
   return (
     <div
-      className={`flex flex-shrink-0 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
+      className={`flex flex-col items-start justify-center gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-0 pt-4`}
     >
       <motion.div
         className={cn('flex w-full items-center justify-between px-2 pb-2', {
@@ -41,27 +41,26 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
             'justify-center': isTenantLogoUrlPresent,
           })}
         >
-          <Container
-            {...containerProps}
-            className={cn('flex h-12 items-center', {
-              'justify-center': isOpen && isTenantLogoUrlPresent,
-            })}
-          >
-            {isTenantLogoUrlPresent ? (
+          {isTenantLogoUrlPresent && (
+            <Container
+              {...containerProps}
+              className={cn('flex h-12 items-center', {
+                'justify-center': isOpen,
+              })}
+            >
               <img className="h-full w-full object-contain" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
-            ) : (
-              <AdminLogoSVG width={'30'} height={'35'} />
-            )}
-          </Container>
+            </Container>
+          )}
           {isOpen && !isTenantLogoUrlPresent ? (
-            <motion.span
+            <motion.a
+              href="/"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-lg font-bold text-gray-900 transition-all duration-300"
+              className="w-full text-center text-2xl font-bold capitalize text-gray-900 transition-all duration-300"
             >
               {TENANT_NAME}
-            </motion.span>
+            </motion.a>
           ) : null}
         </div>
       </motion.div>

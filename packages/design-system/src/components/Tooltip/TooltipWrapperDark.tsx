@@ -25,7 +25,7 @@ const TooltipWrapperDark = ({
 }: IProps) => {
   const isTooltipSideValueTop = tooltipSide === 'top';
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={200}>
       <Tooltip defaultOpen={alwaysVisible}>
         <TooltipTrigger asChild>
           <div className="block cursor-pointer">{trigger}</div>
