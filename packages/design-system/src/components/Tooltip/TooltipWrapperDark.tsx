@@ -9,6 +9,8 @@ interface IProps {
   tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
   tooltipAlign?: 'start' | 'center' | 'end';
   tooltipSideOffsetValue?: number;
+  showArrow?: boolean;
+  alwaysVisible?: boolean;
 }
 
 const TooltipWrapperDark = ({
@@ -18,11 +20,13 @@ const TooltipWrapperDark = ({
   tooltipSide = 'bottom',
   tooltipAlign = 'end',
   tooltipSideOffsetValue = 80,
+  showArrow = true,
+  alwaysVisible = false,
 }: IProps) => {
   const isTooltipSideValueTop = tooltipSide === 'top';
   return (
     <TooltipProvider>
-      <Tooltip defaultOpen={false}>
+      <Tooltip defaultOpen={alwaysVisible}>
         <TooltipTrigger asChild>
           <div className="block cursor-pointer">{trigger}</div>
         </TooltipTrigger>
@@ -31,16 +35,20 @@ const TooltipWrapperDark = ({
             sideOffset={isTooltipSideValueTop ? tooltipSideOffsetValue : 5}
             align={tooltipAlign}
             side={tooltipSide}
-            className="z-[9999] rounded-lg border-none bg-gray-900 px-3 py-2 text-white"
+            className={cn('z-[9999] rounded-lg border-none bg-gray-900 px-3 py-2 text-white', {
+              'pointer-events-none': alwaysVisible,
+            })}
           >
             {content}
-            <TooltipArrow
-              width={12}
-              height={6}
-              className={cn('fixed -right-6 2xl:right-14', {
-                'right-8': isTooltipSideValueTop,
-              })}
-            />
+            {showArrow && (
+              <TooltipArrow
+                width={12}
+                height={6}
+                className={cn('fixed -right-6 2xl:right-14', {
+                  'right-8': isTooltipSideValueTop,
+                })}
+              />
+            )}
           </TooltipContent>
         )}
       </Tooltip>

@@ -506,3 +506,21 @@ export const SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS = {
     },
   },
 };
+
+// Agent Configs Constants Variables
+export const FULL_LOGO_TITLE = 'Full Logo';
+export const SQUARE_LOGO_TITLE = 'Favicon';
+export const NAME_TITLE = 'Name:';
+export const FULL_LOGO_SUBTITLE = 'Recommended size: 240x60px (or a similar aspect ratio)';
+export const SQUARE_LOGO_SUBTITLE = 'Recommended size: 60x60px (or a square aspect ratio)';
+export const NAME_SUBTITLE = 'Name your agent to match your brand.';
+
+export const COLOR_PRIMARY_TITLE = 'Primary';
+export const COLOR_SECONDARY_TITLE = 'Secondary';
+export const COLOR_PRIMARY_SUBTITLE =
+  'This is your primary brand color and it will be used for the primary call to action on the interface.';
+export const COLOR_SECONDARY_SUBTITLE =
+  'This is your accent color used for support visuals like dynamically generated slides.';
+
+export const ORB_DESCRIPTION =
+  'The orb in the conversation interface is based on the primary color. You can either use the standard orb or replace it with your favicon logo.';

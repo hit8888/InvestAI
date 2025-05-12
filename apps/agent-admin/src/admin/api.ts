@@ -8,6 +8,7 @@ import {
   LoginWithEmailPasswordPayload,
   VerifyOtpPayload,
 } from '@meaku/core/types/admin/api';
+import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
 import adminApiClient from './client';
 
@@ -57,4 +58,24 @@ export const getEntityDataBasedOnType = async (entityType: string) => {
 
 export const getActiveConversations = async () => {
   return adminApiClient.get(`/tenant/api/search/sessions/live_sessions`);
+};
+
+// Agent Configs api endpoints
+export const getBrandingAgentConfigs = async (agentId: number) => {
+  return adminApiClient.get(`/tenant/api/agent/${agentId}`);
+};
+
+export const updateBrandingAgentConfigs = async (agentId: number, payload: AgentConfigPayload) => {
+  return adminApiClient.put(`/tenant/api/agent/${agentId}/`, payload);
+};
+
+export const uploadAssetsFile = (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return adminApiClient.post('/tenant/api/assets/upload/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };

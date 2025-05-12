@@ -29,6 +29,7 @@ const LogTabDisplayContent = () => {
           feedbackData={feedbackData}
           lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
           orbLogoUrl={''}
+          showOrbFromConfig={true}
           invertTextColor={false}
         />
       ) : (

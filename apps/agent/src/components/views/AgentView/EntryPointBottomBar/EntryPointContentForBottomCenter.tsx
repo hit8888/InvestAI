@@ -52,10 +52,11 @@ const EntryPointContentForBottomCenter = ({
   const showSuggestedQuestions =
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
-  const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
-
   const orbConfig = configurationApiResponseManager.getOrbConfig();
+
   const orbLogoUrl = orbConfig?.logo_url ?? undefined;
+  const showOrbFromConfig = !!orbConfig?.show_orb;
+  const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
 
   return (
     <div className="w-full rounded-2xl bg-gray-50 p-2">
@@ -64,7 +65,12 @@ const EntryPointContentForBottomCenter = ({
         className="flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
       >
         <div className="relative flex-1">
-          <InputOrb state={OrbStatusEnum.waiting} showOrb={showOrb} orbLogoUrl={orbLogoUrl} />
+          <InputOrb
+            state={OrbStatusEnum.waiting}
+            showOrbFromConfig={showOrbFromConfig}
+            showOrb={showOrb}
+            orbLogoUrl={orbLogoUrl}
+          />
           <EntryPointChatInput
             shouldInputAutoFocus={isAgentOpen}
             value={inputValue}
@@ -86,7 +92,9 @@ const EntryPointContentForBottomCenter = ({
             'pr-1': !hasFirstUserMessageBeenSent,
           })}
         >
-          {hasFirstUserMessageBeenSent && <InputWaitingOrb state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />}
+          {hasFirstUserMessageBeenSent && (
+            <InputWaitingOrb showOrb={showOrbFromConfig} state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
+          )}
           <ChatInputSendButton
             btnType="submit"
             showButton={!!inputValue}

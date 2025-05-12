@@ -39,6 +39,7 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
         <InputOrb
           style={{ width: '54px', height: '54px' }}
           showOrb={true} // Always show orb when left or right entry
+          showOrbFromConfig={true} // Always show orb when left or right entry
           orbLogoUrl={showOrb ? '' : orbLogoUrl}
           showThreeStar={true}
         />

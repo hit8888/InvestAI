@@ -60,6 +60,7 @@ interface IProps {
   initialFeedback?: FeedbackRequestPayload;
   lastMessageResponseId: string;
   orbLogoUrl: string | undefined | null;
+  showOrbFromConfig: boolean;
   invertTextColor: boolean;
 }
 
@@ -81,6 +82,7 @@ const MessageItem = ({
   initialFeedback,
   lastMessageResponseId,
   orbLogoUrl,
+  showOrbFromConfig,
   invertTextColor,
 }: IProps) => {
   // TODO: NEED TO REFACTOR THIS COMPONENT into Multiple Components - FOLLOW SINGLE RESPONSIBILITY PRINCIPLE
@@ -262,12 +264,15 @@ const MessageItem = ({
             primaryColor={primaryColor}
             shouldShowActiveOrb={shouldShowActiveOrb}
             orbLogoUrl={orbLogoUrl}
+            showOrbFromConfig={showOrbFromConfig}
           />
         )}
 
         {isDiscoveryQuestion(message) && (
           <div className="my-5 flex w-full items-start justify-start gap-4">
-            {shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}
+            {shouldShowActiveOrb && (
+              <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+            )}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
             <DiscoveryQuestion
               usingForAgent={usingForAgent}

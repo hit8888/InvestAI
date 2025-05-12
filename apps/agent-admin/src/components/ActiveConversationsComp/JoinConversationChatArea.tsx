@@ -85,6 +85,7 @@ const JoinConversationChatArea = ({ sessionID }: { sessionID: string }) => {
             allowFeedback={true}
             feedbackData={feedbackData}
             orbLogoUrl={''}
+            showOrbFromConfig={true}
             lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
             invertTextColor={false}
           />

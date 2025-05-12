@@ -25,10 +25,7 @@ const QualificationSingleQuestion = ({
 
   return (
     <div className="flex w-full flex-col items-start gap-6 self-stretch">
-      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">
-        {question}
-        {!isRequired ? ' (Optional)' : ''}{' '}
-      </p>
+      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">{question}</p>
       {isQuestionAnswered ? (
         <QualificationSingleQuestionAnswered answer={answeredValue} />
       ) : (

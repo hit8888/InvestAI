@@ -21,6 +21,7 @@ interface TextMessageProps {
   primaryColor: string | null;
   shouldShowActiveOrb: boolean;
   isCurrentMsgUserInactiveMessage: boolean;
+  showOrbFromConfig: boolean;
   orbLogoUrl: string | undefined | null;
 }
 
@@ -43,6 +44,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
   shouldShowActiveOrb,
   isCurrentMsgUserInactiveMessage,
   orbLogoUrl,
+  showOrbFromConfig,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const inactivityMessageRef = useElementScrollIntoView<HTMLDivElement>({
@@ -110,7 +112,11 @@ const TextMessage: React.FC<TextMessageProps> = ({
         })}
       >
         {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
-          <>{shouldShowActiveOrb && <Orb state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />}</>
+          <>
+            {shouldShowActiveOrb && (
+              <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+            )}
+          </>
         )}
 
         <div className="flex-col">

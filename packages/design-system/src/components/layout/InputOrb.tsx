@@ -3,21 +3,22 @@ import InputWaitingOrb from './InputWaitingOrb';
 import { CSSProperties } from 'react';
 
 interface InputOrbProps {
-  showOrb: boolean;
+  showOrb?: boolean;
   orbLogoUrl?: string;
   style?: CSSProperties;
   showThreeStar?: boolean;
   state?: OrbStatusEnum;
+  showOrbFromConfig: boolean;
 }
 
-const InputOrb = ({ showOrb, orbLogoUrl, style, showThreeStar, state }: InputOrbProps) => {
-  if (!showOrb) return null;
-
+const InputOrb = ({ showOrb, orbLogoUrl, style, showThreeStar, state, showOrbFromConfig }: InputOrbProps) => {
+  if (!showOrb) return;
   return (
     <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
       <InputWaitingOrb
         state={state ?? OrbStatusEnum.waiting}
         style={style}
+        showOrb={showOrbFromConfig}
         orbLogoUrl={orbLogoUrl}
         showThreeStar={showThreeStar}
       />

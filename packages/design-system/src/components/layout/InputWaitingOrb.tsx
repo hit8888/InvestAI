@@ -7,12 +7,20 @@ interface InputWaitingOrbProps {
   orbLogoUrl?: string;
   style?: CSSProperties;
   showThreeStar?: boolean;
+  showOrb?: boolean;
   state: OrbStatusEnum;
 }
 
-const InputWaitingOrb = ({ orbLogoUrl, style, showThreeStar, state }: InputWaitingOrbProps) => {
+const InputWaitingOrb = ({ orbLogoUrl, style, showThreeStar, showOrb, state }: InputWaitingOrbProps) => {
   return (
-    <Orb color={RGB_PRIMARY_COLOR} style={style} state={state} orbLogoUrl={orbLogoUrl} showThreeStar={showThreeStar} />
+    <Orb
+      showOrb={showOrb}
+      color={RGB_PRIMARY_COLOR}
+      style={style}
+      state={state}
+      orbLogoUrl={orbLogoUrl}
+      showThreeStar={showThreeStar}
+    />
   );
 };
 

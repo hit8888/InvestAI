@@ -31,17 +31,19 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
         className={cn('flex w-full items-center justify-between px-2 pb-2', {
           'flex-row p-2': isOpen,
           'flex-col p-0': !isOpen,
+          'justify-between': isTenantLogoUrlPresent,
+          'justify-start': !isTenantLogoUrlPresent,
         })}
         {...getTransitionAnimation()}
       >
         <div
-          className={cn('flex items-center gap-2', {
-            'w-full justify-center': isTenantLogoUrlPresent,
+          className={cn('flex w-full items-center gap-2', {
+            'justify-center': isTenantLogoUrlPresent,
           })}
         >
           <Container
             {...containerProps}
-            className={cn('flex h-12 w-full items-center', {
+            className={cn('flex h-12 items-center', {
               'justify-center': isOpen && isTenantLogoUrlPresent,
             })}
           >

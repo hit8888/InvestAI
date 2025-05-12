@@ -23,7 +23,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     isAgentPlaygroundPage,
     // isAgentDataSourcesPage,
     // isAgentWorkflowPage,
-    // isAgentBrandingPage,
+    isAgentBrandingPage,
     // isAgentEntrypointsPage,
   } = usePageRouteState();
   const {
@@ -33,7 +33,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     AGENT_PLAYGROUND,
     // AGENT_DATA_SOURCES,
     // AGENT_WORKFLOW,
-    // AGENT_BRANDING,
+    AGENT_BRANDING,
     // AGENT_ENTRYPOINTS,
   } = AppRoutesEnum;
   const {
@@ -43,7 +43,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     AGENT_PLAYGROUND_LABEL,
     // AGENT_DATA_SOURCES_LABEL,
     // AGENT_WORKFLOW_LABEL,
-    // AGENT_BRANDING_LABEL,
+    AGENT_BRANDING_LABEL,
     // AGENT_ENTRYPOINTS_LABEL,
   } = SidebarNavItemsEnum;
 
@@ -90,11 +90,11 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
         //   navItem: AGENT_DATA_SOURCES_LABEL,
         //   isActive: isAgentDataSourcesPage,
         // },
-        // {
-        //   navUrl: AGENT_BRANDING,
-        //   navItem: AGENT_BRANDING_LABEL,
-        //   isActive: isAgentBrandingPage,
-        // },
+        {
+          navUrl: AGENT_BRANDING,
+          navItem: AGENT_BRANDING_LABEL,
+          isActive: isAgentBrandingPage,
+        },
         // {
         //   navUrl: AGENT_WORKFLOW,
         //   navItem: AGENT_WORKFLOW_LABEL,

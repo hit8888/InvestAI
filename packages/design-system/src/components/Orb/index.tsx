@@ -9,12 +9,13 @@ interface IProps {
   color: string | null;
   state: OrbStatusEnum;
   showThreeStar?: boolean;
+  showOrb?: boolean;
   style?: CSSProperties;
   orbLogoUrl?: string | null | undefined;
 }
 
-const Orb = ({ color, state, style = {}, orbLogoUrl, showThreeStar = false }: IProps) => {
-  if (orbLogoUrl) {
+const Orb = ({ color, state, style = {}, orbLogoUrl, showThreeStar = false, showOrb = true }: IProps) => {
+  if (!showOrb && orbLogoUrl) {
     return <img src={orbLogoUrl} alt="orb logo" className="h-8 w-8 rounded-full object-cover" />;
   }
 
