@@ -8,6 +8,7 @@ import { SessionApiResponseManager } from '@meaku/core/managers/SessionApiRespon
 import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
 import { SessionApiResponse } from '@meaku/core/types/api/session_init_response';
 import { ConfigurationApiResponseManager } from '@meaku/core/managers/ConfigurationApiResponseManager';
+import { hasDemoEndMessage } from '@meaku/core/utils/messageUtils';
 
 const INITIAL_MESSAGES_STATE_LENGTH = 0;
 const INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS = 1;
@@ -59,7 +60,24 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
       : [welcomeMessagePayload];
 
     setMessages(messages);
-    setLatestResponseId(messages[messages.length - 1].response_id);
+
+    // Find the last AI message and use its response_id
+    // There may be case when last message is from user - FORM_FILLED event goes and then refreshed
+    const lastAiMessage = messages
+      .slice()
+      .reverse()
+      .find((message) => message.role === 'ai');
+
+    const lastMessageResponseId = messages[messages.length - 1].response_id;
+
+    const demoEndMessageExist = hasDemoEndMessage(messages);
+    const demoEndLastMessageExist = demoEndMessageExist?.response_id === lastAiMessage?.response_id;
+
+    if (demoEndLastMessageExist) {
+      setLatestResponseId(demoEndMessageExist?.response_id ?? lastMessageResponseId);
+    } else {
+      setLatestResponseId(lastAiMessage?.response_id ?? lastMessageResponseId);
+    }
 
     if (sessionId && prospectId) {
       handleUpdateSessionData({

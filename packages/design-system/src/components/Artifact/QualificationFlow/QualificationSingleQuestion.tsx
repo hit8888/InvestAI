@@ -8,6 +8,7 @@ type IProps = {
   handleSetAnswers: (answer: string | null) => void;
   isRequired: boolean;
   qualificationMetadata: QualificationQuestionMetadataType;
+  hasQualificationMetadataFilledData: boolean;
 };
 
 const QualificationSingleQuestion = ({
@@ -16,9 +17,10 @@ const QualificationSingleQuestion = ({
   dropdownOptions,
   handleSetAnswers,
   qualificationMetadata,
+  hasQualificationMetadataFilledData,
 }: IProps) => {
   const addAsterisk = isRequired ? '*' : '';
-  const isQuestionAnswered = qualificationMetadata.is_filled;
+  const isQuestionAnswered = hasQualificationMetadataFilledData && qualificationMetadata.is_filled;
   const sameQuestionAnswered =
     isQuestionAnswered && qualificationMetadata.filled_data?.find((item) => item.question === question);
   const answeredValue = sameQuestionAnswered ? sameQuestionAnswered.answer : 'No Answer';

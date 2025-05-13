@@ -16,10 +16,13 @@ export interface ArtifactProps {
   title?: string;
   description?: string;
   artifactContent: ArtifactContentWithMetadataProps;
+  isQualificationFormArtifact: boolean;
+  usingForAgent: boolean;
 }
 
 const Artifact = ({
   logoURL,
+  usingForAgent,
   isMediaTakingFullWidth,
   handleSendUserMessage,
   activeArtifact,
@@ -28,6 +31,7 @@ const Artifact = ({
   onSlideItemClick,
   isGeneratingArtifact,
   artifactContent,
+  isQualificationFormArtifact,
 }: ArtifactProps) => {
   const activeArtifactId = activeArtifact?.artifact_id ?? '';
   const activeArtifactType = activeArtifact?.artifact_type;
@@ -49,6 +53,8 @@ const Artifact = ({
               handleSendUserMessage={handleSendUserMessage}
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               onSlideItemClick={onSlideItemClick}
+              isQualificationFormArtifact={isQualificationFormArtifact}
+              usingForAgent={usingForAgent}
             />
           )}
         </div>

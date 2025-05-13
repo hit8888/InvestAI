@@ -11,8 +11,8 @@ import Textarea from '@breakout/design-system/components/layout/textarea';
 import FeedbackButton from '@breakout/design-system/components/layout/feedback-button';
 import {
   FeedbackEnum,
-  FeedbackRequestPayloadSchema,
   FeedbackRequestPayload,
+  getFeedbackRequestPayloadSchema,
 } from '@meaku/core/types/api/feedback_request';
 import { NEGATIVE_FEEDBACK_CATEGORIES, POSITIVE_FEEDBACK_CATEGORIES } from '@meaku/core/constants/feedback';
 import useResponseFeedback from '@meaku/core/queries/mutation/useResponseFeedback';
@@ -56,11 +56,12 @@ const MessageFeedback = ({
   const [categories, setCategories] = useState<string[]>([]);
 
   const form = useForm<FeedbackRequestPayload>({
-    resolver: zodResolver(FeedbackRequestPayloadSchema),
+    resolver: zodResolver(getFeedbackRequestPayloadSchema(isFeedbackThumbDown)),
     defaultValues: {
       category: '',
       remarks: '',
     },
+    mode: 'onChange',
   });
 
   const { mutateAsync: handlePostResponseFeedback } = useResponseFeedback({
@@ -108,14 +109,26 @@ const MessageFeedback = ({
     form.reset();
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    form.reset();
+  const handleCloseDialog = async () => {
+    // Only allow closing if it's positive feedback or if negative feedback has all required fields
+    if (isFeedbackThumbUp || (form.getValues().category && form.getValues().remarks)) {
+      setOpenDialog(false);
+      form.reset();
+    }
   };
 
   const handleSubmitFeedback = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     const values = form.getValues();
+
+    if (isFeedbackThumbDown && (!values.category || !values.remarks)) {
+      // Trigger form validation and check for errors
+      const isValid = await form.trigger();
+      if (!isValid) {
+        await form.trigger(['category', 'remarks']);
+        return;
+      }
+    }
     await handleShareDetailedFeedback(values);
     handleCloseDialog();
   };
@@ -154,11 +167,31 @@ const MessageFeedback = ({
     });
   };
 
+  // Modify the dialog's onOpenChange handler
+  const handleDialogOpenChange = async (open: boolean) => {
+    if (!open && isFeedbackThumbDown) {
+      // If trying to close with negative feedback, check if fields are filled
+      const values = form.getValues();
+      if (!values.category || !values.remarks) {
+        return; // Prevent closing
+      }
+      // If trying to close with negative feedback, validate fields
+      const isValid = await form.trigger();
+      if (!isValid) {
+        return; // Prevent closing and show validation errors
+      }
+    }
+    setOpenDialog(open);
+    if (!open) {
+      form.reset();
+    }
+  };
+
   const showRemarksField = (form.getValues()?.['category'] ?? '').length > 0;
   const isMessageReadOnly = Boolean(feedback?.category || feedback?.remarks) || Boolean(form.getValues()?.remarks);
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog open={openDialog} onOpenChange={handleDialogOpenChange}>
       <div className="my-4 flex items-center gap-2">
         <DialogTrigger asChild>
           <FeedbackButton disabled={isMessageReadOnly} isFilled={isFeedbackThumbUp} onClick={onClickThumbUp} />
@@ -220,7 +253,14 @@ const MessageFeedback = ({
               />
             ) : null}
             <div className="flex w-full gap-6">
-              <Button className="w-full" variant="system_secondary" onClick={handleCloseDialog}>
+              <Button
+                className="w-full"
+                variant="system_secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCloseDialog();
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" className="w-full" onClick={handleSubmitFeedback}>

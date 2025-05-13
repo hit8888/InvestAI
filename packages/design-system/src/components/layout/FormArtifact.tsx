@@ -20,18 +20,10 @@ interface IFormProps {
   artifact?: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
-  isformDisabled?: boolean;
   usingForAgent?: boolean;
 }
 
-const FormArtifact = ({
-  artifactId,
-  artifact,
-  artifactMetadata,
-  handleSendUserMessage,
-  isformDisabled,
-  usingForAgent,
-}: IFormProps) => {
+const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage, usingForAgent }: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -80,8 +72,7 @@ const FormArtifact = ({
     return value !== undefined && value !== '' && value !== null;
   });
 
-  const isSubmitBtnDisabled =
-    !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled || isformDisabled;
+  const isSubmitBtnDisabled = !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled;
 
   const submitButtonRef = useElementScrollIntoView<HTMLButtonElement>({
     shouldScroll: isSubmitBtnDisabled && usingForAgent,
@@ -98,7 +89,6 @@ const FormArtifact = ({
         formFields={formFields}
         formValues={artifactMetadata}
         // handleEdit={handleEdit}
-        // isformDisabled={isformDisabled}
       />
     );
   }

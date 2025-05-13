@@ -6,21 +6,27 @@ import { ArtifactContent, FormArtifactContent, QualificationResponsesType } from
 import {
   checkIsArtifactMessage,
   checkIsQualificationFormArtifact,
+  getFormArtifactMessage,
   getFormFilledEvent,
+  isFormDataFilled,
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
 // import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 
 type IProps = {
   logoURL: string;
+  usingForAgent?: boolean;
   isMediaTakingFullWidth: boolean;
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   onSlideItemClick: (title: string) => void;
   messages: WebSocketMessage[];
 };
 
+// Component used in Dashboard
+
 const ArtifactContainer = ({
   logoURL,
+  usingForAgent = true,
   isMediaTakingFullWidth,
   handleSendMessage,
   onSlideItemClick,
@@ -51,18 +57,45 @@ const ArtifactContainer = ({
     ? ((artifactMessage.message as ArtifactMessageContent).artifact_data.content as ArtifactContent)
     : null;
 
+  const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === artifactMessage?.response_id);
+
+  const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
+  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
+
+  const hasFormArtifactMessage = !!formArtifactMessage;
+  const hasFormFilledMessage = !!formFilledMessage;
+
   const qualificationFormFilled = getFormFilledEvent(messages, artifactMessage, 'QUALIFICATION_FORM_FILLED');
   const hasQualificationFormFilled = !!qualificationFormFilled;
 
   const isQualificationFormArtifact = artifactMessage && checkIsQualificationFormArtifact(artifactMessage);
 
+  const isFormArtifact =
+    artifactMessage && hasFormArtifactMessage && !checkIsQualificationFormArtifact(artifactMessage);
+
   const qualificationQuestionFormMetadata = isQualificationFormArtifact
     ? {
-        is_filled: hasQualificationFormFilled,
+        is_filled: hasFormFilledMessage || hasQualificationFormFilled,
         filled_data: hasQualificationFormFilled
           ? (qualificationFormFilled.message.event_data as { qualification_responses: QualificationResponsesType[] })
               .qualification_responses
-          : artifactMessage?.message.artifact_data.metadata?.filled_data,
+          : hasFormFilledMessage
+            ? formFilledMessage?.message.event_data.form_data
+            : {},
+      }
+    : {};
+
+  const formMetadata = isFormArtifact
+    ? {
+        is_filled:
+          hasFormFilledMessage ||
+          isFormDataFilled(
+            (artifactMessage.message.artifact_data.content as FormArtifactContent)?.form_fields,
+            artifactMessage.message.artifact_data.metadata.filled_data,
+          ),
+        filled_data: hasFormFilledMessage
+          ? formFilledMessage.message.event_data.form_data
+          : artifactMessage.message.artifact_data.metadata?.filled_data,
       }
     : {};
 
@@ -76,7 +109,7 @@ const ArtifactContainer = ({
 
   const artifactContentWithMetadata = {
     ...artifactContent,
-    metadata: qualificationQuestionFormMetadata,
+    metadata: isFormArtifact ? formMetadata : qualificationQuestionFormMetadata,
   };
 
   return (
@@ -90,6 +123,8 @@ const ArtifactContainer = ({
       onSlideItemClick={onSlideItemClick}
       isGeneratingArtifact={false} // TODO: keeping it false for now, there is Too much gap b/w slides ( Linear task:- ENG-1451)
       artifactContent={artifactContentWithMetadata}
+      isQualificationFormArtifact={isQualificationFormArtifact ?? false}
+      usingForAgent={usingForAgent}
     />
   );
 };

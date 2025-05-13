@@ -6,19 +6,28 @@ import { ArtifactContent, FormArtifactContent, QualificationResponsesType } from
 import {
   checkIsArtifactMessage,
   checkIsQualificationFormArtifact,
+  getFormArtifactMessage,
   getFormFilledEvent,
+  isFormDataFilled,
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
 import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 
 type IProps = {
   logoURL: string;
+  usingForAgent?: boolean;
   isMediaTakingFullWidth: boolean;
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   onSlideItemClick: (title: string) => void;
 };
 
-const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage, onSlideItemClick }: IProps) => {
+const ArtifactContainer = ({
+  logoURL,
+  usingForAgent = true,
+  isMediaTakingFullWidth,
+  handleSendMessage,
+  onSlideItemClick,
+}: IProps) => {
   const handleToggleFullScreen = useMessageStore((state) => state.handleToggleFullScreen);
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
   const messages = useMessageStore((state) => state.messages);
@@ -45,20 +54,47 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
     ? ((artifactMessage.message as ArtifactMessageContent).artifact_data.content as ArtifactContent)
     : null;
 
+  const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === artifactMessage?.response_id);
+
+  const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
+  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
+
+  const hasFormArtifactMessage = !!formArtifactMessage;
+  const hasFormFilledMessage = !!formFilledMessage;
+
   const qualificationFormFilled = getFormFilledEvent(messages, artifactMessage, 'QUALIFICATION_FORM_FILLED');
   const hasQualificationFormFilled = !!qualificationFormFilled;
 
   const isQualificationFormArtifact = artifactMessage && checkIsQualificationFormArtifact(artifactMessage);
+  const isFormArtifact =
+    artifactMessage && hasFormArtifactMessage && !checkIsQualificationFormArtifact(artifactMessage);
 
   const qualificationQuestionFormMetadata = isQualificationFormArtifact
     ? {
-        is_filled: hasQualificationFormFilled,
+        is_filled: hasFormFilledMessage || hasQualificationFormFilled,
         filled_data: hasQualificationFormFilled
           ? (qualificationFormFilled.message.event_data as { qualification_responses: QualificationResponsesType[] })
               .qualification_responses
-          : artifactMessage?.message.artifact_data.metadata?.filled_data,
+          : hasFormFilledMessage
+            ? formFilledMessage?.message.event_data.form_data
+            : {},
       }
     : {};
+
+  const formMetadata = isFormArtifact
+    ? {
+        is_filled:
+          hasFormFilledMessage ||
+          isFormDataFilled(
+            (artifactMessage.message.artifact_data.content as FormArtifactContent)?.form_fields,
+            artifactMessage.message.artifact_data.metadata.filled_data,
+          ),
+        filled_data: hasFormFilledMessage
+          ? formFilledMessage.message.event_data.form_data
+          : artifactMessage.message.artifact_data.metadata?.filled_data,
+      }
+    : {};
+
   if (!activeArtifact || !artifactContent) return null;
 
   const artifactWithContent = {
@@ -69,7 +105,7 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
 
   const artifactContentWithMetadata = {
     ...artifactContent,
-    metadata: qualificationQuestionFormMetadata,
+    metadata: isFormArtifact ? formMetadata : qualificationQuestionFormMetadata,
   };
 
   return (
@@ -83,6 +119,8 @@ const ArtifactContainer = ({ logoURL, isMediaTakingFullWidth, handleSendMessage,
       onSlideItemClick={onSlideItemClick}
       isGeneratingArtifact={hasGeneratingArtifactEvents}
       artifactContent={artifactContentWithMetadata}
+      isQualificationFormArtifact={isQualificationFormArtifact ?? false}
+      usingForAgent={usingForAgent}
     />
   );
 };

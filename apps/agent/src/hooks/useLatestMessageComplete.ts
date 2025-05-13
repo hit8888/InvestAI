@@ -1,5 +1,10 @@
 import { useMessageStore } from '../stores/useMessageStore';
-import { isPrimaryGoalCompletedMessage, isStreamMessageComplete, isTextMessage } from '@meaku/core/utils/messageUtils';
+import {
+  hasDemoEndMessage,
+  isPrimaryGoalCompletedMessage,
+  isStreamMessageComplete,
+  isTextMessage,
+} from '@meaku/core/utils/messageUtils';
 import { useCallback } from 'react';
 
 const useLatestMessageComplete = () => {
@@ -14,6 +19,12 @@ const useLatestMessageComplete = () => {
     // Get the latest messages directly from the store when the function is called
     const messages = store.getState().messages;
     if (!latestResponseId) return true;
+
+    const lastMessageResponseID = messages[messages.length - 1].response_id;
+    const demoEndMessageExist = hasDemoEndMessage(messages);
+
+    const isDemoEndLastMessage = lastMessageResponseID === demoEndMessageExist?.response_id;
+    if (isDemoEndLastMessage) return true;
 
     // Get all messages with the latest response ID
     const currentResponseMessages = messages.filter(

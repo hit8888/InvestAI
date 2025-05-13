@@ -7,8 +7,9 @@ import QualificationQuestions from './QualificationQuestions';
 
 const QualificationFlowArtifact = ({ artifact, handleSendUserMessage }: QualificationFlowArtifactProps) => {
   const { containerRef, scale } = useSlideArtifactScaleSystem();
-  const isQualificationQuestionFilled = artifact.metadata.is_filled;
-  const [steps, setSteps] = useState(isQualificationQuestionFilled ? 2 : 1);
+  const isQualificationFormFilled = Array.isArray(artifact.metadata?.filled_data); // If its array - qualification Question
+  const stepNumberBasedOnFormOrQuestionFilled = isQualificationFormFilled && artifact.metadata.is_filled ? 2 : 1;
+  const [steps, setSteps] = useState(stepNumberBasedOnFormOrQuestionFilled);
 
   const handleIncrementSteps = () => {
     setSteps((steps) => steps + 1);
@@ -25,7 +26,7 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage }: Qualific
             minWidth: '1600px',
           }}
         >
-          {!isQualificationQuestionFilled && (
+          {!artifact.metadata.is_filled && (
             <p className="w-full pb-6 pr-6 text-right text-2xl font-semibold text-gray-500">{`${steps} of 2`}</p>
           )}
           {steps === 1 ? (

@@ -40,8 +40,9 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
     };
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.QUALIFICATION_FORM_FILLED, event_data: response_data },
-      message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
+      message_type: 'EVENT',
     });
+
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.QUALIFICATION_QUESTIONS_SUBMITTED, { ...response_data });
   };
 
@@ -50,6 +51,8 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
   const isSubmitBtnDisabled = qualificationQuestions.some(
     (question) => question.is_required && !qualificationAnswers.some((answer) => answer.question === question.question),
   );
+
+  const hasQualificationMetadataFilledData = Array.isArray(qualificationMetadata.filled_data);
 
   return (
     <div className="flex h-full w-full flex-col justify-start gap-10 pb-10">
@@ -64,6 +67,7 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
             key={item.question}
             isRequired={item.is_required}
             question={item.question}
+            hasQualificationMetadataFilledData={hasQualificationMetadataFilledData}
             qualificationMetadata={qualificationMetadata}
             dropdownOptions={item.response_options
               .map((item) => item.value)
@@ -75,7 +79,7 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
         ))}
       </div>
       <div className="flex w-full justify-end pr-2">
-        {!qualificationMetadata.is_filled ? (
+        {!hasQualificationMetadataFilledData ? (
           <Button
             className="h-14 w-36 rounded-xl text-2xl"
             onClick={handleSubmitQualificationQuestions}

@@ -11,7 +11,7 @@ import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketD
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
-import { checkIsQualificationFormArtifact, MEDIA_ARTIFACT_PREVIEW_TYPES } from '@meaku/core/utils/messageUtils';
+import { checkIsQualificationFormArtifact, BASE_ARTIFACT_TYPES } from '@meaku/core/utils/messageUtils';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
@@ -38,7 +38,7 @@ const MessageArtifactPreview = ({
     return null;
 
   // Only show preview for SLIDE, SLIDE_IMAGE, FORM and VIDEO artifacts
-  if (!MEDIA_ARTIFACT_PREVIEW_TYPES.includes(artifactType)) return null;
+  if (!BASE_ARTIFACT_TYPES.includes(artifactType)) return null;
 
   const artifactManager = new ArtifactManager(message.message);
   const content = artifactData.content;
@@ -49,7 +49,7 @@ const MessageArtifactPreview = ({
   ): content is SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent | FormArtifactContent => {
     const isQualificationFormArtifactValid = artifactType === 'FORM' && checkIsQualificationFormArtifact(message);
 
-    const isMediaArtifactValid = MEDIA_ARTIFACT_PREVIEW_TYPES.includes(artifactType);
+    const isMediaArtifactValid = BASE_ARTIFACT_TYPES.includes(artifactType);
     return (
       content !== null && typeof content === 'object' && (isQualificationFormArtifactValid || isMediaArtifactValid)
     );

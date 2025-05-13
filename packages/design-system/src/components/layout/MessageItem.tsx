@@ -1,16 +1,10 @@
 import useInView from '@meaku/core/hooks/useInView';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import ChatArtifact from './ChatArtifact.tsx';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { getMessageTimestamp } from '@meaku/core/utils/index';
-import {
-  ArtifactBaseType,
-  ArtifactMessageContent,
-  MessageAnalyticsEventData,
-  WebSocketMessage,
-} from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType, MessageAnalyticsEventData, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
-import { FormArtifactContent, SuggestionArtifactContent } from '@meaku/core/types/artifact';
+import { SuggestionArtifactContent } from '@meaku/core/types/artifact';
 import MessageArtifactPreview from './MessageArtifactPreview';
 import TextMessage from './TextMessage';
 import { useState } from 'react';
@@ -21,6 +15,7 @@ import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
   checkIsArtifactMessage,
   checkIsMainResponseMessage,
+  checkIsQualificationFormArtifact,
   checkIsSalesResponseComplete,
   getAnalyticsEvent,
   getFormArtifactMessage,
@@ -29,18 +24,14 @@ import {
   isAIResponseInactiveMessage,
   isDiscoveryAnswer,
   isDiscoveryQuestion,
-  // hasStreamMessageForForm,
-  // isAIMessageRespondingToUserMessageWithNotMuchContext,
   isDisplayedAsTextMessage,
-  isFormDataFilled,
   isMediaArtifact,
-  checkIsQualificationFormArtifact,
-  checkIsFormArtifactBase,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
 import Orb from '../Orb';
 import Typography from '../Typography/index.tsx';
+import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -96,9 +87,7 @@ const MessageItem = ({
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
 
   const discoveryMessage = messagesWithSameResponseId.find((msg) => isDiscoveryQuestion(msg));
-
   const isDiscoveryMessage = !!discoveryMessage;
-
   const isCurrentDiscoveryMessage = isDiscoveryQuestion(message);
 
   const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
@@ -107,11 +96,7 @@ const MessageItem = ({
   const mediaArtifactMessage = getMediaArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
   const qualifiedFormFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'QUALIFICATION_FORM_FILLED');
-
-  const hasFormArtifactMessage = !!formArtifactMessage;
-  const hasFormFilledMessage = !!formFilledMessage;
 
   const isLastMessage = lastMessageResponseId === message.response_id;
 
@@ -134,7 +119,8 @@ const MessageItem = ({
   const showMessageArtifactPreview =
     !isLastMessage &&
     isArtifactMessage &&
-    (isMediaArtifact(message.message.artifact_type) || !isFormDataFilled || !!qualifiedFormFilledMessage) &&
+    ((isMediaArtifact(message.message.artifact_type) && !checkIsQualificationFormArtifact(message)) ||
+      !!qualifiedFormFilledMessage) &&
     (showArtifactPreview || isInView) &&
     isSalesResponseComplete;
 
@@ -169,61 +155,7 @@ const MessageItem = ({
     );
   };
 
-  const getChatArtifactContent = (
-    message: WebSocketMessage & { message: ArtifactMessageContent },
-    isFormArtifact: boolean = false,
-  ) => {
-    const formMetadata = isFormArtifact
-      ? {
-          is_filled:
-            hasFormFilledMessage ||
-            isFormDataFilled(
-              (message.message.artifact_data.content as FormArtifactContent)?.form_fields,
-              message.message.artifact_data.metadata.filled_data,
-            ),
-          filled_data: hasFormFilledMessage
-            ? formFilledMessage.message.event_data.form_data
-            : message.message.artifact_data.metadata?.filled_data,
-        }
-      : {};
-
-    return (
-      <ChatArtifact
-        artifact={{
-          artifact_type: message.message.artifact_type,
-          artifact_id: message.message.artifact_data.artifact_id,
-          content: isFormArtifact
-            ? (message.message.artifact_data.content as FormArtifactContent)
-            : (message.message.artifact_data.content as SuggestionArtifactContent),
-          metadata: {
-            ...message.message.artifact_data.metadata,
-            ...formMetadata,
-          },
-          error: message.message.artifact_data.error,
-          error_code: message.message.artifact_data.error_code,
-        }}
-        handleSendUserMessage={handleSendUserMessage}
-        isformDisabled={isFormArtifact && formMetadata.is_filled}
-        usingForAgent={usingForAgent}
-      />
-    );
-  };
-
   const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
-
-  // TODO: Commented out for now as it is not being used. Will fix this the coming PR.
-  // const isAIRespondingWithNotMuchContext = isAIMessageRespondingToUserMessageWithNotMuchContext(message);
-  // const isStreamMessageForForm = formArtifactMessage ? hasStreamMessageForForm(message, formArtifactMessage) : false;
-
-  //TODOS: NEED to callibrate the scrolling issue and latest question at the top issue.
-  // For now it works for scroll issue, but not for latest question at the top issue.
-  // Need to fix this based on number of words and how much space & parent width it would take in the chat widget.
-  // const getMinHeight = () => {
-  //   if (!isAiMessage || !isLastQuestionResponse || isDiscoveryMessage) return 'auto';
-  //   return isAIRespondingWithNotMuchContext || isStreamMessageForForm
-  //     ? 'calc(-800px + 100dvh)'
-  //     : 'calc(-600px + 100dvh)';
-  // };
 
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
   const shouldShowTextMessage =
@@ -233,11 +165,6 @@ const MessageItem = ({
   const shouldShowFeedbackSection = isAiMessage && allowFeedback && isTextMessage;
 
   const hasSalesResponseCompleteAndIsArtifactMessage = isSalesResponseComplete && isArtifactMessage;
-
-  const shouldShowFormArtifact =
-    hasSalesResponseCompleteAndIsArtifactMessage &&
-    checkIsFormArtifactBase(message) &&
-    !checkIsQualificationFormArtifact(message);
 
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =
@@ -322,36 +249,21 @@ const MessageItem = ({
           <>
             {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
-            {/* Form Artifact */}
-            {shouldShowFormArtifact && (
-              <div className="flex flex-col items-start py-4 pl-11">
-                {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent }, true)}
-              </div>
-            )}
-
             {/* Show suggestion artifacts - store handles filtering */}
             {shouldShowSuggestions && (
               <div className="ml-auto mt-3">
-                {getChatArtifactContent(message as WebSocketMessage & { message: ArtifactMessageContent })}
+                <SuggestionsArtifact
+                  suggestedQuestionOrientation="right"
+                  artifact={message.message.artifact_data.content as SuggestionArtifactContent}
+                  handleSendUserMessage={handleSendUserMessage}
+                />
               </div>
             )}
           </>
         ) : null}
 
         {showingContentForAdmin ? (
-          <>
-            {shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}
-
-            {/* Form Artifact */}
-            {hasFormArtifactMessage && (
-              <div className="flex flex-col items-start py-4 pl-11">
-                {getChatArtifactContent(
-                  formArtifactMessage as WebSocketMessage & { message: ArtifactMessageContent },
-                  true,
-                )}
-              </div>
-            )}
-          </>
+          <>{shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}</>
         ) : null}
       </div>
     </MessageItemErrorBoundary>

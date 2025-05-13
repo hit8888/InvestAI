@@ -196,8 +196,7 @@ export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMes
     return true; // For other matching types, no additional checks needed
   }
 };
-export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO'] as const;
-export const MEDIA_ARTIFACT_PREVIEW_TYPES = [...BASE_ARTIFACT_TYPES, 'FORM'] as const;
+export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'FORM'] as const;
 export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES, 'CALENDAR'] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 
@@ -210,6 +209,12 @@ export const isDiscoveryQuestion = (message: WebSocketMessage): boolean => {
     message.message_type === 'EVENT' &&
     message.actor === 'DISCOVERY_QUESTIONS' &&
     message.message.event_type === 'DISCOVERY_QUESTIONS'
+  );
+};
+
+export const hasDemoEndMessage = (messages: WebSocketMessage[]) => {
+  return messages.find(
+    (msg) => 'event_type' in msg.message && msg.message.event_type === 'DEMO_END' && msg.role === 'user',
   );
 };
 

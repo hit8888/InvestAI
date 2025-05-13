@@ -11,6 +11,7 @@ interface IProps {
   hasArtifactOrDemoInMessageHistory: boolean;
   isMediaTakingFullWidth: boolean;
   showDemoPreQuestions: boolean;
+  usingForAgent?: boolean;
 }
 
 const AgentMessagesContainer = ({
@@ -18,6 +19,7 @@ const AgentMessagesContainer = ({
   hasArtifactOrDemoInMessageHistory,
   isMediaTakingFullWidth,
   showDemoPreQuestions,
+  usingForAgent = true,
 }: IProps) => {
   const messages = useMessageStore((state) => state.messages);
 
@@ -50,6 +52,7 @@ const AgentMessagesContainer = ({
 
   return (
     <AgentMessages
+      usingForAgent={usingForAgent}
       sessionId={sessionId}
       orbState={orbState}
       messages={messages}

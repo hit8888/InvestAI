@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export enum FeedbackEnum {
-  THUMBS_UP = "thumbs_up",
-  THUMBS_DOWN = "thumbs_down",
+  THUMBS_UP = 'thumbs_up',
+  THUMBS_DOWN = 'thumbs_down',
 }
 
 export const FeedbackRequestPayloadSchema = z.object({
@@ -12,6 +12,18 @@ export const FeedbackRequestPayloadSchema = z.object({
   remarks: z.string().nullable().optional(),
 });
 
-export type FeedbackRequestPayload = z.infer<
-  typeof FeedbackRequestPayloadSchema
->;
+export const getFeedbackRequestPayloadSchema = (isFeedbackThumbDown: boolean) => {
+  if (isFeedbackThumbDown) {
+    return FeedbackRequestPayloadSchema.extend({
+      category: z.string({
+        required_error: 'Category is required for negative feedback',
+      }),
+      remarks: z.string({
+        required_error: 'Remarks are required for negative feedback',
+      }),
+    });
+  }
+  return FeedbackRequestPayloadSchema;
+};
+
+export type FeedbackRequestPayload = z.infer<typeof FeedbackRequestPayloadSchema>;

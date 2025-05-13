@@ -1,6 +1,7 @@
 import {
   CalendarArtifactContent,
   FormArtifactContent,
+  FormArtifactMetadataType,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
@@ -11,6 +12,7 @@ import { CalendarArtifact } from './CalendarArtifact';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
+import FormArtifact from '../layout/FormArtifact';
 interface Props {
   artifactType: string | undefined;
   artifactContent: ArtifactContentWithMetadataProps;
@@ -21,6 +23,8 @@ interface Props {
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   onSlideItemClick: (title: string) => void;
+  isQualificationFormArtifact: boolean;
+  usingForAgent: boolean;
 }
 
 export const ArtifactContentUi = ({
@@ -33,6 +37,8 @@ export const ArtifactContentUi = ({
   handleToggleFullScreen,
   setIsArtifactPlaying,
   onSlideItemClick,
+  isQualificationFormArtifact,
+  usingForAgent,
 }: Props) => {
   if (!artifactType || !artifactContent) {
     return null;
@@ -77,16 +83,28 @@ export const ArtifactContentUi = ({
         />
       );
     case 'FORM':
-      return (
-        <QualificationFlowArtifact
-          artifact={{
-            artifact_id: activeArtifactId,
-            content: artifactContent as FormArtifactContent,
-            metadata: artifactContent.metadata,
-          }}
-          handleSendUserMessage={handleSendUserMessage}
-        />
-      );
+      if (isQualificationFormArtifact) {
+        return (
+          <QualificationFlowArtifact
+            artifact={{
+              artifact_id: activeArtifactId,
+              content: artifactContent as FormArtifactContent,
+              metadata: artifactContent.metadata,
+            }}
+            handleSendUserMessage={handleSendUserMessage}
+          />
+        );
+      } else {
+        return (
+          <FormArtifact
+            artifactId={activeArtifactId}
+            artifact={artifactContent as FormArtifactContent}
+            artifactMetadata={artifactContent.metadata as FormArtifactMetadataType}
+            handleSendUserMessage={handleSendUserMessage}
+            usingForAgent={usingForAgent}
+          />
+        );
+      }
     default:
       return null;
   }

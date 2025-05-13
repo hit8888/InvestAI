@@ -32,6 +32,7 @@ const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = [
   'FORM_FILLED',
   'QUALIFICATION_FORM_FILLED',
   'DISCOVERY_ANSWER',
+  'DEMO_END',
 ];
 
 const useWebSocketChat = () => {
