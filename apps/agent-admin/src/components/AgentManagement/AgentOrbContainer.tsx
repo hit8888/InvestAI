@@ -2,7 +2,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 import AgentTitleAndSubtitleContent from './AgentTitleAndSubtitleContent';
 import { ORB_DESCRIPTION } from '../../utils/constants';
-import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
+import { Switch } from '@breakout/design-system/components/layout/switch';
 import { useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import Orb from '@breakout/design-system/components/Orb/index';
@@ -47,14 +47,13 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
 
   const getCheckboxElement = () => {
     return (
-      <Checkbox
-        className={cn('rounded-[2px] bg-white', {
-          'border-2 border-gray-400': !useFavicon,
-        })}
-        disabled={useFaviconDisabled}
-        haveBlackBackground={false}
+      <Switch
         checked={useFavicon}
+        disabled={useFaviconDisabled}
         onCheckedChange={handleUseFaviconValue}
+        thumbHeight="h-4"
+        thumbWidth="w-4"
+        className="pl-0.5 transition-colors data-[state=unchecked]:border-gray-200 data-[state=checked]:bg-primary data-[state=unchecked]:bg-gray-300 data-[state=checked]:ring-2 data-[state=checked]:ring-primary/60"
       />
     );
   };
@@ -75,9 +74,8 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
           <div className="flex flex-1 flex-col items-start gap-4">
             <AgentTitleAndSubtitleContent subtitle={ORB_DESCRIPTION} />
             <div
-              className={cn('flex items-center gap-2 rounded-lg border border-gray-200 p-2 pr-3', {
-                'bg-primary/10 text-primary': useFavicon,
-                'bg-gray-100': !useFavicon,
+              className={cn('flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 pr-3', {
+                'text-primary': useFavicon,
               })}
             >
               <TooltipWrapperDark
