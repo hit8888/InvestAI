@@ -1,12 +1,7 @@
-import AgentConfigHeader from '../components/AgentConfigComponent/AgentConfigHeader';
-import withAgentConfigWrapper from './AgentConfigWrapper';
+import PageContainer from '../components/AgentManagement/PageContainer.tsx';
 
 const WorkflowPage = () => {
-  return (
-    <div className="flex-start flex w-full flex-col gap-11 self-stretch">
-      <AgentConfigHeader headerLabel="Workflow" />
-    </div>
-  );
+  return <PageContainer heading={'Workflow'}></PageContainer>;
 };
 
-export default withAgentConfigWrapper(WorkflowPage);
+export default WorkflowPage;

@@ -25,6 +25,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     // isAgentWorkflowPage,
     isAgentBrandingPage,
     // isAgentEntrypointsPage,
+    isAgentInstructionsPage,
   } = usePageRouteState();
   const {
     LEADS,
@@ -35,6 +36,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     // AGENT_WORKFLOW,
     AGENT_BRANDING,
     // AGENT_ENTRYPOINTS,
+    AGENT_INSTRUCTIONS,
   } = AppRoutesEnum;
   const {
     LEADS_LABEL,
@@ -45,6 +47,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     // AGENT_WORKFLOW_LABEL,
     AGENT_BRANDING_LABEL,
     // AGENT_ENTRYPOINTS_LABEL,
+    AGENT_INSTRUCTIONS_LABEL,
   } = SidebarNavItemsEnum;
 
   const NAV_LINK_ITEMS = [
@@ -105,6 +108,11 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
         //   navItem: AGENT_ENTRYPOINTS_LABEL,
         //   isActive: isAgentEntrypointsPage,
         // },
+        {
+          navUrl: AGENT_INSTRUCTIONS,
+          navItem: AGENT_INSTRUCTIONS_LABEL,
+          isActive: isAgentInstructionsPage,
+        },
       ],
     },
   ];

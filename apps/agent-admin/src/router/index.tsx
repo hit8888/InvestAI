@@ -16,6 +16,7 @@ import DataSourcesPage from '../pages/DataSourcesPage';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
+import InstructionsPage from '../pages/InstructionsPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -75,6 +76,10 @@ const routes = [
           {
             path: 'entrypoints',
             element: <ProtectedRoute element={<EntryPointsPage />} />,
+          },
+          {
+            path: 'instructions',
+            element: <ProtectedRoute element={<InstructionsPage />} />,
           },
         ],
       },

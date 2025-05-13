@@ -1,12 +1,7 @@
-import AgentConfigHeader from '../components/AgentConfigComponent/AgentConfigHeader';
-import withAgentConfigWrapper from './AgentConfigWrapper';
+import PageContainer from '../components/AgentManagement/PageContainer.tsx';
 
 const EntryPointsPage = () => {
-  return (
-    <div className="flex-start flex w-full flex-col gap-11 self-stretch">
-      <AgentConfigHeader headerLabel="Entrypoints" />
-    </div>
-  );
+  return <PageContainer heading={'EntryPoints'}></PageContainer>;
 };
 
-export default withAgentConfigWrapper(EntryPointsPage);
+export default EntryPointsPage;

@@ -5,12 +5,12 @@ import AgentTitleAndSubtitleContent from './AgentTitleAndSubtitleContent';
 import AgentImageUpload from './AgentImageUpload';
 import Input from '@breakout/design-system/components/layout/input';
 import {
-  NAME_TITLE,
-  NAME_SUBTITLE,
-  FULL_LOGO_TITLE,
-  SQUARE_LOGO_TITLE,
   FULL_LOGO_SUBTITLE,
+  FULL_LOGO_TITLE,
+  NAME_SUBTITLE,
+  NAME_TITLE,
   SQUARE_LOGO_SUBTITLE,
+  SQUARE_LOGO_TITLE,
 } from '../../utils/constants';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 

@@ -4,10 +4,10 @@ import AgentTitleAndSubtitleContent from './AgentTitleAndSubtitleContent';
 import AgentColorDisplayInput from './AgentColorDisplayInput';
 
 import {
-  COLOR_PRIMARY_TITLE,
-  COLOR_SECONDARY_TITLE,
   COLOR_PRIMARY_SUBTITLE,
+  COLOR_PRIMARY_TITLE,
   COLOR_SECONDARY_SUBTITLE,
+  COLOR_SECONDARY_TITLE,
 } from '../../utils/constants';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 

@@ -267,6 +267,7 @@ export enum AppRoutesEnum {
   AGENT_WORKFLOW = '/agent/workflow',
   AGENT_BRANDING = '/agent/branding',
   AGENT_ENTRYPOINTS = '/agent/entrypoints',
+  AGENT_INSTRUCTIONS = '/agent/instructions',
 }
 
 export enum SidebarNavItemsEnum {
@@ -278,6 +279,7 @@ export enum SidebarNavItemsEnum {
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
   AGENT_ENTRYPOINTS_LABEL = 'Entrypoints',
+  AGENT_INSTRUCTIONS_LABEL = 'Instructions',
 }
 
 // LEADS Page

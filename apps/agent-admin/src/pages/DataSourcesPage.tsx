@@ -1,12 +1,7 @@
-import AgentConfigHeader from '../components/AgentConfigComponent/AgentConfigHeader';
-import withAgentConfigWrapper from './AgentConfigWrapper';
+import PageContainer from '../components/AgentManagement/PageContainer.tsx';
 
 const DataSourcesPage = () => {
-  return (
-    <div className="flex-start flex w-full flex-col gap-11 self-stretch">
-      <AgentConfigHeader headerLabel="Data Sources" />
-    </div>
-  );
+  return <PageContainer heading={'Data Sources'}></PageContainer>;
 };
 
-export default withAgentConfigWrapper(DataSourcesPage);
+export default DataSourcesPage;

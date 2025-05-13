@@ -1,11 +1,10 @@
-import AgentConfigHeader from '../../components/AgentConfigComponent/AgentConfigHeader';
-import withAgentConfigWrapper from '../AgentConfigWrapper';
 import useAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
 import { BrandingShimmer } from '../../components/Shimmer/BrandingShimmer';
-import AgentLogoAndNameContainer from '../../components/AgentConfigComponent/AgentLogoAndNameContainer';
-import AgentColorsContainer from '../../components/AgentConfigComponent/AgentColorsContainer';
-import AgentOrbContainer from '../../components/AgentConfigComponent/AgentOrbContainer';
+import AgentLogoAndNameContainer from '../../components/AgentManagement/AgentLogoAndNameContainer';
+import AgentColorsContainer from '../../components/AgentManagement/AgentColorsContainer';
+import AgentOrbContainer from '../../components/AgentManagement/AgentOrbContainer';
 import BrandingPageErrorState from './ErrorState';
+import PageContainer from '../../components/AgentManagement/PageContainer.tsx';
 
 const BrandingPage = () => {
   const agentId = 1; // All tenants using agent 1
@@ -26,15 +25,12 @@ const BrandingPage = () => {
   }
 
   return (
-    <div className="flex-start flex w-full flex-col gap-8 self-stretch">
-      <AgentConfigHeader headerLabel="Branding" />
-      <div className="flex max-w-2xl flex-col gap-12 self-stretch">
-        <AgentLogoAndNameContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
-        <AgentColorsContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
-        <AgentOrbContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
-      </div>
-    </div>
+    <PageContainer heading={'Branding'}>
+      <AgentLogoAndNameContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
+      <AgentColorsContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
+      <AgentOrbContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
+    </PageContainer>
   );
 };
 
-export default withAgentConfigWrapper(BrandingPage);
+export default BrandingPage;
