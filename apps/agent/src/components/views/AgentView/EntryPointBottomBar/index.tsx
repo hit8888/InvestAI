@@ -4,7 +4,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
-import PopupBannerContent from './PopupBannerContent.tsx';
+import PopupWithBubblesContainer from '../EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import EntryPointContentForBottomCenter from './EntryPointContentForBottomCenter.tsx';
 import InsetAgentOpenButton from './InsetAgentOpenButton.tsx';
 import SideWiseEntryPoint from './SideWiseEntryPoint.tsx';
@@ -74,11 +74,11 @@ const EntryPointBottomBar = ({
       })}
       style={containerStyle}
     >
-      <PopupBannerContent
+      <PopupWithBubblesContainer
         showBubbles={isEntryPointOnTheBottomCenter ? showBubbles : false}
         setShowBubbles={setShowBubbles}
         setShowOrbAfterBubblesDisappear={isEntryPointOnTheBottomCenter ? setShowOrbAfterBubblesDisappear : () => {}}
-        entryPointAlignment={entryPointAlignment}
+        popupBannerAlignment={entryPointAlignment}
       />
       {isSideWiseEntryPoint ? (
         <SideWiseEntryPoint

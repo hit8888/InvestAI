@@ -30,6 +30,10 @@ const PopupContent = ({
   const isEntryPointOnTheBottomRight = popupBannerAlignment === 'right';
 
   const { setAgentOpen } = useUrlParams();
+  const handleBannerClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    handleClosePopup?.();
+  };
 
   return (
     <motion.div
@@ -53,8 +57,8 @@ const PopupContent = ({
         data-testid="greeting-banner"
       >
         <div
-          className={cn('flex w-full items-start gap-2', {
-            'pl-10': isEntryPointOnTheCenterBottom,
+          className={cn('flex w-full items-start justify-center gap-2', {
+            'pl-14': isEntryPointOnTheCenterBottom,
           })}
         >
           {isEntryPointOnTheCenterBottom && (
@@ -67,7 +71,7 @@ const PopupContent = ({
               />
             </div>
           )}
-          <div className="flex w-full flex-col justify-between gap-2">
+          <div className="flex w-full flex-col items-start justify-center gap-2">
             <Typography className="flex-1" variant="title-18" textColor="textPrimary">
               {header ? header : `Hi! I am ${agentName}`} <span className="absolute animate-wave">👋</span>
             </Typography>
@@ -75,7 +79,7 @@ const PopupContent = ({
               {subheader ? subheader : `I am an expert on all things ${orgName}. How can I help you today?`}
             </Typography>
           </div>
-          <Button className="rounded-full bg-[#F2F4F7] p-1" variant="tertiary" onClick={handleClosePopup}>
+          <Button className="rounded-full bg-[#F2F4F7] p-1" variant="tertiary" onClick={handleBannerClose}>
             <PopupCloseIcon width={'18'} height={'18'} color="#98A2B3" />
           </Button>
         </div>

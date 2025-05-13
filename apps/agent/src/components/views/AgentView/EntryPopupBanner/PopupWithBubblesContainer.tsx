@@ -1,91 +1,47 @@
 import { AnimatePresence } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
-import { POPUP_BANNER_COOLDOWN_TIME } from '../../../../constants/localStorage';
-import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
-import PopupContent, { PopupContentProps } from './PopupContent';
+import PopupContent from './PopupContent';
 import PopupBubble from './PopupBubble';
+import { useBannerPopupAnimation } from './useBannerPopupAnimation';
+import { useMessageStore } from '../../../../stores/useMessageStore';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
-interface ContainerProps extends PopupContentProps {
+interface ContainerProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
   showBubbles: boolean;
   setShowBubbles: (value: boolean) => void;
-  header: string | undefined | null;
-  subheader: string | undefined | null;
   popupBannerAlignment: 'left' | 'center' | 'right';
 }
 
 const PopupWithBubblesContainer = ({
-  agentName,
-  orgName,
   setShowOrbAfterBubblesDisappear,
   showBubbles,
   setShowBubbles,
-  header,
-  subheader,
   popupBannerAlignment,
 }: ContainerProps) => {
-  const [showPopupContent, setShowPopupContent] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
-  const [hasShownOnce, setHasShownOnce] = useState(false);
+  const configurationApiResponseManager = useConfigurationApiResponseManager();
+  const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
 
-  const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
+  const { banner_config } = configurationApiResponseManager.getStyleConfig();
+  const orgName = configurationApiResponseManager.getOrgName();
+  const agentName = configurationApiResponseManager.getAgentName();
 
-  // Check if popup is in cooldown period
-  const isPopupInCooldown = useCallback(() => {
-    const lastClosedTime = sessionData.popupLastClosed;
-    if (!lastClosedTime) return false;
-    const timeSinceLastClosed = Date.now() - parseInt(lastClosedTime);
+  const show_banner = banner_config?.show_banner ?? true;
+  const hide_after = banner_config?.hide_after ? parseInt(banner_config?.hide_after) : null;
+  const show_at = banner_config?.show_at ?? '10'; // default 10 seconds
+  const header = banner_config?.header;
+  const subheader = banner_config?.subheader;
 
-    return timeSinceLastClosed < POPUP_BANNER_COOLDOWN_TIME;
-  }, []);
+  const { showPopupContent, isExiting, handleClosePopup } = useBannerPopupAnimation({
+    setShowOrbAfterBubblesDisappear,
+    setShowBubbles,
+    hide_after,
+    show_at,
+  });
 
-  useEffect(() => {
-    if (hasShownOnce || isPopupInCooldown()) return;
+  const showBanner = show_banner && !hasFirstUserMessageBeenSent;
 
-    // Show bubbles after 10 seconds
-    const bubbleTimer = setTimeout(() => {
-      setShowBubbles(true);
-    }, 10000);
+  if (!showBanner) return null;
 
-    // Show popup content after bubbles are fully animated
-    const popupTimer = setTimeout(() => {
-      setShowPopupContent(true);
-    }, 11000);
-
-    // Start exit sequence after 10 seconds
-    const exitTimer = setTimeout(() => {
-      setIsExiting(true);
-      // First hide popup content
-      setShowPopupContent(false);
-
-      // Then hide bubbles after popup content animation completes
-      setTimeout(() => {
-        setShowBubbles(false);
-        setHasShownOnce(true);
-      }, 500); // Match popup exit duration
-
-      // Show Orb Inside Entry bar After Bubbles Disappear
-      setTimeout(() => {
-        setShowOrbAfterBubblesDisappear(true);
-      }, 1500); // 1.5 seconds delay
-    }, 20000); // 10 + 10 seconds initial delay
-
-    return () => {
-      clearTimeout(popupTimer);
-      clearTimeout(exitTimer);
-      clearTimeout(bubbleTimer);
-    };
-  }, [hasShownOnce]);
-
-  const handleClosePopup = () => {
-    // Update session data to indicate popup has been closed for 24 hours
-    handleUpdateSessionData({
-      popupLastClosed: Date.now().toString(),
-    });
-    setShowOrbAfterBubblesDisappear(true);
-    setShowPopupContent(false);
-    setShowBubbles(false);
-  };
   return (
     <>
       <AnimatePresence>
