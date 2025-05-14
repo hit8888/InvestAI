@@ -91,7 +91,7 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
           <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-gray-100 bg-white p-3">
             <div className="flex aspect-square h-11 w-11 items-center justify-center rounded-full">
               {useFavicon && !!shortLogo ? (
-                <img src={shortLogo} alt="Uploaded logo" className="h-full w-full rounded-full object-fill" />
+                <img src={shortLogo} alt="Uploaded logo" className="h-full w-full object-fill" />
               ) : (
                 <Orb
                   style={{

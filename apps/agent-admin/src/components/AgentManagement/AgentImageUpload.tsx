@@ -134,7 +134,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       className={cn(
         'group relative flex aspect-square cursor-pointer items-center justify-center self-stretch rounded-lg border border-primary/60',
         {
-          'px-2 py-1': !!imagePreview?.length && !isSquareLogo,
+          'px-2 py-1': !!imagePreview?.length,
           'border-dashed': !imagePreview?.length,
           'cursor-not-allowed opacity-50': isUploading,
         },

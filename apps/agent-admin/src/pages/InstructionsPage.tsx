@@ -122,7 +122,7 @@ const InstructionsPage = () => {
             onChange={(e) => handlePromptChange(index, e.target.value)}
             onBlur={() => handlePromptSave(index)}
             placeholder="Type your custom instructions here…"
-            className="mb-4 flex min-h-20 w-full items-center rounded-lg p-2 placeholder:text-gray-400"
+            className="flex min-h-20 w-full items-center rounded-lg p-2 placeholder:text-gray-400"
           />
         ))}
 
