@@ -10,9 +10,15 @@ interface IProps {
   suggestedQuestionOrientation: 'left' | 'right';
   artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  invertTextColor?: boolean;
 }
 
-const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestionOrientation }: IProps) => {
+const SuggestionsArtifact = ({
+  artifact,
+  handleSendUserMessage,
+  suggestedQuestionOrientation,
+  invertTextColor,
+}: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const showSuggestionsArtifact: boolean =
     (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
@@ -55,6 +61,7 @@ const SuggestionsArtifact = ({ artifact, handleSendUserMessage, suggestedQuestio
           onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
           itemIndex={index}
           isEntryPointQuestion={false}
+          invertTextColor={invertTextColor}
         />
       ))}
     </div>

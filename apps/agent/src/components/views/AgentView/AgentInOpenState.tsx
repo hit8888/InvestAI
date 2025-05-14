@@ -46,6 +46,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
 
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
   const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
+  const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
 
   const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
 
@@ -86,6 +87,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
           ctaConfig={ctaConfig}
           showFeedbackHeader={isAdmin}
           setActiveArtifact={setActiveArtifact}
+          invertTextColor={invertTextColor}
         />
         <div
           className={cn('flex h-full w-full flex-1 overflow-hidden', {
@@ -130,6 +132,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
             disableMessageSend={disableMessageSend}
             messages={messages}
             isCollapsible={isCollapsible}
+            invertTextColor={invertTextColor}
           />
         )}
       </div>

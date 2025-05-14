@@ -4,7 +4,6 @@ import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
 import Typography from '../Typography';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { useTextTruncation } from '../../hooks/useTextTruncation';
 
 interface IProps {
@@ -13,16 +12,17 @@ interface IProps {
   itemIndex: number;
   isQuestionInCycle?: boolean;
   isEntryPointQuestion: boolean;
+  invertTextColor?: boolean;
 }
 
 const Suggestion = ({
   question,
   onSuggestedQuestionOnClick,
   itemIndex,
-  isQuestionInCycle = false,
   isEntryPointQuestion,
+  isQuestionInCycle = false,
+  invertTextColor,
 }: IProps) => {
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const { isTablet } = useScreenSize();
   const { textRef, isTextTruncated } = useTextTruncation({
     text: question,

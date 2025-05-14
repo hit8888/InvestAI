@@ -141,6 +141,7 @@ const AgentMessages = ({
                   suggested_questions: initialSuggestedQuestions,
                   suggested_questions_type: 'BUBBLE',
                 }}
+                invertTextColor={invertTextColor}
               />
             </div>
           )}

@@ -5,7 +5,6 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import FeedbackHeader from './FeedbackHeader';
 import { checkIfCTAButtonDisabled } from '@meaku/core/utils/messageUtils';
 
@@ -18,6 +17,7 @@ interface IProps {
   isCollapsible: boolean;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   showFeedbackHeader: boolean;
+  invertTextColor?: boolean;
 }
 
 const AgentHeader = ({
@@ -29,9 +29,9 @@ const AgentHeader = ({
   isCollapsible,
   setActiveArtifact,
   showFeedbackHeader,
+  invertTextColor,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
 
   const isCTAButtonDisabled = checkIfCTAButtonDisabled(messages);
 

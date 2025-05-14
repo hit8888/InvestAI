@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Suggestion } from '@breakout/design-system/components/layout/Suggestion';
-import { suggestionContainerAnimation, getSuggestionItemAnimation } from '@meaku/core/utils/entryPointAnimation';
+import { getSuggestionItemAnimation, suggestionContainerAnimation } from '@meaku/core/utils/entryPointAnimation';
 import { SuggestedQuestionsShowingInCycle } from './SuggestedQuestionsShowingInCycle';
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -13,6 +13,7 @@ type EntryPointSuggestedQuestionsProps = {
   handleSuggestedQuestionOnClick: (question: string) => void;
   showOneByOne?: boolean;
   questionAlignment?: EntryPointAlignmentType;
+  invertTextColor?: boolean;
 };
 
 const EntryPointSuggestedQuestions = ({
@@ -21,6 +22,7 @@ const EntryPointSuggestedQuestions = ({
   handleSuggestedQuestionOnClick,
   showOneByOne = false,
   questionAlignment = EntryPointAlignment.LEFT,
+  invertTextColor,
 }: EntryPointSuggestedQuestionsProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const isQuestionAlignmentRight = questionAlignment === EntryPointAlignment.RIGHT;
@@ -60,6 +62,7 @@ const EntryPointSuggestedQuestions = ({
                 showQuestions={showSuggestedQuestions}
                 onQuestionClick={handleSuggestedQuestionOnClickAndTrack}
                 questionAlignment={questionAlignment}
+                invertTextColor={invertTextColor}
               />
             ) : (
               initialSuggestedQuestions.map((question, index) => (
@@ -73,6 +76,7 @@ const EntryPointSuggestedQuestions = ({
                     onSuggestedQuestionOnClick={handleSuggestedQuestionOnClickAndTrack}
                     itemIndex={index}
                     isEntryPointQuestion={true}
+                    invertTextColor={invertTextColor}
                   />
                 </motion.div>
               ))

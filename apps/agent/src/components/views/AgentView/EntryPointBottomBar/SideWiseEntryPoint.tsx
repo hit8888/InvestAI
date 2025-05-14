@@ -14,6 +14,7 @@ type SideWiseEntryPointProps = {
 const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignment }: SideWiseEntryPointProps) => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const { setAgentOpen } = useUrlParams();
 
@@ -60,6 +61,7 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
           questionAlignment={entryPointAlignment}
           showOneByOne={isEntryPointOnTheBottomLeft || isEntryPointOnTheBottomRight}
+          invertTextColor={invertTextColor}
         />
       )}
       {isEntryPointOnTheBottomRight && <>{getEntryPointOrb()}</>}

@@ -85,6 +85,7 @@ const EntryPointContentForBottomCenter = ({
           initialSuggestedQuestions={initialSuggestedQuestions}
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
           questionAlignment={entryPointAlignment}
+          invertTextColor={invertTextColor}
         />
 
         <div

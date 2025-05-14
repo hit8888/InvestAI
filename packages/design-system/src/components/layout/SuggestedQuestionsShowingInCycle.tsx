@@ -9,6 +9,7 @@ type SuggestedQuestionsShowingInCycleProps = {
   showQuestions: boolean;
   onQuestionClick: (question: string) => void;
   questionAlignment: EntryPointAlignmentType;
+  invertTextColor?: boolean;
 };
 
 const containerStyles = {
@@ -22,6 +23,7 @@ export const SuggestedQuestionsShowingInCycle = ({
   showQuestions,
   onQuestionClick,
   questionAlignment,
+  invertTextColor,
 }: SuggestedQuestionsShowingInCycleProps) => {
   const { currentQuestionIndex } = useSuggestedQuestionCycle(questions, true, showQuestions);
 
@@ -43,6 +45,7 @@ export const SuggestedQuestionsShowingInCycle = ({
           itemIndex={currentQuestionIndex}
           isQuestionInCycle={true} // questions are in cycle
           isEntryPointQuestion={true}
+          invertTextColor={invertTextColor}
         />
       </motion.div>
     </div>

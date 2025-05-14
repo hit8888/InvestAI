@@ -256,6 +256,7 @@ const MessageItem = ({
                   suggestedQuestionOrientation="right"
                   artifact={message.message.artifact_data.content as SuggestionArtifactContent}
                   handleSendUserMessage={handleSendUserMessage}
+                  invertTextColor={invertTextColor}
                 />
               </div>
             )}

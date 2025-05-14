@@ -13,6 +13,7 @@ import { TranscriptionResult } from './types';
 import { useTranscriptionHandler } from '../../../../../hooks/useTranscriptionHandler';
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import { getDemoQuestionData } from '@meaku/core/utils/messageUtils';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface Props {
   handleResumeDemo: () => void;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props) => {
+  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
   const RECORDING_RESTART_DELAY = 500;
   const { isRecording, isProcessing, isPlaying, isAskingToContinue, send } = useDemoFlowState();
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
@@ -139,7 +141,7 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
               orientation="row"
             />
           )}
-          <ResumeDemo onResume={handleContinueDemo} isPlayingResponse={isPlaying} />
+          <ResumeDemo onResume={handleContinueDemo} isPlayingResponse={isPlaying} invertTextColor={invertTextColor} />
         </div>
         <AudioRecorder
           key={recorderKey}

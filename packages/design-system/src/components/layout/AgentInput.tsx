@@ -7,16 +7,16 @@ import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
 import PoweredByBreakout from './PoweredByBreakout';
 import { cn } from '../../lib/cn';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+
 interface IProps {
   handleSendMessage: (message: string) => void;
   disableMessageSend: boolean;
   messages: WebSocketMessage[];
   isCollapsible: boolean;
+  invertTextColor?: boolean;
 }
 
-const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible }: IProps) => {
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
+const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible, invertTextColor }: IProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);

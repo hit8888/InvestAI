@@ -1,14 +1,13 @@
 import Button from '@breakout/design-system/components/Button/index';
 import ResumeIcon from '@breakout/design-system/components/icons/ResumeIcon';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
 interface ResumeDemoProps {
   onResume: () => void;
   isPlayingResponse: boolean;
+  invertTextColor?: boolean;
 }
 
-const ResumeDemo = ({ onResume, isPlayingResponse }: ResumeDemoProps) => {
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
+const ResumeDemo = ({ onResume, isPlayingResponse, invertTextColor }: ResumeDemoProps) => {
   return (
     <Button
       onClick={() => {
