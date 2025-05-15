@@ -31,8 +31,8 @@ export const BannerConfigSchema = z.object({
   show_banner: z.boolean().optional(),
   header: z.string().optional().nullish(),
   subheader: z.string().optional().nullish(),
-  show_at: z.string().optional().nullish(),
-  hide_after: z.string().optional().nullish(),
+  show_at: z.number().optional().nullish(),
+  hide_after: z.number().optional().nullish(),
 });
 
 export const OrbConfigSchema = z.object({
