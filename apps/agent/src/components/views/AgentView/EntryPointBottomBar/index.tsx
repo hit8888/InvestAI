@@ -69,7 +69,7 @@ const EntryPointBottomBar = ({
         'absolute bottom-4 left-1/2 -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90':
           isEntryPointOnTheBottomCenter,
         'relative w-full items-end justify-start': !isEntryPointOnTheBottomCenter,
-        hidden: hideBottomBar,
+        hidden: hideBottomBar || isAgentOpen,
         'h-20 w-full': shouldShowOnlySidewiseEntryPointOrb,
       })}
       style={containerStyle}

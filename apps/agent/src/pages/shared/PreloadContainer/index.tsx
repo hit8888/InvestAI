@@ -196,8 +196,10 @@ const PreloadContainer: FC<Props> = ({ children }) => {
 
   if (mode === 'bottomBar') {
     return (
-      <div className="flex h-screen animate-spin items-center justify-center">
-        <Orb color="#E6E6FA" state={OrbStatusEnum.waiting} />
+      <div className="flex h-screen items-end justify-center pb-8">
+        <div className="flex animate-spin items-center justify-center">
+          <Orb color="#E6E6FA" style={{ width: '48px', height: '48px' }} state={OrbStatusEnum.waiting} />
+        </div>
       </div>
     );
   }

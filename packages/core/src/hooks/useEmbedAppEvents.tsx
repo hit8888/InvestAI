@@ -39,6 +39,7 @@ export const useEmbedAppEvents = ({
   const { mode, setMode } = useWidgetMode();
   const [shouldHideBottomBar, setHideBottomBar] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(true);
+  const [shouldShowAgent, setShouldShowAgent] = useState(false);
 
   const [searchParams] = useSearchParams();
   const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
@@ -46,6 +47,11 @@ export const useEmbedAppEvents = ({
   const handleParentWindowMessages = async (event: MessageEvent) => {
     const { type, isCollapsible: newIsCollapsible } = event.data;
 
+    if (event.data.chatOpen === true) {
+      setShouldShowAgent(true);
+    } else if (event.data.chatOpen === false) {
+      setShouldShowAgent(false);
+    }
     switch (type) {
       case 'PARENT_FORM_MESSAGE':
         setIsCollapsible(true);
@@ -106,7 +112,6 @@ export const useEmbedAppEvents = ({
           }
         }
         break;
-
       default:
         if (typeof newIsCollapsible === 'boolean') {
           setIsCollapsible(newIsCollapsible);
@@ -140,5 +145,5 @@ export const useEmbedAppEvents = ({
     window.parent.postMessage({ type: 'EMBED_READY', sessionId, prospectId, apiBaseUrl, config }, '*');
   }, []);
 
-  return { shouldHideBottomBar, isCollapsible, mode };
+  return { shouldHideBottomBar, isCollapsible, mode, shouldShowAgent };
 };

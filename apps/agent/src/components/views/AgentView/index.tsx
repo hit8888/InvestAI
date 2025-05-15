@@ -49,7 +49,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
-  const { shouldHideBottomBar, isCollapsible, mode } = useEmbedAppEvents({
+  const { shouldHideBottomBar, isCollapsible, mode, shouldShowAgent } = useEmbedAppEvents({
     fetchSessionData,
     handleOpenAgent,
     showBanner: !!showBanner,
@@ -79,22 +79,20 @@ const AgentView = ({ fetchSessionData }: IProps) => {
         'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
       })}
     >
-      {isAgentOpen ? (
-        <AgentInOpenState
-          handleSendMessage={handleSendMessage}
-          handleCloseAgent={handleCloseAgent}
-          isCollapsible={isCollapsible}
-        />
-      ) : (
-        <EntryPointBottomBar
-          handleSendUserMessage={handleSendMessage}
-          handleOpenAgent={handleOpenAgent}
-          hideBottomBar={shouldHideBottomBar}
-          showBubbles={showBubbles}
-          setShowBubbles={setShowBubbles}
-          entryPointAlignment={entry_point_alignment ?? 'center'}
-        />
-      )}
+      <AgentInOpenState
+        handleSendMessage={handleSendMessage}
+        handleCloseAgent={handleCloseAgent}
+        isCollapsible={isCollapsible}
+        showAgentInOpenState={shouldShowAgent && isAgentOpen}
+      />
+      <EntryPointBottomBar
+        handleSendUserMessage={handleSendMessage}
+        handleOpenAgent={handleOpenAgent}
+        hideBottomBar={shouldHideBottomBar}
+        showBubbles={showBubbles}
+        setShowBubbles={setShowBubbles}
+        entryPointAlignment={entry_point_alignment ?? 'center'}
+      />
     </div>
   );
 };

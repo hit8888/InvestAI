@@ -19,9 +19,10 @@ interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleCloseAgent?: () => void;
   isCollapsible: boolean;
+  showAgentInOpenState: boolean;
 }
 
-const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }: IProps) => {
+const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, showAgentInOpenState }: IProps) => {
   const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
   useExpandWidthOnDemoFrame(demoDetails);
   useSetArtifactOnNewMessage();
@@ -74,9 +75,17 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible }
   };
 
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
+  const openAgent = isAdmin ? true : showAgentInOpenState; // Adding this to make it work with the iframe and the demo agent
 
   return (
-    <div className="custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 transition-all duration-300 ease-in-out">
+    <div
+      className={cn(
+        'custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 opacity-100 transition-all duration-300 ease-in-out',
+        {
+          'hidden opacity-0': !openAgent,
+        },
+      )}
+    >
       <div className="chat-window-shadow flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white">
         <AgentHeader
           messages={messages}

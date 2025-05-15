@@ -243,7 +243,7 @@ import { initDomDetectors } from "./dom-detectors";
       const styles: Partial<CSSStyleDeclaration> = {
         width,
         height,
-        transition: "width 0.3s ease, height 0.3s ease",
+        transition: "transform 0.3s ease",
         maxWidth: "100vw",
         maxHeight: "100vh",
       };
@@ -274,7 +274,7 @@ import { initDomDetectors } from "./dom-detectors";
     ENTRY_POINT_TRANSFORM_MAP: {
       left: "none",
       right: "none",
-      center: "translateX(-50%)",
+      center: "translateX(-50%) scale(1)",
     } as const,
   };
 
@@ -429,7 +429,7 @@ import { initDomDetectors } from "./dom-detectors";
       Object.assign(container.style, {
         position: "fixed",
         bottom: "10px",
-        transform: "translateX(-50%)",
+        transform: "translateX(-50%) scale(0)",
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
         width: (sizes as CollapsedSizes).CENTER_WIDTH_MESSAGE_SENT,
@@ -457,6 +457,7 @@ import { initDomDetectors } from "./dom-detectors";
 
       if (config.containerId) {
         params.append("container_id", config.containerId);
+        params.append("isAgentOpen", "true"); // if its embedded, we need to open the agent
       }
 
       if (config.userEmail) {
