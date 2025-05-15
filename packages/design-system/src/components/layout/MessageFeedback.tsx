@@ -54,6 +54,7 @@ const MessageFeedback = ({
   const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
   const [openDialog, setOpenDialog] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
+  const [showRemarksRequired, setShowRemarksRequired] = useState(false);
 
   const form = useForm<FeedbackRequestPayload>({
     resolver: zodResolver(getFeedbackRequestPayloadSchema(isFeedbackThumbDown)),
@@ -121,14 +122,20 @@ const MessageFeedback = ({
     e.preventDefault();
     const values = form.getValues();
 
-    if (isFeedbackThumbDown && (!values.category || !values.remarks)) {
-      // Trigger form validation and check for errors
-      const isValid = await form.trigger();
-      if (!isValid) {
-        await form.trigger(['category', 'remarks']);
+    if (isFeedbackThumbDown) {
+      // Check if category is selected
+      if (!values.category) {
+        await form.trigger(['category']);
+        return;
+      }
+      // Check if remarks is present
+      if (!values.remarks) {
+        setShowRemarksRequired(true);
+        await form.trigger(['remarks']);
         return;
       }
     }
+    setShowRemarksRequired(false);
     await handleShareDetailedFeedback(values);
     handleCloseDialog();
   };
@@ -136,14 +143,6 @@ const MessageFeedback = ({
   const handlePrimaryFeedback = async (feedback: FeedbackEnum) => {
     onAddFeedback({
       positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
-    });
-
-    await handlePostResponseFeedback({
-      sessionId,
-      payload: {
-        response_id: message.response_id.toString(),
-        positive_feedback: feedback === FeedbackEnum.THUMBS_UP,
-      },
     });
   };
 
@@ -240,11 +239,17 @@ const MessageFeedback = ({
                 name="remarks"
                 render={({ field }) => (
                   <FormItem>
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="remarks" className="font-medium">
+                        Remarks {showRemarksRequired ? <span className="text-red-500">(required)</span> : null}
+                      </label>
+                    </div>
                     <FormControl>
                       <Textarea
                         {...field}
                         placeholder="Please provide your detailed feedback"
                         value={field.value ?? ''}
+                        id="remarks"
                       />
                     </FormControl>
                     <FormMessage />
