@@ -35,7 +35,7 @@ const Feedback = () => {
       className="relative flex h-screen flex-col items-center justify-center font-inter"
     >
       <div className="flex h-[95vh] w-[98vw]">
-        <AgentInOpenState handleSendMessage={handleSendMessage} isCollapsible={true} />
+        <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
     </Backdrop>
   );

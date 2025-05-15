@@ -75,14 +75,13 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   };
 
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
-  const openAgent = isAdmin ? true : showAgentInOpenState; // Adding this to make it work with the iframe and the demo agent
 
   return (
     <div
       className={cn(
         'custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 opacity-100 transition-all duration-300 ease-in-out',
         {
-          'hidden opacity-0': !openAgent,
+          'hidden opacity-0': !showAgentInOpenState,
         },
       )}
     >
