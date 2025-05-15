@@ -429,7 +429,7 @@ import { initDomDetectors } from "./dom-detectors";
       Object.assign(container.style, {
         position: "fixed",
         bottom: "10px",
-        transform: "translateX(-50%) scale(0)",
+        transform: "translateX(-50%)",
         left: "50%",
         zIndex: ConfigManager.getConfig().containerId ? "1" : "99999",
         width: (sizes as CollapsedSizes).CENTER_WIDTH_MESSAGE_SENT,
