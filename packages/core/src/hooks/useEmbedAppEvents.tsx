@@ -108,6 +108,7 @@ export const useEmbedAppEvents = ({
             if (!payload.isCollapsible) {
               setMode('embed');
               handleOpenAgent();
+              setShouldShowAgent(true);
             }
           }
         }
