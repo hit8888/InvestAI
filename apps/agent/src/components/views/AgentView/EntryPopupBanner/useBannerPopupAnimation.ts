@@ -6,7 +6,7 @@ interface UseBannerPopupAnimationProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
   setShowBubbles: (value: boolean) => void;
   hide_after?: number | null;
-  show_at?: string;
+  show_at?: number;
 }
 
 interface UseBannerPopupAnimationReturn {
@@ -19,7 +19,7 @@ export const useBannerPopupAnimation = ({
   setShowOrbAfterBubblesDisappear,
   setShowBubbles,
   hide_after = 10,
-  show_at = '10',
+  show_at = 10,
 }: UseBannerPopupAnimationProps): UseBannerPopupAnimationReturn => {
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -37,7 +37,7 @@ export const useBannerPopupAnimation = ({
   useEffect(() => {
     if (hasShownOnce || isPopupInCooldown()) return;
 
-    const showAtMs = parseInt(show_at) * 1000;
+    const showAtMs = show_at * 1000;
     const hideAfterMs = hide_after ? hide_after * 1000 : null;
 
     // Show bubbles after show_at seconds

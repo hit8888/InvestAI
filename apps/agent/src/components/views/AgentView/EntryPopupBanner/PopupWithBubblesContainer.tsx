@@ -26,8 +26,8 @@ const PopupWithBubblesContainer = ({
   const agentName = configurationApiResponseManager.getAgentName();
 
   const show_banner = banner_config?.show_banner ?? true;
-  const hide_after = banner_config?.hide_after ? parseInt(banner_config?.hide_after) : null;
-  const show_at = banner_config?.show_at ?? '10'; // default 10 seconds
+  const hide_after = banner_config?.hide_after ? banner_config?.hide_after : null;
+  const show_at = banner_config?.show_at ?? 10; // default 10 seconds
   const header = banner_config?.header;
   const subheader = banner_config?.subheader;
 
