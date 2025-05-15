@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
 import Typography from '@breakout/design-system/components/Typography/index';
-import AgentTitleAndSubtitleContent from './AgentTitleAndSubtitleContent';
+import CardTitleAndDescription from './CardTitleAndDescription';
 import AgentImageUpload from './AgentImageUpload';
 import Input from '@breakout/design-system/components/layout/input';
 import {
@@ -35,7 +35,13 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
 
   const handleLogoUpdate = async (newLogo: string) => {
     setLogo(newLogo);
-    handleConfigUpdate(agentId, { metadata: { logo: newLogo ?? logo } }, agentConfigs, onUpdate, 'Full Logo');
+    handleConfigUpdate(
+      agentId,
+      { metadata: { ...agentConfigs.metadata, logo: newLogo ?? logo } },
+      agentConfigs,
+      onUpdate,
+      'Full Logo',
+    );
   };
 
   const handleOrbLogoUpdate = async (newOrbLogo: string | null) => {
@@ -65,13 +71,13 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
       <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6 pt-4">
         {/* Full Logo Element */}
         <div className="flex w-full items-center gap-8 self-stretch">
-          <AgentTitleAndSubtitleContent title={FULL_LOGO_TITLE} subtitle={FULL_LOGO_SUBTITLE} />
+          <CardTitleAndDescription title={FULL_LOGO_TITLE} description={FULL_LOGO_SUBTITLE} />
           <AgentImageUpload width="260px" height="60px" initialImage={configLogo} onImageUpdate={handleLogoUpdate} />
         </div>
         <div className="w-full border-b border-gray-200"></div>
         {/* Favicon Element */}
         <div className="flex w-full items-center gap-8 self-stretch">
-          <AgentTitleAndSubtitleContent title={SQUARE_LOGO_TITLE} subtitle={SQUARE_LOGO_SUBTITLE} />
+          <CardTitleAndDescription title={SQUARE_LOGO_TITLE} description={SQUARE_LOGO_SUBTITLE} />
           <AgentImageUpload
             width="60px"
             height="60px"
@@ -83,7 +89,7 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
         <div className="w-full border-b border-gray-200"></div>
         {/* Agent Name Element */}
         <div className="flex w-full items-center gap-8 self-stretch">
-          <AgentTitleAndSubtitleContent title={NAME_TITLE} subtitle={NAME_SUBTITLE} />
+          <CardTitleAndDescription title={NAME_TITLE} description={NAME_SUBTITLE} />
           <Input value={agentName} onChange={(e) => setAgentName(e.target.value)} onBlur={handleAgentNameUpdate} />
         </div>
       </div>

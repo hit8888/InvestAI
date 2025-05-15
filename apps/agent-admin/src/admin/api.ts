@@ -69,6 +69,10 @@ export const updateBrandingAgentConfigs = async (agentId: number, payload: Agent
   return adminApiClient.put(`/tenant/api/agent/${agentId}/`, payload);
 };
 
+export const patchAgentConfigs = async (agentId: number, payload: Partial<AgentConfigPayload>) => {
+  return adminApiClient.patch(`/tenant/api/agent/${agentId}/`, payload);
+};
+
 export const uploadAssetsFile = (file: File) => {
   const formData = new FormData();
   formData.append('file', file);

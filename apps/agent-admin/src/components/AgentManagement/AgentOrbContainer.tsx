@@ -1,6 +1,6 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
-import AgentTitleAndSubtitleContent from './AgentTitleAndSubtitleContent';
+import CardTitleAndDescription from './CardTitleAndDescription';
 import { ORB_DESCRIPTION } from '../../utils/constants';
 import { Switch } from '@breakout/design-system/components/layout/switch';
 import { useState } from 'react';
@@ -72,7 +72,7 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
       <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6">
         <div className="flex flex-1 items-center gap-6 self-stretch">
           <div className="flex flex-1 flex-col items-start gap-4">
-            <AgentTitleAndSubtitleContent subtitle={ORB_DESCRIPTION} />
+            <CardTitleAndDescription description={ORB_DESCRIPTION} />
             <div
               className={cn('flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 pr-3', {
                 'text-primary': useFavicon,

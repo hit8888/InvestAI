@@ -20,6 +20,7 @@ export const handleConfigUpdate = async (
     const payload: AgentConfigPayload = {
       name: updateField.name ?? agentConfigs.name,
       metadata: {
+        ...agentConfigs.metadata,
         logo: updateField.metadata?.logo ?? agentConfigs.metadata.logo,
       },
       configs: {

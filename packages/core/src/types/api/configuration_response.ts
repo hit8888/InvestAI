@@ -35,6 +35,11 @@ export const BannerConfigSchema = z.object({
   hide_after: z.string().optional().nullish(),
 });
 
+export const OrbConfigSchema = z.object({
+  show_orb: z.boolean().optional().nullable(),
+  logo_url: z.string().optional().nullable(),
+});
+
 export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
@@ -57,12 +62,7 @@ export const ConfigurationSchema = z.object({
     card: z.string().optional(),
     card_foreground: z.string().optional(),
     banner_config: BannerConfigSchema.optional().nullish(),
-    orb_config: z
-      .object({
-        show_orb: z.boolean().optional().nullable(),
-        logo_url: z.string().optional().nullable(),
-      })
-      .optional(),
+    orb_config: OrbConfigSchema.optional(),
   }),
   tracking_config: z
     .object({
@@ -79,6 +79,8 @@ export type CTAConfigType = z.infer<typeof CTAConfigSchema>;
 export type BottomBarType = z.infer<typeof BottomBarConfigSchema>;
 
 export type BannerConfigType = z.infer<typeof BannerConfigSchema>;
+
+export type OrbConfigType = z.infer<typeof OrbConfigSchema>;
 
 export type ConfigurationApiResponse = z.infer<typeof ConfigurationSchema>;
 
