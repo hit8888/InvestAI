@@ -54,6 +54,8 @@ const ArtifactContainer = ({
     ? ((artifactMessage.message as ArtifactMessageContent).artifact_data.content as ArtifactContent)
     : null;
 
+  if (!activeArtifact || !artifactContent) return null;
+
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === artifactMessage?.response_id);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
@@ -94,8 +96,6 @@ const ArtifactContainer = ({
           : artifactMessage.message.artifact_data.metadata?.filled_data,
       }
     : {};
-
-  if (!activeArtifact || !artifactContent) return null;
 
   const artifactWithContent = {
     artifact_id: activeArtifact.artifact_id,

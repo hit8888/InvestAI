@@ -13,6 +13,7 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
 import FormArtifact from '../layout/FormArtifact';
+
 interface Props {
   artifactType: string | undefined;
   artifactContent: ArtifactContentWithMetadataProps;
@@ -80,6 +81,7 @@ export const ArtifactContentUi = ({
         <CalendarArtifact
           key={(artifactContent as CalendarArtifactContent).calendar_url}
           calendarContent={artifactContent as CalendarArtifactContent}
+          handleSendUserMessage={handleSendUserMessage}
         />
       );
     case 'FORM':

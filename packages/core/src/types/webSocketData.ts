@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   ArtifactEnumSchema,
   CalendarArtifactSchema,
+  CalendarTypeEnum,
   FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
@@ -232,6 +233,15 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       ),
     }),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('CALENDAR_SUBMIT'),
+    event_data: z.object({
+      calendar_type: z.nativeEnum(CalendarTypeEnum),
+      calendar_url: z.string(),
+      form_data: z.record(z.string(), z.any()),
+    }),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -303,4 +313,5 @@ export enum AgentEventType {
   HEARTBEAT = 'HEARTBEAT',
   HEARTBEAT_ACK = 'HEARTBEAT_ACK',
   DISCOVERY_ANSWER = 'DISCOVERY_ANSWER',
+  CALENDAR_SUBMIT = 'CALENDAR_SUBMIT',
 }

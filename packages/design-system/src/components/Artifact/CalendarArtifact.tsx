@@ -1,63 +1,24 @@
-import { InlineWidget as CalendlyWidget } from 'react-calendly';
-import Cal from '@calcom/embed-react';
 import { CalendarArtifactContent, CalendarTypeEnum } from '@meaku/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { CalendlyCalendar } from './CalendlyCalendar';
+import { CalComCalendar } from './CalComCalendar';
+import { IframeCalendar } from './IframeCalendar';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
+  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-export const CalendarArtifact = ({ calendarContent }: Props) => {
+export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Props) => {
   const getCalendarContentBasedOnType = () => {
     switch (calendarContent.calendar_type) {
       case CalendarTypeEnum.CALENDLY:
-        return (
-          <div className="h-full w-full sm:min-h-[600px]">
-            <CalendlyWidget
-              url={calendarContent.calendar_url}
-              prefill={calendarContent.prefill_data}
-              styles={{
-                height: '100%',
-                width: '100%',
-              }}
-              utm={{
-                utmSource: 'Breakout',
-                utmMedium: 'chat',
-                utmCampaign: 'Breakout Agent',
-              }}
-            />
-          </div>
-        );
-
+        return <CalendlyCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
       case CalendarTypeEnum.CAL_COM:
-        return (
-          <div className="h-full w-full sm:min-h-[600px]">
-            <Cal
-              calLink={calendarContent.calendar_url}
-              config={{ theme: 'light', ...calendarContent.prefill_data }}
-              style={{
-                width: '100%',
-                height: '100%',
-                minHeight: '600px',
-              }}
-            />
-          </div>
-        );
-
+        return <CalComCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
       case CalendarTypeEnum.IFRAME:
-        return (
-          <div className="h-full w-full sm:min-h-[600px]">
-            <iframe
-              src={calendarContent.calendar_url}
-              style={{
-                width: '100%',
-                height: '100%',
-                minHeight: '600px',
-              }}
-            />
-          </div>
-        );
-
+        return <IframeCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
       default:
         return null;
     }
