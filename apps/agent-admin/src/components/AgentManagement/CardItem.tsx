@@ -12,7 +12,7 @@ const CardItem = ({
 }) => {
   return (
     <>
-      <div className={`flex w-full items-center gap-8 self-stretch ${className}`}>{children}</div>
+      <div className={`flex w-full items-center gap-x-8 gap-y-6 self-stretch ${className}`}>{children}</div>
       {separator && <CardItemBreak />}
     </>
   );

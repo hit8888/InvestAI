@@ -278,7 +278,7 @@ export enum SidebarNavItemsEnum {
   AGENT_DATA_SOURCES_LABEL = 'Data Sources',
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
-  AGENT_ENTRYPOINTS_LABEL = 'Entrypoints',
+  AGENT_ENTRYPOINTS_LABEL = 'Entry Points',
   AGENT_INSTRUCTIONS_LABEL = 'Instructions',
 }
 

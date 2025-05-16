@@ -7,6 +7,9 @@ import Button from '@breakout/design-system/components/Button/index';
 import { PlusIcon } from 'lucide-react';
 import { Prompt, usePrompts } from '../queries/query/usePrompts';
 import { useCreatePrompt, useUpdatePrompt } from '../queries/mutation/usePromptMutations';
+import { trackError } from '@meaku/core/utils/error';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
+import toast from 'react-hot-toast';
 
 const InstructionsPage = () => {
   const subHeading =
@@ -99,7 +102,22 @@ const InstructionsPage = () => {
           originalPromptsRef.current[newPrompt.id.toString()] = newPrompt.prompt;
         }
       }
+
+      toast.success(`Instructions saved successfully`, {
+        duration: 3000,
+      });
     } catch (err) {
+      trackError(error, {
+        action: 'Prompt save/update',
+        component: 'handlePromptSave function',
+        additionalData: {
+          agentId: agentId,
+          tenantName: getTenantIdentifier()?.['tenant-name'],
+          errorMessage: 'Unable to save Instructions',
+          payload: promptToSave.prompt,
+        },
+      });
+      toast.error('Please check if mandatory fields are filled.');
       console.error('Error saving prompt:', err);
     }
   };

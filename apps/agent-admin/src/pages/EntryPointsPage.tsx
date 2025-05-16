@@ -22,6 +22,9 @@ import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import { getDefaultBannerHeader, getDefaultBannerSubHeader } from '@meaku/core/utils/bannerConfig';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import { getTenantFromLocalStorage } from '../utils/common.ts';
+import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
+import { trackError } from '@meaku/core/utils/error';
+import toast from 'react-hot-toast';
 
 const EntryPointsPage = () => {
   const tenantName = getTenantFromLocalStorage();
@@ -29,7 +32,9 @@ const EntryPointsPage = () => {
   const agentId = 1;
 
   const subHeading =
-    'Hover over any editable area in the entry point to customize it. Just click and start typing — your changes will be saved automatically.';
+    'Set up conversation starters that guide users toward meaningful interactions. Customize each element by clicking on any editable field.';
+
+  const embedCode = `<script src="https://script.getbreakout.ai/chat_widget.js" tenant-id=${tenantName} agent-id="1" async ></script>`;
 
   // State for form values
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
@@ -54,10 +59,28 @@ const EntryPointsPage = () => {
 
   const updateConfig = (payload: Partial<AgentConfigPayload>) => {
     if (agentId) {
-      updateAgentConfig({
-        agentId,
-        payload,
-      });
+      try {
+        updateAgentConfig({
+          agentId,
+          payload,
+        });
+        toast.success(`Configurations saved successfully`, {
+          duration: 3000,
+        });
+      } catch (e) {
+        trackError(error, {
+          action: 'Entry Point update',
+          component: 'updateConfig function',
+          additionalData: {
+            agentId: agentId,
+            tenantName: getTenantIdentifier()?.['tenant-name'],
+            errorMessage: 'Unable to update AgentConfig',
+            payload: payload,
+          },
+        });
+        toast.error('Please check if mandatory fields are filled.');
+        console.error(e);
+      }
     }
   };
 
@@ -256,11 +279,15 @@ const EntryPointsPage = () => {
   };
 
   return (
-    <PageContainer heading={'EntryPoints'} subHeading={subHeading} isLoading={isLoading} error={error}>
+    <PageContainer heading={'Entry Points'} subHeading={subHeading} isLoading={isLoading} error={error}>
       <Section heading={'Configuration'}>
         <Card background={'GRAY25'} border={'GRAY200'}>
           <CardItem>
-            <CardTitleAndDescription title={'Placement'} isMandatoryField={false} />
+            <CardTitleAndDescription
+              title={'Placement'}
+              description={'Select the position that works best with your overall page layout and user flow.'}
+              isMandatoryField={false}
+            />
             <Select value={entryPointAlignment} onValueChange={handleAlignmentChange}>
               <SelectTrigger className={'flex-1'}>
                 <SelectValue placeholder="Select a Type" />
@@ -283,7 +310,9 @@ const EntryPointsPage = () => {
         <Card background={'GRAY25'} border={'GRAY200'}>
           {suggestedQuestions.length === 0 ? (
             <CardItem className="flex-col">
-              <Typography textColor={'gray500'}>No suggested questions added yet</Typography>
+              <Typography textColor={'gray500'}>
+                Help visitors start the conversation with pre-defined questions.
+              </Typography>
               <Button variant="secondary" size="small" onClick={addQuestion} leftIcon={<Plus size={16} />}>
                 Add Question
               </Button>
@@ -292,7 +321,15 @@ const EntryPointsPage = () => {
             <>
               {suggestedQuestions.map((question, index) => (
                 <CardItem key={index} separator={index < suggestedQuestions.length - 1}>
-                  <CardTitleAndDescription title={`Question ${index + 1}`} isMandatoryField={index < 1} />
+                  <CardTitleAndDescription
+                    title={`Question ${index + 1}`}
+                    description={
+                      index < 1
+                        ? 'Create an engaging question that addresses a common user need or pain point.'
+                        : undefined
+                    }
+                    isMandatoryField={index < 1}
+                  />
                   <Input
                     value={question}
                     onChange={(e) => updateQuestion(index, e.target.value)}
@@ -321,13 +358,22 @@ const EntryPointsPage = () => {
       <Section heading={'Banner Configuration'}>
         <Card background={'GRAY25'} border={'GRAY200'}>
           <CardItem separator={isBannerEnabled}>
-            <CardTitleAndDescription title={'Enable Banner'} isMandatoryField={false} />
+            <CardTitleAndDescription
+              title={'Enable Banner'}
+              description={'Toggle on to display a personalized banner above the chat interface.'}
+              isMandatoryField={false}
+            />
             <Switch checked={isBannerEnabled} onCheckedChange={handleBannerToggle} />
           </CardItem>
           {isBannerEnabled && (
             <>
               <CardItem separator={true}>
-                <CardTitleAndDescription title={'Heading'} />
+                <CardTitleAndDescription
+                  title={'Heading'}
+                  description={
+                    'Make this greeting memorable! Use your brand voice - whether quirky, professional, or bold to instantly connect with visitors.'
+                  }
+                />
                 <Input
                   value={bannerHeader}
                   onChange={(e) => handleBannerHeaderChange(e.target.value)}
@@ -336,7 +382,10 @@ const EntryPointsPage = () => {
                 />
               </CardItem>
               <CardItem>
-                <CardTitleAndDescription title={'Sub-heading'} />
+                <CardTitleAndDescription
+                  title={'Sub-heading'}
+                  description={'Show personality here! Tell how the agent provides value'}
+                />
                 <Input
                   value={bannerSubheader}
                   onChange={(e) => handleBannerSubheaderChange(e.target.value)}
@@ -346,6 +395,20 @@ const EntryPointsPage = () => {
               </CardItem>
             </>
           )}
+        </Card>
+      </Section>
+
+      <Section heading={'Embedding the Agent Widget'}>
+        <Card background={'GRAY25'} border={'GRAY200'}>
+          <CardItem className={'flex-col'}>
+            <CardTitleAndDescription
+              description={
+                'Instantly add your Breakout assistant to any webpage with this simple script. Your visitors can get answers and support without leaving your site.'
+              }
+              isMandatoryField={false}
+            />
+            <CodeBlock code={embedCode} language={'html'} />
+          </CardItem>
         </Card>
       </Section>
     </PageContainer>
