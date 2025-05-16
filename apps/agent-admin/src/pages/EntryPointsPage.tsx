@@ -34,7 +34,7 @@ const EntryPointsPage = () => {
   const subHeading =
     'Set up conversation starters that guide users toward meaningful interactions. Customize each element by clicking on any editable field.';
 
-  const embedCode = `<script src="https://script.getbreakout.ai/chat_widget.js" tenant-id=${tenantName} agent-id="1" async ></script>`;
+  const embedCode = `<script src="https://script.getbreakout.ai/chat_widget.js" tenant-id="${tenantName}" agent-id="1" async ></script>`;
 
   // State for form values
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
