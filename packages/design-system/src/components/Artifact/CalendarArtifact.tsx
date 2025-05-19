@@ -24,8 +24,12 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
     }
   };
 
+  const isIframeCalendar = calendarContent.calendar_type === CalendarTypeEnum.IFRAME;
+
   return (
-    <div className="h-full w-full xl:min-h-[680px] xl:min-w-[1200px]">
+    <div
+      className={`h-full w-full ${isIframeCalendar ? 'min-h-[400px] min-w-[600px]' : 'xl:min-h-[680px] xl:min-w-[1200px]'}`}
+    >
       <AspectRatio ratio={16 / 9}>{getCalendarContentBasedOnType()}</AspectRatio>
     </div>
   );
