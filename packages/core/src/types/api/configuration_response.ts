@@ -72,6 +72,7 @@ export const ConfigurationSchema = z.object({
     })
     .optional(),
   whitelisted_domains: z.array(z.string()),
+  experiment_tag: z.string().optional().nullable(),
 });
 
 export type CTAConfigType = z.infer<typeof CTAConfigSchema>;

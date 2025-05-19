@@ -37,4 +37,5 @@ export type InitializationPayload = {
   test_type?: 'automated' | 'manual';
   referrer?: string;
   parent_url?: string;
+  experiment_tag?: string | null;
 };

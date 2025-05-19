@@ -110,6 +110,7 @@ const PreloadContainer: FC<Props> = ({ children }) => {
     test_type: test_type as 'automated' | 'manual' | undefined,
     referrer: document.referrer,
     parent_url: getParentUrlValue(),
+    experiment_tag: configQuery.data?.experiment_tag ?? null,
   };
 
   //test build
