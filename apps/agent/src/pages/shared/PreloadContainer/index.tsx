@@ -23,6 +23,8 @@ import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import Typography from '@breakout/design-system/components/Typography/index';
+import { isMobileDevice } from '@meaku/core/utils/index';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -30,7 +32,7 @@ interface Props {
 
 const PARENT_URL_TIMEOUT = 2;
 
-const PreloadContainer: FC<Props> = ({ children }) => {
+const PreloadContainerContent: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
   const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
@@ -209,6 +211,22 @@ const PreloadContainer: FC<Props> = ({ children }) => {
       <AgentShimmer />
     </div>
   );
+};
+
+const PreloadContainer: FC<Props> = ({ children }) => {
+  if (isMobileDevice()) {
+    return (
+      <div className="flex h-screen items-end justify-center px-8 pb-16">
+        <div className="flex items-center justify-center gap-4 rounded-lg bg-gray-100 p-4">
+          <Orb color="#E6E6FA" style={{ width: '48px', height: '48px' }} state={OrbStatusEnum.waiting} />
+          <Typography variant="body-16" align={'center'}>
+            Mobile view is not currently supported, please open the link on your desktop
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+  return <PreloadContainerContent children={children} />;
 };
 
 export default PreloadContainer;

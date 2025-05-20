@@ -12,10 +12,10 @@ import {
   SelectValue,
 } from '@breakout/design-system/components/layout/select';
 import { Switch } from '@breakout/design-system/components/layout/switch';
-import Button from '@breakout/design-system/components/Button/Button';
+import Button from '@breakout/design-system/components/Button/index';
 import { useEffect, useState } from 'react';
 import { Plus, PlusIcon } from 'lucide-react';
-import Typography from '@breakout/design-system/components/Typography/Typography';
+import Typography from '@breakout/design-system/components/Typography/index';
 import useBrandingAgentConfigsQuery from '../queries/query/useAgentConfigsQuery';
 import { useAgentConfigsMutation } from '../queries/mutation/useAgentConfigsMutation';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';

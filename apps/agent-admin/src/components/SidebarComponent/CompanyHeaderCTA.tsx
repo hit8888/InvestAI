@@ -51,13 +51,16 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
               <img className="h-full w-full object-contain" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
             </Container>
           )}
-          {isOpen && !isTenantLogoUrlPresent ? (
+          {!isTenantLogoUrlPresent ? (
             <motion.a
               href="/"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="w-full text-center text-2xl font-bold capitalize text-gray-900 transition-all duration-300"
+              className={cn('text-center font-bold capitalize text-gray-900 transition-all duration-300', {
+                'w-full text-2xl': isOpen,
+                'w-16 truncate text-xs': !isOpen,
+              })}
             >
               {TENANT_NAME}
             </motion.a>

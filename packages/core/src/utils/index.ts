@@ -84,3 +84,7 @@ export const transformMessage = (message: WebSocketMessage) => {
 
   return transformedMessage;
 };
+
+export const isMobileDevice = (): boolean => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent);
+};
