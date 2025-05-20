@@ -258,16 +258,16 @@ export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
 // Routes
 
 export enum AppRoutesEnum {
-  LEADS = '/leads',
+  LEADS = 'leads',
   LOGIN = '/login',
-  CONVERSATIONS = '/conversations',
-  AGENT = '/agent',
-  AGENT_PLAYGROUND = '/agent/playground',
-  AGENT_DATA_SOURCES = '/agent/data-sources',
-  AGENT_WORKFLOW = '/agent/workflow',
-  AGENT_BRANDING = '/agent/branding',
-  AGENT_ENTRYPOINTS = '/agent/entrypoints',
-  AGENT_INSTRUCTIONS = '/agent/instructions',
+  CONVERSATIONS = 'conversations',
+  AGENT = 'agent',
+  AGENT_PLAYGROUND = 'agent/playground',
+  AGENT_DATA_SOURCES = 'agent/data-sources',
+  AGENT_WORKFLOW = 'agent/workflow',
+  AGENT_BRANDING = 'agent/branding',
+  AGENT_ENTRYPOINTS = 'agent/entrypoints',
+  AGENT_INSTRUCTIONS = 'agent/instructions',
 }
 
 export enum SidebarNavItemsEnum {

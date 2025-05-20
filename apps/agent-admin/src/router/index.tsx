@@ -20,7 +20,7 @@ import InstructionsPage from '../pages/InstructionsPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
-const { LOGIN, LEADS, CONVERSATIONS, AGENT } = AppRoutesEnum;
+const { LOGIN } = AppRoutesEnum;
 
 const routes = [
   {
@@ -38,48 +38,53 @@ const routes = [
         children: [],
       },
       {
-        path: LEADS,
-        element: <ProtectedRoute element={<LeadsPageContainer />} />,
-        children: [],
-      },
-      {
-        path: `${LEADS}/:sessionID`, // Dynamic route for individual leads
-        element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
-      },
-      {
-        path: CONVERSATIONS,
-        element: <ProtectedRoute element={<ConversationsPageContainer />} />,
-      },
-      {
-        path: `${CONVERSATIONS}/:sessionID`, // Dynamic route for individual conversations
-        element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
-      },
-      {
-        path: AGENT,
+        path: 'org/:tenantName',
         children: [
           {
-            path: 'playground',
-            element: <ProtectedRoute element={<PlaygroundPage />} />,
+            path: 'leads',
+            element: <ProtectedRoute element={<LeadsPageContainer />} />,
+            children: [],
           },
           {
-            path: 'data-sources',
-            element: <ProtectedRoute element={<DataSourcesPage />} />,
+            path: 'leads/:sessionID', // Dynamic route for individual leads
+            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
           },
           {
-            path: 'workflow',
-            element: <ProtectedRoute element={<WorkflowPage />} />,
+            path: 'conversations',
+            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
           },
           {
-            path: 'branding',
-            element: <ProtectedRoute element={<BrandingPage />} />,
+            path: 'conversations/:sessionID', // Dynamic route for individual conversations
+            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
           },
           {
-            path: 'entrypoints',
-            element: <ProtectedRoute element={<EntryPointsPage />} />,
-          },
-          {
-            path: 'instructions',
-            element: <ProtectedRoute element={<InstructionsPage />} />,
+            path: 'agent',
+            children: [
+              {
+                path: 'playground',
+                element: <ProtectedRoute element={<PlaygroundPage />} />,
+              },
+              {
+                path: 'data-sources',
+                element: <ProtectedRoute element={<DataSourcesPage />} />,
+              },
+              {
+                path: 'workflow',
+                element: <ProtectedRoute element={<WorkflowPage />} />,
+              },
+              {
+                path: 'branding',
+                element: <ProtectedRoute element={<BrandingPage />} />,
+              },
+              {
+                path: 'entrypoints',
+                element: <ProtectedRoute element={<EntryPointsPage />} />,
+              },
+              {
+                path: 'instructions',
+                element: <ProtectedRoute element={<InstructionsPage />} />,
+              },
+            ],
           },
         ],
       },

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getDashboardBasicPathURL } from '../utils/common';
 
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
@@ -22,10 +24,23 @@ const useAuthHandler = () => {
       saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
       login(); // Set isAuthenticated to true
 
+      const tenantName = getTenantIdentifier()?.['tenant-name'] ?? '';
+      const leadsPath = `${getDashboardBasicPathURL(tenantName)}/${LEADS}`;
       if (isLoginPage) {
-        navigate(LEADS);
+        if (tenantName) {
+          navigate(leadsPath);
+        } else {
+          navigate('/');
+        }
       } else {
-        navigate(pathURL);
+        const basicPathURL = getDashboardBasicPathURL(tenantName);
+        const isBaseOrgPath = pathURL === basicPathURL || pathURL === `${basicPathURL}/`;
+
+        if (isBaseOrgPath) {
+          navigate(leadsPath);
+        } else {
+          navigate(pathURL);
+        }
       }
     } else {
       navigate(LOGIN); // Redirect to login if tokens are not present

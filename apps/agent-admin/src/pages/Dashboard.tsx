@@ -4,6 +4,8 @@ import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/Cu
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
+import toast from 'react-hot-toast';
+import { getDashboardBasicPathURL } from '../utils/common';
 
 const Dashboard = () => {
   const { userInfo } = useAuth();
@@ -18,8 +20,12 @@ const Dashboard = () => {
     const orgItem = organizationsList?.find((item) => item?.name === option);
     if (orgItem) {
       setTenantIdentifier(orgItem);
+      const basicPathURL = getDashboardBasicPathURL(orgItem['tenant-name'] ?? '');
+      navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
+    } else {
+      toast.error('Organization not found');
+      navigate('/');
     }
-    navigate(AppRoutesEnum.LEADS);
   };
 
   return (

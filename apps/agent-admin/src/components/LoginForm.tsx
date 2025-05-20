@@ -12,6 +12,7 @@ import { setTenantIdentifier } from '@meaku/core/utils/index';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
+import { getDashboardBasicPathURL } from '../utils/common';
 
 const LoginForm = () => {
   const { login, saveTokens } = useAuth();
@@ -110,7 +111,8 @@ const LoginForm = () => {
     // we would set this as our admin_tenant_identifier and navigate to 'leads' page.
     if (tenantHavingAdminRole) {
       setTenantIdentifier(tenantHavingAdminRole);
-      navigate(AppRoutesEnum.LEADS);
+      const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
+      navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
     } else {
       navigate('/');
     }

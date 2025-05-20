@@ -11,48 +11,38 @@ import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent
 import PanelNavArrowLiningIcon from '@breakout/design-system/components/icons/panel-navarrow-lining-icon';
 import PanelNavArrowLastLiningIcon from '@breakout/design-system/components/icons/panel-navarrow-lining-last-icon';
 import usePageRouteState from '../../hooks/usePageRouteState';
-import { getTransitionAnimation } from '../../utils/common';
+import { getDashboardBasicPathURL, getTransitionAnimation } from '../../utils/common';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
   const [isAgentExpanded, setIsAgentExpanded] = useState(false);
+  const { tenantName } = useParams();
   const {
     isLeadsPage,
     isConversationsPage,
-    // isAgentPage,
     isAgentPlaygroundPage,
-    // isAgentDataSourcesPage,
-    // isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
     isAgentInstructionsPage,
   } = usePageRouteState();
-  const {
-    LEADS,
-    CONVERSATIONS,
-    AGENT,
-    AGENT_PLAYGROUND,
-    // AGENT_DATA_SOURCES,
-    // AGENT_WORKFLOW,
-    AGENT_BRANDING,
-    AGENT_ENTRYPOINTS,
-    AGENT_INSTRUCTIONS,
-  } = AppRoutesEnum;
+  const { LEADS, CONVERSATIONS, AGENT, AGENT_PLAYGROUND, AGENT_BRANDING, AGENT_ENTRYPOINTS, AGENT_INSTRUCTIONS } =
+    AppRoutesEnum;
   const {
     LEADS_LABEL,
     CONVERSATIONS_LABEL,
     AGENT_LABEL,
     AGENT_PLAYGROUND_LABEL,
-    // AGENT_DATA_SOURCES_LABEL,
-    // AGENT_WORKFLOW_LABEL,
     AGENT_BRANDING_LABEL,
     AGENT_ENTRYPOINTS_LABEL,
     AGENT_INSTRUCTIONS_LABEL,
   } = SidebarNavItemsEnum;
 
+  const basicURL = getDashboardBasicPathURL(tenantName ?? '');
+
   const NAV_LINK_ITEMS = [
     {
-      navUrl: LEADS,
+      navUrl: `${basicURL}/${LEADS}`,
       navItem: LEADS_LABEL,
       navImg: isLeadsPage ? (
         <PanelLeadsActiveIcon {...COMMON_SMALL_ICON_PROPS} />
@@ -62,7 +52,7 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
       isActive: isLeadsPage,
     },
     {
-      navUrl: CONVERSATIONS,
+      navUrl: `${basicURL}/${CONVERSATIONS}`,
       navItem: CONVERSATIONS_LABEL,
       navImg: isConversationsPage ? (
         <PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />
@@ -72,44 +62,34 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
       isActive: isConversationsPage,
     },
     {
-      navUrl: AGENT,
+      navUrl: `${basicURL}/${AGENT}`,
       navItem: AGENT_LABEL,
-      navImg: isAgentExpanded ? (
-        <PanelAgentActiveIcon {...COMMON_SMALL_ICON_PROPS} />
-      ) : (
-        <PanelAgentIcon {...COMMON_SMALL_ICON_PROPS} />
-      ),
-      isActive: isAgentExpanded,
+      navImg:
+        isAgentPlaygroundPage || isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage ? (
+          <PanelAgentActiveIcon {...COMMON_SMALL_ICON_PROPS} />
+        ) : (
+          <PanelAgentIcon {...COMMON_SMALL_ICON_PROPS} />
+        ),
+      isActive: isAgentPlaygroundPage || isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage,
       hasChildren: true,
       children: [
         {
-          navUrl: AGENT_PLAYGROUND,
+          navUrl: `${basicURL}/${AGENT_PLAYGROUND}`,
           navItem: AGENT_PLAYGROUND_LABEL,
           isActive: isAgentPlaygroundPage,
         },
-        // TODO: It will be used Later
-        // {
-        //   navUrl: AGENT_DATA_SOURCES,
-        //   navItem: AGENT_DATA_SOURCES_LABEL,
-        //   isActive: isAgentDataSourcesPage,
-        // },
         {
-          navUrl: AGENT_BRANDING,
+          navUrl: `${basicURL}/${AGENT_BRANDING}`,
           navItem: AGENT_BRANDING_LABEL,
           isActive: isAgentBrandingPage,
         },
-        // {
-        //   navUrl: AGENT_WORKFLOW,
-        //   navItem: AGENT_WORKFLOW_LABEL,
-        //   isActive: isAgentWorkflowPage,
-        // },
         {
-          navUrl: AGENT_ENTRYPOINTS,
+          navUrl: `${basicURL}/${AGENT_ENTRYPOINTS}`,
           navItem: AGENT_ENTRYPOINTS_LABEL,
           isActive: isAgentEntrypointsPage,
         },
         {
-          navUrl: AGENT_INSTRUCTIONS,
+          navUrl: `${basicURL}/${AGENT_INSTRUCTIONS}`,
           navItem: AGENT_INSTRUCTIONS_LABEL,
           isActive: isAgentInstructionsPage,
         },
@@ -141,13 +121,13 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
               className="flex flex-col"
             >
               {navItem.children?.map((child, index) => (
-                <div className="flex w-full">
+                <div key={child.navItem} className="flex w-full">
                   {index === navItem.children.length - 1 ? (
                     <PanelNavArrowLastLiningIcon width="56" height="36" />
                   ) : (
                     <PanelNavArrowLiningIcon width={56} height={36} />
                   )}
-                  <NavLinkSingleItem key={child.navItem} {...child} isPanelOpen={isOpen} isChild={true} />
+                  <NavLinkSingleItem {...child} isPanelOpen={isOpen} isChild={true} />
                 </div>
               ))}
             </motion.div>

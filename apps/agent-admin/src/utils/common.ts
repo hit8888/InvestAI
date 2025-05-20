@@ -61,6 +61,10 @@ export const getAccessTokenFromLocalStorage = () => {
   return localStorage.getItem('accessToken');
 };
 
+export const getDashboardBasicPathURL = (tenantName: string) => {
+  return `/org/${tenantName}`;
+};
+
 export const getUserNameFromLocalStorage = () => {
   const { username, first_name, last_name } = JSON.parse(localStorage.getItem('userInfo') ?? '{}');
 
