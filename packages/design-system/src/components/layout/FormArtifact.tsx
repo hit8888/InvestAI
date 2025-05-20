@@ -41,7 +41,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: artifactMetadata.filled_data ?? {},
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   function onSubmit(values: FormSchemaType) {
