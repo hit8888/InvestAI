@@ -18,7 +18,7 @@
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-devtools": "5.0.0-alpha.91",
     "@tanstack/react-table": "^8.20.6",
-    "axios": "^1.7.7",
+    "axios": "^1.8.2",
     "country-flags-svg": "2.0.0-beta.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
