@@ -18,10 +18,15 @@ const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled }: PhoneI
   const [isFocused, setIsFocused] = useState(false);
   const getDefaultCountry = (): CountryCode => {
     // Get the user's language setting
-    const language = navigator.language; // Get the user's language setting
+    const language = navigator.language;
 
     // Extract region code from language
     const regionCode = language.split('-')[1];
+
+    // For English language without region code, default to US
+    if (language.startsWith('en') && !regionCode) {
+      return 'US';
+    }
 
     // Return region code or default to 'US'
     return (regionCode ? regionCode.toUpperCase() : 'US') as CountryCode;
