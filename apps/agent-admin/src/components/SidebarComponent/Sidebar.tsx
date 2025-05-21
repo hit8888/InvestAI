@@ -25,6 +25,7 @@ const Sidebar = () => {
   if (isLoginPage) {
     return null;
   }
+
   return (
     <motion.div
       className="sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10"

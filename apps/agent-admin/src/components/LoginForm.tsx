@@ -8,11 +8,11 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
-import { setTenantIdentifier } from '@meaku/core/utils/index';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { setupTenantAndAgent } from '../utils/apiCalls';
 
 const LoginForm = () => {
   const { login, saveTokens } = useAuth();
@@ -101,7 +101,7 @@ const LoginForm = () => {
     }
   };
 
-  const handleLoginAndRedirection = (userData: AuthResponse) => {
+  const handleLoginAndRedirection = async (userData: AuthResponse) => {
     login();
     handleResetForm();
 
@@ -110,7 +110,7 @@ const LoginForm = () => {
     // If the user has an admin role and multiple organizations,
     // we would set this as our admin_tenant_identifier and navigate to 'leads' page.
     if (tenantHavingAdminRole) {
-      setTenantIdentifier(tenantHavingAdminRole);
+      await setupTenantAndAgent(tenantHavingAdminRole);
       const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
       navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
     } else {

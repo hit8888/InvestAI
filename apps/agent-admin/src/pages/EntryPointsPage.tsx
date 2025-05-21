@@ -20,7 +20,7 @@ import useBrandingAgentConfigsQuery from '../queries/query/useAgentConfigsQuery'
 import { useAgentConfigsMutation } from '../queries/mutation/useAgentConfigsMutation';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import { getDefaultBannerHeader, getDefaultBannerSubHeader } from '@meaku/core/utils/bannerConfig';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { getTenantFromLocalStorage } from '../utils/common.ts';
 import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
 import { trackError } from '@meaku/core/utils/error';
@@ -29,7 +29,7 @@ import toast from 'react-hot-toast';
 const EntryPointsPage = () => {
   const tenantName = getTenantFromLocalStorage();
   const orgName = getTenantIdentifier()?.['name'] ?? tenantName;
-  const agentId = 1;
+  const agentId = getTenantActiveAgentId();
 
   const subHeading =
     'Set up conversation starters that guide users toward meaningful interactions. Customize each element by clicking on any editable field.';
@@ -72,7 +72,7 @@ const EntryPointsPage = () => {
           action: 'Entry Point update',
           component: 'updateConfig function',
           additionalData: {
-            agentId: agentId,
+            agentId,
             tenantName: getTenantIdentifier()?.['tenant-name'],
             errorMessage: 'Unable to update AgentConfig',
             payload: payload,
@@ -95,12 +95,12 @@ const EntryPointsPage = () => {
       setAgentName(name);
 
       // Set entry point alignment
-      setEntryPointAlignment(styleConfig.entry_point_alignment || 'CENTER');
+      setEntryPointAlignment(styleConfig?.entry_point_alignment || 'center');
 
       // Set banner config
-      setIsBannerEnabled(styleConfig.banner_config.show_banner);
-      setBannerHeader(styleConfig.banner_config.header || getDefaultBannerHeader(agentName));
-      setBannerSubheader(styleConfig.banner_config.subheader || getDefaultBannerSubHeader(orgName));
+      setIsBannerEnabled(styleConfig?.banner_config.show_banner);
+      setBannerHeader(styleConfig?.banner_config.header || getDefaultBannerHeader(agentName));
+      setBannerSubheader(styleConfig?.banner_config.subheader || getDefaultBannerSubHeader(orgName));
 
       // Set suggested questions
       setSuggestedQuestions(welcomeMessage.suggested_questions || []);

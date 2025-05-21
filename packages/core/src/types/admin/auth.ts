@@ -1,12 +1,14 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // organizationDetails
 export const OrganizationDetailsSchema = z.object({
   id: z.number().optional(),
   name: z.string().optional(),
   role: z.string().optional(),
-  "tenant-name": z.string().optional(),
+  'tenant-name': z.string().optional(),
+  active_conversations_enabled: z.boolean().optional(),
   logo: z.string().optional(),
+  agentId: z.number().optional(),
 });
 export type OrganizationDetails = z.infer<typeof OrganizationDetailsSchema>;
 
@@ -20,12 +22,11 @@ export const AuthResponseSchema = z.object({
   is_active: z.boolean(),
   is_staff: z.boolean(),
   date_joined: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: "Invalid date format. Expected ISO 8601 format.",
+    message: 'Invalid date format. Expected ISO 8601 format.',
   }),
   last_login: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: "Invalid date format. Expected ISO 8601 format.",
+    message: 'Invalid date format. Expected ISO 8601 format.',
   }),
   organizations: z.array(OrganizationDetailsSchema),
 });
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;
-

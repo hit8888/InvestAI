@@ -8,15 +8,14 @@ import { PlusIcon } from 'lucide-react';
 import { Prompt, usePrompts } from '../queries/query/usePrompts';
 import { useCreatePrompt, useUpdatePrompt } from '../queries/mutation/usePromptMutations';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 
 const InstructionsPage = () => {
   const subHeading =
     "Set up your own rules to guide the assistant's behavior. This field allows you to write specific instructions in plain English.";
 
-  // In a real app, this would come from context, route params, etc.
-  const agentId = 1;
+  const agentId = getTenantActiveAgentId();
 
   const [localPrompts, setLocalPrompts] = useState<Prompt[]>([]);
   // Keep track of original prompt values to detect changes
@@ -111,7 +110,7 @@ const InstructionsPage = () => {
         action: 'Prompt save/update',
         component: 'handlePromptSave function',
         additionalData: {
-          agentId: agentId,
+          agentId,
           tenantName: getTenantIdentifier()?.['tenant-name'],
           errorMessage: 'Unable to save Instructions',
           payload: promptToSave.prompt,
@@ -135,7 +134,7 @@ const InstructionsPage = () => {
 
         {displayPrompts.map((prompt, index) => (
           <TextArea
-            key={prompt.id || `new-prompt-${index}`}
+            key={prompt.agent_id || `new-prompt-${index}`}
             value={prompt.prompt}
             onChange={(e) => handlePromptChange(index, e.target.value)}
             onBlur={() => handlePromptSave(index)}

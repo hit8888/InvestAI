@@ -45,7 +45,7 @@ const Suggestion = ({
           'max-w-[380px]': isQuestionInCycle,
         },
       )}
-      data-testid={`suggestion-item-${itemIndex}`}
+      data-testid={isEntryPointQuestion ? `entry-point-suggestion-item-${itemIndex}` : `suggestion-item-${itemIndex}`}
     >
       <div className="!h-4 !w-4">
         {!isEntryPointQuestion ? (

@@ -3,7 +3,7 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/CustomFilterDropdown';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
-import { setTenantIdentifier } from '@meaku/core/utils/index';
+import { setupTenantAndAgent } from '../utils/apiCalls';
 import toast from 'react-hot-toast';
 import { getDashboardBasicPathURL } from '../utils/common';
 
@@ -16,10 +16,10 @@ const Dashboard = () => {
     .filter((name): name is string => !!name)
     .sort() || [''];
 
-  const handleSelectOrganization = (option: string | null) => {
+  const handleSelectOrganization = async (option: string | null) => {
     const orgItem = organizationsList?.find((item) => item?.name === option);
     if (orgItem) {
-      setTenantIdentifier(orgItem);
+      await setupTenantAndAgent(orgItem);
       const basicPathURL = getDashboardBasicPathURL(orgItem['tenant-name'] ?? '');
       navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
     } else {

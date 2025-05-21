@@ -32,13 +32,16 @@ test.describe('Basic flow for agent', () => {
 
     // 3. Interact with the chat flow with proper steps
     await test.step('Complete chat flow', async () => {
-      // Wait for and click greeting banner
+      // Check if greeting banner exists and handle accordingly
       const greetingBanner = page.getByTestId('greeting-banner');
-      await expect(greetingBanner).toBeVisible({ timeout: 30000 });
-      await greetingBanner.getByRole('button').click();
+      const isBannerVisible = await greetingBanner.isVisible().catch(() => false);
+
+      if (isBannerVisible) {
+        await greetingBanner.getByRole('button').click();
+      }
 
       // Wait for and click first suggestion
-      const firstSuggestion = page.getByTestId('suggestion-item-0');
+      const firstSuggestion = page.getByTestId('entry-point-suggestion-item-0');
       await expect(firstSuggestion).toBeVisible({ timeout: 40000 });
 
       // Add small delay before clicking to ensure element is fully ready

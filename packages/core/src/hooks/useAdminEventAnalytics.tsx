@@ -10,7 +10,7 @@ const useAdminEventAnalytics = () => {
   const commonProperties = useMemo(
     () => ({
       orgName: tenantDetails?.name,
-      agentId: tenantDetails?.id,
+      agentId: tenantDetails?.agentId,
       url: window.location.href,
       userEmail,
     }),

@@ -23,6 +23,8 @@ export const regenerateTokens = (payload: GenerateTokens) => adminApiClient.post
 
 export const getUserDataFromMeAPI = () => adminApiClient.get(`/core/api/me/`);
 
+export const getAllAgents = () => adminApiClient.get(`/tenant/api/agent/`);
+
 export const getLeadsRowData = (payload: LeadsPayload) => adminApiClient.post(`/tenant/api/search/leads/`, payload);
 
 export const getConversationRowData = (payload: ConversationsPayload) =>

@@ -7,6 +7,16 @@ const WelcomeMessageSchema = z.object({
   bounce_message: z.boolean(),
 });
 
+export const AgentSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  metadata: z.object({
+    logo: z.string(),
+    welcome_message: WelcomeMessageSchema,
+  }),
+  configs: z.object({}),
+});
+
 const OrbConfigSchema = z.object({
   show_orb: z.boolean(),
   logo_url: z.string().nullable(),
@@ -46,3 +56,4 @@ export const agentConfigPayloadSchema = baseAgentConfigSchema;
 
 export type AgentConfigResponse = z.infer<typeof agentConfigSchema>;
 export type AgentConfigPayload = z.infer<typeof agentConfigPayloadSchema>;
+export type AgentType = z.infer<typeof AgentSchema>;

@@ -3,9 +3,10 @@ import AgentLogoAndNameContainer from '../../components/AgentManagement/AgentLog
 import AgentColorsContainer from '../../components/AgentManagement/AgentColorsContainer';
 import AgentOrbContainer from '../../components/AgentManagement/AgentOrbContainer';
 import PageContainer from '../../components/AgentManagement/PageContainer.tsx';
+import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 
 const BrandingPage = () => {
-  const agentId = 1; // All tenants using agent 1
+  const agentId = getTenantActiveAgentId();
   const {
     data: agentConfigs,
     isLoading,

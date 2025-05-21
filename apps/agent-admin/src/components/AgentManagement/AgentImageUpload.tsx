@@ -7,7 +7,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { uploadAssetsFile } from '../../admin/api';
 import toast from 'react-hot-toast';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { trackError } from '@meaku/core/utils/error';
 
 interface AssetResponse {
@@ -79,6 +79,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   initialImage,
   onImageUpdate,
 }) => {
+  const agentId = getTenantActiveAgentId();
   const [imagePreview, setImagePreview] = useState<string | null>(initialImage ?? null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,7 +106,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         action: 'uploadAssetsFile Api call',
         component: 'handleImageUpload function',
         additionalData: {
-          agentId: 1,
+          agentId,
           tenantName: getTenantIdentifier()?.['tenant-name'],
           errorMessage: 'Unable to upload Image',
         },
