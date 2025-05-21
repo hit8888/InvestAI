@@ -225,14 +225,16 @@ export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {
 export const checkIsMainResponseMessage = (message: WebSocketMessage): boolean => {
   return (
     (message.actor === 'SALES' && (isStreamMessage(message) || isTextMessage(message))) ||
-    (message.actor === 'ARTIFACT' && isTextMessage(message)) || //Being used for form acknowledgement
+    (message.actor === 'ARTIFACT' && (isTextMessage(message) || isSuggestionArtifact(message))) || //Being used for form acknowledgement
     (message.actor === 'EVENT' && (isStreamMessage(message) || isTextMessage(message)))
   );
 };
 
 export const checkIsSalesResponseComplete = (messagesWithSameResponseId: WebSocketMessage[]): boolean => {
   return messagesWithSameResponseId.some(
-    (message) => checkIsMainResponseMessage(message) && (isStreamMessageComplete(message) || isTextMessage(message)),
+    (message) =>
+      checkIsMainResponseMessage(message) &&
+      (isStreamMessageComplete(message) || isTextMessage(message) || isSuggestionArtifact(message)),
   );
 };
 

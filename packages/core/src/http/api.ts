@@ -17,8 +17,10 @@ export const initializeSession = (agentId: string, payload: InitializationPayloa
 export const updateSession = (sessionId: string, payload: UpdateSessionDataPayload) =>
   apiClient.post(`/tenant/chat/session/${sessionId}/update/`, payload);
 
-export const postResponseFeedback = (sessionId: string, payload: FeedbackRequestPayload) =>
-  apiClient.post(`/tenant/chat/session/${sessionId}/feedback/`, payload);
+export const postResponseFeedback = (sessionId: string, payload: FeedbackRequestPayload, usingForAgent: boolean) => {
+  const basicURL = usingForAgent ? '/tenant/chat/session/' : '/tenant/api/sessions/';
+  return apiClient.post(`${basicURL}${sessionId}/feedback/`, payload);
+};
 
 export const updateProspect = (prospectId: string, payload: UpdateProspectPayload) =>
   apiClient.put(`/tenant/chat/prospect/${prospectId}/update/`, payload);

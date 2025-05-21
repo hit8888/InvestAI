@@ -228,6 +228,7 @@ const MessageItem = ({
             {isSalesResponseComplete && (
               <MessageFeedback
                 sessionId={sessionId}
+                usingForAgent={usingForAgent}
                 message={message}
                 feedback={feedback}
                 onAddFeedback={handleAddFeedback}
