@@ -44,6 +44,16 @@ export const useEmbedAppEvents = ({
   const [searchParams] = useSearchParams();
   const isAgentOpen = searchParams.get('isAgentOpen') === 'true';
 
+  const handleOpenAndShowAgent = () => {
+    handleOpenAgent();
+    setShouldShowAgent(true);
+  };
+
+  const handleEmbedAndOpenAgent = () => {
+    setMode('embed');
+    handleOpenAndShowAgent();
+  };
+
   const handleParentWindowMessages = async (event: MessageEvent) => {
     const { type, isCollapsible: newIsCollapsible } = event.data;
 
@@ -56,7 +66,7 @@ export const useEmbedAppEvents = ({
       case 'PARENT_FORM_MESSAGE':
         setIsCollapsible(true);
         setMode('overlay');
-        handleOpenAgent();
+        handleOpenAndShowAgent();
         if (event.data.data?.message) {
           if (event.data?.prospectId) {
             handleUpdateSessionData({ prospectId: event.data.prospectId });
@@ -71,8 +81,7 @@ export const useEmbedAppEvents = ({
         break;
       case 'MODE_CHANGE':
         if (!event.data.isCollapsible) {
-          setMode('embed');
-          handleOpenAgent();
+          handleEmbedAndOpenAgent();
         } else {
           setMode('bottomBar');
         }
@@ -80,7 +89,7 @@ export const useEmbedAppEvents = ({
         break;
       case 'open-breakout-button':
         fetchSessionData();
-        handleOpenAgent();
+        handleOpenAndShowAgent();
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.EXTERNAL_BUTTON_CLICKED, {
           ...event.data,
         });
@@ -94,7 +103,7 @@ export const useEmbedAppEvents = ({
           if (payload?.utmParams) {
             handleUpdateSessionData({ utmParams: payload.utmParams });
             if (payload.utmParams.isAgentOpen === 'true') {
-              handleOpenAgent();
+              handleOpenAndShowAgent();
               trackAgentbotEvent(ANALYTICS_EVENT_NAMES.AGENT_OPENED_VIA_UTM_PARAMS, {
                 ...event.data,
               });
@@ -106,9 +115,7 @@ export const useEmbedAppEvents = ({
           if (typeof payload.isCollapsible === 'boolean') {
             setIsCollapsible(payload.isCollapsible);
             if (!payload.isCollapsible) {
-              setMode('embed');
-              handleOpenAgent();
-              setShouldShowAgent(true);
+              handleEmbedAndOpenAgent();
             }
           }
         }
@@ -117,8 +124,7 @@ export const useEmbedAppEvents = ({
         if (typeof newIsCollapsible === 'boolean') {
           setIsCollapsible(newIsCollapsible);
           if (!newIsCollapsible) {
-            setMode('embed');
-            handleOpenAgent();
+            handleEmbedAndOpenAgent();
           }
         }
     }
