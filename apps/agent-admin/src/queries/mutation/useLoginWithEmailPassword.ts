@@ -1,4 +1,4 @@
-import { loginWithEmailPassword } from '../../admin/api';
+import { loginWithEmailPassword } from '@meaku/core/adminHttp/api';
 import { LoginWithEmailPasswordPayload } from '@meaku/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 

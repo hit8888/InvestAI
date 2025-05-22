@@ -24,7 +24,7 @@ import {
   FunnelStep,
   ProspectDetailsType,
 } from './admin-types';
-import { getTenantIdentifier, LEADS_PAGE } from '@meaku/core/utils/index';
+import { LEADS_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
@@ -53,16 +53,8 @@ const {
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
 
-export const getTenantFromLocalStorage = () => {
-  return getTenantIdentifier()?.['tenant-name'];
-};
-
-export const getAccessTokenFromLocalStorage = () => {
-  return localStorage.getItem('accessToken');
-};
-
 export const getDashboardBasicPathURL = (tenantName: string) => {
-  return `/org/${tenantName}`;
+  return `/${tenantName}`;
 };
 
 export const getUserNameFromLocalStorage = () => {

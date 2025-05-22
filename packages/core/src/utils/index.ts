@@ -25,6 +25,14 @@ export const getTenantIdentifier = () => {
   }
 };
 
+export const getTenantFromLocalStorage = () => {
+  return getTenantIdentifier()?.['tenant-name'];
+};
+
+export const getAccessTokenFromLocalStorage = () => {
+  return localStorage.getItem('accessToken');
+};
+
 export const getTenantActiveAgentId = () => {
   const tenantIdentifier = getTenantIdentifier();
   return tenantIdentifier?.agentId ?? 1;

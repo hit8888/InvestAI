@@ -11,6 +11,7 @@ import {
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
 import adminApiClient from './client';
+import { FeedbackRequestPayload } from '../types/api/feedback_request';
 
 export const loginWithEmailPassword = (payload: LoginWithEmailPasswordPayload) =>
   adminApiClient.post(`/core/api/login/`, payload);
@@ -78,6 +79,10 @@ export const updateBrandingAgentConfigs = async (agentId: number, payload: Agent
 
 export const patchAgentConfigs = async (agentId: number, payload: Partial<AgentConfigPayload>) => {
   return adminApiClient.patch(`/tenant/api/agent/${agentId}/`, payload);
+};
+
+export const postResponseFeedbackFromDashboard = (sessionId: string, payload: FeedbackRequestPayload) => {
+  return adminApiClient.post(`/tenant/api/sessions/${sessionId}/feedback/`, payload);
 };
 
 export const uploadAssetsFile = (file: File) => {

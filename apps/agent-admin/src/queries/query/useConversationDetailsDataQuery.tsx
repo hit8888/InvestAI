@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getConversationDetailsData } from '../../admin/api';
+import { getConversationDetailsData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { ConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 const getConversationDetailsDataKey = (tenantName: string, sessionID: string): unknown[] => [
   'conversation-details-data',

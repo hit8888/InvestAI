@@ -30,7 +30,7 @@ const SlideArtifactPreview = ({
   const handleOpenDialog = () => {
     if (viewType === ViewType.USER) {
       handleArtifactOnClick();
-    } else {
+    } else if (viewType === ViewType.DASHBOARD) {
       setOpenDialog(true);
     }
   };
@@ -81,7 +81,7 @@ const SlideArtifactPreview = ({
   ) : (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>{showButtonDisplay()}</DialogTrigger>
-      <DialogContent className="bg-primary-foreground/80 sm:min-w-[1200px]">
+      <DialogContent className="bg-white sm:min-w-[1000px]">
         <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>
         {openDialog ? <div className="h-full w-full rounded-lg">{getArtifactContent()}</div> : null}
       </DialogContent>

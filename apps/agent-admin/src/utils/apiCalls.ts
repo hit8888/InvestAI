@@ -1,5 +1,5 @@
 import { AgentType } from '@meaku/core/types/admin/agent-configs';
-import { getAllAgents } from '../admin/api';
+import { getAllAgents } from '@meaku/core/adminHttp/api';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 import { OrganizationDetails } from '@meaku/core/types/admin/auth';

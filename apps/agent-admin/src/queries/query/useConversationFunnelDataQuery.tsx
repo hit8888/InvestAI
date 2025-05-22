@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getConversationFunnelData } from '../../admin/api';
+import { getConversationFunnelData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { ConversationsFunnelDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';

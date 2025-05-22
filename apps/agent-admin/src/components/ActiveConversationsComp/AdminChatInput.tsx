@@ -1,7 +1,7 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useState } from 'react';
-import TextArea from '@breakout/design-system/components/layout/textarea';
+import TextArea from '@breakout/design-system/components/TextArea/index';
 import ActiveConvJoinAICopilotIcon from '@breakout/design-system/components/icons/join-conv-aicopilot-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import PageContainer from '../components/AgentManagement/PageContainer.tsx';
 import Card from '../components/AgentManagement/Card.tsx';
-import TextArea from '@breakout/design-system/components/layout/textarea';
+import ResizeTextarea from '@breakout/design-system/components/TextArea/ResizeTextarea';
 import InfoCard from '../components/AgentManagement/InfoCard.tsx';
 import Button from '@breakout/design-system/components/Button/index';
 import { PlusIcon } from 'lucide-react';
@@ -133,13 +133,13 @@ const InstructionsPage = () => {
         />
 
         {displayPrompts.map((prompt, index) => (
-          <TextArea
+          <ResizeTextarea
             key={prompt.agent_id || `new-prompt-${index}`}
             value={prompt.prompt}
             onChange={(e) => handlePromptChange(index, e.target.value)}
             onBlur={() => handlePromptSave(index)}
             placeholder="Type your custom instructions here…"
-            className="flex min-h-20 w-full items-center rounded-lg p-2 placeholder:text-gray-400"
+            className="flex min-h-20 w-full items-center rounded-lg p-2 placeholder:text-gray-400 focus:border focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-300"
           />
         ))}
 

@@ -4,7 +4,7 @@ import ImageUploadPattern from '@breakout/design-system/components/Patterns/Imag
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import AgentConfigUploadIcon from '@breakout/design-system/components/icons/agent-config-upload-icon';
 import { cn } from '@breakout/design-system/lib/cn';
-import { uploadAssetsFile } from '../../admin/api';
+import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
 import toast from 'react-hot-toast';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';

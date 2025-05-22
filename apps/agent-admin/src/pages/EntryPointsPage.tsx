@@ -21,7 +21,7 @@ import { useAgentConfigsMutation } from '../queries/mutation/useAgentConfigsMuta
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import { getDefaultBannerHeader, getDefaultBannerSubHeader } from '@meaku/core/utils/bannerConfig';
 import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
-import { getTenantFromLocalStorage } from '../utils/common.ts';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
 import { trackError } from '@meaku/core/utils/error';
 import toast from 'react-hot-toast';

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
-import { patchAgentConfigs } from '../../admin/api';
+import { patchAgentConfigs } from '@meaku/core/adminHttp/api';
 
 interface PatchAgentConfigsParams {
   agentId: number;

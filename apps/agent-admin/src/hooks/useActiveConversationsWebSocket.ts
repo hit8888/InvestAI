@@ -1,7 +1,7 @@
 import useWebSocket from 'react-use-websocket';
 import { ENV } from '@meaku/core/types/env';
 import { useEffect, useState } from 'react';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '../utils/common.ts';
+import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { trackError } from '../utils/error.ts';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import {

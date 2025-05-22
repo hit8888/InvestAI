@@ -1,10 +1,10 @@
 import { LeadsPayload } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getLeadsRowData } from '../../admin/api';
+import { getLeadsRowData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { LeadsTableResponse } from '@meaku/core/types/admin/admin';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 type LeadsTableVariables = LeadsPayload;
 

@@ -21,7 +21,8 @@
     "./managers/*": "./src/managers/*.ts",
     "./transformers/*": "./src/transformers/*.ts",
     "./contexts/*": "./src/contexts/*.tsx",
-    "./stores/*": "./src/stores/*.ts"
+    "./stores/*": "./src/stores/*.ts",
+    "./adminHttp/*": "./src/adminHttp/*.ts"
   },
   "type": "module",
   "devDependencies": {

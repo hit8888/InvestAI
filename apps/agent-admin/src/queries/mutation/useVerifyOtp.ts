@@ -1,4 +1,4 @@
-import { verifyOtp } from '../../admin/api';
+import { verifyOtp } from '@meaku/core/adminHttp/api';
 import { VerifyOtpPayload } from '@meaku/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 

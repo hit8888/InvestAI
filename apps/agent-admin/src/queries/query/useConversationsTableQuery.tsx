@@ -1,10 +1,10 @@
 import { ConversationsPayload } from '@meaku/core/types/admin/api';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getConversationRowData } from '../../admin/api';
+import { getConversationRowData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { ConversationsTableResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 type ConversationTableVariables = ConversationsPayload;
 

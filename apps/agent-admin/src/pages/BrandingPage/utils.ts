@@ -3,7 +3,7 @@ import {
   agentConfigPayloadSchema,
   AgentConfigResponse,
 } from '@meaku/core/types/admin/agent-configs';
-import { updateBrandingAgentConfigs } from '../../admin/api';
+import { updateBrandingAgentConfigs } from '@meaku/core/adminHttp/api';
 import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
 import { getTenantIdentifier } from '@meaku/core/utils/index';

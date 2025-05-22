@@ -9,7 +9,7 @@ const LogTabDisplayContent = () => {
   const logoURL = getTenantIdentifier()?.['logo'];
 
   return (
-    <div className="flex max-h-[900px] w-full flex-col bg-gray-25">
+    <div className="flex max-h-[900px] w-full flex-col overflow-auto bg-gray-25">
       {chatHistory?.length && conversation?.session_id ? (
         <AgentMessages
           viewType={ViewType.DASHBOARD}

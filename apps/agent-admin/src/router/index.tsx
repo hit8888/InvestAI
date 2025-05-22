@@ -38,7 +38,7 @@ const routes = [
         children: [],
       },
       {
-        path: 'org/:tenantName',
+        path: '/:tenantName',
         children: [
           {
             path: 'leads',

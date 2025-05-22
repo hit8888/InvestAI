@@ -1,4 +1,4 @@
-import TextArea from '@breakout/design-system/components/layout/textarea';
+import TextArea from '@breakout/design-system/components/TextArea/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessageComplete } from '@meaku/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';

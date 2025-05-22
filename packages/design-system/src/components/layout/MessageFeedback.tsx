@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@breakout/design-system/components/layout/dialog';
 import Button from '@breakout/design-system/components/Button/index';
-import Textarea from '@breakout/design-system/components/layout/textarea';
+import Textarea from '@breakout/design-system/components/TextArea/index';
 import FeedbackButton from '@breakout/design-system/components/layout/feedback-button';
 import {
   FeedbackEnum,

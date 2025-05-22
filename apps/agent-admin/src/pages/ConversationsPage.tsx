@@ -6,7 +6,7 @@ import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
 import ActiveConversationsLayout from '../components/ActiveConversationsComp/ActiveConversationsLayout';
 import { ActiveConversationsProvider } from '../context/ActiveConversationsContext';
 import { useAuth } from '../context/AuthProvider';
-import { getTenantFromLocalStorage } from '../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 const ConversationsPage = () => {
   const { userInfo } = useAuth();

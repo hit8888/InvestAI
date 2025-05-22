@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getEntityDataBasedOnType } from '../../admin/api';
+import { getEntityDataBasedOnType } from '@meaku/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { EntityMetadataResponseType } from '@meaku/core/types/admin/api';
 
 const getEntityMetadataKey = (entityType: string, tenantName: string): readonly unknown[] => [

@@ -1,4 +1,4 @@
-import { generateOtp } from '../../admin/api';
+import { generateOtp } from '@meaku/core/adminHttp/api';
 import { GenerateOtpPayload } from '@meaku/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 

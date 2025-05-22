@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { setAuthInstance } from './AuthInstance';
+import { setAuthInstance } from '@meaku/core/contexts/AuthInstance';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
 import { DefaultAuthResponse } from '../utils/constants';
 

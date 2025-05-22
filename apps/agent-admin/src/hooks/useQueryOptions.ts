@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
-import { getTenantFromLocalStorage } from '../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 interface UseQueryOptionsProps {
   cacheTime?: number;

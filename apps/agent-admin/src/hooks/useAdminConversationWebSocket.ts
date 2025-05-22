@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { ENV } from '@meaku/core/types/env';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '../utils/common';
+import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { nanoid } from 'nanoid';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';

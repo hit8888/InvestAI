@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { getActiveConversations } from '../../admin/api';
+import { getActiveConversations } from '@meaku/core/adminHttp/api';
 import { useQuery } from '@tanstack/react-query';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 
 const useActiveConversations = () => {

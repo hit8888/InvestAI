@@ -1,5 +1,5 @@
 import { toast } from 'react-hot-toast';
-import { downloadLeadsRowData, downloadConversationRowData } from '../../admin/api';
+import { downloadLeadsRowData, downloadConversationRowData } from '@meaku/core/adminHttp/api';
 import { createFilename, triggerDownload } from './downloadUtils';
 import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@meaku/core/types/admin/api';
 import { LEADS_PAGE } from '@meaku/core/utils/index';

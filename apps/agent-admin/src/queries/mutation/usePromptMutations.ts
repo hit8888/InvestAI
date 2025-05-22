@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import adminApiClient from '../../admin/client';
+import adminApiClient from '@meaku/core/adminHttp/client';
 import { Prompt } from '../query/usePrompts';
 
 interface CreatePromptPayload {

@@ -1,8 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ENV } from '@meaku/core/types/env';
-import { authInstance } from '../context/AuthInstance';
+import { authInstance } from '../contexts/AuthInstance';
 import { getUserDataFromMeAPI, regenerateTokens } from './api';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '../utils/common';
+import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;

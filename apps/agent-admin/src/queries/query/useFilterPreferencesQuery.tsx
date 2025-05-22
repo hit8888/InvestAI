@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getFilterPreferences } from '../../admin/api';
+import { getFilterPreferences } from '@meaku/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '../../utils/common';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { FilterPreferencesResponseType } from '@meaku/core/types/admin/api';
 
 const getFilterPreferencesKey = (tableName: string, tenantName: string): readonly unknown[] => [
