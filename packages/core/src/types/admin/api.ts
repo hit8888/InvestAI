@@ -82,14 +82,15 @@ export const ExportFormatSchema = z.enum([ExportFormat.XLSX, ExportFormat.CSV]);
 export type ExportFormatType = z.infer<typeof ExportFormatSchema>;
 
 // ConversationsPayload
-export const ConversationsPayloadSchema = z.object({
+export const TablePayloadSchema = z.object({
   filters: z.array(FilterSchema),
   sort: z.array(SortSchema),
   search: z.string().optional(),
   page: z.number(),
   page_size: z.number().optional(),
 });
-export type ConversationsPayload = z.infer<typeof ConversationsPayloadSchema>;
+export type ConversationsPayload = z.infer<typeof TablePayloadSchema>;
+export type DataSourcePayload = z.infer<typeof TablePayloadSchema>;
 
 export const AdditionalInfoSchema = z.union([
   z.object({}).strict(), // Allow empty object `{}`
@@ -280,3 +281,135 @@ export type EntityMetadataSchemaType = z.infer<typeof EntityMetadataSchema>;
 export const EntityMetadataResponseSchema = z.array(EntityMetadataSchema);
 
 export type EntityMetadataResponseType = z.infer<typeof EntityMetadataResponseSchema>;
+
+// Agent Configs Schema and Types
+
+export const DataSourceOverviewSchema = z.object({
+  data_sources_count: z.number(),
+  total_count: z.number(),
+  pending_count: z.number(),
+});
+
+export const DataSourceFeaturesSchema = z.object({
+  feature_name: z.string(),
+  updated_on: z.string(),
+  frames_count: z.number(),
+});
+
+export const DataSourceOverviewResponseResultSchema = z.object({
+  WEB_PAGE: DataSourceOverviewSchema.optional().nullable(),
+  PDF: DataSourceOverviewSchema.optional().nullable(),
+  FEATURES: z.array(DataSourceFeaturesSchema).optional().nullable(),
+  VIDEOS: DataSourceOverviewSchema.optional().nullable(),
+  SLIDES: DataSourceOverviewSchema.optional().nullable(),
+});
+
+export const DataSourceWebpagesResponseResultSchema = z.object({
+  id: z.number(),
+  url: z.string(),
+  title: z.string().nullable(),
+  status: z.string(),
+  status_display: z.string(),
+  data_source: z.number(),
+  data_source_name: z.string(),
+  page_type: z.string().nullable(),
+  page_intent_level: z.string().nullable(),
+  created_on: z.string(),
+  updated_on: z.string(),
+});
+
+export const DataSourceDocumentsResponseResultSchema = z.object({
+  id: z.number(),
+  version: z.string(),
+  data_source_type: z.string(),
+  name: z.string().nullable(),
+  source_url: z.string().nullable(),
+  status: z.string(),
+  created_on: z.string(),
+  updated_on: z.string(),
+});
+
+export const DataSourceWebpagesTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(DataSourceWebpagesResponseResultSchema), // Array of webpages results
+});
+
+export const DataSourceDocumentsTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(DataSourceDocumentsResponseResultSchema), // Array of documents results
+});
+
+export const DataSourceItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  description: z.string().optional().nullable(),
+  key: z.string(),
+  public_url: z.string(),
+});
+export type DataSourceItem = z.infer<typeof DataSourceItemSchema>;
+
+export const FetchSitemapRequestSchema = z.object({
+  url: z.string(),
+});
+export type FetchSitemapRequest = z.infer<typeof FetchSitemapRequestSchema>;
+
+export const FetchSitemapResponseSchema = z.object({
+  urls: z.array(z.string()),
+  count: z.number(),
+});
+export type FetchSitemapResponse = z.infer<typeof FetchSitemapResponseSchema>;
+
+export const AddWebpagesSitemapLinksRequestSchema = z.object({
+  main_url: z.string(),
+  urls: z.array(z.string()),
+});
+export type AddWebpagesSitemapLinksRequest = z.infer<typeof AddWebpagesSitemapLinksRequestSchema>;
+
+export const AddWebpagesSitemapLinksResponseSchema = z.object({
+  data_source_id: z.number(),
+  data_source_name: z.string(),
+  is_new_data_source: z.boolean(),
+  urls_added: z.array(z.object({ url: z.string(), id: z.number() })),
+  urls_count: z.number(),
+});
+export type AddWebpagesSitemapLinksResponse = z.infer<typeof AddWebpagesSitemapLinksResponseSchema>;
+
+export const BulkAddDocumentsRequestSchema = z.object({
+  documents: z.array(
+    z.object({
+      asset: DataSourceItemSchema,
+      document_type: z.string().optional(),
+    }),
+  ),
+});
+export type BulkAddDocumentsRequest = z.infer<typeof BulkAddDocumentsRequestSchema>;
+
+export const BulkAddDocumentsResponseSchema = z.object({
+  message: z.string(),
+  data_sources: z.array(DataSourceDocumentsResponseResultSchema),
+});
+export type BulkAddDocumentsResponse = z.infer<typeof BulkAddDocumentsResponseSchema>;
+
+export const DeleteWebpagesRequestSchema = z.object({
+  webpage_ids: z.array(z.number()),
+  delete_embeddings: z.boolean(),
+});
+export type DeleteWebpagesRequest = z.infer<typeof DeleteWebpagesRequestSchema>;
+
+export const DeleteWebpagesResponseSchema = z.object({
+  deactivated_count: z.number(),
+  not_found_ids: z.array(z.number()),
+  embeddings_deleted: z.boolean(),
+});
+export type DeleteWebpagesResponse = z.infer<typeof DeleteWebpagesResponseSchema>;
+
+export const ReprocessWebpagesRequestSchema = z.object({
+  webpage_ids: z.array(z.string()),
+});
+export type ReprocessWebpagesRequest = z.infer<typeof ReprocessWebpagesRequestSchema>;
+
+export const ReprocessWebpagesResponseSchema = z.object({
+  reprocessed_count: z.number(),
+  not_found_ids: z.array(z.number()),
+  task_id: z.string(),
+});
+export type ReprocessWebpagesResponse = z.infer<typeof ReprocessWebpagesResponseSchema>;

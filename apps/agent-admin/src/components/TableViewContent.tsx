@@ -1,16 +1,17 @@
 import React from 'react';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import CustomTableView from './tableComp/CustomTableView';
 import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
-
+import CommonTable from '@breakout/design-system/components/Table/CommonTable';
+import { useSidebar } from '../context/SidebarContext';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 interface TableContentProps {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  tableData: any[];
+  tableData: unknown[];
   isConversationTable?: boolean;
   isLoading: boolean;
   totalRecords: number;
   columnHeaderData: ColumnDefinition[];
   filterContainerHeight?: number;
+  pageType: PaginationPageType;
 }
 
 const DEFAULT_LOADING_ROW_COUNT = 10;
@@ -20,27 +21,30 @@ const TableViewContent: React.FC<TableContentProps> = ({
   isConversationTable = false,
   isLoading,
   totalRecords,
-  tableData,
+  tableData = [],
   columnHeaderData,
   filterContainerHeight = 0,
+  pageType,
 }) => {
+  const { isSidebarOpen } = useSidebar();
   if (isLoading) {
     return <TableViewShimmer columnCount={DEFAULT_LOADING_COLUMNS_COUNT} rowCount={DEFAULT_LOADING_ROW_COUNT} />;
   }
 
   if (!totalRecords) {
     return (
-      <p className="w-full text-center text-2xl font-semibold text-gray-900">{`There are No ${isConversationTable ? 'Conversations' : 'Leads'} Yet !!!`}</p>
+      <p className="w-full text-center text-2xl font-semibold text-gray-900">{`There are no ${isConversationTable ? 'conversations' : 'leads'} yet !!!`}</p>
     );
   }
 
   return (
-    <CustomTableView
+    <CommonTable
       key={isConversationTable ? 'conversation-table-view' : 'leads-table-view'}
-      isConversationsPage={isConversationTable}
-      tabularData={tableData?.length > 0 ? tableData : []}
+      tabularData={tableData}
       columnHeaderData={columnHeaderData}
       filterContainerHeight={filterContainerHeight}
+      isSidebarOpen={isSidebarOpen}
+      pageType={pageType}
     />
   );
 };

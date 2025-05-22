@@ -1,10 +1,21 @@
-const SpinLoader = () => {
+interface SpinLoaderProps {
+  width?: number;
+  height?: number;
+}
+
+const SpinLoader = ({ width = 12, height = 12 }: SpinLoaderProps) => {
+  // Calculate inner circle dimensions (2 units smaller than outer ring)
+  const innerWidth = width - 2;
+  const innerHeight = height - 2;
+
   return (
     <div className="flex items-center justify-center">
       {/* Outer ring with gradient */}
       <div
-        className="relative h-12 w-12 animate-slowSpin rounded-full p-1"
+        className="relative animate-slowSpin rounded-full p-1"
         style={{
+          width: `${width * 4}px`,
+          height: `${height * 4}px`,
           background: `conic-gradient(
                 rgb(var(--system) / 0.1) 0deg, 
                 rgb(var(--system) / 0.2) 45deg, 
@@ -19,7 +30,13 @@ const SpinLoader = () => {
         }}
       >
         {/* Inner circle to create a ring effect */}
-        <div className="absolute h-10 w-10 rounded-full bg-white" />
+        <div
+          className="absolute rounded-full bg-white"
+          style={{
+            width: `${innerWidth * 4}px`,
+            height: `${innerHeight * 4}px`,
+          }}
+        />
       </div>
     </div>
   );

@@ -22,21 +22,40 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     isLeadsPage,
     isConversationsPage,
     isAgentPlaygroundPage,
+    isAgentDataSourcesPage,
+    // isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
     isAgentInstructionsPage,
   } = usePageRouteState();
-  const { LEADS, CONVERSATIONS, AGENT, AGENT_PLAYGROUND, AGENT_BRANDING, AGENT_ENTRYPOINTS, AGENT_INSTRUCTIONS } =
-    AppRoutesEnum;
+  const {
+    LEADS,
+    CONVERSATIONS,
+    AGENT,
+    AGENT_PLAYGROUND,
+    AGENT_BRANDING,
+    AGENT_ENTRYPOINTS,
+    AGENT_INSTRUCTIONS,
+    AGENT_DATA_SOURCES,
+  } = AppRoutesEnum;
   const {
     LEADS_LABEL,
     CONVERSATIONS_LABEL,
     AGENT_LABEL,
     AGENT_PLAYGROUND_LABEL,
+    AGENT_DATA_SOURCES_LABEL,
+    // AGENT_WORKFLOW_LABEL,
     AGENT_BRANDING_LABEL,
     AGENT_ENTRYPOINTS_LABEL,
     AGENT_INSTRUCTIONS_LABEL,
   } = SidebarNavItemsEnum;
+
+  const isAgentTabActive =
+    isAgentPlaygroundPage ||
+    isAgentBrandingPage ||
+    isAgentEntrypointsPage ||
+    isAgentInstructionsPage ||
+    isAgentDataSourcesPage;
 
   const basicURL = getDashboardBasicPathURL(tenantName ?? '');
 
@@ -64,19 +83,24 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
     {
       navUrl: `${basicURL}/${AGENT}`,
       navItem: AGENT_LABEL,
-      navImg:
-        isAgentPlaygroundPage || isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage ? (
-          <PanelAgentActiveIcon {...COMMON_SMALL_ICON_PROPS} />
-        ) : (
-          <PanelAgentIcon {...COMMON_SMALL_ICON_PROPS} />
-        ),
-      isActive: isAgentPlaygroundPage || isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage,
+      navImg: isAgentTabActive ? (
+        <PanelAgentActiveIcon {...COMMON_SMALL_ICON_PROPS} />
+      ) : (
+        <PanelAgentIcon {...COMMON_SMALL_ICON_PROPS} />
+      ),
+      isActive: isAgentTabActive,
       hasChildren: true,
       children: [
         {
           navUrl: `${basicURL}/${AGENT_PLAYGROUND}`,
           navItem: AGENT_PLAYGROUND_LABEL,
           isActive: isAgentPlaygroundPage,
+        },
+        // TODO: It will be used Later
+        {
+          navUrl: `${basicURL}/${AGENT_DATA_SOURCES}`,
+          navItem: AGENT_DATA_SOURCES_LABEL,
+          isActive: isAgentDataSourcesPage,
         },
         {
           navUrl: `${basicURL}/${AGENT_BRANDING}`,

@@ -2,7 +2,7 @@ import { flexRender, Row } from '@tanstack/react-table';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { SHADOW_PINNED_COLUMNS } from '../../utils/constants';
+import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
 
 type CustomSingleBodyRowItemProps = {
   row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>;

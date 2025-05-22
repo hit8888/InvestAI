@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const DownloadIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const DownloadIcon = ({ className = '', width, height, color, viewBox, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}

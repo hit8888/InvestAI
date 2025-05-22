@@ -7,12 +7,14 @@ import FilterContent from './FilterContent';
 import SingleAppliedFilter from './SingleAppliedFilter';
 import AllSelectableFilterContent from './AllSelectableFilterContent';
 import AllFiltersIcon from '@breakout/design-system/components/icons/all-filters';
-import { ALL_FILTERS_ICONS } from '../../utils/constants';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { collectAppliedFilters, getFilterHeaderLabel } from '../../utils/common';
 import { FilterType } from '@meaku/core/types/admin/filters';
 import ExportDownload from './ExportDownload';
-import { ConversationsPayload, LeadsPayload } from '@meaku/core/types/admin/api';
+import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
+import SearchTableContentInput from '../SearchTableContentInput';
+import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 const {
   AllFilters,
@@ -24,10 +26,14 @@ const {
   Company,
   UserMessagesCount,
   TestConversationIncluded,
+  UsageCount,
+  Sources,
+  SearchTableContent,
+  Duration,
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
-  payloadData: ConversationsPayload | LeadsPayload;
+  payloadData: ConversationsPayload | LeadsPayload | DataSourcePayload;
 }
 
 const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) => {
@@ -76,10 +82,28 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
       case ProductOfInterest:
         handleFilterRemove(key, []);
         break;
+      case Sources:
+        handleFilterRemove(key, []);
+        break;
+      case SearchTableContent:
+        handleFilterRemove(key, '');
+        break;
       case UserMessagesCount:
         handleFilterRemove(key, {
           minCount: 0,
           maxCount: 100,
+        });
+        break;
+      case UsageCount:
+        handleFilterRemove(key, {
+          minCount: 0,
+          maxCount: 100,
+        });
+        break;
+      case Duration:
+        handleFilterRemove(key, {
+          minDuration: 0,
+          maxDuration: 100,
         });
         break;
       case MeetingBooked:
@@ -91,17 +115,20 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     }
   };
 
+  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE;
+
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
-        <ExportDownload page={page} payloadData={payloadData} />
-        <PopoverTrigger className="popover-styling border-primary-20-styling flex items-center gap-2 self-stretch">
+        {!isLeadsAndConversationsPage && <SearchTableContentInput page={page} />}
+        {isLeadsAndConversationsPage && <ExportDownload page={page} payloadData={payloadData} />}
+        <PopoverTrigger className="popover-styling border-gray-200-styling flex items-center gap-2 self-stretch">
           <span className="h-5 w-5">
-            <AllFiltersIcon {...ALL_FILTERS_ICONS} />
+            <AllFiltersIcon className="h-6 w-6 text-system" />
           </span>
-          <p className="text-sm font-medium text-primary">All Filters</p>
+          <p className="text-sm font-medium text-gray-600">All Filters</p>
           {appliedFilters.length > 0 && (
-            <p className="flex h-5 w-5 items-center justify-center rounded-full bg-primary p-0.5">
+            <p className="flex h-5 w-5 items-center justify-center rounded-full bg-system p-0.5">
               <span className="text-xs font-medium text-white">{appliedFilters.length}</span>
             </p>
           )}

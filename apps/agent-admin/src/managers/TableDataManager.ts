@@ -16,7 +16,7 @@ class TableDataManager {
     if (!validatedTableData.success) {
       // console.error('Validation failed for TableDataManager:', {
       //   input: tableData,
-      //   errors: validatedTableData.error.format(),
+      //   errors: validatedTableData.error,
       // });
       throw new Error(validatedTableData.error.errors.map((error) => error.message).join(', '));
     }

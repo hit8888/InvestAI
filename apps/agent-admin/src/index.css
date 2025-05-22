@@ -73,6 +73,33 @@
     16px 0 40px -16px rgba(28, 27, 86, 0.01);
 }
 
+.sources-card-shadow {
+  box-shadow:
+    0px 5.833px 35.139px 0px rgba(var(--system) / 0.02),
+    0px 1.8px 9.75px 0px rgba(var(--system) / 0.01),
+    0px 0.733px 4.889px 0px rgba(var(--system) / 0.01),
+    0px 0.167px 2.361px 0px rgba(var(--system) / 0.01);
+}
+
+.data-sources-card-shadow {
+  box-shadow:
+    0px 0px 16px 0px rgba(var(--system) / 0.02),
+    0px 0px 8.346px 0px rgba(var(--system) / 0.01),
+    0px 0px 3.917px 0px rgba(var(--system) / 0.01),
+    0px 0px 1.715px 0px rgba(var(--system) / 0.01),
+    0px 0px 0.742px 0px rgba(var(--system) / 0.01);
+}
+
+.data-sources-dialog-shadow {
+  box-shadow:
+    0px 0px 33px 0px rgba(var(--system) / 0.04),
+    0px 0px 19.326px 0px rgba(var(--system) / 0.03),
+    0px 0px 10.511px 0px rgba(var(--system) / 0.02),
+    0px 0px 5.363px 0px rgba(var(--system) / 0.02),
+    0px 0px 2.689px 0px rgba(var(--system) / 0.02),
+    0px 0px 1.299px 0px rgba(var(--system) / 0.01);
+}
+
 .gradient-text {
   background: linear-gradient(90deg, #3b82f6, #9333ea);
   /* Blue to purple */

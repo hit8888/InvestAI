@@ -1,0 +1,86 @@
+import { Cell, flexRender, Row } from '@tanstack/react-table';
+import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
+import { cn } from '@breakout/design-system/lib/cn';
+import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
+
+type CustomSingleBodyRowItemProps = {
+  row: Row<CommonDataSourceResponse>;
+  index: number;
+  isIdSelected: (id: number) => boolean;
+  toggleSelectId: (id: number) => void;
+};
+
+const CellContent = ({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
+  return (
+    <div className="flex flex-1 items-center text-left text-sm text-gray-900">
+      {cell.getIsPlaceholder() ? null : flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </div>
+  );
+};
+
+type HeaderContentProps = {
+  isFirstColumn: boolean;
+  cell: Cell<CommonDataSourceResponse, unknown>;
+  isRowSelected: boolean;
+  toggleSelectId: (id: number) => void;
+};
+
+const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId }: HeaderContentProps) => {
+  const rowId = cell.row.original.id;
+
+  if (isFirstColumn) {
+    return (
+      <div className="flex items-start gap-4">
+        <Checkbox
+          checked={isRowSelected}
+          className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
+          onCheckedChange={() => toggleSelectId(rowId)}
+          haveBlackBackground={false}
+        />
+        <CellContent cell={cell} />
+      </div>
+    );
+  }
+  return <CellContent cell={cell} />;
+};
+
+const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelectId }: CustomSingleBodyRowItemProps) => {
+  const isEvenRow = index % 2 === 0;
+  const isOddRow = !isEvenRow;
+  const isRowSelected = isIdSelected(row.original.id);
+
+  return (
+    <tr
+      key={row.id}
+      className={cn('flex w-full items-start self-stretch', {
+        'bg-white': isEvenRow,
+        'bg-gray-25': isOddRow,
+        'bg-primary/5': isRowSelected,
+      })}
+    >
+      {row.getVisibleCells().map((cell) => {
+        const isFirstColumn = row.getVisibleCells().indexOf(cell) === 0;
+        return (
+          <td
+            key={cell.id}
+            className={cn(
+              `border-gray/20 flex h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2 2xl:min-w-96 `,
+              {
+                'border-l': isFirstColumn,
+              },
+            )}
+          >
+            <RowCellContent
+              toggleSelectId={toggleSelectId}
+              isFirstColumn={isFirstColumn}
+              cell={cell}
+              isRowSelected={isRowSelected}
+            />
+          </td>
+        );
+      })}
+    </tr>
+  );
+};
+
+export default TableBodyRowItemHavingCheckbox;

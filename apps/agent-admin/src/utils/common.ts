@@ -3,12 +3,17 @@ import {
   BANTItem,
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
+  CONVERSATIONS_TABLE_FILTERS_CONFIG,
+  DOCUMENTS_TABLE_FILTERS_CONFIG,
+  LEADS_TABLE_FILTERS_CONFIG,
   SortByIntentScore,
   SortBySessionLength,
   SortByTimestamp,
   SummaryTabContentList,
   TABLE_COLUMN_WIDTH_SIZE,
   USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
+  VIDEOS_TABLE_FILTERS_CONFIG,
+  WEBPAGES_TABLE_FILTERS_CONFIG,
 } from './constants';
 import {
   ConversationsTableDisplayContent,
@@ -24,7 +29,7 @@ import {
   FunnelStep,
   ProspectDetailsType,
 } from './admin-types';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
 import { SortValues } from '@meaku/core/types/admin/sort';
@@ -49,6 +54,9 @@ const {
   ProductOfInterest,
   UserMessagesCount,
   TestConversationIncluded,
+  UsageCount,
+  Sources,
+  SearchTableContent,
 } = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
@@ -377,9 +385,28 @@ export const getDateAppliedValue = (dateRange: DateRangeProp) => {
   // Example: "Jan 15, 2025 - Jan 20, 2025"
 };
 
+export const getFiltersConfig = (page: string) => {
+  switch (page) {
+    case CONVERSATIONS_PAGE:
+      return CONVERSATIONS_TABLE_FILTERS_CONFIG;
+    case LEADS_PAGE:
+      return LEADS_TABLE_FILTERS_CONFIG;
+    case WEBPAGES_PAGE:
+      return WEBPAGES_TABLE_FILTERS_CONFIG;
+    case DOCUMENTS_PAGE:
+      return DOCUMENTS_TABLE_FILTERS_CONFIG;
+    case VIDEOS_PAGE:
+      return VIDEOS_TABLE_FILTERS_CONFIG;
+    default:
+      return [];
+  }
+};
+
 export const getAllFilterAppliedValues = (filterState: FilterValues, page: string) => {
   const filterApplied: FilterItem[] = [];
   const isLeadsPage = page === LEADS_PAGE;
+  const isConversationsPage = page === CONVERSATIONS_PAGE;
+  const isDocumentsPage = page === DOCUMENTS_PAGE;
   const {
     dateRange,
     intentScore,
@@ -389,11 +416,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     userMessagesCount,
     company,
     testConversationsIncluded,
+    sources,
+    // usageCount,
+    // duration,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
     filterApplied.push({
-      field: isLeadsPage ? 'created_on' : 'timestamp',
+      field: isLeadsPage ? 'created_on' : isConversationsPage ? 'timestamp' : 'updated_on',
       value: convertDateToAppliedFilterValue(dateRange.startDate!, dateRange.endDate!),
       operator: 'between',
     });
@@ -412,6 +442,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push({
       field: 'country',
       value: location,
+      operator: 'in',
+    });
+  }
+
+  if (sources.length > 0) {
+    filterApplied.push({
+      field: 'data_source_name',
+      value: sources,
       operator: 'in',
     });
   }
@@ -454,7 +492,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   // }
 
   // For Conversations Page, we need to filter out test conversations
-  if (!isLeadsPage && !testConversationsIncluded) {
+  if (isConversationsPage && !testConversationsIncluded) {
     filterApplied.push({
       field: 'is_test',
       value: testConversationsIncluded, // Test conversations included only when applied
@@ -464,6 +502,15 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 
   if (filterState.presetFilters) {
     filterApplied.push(...filterState.presetFilters);
+  }
+
+  // Default filter for documents page
+  if (isDocumentsPage) {
+    filterApplied.push({
+      field: 'data_source_type',
+      value: 'PDF',
+      operator: 'eq',
+    });
   }
 
   return filterApplied;
@@ -520,6 +567,30 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: UserMessagesCount,
       label: 'User messages count',
       value: `${filters.userMessagesCount.minCount} - ${filters.userMessagesCount.maxCount}`,
+    });
+  }
+
+  if (filters.usageCount.minCount > 0 && filters.usageCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
+    appliedFilters.push({
+      key: UsageCount,
+      label: 'Usage count',
+      value: `${filters.usageCount.minCount} - ${filters.usageCount.maxCount}`,
+    });
+  }
+
+  if (filters.sources.length > 0) {
+    appliedFilters.push({
+      key: Sources,
+      label: 'Sources',
+      value: filters.sources,
+    });
+  }
+
+  if (filters.searchTableContent.length > 0) {
+    appliedFilters.push({
+      key: SearchTableContent,
+      label: 'Search',
+      value: filters.searchTableContent,
     });
   }
 

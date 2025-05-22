@@ -1,33 +1,62 @@
 import { useRef, useState } from 'react';
 
-import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
+import { useReactTable, getCoreRowModel, ColumnDef, HeaderGroup, Row } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { CONVERSATIONS_PINNED_COLUMNS, LEADS_PINNED_COLUMNS } from '../../utils/constants';
-import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import {
+  CONVERSATIONS_PAGE,
+  CONVERSATIONS_PINNED_COLUMNS,
+  LEADS_PAGE,
+  LEADS_PINNED_COLUMNS,
+} from '@meaku/core/utils/index';
+import {
+  CommonDataSourceResponse,
+  ConversationsTableDisplayContent,
+  LeadsTableDisplayContent,
+  PaginationPageType,
+} from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
+import { useTableWidth } from '../../hooks/useTableWidth';
 import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
-import { useTableWidth } from '../../hooks/useTableWidth';
+import TableHeaderRowItemHavingCheckbox from './TableHeaderRowItemHavingCheckbox';
+import TableBodyRowItemHavingCheckbox from './TableBodyRowItemHavingCheckbox';
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   tabularData: any[];
   columnHeaderData: ColumnDefinition[];
-  isConversationsPage?: boolean;
   filterContainerHeight?: number;
+  isSidebarOpen: boolean;
+  isIdSelected?: (id: number) => boolean;
+  toggleSelectId?: (id: number) => void;
+  selectAll?: () => void;
+  deselectAll?: () => void;
+  getSelectedIds?: () => number[];
+  results?: CommonDataSourceResponse[];
+  pageType: PaginationPageType;
 }
 
-const CustomTableView = ({
+const CommonTable = ({
   tabularData,
   columnHeaderData,
-  isConversationsPage = false,
   filterContainerHeight = 0,
+  isSidebarOpen,
+  isIdSelected = () => false,
+  toggleSelectId = () => {},
+  selectAll = () => {},
+  deselectAll = () => {},
+  getSelectedIds = () => [],
+  results = [],
+  pageType,
 }: TableViewProps) => {
   const navigate = useNavigate();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
-  const { widthStyle } = useTableWidth();
+
+  const isConversationsPage = pageType === CONVERSATIONS_PAGE;
+  const isDataSourcesPage = ![CONVERSATIONS_PAGE, LEADS_PAGE].includes(pageType);
+  const { widthStyle } = useTableWidth({ isDataSourcesPage, isSidebarOpen });
 
   const tableBodyRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -63,12 +92,49 @@ const CustomTableView = ({
     onIntersectionChange: handleHeaderStickyLogic,
   });
 
+  const getTableHeaderRowItem = (headerGroup: HeaderGroup<any>) => {
+    if (isDataSourcesPage) {
+      return (
+        <TableHeaderRowItemHavingCheckbox
+          key={headerGroup.id}
+          headerGroup={headerGroup}
+          selectAll={selectAll}
+          deselectAll={deselectAll}
+          getSelectedIds={getSelectedIds}
+          results={results}
+        />
+      );
+    }
+    return <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />;
+  };
+
+  const getTableBodyRowItem = (row: Row<any>, index: number) => {
+    if (isDataSourcesPage) {
+      return (
+        <TableBodyRowItemHavingCheckbox
+          key={row.id}
+          row={row}
+          index={index}
+          isIdSelected={isIdSelected}
+          toggleSelectId={toggleSelectId}
+        />
+      );
+    }
+    return <CustomSingleBodyRowItem key={row.id} row={row} index={index} handleRowItemClick={handleRowItemClick} />;
+  };
+
+  const tableInitialState = isDataSourcesPage
+    ? {}
+    : {
+        initialState: {
+          columnPinning: {
+            left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : LEADS_PINNED_COLUMNS,
+          },
+        },
+      };
+
   const table = useReactTable({
-    initialState: {
-      columnPinning: {
-        left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : LEADS_PINNED_COLUMNS,
-      },
-    },
+    ...tableInitialState,
     data: tabularData,
 
     columns: columnHeaderData as ColumnDef<any, any>[],
@@ -96,7 +162,7 @@ const CustomTableView = ({
             >
               <thead className="w-full">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />
+                  <>{getTableHeaderRowItem(headerGroup)}</>
                 ))}
               </thead>
             </table>
@@ -119,12 +185,12 @@ const CustomTableView = ({
             }}
           >
             {table.getHeaderGroups().map((headerGroup) => (
-              <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />
+              <>{getTableHeaderRowItem(headerGroup)}</>
             ))}
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row, index) => (
-              <CustomSingleBodyRowItem key={row?.id} row={row} index={index} handleRowItemClick={handleRowItemClick} />
+              <>{getTableBodyRowItem(row, index)}</>
             ))}
           </tbody>
         </table>
@@ -133,4 +199,4 @@ const CustomTableView = ({
   );
 };
 
-export default CustomTableView;
+export default CommonTable;

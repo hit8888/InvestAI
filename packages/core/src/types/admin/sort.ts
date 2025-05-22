@@ -1,7 +1,6 @@
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from './admin';
+import { PaginationPageType } from './admin';
 
 export type SortCategory = 'timestamp' | 'sessionLength' | 'intentScore';
-export type PageType = LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
 
 export type SortValues = {
   timestampSort: string | null;
@@ -12,9 +11,12 @@ export type SortValues = {
 export interface SortFilterState {
   leads: SortValues;
   conversations: SortValues;
-  setSortValue: (page: PageType, category: SortCategory, value: string) => void;
-  resetPageSorts: (page: PageType) => void;
-  initializeSortValues: (page: PageType, sortValues: SortValues) => void;
+  webpages: SortValues;
+  documents: SortValues;
+  videos: SortValues;
+  setSortValue: (page: PaginationPageType, category: SortCategory, value: string) => void;
+  resetPageSorts: (page: PaginationPageType) => void;
+  initializeSortValues: (page: PaginationPageType, sortValues: SortValues) => void;
 }
 
 export interface SortFilterConfig {

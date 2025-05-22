@@ -7,9 +7,20 @@ import ProductOfInterestFilterContent from './ProductOfInterestFilterContent';
 import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
 import CompanyFilterContent from './CompanyFilterContent';
 import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
+import SourcesFilterContent from './SourcesFilterContent';
 
 const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
-  const { DateRange, Company, IntentScore, MeetingBooked, Location, ProductOfInterest, UserMessagesCount } = FilterType;
+  const {
+    DateRange,
+    Company,
+    IntentScore,
+    MeetingBooked,
+    Location,
+    ProductOfInterest,
+    UserMessagesCount,
+    Sources,
+    UsageCount,
+  } = FilterType;
   return (
     <React.Fragment>
       {filterState === DateRange ? (
@@ -27,10 +38,14 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       {filterState === Company ? (
         <CompanyFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
+      {filterState === Sources ? (
+        <SourcesFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
       {filterState === ProductOfInterest ? (
         <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === UserMessagesCount ? <UserMessagesCountFilterContent page={page} /> : null}
+      {filterState === UsageCount ? <UserMessagesCountFilterContent page={page} /> : null}
     </React.Fragment>
   );
 };

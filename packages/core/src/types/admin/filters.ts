@@ -1,4 +1,4 @@
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from './admin';
+import { PaginationPageType } from './admin';
 import { FilterItem } from './api.ts';
 
 export interface TableAllFilterConfig {
@@ -12,7 +12,7 @@ export interface TableAllFilterConfig {
 }
 
 export type PageTypeProps = {
-  page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
+  page: PaginationPageType;
 };
 
 export type CommonFilterContentProps = PageTypeProps & {
@@ -48,6 +48,10 @@ export enum FilterType {
   Location = 'location',
   MeetingBooked = 'meetingBooked',
   ProductOfInterest = 'productOfInterest',
+  Sources = 'sources',
+  UsageCount = 'usageCount',
+  Duration = 'duration',
+  SearchTableContent = 'searchTableContent',
   AllFilters = 'allFilters',
   Company = 'company',
   UserMessagesCount = 'userMessagesCount',
@@ -59,6 +63,16 @@ export interface userMessagesCountFilterValues {
   maxCount: number;
 }
 
+export interface usageCountFilterValues {
+  minCount: number;
+  maxCount: number;
+}
+
+export interface durationFilterValues {
+  minDuration: number;
+  maxDuration: number;
+}
+
 export interface FilterValues {
   presetDate: string;
   dateRange?: DateRangeProp;
@@ -66,7 +80,11 @@ export interface FilterValues {
   location: string[];
   company: string[];
   productOfInterest: string[];
+  sources: string[];
   meetingBooked?: string;
+  usageCount: usageCountFilterValues;
+  duration: durationFilterValues;
+  searchTableContent: string;
   userMessagesCount: userMessagesCountFilterValues;
   presetFilters: FilterItem[];
   testConversationsIncluded: boolean;
@@ -78,7 +96,17 @@ export const InitialFilterValues: FilterValues = {
   location: [],
   company: [],
   productOfInterest: [],
+  sources: [],
   meetingBooked: undefined,
+  usageCount: {
+    minCount: 0,
+    maxCount: 100,
+  },
+  duration: {
+    minDuration: 0,
+    maxDuration: 100,
+  },
+  searchTableContent: '',
   userMessagesCount: {
     minCount: 0,
     maxCount: 100,
@@ -93,17 +121,17 @@ export type FilterValueTypes =
   | string[]
   | number
   | userMessagesCountFilterValues
+  | durationFilterValues
   | boolean
   | undefined;
 
 export interface AllFilterState {
   leads: FilterValues;
   conversations: FilterValues;
-  setFilter: (
-    page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
-    key: keyof FilterValues,
-    value: FilterValueTypes,
-  ) => void;
-  resetPageFilters: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
-  initializeFilterValues: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE, filters: FilterItem[]) => void;
+  webpages: FilterValues;
+  documents: FilterValues;
+  videos: FilterValues;
+  setFilter: (page: PaginationPageType, key: keyof FilterValues, value: FilterValueTypes) => void;
+  resetPageFilters: (page: PaginationPageType) => void;
+  initializeFilterValues: (page: PaginationPageType, filters: FilterItem[]) => void;
 }

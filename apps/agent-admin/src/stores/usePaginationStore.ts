@@ -1,4 +1,5 @@
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
 import { create } from 'zustand';
 
 interface PaginationValues {
@@ -9,12 +10,11 @@ interface PaginationValues {
 export interface PaginationStateAndActions {
   leads: PaginationValues;
   conversations: PaginationValues;
-  setPaginationValue: (
-    page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE,
-    key: keyof PaginationValues,
-    value: number,
-  ) => void;
-  resetPaginationValue: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) => void;
+  webpages: PaginationValues;
+  documents: PaginationValues;
+  videos: PaginationValues;
+  setPaginationValue: (page: PaginationPageType, key: keyof PaginationValues, value: number) => void;
+  resetPaginationValue: (page: PaginationPageType) => void;
 }
 
 const DEFAULT_ITEMS_PER_PAGE = 50;
@@ -24,9 +24,18 @@ export const InitialPaginationValues = {
   itemsPerPage: DEFAULT_ITEMS_PER_PAGE,
 };
 
+const pageTypes: PaginationPageType[] = [LEADS_PAGE, CONVERSATIONS_PAGE, WEBPAGES_PAGE, DOCUMENTS_PAGE, VIDEOS_PAGE];
+
+const initialPaginationState = pageTypes.reduce(
+  (acc, pageType) => {
+    acc[pageType] = { ...InitialPaginationValues };
+    return acc;
+  },
+  {} as Record<PaginationPageType, PaginationValues>,
+);
+
 export const usePaginationStore = create<PaginationStateAndActions>((set) => ({
-  leads: { ...InitialPaginationValues },
-  conversations: { ...InitialPaginationValues },
+  ...initialPaginationState,
 
   setPaginationValue(page, key, value) {
     set((state) => ({
@@ -39,7 +48,7 @@ export const usePaginationStore = create<PaginationStateAndActions>((set) => ({
     }));
   },
 
-  resetPaginationValue: (page: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE) =>
+  resetPaginationValue: (page: PaginationPageType) =>
     set((state) => ({
       ...state,
       [page]: { ...InitialPaginationValues },

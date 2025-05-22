@@ -1,15 +1,11 @@
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import {
-  CONVERSATIONS_TABLE_FILTERS_CONFIG,
-  LEADS_TABLE_FILTERS_CONFIG,
-  USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
-} from '../../utils/constants';
-import { getDateAppliedValue } from '../../utils/common';
+import { USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD } from '../../utils/constants';
+import { getDateAppliedValue, getFiltersConfig } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
 import TestConversationIncludedFilter from './TestConversationIncludedFilter';
 
 type AllSelectableFilterContentProps = PageTypeProps & {
@@ -23,11 +19,22 @@ const AllSelectableFilterContent = ({
   handleFilterState,
 }: AllSelectableFilterContentProps) => {
   const { resetPageFilters } = useAllFilterStore();
-  const { DateRange, IntentScore, Location, MeetingBooked, ProductOfInterest, Company, UserMessagesCount } = FilterType;
+  const {
+    DateRange,
+    IntentScore,
+    Location,
+    MeetingBooked,
+    ProductOfInterest,
+    Company,
+    UserMessagesCount,
+    Duration,
+    UsageCount,
+    Sources,
+  } = FilterType;
 
-  const isLeadsPage = page === LEADS_PAGE;
+  const isConversationsPage = page === CONVERSATIONS_PAGE;
 
-  const filterConfig = isLeadsPage ? LEADS_TABLE_FILTERS_CONFIG : CONVERSATIONS_TABLE_FILTERS_CONFIG;
+  const filterConfig = [...getFiltersConfig(page)];
   const handleClearAll = () => {
     resetPageFilters(page);
     handleFilterState(FilterType.AllFilters);
@@ -36,8 +43,18 @@ const AllSelectableFilterContent = ({
 
   const filters = useAllFilterStore();
   const isFilterApplied = (filterKey: string) => {
-    const { dateRange, intentScore, location, company, productOfInterest, userMessagesCount, meetingBooked } =
-      filters[page];
+    const {
+      dateRange,
+      intentScore,
+      location,
+      company,
+      productOfInterest,
+      userMessagesCount,
+      meetingBooked,
+      sources,
+      duration,
+      usageCount,
+    } = filters[page];
     switch (filterKey) {
       case DateRange:
         return !!dateRange;
@@ -47,8 +64,14 @@ const AllSelectableFilterContent = ({
         return location.length > 0;
       case Company:
         return company.length > 0;
+      case Sources:
+        return sources.length > 0;
       case ProductOfInterest:
         return productOfInterest.length > 0;
+      case Duration:
+        return duration.minDuration > 0 && duration.maxDuration <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
+      case UsageCount:
+        return usageCount.minCount > 0 && usageCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
       case UserMessagesCount:
         return userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
       case MeetingBooked:
@@ -59,8 +82,18 @@ const AllSelectableFilterContent = ({
   };
 
   const getCurrentValue = (filterKey: string) => {
-    const { dateRange, intentScore, location, company, productOfInterest, userMessagesCount, meetingBooked } =
-      filters[page];
+    const {
+      dateRange,
+      intentScore,
+      location,
+      company,
+      productOfInterest,
+      userMessagesCount,
+      meetingBooked,
+      duration,
+      usageCount,
+      sources,
+    } = filters[page];
     switch (filterKey) {
       case DateRange:
         return dateRange ? getDateAppliedValue(dateRange) : 'Any';
@@ -70,9 +103,19 @@ const AllSelectableFilterContent = ({
         return location.length > 0 ? `${location.length} selected` : 'Any';
       case Company:
         return company.length > 0 ? `${company.length} selected` : 'Any';
+      case Sources:
+        return sources.length > 0 ? `${sources.length} selected` : 'Any';
       case UserMessagesCount:
         return userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
           ? `${userMessagesCount.minCount} To ${userMessagesCount.maxCount} messages`
+          : 'Any';
+      case Duration:
+        return duration.minDuration > 0 && duration.maxDuration <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
+          ? `${duration.minDuration} To ${duration.maxDuration} minutes`
+          : 'Any';
+      case UsageCount:
+        return usageCount.minCount > 0 && usageCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
+          ? `${usageCount.minCount} To ${usageCount.maxCount} usage`
           : 'Any';
       case ProductOfInterest:
         return productOfInterest.length > 0 ? `${productOfInterest.length} selected` : 'Any';
@@ -88,7 +131,7 @@ const AllSelectableFilterContent = ({
 
   return (
     <React.Fragment key={FilterType.AllFilters}>
-      {!isLeadsPage ? <TestConversationIncludedFilter page={page} /> : null}
+      {isConversationsPage ? <TestConversationIncludedFilter page={page} /> : null}
       {filterConfig.map((config) => (
         <SingleFilterState
           key={config.filterKey}

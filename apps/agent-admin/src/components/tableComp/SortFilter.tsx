@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SortCategory, SortValues } from '@meaku/core/types/admin/sort';
 import SortFilterIcon from '@breakout/design-system/components/icons/sort-filter-icon';
-import { COMMON_ICON_PROPS, SORT_FILTER_CONFIG } from '../../utils/constants';
+import { SORT_FILTER_CONFIG } from '../../utils/constants';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import CategorisedRadioHeaderLabel from './CategorisedRadioHeaderLabel';
@@ -35,13 +35,13 @@ const SortFilter = ({ page, disabledState }: IProps) => {
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger
-        className={cn('popover-styling border-primary-20-styling flex items-center justify-center gap-2', {
+        className={cn('popover-styling border-gray-200-styling flex items-center justify-center gap-2', {
           'pointer-events-none opacity-50': disabledState,
         })}
       >
-        <p className="text-sm font-medium text-primary">Sort</p>
+        <p className="text-sm font-medium text-gray-600">Sort</p>
         <span className="h-5 w-5">
-          <SortFilterIcon {...COMMON_ICON_PROPS} />
+          <SortFilterIcon className="h-6 w-6 text-system" />
         </span>
       </PopoverTrigger>
       <PopoverContent

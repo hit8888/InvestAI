@@ -3,6 +3,8 @@ import { z } from 'zod';
 import {
   CompanyDetailsSchema,
   ConversationsTableResponseSchema,
+  DataSourceDocumentsTableResponseSchema,
+  DataSourceWebpagesTableResponseSchema,
   LeadsTableResponseSchema,
   ProspectDetailsSchema,
 } from './api';
@@ -89,4 +91,6 @@ export interface ColumnDefinition {
   size?: number;
 }
 
-export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema);
+export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
+  .or(DataSourceWebpagesTableResponseSchema)
+  .or(DataSourceDocumentsTableResponseSchema);

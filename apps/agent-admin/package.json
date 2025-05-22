@@ -27,6 +27,7 @@
     "nanoid": "^5.0.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.26.2",
     "react-use-websocket": "^4.8.1",

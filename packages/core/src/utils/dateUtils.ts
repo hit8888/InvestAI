@@ -1,10 +1,6 @@
-import { format, differenceInHours, addDays } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
-import {
-  DATE_FORMAT_OPTIONS,
-  DATE_FORMATS,
-  HUMAN_READABLE_DATE_LABELS,
-} from "@meaku/core/constants/dateFormat";
+import { format, differenceInHours, addDays } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
+import { DATE_FORMAT_OPTIONS, DATE_FORMATS, HUMAN_READABLE_DATE_LABELS } from '@meaku/core/constants/dateFormat';
 
 const { TODAY, YESTERDAY } = HUMAN_READABLE_DATE_LABELS;
 const { STANDARD_DATE, ISO_DATE_TIME } = DATE_FORMATS;
@@ -30,7 +26,10 @@ class DateUtil {
    * @param timezone User's timezone (optional)
    * @returns Formatted time string in "hh:mm a" format
    */
-  static formatTimeWithMeridiem(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+  static formatTimeWithMeridiem(
+    timestamp: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
     const date = new Date(timestamp);
     return new Intl.DateTimeFormat('en-US', {
       ...DATE_FORMAT_OPTIONS.STANDARD_TIME,
@@ -44,7 +43,10 @@ class DateUtil {
    * @param timezone User's timezone (optional)
    * @returns Formatted date & time string in "MMM dd, yyyy hh:mm a" format
    */
-  static formatDateTime(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+  static formatDateTime(
+    timestamp: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
     const date = new Date(timestamp);
     return new Intl.DateTimeFormat('en-US', {
       ...DATE_FORMAT_OPTIONS.STANDARD_DATE_WITH_TIME_WITHOUT_SECOND,
@@ -91,7 +93,10 @@ class DateUtil {
    * @param timezone User's timezone (optional, defaults to local timezone)
    * @returns Human-readable date string
    */
-  static getDateInHumanReadableFormat(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+  static getDateInHumanReadableFormat(
+    timestamp: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
     const date = new Date(timestamp);
     const now = new Date();
 
@@ -104,7 +109,7 @@ class DateUtil {
     } else if (isTodayCheck && hoursDiff >= 12) {
       return TODAY;
     } else if (hoursDiff <= 12) {
-      return DateUtil.formatTimeWithMeridiem(timestamp, timezone)
+      return DateUtil.formatTimeWithMeridiem(timestamp, timezone);
     } else {
       return DateUtil.formatDate(timestamp, timezone);
     }
@@ -119,7 +124,6 @@ class DateUtil {
    * @returns An array containing the start and end date in ISO 8601 format
    */
   static convertDateToAppliedFilterValue(startDateStr: Date, endDateStr: Date): string[] {
-
     // Parse the start date and add 1 day to counter timezone offset issues
     const startDate = addDays(new Date(startDateStr), 1);
     startDate.setUTCHours(0, 0, 0, 0); // Set start date to 00:00:00 UTC
@@ -161,14 +165,43 @@ class DateUtil {
   }
 
   /**
- * Convert a UTC timestamp to an ISO 8601 formatted string without local timezone adjustments.
- * @param timestamp Timestamp to format
- * @returns Formatted ISO string in UTC time
- */
-  static getDateValueInISOString(timestamp: string, timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone): string {
+   * Convert a UTC timestamp to an ISO 8601 formatted string without local timezone adjustments.
+   * @param timestamp Timestamp to format
+   * @returns Formatted ISO string in UTC time
+   */
+  static getDateValueInISOString(
+    timestamp: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
     const date = new Date(timestamp); // Parse timestamp as Date object
     const zonedDate = toZonedTime(date, timezone); // Convert to the given timezone
     return format(zonedDate, ISO_DATE_TIME); // Format in that timezone
+  }
+
+  /**
+   * Format a date string into a short display format (MM/DD/YY)
+   * @param dateString The date string to format
+   * @param timezone User's timezone (optional, defaults to local timezone)
+   * @returns Formatted date string in "MM/DD/YY" format, or 'N/A' if invalid
+   */
+  static formatDateInMMDDYY(
+    dateString: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
+    if (!dateString) return 'N/A';
+
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: '2-digit',
+        timeZone: timezone,
+      }).format(date);
+    } catch (error) {
+      console.error('Error formatting date:', dateString, error);
+      return 'Invalid Date';
+    }
   }
 }
 

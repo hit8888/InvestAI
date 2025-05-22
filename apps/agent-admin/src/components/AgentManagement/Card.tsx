@@ -1,3 +1,4 @@
+import { cn } from '@breakout/design-system/lib/cn';
 import { ReactNode } from 'react';
 
 type BackgroundVariant = 'GRAY10' | 'GRAY25' | 'GRAY50' | 'GRAY100' | 'WHITE' | 'TRANSPARENT';
@@ -30,7 +31,12 @@ const borderStyles: Record<BorderVariant, string> = {
 const Card = ({ children, className = '', background = 'GRAY25', border = 'GRAY200' }: CardProps) => {
   return (
     <div
-      className={`flex w-full flex-col gap-6 rounded-2xl p-6 pt-4 ${backgroundStyles[background]} ${borderStyles[border]} ${className}`}
+      className={cn(
+        'flex w-full flex-col items-start gap-6 rounded-2xl p-6 pt-4',
+        backgroundStyles[background],
+        borderStyles[border],
+        className,
+      )}
     >
       {children}
     </div>

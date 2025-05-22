@@ -1,12 +1,11 @@
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import TooltipAddedAppliedFilter from './TooltipAddedAppliedFilter';
-import { COMMON_ICON_PROPS } from '../../utils/constants';
 import { FilterType } from '@meaku/core/types/admin/filters';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useState } from 'react';
 import FilterContent from './FilterContent';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
-import { PageType } from '@meaku/core/types/admin/sort';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 type SingleAppliedFilterProps = {
   filter: { key: string; label: string; value: string | string[] | boolean };
@@ -16,7 +15,7 @@ type SingleAppliedFilterProps = {
   handleClose: () => void;
   widthOfPopover: string;
   currentHeaderLabel: string;
-  page: PageType;
+  page: PaginationPageType;
 };
 
 const { Location, ProductOfInterest, Company, DateRange, TestConversationIncluded } = FilterType;
@@ -56,20 +55,20 @@ const SingleAppliedFilter = ({
       <PopoverTrigger
         key={filter.key}
         onClick={handleAppliedFilterClick}
-        className="popover-styling border-primary-20-styling flex cursor-pointer items-center justify-center gap-2 border-primary"
+        className="popover-styling border-gray-200-styling flex cursor-pointer items-center justify-center gap-2 border-gray-200"
       >
-        <span className="text-xs font-normal text-primary/70">{filter.label}:</span>
+        <span className="text-xs font-normal text-gray-400">{filter.label}:</span>
         {[Location, ProductOfInterest, Company].includes(filter.key as FilterType) ? (
           <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
         ) : (
-          <span className="text-sm font-semibold capitalize text-primary">{filter.value}</span>
+          <span className="text-sm font-semibold capitalize text-gray-600">{filter.value}</span>
         )}
         <span
           onClick={(e) => handleRemove(e as React.MouseEvent<HTMLButtonElement>)}
           aria-label="Remove Filter"
-          className="popover-styling cursor-pointer focus:border-primary-20-styling focus:!p-0"
+          className="popover-styling cursor-pointer focus:border-gray-200-styling focus:!p-0"
         >
-          <CrossIcon {...COMMON_ICON_PROPS} />
+          <CrossIcon className="h-6 w-6 text-system" />
         </span>
       </PopoverTrigger>
       <PopoverContent

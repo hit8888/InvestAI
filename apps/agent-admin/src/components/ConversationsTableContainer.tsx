@@ -69,8 +69,9 @@ const ConversationsTableContainer = () => {
       sort: getSortingAppliedValues(sortState, CONVERSATIONS_PAGE),
       page: currentPage,
       page_size: itemsPerPage,
+      search: filterState.searchTableContent,
     };
-  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
+  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage, filterState.searchTableContent]);
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
@@ -125,6 +126,7 @@ const ConversationsTableContainer = () => {
             onFiltersContainerHeightChange={setFilterContainerHeight}
           />
           <TableViewContent
+            pageType={CONVERSATIONS_PAGE}
             key={'conversations-table-container'}
             isConversationTable={true}
             isLoading={isLoading}

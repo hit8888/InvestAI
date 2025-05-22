@@ -7,6 +7,17 @@ import {
   LeadsPayload,
   LoginWithEmailPasswordPayload,
   VerifyOtpPayload,
+  DataSourcePayload,
+  FetchSitemapResponse,
+  FetchSitemapRequest,
+  AddWebpagesSitemapLinksRequest,
+  AddWebpagesSitemapLinksResponse,
+  BulkAddDocumentsRequest,
+  BulkAddDocumentsResponse,
+  DeleteWebpagesRequest,
+  DeleteWebpagesResponse,
+  ReprocessWebpagesRequest,
+  ReprocessWebpagesResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -45,6 +56,9 @@ export const downloadConversationRowData = (payload: ConversationsPayload, downl
 
 export const getFilterOptionsData = (payload: FilterOptionsPayload, pageType: string) =>
   adminApiClient.post(`tenant/api/search/${pageType}/filterset/`, payload);
+
+export const getDataSourceFilterOptionsData = (payload: FilterOptionsPayload, pageType: string) =>
+  adminApiClient.post(`tenant/api/${pageType}/filterset/`, payload);
 
 export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/analytics/funnels/conversations`);
 
@@ -85,7 +99,7 @@ export const postResponseFeedbackFromDashboard = (sessionId: string, payload: Fe
   return adminApiClient.post(`/tenant/api/sessions/${sessionId}/feedback/`, payload);
 };
 
-export const uploadAssetsFile = (file: File) => {
+export const uploadAssetsFile = (file: File, onProgress?: (progress: number) => void) => {
   const formData = new FormData();
   formData.append('file', file);
 
@@ -93,5 +107,37 @@ export const uploadAssetsFile = (file: File) => {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total && onProgress) {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onProgress(progress);
+      }
+    },
   });
 };
+
+export const getDataSourceOverviewData = () => adminApiClient.get(`tenant/api/datasources/overview/`);
+
+export const getDataSourceWebpagesData = (payload: DataSourcePayload) =>
+  adminApiClient.post(`tenant/api/webpages/`, payload);
+
+export const getDataSourceDocumentsData = (payload: DataSourcePayload) =>
+  adminApiClient.post(`tenant/api/datasources/`, payload);
+
+export const getDataSourceVideosData = (payload: DataSourcePayload) =>
+  adminApiClient.post(`tenant/api/videos/`, payload);
+
+export const fetchSitemapforWebpage = (payload: FetchSitemapRequest) =>
+  adminApiClient.post<FetchSitemapResponse>(`tenant/api/sitemap/`, payload);
+
+export const addWebpagesSitemapLinks = (payload: AddWebpagesSitemapLinksRequest) =>
+  adminApiClient.post<AddWebpagesSitemapLinksResponse>(`tenant/api/webpages/add/`, payload);
+
+export const bulkAddDocuments = (payload: BulkAddDocumentsRequest) =>
+  adminApiClient.post<BulkAddDocumentsResponse>(`tenant/api/datasources/documents/bulk/`, payload);
+
+export const deleteDataSourceItems = (payload: DeleteWebpagesRequest, sourceType: string) =>
+  adminApiClient.delete<DeleteWebpagesResponse>(`tenant/api/${sourceType}/delete/`, { data: payload });
+
+export const reprocessWebpages = (payload: ReprocessWebpagesRequest) =>
+  adminApiClient.post<ReprocessWebpagesResponse>(`tenant/api/webpages/reprocess/`, payload);

@@ -5,11 +5,11 @@ import PaginationPreviousArrow from '@breakout/design-system/components/icons/pa
 import NavigationArrowButton from './NavigationArrowButton';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { PageType } from '@meaku/core/types/admin/sort';
 import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 interface PaginationProps {
-  tableType: PageType;
+  tableType: PaginationPageType;
   isLoading: boolean;
   paginationPerPageOptions: string[];
   totalItems: number; // Total number of items

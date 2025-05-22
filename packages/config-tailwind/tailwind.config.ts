@@ -303,13 +303,13 @@ const config: Omit<Config, "content"> = {
 
       addComponents({
         ".popover-styling": {
-          "@apply focus:bg-primary/5 focus:border-2 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10":
+          "@apply focus:bg-gray-50 focus:border-2 focus:border-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200":
             {},
-          "@apply data-[state=open]:bg-primary/5 data-[state=open]:border-2 data-[state=open]:border-primary data-[state=open]:ring-4 data-[state=open]:ring-primary/10":
+          "@apply data-[state=open]:bg-gray-50 data-[state=open]:border-2 data-[state=open]:border-gray-500 data-[state=open]:ring-4 data-[state=open]:ring-gray-200":
             {},
         },
-        ".border-primary-20-styling": {
-          "@apply rounded-lg border border-primary/20 bg-primary/2.5 p-2": {},
+        ".border-gray-200-styling": {
+          "@apply rounded-lg border border-gray-200 bg-gray-25 p-2": {},
         },
       });
     },

@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { usePaginationStore } from '../stores/usePaginationStore';
-import { CONVERSATIONS_PAGE_TYPE, LEADS_PAGE_TYPE } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 interface UsePaginationProps {
-  pageType: LEADS_PAGE_TYPE | CONVERSATIONS_PAGE_TYPE;
+  pageType: PaginationPageType;
 }
 
 interface UsePaginationResult {

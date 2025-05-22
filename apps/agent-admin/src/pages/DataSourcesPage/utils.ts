@@ -1,0 +1,157 @@
+import {
+  DATA_SOURCES_COMMON_COLUMN_HEADER_LABEL_MAPPING,
+  DATA_SOURCES_COMMON_COLUMN_LISTS,
+  SourcesCardTypes,
+  SourcesUploadStatus,
+} from './constants';
+import SlidesSourcesIcon from '@breakout/design-system/components/icons/sources-slides-icon';
+import SourcesUrlLinkIcon from '@breakout/design-system/components/icons/sources-url-link-icon';
+import SourceFileIcon from '@breakout/design-system/components/icons/source-file-icon';
+import SourceVideoIcon from '@breakout/design-system/components/icons/source-video-icon';
+import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
+import DateUtil from '@meaku/core/utils/dateUtils';
+
+// const TableColumnWidthSize = 200;
+const { WEBPAGES, DOCUMENTS, VIDEOS, SLIDES } = SourcesCardTypes;
+
+export const getIncludedSourceLabel = (selectedType: string | null) => {
+  switch (selectedType) {
+    case WEBPAGES:
+      return {
+        label: 'Links',
+        icon: SourcesUrlLinkIcon,
+      };
+    case DOCUMENTS:
+      return {
+        label: 'Documents',
+        icon: SourceFileIcon,
+      };
+    case VIDEOS:
+      return {
+        label: 'Videos',
+        icon: SourceVideoIcon,
+      };
+    case SLIDES:
+      return {
+        label: 'Slides',
+        icon: SlidesSourcesIcon,
+      };
+    default:
+      return {
+        label: '',
+        icon: '',
+      };
+  }
+};
+
+// Convert column list to the required format
+export const getDataSourcesFormattedColumnsList = (pageType: string) => {
+  const columnsList = DATA_SOURCES_COMMON_COLUMN_LISTS[pageType as keyof typeof DATA_SOURCES_COMMON_COLUMN_LISTS];
+  const columnHeaderLabelMapping =
+    DATA_SOURCES_COMMON_COLUMN_HEADER_LABEL_MAPPING[
+      pageType as keyof typeof DATA_SOURCES_COMMON_COLUMN_HEADER_LABEL_MAPPING
+    ];
+  const formattedColumns = columnsList.map((key) => {
+    const newItem = {
+      id: key,
+      accessorKey: key,
+      header: columnHeaderLabelMapping[key as keyof typeof columnHeaderLabelMapping],
+      // size: key === 'page_url' ? 600: TableColumnWidthSize, // Default size taken
+    };
+
+    return newItem;
+  });
+  return formattedColumns;
+};
+
+// Helper function to generate stats for DataSourceCard from DataSourceOverviewData
+export const generateDataSourceStats = (
+  data: DataSourceOverviewData | null | undefined,
+): { itemLabel: string; itemValue: string; itemKey: SourcesUploadStatus }[] => {
+  if (!data) {
+    return [{ itemLabel: 'Total:', itemValue: '0', itemKey: SourcesUploadStatus.UPLOADED }];
+  }
+
+  const stats: { itemLabel: string; itemValue: string; itemKey: SourcesUploadStatus }[] = [];
+
+  // Main stat (Uploaded/Total)
+  if (typeof data.total_count === 'number') {
+    const mainValue = data.total_count.toString();
+    let mainLabel = 'Total:'; // Default label
+
+    // Apply new logic for mainLabel based on data_sources_count
+    if (typeof data.data_sources_count === 'number') {
+      if (data.data_sources_count > 1) {
+        // If 0, or > 1, use "X Sources:"
+        mainLabel = `${data.data_sources_count} Sources:`;
+      }
+      // If data.data_sources_count is 1, mainLabel remains 'Total:'
+    }
+    // If data.data_sources_count is undefined, mainLabel also remains 'Total:'
+
+    stats.push({
+      itemLabel: mainLabel,
+      itemValue: mainValue,
+      itemKey: SourcesUploadStatus.UPLOADED,
+    });
+  } else if (typeof data.data_sources_count === 'number') {
+    // Fallback if total_count is not available, but data_sources_count is.
+    let itemLabelForFallback;
+    if (data.data_sources_count === 1) {
+      itemLabelForFallback = 'Total:';
+    } else {
+      // For 0, or > 1
+      itemLabelForFallback = `${data.data_sources_count} Sources:`;
+    }
+    stats.push({
+      itemLabel: itemLabelForFallback,
+      itemValue: data.data_sources_count.toString(),
+      itemKey: SourcesUploadStatus.UPLOADED,
+    });
+  }
+
+  // Pending stat
+  if (typeof data.pending_count === 'number' && data.pending_count > 0) {
+    stats.push({
+      itemLabel: '', // Empty label for pending count
+      itemValue: data.pending_count.toString(),
+      itemKey: SourcesUploadStatus.UPLOAD_IN_PROGRESS,
+    });
+  }
+
+  if (stats.length === 0) {
+    return [{ itemLabel: 'Total:', itemValue: '0', itemKey: SourcesUploadStatus.UPLOADED }];
+  }
+
+  return stats;
+};
+
+// Helper function to generate stats for a single feature asset
+export const generateFeatureAssetStats = (
+  feature: DataSourceFeaturesData,
+): { itemLabel: string; itemValue: string; itemKey: SourcesUploadStatus }[] => {
+  const stats: { itemLabel: string; itemValue: string; itemKey: SourcesUploadStatus }[] = [];
+
+  if (typeof feature.frames_count === 'number') {
+    stats.push({
+      itemLabel: 'Frames:',
+      itemValue: feature.frames_count.toString(),
+      itemKey: SourcesUploadStatus.UPLOADED,
+    });
+  }
+
+  if (feature.updated_on) {
+    stats.push({
+      itemLabel: 'Updated on:',
+      itemValue: DateUtil.formatDateInMMDDYY(feature.updated_on),
+      itemKey: SourcesUploadStatus.UPLOADED,
+    });
+  }
+
+  // Fallback if no specific stats can be generated from the feature data
+  if (stats.length === 0) {
+    return [{ itemLabel: 'Info:', itemValue: 'Data not available', itemKey: SourcesUploadStatus.UPLOADED }];
+  }
+
+  return stats;
+};

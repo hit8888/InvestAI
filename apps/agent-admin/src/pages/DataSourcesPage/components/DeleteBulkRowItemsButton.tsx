@@ -1,0 +1,98 @@
+import { useState } from 'react';
+import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
+import { SourcesCardTypes } from '../constants';
+import { useQueryClient } from '@tanstack/react-query';
+import { deleteDataSourceItems } from '@meaku/core/adminHttp/api';
+import { toast } from 'react-hot-toast';
+import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
+import Typography from '@breakout/design-system/components/Typography/index';
+import Button from '@breakout/design-system/components/Button/index';
+import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
+
+const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {
+  const { selectedIds, deselectAll } = useDataSourceTableStore();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const areSelectedItems = selectedIds.length > 0;
+
+  if (!areSelectedItems) return null;
+
+  const handleBulkDelete = async () => {
+    if (!areSelectedItems) return;
+
+    try {
+      setIsDeleting(true);
+      // TODO: payload should be based on the source type
+      await deleteDataSourceItems(
+        {
+          webpage_ids: selectedIds,
+          delete_embeddings: true,
+        },
+        selectedType,
+      );
+
+      // Invalidate and refetch the data
+      await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+
+      // Clear selected items
+      deselectAll();
+
+      toast.success('Selected items deleted successfully');
+    } catch (error) {
+      console.error('Error deleting items:', error);
+      toast.error('Failed to delete selected items');
+      setIsDialogOpen(false);
+    } finally {
+      setIsDeleting(false);
+      setIsDialogOpen(false);
+    }
+  };
+
+  return (
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger asChild>
+        <Button variant={'destructive_secondary'} buttonStyle={'icon'}>
+          {isDialogOpen ? (
+            <span className="animate-spin">⌛</span>
+          ) : (
+            <DeleteIcon width="16" height="16" className="text-destructive-1000" />
+          )}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="data-sources-dialog-shadow flex max-w-md flex-col items-center justify-center gap-14 rounded-2xl border border-gray-200 bg-white p-4">
+        <div className="flex flex-col items-center justify-center gap-1 self-stretch">
+          <Typography variant={'title-24'} textColor={'textPrimary'} align={'center'}>
+            Delete selected pages?
+          </Typography>
+          <Typography variant={'body-16'} textColor={'textSecondary'} align={'center'}>
+            You’re about to permanently remove the selected pages from your data source. This action cannot be undone.
+          </Typography>
+        </div>
+        <div className="flex w-full items-center gap-6">
+          <Button
+            onClick={() => setIsDialogOpen(false)}
+            variant="system_secondary"
+            disabled={isDeleting}
+            className="w-full"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleBulkDelete}
+            variant="destructive"
+            buttonStyle={'rightIcon'}
+            disabled={isDeleting}
+            className="w-full"
+          >
+            Yes, Delete
+            <DeleteIcon width="16" height="16" className="text-white" />
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default DeleteBulkRowItemsButton;

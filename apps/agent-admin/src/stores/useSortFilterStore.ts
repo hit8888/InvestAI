@@ -15,6 +15,15 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
   conversations: {
     ...InitialSortValues,
   },
+  webpages: {
+    ...InitialSortValues,
+  },
+  documents: {
+    ...InitialSortValues,
+  },
+  videos: {
+    ...InitialSortValues,
+  },
   setSortValue: (page, category, value) =>
     set((state) => ({
       ...state,

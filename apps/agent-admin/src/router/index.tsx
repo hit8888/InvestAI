@@ -12,11 +12,11 @@ import ProtectedRoute from '../pages/ProtectedRoutes';
 import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
 
 import { AppRoutesEnum } from '../utils/constants';
-import DataSourcesPage from '../pages/DataSourcesPage';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
 import InstructionsPage from '../pages/InstructionsPage.tsx';
+import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -66,7 +66,23 @@ const routes = [
               },
               {
                 path: 'data-sources',
-                element: <ProtectedRoute element={<DataSourcesPage />} />,
+                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+              },
+              {
+                path: 'data-sources/webpages',
+                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+              },
+              {
+                path: 'data-sources/documents',
+                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+              },
+              {
+                path: 'data-sources/videos',
+                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+              },
+              {
+                path: 'data-sources/slides',
+                element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
                 path: 'workflow',

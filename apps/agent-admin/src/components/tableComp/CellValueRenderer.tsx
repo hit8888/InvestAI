@@ -9,6 +9,11 @@ import ProductOfInterestCellValue from './tableCellComp/ProductOfInterestCellVal
 import TimestampCellValue from './tableCellComp/TimestampCellValue';
 import SessionIDCellValue from './tableCellComp/SessionIDCellValue';
 import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
+import DataSourceNameCellValue from './tableCellComp/DataSourceNameCellValue';
+import UrlCellValue from './tableCellComp/UrlCellValue';
+import StatusCellValue from './tableCellComp/StatusCellValue';
+import NameCellValue from './tableCellComp/NameCellValue';
+import DataSourceTypeCellValue from './tableCellComp/DataSourceTypeCellValue';
 
 export type CellValueRendererProps = {
   id: string;
@@ -28,6 +33,13 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   buyer_intent_score: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
   // session_id: SessionIDCellValue,
+  data_source_name: DataSourceNameCellValue,
+  url: UrlCellValue,
+  updated_on: TimestampCellValue, // For DataSource Table
+  status: StatusCellValue, // For DataSource Table
+  name: NameCellValue,
+  data_source_type: DataSourceTypeCellValue,
+  source_url: UrlCellValue, // For DataSource Table
 };
 
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {

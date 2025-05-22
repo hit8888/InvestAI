@@ -7,6 +7,9 @@ import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/fi
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
 import FilterCompanyIcon from '@breakout/design-system/components/icons/filter-company-icon';
+import FilterSourcesIcon from '@breakout/design-system/components/icons/filter-sources-icon';
+import FilterDurationIcon from '@breakout/design-system/components/icons/filter-duration-icon';
+import FilterUsageCountIcon from '@breakout/design-system/components/icons/filter-usage-count-icon';
 import FilterUserMessagesCountIcon from '@breakout/design-system/components/icons/filter-message-count-icon';
 import SummaryConversationIcon from '@breakout/design-system/components/icons/summary-conv-icon';
 import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
@@ -27,23 +30,25 @@ import CompanyRevenueIcon from '@breakout/design-system/components/icons/company
 import { ConversationRightSideDetailsType } from './admin-types';
 import { ExportFormat } from '@meaku/core/types/admin/api';
 
-const { DateRange, IntentScore, MeetingBooked, Location, ProductOfInterest, Company, UserMessagesCount } = FilterType;
+const {
+  DateRange,
+  IntentScore,
+  MeetingBooked,
+  Location,
+  ProductOfInterest,
+  Company,
+  UserMessagesCount,
+  UsageCount,
+  // SearchTableContent,
+  Duration,
+  Sources,
+} = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
 export const CONVERSATION_LABEL_UPPERCASE = 'CONVERSATION';
 export const LEAD_LABEL_UPPERCASE = 'LEAD';
 
 export const TABLE_COLUMN_WIDTH_SIZE = 200;
-
-export const WIDTH_OF_SIDEBAR_OPEN = 270;
-export const WIDTH_OF_SIDEBAR_CLOSED = 80;
-
-export const CONTENT_CONTAINER_BOTHSIDE_PADDING_VALUE = 32;
-
-export const WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_SIDEBAR_OPEN =
-  WIDTH_OF_SIDEBAR_OPEN + CONTENT_CONTAINER_BOTHSIDE_PADDING_VALUE;
-export const WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_SIDEBAR_CLOSED =
-  WIDTH_OF_SIDEBAR_CLOSED + CONTENT_CONTAINER_BOTHSIDE_PADDING_VALUE;
 
 export const USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD = 100;
 
@@ -63,6 +68,7 @@ export const DefaultAuthResponse: AuthResponse = {
 // Pagination
 export const PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE = ['10', '25', '50', '75', '100'];
 export const PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE = ['100', '200', '500'];
+export const PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE = ['50', '100', '200', '500'];
 
 // ICON Props
 
@@ -85,7 +91,6 @@ export const DEFAULT_SUMMARY_VALUE =
 
 export const PAGINATION_ARROW_ICONS = COMMON_SMALL_ICON_PROPS;
 export const DROPDOWN_ARROW_ICONS = COMMON_ICON_PROPS;
-export const ALL_FILTERS_ICONS = COMMON_ICON_PROPS;
 
 export const DEFAULT_USERNAME = 'Kymberly Abestango';
 export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';
@@ -215,6 +220,41 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   },
 ];
 
+const DATA_SOURCES_TABLE_FILTERS_CONFIG = [
+  {
+    filterIcon: FilterDateIcon,
+    filterLabel: 'Date Range',
+    filterValue: 'Nov 21 - Nov 29, 2024',
+    filterApplied: true,
+    filterKey: DateRange,
+    filterType: DateRange,
+  },
+  {
+    filterIcon: FilterSourcesIcon,
+    filterLabel: 'Sources',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: Sources,
+    filterType: Sources,
+  },
+  {
+    filterIcon: FilterUsageCountIcon,
+    filterLabel: 'Usage Count',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: UsageCount,
+    filterType: UsageCount,
+  },
+  {
+    filterIcon: FilterDurationIcon,
+    filterLabel: 'Duration',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: Duration,
+    filterType: Duration,
+  },
+];
+
 export enum FilterByMeetingBooked {
   ALL = 'All',
   YES = 'yes',
@@ -253,6 +293,21 @@ export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filte
 
 export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
   (item) => ![IntentScore, MeetingBooked].includes(item.filterType),
+);
+
+// Not Showing Usage Count for now
+export const WEBPAGES_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
+  (item) => ![Duration, UsageCount].includes(item.filterType),
+);
+
+// Not Showing Usage Count for now
+export const DOCUMENTS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
+  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
+);
+
+// Not Showing Usage Count for now
+export const VIDEOS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
+  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
 );
 
 // Routes
@@ -322,10 +377,6 @@ export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
   'ip_address',
   'session_id',
 ];
-
-export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
-export const LEADS_PINNED_COLUMNS = ['email', 'name'];
-export const SHADOW_PINNED_COLUMNS = ['name', 'country'];
 
 export interface FunnelData {
   funnelChipType: string;

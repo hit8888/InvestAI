@@ -3,15 +3,17 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversation, ActiveConversationsContext } from '../../context/ActiveConversationsContext';
 import { useCallback, useContext, useState } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
-import { useTableWidth } from '../../hooks/useTableWidth';
+import { useTableWidth } from '@breakout/design-system/hooks/useTableWidth';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import JoinConversationDrawer from './JoinConversationDrawer';
 import WebSocketManager from './WebSocketManager';
 import { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
+import { useSidebar } from '../../context/SidebarContext';
 import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
 
 const ActiveConversationsLayout = () => {
-  const { widthStyle } = useTableWidth();
+  const { isSidebarOpen } = useSidebar();
+  const { widthStyle } = useTableWidth({ isSidebarOpen });
   const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
   const [showActiveConversations, setShowActiveConversations] = useState(false);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});

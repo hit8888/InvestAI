@@ -63,11 +63,11 @@ const LeadsTableContainer = () => {
     return {
       filters: allAppliedFilterValues,
       sort: getSortingAppliedValues(sortState, LEADS_PAGE),
-      search: '',
+      search: filterState.searchTableContent,
       page: currentPage,
       page_size: itemsPerPage,
     };
-  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage]);
+  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage, filterState.searchTableContent]);
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
@@ -121,6 +121,7 @@ const LeadsTableContainer = () => {
             onFiltersContainerHeightChange={setFilterContainerHeight}
           />
           <TableViewContent
+            pageType={LEADS_PAGE}
             key={'leads-table-container'}
             isLoading={isLoading}
             totalRecords={totalRecords}
