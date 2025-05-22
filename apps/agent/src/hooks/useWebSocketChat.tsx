@@ -191,7 +191,7 @@ const useWebSocketChat = () => {
         }
       }
     },
-    [readyState, sessionId, isAMessageBeingProcessed],
+    [readyState, sessionId, isAMessageBeingProcessed, adminJoinStatus],
   );
 
   useEffect(() => {

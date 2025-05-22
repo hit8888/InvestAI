@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { AdminConversationJoinStatus, DemoPlayingStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus, DemoPlayingStatus, MessageSenderRole } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isDiscoveryQuestion, filterOutSuggestions, shouldUpdateMessage } from '@meaku/core/utils/messageUtils';
 
@@ -50,6 +50,17 @@ export const useMessageStore = create<State>()(
                 message.message.event_type === 'GENERATING_ARTIFACT'
               ),
           );
+
+          const hasAdminJoined = messages.some(
+            (message) =>
+              message.role === MessageSenderRole.ADMIN &&
+              message.message_type === 'EVENT' &&
+              message.message.event_type === 'JOIN_SESSION',
+          );
+
+          if (hasAdminJoined) {
+            draft.adminJoinStatus = AdminConversationJoinStatus.JOINED;
+          }
         }),
       isAMessageBeingProcessed: false as const,
       setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>
