@@ -3,10 +3,10 @@ import { useSortFilterStore } from '../stores/useSortFilterStore';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
 import useFilterPreferencesQuery from '../queries/query/useFilterPreferencesQuery';
 import { useQueryOptions } from './useQueryOptions';
-import { PageType } from '@meaku/core/types/admin/sort';
 import { getSortValuesFromSortItems } from '../utils/common.ts';
+import { MainPageType } from '@meaku/core/types/admin/admin';
 
-export const useInitializeFilterPreferences = (page: PageType) => {
+export const useInitializeFilterPreferences = (page: MainPageType) => {
   const { initializeSortValues } = useSortFilterStore();
   const { initializeFilterValues } = useAllFilterStore();
   const queryOptions = useQueryOptions();

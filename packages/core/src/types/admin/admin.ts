@@ -34,6 +34,8 @@ export type WEBPAGES_PAGE_TYPE = typeof WEBPAGES_PAGE;
 export type DOCUMENTS_PAGE_TYPE = typeof DOCUMENTS_PAGE;
 export type VIDEOS_PAGE_TYPE = typeof VIDEOS_PAGE;
 
+export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE;
+
 export type PaginationPageType =
   | LEADS_PAGE_TYPE
   | CONVERSATIONS_PAGE_TYPE

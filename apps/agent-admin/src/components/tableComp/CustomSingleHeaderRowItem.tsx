@@ -1,8 +1,8 @@
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { SHADOW_PINNED_COLUMNS } from '../../utils/constants';
+import { useTablePinningStyles } from '@breakout/design-system/hooks/useTablePinningStyles';
+import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
 
 type CustomSingleHeaderRowItemProps = {
   headerGroup: HeaderGroup<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
