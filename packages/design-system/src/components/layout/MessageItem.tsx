@@ -159,7 +159,7 @@ const MessageItem = ({
     );
   };
 
-  const showingContentForAdmin = viewType !== ViewType.USER && isAIMessage && isTextMessage;
+  const showingContentForDashboard = viewType === ViewType.DASHBOARD && isAIMessage && isTextMessage;
 
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
   const shouldShowTextMessage =
@@ -272,7 +272,7 @@ const MessageItem = ({
           </>
         ) : null}
 
-        {showingContentForAdmin ? (
+        {showingContentForDashboard ? (
           <>{shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}</>
         ) : null}
       </div>

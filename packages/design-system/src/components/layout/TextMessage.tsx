@@ -53,11 +53,9 @@ const TextMessage: React.FC<TextMessageProps> = ({
   showOrbFromConfig,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const isMessageFromOtherHuman =
-    (viewType === ViewType.ADMIN && message.role === MessageSenderRole.USER) ||
-    (viewType === ViewType.USER && message.role === MessageSenderRole.ADMIN);
+  const isHumanMessage = message.role === MessageSenderRole.USER || message.role === MessageSenderRole.ADMIN;
   const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: (isCurrentMsgUserInactiveMessage && isLastQuestionResponse) || isMessageFromOtherHuman,
+    shouldScroll: (isCurrentMsgUserInactiveMessage && isLastQuestionResponse) || isHumanMessage,
   });
 
   const isAIMessage = checkIsAIMessage(message);
