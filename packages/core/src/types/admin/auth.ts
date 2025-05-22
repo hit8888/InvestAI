@@ -6,9 +6,9 @@ export const OrganizationDetailsSchema = z.object({
   name: z.string().optional(),
   role: z.string().optional(),
   'tenant-name': z.string().optional(),
-  active_conversations_enabled: z.boolean().optional(),
   logo: z.string().optional(),
   agentId: z.number().optional(),
+  active_conversations_enabled: z.boolean().optional(),
 });
 export type OrganizationDetails = z.infer<typeof OrganizationDetailsSchema>;
 

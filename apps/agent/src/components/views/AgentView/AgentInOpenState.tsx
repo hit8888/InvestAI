@@ -3,7 +3,7 @@ import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
 import AgentInput from '@breakout/design-system/components/layout/AgentInput';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { DemoPlayingStatus, ViewType } from '@meaku/core/types/common';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
@@ -108,6 +108,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             hasArtifactOrDemoInMessageHistory={showMediaArtifactContainer}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
             showDemoPreQuestions={isDemoAvailable && !demoDetails}
+            viewType={ViewType.USER}
           />
 
           {/* Right Side Artifact Container */}
@@ -117,6 +118,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               handleSendMessage={handleSendMessage}
               onSlideItemClick={handleSlideItemClick}
+              viewType={ViewType.USER}
             />
           )}
 

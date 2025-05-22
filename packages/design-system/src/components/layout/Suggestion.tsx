@@ -5,6 +5,7 @@ import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
 import Typography from '../Typography';
 import { useTextTruncation } from '../../hooks/useTextTruncation';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   question: string;
@@ -13,6 +14,7 @@ interface IProps {
   isQuestionInCycle?: boolean;
   isEntryPointQuestion: boolean;
   invertTextColor?: boolean;
+  viewType?: ViewType;
 }
 
 const Suggestion = ({
@@ -22,6 +24,7 @@ const Suggestion = ({
   isEntryPointQuestion,
   isQuestionInCycle = false,
   invertTextColor,
+  viewType,
 }: IProps) => {
   const { isTablet } = useScreenSize();
   const { textRef, isTextTruncated } = useTextTruncation({
@@ -29,15 +32,19 @@ const Suggestion = ({
     maxWidth: isQuestionInCycle ? 380 : undefined,
   });
 
+  const isClickEnabled = !viewType || viewType === ViewType.USER;
+
   const handleClickOnSuggestedQuestion = (question: string) => {
-    onSuggestedQuestionOnClick(question);
+    if (isClickEnabled) {
+      onSuggestedQuestionOnClick(question);
+    }
   };
 
   return (
     <div
       onClick={() => handleClickOnSuggestedQuestion(question)}
       className={cn(
-        'flex w-fit cursor-pointer items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out',
+        `flex w-fit items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out ${isClickEnabled ? 'cursor-pointer' : 'cursor-not-allowed'}`,
         {
           'border border-gray-900 bg-white py-2 pl-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
             !isEntryPointQuestion,

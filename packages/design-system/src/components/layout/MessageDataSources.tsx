@@ -8,10 +8,11 @@ import { cn } from '@breakout/design-system/lib/cn';
 import FaviconImage from '@breakout/design-system/components/layout/favicon-image';
 import { DataSourceType } from '@meaku/core/types/webSocketData';
 import { Badge } from '@breakout/design-system/components/layout/badge';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   dataSources: DataSourceType[];
-  usingForAgent: boolean;
+  viewType: ViewType;
 }
 
 function truncateToPercentage(number: number) {
@@ -20,7 +21,7 @@ function truncateToPercentage(number: number) {
 }
 
 const MessageDataSources = (props: IProps) => {
-  const { dataSources, usingForAgent } = props;
+  const { dataSources, viewType } = props;
 
   const totalDocuments = dataSources.length;
 
@@ -53,7 +54,7 @@ const MessageDataSources = (props: IProps) => {
                           href={doc.url}
                           target="_blank"
                           className={cn('line-clamp-1 max-w-[60%] text-primary underline', {
-                            'max-w-[80%]': !usingForAgent,
+                            'max-w-[80%]': viewType === ViewType.DASHBOARD,
                           })}
                           title={doc.title || doc.data_source_name || doc.url}
                         >

@@ -1,5 +1,6 @@
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
+import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 
@@ -11,7 +12,7 @@ const LogTabDisplayContent = () => {
     <div className="flex max-h-[900px] w-full flex-col bg-gray-25">
       {chatHistory?.length && conversation?.session_id ? (
         <AgentMessages
-          usingForAgent={false}
+          viewType={ViewType.DASHBOARD}
           sessionId={conversation?.session_id}
           isAMessageBeingProcessed={false}
           setActiveArtifact={() => {}}

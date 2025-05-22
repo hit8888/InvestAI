@@ -14,9 +14,10 @@ import {
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
 import ArrowRight from '../icons/ArrowRight.tsx';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
-  usingForAgent: boolean;
+  viewType: ViewType;
   artifactId: string;
   logoURL: string | null;
   artifactType?: ArtifactEnum;
@@ -29,7 +30,7 @@ interface IProps {
 }
 
 const ArtifactPreview = ({
-  usingForAgent,
+  viewType,
   artifactId,
   artifactType,
   setDemoPlayingStatus,
@@ -48,7 +49,7 @@ const ArtifactPreview = ({
       artifact_id: artifactId,
       artifact_type: artifactType ?? 'NONE',
     });
-    if (artifactType === 'VIDEO' && !usingForAgent) {
+    if (artifactType === 'VIDEO' && viewType === ViewType.DASHBOARD) {
       setIsVideoDialogOpen(true);
     }
   };
@@ -61,7 +62,7 @@ const ArtifactPreview = ({
         artifactType={artifactType}
         logoURL={logoURL ?? ''}
         artifactContent={artifactContent as SlideImageArtifactContent | SlideArtifactContent}
-        usingForAgent={usingForAgent}
+        viewType={viewType}
         isFetching={isFetching}
         handleArtifactOnClick={handleArtifactOnClick}
         title={title}
@@ -88,7 +89,7 @@ const ArtifactPreview = ({
     return <CustomVideoPlayer videoURL={videoURL} />;
   };
 
-  return usingForAgent ? (
+  return viewType === ViewType.USER ? (
     <>{showArtifactPreviewButtonDisplay()}</>
   ) : (
     <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>

@@ -15,7 +15,6 @@ import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
   checkIsArtifactMessage,
   checkIsMainResponseMessage,
-  checkIsQualificationFormArtifact,
   checkIsSalesResponseComplete,
   getAnalyticsEvent,
   getFormArtifactMessage,
@@ -26,16 +25,21 @@ import {
   isDiscoveryQuestion,
   isDisplayedAsTextMessage,
   isMediaArtifact,
+  checkIsQualificationFormArtifact,
+  checkIsAIMessage,
+  checkIsAdminJoinedMessage,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
 import Orb from '../Orb';
 import Typography from '../Typography/index.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
+import { ViewType } from '@meaku/core/types/common';
+import AdminJoinedInfo from './AdminJoinedInfo.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
-  usingForAgent: boolean;
+  viewType: ViewType;
   message: WebSocketMessage;
   messages: WebSocketMessage[];
   sessionId: string;
@@ -57,7 +61,7 @@ interface IProps {
 
 const MessageItem = ({
   isAMessageBeingProcessed,
-  usingForAgent,
+  viewType,
   message,
   messages,
   sessionId,
@@ -78,7 +82,7 @@ const MessageItem = ({
 }: IProps) => {
   // TODO: NEED TO REFACTOR THIS COMPONENT into Multiple Components - FOLLOW SINGLE RESPONSIBILITY PRINCIPLE
   const { isInView, ref: inViewRef } = useInView(0, true);
-  const isAiMessage = message.role === 'ai';
+  const isAIMessage = checkIsAIMessage(message);
   const isTextMessage = isDisplayedAsTextMessage(message);
   const isArtifactMessage = checkIsArtifactMessage(message);
   const isSalesResponseMessage = checkIsMainResponseMessage(message);
@@ -147,7 +151,7 @@ const MessageItem = ({
     return (
       <MessageArtifactPreview
         message={message}
-        usingForAgent={usingForAgent}
+        viewType={viewType}
         setDemoPlayingStatus={setDemoPlayingStatus}
         setActiveArtifact={setActiveArtifact}
         logoURL={logoURL}
@@ -155,14 +159,14 @@ const MessageItem = ({
     );
   };
 
-  const showingContentForAdmin = !usingForAgent && isAiMessage && isTextMessage;
+  const showingContentForAdmin = viewType !== ViewType.USER && isAIMessage && isTextMessage;
 
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
   const shouldShowTextMessage =
     isTextMessage && message.message.content !== '' && (isDiscoveryMessage ? isSalesResponseComplete : true);
 
   // To show the feedback section, the message must be an AI message, the feedback must be allowed, and the message must be a text message
-  const shouldShowFeedbackSection = isAiMessage && allowFeedback && isTextMessage;
+  const shouldShowFeedbackSection = isAIMessage && allowFeedback && isTextMessage;
 
   const hasSalesResponseCompleteAndIsArtifactMessage = isSalesResponseComplete && isArtifactMessage;
 
@@ -183,8 +187,7 @@ const MessageItem = ({
         {shouldShowTextMessage && (
           <TextMessage
             message={message}
-            isAiMessage={isAiMessage}
-            usingForAgent={usingForAgent}
+            viewType={viewType}
             isCurrentMsgUserInactiveMessage={isCurrentMsgUserInactiveMessage}
             isLastQuestionResponse={isLastQuestionResponse}
             orbState={orbState}
@@ -195,6 +198,10 @@ const MessageItem = ({
           />
         )}
 
+        {checkIsAdminJoinedMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
+          <AdminJoinedInfo />
+        )}
+
         {isDiscoveryQuestion(message) && (
           <div className="my-5 flex w-full items-start justify-start gap-4">
             {shouldShowActiveOrb && (
@@ -202,7 +209,7 @@ const MessageItem = ({
             )}
             {!shouldShowActiveOrb && <div className="pl-7"></div>}
             <DiscoveryQuestion
-              usingForAgent={usingForAgent}
+              viewType={viewType}
               message={message}
               onSubmit={handleSendUserMessage}
               isLastMessage={isLastMessage}
@@ -212,15 +219,15 @@ const MessageItem = ({
 
         {isDiscoveryAnswer(message) && (
           <div className="my-5 flex flex-row items-end gap-4">
-            <div className="pl-7"></div>
-            <DiscoveryAnswer message={message} usingForAgent={usingForAgent} />
+            {viewType === ViewType.USER ? <div className="pl-7"></div> : null}
+            <DiscoveryAnswer message={message} viewType={viewType} />
           </div>
         )}
 
         {shouldShowFeedbackSection && (
           <div className="pl-11">
-            <MessageDataSources usingForAgent={usingForAgent} dataSources={message.documents ?? []} />
-            {!usingForAgent && (
+            <MessageDataSources viewType={viewType} dataSources={message.documents ?? []} />
+            {viewType !== ViewType.USER && (
               <Typography className="mt-2 w-full" variant="caption-12-medium" textColor="gray400">
                 {formattedTimestamp}
               </Typography>
@@ -228,7 +235,7 @@ const MessageItem = ({
             {isSalesResponseComplete && (
               <MessageFeedback
                 sessionId={sessionId}
-                usingForAgent={usingForAgent}
+                viewType={viewType}
                 message={message}
                 feedback={feedback}
                 onAddFeedback={handleAddFeedback}
@@ -238,7 +245,7 @@ const MessageItem = ({
             )}
             {isAnalyticsEvent && (
               <MessageAnalytics
-                usingForAgent={usingForAgent}
+                viewType={viewType}
                 invertTextColor={invertTextColor}
                 analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData}
               />
@@ -246,7 +253,7 @@ const MessageItem = ({
           </div>
         )}
 
-        {usingForAgent ? (
+        {viewType === ViewType.USER || viewType === ViewType.ADMIN ? (
           <>
             {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
 
@@ -258,6 +265,7 @@ const MessageItem = ({
                   artifact={message.message.artifact_data.content as SuggestionArtifactContent}
                   handleSendUserMessage={handleSendUserMessage}
                   invertTextColor={invertTextColor}
+                  viewType={viewType}
                 />
               </div>
             )}

@@ -1,3 +1,4 @@
+import { ViewType } from '../types';
 import { ConfigPayload } from '../types/api/agent_config_request';
 import { FeedbackRequestPayload } from '../types/api/feedback_request';
 import { InitializationPayload } from '../types/api/session_init_request';
@@ -17,8 +18,8 @@ export const initializeSession = (agentId: string, payload: InitializationPayloa
 export const updateSession = (sessionId: string, payload: UpdateSessionDataPayload) =>
   apiClient.post(`/tenant/chat/session/${sessionId}/update/`, payload);
 
-export const postResponseFeedback = (sessionId: string, payload: FeedbackRequestPayload, usingForAgent: boolean) => {
-  const basicURL = usingForAgent ? '/tenant/chat/session/' : '/tenant/api/sessions/';
+export const postResponseFeedback = (sessionId: string, payload: FeedbackRequestPayload, viewType: ViewType) => {
+  const basicURL = viewType === ViewType.USER ? '/tenant/chat/session/' : '/tenant/api/sessions/';
   return apiClient.post(`${basicURL}${sessionId}/feedback/`, payload);
 };
 

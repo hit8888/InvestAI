@@ -31,7 +31,7 @@ const useLatestMessageComplete = () => {
       (message) => message.response_id === latestResponseId && message.role === 'ai',
     );
 
-    if (currentResponseMessages.length === 0) return false;
+    if (currentResponseMessages.length === 0) return true;
 
     // Check if any message is a complete stream message or a text message or a user event message with event_type as PRIMARY_GOAL_COMPLETED
     return currentResponseMessages.some(

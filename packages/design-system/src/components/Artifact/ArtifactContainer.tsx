@@ -11,32 +11,30 @@ import {
   isFormDataFilled,
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
-// import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
+import { ViewType } from '@meaku/core/types/common';
 
 type IProps = {
   logoURL: string;
-  usingForAgent?: boolean;
+  viewType: ViewType;
   isMediaTakingFullWidth: boolean;
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   onSlideItemClick: (title: string) => void;
   messages: WebSocketMessage[];
+  isGeneratingArtifact?: boolean;
 };
-
-// Component used in Dashboard
 
 const ArtifactContainer = ({
   logoURL,
-  usingForAgent = true,
+  viewType,
   isMediaTakingFullWidth,
   handleSendMessage,
   onSlideItemClick,
   messages,
+  isGeneratingArtifact,
 }: IProps) => {
   const handleToggleFullScreen = useCommonMessageStore((state) => state.handleToggleFullScreen);
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
   const activeArtifact = useArtifactStore((state) => state.activeArtifact);
-
-  // const { hasGeneratingArtifactEvents } = useGetArtifactLoadingState();
 
   // Find the message that corresponds to the active artifact
   const artifactMessage = activeArtifact
@@ -121,10 +119,10 @@ const ArtifactContainer = ({
       setIsArtifactPlaying={setIsArtifactPlaying}
       activeArtifact={artifactWithContent}
       onSlideItemClick={onSlideItemClick}
-      isGeneratingArtifact={false} // TODO: keeping it false for now, there is Too much gap b/w slides ( Linear task:- ENG-1451)
+      isGeneratingArtifact={isGeneratingArtifact}
       artifactContent={artifactContentWithMetadata}
       isQualificationFormArtifact={isQualificationFormArtifact ?? false}
-      usingForAgent={usingForAgent}
+      viewType={viewType}
     />
   );
 };

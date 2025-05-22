@@ -231,6 +231,11 @@ export const ConversationDetailsResponseSchema = z.object({
   feedback: z.array(FeedbackRequestPayloadSchema).optional(),
 });
 
+export const ActiveConversationDetailsResponseSchema = z.object({
+  chat_history: z.array(WebSocketMessageSchema),
+  chat_summary: z.string(),
+});
+
 // Schema for Filter Options - Payload & Response
 export const FilterOptionsPayloadSchema = z.object({
   field: z.string(),

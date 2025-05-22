@@ -4,13 +4,14 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/des
 import SlideArtifact from '../Artifact/SlideArtifact';
 import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/types/artifact';
 import CommonArtifactPreview from './CommonArtifactPreview';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   handleArtifactOnClick: () => void;
   isFetching: boolean;
   title?: string;
   artifactType: 'SLIDE' | 'SLIDE_IMAGE';
-  usingForAgent: boolean;
+  viewType: ViewType;
   logoURL: string;
   artifactContent: SlideArtifactContent | SlideImageArtifactContent;
 }
@@ -22,12 +23,12 @@ const SlideArtifactPreview = ({
   artifactType,
   isFetching,
   title,
-  usingForAgent,
+  viewType,
 }: IProps) => {
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (usingForAgent) {
+    if (viewType === ViewType.USER) {
       handleArtifactOnClick();
     } else {
       setOpenDialog(true);
@@ -75,7 +76,7 @@ const SlideArtifactPreview = ({
       />
     );
   };
-  return usingForAgent ? (
+  return viewType === ViewType.USER ? (
     <>{showButtonDisplay()}</>
   ) : (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>

@@ -5,13 +5,14 @@ import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   hasArtifactOrDemoInMessageHistory: boolean;
   isMediaTakingFullWidth: boolean;
   showDemoPreQuestions: boolean;
-  usingForAgent?: boolean;
+  viewType: ViewType;
 }
 
 const AgentMessagesContainer = ({
@@ -19,7 +20,7 @@ const AgentMessagesContainer = ({
   hasArtifactOrDemoInMessageHistory,
   isMediaTakingFullWidth,
   showDemoPreQuestions,
-  usingForAgent = true,
+  viewType,
 }: IProps) => {
   const messages = useMessageStore((state) => state.messages);
 
@@ -52,9 +53,9 @@ const AgentMessagesContainer = ({
 
   return (
     <AgentMessages
-      usingForAgent={usingForAgent}
       sessionId={sessionId}
       orbState={orbState}
+      viewType={viewType}
       messages={messages}
       showRightPanel={hasArtifactOrDemoInMessageHistory}
       hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}

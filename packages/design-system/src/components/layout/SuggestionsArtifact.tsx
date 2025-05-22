@@ -5,12 +5,14 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { cn } from '../../lib/cn.ts';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   suggestedQuestionOrientation: 'left' | 'right';
   artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   invertTextColor?: boolean;
+  viewType?: ViewType;
 }
 
 const SuggestionsArtifact = ({
@@ -18,6 +20,7 @@ const SuggestionsArtifact = ({
   handleSendUserMessage,
   suggestedQuestionOrientation,
   invertTextColor,
+  viewType,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const showSuggestionsArtifact: boolean =
@@ -62,6 +65,7 @@ const SuggestionsArtifact = ({
           itemIndex={index}
           isEntryPointQuestion={false}
           invertTextColor={invertTextColor}
+          viewType={viewType}
         />
       ))}
     </div>

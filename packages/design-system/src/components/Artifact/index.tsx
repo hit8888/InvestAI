@@ -3,8 +3,10 @@ import { ArtifactContentUi } from './ArtifactContentUi';
 import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import { ArtifactContent } from '@meaku/core/types/artifact';
 import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
+import { ViewType } from '@meaku/core/types/common';
 
 export interface ArtifactProps {
+  viewType: ViewType;
   isMediaTakingFullWidth: boolean;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   logoURL: string;
@@ -12,17 +14,16 @@ export interface ArtifactProps {
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   onSlideItemClick: (title: string) => void;
-  isGeneratingArtifact: boolean;
+  isGeneratingArtifact?: boolean;
   title?: string;
   description?: string;
   artifactContent: ArtifactContentWithMetadataProps;
-  isQualificationFormArtifact: boolean;
-  usingForAgent: boolean;
+  isQualificationFormArtifact?: boolean;
 }
 
 const Artifact = ({
   logoURL,
-  usingForAgent,
+  viewType,
   isMediaTakingFullWidth,
   handleSendUserMessage,
   activeArtifact,
@@ -54,7 +55,7 @@ const Artifact = ({
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               onSlideItemClick={onSlideItemClick}
               isQualificationFormArtifact={isQualificationFormArtifact}
-              usingForAgent={usingForAgent}
+              viewType={viewType}
             />
           )}
         </div>

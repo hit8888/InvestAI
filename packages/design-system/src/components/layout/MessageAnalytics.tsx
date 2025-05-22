@@ -3,16 +3,17 @@ import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
 import Typography from '../Typography';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { cn } from '../../lib/cn';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   analytics: MessageAnalyticsEventData;
   invertTextColor: boolean;
-  usingForAgent: boolean;
+  viewType: ViewType;
 }
 
-const MessageAnalytics = ({ analytics, invertTextColor, usingForAgent }: IProps) => {
+const MessageAnalytics = ({ analytics, invertTextColor, viewType }: IProps) => {
   const buyerIntentScoreRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: usingForAgent,
+    shouldScroll: viewType === ViewType.USER || viewType === ViewType.ADMIN,
   });
   if (!analytics || !analytics.buyer_intent_score) {
     return null;

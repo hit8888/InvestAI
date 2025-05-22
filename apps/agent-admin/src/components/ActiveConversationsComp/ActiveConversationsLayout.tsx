@@ -7,7 +7,8 @@ import { useTableWidth } from '../../hooks/useTableWidth';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import JoinConversationDrawer from './JoinConversationDrawer';
 import WebSocketManager from './WebSocketManager';
-import { SendMessageFn, WebSocketTextMessage } from '../../hooks/useJoinConversationWebSocket';
+import { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
+import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
 
 const ActiveConversationsLayout = () => {
   const { widthStyle } = useTableWidth();
@@ -32,9 +33,31 @@ const ActiveConversationsLayout = () => {
     }));
   }, []);
 
-  const handleSendMessage = (sessionId: string, message: WebSocketTextMessage) => {
+  const handleSendMessage = (sessionId: string, textMessage: string) => {
     const sendMessage = sendMessageFnMap[sessionId];
-    sendMessage(message);
+
+    sendMessage({
+      message: {
+        content: textMessage,
+        event_type: 'ADMIN_RESPONSE',
+        event_data: {},
+      },
+      message_type: 'EVENT',
+    });
+  };
+
+  const handleAIResponseGenerationRequest = (sessionId: string) => {
+    const sendMessage = sendMessageFnMap[sessionId];
+    sendMessage({
+      message: {
+        content: '',
+        event_type: 'RESPONSE_SUGGESTIONS',
+        event_data: {
+          query: currentConversation?.last_user_message,
+        },
+      },
+      message_type: 'EVENT',
+    });
   };
 
   return (
@@ -71,11 +94,16 @@ const ActiveConversationsLayout = () => {
               />
             ))}
 
-            <JoinConversationDrawer
-              conversation={currentConversation}
-              onSendMessage={handleSendMessage}
-              onClose={handleCloseJoinConversationDrawer}
-            />
+            <ActiveConversationDetailsProvider>
+              {currentConversation ? (
+                <JoinConversationDrawer
+                  conversation={currentConversation}
+                  onSendMessage={handleSendMessage}
+                  onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
+                  onClose={handleCloseJoinConversationDrawer}
+                />
+              ) : null}
+            </ActiveConversationDetailsProvider>
           </div>
         ) : null}
       </>

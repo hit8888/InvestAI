@@ -2,30 +2,31 @@ import { forwardRef, useImperativeHandle } from 'react';
 import { cn } from '../../lib/cn';
 import useAutoResizeTextArea from '../../hooks/useAutoResizeTextArea';
 
-const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  (props, parentRef) => {
-    const { className, ...restProps } = props;
-    const autoResizeRef = useAutoResizeTextArea({
-      textAreaValue: props.value as string,
-      initialHeight: 56,
-      maxHeight: 100,
-    });
+const TextArea = forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement> & { initialHeight?: number }
+>((props, parentRef) => {
+  const { className, initialHeight, ...restProps } = props;
+  const autoResizeRef = useAutoResizeTextArea({
+    textAreaValue: props.value as string,
+    initialHeight: initialHeight ?? 56,
+    maxHeight: 100,
+  });
 
-    // Combine refs
-    useImperativeHandle(parentRef, () => autoResizeRef.current!);
+  // Combine refs
+  useImperativeHandle(parentRef, () => autoResizeRef.current!);
 
-    return (
-      <textarea
-        ref={autoResizeRef}
-        className={cn(
-          'w-full flex-1 resize-none overflow-y-auto rounded-xl border-gray-300 text-sm focus:border-gray-300 focus:ring-0 disabled:opacity-60',
-          className,
-        )}
-        {...restProps}
-      />
-    );
-  },
-);
+  return (
+    <textarea
+      ref={autoResizeRef}
+      className={cn(
+        'w-full flex-1 resize-none overflow-y-auto rounded-xl border-gray-300 text-sm focus:border-gray-300 focus:ring-0 disabled:opacity-60',
+        className,
+      )}
+      {...restProps}
+    />
+  );
+});
 
 TextArea.displayName = 'TextArea';
 

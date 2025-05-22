@@ -1,6 +1,7 @@
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { ActiveConversation, BuyerIntent } from '../../context/ActiveConversationsContext';
+import { ActiveConversation } from '../../context/ActiveConversationsContext';
+import { BuyerIntent } from '@meaku/core/types/common';
 import SummaryIcon from '@breakout/design-system/components/icons/summary-icon';
 import PersonIcon from '@breakout/design-system/components/icons/person-icon';
 import EmailIcon from '@breakout/design-system/components/icons/email-icon';
@@ -14,6 +15,7 @@ import { findFlagUrlByCountryName } from 'country-flags-svg';
 import BuyerIntentChip from './BuyerIntentChip';
 import OverviewDataItems, { OverviewDataItem } from './OverviewDataItems';
 import { CHAT_SUMMARY_TRIM_LENGTH } from '../../utils/constants';
+import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 
 interface ConversationOverviewProps {
   conversation: ActiveConversation;
@@ -115,6 +117,7 @@ const ConversationOverview = ({ conversation }: ConversationOverviewProps) => {
 
     setHasProspectData(isRenderingProspectData);
     setHasCompanyData(isRenderingCompanyData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation, setHasProspectData, setHasCompanyData]);
 
   const onToggleView = () => {
@@ -135,7 +138,7 @@ const ConversationOverview = ({ conversation }: ConversationOverviewProps) => {
       </div>
 
       {isExpanded ? (
-        <div className="absolute right-0 top-[115%] w-96 rounded-2xl border border-gray-200 bg-white p-4 shadow-md">
+        <div className="absolute right-0 top-[115%] z-30 w-96 rounded-2xl border border-gray-200 bg-white p-4 shadow-md">
           <Summary className={`${hasProspectData || hasCompanyData ? sectionBorderClass : ''}`} />
 
           {hasProspectData ? (
@@ -157,9 +160,7 @@ const Summary = ({ className }: { className: string }) => {
   const [showTrimmed, setShowTrimmed] = useState(true);
   const Icon = showTrimmed ? ChevronDown : ChevronUp;
   const showMoreButtonText = showTrimmed ? 'Show More' : 'Show Less';
-  // TODO - this needs to come from api
-  const chatSummary =
-    'The user inquired about integrating the AI tool into their e-commerce website. The AI provided detailed steps for implementation and highlighted potential benefits, such as increased customer engagement and automated query handling. The user expressed interest in testing the tool and asked about available subscription plans. The AI shared pricing information and offered to schedule a demo. The conversation concluded with the user agreeing to explore the demo option.';
+  const { chatSummary } = useActiveConversationDetails();
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>

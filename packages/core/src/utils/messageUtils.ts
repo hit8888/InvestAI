@@ -11,6 +11,7 @@ import {
   WebSocketMessage,
 } from '../types/webSocketData';
 import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
+import { MessageSenderRole, MessageViewType, ViewType } from '../types/common';
 
 export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
@@ -80,6 +81,7 @@ export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => 
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||
+    (message.message_type === 'EVENT' && message.role === 'admin') ||
     message.message_type === 'LOADING_TEXT'
   );
 };
@@ -308,8 +310,49 @@ export const getMediaArtifactMessage = (messagesWithSameResponseId: WebSocketMes
   );
 };
 
-const isAIMessage = (message: WebSocketMessage): boolean => {
-  return message.role === 'ai';
+export const checkIsAIMessage = (message: WebSocketMessage): boolean => {
+  return message.role === MessageSenderRole.AI;
+};
+
+export const checkIsAdminJoinedMessage = (message: WebSocketMessage): boolean => {
+  return message.message_type === 'EVENT' && message.message.event_type === 'JOIN_SESSION';
+};
+
+export function getMessageViewType(messageSenderRole: MessageSenderRole, viewType: ViewType): MessageViewType {
+  if (messageSenderRole === MessageSenderRole.ADMIN) {
+    switch (viewType) {
+      case ViewType.ADMIN:
+        return MessageViewType.ADMIN_MESSAGE_IN_ADMIN_VIEW;
+      case ViewType.USER:
+        return MessageViewType.ADMIN_MESSAGE_IN_USER_VIEW;
+      case ViewType.DASHBOARD:
+        return MessageViewType.ADMIN_MESSAGE_IN_DASHBOARD_VIEW;
+    }
+  } else if (messageSenderRole === MessageSenderRole.USER) {
+    switch (viewType) {
+      case ViewType.ADMIN:
+        return MessageViewType.USER_MESSAGE_IN_ADMIN_VIEW;
+      case ViewType.USER:
+        return MessageViewType.USER_MESSAGE_IN_USER_VIEW;
+      case ViewType.DASHBOARD:
+        return MessageViewType.USER_MESSAGE_IN_DASHBOARD_VIEW;
+    }
+  } else {
+    switch (viewType) {
+      case ViewType.ADMIN:
+        return MessageViewType.AI_MESSAGE_IN_ADMIN_VIEW;
+      case ViewType.USER:
+        return MessageViewType.AI_MESSAGE_IN_USER_VIEW;
+      case ViewType.DASHBOARD:
+        return MessageViewType.AI_MESSAGE_IN_DASHBOARD_VIEW;
+    }
+  }
+}
+
+export const isHumanMessageInDashboardView = (messageViewType: MessageViewType) => {
+  return [MessageViewType.USER_MESSAGE_IN_DASHBOARD_VIEW, MessageViewType.ADMIN_MESSAGE_IN_DASHBOARD_VIEW].includes(
+    messageViewType,
+  );
 };
 
 // Check if the messages have the same session_id and response_id
@@ -345,9 +388,9 @@ export const hasStreamMessageForForm = (
 ): artifactMessage is WebSocketMessage & { message: ArtifactMessageContent } => {
   return (
     hasMessagesMatchingIds(streamMessage, artifactMessage) &&
-    isAIMessage(streamMessage) &&
+    checkIsAIMessage(streamMessage) &&
     isStreamMessage(streamMessage) &&
-    isAIMessage(artifactMessage) &&
+    checkIsAIMessage(artifactMessage) &&
     checkIsFormArtifactBase(artifactMessage)
   );
 };
@@ -368,7 +411,7 @@ export const isAIMessageRespondingToUserMessageWithNotMuchContext = (message: We
   if (!requiredKeys.every((key) => key in message)) return false;
 
   // Validate role, actor, and message_type
-  if (!isAIMessage(message) || message.actor !== 'SALES' || !isStreamMessage(message)) {
+  if (!checkIsAIMessage(message) || message.actor !== 'SALES' || !isStreamMessage(message)) {
     return false;
   }
 

@@ -8,7 +8,7 @@ type JoinConversationHeaderProps = {
 
 const JoinConversationHeader = ({ conversation }: JoinConversationHeaderProps) => {
   return (
-    <div className="flex w-full items-center justify-between px-4 py-2 outline-none">
+    <div className="z-100 flex w-full items-center justify-between px-4 py-2 outline-none">
       <SessionIdLabelWithCopyButton sessionId={conversation.session_id} />
       <ConversationActions conversation={conversation} />
     </div>

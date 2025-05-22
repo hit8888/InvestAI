@@ -12,10 +12,11 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
 import { checkIsQualificationFormArtifact, BASE_ARTIFACT_TYPES } from '@meaku/core/utils/messageUtils';
+import { ViewType } from '@meaku/core/types/common';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
-  usingForAgent: boolean;
+  viewType: ViewType;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   logoURL: string | null;
@@ -23,7 +24,7 @@ interface MessageArtifactPreviewProps {
 
 const MessageArtifactPreview = ({
   message,
-  usingForAgent,
+  viewType,
   setDemoPlayingStatus,
   setActiveArtifact,
   logoURL,
@@ -60,7 +61,7 @@ const MessageArtifactPreview = ({
   return (
     <div className="my-4 pl-11 pr-6">
       <ArtifactPreview
-        usingForAgent={usingForAgent}
+        viewType={viewType}
         artifactId={artifactData.artifact_id}
         artifactType={artifactType as ArtifactEnum}
         setDemoPlayingStatus={setDemoPlayingStatus}

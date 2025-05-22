@@ -1,13 +1,14 @@
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import CommonDiscoveryAnswer from './CommonDiscoveryAnswer';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
+import { ViewType } from '@meaku/core/types/common';
 
 type DiscoveryAnswerProps = {
   message: WebSocketMessage;
-  usingForAgent: boolean;
+  viewType: ViewType;
 };
 
-export const DiscoveryAnswer = ({ message, usingForAgent }: DiscoveryAnswerProps) => {
+export const DiscoveryAnswer = ({ message, viewType }: DiscoveryAnswerProps) => {
   if (
     !message.message ||
     message.message_type !== 'EVENT' ||
@@ -26,8 +27,8 @@ export const DiscoveryAnswer = ({ message, usingForAgent }: DiscoveryAnswerProps
 
   return (
     <CommonDiscoveryAnswer
-      timestamp={message.timestamp}
-      usingForAgent={usingForAgent}
+      message={message}
+      viewType={viewType}
       question={question}
       responses={responses}
       answerType={answerType}

@@ -13,8 +13,10 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
 import FormArtifact from '../layout/FormArtifact';
+import { ViewType } from '@meaku/core/types/common';
 
 interface Props {
+  viewType: ViewType;
   artifactType: string | undefined;
   artifactContent: ArtifactContentWithMetadataProps;
   activeArtifactId: string;
@@ -24,8 +26,7 @@ interface Props {
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   onSlideItemClick: (title: string) => void;
-  isQualificationFormArtifact: boolean;
-  usingForAgent: boolean;
+  isQualificationFormArtifact?: boolean;
 }
 
 export const ArtifactContentUi = ({
@@ -39,7 +40,7 @@ export const ArtifactContentUi = ({
   setIsArtifactPlaying,
   onSlideItemClick,
   isQualificationFormArtifact,
-  usingForAgent,
+  viewType,
 }: Props) => {
   if (!artifactType || !artifactContent) {
     return null;
@@ -103,7 +104,7 @@ export const ArtifactContentUi = ({
             artifact={artifactContent as FormArtifactContent}
             artifactMetadata={artifactContent.metadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}
-            usingForAgent={usingForAgent}
+            viewType={viewType}
           />
         );
       }

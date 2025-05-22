@@ -1,104 +1,75 @@
-import { useQueryOptions } from '../../hooks/useQueryOptions';
-import useConversationDetailsDataQuery from '../../queries/query/useConversationDetailsDataQuery';
-import ConversationDetailsDataResponseManager from '../../managers/ConversationDetailsDataManager';
-import { useEffect, useMemo } from 'react';
-import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import ArtifactContainer from '@breakout/design-system/components/Artifact/ArtifactContainer';
 import { cn } from '@breakout/design-system/lib/cn';
+import { ViewType } from '@meaku/core/types/common';
+import { LoaderCircle } from 'lucide-react';
+import { useMessageStore } from '../../hooks/useMessageStore';
+import { useGetArtifactLoadingState } from '../../hooks/useGetArtifactLoadingState';
+import useArtifactStore from '@meaku/core/stores/useArtifactStore';
+import { useSetArtifactOnNewMessage } from '../../hooks/useSetArtifactOnNewMessage';
 
-const JoinConversationChatArea = ({ sessionID }: { sessionID: string }) => {
-  const {
-    chatHistory,
-    conversation,
-    feedbackData,
-    handleSetConversationDetails,
-    handleSetChatHistoryDetails,
-    handleSetFeedbackDetails,
-  } = useConversationDetails();
-  const queryOptions = useQueryOptions();
+interface JoinConversationChatAreaProps {
+  sessionId: string;
+  isLoading?: boolean;
+}
 
-  const { data, isLoading, isError } = useConversationDetailsDataQuery({
-    sessionID: sessionID || '',
-    queryOptions,
-  });
-
-  const detailsManager = useMemo(() => {
-    if (!data) return null;
-
-    return new ConversationDetailsDataResponseManager(data);
-  }, [data]);
-
-  // Fetch and process conversation details when session ID changes or when loading state changes.
-  useEffect(() => {
-    if (!detailsManager || isLoading) return;
-
-    try {
-      const chatHistoryMessages = detailsManager.getFormattedChatHistory();
-      handleSetChatHistoryDetails(chatHistoryMessages);
-
-      const conversationData = detailsManager.getFormattedConversationData() ?? {};
-      handleSetConversationDetails(conversationData);
-
-      const feedbackData = detailsManager.getFeedback();
-      handleSetFeedbackDetails(feedbackData);
-    } catch (error) {
-      console.error('Error while processing conversation details', error);
-    }
-
-    return () => {
-      // Cleanup code here
-      handleSetConversationDetails(null);
-      handleSetChatHistoryDetails([]);
-      handleSetFeedbackDetails([]);
-    };
-  }, [isLoading]);
-
-  if (isError) {
-    // TODO: track this error
-    console.error('Error while fetching conversation details');
-    // return null;
-  }
+const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
-  // const nonDemoFlow = true;
+  const { messages } = useMessageStore();
+
+  const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
+  const { hasGeneratingArtifactEvents } = useGetArtifactLoadingState();
+  useSetArtifactOnNewMessage();
+
+  if (isLoading) {
+    return (
+      <div className="flex w-full grow grow items-center justify-center overflow-hidden rounded-2xl border border-gray-200">
+        <div className="animate-spin text-customSecondaryText">
+          <LoaderCircle size={36} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-full w-full rounded-2xl border border-gray-200">
+    <div className="w-full grow overflow-hidden rounded-2xl border border-gray-200">
       <div className={cn('flex h-full w-full flex-1 gap-2 overflow-hidden')}>
-        {chatHistory?.length && conversation?.session_id ? (
+        {messages?.length ? (
           <AgentMessages
-            usingForAgent={true}
-            sessionId={conversation?.session_id}
-            isAMessageBeingProcessed={true}
-            setActiveArtifact={() => {}}
+            viewType={ViewType.ADMIN}
+            sessionId={sessionId}
+            isAMessageBeingProcessed={false}
+            setActiveArtifact={setActiveArtifact}
             setDemoPlayingStatus={() => {}}
             orbState={OrbStatusEnum.idle}
-            messages={chatHistory}
+            messages={messages}
             showRightPanel={true}
             handleSendUserMessage={() => {}}
             initialSuggestedQuestions={[]}
-            allowFullWidthForText={true}
+            allowFullWidthForText={false}
             showDemoPreQuestions={false}
             primaryColor={'rgb(var(--primary))'}
             logoURL={logoURL}
-            allowFeedback={true}
-            feedbackData={feedbackData}
+            allowFeedback={false}
             orbLogoUrl={''}
             showOrbFromConfig={true}
-            lastMessageResponseId={chatHistory[chatHistory.length - 1].response_id}
+            lastMessageResponseId={messages[messages.length - 1].response_id}
             invertTextColor={false}
           />
         ) : (
           <p className="mt-20 w-full text-center text-2xl font-semibold">There is no log for this session.</p>
         )}
-        {/* Right Side Artifact Container */}
+
         <ArtifactContainer
           logoURL={logoURL}
           isMediaTakingFullWidth={true}
           handleSendMessage={() => {}}
           onSlideItemClick={() => {}}
-          messages={chatHistory}
+          messages={messages}
+          viewType={ViewType.ADMIN}
+          isGeneratingArtifact={hasGeneratingArtifactEvents}
         />
       </div>
     </div>

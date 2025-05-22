@@ -1,11 +1,12 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { postResponseFeedback } from '../../http/api';
 import { FeedbackRequestPayload } from '../../types/api/feedback_request';
+import { ViewType } from '../../types';
 
 type ResponseFeedbackResult = ReturnType<typeof postResponseFeedback> extends Promise<infer T> ? T : never;
 
 type ResponseFeedbackVariables = {
-  usingForAgent: boolean;
+  viewType: ViewType;
   sessionId: string;
   payload: FeedbackRequestPayload;
 };
@@ -15,8 +16,8 @@ const useResponseFeedback = (
 ) => {
   const mutation = useMutation({
     mutationKey: ['post-response-feedback'],
-    mutationFn: async ({ usingForAgent, sessionId, payload }: ResponseFeedbackVariables) => {
-      const response = await postResponseFeedback(sessionId, payload, usingForAgent);
+    mutationFn: async ({ viewType, sessionId, payload }: ResponseFeedbackVariables) => {
+      const response = await postResponseFeedback(sessionId, payload, viewType);
 
       return response.data;
     },

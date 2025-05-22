@@ -17,6 +17,7 @@ import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
+import { AdminConversationJoinStatus, MessageSenderRole } from '@meaku/core/types/common';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -49,8 +50,11 @@ const useWebSocketChat = () => {
 
   const handleAddUserMessage = useMessageStore((state) => state.handleAddUserMessage);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
+  const handleAddAdminMessage = useMessageStore((state) => state.handleAddAdminMessage);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const adminJoinStatus = useMessageStore((state) => state.adminJoinStatus);
+  const setAdminJoinStatus = useMessageStore((state) => state.setAdminJoinStatus);
   const { isMessageComplete } = useLatestMessageComplete();
 
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
@@ -62,7 +66,7 @@ const useWebSocketChat = () => {
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
   const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
-  const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}` : '';
+  const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}&session_id=${sessionId}` : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
     wsUrl,
@@ -178,10 +182,13 @@ const useWebSocketChat = () => {
         messageQueue.current.push(payload);
       } else {
         handleAddUserMessage(payload);
-        setIsAMessageBeingProcessed(true);
         sendMessage(JSON.stringify(payload));
-        handleAnimatedOrb(response_id);
         resetInactivityTimer();
+
+        if (adminJoinStatus !== AdminConversationJoinStatus.JOINED) {
+          setIsAMessageBeingProcessed(true);
+          handleAnimatedOrb(response_id);
+        }
       }
     },
     [readyState, sessionId, isAMessageBeingProcessed],
@@ -219,9 +226,21 @@ const useWebSocketChat = () => {
         }
       }
 
-      handleUpdateOrbState(OrbStatusEnum.responding);
+      if (response.role === MessageSenderRole.AI) {
+        handleUpdateOrbState(OrbStatusEnum.responding);
+        handleAddAIMessage(response);
+      } else if (
+        response.role === MessageSenderRole.ADMIN &&
+        response.message_type === 'EVENT' &&
+        response.message.event_type === 'JOIN_SESSION'
+      ) {
+        setAdminJoinStatus(AdminConversationJoinStatus.JOINED);
+        handleAddAdminMessage(response);
+      } else if (response.role === MessageSenderRole.ADMIN) {
+        handleAddAdminMessage(response);
+      }
+
       setIsAMessageBeingProcessed(false);
-      handleAddAIMessage(response);
     } catch (error) {
       trackError(error, {
         action: 'useEffect | handleAddAIMessage',

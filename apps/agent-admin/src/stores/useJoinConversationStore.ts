@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 import { ActiveConversation } from '../context/ActiveConversationsContext';
-
-export enum JoinConversationStatus {
-  PENDING = 'PENDING',
-  JOINED = 'JOINED',
-  DENIED = 'DENIED',
-  EXIT = 'EXIT',
-}
+import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 
 interface JoinConversationState {
   currentConversation: ActiveConversation | null;
@@ -15,8 +9,8 @@ interface JoinConversationState {
   setAdminDisplayName: (displayName: string) => void;
   adminJobTitle: string;
   setAdminJobTitle: (displayName: string) => void;
-  sessionsStatus: Record<string, JoinConversationStatus>;
-  updateSessionStatus: (session: string, status: JoinConversationStatus) => void;
+  sessionsStatus: Record<string, AdminConversationJoinStatus>;
+  updateSessionStatus: (session: string, status: AdminConversationJoinStatus) => void;
 }
 
 const useJoinConversationStore = create<JoinConversationState>((set) => ({
@@ -27,18 +21,14 @@ const useJoinConversationStore = create<JoinConversationState>((set) => ({
   adminJobTitle: '',
   setAdminJobTitle: (jobTitle) => set({ adminJobTitle: jobTitle }),
   sessionsStatus: {},
-  updateSessionStatus: (sessionId: string, status: JoinConversationStatus) => {
+  updateSessionStatus: (sessionId: string, status: AdminConversationJoinStatus) => {
     set((state) => {
-      if (!state.sessionsStatus[sessionId]) {
-        return {
-          sessionsStatus: {
-            ...state.sessionsStatus,
-            [sessionId]: status,
-          },
-        };
-      }
-
-      return { sessionsStatus: state.sessionsStatus };
+      return {
+        sessionsStatus: {
+          ...state.sessionsStatus,
+          [sessionId]: status,
+        },
+      };
     });
   },
 }));

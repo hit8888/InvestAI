@@ -14,16 +14,17 @@ import { FormArtifactContent, FormArtifactMetadataType } from '@meaku/core/types
 import FormFilledThankYouContent from './FormFilledThankYouContent';
 import { createFormSchema } from '../../utils/chat';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IFormProps {
   artifactId?: string;
   artifact?: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
-  usingForAgent?: boolean;
+  viewType: ViewType;
 }
 
-const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage, usingForAgent }: IFormProps) => {
+const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage, viewType }: IFormProps) => {
   const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
@@ -44,7 +45,13 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
     mode: 'onTouched',
   });
 
+  const formDisabled = viewType !== ViewType.USER;
+
   function onSubmit(values: FormSchemaType) {
+    if (formDisabled) {
+      return;
+    }
+
     const response_data = {
       artifact_id: artifactId ?? '',
       form_data: values,
@@ -75,7 +82,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
   const isSubmitBtnDisabled = !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled;
 
   const submitButtonRef = useElementScrollIntoView<HTMLButtonElement>({
-    shouldScroll: isSubmitBtnDisabled && usingForAgent,
+    shouldScroll: (isSubmitBtnDisabled && viewType === ViewType.USER) || viewType === ViewType.ADMIN,
     delay: 0,
   });
 
@@ -104,7 +111,12 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
               ))}
             </div>
             <div className="flex justify-end">
-              <Button ref={submitButtonRef} type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
+              <Button
+                ref={submitButtonRef}
+                type="submit"
+                disabled={formDisabled || isSubmitBtnDisabled}
+                data-testid="submit-form-btn"
+              >
                 Submit
               </Button>
             </div>

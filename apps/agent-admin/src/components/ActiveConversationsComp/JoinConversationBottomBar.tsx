@@ -1,30 +1,31 @@
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
-import { WebSocketTextMessage } from '../../hooks/useJoinConversationWebSocket';
-import { JoinConversationStatus } from '../../stores/useJoinConversationStore';
+import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import AdminChatInput from './AdminChatInput';
 import JoinConversationButton from './JoinConversationButton';
 
 type JoinConversationBottomBarProps = {
-  sessionStatus: JoinConversationStatus;
-  onSendMessage: (message: WebSocketTextMessage) => void;
+  sessionStatus: AdminConversationJoinStatus;
   onJoinButtonClick: () => void;
+  onSendMessage: (message: string) => void;
+  onAIResponseGenerationRequest: () => void;
 };
 
 const JoinConversationBottomBar = ({
   sessionStatus,
-  onSendMessage,
   onJoinButtonClick,
+  onSendMessage,
+  onAIResponseGenerationRequest,
 }: JoinConversationBottomBarProps) => {
-  const renderContent = (sessionStatus: JoinConversationStatus) => {
+  const renderContent = (sessionStatus: AdminConversationJoinStatus) => {
     switch (sessionStatus) {
-      case JoinConversationStatus.PENDING:
+      case AdminConversationJoinStatus.PENDING:
         return <PendingJoinConversation />;
-      case JoinConversationStatus.JOINED:
-        return <AdminChatInput onSendMessage={onSendMessage} />;
-      case JoinConversationStatus.DENIED:
+      case AdminConversationJoinStatus.JOINED:
+        return (
+          <AdminChatInput onSendMessage={onSendMessage} onAIResponseGenerationRequest={onAIResponseGenerationRequest} />
+        );
+      case AdminConversationJoinStatus.DENIED:
         return <JoinConversationDenied />;
-      case JoinConversationStatus.EXIT:
-        return null;
       default:
         return <JoinConversationButton onJoinConversationClick={onJoinButtonClick} />;
     }

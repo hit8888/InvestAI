@@ -9,18 +9,19 @@ import { ReactNode } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import TextBasedDiscoveryQuestion from './TextBasedDiscoveryQuestion';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   message: WebSocketMessage;
   isLastMessage?: boolean;
   onSubmit: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
-  usingForAgent: boolean;
+  viewType: ViewType;
 }
 
-export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit, usingForAgent }: IProps) {
+export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit, viewType }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: usingForAgent && isLastMessage,
+    shouldScroll: viewType === ViewType.USER || (viewType === ViewType.ADMIN && isLastMessage),
   });
 
   // TODO: Block of code (Line 29-39) is a duplicate of the Code Block (Line 81 - 91)  below.
@@ -43,7 +44,7 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
       question,
       response_options,
     });
-  }, [message.message, message.message_type]);
+  }, [message.message, message.message_type, trackAgentbotEvent]);
 
   const sendEvent = (eventData: EventData) => {
     onSubmit({
@@ -101,8 +102,8 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
       case SINGLE_SELECT:
         content = (
           <SingleSelectQuestion
-            timestamp={message.timestamp}
-            usingForAgent={usingForAgent}
+            message={message}
+            viewType={viewType}
             question={question}
             response_options={response_options}
             onSelect={(option) => handleSingleSelectSubmit(question, option)}
@@ -112,8 +113,8 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
       case MULTI_SELECT:
         content = (
           <MultiSelectQuestion
-            timestamp={message.timestamp}
-            usingForAgent={usingForAgent}
+            message={message}
+            viewType={viewType}
             question={question}
             response_options={response_options}
             onSubmit={(responses) => handleMultiSelectSubmit(question, responses)}

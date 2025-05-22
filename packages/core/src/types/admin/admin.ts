@@ -1,24 +1,25 @@
-import { z } from "zod";
-import { 
-    TableDataSchema,
-    LeadsTableViewSchema,
-    ConversationsTableViewSchema,
-    LocationWithCityCountrySchema,
-    TransformedProspectAndCompanyDetailsSchema, 
-} from "./admin-table";
-import { 
-    LeadResultSchema, 
-    PaginationDataSchema, 
-    ProspectDetailsSchema,
-    AdditionalInfoSchema,
-    CompanyDetailsSchema,
-    LeadsTableResponseSchema, 
-    ConversationDetailsResponseSchema,
-    ConversationFunnelResponseSchema,
-    ConversationsResponseResultSchema, 
-    ConversationsTableResponseSchema, 
-} from "./api";
-import { CONVERSATIONS_PAGE, LEADS_PAGE } from "../../utils";
+import { z } from 'zod';
+import {
+  TableDataSchema,
+  LeadsTableViewSchema,
+  ConversationsTableViewSchema,
+  LocationWithCityCountrySchema,
+  TransformedProspectAndCompanyDetailsSchema,
+} from './admin-table';
+import {
+  LeadResultSchema,
+  PaginationDataSchema,
+  ProspectDetailsSchema,
+  AdditionalInfoSchema,
+  CompanyDetailsSchema,
+  LeadsTableResponseSchema,
+  ConversationDetailsResponseSchema,
+  ConversationFunnelResponseSchema,
+  ConversationsResponseResultSchema,
+  ConversationsTableResponseSchema,
+  ActiveConversationDetailsResponseSchema,
+} from './api';
+import { CONVERSATIONS_PAGE, LEADS_PAGE } from '../../utils';
 
 export type CONVERSATIONS_PAGE_TYPE = typeof CONVERSATIONS_PAGE;
 export type LEADS_PAGE_TYPE = typeof LEADS_PAGE;
@@ -40,6 +41,7 @@ export type ConversationsTableResponse = z.infer<typeof ConversationsTableRespon
 
 export type ConversationsFunnelDataResponse = z.infer<typeof ConversationFunnelResponseSchema>;
 export type ConversationDetailsDataResponse = z.infer<typeof ConversationDetailsResponseSchema>;
+export type ActiveConversationDetailsDataResponse = z.infer<typeof ActiveConversationDetailsResponseSchema>;
 
 export type ProspectDetails = z.infer<typeof ProspectDetailsSchema>;
 export type CompanyDetails = z.infer<typeof CompanyDetailsSchema>;

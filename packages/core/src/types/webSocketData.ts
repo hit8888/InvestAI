@@ -242,13 +242,31 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       form_data: z.record(z.string(), z.any()),
     }),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('JOIN_SESSION'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('ADMIN_RESPONSE'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('RESPONSE_SUGGESTIONS'),
+    event_data: z.object({
+      query: z.string().optional(),
+      suggestions: z.array(z.string()).optional(),
+    }),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
   .object({
     session_id: z.string(),
     response_id: z.string(),
-    role: z.enum(['user', 'ai']),
+    role: z.enum(['ai', 'admin', 'user']),
     actor: ActorSchema.optional(),
     documents: z.array(DataSourceSchema).optional().nullable(),
     timestamp: z.string(),

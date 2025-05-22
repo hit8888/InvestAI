@@ -1,50 +1,71 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useState } from 'react';
-import AICopilotInsideInputBar from './AICopilotInsideInputBar';
+import { useEffect, useState } from 'react';
 import TextArea from '@breakout/design-system/components/layout/textarea';
-import { WebSocketTextMessage } from '../../hooks/useJoinConversationWebSocket';
+import ActiveConvJoinAICopilotIcon from '@breakout/design-system/components/icons/join-conv-aicopilot-icon';
+import { useMessageStore } from '../../hooks/useMessageStore';
 
 type AdminChatInputProps = {
-  onSendMessage: (message: WebSocketTextMessage) => void;
+  onSendMessage: (message: string) => void;
+  onAIResponseGenerationRequest: () => void;
 };
 
-const AdminChatInput = ({ onSendMessage }: AdminChatInputProps) => {
+const AdminChatInput = ({ onSendMessage, onAIResponseGenerationRequest }: AdminChatInputProps) => {
   const [inputValue, setInputValue] = useState('');
+  const aiSuggestionMessage = useMessageStore((state) => state.aiSuggestionMessage);
+
+  useEffect(() => {
+    if (aiSuggestionMessage) {
+      setInputValue(aiSuggestionMessage);
+    }
+  }, [aiSuggestionMessage]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleClickOnAIResponseMessage = (value: string) => {
-    setInputValue(value);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const isShiftKeyPressed = event.shiftKey;
+    const isEnterKeyPressed = event.key === 'Enter' || event.key === 'Return';
+
+    if (!isShiftKeyPressed && isEnterKeyPressed) {
+      event.preventDefault();
+      handleFormSubmission();
+    }
   };
 
-  const handleFormSubmission = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleFormSubmission = () => {
     const trimmedInputValue = inputValue.trim();
 
     if (trimmedInputValue.length <= 0) return;
 
-    onSendMessage({ message: { content: trimmedInputValue }, message_type: 'TEXT' });
+    onSendMessage(trimmedInputValue);
     setInputValue('');
   };
 
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleFormSubmission();
+  };
+
   return (
-    <div className="flex w-full items-center gap-2">
-      <AICopilotInsideInputBar handleClickOnAIResponseMessage={handleClickOnAIResponseMessage} />
-      <form onSubmit={handleFormSubmission} className="flex w-full items-center gap-3">
+    <div className="flex w-full items-center">
+      <div className="cursor-pointer px-2 py-1" onClick={onAIResponseGenerationRequest}>
+        <ActiveConvJoinAICopilotIcon className="h-6 w-5" />
+      </div>
+
+      <form onSubmit={onSubmit} className="flex w-full items-center gap-3">
         <TextArea
+          autoFocus={true}
+          initialHeight={36}
           className={cn(
-            `flex w-full items-center border-none bg-transparent px-2 py-0
+            `flex w-full items-center border-none bg-transparent p-2
             placeholder:text-gray-400 focus:border-none focus:outline-none focus:ring-0`,
-            {
-              'max-h-20': inputValue,
-            },
           )}
           placeholder="Type your message here..."
           value={inputValue}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
         />
         {inputValue && (
           <button

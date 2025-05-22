@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -6,16 +6,19 @@ import Orb from '@breakout/design-system/components/Orb/index';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { getMessageTimestamp } from '@meaku/core/utils/index';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import UserMessageChatTail from '../icons/user-message-chat-tail';
-import Typography from '../Typography';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
+import { checkIsAIMessage, getMessageViewType } from '@meaku/core/utils/messageUtils';
+import ChatMessageTail from './ChatMessageTail';
+import ChatMessageTimestamp from './ChatMessageTimestamp';
+import ChatMessageSender from './ChatMessageSender';
+import { getChatMessageClass, getChatTextMessageContainerClass } from './messageUtils';
+
 interface TextMessageProps {
   message: WebSocketMessage;
-  isAiMessage: boolean;
-  usingForAgent: boolean;
+  viewType: ViewType;
   isLastQuestionResponse: boolean;
   orbState: OrbStatusEnum;
   primaryColor: string | null;
@@ -25,19 +28,22 @@ interface TextMessageProps {
   orbLogoUrl: string | undefined | null;
 }
 
-const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => {
-  const { href, ...rest } = props;
-  return <a className="text-blue_sec-1000" href={href} {...rest} target="_blank" rel="noreferrer" />;
-};
+const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => (
+  <a className="text-blue_sec-1000" {...props} target="_blank" rel="noreferrer" />
+);
 
-const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => {
-  return <strong className="text-primary-textColor" {...props} />;
+const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => (
+  <strong className="text-primary-textColor" {...props} />
+);
+
+const reactMarkdownComponents: Partial<Components> = {
+  a: MessageLink,
+  strong: MessageStrong,
 };
 
 const TextMessage: React.FC<TextMessageProps> = ({
   message,
-  isAiMessage,
-  usingForAgent,
+  viewType,
   isLastQuestionResponse,
   orbState,
   primaryColor,
@@ -47,26 +53,18 @@ const TextMessage: React.FC<TextMessageProps> = ({
   showOrbFromConfig,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const inactivityMessageRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: isCurrentMsgUserInactiveMessage && isLastQuestionResponse,
+  const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll:
+      (isCurrentMsgUserInactiveMessage && isLastQuestionResponse) || message.role === MessageSenderRole.ADMIN,
   });
-  const [isSingleLineMessage, setIsSingleLineMessage] = useState(false);
-  const messageRef = useRef<HTMLDivElement>(null);
 
-  const conditionSpecificForDashboard = !usingForAgent && !isAiMessage;
-  const timestamp = message?.timestamp;
-  const formattedTimestamp = getMessageTimestamp(timestamp);
-
-  const reactMarkdownComponents: Partial<Components> = {
-    a: MessageLink,
-    strong: MessageStrong,
-  };
+  const isAIMessage = checkIsAIMessage(message);
+  const messageViewType = getMessageViewType(message.role as MessageSenderRole, viewType);
 
   const handleMessageClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
-    const isLink = target.tagName === 'A';
 
-    if (isLink && isAiMessage) {
+    if (target.tagName === 'A' && isAIMessage) {
       trackAgentbotEvent(ANALYTICS_EVENT_NAMES.LINK_CLICKED_INSIDE_MESSAGE, {
         link: (target as HTMLAnchorElement).href,
         message: message.message,
@@ -74,76 +72,55 @@ const TextMessage: React.FC<TextMessageProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (messageRef.current) {
-      const lineHeight = parseFloat(getComputedStyle(messageRef.current).lineHeight);
-      const height = messageRef.current.scrollHeight;
+  const renderOrb = () =>
+    shouldShowActiveOrb && (
+      <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+    );
 
-      if (isSingleLineMessage === height <= lineHeight) return;
-
-      setIsSingleLineMessage(height <= lineHeight);
+  const renderMessageContent = () => {
+    if (message.message_type === 'LOADING_TEXT') {
+      return (
+        <div className="flex h-8 items-center">
+          <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
+        </div>
+      );
     }
-  }, [message.message, isSingleLineMessage]);
+
+    return (
+      <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
+        {message.message.content}
+      </ReactMarkdown>
+    );
+  };
 
   return (
     <div
-      ref={inactivityMessageRef}
-      className={cn('flex items-center', {
-        'ml-16 justify-end py-4 pr-2': !isAiMessage,
-        'flex-col items-end': conditionSpecificForDashboard,
-      })}
+      ref={scrollToMessageRef}
+      className={cn('flex items-center', getChatTextMessageContainerClass(messageViewType))}
     >
-      {conditionSpecificForDashboard ? (
-        <Typography
-          variant="caption-12-medium"
-          align="right"
-          textColor="gray500"
-          className="w-full self-stretch pb-2 pr-2"
-        >
-          User
-        </Typography>
-      ) : null}
       <div
-        className={cn('relative max-w-full', {
-          'rounded-2xl bg-transparent_gray_6 px-4 py-2': !isAiMessage,
-          'flex gap-4 py-4 pl-0': isAiMessage && isLastQuestionResponse,
-          'flex gap-7 p-4 pl-0': isAiMessage && !isLastQuestionResponse,
-          'pl-11': !shouldShowActiveOrb && isAiMessage,
+        className={cn('relative max-w-full rounded-2xl px-4 py-2', getChatMessageClass(messageViewType), {
+          'flex gap-4 py-4 pl-0': isAIMessage && isLastQuestionResponse,
+          'flex gap-7 p-4 pl-0': isAIMessage && !isLastQuestionResponse,
+          'pl-11': isAIMessage && !shouldShowActiveOrb,
         })}
       >
-        {(isAiMessage || message.message_type === 'LOADING_TEXT') && (
-          <>
-            {shouldShowActiveOrb && (
-              <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
-            )}
-          </>
-        )}
+        <ChatMessageSender messageViewType={messageViewType} role={message.role} />
+
+        {(isAIMessage || message.message_type === 'LOADING_TEXT') && renderOrb()}
 
         <div className="flex-col">
           <div
             className={cn('prose max-w-full flex-1 text-base text-customPrimaryText', {
-              'leading-snug': isAiMessage,
+              'leading-snug': isAIMessage,
             })}
-            ref={messageRef}
             onClick={handleMessageClick}
           >
-            {message.message_type === 'LOADING_TEXT' ? (
-              <div className="flex h-8 items-center">
-                <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
-              </div>
-            ) : (
-              <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
-                {message.message.content}
-              </ReactMarkdown>
-            )}
-            {conditionSpecificForDashboard ? (
-              <Typography variant="caption-12-medium" align="right" textColor="gray400" className="!-mt-4 w-full">
-                {formattedTimestamp}
-              </Typography>
-            ) : null}
+            {renderMessageContent()}
+            <ChatMessageTimestamp messageViewType={messageViewType} timestamp={message.timestamp} />
           </div>
         </div>
-        {!isAiMessage && <UserMessageChatTail />}
+        <ChatMessageTail messageViewType={messageViewType} />
       </div>
     </div>
   );

@@ -1,15 +1,19 @@
 import { Checkbox } from '../../Checkbox';
 import { OptionType } from './types';
 
+interface MultiSelectOptionCheckboxProps {
+  option: OptionType;
+  isSelected: boolean;
+  isDisabled?: boolean;
+  onCheckboxToggle: (option: OptionType, isSelected: boolean) => void;
+}
+
 export const MultiSelectOptionCheckbox = ({
   option,
   isSelected,
+  isDisabled,
   onCheckboxToggle,
-}: {
-  option: OptionType;
-  isSelected: boolean;
-  onCheckboxToggle: (option: OptionType, isSelected: boolean) => void;
-}) => {
+}: MultiSelectOptionCheckboxProps) => {
   const labelClassNames = isSelected ? 'border-gray-400 ring-4 ring-gray-200' : '';
   const checkBoxClassNames = isSelected ? '' : 'border-gray-400';
 
@@ -21,6 +25,7 @@ export const MultiSelectOptionCheckbox = ({
         checked={isSelected}
         className={`flex h-4 w-4 items-center justify-center border-gray-900 hover:border-gray-900 ${checkBoxClassNames}`}
         onCheckedChange={() => onCheckboxToggle(option, !isSelected)}
+        disabled={isDisabled}
       />
       <span className="ml-2 text-sm font-medium text-customPrimaryText">{option.value}</span>
     </label>

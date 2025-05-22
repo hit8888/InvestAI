@@ -5,12 +5,12 @@ import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { DemoPlayingStatus, MessageSenderRole, ViewType } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import { messagesGroupedByResponseIdAndTimestamp, shouldMessageScrollToTop } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
-  usingForAgent?: boolean;
+  viewType: ViewType;
   messages: WebSocketMessage[];
   sessionId: string;
   orbState: OrbStatusEnum;
@@ -26,7 +26,7 @@ interface IProps {
   primaryColor: string | null;
   logoURL: string | null;
   allowFeedback: boolean;
-  feedbackData: FeedbackRequestPayload[];
+  feedbackData?: FeedbackRequestPayload[];
   lastMessageResponseId: string;
   orbLogoUrl: string | undefined | null;
   showOrbFromConfig: boolean;
@@ -34,7 +34,7 @@ interface IProps {
 }
 
 const AgentMessages = ({
-  usingForAgent = true,
+  viewType,
   messages,
   sessionId,
   orbState,
@@ -78,10 +78,16 @@ const AgentMessages = ({
   };
 
   useEffect(() => {
-    if (currentMessageScrollToTop.current && usingForAgent) {
+    const lastMessage = messages[messages.length - 1];
+
+    if (
+      lastMessage?.role === MessageSenderRole.AI &&
+      currentMessageScrollToTop.current &&
+      (viewType === ViewType.USER || viewType === ViewType.ADMIN)
+    ) {
       handleScrollToBottom();
     }
-  }, [currentMessageScrollToTop.current, usingForAgent, messages.length]);
+  }, [viewType, messages]);
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
 
@@ -89,13 +95,13 @@ const AgentMessages = ({
 
   return (
     <div
-      className={cn('w-[35%] overflow-y-auto', {
+      className={cn('w-[35%] shrink-0 overflow-y-auto', {
         'w-full': !showRightPanel,
       })}
       onWheel={(e) => e.stopPropagation()}
       style={{
         height: '100%',
-        overflow: usingForAgent ? 'hidden' : 'auto',
+        overflow: viewType === ViewType.USER ? 'hidden' : 'auto',
       }}
     >
       <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2">
@@ -111,7 +117,7 @@ const AgentMessages = ({
                 <MessageItem
                   isAMessageBeingProcessed={isAMessageBeingProcessed}
                   logoURL={logoURL}
-                  usingForAgent={usingForAgent}
+                  viewType={viewType}
                   sessionId={sessionId}
                   primaryColor={primaryColor}
                   message={message}
@@ -122,7 +128,7 @@ const AgentMessages = ({
                   setDemoPlayingStatus={setDemoPlayingStatus}
                   handleSendUserMessage={handleSendUserMessage}
                   allowFeedback={allowFeedback}
-                  initialFeedback={feedbackData.find((feedback) => feedback.response_id === message.response_id)}
+                  initialFeedback={feedbackData?.find((feedback) => feedback.response_id === message.response_id)}
                   lastMessageResponseId={lastMessageResponseId}
                   messages={messagesSortedByResponseIdAndTimestamp}
                   orbLogoUrl={orbLogoUrl}

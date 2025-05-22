@@ -32,6 +32,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import SuccessToastMessage from './SuccessToastMessage';
 import toast from 'react-hot-toast';
+import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   sessionId: string;
@@ -40,7 +41,7 @@ interface IProps {
   onAddFeedback: (feedback: Partial<FeedbackRequestPayload>) => void;
   onRemoveFeedback: () => void;
   invertTextColor: boolean;
-  usingForAgent: boolean;
+  viewType: ViewType;
 }
 
 const MessageFeedback = ({
@@ -50,7 +51,7 @@ const MessageFeedback = ({
   onAddFeedback,
   onRemoveFeedback,
   invertTextColor,
-  usingForAgent,
+  viewType,
 }: IProps) => {
   const [isFeedbackThumbUp, setIsFeedbackThumbUp] = useState(Boolean(feedback?.positive_feedback === true));
   const [isFeedbackThumbDown, setIsFeedbackThumbDown] = useState(Boolean(feedback?.positive_feedback === false));
@@ -158,7 +159,7 @@ const MessageFeedback = ({
     });
 
     await handlePostResponseFeedback({
-      usingForAgent,
+      viewType,
       sessionId,
       payload: {
         response_id: message.response_id.toString(),

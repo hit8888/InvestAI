@@ -1,4 +1,4 @@
-const UserMessageChatTail = () => {
+const RightMessageChatTail = () => {
   return (
     <svg
       className="absolute -right-1.5 bottom-0"
@@ -19,4 +19,4 @@ const UserMessageChatTail = () => {
   );
 };
 
-export default UserMessageChatTail;
+export default RightMessageChatTail;

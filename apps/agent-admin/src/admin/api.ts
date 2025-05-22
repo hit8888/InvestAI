@@ -50,6 +50,11 @@ export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/a
 export const getConversationDetailsData = (sessionId: string) =>
   adminApiClient.get(`tenant/api/conversations/${sessionId}/?fetch_all=true`);
 
+export const getActiveConversationDetailsData = (sessionId: string, queryParams?: Record<string, string>) => {
+  const queryParamsStr = queryParams ? new URLSearchParams(queryParams).toString() : '';
+  return adminApiClient.get(`tenant/api/session/${sessionId}/details/?${queryParamsStr}`);
+};
+
 export const getFilterPreferences = async (tableName: string) => {
   return adminApiClient.get(`/tenant/api/filter-preferences/?table_name=${tableName}`);
 };

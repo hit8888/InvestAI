@@ -23,7 +23,7 @@ const SlideArtifact = ({ artifact: { items, sub_title, title }, logoURL, onItemC
           <ArtifactWhiteBgEllipse />
 
           <div
-            className="relative z-50 h-full w-full origin-top-left p-2"
+            className="relative z-10 h-full w-full origin-top-left p-2"
             style={{
               transform: `scale(${scale})`,
               minHeight: '900px',

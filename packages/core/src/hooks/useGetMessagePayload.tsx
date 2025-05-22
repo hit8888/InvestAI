@@ -1,5 +1,5 @@
 import { useIsAdmin } from '../contexts/UrlDerivedDataProvider';
-import { WebSocketMessage, BaseMessageContent, EventMessageContent } from '../types';
+import { WebSocketMessage, BaseMessageContent, EventMessageContent, MessageSenderRole } from '../types';
 import useSessionApiResponseManager from './useSessionApiResponseManager';
 
 type MessagePayloadParams = {
@@ -18,7 +18,7 @@ const useGetMessagePayload = () => {
     const basePayload = {
       session_id,
       response_id,
-      role: 'user' as const,
+      role: is_admin ? MessageSenderRole.ADMIN : MessageSenderRole.USER,
       is_admin,
       timestamp: new Date().toISOString(),
       message_type,

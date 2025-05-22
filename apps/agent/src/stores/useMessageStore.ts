@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus, DemoPlayingStatus } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isDiscoveryQuestion, filterOutSuggestions, shouldUpdateMessage } from '@meaku/core/utils/messageUtils';
 
@@ -15,6 +15,10 @@ interface State {
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: WebSocketMessage) => void;
   handleAddUserMessage: (message: WebSocketMessage) => void;
+  adminJoinStatus: AdminConversationJoinStatus;
+  setAdminJoinStatus: (status: AdminConversationJoinStatus) => void;
+  latestAdminMessageResponseId: string;
+  handleAddAdminMessage: (response: WebSocketMessage) => void;
   handleRemoveMessages: (messageIds: string[]) => void;
   hasFirstUserMessageBeenSent: boolean;
   setHasFirstUserMessageBeenSent: (value: boolean) => void;
@@ -78,6 +82,21 @@ export const useMessageStore = create<State>()(
             draft.messages.push(message);
           }
         }),
+      adminJoinStatus: AdminConversationJoinStatus.PENDING,
+      setAdminJoinStatus: (status: AdminConversationJoinStatus) => {
+        set((state) => {
+          state.adminJoinStatus = status;
+        });
+      },
+      latestAdminMessageResponseId: '',
+      handleAddAdminMessage: (message) => {
+        set((state) => {
+          if (message.response_id !== state.latestAdminMessageResponseId) {
+            state.messages.push(message);
+            state.latestAdminMessageResponseId = message.response_id;
+          }
+        });
+      },
       handleAddUserMessage: (message) =>
         set((draft) => {
           // Remove previous suggestions when user sends a message

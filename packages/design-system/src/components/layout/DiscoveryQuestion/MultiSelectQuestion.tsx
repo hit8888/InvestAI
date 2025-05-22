@@ -4,20 +4,22 @@ import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
 import { MultiSelectResponseOption } from './MultiSelectResponseItem';
 import Button from '../../Button';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
+import { ViewType } from '@meaku/core/types/common';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 type MultiSelectQuestionProps = {
+  message: WebSocketMessage;
   question: string;
   response_options: OptionType[];
   onSubmit: (option: OptionType[]) => void;
-  timestamp: string;
-  usingForAgent: boolean;
+  viewType: ViewType;
 };
 export const MultiSelectQuestion = ({
+  message,
   question,
   response_options,
   onSubmit,
-  timestamp,
-  usingForAgent,
+  viewType,
 }: MultiSelectQuestionProps) => {
   const [selectedOptions, setSelectedOptions] = useState<Array<OptionType>>([]);
   const [inputTexts, setInputTexts] = useState<Record<number, OptionType>>({});
@@ -54,8 +56,8 @@ export const MultiSelectQuestion = ({
   if (submitted && responses && responses.length > 0) {
     return (
       <CommonDiscoveryAnswer
-        timestamp={timestamp}
-        usingForAgent={usingForAgent}
+        message={message}
+        viewType={viewType}
         question={question}
         responses={responses}
         answerType={DISCOVERY_QUESTION_ANSWER_TYPE.MULTI_SELECT}
@@ -79,6 +81,7 @@ export const MultiSelectQuestion = ({
             onSelectionChange={handleSelection}
             inputText={inputTexts[index]?.value ?? ''}
             onTextChange={(text: string) => handleTextChange(text, index)}
+            disabled={viewType !== ViewType.USER}
           />
         ))}
 

@@ -12,19 +12,20 @@ import {
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
 import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
+import { ViewType } from '@meaku/core/types/common';
 
 type IProps = {
   logoURL: string;
-  usingForAgent?: boolean;
   isMediaTakingFullWidth: boolean;
+  viewType: ViewType;
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   onSlideItemClick: (title: string) => void;
 };
 
 const ArtifactContainer = ({
   logoURL,
-  usingForAgent = true,
   isMediaTakingFullWidth,
+  viewType,
   handleSendMessage,
   onSlideItemClick,
 }: IProps) => {
@@ -111,6 +112,7 @@ const ArtifactContainer = ({
   return (
     <Artifact
       logoURL={logoURL}
+      viewType={viewType}
       isMediaTakingFullWidth={isMediaTakingFullWidth}
       handleSendUserMessage={handleSendMessage}
       handleToggleFullScreen={handleToggleFullScreen}
@@ -120,7 +122,6 @@ const ArtifactContainer = ({
       isGeneratingArtifact={hasGeneratingArtifactEvents}
       artifactContent={artifactContentWithMetadata}
       isQualificationFormArtifact={isQualificationFormArtifact ?? false}
-      usingForAgent={usingForAgent}
     />
   );
 };

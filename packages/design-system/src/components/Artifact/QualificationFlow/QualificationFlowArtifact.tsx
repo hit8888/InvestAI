@@ -19,7 +19,7 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage }: Qualific
     <AspectRatio ratio={16 / 9}>
       <div ref={containerRef} className="relative aspect-video w-full">
         <div
-          className="relative z-50 h-full w-full origin-top-left p-2"
+          className="relative z-10 h-full w-full origin-top-left p-2"
           style={{
             transform: `scale(${scale})`,
             minHeight: '900px',

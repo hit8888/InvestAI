@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
-import useJoinConversationsWebSocket, { SendMessageFn } from '../../hooks/useJoinConversationWebSocket';
-import useJoinConversationStore, { JoinConversationStatus } from '../../stores/useJoinConversationStore';
+import useAdminConversationsWebSocket, { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
+import useJoinConversationStore from '../../stores/useJoinConversationStore';
+import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 
 type WebSocketManagerProps = {
   sessionId: string;
   onWebSocketChange: (sessionId: string, sendMessage: SendMessageFn) => void;
 };
 
-const conversationEnabledStates = [JoinConversationStatus.PENDING, JoinConversationStatus.JOINED];
+const conversationEnabledStates = [AdminConversationJoinStatus.PENDING, AdminConversationJoinStatus.JOINED];
 
 const WebSocketManager = ({ sessionId, onWebSocketChange }: WebSocketManagerProps) => {
   const { sessionsStatus } = useJoinConversationStore();
 
-  const { sendMessage } = useJoinConversationsWebSocket({
+  const { sendMessage } = useAdminConversationsWebSocket({
     sessionId,
     enabled: conversationEnabledStates.includes(sessionsStatus[sessionId]),
   });

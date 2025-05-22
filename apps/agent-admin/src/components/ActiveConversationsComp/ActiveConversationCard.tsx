@@ -12,12 +12,7 @@ const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversatio
   const {
     last_user_message,
     buyer_intent,
-    prospect: {
-      name,
-      company,
-      country,
-      company_demographics: { company_logo_url },
-    },
+    prospect: { name, company, country, company_demographics },
   } = conversation;
 
   const countryFlagUrl = country ? findFlagUrlByCountryName(country) : '';
@@ -43,7 +38,7 @@ const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversatio
             <div className="mt-3 flex flex-wrap gap-2">
               <BuyerIntentChip buyerIntent={buyer_intent} />
               <ChipWithIcon name={country} iconUrl={countryFlagUrl} />
-              <ChipWithIcon name={company} iconUrl={company_logo_url} />
+              <ChipWithIcon name={company} iconUrl={company_demographics?.company_logo_url} />
             </div>
           </div>
         </div>
