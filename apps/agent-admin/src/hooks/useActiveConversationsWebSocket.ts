@@ -58,6 +58,7 @@ const useActiveConversationsWebSocket = () => {
               event_data: {},
               event_type: 'HEARTBEAT',
             },
+            role: MessageSenderRole.ADMIN,
             response_id,
             message_type: 'EVENT',
           }),
