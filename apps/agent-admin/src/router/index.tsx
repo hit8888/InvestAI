@@ -17,6 +17,7 @@ import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
 import InstructionsPage from '../pages/InstructionsPage.tsx';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
+import RedirectGuard from './RedirectGaurd.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -38,7 +39,8 @@ const routes = [
         children: [],
       },
       {
-        path: '/:tenantName',
+        path: '/:tenantName?',
+        element: <RedirectGuard />,
         children: [
           {
             path: 'leads',
