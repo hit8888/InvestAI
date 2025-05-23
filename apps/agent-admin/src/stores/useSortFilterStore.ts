@@ -8,6 +8,22 @@ const InitialSortValues = {
   intentScoreSort: null,
 };
 
+const commonInitialSortValues = {
+  updated_onSort: false, // true means desc, false means asc
+  statusSort: false,
+  data_source_typeSort: false,
+};
+
+const webpagesInitialSortValues = {
+  ...commonInitialSortValues,
+  urlSort: false,
+};
+
+const documentsInitialSortValues = {
+  ...commonInitialSortValues,
+  nameSort: false,
+};
+
 export const useSortFilterStore = create<SortFilterState>((set) => ({
   leads: {
     ...InitialSortValues,
@@ -16,10 +32,10 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
     ...InitialSortValues,
   },
   webpages: {
-    ...InitialSortValues,
+    ...webpagesInitialSortValues,
   },
   documents: {
-    ...InitialSortValues,
+    ...documentsInitialSortValues,
   },
   videos: {
     ...InitialSortValues,

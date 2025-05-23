@@ -33,7 +33,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
 
   if (!totalRecords) {
     return (
-      <p className="w-full text-center text-2xl font-semibold text-gray-900">{`There are no ${isConversationTable ? 'conversations' : 'leads'} yet !!!`}</p>
+      <p className="w-full text-center text-4xl font-semibold text-gray-900">{`${isConversationTable ? 'No conversations yet' : 'Waiting for activity'}`}</p>
     );
   }
 

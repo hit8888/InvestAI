@@ -32,7 +32,7 @@ import {
 import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
-import { SortValues } from '@meaku/core/types/admin/sort';
+import { SortValues, WebpagesSortValues, DocumentsSortValues } from '@meaku/core/types/admin/sort';
 import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
@@ -298,16 +298,74 @@ export const getFilterHeaderLabel = (filterState: string) => {
   }
 };
 
-export const getSortingAppliedValues = (sortState: SortValues, page: string) => {
+export const getSortingAppliedValues = (
+  sortState: SortValues | WebpagesSortValues | DocumentsSortValues,
+  page: string,
+) => {
   const isLeadsPage = page === LEADS_PAGE;
+  const isMainTabPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
+  const isWebpagesPage = page === WEBPAGES_PAGE;
+  const isDocumentsPage = page === DOCUMENTS_PAGE;
   const sortApplied: SortItem[] = [];
-  const { timestampSort, sessionLengthSort, intentScoreSort } = sortState;
-  if (timestampSort) {
+  const { timestampSort, sessionLengthSort, intentScoreSort } = sortState as SortValues;
+  const { updated_onSort, statusSort, data_source_typeSort, urlSort } = sortState as WebpagesSortValues;
+  const {
+    updated_onSort: updated_onSortDocuments,
+    nameSort,
+    data_source_typeSort: data_source_typeSortDocuments,
+    statusSort: statusSortDocuments,
+  } = sortState as DocumentsSortValues;
+  if (isMainTabPage && timestampSort) {
     sortApplied.push({
       field: isLeadsPage ? 'created_on' : 'timestamp',
       order: timestampSort ? (timestampSort === SortByTimestamp.NEWEST_FIRST ? 'desc' : 'asc') : 'desc',
     });
   }
+
+  if (isWebpagesPage) {
+    sortApplied.push({
+      field: 'updated_on',
+      order: updated_onSort ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'status',
+      order: statusSort ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'data_source_type',
+      order: data_source_typeSort ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'url',
+      order: urlSort ? 'desc' : 'asc',
+    });
+  }
+
+  if (isDocumentsPage) {
+    sortApplied.push({
+      field: 'name',
+      order: nameSort ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'status',
+      order: statusSortDocuments ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'data_source_type',
+      order: data_source_typeSortDocuments ? 'desc' : 'asc',
+    });
+
+    sortApplied.push({
+      field: 'updated_on',
+      order: updated_onSortDocuments ? 'desc' : 'asc',
+    });
+  }
+
   if (sessionLengthSort) {
     sortApplied.push({
       field: 'user_message_count',
@@ -448,7 +506,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 
   if (sources.length > 0) {
     filterApplied.push({
-      field: 'data_source_name',
+      field: 'data_source_type',
       value: sources,
       operator: 'in',
     });

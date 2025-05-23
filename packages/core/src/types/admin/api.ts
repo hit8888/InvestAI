@@ -311,7 +311,7 @@ export const DataSourceWebpagesResponseResultSchema = z.object({
   status: z.string(),
   status_display: z.string(),
   data_source: z.number(),
-  data_source_name: z.string(),
+  data_source_type: z.string(),
   page_type: z.string().nullable(),
   page_intent_level: z.string().nullable(),
   created_on: z.string(),

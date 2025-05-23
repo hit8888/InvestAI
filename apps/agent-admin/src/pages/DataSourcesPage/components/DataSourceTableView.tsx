@@ -14,7 +14,9 @@ import { getDataSourcesFormattedColumnsList } from '../utils';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import DataSourceTableHeader from './DataSourceTableHeader';
 import { useAllFilterStore } from '../../../stores/useAllFilterStore';
-import { collectAppliedFilters, getAllFilterAppliedValues } from '../../../utils/common';
+import { collectAppliedFilters, getAllFilterAppliedValues, getSortingAppliedValues } from '../../../utils/common';
+import ErrorState from '../../../components/AgentManagement/ErrorState';
+import { useSortFilterStore } from '../../../stores/useSortFilterStore';
 
 interface DataSourceTableViewProps {
   pageType: PaginationPageType;
@@ -28,6 +30,7 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const { results, getPaginatedTableData, setTableData } = useDataSourceTableStore();
   const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
+  const sortState = useSortFilterStore((state) => state[pageType as PaginationPageType]);
   const filterState = useAllFilterStore((state) => state[pageType as PaginationPageType]);
 
   // Reset to page 1 when filters changes
@@ -50,12 +53,12 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const payloadData: DataSourcePayload = useMemo(() => {
     return {
       filters: allAppliedFilterValues,
-      sort: [],
+      sort: getSortingAppliedValues(sortState, pageType),
       page: currentPage,
       page_size: itemsPerPage,
       search: filterState.searchTableContent,
     };
-  }, [allAppliedFilterValues, currentPage, itemsPerPage, filterState.searchTableContent]);
+  }, [allAppliedFilterValues, currentPage, itemsPerPage, sortState, filterState.searchTableContent]);
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
@@ -79,13 +82,15 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const conversationsPageColumns: ColumnDefinition[] = getDataSourcesFormattedColumnsList(pageType);
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
 
-  if (isError) return null;
+  if (isError) return <ErrorState />;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start self-stretch">
       <DataSourceTableHeader
         key={pageType}
         page={pageType}
+        totalRecords={totalRecords}
+        isLoading={isLoading}
         payloadData={debouncedPayloadData}
         onFilterContainerHeightChange={setFilterContainerHeight}
       />

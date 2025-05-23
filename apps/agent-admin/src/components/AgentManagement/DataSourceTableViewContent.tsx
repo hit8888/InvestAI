@@ -5,6 +5,7 @@ import { useDataSourceTableStore } from '../../stores/useDataSourceTableStore';
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import { useSidebar } from '../../context/SidebarContext';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { useSortFilterStore } from '../../stores/useSortFilterStore';
 interface TableContentProps {
   tableData: unknown[];
   isLoading: boolean;
@@ -26,6 +27,7 @@ const DataSourceTableViewContent: React.FC<TableContentProps> = ({
   pageType,
 }) => {
   const { selectAll, deselectAll, getSelectedIds, results, isIdSelected, toggleSelectId } = useDataSourceTableStore();
+  const { setSortValue } = useSortFilterStore();
   const { isSidebarOpen } = useSidebar();
 
   if (isLoading) {
@@ -33,9 +35,7 @@ const DataSourceTableViewContent: React.FC<TableContentProps> = ({
   }
 
   if (!totalRecords) {
-    return (
-      <p className="w-full text-center text-2xl font-semibold text-gray-900">{`There are no data to show for ${pageType} yet !!!`}</p>
-    );
+    return <p className="w-full text-center text-2xl font-semibold text-gray-900">{`No ${pageType} added`}</p>;
   }
 
   return (
@@ -51,6 +51,7 @@ const DataSourceTableViewContent: React.FC<TableContentProps> = ({
       isIdSelected={isIdSelected}
       toggleSelectId={toggleSelectId}
       results={results}
+      setSortValue={setSortValue}
       isSidebarOpen={isSidebarOpen}
     />
   );

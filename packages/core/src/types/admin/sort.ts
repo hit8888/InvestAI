@@ -1,6 +1,15 @@
 import { PaginationPageType } from './admin';
 
-export type SortCategory = 'timestamp' | 'sessionLength' | 'intentScore';
+export type SortCategory =
+  | 'timestamp'
+  | 'sessionLength'
+  | 'intentScore'
+  | 'updated_on'
+  | 'status'
+  | 'data_source_type'
+  | 'url'
+  | 'name'
+  | 'source_url';
 
 export type SortValues = {
   timestampSort: string | null;
@@ -8,13 +17,27 @@ export type SortValues = {
   intentScoreSort: string | null;
 };
 
+export type CommonSortValues = {
+  updated_onSort: boolean;
+  statusSort: boolean;
+  data_source_typeSort: boolean;
+};
+
+export type WebpagesSortValues = CommonSortValues & {
+  urlSort: boolean;
+};
+
+export type DocumentsSortValues = CommonSortValues & {
+  nameSort: boolean;
+};
+
 export interface SortFilterState {
   leads: SortValues;
   conversations: SortValues;
-  webpages: SortValues;
-  documents: SortValues;
+  webpages: WebpagesSortValues;
+  documents: DocumentsSortValues;
   videos: SortValues;
-  setSortValue: (page: PaginationPageType, category: SortCategory, value: string) => void;
+  setSortValue: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
   resetPageSorts: (page: PaginationPageType) => void;
   initializeSortValues: (page: PaginationPageType, sortValues: SortValues) => void;
 }

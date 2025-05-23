@@ -48,6 +48,10 @@ const TablePagination: React.FC<PaginationProps> = ({
     return <TablePaginationShimmer />;
   }
 
+  if (totalItems === 0) {
+    return null;
+  }
+
   return (
     <div className="flex items-center justify-end gap-4">
       <div className="flex items-start gap-2">

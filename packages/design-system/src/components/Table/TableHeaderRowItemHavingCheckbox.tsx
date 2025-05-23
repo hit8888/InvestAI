@@ -2,12 +2,19 @@ import { flexRender, HeaderGroup, Header } from '@tanstack/react-table';
 import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
+import SortFilterIcon from '../icons/sort-filter-icon';
+import Button from '../Button';
+import { SortCategory } from '@meaku/core/types/admin/sort';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { useState } from 'react';
 
 type DataSourceStoreProps = {
   selectAll: () => void;
   deselectAll: () => void;
   getSelectedIds: () => number[];
   results: CommonDataSourceResponse[];
+  pageType: PaginationPageType;
+  setSortValue: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
 };
 
 type CustomSingleHeaderRowItemProps = DataSourceStoreProps & {
@@ -38,9 +45,12 @@ const HeaderContent = ({
   deselectAll,
   getSelectedIds,
   results,
+  setSortValue,
+  pageType,
 }: HeaderContentProps) => {
   const selectedIds = getSelectedIds();
   const isAllSelected = selectedIds.length === results.length && results.length > 0;
+  const [isSortingActive, setIsSortingActive] = useState(false);
 
   const handleCheckboxChange = (checked: boolean) => {
     if (checked) {
@@ -50,20 +60,34 @@ const HeaderContent = ({
     }
   };
 
-  if (isFirstColumn) {
-    return (
+  const handleSortValueChange = () => {
+    setSortValue(pageType, header.column.id as SortCategory, !isSortingActive);
+    setIsSortingActive(!isSortingActive);
+  };
+
+  return (
+    <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-4">
-        <Checkbox
-          checked={isAllSelected}
-          className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
-          onCheckedChange={handleCheckboxChange}
-          haveBlackBackground={false}
-        />
+        {isFirstColumn && (
+          <Checkbox
+            checked={isAllSelected}
+            className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
+            onCheckedChange={handleCheckboxChange}
+            haveBlackBackground={false}
+          />
+        )}
         <HeaderTitle header={header} />
       </div>
-    );
-  }
-  return <HeaderTitle header={header} />;
+      <Button
+        onClick={handleSortValueChange}
+        className={cn({ 'bg-white': isSortingActive })}
+        variant="system_tertiary"
+        buttonStyle={'icon'}
+      >
+        <SortFilterIcon className="h-4 w-4 text-gray-700" />
+      </Button>
+    </div>
+  );
 };
 
 const TableHeaderRowItemHavingCheckbox = ({
@@ -72,6 +96,8 @@ const TableHeaderRowItemHavingCheckbox = ({
   deselectAll,
   getSelectedIds,
   results,
+  setSortValue,
+  pageType,
 }: CustomSingleHeaderRowItemProps) => {
   return (
     <tr key={headerGroup.id} className="relative flex w-full items-start">
@@ -97,6 +123,8 @@ const TableHeaderRowItemHavingCheckbox = ({
               results={results}
               isFirstColumn={isFirstColumn}
               header={header}
+              setSortValue={setSortValue}
+              pageType={pageType}
             />
             <div
               {...{

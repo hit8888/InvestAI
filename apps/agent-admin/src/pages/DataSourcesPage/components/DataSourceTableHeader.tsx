@@ -7,14 +7,23 @@ import { useDataSources } from '../../../context/DataSourcesContext';
 import { SourcesCardTypes } from '../constants';
 import ReembedBulkRowItemsButton from './ReembedBulkRowItemsButton';
 import DeleteBulkRowItemsButton from './DeleteBulkRowItemsButton';
+import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type IProps = {
   onFilterContainerHeightChange: (height: number) => void;
   payloadData: DataSourcePayload;
   page: PaginationPageType;
+  isLoading: boolean;
+  totalRecords: number;
 };
 
-const DataSourceTableHeader = ({ onFilterContainerHeightChange, payloadData, page }: IProps) => {
+const DataSourceTableHeader = ({
+  onFilterContainerHeightChange,
+  payloadData,
+  page,
+  isLoading,
+  totalRecords,
+}: IProps) => {
   const { filtersRef, height } = useFiltersContainerHeight();
   const { selectedType } = useDataSources();
 
@@ -24,6 +33,15 @@ const DataSourceTableHeader = ({ onFilterContainerHeightChange, payloadData, pag
       onFilterContainerHeightChange(height);
     }
   }, [height, onFilterContainerHeightChange]);
+
+  if (isLoading) {
+    return <DataSourceTableHeaderShimmer />;
+  }
+
+  if (!totalRecords) {
+    return null;
+  }
+
   return (
     <div
       ref={filtersRef}
@@ -33,6 +51,21 @@ const DataSourceTableHeader = ({ onFilterContainerHeightChange, payloadData, pag
       <div className="flex items-center justify-end gap-4">
         <ReembedBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
         <DeleteBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
+      </div>
+    </div>
+  );
+};
+
+const DataSourceTableHeaderShimmer = () => {
+  return (
+    <div className="sticky top-0 z-20 flex w-full flex-1 content-end items-end justify-between self-stretch bg-white py-4">
+      <div className="flex flex-1 items-center gap-4">
+        <Skeleton className="h-10 w-1/3" />
+        <Skeleton className="h-10 w-32" />
+      </div>
+      <div className="flex items-center justify-end gap-4">
+        <Skeleton className="h-10 w-32" />
+        <Skeleton className="h-10 w-32" />
       </div>
     </div>
   );

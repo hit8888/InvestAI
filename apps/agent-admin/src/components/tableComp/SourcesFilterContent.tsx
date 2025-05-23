@@ -19,7 +19,7 @@ const SourcesFilterContent = ({ page, filterState, handleClosePopover }: CommonF
 
   const payloadData: FilterOptionsPayload = {
     filters: filtersOptionsPayload,
-    field: 'data_source_name',
+    field: 'data_source_type',
     search: '',
   };
 

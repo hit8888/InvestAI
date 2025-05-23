@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 
 import { useReactTable, getCoreRowModel, ColumnDef, HeaderGroup, Row } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
+import { SortCategory } from '@meaku/core/types/admin/sort';
 import {
   CONVERSATIONS_PAGE,
   CONVERSATIONS_PINNED_COLUMNS,
@@ -35,6 +36,7 @@ interface TableViewProps {
   deselectAll?: () => void;
   getSelectedIds?: () => number[];
   results?: CommonDataSourceResponse[];
+  setSortValue?: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
   pageType: PaginationPageType;
 }
 
@@ -49,6 +51,7 @@ const CommonTable = ({
   deselectAll = () => {},
   getSelectedIds = () => [],
   results = [],
+  setSortValue = () => {},
   pageType,
 }: TableViewProps) => {
   const navigate = useNavigate();
@@ -102,6 +105,8 @@ const CommonTable = ({
           deselectAll={deselectAll}
           getSelectedIds={getSelectedIds}
           results={results}
+          pageType={pageType}
+          setSortValue={setSortValue}
         />
       );
     }

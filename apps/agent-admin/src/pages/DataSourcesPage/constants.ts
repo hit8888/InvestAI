@@ -74,10 +74,10 @@ export const FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE = {
   [SourcesCardTypes.SLIDES]: 'This file format isn’t supported. Please upload a slide in PDF or PPTX format.',
 };
 
-export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['data_source_name', 'url', 'updated_on', 'status'];
+export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['data_source_type', 'url', 'updated_on', 'status'];
 
 export const DATA_SOURCES_WEBPAGES_COLUMN_HEADER_LABEL_MAPPING = {
-  data_source_name: 'Sources',
+  data_source_type: 'Sources',
   url: 'Page URL',
   updated_on: 'Last Updated',
   status: 'Status',
@@ -86,9 +86,9 @@ export const DATA_SOURCES_WEBPAGES_COLUMN_HEADER_LABEL_MAPPING = {
 export const DATA_SOURCES_DOCUMENTS_COLUMN_LISTS = [
   'name',
   'data_source_type',
-  'source_url',
-  // 'status',
+  'status',
   'updated_on',
+  // 'source_url',
 ];
 
 export const DATA_SOURCES_DOCUMENTS_COLUMN_HEADER_LABEL_MAPPING = {
