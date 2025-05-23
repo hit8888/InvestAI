@@ -57,7 +57,7 @@ const SortFilter = ({ page, disabledState }: IProps) => {
             <CustomRadioGroupButtons
               radioOptions={config.radioOptions}
               onCallback={handleRadioOptions}
-              defaultSelected={sortValues[config.stateKey as keyof SortValues] || null}
+              defaultSelected={(sortValues as SortValues)[config.stateKey as keyof SortValues] || null}
               category={config.category}
             />
           </React.Fragment>
