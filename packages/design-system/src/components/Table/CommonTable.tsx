@@ -167,9 +167,9 @@ const CommonTable = ({
               }}
             >
               <thead className="w-full">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <>{getTableHeaderRowItem(headerGroup)}</>
-                ))}
+                {table.getHeaderGroups().map((headerGroup) => {
+                  return getTableHeaderRowItem(headerGroup);
+                })}
               </thead>
             </table>
           </div>
@@ -190,14 +190,14 @@ const CommonTable = ({
               zIndex: 4,
             }}
           >
-            {table.getHeaderGroups().map((headerGroup) => (
-              <>{getTableHeaderRowItem(headerGroup)}</>
-            ))}
+            {table.getHeaderGroups().map((headerGroup) => {
+              return getTableHeaderRowItem(headerGroup);
+            })}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row, index) => (
-              <>{getTableBodyRowItem(row, index)}</>
-            ))}
+            {table.getRowModel().rows.map((row, index) => {
+              return getTableBodyRowItem(row, index);
+            })}
           </tbody>
         </table>
       </div>

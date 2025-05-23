@@ -10,10 +10,12 @@ const statusText: Record<DATA_SOURCE_STATUS, string> = {
   [DATA_SOURCE_STATUS.VECTORIZED]: 'VECTORIZED',
   [DATA_SOURCE_STATUS.FAILED]: 'FAILED',
   [DATA_SOURCE_STATUS.CANCELLED]: 'CANCELLED',
+  [DATA_SOURCE_STATUS.COMPLETED]: 'COMPLETED',
 };
 
 const statusClasses: Record<DATA_SOURCE_STATUS, string> = {
   [DATA_SOURCE_STATUS.VECTORIZED]: 'bg-positive-100 text-positive-1000',
+  [DATA_SOURCE_STATUS.COMPLETED]: 'bg-positive-100 text-positive-1000',
   [DATA_SOURCE_STATUS.FAILED]: 'bg-destructive-100 text-destructive-1000',
   [DATA_SOURCE_STATUS.CANCELLED]: 'bg-destructive-100 text-destructive-1000',
   [DATA_SOURCE_STATUS.PENDING]: 'bg-orange_sec-100 text-orange_sec-1000',
@@ -33,6 +35,7 @@ interface DataSourceStatusChipProps {
 }
 
 const DataSourceStatusChip: React.FC<DataSourceStatusChipProps> = ({ status }) => {
+  if (!status) return null;
   return (
     <div
       className={cn(
@@ -41,7 +44,7 @@ const DataSourceStatusChip: React.FC<DataSourceStatusChipProps> = ({ status }) =
         getAnimationClass(status),
       )}
     >
-      {statusText[status].toLowerCase()}
+      {statusText[status]?.toLowerCase()}
     </div>
   );
 };
