@@ -44,12 +44,13 @@ const Suggestion = ({
     <div
       onClick={() => handleClickOnSuggestedQuestion(question)}
       className={cn(
-        `flex w-fit items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out ${isClickEnabled ? 'cursor-pointer' : 'cursor-not-allowed'}`,
+        `flex w-fit cursor-pointer items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out`,
         {
           'border border-gray-900 bg-white py-2 pl-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
             !isEntryPointQuestion,
           'border-2 border-primary/60 bg-primary/80 px-2 hover:bg-primary/90 focus:bg-primary': isEntryPointQuestion,
           'max-w-[380px]': isQuestionInCycle,
+          'cursor-not-allowed hover:bg-transparent': !isClickEnabled,
         },
       )}
       data-testid={isEntryPointQuestion ? `entry-point-suggestion-item-${itemIndex}` : `suggestion-item-${itemIndex}`}
@@ -79,6 +80,7 @@ const Suggestion = ({
             textColor={isEntryPointQuestion ? (invertTextColor ? 'default' : 'white') : 'textSecondary'}
             className={cn('line-clamp-1 lg:line-clamp-2', {
               'min-w-0 max-w-[350px] flex-1': isQuestionInCycle,
+              'cursor-not-allowed hover:bg-transparent': !isClickEnabled,
             })}
           >
             {question}
