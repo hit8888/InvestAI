@@ -314,7 +314,7 @@ export const VIDEOS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.fil
 
 export enum AppRoutesEnum {
   LEADS = 'leads',
-  LOGIN = '/login',
+  LOGIN = 'login',
   CONVERSATIONS = 'conversations',
   AGENT = 'agent',
   AGENT_PLAYGROUND = 'agent/playground',

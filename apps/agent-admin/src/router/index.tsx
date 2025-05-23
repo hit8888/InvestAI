@@ -33,7 +33,7 @@ const routes = [
         children: [],
       },
       {
-        path: LOGIN,
+        path: LOGIN.replace(/\/+$/, ''),
         element: <LoginPage />,
         children: [],
       },
@@ -46,7 +46,7 @@ const routes = [
             children: [],
           },
           {
-            path: 'leads/:sessionID', // Dynamic route for individual leads
+            path: 'leads/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
           },
           {
@@ -54,7 +54,7 @@ const routes = [
             element: <ProtectedRoute element={<ConversationsPageContainer />} />,
           },
           {
-            path: 'conversations/:sessionID', // Dynamic route for individual conversations
+            path: 'conversations/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
           },
           {
@@ -112,6 +112,8 @@ const routes = [
   },
 ];
 
-const router = sentryCreateBrowserRouter(routes);
+const router = sentryCreateBrowserRouter(routes, {
+  basename: '/',
+});
 
 export default router;

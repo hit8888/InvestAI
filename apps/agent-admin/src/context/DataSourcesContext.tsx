@@ -16,10 +16,14 @@ const DataSourcesContext = createContext<SidebarContextProps | undefined>(undefi
 export const DataSourcesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const getSelectedTypeFromPath = (path: string): string | null => {
-    if (path === AGENT_DATA_SOURCES) {
+    // Remove trailing slash for consistent comparison
+    const normalizedPath = path.replace(/\/+$/, '');
+    const normalizedDataSourcesPath = AGENT_DATA_SOURCES.replace(/\/+$/, '');
+
+    if (normalizedPath === normalizedDataSourcesPath) {
       return null;
-    } else if (path.includes(AGENT_DATA_SOURCES)) {
-      const type = path.split(`${AGENT_DATA_SOURCES}/`)[1];
+    } else if (normalizedPath.includes(normalizedDataSourcesPath)) {
+      const type = normalizedPath.split(`${normalizedDataSourcesPath}/`)[1];
       return type || null;
     }
     return null;

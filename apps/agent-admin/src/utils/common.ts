@@ -62,7 +62,7 @@ const {
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
 
 export const getDashboardBasicPathURL = (tenantName: string) => {
-  return `/${tenantName}`;
+  return `/${tenantName}`.replace(/\/+$/, '');
 };
 
 export const getUserNameFromLocalStorage = () => {
