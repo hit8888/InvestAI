@@ -36,12 +36,12 @@ const DataSourceStatusChip: React.FC<DataSourceStatusChipProps> = ({ status }) =
   return (
     <div
       className={cn(
-        'inline-block rounded-full px-3 py-1 text-base font-medium capitalize',
+        'inline-block rounded-full px-3 py-1 text-sm font-medium capitalize',
         statusClasses[status],
         getAnimationClass(status),
       )}
     >
-      {statusText[status]}
+      {statusText[status].toLowerCase()}
     </div>
   );
 };

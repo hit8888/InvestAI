@@ -69,7 +69,11 @@ const TableBodyRowItemHavingCheckbox = ({
     >
       {row.getVisibleCells().map((cell) => {
         const isFirstColumn = row.getVisibleCells().indexOf(cell) === 0;
+        const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
         const isUrlColumn = cell.column.id === 'url';
+        const isStatusColumn = cell.column.id === 'status';
+        const isSourceNameColumn = cell.column.id === 'source_name';
+        const isDataSourceTypeColumn = cell.column.id === 'data_source_type';
         return (
           <td
             key={cell.id}
@@ -78,6 +82,8 @@ const TableBodyRowItemHavingCheckbox = ({
               {
                 'border-l': isFirstColumn,
                 'min-w-[600px]': isUrlColumn,
+                'min-w-[500px]': isSourceNameColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn,
               },
             )}
           >

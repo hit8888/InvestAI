@@ -11,7 +11,7 @@ import SessionIDCellValue from './tableCellComp/SessionIDCellValue';
 import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
 import UrlCellValue from './tableCellComp/UrlCellValue';
 import StatusCellValue from './tableCellComp/StatusCellValue';
-import NameCellValue from './tableCellComp/NameCellValue';
+import SourceNameCellValue from './tableCellComp/SourceNameCellValue';
 import DataSourceTypeCellValue from './tableCellComp/DataSourceTypeCellValue';
 import TitleCellValue from './tableCellComp/TitleCellValue';
 
@@ -36,7 +36,7 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   url: UrlCellValue,
   updated_on: TimestampCellValue,
   status: StatusCellValue,
-  source_name: NameCellValue,
+  source_name: SourceNameCellValue,
   title: TitleCellValue,
   data_source_type: DataSourceTypeCellValue,
   source_url: UrlCellValue,

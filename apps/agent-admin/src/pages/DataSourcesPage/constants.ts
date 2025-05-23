@@ -74,7 +74,7 @@ export const FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE = {
   [SourcesCardTypes.SLIDES]: 'This file format isn’t supported. Please upload a slide in PDF or PPTX format.',
 };
 
-export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['url', 'status', 'updated_on', 'title'];
+export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['url', 'title', 'status', 'updated_on'];
 
 export const DATA_SOURCES_WEBPAGES_COLUMN_HEADER_LABEL_MAPPING = {
   url: 'Page URL',

@@ -8,6 +8,7 @@ import Button from '@breakout/design-system/components/Button/index';
 import ReembedIcon from '@breakout/design-system/components/icons/reembed-icon';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { cn } from '@breakout/design-system/lib/cn';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 const ReembedBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {
   const { selectedIds, deselectAll } = useDataSourceTableStore();
@@ -51,15 +52,24 @@ const ReembedBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCard
     );
   };
 
+  const getTooltipContent = () => {
+    return (
+      <Typography className="max-w-96" variant={'body-14'} textColor="white">
+        You can re-embed the selected pages so that the agent can be trained on the updates made
+      </Typography>
+    );
+  };
+
   return (
     <div className="flex items-center justify-end gap-4">
       <TooltipWrapperDark
-        tooltipSide="top"
-        tooltipAlign="end"
+        tooltipSide="left"
+        tooltipAlign="center"
+        showArrow={false}
         tooltipSideOffsetValue={15}
         trigger={getReembedButton()}
         showTooltip={showReembedButton}
-        content={<p>You can re-embed the selected pages so that the agent can be trained on the updates made</p>}
+        content={getTooltipContent()}
       />
     </div>
   );

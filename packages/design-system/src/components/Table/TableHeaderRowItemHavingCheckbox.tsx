@@ -108,6 +108,9 @@ const TableHeaderRowItemHavingCheckbox = ({
         const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
         const isFirstColumn = headerGroup.headers.indexOf(header) === 0;
         const isUrlColumn = header.column.id === 'url';
+        const isStatusColumn = header.column.id === 'status';
+        const isSourceNameColumn = header.column.id === 'source_name';
+        const isDataSourceTypeColumn = header.column.id === 'data_source_type';
         return (
           <th
             key={header.id}
@@ -118,6 +121,8 @@ const TableHeaderRowItemHavingCheckbox = ({
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
                 'min-w-[600px]': isUrlColumn,
+                'min-w-[500px]': isSourceNameColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn,
               },
             )}
           >
