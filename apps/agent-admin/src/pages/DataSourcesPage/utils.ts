@@ -53,10 +53,9 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
     ];
   const formattedColumns = columnsList.map((key) => {
     const newItem = {
-      id: key,
+      id: key === 'name' ? 'source_name' : key,
       accessorKey: key,
       header: columnHeaderLabelMapping[key as keyof typeof columnHeaderLabelMapping],
-      // size: key === 'page_url' ? 600: TableColumnWidthSize, // Default size taken
     };
 
     return newItem;

@@ -121,6 +121,7 @@ const CommonTable = ({
           row={row}
           index={index}
           isIdSelected={isIdSelected}
+          pageType={pageType}
           toggleSelectId={toggleSelectId}
         />
       );

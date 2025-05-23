@@ -12,6 +12,8 @@ import ArrowRight from '@breakout/design-system/components/icons/ArrowRight';
 import { useDataSources } from '../../../context/DataSourcesContext';
 import DataSourceStatBadge from './DataSourceStatBadge';
 import { useNavigate } from 'react-router-dom';
+import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface Stat {
   itemLabel: string;
@@ -60,34 +62,69 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ title, stats, type, has
     navigate(type);
     toggleDataSourceSelectedType(type);
   };
+
+  const getTrigger = () => {
+    return (
+      <div
+        onClick={!hasEdit ? onCardClick : undefined}
+        className={`data-sources-card-shadow flex w-full items-center justify-between gap-6 rounded-lg border border-primary/20 p-4 transition-all duration-300 hover:border-primary/40 hover:bg-bluegray-50 hover:shadow-md`}
+      >
+        <div className="flex flex-col items-start gap-6">
+          <div className="flex items-center gap-2 self-stretch">
+            {Icon && <Icon className="text-gray-500" width="16" height="16" />}
+            <Typography variant={'label-16-medium'} className="flex-1">
+              {title}
+            </Typography>
+          </div>
+        </div>
+        <div className="flex w-full flex-1 items-center justify-end gap-6">
+          <div className="flex items-start gap-3">
+            {stats.map((stat) => (
+              <DataSourceStatBadge
+                key={stat.itemKey}
+                itemKey={stat.itemKey}
+                itemLabel={stat.itemLabel}
+                itemValue={stat.itemValue}
+                itemValueLabel={itemValueLabel}
+              />
+            ))}
+          </div>
+          {/* TODO: remove the hidden when the feature is implemented */}
+          <Button
+            className={cn('', {
+              '!hidden': isFeatureCard,
+            })}
+            variant={'system_secondary'}
+            buttonStyle={'icon'}
+          >
+            {hasEdit ? <FeaturesSourcesEditIcon className="text-gray-600" /> : <ArrowRight className="text-gray-600" />}
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const getContent = () => {
+    return (
+      <div className="flex max-w-64 flex-col gap-2">
+        <Typography variant={'body-14'} className="text-white">
+          Customize demo assets to match your needs. Contact Breakout support team for assistance.
+        </Typography>
+      </div>
+    );
+  };
+  const isFeatureCard = type === SourcesCardTypes.FEATURES;
   return (
-    <div
-      className={`data-sources-card-shadow flex w-full items-center justify-between gap-6 rounded-lg border border-primary/20 p-4`}
-    >
-      <div className="flex flex-col items-start gap-6">
-        <div className="flex items-center gap-2 self-stretch">
-          {Icon && <Icon className="text-gray-500" width="16" height="16" />}
-          <Typography variant={'label-16-medium'} className="flex-1">
-            {title}
-          </Typography>
-        </div>
-      </div>
-      <div className="flex w-full flex-1 items-center justify-end gap-6">
-        <div className="flex items-start gap-3">
-          {stats.map((stat) => (
-            <DataSourceStatBadge
-              key={stat.itemKey}
-              itemKey={stat.itemKey}
-              itemLabel={stat.itemLabel}
-              itemValue={stat.itemValue}
-              itemValueLabel={itemValueLabel}
-            />
-          ))}
-        </div>
-        <Button onClick={onCardClick} variant={'system_secondary'} buttonStyle={'icon'}>
-          {hasEdit ? <FeaturesSourcesEditIcon className="text-gray-600" /> : <ArrowRight className="text-gray-600" />}
-        </Button>
-      </div>
+    <div className="w-full">
+      <TooltipWrapperDark
+        showArrow={false}
+        tooltipAlign="center"
+        tooltipSide="bottom"
+        disableHoverableContent={isFeatureCard}
+        trigger={getTrigger()}
+        content={getContent()}
+        showTooltip={isFeatureCard}
+      />
     </div>
   );
 };

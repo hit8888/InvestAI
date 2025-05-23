@@ -7,6 +7,7 @@ import Button from '../Button';
 import { SortCategory } from '@meaku/core/types/admin/sort';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { useState } from 'react';
+import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
 
 type DataSourceStoreProps = {
   selectAll: () => void;
@@ -52,6 +53,8 @@ const HeaderContent = ({
   const isAllSelected = selectedIds.length === results.length && results.length > 0;
   const [isSortingActive, setIsSortingActive] = useState(false);
 
+  const isDocumentsPage = pageType === DOCUMENTS_PAGE;
+
   const handleCheckboxChange = (checked: boolean) => {
     if (checked) {
       selectAll();
@@ -68,7 +71,7 @@ const HeaderContent = ({
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-4">
-        {isFirstColumn && (
+        {isFirstColumn && !isDocumentsPage && (
           <Checkbox
             checked={isAllSelected}
             className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
@@ -104,6 +107,7 @@ const TableHeaderRowItemHavingCheckbox = ({
       {headerGroup.headers.map((header) => {
         const isLastColumn = headerGroup.headers.indexOf(header) === headerGroup.headers.length - 1;
         const isFirstColumn = headerGroup.headers.indexOf(header) === 0;
+        const isUrlColumn = header.column.id === 'url';
         return (
           <th
             key={header.id}
@@ -113,6 +117,7 @@ const TableHeaderRowItemHavingCheckbox = ({
               {
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
+                'min-w-[600px]': isUrlColumn,
               },
             )}
           >

@@ -11,17 +11,18 @@ const InitialSortValues = {
 const commonInitialSortValues = {
   updated_onSort: false, // true means desc, false means asc
   statusSort: false,
-  data_source_typeSort: false,
 };
 
 const webpagesInitialSortValues = {
   ...commonInitialSortValues,
   urlSort: false,
+  titleSort: false,
 };
 
 const documentsInitialSortValues = {
   ...commonInitialSortValues,
   nameSort: false,
+  data_source_typeSort: false,
 };
 
 export const useSortFilterStore = create<SortFilterState>((set) => ({

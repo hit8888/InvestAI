@@ -14,20 +14,22 @@ const { AGENT_DATA_SOURCES } = AppRoutesEnum;
 const DataSourcesContext = createContext<SidebarContextProps | undefined>(undefined);
 
 export const DataSourcesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const path = location.pathname;
+  const getSelectedTypeFromPath = (path: string): string | null => {
     if (path === AGENT_DATA_SOURCES) {
-      setSelectedType(null);
+      return null;
     } else if (path.includes(AGENT_DATA_SOURCES)) {
       const type = path.split(`${AGENT_DATA_SOURCES}/`)[1];
-      if (type) {
-        setSelectedType(type);
-      }
+      return type || null;
     }
+    return null;
+  };
+
+  const [selectedType, setSelectedType] = useState<string | null>(() => getSelectedTypeFromPath(location.pathname));
+  const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    setSelectedType(getSelectedTypeFromPath(location.pathname));
   }, [location.pathname]);
 
   const toggleDataSourceSelectedType = (value: string | null) => {

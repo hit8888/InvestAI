@@ -24,7 +24,7 @@ import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
-  const queryOptions = useQueryOptions();
+  const queryOptions = useQueryOptions({ enabled: selectedType === null });
 
   const {
     data: dataSourcesData,

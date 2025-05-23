@@ -13,6 +13,7 @@ import UrlCellValue from './tableCellComp/UrlCellValue';
 import StatusCellValue from './tableCellComp/StatusCellValue';
 import NameCellValue from './tableCellComp/NameCellValue';
 import DataSourceTypeCellValue from './tableCellComp/DataSourceTypeCellValue';
+import TitleCellValue from './tableCellComp/TitleCellValue';
 
 export type CellValueRendererProps = {
   id: string;
@@ -33,11 +34,12 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   meeting_status: MeetingStatusCellValue,
   // session_id: SessionIDCellValue,
   url: UrlCellValue,
-  updated_on: TimestampCellValue, // For DataSource Table
-  status: StatusCellValue, // For DataSource Table
-  name: NameCellValue,
+  updated_on: TimestampCellValue,
+  status: StatusCellValue,
+  source_name: NameCellValue,
+  title: TitleCellValue,
   data_source_type: DataSourceTypeCellValue,
-  source_url: UrlCellValue, // For DataSource Table
+  source_url: UrlCellValue,
 };
 
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {

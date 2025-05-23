@@ -9,6 +9,7 @@ export type SortCategory =
   | 'data_source_type'
   | 'url'
   | 'name'
+  | 'title'
   | 'source_url';
 
 export type SortValues = {
@@ -20,15 +21,16 @@ export type SortValues = {
 export type CommonSortValues = {
   updated_onSort: boolean;
   statusSort: boolean;
-  data_source_typeSort: boolean;
 };
 
 export type WebpagesSortValues = CommonSortValues & {
   urlSort: boolean;
+  titleSort: boolean;
 };
 
 export type DocumentsSortValues = CommonSortValues & {
   nameSort: boolean;
+  data_source_typeSort: boolean;
 };
 
 export interface SortFilterState {

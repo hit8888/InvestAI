@@ -308,7 +308,7 @@ export const getSortingAppliedValues = (
   const isDocumentsPage = page === DOCUMENTS_PAGE;
   const sortApplied: SortItem[] = [];
   const { timestampSort, sessionLengthSort, intentScoreSort } = sortState as SortValues;
-  const { updated_onSort, statusSort, data_source_typeSort, urlSort } = sortState as WebpagesSortValues;
+  const { updated_onSort, statusSort, titleSort, urlSort } = sortState as WebpagesSortValues;
   const {
     updated_onSort: updated_onSortDocuments,
     nameSort,
@@ -334,8 +334,8 @@ export const getSortingAppliedValues = (
     });
 
     sortApplied.push({
-      field: 'data_source_type',
-      order: data_source_typeSort ? 'desc' : 'asc',
+      field: 'title',
+      order: titleSort ? 'desc' : 'asc',
     });
 
     sortApplied.push({

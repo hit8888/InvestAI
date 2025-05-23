@@ -7,16 +7,23 @@ type IProps = {
   tooltipText: string;
   children?: React.ReactNode;
   showTooltip?: boolean;
+  contentMaxWidth?: string;
 };
 
-const CustomTooltipWithClipboardUsingHover = ({ tooltipText, children, toastMessage, showTooltip = true }: IProps) => {
+const CustomTooltipWithClipboardUsingHover = ({
+  tooltipText,
+  children,
+  toastMessage,
+  showTooltip = true,
+  contentMaxWidth = 'max-w-full',
+}: IProps) => {
   return (
     <TooltipWrapperDark
       trigger={children}
       showTooltip={showTooltip}
       content={
-        <div className="flex w-full items-center gap-2">
-          <span className="text-xs font-medium">{tooltipText}</span>
+        <div className={`flex w-fit items-center justify-between gap-2 ${contentMaxWidth}`}>
+          <span className="text-sm font-medium">{tooltipText}</span>
           <CopyToClipboardButton
             copyIconClassname="h-4 w-4 text-white"
             textToCopy={tooltipText}

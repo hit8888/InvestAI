@@ -2,12 +2,14 @@ import { Cell, flexRender, Row } from '@tanstack/react-table';
 import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
+import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
 
 type CustomSingleBodyRowItemProps = {
   row: Row<CommonDataSourceResponse>;
   index: number;
   isIdSelected: (id: number) => boolean;
   toggleSelectId: (id: number) => void;
+  pageType: string;
 };
 
 const CellContent = ({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
@@ -23,12 +25,13 @@ type HeaderContentProps = {
   cell: Cell<CommonDataSourceResponse, unknown>;
   isRowSelected: boolean;
   toggleSelectId: (id: number) => void;
+  pageType: string;
 };
 
-const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId }: HeaderContentProps) => {
+const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId, pageType }: HeaderContentProps) => {
   const rowId = cell.row.original.id;
 
-  if (isFirstColumn) {
+  if (isFirstColumn && pageType !== DOCUMENTS_PAGE) {
     return (
       <div className="flex items-start gap-4">
         <Checkbox
@@ -44,7 +47,13 @@ const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId }: 
   return <CellContent cell={cell} />;
 };
 
-const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelectId }: CustomSingleBodyRowItemProps) => {
+const TableBodyRowItemHavingCheckbox = ({
+  row,
+  index,
+  isIdSelected,
+  toggleSelectId,
+  pageType,
+}: CustomSingleBodyRowItemProps) => {
   const isEvenRow = index % 2 === 0;
   const isOddRow = !isEvenRow;
   const isRowSelected = isIdSelected(row.original.id);
@@ -60,6 +69,7 @@ const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelect
     >
       {row.getVisibleCells().map((cell) => {
         const isFirstColumn = row.getVisibleCells().indexOf(cell) === 0;
+        const isUrlColumn = cell.column.id === 'url';
         return (
           <td
             key={cell.id}
@@ -67,6 +77,7 @@ const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelect
               `border-gray/20 flex h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2 2xl:min-w-96 `,
               {
                 'border-l': isFirstColumn,
+                'min-w-[600px]': isUrlColumn,
               },
             )}
           >
@@ -75,6 +86,7 @@ const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelect
               isFirstColumn={isFirstColumn}
               cell={cell}
               isRowSelected={isRowSelected}
+              pageType={pageType}
             />
           </td>
         );

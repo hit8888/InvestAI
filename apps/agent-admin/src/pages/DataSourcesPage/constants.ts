@@ -41,19 +41,19 @@ export const DIALOG_LOADING_MESSAGE_MAPPED_OBJECT = {
 export const DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT = {
   [SourcesCardTypes.WEBPAGES]:
     'Once you enter a valid URL and start fetching, all discovered links will appear here automatically.',
-  [SourcesCardTypes.DOCUMENTS]: 'Accepted formats: PDF, DOCX, XLSX, PPTX, TXT, CSV',
+  [SourcesCardTypes.DOCUMENTS]: 'Accepted formats: PDF',
   [SourcesCardTypes.VIDEOS]: 'Accepted formats: MP4, MOV, WebM',
   [SourcesCardTypes.SLIDES]: 'Accepted formats: PDF, PPTX, PNG',
 };
 
 export const DATA_SOURCES_ACCEPTED_FILE_TYPES = {
   [SourcesCardTypes.DOCUMENTS]: {
-    'application/pdf': ['.pdf'],
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-    'text/plain': ['.txt'],
-    'text/csv': ['.csv'],
+    'application/pdf': ['.pdf'], // TODO: can keep the comment for future reference
+    // 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+    // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+    // 'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+    // 'text/plain': ['.txt'],
+    // 'text/csv': ['.csv'],
   },
   [SourcesCardTypes.VIDEOS]: {
     'video/mp4': ['.mp4'],
@@ -74,14 +74,25 @@ export const FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE = {
   [SourcesCardTypes.SLIDES]: 'This file format isn’t supported. Please upload a slide in PDF or PPTX format.',
 };
 
-export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['data_source_type', 'url', 'updated_on', 'status'];
+export const DATA_SOURCES_WEBPAGES_COLUMN_LISTS = ['url', 'status', 'updated_on', 'title'];
 
 export const DATA_SOURCES_WEBPAGES_COLUMN_HEADER_LABEL_MAPPING = {
-  data_source_type: 'Sources',
   url: 'Page URL',
+  title: 'Title',
   updated_on: 'Last Updated',
   status: 'Status',
 };
+
+export const enum DATA_SOURCE_STATUS {
+  PENDING = 'PENDING',
+  CRAWLING = 'CRAWLING',
+  CRAWLED = 'CRAWLED',
+  CLEANING = 'CLEANING',
+  CLEANED = 'CLEANED',
+  VECTORIZED = 'VECTORIZED',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}
 
 export const DATA_SOURCES_DOCUMENTS_COLUMN_LISTS = [
   'name',
