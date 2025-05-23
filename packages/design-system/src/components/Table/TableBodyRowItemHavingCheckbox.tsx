@@ -78,7 +78,7 @@ const TableBodyRowItemHavingCheckbox = ({
           <td
             key={cell.id}
             className={cn(
-              `border-gray/20 flex h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2 2xl:min-w-96 `,
+              `border-gray/20 flex h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2`,
               {
                 'border-l': isFirstColumn,
                 'min-w-[600px]': isUrlColumn,

@@ -116,7 +116,7 @@ const TableHeaderRowItemHavingCheckbox = ({
             key={header.id}
             colSpan={header.colSpan}
             className={cn(
-              `relative flex min-w-72 flex-1 items-center gap-2 border border-gray-300 bg-gray-100 px-2 py-2.5 2xl:min-w-96`,
+              `relative flex min-w-72 flex-1 items-center gap-2 border border-gray-300 bg-gray-100 px-2 py-2.5`,
               {
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
