@@ -4,7 +4,6 @@
 interface ImportMetaEnv extends import('vite/types/importMeta').ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_BASE_API_URL: string;
-  readonly VITE_WEBSOCKET_URL: string;
   readonly VITE_SENTRY_DSN: string;
   readonly VITE_LOGROCKET_APP_ID: string;
   readonly VITE_APP_ENV: string;

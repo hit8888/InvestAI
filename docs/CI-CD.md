@@ -70,7 +70,6 @@ Environment variables are automatically set based on branch:
 
 Variables include:
 - VITE_BASE_API_URL
-- VITE_WEBSOCKET_URL
 - VITE_SENTRY_DSN
 - VITE_SENTRY_AUTH_TOKEN
 - VITE_LOGROCKET_APP_ID

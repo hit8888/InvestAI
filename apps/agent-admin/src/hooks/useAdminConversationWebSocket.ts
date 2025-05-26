@@ -35,7 +35,7 @@ const useAdminConversationsWebSocket = ({
   const token = getAccessTokenFromLocalStorage();
   const adminConversationsWsUrl =
     tenant && token
-      ? `${ENV.VITE_WEBSOCKET_URL}/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`
+      ? `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`
       : '';
 
   const { lastMessage, sendMessage } = useWebSocket(

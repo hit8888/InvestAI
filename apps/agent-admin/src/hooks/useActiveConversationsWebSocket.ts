@@ -24,7 +24,9 @@ const useActiveConversationsWebSocket = () => {
   const tenant = getTenantFromLocalStorage();
   const token = getAccessTokenFromLocalStorage();
   const liveConversationsWsUrl =
-    tenant && token ? `${ENV.VITE_WEBSOCKET_URL}/active-conversations/events/?tenant=${tenant}&token=${token}` : '';
+    tenant && token
+      ? `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws/active-conversations/events/?tenant=${tenant}&token=${token}`
+      : '';
 
   const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, string>>({});
   const currentConversation = useJoinConversationStore((state) => state.currentConversation);

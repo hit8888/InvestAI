@@ -66,7 +66,9 @@ const useWebSocketChat = () => {
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
   const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
-  const wsUrl = orgName ? `${ENV.VITE_WEBSOCKET_URL}?tenant=${orgName.toLowerCase()}&session_id=${sessionId}` : '';
+  const wsUrl = orgName
+    ? `${ENV.VITE_BASE_API_URL}/ws/chat?tenant=${orgName.toLowerCase()}&session_id=${sessionId}`
+    : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
     wsUrl,

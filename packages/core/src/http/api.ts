@@ -3,10 +3,7 @@ import { FeedbackRequestPayload } from '../types/api/feedback_request';
 import { InitializationPayload } from '../types/api/session_init_request';
 import { UpdateSessionDataPayload } from '../types/api/session_update_request';
 import { UpdateProspectPayload } from '../types/api/update_prospect_request';
-import { ENV } from '../types/env';
 import apiClient from './client';
-
-export const ARTIFACT_BASE_API_URL = ENV.VITE_ARTIFACT_BASE_API_URL;
 
 export const getConfig = (agentId: string, payload: ConfigPayload) =>
   apiClient.post(`/tenant/chat/agent/${agentId}/config/`, { ...payload });

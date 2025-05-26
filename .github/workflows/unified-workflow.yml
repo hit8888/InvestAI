@@ -87,7 +87,6 @@ jobs:
         working-directory: apps/agent
         env:
           VITE_BASE_API_URL: ${{ github.ref == 'refs/heads/release' && secrets.PROD_BASE_API_URL || secrets.STAGING_BASE_API_URL }}
-          VITE_WEBSOCKET_URL: ${{ github.ref == 'refs/heads/release' && secrets.PROD_WEBSOCKET_URL || secrets.STAGING_WEBSOCKET_URL }}
           VITE_SENTRY_DSN: ${{ github.ref == 'refs/heads/release' && secrets.PROD_SENTRY_DSN || secrets.STAGING_SENTRY_DSN }}
           VITE_SENTRY_AUTH_TOKEN: ${{ github.ref == 'refs/heads/release' && secrets.PROD_SENTRY_AUTH_TOKEN || secrets.STAGING_SENTRY_AUTH_TOKEN }}
           VITE_LOGROCKET_APP_ID: ${{ github.ref == 'refs/heads/release' && secrets.PROD_LOGROCKET_APP_ID || secrets.STAGING_LOGROCKET_APP_ID }}

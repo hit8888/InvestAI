@@ -4,6 +4,8 @@ import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType }
 import { ENV } from '@meaku/core/types/env';
 import { isDev } from '../utils/common';
 
+const WEBSOCKET_URL = `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws`;
+
 Sentry.init({
   dsn: isDev ? '' : ENV.VITE_SENTRY_DSN,
   integrations: [
@@ -18,7 +20,7 @@ Sentry.init({
     Sentry.replayIntegration(),
   ],
   tracesSampleRate: 1.0,
-  tracePropagationTargets: [ENV.VITE_BASE_API_URL, ENV.VITE_WEBSOCKET_URL],
+  tracePropagationTargets: [ENV.VITE_BASE_API_URL, WEBSOCKET_URL],
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
