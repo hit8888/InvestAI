@@ -93,7 +93,7 @@ export const useMessageStore = create<State>()(
             draft.messages.push(message);
           }
         }),
-      adminJoinStatus: AdminConversationJoinStatus.PENDING,
+      adminJoinStatus: AdminConversationJoinStatus.INIT,
       setAdminJoinStatus: (status: AdminConversationJoinStatus) => {
         set((state) => {
           state.adminJoinStatus = status;

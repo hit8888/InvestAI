@@ -318,6 +318,10 @@ export const checkIsAdminJoinedMessage = (message: WebSocketMessage): boolean =>
   return message.message_type === 'EVENT' && message.message.event_type === 'JOIN_SESSION';
 };
 
+export const checkIsAdminLeftMessage = (message: WebSocketMessage): boolean => {
+  return message.message_type === 'EVENT' && message.message.event_type === 'LEAVE_SESSION';
+};
+
 export function getMessageViewType(messageSenderRole: MessageSenderRole, viewType: ViewType): MessageViewType {
   if (messageSenderRole === MessageSenderRole.ADMIN) {
     switch (viewType) {

@@ -14,6 +14,7 @@ import { useMessageStore } from '../../hooks/useMessageStore';
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
   onSendMessage?: (sessionId: string, message: string) => void;
+  onExitConversation: () => void;
   onAIResponseGenerationRequest: (sessionId: string) => void;
   onClose: () => void;
 };
@@ -21,6 +22,7 @@ type JoinConversationDrawerProps = {
 const JoinConversationDrawer = ({
   conversation,
   onSendMessage,
+  onExitConversation,
   onAIResponseGenerationRequest,
   onClose,
 }: JoinConversationDrawerProps) => {
@@ -77,7 +79,7 @@ const JoinConversationDrawer = ({
     <Drawer open={true} onOpenChange={onClose} direction="bottom">
       <DrawerOverlay className="fixed inset-0 bg-black/50" />
       <DrawerContent className="z-[1000] mx-2 h-[90vh] rounded-2xl bg-primary-foreground px-2 pb-2">
-        <JoinConversationHeader conversation={conversation} />
+        <JoinConversationHeader conversation={conversation} onExitConversation={onExitConversation} />
 
         <div className="flex w-full grow flex-col gap-2 overflow-hidden">
           <JoinConversationChatArea sessionId={sessionId} isLoading={isLoading} />

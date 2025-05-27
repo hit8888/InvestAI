@@ -4,13 +4,14 @@ import ConversationActions from './ConversationActions';
 
 type JoinConversationHeaderProps = {
   conversation: ActiveConversation;
+  onExitConversation: () => void;
 };
 
-const JoinConversationHeader = ({ conversation }: JoinConversationHeaderProps) => {
+const JoinConversationHeader = ({ conversation, onExitConversation }: JoinConversationHeaderProps) => {
   return (
     <div className="z-100 flex w-full items-center justify-between px-4 py-2 outline-none">
       <SessionIdLabelWithCopyButton sessionId={conversation.session_id} />
-      <ConversationActions conversation={conversation} />
+      <ConversationActions conversation={conversation} onExitConversation={onExitConversation} />
     </div>
   );
 };

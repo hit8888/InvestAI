@@ -28,6 +28,7 @@ import {
   checkIsQualificationFormArtifact,
   checkIsAIMessage,
   checkIsAdminJoinedMessage,
+  checkIsAdminLeftMessage,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -36,6 +37,7 @@ import Typography from '../Typography/index.tsx';
 import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { ViewType } from '@meaku/core/types/common';
 import AdminJoinedInfo from './AdminJoinedInfo.tsx';
+import AdminExitInfo from './AdminExitInfo.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -200,6 +202,10 @@ const MessageItem = ({
 
         {checkIsAdminJoinedMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
           <AdminJoinedInfo />
+        )}
+
+        {checkIsAdminLeftMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
+          <AdminExitInfo />
         )}
 
         {isDiscoveryQuestion(message) && (

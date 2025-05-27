@@ -10,6 +10,7 @@ import WebSocketManager from './WebSocketManager';
 import { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import { useSidebar } from '../../context/SidebarContext';
 import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
+import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
@@ -18,10 +19,35 @@ const ActiveConversationsLayout = () => {
   const [showActiveConversations, setShowActiveConversations] = useState(false);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
 
-  const { currentConversation, setCurrentConversation } = useJoinConversationStore();
+  const { currentConversation, sessionsStatus, setCurrentConversation, updateSessionStatus } =
+    useJoinConversationStore();
+
+  const handleExitConversation = () => {
+    const sessionId = currentConversation?.session_id;
+
+    if (sessionId) {
+      const sendMessage = sendMessageFnMap[sessionId];
+
+      sendMessage({
+        message: {
+          content: '',
+          event_type: 'LEAVE_SESSION',
+          event_data: {},
+        },
+        message_type: 'EVENT',
+      });
+
+      updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
+      setCurrentConversation(null);
+    }
+  };
 
   const handleCardClick = (conversation: ActiveConversation) => {
     setCurrentConversation(conversation);
+
+    if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
+      updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
+    }
   };
 
   const handleCloseJoinConversationDrawer = () => {
@@ -101,6 +127,7 @@ const ActiveConversationsLayout = () => {
                 <JoinConversationDrawer
                   conversation={currentConversation}
                   onSendMessage={handleSendMessage}
+                  onExitConversation={handleExitConversation}
                   onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
                   onClose={handleCloseJoinConversationDrawer}
                 />

@@ -6,17 +6,17 @@ import ExitConversationConfirmDialog from './ExitConversationConfirmDialog';
 import { useState } from 'react';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 
-const ExitConversation = ({ conversation }: { conversation: ActiveConversation }) => {
-  const { sessionsStatus, setCurrentConversation, updateSessionStatus } = useJoinConversationStore();
+interface ExitConversationProps {
+  conversation: ActiveConversation;
+  onExitConversation: () => void;
+}
+
+const ExitConversation = ({ conversation, onExitConversation }: ExitConversationProps) => {
+  const { sessionsStatus } = useJoinConversationStore();
   const [openExitConvConfirm, setOpenExitConvConfirm] = useState(false);
 
   const handleInitExitConversation = () => {
     setOpenExitConvConfirm(true);
-  };
-
-  const handleExitConversation = () => {
-    updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.EXIT);
-    setCurrentConversation(null);
   };
 
   const sessionStatus = sessionsStatus[conversation.session_id];
@@ -35,7 +35,7 @@ const ExitConversation = ({ conversation }: { conversation: ActiveConversation }
 
       <ExitConversationConfirmDialog
         isOpen={openExitConvConfirm}
-        onSubmit={handleExitConversation}
+        onSubmit={onExitConversation}
         onClose={() => setOpenExitConvConfirm(false)}
       />
     </>

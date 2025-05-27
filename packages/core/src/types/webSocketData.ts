@@ -260,6 +260,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       suggestions: z.array(z.string()).optional(),
     }),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('LEAVE_SESSION'),
+    event_data: z.object({}),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z

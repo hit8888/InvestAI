@@ -6,12 +6,13 @@ import ExitConversation from './ExitConversation';
 
 interface ConversationActionsProps {
   conversation: ActiveConversation;
+  onExitConversation: () => void;
 }
 
-const ConversationActions = ({ conversation }: ConversationActionsProps) => {
+const ConversationActions = ({ conversation, onExitConversation }: ConversationActionsProps) => {
   return (
     <div className="flex items-center gap-4">
-      <ExitConversation conversation={conversation} />
+      <ExitConversation conversation={conversation} onExitConversation={onExitConversation} />
 
       <ConversationOverview conversation={conversation} />
 

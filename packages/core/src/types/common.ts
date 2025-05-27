@@ -50,6 +50,7 @@ export enum MessageViewType {
 }
 
 export enum AdminConversationJoinStatus {
+  INIT = 'INIT',
   PENDING = 'PENDING',
   JOINED = 'JOINED',
   DENIED = 'DENIED',
