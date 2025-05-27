@@ -77,6 +77,9 @@ export const useEmbedAppEvents = ({
             message: { content: event.data.data.message },
             message_type: 'TEXT',
           });
+          trackAgentbotEvent(ANALYTICS_EVENT_NAMES.PARENT_FORM_MESSAGE, {
+            ...event.data.data,
+          });
         }
         break;
       case 'MODE_CHANGE':
@@ -105,7 +108,7 @@ export const useEmbedAppEvents = ({
             if (payload.utmParams.isAgentOpen === 'true') {
               handleOpenAndShowAgent();
               trackAgentbotEvent(ANALYTICS_EVENT_NAMES.AGENT_OPENED_VIA_UTM_PARAMS, {
-                ...event.data,
+                ...payload,
               });
             }
           }

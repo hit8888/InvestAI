@@ -180,13 +180,6 @@ declare global {
       tracking_config: TrackingConfigType;
     };
   }
-
-  interface OverlayManager {
-    overlay: HTMLDivElement;
-    wrapper: HTMLDivElement;
-    show: () => void;
-    hide: () => void;
-  }
 }
 
 export interface ExternalButtonManager {

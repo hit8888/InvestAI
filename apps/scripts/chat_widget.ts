@@ -1,4 +1,5 @@
 import { initDomDetectors } from "./dom-detectors";
+import { OverlayManager } from "./OverlayManager";
 
 (function () {
   // Config Module
@@ -324,56 +325,6 @@ import { initDomDetectors } from "./dom-detectors";
     },
   };
 
-  // Overlay Manager Module
-  const OverlayManager = {
-    create(): OverlayManager {
-      const overlay = document.createElement("div");
-      overlay.id = "chat-widget-overlay";
-      Object.assign(overlay.style, {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        right: "0",
-        bottom: "0",
-        zIndex: "999999",
-        display: "none",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        transition: "opacity 0.3s ease",
-        pointerEvents: "auto",
-      });
-
-      const wrapper = document.createElement("div");
-      Object.assign(wrapper.style, {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "90%",
-        maxWidth: "1200px",
-        height: "80vh",
-        backgroundColor: "#fff",
-        borderRadius: "24px",
-        overflow: "hidden",
-        pointerEvents: "auto",
-        zIndex: "1000000",
-      });
-
-      overlay.appendChild(wrapper);
-      document.body.appendChild(overlay);
-
-      return {
-        overlay,
-        wrapper,
-        show: () => {
-          overlay.style.display = "block";
-        },
-        hide: () => {
-          overlay.style.display = "none";
-        },
-      };
-    },
-  };
-
   // Agent Iframe Manager Module
   const AgentIframeManager = {
     create(container: HTMLElement, iframeSrc: string): HTMLIFrameElement {
@@ -680,7 +631,6 @@ import { initDomDetectors } from "./dom-detectors";
     try {
       const url = URLManager.getCurrentUrl();
       let iframe: HTMLIFrameElement;
-      let overlay: OverlayManager | null = null;
 
       // Create embedded container if containerId is provided
       if (config.containerId) {
@@ -708,7 +658,17 @@ import { initDomDetectors } from "./dom-detectors";
       }
 
       // Create overlay for form submissions
-      overlay = OverlayManager.create();
+      const overlay = OverlayManager(
+        config,
+        postMessage,
+        embeddedContainer,
+        bottomContainer,
+      );
+
+      // Set iframe reference in overlay manager
+      if (iframe! && currentContainer) {
+        overlay.setIframe(iframe!, currentContainer);
+      }
 
       // Message event listener
       window.addEventListener(
@@ -739,7 +699,7 @@ import { initDomDetectors } from "./dom-detectors";
                       hideBottomBar: config.hideBottomBar,
                       // Check if we're in overlay mode
                       isCollapsible:
-                        currentContainer === overlay?.wrapper
+                        currentContainer === overlay?.getWrapper()
                           ? true
                           : !config.containerId,
                       prospectId: localStorage.getItem(
@@ -833,7 +793,7 @@ import { initDomDetectors } from "./dom-detectors";
                   hasFirstUserMessageBeenSent,
                   // Only set isCollapsible based on container if not in overlay
                   isCollapsible:
-                    currentContainer === overlay?.wrapper
+                    currentContainer === overlay?.getWrapper()
                       ? true
                       : !config.containerId,
                 });
@@ -869,119 +829,6 @@ import { initDomDetectors } from "./dom-detectors";
             hasFirstUserMessageBeenSent,
           );
         }
-      });
-
-      // Add overlay close handling
-      if (overlay) {
-        const handleOverlayClose = () => {
-          if (iframe) {
-            overlay.wrapper.removeChild(iframe);
-            if (config.containerId && embeddedContainer) {
-              embeddedContainer.appendChild(iframe);
-              currentContainer = embeddedContainer;
-              // Reset isCollapsible when moving back to embedded mode
-              postMessage(iframe, {
-                isCollapsible: false,
-                type: "MODE_CHANGE",
-              });
-            } else if (bottomContainer) {
-              bottomContainer.appendChild(iframe);
-              currentContainer = bottomContainer;
-              // Reset isCollapsible when moving back to bottom bar mode
-              postMessage(iframe, {
-                isCollapsible: true,
-                type: "MODE_CHANGE",
-              });
-            }
-          }
-          overlay.hide();
-        };
-
-        overlay.overlay.addEventListener("click", (e) => {
-          if (e.target === overlay.overlay) {
-            handleOverlayClose();
-          }
-        });
-
-        // Listen for close events from iframe
-        window.addEventListener("message", (event: MessageEvent) => {
-          if (event.data.type === "CLOSE_OVERLAY") {
-            handleOverlayClose();
-          }
-        });
-      }
-
-      // Modify the form submit handler
-      window.addEventListener("submit", (e) => {
-        const form = e.target as HTMLFormElement;
-        if (!form.hasAttribute("data-breakout-form")) {
-          return;
-        }
-        e.preventDefault();
-
-        const input = form.querySelector(
-          'input[type="text"]',
-        ) as HTMLInputElement;
-        const message = input.value.trim();
-
-        if (overlay && iframe) {
-          // Show the overlay
-          overlay.show();
-
-          // Safely move iframe to overlay wrapper
-          try {
-            // Check if iframe is actually in the current container
-            if (iframe.parentNode === currentContainer) {
-              currentContainer?.removeChild(iframe);
-            } else if (iframe.parentNode) {
-              // If iframe is somewhere else, remove it from there
-              iframe.parentNode.removeChild(iframe);
-            }
-
-            // Update current container before appending
-            currentContainer = overlay.wrapper;
-            // Append to overlay wrapper
-            overlay.wrapper.appendChild(iframe);
-
-            // Immediately send isCollapsible true for overlay mode
-            postMessage(iframe, {
-              isCollapsible: true,
-              type: "MODE_CHANGE",
-            });
-
-            // Wait for iframe to be ready in new container
-            const messageHandler = (event: MessageEvent) => {
-              if (event.data.type === "EMBED_READY") {
-                // Send the message once iframe is ready
-                postMessage(iframe, {
-                  type: "PARENT_FORM_MESSAGE",
-                  data: {
-                    message: message,
-                  },
-                  isCollapsible: true, // Always true in overlay mode
-                  prospectId: localStorage.getItem("__breakout__prospectId"),
-                });
-                window.removeEventListener("message", messageHandler);
-              }
-            };
-
-            window.addEventListener("message", messageHandler);
-          } catch (error) {
-            console.error("Error moving iframe:", error);
-            // If moving fails, try to recover by creating a new iframe
-            if (iframe.parentNode !== overlay.wrapper) {
-              currentContainer = overlay.wrapper;
-              overlay.wrapper.appendChild(iframe);
-              // Still try to set isCollapsible in error case
-              postMessage(iframe, {
-                type: "MODE_CHANGE",
-                isCollapsible: true,
-              });
-            }
-          }
-        }
-
-        input.value = "";
       });
     } catch (err) {
       console.error("Error initializing widget:", err);
