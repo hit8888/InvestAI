@@ -157,9 +157,6 @@ const ConversationOverview = ({ conversation }: ConversationOverviewProps) => {
 };
 
 const Summary = ({ className }: { className: string }) => {
-  const [showTrimmed, setShowTrimmed] = useState(true);
-  const Icon = showTrimmed ? ChevronDown : ChevronUp;
-  const showMoreButtonText = showTrimmed ? 'Show More' : 'Show Less';
   const { chatSummary } = useActiveConversationDetails();
 
   return (
@@ -171,18 +168,36 @@ const Summary = ({ className }: { className: string }) => {
         <p className="text-sm font-medium text-gray-500">Summary:</p>
       </div>
 
+      {chatSummary ? (
+        <SummaryText chatSummary={chatSummary} />
+      ) : (
+        <p className="text-sm text-gray-400">No summary available yet.</p>
+      )}
+    </div>
+  );
+};
+
+const SummaryText = ({ chatSummary }: { chatSummary: string }) => {
+  const [showTrimmed, setShowTrimmed] = useState(chatSummary.length > CHAT_SUMMARY_TRIM_LENGTH);
+  const Icon = showTrimmed ? ChevronDown : ChevronUp;
+  const showMoreButtonText = showTrimmed ? 'Show More' : 'Show Less';
+
+  return (
+    <>
       <p className="text-sm text-gray-900">
         {showTrimmed ? `${chatSummary.substring(0, CHAT_SUMMARY_TRIM_LENGTH)}...` : chatSummary}
       </p>
 
-      <div
-        onClick={() => setShowTrimmed((showMore) => !showMore)}
-        className={`flex cursor-pointer items-center gap-2 self-end rounded-md px-3 py-1.5 text-sm font-medium text-primary`}
-      >
-        <span>{showMoreButtonText}</span>
-        <Icon size={16} className="text-bluegray-1000" />
-      </div>
-    </div>
+      {chatSummary.length > CHAT_SUMMARY_TRIM_LENGTH ? (
+        <div
+          onClick={() => setShowTrimmed((showMore) => !showMore)}
+          className={`flex cursor-pointer items-center gap-2 self-end rounded-md px-3 py-1.5 text-sm font-medium text-primary`}
+        >
+          <span>{showMoreButtonText}</span>
+          <Icon size={16} className="text-bluegray-1000" />
+        </div>
+      ) : null}
+    </>
   );
 };
 

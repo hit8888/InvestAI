@@ -44,19 +44,22 @@ const Artifact = ({
           {isGeneratingArtifact ? (
             <div className="h-full w-full animate-pulse bg-primary/10" />
           ) : (
-            <ArtifactContentUi
-              logoURL={logoURL}
-              handleToggleFullScreen={handleToggleFullScreen}
-              setIsArtifactPlaying={setIsArtifactPlaying}
-              artifactType={activeArtifactType}
-              artifactContent={artifactContent}
-              activeArtifactId={activeArtifactId}
-              handleSendUserMessage={handleSendUserMessage}
-              isMediaTakingFullWidth={isMediaTakingFullWidth}
-              onSlideItemClick={onSlideItemClick}
-              isQualificationFormArtifact={isQualificationFormArtifact}
-              viewType={viewType}
-            />
+            <>
+              <ArtifactContentUi
+                logoURL={logoURL}
+                handleToggleFullScreen={handleToggleFullScreen}
+                setIsArtifactPlaying={setIsArtifactPlaying}
+                artifactType={activeArtifactType}
+                artifactContent={artifactContent}
+                activeArtifactId={activeArtifactId}
+                handleSendUserMessage={handleSendUserMessage}
+                isMediaTakingFullWidth={isMediaTakingFullWidth}
+                onSlideItemClick={onSlideItemClick}
+                isQualificationFormArtifact={isQualificationFormArtifact}
+                viewType={viewType}
+              />
+              {viewType === ViewType.USER ? null : <div className="bg-gray absolute inset-0 z-10 bg-opacity-10" />}
+            </>
           )}
         </div>
       </div>

@@ -29,7 +29,7 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: artifactMetadata.filled_data ?? {},
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   function onSubmit(values: FormSchemaType) {
