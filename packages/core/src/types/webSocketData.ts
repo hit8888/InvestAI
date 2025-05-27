@@ -20,6 +20,7 @@ export const ScriptStepDTO = z.object({
   audio_url: z.string().optional(),
   is_end: z.boolean(),
   asset_type: z.enum(['IMAGE', 'VIDEO']).nullable(),
+  current_feature: z.string().nullable(),
 });
 
 export type ScriptStepType = z.infer<typeof ScriptStepDTO>;
@@ -145,7 +146,9 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('DEMO_OPTIONS'),
-    event_data: z.object({}),
+    event_data: z.object({
+      demo_available: z.boolean().optional(),
+    }),
   }),
   z.object({
     content: z.string(),
@@ -175,9 +178,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('DEMO_NEXT'),
-    event_data: z.object({
-      feature_ids: z.array(z.number()).optional(),
-    }),
+    event_data: DemoEventDataSchema.or(z.object({})),
   }),
   z.object({
     content: z.string(),

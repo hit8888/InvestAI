@@ -40,23 +40,23 @@ const useDemoDetails = () => {
 
   const demoFeatures = eventData?.features ?? [];
 
-  const isDemoAvailable = messages
-    .filter((msg) => msg.response_id === latestResponseId)
-    .some((message) => {
-      const hasCompleteMessage = messages
-        .filter((msg) => msg.response_id === latestResponseId)
-        .some((msg) => msg.message_type === 'STREAM' && msg.message.is_complete);
+  const isDemoAvailable = messages.some((message) => {
+    const hasCompleteMessage = messages
+      .filter((msg) => msg.response_id === latestResponseId)
+      .some((msg) => msg.message_type === 'STREAM' && msg.message.is_complete);
 
-      if (!hasCompleteMessage) return false;
+    const latestResponseIdMessage = messages.find((msg) => msg.response_id === latestResponseId);
 
-      if (message.message_type === 'EVENT' && 'event_type' in message.message) {
-        const eventMessage = message.message;
-        if (eventMessage.event_type === 'DEMO_AVAILABLE') {
-          return eventMessage.event_data.demo_available;
-        }
+    if (latestResponseIdMessage?.message_type === 'STREAM' && !hasCompleteMessage) return false;
+
+    if (message.message_type === 'EVENT' && 'event_type' in message.message) {
+      const eventMessage = message.message;
+      if (eventMessage.event_type === 'DEMO_AVAILABLE' || eventMessage.event_type === 'DEMO_OPTIONS') {
+        return eventMessage.event_data.demo_available;
       }
-      return false;
-    });
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (draftDemoDetails) {

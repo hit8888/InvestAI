@@ -9,6 +9,7 @@ import {
   MessageAnalyticsEventData,
   StreamMessageContent,
   WebSocketMessage,
+  DemoEventDataSchema,
 } from '../types/webSocketData';
 import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
 import { MessageSenderRole, MessageViewType, ViewType } from '../types/common';
@@ -123,6 +124,28 @@ export const isGeneratingMediaArtifactEvent = (message: WebSocketMessage) =>
   message.message.event_type === AgentEventType.GENERATING_ARTIFACT &&
   isMediaArtifact(message.message.event_data.artifact_type);
 
+export const isDemoAvailable = (message: WebSocketMessage): boolean => {
+  return (
+    message.role === 'ai' &&
+    message.message_type === 'EVENT' &&
+    message.actor === 'DEMO' &&
+    message.message.event_type === 'DEMO_AVAILABLE' &&
+    'event_data' in message.message &&
+    message.message.event_data &&
+    'demo_available' in message.message.event_data &&
+    message.message.event_data.demo_available
+  );
+};
+
+export const isDemoOptionsMessage = (message: WebSocketMessage): boolean => {
+  return (
+    message.role === 'ai' &&
+    message.message_type === 'EVENT' &&
+    message.actor === 'DEMO' &&
+    message.message.event_type === 'DEMO_OPTIONS'
+  );
+};
+
 export const getDemoQuestionData = (message: WebSocketMessage | undefined): DemoEventData | null => {
   if (
     message?.message_type === 'EVENT' &&
@@ -218,6 +241,50 @@ export const hasDemoEndMessage = (messages: WebSocketMessage[]) => {
   return messages.find(
     (msg) => 'event_type' in msg.message && msg.message.event_type === 'DEMO_END' && msg.role === 'user',
   );
+};
+
+export const getDemoOptions = (demoOptionsMessageIndex: number, messages: WebSocketMessage[]) => {
+  const demoOptionsMessage = messages[demoOptionsMessageIndex];
+  const eventData =
+    'event_data' in demoOptionsMessage.message
+      ? (demoOptionsMessage.message.event_data as typeof DemoEventDataSchema)
+      : null;
+
+  if (
+    !('event_type' in demoOptionsMessage.message) ||
+    demoOptionsMessage.message.event_type !== 'DEMO_OPTIONS' ||
+    !eventData
+  ) {
+    return null;
+  }
+
+  let demoFeatureName, demoEndMessageIndex;
+
+  for (let index = demoOptionsMessageIndex; index < messages.length; index++) {
+    const message = messages[index];
+
+    if (
+      'event_type' in message.message &&
+      message.message.event_type === 'DEMO_NEXT' &&
+      'event_data' in message.message &&
+      'script_step' in message.message.event_data &&
+      message.message.event_data.script_step &&
+      'current_feature' in message.message.event_data.script_step
+    ) {
+      demoFeatureName = message.message.event_data.script_step.current_feature;
+    }
+
+    if ('event_type' in message.message && message.message.event_type === 'DEMO_END') {
+      demoEndMessageIndex = index;
+      break;
+    }
+  }
+
+  if (demoEndMessageIndex && demoFeatureName) {
+    return demoFeatureName;
+  }
+
+  return null;
 };
 
 export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {

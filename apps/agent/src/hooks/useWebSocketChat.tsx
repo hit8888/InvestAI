@@ -10,9 +10,14 @@ import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
-import { AgentEventType, EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
-import { hasUserSentInactiveMessage, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import {
+  hasUserSentInactiveMessage,
+  isDemoAvailable,
+  isDemoOptionsMessage,
+  isMessageAnalyticsEvent,
+} from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
@@ -209,24 +214,7 @@ const useWebSocketChat = () => {
 
       handleStopOrbAnimation();
 
-      // First check if it's an event message
-      if (response.message_type === 'EVENT' && 'event_type' in response.message) {
-        const eventMessageContent = response.message as EventMessageContent;
-        if (
-          'event_data' in eventMessageContent &&
-          'demo_available' in eventMessageContent.event_data &&
-          eventMessageContent.event_data.demo_available
-        ) {
-          const demoEventData = eventMessageContent.event_data;
-          if (
-            (demoEventData.demo_available &&
-              (demoEventData.script_step || (demoEventData.features && !!demoEventData.features.length))) ||
-            demoEventData.response_audio_url
-          ) {
-            return;
-          }
-        }
-      }
+      if (response.actor === 'DEMO' && !isDemoOptionsMessage(response) && !isDemoAvailable(response)) return;
 
       if (response.role === MessageSenderRole.AI) {
         handleUpdateOrbState(OrbStatusEnum.responding);

@@ -21,6 +21,7 @@ import {
   getFormFilledEvent,
   getMediaArtifactMessage,
   isAIResponseInactiveMessage,
+  isDemoOptionsMessage,
   isDiscoveryAnswer,
   isDiscoveryQuestion,
   isDisplayedAsTextMessage,
@@ -38,6 +39,7 @@ import SuggestionsArtifact from './SuggestionsArtifact.tsx';
 import { ViewType } from '@meaku/core/types/common';
 import AdminJoinedInfo from './AdminJoinedInfo.tsx';
 import AdminExitInfo from './AdminExitInfo.tsx';
+import DemoArtifactPreview from './DemoArtifactPreview.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -262,6 +264,13 @@ const MessageItem = ({
         {viewType === ViewType.USER || viewType === ViewType.ADMIN ? (
           <>
             {showMessageArtifactPreview ? <>{getMessageArtifactPreviewContent(message)}</> : null}
+
+            {isDemoOptionsMessage(message) ? (
+              <DemoArtifactPreview
+                handleSendUserMessage={handleSendUserMessage}
+                setDemoPlayingStatus={setDemoPlayingStatus}
+              />
+            ) : null}
 
             {/* Show suggestion artifacts - store handles filtering */}
             {shouldShowSuggestions && (
