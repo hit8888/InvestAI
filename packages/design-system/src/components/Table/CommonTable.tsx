@@ -120,8 +120,8 @@ const CommonTable = ({
           key={row.id}
           row={row}
           index={index}
-          isIdSelected={isIdSelected}
           pageType={pageType}
+          isIdSelected={isIdSelected}
           toggleSelectId={toggleSelectId}
         />
       );
@@ -142,7 +142,6 @@ const CommonTable = ({
   const table = useReactTable({
     ...tableInitialState,
     data: tabularData,
-
     columns: columnHeaderData as ColumnDef<any, any>[],
     getCoreRowModel: getCoreRowModel(),
   });

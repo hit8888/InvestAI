@@ -10,6 +10,7 @@ import SourceFileIcon from '@breakout/design-system/components/icons/source-file
 import SourceVideoIcon from '@breakout/design-system/components/icons/source-video-icon';
 import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
 import DateUtil from '@meaku/core/utils/dateUtils';
+import { DataSourceItem } from '@meaku/core/types/admin/api';
 
 // const TableColumnWidthSize = 200;
 const { WEBPAGES, DOCUMENTS, VIDEOS, SLIDES } = SourcesCardTypes;
@@ -44,6 +45,16 @@ export const getIncludedSourceLabel = (selectedType: string | null) => {
   }
 };
 
+const getDataSourceID = (key: string) => {
+  switch (key) {
+    case 'name':
+      return 'source_name';
+    case 'data':
+      return 'description';
+    default:
+      return key;
+  }
+};
 // Convert column list to the required format
 export const getDataSourcesFormattedColumnsList = (pageType: string) => {
   const columnsList = DATA_SOURCES_COMMON_COLUMN_LISTS[pageType as keyof typeof DATA_SOURCES_COMMON_COLUMN_LISTS];
@@ -53,9 +64,21 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
     ];
   const formattedColumns = columnsList.map((key) => {
     const newItem = {
-      id: key === 'name' ? 'source_name' : key,
+      id: getDataSourceID(key),
       accessorKey: key,
       header: columnHeaderLabelMapping[key as keyof typeof columnHeaderLabelMapping],
+      ...(key === 'data' && {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        accessorFn: (row: any) => ({
+          description: row.data || '',
+          title: row.title || '',
+          labelled_by_name: row.labelled_by_name || '',
+        }),
+      }),
+      ...(key === 'duration' && {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        accessorFn: (row: any) => row.asset?.public_url || '',
+      }),
     };
 
     return newItem;
@@ -153,4 +176,26 @@ export const generateFeatureAssetStats = (
   }
 
   return stats;
+};
+
+export const getSingleSourceItemVideoUrl = (item: DataSourceItem | File) => {
+  const isFile = item instanceof File;
+  if (isFile) {
+    return URL.createObjectURL(item);
+  }
+  return (item as DataSourceItem).public_url;
+};
+
+export const getSingleSourceItemTypeAndName = (item: DataSourceItem | File) => {
+  const isFile = item instanceof File;
+  if (isFile) {
+    return {
+      type: item.type,
+      name: item.name,
+    };
+  }
+  return {
+    type: (item as DataSourceItem).type,
+    name: (item as DataSourceItem).name,
+  };
 };

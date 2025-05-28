@@ -131,6 +131,7 @@ export interface AllFilterState {
   webpages: FilterValues;
   documents: FilterValues;
   videos: FilterValues;
+  slides: FilterValues;
   setFilter: (page: PaginationPageType, key: keyof FilterValues, value: FilterValueTypes) => void;
   resetPageFilters: (page: PaginationPageType) => void;
   initializeFilterValues: (page: PaginationPageType, filters: FilterItem[]) => void;

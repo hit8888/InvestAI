@@ -6,6 +6,7 @@ import {
   CONVERSATIONS_TABLE_FILTERS_CONFIG,
   DOCUMENTS_TABLE_FILTERS_CONFIG,
   LEADS_TABLE_FILTERS_CONFIG,
+  SLIDE_TABLE_FILTERS_CONFIG,
   SortByIntentScore,
   SortBySessionLength,
   SortByTimestamp,
@@ -29,10 +30,17 @@ import {
   FunnelStep,
   ProspectDetailsType,
 } from './admin-types';
-import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
+import {
+  CONVERSATIONS_PAGE,
+  DOCUMENTS_PAGE,
+  LEADS_PAGE,
+  SLIDES_PAGE,
+  VIDEOS_PAGE,
+  WEBPAGES_PAGE,
+} from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
-import { SortValues, WebpagesSortValues, DocumentsSortValues } from '@meaku/core/types/admin/sort';
+import { SortValues, WebpagesSortValues, DocumentsSortValues, ArtifactsSortValues } from '@meaku/core/types/admin/sort';
 import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
@@ -299,7 +307,7 @@ export const getFilterHeaderLabel = (filterState: string) => {
 };
 
 export const getSortingAppliedValues = (
-  sortState: SortValues | WebpagesSortValues | DocumentsSortValues,
+  sortState: SortValues | WebpagesSortValues | DocumentsSortValues | ArtifactsSortValues,
   page: string,
 ) => {
   const isLeadsPage = page === LEADS_PAGE;
@@ -379,7 +387,7 @@ export const getSortingAppliedValues = (
     });
   }
 
-  if (sortApplied.length === 0) {
+  if (isMainTabPage && sortApplied.length === 0) {
     sortApplied.push({
       field: isLeadsPage ? 'created_on' : 'timestamp',
       order: 'desc',
@@ -455,6 +463,8 @@ export const getFiltersConfig = (page: string) => {
       return DOCUMENTS_TABLE_FILTERS_CONFIG;
     case VIDEOS_PAGE:
       return VIDEOS_TABLE_FILTERS_CONFIG;
+    case SLIDES_PAGE:
+      return SLIDE_TABLE_FILTERS_CONFIG;
     default:
       return [];
   }
@@ -466,6 +476,8 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const isConversationsPage = page === CONVERSATIONS_PAGE;
   const isConversationsAndLeadsPage = isConversationsPage || isLeadsPage;
   const isDocumentsPage = page === DOCUMENTS_PAGE;
+  const isVideosPage = page === VIDEOS_PAGE;
+  const isSlidesPage = page === SLIDES_PAGE;
   const {
     dateRange,
     intentScore,
@@ -568,6 +580,24 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push({
       field: 'data_source_type',
       value: 'PDF',
+      operator: 'eq',
+    });
+  }
+
+  // Default filter for videos page
+  if (isVideosPage) {
+    filterApplied.push({
+      field: 'data_source_type',
+      value: 'VIDEO',
+      operator: 'eq',
+    });
+  }
+
+  // Default filter for slides page
+  if (isSlidesPage) {
+    filterApplied.push({
+      field: 'data_source_type',
+      value: 'SLIDE',
       operator: 'eq',
     });
   }

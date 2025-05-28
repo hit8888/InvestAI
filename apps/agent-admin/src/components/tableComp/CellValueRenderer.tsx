@@ -14,25 +14,31 @@ import StatusCellValue from './tableCellComp/StatusCellValue';
 import SourceNameCellValue from './tableCellComp/SourceNameCellValue';
 import DataSourceTypeCellValue from './tableCellComp/DataSourceTypeCellValue';
 import TitleCellValue from './tableCellComp/TitleCellValue';
+import AssetCellValue from './tableCellComp/AssetCellValue';
+import { DataSourceItem } from '@meaku/core/types/admin/api';
+import DescriptionCellValue from './tableCellComp/DescriptionCellValue';
+import DurationCellValue from './tableCellComp/DurationCellValue';
+
+type cellValueMapType = {
+  [key: string]: React.FC<{ value: string }>;
+};
 
 export type CellValueRendererProps = {
   id: string;
-  info: string | LocationWithCityCountry;
+  info: string | LocationWithCityCountry | DataSourceItem;
 };
 
-const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
+const cellValueMap: cellValueMapType = {
   email: EmailCellValue,
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
-  timestamp: TimestampCellValue, // For Conversations Table
-  timeline: TimestampCellValue, // For Leads Table
-  // location: LocationCellValue,
+  timestamp: TimestampCellValue,
+  timeline: TimestampCellValue,
   summary: ConversationPreviewCellValue,
   bant_analysis: BANTAnalysisCellValue,
   buyer_intent_score: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
-  // session_id: SessionIDCellValue,
   url: UrlCellValue,
   updated_on: TimestampCellValue,
   status: StatusCellValue,
@@ -42,13 +48,47 @@ const cellValueMap: { [key: string]: React.FC<{ value: string }> } = {
   source_url: UrlCellValue,
 };
 
+type SpecialCellConfig = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: React.ComponentType<any>;
+  type: string; // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  props?: Record<string, any>;
+};
+
+const specialCellMap: Record<string, SpecialCellConfig> = {
+  country: {
+    component: LocationCellValue,
+    type: 'LocationWithCityCountry',
+  },
+  session_id: {
+    component: SessionIDCellValue,
+    type: 'string',
+    props: { isTooltipWithClipboard: true },
+  },
+  asset: {
+    component: AssetCellValue,
+    type: 'DataSourceItem',
+  },
+  description: {
+    component: DescriptionCellValue,
+    type: 'DescriptionValue',
+  },
+  duration: {
+    component: DurationCellValue,
+    type: 'string',
+  },
+};
+
 const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {
-  if (id === 'country' && typeof info !== 'string') {
-    return <LocationCellValue value={info as LocationWithCityCountry} />;
+  // Handle special cases
+  const specialCell = specialCellMap[id];
+  if (specialCell) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { component: Component, props = {}, type } = specialCell;
+    return <Component value={info as typeof type} {...props} />;
   }
-  if (id === 'session_id') {
-    return <SessionIDCellValue value={info as string} isTooltipWithClipboard={true} />;
-  }
+
+  // Handle standard cases
   const Component = cellValueMap[id];
   return Component ? <Component value={info as string} /> : <span>{info as string}</span>;
 };

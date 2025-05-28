@@ -18,6 +18,8 @@ import {
   DeleteWebpagesResponse,
   ReprocessWebpagesRequest,
   ReprocessWebpagesResponse,
+  BulkAddArtifactsRequest,
+  BulkAddArtifactsResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -124,8 +126,11 @@ export const getDataSourceWebpagesData = (payload: DataSourcePayload) =>
 export const getDataSourceDocumentsData = (payload: DataSourcePayload) =>
   adminApiClient.post(`tenant/api/datasources/`, payload);
 
-export const getDataSourceVideosData = (payload: DataSourcePayload) =>
-  adminApiClient.post(`tenant/api/videos/`, payload);
+export const getDataSourceArtifactsData = (payload: DataSourcePayload) =>
+  adminApiClient.post(`/tenant/api/artifacts/`, payload);
+
+export const bulkAddArtifacts = (payload: BulkAddArtifactsRequest) =>
+  adminApiClient.post<BulkAddArtifactsResponse>(`/tenant/api/artifacts/bulk/`, payload);
 
 export const fetchSitemapforWebpage = (payload: FetchSitemapRequest) =>
   adminApiClient.post<FetchSitemapResponse>(`tenant/api/sitemap/`, payload);
@@ -138,6 +143,8 @@ export const bulkAddDocuments = (payload: BulkAddDocumentsRequest) =>
 
 export const deleteDataSourceItems = (payload: DeleteWebpagesRequest, sourceType: string) =>
   adminApiClient.delete<DeleteWebpagesResponse>(`tenant/api/${sourceType}/delete/`, { data: payload });
+
+export const deleteArtifacts = (id: number) => adminApiClient.delete(`tenant/api/artifacts/${id}`);
 
 export const reprocessWebpages = (payload: ReprocessWebpagesRequest) =>
   adminApiClient.post<ReprocessWebpagesResponse>(`tenant/api/webpages/reprocess/`, payload);

@@ -9,6 +9,7 @@ export const useAllFilterStore = create<AllFilterState>((set) => ({
   webpages: { ...InitialFilterValues },
   documents: { ...InitialFilterValues },
   videos: { ...InitialFilterValues },
+  slides: { ...InitialFilterValues },
 
   setFilter: (page: PaginationPageType, key: keyof FilterValues, value: FilterValueTypes) =>
     set((state) => ({

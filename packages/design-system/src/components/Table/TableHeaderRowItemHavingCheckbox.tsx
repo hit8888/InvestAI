@@ -70,7 +70,7 @@ const HeaderContent = ({
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
         {isFirstColumn && !isDocumentsPage && (
           <Checkbox
             checked={isAllSelected}
@@ -111,6 +111,9 @@ const TableHeaderRowItemHavingCheckbox = ({
         const isStatusColumn = header.column.id === 'status';
         const isSourceNameColumn = header.column.id === 'source_name';
         const isDataSourceTypeColumn = header.column.id === 'data_source_type';
+        const isDescriptionColumn = header.column.id === 'description';
+        const isDurationColumn = header.column.id === 'duration';
+
         return (
           <th
             key={header.id}
@@ -121,8 +124,8 @@ const TableHeaderRowItemHavingCheckbox = ({
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
                 'min-w-[600px]': isUrlColumn,
-                'min-w-[500px]': isSourceNameColumn,
-                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn,
+                'min-w-[500px]': isSourceNameColumn || isDescriptionColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn || isDurationColumn,
               },
             )}
           >

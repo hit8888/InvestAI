@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDataSourcesStore } from '../stores/useDataSourcesStore';
 import { SourcesCardTypes } from '../pages/DataSourcesPage/constants';
-import { addWebpagesSitemapLinks, bulkAddDocuments } from '@meaku/core/adminHttp/api';
+import { addWebpagesSitemapLinks, bulkAddArtifacts, bulkAddDocuments } from '@meaku/core/adminHttp/api';
 import toast from 'react-hot-toast';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { useQueryClient } from '@tanstack/react-query';
@@ -48,6 +48,20 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
           toast.success('Successfully added document sources');
           break;
+
+        case SourcesCardTypes.VIDEOS:
+        case SourcesCardTypes.SLIDES: {
+          const dataSourceType = selectedType === SourcesCardTypes.VIDEOS ? 'VIDEO' : 'SLIDE';
+          await bulkAddArtifacts(
+            dataSources.map((source) => ({
+              asset: source.id,
+              data_source_type: dataSourceType,
+            })),
+          );
+          queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+          toast.success('Successfully added document sources');
+          break;
+        }
 
         default:
           throw new Error('Unsupported data source type');

@@ -93,6 +93,14 @@ export const enum DATA_SOURCE_STATUS {
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED',
   COMPLETED = 'COMPLETED',
+  AI_LABELING_SCHEDULED = 'AI_LABELING_SCHEDULED',
+  IMAGE_ANALYSIS_IN_PROGRESS = 'IMAGE_ANALYSIS_IN_PROGRESS',
+  TRANSCRIBING_VIDEO = 'TRANSCRIBING_VIDEO',
+  VIDEO_TRANSCRIBED = 'VIDEO_TRANSCRIBED',
+  VIDEO_TEXT_ANALYSIS_IN_PROGRESS = 'VIDEO_TEXT_ANALYSIS_IN_PROGRESS',
+  LABELLED = 'LABELLED',
+  VECTORIZATION_SCHEDULED = 'VECTORIZATION_SCHEDULED',
+  VECTORIZING = 'VECTORIZING',
 }
 
 export const DATA_SOURCES_DOCUMENTS_COLUMN_LISTS = [
@@ -111,23 +119,23 @@ export const DATA_SOURCES_DOCUMENTS_COLUMN_HEADER_LABEL_MAPPING = {
   source_url: 'Source URL',
 };
 
-export const DATA_SOURCES_VIDEOS_COLUMN_LISTS = ['videos', 'summary', 'duration', 'last_updated', 'usage_count'];
+export const DATA_SOURCES_VIDEOS_COLUMN_LISTS = ['asset', 'data', 'duration', 'status', 'updated_on'];
 
 export const DATA_SOURCES_VIDEOS_COLUMN_HEADER_LABEL_MAPPING = {
-  videos: 'Videos',
-  summary: 'Summary',
+  asset: 'Videos',
+  data: 'Description',
   duration: 'Duration',
-  last_updated: 'Last Updated',
-  usage_count: 'Usage Count',
+  status: 'Status',
+  updated_on: 'Last Updated',
 };
 
-export const DATA_SOURCES_SLIDES_COLUMN_LISTS = ['slides', 'description', 'last_updated', 'usage_count'];
+export const DATA_SOURCES_SLIDES_COLUMN_LISTS = ['asset', 'data', 'status', 'updated_on'];
 
 export const DATA_SOURCES_SLIDES_COLUMN_HEADER_LABEL_MAPPING = {
-  slides: 'Slides',
-  description: 'Description',
-  last_updated: 'Last Updated',
-  usage_count: 'Usage Count',
+  asset: 'Slides',
+  data: 'Description',
+  status: 'Status',
+  updated_on: 'Last Updated',
 };
 
 export const DATA_SOURCES_COMMON_COLUMN_LISTS = {

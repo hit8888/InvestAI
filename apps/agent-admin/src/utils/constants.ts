@@ -310,6 +310,11 @@ export const VIDEOS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.fil
   (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
 );
 
+// Not Showing Usage Count for now
+export const SLIDE_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
+  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
+);
+
 // Routes
 
 export enum AppRoutesEnum {
@@ -542,7 +547,7 @@ export const COMPANY_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
 ];
 
 export const CHAT_SUMMARY_TRIM_LENGTH = 100;
-
+export const DATA_SOURCE_DESCRIPTION_TRIM_LENGTH = 300;
 // FRAMER MOTION PROPS
 
 export const SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS = {

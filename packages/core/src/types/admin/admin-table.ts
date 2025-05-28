@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   CompanyDetailsSchema,
   ConversationsTableResponseSchema,
+  DataSourceArtifactsTableResponseSchema,
   DataSourceDocumentsTableResponseSchema,
   DataSourceWebpagesTableResponseSchema,
   LeadsTableResponseSchema,
@@ -91,6 +92,13 @@ export interface ColumnDefinition {
   size?: number;
 }
 
+export type DescriptionValue = {
+  description: string;
+  title?: string;
+  labelled_by_name?: string;
+};
+
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
   .or(DataSourceWebpagesTableResponseSchema)
-  .or(DataSourceDocumentsTableResponseSchema);
+  .or(DataSourceDocumentsTableResponseSchema)
+  .or(DataSourceArtifactsTableResponseSchema);

@@ -13,6 +13,12 @@ const commonInitialSortValues = {
   statusSort: false,
 };
 
+const artifactsInitialSortValues = {
+  ...commonInitialSortValues,
+  assetSort: false,
+  dataSort: false,
+};
+
 const webpagesInitialSortValues = {
   ...commonInitialSortValues,
   urlSort: false,
@@ -39,7 +45,10 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
     ...documentsInitialSortValues,
   },
   videos: {
-    ...InitialSortValues,
+    ...artifactsInitialSortValues,
+  },
+  slides: {
+    ...artifactsInitialSortValues,
   },
   setSortValue: (page, category, value) =>
     set((state) => ({

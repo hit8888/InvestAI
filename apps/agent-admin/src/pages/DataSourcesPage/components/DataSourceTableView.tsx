@@ -34,8 +34,8 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const filterState = useAllFilterStore((state) => state[pageType as PaginationPageType]);
 
   // Reset to page 1 when filters changes
+  const appliedFilters = collectAppliedFilters(filterState);
   useEffect(() => {
-    const appliedFilters = collectAppliedFilters(filterState);
     if (!appliedFilters.length) {
       return;
     } else {
@@ -82,6 +82,10 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const conversationsPageColumns: ColumnDefinition[] = getDataSourcesFormattedColumnsList(pageType);
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
 
+  const areFiltersApplied = useMemo(() => {
+    return appliedFilters.length > 0;
+  }, [appliedFilters]);
+
   if (isError) return <ErrorState />;
 
   return (
@@ -91,6 +95,7 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         page={pageType}
         totalRecords={totalRecords}
         isLoading={isLoading}
+        areFiltersApplied={areFiltersApplied}
         payloadData={debouncedPayloadData}
         onFilterContainerHeightChange={setFilterContainerHeight}
       />

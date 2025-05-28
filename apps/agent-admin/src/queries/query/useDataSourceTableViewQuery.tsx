@@ -2,13 +2,13 @@ import { DataSourcePayload } from '@meaku/core/types/admin/api';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
   getDataSourceDocumentsData,
-  getDataSourceVideosData,
+  getDataSourceArtifactsData,
   getDataSourceWebpagesData,
 } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { CommonDataSourceTableResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { getTenantFromLocalStorage, SLIDES_PAGE } from '@meaku/core/utils/index';
 import { DOCUMENTS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
 
 const getDataSourceTableKey = (payload: DataSourcePayload, tenantName: string, tableKey: string): unknown[] => [
@@ -31,7 +31,8 @@ interface IProps {
 const API_FUNCTION_CALL_MAPPING = {
   [WEBPAGES_PAGE]: getDataSourceWebpagesData,
   [DOCUMENTS_PAGE]: getDataSourceDocumentsData,
-  [VIDEOS_PAGE]: getDataSourceVideosData,
+  [VIDEOS_PAGE]: getDataSourceArtifactsData,
+  [SLIDES_PAGE]: getDataSourceArtifactsData,
 };
 
 const useDataSourceTableViewQuery = ({

@@ -3,41 +3,42 @@ import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
 import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
+import { memo, useCallback } from 'react';
 
 type CustomSingleBodyRowItemProps = {
   row: Row<CommonDataSourceResponse>;
   index: number;
+  pageType: string;
   isIdSelected: (id: number) => boolean;
   toggleSelectId: (id: number) => void;
-  pageType: string;
 };
 
-const CellContent = ({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
+const CellContent = memo(({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
   return (
-    <div className="flex flex-1 items-center text-left text-sm text-gray-900">
+    <div className="flex h-full w-full items-center text-left text-sm text-gray-900">
       {cell.getIsPlaceholder() ? null : flexRender(cell.column.columnDef.cell, cell.getContext())}
     </div>
   );
-};
+});
+
+CellContent.displayName = 'CellContent';
 
 type HeaderContentProps = {
   isFirstColumn: boolean;
   cell: Cell<CommonDataSourceResponse, unknown>;
   isRowSelected: boolean;
-  toggleSelectId: (id: number) => void;
+  onToggleSelect: () => void;
   pageType: string;
 };
 
-const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId, pageType }: HeaderContentProps) => {
-  const rowId = cell.row.original.id;
-
+const RowCellContent = memo(({ isFirstColumn, cell, isRowSelected, onToggleSelect, pageType }: HeaderContentProps) => {
   if (isFirstColumn && pageType !== DOCUMENTS_PAGE) {
     return (
-      <div className="flex items-start gap-4">
+      <div className="flex w-full items-center gap-4">
         <Checkbox
           checked={isRowSelected}
           className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
-          onCheckedChange={() => toggleSelectId(rowId)}
+          onCheckedChange={onToggleSelect}
           haveBlackBackground={false}
         />
         <CellContent cell={cell} />
@@ -45,18 +46,27 @@ const RowCellContent = ({ isFirstColumn, cell, isRowSelected, toggleSelectId, pa
     );
   }
   return <CellContent cell={cell} />;
-};
+});
+
+RowCellContent.displayName = 'RowCellContent';
 
 const TableBodyRowItemHavingCheckbox = ({
   row,
   index,
+  pageType,
   isIdSelected,
   toggleSelectId,
-  pageType,
 }: CustomSingleBodyRowItemProps) => {
+  const rowId = row.original.id;
+  const isRowSelected = isIdSelected(rowId);
+
+  // Memoize the toggle handler to prevent unnecessary re-renders
+  const handleToggleSelect = useCallback(() => {
+    toggleSelectId(rowId);
+  }, [toggleSelectId, rowId]);
+
   const isEvenRow = index % 2 === 0;
   const isOddRow = !isEvenRow;
-  const isRowSelected = isIdSelected(row.original.id);
 
   return (
     <tr
@@ -74,21 +84,23 @@ const TableBodyRowItemHavingCheckbox = ({
         const isStatusColumn = cell.column.id === 'status';
         const isSourceNameColumn = cell.column.id === 'source_name';
         const isDataSourceTypeColumn = cell.column.id === 'data_source_type';
+        const isDescriptionColumn = cell.column.id === 'description';
+        const isDurationColumn = cell.column.id === 'duration';
         return (
           <td
             key={cell.id}
             className={cn(
-              `border-gray/20 flex h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2`,
+              `border-gray/20 flex min-h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2`,
               {
                 'border-l': isFirstColumn,
                 'min-w-[600px]': isUrlColumn,
-                'min-w-[500px]': isSourceNameColumn,
-                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn,
+                'min-w-[500px]': isSourceNameColumn || isDescriptionColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isDataSourceTypeColumn || isDurationColumn,
               },
             )}
           >
             <RowCellContent
-              toggleSelectId={toggleSelectId}
+              onToggleSelect={handleToggleSelect}
               isFirstColumn={isFirstColumn}
               cell={cell}
               isRowSelected={isRowSelected}
@@ -100,5 +112,7 @@ const TableBodyRowItemHavingCheckbox = ({
     </tr>
   );
 };
+
+TableBodyRowItemHavingCheckbox.displayName = 'TableBodyRowItemHavingCheckbox';
 
 export default TableBodyRowItemHavingCheckbox;

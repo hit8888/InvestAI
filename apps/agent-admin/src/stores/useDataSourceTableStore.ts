@@ -83,3 +83,20 @@ export const useDataSourceTableStore = create<DataSourceTableState>((set, get) =
     return PaginationDataSchema.parse(paginationData);
   },
 }));
+
+// Custom hooks for optimized selection
+export const useTableSelection = () => {
+  const toggleSelectId = useDataSourceTableStore((state) => state.toggleSelectId);
+  const selectAll = useDataSourceTableStore((state) => state.selectAll);
+  const deselectAll = useDataSourceTableStore((state) => state.deselectAll);
+  const getSelectedIds = useDataSourceTableStore((state) => state.getSelectedIds);
+  const isIdSelected = useDataSourceTableStore((state) => state.isIdSelected);
+
+  return {
+    toggleSelectId,
+    selectAll,
+    deselectAll,
+    getSelectedIds,
+    isIdSelected,
+  };
+};

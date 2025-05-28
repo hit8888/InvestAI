@@ -8,6 +8,7 @@ import { SourcesCardTypes } from '../constants';
 import ReembedBulkRowItemsButton from './ReembedBulkRowItemsButton';
 import DeleteBulkRowItemsButton from './DeleteBulkRowItemsButton';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
+import EditBulkRowItemsButton from './EditBulkRowItemsButton';
 
 type IProps = {
   onFilterContainerHeightChange: (height: number) => void;
@@ -15,6 +16,7 @@ type IProps = {
   page: PaginationPageType;
   isLoading: boolean;
   totalRecords: number;
+  areFiltersApplied: boolean;
 };
 
 const DataSourceTableHeader = ({
@@ -23,6 +25,7 @@ const DataSourceTableHeader = ({
   page,
   isLoading,
   totalRecords,
+  areFiltersApplied,
 }: IProps) => {
   const { filtersRef, height } = useFiltersContainerHeight();
   const { selectedType } = useDataSources();
@@ -38,7 +41,7 @@ const DataSourceTableHeader = ({
     return <DataSourceTableHeaderShimmer />;
   }
 
-  if (!totalRecords) {
+  if (!totalRecords && !areFiltersApplied) {
     return null;
   }
 
@@ -49,6 +52,7 @@ const DataSourceTableHeader = ({
     >
       <AllFiltersContainer page={page} payloadData={payloadData} />
       <div className="flex items-center justify-end gap-4">
+        <EditBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
         <ReembedBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
         <DeleteBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
       </div>

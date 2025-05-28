@@ -10,7 +10,9 @@ export type SortCategory =
   | 'url'
   | 'name'
   | 'title'
-  | 'source_url';
+  | 'source_url'
+  | 'asset'
+  | 'data';
 
 export type SortValues = {
   timestampSort: string | null;
@@ -33,12 +35,18 @@ export type DocumentsSortValues = CommonSortValues & {
   data_source_typeSort: boolean;
 };
 
+export type ArtifactsSortValues = CommonSortValues & {
+  assetSort: boolean;
+  dataSort: boolean;
+};
+
 export interface SortFilterState {
   leads: SortValues;
   conversations: SortValues;
   webpages: WebpagesSortValues;
   documents: DocumentsSortValues;
-  videos: SortValues;
+  videos: ArtifactsSortValues;
+  slides: ArtifactsSortValues;
   setSortValue: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
   resetPageSorts: (page: PaginationPageType) => void;
   initializeSortValues: (page: PaginationPageType, sortValues: SortValues) => void;

@@ -1,5 +1,12 @@
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
-import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
+import {
+  CONVERSATIONS_PAGE,
+  DOCUMENTS_PAGE,
+  LEADS_PAGE,
+  SLIDES_PAGE,
+  VIDEOS_PAGE,
+  WEBPAGES_PAGE,
+} from '@meaku/core/utils/index';
 import { create } from 'zustand';
 
 interface PaginationValues {
@@ -13,6 +20,7 @@ export interface PaginationStateAndActions {
   webpages: PaginationValues;
   documents: PaginationValues;
   videos: PaginationValues;
+  slides: PaginationValues;
   setPaginationValue: (page: PaginationPageType, key: keyof PaginationValues, value: number) => void;
   resetPaginationValue: (page: PaginationPageType) => void;
 }
@@ -24,7 +32,14 @@ export const InitialPaginationValues = {
   itemsPerPage: DEFAULT_ITEMS_PER_PAGE,
 };
 
-const pageTypes: PaginationPageType[] = [LEADS_PAGE, CONVERSATIONS_PAGE, WEBPAGES_PAGE, DOCUMENTS_PAGE, VIDEOS_PAGE];
+const pageTypes: PaginationPageType[] = [
+  LEADS_PAGE,
+  CONVERSATIONS_PAGE,
+  WEBPAGES_PAGE,
+  DOCUMENTS_PAGE,
+  VIDEOS_PAGE,
+  SLIDES_PAGE,
+];
 
 const initialPaginationState = pageTypes.reduce(
   (acc, pageType) => {

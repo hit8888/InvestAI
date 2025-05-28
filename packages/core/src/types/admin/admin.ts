@@ -25,15 +25,17 @@ import {
   DataSourceOverviewResponseResultSchema,
   DataSourceOverviewSchema,
   DataSourceFeaturesSchema,
+  DataSourceArtifactsTableResponseSchema,
+  DataSourceArtifactsResponseResultSchema,
 } from './api';
-import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '../../utils';
+import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, SLIDES_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '../../utils';
 
 export type CONVERSATIONS_PAGE_TYPE = typeof CONVERSATIONS_PAGE;
 export type LEADS_PAGE_TYPE = typeof LEADS_PAGE;
 export type WEBPAGES_PAGE_TYPE = typeof WEBPAGES_PAGE;
 export type DOCUMENTS_PAGE_TYPE = typeof DOCUMENTS_PAGE;
 export type VIDEOS_PAGE_TYPE = typeof VIDEOS_PAGE;
-
+export type SLIDES_PAGE_TYPE = typeof SLIDES_PAGE;
 export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE;
 
 export type PaginationPageType =
@@ -41,7 +43,8 @@ export type PaginationPageType =
   | CONVERSATIONS_PAGE_TYPE
   | WEBPAGES_PAGE_TYPE
   | DOCUMENTS_PAGE_TYPE
-  | VIDEOS_PAGE_TYPE;
+  | VIDEOS_PAGE_TYPE
+  | SLIDES_PAGE_TYPE;
 
 export type LocationWithCityCountry = z.infer<typeof LocationWithCityCountrySchema>;
 
@@ -77,5 +80,15 @@ export type DataSourceWebpagesTableResponse = z.infer<typeof DataSourceWebpagesT
 export type DataSourceDocumentsResponse = z.infer<typeof DataSourceDocumentsResponseResultSchema>;
 export type DataSourceDocumentsTableResponse = z.infer<typeof DataSourceDocumentsTableResponseSchema>;
 
-export type CommonDataSourceResponse = DataSourceWebpagesResponse | DataSourceDocumentsResponse;
-export type CommonDataSourceTableResponse = DataSourceWebpagesTableResponse | DataSourceDocumentsTableResponse;
+export type DataSourceArtifactsResponse = z.infer<typeof DataSourceArtifactsResponseResultSchema>;
+export type DataSourceArtifactsTableResponse = z.infer<typeof DataSourceArtifactsTableResponseSchema>;
+
+export type CommonDataSourceResponse =
+  | DataSourceWebpagesResponse
+  | DataSourceDocumentsResponse
+  | DataSourceArtifactsResponse;
+
+export type CommonDataSourceTableResponse =
+  | DataSourceWebpagesTableResponse
+  | DataSourceDocumentsTableResponse
+  | DataSourceArtifactsTableResponse;

@@ -10,6 +10,7 @@ export const LEADS_PAGE = 'leads';
 export const WEBPAGES_PAGE = 'webpages';
 export const DOCUMENTS_PAGE = 'documents';
 export const VIDEOS_PAGE = 'videos';
+export const SLIDES_PAGE = 'slides';
 
 export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];

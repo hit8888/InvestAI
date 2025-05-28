@@ -39,10 +39,10 @@ const DataSourcesPage = () => {
     DOCUMENTS: dataSourcesData?.PDF,
   };
 
-  // const artifactsSourcesData = {
-  //   VIDEOS: dataSourcesData?.VIDEOS,
-  //   SLIDES: dataSourcesData?.SLIDES,
-  // };
+  const artifactsSourcesData = {
+    VIDEOS: dataSourcesData?.VIDEO,
+    SLIDES: dataSourcesData?.SLIDE,
+  };
 
   const demoAssetsData = {
     FEATURES: dataSourcesData?.FEATURES,
@@ -52,7 +52,7 @@ const DataSourcesPage = () => {
     return (
       <PageContainer isLoading={isLoading} error={error} className="max-w-3xl gap-6" heading="Data Sources">
         <KnowledgeSourcesContent dataSourcesData={knowledgeSourcesData} />
-        {/* <ArtifactsContent dataSourcesData={artifactsSourcesData} /> */}
+        <ArtifactsContent dataSourcesData={artifactsSourcesData} />
         <DemoAssetsContent dataSourcesData={demoAssetsData} />
       </PageContainer>
     );

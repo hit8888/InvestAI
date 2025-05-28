@@ -300,8 +300,8 @@ export const DataSourceOverviewResponseResultSchema = z.object({
   WEB_PAGE: DataSourceOverviewSchema.optional().nullable(),
   PDF: DataSourceOverviewSchema.optional().nullable(),
   FEATURES: z.array(DataSourceFeaturesSchema).optional().nullable(),
-  VIDEOS: DataSourceOverviewSchema.optional().nullable(),
-  SLIDES: DataSourceOverviewSchema.optional().nullable(),
+  VIDEO: DataSourceOverviewSchema.optional().nullable(),
+  SLIDE: DataSourceOverviewSchema.optional().nullable(),
 });
 
 export const DataSourceWebpagesResponseResultSchema = z.object({
@@ -329,6 +329,31 @@ export const DataSourceDocumentsResponseResultSchema = z.object({
   updated_on: z.string(),
 });
 
+export const DataSourceAssetItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  description: z.string().optional().nullable(),
+  key: z.string(),
+  public_url: z.string(),
+});
+export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
+
+export const DataSourceArtifactsResponseResultSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  data: z.string(),
+  relevant_queries: z.array(z.string()),
+  status: z.string(),
+  asset: DataSourceAssetItemSchema,
+  data_source_id: z.number(),
+  data_source_type: z.string(),
+  labelled_by: z.string().or(z.number()).nullable(),
+  labelled_by_name: z.string().nullable(),
+  created_on: z.string(),
+  updated_on: z.string(),
+});
+
 export const DataSourceWebpagesTableResponseSchema = PaginationDataSchema.extend({
   results: z.array(DataSourceWebpagesResponseResultSchema), // Array of webpages results
 });
@@ -337,15 +362,9 @@ export const DataSourceDocumentsTableResponseSchema = PaginationDataSchema.exten
   results: z.array(DataSourceDocumentsResponseResultSchema), // Array of documents results
 });
 
-export const DataSourceItemSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.string(),
-  description: z.string().optional().nullable(),
-  key: z.string(),
-  public_url: z.string(),
+export const DataSourceArtifactsTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(DataSourceArtifactsResponseResultSchema), // Array of artifacts results
 });
-export type DataSourceItem = z.infer<typeof DataSourceItemSchema>;
 
 export const FetchSitemapRequestSchema = z.object({
   url: z.string(),
@@ -376,7 +395,7 @@ export type AddWebpagesSitemapLinksResponse = z.infer<typeof AddWebpagesSitemapL
 export const BulkAddDocumentsRequestSchema = z.object({
   documents: z.array(
     z.object({
-      asset: DataSourceItemSchema,
+      asset: DataSourceAssetItemSchema,
       document_type: z.string().optional(),
     }),
   ),
@@ -388,6 +407,17 @@ export const BulkAddDocumentsResponseSchema = z.object({
   data_sources: z.array(DataSourceDocumentsResponseResultSchema),
 });
 export type BulkAddDocumentsResponse = z.infer<typeof BulkAddDocumentsResponseSchema>;
+
+export const BulkAddArtifactsRequestSchema = z.array(
+  z.object({
+    asset: z.string(),
+    data_source_type: z.string(),
+  }),
+);
+export type BulkAddArtifactsRequest = z.infer<typeof BulkAddArtifactsRequestSchema>;
+
+export const BulkAddArtifactsResponseSchema = z.array(DataSourceArtifactsResponseResultSchema);
+export type BulkAddArtifactsResponse = z.infer<typeof BulkAddArtifactsResponseSchema>;
 
 export const DeleteWebpagesRequestSchema = z.object({
   webpage_ids: z.array(z.number()),
