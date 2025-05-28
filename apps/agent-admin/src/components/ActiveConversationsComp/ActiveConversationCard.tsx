@@ -26,9 +26,9 @@ const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversatio
         <div className="flex items-start">
           <div className="flex-1 overflow-hidden">
             {name ? (
-              <div className="px-2 text-xs font-medium text-bluegray-1000">{name}:</div>
+              <div className="px-2 text-xs font-medium text-bluegray-1000">{name}</div>
             ) : (
-              <div className="px-2 text-xs font-medium text-gray-500">User:</div>
+              <div className="px-2 text-xs font-medium text-gray-500">User</div>
             )}
 
             <div className="mt-1 h-6 overflow-hidden text-ellipsis whitespace-nowrap px-2 text-sm text-customPrimaryText">
