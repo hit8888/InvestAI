@@ -1,4 +1,4 @@
-import { DomElementClickConfigType, ProspectRequestData } from "../types";
+import { DomElementClickConfigType, ProspectRequestData } from "../lib/types";
 import { submitProspect } from "./api";
 
 export function initDomElementClickDetection({

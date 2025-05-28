@@ -1,4 +1,4 @@
-import { ProspectRequestData } from "../types";
+import { ProspectRequestData } from "../lib/types";
 
 const prospectIdKey = "__breakout__prospectId";
 

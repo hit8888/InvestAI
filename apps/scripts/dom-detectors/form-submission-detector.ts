@@ -1,6 +1,6 @@
-import { FormSubmissionConfigType, ProspectRequestData } from "../types";
 import { submitProspect } from "./api";
 import { hasEmail, hasName } from "./util";
+import { FormSubmissionConfigType, ProspectRequestData } from "../lib/types";
 
 export function initFormSubmissionDetection({
   track_form_submissions,

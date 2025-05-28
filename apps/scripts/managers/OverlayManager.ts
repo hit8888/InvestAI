@@ -1,25 +1,30 @@
+import { WIDGET_IDS, Z_INDEX } from "../lib/constants";
+
 export function OverlayManager(
-  config: Config,
   postMessage: (iframe: HTMLIFrameElement, message: object) => void,
-  embeddedContainer: HTMLElement | null = null,
-  bottomContainer: HTMLElement | null = null,
+  containerId?: string | null,
 ) {
-  let overlay: HTMLDivElement;
-  let wrapper: HTMLDivElement;
+  let overlay: HTMLDivElement | null = null;
+  let wrapper: HTMLDivElement | null = null;
   let iframe: HTMLIFrameElement | null = null;
   let currentContainer: HTMLElement | null = null;
+  let embeddedContainer: HTMLElement | null = null;
+  let bottomContainer: HTMLElement | null = null;
+  let isInitialized = false;
 
   const createOverlayElements = (): void => {
+    if (isInitialized) return;
+
     // Create overlay
     overlay = document.createElement("div");
-    overlay.id = "chat-widget-overlay";
+    overlay.id = WIDGET_IDS.CHAT_OVERLAY;
     Object.assign(overlay.style, {
       position: "fixed",
       top: "0",
       left: "0",
       right: "0",
       bottom: "0",
-      zIndex: "999999",
+      zIndex: Z_INDEX.OVERLAY,
       display: "none",
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       transition: "opacity 0.3s ease",
@@ -40,18 +45,37 @@ export function OverlayManager(
       borderRadius: "24px",
       overflow: "hidden",
       pointerEvents: "auto",
-      zIndex: "1000000",
+      zIndex: Z_INDEX.OVERLAY_WRAPPER,
     });
 
     overlay.appendChild(wrapper);
     document.body.appendChild(overlay);
+    isInitialized = true;
+  };
+
+  const setupEventListeners = (): void => {
+    if (!overlay) return;
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        handleClose();
+      }
+    });
+
+    window.addEventListener("message", (event: MessageEvent) => {
+      if (event.data.type === "CLOSE_OVERLAY") {
+        handleClose();
+      }
+    });
+
+    window.addEventListener("submit", handleFormSubmit);
   };
 
   const handleClose = (): void => {
-    if (iframe) {
+    if (iframe && wrapper) {
       wrapper.removeChild(iframe);
 
-      if (config.containerId && embeddedContainer) {
+      if (containerId && embeddedContainer) {
         embeddedContainer.appendChild(iframe);
         currentContainer = embeddedContainer;
         postMessage(iframe, {
@@ -87,24 +111,8 @@ export function OverlayManager(
     input.value = "";
   };
 
-  const setupEventListeners = (): void => {
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) {
-        handleClose();
-      }
-    });
-
-    window.addEventListener("message", (event: MessageEvent) => {
-      if (event.data.type === "CLOSE_OVERLAY") {
-        handleClose();
-      }
-    });
-
-    window.addEventListener("submit", handleFormSubmit);
-  };
-
   const showWithIframe = (formId: string, message: string): void => {
-    if (!iframe) return;
+    if (!iframe || !wrapper) return;
 
     show();
 
@@ -149,12 +157,25 @@ export function OverlayManager(
     }
   };
 
+  const initialize = (
+    embeddedContainerParam: HTMLElement | null = null,
+    bottomContainerParam: HTMLElement | null = null,
+  ): void => {
+    embeddedContainer = embeddedContainerParam;
+    bottomContainer = bottomContainerParam;
+    createOverlayElements();
+    setupEventListeners();
+  };
+
   const show = (): void => {
-    overlay.style.display = "block";
+    if (!overlay) initialize();
+    overlay!.style.display = "block";
   };
 
   const hide = (): void => {
-    overlay.style.display = "none";
+    if (overlay) {
+      overlay.style.display = "none";
+    }
   };
 
   const setIframe = (
@@ -165,24 +186,27 @@ export function OverlayManager(
     currentContainer = container;
   };
 
-  const getWrapper = (): HTMLDivElement => wrapper;
-  const getOverlay = (): HTMLDivElement => overlay;
+  const getWrapper = (): HTMLDivElement | null => wrapper;
+  const getOverlay = (): HTMLDivElement | null => overlay;
 
   const destroy = (): void => {
     window.removeEventListener("message", handleClose);
     window.removeEventListener("submit", handleFormSubmit);
 
-    if (overlay.parentNode) {
+    if (overlay && overlay.parentNode) {
       overlay.parentNode.removeChild(overlay);
     }
+
+    overlay = null;
+    wrapper = null;
+    iframe = null;
+    currentContainer = null;
+    isInitialized = false;
   };
 
-  // Initialize
-  createOverlayElements();
-  setupEventListeners();
-
-  // Return public API
+  // Return public API (no automatic initialization)
   return {
+    initialize,
     show,
     hide,
     setIframe,
