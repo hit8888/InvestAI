@@ -20,6 +20,7 @@ import {
   ReprocessWebpagesResponse,
   BulkAddArtifactsRequest,
   BulkAddArtifactsResponse,
+  UpdateArtifactRequest,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -131,6 +132,9 @@ export const getDataSourceArtifactsData = (payload: DataSourcePayload) =>
 
 export const bulkAddArtifacts = (payload: BulkAddArtifactsRequest) =>
   adminApiClient.post<BulkAddArtifactsResponse>(`/tenant/api/artifacts/bulk/`, payload);
+
+export const updateArtifact = (id: number, payload: UpdateArtifactRequest) =>
+  adminApiClient.patch<BulkAddArtifactsResponse>(`/tenant/api/artifacts/${id}/`, payload);
 
 export const fetchSitemapforWebpage = (payload: FetchSitemapRequest) =>
   adminApiClient.post<FetchSitemapResponse>(`tenant/api/sitemap/`, payload);

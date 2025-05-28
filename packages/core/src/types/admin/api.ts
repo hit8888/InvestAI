@@ -302,6 +302,8 @@ export const DataSourceOverviewResponseResultSchema = z.object({
   FEATURES: z.array(DataSourceFeaturesSchema).optional().nullable(),
   VIDEO: DataSourceOverviewSchema.optional().nullable(),
   SLIDE: DataSourceOverviewSchema.optional().nullable(),
+  VIDEO: DataSourceOverviewSchema.optional().nullable(),
+  SLIDE: DataSourceOverviewSchema.optional().nullable(),
 });
 
 export const DataSourceWebpagesResponseResultSchema = z.object({
@@ -415,6 +417,13 @@ export const BulkAddArtifactsRequestSchema = z.array(
   }),
 );
 export type BulkAddArtifactsRequest = z.infer<typeof BulkAddArtifactsRequestSchema>;
+
+export const UpdateArtifactRequestSchema = z.object({
+  title: z.string(),
+  data: z.string(),
+  relevant_queries: z.array(z.string()),
+});
+export type UpdateArtifactRequest = z.infer<typeof UpdateArtifactRequestSchema>;
 
 export const BulkAddArtifactsResponseSchema = z.array(DataSourceArtifactsResponseResultSchema);
 export type BulkAddArtifactsResponse = z.infer<typeof BulkAddArtifactsResponseSchema>;

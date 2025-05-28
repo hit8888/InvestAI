@@ -43,10 +43,7 @@ const ResizeTextarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttribu
   return (
     <textarea
       ref={textareaRef}
-      className={cn(
-        'w-full overflow-y-auto rounded-xl border-gray-300 text-sm focus:border-gray-300 focus:ring-0 disabled:opacity-60',
-        className,
-      )}
+      className={cn('w-full overflow-y-auto rounded-xl border-gray-300 text-sm disabled:opacity-60', className)}
       style={style}
       value={value}
       {...restProps}

@@ -33,6 +33,7 @@ const cellValueMap: cellValueMapType = {
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
+  product_interest: ProductOfInterestCellValue,
   timestamp: TimestampCellValue,
   timeline: TimestampCellValue,
   summary: ConversationPreviewCellValue,

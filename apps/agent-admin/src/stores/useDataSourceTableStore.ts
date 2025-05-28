@@ -17,6 +17,7 @@ interface DataSourceTableState {
   isIdSelected: (id: number) => boolean;
   getSelectedIds: () => number[];
   getSelectedDataSources: () => CommonDataSourceResponse[];
+  updateSingleDataSource: (id: number, data: Partial<CommonDataSourceResponse>) => void;
   getPaginatedTableData: () => {
     current_page: number;
     page_size: number;
@@ -81,6 +82,15 @@ export const useDataSourceTableStore = create<DataSourceTableState>((set, get) =
       total_records: state.total_records,
     };
     return PaginationDataSchema.parse(paginationData);
+  },
+
+  updateSingleDataSource: (id: number, data: Partial<CommonDataSourceResponse>) => {
+    set((state) => {
+      const updatedResults = state.results.map((source) =>
+        source.id === id ? ({ ...source, ...data } as CommonDataSourceResponse) : source,
+      );
+      return { results: updatedResults };
+    });
   },
 }));
 

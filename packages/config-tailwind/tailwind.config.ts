@@ -208,6 +208,7 @@ const config: Omit<Config, "content"> = {
         transparent_gray_3: "rgba(16, 24, 40, 0.03)",
         transparent_gray_6: "rgba(16, 24, 40, 0.06)",
         transparent_gray_8: "rgba(16, 24, 40, 0.08)",
+        transparent_gray_16: "rgba(16, 24, 40, 0.16)",
         transparent_white_32: "rgba(255, 255, 255, 0.32)",
         transparent_white_85: "rgba(255, 255, 255, 0.85)",
       },

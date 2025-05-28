@@ -12,6 +12,14 @@ import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/type
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DataSourceItem } from '@meaku/core/types/admin/api';
 
+export type CommonEditDrawerSectionProps = {
+  id: number;
+  type: string;
+  title: string;
+  data: string;
+  relevant_queries: string[];
+};
+
 // const TableColumnWidthSize = 200;
 const { WEBPAGES, DOCUMENTS, VIDEOS, SLIDES } = SourcesCardTypes;
 
