@@ -302,8 +302,6 @@ export const DataSourceOverviewResponseResultSchema = z.object({
   FEATURES: z.array(DataSourceFeaturesSchema).optional().nullable(),
   VIDEO: DataSourceOverviewSchema.optional().nullable(),
   SLIDE: DataSourceOverviewSchema.optional().nullable(),
-  VIDEO: DataSourceOverviewSchema.optional().nullable(),
-  SLIDE: DataSourceOverviewSchema.optional().nullable(),
 });
 
 export const DataSourceWebpagesResponseResultSchema = z.object({
