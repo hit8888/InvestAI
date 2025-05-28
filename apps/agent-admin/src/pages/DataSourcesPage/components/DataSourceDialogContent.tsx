@@ -12,7 +12,6 @@ import DefaultDialogMessage from './DefaultDialogMessage';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useDataSources } from '../../../context/DataSourcesContext';
 import { SourcesCardTypes } from '../constants';
-import AddMorePlusIcon from '@breakout/design-system/components/icons/sources-add-more-plus-icon';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import { useDataSourceAdd } from '../../../hooks/useDataSourceAdd';
 import { useSitemapFetch } from '../../../hooks/useSitemapFetch';
@@ -150,8 +149,7 @@ const DataSourceDialogAddButton = ({
       variant={'system'}
       buttonStyle={'rightIcon'}
     >
-      {isAdding ? 'Adding...' : 'Add'}
-      {!isAdding && <AddMorePlusIcon width="16" height="16" />}
+      {isAdding ? 'Embedding...' : 'Embed'}
       {isAdding && <SpinLoader width={4} height={4} />}
     </Button>
   );

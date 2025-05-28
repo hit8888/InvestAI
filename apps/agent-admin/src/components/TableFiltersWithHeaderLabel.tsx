@@ -30,10 +30,6 @@ const TableFiltersWithHeaderLabel = ({
     }
   }, [height, onFiltersContainerHeightChange]);
 
-  if (disabledState) {
-    return null;
-  }
-
   if (isLoading) {
     return <TableFiltersWithHeaderLabelShimmer />;
   }

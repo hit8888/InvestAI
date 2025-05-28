@@ -5,7 +5,7 @@ import { getDateAppliedValue, getFiltersConfig } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
-import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE, LEADS_PAGE } from '@meaku/core/utils/index';
 import TestConversationIncludedFilter from './TestConversationIncludedFilter';
 
 type AllSelectableFilterContentProps = PageTypeProps & {
@@ -32,7 +32,7 @@ const AllSelectableFilterContent = ({
     Sources,
   } = FilterType;
 
-  const isConversationsPage = page === CONVERSATIONS_PAGE;
+  const isConversationsAndLeadsPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
 
   const filterConfig = [...getFiltersConfig(page)];
   const handleClearAll = () => {
@@ -131,7 +131,7 @@ const AllSelectableFilterContent = ({
 
   return (
     <React.Fragment key={FilterType.AllFilters}>
-      {isConversationsPage ? <TestConversationIncludedFilter page={page} /> : null}
+      {isConversationsAndLeadsPage ? <TestConversationIncludedFilter page={page} /> : null}
       {filterConfig.map((config) => (
         <SingleFilterState
           key={config.filterKey}

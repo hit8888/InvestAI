@@ -464,6 +464,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const filterApplied: FilterItem[] = [];
   const isLeadsPage = page === LEADS_PAGE;
   const isConversationsPage = page === CONVERSATIONS_PAGE;
+  const isConversationsAndLeadsPage = isConversationsPage || isLeadsPage;
   const isDocumentsPage = page === DOCUMENTS_PAGE;
   const {
     dateRange,
@@ -549,11 +550,11 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   //   });
   // }
 
-  // For Conversations Page, we need to filter out test conversations
-  if (isConversationsPage && !testConversationsIncluded) {
+  // For Conversations Page & Leads Page, we need to filter out test conversations
+  if (isConversationsAndLeadsPage) {
     filterApplied.push({
-      field: 'is_test',
-      value: testConversationsIncluded, // Test conversations included only when applied
+      field: isLeadsPage ? 'is_valid' : 'is_test',
+      value: isLeadsPage ? !testConversationsIncluded : testConversationsIncluded, // For Leads Page, is_valid key is used to represent valid conversations
       operator: 'eq',
     });
   }

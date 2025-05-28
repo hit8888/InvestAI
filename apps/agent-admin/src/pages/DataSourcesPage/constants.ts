@@ -23,7 +23,7 @@ export enum SourcesUploadStatus {
 
 export const SOURCES_DIALOG_DESCRIPTION_MAPPED_OBJECT = {
   [SourcesCardTypes.WEBPAGES]:
-    'Paste the full URL of the page you want to add. Make sure it’s publicly accessible and relevant to your integration.',
+    'Drop in the top-level link on your website — website, blog, help center, whatever you’ve got. We’ll grab all the sub-links along with the content.',
   [SourcesCardTypes.DOCUMENTS]:
     'Upload one or more documents to use them as data sources for your assistant. Supported file types include text, spreadsheets, presentations, and more',
   [SourcesCardTypes.VIDEOS]: 'Upload one or more videos to use them as visual guides or demos inside your assistant.',
