@@ -11,14 +11,13 @@ const TestConversationIncludedFilter = ({ page }: PageTypeProps) => {
     filters.setFilter(page, TestConversationIncluded, !testConversationsIncluded);
   };
 
-  const textLabel = !testConversationsIncluded ? 'Hidden Test Conversations' : 'Showing Test Conversations';
   return (
     <div
       onClick={handleSwitchChange}
       className="flex w-full cursor-pointer self-stretch bg-white p-4 
     hover:bg-primary/5 focus:border-2 focus:border-primary focus:bg-primary/5 focus:outline-none focus:ring-offset-0"
     >
-      <p className="flex-1 text-base font-normal text-gray-900">{textLabel}</p>
+      <p className="flex-1 text-base font-normal text-gray-900">Test Conversations</p>
       <div className="flex items-center gap-2 text-gray-500">
         <Switch
           checked={testConversationsIncluded}

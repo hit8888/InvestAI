@@ -12,7 +12,7 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     return (
       <div className="flex w-full items-center gap-2">
         {value.title && (
-          <Typography variant="label-14-semibold" className="flex-1">
+          <Typography title={value.title} variant="label-14-semibold" className="line-clamp-1 flex-1 break-all">
             {value.title}
           </Typography>
         )}
