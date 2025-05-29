@@ -5,6 +5,7 @@ import FilterProductOfInterestIcon from '@breakout/design-system/components/icon
 import FilterLocationIcon from '@breakout/design-system/components/icons/filter-location-icon';
 import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
+import FilterStatusIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
 import FilterCompanyIcon from '@breakout/design-system/components/icons/filter-company-icon';
 import FilterSourcesIcon from '@breakout/design-system/components/icons/filter-sources-icon';
@@ -42,6 +43,7 @@ const {
   // SearchTableContent,
   Duration,
   Sources,
+  Status,
 } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
@@ -228,6 +230,14 @@ const DATA_SOURCES_TABLE_FILTERS_CONFIG = [
     filterApplied: true,
     filterKey: DateRange,
     filterType: DateRange,
+  },
+  {
+    filterIcon: FilterStatusIcon,
+    filterLabel: 'Status',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: Status,
+    filterType: Status,
   },
   {
     filterIcon: FilterSourcesIcon,

@@ -8,6 +8,7 @@ import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/fi
 import CompanyFilterContent from './CompanyFilterContent';
 import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
 import SourcesFilterContent from './SourcesFilterContent';
+import StatusFilterContent from './StatusFilterContent';
 
 const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
   const {
@@ -19,6 +20,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
     ProductOfInterest,
     UserMessagesCount,
     Sources,
+    Status,
     UsageCount,
   } = FilterType;
   return (
@@ -40,6 +42,9 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       ) : null}
       {filterState === Sources ? (
         <SourcesFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
+      {filterState === Status ? (
+        <StatusFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === ProductOfInterest ? (
         <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />

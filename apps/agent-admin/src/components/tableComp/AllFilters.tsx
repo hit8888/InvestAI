@@ -30,6 +30,7 @@ const {
   Sources,
   SearchTableContent,
   Duration,
+  Status,
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
@@ -83,6 +84,9 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
         handleFilterRemove(key, []);
         break;
       case Sources:
+        handleFilterRemove(key, []);
+        break;
+      case Status:
         handleFilterRemove(key, []);
         break;
       case SearchTableContent:

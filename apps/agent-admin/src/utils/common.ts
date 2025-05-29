@@ -64,6 +64,7 @@ const {
   TestConversationIncluded,
   UsageCount,
   Sources,
+  Status,
   SearchTableContent,
 } = FilterType;
 
@@ -283,6 +284,16 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'Company',
         width: '434px',
       };
+    case Sources:
+      return {
+        label: 'Sources',
+        width: '334px',
+      };
+    case Status:
+      return {
+        label: 'Status',
+        width: '334px',
+      };
     case MeetingBooked:
       return {
         label: 'Meeting booked',
@@ -490,6 +501,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     sources,
     // usageCount,
     // duration,
+    status,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -521,6 +533,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push({
       field: 'data_source_type',
       value: sources,
+      operator: 'in',
+    });
+  }
+
+  if (status.length > 0) {
+    filterApplied.push({
+      field: 'status',
+      value: status,
       operator: 'in',
     });
   }
@@ -608,94 +628,113 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 export const collectAppliedFilters = (filters: FilterValues) => {
   const appliedFilters: { key: string; label: string; value: string | string[] | boolean }[] = [];
 
-  if (filters.dateRange) {
+  const {
+    dateRange,
+    intentScore,
+    location,
+    productOfInterest,
+    meetingBooked,
+    userMessagesCount,
+    company,
+    testConversationsIncluded,
+    sources,
+    status,
+    searchTableContent,
+    usageCount,
+  } = filters;
+
+  if (dateRange) {
     appliedFilters.push({
       key: DateRange,
       label: 'Date',
-      value: getDateAppliedValue(filters.dateRange),
+      value: getDateAppliedValue(dateRange),
     });
   }
 
-  if (filters.testConversationsIncluded) {
+  if (testConversationsIncluded) {
     appliedFilters.push({
       key: TestConversationIncluded,
       label: 'Playground Conversations',
-      value: `${filters.testConversationsIncluded}`,
+      value: `${testConversationsIncluded}`,
     });
   }
 
-  if (filters.intentScore.length > 0) {
+  if (intentScore.length > 0) {
     appliedFilters.push({
       key: IntentScore,
       label: 'Intent Score',
-      value: filters.intentScore.join(', '),
+      value: intentScore.join(', '),
     });
   }
 
-  if (filters.location.length > 0) {
+  if (location.length > 0) {
     appliedFilters.push({
       key: Location,
       label: 'Location',
-      value: filters.location,
+      value: location,
     });
   }
 
-  if (filters.company.length > 0) {
+  if (company.length > 0) {
     appliedFilters.push({
       key: Company,
       label: 'Company',
-      value: filters.company,
+      value: company,
     });
   }
 
-  if (
-    filters.userMessagesCount.minCount > 0 &&
-    filters.userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
-  ) {
+  if (userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
     appliedFilters.push({
       key: UserMessagesCount,
       label: 'User messages count',
-      value: `${filters.userMessagesCount.minCount} - ${filters.userMessagesCount.maxCount}`,
+      value: `${userMessagesCount.minCount} - ${userMessagesCount.maxCount}`,
     });
   }
 
-  if (filters.usageCount.minCount > 0 && filters.usageCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
+  if (usageCount.minCount > 0 && usageCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD) {
     appliedFilters.push({
       key: UsageCount,
       label: 'Usage count',
-      value: `${filters.usageCount.minCount} - ${filters.usageCount.maxCount}`,
+      value: `${usageCount.minCount} - ${usageCount.maxCount}`,
     });
   }
 
-  if (filters.sources.length > 0) {
+  if (sources.length > 0) {
     appliedFilters.push({
       key: Sources,
       label: 'Sources',
-      value: filters.sources,
+      value: sources,
     });
   }
 
-  if (filters.searchTableContent.length > 0) {
+  if (status.length > 0) {
+    appliedFilters.push({
+      key: Status,
+      label: 'Status',
+      value: status,
+    });
+  }
+
+  if (searchTableContent.length > 0) {
     appliedFilters.push({
       key: SearchTableContent,
       label: 'Search',
-      value: filters.searchTableContent,
+      value: searchTableContent,
     });
   }
-
-  if (filters.productOfInterest.length > 0) {
+  if (productOfInterest.length > 0) {
     appliedFilters.push({
       key: ProductOfInterest,
       label: 'Product',
-      value: filters.productOfInterest,
+      value: productOfInterest,
     });
   }
 
-  if (filters.meetingBooked) {
+  if (meetingBooked) {
     appliedFilters.push({
       key: MeetingBooked,
       label: 'Meeting booked',
-      value: filters.meetingBooked,
+      value: meetingBooked,
     });
   }
 

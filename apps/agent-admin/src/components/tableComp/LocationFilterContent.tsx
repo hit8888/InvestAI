@@ -84,7 +84,6 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
         handleClosePopover={handleClosePopover}
         keyValue={Location}
         checkboxOptions={resultantOptions || []}
-        isLocationFilter={true}
         checkboxOrientation={'right'}
         selectedOptions={filters[page].location}
         onSelectionChange={(value) => filters.setFilter(page, Location, value)}

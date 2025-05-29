@@ -12,7 +12,6 @@ import ArrowRight from '@breakout/design-system/components/icons/ArrowRight';
 import { useDataSources } from '../../../context/DataSourcesContext';
 import DataSourceStatBadge from './DataSourceStatBadge';
 import { useNavigate } from 'react-router-dom';
-import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { cn } from '@breakout/design-system/lib/cn';
 
 interface Stat {
@@ -104,29 +103,8 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ title, stats, type, has
     );
   };
 
-  const getContent = () => {
-    return (
-      <div className="flex max-w-64 flex-col gap-2">
-        <Typography variant={'body-14'} className="text-white">
-          Customize demo assets to match your needs. Contact Breakout support team for assistance.
-        </Typography>
-      </div>
-    );
-  };
   const isFeatureCard = type === SourcesCardTypes.FEATURES;
-  return (
-    <div className="w-full">
-      <TooltipWrapperDark
-        showArrow={false}
-        tooltipAlign="center"
-        tooltipSide="bottom"
-        disableHoverableContent={isFeatureCard}
-        trigger={getTrigger()}
-        content={getContent()}
-        showTooltip={isFeatureCard}
-      />
-    </div>
-  );
+  return <div className="w-full cursor-pointer">{getTrigger()}</div>;
 };
 
 export default DataSourceCard;

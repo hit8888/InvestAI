@@ -3,7 +3,7 @@ import { getDataSourceFilterOptionsData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { getTenantFromLocalStorage, SLIDES_PAGE, VIDEOS_PAGE } from '@meaku/core/utils/index';
 
 type FilterOptionsVariables = FilterOptionsPayload;
 
@@ -27,11 +27,13 @@ const useDataSourceFilterOptionsDataQuery = ({
   queryOptions,
 }: IProps): UseQueryResult<FilterOptionsResponse> => {
   const tenantName = getTenantFromLocalStorage();
+  const isArtifactsPage = page === VIDEOS_PAGE || page === SLIDES_PAGE;
+  const pageValue = isArtifactsPage ? 'artifacts' : page;
   const filterQuery = useQuery({
     queryKey: getDataSourceFilterOptionsDataKey(payload, tenantName ?? '', page),
     queryFn: async (): Promise<FilterOptionsResponse> => {
       if (!tenantName) throw new Error('Tenant name is undefined');
-      const response: AxiosResponse<FilterOptionsResponse> = await getDataSourceFilterOptionsData(payload, page);
+      const response: AxiosResponse<FilterOptionsResponse> = await getDataSourceFilterOptionsData(payload, pageValue);
       return response.data;
     },
     ...queryOptions,

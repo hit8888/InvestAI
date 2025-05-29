@@ -6,10 +6,10 @@ import { cn } from '@breakout/design-system/lib/cn';
 import BuyerIntentCellValue from './tableCellComp/BuyerIntentCellValue';
 import FilterSelectAllContainer from './FilterSelectAllContainer';
 import { FilterType } from '@meaku/core/types/admin/filters';
+import DataSourceStatusChip from './tableCellComp/DataSourceStatusChip';
+import { DATA_SOURCE_STATUS } from '../../pages/DataSourcesPage/constants';
 
 type CommonCheckboxesFilterContent = {
-  isLocationFilter?: boolean;
-  isBuyerIntentFilter?: boolean;
   keyValue: string;
   selectedOptions: string[];
   onSelectionChange: (value: string[]) => void;
@@ -18,9 +18,25 @@ type CommonCheckboxesFilterContent = {
   filterState: FilterType;
   checkboxOrientation?: 'right' | 'left';
 };
+
+const renderFilterLabel = (label: string, keyValue: string) => {
+  switch (keyValue) {
+    case FilterType.Location:
+      return (
+        <div className="text-base font-normal text-gray-900">
+          <LocationCellValue value={label} showTruncatedText={false} />
+        </div>
+      );
+    case FilterType.IntentScore:
+      return <BuyerIntentCellValue value={`${label.toLowerCase()} Intent`} />;
+    case FilterType.Status:
+      return <DataSourceStatusChip status={label as DATA_SOURCE_STATUS} />;
+    default:
+      return null;
+  }
+};
+
 const CommonCheckboxesFilterContent = ({
-  isLocationFilter = false,
-  isBuyerIntentFilter = false,
   keyValue,
   checkboxOptions,
   selectedOptions,
@@ -47,7 +63,6 @@ const CommonCheckboxesFilterContent = ({
   const handleSelectAll = () => {
     setSelectedCheckboxes(checkboxOptions.map((option) => option.value));
     onSelectionChange(checkboxOptions.map((option) => option.value));
-    // handleClosePopover();
   };
 
   const areAllSelected = selectedCheckboxes.length === checkboxOptions.length;
@@ -68,17 +83,7 @@ const CommonCheckboxesFilterContent = ({
             selectedCheckboxes={selectedCheckboxes}
             handleCheckboxToggle={handleCheckboxToggle}
             checkboxPosition={checkboxOrientation}
-            renderLabel={
-              isLocationFilter
-                ? (label) => (
-                    <div className="text-base font-normal text-gray-900">
-                      <LocationCellValue value={label} showTruncatedText={false} />
-                    </div>
-                  )
-                : isBuyerIntentFilter
-                  ? (label) => <BuyerIntentCellValue value={`${label.toLowerCase()} Intent`} />
-                  : undefined
-            }
+            renderLabel={(label) => renderFilterLabel(label, keyValue)}
           />
         ))}
       </div>

@@ -55,6 +55,7 @@ export enum FilterType {
   AllFilters = 'allFilters',
   Company = 'company',
   UserMessagesCount = 'userMessagesCount',
+  Status = 'status',
   TestConversationIncluded = 'testConversationsIncluded',
 }
 
@@ -81,6 +82,7 @@ export interface FilterValues {
   company: string[];
   productOfInterest: string[];
   sources: string[];
+  status: string[];
   meetingBooked?: string;
   usageCount: usageCountFilterValues;
   duration: durationFilterValues;
@@ -97,6 +99,7 @@ export const InitialFilterValues: FilterValues = {
   company: [],
   productOfInterest: [],
   sources: [],
+  status: [],
   meetingBooked: undefined,
   usageCount: {
     minCount: 0,

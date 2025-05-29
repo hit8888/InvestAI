@@ -8,18 +8,18 @@ import { useQueryOptions } from '../../hooks/useQueryOptions';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import useDataSourceFilterOptionsDataQuery from '../../queries/query/useDataSourceFilterOptionsDataQuery';
 
-const SourcesFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
+const StatusFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const filters = useAllFilterStore();
   const filtersValues = filters[page];
-  const { Sources } = FilterType;
+  const { Status } = FilterType;
 
   const filtersOptionsPayload = useMemo(() => {
-    return getAllFilterAppliedValues(filtersValues, page).filter((filter) => filter.field !== 'sources');
+    return getAllFilterAppliedValues(filtersValues, page).filter((filter) => filter.field !== 'status');
   }, [filtersValues, page]);
 
   const payloadData: FilterOptionsPayload = {
     filters: filtersOptionsPayload,
-    field: 'data_source_type',
+    field: 'status',
     search: '',
   };
 
@@ -31,25 +31,25 @@ const SourcesFilterContent = ({ page, filterState, handleClosePopover }: CommonF
     queryOptions,
   });
 
-  const sourceValues: string[] = data?.values.filter(Boolean) ?? [];
+  const statusValues: string[] = data?.values.filter(Boolean) ?? [];
 
-  const resultantOptions = getDescendingOrderedOptions([], sourceValues);
+  const resultantOptions = getDescendingOrderedOptions([], statusValues);
 
   if (isLoading) return <FilterOptionsShimmer />;
-  if (isError) return <div className="p-4">No Sources data</div>;
+  if (isError) return <div className="p-4">No Status data</div>;
   if (!data) return null;
   return (
-    <React.Fragment key={Sources}>
+    <React.Fragment key={Status}>
       <CommonCheckboxesFilterContent
         filterState={filterState}
         handleClosePopover={handleClosePopover}
-        keyValue={Sources}
+        keyValue={Status}
         checkboxOptions={resultantOptions || []}
-        selectedOptions={filters[page].sources}
-        onSelectionChange={(value) => filters.setFilter(page, Sources, value)}
+        selectedOptions={filters[page].status}
+        onSelectionChange={(value) => filters.setFilter(page, Status, value)}
       />
     </React.Fragment>
   );
 };
 
-export default SourcesFilterContent;
+export default StatusFilterContent;

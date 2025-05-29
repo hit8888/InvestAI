@@ -9,7 +9,6 @@ const IntentScoreFilterContent = ({ page, handleClosePopover, filterState }: Com
   return (
     <CommonCheckboxesFilterContent
       filterState={filterState}
-      isBuyerIntentFilter={true}
       keyValue={IntentScore}
       checkboxOptions={FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS}
       selectedOptions={filters[page].intentScore}

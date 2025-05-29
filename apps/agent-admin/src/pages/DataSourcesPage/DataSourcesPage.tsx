@@ -2,11 +2,9 @@ import {
   ARTIFACTS_SOURCES_TITLE,
   DEMO_ASSETS_SOURCES_TITLE,
   DOCUMENTS_TITLE,
-  FEATURES_TITLE,
   KNOWLEDGE_SOURCES_TITLE,
   SLIDES_TITLE,
   SourcesCardTypes,
-  SourcesUploadStatus,
   VIDEO_TITLE,
   WEBPAGES_TITLE,
 } from './constants';
@@ -128,28 +126,19 @@ type DemoAssetsData = {
 
 const DemoAssetsContent = ({ dataSourcesData }: DemoAssetsData) => {
   const { FEATURES } = dataSourcesData;
+
+  if (!FEATURES || FEATURES.length === 0) return null;
   return (
     <SourceCard cardTitle={DEMO_ASSETS_SOURCES_TITLE}>
-      {FEATURES && FEATURES.length > 0 ? (
-        FEATURES.map((feature, index) => (
-          <DataSourceCard
-            key={`${feature.feature_name}-${index}`}
-            hasEdit
-            type={SourcesCardTypes.FEATURES}
-            title={feature.feature_name}
-            stats={generateFeatureAssetStats(feature)}
-          />
-        ))
-      ) : (
+      {FEATURES.map((feature, index) => (
         <DataSourceCard
-          type={SourcesCardTypes.FEATURES}
+          key={`${feature.feature_name}-${index}`}
           hasEdit
-          title={FEATURES_TITLE}
-          stats={[
-            { itemLabel: 'Info:', itemValue: 'No features data available', itemKey: SourcesUploadStatus.UPLOADED },
-          ]}
+          type={SourcesCardTypes.FEATURES}
+          title={feature.feature_name}
+          stats={generateFeatureAssetStats(feature)}
         />
-      )}
+      ))}
     </SourceCard>
   );
 };

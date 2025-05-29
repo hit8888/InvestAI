@@ -30,6 +30,7 @@ const AllSelectableFilterContent = ({
     Duration,
     UsageCount,
     Sources,
+    Status,
   } = FilterType;
 
   const isConversationsAndLeadsPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
@@ -54,6 +55,7 @@ const AllSelectableFilterContent = ({
       sources,
       duration,
       usageCount,
+      status,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -66,6 +68,8 @@ const AllSelectableFilterContent = ({
         return company.length > 0;
       case Sources:
         return sources.length > 0;
+      case Status:
+        return status.length > 0;
       case ProductOfInterest:
         return productOfInterest.length > 0;
       case Duration:
@@ -93,6 +97,7 @@ const AllSelectableFilterContent = ({
       duration,
       usageCount,
       sources,
+      status,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -105,6 +110,8 @@ const AllSelectableFilterContent = ({
         return company.length > 0 ? `${company.length} selected` : 'Any';
       case Sources:
         return sources.length > 0 ? `${sources.length} selected` : 'Any';
+      case Status:
+        return status.length > 0 ? `${status.length} selected` : 'Any';
       case UserMessagesCount:
         return userMessagesCount.minCount > 0 && userMessagesCount.maxCount <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD
           ? `${userMessagesCount.minCount} To ${userMessagesCount.maxCount} messages`
