@@ -1,11 +1,13 @@
 import { RETRY_CONFIG, WIDGET_IDS } from "../lib/constants";
 
 export function AgentIframeManager() {
+  let iframe: HTMLIFrameElement | null = null;
+
   const create = (
     container: HTMLElement,
     iframeSrc: string,
   ): HTMLIFrameElement => {
-    const iframe = document.createElement("iframe");
+    iframe = document.createElement("iframe");
     Object.assign(iframe.style, {
       width: "100%",
       height: "100%",
@@ -25,7 +27,7 @@ export function AgentIframeManager() {
 
     container.appendChild(iframe);
     setTimeout(
-      () => checkIframeStatus(iframeLoaded, iframe),
+      () => iframe && checkIframeStatus(iframeLoaded, iframe),
       RETRY_CONFIG.IFRAME_CHECK_DELAY,
     );
 
@@ -42,9 +44,24 @@ export function AgentIframeManager() {
     }
   };
 
+  const reload = () => {
+    if (iframe) {
+      const currentSrc = iframe.src;
+
+      // Force reload by setting src again
+      iframe.src = "";
+      setTimeout(() => {
+        if (iframe) {
+          iframe.src = currentSrc;
+        }
+      }, 10);
+    }
+  };
+
   // Return public API
   return {
     create,
     checkIframeStatus,
+    reload,
   };
 }

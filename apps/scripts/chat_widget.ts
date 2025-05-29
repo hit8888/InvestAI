@@ -13,6 +13,7 @@ import {
   StyleManager,
   TimeManager,
   URLManager,
+  HistoryManager,
 } from "./managers";
 import { type EntryPointAlignmentType } from "./lib/types";
 
@@ -49,6 +50,14 @@ import { type EntryPointAlignmentType } from "./lib/types";
     messageManager.sendMessage,
     configManager.getConfig().containerId,
   );
+
+  HistoryManager(() => {
+    const prospectId = localStorage.getItem("prospectId");
+
+    if (!prospectId) {
+      agentIframeManager.reload();
+    }
+  });
 
   // Widget initialization function
   const initializeWidget = async (): Promise<void> => {

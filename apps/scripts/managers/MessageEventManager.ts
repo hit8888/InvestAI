@@ -150,6 +150,9 @@ export function MessageEventManager(
   };
 
   const handleChatInit = (event: MessageEvent<IframeMessage>): void => {
+    const prospectId = event.data.prospectId ?? "";
+    localStorage.setItem("prospectId", prospectId);
+
     window.__breakout__ = {
       ...window.__breakout__,
       prospectId: event.data.prospectId,

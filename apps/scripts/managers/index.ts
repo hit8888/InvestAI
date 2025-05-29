@@ -13,3 +13,4 @@ export { IframeURLManager } from "./IframeURLManager";
 export { EmbeddedContainerManager } from "./EmbeddedContainerManager";
 export { TimeManager } from "./TimeManager";
 export { OverlayManager } from "./OverlayManager";
+export { HistoryManager } from "./HistoryManager";
