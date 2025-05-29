@@ -7,6 +7,7 @@ import {
   ArtifactEnum,
   ArtifactPreviewEnum,
   FormArtifactContent,
+  FormArtifactMetadataType,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
@@ -15,7 +16,8 @@ import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
 import ArrowRight from '../icons/ArrowRight.tsx';
 import { ViewType } from '@meaku/core/types/common';
-
+import FormArtifact from './FormArtifact.tsx';
+import QualificationFlowArtifact from '../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
 interface IProps {
   viewType: ViewType;
   artifactId: string;
@@ -27,6 +29,11 @@ interface IProps {
   artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent | FormArtifactContent;
   isError?: boolean;
   isFetching?: boolean;
+  isQualificationFormArtifact: boolean;
+  artifactContentWithMetadata: {
+    content: FormArtifactContent;
+    metadata: FormArtifactMetadataType;
+  };
 }
 
 const ArtifactPreview = ({
@@ -40,8 +47,10 @@ const ArtifactPreview = ({
   artifactContent,
   isError = false,
   isFetching = false,
+  isQualificationFormArtifact,
+  artifactContentWithMetadata,
 }: IProps) => {
-  const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleArtifactOnClick = () => {
     setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
@@ -49,8 +58,8 @@ const ArtifactPreview = ({
       artifact_id: artifactId,
       artifact_type: artifactType ?? 'NONE',
     });
-    if (artifactType === 'VIDEO' && viewType === ViewType.DASHBOARD) {
-      setIsVideoDialogOpen(true);
+    if ((artifactType === 'VIDEO' || artifactType === 'FORM') && viewType === ViewType.DASHBOARD) {
+      setIsDialogOpen(true);
     }
   };
 
@@ -84,19 +93,55 @@ const ArtifactPreview = ({
     );
   };
 
-  const getVideoPlayerContent = () => {
-    const videoURL = (artifactContent as VideoArtifactContent)?.video_url;
-    return <CustomVideoPlayer videoURL={videoURL} />;
+  const showFormContent = () => {
+    let formContent = null;
+    if (isQualificationFormArtifact) {
+      formContent = (
+        <QualificationFlowArtifact
+          artifact={{
+            artifact_id: artifactId,
+            content: artifactContentWithMetadata.content as FormArtifactContent,
+            metadata: artifactContentWithMetadata?.metadata as FormArtifactMetadataType,
+          }}
+          handleSendUserMessage={() => {}}
+        />
+      );
+    } else {
+      formContent = (
+        <FormArtifact
+          artifactId={artifactId}
+          artifact={artifactContentWithMetadata.content as FormArtifactContent}
+          artifactMetadata={artifactContentWithMetadata?.metadata as FormArtifactMetadataType}
+          handleSendUserMessage={() => {}}
+          viewType={viewType}
+        />
+      );
+    }
+
+    return <div className="flex w-full items-center justify-center">{formContent}</div>;
+  };
+
+  const getDialogContent = () => {
+    switch (artifactType) {
+      case 'VIDEO': {
+        const videoURL = (artifactContent as VideoArtifactContent)?.video_url;
+        return <CustomVideoPlayer videoURL={videoURL} />;
+      }
+      case 'FORM':
+        return showFormContent();
+      default:
+        return null;
+    }
   };
 
   return viewType === ViewType.USER ? (
     <>{showArtifactPreviewButtonDisplay()}</>
   ) : (
-    <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{showArtifactPreviewButtonDisplay()}</DialogTrigger>
-      <DialogContent className="bg-primary-foreground/80 sm:min-w-[1200px]">
+      <DialogContent className="bg-white sm:min-h-[600px] sm:min-w-[1200px]">
         <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>
-        {isVideoDialogOpen ? <div className="h-full w-full rounded-lg">{getVideoPlayerContent()}</div> : null}
+        {isDialogOpen ? <div className="h-full w-full rounded-lg">{getDialogContent()}</div> : null}
       </DialogContent>
     </Dialog>
   );

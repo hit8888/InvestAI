@@ -2,17 +2,11 @@ import Artifact from '@breakout/design-system/components/Artifact/index';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from '../../../stores/useMessageStore';
-import { ArtifactContent, FormArtifactContent, QualificationResponsesType } from '@meaku/core/types/artifact';
-import {
-  checkIsArtifactMessage,
-  checkIsQualificationFormArtifact,
-  getFormArtifactMessage,
-  getFormFilledEvent,
-  isFormDataFilled,
-  SupportedArtifactType,
-} from '@meaku/core/utils/messageUtils';
+import { ArtifactContent, FormArtifactContent } from '@meaku/core/types/artifact';
+import { checkIsArtifactMessage, SupportedArtifactType } from '@meaku/core/utils/messageUtils';
 import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 import { ViewType } from '@meaku/core/types/common';
+import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
 
 type IProps = {
   logoURL: string;
@@ -55,48 +49,10 @@ const ArtifactContainer = ({
     ? ((artifactMessage.message as ArtifactMessageContent).artifact_data.content as ArtifactContent)
     : null;
 
+  const { isQualificationFormArtifact, isFormArtifact, formMetadata, qualificationQuestionFormMetadata } =
+    useNormalAndQualificationFormArtifactMetadataProvider({ artifactMessage, messages });
+
   if (!activeArtifact || !artifactContent) return null;
-
-  const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === artifactMessage?.response_id);
-
-  const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
-
-  const hasFormArtifactMessage = !!formArtifactMessage;
-  const hasFormFilledMessage = !!formFilledMessage;
-
-  const qualificationFormFilled = getFormFilledEvent(messages, artifactMessage, 'QUALIFICATION_FORM_FILLED');
-  const hasQualificationFormFilled = !!qualificationFormFilled;
-
-  const isQualificationFormArtifact = artifactMessage && checkIsQualificationFormArtifact(artifactMessage);
-  const isFormArtifact =
-    artifactMessage && hasFormArtifactMessage && !checkIsQualificationFormArtifact(artifactMessage);
-
-  const qualificationQuestionFormMetadata = isQualificationFormArtifact
-    ? {
-        is_filled: hasFormFilledMessage || hasQualificationFormFilled,
-        filled_data: hasQualificationFormFilled
-          ? (qualificationFormFilled.message.event_data as { qualification_responses: QualificationResponsesType[] })
-              .qualification_responses
-          : hasFormFilledMessage
-            ? formFilledMessage?.message.event_data.form_data
-            : {},
-      }
-    : {};
-
-  const formMetadata = isFormArtifact
-    ? {
-        is_filled:
-          hasFormFilledMessage ||
-          isFormDataFilled(
-            (artifactMessage.message.artifact_data.content as FormArtifactContent)?.form_fields,
-            artifactMessage.message.artifact_data.metadata.filled_data,
-          ),
-        filled_data: hasFormFilledMessage
-          ? formFilledMessage.message.event_data.form_data
-          : artifactMessage.message.artifact_data.metadata?.filled_data,
-      }
-    : {};
 
   const artifactWithContent = {
     artifact_id: activeArtifact.artifact_id,

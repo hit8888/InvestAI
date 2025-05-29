@@ -155,6 +155,7 @@ const MessageItem = ({
     return (
       <MessageArtifactPreview
         message={message}
+        messages={messages}
         viewType={viewType}
         setDemoPlayingStatus={setDemoPlayingStatus}
         setActiveArtifact={setActiveArtifact}
