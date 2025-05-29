@@ -11,12 +11,21 @@ import usePageRouteState from './usePageRouteState';
 import { useParams } from 'react-router-dom';
 import { getDashboardBasicPathURL } from '../utils/common';
 
+const AGENT_TAB_EXPANDED_KEY = 'agent_tab_expanded';
+
+const getInitialAgentTabExpandedState = () => {
+  const storedValue = localStorage.getItem(AGENT_TAB_EXPANDED_KEY);
+  return storedValue ? JSON.parse(storedValue) : false;
+};
+
 const useSidebarNavigationItems = () => {
-  const [isAgentExpanded, setIsAgentExpanded] = useState(false);
+  const [isAgentExpanded, setIsAgentExpanded] = useState(() => getInitialAgentTabExpandedState());
   const { tenantName } = useParams();
 
   const handleAgentTabExpansion = () => {
-    setIsAgentExpanded(!isAgentExpanded);
+    const newValue = !isAgentExpanded;
+    setIsAgentExpanded(newValue);
+    localStorage.setItem(AGENT_TAB_EXPANDED_KEY, JSON.stringify(newValue));
   };
 
   const {
