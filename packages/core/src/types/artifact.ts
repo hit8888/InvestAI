@@ -131,6 +131,7 @@ export enum CalendarTypeEnum {
   CALENDLY = 'CALENDLY',
   CAL_COM = 'CAL_COM',
   IFRAME = 'IFRAME',
+  HUBSPOT = 'HUBSPOT',
 }
 
 export const CalendarArtifactSchema = z.object({
