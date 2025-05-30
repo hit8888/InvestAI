@@ -63,10 +63,6 @@ const routes = [
             path: 'agent',
             children: [
               {
-                path: 'playground',
-                element: <ProtectedRoute element={<PlaygroundPage />} />,
-              },
-              {
                 path: 'data-sources',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
@@ -101,6 +97,15 @@ const routes = [
               {
                 path: 'instructions',
                 element: <ProtectedRoute element={<InstructionsPage />} />,
+              },
+            ],
+          },
+          {
+            path: 'training',
+            children: [
+              {
+                path: 'playground',
+                element: <ProtectedRoute element={<PlaygroundPage />} />,
               },
             ],
           },

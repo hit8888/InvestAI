@@ -6,72 +6,99 @@ import PanelConversationIcon from '@breakout/design-system/components/icons/pane
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
 import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent-icon';
+import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
+import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
 
 import usePageRouteState from './usePageRouteState';
 import { useParams } from 'react-router-dom';
 import { getDashboardBasicPathURL } from '../utils/common';
 
-const AGENT_TAB_EXPANDED_KEY = 'agent_tab_expanded';
+const EXPANDED_TABS_KEY = 'expanded_tabs';
 
-const getInitialAgentTabExpandedState = () => {
-  const storedValue = localStorage.getItem(AGENT_TAB_EXPANDED_KEY);
-  return storedValue ? JSON.parse(storedValue) : false;
+interface ExpandedTabsState {
+  [key: string]: boolean;
+}
+
+const getInitialExpandedState = (): ExpandedTabsState => {
+  const storedValue = localStorage.getItem(EXPANDED_TABS_KEY);
+  return storedValue ? JSON.parse(storedValue) : {};
 };
 
 const useSidebarNavigationItems = () => {
-  const [isAgentExpanded, setIsAgentExpanded] = useState(() => getInitialAgentTabExpandedState());
+  const [expandedTabs, setExpandedTabs] = useState<ExpandedTabsState>(getInitialExpandedState);
   const { tenantName } = useParams();
 
-  const handleAgentTabExpansion = () => {
-    const newValue = !isAgentExpanded;
-    setIsAgentExpanded(newValue);
-    localStorage.setItem(AGENT_TAB_EXPANDED_KEY, JSON.stringify(newValue));
+  const handleTabExpansion = (tabKey: string) => {
+    setExpandedTabs((prev) => {
+      const newState = {
+        ...prev,
+        [tabKey]: !prev[tabKey],
+      };
+      localStorage.setItem(EXPANDED_TABS_KEY, JSON.stringify(newState));
+      return newState;
+    });
   };
 
   const {
     isLeadsPage,
     isConversationsPage,
-    isAgentPlaygroundPage,
     isAgentDataSourcesPage,
-    // isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
     isAgentInstructionsPage,
+    isTrainingPlaygroundPage,
   } = usePageRouteState();
+
   const {
     LEADS,
     CONVERSATIONS,
     AGENT,
-    AGENT_PLAYGROUND,
     AGENT_BRANDING,
     AGENT_ENTRYPOINTS,
     AGENT_INSTRUCTIONS,
     AGENT_DATA_SOURCES,
+    TRAINING,
+    TRAINING_PLAYGROUND,
   } = AppRoutesEnum;
+
   const {
     LEADS_LABEL,
     CONVERSATIONS_LABEL,
     AGENT_LABEL,
-    AGENT_PLAYGROUND_LABEL,
     AGENT_DATA_SOURCES_LABEL,
-    // AGENT_WORKFLOW_LABEL,
     AGENT_BRANDING_LABEL,
     AGENT_ENTRYPOINTS_LABEL,
     AGENT_INSTRUCTIONS_LABEL,
+    TRAINING_LABEL,
+    TRAINING_PLAYGROUND_LABEL,
   } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
-    isAgentPlaygroundPage ||
-    isAgentBrandingPage ||
-    isAgentEntrypointsPage ||
-    isAgentInstructionsPage ||
-    isAgentDataSourcesPage;
+    isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage || isAgentDataSourcesPage;
+
+  const isTrainingTabActive = isTrainingPlaygroundPage;
 
   useEffect(() => {
-    if (isAgentTabActive) {
-      setIsAgentExpanded(true);
-    }
-  }, [isAgentTabActive]);
+    setExpandedTabs((prev) => {
+      const newState = { ...prev };
+      let hasChanges = false;
+
+      if (isAgentTabActive && !prev[AGENT_LABEL]) {
+        newState[AGENT_LABEL] = true;
+        hasChanges = true;
+      }
+      if (isTrainingTabActive && !prev[TRAINING_LABEL]) {
+        newState[TRAINING_LABEL] = true;
+        hasChanges = true;
+      }
+
+      if (hasChanges) {
+        localStorage.setItem(EXPANDED_TABS_KEY, JSON.stringify(newState));
+      }
+
+      return hasChanges ? newState : prev;
+    });
+  }, [isAgentTabActive, isTrainingTabActive]);
 
   const basicURL = getDashboardBasicPathURL(tenantName ?? '');
 
@@ -108,12 +135,6 @@ const useSidebarNavigationItems = () => {
       hasChildren: true,
       children: [
         {
-          navUrl: `${basicURL}/${AGENT_PLAYGROUND}`,
-          navItem: AGENT_PLAYGROUND_LABEL,
-          isActive: isAgentPlaygroundPage,
-        },
-        // TODO: It will be used Later
-        {
           navUrl: `${basicURL}/${AGENT_DATA_SOURCES}`,
           navItem: AGENT_DATA_SOURCES_LABEL,
           isActive: isAgentDataSourcesPage,
@@ -135,9 +156,31 @@ const useSidebarNavigationItems = () => {
         },
       ],
     },
+    {
+      navUrl: `${basicURL}/${TRAINING}`,
+      navItem: TRAINING_LABEL,
+      navImg: isTrainingTabActive ? (
+        <PanelTrainingActiveIcon {...COMMON_SMALL_ICON_PROPS} />
+      ) : (
+        <PanelTrainingIcon {...COMMON_SMALL_ICON_PROPS} />
+      ),
+      isActive: isTrainingTabActive,
+      hasChildren: true,
+      children: [
+        {
+          navUrl: `${basicURL}/${TRAINING_PLAYGROUND}`,
+          navItem: TRAINING_PLAYGROUND_LABEL,
+          isActive: isTrainingPlaygroundPage,
+        },
+      ],
+    },
   ];
 
-  return { NAV_LINK_ITEMS, isAgentExpanded, handleAgentTabExpansion };
+  return {
+    NAV_LINK_ITEMS,
+    expandedTabs,
+    handleTabExpansion,
+  };
 };
 
 export default useSidebarNavigationItems;

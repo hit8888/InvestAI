@@ -7,7 +7,7 @@ import useSidebarNavigationItems from '../../hooks/useSidebarNavigationItems';
 import { getTransitionAnimation } from '../../utils/common';
 
 const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
-  const { NAV_LINK_ITEMS, isAgentExpanded, handleAgentTabExpansion } = useSidebarNavigationItems();
+  const { NAV_LINK_ITEMS, expandedTabs, handleTabExpansion } = useSidebarNavigationItems();
 
   return (
     <motion.div
@@ -22,10 +22,10 @@ const NavigationBodyItems = ({ isOpen }: { isOpen: boolean }) => {
           <NavLinkSingleItem
             {...navItem}
             isPanelOpen={isOpen}
-            onExpand={handleAgentTabExpansion}
-            isExpanded={isAgentExpanded}
+            onExpand={() => handleTabExpansion(navItem.navItem)}
+            isExpanded={expandedTabs[navItem.navItem]}
           />
-          {navItem.hasChildren && isAgentExpanded && isOpen && (
+          {navItem.hasChildren && expandedTabs[navItem.navItem] && isOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
