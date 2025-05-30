@@ -6,6 +6,7 @@ import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import { useSidebar } from '../../context/SidebarContext';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
+import { DataSourceSortValues } from '@meaku/core/types/admin/sort';
 
 interface TableContentProps {
   tableData: unknown[];
@@ -31,6 +32,7 @@ const DataSourceTableViewContent = memo(
     const { results } = useDataSourceTableStore();
     const { setSortValue } = useSortFilterStore();
     const { isSidebarOpen } = useSidebar();
+    const sortValue = useSortFilterStore((state) => state[pageType] as DataSourceSortValues);
     const { selectAll, deselectAll, getSelectedIds, isIdSelected, toggleSelectId } = useTableSelection();
 
     if (isLoading) {
@@ -55,6 +57,7 @@ const DataSourceTableViewContent = memo(
         toggleSelectId={toggleSelectId}
         results={results}
         setSortValue={setSortValue}
+        sortValue={sortValue}
         isSidebarOpen={isSidebarOpen}
       />
     );

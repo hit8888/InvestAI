@@ -139,3 +139,8 @@ export interface AllFilterState {
   resetPageFilters: (page: PaginationPageType) => void;
   initializeFilterValues: (page: PaginationPageType, filters: FilterItem[]) => void;
 }
+
+export type ResultantOption = {
+  value: string;
+  label: string;
+};

@@ -8,6 +8,7 @@ import FilterSelectAllContainer from './FilterSelectAllContainer';
 import { FilterType } from '@meaku/core/types/admin/filters';
 import DataSourceStatusChip from './tableCellComp/DataSourceStatusChip';
 import { DATA_SOURCE_STATUS } from '../../pages/DataSourcesPage/constants';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 type CommonCheckboxesFilterContent = {
   keyValue: string;
@@ -32,7 +33,7 @@ const renderFilterLabel = (label: string, keyValue: string) => {
     case FilterType.Status:
       return <DataSourceStatusChip status={label as DATA_SOURCE_STATUS} />;
     default:
-      return null;
+      return <Typography variant="body-16">{label}</Typography>;
   }
 };
 

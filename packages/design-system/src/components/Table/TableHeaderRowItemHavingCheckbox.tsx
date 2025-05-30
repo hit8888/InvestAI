@@ -1,97 +1,6 @@
-import { flexRender, HeaderGroup, Header } from '@tanstack/react-table';
-import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
-import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
-import SortFilterIcon from '../icons/sort-filter-icon';
-import Button from '../Button';
-import { SortCategory } from '@meaku/core/types/admin/sort';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
-import { useState } from 'react';
-import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
-
-type DataSourceStoreProps = {
-  selectAll: () => void;
-  deselectAll: () => void;
-  getSelectedIds: () => number[];
-  results: CommonDataSourceResponse[];
-  pageType: PaginationPageType;
-  setSortValue: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
-};
-
-type CustomSingleHeaderRowItemProps = DataSourceStoreProps & {
-  headerGroup: HeaderGroup<CommonDataSourceResponse>;
-};
-
-type HeaderTitleProps = {
-  header: Header<CommonDataSourceResponse, unknown>;
-};
-
-const HeaderTitle = ({ header }: HeaderTitleProps) => {
-  return (
-    <span className={cn(`w-full flex-1 text-left text-xs font-medium text-gray-500`)}>
-      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-    </span>
-  );
-};
-
-type HeaderContentProps = DataSourceStoreProps & {
-  isFirstColumn: boolean;
-  header: Header<CommonDataSourceResponse, unknown>;
-};
-
-const HeaderContent = ({
-  isFirstColumn,
-  header,
-  selectAll,
-  deselectAll,
-  getSelectedIds,
-  results,
-  setSortValue,
-  pageType,
-}: HeaderContentProps) => {
-  const selectedIds = getSelectedIds();
-  const isAllSelected = selectedIds.length === results.length && results.length > 0;
-  const [isSortingActive, setIsSortingActive] = useState(false);
-
-  const isDocumentsPage = pageType === DOCUMENTS_PAGE;
-
-  const handleCheckboxChange = (checked: boolean) => {
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  };
-
-  const handleSortValueChange = () => {
-    setSortValue(pageType, header.column.id as SortCategory, !isSortingActive);
-    setIsSortingActive(!isSortingActive);
-  };
-
-  return (
-    <div className="flex w-full items-center justify-between">
-      <div className="flex items-center justify-center gap-4">
-        {isFirstColumn && !isDocumentsPage && (
-          <Checkbox
-            checked={isAllSelected}
-            className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
-            onCheckedChange={handleCheckboxChange}
-            haveBlackBackground={false}
-          />
-        )}
-        <HeaderTitle header={header} />
-      </div>
-      <Button
-        onClick={handleSortValueChange}
-        className={cn({ 'bg-white': isSortingActive })}
-        variant="system_tertiary"
-        buttonStyle={'icon'}
-      >
-        <SortFilterIcon className="h-4 w-4 text-gray-700" />
-      </Button>
-    </div>
-  );
-};
+import { CustomSingleHeaderRowItemProps } from './tableTypes';
+import HeaderCellContent from './HeaderCellContent';
 
 const TableHeaderRowItemHavingCheckbox = ({
   headerGroup,
@@ -101,6 +10,7 @@ const TableHeaderRowItemHavingCheckbox = ({
   results,
   setSortValue,
   pageType,
+  sortValue,
 }: CustomSingleHeaderRowItemProps) => {
   return (
     <tr key={headerGroup.id} className="relative flex w-full items-start">
@@ -129,7 +39,7 @@ const TableHeaderRowItemHavingCheckbox = ({
               },
             )}
           >
-            <HeaderContent
+            <HeaderCellContent
               selectAll={selectAll}
               deselectAll={deselectAll}
               getSelectedIds={getSelectedIds}
@@ -138,6 +48,7 @@ const TableHeaderRowItemHavingCheckbox = ({
               header={header}
               setSortValue={setSortValue}
               pageType={pageType}
+              sortValue={sortValue}
             />
             <div
               {...{

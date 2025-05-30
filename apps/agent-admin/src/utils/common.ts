@@ -40,7 +40,13 @@ import {
 } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
-import { SortValues, WebpagesSortValues, DocumentsSortValues, ArtifactsSortValues } from '@meaku/core/types/admin/sort';
+import {
+  SortValues,
+  WebpagesSortValues,
+  DocumentsSortValues,
+  ArtifactsSortValues,
+  DataSourceSortValues,
+} from '@meaku/core/types/admin/sort';
 import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
@@ -317,23 +323,29 @@ export const getFilterHeaderLabel = (filterState: string) => {
   }
 };
 
-export const getSortingAppliedValues = (
-  sortState: SortValues | WebpagesSortValues | DocumentsSortValues | ArtifactsSortValues,
-  page: string,
-) => {
+export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortValues, page: string) => {
   const isLeadsPage = page === LEADS_PAGE;
   const isMainTabPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
   const isWebpagesPage = page === WEBPAGES_PAGE;
   const isDocumentsPage = page === DOCUMENTS_PAGE;
+  const isVideosPage = page === VIDEOS_PAGE;
+  const isSlidesPage = page === SLIDES_PAGE;
   const sortApplied: SortItem[] = [];
   const { timestampSort, sessionLengthSort, intentScoreSort } = sortState as SortValues;
   const { updated_onSort, statusSort, titleSort, urlSort } = sortState as WebpagesSortValues;
   const {
     updated_onSort: updated_onSortDocuments,
-    nameSort,
+    source_nameSort,
     data_source_typeSort: data_source_typeSortDocuments,
     statusSort: statusSortDocuments,
   } = sortState as DocumentsSortValues;
+  const {
+    updated_onSort: updated_onSortArtifacts,
+    statusSort: statusSortArtifacts,
+    assetSort,
+    descriptionSort,
+  } = sortState as ArtifactsSortValues;
+
   if (isMainTabPage && timestampSort) {
     sortApplied.push({
       field: isLeadsPage ? 'created_on' : 'timestamp',
@@ -342,47 +354,93 @@ export const getSortingAppliedValues = (
   }
 
   if (isWebpagesPage) {
-    sortApplied.push({
-      field: 'updated_on',
-      order: updated_onSort ? 'desc' : 'asc',
-    });
+    if (updated_onSort) {
+      sortApplied.push({
+        field: 'updated_on',
+        order: updated_onSort,
+      });
+    }
 
-    sortApplied.push({
-      field: 'status',
-      order: statusSort ? 'desc' : 'asc',
-    });
+    if (statusSort) {
+      sortApplied.push({
+        field: 'status',
+        order: statusSort,
+      });
+    }
 
-    sortApplied.push({
-      field: 'title',
-      order: titleSort ? 'desc' : 'asc',
-    });
+    if (titleSort) {
+      sortApplied.push({
+        field: 'title',
+        order: titleSort,
+      });
+    }
 
-    sortApplied.push({
-      field: 'url',
-      order: urlSort ? 'desc' : 'asc',
-    });
+    if (urlSort) {
+      sortApplied.push({
+        field: 'url',
+        order: urlSort,
+      });
+    }
   }
 
   if (isDocumentsPage) {
-    sortApplied.push({
-      field: 'name',
-      order: nameSort ? 'desc' : 'asc',
-    });
+    if (source_nameSort) {
+      sortApplied.push({
+        field: 'name',
+        order: source_nameSort,
+      });
+    }
 
-    sortApplied.push({
-      field: 'status',
-      order: statusSortDocuments ? 'desc' : 'asc',
-    });
+    if (statusSortDocuments) {
+      sortApplied.push({
+        field: 'status',
+        order: statusSortDocuments,
+      });
+    }
 
-    sortApplied.push({
-      field: 'data_source_type',
-      order: data_source_typeSortDocuments ? 'desc' : 'asc',
-    });
+    if (data_source_typeSortDocuments) {
+      sortApplied.push({
+        field: 'data_source_type',
+        order: data_source_typeSortDocuments,
+      });
+    }
 
-    sortApplied.push({
-      field: 'updated_on',
-      order: updated_onSortDocuments ? 'desc' : 'asc',
-    });
+    if (updated_onSortDocuments) {
+      sortApplied.push({
+        field: 'updated_on',
+        order: updated_onSortDocuments,
+      });
+    }
+  }
+
+  if (isVideosPage || isSlidesPage) {
+    if (updated_onSortArtifacts) {
+      sortApplied.push({
+        field: 'updated_on',
+        order: updated_onSortArtifacts,
+      });
+    }
+
+    if (statusSortArtifacts) {
+      sortApplied.push({
+        field: 'status',
+        order: statusSortArtifacts,
+      });
+    }
+
+    if (assetSort) {
+      sortApplied.push({
+        field: 'asset',
+        order: assetSort,
+      });
+    }
+
+    if (descriptionSort) {
+      sortApplied.push({
+        field: 'title',
+        order: descriptionSort,
+      });
+    }
   }
 
   if (sessionLengthSort) {

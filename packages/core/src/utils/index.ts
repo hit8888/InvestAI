@@ -16,6 +16,8 @@ export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];
 export const SHADOW_PINNED_COLUMNS = ['name', 'country'];
 
+export const NON_SORTABLE_COLUMNS = ['duration'];
+
 export const WIDTH_OF_SIDEBAR_OPEN = 270;
 export const WIDTH_OF_SIDEBAR_CLOSED = 80;
 

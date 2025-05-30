@@ -14,6 +14,8 @@ export type SortCategory =
   | 'asset'
   | 'data';
 
+export type SortOrder = 'asc' | 'desc' | null;
+
 export type SortValues = {
   timestampSort: string | null;
   sessionLengthSort: string | null;
@@ -21,24 +23,26 @@ export type SortValues = {
 };
 
 export type CommonSortValues = {
-  updated_onSort: boolean;
-  statusSort: boolean;
+  updated_onSort: SortOrder;
+  statusSort: SortOrder;
 };
 
 export type WebpagesSortValues = CommonSortValues & {
-  urlSort: boolean;
-  titleSort: boolean;
+  urlSort: SortOrder;
+  titleSort: SortOrder;
 };
 
 export type DocumentsSortValues = CommonSortValues & {
-  nameSort: boolean;
-  data_source_typeSort: boolean;
+  source_nameSort: SortOrder;
+  data_source_typeSort: SortOrder;
 };
 
 export type ArtifactsSortValues = CommonSortValues & {
-  assetSort: boolean;
-  dataSort: boolean;
+  assetSort: SortOrder;
+  descriptionSort: SortOrder;
 };
+
+export type DataSourceSortValues = WebpagesSortValues | DocumentsSortValues | ArtifactsSortValues;
 
 export interface SortFilterState {
   leads: SortValues;
@@ -47,7 +51,7 @@ export interface SortFilterState {
   documents: DocumentsSortValues;
   videos: ArtifactsSortValues;
   slides: ArtifactsSortValues;
-  setSortValue: (page: PaginationPageType, category: SortCategory, value: string | boolean) => void;
+  setSortValue: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;
   resetPageSorts: (page: PaginationPageType) => void;
   initializeSortValues: (page: PaginationPageType, sortValues: SortValues) => void;
 }

@@ -9,26 +9,26 @@ const InitialSortValues = {
 };
 
 const commonInitialSortValues = {
-  updated_onSort: false, // true means desc, false means asc
-  statusSort: false,
+  updated_onSort: null,
+  statusSort: null,
 };
 
 const artifactsInitialSortValues = {
   ...commonInitialSortValues,
-  assetSort: false,
-  dataSort: false,
+  assetSort: null,
+  descriptionSort: null,
 };
 
 const webpagesInitialSortValues = {
   ...commonInitialSortValues,
-  urlSort: false,
-  titleSort: false,
+  urlSort: null,
+  titleSort: null,
 };
 
 const documentsInitialSortValues = {
   ...commonInitialSortValues,
-  nameSort: false,
-  data_source_typeSort: false,
+  source_nameSort: null,
+  data_source_typeSort: null,
 };
 
 export const useSortFilterStore = create<SortFilterState>((set) => ({
@@ -51,13 +51,27 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
     ...artifactsInitialSortValues,
   },
   setSortValue: (page, category, value) =>
-    set((state) => ({
-      ...state,
-      [page]: {
-        ...state[page],
-        [category + 'Sort']: value,
-      },
-    })),
+    set((state) => {
+      // Get all keys for the current page
+      const pageKeys = Object.keys(state[page]);
+
+      // Create a new object with all values set to null
+      const resetValues = pageKeys.reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: null,
+        }),
+        {},
+      );
+
+      return {
+        ...state,
+        [page]: {
+          ...resetValues,
+          [category + 'Sort']: value,
+        },
+      };
+    }),
   resetPageSorts: (page) =>
     set((state) => ({
       ...state,
