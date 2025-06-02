@@ -2,7 +2,7 @@ import SendIcon from '@breakout/design-system/components/icons/send';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useEffect, useState } from 'react';
 import TextArea from '@breakout/design-system/components/TextArea/index';
-import ActiveConvJoinAICopilotIcon from '@breakout/design-system/components/icons/join-conv-aicopilot-icon';
+import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
 
 type AdminChatInputProps = {
@@ -51,7 +51,7 @@ const AdminChatInput = ({ onSendMessage, onAIResponseGenerationRequest }: AdminC
   return (
     <div className="flex w-full items-center">
       <div className="cursor-pointer px-2 py-1" onClick={onAIResponseGenerationRequest}>
-        <ActiveConvJoinAICopilotIcon className="h-6 w-5" />
+        <AiSparklesIcon className="h-6 w-5" />
       </div>
 
       <form onSubmit={onSubmit} className="flex w-full items-center gap-3">

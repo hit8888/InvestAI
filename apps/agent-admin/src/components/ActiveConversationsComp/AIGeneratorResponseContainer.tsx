@@ -3,7 +3,7 @@ import { PopoverClose } from '@breakout/design-system/components/Popover/index';
 import CloseIcon from '@breakout/design-system/components/icons/popup-close-icon';
 import Button from '@breakout/design-system/components/Button/index';
 import AiResponseGenerateGradientButton from '@breakout/design-system/components/icons/ai-response-generate-gradient-button';
-import ActiveConvJoinAICopilotIconSmall from '@breakout/design-system/components/icons/join-conv-aicopilot-icon-small';
+import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 
 type AIGeneratorResponseContainerProps = {
   allAIResponseMessages: string[];
@@ -69,7 +69,7 @@ const SingleAIResponseMessageContainer = ({
         className="flex w-full cursor-pointer items-start gap-2 rounded-lg bg-white p-2"
         onClick={() => handleClickOnAIResponseMessage(message)}
       >
-        <ActiveConvJoinAICopilotIconSmall className="h-4 w-4" />
+        <AiSparklesIcon className="h-4 w-4" />
         <p className="w-[90%] text-sm text-primary">{message}</p>
       </div>
       <div className="w-full pl-8 pr-2">
