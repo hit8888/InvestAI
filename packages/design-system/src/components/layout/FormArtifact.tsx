@@ -107,7 +107,13 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
             <div className="flex w-full flex-col items-start gap-6">
               {formFields.map((field, i) => (
-                <ChatFormField isArtifactFormFilled={isArtifactFormFilled} key={i} form={form} form_field={field} />
+                <ChatFormField
+                  key={i}
+                  isArtifactFormFilled={isArtifactFormFilled}
+                  form={form}
+                  form_field={field}
+                  artifactMetadata={artifactMetadata}
+                />
               ))}
             </div>
             <div className="flex justify-end">

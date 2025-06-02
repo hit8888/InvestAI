@@ -86,6 +86,7 @@ export const QualificationQuestionSchema = z.object({
 export const FormArtifactMetadata = z.object({
   is_filled: z.boolean().optional(),
   filled_data: z.record(z.string(), z.any()).optional(),
+  country_code: z.string().optional(),
 });
 
 export type FormArtifactMetadataType = z.infer<typeof FormArtifactMetadata>;

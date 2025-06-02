@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '../../lib/cn';
-// import { CountryCode } from 'libphonenumber-js';
+import { CountryCode } from 'libphonenumber-js';
 import PhoneInput from 'react-phone-number-input';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { CountrySelect } from '../layout/CountrySelect';
@@ -12,9 +12,10 @@ type PhoneInputProps = {
   field: ControllerRenderProps<FieldValues, string>;
   phoneLabel: string;
   isArtifactFormFilled: boolean;
+  defaultCountry?: CountryCode;
 };
 
-const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled }: PhoneInputProps) => {
+const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled, defaultCountry = 'US' }: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   // TODO: Add default country based on user's IP address or something other logic
   // const getDefaultCountry = (): CountryCode => {
@@ -35,7 +36,7 @@ const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled }: PhoneI
 
   return (
     <PhoneInput
-      defaultCountry="US"
+      defaultCountry={defaultCountry}
       className={cn('custom-phone-input group w-full rounded-lg border border-gray-300 bg-white text-sm ', {
         'border-gray-400 ring-0 ': isFocused,
       })}

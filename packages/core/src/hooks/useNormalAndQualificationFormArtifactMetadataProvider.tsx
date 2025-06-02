@@ -65,6 +65,7 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
         filled_data: hasFormFilledMessage
           ? formFilledMessage.message.event_data.form_data
           : artifactMessage.message.artifact_data.metadata?.filled_data,
+        country_code: artifactMessage.message.artifact_data.metadata?.country_code,
       }
     : {};
 

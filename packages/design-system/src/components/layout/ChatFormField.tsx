@@ -12,12 +12,15 @@ import PhoneInputContainer from '../PhoneInput';
 import { cn } from '../../lib/cn';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import AgentDropdown from '../Dropdown/AgentDropdown';
+import { FormArtifactMetadataType } from '@meaku/core/types/artifact';
+import { CountryCode } from 'libphonenumber-js/core';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
   form_field: FormFieldType;
   isArtifactFormFilled: boolean;
   fieldClassName?: string;
+  artifactMetadata: FormArtifactMetadataType;
 }
 
 // Helper function to generate label with asterisk for required fields
@@ -52,6 +55,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             isArtifactFormFilled={isArtifactFormFilled}
             phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             field={field}
+            defaultCountry={props.artifactMetadata.country_code as CountryCode}
           />
         );
       case 'picklist':
