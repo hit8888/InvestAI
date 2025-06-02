@@ -6,6 +6,7 @@ import { useState } from 'react';
 import FilterContent from './FilterContent';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { MULTI_VALUE_FILTER_TYPES } from '../../utils/constants';
 
 type SingleAppliedFilterProps = {
   filter: { key: string; label: string; value: string | string[] | boolean };
@@ -18,7 +19,7 @@ type SingleAppliedFilterProps = {
   page: PaginationPageType;
 };
 
-const { Location, ProductOfInterest, Company, DateRange, TestConversationIncluded } = FilterType;
+const { DateRange, TestConversationIncluded } = FilterType;
 
 const SingleAppliedFilter = ({
   filter,
@@ -58,7 +59,7 @@ const SingleAppliedFilter = ({
         className="popover-styling border-gray-200-styling flex cursor-pointer items-center justify-center gap-2 border-gray-200"
       >
         <span className="text-xs font-normal text-gray-400">{filter.label}:</span>
-        {[Location, ProductOfInterest, Company].includes(filter.key as FilterType) ? (
+        {MULTI_VALUE_FILTER_TYPES.includes(filter.key as FilterType) ? (
           <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
         ) : (
           <span className="text-sm font-semibold capitalize text-gray-600">{filter.value}</span>

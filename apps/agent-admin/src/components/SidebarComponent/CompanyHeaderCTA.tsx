@@ -38,7 +38,7 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
       >
         <div
           className={cn('flex w-full items-center gap-2', {
-            'justify-center': isTenantLogoUrlPresent,
+            'justify-start': isTenantLogoUrlPresent,
           })}
         >
           {isTenantLogoUrlPresent && (
@@ -57,7 +57,7 @@ const CompanyHeaderCTA = ({ isOpen, toggleSidebar }: IProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={cn('text-center font-bold capitalize text-gray-900 transition-all duration-300', {
+              className={cn('text-left font-bold capitalize text-gray-900 transition-all duration-300', {
                 'w-full text-2xl': isOpen,
                 'w-16 truncate text-xs': !isOpen,
               })}

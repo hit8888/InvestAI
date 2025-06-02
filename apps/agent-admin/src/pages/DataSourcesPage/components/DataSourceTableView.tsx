@@ -17,6 +17,7 @@ import { useAllFilterStore } from '../../../stores/useAllFilterStore';
 import { collectAppliedFilters, getAllFilterAppliedValues, getSortingAppliedValues } from '../../../utils/common';
 import ErrorState from '../../../components/AgentManagement/ErrorState';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface DataSourceTableViewProps {
   pageType: PaginationPageType;
@@ -27,7 +28,7 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
     pageType: pageType as PaginationPageType,
   });
 
-  const { results, getPaginatedTableData, setTableData } = useDataSourceTableStore();
+  const { results, getPaginatedTableData, setTableData, selectedIds } = useDataSourceTableStore();
   const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
   const sortState = useSortFilterStore((state) => state[pageType as PaginationPageType]);
@@ -74,6 +75,10 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
     if (data) {
       setTableData(data);
     }
+
+    return () => {
+      setTableData(null);
+    };
   }, [data]);
 
   const paginatedData = getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
@@ -85,6 +90,10 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   const areFiltersApplied = useMemo(() => {
     return appliedFilters.length > 0;
   }, [appliedFilters]);
+
+  const isAllDataSourcesSelectedPerPage = useMemo(() => {
+    return selectedIds.length === results.length && results.length > 0;
+  }, [selectedIds, results]);
 
   if (isError) return <ErrorState />;
 
@@ -99,6 +108,17 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         payloadData={debouncedPayloadData}
         onFilterContainerHeightChange={setFilterContainerHeight}
       />
+      {isAllDataSourcesSelectedPerPage && (
+        <div className="mb-1 flex w-full flex-col items-center self-stretch rounded-lg bg-gray-100 p-2">
+          <Typography variant="body-16" textColor="gray500" align="center">
+            All{' '}
+            <span className="font-semibold text-system">
+              {results.length} {pageType}
+            </span>{' '}
+            on this page are selected.
+          </Typography>
+        </div>
+      )}
       <DataSourceTableViewContent
         columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
         tableData={results}

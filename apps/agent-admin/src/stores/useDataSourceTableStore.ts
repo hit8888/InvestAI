@@ -10,7 +10,7 @@ interface DataSourceTableState {
   total_pages: number;
   total_records: number;
   selectedIds: number[];
-  setTableData: (data: TableDataResponse) => void;
+  setTableData: (data: TableDataResponse | null) => void;
   toggleSelectId: (id: number) => void;
   selectAll: () => void;
   deselectAll: () => void;
@@ -35,11 +35,15 @@ export const useDataSourceTableStore = create<DataSourceTableState>((set, get) =
   selectedIds: [],
 
   setTableData: (data) => {
-    const validatedData = TableDataSchema.safeParse(data);
-    if (!validatedData.success) {
-      throw new Error(validatedData.error.errors.map((error) => error.message).join(', '));
+    if (data) {
+      const validatedData = TableDataSchema.safeParse(data);
+      if (!validatedData.success) {
+        throw new Error(validatedData.error.errors.map((error) => error.message).join(', '));
+      }
+      set(validatedData.data as DataSourceTableState);
+    } else {
+      set({ results: [], current_page: 1, page_size: 10, total_pages: 1, total_records: 0, selectedIds: [] });
     }
-    set(validatedData.data as DataSourceTableState);
   },
 
   toggleSelectId: (id) => {

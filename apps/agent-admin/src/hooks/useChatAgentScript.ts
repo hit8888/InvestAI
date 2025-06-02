@@ -1,13 +1,14 @@
+import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import { useEffect } from 'react';
 
 const useChatAgentScript = (tenantName: string, userEmail: string) => {
   const isStaging = import.meta.env.VITE_APP_ENV !== 'production';
+  const agentId = getTenantActiveAgentId();
   useEffect(() => {
     const script = document.createElement('script');
     // TODO: Move script src to env variable
     script.src = 'https://script.getbreakout.ai/chat_widget.js';
-    // TODO: agent-id should be dynamic
-    script.setAttribute('agent-id', '1');
+    script.setAttribute('agent-id', agentId);
     script.setAttribute('tenant-id', tenantName);
     script.setAttribute('container-id', 'embedded-breakout-agent');
     script.setAttribute('is-collapsible', 'false');

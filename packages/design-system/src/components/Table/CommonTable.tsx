@@ -123,7 +123,6 @@ const CommonTable = ({
           key={row.id}
           row={row}
           index={index}
-          pageType={pageType}
           isIdSelected={isIdSelected}
           toggleSelectId={toggleSelectId}
         />

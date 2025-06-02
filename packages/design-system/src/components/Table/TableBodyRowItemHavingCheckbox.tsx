@@ -3,13 +3,7 @@ import { useCallback } from 'react';
 import { CustomSingleBodyRowItemProps } from './tableTypes';
 import RowCellContent from './RowCellContent';
 
-const TableBodyRowItemHavingCheckbox = ({
-  row,
-  index,
-  pageType,
-  isIdSelected,
-  toggleSelectId,
-}: CustomSingleBodyRowItemProps) => {
+const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelectId }: CustomSingleBodyRowItemProps) => {
   const rowId = row.original.id;
   const isRowSelected = isIdSelected(rowId);
 
@@ -57,7 +51,6 @@ const TableBodyRowItemHavingCheckbox = ({
               isFirstColumn={isFirstColumn}
               cell={cell}
               isRowSelected={isRowSelected}
-              pageType={pageType}
             />
           </td>
         );

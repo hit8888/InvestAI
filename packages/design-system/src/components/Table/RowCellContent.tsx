@@ -3,7 +3,6 @@ import { Cell, flexRender } from '@tanstack/react-table';
 import { memo } from 'react';
 import { Checkbox } from '../Checkbox';
 import { RowCellContentProps } from './tableTypes';
-import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
 
 const CellContent = memo(({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
   return (
@@ -15,8 +14,8 @@ const CellContent = memo(({ cell }: { cell: Cell<CommonDataSourceResponse, unkno
 
 CellContent.displayName = 'CellContent';
 
-const RowCellContent = memo(({ isFirstColumn, cell, isRowSelected, onToggleSelect, pageType }: RowCellContentProps) => {
-  if (isFirstColumn && pageType !== DOCUMENTS_PAGE) {
+const RowCellContent = memo(({ isFirstColumn, cell, isRowSelected, onToggleSelect }: RowCellContentProps) => {
+  if (isFirstColumn) {
     return (
       <div className="flex w-full items-center gap-4">
         <Checkbox

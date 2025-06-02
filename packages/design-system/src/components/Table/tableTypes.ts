@@ -28,7 +28,6 @@ export type HeaderContentProps = DataSourceStoreProps & {
 export type CustomSingleBodyRowItemProps = {
   row: Row<CommonDataSourceResponse>;
   index: number;
-  pageType: string;
   isIdSelected: (id: number) => boolean;
   toggleSelectId: (id: number) => void;
 };
@@ -38,5 +37,4 @@ export type RowCellContentProps = {
   cell: Cell<CommonDataSourceResponse, unknown>;
   isRowSelected: boolean;
   onToggleSelect: () => void;
-  pageType: string;
 };

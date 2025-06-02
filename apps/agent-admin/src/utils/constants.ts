@@ -99,6 +99,8 @@ export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';
 export const LOGOUT_BUTTON_TITLE = 'Logout';
 export const EXPORT_DOWNLOAD_LABEL = 'Download';
 
+export const MULTI_VALUE_FILTER_TYPES = [Location, ProductOfInterest, Company, Status, Sources];
+
 export enum COPIED_FIELD_TEXTS {
   EMAIL = 'Email Copied',
   SESSION_ID = 'Session ID Copied',
@@ -302,7 +304,7 @@ export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filte
 );
 
 export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
-  (item) => ![IntentScore, MeetingBooked].includes(item.filterType),
+  (item) => ![MeetingBooked].includes(item.filterType),
 );
 
 // Not Showing Usage Count for now

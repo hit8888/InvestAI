@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
 import { AppRoutesEnum } from '../utils/constants';
 
@@ -11,8 +11,15 @@ interface RouteWrapperProps {
 const ProtectedRoute: React.FC<RouteWrapperProps> = ({ element }) => {
   const { isAuthenticated } = useAuth();
   const { LOGIN } = AppRoutesEnum;
+  const location = useLocation();
 
-  return isAuthenticated ? element : <Navigate to={`/${LOGIN}`} />;
+  if (!isAuthenticated) {
+    // Save the attempted URL in localStorage
+    localStorage.setItem('redirectAfterLogin', JSON.stringify(location.pathname));
+    return <Navigate to={`/${LOGIN}`} />;
+  }
+
+  return element;
 };
 
 export default ProtectedRoute;

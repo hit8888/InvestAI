@@ -107,8 +107,18 @@ const LoginForm = () => {
 
     const org = userData?.organizations;
     const tenantHavingAdminRole = org?.find((item) => item?.['role'] === 'admin');
-    // If the user has an admin role and multiple organizations,
-    // we would set this as our admin_tenant_identifier and navigate to 'leads' page.
+
+    // Check for saved redirect URL
+    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '{}');
+
+    if (savedRedirectPath) {
+      // Clear the saved path
+      navigate(savedRedirectPath);
+      localStorage.removeItem('redirectAfterLogin');
+      return;
+    }
+
+    // If no saved path, proceed with default navigation
     if (tenantHavingAdminRole) {
       await setupTenantAndAgent(tenantHavingAdminRole);
       const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');

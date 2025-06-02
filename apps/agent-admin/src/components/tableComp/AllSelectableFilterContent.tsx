@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD } from '../../utils/constants';
-import { getDateAppliedValue, getFiltersConfig } from '../../utils/common';
+import { getDateAppliedValue, getFiltersConfig, getOrderedBuyerIntent } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
@@ -35,7 +35,9 @@ const AllSelectableFilterContent = ({
 
   const isConversationsAndLeadsPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
 
+  // All filters config
   const filterConfig = [...getFiltersConfig(page)];
+
   const handleClearAll = () => {
     resetPageFilters(page);
     handleFilterState(FilterType.AllFilters);
@@ -103,7 +105,7 @@ const AllSelectableFilterContent = ({
       case DateRange:
         return dateRange ? getDateAppliedValue(dateRange) : 'Any';
       case IntentScore:
-        return intentScore.length > 0 ? `${intentScore.length} selected` : 'Any';
+        return intentScore.length > 0 ? getOrderedBuyerIntent(intentScore).join(', ') : 'Any';
       case Location:
         return location.length > 0 ? `${location.length} selected` : 'Any';
       case Company:

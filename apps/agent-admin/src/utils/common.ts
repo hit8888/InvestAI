@@ -571,9 +571,8 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   }
 
   if (intentScore.length > 0) {
-    // Get the minimum score from selected intent levels
     filterApplied.push({
-      field: 'buyer_intent_score', // TODO: use buyer_intent
+      field: 'buyer_intent',
       value: intentScore,
       operator: 'in',
     });
@@ -721,7 +720,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     appliedFilters.push({
       key: IntentScore,
       label: 'Intent Score',
-      value: intentScore.join(', '),
+      value: getOrderedBuyerIntent(intentScore).join(', '),
     });
   }
 
@@ -989,4 +988,18 @@ export const transformEntityDataToColumnHeaderLabelMapping = (inputArray: Entity
   });
 
   return result;
+};
+
+export const getOrderedBuyerIntent = (intentScores: string[]): string[] => {
+  const orderMap = {
+    high: 0,
+    medium: 1,
+    low: 2,
+  };
+
+  return [...intentScores].sort((a, b) => {
+    const aLower = a.toLowerCase();
+    const bLower = b.toLowerCase();
+    return (orderMap[aLower as keyof typeof orderMap] ?? 999) - (orderMap[bLower as keyof typeof orderMap] ?? 999);
+  });
 };

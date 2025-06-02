@@ -29,6 +29,7 @@ const HeaderCellContent = ({
 }: HeaderContentProps) => {
   const selectedIds = getSelectedIds();
   const isAllSelected = selectedIds.length === results.length && results.length > 0;
+  const isIndeterminate = selectedIds.length > 0 && selectedIds.length < results.length;
   const sortKey = `${header.column.id}Sort` as keyof DataSourceSortValues;
   const initialSortingDirection = sortValue[sortKey] as SortOrder;
   const [sortingDirection, setSortDirection] = useState<SortOrder>(initialSortingDirection);
@@ -40,9 +41,14 @@ const HeaderCellContent = ({
   }, [initialSortingDirection]);
 
   const handleCheckboxChange = (checked: boolean) => {
-    if (checked) {
+    if (isIndeterminate) {
+      // If in indeterminate state, deselect all
+      deselectAll();
+    } else if (checked) {
+      // If unchecked, select all
       selectAll();
     } else {
+      // If all are selected, deselect all
       deselectAll();
     }
   };
@@ -72,6 +78,7 @@ const HeaderCellContent = ({
         {isFirstColumn && (
           <Checkbox
             checked={isAllSelected}
+            indeterminate={isIndeterminate}
             className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
             onCheckedChange={handleCheckboxChange}
             haveBlackBackground={false}

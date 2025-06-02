@@ -2,17 +2,29 @@ import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS } from '../../utils/constants';
 import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import { useCallback } from 'react';
 
 const IntentScoreFilterContent = ({ page, handleClosePopover, filterState }: CommonFilterContentProps) => {
-  const filters = useAllFilterStore();
+  const filters = useAllFilterStore((state) => state[page]);
+  const setFilter = useAllFilterStore((state) => state.setFilter);
   const { IntentScore } = FilterType;
+
+  const intentScore = filters.intentScore;
+
+  const handleSelectionChange = useCallback(
+    (value: string[]) => {
+      setFilter(page, IntentScore, value);
+    },
+    [page, IntentScore, setFilter],
+  );
+
   return (
     <CommonCheckboxesFilterContent
       filterState={filterState}
       keyValue={IntentScore}
       checkboxOptions={FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS}
-      selectedOptions={filters[page].intentScore}
-      onSelectionChange={(value) => filters.setFilter(page, IntentScore, value)}
+      selectedOptions={intentScore}
+      onSelectionChange={handleSelectionChange}
       handleClosePopover={handleClosePopover}
     />
   );
