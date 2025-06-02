@@ -1,26 +1,26 @@
 import {
+  AddWebpagesSitemapLinksRequest,
+  AddWebpagesSitemapLinksResponse,
+  BulkAddArtifactsRequest,
+  BulkAddArtifactsResponse,
+  BulkAddDocumentsRequest,
+  BulkAddDocumentsResponse,
   ConversationsPayload,
+  DataSourcePayload,
+  DeleteWebpagesRequest,
+  DeleteWebpagesResponse,
   ExportFormatType,
+  FetchSitemapRequest,
+  FetchSitemapResponse,
   FilterOptionsPayload,
   GenerateOtpPayload,
   GenerateTokens,
   LeadsPayload,
   LoginWithEmailPasswordPayload,
-  VerifyOtpPayload,
-  DataSourcePayload,
-  FetchSitemapResponse,
-  FetchSitemapRequest,
-  AddWebpagesSitemapLinksRequest,
-  AddWebpagesSitemapLinksResponse,
-  BulkAddDocumentsRequest,
-  BulkAddDocumentsResponse,
-  DeleteWebpagesRequest,
-  DeleteWebpagesResponse,
   ReprocessWebpagesRequest,
   ReprocessWebpagesResponse,
-  BulkAddArtifactsRequest,
-  BulkAddArtifactsResponse,
   UpdateArtifactRequest,
+  VerifyOtpPayload,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -40,10 +40,11 @@ export const getUserDataFromMeAPI = () => adminApiClient.get(`/core/api/me/`);
 
 export const getAllAgents = () => adminApiClient.get(`/tenant/api/agent/`);
 
-export const getLeadsRowData = (payload: LeadsPayload) => adminApiClient.post(`/tenant/api/search/leads/`, payload);
+export const getLeadsRowData = (payload: LeadsPayload) =>
+  adminApiClient.post(`/tenant/api/search/leads/query/`, payload);
 
 export const getConversationRowData = (payload: ConversationsPayload) =>
-  adminApiClient.post(`tenant/api/search/conversations/`, payload);
+  adminApiClient.post(`tenant/api/search/conversations/query/`, payload);
 
 export const downloadLeadsRowData = (payload: LeadsPayload, downloadType: ExportFormatType) => {
   return adminApiClient.post(`/tenant/api/leads/download/${downloadType}/`, payload, {
@@ -122,13 +123,13 @@ export const uploadAssetsFile = (file: File, onProgress?: (progress: number) => 
 export const getDataSourceOverviewData = () => adminApiClient.get(`tenant/api/datasources/overview/`);
 
 export const getDataSourceWebpagesData = (payload: DataSourcePayload) =>
-  adminApiClient.post(`tenant/api/webpages/`, payload);
+  adminApiClient.post(`tenant/api/webpages/query/`, payload);
 
 export const getDataSourceDocumentsData = (payload: DataSourcePayload) =>
-  adminApiClient.post(`tenant/api/datasources/`, payload);
+  adminApiClient.post(`tenant/api/datasources/query/`, payload);
 
 export const getDataSourceArtifactsData = (payload: DataSourcePayload) =>
-  adminApiClient.post(`/tenant/api/artifacts/`, payload);
+  adminApiClient.post(`/tenant/api/artifacts/query/`, payload);
 
 export const bulkAddArtifacts = (payload: BulkAddArtifactsRequest) =>
   adminApiClient.post<BulkAddArtifactsResponse>(`/tenant/api/artifacts/bulk/`, payload);
