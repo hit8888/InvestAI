@@ -25,6 +25,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { isMobileDevice } from '@meaku/core/utils/index';
+import { getFontElement } from './font-helper.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -93,6 +94,19 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
       });
     }
   }, [configQuery.error]);
+
+  useEffect(() => {
+    const fontLinkElement = getFontElement(configQuery.data);
+
+    if (!fontLinkElement) return;
+
+    document.head.appendChild(fontLinkElement);
+
+    return () => {
+      document.head.removeChild(fontLinkElement);
+      document.body.style.fontFamily = '';
+    };
+  }, [configQuery.data?.style_config?.font_config]);
 
   useSetDistinctIdOnAppMount();
 
@@ -207,7 +221,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     );
   }
   return (
-    <div className={cn('mx-0 mt-0 flex h-[100vh] w-[100vw] justify-center rounded-3xl font-inter')}>
+    <div className={cn('mx-0 mt-0 flex h-[100vh] w-[100vw] justify-center rounded-3xl')}>
       <AgentShimmer />
     </div>
   );

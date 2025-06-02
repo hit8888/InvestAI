@@ -63,6 +63,12 @@ export const ConfigurationSchema = z.object({
     card_foreground: z.string().optional(),
     banner_config: BannerConfigSchema.optional().nullish(),
     orb_config: OrbConfigSchema.optional(),
+    font_config: z
+      .object({
+        font_family: z.string(),
+        font_url: z.string(),
+      })
+      .optional(),
   }),
   tracking_config: z
     .object({

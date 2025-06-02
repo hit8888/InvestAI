@@ -75,7 +75,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   return (
     <div
-      className={cn(getItemAlignment(), 'mx-auto flex h-[95vh] w-[97vw] font-inter', {
+      className={cn(getItemAlignment(), 'mx-auto flex h-[95vh] w-[97vw]', {
         'mt-2 rounded-3xl': isAgentOpen,
         'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
       })}
