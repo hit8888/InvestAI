@@ -65,6 +65,7 @@ const useWebSocketChat = () => {
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
 
   const messageQueue = useRef<WebSocketMessage[]>([]);
+  const systemMessageQueue = useRef<WebSocketMessage[]>([]);
   // Inactivity timer reference
   const sessionApiResponseManager = useSessionApiResponseManager();
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
@@ -214,6 +215,11 @@ const useWebSocketChat = () => {
       const response_id = nanoid();
       const payload = getMessagePayload({ message, message_type, response_id, role: MessageSenderRole.SYSTEM });
 
+      if (!payload.session_id) {
+        systemMessageQueue.current.push(payload);
+        return;
+      }
+
       sendMessage(JSON.stringify(payload));
     },
     [getMessagePayload, sendMessage],
@@ -281,6 +287,15 @@ const useWebSocketChat = () => {
     });
 
     messageQueue.current = [];
+
+    if (systemMessageQueue.current.length) {
+      systemMessageQueue.current.forEach((payload) => {
+        const updatedPayload = { ...payload, session_id: sessionId };
+
+        sendMessage(JSON.stringify(updatedPayload));
+      });
+      systemMessageQueue.current = [];
+    }
   }, [readyState, sendMessage, sessionId]);
 
   // Cleanup effect
