@@ -13,6 +13,7 @@ import {
   StyleManager,
   TimeManager,
   URLManager,
+  UrlTrackingManager,
   HistoryManager,
 } from "./managers";
 import { type EntryPointAlignmentType } from "./lib/types";
@@ -50,6 +51,7 @@ import { type EntryPointAlignmentType } from "./lib/types";
     messageManager.sendMessage,
     configManager.getConfig().containerId,
   );
+  const urlTrackingManager = UrlTrackingManager();
 
   HistoryManager(() => {
     const prospectId = localStorage.getItem("prospectId");
@@ -57,6 +59,7 @@ import { type EntryPointAlignmentType } from "./lib/types";
     if (!prospectId) {
       agentIframeManager.reload();
     }
+    urlTrackingManager.trackCurrentUrl();
   });
 
   // Widget initialization function
@@ -111,6 +114,10 @@ import { type EntryPointAlignmentType } from "./lib/types";
         overlayManager.setIframe(iframe!, currentContainer);
       }
 
+      urlTrackingManager.init({
+        postMessage: messageManager.sendMessage.bind(null, iframe!),
+      });
+
       // Initialize message event manager
       const messageEventState = {
         iFrameSource,
@@ -129,6 +136,7 @@ import { type EntryPointAlignmentType } from "./lib/types";
         configManager,
         styleManager,
         overlayManager,
+        urlTrackingManager,
         postMessage,
       };
 

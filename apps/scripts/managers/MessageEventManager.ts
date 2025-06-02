@@ -38,6 +38,10 @@ export interface MessageEventDependencies {
   overlayManager: {
     getWrapper: () => HTMLDivElement | null;
   };
+  urlTrackingManager: {
+    trackCurrentUrl: () => void;
+    updateFirstInteractionTimestamp: (isAgentOpen: boolean) => void;
+  };
   postMessage: (iframe: HTMLIFrameElement, message: object) => void;
 }
 
@@ -63,6 +67,7 @@ export function MessageEventManager(
     configManager,
     styleManager,
     overlayManager,
+    urlTrackingManager,
     postMessage,
   } = dependencies;
 
@@ -104,6 +109,7 @@ export function MessageEventManager(
         },
         { targetOrigin: "*" },
       );
+      urlTrackingManager?.trackCurrentUrl?.();
     }
   };
 
@@ -174,6 +180,10 @@ export function MessageEventManager(
     urlManager.updateParentUrlParam(
       "isAgentOpen",
       state.isAgentOpen.toString(),
+    );
+
+    urlTrackingManager?.updateFirstInteractionTimestamp?.(
+      state.hasFirstUserMessageBeenSent,
     );
 
     if (

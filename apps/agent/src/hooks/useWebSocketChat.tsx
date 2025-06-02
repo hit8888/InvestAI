@@ -201,6 +201,22 @@ const useWebSocketChat = () => {
     [readyState, sessionId, isAMessageBeingProcessed, adminJoinStatus],
   );
 
+  const handleSendSystemMessage = useCallback(
+    async ({
+      message,
+      message_type,
+    }: {
+      message: WebSocketMessage['message'];
+      message_type: WebSocketMessage['message_type'];
+    }) => {
+      const response_id = nanoid();
+      const payload = getMessagePayload({ message, message_type, response_id, role: MessageSenderRole.SYSTEM });
+
+      sendMessage(JSON.stringify(payload));
+    },
+    [getMessagePayload, sendMessage],
+  );
+
   useEffect(() => {
     if (!lastMessage) return;
 
@@ -276,7 +292,7 @@ const useWebSocketChat = () => {
     };
   }, []);
 
-  return { readyState, handleSendUserMessage, sendMessage, lastMessage };
+  return { readyState, handleSendUserMessage, sendMessage, lastMessage, handleSendSystemMessage };
 };
 
 export default useWebSocketChat;

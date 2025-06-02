@@ -266,13 +266,20 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('LEAVE_SESSION'),
     event_data: z.object({}),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('URL_TRACKING'),
+    event_data: z.object({
+      recent_history: z.array(z.object({ url: z.string(), timestamp: z.number() })),
+    }),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
   .object({
     session_id: z.string(),
     response_id: z.string(),
-    role: z.enum(['ai', 'admin', 'user']),
+    role: z.enum(['ai', 'admin', 'user', 'system']),
     actor: ActorSchema.optional(),
     documents: z.array(DataSourceSchema).optional().nullable(),
     timestamp: z.string(),

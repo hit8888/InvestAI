@@ -20,6 +20,10 @@ interface IProps {
     message,
     message_type,
   }: Pick<WebSocketMessage, 'message' | 'message_type'>) => Promise<void>;
+  handleSendSystemMessage: ({
+    message,
+    message_type,
+  }: Pick<WebSocketMessage, 'message' | 'message_type'>) => Promise<void>;
 }
 
 export const useEmbedAppEvents = ({
@@ -29,6 +33,7 @@ export const useEmbedAppEvents = ({
   hasFirstUserMessageBeenSent,
   entryPointAlignment,
   handleSendUserMessage,
+  handleSendSystemMessage,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { handleUpdateSessionData } = useLocalStorageSession();
@@ -63,6 +68,18 @@ export const useEmbedAppEvents = ({
       setShouldShowAgent(false);
     }
     switch (type) {
+      case 'URL_TRACKING':
+        handleSendSystemMessage({
+          message: {
+            content: '',
+            event_data: {
+              recent_history: event.data.urls,
+            },
+            event_type: 'URL_TRACKING',
+          },
+          message_type: 'EVENT',
+        });
+        break;
       case 'PARENT_FORM_MESSAGE':
         setIsCollapsible(true);
         setMode('overlay');

@@ -29,6 +29,7 @@ export enum MessageSenderRole {
   AI = 'ai',
   ADMIN = 'admin',
   USER = 'user',
+  SYSTEM = 'system',
 }
 
 export enum ViewType {
