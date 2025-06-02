@@ -79,6 +79,7 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
                       key={i}
                       form={form}
                       form_field={field}
+                      artifactMetadata={artifactMetadata}
                     />
                   ))}
                 </div>
