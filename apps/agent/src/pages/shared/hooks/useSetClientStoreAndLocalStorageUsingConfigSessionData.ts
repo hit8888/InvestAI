@@ -9,9 +9,9 @@ import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_re
 import { SessionApiResponse } from '@meaku/core/types/api/session_init_response';
 import { ConfigurationApiResponseManager } from '@meaku/core/managers/ConfigurationApiResponseManager';
 import { hasDemoEndMessage } from '@meaku/core/utils/messageUtils';
+import { MESSAGE_STATE } from '@meaku/core/utils/index';
 
-const INITIAL_MESSAGES_STATE_LENGTH = 0;
-const INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS = 1;
+const { EMPTY, DEMO_START, FIRST_AND_WELCOME } = MESSAGE_STATE;
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   configurationApiResponse,
@@ -29,6 +29,7 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   const { handleUpdateSessionData } = useLocalStorageSession();
 
   const setMessages = useMessageStore((state) => state.setMessages);
+  const messagesStore = useMessageStore((state) => state.messages);
   const setLatestResponseId = useMessageStore((state) => state.setLatestResponseId);
   const setHasFirstUserMessageBeenSent = useMessageStore((state) => state.setHasFirstUserMessageBeenSent);
 
@@ -55,8 +56,12 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
       return;
     }
 
+    // For Showing the first message in the chat history instantly
+    // messagesStore.length === 2 is for the case when the user has sent the first message ( without sessionId) + welcome message
+    const newMessages = messagesStore.length === FIRST_AND_WELCOME ? [...messagesStore] : [welcomeMessagePayload];
+
     const messages = sessionApiResponseManager
-      ? sessionApiResponseManager.getFormattedChatHistory(welcomeMessagePayload)
+      ? sessionApiResponseManager.getFormattedChatHistory(newMessages)
       : [welcomeMessagePayload];
 
     setMessages(messages);
@@ -87,14 +92,14 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
 
       window.parent.postMessage({ type: 'CHAT_INIT', prospectId }, '*');
 
-      if (isAdmin && messages.length === INITIAL_MESSAGES_STATE_LENGTH_FOR_DEMO_AGENTS) {
+      if (isAdmin && messages.length === DEMO_START) {
         return;
       }
       // The messages length will be always INITIAL_MESSAGES_STATE_LENGTH for demo and non demo path
       // For Demo => sessionID and prospectID is initially generated when the user provides the email address and start the chat
       // For Non-Demo agent + chat_widget + isAgentOpen = true => messages.length = INITIAL_MESSAGES_STATE_LENGTH,
       // Adding the check for messages.length > INITIAL_MESSAGES_STATE_LENGTH to handle the case where the agent view will be open and chat messages does not go on the leftside and suggested questions should be visible
-      setHasFirstUserMessageBeenSent(messages.length > INITIAL_MESSAGES_STATE_LENGTH);
+      setHasFirstUserMessageBeenSent(messages.length > EMPTY);
     }
   }, [handleUpdateSessionData, isReadOnly, isAdmin, prospectId, sessionId]);
 };

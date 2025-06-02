@@ -1,6 +1,5 @@
 import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
 import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
-import { filterOutSuggestions } from '../utils/messageUtils';
 import { trackError } from '../utils/error';
 import { getTransformedResponse } from '../utils';
 
@@ -40,9 +39,9 @@ export class SessionApiResponseManager {
     return this.session.feedback;
   }
 
-  public getFormattedChatHistory(welcomeMessagePayload?: WebSocketMessage): ChatHistory {
+  public getFormattedChatHistory(messagesPayload?: WebSocketMessage[]): ChatHistory {
     const chatHistory = this.session.chat_history;
-    const history = welcomeMessagePayload ? [welcomeMessagePayload, ...chatHistory] : chatHistory;
+    const history = messagesPayload && messagesPayload.length > 0 ? [...messagesPayload, ...chatHistory] : chatHistory;
 
     // For each response_id where role is 'ai', ensure STREAM comes before TEXT or ARTIFACT
     const processedHistory = [...history];
@@ -61,6 +60,6 @@ export class SessionApiResponseManager {
       }
     }
 
-    return filterOutSuggestions(processedHistory);
+    return processedHistory;
   }
 }

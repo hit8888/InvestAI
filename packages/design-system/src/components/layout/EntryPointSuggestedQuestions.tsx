@@ -55,7 +55,7 @@ const EntryPointSuggestedQuestions = ({
         })}
       >
         {showSuggestedQuestions && (
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {showOneByOne ? (
               <SuggestedQuestionsShowingInCycle
                 questions={initialSuggestedQuestions}

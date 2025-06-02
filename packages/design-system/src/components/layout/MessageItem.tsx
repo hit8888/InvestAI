@@ -184,10 +184,7 @@ const MessageItem = ({
 
   return (
     <MessageItemErrorBoundary message={message}>
-      <div
-        ref={inViewRef}
-        // style={{ minHeight: getMinHeight() }}
-      >
+      <div ref={inViewRef}>
         {/* Text Message */}
         {shouldShowTextMessage && (
           <TextMessage

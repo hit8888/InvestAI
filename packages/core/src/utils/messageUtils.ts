@@ -165,6 +165,9 @@ export const isSuggestionArtifact = (msg: WebSocketMessage) =>
 export const filterOutSuggestions = (messages: WebSocketMessage[]) =>
   messages.filter((msg) => !isSuggestionArtifact(msg));
 
+export const filterMessagesWithoutSessionId = (messages: WebSocketMessage[], message: WebSocketMessage) =>
+  messages.filter((msg) => msg.response_id === message.response_id).filter((msg) => msg.session_id.length > 0);
+
 export const hasMatchingMessageType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
   return msg.message_type === message.message_type;
 };

@@ -182,6 +182,8 @@ const useWebSocketChat = () => {
 
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+        // For Showing the first message in the chat history instantly
+        handleAddUserMessage(payload);
         setHasFirstUserMessageBeenSent(true);
       }
 

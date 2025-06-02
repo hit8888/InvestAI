@@ -4,7 +4,15 @@ import { immer } from 'zustand/middleware/immer';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { AdminConversationJoinStatus, DemoPlayingStatus, MessageSenderRole } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isDiscoveryQuestion, filterOutSuggestions, shouldUpdateMessage } from '@meaku/core/utils/messageUtils';
+import {
+  isDiscoveryQuestion,
+  filterOutSuggestions,
+  shouldUpdateMessage,
+  filterMessagesWithoutSessionId,
+} from '@meaku/core/utils/messageUtils';
+import { MESSAGE_STATE } from '@meaku/core/utils/index';
+
+const { FIRST_WELCOME_USER } = MESSAGE_STATE;
 
 interface State {
   messages: WebSocketMessage[];
@@ -113,6 +121,13 @@ export const useMessageStore = create<State>()(
           // Remove previous suggestions when user sends a message
           draft.messages = filterOutSuggestions(draft.messages);
           draft.messages.push(message);
+          // Filter out messages - when the user has sent the first message ( with session_id) + welcome message + user message ( without session_id)
+          if (draft.messages.length === FIRST_WELCOME_USER) {
+            draft.messages = [
+              ...draft.messages.slice(0, 1), // Keeping the welcome message
+              ...filterMessagesWithoutSessionId(draft.messages.slice(1), message), // Filtering out the user sent message with session_id
+            ];
+          }
           draft.latestResponseId = message.response_id;
         }),
       isMediaTakingFullWidth: false,

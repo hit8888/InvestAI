@@ -83,7 +83,7 @@ const AgentMessages = ({
     if (
       lastMessage?.role === MessageSenderRole.AI &&
       currentMessageScrollToTop.current &&
-      (viewType === ViewType.USER || viewType === ViewType.ADMIN)
+      viewType === ViewType.ADMIN
     ) {
       handleScrollToBottom();
     }

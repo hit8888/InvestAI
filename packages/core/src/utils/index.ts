@@ -127,3 +127,10 @@ export const transformMessage = (message: WebSocketMessage) => {
 export const isMobileDevice = (): boolean => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(navigator.userAgent);
 };
+
+export const MESSAGE_STATE = {
+  EMPTY: 0,
+  DEMO_START: 1,
+  FIRST_AND_WELCOME: 2,
+  FIRST_WELCOME_USER: 3,
+} as const;
