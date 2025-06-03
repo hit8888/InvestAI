@@ -73,6 +73,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
           <Input
             readOnly={isArtifactFormFilled}
             {...field}
+            value={field.value ?? ''}
             autoComplete="off"
             className={cn(
               'border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',

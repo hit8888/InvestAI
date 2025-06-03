@@ -183,8 +183,11 @@ const useWebSocketChat = () => {
 
       if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
-        // For Showing the first message in the chat history instantly
-        handleAddUserMessage(payload);
+        // For Showing the first message in the chat history instantly only for non-demo agents
+        // For Demo agents, sessionId is generated when the user provides the email address
+        if (!isAdmin) {
+          handleAddUserMessage(payload);
+        }
         setHasFirstUserMessageBeenSent(true);
       }
 

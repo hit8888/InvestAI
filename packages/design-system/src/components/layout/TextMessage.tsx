@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactMarkdown, { Components } from 'react-markdown';
-import gfm from 'remark-gfm';
 import { cn } from '@breakout/design-system/lib/cn';
 import Orb from '@breakout/design-system/components/Orb/index';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
@@ -15,6 +13,7 @@ import ChatMessageTail from './ChatMessageTail';
 import ChatMessageTimestamp from './ChatMessageTimestamp';
 import ChatMessageSender from './ChatMessageSender';
 import { getChatMessageClass, getChatTextMessageContainerClass } from './messageUtils';
+import GithubMarkdownRenderer from './GithubMarkdownRenderer';
 
 interface TextMessageProps {
   message: WebSocketMessage;
@@ -27,19 +26,6 @@ interface TextMessageProps {
   showOrbFromConfig: boolean;
   orbLogoUrl: string | undefined | null;
 }
-
-const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => (
-  <a className="text-blue_sec-1000" {...props} target="_blank" rel="noreferrer" />
-);
-
-const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => (
-  <strong className="text-primary-textColor" {...props} />
-);
-
-const reactMarkdownComponents: Partial<Components> = {
-  a: MessageLink,
-  strong: MessageStrong,
-};
 
 const TextMessage: React.FC<TextMessageProps> = ({
   message,
@@ -86,11 +72,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
       );
     }
 
-    return (
-      <ReactMarkdown remarkPlugins={[gfm]} components={reactMarkdownComponents}>
-        {message.message.content}
-      </ReactMarkdown>
-    );
+    return <GithubMarkdownRenderer markdown={message.message.content || ''} />;
   };
 
   return (

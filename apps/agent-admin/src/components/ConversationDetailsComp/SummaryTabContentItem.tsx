@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
 import { getStringWithBothCommaAND } from '../../utils/common';
 import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
+import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
@@ -28,6 +29,9 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
           {listValue as string}
         </Link>
       );
+    }
+    if (isSummaryItem) {
+      return <GithubMarkdownRenderer markdown={listValue as string} />;
     }
     return <p className="flex-1 text-base font-normal text-gray-900">{listValue as string}</p>;
   };

@@ -5,6 +5,7 @@ import { CalendlyCalendar } from './CalendlyCalendar';
 import { CalComCalendar } from './CalComCalendar';
 import { IframeCalendar } from './IframeCalendar';
 import { HubSpotCalendar } from './HubSpotCalendar';
+import { cn } from '../../lib/cn';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
@@ -30,9 +31,17 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
   const isIframeCalendar = calendarContent.calendar_type === CalendarTypeEnum.IFRAME;
   const isHubSpotCalendar = calendarContent.calendar_type === CalendarTypeEnum.HUBSPOT;
 
+  const isIframeOrHubSpotCalendar = isIframeCalendar || isHubSpotCalendar;
+
   return (
     <div
-      className={`h-full w-full ${isIframeCalendar || isHubSpotCalendar ? 'min-h-[400px] min-w-[600px]' : 'xl:min-h-[680px] xl:min-w-[1200px]'}`}
+      className={cn(
+        `h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0 `,
+        {
+          'min-h-[400px] min-w-[600px]': isIframeOrHubSpotCalendar,
+          'xl:min-h-[680px] xl:min-w-[1200px]': !isIframeOrHubSpotCalendar,
+        },
+      )}
     >
       <AspectRatio ratio={16 / 9}>{getCalendarContentBasedOnType()}</AspectRatio>
     </div>
