@@ -19,6 +19,7 @@ export enum SourcesCardTypes {
 export enum SourcesUploadStatus {
   UPLOADED = 'UPLOADED',
   UPLOAD_IN_PROGRESS = 'UPLOAD_IN_PROGRESS',
+  FRAMES_COUNT = 'FRAMES_COUNT',
 }
 
 export const SOURCES_DIALOG_DESCRIPTION_MAPPED_OBJECT = {

@@ -392,20 +392,14 @@ export const AddWebpagesSitemapLinksResponseSchema = z.object({
 });
 export type AddWebpagesSitemapLinksResponse = z.infer<typeof AddWebpagesSitemapLinksResponseSchema>;
 
-export const BulkAddDocumentsRequestSchema = z.object({
-  documents: z.array(
-    z.object({
-      asset: DataSourceAssetItemSchema,
-      document_type: z.string().optional(),
-    }),
-  ),
-});
+export const BulkAddDocumentsRequestSchema = z.array(
+  z.object({
+    asset: z.string(),
+  }),
+);
 export type BulkAddDocumentsRequest = z.infer<typeof BulkAddDocumentsRequestSchema>;
 
-export const BulkAddDocumentsResponseSchema = z.object({
-  message: z.string(),
-  data_sources: z.array(DataSourceDocumentsResponseResultSchema),
-});
+export const BulkAddDocumentsResponseSchema = z.array(DataSourceDocumentsResponseResultSchema);
 export type BulkAddDocumentsResponse = z.infer<typeof BulkAddDocumentsResponseSchema>;
 
 export const BulkAddArtifactsRequestSchema = z.array(
@@ -439,10 +433,33 @@ export const DeleteWebpagesResponseSchema = z.object({
 });
 export type DeleteWebpagesResponse = z.infer<typeof DeleteWebpagesResponseSchema>;
 
+export const DeleteDocumentsRequestSchema = z.object({
+  document_ids: z.array(z.number()),
+});
+export type DeleteDocumentsRequest = z.infer<typeof DeleteDocumentsRequestSchema>;
+
+export const DeleteDocumentsResponseSchema = z.object({
+  deleted_documents: z.array(z.number()),
+  total_processed: z.number(),
+  total_deleted: z.number(),
+  total_failed: z.number(),
+});
+export type DeleteDocumentsResponse = z.infer<typeof DeleteDocumentsResponseSchema>;
+
 export const ReprocessWebpagesRequestSchema = z.object({
-  webpage_ids: z.array(z.string()),
+  webpage_ids: z.array(z.number()),
 });
 export type ReprocessWebpagesRequest = z.infer<typeof ReprocessWebpagesRequestSchema>;
+
+export const BulkProcessDocumentsRequestSchema = z.object({
+  document_ids: z.array(z.number()),
+});
+export type BulkProcessDocumentsRequest = z.infer<typeof BulkProcessDocumentsRequestSchema>;
+
+export const BulkReprocessArtifactsRequestSchema = z.object({
+  artifact_ids: z.array(z.number()),
+});
+export type BulkReprocessArtifactsRequest = z.infer<typeof BulkReprocessArtifactsRequestSchema>;
 
 export const ReprocessWebpagesResponseSchema = z.object({
   reprocessed_count: z.number(),

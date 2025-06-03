@@ -25,7 +25,7 @@ const VideoDurationHandler = ({
   const defaultVideo = (
     <video
       ref={videoRef}
-      src={videoUrl}
+      src={videoUrl.length > 0 ? videoUrl : undefined}
       className={`h-full w-full rounded object-fill ${className}`}
       onLoadedMetadata={handleVideoLoadedMetadata}
     />

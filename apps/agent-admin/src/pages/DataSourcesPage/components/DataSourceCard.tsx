@@ -66,7 +66,9 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ title, stats, type, has
     return (
       <div
         onClick={!hasEdit ? onCardClick : undefined}
-        className={`data-sources-card-shadow flex w-full items-center justify-between gap-6 rounded-lg border border-primary/20 p-4 transition-all duration-300 hover:border-primary/40 hover:bg-bluegray-50 hover:shadow-md`}
+        className={`data-sources-card-shadow flex w-full items-center justify-between gap-6 
+          rounded-lg border border-primary/20 p-4 transition-all duration-300 
+          hover:border-primary/40 hover:bg-bluegray-50 hover:shadow-md`}
       >
         <div className="flex flex-col items-start gap-6">
           <div className="flex items-center gap-2 self-stretch">

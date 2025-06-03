@@ -3,7 +3,7 @@ import { SourcesCardTypes } from '../constants';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
-import { reprocessWebpages } from '@meaku/core/adminHttp/api';
+import { bulkProcessDocuments, bulkReprocessArtifacts, reprocessWebpages } from '@meaku/core/adminHttp/api';
 import Button from '@breakout/design-system/components/Button/index';
 import ReembedIcon from '@breakout/design-system/components/icons/reembed-icon';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
@@ -16,16 +16,27 @@ const ReembedBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCard
   const queryClient = useQueryClient();
 
   const areSelectedItems = selectedIds.length > 0;
-  const showReembedButton = selectedType === SourcesCardTypes.WEBPAGES && areSelectedItems;
+  const showReembedButton = areSelectedItems;
+  const isArtifactsPage = selectedType === SourcesCardTypes.VIDEOS || selectedType === SourcesCardTypes.SLIDES;
 
   const handleReembed = async () => {
     if (!areSelectedItems) return;
 
     try {
       setIsReprocessing(true);
-      await reprocessWebpages({
-        webpage_ids: selectedIds.map(String),
-      });
+      if (selectedType === SourcesCardTypes.WEBPAGES) {
+        await reprocessWebpages({
+          webpage_ids: selectedIds,
+        });
+      } else if (selectedType === SourcesCardTypes.DOCUMENTS) {
+        await bulkProcessDocuments({
+          document_ids: selectedIds,
+        });
+      } else if (isArtifactsPage) {
+        await bulkReprocessArtifacts({
+          artifact_ids: selectedIds,
+        });
+      }
 
       // Invalidate and refetch the data
       await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
@@ -63,6 +74,7 @@ const ReembedBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCard
   return (
     <div className="flex items-center justify-end gap-4">
       <TooltipWrapperDark
+        disableHoverableContent
         tooltipSide="left"
         tooltipAlign="center"
         showArrow={false}

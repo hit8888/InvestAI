@@ -98,6 +98,11 @@ export type DescriptionValue = {
   labelled_by_name?: string;
 };
 
+export type SourceNameValue = {
+  name: string;
+  url: string;
+};
+
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
   .or(DataSourceWebpagesTableResponseSchema)
   .or(DataSourceDocumentsTableResponseSchema)

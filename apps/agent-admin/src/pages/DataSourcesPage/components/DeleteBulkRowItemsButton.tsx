@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { SourcesCardTypes } from '../constants';
 import { useQueryClient } from '@tanstack/react-query';
-import { deleteArtifacts, deleteDataSourceItems } from '@meaku/core/adminHttp/api';
+import { deleteArtifacts, deleteDocuments, deleteWebpages } from '@meaku/core/adminHttp/api';
 import { toast } from 'react-hot-toast';
 import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import Typography from '@breakout/design-system/components/Typography/index';
@@ -24,13 +24,12 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
   const deleteBulkItems = async () => {
     let response;
     if (selectedType === SourcesCardTypes.WEBPAGES) {
-      response = await deleteDataSourceItems(
-        {
-          webpage_ids: selectedIds,
-          delete_embeddings: true,
-        },
-        selectedType,
-      );
+      response = await deleteWebpages({
+        webpage_ids: selectedIds,
+        delete_embeddings: true,
+      });
+    } else if (selectedType === SourcesCardTypes.DOCUMENTS) {
+      response = await deleteDocuments({ document_ids: selectedIds });
     } else if (isArtifactsPage) {
       if (selectedIds.length > 1) {
         toast.error('You can only delete one item at a time');

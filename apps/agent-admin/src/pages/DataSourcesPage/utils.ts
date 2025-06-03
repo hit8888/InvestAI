@@ -87,6 +87,13 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         accessorFn: (row: any) => row.asset?.public_url || '',
       }),
+      ...(key === 'name' && {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        accessorFn: (row: any) => ({
+          name: row.name || '',
+          url: row.source_url || '',
+        }),
+      }),
     };
 
     return newItem;
@@ -166,7 +173,7 @@ export const generateFeatureAssetStats = (
     stats.push({
       itemLabel: 'Frames:',
       itemValue: feature.frames_count.toString(),
-      itemKey: SourcesUploadStatus.UPLOADED,
+      itemKey: SourcesUploadStatus.FRAMES_COUNT,
     });
   }
 

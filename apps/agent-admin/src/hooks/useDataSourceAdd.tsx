@@ -34,17 +34,11 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
           break;
 
         case SourcesCardTypes.DOCUMENTS:
-          await bulkAddDocuments({
-            documents: dataSources.map((source) => ({
-              asset: {
-                id: source.id,
-                name: source.name,
-                type: source.type,
-                key: source.key,
-                public_url: source.public_url,
-              },
+          await bulkAddDocuments(
+            dataSources.map((source) => ({
+              asset: source.id,
             })),
-          });
+          );
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
           toast.success('Successfully added document sources');
           break;

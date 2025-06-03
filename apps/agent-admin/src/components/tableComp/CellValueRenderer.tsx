@@ -43,7 +43,6 @@ const cellValueMap: cellValueMapType = {
   url: UrlCellValue,
   updated_on: TimestampCellValue,
   status: StatusCellValue,
-  source_name: SourceNameCellValue,
   title: TitleCellValue,
   data_source_type: DataSourceTypeCellValue,
   source_url: UrlCellValue,
@@ -77,6 +76,10 @@ const specialCellMap: Record<string, SpecialCellConfig> = {
   duration: {
     component: DurationCellValue,
     type: 'string',
+  },
+  source_name: {
+    component: SourceNameCellValue,
+    type: 'SourceNameValue',
   },
 };
 

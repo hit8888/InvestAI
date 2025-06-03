@@ -5,8 +5,12 @@ import {
   BulkAddArtifactsResponse,
   BulkAddDocumentsRequest,
   BulkAddDocumentsResponse,
+  BulkProcessDocumentsRequest,
+  BulkReprocessArtifactsRequest,
   ConversationsPayload,
   DataSourcePayload,
+  DeleteDocumentsRequest,
+  DeleteDocumentsResponse,
   DeleteWebpagesRequest,
   DeleteWebpagesResponse,
   ExportFormatType,
@@ -144,12 +148,21 @@ export const addWebpagesSitemapLinks = (payload: AddWebpagesSitemapLinksRequest)
   adminApiClient.post<AddWebpagesSitemapLinksResponse>(`tenant/api/webpages/add/`, payload);
 
 export const bulkAddDocuments = (payload: BulkAddDocumentsRequest) =>
-  adminApiClient.post<BulkAddDocumentsResponse>(`tenant/api/datasources/documents/bulk/`, payload);
+  adminApiClient.post<BulkAddDocumentsResponse>(`tenant/api/documents/bulk/`, payload);
 
-export const deleteDataSourceItems = (payload: DeleteWebpagesRequest, sourceType: string) =>
-  adminApiClient.delete<DeleteWebpagesResponse>(`tenant/api/${sourceType}/delete/`, { data: payload });
+export const deleteWebpages = (payload: DeleteWebpagesRequest) =>
+  adminApiClient.delete<DeleteWebpagesResponse>(`tenant/api/webpages/delete/`, { data: payload });
 
 export const deleteArtifacts = (id: number) => adminApiClient.delete(`tenant/api/artifacts/${id}`);
 
+export const deleteDocuments = (payload: DeleteDocumentsRequest) =>
+  adminApiClient.delete<DeleteDocumentsResponse>(`tenant/api/documents/bulk/`, { data: payload });
+
 export const reprocessWebpages = (payload: ReprocessWebpagesRequest) =>
   adminApiClient.post<ReprocessWebpagesResponse>(`tenant/api/webpages/reprocess/`, payload);
+
+export const bulkProcessDocuments = (payload: BulkProcessDocumentsRequest) =>
+  adminApiClient.post(`tenant/api/documents/bulk-process/`, payload);
+
+export const bulkReprocessArtifacts = (payload: BulkReprocessArtifactsRequest) =>
+  adminApiClient.post(`tenant/api/artifacts/bulk-reprocess/`, payload);
