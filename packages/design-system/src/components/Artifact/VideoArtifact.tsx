@@ -132,15 +132,15 @@ type PlayAndPauseIconDisplayProps = {
 const PlayAndPauseIconDisplay = ({ handlePlayAndPause, isPlaying }: PlayAndPauseIconDisplayProps) => {
   return (
     <div
-      className={cn('absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/30', {
+      className={cn('absolute inset-0 z-10 flex h-[80%] cursor-pointer items-center justify-center', {
         'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
       })}
       onClick={handlePlayAndPause}
     >
       {isPlaying ? (
-        <PauseIcon className="fill-white text-white" size={60} />
+        <PauseIcon className="fill-gray-500 text-gray-500" size={60} />
       ) : (
-        <PlayIcon className="fill-white text-white" size={60} />
+        <PlayIcon className="fill-gray-500 text-gray-500" size={60} />
       )}
     </div>
   );
