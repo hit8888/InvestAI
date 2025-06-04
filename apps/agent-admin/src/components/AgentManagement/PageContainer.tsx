@@ -1,8 +1,8 @@
 import AgentConfigHeader from './AgentConfigHeader.tsx';
 import { ReactNode } from 'react';
-import Shimmer from './Shimmer.tsx';
 import ErrorState from './ErrorState.tsx';
 import { cn } from '@breakout/design-system/lib/cn';
+import DataSourceLoadingState from './DataSourceLoadingState.tsx';
 
 interface PageContainerProps {
   heading: string;
@@ -14,17 +14,7 @@ interface PageContainerProps {
 }
 
 const PageContainer = ({ heading, subHeading, isLoading, error, children, className }: PageContainerProps) => {
-  if (isLoading)
-    return (
-      <div className="flex w-full flex-shrink-0 flex-col items-start gap-4 bg-white p-14">
-        <div className="flex-start flex w-full flex-col gap-11 self-stretch">
-          <AgentConfigHeader headerLabel={heading} subHeading={subHeading} />
-          <div className="flex max-w-2xl flex-col gap-12 self-stretch">
-            <Shimmer />
-          </div>
-        </div>
-      </div>
-    );
+  if (isLoading) return <DataSourceLoadingState heading={heading} subHeading={subHeading ?? ''} />;
 
   if (error) return <ErrorState />;
 

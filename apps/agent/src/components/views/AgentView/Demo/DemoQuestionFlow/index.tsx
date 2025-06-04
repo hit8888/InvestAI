@@ -11,7 +11,7 @@ import { useDemoFlowState } from '../../../../../hooks/useDemoFlowState';
 import { useResponseAudioPlayer } from '../../../../../hooks/useResponseAudioPlayer';
 import { TranscriptionResult } from './types';
 import { useTranscriptionHandler } from '../../../../../hooks/useTranscriptionHandler';
-import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@breakout/design-system/components/Drawer/index';
 import { getDemoQuestionData } from '@meaku/core/utils/messageUtils';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
@@ -127,6 +127,10 @@ const DemoQuestionFlow = ({ handleResumeDemo, isQueryRaisedRef, isOpen }: Props)
       modal={false} // Prevents modal behavior
       dismissible={false} // Prevents closing on outside click
     >
+      {/* Preventing Console Errors and warnings */}
+      <DrawerTitle className="sr-only"></DrawerTitle>
+      <DrawerDescription className="sr-only"></DrawerDescription>
+
       <DrawerContent className="z-[1000] h-[200px] w-full bg-primary-foreground">
         <div className="flex h-full items-center justify-between px-8">
           {isRecording ? (

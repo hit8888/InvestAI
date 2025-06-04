@@ -12,7 +12,7 @@ const usePageRouteState = () => {
     AGENT_WORKFLOW,
     AGENT_BRANDING,
     AGENT_ENTRYPOINTS,
-    AGENT_INSTRUCTIONS,
+    AGENT_AI_PROMPTS,
     TRAINING,
     TRAINING_PLAYGROUND,
   } = AppRoutesEnum;
@@ -26,7 +26,7 @@ const usePageRouteState = () => {
   const isAgentWorkflowPage = location.pathname.includes(AGENT_WORKFLOW);
   const isAgentBrandingPage = location.pathname.includes(AGENT_BRANDING);
   const isAgentEntrypointsPage = location.pathname.includes(AGENT_ENTRYPOINTS);
-  const isAgentInstructionsPage = location.pathname.includes(AGENT_INSTRUCTIONS);
+  const isAgentAiPromptsPage = location.pathname.includes(AGENT_AI_PROMPTS);
   const isTrainingPage = location.pathname.includes(TRAINING);
   const isTrainingPlaygroundPage = location.pathname.includes(TRAINING_PLAYGROUND);
 
@@ -42,7 +42,7 @@ const usePageRouteState = () => {
     isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
-    isAgentInstructionsPage,
+    isAgentAiPromptsPage,
     isTrainingPage,
     isTrainingPlaygroundPage,
     pathURL,

@@ -1,6 +1,10 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
-const Shimmer = () => {
+type ShimmerProps = {
+  type?: 'agent-config' | 'ai-prompts';
+};
+
+const Shimmer = ({ type = 'agent-config' }: ShimmerProps) => {
   return (
     <>
       <div className="flex w-full flex-col gap-4">
@@ -37,28 +41,30 @@ const Shimmer = () => {
       </div>
 
       {/* Colors Section */}
-      <div className="flex w-full flex-col gap-4">
-        <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6 pt-4">
-          {/* Primary Color */}
-          <div className="flex w-full flex-1 items-center justify-between gap-8 self-stretch">
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="h-4 w-64" />
+      {type === 'agent-config' && (
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6 pt-4">
+            {/* Primary Color */}
+            <div className="flex w-full flex-1 items-center justify-between gap-8 self-stretch">
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-64" />
+              </div>
+              <Skeleton className="h-10 w-[260px]" />
             </div>
-            <Skeleton className="h-10 w-[260px]" />
-          </div>
-          <div className="w-full border-b border-gray-200"></div>
+            <div className="w-full border-b border-gray-200"></div>
 
-          {/* Secondary Color */}
-          <div className="flex w-full items-center justify-between gap-8 self-stretch">
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="h-4 w-64" />
+            {/* Secondary Color */}
+            <div className="flex w-full items-center justify-between gap-8 self-stretch">
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-64" />
+              </div>
+              <Skeleton className="h-10 w-[260px]" />
             </div>
-            <Skeleton className="h-10 w-[260px]" />
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

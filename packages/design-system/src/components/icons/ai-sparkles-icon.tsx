@@ -59,9 +59,9 @@ const AiSparklesIcon = ({ className = '', width, height, viewBox, ...props }: Pr
           width="39"
           height="39"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur_10882_396853" />
         </filter>
@@ -72,9 +72,9 @@ const AiSparklesIcon = ({ className = '', width, height, viewBox, ...props }: Pr
           width="39"
           height="39"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur_10882_396853" />
         </filter>
@@ -85,9 +85,9 @@ const AiSparklesIcon = ({ className = '', width, height, viewBox, ...props }: Pr
           width="39"
           height="39"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="6" result="effect1_foregroundBlur_10882_396853" />
         </filter>
@@ -98,9 +98,9 @@ const AiSparklesIcon = ({ className = '', width, height, viewBox, ...props }: Pr
           width="30"
           height="32"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_10882_396853" />
         </filter>
@@ -115,7 +115,7 @@ const AiSparklesIcon = ({ className = '', width, height, viewBox, ...props }: Pr
             attributeName="gradientTransform"
             type="translate"
             values="0 -16.5; 0 16.5"
-            dur="2s"
+            dur="3s"
             repeatCount="indefinite"
           />
         </linearGradient>

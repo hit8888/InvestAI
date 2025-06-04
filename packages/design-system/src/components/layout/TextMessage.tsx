@@ -93,7 +93,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
 
         <div className="flex-col">
           <div
-            className={cn('prose max-w-full flex-1 text-base text-customPrimaryText', {
+            className={cn('prose w-full flex-1 text-base text-customPrimaryText', {
               'leading-snug': isAIMessage,
             })}
             onClick={handleMessageClick}

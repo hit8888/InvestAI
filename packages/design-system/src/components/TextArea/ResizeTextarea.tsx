@@ -36,9 +36,13 @@ const useTextareaResize = ({ value, maxHeight = 300, minHeight = 40 }: UseTextar
   };
 };
 
-const ResizeTextarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>((props) => {
-  const { className, value, ...restProps } = props;
-  const { textareaRef, style } = useTextareaResize({ value });
+interface ResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  minHeight?: number;
+}
+
+const ResizeTextarea = forwardRef<HTMLTextAreaElement, ResizeTextareaProps>((props) => {
+  const { className, value, minHeight, ...restProps } = props;
+  const { textareaRef, style } = useTextareaResize({ value, minHeight });
 
   return (
     <textarea

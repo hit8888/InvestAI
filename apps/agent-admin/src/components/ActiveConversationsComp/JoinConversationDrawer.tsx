@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { Drawer, DrawerContent, DrawerOverlay } from '@breakout/design-system/components/Drawer/index';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerOverlay,
+  DrawerTitle,
+} from '@breakout/design-system/components/Drawer/index';
 import useActiveConversationDetailsDataQuery from '../../queries/query/useActiveConversationDetailsDataQuery';
 import JoinConversationHeader from './JoinConversationHeader';
 import JoinConversationChatArea from './JoinConversationChatArea';
@@ -78,6 +84,10 @@ const JoinConversationDrawer = ({
   return (
     <Drawer open={true} onOpenChange={onClose} direction="bottom">
       <DrawerOverlay className="fixed inset-0 bg-black/50" />
+      {/* Preventing Console Errors and warnings */}
+      <DrawerTitle className="sr-only"></DrawerTitle>
+      <DrawerDescription className="sr-only"></DrawerDescription>
+
       <DrawerContent className="z-[1000] mx-2 h-[90vh] rounded-2xl bg-primary-foreground px-2 pb-2">
         <JoinConversationHeader conversation={conversation} onExitConversation={onExitConversation} />
 

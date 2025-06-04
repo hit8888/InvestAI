@@ -338,7 +338,7 @@ export enum AppRoutesEnum {
   AGENT_WORKFLOW = 'agent/workflow',
   AGENT_BRANDING = 'agent/branding',
   AGENT_ENTRYPOINTS = 'agent/entrypoints',
-  AGENT_INSTRUCTIONS = 'agent/instructions',
+  AGENT_AI_PROMPTS = 'agent/ai-prompts',
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
 }
@@ -351,7 +351,7 @@ export enum SidebarNavItemsEnum {
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
   AGENT_ENTRYPOINTS_LABEL = 'Entry Points',
-  AGENT_INSTRUCTIONS_LABEL = 'Instructions',
+  AGENT_AI_PROMPTS_LABEL = 'AI Prompts',
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
 }

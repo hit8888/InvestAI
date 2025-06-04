@@ -45,7 +45,7 @@ const useSidebarNavigationItems = () => {
     isAgentDataSourcesPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
-    isAgentInstructionsPage,
+    isAgentAiPromptsPage,
     isTrainingPlaygroundPage,
   } = usePageRouteState();
 
@@ -55,7 +55,7 @@ const useSidebarNavigationItems = () => {
     AGENT,
     AGENT_BRANDING,
     AGENT_ENTRYPOINTS,
-    AGENT_INSTRUCTIONS,
+    AGENT_AI_PROMPTS,
     AGENT_DATA_SOURCES,
     TRAINING,
     TRAINING_PLAYGROUND,
@@ -68,13 +68,13 @@ const useSidebarNavigationItems = () => {
     AGENT_DATA_SOURCES_LABEL,
     AGENT_BRANDING_LABEL,
     AGENT_ENTRYPOINTS_LABEL,
-    AGENT_INSTRUCTIONS_LABEL,
+    AGENT_AI_PROMPTS_LABEL,
     TRAINING_LABEL,
     TRAINING_PLAYGROUND_LABEL,
   } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
-    isAgentBrandingPage || isAgentEntrypointsPage || isAgentInstructionsPage || isAgentDataSourcesPage;
+    isAgentBrandingPage || isAgentEntrypointsPage || isAgentAiPromptsPage || isAgentDataSourcesPage;
 
   const isTrainingTabActive = isTrainingPlaygroundPage;
 
@@ -150,9 +150,9 @@ const useSidebarNavigationItems = () => {
           isActive: isAgentEntrypointsPage,
         },
         {
-          navUrl: `${basicURL}/${AGENT_INSTRUCTIONS}`,
-          navItem: AGENT_INSTRUCTIONS_LABEL,
-          isActive: isAgentInstructionsPage,
+          navUrl: `${basicURL}/${AGENT_AI_PROMPTS}`,
+          navItem: AGENT_AI_PROMPTS_LABEL,
+          isActive: isAgentAiPromptsPage,
         },
       ],
     },

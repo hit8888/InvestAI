@@ -11,14 +11,21 @@ export interface Prompt {
   updated_on?: string;
 }
 
-export const fetchPrompts = async (agentId: number): Promise<Prompt[]> => {
-  const response = await adminApiClient.get(`/tenant/api/prompts/response-generation/${agentId}`);
-  return response.data;
+interface FetchPromptsPayload {
+  filters: {
+    field: string;
+    value: string | number | null;
+  }[];
+}
+
+export const fetchPrompts = async (payload: FetchPromptsPayload): Promise<Prompt[]> => {
+  const response = await adminApiClient.post(`/tenant/api/prompts/query/`, payload);
+  return response.data?.results;
 };
 
-export const usePrompts = (agentId: number) => {
+export const usePrompts = (payload: FetchPromptsPayload) => {
   return useQuery({
-    queryKey: ['prompts', agentId],
-    queryFn: () => fetchPrompts(agentId),
+    queryKey: ['prompts', payload],
+    queryFn: () => fetchPrompts(payload),
   });
 };
