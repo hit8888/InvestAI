@@ -30,6 +30,8 @@ export type CustomSingleBodyRowItemProps = {
   index: number;
   isIdSelected: (id: number) => boolean;
   toggleSelectId: (id: number) => void;
+  handleDataSourcesDrawerToggle: () => void;
+  allowedToOpenDrawer: boolean;
 };
 
 export type RowCellContentProps = {

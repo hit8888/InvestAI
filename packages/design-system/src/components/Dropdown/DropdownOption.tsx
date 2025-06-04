@@ -19,7 +19,7 @@ const DropdownOption = ({ menuOptionTitle, onMenuOptionClicked, isSelectedOption
         onMenuOptionClicked();
       }}
       className={cn(
-        'relative flex w-full cursor-pointer select-none items-center justify-start gap-4 px-4 py-3 text-left text-base capitalize text-gray-900 outline-none',
+        'relative flex w-full cursor-pointer select-none items-center justify-start gap-4 px-4 py-3 text-left text-sm capitalize text-gray-900 outline-none',
         'focus:bg-gray-50',
         {
           'bg-gray-200 data-[highlighted]:bg-gray-200': isSelectedOption,

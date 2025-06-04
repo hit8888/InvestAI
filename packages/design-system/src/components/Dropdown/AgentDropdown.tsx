@@ -42,7 +42,7 @@ const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onC
         className={cn(
           `inline-flex h-16 w-full max-w-[800px] cursor-pointer 
           items-center justify-between gap-2 rounded-xl 
-          border border-gray-300 bg-white p-6 text-2xl 
+          border border-gray-300 bg-white p-6 text-xl 
           text-customPrimaryText shadow-sm hover:bg-gray-25 focus:outline-none`,
           {
             'ring-4 ring-primary/20': isDropdownOpen,
@@ -54,7 +54,9 @@ const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onC
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="overflow-hidden truncate whitespace-nowrap text-gray-400">{placeholderLabel}</span>
+                <span className="overflow-hidden truncate whitespace-nowrap text-sm text-gray-400">
+                  {placeholderLabel}
+                </span>
               </TooltipTrigger>
               <TooltipContent className="bg-white">
                 <p className="text-black">{placeholderLabel}</p>
@@ -62,7 +64,7 @@ const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onC
             </Tooltip>
           </TooltipProvider>
         ) : null}
-        {selectedOption ? <span className="truncate">{selectedOption}</span> : null}
+        {selectedOption ? <span className="truncate text-sm">{selectedOption}</span> : null}
         <span
           className={cn('h-5 w-5 flex-shrink-0', {
             'rotate-0': !isDropdownOpen,

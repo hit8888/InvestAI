@@ -7,6 +7,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
 import { DataSourceSortValues } from '@meaku/core/types/admin/sort';
+import { useDataSourcesDrawer } from '../../context/DataSourcesDrawerContext';
 
 interface TableContentProps {
   tableData: unknown[];
@@ -29,6 +30,7 @@ const DataSourceTableViewContent = memo(
     filterContainerHeight,
     pageType,
   }: TableContentProps) => {
+    const { toggleDataSourcesDrawer } = useDataSourcesDrawer();
     const { results } = useDataSourceTableStore();
     const { setSortValue } = useSortFilterStore();
     const { isSidebarOpen } = useSidebar();
@@ -59,6 +61,7 @@ const DataSourceTableViewContent = memo(
         setSortValue={setSortValue}
         sortValue={sortValue}
         isSidebarOpen={isSidebarOpen}
+        toggleDataSourcesDrawer={toggleDataSourcesDrawer}
       />
     );
   },

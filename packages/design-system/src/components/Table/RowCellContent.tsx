@@ -22,6 +22,7 @@ const RowCellContent = memo(({ isFirstColumn, cell, isRowSelected, onToggleSelec
           checked={isRowSelected}
           className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
           onCheckedChange={onToggleSelect}
+          onClick={(e) => e.stopPropagation()}
           haveBlackBackground={false}
         />
         <CellContent cell={cell} />

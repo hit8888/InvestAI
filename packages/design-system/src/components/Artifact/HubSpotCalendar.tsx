@@ -42,8 +42,6 @@ export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage }: Prop
   useEffect(() => {
     // Listen for HubSpot meeting booking events
     const handleHubSpotMessage = (event: MessageEvent) => {
-      console.log({ event });
-
       if (event.data?.meetingBookSucceeded === true && !!event.data?.meetingsPayload) {
         if (handleSendUserMessage) {
           handleSendUserMessage({

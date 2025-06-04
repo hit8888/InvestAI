@@ -8,6 +8,8 @@ import {
   CONVERSATIONS_PINNED_COLUMNS,
   LEADS_PAGE,
   LEADS_PINNED_COLUMNS,
+  SLIDES_PAGE,
+  VIDEOS_PAGE,
 } from '@meaku/core/utils/index';
 import {
   CommonDataSourceResponse,
@@ -39,6 +41,7 @@ interface TableViewProps {
   setSortValue?: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;
   sortValue?: DataSourceSortValues;
   pageType: PaginationPageType;
+  toggleDataSourcesDrawer?: (value: boolean) => void;
 }
 
 const CommonTable = ({
@@ -55,12 +58,15 @@ const CommonTable = ({
   setSortValue = () => {},
   sortValue = {} as DataSourceSortValues,
   pageType,
+  toggleDataSourcesDrawer = () => {},
 }: TableViewProps) => {
   const navigate = useNavigate();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
   const isConversationsPage = pageType === CONVERSATIONS_PAGE;
   const isDataSourcesPage = ![CONVERSATIONS_PAGE, LEADS_PAGE].includes(pageType);
+  const allowedToOpenDrawer = pageType === VIDEOS_PAGE || pageType === SLIDES_PAGE;
+
   const { widthStyle } = useTableWidth({ isDataSourcesPage, isSidebarOpen });
 
   const tableBodyRef = useRef<HTMLDivElement>(null);
@@ -78,6 +84,10 @@ const CommonTable = ({
         state: { from: isConversationsPage ? 'conversations' : 'leads' },
       });
     }
+  };
+
+  const handleDataSourcesDrawerToggle = () => {
+    toggleDataSourcesDrawer(true);
   };
 
   // Scroll Sync Handler for table header and body
@@ -123,8 +133,10 @@ const CommonTable = ({
           key={row.id}
           row={row}
           index={index}
+          allowedToOpenDrawer={allowedToOpenDrawer}
           isIdSelected={isIdSelected}
           toggleSelectId={toggleSelectId}
+          handleDataSourcesDrawerToggle={handleDataSourcesDrawerToggle}
         />
       );
     }

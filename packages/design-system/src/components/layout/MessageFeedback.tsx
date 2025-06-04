@@ -114,8 +114,7 @@ const MessageFeedback = ({
   };
 
   const handleCloseDialog = async () => {
-    // Only allow closing if it's positive feedback or if negative feedback has all required fields
-    if (isFeedbackThumbUp || (form.getValues().category && form.getValues().remarks)) {
+    if (isFeedbackThumbUp || isFeedbackThumbDown) {
       setOpenDialog(false);
       form.reset();
     }
@@ -176,7 +175,7 @@ const MessageFeedback = ({
       // If trying to close with negative feedback, check if fields are filled
       const values = form.getValues();
       if (!values.category || !values.remarks) {
-        return; // Prevent closing
+        setOpenDialog(false);
       }
       // If trying to close with negative feedback, validate fields
       const isValid = await form.trigger();

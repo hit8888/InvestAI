@@ -19,6 +19,7 @@ import useDataSourceOverviewDataQuery from '../../queries/query/useDataSourcesOv
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
 import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
+import { DataSourcesDrawerProvider } from '../../context/DataSourcesDrawerContext';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
@@ -63,7 +64,9 @@ const DataSourcesPage = () => {
           <DataSourcesNavigation />
           <DataSourcesAddMoreButton />
         </div>
-        <DataSourceTableContainer />
+        <DataSourcesDrawerProvider>
+          <DataSourceTableContainer />
+        </DataSourcesDrawerProvider>
       </div>
     </div>
   );

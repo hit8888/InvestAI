@@ -3,7 +3,14 @@ import { useCallback } from 'react';
 import { CustomSingleBodyRowItemProps } from './tableTypes';
 import RowCellContent from './RowCellContent';
 
-const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelectId }: CustomSingleBodyRowItemProps) => {
+const TableBodyRowItemHavingCheckbox = ({
+  row,
+  index,
+  isIdSelected,
+  toggleSelectId,
+  handleDataSourcesDrawerToggle,
+  allowedToOpenDrawer,
+}: CustomSingleBodyRowItemProps) => {
   const rowId = row.original.id;
   const isRowSelected = isIdSelected(rowId);
 
@@ -15,6 +22,13 @@ const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelect
   const isEvenRow = index % 2 === 0;
   const isOddRow = !isEvenRow;
 
+  const handleRowItemClick = () => {
+    if (allowedToOpenDrawer && !isRowSelected) {
+      toggleSelectId(rowId);
+      handleDataSourcesDrawerToggle();
+    }
+  };
+
   return (
     <tr
       key={row.id}
@@ -22,7 +36,9 @@ const TableBodyRowItemHavingCheckbox = ({ row, index, isIdSelected, toggleSelect
         'bg-white': isEvenRow,
         'bg-gray-25': isOddRow,
         'bg-primary/5': isRowSelected,
+        'cursor-pointer': allowedToOpenDrawer,
       })}
+      onClick={handleRowItemClick}
     >
       {row.getVisibleCells().map((cell) => {
         const isFirstColumn = row.getVisibleCells().indexOf(cell) === 0;

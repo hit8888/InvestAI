@@ -17,7 +17,7 @@ import { useAllFilterStore } from '../../../stores/useAllFilterStore';
 import { collectAppliedFilters, getAllFilterAppliedValues, getSortingAppliedValues } from '../../../utils/common';
 import ErrorState from '../../../components/AgentManagement/ErrorState';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore';
-import Typography from '@breakout/design-system/components/Typography/index';
+import NudgeMessage from './NudgeMessage';
 
 interface DataSourceTableViewProps {
   pageType: PaginationPageType;
@@ -108,17 +108,7 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         payloadData={debouncedPayloadData}
         onFilterContainerHeightChange={setFilterContainerHeight}
       />
-      {isAllDataSourcesSelectedPerPage && (
-        <div className="mb-1 flex w-full flex-col items-center self-stretch rounded-lg bg-gray-100 p-2">
-          <Typography variant="body-16" textColor="gray500" align="center">
-            All{' '}
-            <span className="font-semibold text-system">
-              {results.length} {pageType}
-            </span>{' '}
-            on this page are selected.
-          </Typography>
-        </div>
-      )}
+      {isAllDataSourcesSelectedPerPage && <NudgeMessage itemsSelected={results.length} pageType={pageType} />}
       <DataSourceTableViewContent
         columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
         tableData={results}
