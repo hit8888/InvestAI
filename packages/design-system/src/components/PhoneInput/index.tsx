@@ -37,9 +37,12 @@ const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled, defaultC
   return (
     <PhoneInput
       defaultCountry={defaultCountry}
-      className={cn('custom-phone-input group w-full rounded-lg border border-gray-300 bg-white text-sm ', {
-        'border-gray-400 ring-0 ': isFocused,
-      })}
+      className={cn(
+        'custom-phone-input group w-full rounded-lg border border-gray-300 bg-white text-sm text-customPrimaryText',
+        {
+          'border-gray-400 ring-0 ': isFocused,
+        },
+      )}
       readOnly={isArtifactFormFilled}
       placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}

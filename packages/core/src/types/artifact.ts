@@ -82,6 +82,7 @@ export const QualificationQuestionSchema = z.object({
   response_options: z.array(QualificationSelectOptionSchema),
   is_required: z.boolean(),
 });
+export type QualificationQuestionType = z.infer<typeof QualificationQuestionSchema>;
 
 export const FormArtifactMetadata = z.object({
   is_filled: z.boolean().optional(),

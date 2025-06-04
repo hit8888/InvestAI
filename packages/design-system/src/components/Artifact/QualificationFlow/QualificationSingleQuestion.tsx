@@ -35,6 +35,7 @@ const QualificationSingleQuestion = ({
           options={dropdownOptions}
           placeholderLabel={`Select an option${addAsterisk}`}
           onCallback={handleSetAnswers}
+          fontToShown="text-3xl"
         />
       )}
     </div>

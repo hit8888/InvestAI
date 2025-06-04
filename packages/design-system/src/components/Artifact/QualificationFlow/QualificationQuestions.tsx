@@ -6,7 +6,11 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { AgentEventType } from '@meaku/core/types/webSocketData';
 import { QualificationFlowArtifactProps } from './QualificationTypes';
 import ArrowRight from '../../icons/ArrowRight';
-import { QualificationQuestionMetadataType, QualificationResponsesType } from '@meaku/core/types/artifact';
+import {
+  QualificationQuestionMetadataType,
+  QualificationQuestionType,
+  QualificationResponsesType,
+} from '@meaku/core/types/artifact';
 import QualificationSingleQuestion from './QualificationSingleQuestion';
 
 const MAX_QUESTION_IN_DISPLAY_WITHOUT_SCROLL = 4;
@@ -52,6 +56,14 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
     (question) => question.is_required && !qualificationAnswers.some((answer) => answer.question === question.question),
   );
 
+  const dropdownOptions = qualificationQuestions.map((item) =>
+    item.response_options.map((item) => item.value).filter((value): value is string => value !== undefined),
+  );
+
+  const handleEachQuestionSetAnswers = (answer: string | null, item: QualificationQuestionType) => {
+    handleSetAnswers(item.question, answer || '', item.answer_type, item.id ?? '');
+  };
+
   const hasQualificationMetadataFilledData = Array.isArray(qualificationMetadata.filled_data);
 
   return (
@@ -62,19 +74,15 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
             qualificationQuestions.length > MAX_QUESTION_IN_DISPLAY_WITHOUT_SCROLL, // Taking a threshold
         })}
       >
-        {qualificationQuestions.map((item) => (
+        {qualificationQuestions.map((item, index) => (
           <QualificationSingleQuestion
             key={item.question}
             isRequired={item.is_required}
             question={item.question}
             hasQualificationMetadataFilledData={hasQualificationMetadataFilledData}
             qualificationMetadata={qualificationMetadata}
-            dropdownOptions={item.response_options
-              .map((item) => item.value)
-              .filter((value): value is string => value !== undefined)}
-            handleSetAnswers={(answer) =>
-              handleSetAnswers(item.question, answer || '', item.answer_type, item.id ?? '')
-            }
+            dropdownOptions={dropdownOptions[index]}
+            handleSetAnswers={(answer) => handleEachQuestionSetAnswers(answer, item)}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
 
@@ -17,10 +17,19 @@ interface DropdownProps {
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
   className?: string;
+  fontToShown?: string;
+  showTooltipContent?: boolean;
 }
 
 // Also Add check for is_required key
-const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onCallback, className }) => {
+const AgentDropdown = ({
+  options,
+  placeholderLabel,
+  onCallback,
+  className,
+  fontToShown,
+  showTooltipContent = false,
+}: DropdownProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -48,23 +57,26 @@ const AgentDropdown: React.FC<DropdownProps> = ({ options, placeholderLabel, onC
             'ring-4 ring-primary/20': isDropdownOpen,
           },
           className,
+          fontToShown,
         )}
       >
         {!selectedOption && placeholderLabel ? (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="overflow-hidden truncate whitespace-nowrap text-sm text-gray-400">
+                <span className={cn('overflow-hidden truncate whitespace-nowrap text-gray-400', fontToShown)}>
                   {placeholderLabel}
                 </span>
               </TooltipTrigger>
-              <TooltipContent className="bg-white">
-                <p className="text-black">{placeholderLabel}</p>
-              </TooltipContent>
+              {showTooltipContent && (
+                <TooltipContent className="bg-white">
+                  <p className="text-black">{placeholderLabel}</p>
+                </TooltipContent>
+              )}
             </Tooltip>
           </TooltipProvider>
         ) : null}
-        {selectedOption ? <span className="truncate text-sm">{selectedOption}</span> : null}
+        {selectedOption ? <span className={cn('truncate', fontToShown)}>{selectedOption}</span> : null}
         <span
           className={cn('h-5 w-5 flex-shrink-0', {
             'rotate-0': !isDropdownOpen,

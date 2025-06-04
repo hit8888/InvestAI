@@ -65,6 +65,8 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             className="h-10 rounded-lg p-4 text-base"
             options={form_field.options ?? []}
             placeholderLabel={form_field.label}
+            fontToShown="text-sm"
+            showTooltipContent
             {...field}
           />
         );
@@ -76,7 +78,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             value={field.value ?? ''}
             autoComplete="off"
             className={cn(
-              'border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
+              'border border-gray-300 bg-white text-customPrimaryText placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
               fieldClassName,
             )}
             placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
