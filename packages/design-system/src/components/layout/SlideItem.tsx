@@ -16,7 +16,15 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
   };
 
   return (
-    <div className="group/item w-full rounded-2xl transition-all duration-700">
+    <div
+      className="group/item w-full animate-gradient-sweep rounded-2xl p-[0.2rem] transition-all"
+      style={{
+        background:
+          'linear-gradient(90deg, transparent 0%, transparent 40%, rgba(156, 163, 175, 0.6) 50%, transparent 60%, transparent 100%)',
+        backgroundSize: '300% 100%',
+        backgroundPosition: '100% 50%',
+      }}
+    >
       <button
         type="button"
         className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow flex h-full w-full cursor-pointer flex-col items-center gap-8 rounded-2xl

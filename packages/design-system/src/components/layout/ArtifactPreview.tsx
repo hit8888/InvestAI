@@ -6,6 +6,7 @@ import CustomVideoPlayer from './CustomVideoPlayer.tsx';
 import {
   ArtifactEnum,
   ArtifactPreviewEnum,
+  CalendarArtifactContent,
   FormArtifactContent,
   FormArtifactMetadataType,
   SlideArtifactContent,
@@ -19,6 +20,7 @@ import { ViewType } from '@meaku/core/types/common';
 import FormArtifact from './FormArtifact.tsx';
 import QualificationFlowArtifact from '../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
 import CalendarArtifactPreview from './CalendarArtifactPreview.tsx';
+import { CalendarArtifact } from '../Artifact/CalendarArtifact.tsx';
 interface IProps {
   viewType: ViewType;
   artifactId: string;
@@ -27,7 +29,12 @@ interface IProps {
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   title?: string;
-  artifactContent?: SlideImageArtifactContent | SlideArtifactContent | VideoArtifactContent | FormArtifactContent;
+  artifactContent?:
+    | SlideImageArtifactContent
+    | SlideArtifactContent
+    | VideoArtifactContent
+    | FormArtifactContent
+    | CalendarArtifactContent;
   isError?: boolean;
   isFetching?: boolean;
   isQualificationFormArtifact: boolean;
@@ -59,7 +66,9 @@ const ArtifactPreview = ({
       artifact_id: artifactId,
       artifact_type: artifactType ?? 'NONE',
     });
-    if ((artifactType === 'VIDEO' || artifactType === 'FORM') && viewType === ViewType.DASHBOARD) {
+
+    const dialogEnabledArtifactTypes = ['VIDEO', 'FORM', 'CALENDAR'];
+    if (dialogEnabledArtifactTypes.includes(artifactType ?? '') && viewType === ViewType.DASHBOARD) {
       setIsDialogOpen(true);
     }
   };
@@ -129,6 +138,14 @@ const ArtifactPreview = ({
       case 'VIDEO': {
         const videoURL = (artifactContent as VideoArtifactContent)?.video_url;
         return <CustomVideoPlayer videoURL={videoURL} />;
+      }
+      case 'CALENDAR': {
+        return (
+          <CalendarArtifact
+            calendarContent={artifactContent as CalendarArtifactContent}
+            handleSendUserMessage={() => {}}
+          />
+        );
       }
       case 'FORM':
         return showFormContent();

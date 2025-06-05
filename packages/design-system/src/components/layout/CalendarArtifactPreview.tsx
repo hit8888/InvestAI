@@ -10,7 +10,7 @@ const CalendarArtifactPreview = ({ handleClick }: { handleClick: () => void }) =
       onClick={handleClick}
       className="flex w-full max-w-[424px] cursor-pointer items-center justify-between gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 ring-system hover:bg-transparent_gray_6"
     >
-      <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 p-2">
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 p-1">
         <CalendarIcon height={24} width={24} />
       </div>
       <Typography variant="label-16-semibold" className="flex-1">

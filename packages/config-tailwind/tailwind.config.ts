@@ -218,6 +218,7 @@ const config: Omit<Config, "content"> = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
+        "gradient-sweep": "gradient-sweep 4s linear infinite",
         slowSpin: "spin 4s linear infinite",
         "typing-dot1": "typing-dot 1.2s infinite 0.0s",
         "typing-dot2": "typing-dot 1.2s infinite 0.2s",
@@ -265,6 +266,14 @@ const config: Omit<Config, "content"> = {
           },
           "100%": {
             backgroundPosition: "0% 50%",
+          },
+        },
+        "gradient-sweep": {
+          "0%": {
+            backgroundPosition: "100% 50%",
+          },
+          "100%": {
+            backgroundPosition: "-200% 50%",
           },
         },
         "typing-dot": {

@@ -55,7 +55,9 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
           <Button onClick={handleNotForNowButtonClick} disabled={showDemoTopics} variant="system_tertiary">
             Not for now
           </Button>
-          <Button onClick={handleYesLetsDoItButtonClick}>Yes, lets do that!</Button>
+          <Button disabled={showDemoTopics} onClick={handleYesLetsDoItButtonClick}>
+            Yes, lets do that!
+          </Button>
         </div>
       </div>
     </div>
