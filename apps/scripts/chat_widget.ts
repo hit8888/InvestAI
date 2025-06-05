@@ -114,9 +114,9 @@ import { type EntryPointAlignmentType } from "./lib/types";
         overlayManager.setIframe(iframe!, currentContainer);
       }
 
-      urlTrackingManager.init({
-        postMessage: messageManager.sendMessage.bind(null, iframe!),
-      });
+      // urlTrackingManager.init({
+      //   postMessage: messageManager.sendMessage.bind(null, iframe!),
+      // });
 
       // Initialize message event manager
       const messageEventState = {
