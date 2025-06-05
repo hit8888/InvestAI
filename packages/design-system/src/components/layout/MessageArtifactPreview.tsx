@@ -46,8 +46,7 @@ const MessageArtifactPreview = ({
   const artifactType = artifactData?.artifact_type;
 
   // Narrow down the type and ensure it's a valid ArtifactEnum
-  if (artifactType === 'NONE' || artifactType === 'SUGGESTIONS' || artifactType === 'CALENDAR' || !artifactType)
-    return null;
+  if (artifactType === 'NONE' || artifactType === 'SUGGESTIONS' || !artifactType) return null;
 
   // Only show preview for SLIDE, SLIDE_IMAGE, FORM and VIDEO artifacts
   if (!BASE_ARTIFACT_TYPES.includes(artifactType)) return null;

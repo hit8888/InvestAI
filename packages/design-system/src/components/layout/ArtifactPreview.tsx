@@ -18,6 +18,7 @@ import ArrowRight from '../icons/ArrowRight.tsx';
 import { ViewType } from '@meaku/core/types/common';
 import FormArtifact from './FormArtifact.tsx';
 import QualificationFlowArtifact from '../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
+import CalendarArtifactPreview from './CalendarArtifactPreview.tsx';
 interface IProps {
   viewType: ViewType;
   artifactId: string;
@@ -82,6 +83,8 @@ const ArtifactPreview = ({
   const showArtifactPreviewButtonDisplay = () => {
     if (artifactType === 'FORM') {
       return <QualificationQuestionFormPreview handleClick={handleArtifactOnClick} />;
+    } else if (artifactType === 'CALENDAR') {
+      return <CalendarArtifactPreview handleClick={handleArtifactOnClick} />;
     }
     return (
       <CommonArtifactPreview

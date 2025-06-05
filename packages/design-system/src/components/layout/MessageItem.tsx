@@ -125,7 +125,6 @@ const MessageItem = ({
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
   const showMessageArtifactPreview =
-    !isLastMessage &&
     isArtifactMessage &&
     ((isMediaArtifact(message.message.artifact_type) && !checkIsQualificationFormArtifact(message)) ||
       !!qualifiedFormFilledMessage) &&
