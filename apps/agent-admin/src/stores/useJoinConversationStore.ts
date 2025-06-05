@@ -11,6 +11,8 @@ interface JoinConversationState {
   setAdminJobTitle: (displayName: string) => void;
   sessionsStatus: Record<string, AdminConversationJoinStatus>;
   updateSessionStatus: (session: string, status: AdminConversationJoinStatus) => void;
+  isGeneratingAIResponse: boolean;
+  setIsGeneratingAIResponse: (isGeneratingAIResponse: boolean) => void;
 }
 
 const useJoinConversationStore = create<JoinConversationState>((set) => ({
@@ -31,6 +33,8 @@ const useJoinConversationStore = create<JoinConversationState>((set) => ({
       };
     });
   },
+  isGeneratingAIResponse: false,
+  setIsGeneratingAIResponse: (isGeneratingAIResponse) => set({ isGeneratingAIResponse }),
 }));
 
 export default useJoinConversationStore;

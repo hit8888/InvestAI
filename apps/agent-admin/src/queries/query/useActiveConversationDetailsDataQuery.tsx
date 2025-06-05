@@ -35,6 +35,7 @@ const useActiveConversationDetailsDataQuery = ({
       );
       return response.data;
     },
+    refetchOnMount: 'always',
     ...queryOptions,
   });
 

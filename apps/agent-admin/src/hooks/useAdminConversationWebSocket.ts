@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';
 import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import useJoinConversationStore from '../stores/useJoinConversationStore';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
@@ -30,6 +31,7 @@ const useAdminConversationsWebSocket = ({
 }: AdminConversationsWebSocketProps): AdminConversationsWebSocketInfo => {
   const handleAddAdminMessage = useMessageStore((state) => state.handleAddAdminMessage);
   const setAISuggestionMessage = useMessageStore((state) => state.setAISuggestionMessage);
+  const setIsGeneratingAIResponse = useJoinConversationStore((state) => state.setIsGeneratingAIResponse);
 
   const tenant = getTenantFromLocalStorage();
   const token = getAccessTokenFromLocalStorage();
@@ -91,8 +93,9 @@ const useAdminConversationsWebSocket = ({
     ) {
       const aiSuggestion = response.message.event_data?.suggestions?.[0] ?? '';
       setAISuggestionMessage(aiSuggestion);
+      setIsGeneratingAIResponse(false);
     }
-  }, [lastMessage, setAISuggestionMessage]);
+  }, [lastMessage, setAISuggestionMessage, setIsGeneratingAIResponse]);
 
   const handleSendAdminMessage = useCallback(
     async ({ message, message_type }: WebSocketMessage) => {

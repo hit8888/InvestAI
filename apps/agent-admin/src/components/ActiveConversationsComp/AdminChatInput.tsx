@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import TextArea from '@breakout/design-system/components/TextArea/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
+import useJoinConversationStore from '../../stores/useJoinConversationStore';
 
 type AdminChatInputProps = {
   onSendMessage: (message: string) => void;
@@ -13,12 +14,15 @@ type AdminChatInputProps = {
 const AdminChatInput = ({ onSendMessage, onAIResponseGenerationRequest }: AdminChatInputProps) => {
   const [inputValue, setInputValue] = useState('');
   const aiSuggestionMessage = useMessageStore((state) => state.aiSuggestionMessage);
+  const setAISuggestionMessage = useMessageStore((state) => state.setAISuggestionMessage);
+  const { isGeneratingAIResponse } = useJoinConversationStore();
 
   useEffect(() => {
     if (aiSuggestionMessage) {
       setInputValue(aiSuggestionMessage);
+      setAISuggestionMessage('');
     }
-  }, [aiSuggestionMessage]);
+  }, [aiSuggestionMessage, setAISuggestionMessage]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
@@ -48,10 +52,15 @@ const AdminChatInput = ({ onSendMessage, onAIResponseGenerationRequest }: AdminC
     handleFormSubmission();
   };
 
+  const handleAIResponseGenerationRequest = () => {
+    if (isGeneratingAIResponse) return;
+    onAIResponseGenerationRequest();
+  };
+
   return (
     <div className="flex w-full items-center">
-      <div className="cursor-pointer px-2 py-1" onClick={onAIResponseGenerationRequest}>
-        <AiSparklesIcon className="h-6 w-5" />
+      <div className="cursor-pointer px-2 py-1" onClick={handleAIResponseGenerationRequest}>
+        <AiSparklesIcon className={cn('h-6 w-5', isGeneratingAIResponse && 'animate-bounce')} />
       </div>
 
       <form onSubmit={onSubmit} className="flex w-full items-center gap-3">

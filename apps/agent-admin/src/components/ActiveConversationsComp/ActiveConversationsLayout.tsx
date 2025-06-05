@@ -19,8 +19,13 @@ const ActiveConversationsLayout = () => {
   const [showActiveConversations, setShowActiveConversations] = useState(false);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
 
-  const { currentConversation, sessionsStatus, setCurrentConversation, updateSessionStatus } =
-    useJoinConversationStore();
+  const {
+    currentConversation,
+    sessionsStatus,
+    setCurrentConversation,
+    updateSessionStatus,
+    setIsGeneratingAIResponse,
+  } = useJoinConversationStore();
 
   const handleExitConversation = () => {
     const sessionId = currentConversation?.session_id;
@@ -75,6 +80,7 @@ const ActiveConversationsLayout = () => {
   };
 
   const handleAIResponseGenerationRequest = (sessionId: string) => {
+    setIsGeneratingAIResponse(true);
     const sendMessage = sendMessageFnMap[sessionId];
     sendMessage({
       message: {

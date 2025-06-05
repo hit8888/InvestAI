@@ -79,9 +79,11 @@ const useActiveConversationsWebSocket = () => {
 
       if (response.role === MessageSenderRole.AI && response.session_id === currentConversation?.session_id) {
         handleAddAIMessage(response);
-      } else if (response.role === MessageSenderRole.USER && response.session_id === currentConversation?.session_id) {
+      } else if (response.role === MessageSenderRole.USER) {
         handleAddUserMessage(response);
-      } else if (isTextMessage(response) || checkIsEventMessage(response)) {
+      }
+
+      if (isTextMessage(response) || checkIsEventMessage(response)) {
         const { session_id, message, role } = response;
 
         if (role === MessageSenderRole.USER && message.content) {

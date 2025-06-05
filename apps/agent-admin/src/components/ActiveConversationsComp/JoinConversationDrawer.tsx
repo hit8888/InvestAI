@@ -33,7 +33,7 @@ const JoinConversationDrawer = ({
   onClose,
 }: JoinConversationDrawerProps) => {
   const { session_id: sessionId } = conversation;
-  const { updateSessionStatus, sessionsStatus } = useJoinConversationStore();
+  const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse } = useJoinConversationStore();
   const { chatHistory, setChatHistory, setChatSummary } = useActiveConversationDetails();
   const { setMessages } = useMessageStore();
 
@@ -60,6 +60,12 @@ const JoinConversationDrawer = ({
       setChatSummary('');
     };
   }, [isLoading]);
+
+  useEffect(() => {
+    return () => {
+      setIsGeneratingAIResponse(false);
+    };
+  }, [setIsGeneratingAIResponse]);
 
   if (isError) {
     // TODO: track this error
