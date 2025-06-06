@@ -23,7 +23,10 @@ import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { AdminConversationJoinStatus, MessageSenderRole } from '@meaku/core/types/common';
+import { getFirstAiMessageShowingInChatHistory } from '../utils/common.ts';
+import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 
+const DELAY_BETWEEN_WORDS = 75; // in ms
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
@@ -41,10 +44,45 @@ const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = [
   'DEMO_END',
 ];
 
+const sendWordByWordMessage = (
+  message: string,
+  response_id: string,
+  session_id: string,
+  timestamp: string,
+  handleAddAIMessage: (message: WebSocketMessage) => void,
+) => {
+  const words = message.split(' ');
+  let currentIndex = 0;
+  const interval = setInterval(() => {
+    if (currentIndex >= words.length) {
+      clearInterval(interval);
+      return;
+    }
+
+    const currentMessage = words.slice(0, currentIndex + 1).join(' ');
+    const welcomeMessage: WebSocketMessage = {
+      response_id,
+      session_id,
+      timestamp,
+      message_type: 'TEXT',
+      message: {
+        content: currentMessage,
+      },
+      role: MessageSenderRole.AI,
+      documents: [],
+    };
+    handleAddAIMessage(welcomeMessage);
+    currentIndex++;
+  }, DELAY_BETWEEN_WORDS);
+};
+
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
 
   const isAdmin = useIsAdmin();
+
+  const orgNameFromConfig = useConfigurationApiResponseManager()?.getOrgName();
+  const firstAiMessageText = getFirstAiMessageShowingInChatHistory(orgNameFromConfig ?? '');
 
   const getMessagePayload = useGetMessagePayload();
 
@@ -188,6 +226,14 @@ const useWebSocketChat = () => {
         if (!isAdmin) {
           handleAddUserMessage(payload);
         }
+        // Adding Waiting message in the chat history instantly
+        sendWordByWordMessage(
+          firstAiMessageText,
+          payload.response_id,
+          sessionId,
+          payload.timestamp,
+          handleAddAIMessage,
+        );
         setHasFirstUserMessageBeenSent(true);
       }
 

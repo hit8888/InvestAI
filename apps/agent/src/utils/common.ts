@@ -32,3 +32,11 @@ export const handleColorConfig = (styleConfig: Omit<StyleConfig, StyleConfigKeys
 export const capitalizeString = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+export const getFirstAiMessageShowingInChatHistory = (orgName: string) => {
+  return `Give me a moment — crafting a custom response just for you.  
+
+By the way, quick intro — I'm your **AI sidekick**.  
+
+Here to help you explore **${orgName}** visually and conversationally. Ask away or follow the slides on the right!`;
+};

@@ -7,6 +7,7 @@ import { DemoPlayingStatus, ViewType } from '@meaku/core/types/common';
 import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidthOnDemoFrame.ts';
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
+import StaticArtifactContainer from '@breakout/design-system/components/Artifact/StaticArtifactContainer';
 import { Demo } from './Demo/index.tsx';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
@@ -76,6 +77,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
 
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
 
+  const aiMessages = messages.filter((message) => message.role === 'ai');
+  const hasArtifactAiMessage = aiMessages.some((message) => message.message_type === 'ARTIFACT');
   return (
     <div
       className={cn(
@@ -110,6 +113,9 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             showDemoPreQuestions={isDemoAvailable && !demoDetails}
             viewType={ViewType.USER}
           />
+
+          {/* Right Side Static Artifact Container */}
+          {!hasArtifactAiMessage ? <StaticArtifactContainer /> : null}
 
           {/* Right Side Artifact Container */}
           {nonDemoFlow && (

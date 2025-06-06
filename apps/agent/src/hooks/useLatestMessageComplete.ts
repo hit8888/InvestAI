@@ -20,7 +20,7 @@ const useLatestMessageComplete = () => {
     const messages = store.getState().messages;
     if (!latestResponseId) return true;
 
-    const lastMessageResponseID = messages[messages.length - 1].response_id;
+    const lastMessageResponseID = messages[messages.length - 1]?.response_id;
     const demoEndMessageExist = hasDemoEndMessage(messages);
 
     const isDemoEndLastMessage = lastMessageResponseID === demoEndMessageExist?.response_id;

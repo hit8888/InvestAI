@@ -165,8 +165,12 @@ export const isSuggestionArtifact = (msg: WebSocketMessage) =>
 export const filterOutSuggestions = (messages: WebSocketMessage[]) =>
   messages.filter((msg) => !isSuggestionArtifact(msg));
 
-export const filterMessagesWithoutSessionId = (messages: WebSocketMessage[], message: WebSocketMessage) =>
-  messages.filter((msg) => msg.response_id === message.response_id).filter((msg) => msg.session_id.length > 0);
+export const filterMessagesWithoutSessionId = (messages: WebSocketMessage[], message: WebSocketMessage) => {
+  return filterMessagesWithSessionID(messages.filter((msg) => msg.response_id === message.response_id));
+};
+
+export const filterMessagesWithSessionID = (messages: WebSocketMessage[]) =>
+  messages.filter((msg) => msg.session_id.length > 0);
 
 export const hasMatchingMessageType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
   return msg.message_type === message.message_type;
@@ -573,10 +577,16 @@ export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessa
       const bIsStream = isStreamMessage(b);
       const aIsDiscovery = isDiscoveryQuestion(a);
       const bIsDiscovery = isDiscoveryQuestion(b);
+      const aIsArtifact = checkIsArtifactMessage(a);
+      const bIsArtifact = checkIsArtifactMessage(b);
 
       // If one is stream and other is discovery, stream gets priority
       if (aIsStream && bIsDiscovery) return -1;
       if (aIsDiscovery && bIsStream) return 1;
+
+      // if one is stream and other is artifact, stream gets priority
+      if (aIsStream && bIsArtifact) return -1;
+      if (aIsArtifact && bIsStream) return 1;
     }
 
     // For all other cases, maintain their original order

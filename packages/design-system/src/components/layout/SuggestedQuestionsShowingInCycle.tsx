@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { Suggestion } from './Suggestion';
 import { getSuggestionItemAnimation } from '@meaku/core/utils/entryPointAnimation';
-import { useSuggestedQuestionCycle } from '../../hooks/useSuggestedQuestionCycle';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
+import { useCycle } from '../../hooks/useCycle';
 
 type SuggestedQuestionsShowingInCycleProps = {
   questions: string[];
@@ -25,10 +25,11 @@ export const SuggestedQuestionsShowingInCycle = ({
   questionAlignment,
   invertTextColor,
 }: SuggestedQuestionsShowingInCycleProps) => {
-  const { currentQuestionIndex } = useSuggestedQuestionCycle(questions, true, showQuestions);
+  const questionsLength = questions.length;
+  const { currentItemIndex } = useCycle({ itemsLength: questionsLength, showItems: showQuestions });
 
-  const isOnlyOneQuestion = questions.length === 1;
-  const singleQuestionValue = isOnlyOneQuestion ? questions[0] : questions[currentQuestionIndex];
+  const isOnlyOneQuestion = questionsLength === 1;
+  const singleQuestionValue = isOnlyOneQuestion ? questions[0] : questions[currentItemIndex];
   return (
     <div style={containerStyles}>
       <motion.div
@@ -42,7 +43,7 @@ export const SuggestedQuestionsShowingInCycle = ({
         <Suggestion
           question={singleQuestionValue}
           onSuggestedQuestionOnClick={onQuestionClick}
-          itemIndex={currentQuestionIndex}
+          itemIndex={currentItemIndex}
           isQuestionInCycle={true} // questions are in cycle
           isEntryPointQuestion={true}
           invertTextColor={invertTextColor}
