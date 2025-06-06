@@ -18,7 +18,7 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage }: Qualific
   return (
     <div className="h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0">
       <AspectRatio ratio={16 / 9}>
-        <div ref={containerRef} className="relative aspect-video w-full">
+        <div ref={containerRef} className="relative aspect-video h-full w-full">
           <div
             className="relative z-10 h-full w-full origin-top-left p-2"
             style={{

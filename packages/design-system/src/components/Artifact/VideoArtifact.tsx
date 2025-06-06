@@ -71,13 +71,16 @@ const VideoArtifact = ({
 
   return (
     <div
-      className={cn('flex h-full ', {
-        'w-full': !isMediaTakingFullWidth,
-        'w-full max-w-full': isMediaTakingFullWidth,
-      })}
+      className={cn(
+        'flex h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0',
+        {
+          'w-full': !isMediaTakingFullWidth,
+          'w-full max-w-full': isMediaTakingFullWidth,
+        },
+      )}
     >
       <AspectRatio ratio={16 / 9}>
-        <div className="relative h-full w-full h-xs:max-h-[200px] h-sm:max-h-[300px]" onClick={handlePlayAndPause}>
+        <div className="relative h-full w-full" onClick={handlePlayAndPause}>
           <PlayAndPauseIconDisplay handlePlayAndPause={handlePlayAndPause} isPlaying={isPlaying} />
           <ReactPlayer
             ref={playerRef}
@@ -132,15 +135,15 @@ type PlayAndPauseIconDisplayProps = {
 const PlayAndPauseIconDisplay = ({ handlePlayAndPause, isPlaying }: PlayAndPauseIconDisplayProps) => {
   return (
     <div
-      className={cn('absolute inset-0 z-10 flex h-[80%] cursor-pointer items-center justify-center', {
+      className={cn('absolute z-10 flex h-[80%] w-full cursor-pointer items-center justify-center', {
         'opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100': isPlaying,
       })}
       onClick={handlePlayAndPause}
     >
       {isPlaying ? (
-        <PauseIcon className="fill-gray-500 text-gray-500" size={60} />
+        <PauseIcon className="relative top-[10%] fill-gray-500 text-gray-500" size={60} />
       ) : (
-        <PlayIcon className="fill-gray-500 text-gray-500" size={60} />
+        <PlayIcon className="relative top-[10%] fill-gray-500 text-gray-500" size={60} />
       )}
     </div>
   );

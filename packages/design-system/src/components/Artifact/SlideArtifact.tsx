@@ -16,33 +16,35 @@ interface IProps {
 const SlideArtifact = ({ artifact: { items, sub_title, title }, logoURL, onItemClick }: IProps) => {
   const { containerRef, scale } = useSlideArtifactScaleSystem();
   return (
-    <AspectRatio ratio={16 / 9}>
-      <div ref={containerRef} className="relative aspect-video w-full">
-        <div className="absolute inset-0 overflow-hidden rounded-lg border border-gray-200">
-          <SlideBackgroundPattern patternColor="rgb(var(--primary) / 0.2)" />
-          <ArtifactWhiteBgEllipse />
+    <div className="h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0">
+      <AspectRatio ratio={16 / 9}>
+        <div ref={containerRef} className="relative aspect-video h-full w-full">
+          <div className="absolute h-full w-full overflow-hidden rounded-lg border border-gray-200">
+            <SlideBackgroundPattern patternColor="rgb(var(--primary) / 0.2)" />
+            <ArtifactWhiteBgEllipse />
 
-          <div
-            className="relative z-10 h-full w-full origin-top-left p-2"
-            style={{
-              transform: `scale(${scale})`,
-              minHeight: '900px',
-              minWidth: '1600px',
-            }}
-          >
-            <div className="relative flex h-full w-full flex-col p-5 pt-8">
-              <SlideHeader logoUrl={logoURL} />
-              <div className="flex h-full w-full items-center justify-center ">
-                {(sub_title || title) && <SlideSubTitle text={sub_title || title} />}
-                <div className="h-full w-2/3">
-                  <SlideItems items={items} onItemClick={onItemClick} />
+            <div
+              className="relative z-10 h-full w-full origin-top-left p-2"
+              style={{
+                transform: `scale(${scale})`,
+                minHeight: '900px',
+                minWidth: '1600px',
+              }}
+            >
+              <div className="relative flex h-full w-full flex-col p-5 pt-8">
+                <SlideHeader logoUrl={logoURL} />
+                <div className="flex h-full w-full items-center justify-center ">
+                  {(sub_title || title) && <SlideSubTitle text={sub_title || title} />}
+                  <div className="h-full w-2/3">
+                    <SlideItems items={items} onItemClick={onItemClick} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </AspectRatio>
+      </AspectRatio>
+    </div>
   );
 };
 
