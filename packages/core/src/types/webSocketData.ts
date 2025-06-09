@@ -103,6 +103,13 @@ export const DemoEventDataSchema = z.object({
   resume_demo: z.boolean().nullable(),
 });
 
+export const CtaEventDataSchema = z.object({
+  url: z.string().optional(),
+  align: z.enum(['left', 'right']).optional(),
+  label: z.string().optional(),
+  message: z.string().optional(),
+});
+
 export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
@@ -273,6 +280,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       recent_history: z.array(z.object({ url: z.string(), timestamp: z.number() })),
     }),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('CTA_EVENT'),
+    event_data: CtaEventDataSchema,
+  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -317,6 +329,8 @@ export type StreamMessageContent = z.infer<typeof StreamMessageContentSchema>;
 export type BaseMessageContent = z.infer<typeof BaseMessageContentSchema>;
 
 export type EventMessageContent = z.infer<typeof EventMessageContentSchema>;
+
+export type CtaEventDataContent = z.infer<typeof CtaEventDataSchema>;
 
 export type WebSocketMessage = z.infer<typeof WebSocketMessageSchema>;
 

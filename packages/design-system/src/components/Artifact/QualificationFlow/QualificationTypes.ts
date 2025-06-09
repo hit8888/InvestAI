@@ -4,6 +4,7 @@ import {
   FormArtifactMetadataType,
   QualificationQuestionMetadataType,
 } from '@meaku/core/types/artifact';
+import { ViewType } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 export type QualificationFlowArtifactProps = {
@@ -13,6 +14,7 @@ export type QualificationFlowArtifactProps = {
     metadata: FormArtifactMetadataType | QualificationQuestionMetadataType;
   };
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  viewType?: ViewType;
 };
 
 export type ArtifactContentWithMetadataProps =

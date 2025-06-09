@@ -116,6 +116,7 @@ const ArtifactPreview = ({
             metadata: artifactContentWithMetadata?.metadata as FormArtifactMetadataType,
           }}
           handleSendUserMessage={() => {}}
+          viewType={viewType}
         />
       );
     } else {

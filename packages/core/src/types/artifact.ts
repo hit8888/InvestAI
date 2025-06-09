@@ -109,6 +109,7 @@ export const QualificationQuestionAnswerSchema = z.object({
 export const QualificationQuestionMetadata = z.object({
   is_filled: z.boolean(),
   filled_data: z.array(QualificationResponsesSchema).optional(),
+  sign_up_url: z.string().optional(),
 });
 
 export type QualificationQuestionMetadataType = z.infer<typeof QualificationQuestionMetadata>;

@@ -10,6 +10,7 @@ import {
   StreamMessageContent,
   WebSocketMessage,
   DemoEventDataSchema,
+  CtaEventDataContent,
 } from '../types/webSocketData';
 import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
 import { MessageSenderRole, MessageViewType, ViewType } from '../types/common';
@@ -353,6 +354,22 @@ export const getFormFilledEvent = (
       formArtifactMessage.message.artifact_data.artifact_id === msg.message.event_data.artifact_id &&
       ((eventType === 'FORM_FILLED' && 'form_data' in msg.message.event_data) ||
         (eventType === 'QUALIFICATION_FORM_FILLED' && 'qualification_responses' in msg.message.event_data)),
+  );
+};
+
+export const getCtaEvent = (messages: WebSocketMessage[], responseId: string | undefined, align: 'left' | 'right') => {
+  return messages.find(
+    (
+      msg,
+    ): msg is WebSocketMessage & {
+      message: EventMessageContent & {
+        event_data: CtaEventDataContent;
+      };
+    } =>
+      msg.response_id === responseId &&
+      checkIsEventMessage(msg) &&
+      msg.message?.event_type === 'CTA_EVENT' &&
+      msg.message?.event_data?.align === align,
   );
 };
 

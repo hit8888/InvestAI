@@ -2,7 +2,7 @@ import { ArtifactMessageContent } from '../types/webSocketData';
 
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { ArtifactContent, FormArtifactContent, QualificationResponsesType } from '@meaku/core/types/artifact';
-import { checkIsQualificationFormArtifact, isFormDataFilled } from '../utils/messageUtils';
+import { checkIsQualificationFormArtifact, getCtaEvent, isFormDataFilled } from '../utils/messageUtils';
 import { getFormArtifactMessage } from '../utils/messageUtils';
 import { getFormFilledEvent } from '../utils/messageUtils';
 
@@ -42,6 +42,8 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
   const isFormArtifact =
     artifactMessage && hasFormArtifactMessage && !checkIsQualificationFormArtifact(artifactMessage);
 
+  const ctaEvent = getCtaEvent(messages, qualificationFormFilled?.response_id, 'right');
+
   const qualificationQuestionFormMetadata = isQualificationFormArtifact
     ? {
         is_filled: hasFormFilledMessage || hasQualificationFormFilled,
@@ -51,6 +53,7 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
           : hasFormFilledMessage
             ? formFilledMessage?.message.event_data.form_data
             : {},
+        sign_up_url: ctaEvent?.message?.event_data?.url || '',
       }
     : {};
 
