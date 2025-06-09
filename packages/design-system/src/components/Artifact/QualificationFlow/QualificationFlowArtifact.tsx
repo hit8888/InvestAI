@@ -9,8 +9,14 @@ import Button from '../../Button';
 import ArrowRight from '../../icons/ArrowRight';
 import { QualificationQuestionMetadataType } from '@meaku/core/types/artifact';
 
+const DEFAULT_FILLED_STATE_MESSAGES = {
+  TITLE: 'Thanks for telling us about your business!',
+  MESSAGE: 'You can create your account and get started',
+  LABEL: 'Sign Up',
+};
+
 const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }: QualificationFlowArtifactProps) => {
-  const { sign_up_url, is_filled, filled_data } = (artifact.metadata as QualificationQuestionMetadataType) ?? {};
+  const { ctaMetadata, is_filled, filled_data } = (artifact.metadata as QualificationQuestionMetadataType) ?? {};
   const { containerRef, scale } = useSlideArtifactScaleSystem();
   const isQualificationFormFilled = Array.isArray(filled_data); // If its array - qualification Question
   const stepNumberBasedOnFormOrQuestionFilled = isQualificationFormFilled && is_filled ? 2 : 1;
@@ -22,22 +28,22 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }
   };
 
   const handleSignUp = () => {
-    window.open(sign_up_url, '_blank');
+    window.open(ctaMetadata?.url, '_blank');
   };
 
-  if (is_filled && isUserView) {
+  if (isQualificationFormFilled && isUserView) {
     return (
       <div className="flex flex-col items-center justify-center gap-2">
         <Typography variant="title-24" className="text-center">
-          Thanks for telling us about your business!
+          {ctaMetadata?.title || DEFAULT_FILLED_STATE_MESSAGES.TITLE}
         </Typography>
-        {sign_up_url && (
+        {ctaMetadata?.url && (
           <div className="flex flex-col items-center justify-center gap-6">
             <Typography variant="body-16" textColor="textPrimary" className="text-center">
-              You can create your account and get started
+              {ctaMetadata?.message || DEFAULT_FILLED_STATE_MESSAGES.MESSAGE}
             </Typography>
             <Button variant="system" onClick={handleSignUp}>
-              Sign Up
+              {ctaMetadata?.label || DEFAULT_FILLED_STATE_MESSAGES.LABEL}
               <ArrowRight width="16" height="16" />
             </Button>
           </div>

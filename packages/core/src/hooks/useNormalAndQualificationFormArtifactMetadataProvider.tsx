@@ -53,7 +53,7 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
           : hasFormFilledMessage
             ? formFilledMessage?.message.event_data.form_data
             : {},
-        sign_up_url: ctaEvent?.message?.event_data?.url || '',
+        ctaMetadata: ctaEvent?.message?.event_data || {},
       }
     : {};
 

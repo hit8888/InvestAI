@@ -106,10 +106,18 @@ export const QualificationQuestionAnswerSchema = z.object({
   qualification_responses: z.array(QualificationResponsesSchema),
 });
 
+export const CtaEventDataSchema = z.object({
+  url: z.string().optional(),
+  align: z.enum(['left', 'right']).optional(),
+  label: z.string().optional(),
+  message: z.string().optional(),
+  title: z.string().optional(),
+});
+
 export const QualificationQuestionMetadata = z.object({
   is_filled: z.boolean(),
   filled_data: z.array(QualificationResponsesSchema).optional(),
-  sign_up_url: z.string().optional(),
+  ctaMetadata: CtaEventDataSchema.optional(),
 });
 
 export type QualificationQuestionMetadataType = z.infer<typeof QualificationQuestionMetadata>;

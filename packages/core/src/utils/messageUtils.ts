@@ -357,6 +357,16 @@ export const getFormFilledEvent = (
   );
 };
 
+export const isCtaEvent = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & {
+  message: EventMessageContent & {
+    event_data: CtaEventDataContent;
+  };
+} => {
+  return checkIsEventMessage(message) && message.message?.event_type === 'CTA_EVENT';
+};
+
 export const getCtaEvent = (messages: WebSocketMessage[], responseId: string | undefined, align: 'left' | 'right') => {
   return messages.find(
     (
@@ -365,11 +375,7 @@ export const getCtaEvent = (messages: WebSocketMessage[], responseId: string | u
       message: EventMessageContent & {
         event_data: CtaEventDataContent;
       };
-    } =>
-      msg.response_id === responseId &&
-      checkIsEventMessage(msg) &&
-      msg.message?.event_type === 'CTA_EVENT' &&
-      msg.message?.event_data?.align === align,
+    } => msg.response_id === responseId && isCtaEvent(msg) && msg.message?.event_data?.align === align,
   );
 };
 

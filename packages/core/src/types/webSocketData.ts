@@ -3,6 +3,7 @@ import {
   ArtifactEnumSchema,
   CalendarArtifactSchema,
   CalendarTypeEnum,
+  CtaEventDataSchema,
   FormArtifactMetadata,
   FormArtifactSchema,
   FormFieldSchema,
@@ -101,13 +102,6 @@ export const DemoEventDataSchema = z.object({
   response: z.string().nullable(),
   response_audio_url: z.string().nullable(),
   resume_demo: z.boolean().nullable(),
-});
-
-export const CtaEventDataSchema = z.object({
-  url: z.string().optional(),
-  align: z.enum(['left', 'right']).optional(),
-  label: z.string().optional(),
-  message: z.string().optional(),
 });
 
 export const EventMessageContentSchema = z.discriminatedUnion('event_type', [

@@ -30,6 +30,7 @@ import {
   checkIsAIMessage,
   checkIsAdminJoinedMessage,
   checkIsAdminLeftMessage,
+  isCtaEvent,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -40,6 +41,7 @@ import { ViewType } from '@meaku/core/types/common';
 import AdminJoinedInfo from './AdminJoinedInfo.tsx';
 import AdminExitInfo from './AdminExitInfo.tsx';
 import DemoArtifactPreview from './DemoArtifactPreview.tsx';
+import CtaEventMessage from './CtaEventMessage.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -119,8 +121,10 @@ const MessageItem = ({
   const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || message.message_type === 'LOADING_TEXT';
+  const isCtaEventMessage = isCtaEvent(message);
 
-  const shouldShowActiveOrb = isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage);
+  const shouldShowActiveOrb =
+    isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
@@ -287,6 +291,17 @@ const MessageItem = ({
         {showingContentForDashboard ? (
           <>{shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}</>
         ) : null}
+
+        {isCtaEventMessage && (
+          <CtaEventMessage
+            event={message}
+            renderOrb={() =>
+              shouldShowActiveOrb && (
+                <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+              )
+            }
+          />
+        )}
       </div>
     </MessageItemErrorBoundary>
   );
