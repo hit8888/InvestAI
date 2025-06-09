@@ -568,8 +568,93 @@ export const shouldMessageScrollToTop = (message: WebSocketMessage): boolean => 
   return isUserEventMessage(message) || isUserTextMessage(message);
 };
 
+// Helper function to check if a message is a main response (stream or text)
+const isMainResponse = (message: WebSocketMessage): boolean => {
+  return isStreamMessage(message) || isTextMessage(message);
+};
+
+// Helper function to check if a message should be delayed (discovery, artifact)
+const isDelayedMessage = (message: WebSocketMessage): boolean => {
+  return isDiscoveryQuestion(message) || checkIsArtifactMessage(message);
+};
+
+// Helper function to check if a group of messages with same response_id is ready to be shown
+const isMessageGroupReady = (messages: WebSocketMessage[]): boolean => {
+  // If there's no stream message, the group is ready
+  const streamMessage = messages.find(isStreamMessage);
+  if (!streamMessage) return true;
+
+  // If there is a stream message, check if it's complete
+  return isStreamMessageComplete(streamMessage);
+};
+
+// Helper function to get user message and incomplete stream message from a group
+const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMessage[] => {
+  const userMessage = messages.find((msg) => msg.role === MessageSenderRole.USER);
+  const streamMessage = messages.find(isStreamMessage);
+
+  const result: WebSocketMessage[] = [];
+  if (userMessage) {
+    result.push(userMessage);
+  }
+  if (streamMessage) {
+    result.push(streamMessage);
+  }
+  return result;
+};
+
+// Helper function to sort messages within a group
+const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
+  return messages.slice().sort((a, b) => {
+    const aIsMainResponse = isMainResponse(a);
+    const bIsMainResponse = isMainResponse(b);
+    const aIsDelayed = isDelayedMessage(a);
+    const bIsDelayed = isDelayedMessage(b);
+
+    // Always show main responses before delayed messages
+    if (aIsMainResponse && bIsDelayed) return -1;
+    if (aIsDelayed && bIsMainResponse) return 1;
+
+    // If both are delayed messages, prioritize artifacts over discovery
+    if (aIsDelayed && bIsDelayed) {
+      const aIsArtifact = checkIsArtifactMessage(a);
+      const bIsArtifact = checkIsArtifactMessage(b);
+      const aIsDiscovery = isDiscoveryQuestion(a);
+      const bIsDiscovery = isDiscoveryQuestion(b);
+
+      // if both are artifacts, prioritize media artifacts over suggested questions
+      if (aIsArtifact && bIsArtifact) {
+        const aIsMediaArtifact = isMediaArtifact(a.message.artifact_type);
+        const bIsMediaArtifact = isMediaArtifact(b.message.artifact_type);
+        const aIsSuggestion = isSuggestionArtifact(a);
+        const bIsSuggestion = isSuggestionArtifact(b);
+
+        if (aIsMediaArtifact && bIsSuggestion) return -1;
+        if (aIsSuggestion && bIsMediaArtifact) return 1;
+      }
+
+      if (aIsArtifact && bIsDiscovery) return -1;
+      if (aIsDiscovery && bIsArtifact) return 1;
+    }
+
+    // For all other cases, maintain their original order
+    return 0;
+  });
+};
+
 // This function groups messages by response_id and then sorts them by the first occurrence of response_id
+// It ensures that main responses (stream/text) appear before delayed messages (discovery, artifacts, pre-demo)
+// and artifacts appear before discovery questions when both are delayed
+// Incomplete stream messages are shown immediately along with their user message, while other messages wait for stream completion
 export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessage[]) => {
+  // Group messages by response_id
+  const messageGroups = new Map<string, WebSocketMessage[]>();
+  messages.forEach((msg) => {
+    const group = messageGroups.get(msg.response_id) || [];
+    group.push(msg);
+    messageGroups.set(msg.response_id, group);
+  });
+
   // Create a map to store the first occurrence index of each response_id
   const firstOccurrenceMap = new Map<string, number>();
   messages.forEach((msg, index) => {
@@ -578,37 +663,41 @@ export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessa
     }
   });
 
-  return messages.slice().sort((a, b) => {
-    // Get the first occurrence index for each response_id
-    const aFirstIndex = firstOccurrenceMap.get(a.response_id) || 0;
-    const bFirstIndex = firstOccurrenceMap.get(b.response_id) || 0;
-
-    // First sort by the first occurrence of response_id
-    if (aFirstIndex !== bFirstIndex) {
-      return aFirstIndex - bFirstIndex;
-    }
-
-    // If same response_id, prioritize stream messages over discovery questions
-    if (aFirstIndex === bFirstIndex) {
-      const aIsStream = isStreamMessage(a);
-      const bIsStream = isStreamMessage(b);
-      const aIsDiscovery = isDiscoveryQuestion(a);
-      const bIsDiscovery = isDiscoveryQuestion(b);
-      const aIsArtifact = checkIsArtifactMessage(a);
-      const bIsArtifact = checkIsArtifactMessage(b);
-
-      // If one is stream and other is discovery, stream gets priority
-      if (aIsStream && bIsDiscovery) return -1;
-      if (aIsDiscovery && bIsStream) return 1;
-
-      // if one is stream and other is artifact, stream gets priority
-      if (aIsStream && bIsArtifact) return -1;
-      if (aIsArtifact && bIsStream) return 1;
-    }
-
-    // For all other cases, maintain their original order
-    return 0;
+  // Sort groups by their first occurrence
+  const sortedGroups = Array.from(messageGroups.entries()).sort(([aId, _], [bId, __]) => {
+    const aFirstIndex = firstOccurrenceMap.get(aId) || 0;
+    const bFirstIndex = firstOccurrenceMap.get(bId) || 0;
+    return aFirstIndex - bFirstIndex;
   });
+
+  // Process each group
+  const result: WebSocketMessage[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  for (const [_, groupMessages] of sortedGroups) {
+    const incompleteMessages = getIncompleteGroupMessages(groupMessages);
+    if (isMessageGroupReady(groupMessages)) {
+      // If stream is complete or there's no stream, show all messages in order
+      result.push(...sortMessageGroup(groupMessages));
+    } else if (incompleteMessages.length > 0) {
+      // If there's an incomplete stream, show user message and stream message
+      result.push(...incompleteMessages);
+    }
+  }
+
+  return result;
+};
+
+// Check if the current AI stream message is complete, given the last message response id
+export const checkIsCurrentMessageComplete = (messages: WebSocketMessage[], lastMessageResponseId: string) => {
+  return (
+    messages.filter(
+      (message) =>
+        message.role === MessageSenderRole.AI &&
+        message.response_id === lastMessageResponseId &&
+        message.message_type === 'STREAM' &&
+        isStreamMessageComplete(message),
+    ).length > 0
+  );
 };
 
 export const checkIfCTAButtonDisabled = (messages: WebSocketMessage[]) => {

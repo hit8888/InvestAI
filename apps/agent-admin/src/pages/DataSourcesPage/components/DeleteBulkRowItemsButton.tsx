@@ -9,6 +9,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
+import { DeleteDocumentsResponse, DeleteWebpagesResponse } from '@meaku/core/types/admin/api';
 
 const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {
   const { selectedIds, deselectAll } = useDataSourceTableStore();
@@ -28,8 +29,43 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
         webpage_ids: selectedIds,
         delete_embeddings: true,
       });
+
+      if (response?.data) {
+        const data = response.data as unknown as DeleteWebpagesResponse;
+        const { deactivated_count } = data;
+
+        if (deactivated_count > 0) {
+          // Invalidate and refetch the data
+          await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+          // Clear selected items
+          deselectAll();
+          toast.success(`Successfully deleted ${deactivated_count} out of ${selectedIds.length} pages`);
+        }
+      }
     } else if (selectedType === SourcesCardTypes.DOCUMENTS) {
       response = await deleteDocuments({ document_ids: selectedIds });
+
+      // Handle bulk deletion response
+      if (response?.data) {
+        const data = response.data as unknown as DeleteDocumentsResponse;
+        const { total_processed, total_deleted, total_failed } = data;
+
+        if (total_failed > 0) {
+          // Clear selected items
+          deselectAll();
+          toast.error(`Failed to delete ${total_failed} out of ${total_processed} documents.`);
+          toast.error('Message: Document not found or already deleted.');
+        }
+
+        if (total_deleted > 0) {
+          // Invalidate and refetch the data
+          await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+          // Clear selected items
+          deselectAll();
+          toast.success(`Successfully deleted ${total_deleted} out of ${total_processed} documents`);
+        }
+        return;
+      }
     } else if (isArtifactsPage) {
       if (selectedIds.length > 1) {
         toast.error('You can only delete one item at a time');

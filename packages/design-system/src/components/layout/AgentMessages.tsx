@@ -7,7 +7,11 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import MessageItem from './MessageItem';
 import { DemoPlayingStatus, MessageSenderRole, ViewType } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
-import { messagesGroupedByResponseIdAndTimestamp, shouldMessageScrollToTop } from '@meaku/core/utils/messageUtils';
+import {
+  checkIsCurrentMessageComplete,
+  messagesGroupedByResponseIdAndTimestamp,
+  shouldMessageScrollToTop,
+} from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   viewType: ViewType;
@@ -93,6 +97,8 @@ const AgentMessages = ({
 
   const messagesSortedByResponseIdAndTimestamp = messagesGroupedByResponseIdAndTimestamp(messages);
 
+  const isCurrentMessageComplete = checkIsCurrentMessageComplete(messages, lastMessageResponseId);
+
   return (
     <div
       className={cn('w-[35%] shrink-0 overflow-y-auto', {
@@ -151,7 +157,7 @@ const AgentMessages = ({
               />
             </div>
           )}
-          {showDemoPreQuestions && (
+          {isCurrentMessageComplete && showDemoPreQuestions && (
             <PreDemoQuestion
               isAMessageBeingProcessed={isAMessageBeingProcessed}
               setDemoPlayingStatus={setDemoPlayingStatus}

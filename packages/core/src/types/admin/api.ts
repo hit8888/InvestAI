@@ -439,7 +439,13 @@ export const DeleteDocumentsRequestSchema = z.object({
 export type DeleteDocumentsRequest = z.infer<typeof DeleteDocumentsRequestSchema>;
 
 export const DeleteDocumentsResponseSchema = z.object({
-  deleted_documents: z.array(z.number()),
+  deleted_documents: z.array(
+    z.object({
+      document_id: z.number(),
+      success: z.boolean(),
+      message: z.string(),
+    }),
+  ),
   total_processed: z.number(),
   total_deleted: z.number(),
   total_failed: z.number(),
