@@ -28,16 +28,18 @@ const CtaEventMessage = (props: IProps) => {
   }
 
   return (
-    <div className="my-4 flex items-end gap-4">
-      {renderOrb?.()}
-      <div className="flex items-center justify-between gap-4 rounded-2xl bg-transparent_gray_3 p-4">
-        <Typography className="w-7/12" variant="title-18">
-          {message ?? DEFAULT_MESSAGE}
-        </Typography>
-        <Button onClick={handleClick}>
-          {label ?? DEFAULT_LABEL}
-          <ArrowRight width="16" height="16" />
-        </Button>
+    <div className="my-4 pl-11 pr-6">
+      <div className="flex w-full max-w-[424px] items-end">
+        {renderOrb?.()}
+        <div className="flex items-center justify-between gap-4 rounded-2xl bg-transparent_gray_3 p-4">
+          <Typography className="w-7/12" variant="title-18">
+            {message ?? DEFAULT_MESSAGE}
+          </Typography>
+          <Button onClick={handleClick}>
+            {label ?? DEFAULT_LABEL}
+            <ArrowRight width="16" height="16" />
+          </Button>
+        </div>
       </div>
     </div>
   );
