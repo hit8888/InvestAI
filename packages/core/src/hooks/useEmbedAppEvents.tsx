@@ -84,6 +84,9 @@ export const useEmbedAppEvents = ({
         setIsCollapsible(true);
         setMode('overlay');
         handleOpenAndShowAgent();
+        trackAgentbotEvent(ANALYTICS_EVENT_NAMES.PARENT_FORM_MESSAGE, {
+          ...event.data.data,
+        });
         if (event.data.data?.message) {
           if (event.data?.prospectId) {
             handleUpdateSessionData({ prospectId: event.data.prospectId });
@@ -93,9 +96,6 @@ export const useEmbedAppEvents = ({
           handleSendUserMessage({
             message: { content: event.data.data.message },
             message_type: 'TEXT',
-          });
-          trackAgentbotEvent(ANALYTICS_EVENT_NAMES.PARENT_FORM_MESSAGE, {
-            ...event.data.data,
           });
         }
         break;

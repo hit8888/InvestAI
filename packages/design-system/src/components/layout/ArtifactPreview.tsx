@@ -131,7 +131,7 @@ const ArtifactPreview = ({
       );
     }
 
-    return <div className="flex w-full items-center justify-center">{formContent}</div>;
+    return <div className="flex h-full w-full items-center justify-center">{formContent}</div>;
   };
 
   const getDialogContent = () => {
@@ -161,7 +161,7 @@ const ArtifactPreview = ({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{showArtifactPreviewButtonDisplay()}</DialogTrigger>
       <DialogContent className="bg-white sm:min-h-[600px] sm:min-w-[1200px]">
-        <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>
+        {title && <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>}
         {isDialogOpen ? <div className="h-full w-full rounded-lg">{getDialogContent()}</div> : null}
       </DialogContent>
     </Dialog>
