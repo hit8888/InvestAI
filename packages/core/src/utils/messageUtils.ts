@@ -597,11 +597,20 @@ const isMessageGroupReady = (messages: WebSocketMessage[]): boolean => {
 // Helper function to get user message and incomplete stream message from a group
 const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMessage[] => {
   const userMessage = messages.find((msg) => msg.role === MessageSenderRole.USER);
+
+  // For Nudge Message, TEXT Message with No session_id
+  const nudgeMessage = messages.find(
+    (msg) => msg.role === MessageSenderRole.AI && !msg.session_id && isTextMessage(msg),
+  );
+
   const streamMessage = messages.find(isStreamMessage);
 
   const result: WebSocketMessage[] = [];
   if (userMessage) {
     result.push(userMessage);
+  }
+  if (nudgeMessage) {
+    result.push(nudgeMessage);
   }
   if (streamMessage) {
     result.push(streamMessage);
