@@ -210,7 +210,7 @@ export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMes
 
   // Case 2: For TEXT or STREAM new messages
   if (isTextMessage(message) || isStreamMessage(message)) {
-    return hasMatchingMessageType(msg, message);
+    return hasMatchingMessageType(msg, message) && msg.session_id === message.session_id;
   }
 
   // Case 3: For other message types
