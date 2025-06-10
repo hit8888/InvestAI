@@ -1,5 +1,4 @@
 import AdminLoginForm, { AdminLoginFormRef } from '@breakout/design-system/components/layout/AdminLoginForm';
-import { cn } from '@breakout/design-system/lib/cn';
 import { useRef, useState } from 'react';
 import useLoginWithEmailPassword from '../queries/mutation/useLoginWithEmailPassword';
 import useGenerateOtp from '../queries/mutation/useGenerateOtp';
@@ -7,25 +6,31 @@ import useVerifyOtp from '../queries/mutation/useVerifyOtp';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
-import { AppRoutesEnum } from '../utils/constants';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
-import { AuthResponse } from '@meaku/core/types/admin/auth';
-import { getDashboardBasicPathURL } from '../utils/common';
-import { setupTenantAndAgent } from '../utils/apiCalls';
+import useGoogleSso from '../hooks/useGoogleSso';
+import { HelpCircle } from 'lucide-react';
+import Typography from '@breakout/design-system/components/Typography/index';
+import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
+import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
+import GoogleIcon from '@breakout/design-system/components/icons/google-icon';
 
 const LoginForm = () => {
-  const { login, saveTokens } = useAuth();
+  const { initAuth, authInProgress } = useGoogleSso();
+
+  const { saveTokens, handleLoginAndRedirection } = useAuth();
 
   const formRef = useRef<AdminLoginFormRef>(null);
 
   const navigate = useNavigate();
 
-  const [authMode, setAuthMode] = useState<'password' | 'generateOtp' | 'enterOtp'>('password');
+  const [authMode, setAuthMode] = useState<'password' | 'generateOtp' | 'enterOtp' | 'needHelp'>('password');
   const [hasOtpBeenSent, setHasOtpBeenSent] = useState(false);
 
   const showPasswordField = authMode === 'password';
+  const showGenerateOtpField = authMode === 'generateOtp';
   const showOtpField = authMode === 'enterOtp';
+  const showNeedHelpField = authMode === 'needHelp';
 
   const { mutateAsync: loginWithEmailPassword, isPending: isLoginWithEmailPasswordPending } = useLoginWithEmailPassword(
     {
@@ -33,7 +38,7 @@ const LoginForm = () => {
       onSuccess: (data: any) => {
         // console.log('🚀 ~ file: LoginForm.tsx:33 ~ }=useLoginWithEmailPassword ~ data:', data);
         saveTokens(data.access, data.refresh, data.user);
-        handleLoginAndRedirection(data.user);
+        handleLoginAndRedirection(data.user, navigate);
       },
     },
   );
@@ -52,8 +57,9 @@ const LoginForm = () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
       // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
+      handleResetForm();
       saveTokens(data.access, data.refresh, data.user);
-      handleLoginAndRedirection(data.user);
+      handleLoginAndRedirection(data.user, navigate);
     },
     onError: (error) => {
       setHasOtpBeenSent(false);
@@ -72,6 +78,7 @@ const LoginForm = () => {
       formRef.current.resetOTP();
     }
   };
+
   const handleLogin = async (values: LoginFormValues) => {
     switch (authMode) {
       case 'password':
@@ -101,33 +108,6 @@ const LoginForm = () => {
     }
   };
 
-  const handleLoginAndRedirection = async (userData: AuthResponse) => {
-    login();
-    handleResetForm();
-
-    const org = userData?.organizations;
-    const tenantHavingAdminRole = org?.find((item) => item?.['role'] === 'admin');
-
-    // Check for saved redirect URL
-    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '{}');
-
-    if (savedRedirectPath) {
-      // Clear the saved path
-      navigate(savedRedirectPath);
-      localStorage.removeItem('redirectAfterLogin');
-      return;
-    }
-
-    // If no saved path, proceed with default navigation
-    if (tenantHavingAdminRole) {
-      await setupTenantAndAgent(tenantHavingAdminRole);
-      const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
-      navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
-    } else {
-      navigate('/');
-    }
-  };
-
   const handleToggleShowOtpLogin = () => {
     if (authMode === 'enterOtp' || authMode === 'generateOtp') {
       setAuthMode('password');
@@ -141,35 +121,111 @@ const LoginForm = () => {
     setHasOtpBeenSent(false);
   };
 
+  const handleReturnBack = () => {
+    if (showOtpField) {
+      setAuthMode('generateOtp');
+      return;
+    }
+
+    setAuthMode('password');
+  };
+
   return (
-    <div className="w-full">
-      <AdminLoginForm
-        ref={formRef}
-        handleLogin={handleLogin}
-        showOtpField={showOtpField}
-        showPasswordField={showPasswordField}
-        isLoading={isLoading}
-        submitBtnLabel={authMode === 'generateOtp' ? 'Generate a Code' : 'Login'}
-      />
-      <div className="relative py-8">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-400">Or</span>
-        </div>
+    <>
+      <div className="flex w-full max-w-md flex-col justify-center gap-6">
+        {(showOtpField || showNeedHelpField) && (
+          <button
+            className="absolute left-4 top-0 px-4 py-3 text-sm font-semibold text-primary"
+            onClick={handleReturnBack}
+          >
+            Return back
+          </button>
+        )}
+        <h1 className="self-stretch text-center text-[54px] font-semibold text-slate-800">
+          {showNeedHelpField ? 'Need Help?' : showPasswordField ? 'Login in to Dashboard' : 'Enter Code'}
+        </h1>
+        {(showPasswordField || showGenerateOtpField) && (
+          <div className="flex w-full flex-col items-center self-stretch">
+            <div className="flex w-full rounded-custom-50 bg-gray-100 p-1">
+              <button
+                onClick={handleToggleShowOtpLogin}
+                className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
+                  showPasswordField ? 'bg-white text-primary shadow' : 'text-gray-500'
+                }`}
+              >
+                Login with Password
+              </button>
+              <button
+                onClick={handleToggleShowOtpLogin}
+                className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
+                  showGenerateOtpField ? 'bg-white text-primary shadow' : 'text-gray-500'
+                }`}
+              >
+                Log in with a Сode
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showNeedHelpField ? (
+          <div className="flex flex-col items-center gap-4">
+            <Typography variant="body-16" textColor="textSecondary" className="text-center">
+              If you’re having trouble logging in or didn’t receive your verification code, reach out to our support
+              team. We’re here to help!
+            </Typography>
+            <div className="flex items-center gap-6 rounded-2xl border bg-white p-2">
+              <Typography variant="label-16-medium" textColor="primary">
+                support@getbreakout.ai
+              </Typography>
+              <div className="rounded-lg border bg-primary/10">
+                <CopyToClipboardButton textToCopy="support@getbreakout.com" />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <AdminLoginForm
+            ref={formRef}
+            handleLogin={handleLogin}
+            showOtpField={showOtpField}
+            showPasswordField={showPasswordField}
+            isLoading={isLoading}
+            submitBtnLabel={showOtpField ? 'Continue' : showGenerateOtpField ? 'Send Code' : 'Login'}
+          />
+        )}
+
+        {showPasswordField && (
+          <>
+            <div className="flex w-full items-center gap-2 self-stretch">
+              <hr className="flex-grow border-[#DCDAF8]" />
+              <span className="text-sm text-slate-400">Or</span>
+              <hr className="flex-grow border-[#DCDAF8]" />
+            </div>
+            <button
+              onClick={initAuth}
+              className="flex w-full items-center justify-center gap-2 self-stretch rounded-lg border border-gray-300 py-3 pl-2 pr-4 text-sm font-medium text-slate-800 hover:bg-gray-50"
+            >
+              {authInProgress ? (
+                <SpinLoader width={5} height={5} />
+              ) : (
+                <>
+                  <GoogleIcon />
+                  Login with Google
+                </>
+              )}
+            </button>
+          </>
+        )}
       </div>
-      <div>
+      {!showNeedHelpField && (
         <button
-          //   variant="secondary"
-          className={cn('gradient-text w-full text-lg font-normal 2xl:text-3xl')}
-          onClick={handleToggleShowOtpLogin}
-          disabled={isLoading}
+          className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1 text-sm font-normal text-primary/60"
+          onClick={() => setAuthMode('needHelp')}
         >
-          {authMode === 'password' ? 'Login with OTP' : 'Login with Password'}
+          <HelpCircle className="h-4 w-4" />
+          Need Help?
         </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -5,10 +5,10 @@ import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
 
 const Root = () => {
-  const { isDashboardPage, isLoginPage } = usePageRouteState();
+  const { isDashboardPage, isLoginPage, isGoogleSsoCallbackPage } = usePageRouteState();
   useAuthHandler();
 
-  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage;
+  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isGoogleSsoCallbackPage;
 
   return (
     <div className="flex w-full">

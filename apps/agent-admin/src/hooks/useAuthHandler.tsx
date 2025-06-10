@@ -9,10 +9,14 @@ import { getDashboardBasicPathURL } from '../utils/common';
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
   const navigate = useNavigate();
-  const { isLoginPage, pathURL } = usePageRouteState();
+  const { isLoginPage, pathURL, isGoogleSsoCallbackPage } = usePageRouteState();
   const { LOGIN, LEADS } = AppRoutesEnum;
 
   useEffect(() => {
+    if (isGoogleSsoCallbackPage) {
+      return;
+    }
+
     // Check for tokens in local storage on page load
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');

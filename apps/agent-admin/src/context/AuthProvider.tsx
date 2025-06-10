@@ -1,7 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { setAuthInstance } from '@meaku/core/contexts/AuthInstance';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
-import { DefaultAuthResponse } from '../utils/constants';
+import { AppRoutesEnum, DefaultAuthResponse } from '../utils/constants';
+import { setupTenantAndAgent } from '../utils/apiCalls';
+import { getDashboardBasicPathURL } from '../utils/common';
 
 interface AuthContextType {
   accessToken: string | null;
@@ -12,6 +14,7 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   userInfo?: AuthResponse;
+  handleLoginAndRedirection: (userData: AuthResponse, callback: (path: string) => void) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -27,6 +30,7 @@ const defaultContext: AuthContextType = {
   login: () => {},
   logout: () => {},
   userInfo: DefaultAuthResponse,
+  handleLoginAndRedirection: () => Promise.resolve(),
 };
 
 // Create Auth Context
@@ -82,6 +86,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     clearStateValuesAndLocalStorage();
   };
 
+  const handleLoginAndRedirection = async (userData: AuthResponse, callback: (path: string) => void) => {
+    login();
+
+    const org = userData?.organizations;
+    const tenantHavingAdminRole = org?.find((item) => item?.['role'] === 'admin');
+
+    // Check for saved redirect URL
+    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '{}');
+
+    if (savedRedirectPath) {
+      // Clear the saved path
+      callback(savedRedirectPath);
+      localStorage.removeItem('redirectAfterLogin');
+      return;
+    }
+
+    // If no saved path, proceed with default navigation
+    if (tenantHavingAdminRole) {
+      await setupTenantAndAgent(tenantHavingAdminRole);
+      const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
+      callback(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
+    } else {
+      callback('/');
+    }
+  };
+
   // Register auth instance
   useEffect(() => {
     setAuthInstance({ saveTokens, logout, clearAuthValuesFromLocalStorage });
@@ -99,6 +129,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         logout,
         userInfo,
+        handleLoginAndRedirection,
       }}
     >
       {children}

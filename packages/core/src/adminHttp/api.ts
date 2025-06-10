@@ -19,6 +19,7 @@ import {
   FilterOptionsPayload,
   GenerateOtpPayload,
   GenerateTokens,
+  LoginWithGoogleSsoPayload,
   LeadsPayload,
   LoginWithEmailPasswordPayload,
   ReprocessWebpagesRequest,
@@ -33,6 +34,9 @@ import { FeedbackRequestPayload } from '../types/api/feedback_request';
 
 export const loginWithEmailPassword = (payload: LoginWithEmailPasswordPayload) =>
   adminApiClient.post(`/core/api/login/`, payload);
+
+export const loginWithGoogleSso = (payload: LoginWithGoogleSsoPayload) =>
+  adminApiClient.post(`/core/api/login/google/`, payload);
 
 export const generateOtp = (payload: GenerateOtpPayload) => adminApiClient.post(`/core/api/generate-code/`, payload);
 

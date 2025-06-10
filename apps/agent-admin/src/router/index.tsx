@@ -4,7 +4,7 @@ import Custom404 from '@breakout/design-system/components/layout/Custom404';
 
 import Root from '../layout';
 import Dashboard from '../pages/Dashboard';
-import LoginPage from '../pages/LoginPage';
+import LoginPage from '../pages/LoginPage/LoginPage.tsx';
 import LeadsPageContainer from '../pages/LeadsPageContainer';
 import ConversationsPageContainer from '../pages/ConversationsPageContainer';
 import PlaygroundPage from '../pages/PlaygroundPage';
@@ -31,6 +31,11 @@ const routes = [
       {
         path: '',
         element: <ProtectedRoute element={<Dashboard />} />,
+        children: [],
+      },
+      {
+        path: 'auth/google/callback',
+        element: <LoginPage />,
         children: [],
       },
       {

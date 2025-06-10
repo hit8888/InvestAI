@@ -6,6 +6,7 @@ const usePageRouteState = () => {
   const {
     LEADS,
     LOGIN,
+    GOOGLE_SSO_CALLBACK,
     CONVERSATIONS,
     AGENT,
     AGENT_DATA_SOURCES,
@@ -18,6 +19,7 @@ const usePageRouteState = () => {
   } = AppRoutesEnum;
 
   const isDashboardPage = location.pathname === '/';
+  const isGoogleSsoCallbackPage = location.pathname.includes(GOOGLE_SSO_CALLBACK);
   const isLoginPage = location.pathname.includes(LOGIN);
   const isLeadsPage = location.pathname.includes(LEADS);
   const isConversationsPage = location.pathname.includes(CONVERSATIONS);
@@ -35,6 +37,7 @@ const usePageRouteState = () => {
   return {
     isDashboardPage,
     isLoginPage,
+    isGoogleSsoCallbackPage,
     isLeadsPage,
     isConversationsPage,
     isAgentPage,

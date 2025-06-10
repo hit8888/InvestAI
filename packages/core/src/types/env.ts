@@ -9,6 +9,7 @@ const envSchema = z.object({
   VITE_SENTRY_DSN: z.string(),
   VITE_LOGROCKET_APP_ID: z.string(),
   VITE_APP_ENV: z.string(),
+  VITE_GOOGLE_SSO_CLIENT_ID: z.string(),
 });
 
 export const ENV = envSchema.parse(import.meta.env);

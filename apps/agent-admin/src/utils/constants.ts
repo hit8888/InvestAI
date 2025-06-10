@@ -332,6 +332,7 @@ export const SLIDE_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filt
 export enum AppRoutesEnum {
   LEADS = 'leads',
   LOGIN = 'login',
+  GOOGLE_SSO_CALLBACK = 'auth/google/callback',
   CONVERSATIONS = 'conversations',
   AGENT = 'agent',
   AGENT_DATA_SOURCES = 'agent/data-sources',

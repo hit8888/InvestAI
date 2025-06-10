@@ -9,6 +9,13 @@ export const LoginWithEmailPasswordPayloadSchema = z.object({
 });
 export type LoginWithEmailPasswordPayload = z.infer<typeof LoginWithEmailPasswordPayloadSchema>;
 
+// GoogleSsoPayload
+export const LoginWithGoogleSsoPayloadSchema = z.object({
+  code: z.string(),
+  redirect_uri: z.string(),
+});
+export type LoginWithGoogleSsoPayload = z.infer<typeof LoginWithGoogleSsoPayloadSchema>;
+
 // GenerateOtpPayload
 export const GenerateOtpPayloadSchema = z.object({
   email: z.string().email(),
