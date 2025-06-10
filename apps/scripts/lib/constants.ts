@@ -79,9 +79,9 @@ export const ENTRY_POINT_TRANSFORM_MAP = {
 
 export const Z_INDEX = {
   WIDGET_EMBEDDED: "1",
-  WIDGET_BOTTOM: "99999",
-  OVERLAY: "999999",
-  OVERLAY_WRAPPER: "1000000",
+  WIDGET_BOTTOM: "1000000000",
+  OVERLAY: "1000000001",
+  OVERLAY_WRAPPER: "1000000002",
 } as const;
 
 // ============================================================================
