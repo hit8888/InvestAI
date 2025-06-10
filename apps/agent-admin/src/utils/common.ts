@@ -386,7 +386,7 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
   if (isDocumentsPage) {
     if (source_nameSort) {
       sortApplied.push({
-        field: 'name',
+        field: 'asset',
         order: source_nameSort,
       });
     }
@@ -409,6 +409,13 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
       sortApplied.push({
         field: 'updated_on',
         order: updated_onSortDocuments,
+      });
+    }
+
+    if (descriptionSort) {
+      sortApplied.push({
+        field: 'title',
+        order: descriptionSort,
       });
     }
   }

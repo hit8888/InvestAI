@@ -106,6 +106,7 @@ export const enum DATA_SOURCE_STATUS {
 
 export const DATA_SOURCES_DOCUMENTS_COLUMN_LISTS = [
   'name',
+  'data',
   'data_source_type',
   'status',
   'updated_on',
@@ -114,6 +115,7 @@ export const DATA_SOURCES_DOCUMENTS_COLUMN_LISTS = [
 
 export const DATA_SOURCES_DOCUMENTS_COLUMN_HEADER_LABEL_MAPPING = {
   name: 'Documents',
+  data: 'Description',
   data_source_type: 'File Type',
   updated_on: 'Last Updated',
   status: 'Status',

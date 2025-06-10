@@ -35,6 +35,7 @@ export type WebpagesSortValues = CommonSortValues & {
 export type DocumentsSortValues = CommonSortValues & {
   source_nameSort: SortOrder;
   data_source_typeSort: SortOrder;
+  descriptionSort: SortOrder;
 };
 
 export type ArtifactsSortValues = CommonSortValues & {

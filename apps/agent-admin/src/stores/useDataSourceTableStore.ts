@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { CommonDataSourceResponse, TableDataResponse } from '@meaku/core/types/admin/admin';
 import { PaginationDataSchema } from '@meaku/core/types/admin/api';
-import { TableDataSchema } from '@meaku/core/types/admin/admin-table';
 
 interface DataSourceTableState {
   results: CommonDataSourceResponse[];
@@ -36,11 +35,7 @@ export const useDataSourceTableStore = create<DataSourceTableState>((set, get) =
 
   setTableData: (data) => {
     if (data) {
-      const validatedData = TableDataSchema.safeParse(data);
-      if (!validatedData.success) {
-        throw new Error(validatedData.error.errors.map((error) => error.message).join(', '));
-      }
-      set(validatedData.data as DataSourceTableState);
+      set(data as DataSourceTableState);
     } else {
       set({ results: [], current_page: 1, page_size: 10, total_pages: 1, total_records: 0, selectedIds: [] });
     }

@@ -318,17 +318,6 @@ export const DataSourceWebpagesResponseResultSchema = z.object({
   updated_on: z.string(),
 });
 
-export const DataSourceDocumentsResponseResultSchema = z.object({
-  id: z.number(),
-  version: z.string(),
-  data_source_type: z.string(),
-  name: z.string().nullable(),
-  source_url: z.string().nullable(),
-  status: z.string(),
-  created_on: z.string(),
-  updated_on: z.string(),
-});
-
 export const DataSourceAssetItemSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -338,6 +327,24 @@ export const DataSourceAssetItemSchema = z.object({
   public_url: z.string(),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
+
+export const DataSourceDocumentsResponseResultSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  data: z.string(),
+  relevant_queries: z.array(z.string()),
+  metadata: z.object({
+    page_count: z.number(),
+    content_type: z.string(),
+    extraction_method: z.string(),
+  }),
+  asset: DataSourceAssetItemSchema,
+  data_source_id: z.number(),
+  data_source_type: z.string(),
+  created_on: z.string(),
+  updated_on: z.string(),
+  status: z.string(),
+});
 
 export const DataSourceArtifactsResponseResultSchema = z.object({
   id: z.number(),

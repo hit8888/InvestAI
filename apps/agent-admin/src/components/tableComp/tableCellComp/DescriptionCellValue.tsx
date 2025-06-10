@@ -3,6 +3,7 @@ import { DATA_SOURCE_DESCRIPTION_TRIM_LENGTH } from '../../../utils/constants';
 import { DescriptionValue } from '@meaku/core/types/admin/admin-table';
 import Typography from '@breakout/design-system/components/Typography/index';
 import SparkleThreeStarIcon from '@breakout/design-system/components/icons/sparkle-three-star';
+import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 
 const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
   const [showTrimmed, setShowTrimmed] = useState(true);
@@ -33,11 +34,15 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     <div className="flex flex-col items-start gap-2">
       {renderTitleAndLabel()}
       {value.description && (
-        <p className="w-[85%] text-sm text-gray-900">
-          {showTrimmed
-            ? `${value.description.substring(0, DATA_SOURCE_DESCRIPTION_TRIM_LENGTH)}...`
-            : value.description}
-        </p>
+        <div className="w-[85%] text-sm text-gray-900">
+          <GithubMarkdownRenderer
+            markdown={
+              showTrimmed
+                ? `${value.description.substring(0, DATA_SOURCE_DESCRIPTION_TRIM_LENGTH)}...`
+                : value.description
+            }
+          />
+        </div>
       )}
       {value.description && (
         <div
