@@ -8,7 +8,7 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 type SingleSelectQuestionProps = {
   message: WebSocketMessage;
   question: string;
-  response_options: OptionType[];
+  response_options: Array<OptionType | Record<string, never>>;
   onSelect: (option: OptionType) => void;
   viewType: ViewType;
 };
@@ -46,7 +46,7 @@ export const SingleSelectQuestion = ({
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
-        {response_options.map((option: OptionType) => (
+        {(response_options as OptionType[]).map((option: OptionType) => (
           <SingleSelectOption
             key={option.value}
             option={option}

@@ -218,7 +218,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
             value: z.string().optional(),
             placeholder: z.string().optional(),
           }),
-          z.object({}).catchall(z.unknown()),
+          z.object({}),
         ]),
       ),
     }),

@@ -10,7 +10,7 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 type MultiSelectQuestionProps = {
   message: WebSocketMessage;
   question: string;
-  response_options: OptionType[];
+  response_options: Array<OptionType | Record<string, never>>;
   onSubmit: (option: OptionType[]) => void;
   viewType: ViewType;
 };
@@ -73,7 +73,7 @@ export const MultiSelectQuestion = ({
       <h3 className="mb-4 text-base font-medium text-gray-800">{question}</h3>
 
       <div className="space-y-3">
-        {response_options.map((option, index) => (
+        {(response_options as OptionType[]).map((option, index) => (
           <MultiSelectResponseOption
             key={index}
             option={option}
