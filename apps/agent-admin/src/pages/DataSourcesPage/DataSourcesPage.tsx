@@ -20,6 +20,7 @@ import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
 import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
 import { DataSourcesDrawerProvider } from '../../context/DataSourcesDrawerContext';
+import CreateCustomDocumentButton from './components/CreateCustomDocumentButton';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
@@ -63,6 +64,7 @@ const DataSourcesPage = () => {
         <div className="flex w-full items-center gap-6">
           <DataSourcesNavigation />
           <DataSourcesAddMoreButton />
+          <CreateCustomDocumentButton />
         </div>
         <DataSourcesDrawerProvider>
           <DataSourceTableContainer />

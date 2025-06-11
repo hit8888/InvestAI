@@ -49,6 +49,7 @@ export enum FilterType {
   MeetingBooked = 'meetingBooked',
   ProductOfInterest = 'productOfInterest',
   Sources = 'sources',
+  FileType = 'fileType',
   UsageCount = 'usageCount',
   Duration = 'duration',
   SearchTableContent = 'searchTableContent',
@@ -83,6 +84,7 @@ export interface FilterValues {
   productOfInterest: string[];
   sources: string[];
   status: string[];
+  fileType: string[];
   meetingBooked?: string;
   usageCount: usageCountFilterValues;
   duration: durationFilterValues;
@@ -100,6 +102,7 @@ export const InitialFilterValues: FilterValues = {
   productOfInterest: [],
   sources: [],
   status: [],
+  fileType: [],
   meetingBooked: undefined,
   usageCount: {
     minCount: 0,

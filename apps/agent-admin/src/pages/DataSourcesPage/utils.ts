@@ -90,7 +90,7 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
       ...(key === 'name' && {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         accessorFn: (row: any) => ({
-          name: row?.asset?.name || '',
+          name: row?.asset?.name || row?.title || '',
           url: row?.asset?.public_url || '',
         }),
       }),

@@ -9,6 +9,7 @@ import FilterStatusIcon from '@breakout/design-system/components/icons/filter-in
 import FilterDateIcon from '@breakout/design-system/components/icons/filter-date-icon';
 import FilterCompanyIcon from '@breakout/design-system/components/icons/filter-company-icon';
 import FilterSourcesIcon from '@breakout/design-system/components/icons/filter-sources-icon';
+import FilterFileTypeIcon from '@breakout/design-system/components/icons/filter-filetype-icon';
 import FilterDurationIcon from '@breakout/design-system/components/icons/filter-duration-icon';
 import FilterUsageCountIcon from '@breakout/design-system/components/icons/filter-usage-count-icon';
 import FilterUserMessagesCountIcon from '@breakout/design-system/components/icons/filter-message-count-icon';
@@ -44,6 +45,7 @@ const {
   Duration,
   Sources,
   Status,
+  FileType,
 } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
@@ -265,6 +267,14 @@ const DATA_SOURCES_TABLE_FILTERS_CONFIG = [
     filterKey: Duration,
     filterType: Duration,
   },
+  {
+    filterIcon: FilterFileTypeIcon,
+    filterLabel: 'File Type',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: FileType,
+    filterType: FileType,
+  },
 ];
 
 export enum FilterByMeetingBooked {
@@ -309,7 +319,7 @@ export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
 
 // Not Showing Usage Count for now
 export const WEBPAGES_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, UsageCount].includes(item.filterType),
+  (item) => ![Duration, UsageCount, FileType].includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
@@ -319,12 +329,12 @@ export const DOCUMENTS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.
 
 // Not Showing Usage Count for now
 export const VIDEOS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
+  (item) => ![Duration, Sources, UsageCount, FileType].includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
 export const SLIDE_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
+  (item) => ![Duration, Sources, UsageCount, FileType].includes(item.filterType),
 );
 
 // Routes

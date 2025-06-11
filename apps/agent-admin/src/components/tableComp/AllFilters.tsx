@@ -31,6 +31,7 @@ const {
   SearchTableContent,
   Duration,
   Status,
+  FileType,
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
@@ -46,8 +47,7 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     setFilterState(value);
   };
 
-  const currentHeaderLabel = getFilterHeaderLabel(filterState).label;
-  const widthOfPopover = getFilterHeaderLabel(filterState).width;
+  const { label: currentHeaderLabel, width: widthOfPopover } = getFilterHeaderLabel(filterState);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -84,6 +84,9 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
         handleFilterRemove(key, []);
         break;
       case Sources:
+        handleFilterRemove(key, []);
+        break;
+      case FileType:
         handleFilterRemove(key, []);
         break;
       case Status:

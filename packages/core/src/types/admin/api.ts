@@ -424,12 +424,36 @@ export const BulkAddArtifactsRequestSchema = z.array(
 );
 export type BulkAddArtifactsRequest = z.infer<typeof BulkAddArtifactsRequestSchema>;
 
-export const UpdateArtifactRequestSchema = z.object({
+export const UpdateArtifactAndCustomDocumentRequestSchema = z.object({
   title: z.string(),
   data: z.string(),
   relevant_queries: z.array(z.string()),
 });
-export type UpdateArtifactRequest = z.infer<typeof UpdateArtifactRequestSchema>;
+export type UpdateArtifactAndCustomDocumentRequest = z.infer<typeof UpdateArtifactAndCustomDocumentRequestSchema>;
+
+export type UpdateArtifactRequest = UpdateArtifactAndCustomDocumentRequest;
+
+export type UpdateCustomDocumentRequest = UpdateArtifactAndCustomDocumentRequest;
+
+export const CreateCustomDocumentRequestSchema = UpdateArtifactAndCustomDocumentRequestSchema.omit({
+  relevant_queries: true,
+});
+export type CreateCustomDocumentRequest = z.infer<typeof CreateCustomDocumentRequestSchema>;
+
+export const CreateAndUpdateCustomDocumentResponseSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  data: z.string(),
+  relevant_queries: z.array(z.string()),
+  status: z.string(),
+  data_source_id: z.number(),
+  data_source_type: z.string(),
+  asset: z.null(),
+  created_on: z.string(),
+  updated_on: z.string(),
+  metadata: z.object({}),
+});
+export type CreateAndUpdateCustomDocumentResponse = z.infer<typeof CreateAndUpdateCustomDocumentResponseSchema>;
 
 export const BulkAddArtifactsResponseSchema = z.array(DataSourceArtifactsResponseResultSchema);
 export type BulkAddArtifactsResponse = z.infer<typeof BulkAddArtifactsResponseSchema>;

@@ -9,7 +9,7 @@ import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 interface UseDataSourceFilterContentProps {
   page: PaginationPageType;
-  field: 'status' | 'sources';
+  field: 'status' | 'sources' | 'fileType';
   filterPayload?: string;
 }
 

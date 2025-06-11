@@ -33,6 +33,7 @@ export const typographyVariants = cva('', {
       gray400: 'text-gray-400',
       gray500: 'text-gray-500',
       white: 'text-white',
+      black: 'text-black',
       error: 'text-destructive-1000',
       error600: 'text-destructive-600',
       textPrimary: 'text-customPrimaryText',

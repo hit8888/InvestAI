@@ -26,6 +26,9 @@ import {
   ReprocessWebpagesResponse,
   UpdateArtifactRequest,
   VerifyOtpPayload,
+  CreateCustomDocumentRequest,
+  CreateAndUpdateCustomDocumentResponse,
+  UpdateCustomDocumentRequest,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -144,6 +147,12 @@ export const bulkAddArtifacts = (payload: BulkAddArtifactsRequest) =>
 
 export const updateArtifact = (id: number, payload: UpdateArtifactRequest) =>
   adminApiClient.patch<BulkAddArtifactsResponse>(`/tenant/api/artifacts/${id}/`, payload);
+
+export const createCustomDocument = (payload: CreateCustomDocumentRequest) =>
+  adminApiClient.post<CreateAndUpdateCustomDocumentResponse>(`/tenant/api/documents/create/`, payload);
+
+export const updateCustomDocument = (id: number, payload: UpdateCustomDocumentRequest) =>
+  adminApiClient.put<CreateAndUpdateCustomDocumentResponse>(`/tenant/api/documents/${id}/`, payload);
 
 export const fetchSitemapforWebpage = (payload: FetchSitemapRequest) =>
   adminApiClient.post<FetchSitemapResponse>(`tenant/api/sitemap/`, payload);

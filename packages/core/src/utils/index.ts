@@ -12,6 +12,8 @@ export const DOCUMENTS_PAGE = 'documents';
 export const VIDEOS_PAGE = 'videos';
 export const SLIDES_PAGE = 'slides';
 
+export const PAGES_WITH_DRAWER_ENABLED = [DOCUMENTS_PAGE, VIDEOS_PAGE, SLIDES_PAGE];
+
 export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
 export const LEADS_PINNED_COLUMNS = ['email', 'name'];
 export const SHADOW_PINNED_COLUMNS = ['name', 'country'];

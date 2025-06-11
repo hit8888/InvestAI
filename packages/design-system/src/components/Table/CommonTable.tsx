@@ -8,8 +8,7 @@ import {
   CONVERSATIONS_PINNED_COLUMNS,
   LEADS_PAGE,
   LEADS_PINNED_COLUMNS,
-  SLIDES_PAGE,
-  VIDEOS_PAGE,
+  PAGES_WITH_DRAWER_ENABLED,
 } from '@meaku/core/utils/index';
 import {
   CommonDataSourceResponse,
@@ -65,7 +64,7 @@ const CommonTable = ({
 
   const isConversationsPage = pageType === CONVERSATIONS_PAGE;
   const isDataSourcesPage = ![CONVERSATIONS_PAGE, LEADS_PAGE].includes(pageType);
-  const allowedToOpenDrawer = pageType === VIDEOS_PAGE || pageType === SLIDES_PAGE;
+  const allowedToOpenDrawer = PAGES_WITH_DRAWER_ENABLED.includes(pageType);
 
   const { widthStyle } = useTableWidth({ isDataSourcesPage, isSidebarOpen });
 

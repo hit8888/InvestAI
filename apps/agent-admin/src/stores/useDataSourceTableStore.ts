@@ -100,6 +100,7 @@ export const useTableSelection = () => {
   const deselectAll = useDataSourceTableStore((state) => state.deselectAll);
   const getSelectedIds = useDataSourceTableStore((state) => state.getSelectedIds);
   const isIdSelected = useDataSourceTableStore((state) => state.isIdSelected);
+  const getSelectedDataSources = useDataSourceTableStore((state) => state.getSelectedDataSources);
 
   return {
     toggleSelectId,
@@ -107,5 +108,6 @@ export const useTableSelection = () => {
     deselectAll,
     getSelectedIds,
     isIdSelected,
+    getSelectedDataSources,
   };
 };

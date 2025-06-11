@@ -4,6 +4,8 @@ import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import EditBulkRowItemsDrawer from './EditBulkRowItemsDrawer';
 import { useDataSourcesDrawer } from '../../../context/DataSourcesDrawerContext';
+import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
+import CustomDocumentDrawer from './CustomDocumentDrawer';
 
 const DataSourceTableContainer = () => {
   const { selectedType } = useDataSources();
@@ -15,10 +17,16 @@ const DataSourceTableContainer = () => {
     deselectAll();
   };
 
+  const isDocumentsPage = selectedType === DOCUMENTS_PAGE;
+
   return (
     <div className="flex w-full flex-col items-end gap-6 self-stretch">
       <DataSourceTableView pageType={selectedType as PaginationPageType} />
-      <EditBulkRowItemsDrawer open={isDataSourcesDrawerOpen} onClose={handleCloseDrawer} />
+      {isDocumentsPage ? (
+        <CustomDocumentDrawer open={isDataSourcesDrawerOpen} onClose={handleCloseDrawer} />
+      ) : (
+        <EditBulkRowItemsDrawer open={isDataSourcesDrawerOpen} onClose={handleCloseDrawer} />
+      )}
     </div>
   );
 };

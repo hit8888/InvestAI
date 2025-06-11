@@ -1,7 +1,7 @@
 import CustomVideoPlayer from '@breakout/design-system/components/layout/CustomVideoPlayer';
 import { CommonDataSourceResponse, DataSourceArtifactsResponse } from '@meaku/core/types/admin/admin';
 import { DataSourceItem } from '@meaku/core/types/admin/api';
-import RelevantQueriesSectionEditDrawer from './RelevantQueriesSectionEditDrawer';
+import RelevantQueriesSectionDrawer from './RelevantQueriesSectionDrawer';
 import DescriptionSectionEditDrawer from './DescriptionSectionEditDrawer';
 import TitleSectionEditDrawer from './TitleSectionEditDrawer';
 
@@ -38,7 +38,7 @@ const DisplayAndEditDataSourceDetails = ({
       <AssetDisplaySection asset={asset} />
       <TitleSectionEditDrawer key={title} {...commonProps} />
       <DescriptionSectionEditDrawer key={data} {...commonProps} />
-      <RelevantQueriesSectionEditDrawer key={relevant_queries.join(',')} {...commonProps} />
+      <RelevantQueriesSectionDrawer key={relevant_queries.join(',')} {...commonProps} />
     </div>
   );
 };

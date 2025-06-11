@@ -6,13 +6,25 @@ import { CommonEditDrawerSectionProps } from '../utils';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { toast } from 'react-hot-toast';
 
-const RelevantQueriesSectionEditDrawer = ({
+const getTypeText = (type: string) => {
+  if (type === 'VIDEO') return 'video';
+  if (type === 'DOCUMENT') return 'text';
+  if (type === 'SLIDE') return 'slide';
+  return '';
+};
+
+type RelevantQueriesSectionDrawerProps = CommonEditDrawerSectionProps & {
+  onCallBack?: (relevant_queries: string[]) => void;
+};
+
+const RelevantQueriesSectionDrawer = ({
   type,
   relevant_queries,
   id,
   title,
   data,
-}: CommonEditDrawerSectionProps) => {
+  onCallBack,
+}: RelevantQueriesSectionDrawerProps) => {
   const initiateQueries = () => {
     if (relevant_queries.length >= 4) {
       return relevant_queries;
@@ -45,6 +57,10 @@ const RelevantQueriesSectionEditDrawer = ({
     const newRelevantQueries = queries.filter((item) => item.trim().length > 0);
 
     try {
+      if (onCallBack) {
+        onCallBack(newRelevantQueries);
+        return;
+      }
       await updateArtifact(id, { title, data, relevant_queries: newRelevantQueries });
 
       // Update the data source in the table store
@@ -56,11 +72,14 @@ const RelevantQueriesSectionEditDrawer = ({
     }
   };
 
-  const typeText = type === 'VIDEO' ? 'video' : 'slide';
+  const typeText = getTypeText(type);
 
   return (
     <div className="flex flex-1 flex-col gap-2">
-      <Typography variant="label-16-medium">{`Add sample questions matching the ${typeText}`}</Typography>
+      <Typography
+        variant="label-16-medium"
+        textColor="black"
+      >{`Add sample questions matching the ${typeText}`}</Typography>
       <div className="grid w-full grid-cols-2 gap-4">
         {queries.map((query, index) => (
           <Input
@@ -77,4 +96,4 @@ const RelevantQueriesSectionEditDrawer = ({
   );
 };
 
-export default RelevantQueriesSectionEditDrawer;
+export default RelevantQueriesSectionDrawer;

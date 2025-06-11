@@ -72,6 +72,7 @@ const {
   Sources,
   Status,
   SearchTableContent,
+  FileType,
 } = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
@@ -293,6 +294,11 @@ export const getFilterHeaderLabel = (filterState: string) => {
     case Sources:
       return {
         label: 'Sources',
+        width: '334px',
+      };
+    case FileType:
+      return {
+        label: 'File type',
         width: '334px',
       };
     case Status:
@@ -551,7 +557,6 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const isLeadsPage = page === LEADS_PAGE;
   const isConversationsPage = page === CONVERSATIONS_PAGE;
   const isConversationsAndLeadsPage = isConversationsPage || isLeadsPage;
-  const isDocumentsPage = page === DOCUMENTS_PAGE;
   const isVideosPage = page === VIDEOS_PAGE;
   const isSlidesPage = page === SLIDES_PAGE;
   const {
@@ -567,6 +572,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     // usageCount,
     // duration,
     status,
+    fileType,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -659,12 +665,11 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push(...filterState.presetFilters);
   }
 
-  // Default filter for documents page
-  if (isDocumentsPage) {
+  if (fileType.length > 0) {
     filterApplied.push({
       field: 'data_source_type',
-      value: 'PDF',
-      operator: 'eq',
+      value: fileType,
+      operator: 'in',
     });
   }
 
@@ -705,6 +710,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     status,
     searchTableContent,
     usageCount,
+    fileType,
   } = filters;
 
   if (dateRange) {
@@ -768,6 +774,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: Sources,
       label: 'Sources',
       value: sources,
+    });
+  }
+
+  if (fileType.length > 0) {
+    appliedFilters.push({
+      key: FileType,
+      label: 'File type',
+      value: fileType,
     });
   }
 

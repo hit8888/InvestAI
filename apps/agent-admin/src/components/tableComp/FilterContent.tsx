@@ -9,6 +9,7 @@ import CompanyFilterContent from './CompanyFilterContent';
 import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
 import SourcesFilterContent from './SourcesFilterContent';
 import StatusFilterContent from './StatusFilterContent';
+import FileTypeFilterContent from './FileTypeFilterContent';
 
 const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
   const {
@@ -22,6 +23,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
     Sources,
     Status,
     UsageCount,
+    FileType,
   } = FilterType;
   return (
     <React.Fragment>
@@ -42,6 +44,9 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       ) : null}
       {filterState === Sources ? (
         <SourcesFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
+      {filterState === FileType ? (
+        <FileTypeFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === Status ? (
         <StatusFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />

@@ -31,6 +31,7 @@ const AllSelectableFilterContent = ({
     UsageCount,
     Sources,
     Status,
+    FileType,
   } = FilterType;
 
   const isConversationsAndLeadsPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
@@ -58,6 +59,7 @@ const AllSelectableFilterContent = ({
       duration,
       usageCount,
       status,
+      fileType,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -70,6 +72,8 @@ const AllSelectableFilterContent = ({
         return company.length > 0;
       case Sources:
         return sources.length > 0;
+      case FileType:
+        return fileType.length > 0;
       case Status:
         return status.length > 0;
       case ProductOfInterest:
@@ -100,6 +104,7 @@ const AllSelectableFilterContent = ({
       usageCount,
       sources,
       status,
+      fileType,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -112,6 +117,8 @@ const AllSelectableFilterContent = ({
         return company.length > 0 ? `${company.length} selected` : 'Any';
       case Sources:
         return sources.length > 0 ? `${sources.length} selected` : 'Any';
+      case FileType:
+        return fileType.length > 0 ? `${fileType.length} selected` : 'Any';
       case Status:
         return status.length > 0 ? `${status.length} selected` : 'Any';
       case UserMessagesCount:

@@ -6,6 +6,7 @@ import AddMorePlusIcon from '@breakout/design-system/components/icons/sources-ad
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -55,6 +56,7 @@ const DataSourcesAddMoreButton = () => {
           <DialogTitle>
             <Typography variant={'title-24'} className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
           </DialogTitle>
+          <DialogDescription className="sr-only"></DialogDescription>
           {selectedType ? (
             <Typography variant={'body-16'} className="text-customSecondaryText">
               {
