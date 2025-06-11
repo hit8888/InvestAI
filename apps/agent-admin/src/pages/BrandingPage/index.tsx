@@ -18,11 +18,16 @@ const BrandingPage = () => {
 
   const hasError = isError || !agentConfigs || !agentConfigs.configs || Object.keys(agentConfigs.configs).length === 0;
 
+  const commonProps = {
+    agentId: Number(agentId),
+    agentConfigs: agentConfigs!,
+    onUpdate: refetch,
+  };
   return (
     <PageContainer isLoading={isLoading} heading={'Branding'} error={hasError}>
-      <AgentLogoAndNameContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
-      <AgentColorsContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
-      <AgentOrbContainer agentId={Number(agentId)} agentConfigs={agentConfigs!} onUpdate={refetch} />
+      <AgentLogoAndNameContainer {...commonProps} />
+      <AgentColorsContainer {...commonProps} />
+      <AgentOrbContainer {...commonProps} />
     </PageContainer>
   );
 };

@@ -1,7 +1,10 @@
 import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
 import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
 import { trackError } from '../utils/error';
-import { getTransformedResponse } from '../utils';
+import { getTenantActiveAgentId, getTransformedResponse } from '../utils';
+
+const WELCOME_MESSAGE_STATE = 1;
+const USER_WELCOME_MESSAGE_STATE = 2;
 
 export class SessionApiResponseManager {
   private session: SessionApiResponse;
@@ -18,9 +21,17 @@ export class SessionApiResponseManager {
         component: 'SessionApiResponseManager',
         action: 'constructor',
       });
-      throw new Error(validatedSession.error.errors.map((error) => error.message).join(', '));
+      // Fallback to empty session to avoid aborting the render
+      this.session = {
+        agent_id: Number(getTenantActiveAgentId()),
+        session_id: '',
+        prospect_id: '',
+        chat_history: [],
+        feedback: [],
+      };
+    } else {
+      this.session = validatedSession.data;
     }
-    this.session = validatedSession.data;
   }
 
   getSessionId() {
@@ -41,7 +52,23 @@ export class SessionApiResponseManager {
 
   public getFormattedChatHistory(messagesPayload?: WebSocketMessage[]): ChatHistory {
     const chatHistory = this.session.chat_history;
-    const history = messagesPayload && messagesPayload.length > 0 ? [...messagesPayload, ...chatHistory] : chatHistory;
+
+    // If no messages payload, return existing chat history
+    if (!messagesPayload) {
+      return chatHistory;
+    }
+
+    // Handle different message payload scenarios
+    let history: WebSocketMessage[];
+    if (messagesPayload.length >= USER_WELCOME_MESSAGE_STATE) {
+      // For 2 or more messages, append to existing history if it exists
+      history = chatHistory.length > 0 ? [...chatHistory, ...messagesPayload] : [...messagesPayload];
+    } else if (messagesPayload.length === WELCOME_MESSAGE_STATE) {
+      // For single welcome message, prepend to existing history - when init api is called
+      history = [...messagesPayload, ...chatHistory];
+    } else {
+      history = chatHistory;
+    }
 
     // For each response_id where role is 'ai', ensure STREAM comes before TEXT or ARTIFACT
     const processedHistory = [...history];

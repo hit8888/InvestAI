@@ -173,9 +173,16 @@ class DateUtil {
     timestamp: string,
     timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
   ): string {
-    const date = new Date(timestamp); // Parse timestamp as Date object
-    const zonedDate = toZonedTime(date, timezone); // Convert to the given timezone
-    return format(zonedDate, ISO_DATE_TIME); // Format in that timezone
+    try {
+      if (!timestamp) return '';
+      const date = new Date(timestamp); // Parse timestamp as Date object
+      if (isNaN(date.getTime())) return ''; // Check if the date is valid
+      const zonedDate = toZonedTime(date, timezone); // Convert to the given timezone
+      return format(zonedDate, ISO_DATE_TIME); // Format in that timezone
+    } catch (error) {
+      console.warn('Invalid timestamp in getDateValueInISOString:', timestamp, error);
+      return '';
+    }
   }
 
   /**

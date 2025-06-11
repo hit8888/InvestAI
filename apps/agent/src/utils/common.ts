@@ -40,3 +40,10 @@ By the way, quick intro — I'm your **AI sidekick**.
 
 Here to help you explore **${orgName}** visually and conversationally. Ask away or follow the slides on the right!`;
 };
+
+export const getWebsocketBaseUrl = () => {
+  // Ensure WebSocket URL uses wss:// protocol
+  const protocol = 'wss:';
+  const baseUrl = ENV.VITE_BASE_API_URL.replace(/^https?:/, protocol);
+  return baseUrl;
+};

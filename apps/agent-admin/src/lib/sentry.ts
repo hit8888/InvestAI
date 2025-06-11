@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 import { ENV } from '@meaku/core/types/env';
 import { isDev } from '../utils/common';
+import { getWebsocketBaseUrl } from '../utils/apiCalls';
 
-const WEBSOCKET_URL = `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws`;
+const WEBSOCKET_URL = `${getWebsocketBaseUrl()}/tenant/ws`;
 
 Sentry.init({
   dsn: isDev ? '' : ENV.VITE_SENTRY_DSN,

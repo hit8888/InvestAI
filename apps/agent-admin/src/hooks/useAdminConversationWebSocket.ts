@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { ENV } from '@meaku/core/types/env';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { nanoid } from 'nanoid';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';
 import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
+import { getWebsocketBaseUrl } from '../utils/apiCalls';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
@@ -37,7 +37,7 @@ const useAdminConversationsWebSocket = ({
   const token = getAccessTokenFromLocalStorage();
   const adminConversationsWsUrl =
     tenant && token
-      ? `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`
+      ? `${getWebsocketBaseUrl()}/tenant/ws/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`
       : '';
 
   const { lastMessage, sendMessage } = useWebSocket(

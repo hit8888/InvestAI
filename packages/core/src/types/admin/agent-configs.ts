@@ -18,7 +18,7 @@ export const AgentSchema = z.object({
 });
 
 const OrbConfigSchema = z.object({
-  show_orb: z.boolean(),
+  show_orb: z.boolean().optional(),
   logo_url: z.string().nullable(),
 });
 
@@ -39,7 +39,7 @@ const baseAgentConfigSchema = z.object({
     'agent_personalization:style': z.object({
       primary: z.string(),
       secondary: z.string(),
-      orb_config: OrbConfigSchema,
+      orb_config: OrbConfigSchema.optional(),
       banner_config: BannerConfigSchema,
       entry_point_alignment: z.string(),
     }),

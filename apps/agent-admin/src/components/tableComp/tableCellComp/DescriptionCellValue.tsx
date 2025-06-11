@@ -30,6 +30,11 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     );
   };
 
+  const handleShowMore = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setShowTrimmed((showMore) => !showMore);
+  };
+
   return (
     <div className="flex flex-col items-start gap-2">
       {renderTitleAndLabel()}
@@ -46,7 +51,7 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
       )}
       {value.description && (
         <div
-          onClick={() => setShowTrimmed((showMore) => !showMore)}
+          onClick={handleShowMore}
           className={`flex cursor-pointer items-center gap-2 self-end rounded-md px-3 py-1.5 text-sm font-medium text-primary`}
         >
           <span>{showMoreButtonText}</span>

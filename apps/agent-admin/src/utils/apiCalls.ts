@@ -3,6 +3,7 @@ import { getAllAgents } from '@meaku/core/adminHttp/api';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 import { OrganizationDetails } from '@meaku/core/types/admin/auth';
+import { ENV } from '@meaku/core/types/env';
 
 export const getAllAgentsForTenant = async () => {
   try {
@@ -23,4 +24,11 @@ export const setupTenantAndAgent = async (tenantData: OrganizationDetails) => {
   } else {
     toast.error('No agents found for tenant');
   }
+};
+
+export const getWebsocketBaseUrl = () => {
+  // Ensure WebSocket URL uses wss:// protocol
+  const protocol = 'wss:';
+  const baseUrl = ENV.VITE_CHAT_BASE_API_URL?.replace(/^https?:/, protocol);
+  return baseUrl;
 };

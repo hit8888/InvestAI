@@ -1,5 +1,4 @@
 import useWebSocket from 'react-use-websocket';
-import { ENV } from '@meaku/core/types/env';
 import { useEffect, useState } from 'react';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { trackError } from '../utils/error.ts';
@@ -15,6 +14,7 @@ import { useMessageStore } from './useMessageStore.ts';
 import { MessageSenderRole } from '@meaku/core/types/common';
 import { nanoid } from 'nanoid';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
+import { getWebsocketBaseUrl } from '../utils/apiCalls.ts';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
@@ -25,7 +25,7 @@ const useActiveConversationsWebSocket = () => {
   const token = getAccessTokenFromLocalStorage();
   const liveConversationsWsUrl =
     tenant && token
-      ? `${ENV.VITE_CHAT_BASE_API_URL}/tenant/ws/active-conversations/events/?tenant=${tenant}&token=${token}`
+      ? `${getWebsocketBaseUrl()}/tenant/ws/active-conversations/events/?tenant=${tenant}&token=${token}`
       : '';
 
   const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, string>>({});

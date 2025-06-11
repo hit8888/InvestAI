@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { ENV } from '@meaku/core/types/env';
 import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -23,8 +22,9 @@ import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { AdminConversationJoinStatus, MessageSenderRole } from '@meaku/core/types/common';
-import { getFirstAiMessageShowingInChatHistory } from '../utils/common.ts';
+import { getFirstAiMessageShowingInChatHistory, getWebsocketBaseUrl } from '../utils/common.ts';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 
 const DELAY_BETWEEN_WORDS = 75; // in ms
 const MAX_RETRIES = 5;
@@ -96,6 +96,7 @@ const useWebSocketChat = () => {
   const handleAddAdminMessage = useMessageStore((state) => state.handleAddAdminMessage);
   const setIsAMessageBeingProcessed = useMessageStore((state) => state.setIsAMessageBeingProcessed);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
+  const isInitApiSuccess = useMessageStore((state) => state.isInitApiSuccess);
   const adminJoinStatus = useMessageStore((state) => state.adminJoinStatus);
   const setAdminJoinStatus = useMessageStore((state) => state.setAdminJoinStatus);
   const { isMessageComplete } = useLatestMessageComplete();
@@ -109,9 +110,11 @@ const useWebSocketChat = () => {
   const { trackAgentbotEvent: trackEvent } = useAgentbotAnalytics();
   const { handleStopOrbAnimation, handleAnimatedOrb } = useAnimateDifferentOrbStates({ handleAddAIMessage });
 
-  const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
+  const { sessionData } = useLocalStorageSession();
+  const sessionId = sessionApiResponseManager?.getSessionId() ?? sessionData?.sessionId ?? '';
+
   const wsUrl = orgName
-    ? `${ENV.VITE_BASE_API_URL}/ws/chat?tenant=${orgName.toLowerCase()}&session_id=${sessionId}`
+    ? `${getWebsocketBaseUrl()}/ws/chat?tenant=${orgName.toLowerCase()}&session_id=${sessionId}`
     : '';
 
   const { readyState, sendMessage, lastMessage, getWebSocket } = useWebSocket(
@@ -223,25 +226,42 @@ const useWebSocketChat = () => {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         // For Showing the first message in the chat history instantly only for non-demo agents
         // For Demo agents, sessionId is generated when the user provides the email address
-        if (!isAdmin) {
+        // isInitApiSuccess is true when the sessionId is generated and the session data is fetched from the server
+        if (!isAdmin && !isInitApiSuccess) {
           handleAddUserMessage(payload);
         }
+
         // Adding Waiting message in the chat history instantly
-        sendWordByWordMessage(
-          firstAiMessageText,
-          payload.response_id,
-          sessionId,
-          payload.timestamp,
-          handleAddAIMessage,
-        );
+        // for demo agents, sessionId is generated when the user provides the email address so isInitApiSuccess is true
+        if (isAdmin && isInitApiSuccess) {
+          sendWordByWordMessage(
+            firstAiMessageText,
+            payload.response_id,
+            sessionId,
+            payload.timestamp,
+            handleAddAIMessage,
+          );
+        }
+
+        // for non-demo agents, session_id is not generated yet so isInitApiSuccess is false
+        if (!isInitApiSuccess && !sessionId) {
+          sendWordByWordMessage(
+            firstAiMessageText,
+            payload.response_id,
+            sessionId,
+            payload.timestamp,
+            handleAddAIMessage,
+          );
+        }
         setHasFirstUserMessageBeenSent(true);
       }
 
       if (!sessionId) {
         messageQueue.current.push(payload);
       } else {
-        handleAddUserMessage(payload);
-        sendMessage(JSON.stringify(payload));
+        const updatedPayload = { ...payload, session_id: sessionId };
+        handleAddUserMessage(updatedPayload);
+        sendMessage(JSON.stringify(updatedPayload));
         resetInactivityTimer();
 
         if (adminJoinStatus !== AdminConversationJoinStatus.JOINED) {

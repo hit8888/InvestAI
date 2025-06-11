@@ -24,7 +24,7 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
   const [agentName, setAgentName] = useState(agentConfigs?.name ?? '');
 
   const configLogo = agentConfigs?.metadata?.logo;
-  const configOrbLogo = agentConfigs?.configs?.['agent_personalization:style']?.orb_config?.logo_url;
+  const configOrbLogo = agentConfigs?.configs?.['agent_personalization:style']?.orb_config?.logo_url ?? null;
 
   const [logo, setLogo] = useState<string | null>(configLogo);
   const [orbLogo, setOrbLogo] = useState<string | null>(configOrbLogo);

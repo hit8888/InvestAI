@@ -19,6 +19,8 @@ interface State {
   latestResponseId: string;
   setLatestResponseId: (latestResponseId: string) => void;
   setMessages: (messages: WebSocketMessage[]) => void;
+  isInitApiSuccess: boolean;
+  setIsInitApiSuccess: (isInitApiSuccess: boolean) => void;
   isAMessageBeingProcessed: boolean;
   setIsAMessageBeingProcessed: (isAMessageBeingProcessed: boolean) => void;
   handleAddAIMessage: (response: WebSocketMessage) => void;
@@ -76,6 +78,11 @@ export const useMessageStore = create<State>()(
           setIsAMessageBeingProcessed: (isAMessageBeingProcessed) =>
             set((draft) => {
               draft.isAMessageBeingProcessed = isAMessageBeingProcessed;
+            }),
+          isInitApiSuccess: false,
+          setIsInitApiSuccess: (isInitApiSuccess) =>
+            set((draft) => {
+              draft.isInitApiSuccess = isInitApiSuccess;
             }),
           demoPlayingStatus: DemoPlayingStatus.INITIAL,
           setDemoPlayingStatus: (demoPlayingStatus) =>

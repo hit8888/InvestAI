@@ -26,6 +26,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { isMobileDevice } from '@meaku/core/utils/index';
 import { getFontElement } from './font-helper.ts';
+import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -44,6 +45,8 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
   const parentUrlParam = getParam('parent_url');
+
+  const setIsInitApiSuccess = useMessageStore((state) => state.setIsInitApiSuccess);
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -135,6 +138,15 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     initializeSessionPayload,
     queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl, retry: 1 },
   });
+
+  // set isInitApiSuccess to true when the session data is fetched from the server
+  useEffect(() => {
+    if (sessionQuery.isSuccess) {
+      setIsInitApiSuccess(true);
+    } else {
+      setIsInitApiSuccess(false);
+    }
+  }, [sessionQuery.isSuccess]);
 
   useEffect(() => {
     if (!is_test && sessionQuery.error) {

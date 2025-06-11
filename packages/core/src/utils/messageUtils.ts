@@ -598,10 +598,8 @@ const isMessageGroupReady = (messages: WebSocketMessage[]): boolean => {
 const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMessage[] => {
   const userMessage = messages.find((msg) => msg.role === MessageSenderRole.USER);
 
-  // For Nudge Message, TEXT Message with No session_id
-  const nudgeMessage = messages.find(
-    (msg) => msg.role === MessageSenderRole.AI && !msg.session_id && isTextMessage(msg),
-  );
+  // For Nudge Message, TEXT Message with No actor key
+  const nudgeMessage = messages.find((msg) => msg.role === MessageSenderRole.AI && !msg.actor && isTextMessage(msg));
 
   const streamMessage = messages.find(isStreamMessage);
 
