@@ -2,8 +2,8 @@ import { useLocalStorageState } from 'ahooks';
 import { useEffect, useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorage';
 import useUpdateProspect from '@meaku/core/queries/mutation/useUpdateProspect';
-import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 
 const useAdminUserEmail = () => {
   const userEmailKey = `${LOCAL_STORAGE_KEYS.USER_EMAIL}`;
@@ -15,7 +15,8 @@ const useAdminUserEmail = () => {
   const [userEmail, setUserEmail] = useLocalStorageState<string>(userEmailKey, {
     listenStorageChange: true,
   });
-  const { sessionData } = useLocalStorageSession();
+
+  const prospectId = useSessionApiResponseManager()?.getProspectId();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -29,8 +30,14 @@ const useAdminUserEmail = () => {
     setUserEmail(email);
 
     if (isAdmin) {
+      // Wait for prospectId to be available
+      if (!prospectId) {
+        console.log('Waiting for prospectId to be available...');
+        return;
+      }
+
       const data = await handleUpdateProspect({
-        prospectId: sessionData.prospectId as string,
+        prospectId: prospectId as string,
         payload: {
           email,
         },
@@ -41,6 +48,22 @@ const useAdminUserEmail = () => {
       }
     }
   };
+
+  // Effect to handle email update when prospectId becomes available
+  useEffect(() => {
+    if (isAdmin && userEmail && prospectId && !hasProspectBeenUpdated) {
+      handleUpdateProspect({
+        prospectId: prospectId as string,
+        payload: {
+          email: userEmail,
+        },
+      }).then((data) => {
+        if (data) {
+          setHasProspectBeenUpdated(true);
+        }
+      });
+    }
+  }, [prospectId, userEmail, isAdmin, hasProspectBeenUpdated]);
 
   return {
     userEmail,

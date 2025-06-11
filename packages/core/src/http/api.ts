@@ -19,4 +19,4 @@ export const postResponseFeedback = (sessionId: string, payload: FeedbackRequest
 };
 
 export const updateProspect = (prospectId: string, payload: UpdateProspectPayload) =>
-  apiClient.put(`/tenant/chat/prospect/${prospectId}/update/`, payload);
+  apiClient.post(`/tenant/chat/prospect/${prospectId}/update/`, payload);
