@@ -34,6 +34,7 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
             ...agentConfigs?.configs['agent_personalization:style'],
             orb_config: {
               ...agentConfigs?.configs['agent_personalization:style'].orb_config,
+              logo_url: agentConfigs?.configs['agent_personalization:style'].orb_config?.logo_url ?? null,
               show_orb: !value,
             },
           },

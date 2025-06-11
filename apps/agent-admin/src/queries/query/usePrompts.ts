@@ -15,6 +15,7 @@ interface FetchPromptsPayload {
   filters: {
     field: string;
     value: string | number | null;
+    operator?: string;
   }[];
 }
 
@@ -27,5 +28,6 @@ export const usePrompts = (payload: FetchPromptsPayload) => {
   return useQuery({
     queryKey: ['prompts', payload],
     queryFn: () => fetchPrompts(payload),
+    refetchOnMount: 'always',
   });
 };
