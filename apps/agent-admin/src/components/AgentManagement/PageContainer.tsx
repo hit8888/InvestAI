@@ -1,6 +1,6 @@
 import AgentConfigHeader from './AgentConfigHeader.tsx';
 import { ReactNode } from 'react';
-import ErrorState from './ErrorState.tsx';
+import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { cn } from '@breakout/design-system/lib/cn';
 import DataSourceLoadingState from './DataSourceLoadingState.tsx';
 

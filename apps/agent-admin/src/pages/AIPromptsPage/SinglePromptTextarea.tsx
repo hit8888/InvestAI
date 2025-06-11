@@ -5,7 +5,7 @@ import InfoCard from '../../components/AgentManagement/InfoCard.tsx';
 import { Prompt, usePrompts } from '../../queries/query/usePrompts.ts';
 import { useCreatePrompt } from '../../queries/mutation/usePromptMutations.ts';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
-import ErrorState from '../../components/AgentManagement/ErrorState.tsx';
+import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import LoadingState from './LoadingState.tsx';
 import PromptHeader from './PromptHeader.tsx';
 import PromptArea from './PromptArea.tsx';

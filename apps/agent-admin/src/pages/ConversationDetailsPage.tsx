@@ -3,6 +3,7 @@ import withPageViewWrapper from '../pages/PageViewWrapper';
 import ConversationsBreadCrumb from '../components/ConversationDetailsComp/ConversationsBreadCrumb';
 import ConversationDetailsNavigatedHeader from '../components/ConversationDetailsComp/ConversationDetailsNavigatedHeader';
 import ConversationDetailsMultipleTabContainer from '../components/ConversationDetailsComp/ConversationDetailsMultipleTabContainer';
+import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 
 import { useConversationDetails } from '../context/ConversationDetailsContext';
 import useConversationDetailsDataQuery from '../queries/query/useConversationDetailsDataQuery';
@@ -47,7 +48,6 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
 
   const detailsManager = useMemo(() => {
     if (!data) return null;
-
     return new ConversationDetailsDataResponseManager(data);
   }, [data]);
 
@@ -55,18 +55,19 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
   useEffect(() => {
     if (!detailsManager || isLoading) return;
 
-    try {
-      const chatHistoryMessages = detailsManager.getFormattedChatHistory();
-      handleSetChatHistoryDetails(chatHistoryMessages);
-
-      const conversationData = detailsManager.getFormattedConversationData() ?? {};
-      handleSetConversationDetails(conversationData);
-
-      const feedbackData = detailsManager.getFeedback();
-      handleSetFeedbackDetails(feedbackData);
-    } catch (error) {
-      console.error('Error while processing conversation details', error);
+    if (detailsManager.hasError()) {
+      console.error('Error in conversation details:', detailsManager.getError());
+      return;
     }
+
+    const chatHistoryMessages = detailsManager.getFormattedChatHistory();
+    handleSetChatHistoryDetails(chatHistoryMessages);
+
+    const conversationData = detailsManager.getFormattedConversationData();
+    handleSetConversationDetails(conversationData);
+
+    const feedbackData = detailsManager.getFeedback();
+    handleSetFeedbackDetails(feedbackData);
 
     return () => {
       // Cleanup code here
@@ -74,11 +75,10 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
       handleSetChatHistoryDetails([]);
       handleSetFeedbackDetails([]);
     };
-  }, [isLoading]);
+  }, [isLoading, detailsManager]);
 
-  if (isError) {
-    console.error('Error while fetching conversation details');
-    return null;
+  if (isError || (detailsManager && detailsManager.hasError())) {
+    return <ErrorState />;
   }
 
   return (

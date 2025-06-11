@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { CommonDataSourceResponse, TableDataResponse } from '@meaku/core/types/admin/admin';
 import { PaginationDataSchema } from '@meaku/core/types/admin/api';
+import TableDataManager from '../managers/TableDataManager';
 
 interface DataSourceTableState {
   results: CommonDataSourceResponse[];
@@ -9,6 +10,8 @@ interface DataSourceTableState {
   total_pages: number;
   total_records: number;
   selectedIds: number[];
+  tableManager: TableDataManager | null;
+  error: string | null;
   setTableData: (data: TableDataResponse | null) => void;
   toggleSelectId: (id: number) => void;
   selectAll: () => void;
@@ -32,12 +35,41 @@ export const useDataSourceTableStore = create<DataSourceTableState>((set, get) =
   total_pages: 1,
   total_records: 0,
   selectedIds: [],
+  tableManager: null,
+  error: null,
 
   setTableData: (data) => {
     if (data) {
-      set(data as DataSourceTableState);
+      const manager = new TableDataManager(data);
+      if (manager.hasError()) {
+        set({ error: manager.getError() });
+        return;
+      }
+      const paginationData = manager.getPaginatedTableData();
+      if (!paginationData) {
+        set({ error: 'Failed to get pagination data' });
+        return;
+      }
+      set({
+        results: manager.getTableDataResults() as CommonDataSourceResponse[],
+        current_page: paginationData.current_page,
+        page_size: paginationData.page_size,
+        total_pages: paginationData.total_pages,
+        total_records: paginationData.total_records,
+        tableManager: manager,
+        error: null,
+      });
     } else {
-      set({ results: [], current_page: 1, page_size: 10, total_pages: 1, total_records: 0, selectedIds: [] });
+      set({
+        results: [],
+        current_page: 1,
+        page_size: 10,
+        total_pages: 1,
+        total_records: 0,
+        selectedIds: [],
+        tableManager: null,
+        error: null,
+      });
     }
   },
 

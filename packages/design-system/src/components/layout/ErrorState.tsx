@@ -1,6 +1,7 @@
 import SomethingWentWrongIcon from '@breakout/design-system/components/icons/something-went-wrong-icon';
 import Button from '@breakout/design-system/components/Button/index';
 import RestartIcon from '@breakout/design-system/components/icons/restart-icon';
+import { ArrowLeftIcon } from 'lucide-react';
 
 const ErrorState = () => {
   return (
@@ -13,10 +14,16 @@ const ErrorState = () => {
         We couldn’t load this section right now. This might be due to a temporary issue or network error. Please try
         refreshing the page or come back later.
       </p>
-      <Button variant="primary" buttonStyle={'rightIcon'} onClick={() => window.location.reload()}>
-        Try Again
-        <RestartIcon className="h-4 w-4" />
-      </Button>
+      <div className="flex gap-4">
+        <Button variant="primary" buttonStyle={'rightIcon'} onClick={() => window.location.reload()}>
+          Try Again
+          <RestartIcon className="h-4 w-4" />
+        </Button>
+        <Button variant="primary" buttonStyle={'leftIcon'} onClick={() => window.history.back()}>
+          <ArrowLeftIcon className="h-4 w-4" />
+          Go Back
+        </Button>
+      </div>
     </div>
   );
 };

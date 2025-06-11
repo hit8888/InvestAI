@@ -208,7 +208,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       answer_type: z.enum(['SINGLE_SELECT', 'MULTI_SELECT', 'TEXT']),
       question: z.string(),
       response_options: z.array(
-        z.discriminatedUnion('type', [
+        z.union([
           z.object({
             type: z.literal('string'),
             value: z.string(),
@@ -218,6 +218,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
             value: z.string().optional(),
             placeholder: z.string().optional(),
           }),
+          z.object({}).catchall(z.unknown()),
         ]),
       ),
     }),

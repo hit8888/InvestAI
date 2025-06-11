@@ -15,7 +15,7 @@ import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore
 import DataSourceTableHeader from './DataSourceTableHeader';
 import { useAllFilterStore } from '../../../stores/useAllFilterStore';
 import { collectAppliedFilters, getAllFilterAppliedValues, getSortingAppliedValues } from '../../../utils/common';
-import ErrorState from '../../../components/AgentManagement/ErrorState';
+import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore';
 import NudgeMessage from './NudgeMessage';
 
@@ -28,7 +28,13 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
     pageType: pageType as PaginationPageType,
   });
 
-  const { results, getPaginatedTableData, setTableData, selectedIds } = useDataSourceTableStore();
+  const {
+    results,
+    getPaginatedTableData,
+    setTableData,
+    selectedIds,
+    error: dataSourceTableError,
+  } = useDataSourceTableStore();
   const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
   const sortState = useSortFilterStore((state) => state[pageType as PaginationPageType]);
@@ -95,7 +101,7 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
     return selectedIds.length === results.length && results.length > 0;
   }, [selectedIds, results]);
 
-  if (isError) return <ErrorState />;
+  if (isError || dataSourceTableError) return <ErrorState />;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start self-stretch">

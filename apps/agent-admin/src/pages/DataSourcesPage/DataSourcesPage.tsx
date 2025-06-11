@@ -21,6 +21,7 @@ import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/type
 import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
 import { DataSourcesDrawerProvider } from '../../context/DataSourcesDrawerContext';
 import CreateCustomDocumentButton from './components/CreateCustomDocumentButton';
+import { useEffect } from 'react';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
@@ -30,9 +31,17 @@ const DataSourcesPage = () => {
     data: dataSourcesData,
     isLoading,
     error,
+    refetch,
   } = useDataSourceOverviewDataQuery({
     queryOptions,
   });
+
+  // Refetch data when selectedType changes (when navigating between detail pages)
+  useEffect(() => {
+    if (selectedType === null) {
+      refetch();
+    }
+  }, [selectedType]);
 
   const knowledgeSourcesData = {
     WEB_PAGE: dataSourcesData?.WEB_PAGE,

@@ -32,6 +32,7 @@ import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
+import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 
 const ConversationsTableContainer = () => {
   const { transformedEntityMetadata } = useEntityMetadata();
@@ -82,7 +83,7 @@ const ConversationsTableContainer = () => {
     queryOptions,
   });
 
-  const { setTableData } = useTableStore();
+  const { setTableData, error: tableError } = useTableStore();
 
   // When data changes, update the store
   useEffect(() => {
@@ -109,9 +110,12 @@ const ConversationsTableContainer = () => {
   );
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
 
-  if (isError) return null;
-
   const haveNoRecords = totalRecords === 0;
+
+  // Handle error states
+  if (isError || tableError) {
+    return <ErrorState />;
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
