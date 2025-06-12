@@ -340,12 +340,14 @@ export const DataSourceDocumentsResponseResultSchema = z.object({
   title: z.string(),
   data: z.string(),
   relevant_queries: z.array(z.string()),
-  metadata: z.object({
-    page_count: z.number(),
-    content_type: z.string(),
-    extraction_method: z.string(),
-  }),
-  asset: DataSourceAssetItemSchema,
+  metadata: z
+    .object({
+      page_count: z.number(),
+      content_type: z.string(),
+      extraction_method: z.string(),
+    })
+    .or(z.object({})),
+  asset: DataSourceAssetItemSchema.nullable(),
   data_source_id: z.number(),
   data_source_type: z.string(),
   created_on: z.string(),

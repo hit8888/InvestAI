@@ -3,6 +3,11 @@ import RelevantQueriesSectionDrawer from './RelevantQueriesSectionDrawer';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import DocumentCreationHeader from './DocumentCreationHeader';
 import DocumentCreationTitleAndDescription from './DocumentCreationTitleAndDescription';
+import {
+  CUSTOM_DOCUMENT_DEFAULT_SOURCE,
+  CUSTOM_DOCUMENT_DEFAULT_TITLE,
+  CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION,
+} from '../../../utils/constants';
 
 type CustomDocumentDrawerContentContainerProps = {
   onClose: () => void;
@@ -15,25 +20,17 @@ type SelectedSource = {
   relevant_queries?: string[];
 };
 
-// Default values when no source is selected
-const defaultSource = {
-  id: 0,
-  title: '',
-  data: '',
-  relevant_queries: [],
-};
-
 const CustomDocumentDrawerContentContainer = ({ onClose }: CustomDocumentDrawerContentContainerProps) => {
   const { getSelectedDataSources } = useDataSourceTableStore();
   const selectedDataSources = getSelectedDataSources();
 
   const isSelected = selectedDataSources.length > 0;
 
-  const selectedSource = isSelected ? (selectedDataSources[0] as SelectedSource) : defaultSource;
+  const selectedSource = isSelected ? (selectedDataSources[0] as SelectedSource) : CUSTOM_DOCUMENT_DEFAULT_SOURCE;
   const { relevant_queries = [], title = '', data = '', id } = selectedSource;
 
-  const [titleHeader, setTitleHeader] = useState(title || 'Title');
-  const [description, setDescription] = useState(data || 'Write your document text…');
+  const [titleHeader, setTitleHeader] = useState(title || CUSTOM_DOCUMENT_DEFAULT_TITLE);
+  const [description, setDescription] = useState(data || CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION);
   const [updatedRelevantQueries, setUpdatedRelevantQueries] = useState<string[]>(relevant_queries);
 
   const handleUpdateRelevantQueries = (relevant_queries: string[]) => {

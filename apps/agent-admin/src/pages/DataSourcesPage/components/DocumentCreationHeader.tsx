@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast';
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { XIcon } from 'lucide-react';
+import { CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION, CUSTOM_DOCUMENT_DEFAULT_TITLE } from '../../../utils/constants';
 
 type DocumentCreationHeaderProps = {
   onClose: () => void;
@@ -24,7 +25,14 @@ const DocumentCreationHeader = ({
   const createCustomDocument = useCreateCustomDocument();
   const updateCustomDocument = useUpdateCustomDocument();
 
+  const checkIfTitleIsChanged = title !== CUSTOM_DOCUMENT_DEFAULT_TITLE;
+  const checkIfDescriptionIsChanged = data !== CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION;
+
   const handleSaveAndAdd = () => {
+    if (!checkIfTitleIsChanged && !checkIfDescriptionIsChanged) {
+      toast.error('Please change the title and description');
+      return;
+    }
     try {
       if (isSelected) {
         updateCustomDocument.mutateAsync({
