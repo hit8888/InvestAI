@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from "lib/constants";
 import { initDomDetectors } from "../dom-detectors";
 import type {
   Config,
@@ -109,7 +110,6 @@ export function MessageEventManager(
         },
         { targetOrigin: "*" },
       );
-      urlTrackingManager?.trackCurrentUrl?.();
     }
   };
 
@@ -153,16 +153,18 @@ export function MessageEventManager(
 
     const { tracking_config } = agentConfig;
     initDomDetectors(tracking_config);
+    urlTrackingManager?.trackCurrentUrl?.();
   };
 
   const handleChatInit = (event: MessageEvent<IframeMessage>): void => {
     const prospectId = event.data.prospectId ?? "";
-    localStorage.setItem("prospectId", prospectId);
+    localStorage.setItem(STORAGE_KEYS.PROSPECT_ID, prospectId);
 
     window.__breakout__ = {
       ...window.__breakout__,
       prospectId: event.data.prospectId,
     };
+    urlTrackingManager?.updateFirstInteractionTimestamp?.(!!prospectId);
   };
 
   const handleChatStateChange = (event: MessageEvent<IframeMessage>): void => {
@@ -180,10 +182,6 @@ export function MessageEventManager(
     urlManager.updateParentUrlParam(
       "isAgentOpen",
       state.isAgentOpen.toString(),
-    );
-
-    urlTrackingManager?.updateFirstInteractionTimestamp?.(
-      state.hasFirstUserMessageBeenSent,
     );
 
     if (

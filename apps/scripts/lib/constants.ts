@@ -121,3 +121,8 @@ export const PERFORMANCE_CONFIG = {
   IFRAME_LOAD_TIMEOUT: 3000,
   MESSAGE_HANDLER_TIMEOUT: 5000,
 } as const;
+
+export const STORAGE_KEYS = {
+  PROSPECT_ID: "prospectId",
+  URL_TRACKING: "urlTracker",
+} as const;

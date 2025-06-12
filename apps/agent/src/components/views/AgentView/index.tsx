@@ -19,7 +19,7 @@ interface IProps {
 const AgentView = ({ fetchSessionData }: IProps) => {
   const [showBubbles, setShowBubbles] = useState(false);
 
-  const { handleSendUserMessage, handleSendSystemMessage } = useWebSocketChat();
+  const { handleSendUserMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
@@ -56,7 +56,6 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     hasFirstUserMessageBeenSent,
     entryPointAlignment: entry_point_alignment ?? 'center',
     handleSendUserMessage,
-    handleSendSystemMessage,
   });
 
   const handleCloseAgent = () => {

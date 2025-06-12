@@ -92,12 +92,18 @@ export type DomElementClickConfigType = Pick<
   "track_clicks" | "element_selectors"
 >;
 
+export type UrlEntry = {
+  url: string;
+  timestamp: number;
+};
+
 export interface ProspectRequestData {
   email?: string;
   name?: string;
   external_id?: string;
-  prospect_demographics: unknown;
+  prospect_demographics?: unknown;
   origin?: "WEB_FORM" | "LINK_CLICK";
+  browsed_urls?: UrlEntry[];
 }
 
 // ============================================================================

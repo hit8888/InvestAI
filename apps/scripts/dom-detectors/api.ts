@@ -22,7 +22,7 @@ const createProspect = (requestData: ProspectRequestData) => {
   });
 };
 
-const updateProspect = (
+export const updateProspect = (
   prospectId: string,
   requestData: ProspectRequestData,
 ) => {

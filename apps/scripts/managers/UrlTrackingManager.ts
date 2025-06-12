@@ -1,9 +1,7 @@
+import { updateProspect } from "dom-detectors/api";
+import { STORAGE_KEYS } from "lib/constants";
+import { UrlEntry } from "lib/types";
 import { debounce } from "lib/utils";
-
-type UrlEntry = {
-  url: string;
-  timestamp: number;
-};
 
 type UrlTrackingManagerOptions = {
   maxUrls?: number;
@@ -16,7 +14,7 @@ function UrlTrackingManager() {
   // Options
   let maxUrls = 10;
   let maxTime = 60 * 60 * 1000;
-  let urlStorageKey = "urlTracker";
+  let urlStorageKey: string = STORAGE_KEYS.URL_TRACKING;
   let postMessage: ((message: object) => void) | null = null;
   let initialized = false;
 
@@ -56,9 +54,11 @@ function UrlTrackingManager() {
   }
 
   function sendHistoryChangeEvent(): void {
-    if (!firstInteractionTimestamp || !postMessage) return;
+    const prospectId = localStorage.getItem(STORAGE_KEYS.PROSPECT_ID);
 
-    postMessage({ type: "URL_TRACKING", firstInteractionTimestamp, urls });
+    if (!prospectId || !firstInteractionTimestamp || !postMessage) return;
+
+    updateProspect(prospectId, { browsed_urls: urls });
     urls = [];
     saveToStorage();
   }

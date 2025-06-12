@@ -17,6 +17,7 @@ import {
   HistoryManager,
 } from "./managers";
 import { type EntryPointAlignmentType } from "./lib/types";
+import { STORAGE_KEYS } from "lib/constants";
 
 (function () {
   // Initialize managers
@@ -54,7 +55,7 @@ import { type EntryPointAlignmentType } from "./lib/types";
   const urlTrackingManager = UrlTrackingManager();
 
   HistoryManager(() => {
-    const prospectId = localStorage.getItem("prospectId");
+    const prospectId = localStorage.getItem(STORAGE_KEYS.PROSPECT_ID);
 
     if (!prospectId) {
       agentIframeManager.reload();
@@ -114,9 +115,9 @@ import { type EntryPointAlignmentType } from "./lib/types";
         overlayManager.setIframe(iframe!, currentContainer);
       }
 
-      // urlTrackingManager.init({
-      //   postMessage: messageManager.sendMessage.bind(null, iframe!),
-      // });
+      urlTrackingManager.init({
+        postMessage: messageManager.sendMessage.bind(null, iframe!),
+      });
 
       // Initialize message event manager
       const messageEventState = {
