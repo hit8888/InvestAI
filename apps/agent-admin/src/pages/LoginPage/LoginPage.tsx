@@ -6,7 +6,7 @@ import { QOUTE_SLIDES } from './constants';
 const LoginPage = () => {
   return (
     <>
-      <div className="relative flex h-screen min-h-[768px] w-full bg-[#FBFBFE] p-4">
+      <div className="relative flex h-screen min-h-[720px] w-full bg-[#FBFBFE] p-4">
         <div className="w-2/3">
           <div className="flex h-full w-full flex-col justify-between bg-[url(/dashboard-login-banner.png)] bg-[length:100%_100%] bg-no-repeat p-14 pb-20">
             <img src="/logo-white.svg" height={54} width={54} />

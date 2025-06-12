@@ -108,7 +108,7 @@ export const QualificationQuestionAnswerSchema = z.object({
 
 export const CtaEventDataSchema = z.object({
   url: z.string().optional(),
-  align: z.enum(['left', 'right']).optional(),
+  align: z.enum(['left', 'right', 'center']).optional(),
   label: z.string().optional(),
   message: z.string().optional(),
   title: z.string().optional(),

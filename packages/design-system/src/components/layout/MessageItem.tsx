@@ -292,16 +292,7 @@ const MessageItem = ({
           <>{shouldShowMediaArtifactForAdmin && <>{getMessageArtifactPreviewContent(mediaArtifactMessage)}</>}</>
         ) : null}
 
-        {isCtaEventMessage && (
-          <CtaEventMessage
-            event={message}
-            renderOrb={() =>
-              shouldShowActiveOrb && (
-                <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
-              )
-            }
-          />
-        )}
+        {isCtaEventMessage && <CtaEventMessage event={message} />}
       </div>
     </MessageItemErrorBoundary>
   );

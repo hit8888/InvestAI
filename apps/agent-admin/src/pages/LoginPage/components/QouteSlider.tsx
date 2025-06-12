@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCycle } from '@breakout/design-system/hooks/useCycle';
 
 type QouteSliderProps = {
   slides?: {
@@ -8,7 +8,11 @@ type QouteSliderProps = {
 };
 
 const QouteSlider = ({ slides }: QouteSliderProps) => {
-  const [activeSlide, setActiveSlide] = useState(0);
+  const { currentItemIndex } = useCycle({
+    itemsLength: slides?.length || 1,
+    intervalDuration: 5000,
+    initialIndex: Math.floor(Math.random() * (slides?.length || 1)),
+  });
 
   if (!slides || slides?.length === 0) {
     return null;
@@ -18,18 +22,17 @@ const QouteSlider = ({ slides }: QouteSliderProps) => {
     <div className="text-white">
       <div className="flex flex-col gap-4">
         <p className="max-w-[699px] font-['Inter_Tight'] text-[32px] font-medium leading-tight tracking-[.01em]">
-          {slides[activeSlide].quote}
+          {slides[currentItemIndex].quote}
         </p>
-        <p className="font-['SF_Pro_Display'] text-2xl">{slides[activeSlide].author}</p>
+        <p className="font-['system-ui'] text-2xl">{slides[currentItemIndex].author}</p>
       </div>
-      <div className="mt-[60px] flex cursor-pointer items-center gap-2">
+      <div className="mt-[60px] flex items-center gap-2">
         {slides.map((_, index) => (
           <div
             key={index}
             className={`h-2 rounded-full bg-white transition-all duration-300 ${
-              activeSlide === index ? 'w-[100px]' : 'w-10 opacity-50'
+              currentItemIndex === index ? 'w-[100px]' : 'w-10 opacity-50'
             }`}
-            onClick={() => setActiveSlide(index)}
           />
         ))}
       </div>

@@ -6,6 +6,7 @@ type UseCycleProps = {
   isEnabled?: boolean;
   showItems?: boolean;
   intervalDuration?: number;
+  initialIndex?: number;
 };
 
 export const useCycle = ({
@@ -13,8 +14,9 @@ export const useCycle = ({
   isEnabled = true,
   showItems = true,
   intervalDuration = SUGGESTED_QUESTIONS_INTERVAL_DURATION_IN_CYCLE_IN_MS,
+  initialIndex = 0,
 }: UseCycleProps) => {
-  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(initialIndex);
 
   useEffect(() => {
     if (isEnabled && showItems) {

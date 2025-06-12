@@ -6,7 +6,6 @@ import useVerifyOtp from '../queries/mutation/useVerifyOtp';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthProvider';
-import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
 import useGoogleSso from '../hooks/useGoogleSso';
 import { HelpCircle } from 'lucide-react';
@@ -44,11 +43,7 @@ const LoginForm = () => {
   );
 
   const { mutateAsync: generateOtp, isPending: isGenerateOtpPending } = useGenerateOtp({
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    onSuccess: (data: any) => {
-      toast.custom(<SuccessToastMessage title={data.message} />, {
-        position: 'top-center',
-      });
+    onSuccess: () => {
       setAuthMode('enterOtp');
     },
   });
@@ -142,7 +137,7 @@ const LoginForm = () => {
           </button>
         )}
         <h1 className="self-stretch text-center text-[54px] font-semibold text-slate-800">
-          {showNeedHelpField ? 'Need Help?' : showPasswordField ? 'Login in to Dashboard' : 'Enter Code'}
+          {showNeedHelpField ? 'Need Help?' : 'Log in to Breakout'}
         </h1>
         {(showPasswordField || showGenerateOtpField) && (
           <div className="flex w-full flex-col items-center self-stretch">
@@ -153,7 +148,7 @@ const LoginForm = () => {
                   showPasswordField ? 'bg-white text-primary shadow' : 'text-gray-500'
                 }`}
               >
-                Login with Password
+                Login with password
               </button>
               <button
                 onClick={handleToggleShowOtpLogin}
@@ -161,7 +156,7 @@ const LoginForm = () => {
                   showGenerateOtpField ? 'bg-white text-primary shadow' : 'text-gray-500'
                 }`}
               >
-                Log in with a Сode
+                Log in with a code
               </button>
             </div>
           </div>

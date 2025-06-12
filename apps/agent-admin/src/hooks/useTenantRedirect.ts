@@ -9,9 +9,13 @@ export const useTenantRedirect = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { tenantName: tenantNameParam } = useParams();
-  const { userInfo } = useAuth();
+  const { userInfo, isAuthenticated } = useAuth();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     const tenantNameFromStorage = getTenantFromLocalStorage();
     const organizations = userInfo?.organizations || [];
 

@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import { ENV } from '@meaku/core/types/index';
 import useLoginWithGoogleSso from '../queries/mutation/useLoginWithGoogleSso';
@@ -37,6 +38,9 @@ const useGoogleSso = () => {
     if (code) {
       loginWithGoogleSso({ code, redirect_uri: REDIRECT_URI });
     } else if (error) {
+      setTimeout(() => {
+        toast.error('Authentication failed. Please try again.');
+      });
       navigate(`/${AppRoutesEnum.LOGIN}`);
     }
   }, [code, error, loginWithGoogleSso, navigate]);
