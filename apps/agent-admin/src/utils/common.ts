@@ -22,14 +22,9 @@ import {
   LeadsTableDisplayContent,
   LeadsTableViewContent,
   LocationWithCityCountry,
+  TransformedProspectAndCompanyDetailsContent,
 } from '@meaku/core/types/admin/admin';
-import {
-  CompanyDetailsType,
-  ConversationRightSideDetailsType,
-  FunnelData,
-  FunnelStep,
-  ProspectDetailsType,
-} from './admin-types';
+import { ConversationRightSideDetailsType, FunnelData, FunnelStep } from './admin-types';
 import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
@@ -153,57 +148,40 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
   return mappedData;
 };
 
-export const getProspectAndCompanyDetailsData = (conversation: ConversationsTableDisplayContent) => {
-  const prospectDetails =
-    conversation.prospect_details && Object.keys(conversation.prospect_details).length > 0
-      ? (conversation.prospect_details as {
-          city?: string;
-          country?: string;
-          role?: string | null;
-          budget?: string | null;
-          timeline?: string | null;
-          product_interest?: string;
-        })
-      : null;
-  const companyDetails =
-    conversation.company_details && Object.keys(conversation.company_details).length > 0
-      ? (conversation.company_details as {
-          company_name?: string;
-          website_url?: string;
-          company_country?: string;
-          company_revenue?: string;
-          employee_count?: string;
-          industry_domain?: string;
-          operating_countries?: string[];
-          linkedin_url?: string;
-        })
-      : null;
+export const getProspectAndCompanyDetailsData = (
+  conversation: ConversationsTableDisplayContent,
+): TransformedProspectAndCompanyDetailsContent => {
+  const {
+    country,
+    company,
+    email,
+    name,
+    prospect_details: prospectDetails,
+    company_details: companyDetails,
+  } = conversation || {};
 
-  const transformedData = {
+  const transformedData: TransformedProspectAndCompanyDetailsContent = {
     prospect: {
-      name: conversation.name || '-',
-      email: conversation.email || '-',
+      name: name || '-',
+      email: email || '-',
       location: {
         city: prospectDetails?.city || '',
-        country: prospectDetails?.country || (conversation.country as string) || '-',
+        country: prospectDetails?.country || (country as string) || '-',
       },
-      role: prospectDetails?.role || conversation.role || '-',
-      budget: prospectDetails?.budget || conversation.budget || '-',
-      timeline: prospectDetails?.timeline || conversation.timeline || '-',
-      product_interest: prospectDetails?.product_interest || conversation.product_of_interest || '-',
+      enrichmentSource: prospectDetails?.enrichment_source || '',
     },
     company: {
-      name: companyDetails?.company_name || conversation.company || '-',
+      name: companyDetails?.company_name || company || '-',
       logoUrl: companyDetails?.website_url ? `${companyDetails?.website_url}/favicon.ico` : '',
-      location: companyDetails?.company_country || (conversation.country as string) || '-',
+      location: companyDetails?.company_country || (country as string) || '-',
       revenue: companyDetails?.company_revenue || '-',
       employees: companyDetails?.employee_count || '-',
       domain: companyDetails?.industry_domain || '-',
       foundationDate: '-',
-      linkedinUrl: companyDetails?.linkedin_url || '-',
-      websiteUrl: companyDetails?.website_url || '-',
+      enrichmentSource: companyDetails?.enrichment_source || '',
     },
   };
+
   return transformedData;
 };
 
@@ -934,12 +912,12 @@ export function generateConversationSummaryContent(
 }
 
 export const getConversationRightSideDetailsItems = (
-  dataObject: ProspectDetailsType | CompanyDetailsType,
+  dataObject: TransformedProspectAndCompanyDetailsContent['prospect' | 'company'],
   detailDataItems: ConversationRightSideDetailsType[],
 ) => {
   const addedValueObject = detailDataItems.map((item) => ({
     ...item,
-    itemValue: dataObject[item.itemKey as keyof (ProspectDetailsType | CompanyDetailsType)],
+    itemValue: dataObject[item.itemKey as keyof TransformedProspectAndCompanyDetailsContent['prospect' | 'company']],
   }));
   return addedValueObject.filter((item) => {
     // For Location object, check if any of the values are not '-'

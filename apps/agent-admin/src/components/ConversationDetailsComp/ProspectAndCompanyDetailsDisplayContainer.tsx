@@ -4,16 +4,13 @@ import {
   PROSPECT_DETAILS_DATA_ITEMS,
 } from '../../utils/constants';
 import { getConversationRightSideDetailsItems } from '../../utils/common';
-import { CompanyDetailsType, ProspectDetailsType } from '../../utils/admin-types';
 import SingleProspectAndCompanyItemDataDisplay from './SingleProspectAndCompanyItemDataDisplay';
+import { TransformedProspectAndCompanyDetailsContent } from '@meaku/core/types/admin/admin';
 
 const ProspectAndCompanyDetailsDisplayContainer = ({
   prospect,
   company,
-}: {
-  prospect: ProspectDetailsType;
-  company: CompanyDetailsType;
-}) => {
+}: TransformedProspectAndCompanyDetailsContent) => {
   const prospectItemsWithValue = getConversationRightSideDetailsItems(prospect, PROSPECT_DETAILS_DATA_ITEMS);
   const companyItemsWithValue = getConversationRightSideDetailsItems(company, COMPANY_DETAILS_DATA_ITEMS);
 
@@ -37,6 +34,7 @@ const ProspectAndCompanyDetailsDisplayContainer = ({
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
                   itemValue={dataItem.itemValue}
+                  enrichmentSource={prospect.enrichmentSource}
                 />
               ))}
             </div>
@@ -56,6 +54,7 @@ const ProspectAndCompanyDetailsDisplayContainer = ({
                   itemLabel={dataItem.itemLabel}
                   itemIcon={<dataItem.ItemIcon {...COMMON_SMALL_ICON_PROPS} />}
                   itemValue={dataItem.itemValue}
+                  enrichmentSource={company.enrichmentSource}
                 />
               ))}
             </div>

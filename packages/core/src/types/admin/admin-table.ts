@@ -6,6 +6,7 @@ import {
   DataSourceArtifactsTableResponseSchema,
   DataSourceDocumentsTableResponseSchema,
   DataSourceWebpagesTableResponseSchema,
+  EnrichmentSourceEnum,
   LeadsTableResponseSchema,
   ProspectDetailsSchema,
 } from './api';
@@ -54,6 +55,7 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
     name: z.string(),
     email: z.string(),
     location: LocationWithCityCountrySchema,
+    enrichmentSource: EnrichmentSourceEnum.or(z.string()),
   }),
   company: z.object({
     name: z.string(),
@@ -63,6 +65,7 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
     employees: z.string(), // Optional or empty string as placeholder
     domain: z.string(), // Optional or empty string as placeholder
     foundationDate: z.string(), // Optional or empty string as placeholder
+    enrichmentSource: EnrichmentSourceEnum.or(z.string()),
   }),
 });
 

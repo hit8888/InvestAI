@@ -3,7 +3,8 @@ import LocationCellValue from '../tableComp/tableCellComp/LocationCellValue';
 import EmailCellValue from '../tableComp/tableCellComp/EmailCellValue';
 import { cn } from '@breakout/design-system/lib/cn';
 import { CONV_RIGHTSIDE_DETAILS_DATA_ITEMS } from '../../utils/constants';
-import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
+import { EnrichmentSource, LocationWithCityCountry } from '@meaku/core/types/admin/admin';
+import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/index';
 
 const { LOCATION, EMAIL } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
@@ -14,6 +15,7 @@ type IProps = {
   showBottomBorder?: boolean;
   isKeyValueColumnwise?: boolean;
   itemLabelWidth?: string;
+  enrichmentSource: EnrichmentSource | string;
 };
 
 const SingleProspectAndCompanyItemDataDisplay = ({
@@ -23,6 +25,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
   showBottomBorder = true,
   isKeyValueColumnwise = false,
   itemLabelWidth,
+  enrichmentSource,
 }: IProps) => {
   let content = (
     <span
@@ -59,7 +62,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
         <span className="w-full text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>
       <div
-        className={cn('flex w-[60%] justify-end', {
+        className={cn('flex w-[60%] items-center justify-end gap-2', {
           'justify-start': isKeyValueColumnwise,
           'w-[100%]': !itemLabelWidth,
           'w-[80%]': itemLabelWidth === 'w-[20%]',
@@ -67,6 +70,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
         })}
       >
         {content}
+        <EnrichmentTag enrichmentSource={enrichmentSource} />
       </div>
     </div>
   );

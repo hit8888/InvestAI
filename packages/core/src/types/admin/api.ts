@@ -140,44 +140,42 @@ export const LeadResultSchema = z.object({
   updated_on: z.string(), // ISO date string
 });
 
-export const ProspectDetailsSchema = z.union([
-  z.object({}), // Allow empty object
-  z.object({
-    loc: z.string().optional(),
-    city: z.string().optional(),
-    region: z.string().optional(),
-    country: z.string().optional(),
-    timezone: z.string().optional(),
-    ip_address: z.string().optional(),
-    role: z.string().optional().nullable(),
-    budget: z.string().optional().nullable(),
-    timeline: z.string().optional().nullable(),
-    product_interest: z.string().optional().nullable(),
-  }),
-]);
+export const EnrichmentSourceEnum = z.enum(['ip_enrichment', 'user_provided', 'crm_extracted', 'utm_extracted']);
 
-export const CompanyDetailsSchema = z.union([
-  z.object({}), // Allow empty object
-  z.object({
-    id: z.number(),
-    keywords: z.string().nullable(),
-    confidence: z.string().nullable(),
-    ip_address: z.array(z.string()),
-    ip_country: z.string(),
-    competitors: z.array(z.string()),
-    website_url: z.string().nullable(),
-    company_name: z.string().nullable(),
-    company_type: z.string().nullable(),
-    linkedin_url: z.string().nullable(),
-    brief_summary: z.string().nullable(),
-    employee_count: z.string().or(z.string()),
-    company_country: z.string().nullable(),
-    company_revenue: z.string().nullable(),
-    industry_domain: z.string().nullable(),
-    enrichment_provider: z.string().nullable(),
-    operating_countries: z.array(z.string()),
-  }),
-]);
+export const ProspectDetailsSchema = z.object({
+  loc: z.string().optional(),
+  city: z.string().optional(),
+  region: z.string().optional(),
+  country: z.string().optional(),
+  timezone: z.string().optional(),
+  ip_address: z.string().optional(),
+  role: z.string().optional().nullable(),
+  budget: z.string().optional().nullable(),
+  timeline: z.string().optional().nullable(),
+  product_interest: z.string().optional().nullable(),
+  enrichment_source: EnrichmentSourceEnum.optional().nullable(),
+});
+
+export const CompanyDetailsSchema = z.object({
+  id: z.number().optional(),
+  keywords: z.string().optional().nullable(),
+  confidence: z.string().optional().nullable(),
+  ip_address: z.array(z.string()).optional(),
+  ip_country: z.string().optional(),
+  competitors: z.array(z.string()).optional(),
+  website_url: z.string().optional().nullable(),
+  company_name: z.string().optional().nullable(),
+  company_type: z.string().optional().nullable(),
+  linkedin_url: z.string().optional().nullable(),
+  brief_summary: z.string().optional().nullable(),
+  employee_count: z.string().optional().or(z.string()),
+  company_country: z.string().optional().nullable(),
+  company_revenue: z.string().optional().nullable(),
+  industry_domain: z.string().optional().nullable(),
+  enrichment_provider: z.string().optional().nullable(),
+  operating_countries: z.array(z.string()).optional(),
+  enrichment_source: EnrichmentSourceEnum.optional().nullable(),
+});
 
 export const ConversationsResponseResultSchema = z.object({
   buyer_intent_score: z.number().nullable(),

@@ -12,6 +12,7 @@ interface IProps {
   showArrow?: boolean;
   alwaysVisible?: boolean;
   disableHoverableContent?: boolean;
+  tooltipArrowClassName?: string;
 }
 
 const TooltipWrapperDark = ({
@@ -24,6 +25,7 @@ const TooltipWrapperDark = ({
   showArrow = true,
   alwaysVisible = false,
   disableHoverableContent = false,
+  tooltipArrowClassName,
 }: IProps) => {
   const isTooltipSideValueTop = tooltipSide === 'top';
   return (
@@ -46,9 +48,11 @@ const TooltipWrapperDark = ({
               <TooltipArrow
                 width={12}
                 height={6}
-                className={cn('fixed -right-6 2xl:right-14', {
-                  'right-8': isTooltipSideValueTop,
-                })}
+                className={cn(
+                  'fixed -right-6 2xl:right-14',
+                  { 'right-8': isTooltipSideValueTop },
+                  tooltipArrowClassName,
+                )}
               />
             )}
           </TooltipContent>

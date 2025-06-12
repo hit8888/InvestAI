@@ -27,6 +27,7 @@ import {
   DataSourceFeaturesSchema,
   DataSourceArtifactsTableResponseSchema,
   DataSourceArtifactsResponseResultSchema,
+  EnrichmentSourceEnum,
 } from './api';
 import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, SLIDES_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '../../utils';
 
@@ -69,6 +70,7 @@ export type DataSourceOverviewData = z.infer<typeof DataSourceOverviewSchema>;
 export type DataSourceFeaturesData = z.infer<typeof DataSourceFeaturesSchema>;
 export type ActiveConversationDetailsDataResponse = z.infer<typeof ActiveConversationDetailsResponseSchema>;
 
+export type EnrichmentSource = z.infer<typeof EnrichmentSourceEnum>;
 export type ProspectDetails = z.infer<typeof ProspectDetailsSchema>;
 export type CompanyDetails = z.infer<typeof CompanyDetailsSchema>;
 export type AdditionalInfoType = z.infer<typeof AdditionalInfoSchema>;
