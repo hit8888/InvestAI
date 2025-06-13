@@ -17,7 +17,8 @@ const UrlCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) =>
     <CustomTooltipWithClipboardUsingHover
       tooltipText={value}
       toastMessage={'URL link copied'}
-      showTooltip={true}
+      showTooltip
+      tooltipAlign="start"
       contentMaxWidth="max-w-[500px]"
     >
       {getTrigger()}

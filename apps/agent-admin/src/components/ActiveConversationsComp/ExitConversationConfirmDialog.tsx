@@ -1,10 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogOverlay,
-  DialogTitle,
-} from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent, DialogOverlay } from '@breakout/design-system/components/layout/dialog';
 import Button from '@breakout/design-system/components/Button/index';
 
 type ExitConversationConfirmDialogProps = {
@@ -19,10 +13,6 @@ const ExitConversationConfirmDialog = ({ isOpen, onSubmit, onClose }: ExitConver
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogOverlay className="pointer-events-none top-[3.8rem] z-[1000] mx-2 mb-2 rounded-2xl bg-black/30" />
-      {/* Preventing Console Errors and warnings */}
-      <DialogTitle className="sr-only"></DialogTitle>
-      <DialogDescription className="sr-only"></DialogDescription>
-
       <DialogContent className="z-[1000] rounded-2xl border border-gray-300 bg-white p-4">
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-1">

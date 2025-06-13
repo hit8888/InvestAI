@@ -6,7 +6,6 @@ import AddMorePlusIcon from '@breakout/design-system/components/icons/sources-ad
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -17,7 +16,7 @@ import DataSourceDialogContent from './DataSourceDialogContent';
 
 const { WEBPAGES, DOCUMENTS, VIDEOS, SLIDES } = SourcesCardTypes;
 
-const DataSourcesAddMoreButton = () => {
+const CommonUploadDataSourcesButton = () => {
   const { selectedType } = useDataSources();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -44,7 +43,7 @@ const DataSourcesAddMoreButton = () => {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button variant={'primary'} buttonStyle={'rightIcon'}>
-          Add more {sourceLabel}
+          Upload {sourceLabel}
           <AddMorePlusIcon width="16" height="16" />
         </Button>
       </DialogTrigger>
@@ -56,7 +55,6 @@ const DataSourcesAddMoreButton = () => {
           <DialogTitle>
             <Typography variant={'title-24'} className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
           </DialogTitle>
-          <DialogDescription className="sr-only"></DialogDescription>
           {selectedType ? (
             <Typography variant={'body-16'} className="text-customSecondaryText">
               {
@@ -73,4 +71,4 @@ const DataSourcesAddMoreButton = () => {
   );
 };
 
-export default DataSourcesAddMoreButton;
+export default CommonUploadDataSourcesButton;

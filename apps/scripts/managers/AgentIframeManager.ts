@@ -14,7 +14,7 @@ export function AgentIframeManager() {
       border: "none",
       borderRadius: "36px",
     });
-    iframe.allow = "geolocation *; microphone *; camera *";
+    iframe.allow = "geolocation *; microphone *; camera *; clipboard-write";
     iframe.id = WIDGET_IDS.BREAKOUT_AGENT;
     iframe.src = iframeSrc;
 

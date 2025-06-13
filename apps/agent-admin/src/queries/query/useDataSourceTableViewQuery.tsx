@@ -50,6 +50,7 @@ const useDataSourceTableViewQuery = ({
       return response.data;
     },
     ...queryOptions,
+    refetchOnMount: 'always',
   });
 
   return dataSourceQuery;

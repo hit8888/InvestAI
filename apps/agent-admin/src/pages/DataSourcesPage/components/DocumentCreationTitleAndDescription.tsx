@@ -19,7 +19,7 @@ const DocumentCreationTitleAndDescription = ({
   isSelected,
 }: DocumentCreationTitleAndDescriptionProps) => {
   return (
-    <div className="w-full self-stretch bg-gray-100 p-4">
+    <div className="h-full w-full self-stretch bg-gray-100 p-4">
       <div className="flex h-full flex-col gap-4 self-stretch bg-white px-11 py-8">
         <TooltipWrapperDark
           showTooltip={isSelected}
@@ -39,10 +39,7 @@ const DocumentCreationTitleAndDescription = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Write your document text…"
-          className={cn(
-            'min-h-[calc(70vh-100px)] w-full border-none text-base text-black focus-visible:ring-0',
-            isSelected && 'min-h-[400px]',
-          )}
+          className={cn('h-full w-full border-none text-base text-black focus-visible:ring-0')}
         />
       </div>
     </div>

@@ -608,13 +608,13 @@ export const COLOR_SECONDARY_SUBTITLE =
 export const ORB_DESCRIPTION =
   'The orb in the conversation interface is based on the primary color. You can either use the standard orb or replace it with your favicon logo.';
 
+export const CUSTOM_DOCUMENT_DEFAULT_TITLE = 'Title';
+export const CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION = 'Write your document text…';
+
 // Default values when no source is selected
 export const CUSTOM_DOCUMENT_DEFAULT_SOURCE = {
   id: 0,
-  title: '',
-  data: '',
+  title: CUSTOM_DOCUMENT_DEFAULT_TITLE,
+  data: CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION,
   relevant_queries: [],
 };
-
-export const CUSTOM_DOCUMENT_DEFAULT_TITLE = 'Title';
-export const CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION = 'Write your document text…';

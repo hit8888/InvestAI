@@ -12,6 +12,7 @@ type DocumentCreationHeaderProps = {
   data: string;
   relevant_queries: string[];
   isSelected: boolean;
+  checkIfAnyFieldIsChanged: boolean;
 };
 
 const DocumentCreationHeader = ({
@@ -21,6 +22,7 @@ const DocumentCreationHeader = ({
   data,
   relevant_queries,
   isSelected,
+  checkIfAnyFieldIsChanged,
 }: DocumentCreationHeaderProps) => {
   const createCustomDocument = useCreateCustomDocument();
   const updateCustomDocument = useUpdateCustomDocument();
@@ -29,12 +31,23 @@ const DocumentCreationHeader = ({
   const checkIfDescriptionIsChanged = data !== CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION;
 
   const handleSaveAndAdd = () => {
-    if (!checkIfTitleIsChanged && !checkIfDescriptionIsChanged) {
-      toast.error('Please change the title and description');
-      return;
+    if (!isSelected) {
+      if (!checkIfTitleIsChanged && !checkIfDescriptionIsChanged) {
+        toast.error('Please change the title and description');
+        return;
+      }
+      if (!checkIfTitleIsChanged) {
+        toast.error('Please change the title');
+        return;
+      }
+      if (!checkIfDescriptionIsChanged) {
+        toast.error('Please change the description');
+        return;
+      }
     }
+
     try {
-      if (isSelected) {
+      if (isSelected && checkIfAnyFieldIsChanged) {
         updateCustomDocument.mutateAsync({
           id,
           payload: {
@@ -44,10 +57,11 @@ const DocumentCreationHeader = ({
           },
         });
         toast.success('Document updated successfully');
-      } else {
+      } else if (!isSelected && checkIfAnyFieldIsChanged) {
         createCustomDocument.mutateAsync({
           title: title,
           data: data,
+          relevant_queries: relevant_queries,
         });
         toast.success('Document created successfully');
       }

@@ -124,17 +124,23 @@ class DateUtil {
    * @returns An array containing the start and end date in ISO 8601 format
    */
   static convertDateToAppliedFilterValue(startDateStr: Date, endDateStr: Date): string[] {
-    // Parse the start date and add 1 day to counter timezone offset issues
-    const startDate = addDays(new Date(startDateStr), 1);
-    startDate.setUTCHours(0, 0, 0, 0); // Set start date to 00:00:00 UTC
+    // Create dates in local timezone
+    const startDate = new Date(startDateStr);
+    const endDate = new Date(endDateStr || startDateStr);
 
-    // Parse the end date; if not provided, use the start date as the end date
-    const endDate = addDays(new Date(endDateStr || startDateStr), 1);
-    endDate.setUTCHours(23, 59, 59, 999); // Set end date to 23:59:59 local time
+    // Set start date to beginning of day in local timezone
+    startDate.setHours(0, 0, 0, 0);
+
+    // Set end date to end of day in local timezone
+    endDate.setHours(23, 59, 59, 999);
+
+    // Convert to UTC while preserving the local time
+    const utcStartDate = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000);
+    const utcEndDate = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000);
 
     // Format both dates into ISO 8601 strings
-    const formattedStartDate = startDate.toISOString(); // Example: "2025-01-16T00:00:00.000Z"
-    const formattedEndDate = endDate.toISOString(); // Example: "2025-01-20T23:59:59.999Z"
+    const formattedStartDate = utcStartDate.toISOString();
+    const formattedEndDate = utcEndDate.toISOString();
 
     return [formattedStartDate, formattedEndDate];
   }

@@ -1,12 +1,6 @@
 import { useState } from 'react';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import SlideArtifact from '../Artifact/SlideArtifact';
 import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/types/artifact';
 import CommonArtifactPreview from './CommonArtifactPreview';
@@ -89,8 +83,7 @@ const SlideArtifactPreview = ({
       <DialogTrigger asChild>{showButtonDisplay()}</DialogTrigger>
       <DialogContent className="bg-white sm:min-w-[1000px]">
         <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>
-        <DialogDescription className="sr-only"></DialogDescription>
-        {openDialog ? <div className="h-full min-h-[600px] w-full rounded-lg">{getArtifactContent()}</div> : null}
+        {openDialog ? <div className="h-full min-h-[500px] w-full rounded-lg">{getArtifactContent()}</div> : null}
       </DialogContent>
     </Dialog>
   );

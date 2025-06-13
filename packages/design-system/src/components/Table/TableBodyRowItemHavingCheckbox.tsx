@@ -2,6 +2,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { useCallback } from 'react';
 import { CustomSingleBodyRowItemProps } from './tableTypes';
 import RowCellContent from './RowCellContent';
+import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
 
 const TableBodyRowItemHavingCheckbox = ({
   row,
@@ -13,6 +14,9 @@ const TableBodyRowItemHavingCheckbox = ({
 }: CustomSingleBodyRowItemProps) => {
   const rowId = row.original.id;
   const isRowSelected = isIdSelected(rowId);
+  const isDocumentTypePDF = row.original.data_source_type === DATA_SOURCE_TYPE_ENUM.PDF;
+
+  const isRowItemClickAllowed = allowedToOpenDrawer && !isRowSelected && !isDocumentTypePDF;
 
   // Memoize the toggle handler to prevent unnecessary re-renders
   const handleToggleSelect = useCallback(() => {
@@ -23,7 +27,7 @@ const TableBodyRowItemHavingCheckbox = ({
   const isOddRow = !isEvenRow;
 
   const handleRowItemClick = () => {
-    if (allowedToOpenDrawer && !isRowSelected) {
+    if (isRowItemClickAllowed) {
       toggleSelectId(rowId);
       handleDataSourcesDrawerToggle();
     }
@@ -36,7 +40,7 @@ const TableBodyRowItemHavingCheckbox = ({
         'bg-white': isEvenRow,
         'bg-gray-25': isOddRow,
         'bg-primary/5': isRowSelected,
-        'cursor-pointer': allowedToOpenDrawer,
+        'cursor-pointer': isRowItemClickAllowed,
       })}
       onClick={handleRowItemClick}
     >

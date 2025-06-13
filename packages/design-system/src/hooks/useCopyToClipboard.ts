@@ -22,9 +22,11 @@ export const useCopyToClipboard = (text: string, options: CopyToClipboardOptions
   }, [isCopied, copyDuration]);
 
   const copy = async () => {
+    let successful = false;
     try {
       // Try using Clipboard API first
       await navigator.clipboard.writeText(text);
+      successful = true;
     } catch (err) {
       trackError(err, {
         action: 'copy',
@@ -34,15 +36,36 @@ export const useCopyToClipboard = (text: string, options: CopyToClipboardOptions
           error: err,
         },
       });
+
+      // Fallback to execCommand if Clipboard API is not supported
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.top = '0';
+        textarea.style.left = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch (execErr) {
+        successful = false;
+        trackError(execErr, {
+          action: 'copyExecFallback',
+          component: 'useCopyToClipboard',
+          additionalData: { copiedText: text, error: execErr },
+        });
+      }
     }
 
-    if (onCopy) {
+    if (successful && onCopy) {
       onCopy();
     }
-    if (toastMessage) {
+    if (successful && toastMessage) {
       toast.success(toastMessage);
     }
-    setIsCopied(true);
+    setIsCopied(successful);
   };
 
   return { isCopied, copy };

@@ -12,7 +12,7 @@ import SourceCard from './components/SourceCard';
 import DataSourceCard from './components/DataSourceCard';
 import { useDataSources } from '../../context/DataSourcesContext';
 import DataSourcesNavigation from './components/DataSourcesNavigation';
-import DataSourcesAddMoreButton from './components/DataSourcesAddMoreButton';
+import CommonUploadDataSourcesButton from './components/CommonUploadDataSourcesButton';
 import PageContainer from '../../components/AgentManagement/PageContainer';
 import DataSourceTableContainer from './components/DataSourceTableContainer';
 import useDataSourceOverviewDataQuery from '../../queries/query/useDataSourcesOverviewDataQuery';
@@ -22,6 +22,7 @@ import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
 import { DataSourcesDrawerProvider } from '../../context/DataSourcesDrawerContext';
 import CreateCustomDocumentButton from './components/CreateCustomDocumentButton';
 import { useEffect } from 'react';
+import { DOCUMENTS_PAGE } from '../../../../../packages/core/src';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
@@ -67,13 +68,15 @@ const DataSourcesPage = () => {
     );
   }
 
+  const isDocumentsPage = selectedType === DOCUMENTS_PAGE;
+
   return (
     <div className="flex w-full flex-1 p-14 pt-8">
       <div className="flex flex-1 flex-col items-start gap-10 self-stretch">
         <div className="flex w-full items-center gap-6">
           <DataSourcesNavigation />
-          <DataSourcesAddMoreButton />
-          <CreateCustomDocumentButton />
+          <CommonUploadDataSourcesButton />
+          {isDocumentsPage && <CreateCustomDocumentButton />}
         </div>
         <DataSourcesDrawerProvider>
           <DataSourceTableContainer />
@@ -114,8 +117,7 @@ type ArtifactsSourcesData = {
   };
 };
 
-// TODO: Remove export keyword once the artifacts sources are implemented
-export const ArtifactsContent = ({ dataSourcesData }: ArtifactsSourcesData) => {
+const ArtifactsContent = ({ dataSourcesData }: ArtifactsSourcesData) => {
   return (
     <SourceCard cardTitle={ARTIFACTS_SOURCES_TITLE}>
       <DataSourceCard

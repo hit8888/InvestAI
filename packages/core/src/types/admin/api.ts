@@ -435,9 +435,7 @@ export type UpdateArtifactRequest = UpdateArtifactAndCustomDocumentRequest;
 
 export type UpdateCustomDocumentRequest = UpdateArtifactAndCustomDocumentRequest;
 
-export const CreateCustomDocumentRequestSchema = UpdateArtifactAndCustomDocumentRequestSchema.omit({
-  relevant_queries: true,
-});
+export const CreateCustomDocumentRequestSchema = UpdateArtifactAndCustomDocumentRequestSchema;
 export type CreateCustomDocumentRequest = z.infer<typeof CreateCustomDocumentRequestSchema>;
 
 export const CreateAndUpdateCustomDocumentResponseSchema = z.object({

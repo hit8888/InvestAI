@@ -40,6 +40,8 @@ const DrawerContent: React.ForwardRefExoticComponent<
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
     <DrawerOverlay />
+    <DrawerTitle className="sr-only" />
+    <DrawerDescription className="sr-only" />
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(

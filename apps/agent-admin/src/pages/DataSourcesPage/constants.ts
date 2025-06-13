@@ -69,8 +69,7 @@ export const DATA_SOURCES_ACCEPTED_FILE_TYPES = {
 };
 
 export const FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE = {
-  [SourcesCardTypes.DOCUMENTS]:
-    'This file format isn’t supported. Please upload a Document in PDF, DOCX, XLSX, PPTX, TXT, CSV format.',
+  [SourcesCardTypes.DOCUMENTS]: 'This file format isn’t supported. Please upload a Document in PDF.',
   [SourcesCardTypes.VIDEOS]: 'This file format isn’t supported. Please upload a video in MP4, MOV, or WebM format.',
   [SourcesCardTypes.SLIDES]: 'This file format isn’t supported. Please upload a slide in PDF or PPTX format.',
 };

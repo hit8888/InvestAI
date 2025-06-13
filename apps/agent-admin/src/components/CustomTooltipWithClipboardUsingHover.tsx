@@ -7,6 +7,7 @@ type IProps = {
   tooltipText: string;
   children?: React.ReactNode;
   showTooltip?: boolean;
+  tooltipAlign?: 'start' | 'center' | 'end';
   contentMaxWidth?: string;
 };
 
@@ -15,12 +16,14 @@ const CustomTooltipWithClipboardUsingHover = ({
   children,
   toastMessage,
   showTooltip = true,
+  tooltipAlign = 'end',
   contentMaxWidth = 'max-w-full',
 }: IProps) => {
   return (
     <TooltipWrapperDark
       trigger={children}
       showTooltip={showTooltip}
+      tooltipAlign={tooltipAlign}
       content={
         <div className={`flex w-fit items-center justify-between gap-2 ${contentMaxWidth}`}>
           <span className="text-sm font-medium">{tooltipText}</span>

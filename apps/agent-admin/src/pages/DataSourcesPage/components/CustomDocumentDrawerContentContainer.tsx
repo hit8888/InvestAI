@@ -11,6 +11,7 @@ import {
 
 type CustomDocumentDrawerContentContainerProps = {
   onClose: () => void;
+  isClickedOnCreateButton?: boolean;
 };
 
 type SelectedSource = {
@@ -20,11 +21,15 @@ type SelectedSource = {
   relevant_queries?: string[];
 };
 
-const CustomDocumentDrawerContentContainer = ({ onClose }: CustomDocumentDrawerContentContainerProps) => {
+const CustomDocumentDrawerContentContainer = ({
+  onClose,
+  isClickedOnCreateButton,
+}: CustomDocumentDrawerContentContainerProps) => {
   const { getSelectedDataSources } = useDataSourceTableStore();
   const selectedDataSources = getSelectedDataSources();
 
-  const isSelected = selectedDataSources.length > 0;
+  // If the drawer is opened from the create button, then the selected data sources will be empty
+  const isSelected = selectedDataSources.length > 0 && !isClickedOnCreateButton;
 
   const selectedSource = isSelected ? (selectedDataSources[0] as SelectedSource) : CUSTOM_DOCUMENT_DEFAULT_SOURCE;
   const { relevant_queries = [], title = '', data = '', id } = selectedSource;
@@ -57,22 +62,26 @@ const CustomDocumentDrawerContentContainer = ({ onClose }: CustomDocumentDrawerC
     relevant_queries: checkIfRelevantQueriesAreChanged ? updatedRelevantQueries : relevant_queries,
   };
 
+  const checkIfAnyFieldIsChanged =
+    checkIfTitleIsChanged || checkIfDescriptionIsChanged || checkIfRelevantQueriesAreChanged;
+
   return (
     <div className="flex h-full w-full flex-col">
-      <DocumentCreationHeader onClose={onClose} {...queryProps} isSelected={isSelected} />
-      <div className="flex h-full max-h-[calc(100vh-100px)] flex-col self-stretch overflow-y-auto">
-        <DocumentCreationTitleAndDescription
-          title={titleHeader}
-          description={description}
-          setTitle={setTitleHeader}
-          setDescription={setDescription}
-          isSelected={isSelected}
-        />
-        {isSelected && (
-          <div className="bg-white p-4">
-            <RelevantQueriesSectionDrawer onCallBack={handleUpdateRelevantQueries} {...queryProps} />
-          </div>
-        )}
+      <DocumentCreationHeader
+        onClose={onClose}
+        {...queryProps}
+        isSelected={isSelected}
+        checkIfAnyFieldIsChanged={checkIfAnyFieldIsChanged}
+      />
+      <DocumentCreationTitleAndDescription
+        title={titleHeader}
+        description={description}
+        setTitle={setTitleHeader}
+        setDescription={setDescription}
+        isSelected={isSelected}
+      />
+      <div className="p-4">
+        <RelevantQueriesSectionDrawer onCallBack={handleUpdateRelevantQueries} {...queryProps} />
       </div>
     </div>
   );

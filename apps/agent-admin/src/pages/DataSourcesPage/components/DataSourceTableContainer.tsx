@@ -23,7 +23,11 @@ const DataSourceTableContainer = () => {
     <div className="flex w-full flex-col items-end gap-6 self-stretch">
       <DataSourceTableView pageType={selectedType as PaginationPageType} />
       {isDocumentsPage ? (
-        <CustomDocumentDrawer open={isDataSourcesDrawerOpen} onClose={handleCloseDrawer} />
+        <CustomDocumentDrawer
+          isClickedOnCreateButton={false}
+          open={isDataSourcesDrawerOpen}
+          onClose={handleCloseDrawer}
+        />
       ) : (
         <EditBulkRowItemsDrawer open={isDataSourcesDrawerOpen} onClose={handleCloseDrawer} />
       )}

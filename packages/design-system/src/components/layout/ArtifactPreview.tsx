@@ -138,7 +138,9 @@ const ArtifactPreview = ({
     switch (artifactType) {
       case 'VIDEO': {
         const videoURL = (artifactContent as VideoArtifactContent)?.video_url;
-        return <CustomVideoPlayer videoURL={videoURL} />;
+        return (
+          <CustomVideoPlayer videoURL={videoURL} className="h-full w-full rounded ring-2 ring-inset ring-gray-500" />
+        );
       }
       case 'CALENDAR': {
         return (
@@ -160,7 +162,7 @@ const ArtifactPreview = ({
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{showArtifactPreviewButtonDisplay()}</DialogTrigger>
-      <DialogContent className="bg-white sm:min-h-[600px] sm:min-w-[1200px]">
+      <DialogContent className="bg-white sm:min-w-[70vw]">
         {title && <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>}
         {isDialogOpen ? <div className="h-full w-full rounded-lg">{getDialogContent()}</div> : null}
       </DialogContent>

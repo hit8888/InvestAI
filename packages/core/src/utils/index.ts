@@ -12,6 +12,14 @@ export const DOCUMENTS_PAGE = 'documents';
 export const VIDEOS_PAGE = 'videos';
 export const SLIDES_PAGE = 'slides';
 
+export const DATA_SOURCE_TYPE_ENUM = {
+  WEB_PAGE: 'WEB_PAGE',
+  PDF: 'PDF',
+  VIDEO: 'VIDEO',
+  SLIDE: 'SLIDE',
+  CUSTOM_DOCUMENT: 'CUSTOM_DOCUMENT',
+};
+
 export const PAGES_WITH_DRAWER_ENABLED = [DOCUMENTS_PAGE, VIDEOS_PAGE, SLIDES_PAGE];
 
 export const CONVERSATIONS_PINNED_COLUMNS = ['summary', 'country'];
