@@ -105,7 +105,7 @@ function processFormSubmission(form: HTMLFormElement) {
     if (!key) {
       const elementType: string =
         (element as HTMLInputElement).type || "default";
-      key = `unnamed_element_${element.tagName.toLowerCase()}_${elementType}_${formElementIndex}`;
+      key = `unknown_element_${element.tagName.toLowerCase()}_${elementType}_${formElementIndex}`;
     }
 
     // Handle different types of form elements
