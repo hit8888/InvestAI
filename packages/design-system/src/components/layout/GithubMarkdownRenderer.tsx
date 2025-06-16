@@ -2,7 +2,7 @@ import ReactMarkdown, { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => (
-  <a className="text-blue_sec-1000" {...props} target="_blank" rel="noreferrer" />
+  <a className="break-all text-blue_sec-1000" {...props} target="_blank" rel="noreferrer" />
 );
 
 const MessageStrong = (props: React.HTMLAttributes<HTMLElement>) => (
