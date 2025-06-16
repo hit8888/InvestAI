@@ -204,11 +204,11 @@ const MessageItem = ({
         )}
 
         {checkIsAdminJoinedMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
-          <AdminJoinedInfo />
+          <AdminJoinedInfo message={message} />
         )}
 
         {checkIsAdminLeftMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
-          <AdminExitInfo />
+          <AdminExitInfo message={message} />
         )}
 
         {isDiscoveryQuestion(message) && (

@@ -248,7 +248,13 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('JOIN_SESSION'),
-    event_data: z.object({}),
+    event_data: z.object({
+      first_name: z.string(),
+      last_name: z.string(),
+      profile_picture: z.string().nullable(),
+      designation: z.string().nullable(),
+      department: z.string().nullable(),
+    }),
   }),
   z.object({
     content: z.string(),
@@ -266,7 +272,13 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('LEAVE_SESSION'),
-    event_data: z.object({}),
+    event_data: z.object({
+      first_name: z.string(),
+      last_name: z.string(),
+      profile_picture: z.string().nullable(),
+      designation: z.string().nullable(),
+      department: z.string().nullable(),
+    }),
   }),
   z.object({
     content: z.string(),
