@@ -2,6 +2,9 @@ import { LoaderCircle, TriangleAlert } from 'lucide-react';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import AdminChatInput from './AdminChatInput';
 import JoinConversationButton from './JoinConversationButton';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../../assets/popup-sound.mp4';
+import { useEffect } from 'react';
 
 type JoinConversationBottomBarProps = {
   sessionStatus: AdminConversationJoinStatus;
@@ -16,6 +19,15 @@ const JoinConversationBottomBar = ({
   onSendMessage,
   onAIResponseGenerationRequest,
 }: JoinConversationBottomBarProps) => {
+  const baseVolume = 0.5;
+  const { play } = useSound(popupsound, baseVolume);
+
+  useEffect(() => {
+    if (sessionStatus === AdminConversationJoinStatus.JOINED) {
+      play();
+    }
+  }, [sessionStatus, play]);
+
   const renderContent = (sessionStatus: AdminConversationJoinStatus) => {
     switch (sessionStatus) {
       case AdminConversationJoinStatus.PENDING:

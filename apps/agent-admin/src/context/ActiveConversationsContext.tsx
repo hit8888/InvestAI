@@ -2,8 +2,10 @@ import React, { createContext, useEffect, useState } from 'react';
 import useActiveConversationsWebSocket from '../hooks/useActiveConversationsWebSocket';
 import useActiveConversations from '../queries/query/useActiveConversations';
 import { BuyerIntent } from '@meaku/core/types/common';
+import useSound from '@meaku/core/hooks/useSound';
 import { useNavigate, useParams } from 'react-router-dom';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
+import popupsound from '../assets/popup-sound.mp4';
 
 export type ActiveConversationCard = {
   sessionId: string;
@@ -62,6 +64,9 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   const { setCurrentConversation } = useJoinConversationStore();
   const navigate = useNavigate();
 
+  const baseVolume = 0.35;
+  const { play } = useSound(popupsound, baseVolume);
+
   useEffect(() => {
     if (conversations) {
       setActiveConversations(conversations);
@@ -84,7 +89,9 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
     const hasNewSession = !!liveSessionIds.find((sessionId) => !currentSessionIds.includes(sessionId));
 
     if (hasNewSession) {
-      refetchActiveConversations();
+      refetchActiveConversations().then(() => {
+        play();
+      });
     } else {
       setActiveConversations((conversations) => {
         const newConversations: ActiveConversation[] = [];

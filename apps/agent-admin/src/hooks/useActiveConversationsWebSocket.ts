@@ -15,6 +15,8 @@ import { MessageSenderRole } from '@meaku/core/types/common';
 import { nanoid } from 'nanoid';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { getWebsocketBaseUrl } from '../utils/apiCalls.ts';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../assets/popup-sound.mp4';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
@@ -33,6 +35,9 @@ const useActiveConversationsWebSocket = () => {
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const handleAddUserMessage = useMessageStore((state) => state.handleAddAIMessage);
   const getMessagePayload = useGetMessagePayload();
+
+  const baseVolume = 0.2;
+  const { play } = useSound(popupsound, baseVolume);
 
   const { lastMessage, getWebSocket } = useWebSocket(liveConversationsWsUrl, {
     share: true,
@@ -81,6 +86,7 @@ const useActiveConversationsWebSocket = () => {
         handleAddAIMessage(response);
       } else if (response.role === MessageSenderRole.USER) {
         handleAddUserMessage(response);
+        play();
       }
 
       if (isTextMessage(response) || checkIsEventMessage(response)) {
