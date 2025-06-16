@@ -224,6 +224,7 @@ const config: Omit<Config, "content"> = {
         "typing-dot2": "typing-dot 1.2s infinite 0.2s",
         "typing-dot3": "typing-dot 1.2s infinite 0.4s",
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        flip: "flip 2s ease-in-out infinite",
       },
       keyframes: {
         ripple: {
@@ -280,6 +281,11 @@ const config: Omit<Config, "content"> = {
           "0%": { opacity: 0 },
           "50%": { opacity: 1 },
           "100%": { opacity: 0 },
+        },
+        flip: {
+          "0%": { transform: "rotateX(0deg)" },
+          "50%": { transform: "rotateX(180deg)" },
+          "100%": { transform: "rotateX(0deg)" },
         },
       },
       borderRadius: {

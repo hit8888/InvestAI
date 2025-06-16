@@ -32,7 +32,6 @@ const useAdminUserEmail = () => {
     if (isAdmin) {
       // Wait for prospectId to be available
       if (!prospectId) {
-        console.log('Waiting for prospectId to be available...');
         return;
       }
 

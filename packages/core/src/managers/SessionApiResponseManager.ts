@@ -61,8 +61,11 @@ export class SessionApiResponseManager {
     // Handle different message payload scenarios
     let history: WebSocketMessage[];
     if (messagesPayload.length >= USER_WELCOME_MESSAGE_STATE) {
-      // For 2 or more messages, append to existing history if it exists
-      history = chatHistory.length > 0 ? [...chatHistory, ...messagesPayload] : [...messagesPayload];
+      // For 2 or more messages, append to existing history if it exists ( overlay agent )
+      history =
+        chatHistory.length > 0
+          ? [...messagesPayload.slice(0, 1), ...chatHistory, ...messagesPayload.slice(1)]
+          : [...messagesPayload];
     } else if (messagesPayload.length === WELCOME_MESSAGE_STATE) {
       // For single welcome message, prepend to existing history - when init api is called
       history = [...messagesPayload, ...chatHistory];

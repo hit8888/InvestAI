@@ -1,13 +1,5 @@
-import { useCycle } from '../../hooks/useCycle';
-import SlideSubTitle from '../layout/SlideSubTitle';
 import CommonSlideArtifactContent from './CommonSlideArtifactContent';
-
-const STATIC_LABEL_CONTENT_INTERVAL_DURATION_IN_MS = 2000;
-const STATIC_LABEL_CONTENT = [
-  `I'll surface relevant visuals here, in real time.`,
-  `Slides, videos, and demo will load here.`,
-  `Getting things ready...`,
-];
+import { LucideHourglass } from 'lucide-react';
 
 const StaticArtifactContainer = () => {
   return (
@@ -22,14 +14,10 @@ const StaticArtifactContainer = () => {
 };
 
 const NudgeArtifactContent = () => {
-  const { currentItemIndex } = useCycle({
-    itemsLength: STATIC_LABEL_CONTENT.length,
-    intervalDuration: STATIC_LABEL_CONTENT_INTERVAL_DURATION_IN_MS,
-  });
   return (
     <CommonSlideArtifactContent>
-      <div className="flex h-full w-full items-center justify-start pl-8">
-        <SlideSubTitle className="w-full" text={STATIC_LABEL_CONTENT[currentItemIndex]} />
+      <div className="flex h-full w-full items-center justify-center">
+        <LucideHourglass className="h-40 w-40 animate-flip stroke-primary stroke-2" />
       </div>
     </CommonSlideArtifactContent>
   );

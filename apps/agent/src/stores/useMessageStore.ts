@@ -131,15 +131,11 @@ export const useMessageStore = create<State>()(
               draft.messages = filterOutSuggestions(draft.messages);
               draft.messages.push(message);
 
-              if (draft.messages.length === 2) {
-                draft.messages = [draft.messages[1]];
-              }
-
               // Filter out messages - when the user has sent the first message ( with session_id) + welcome message + user message ( without session_id)
               if (draft.messages.length === FIRST_WELCOME_USER) {
                 draft.messages = [
+                  ...draft.messages.slice(0, 1), // Keeping the welcome message
                   ...filterMessagesWithoutSessionId(draft.messages.slice(0), message), // Filtering out the user sent message with session_id
-                  ...draft.messages.slice(1, 2), // Keeping the waiting message
                 ];
               }
               draft.latestResponseId = message.response_id;

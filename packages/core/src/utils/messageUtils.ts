@@ -688,7 +688,8 @@ export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessa
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const [_, groupMessages] of sortedGroups) {
     const incompleteMessages = getIncompleteGroupMessages(groupMessages);
-    if (isMessageGroupReady(groupMessages)) {
+    const checkMessageGroupReady = isMessageGroupReady(groupMessages);
+    if (checkMessageGroupReady) {
       // If stream is complete or there's no stream, show all messages in order
       result.push(...sortMessageGroup(groupMessages));
     } else if (incompleteMessages.length > 0) {

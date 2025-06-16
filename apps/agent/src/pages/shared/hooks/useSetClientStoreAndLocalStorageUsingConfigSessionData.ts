@@ -11,7 +11,7 @@ import { ConfigurationApiResponseManager } from '@meaku/core/managers/Configurat
 import { hasDemoEndMessage } from '@meaku/core/utils/messageUtils';
 import { MESSAGE_STATE } from '@meaku/core/utils/index';
 
-const { EMPTY, DEMO_START, FIRST_AND_WELCOME } = MESSAGE_STATE;
+const { EMPTY, DEMO_START, FIRST_AND_WELCOME, FIRST_WELCOME_LOADING_TEXT } = MESSAGE_STATE;
 
 const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
   configurationApiResponse,
@@ -58,7 +58,11 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
 
     // For Showing the first message in the chat history instantly
     // messagesStore.length === 2 is for the case when the user has sent the first message ( without sessionId) + welcome message
-    const newMessages = messagesStore.length === FIRST_AND_WELCOME ? [...messagesStore] : [welcomeMessagePayload];
+    // messagesStore.length === 3 is for the case when the user has sent the first message ( without sessionId) + welcome message + ai message LOADING_TEXT ( Overlay agent )
+    const newMessages =
+      messagesStore.length === FIRST_AND_WELCOME || messagesStore.length === FIRST_WELCOME_LOADING_TEXT
+        ? [...messagesStore]
+        : [welcomeMessagePayload];
 
     const messages = sessionApiResponseManager
       ? sessionApiResponseManager.getFormattedChatHistory(newMessages)

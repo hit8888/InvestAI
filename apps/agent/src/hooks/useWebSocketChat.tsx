@@ -22,11 +22,9 @@ import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { useExponentialBackoff } from './useExponentialBackoff';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { AdminConversationJoinStatus, MessageSenderRole } from '@meaku/core/types/common';
-import { getFirstAiMessageShowingInChatHistory, getWebsocketBaseUrl } from '../utils/common.ts';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import { getWebsocketBaseUrl } from '../utils/common.ts';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 
-const DELAY_BETWEEN_WORDS = 75; // in ms
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
 const MAX_RETRY_INTERVAL = 20000;
@@ -44,46 +42,10 @@ const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = [
   'DEMO_END',
 ];
 
-const sendWordByWordMessage = (
-  message: string,
-  response_id: string,
-  session_id: string,
-  timestamp: string,
-  handleAddAIMessage: (message: WebSocketMessage) => void,
-) => {
-  const words = message.split(' ');
-  let currentIndex = 0;
-  const interval = setInterval(() => {
-    if (currentIndex >= words.length) {
-      clearInterval(interval);
-      return;
-    }
-
-    const currentMessage = words.slice(0, currentIndex + 1).join(' ');
-    const welcomeMessage: WebSocketMessage = {
-      response_id,
-      session_id,
-      timestamp,
-      message_type: 'TEXT',
-      message: {
-        content: currentMessage,
-      },
-      role: MessageSenderRole.AI,
-      documents: [],
-    };
-    handleAddAIMessage(welcomeMessage);
-    currentIndex++;
-  }, DELAY_BETWEEN_WORDS);
-};
-
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
 
   const isAdmin = useIsAdmin();
-
-  const orgNameFromConfig = useConfigurationApiResponseManager()?.getOrgName();
-  const firstAiMessageText = getFirstAiMessageShowingInChatHistory(orgNameFromConfig ?? '');
-
   const getMessagePayload = useGetMessagePayload();
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -228,29 +190,6 @@ const useWebSocketChat = () => {
         // isInitApiSuccess is true when the sessionId is generated and the session data is fetched from the server
         if (!isAdmin && !isInitApiSuccess) {
           handleAddUserMessage(payload);
-        }
-
-        // Adding Waiting message in the chat history instantly
-        // for demo agents, sessionId is generated when the user provides the email address so isInitApiSuccess is true
-        if (isAdmin && isInitApiSuccess) {
-          sendWordByWordMessage(
-            firstAiMessageText,
-            payload.response_id,
-            sessionId,
-            payload.timestamp,
-            handleAddAIMessage,
-          );
-        }
-
-        // for non-demo agents, session_id is not generated yet so isInitApiSuccess is false
-        if (!isInitApiSuccess && !sessionId) {
-          sendWordByWordMessage(
-            firstAiMessageText,
-            payload.response_id,
-            sessionId,
-            payload.timestamp,
-            handleAddAIMessage,
-          );
         }
         setHasFirstUserMessageBeenSent(true);
       }

@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const AiEnrichmentIcon = ({ className = '', width = 26, height = 26, ...props }: Props) => {
+const EnrichmentIcon = ({ className = '', width = 26, height = 26, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
@@ -80,4 +80,4 @@ const AiEnrichmentIcon = ({ className = '', width = 26, height = 26, ...props }:
   );
 };
 
-export default AiEnrichmentIcon;
+export default EnrichmentIcon;
