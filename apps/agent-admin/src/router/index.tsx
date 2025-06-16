@@ -61,6 +61,10 @@ const routes = [
             element: <ProtectedRoute element={<ConversationsPageContainer />} />,
           },
           {
+            path: 'conversations/live/:sessionID',
+            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
+          },
+          {
             path: 'conversations/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
           },

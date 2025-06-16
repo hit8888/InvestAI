@@ -1,7 +1,7 @@
 import ActiveConversationCard from './ActiveConversationCard';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ActiveConversation, ActiveConversationsContext } from '../../context/ActiveConversationsContext';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import LiveConversationsHeader from './LiveConversationsHeader';
 import { useTableWidth } from '@breakout/design-system/hooks/useTableWidth';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
@@ -11,6 +11,7 @@ import { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import { useSidebar } from '../../context/SidebarContext';
 import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { useNavigate } from 'react-router-dom';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
@@ -18,6 +19,7 @@ const ActiveConversationsLayout = () => {
   const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
   const [showActiveConversations, setShowActiveConversations] = useState(false);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
+  const navigate = useNavigate();
 
   const {
     currentConversation,
@@ -26,6 +28,10 @@ const ActiveConversationsLayout = () => {
     updateSessionStatus,
     setIsGeneratingAIResponse,
   } = useJoinConversationStore();
+
+  useEffect(() => {
+    setShowActiveConversations(Boolean(currentConversation));
+  }, [currentConversation]);
 
   const handleExitConversation = () => {
     const sessionId = currentConversation?.session_id;
@@ -44,11 +50,12 @@ const ActiveConversationsLayout = () => {
 
       updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
       setCurrentConversation(null);
+      navigate('/conversations');
     }
   };
 
   const handleCardClick = (conversation: ActiveConversation) => {
-    setCurrentConversation(conversation);
+    navigate(`/conversations/live/${conversation.session_id}`);
 
     if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
       updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
@@ -57,6 +64,7 @@ const ActiveConversationsLayout = () => {
 
   const handleCloseJoinConversationDrawer = () => {
     setCurrentConversation(null);
+    navigate('/conversations');
   };
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {

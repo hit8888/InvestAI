@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useState } from 'react';
 import useActiveConversationsWebSocket from '../hooks/useActiveConversationsWebSocket';
 import useActiveConversations from '../queries/query/useActiveConversations';
 import { BuyerIntent } from '@meaku/core/types/common';
+import { useNavigate, useParams } from 'react-router-dom';
+import useJoinConversationStore from '../stores/useJoinConversationStore';
 
 export type ActiveConversationCard = {
   sessionId: string;
@@ -56,12 +58,25 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   const { lastMessageBySession } = useActiveConversationsWebSocket();
   const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversations();
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
+  const { sessionID } = useParams<{ sessionID: string }>();
+  const { setCurrentConversation } = useJoinConversationStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (conversations) {
       setActiveConversations(conversations);
     }
-  }, [conversations]);
+
+    if (sessionID && conversations) {
+      const currentConversation = conversations.find((c) => c.session_id === sessionID);
+
+      if (currentConversation) {
+        setCurrentConversation(currentConversation);
+      } else {
+        navigate('/conversations');
+      }
+    }
+  }, [conversations, sessionID, setCurrentConversation]);
 
   useEffect(() => {
     const currentSessionIds = activeConversations?.map((c) => c.session_id) ?? [];

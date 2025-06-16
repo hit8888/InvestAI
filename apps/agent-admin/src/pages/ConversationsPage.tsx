@@ -13,7 +13,7 @@ const ConversationsPage = () => {
   const orgList = userInfo?.organizations;
   const tenantName = getTenantFromLocalStorage();
   const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
-  const showActiveConversations = organization?.active_conversations_enabled;
+  const activeConversationsEnabled = organization?.active_conversations_enabled;
 
   return (
     <>
@@ -22,7 +22,7 @@ const ConversationsPage = () => {
           headerTitle="Conversations"
           headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
-        {showActiveConversations && (
+        {activeConversationsEnabled && (
           <ActiveConversationsProvider>
             <ActiveConversationsLayout />
           </ActiveConversationsProvider>
