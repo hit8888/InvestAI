@@ -43,7 +43,7 @@ const ActiveConversationsLayout = () => {
         message: {
           content: '',
           event_type: 'LEAVE_SESSION',
-          event_data: {},
+          event_data: {}, // TODO: add event data
         },
         message_type: 'EVENT',
       });
