@@ -20,7 +20,11 @@ const AdminExitInfo = ({ message }: AdminExitInfoProps) => {
     return null;
   }
 
-  const eventData = message.message.event_data;
+  const eventData = message.message.event_data as {
+    first_name: string;
+    last_name: string;
+    profile_picture: string | null;
+  };
   const fullName = `${eventData?.first_name ?? ''} ${eventData.last_name ?? ''}`.trim();
   const adminName = fullName ?? 'Admin';
   const profileIconUrl = eventData?.profile_picture;
