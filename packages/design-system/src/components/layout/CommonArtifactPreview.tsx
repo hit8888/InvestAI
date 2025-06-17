@@ -3,6 +3,8 @@ import VideoPreviewIcon from '../icons/VideoPreviewIcon';
 import DemoPreviewIcon from '../icons/DemoPreviewIcon';
 import { ArtifactPreviewEnum } from '@meaku/core/types/artifact';
 import Typography from '../Typography';
+import { useTextTruncation } from '../../hooks/useTextTruncation';
+import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
 
 type CommonArtifactPreviewProps = {
   artifactType: keyof typeof ArtifactPreviewEnum;
@@ -32,6 +34,9 @@ const ARTIFACT_CONFIG = {
 
 const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }: CommonArtifactPreviewProps) => {
   const { header, icon: Icon } = ARTIFACT_CONFIG[artifactType];
+  const { textRef, isTextTruncated } = useTextTruncation({
+    text: title ?? '',
+  });
 
   return (
     <div
@@ -47,15 +52,27 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
       ) : (
         <div className="flex flex-1 items-center gap-2 text-left">
           <Typography variant="body-14" textColor="gray400">{`${header}: `}</Typography>
-          {title && (
-            <Typography
-              className="2xl:text-md line-clamp-1 break-all"
-              variant="label-14-medium"
-              textColor="textPrimary"
-            >
-              {title}
-            </Typography>
-          )}
+          <TooltipWrapperDark
+            tooltipSide="top"
+            tooltipAlign="end"
+            tooltipSideOffsetValue={15}
+            trigger={
+              <>
+                {title && (
+                  <Typography
+                    ref={textRef}
+                    className="2xl:text-md line-clamp-1 break-all"
+                    variant="label-14-medium"
+                    textColor="textPrimary"
+                  >
+                    {title}
+                  </Typography>
+                )}
+              </>
+            }
+            showTooltip={isTextTruncated}
+            content={<p>{title}</p>}
+          />
         </div>
       )}
     </div>

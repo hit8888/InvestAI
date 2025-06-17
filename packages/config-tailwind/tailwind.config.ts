@@ -219,11 +219,14 @@ const config: Omit<Config, "content"> = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
         "gradient-sweep": "gradient-sweep 4s linear infinite",
+        shimmer: "shimmer 4s linear infinite",
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-medium": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         slowSpin: "spin 4s linear infinite",
         "typing-dot1": "typing-dot 1.2s infinite 0.0s",
         "typing-dot2": "typing-dot 1.2s infinite 0.2s",
         "typing-dot3": "typing-dot 1.2s infinite 0.4s",
-        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         flip: "flip 2s ease-in-out infinite",
       },
       keyframes: {
@@ -286,6 +289,22 @@ const config: Omit<Config, "content"> = {
           "0%": { transform: "rotateX(0deg)" },
           "50%": { transform: "rotateX(180deg)" },
           "100%": { transform: "rotateX(0deg)" },
+        },
+        pulse: {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.5",
+          },
+        },
+        shimmer: {
+          "0%": {
+            backgroundPosition: "-1000px 0",
+          },
+          "100%": {
+            backgroundPosition: "1000px 0",
+          },
         },
       },
       borderRadius: {

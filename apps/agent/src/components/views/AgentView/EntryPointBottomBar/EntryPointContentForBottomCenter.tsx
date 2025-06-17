@@ -59,7 +59,7 @@ const EntryPointContentForBottomCenter = ({
   const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
 
   return (
-    <div className="w-full rounded-2xl bg-gray-50 p-2">
+    <div className="w-full rounded-2xl bg-gray-50 p-1">
       <form
         onSubmit={handleFormSubmission}
         className="flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"

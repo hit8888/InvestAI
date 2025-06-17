@@ -71,7 +71,7 @@ const PopupContent = ({
               />
             </div>
           )}
-          <div className="flex w-full flex-col items-start justify-center gap-2">
+          <div className="flex w-full flex-col items-start justify-center gap-1">
             <Typography className="flex-1" variant="title-18" textColor="textPrimary">
               {header ? header : `Hi! I am ${agentName}`} <span className="absolute animate-wave">👋</span>
             </Typography>
