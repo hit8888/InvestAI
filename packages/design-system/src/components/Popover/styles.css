@@ -1,6 +1,6 @@
 .pop-over-content {
   transform-origin: var(--radix-popover-content-transform-origin);
-  animation: scaleIn 0.5s ease-out;
+  animation: scaleIn 0.25s ease-out;
 }
 
 @keyframes scaleIn {

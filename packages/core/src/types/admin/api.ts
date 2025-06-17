@@ -509,3 +509,90 @@ export const ReprocessWebpagesResponseSchema = z.object({
   task_id: z.string(),
 });
 export type ReprocessWebpagesResponse = z.infer<typeof ReprocessWebpagesResponseSchema>;
+
+export const InsightsCommonRequestSchema = z.object({
+  start_date: z.string(),
+  end_date: z.string(),
+  timezone: z.string(),
+});
+export type InsightsCommonRequest = z.infer<typeof InsightsCommonRequestSchema>;
+
+export const InsightsSummaryResponseSchema = z.object({
+  summary: z.string(),
+});
+export type InsightsSummaryResponse = z.infer<typeof InsightsSummaryResponseSchema>;
+
+export const SessionInsightsRequestSchema = z.object({
+  start_date: z.string(),
+  end_date: z.string(),
+  timezone: z.string(),
+  insight_interval: z.enum(['hourly', 'daily', 'weekly']),
+});
+export type SessionInsightsRequest = z.infer<typeof SessionInsightsRequestSchema>;
+
+export const DailySessionInsightsResponseSchema = z.object({
+  daily_counts: z.array(
+    z.object({
+      date: z.string(),
+      session_count: z.number(),
+    }),
+  ),
+  busiest_day: z.object({
+    date: z.string(),
+    session_count: z.number(),
+  }),
+  total_conversations: z.number(),
+});
+export type DailySessionInsightsResponse = z.infer<typeof DailySessionInsightsResponseSchema>;
+
+export enum DayOfWeek {
+  MONDAY = 'Monday',
+  TUESDAY = 'Tuesday',
+  WEDNESDAY = 'Wednesday',
+  THURSDAY = 'Thursday',
+  FRIDAY = 'Friday',
+  SATURDAY = 'Saturday',
+  SUNDAY = 'Sunday',
+}
+
+export const WeeklySessionInsightsResponseSchema = z.object({
+  weekly_pattern: z.array(
+    z.object({
+      day: z.nativeEnum(DayOfWeek),
+      average: z.number(),
+    }),
+  ),
+  busiest_day: z.nativeEnum(DayOfWeek),
+  quietest_day: z.nativeEnum(DayOfWeek),
+});
+export type WeeklySessionInsightsResponse = z.infer<typeof WeeklySessionInsightsResponseSchema>;
+
+export const HourlySessionInsightsResponseSchema = z.object({
+  hourly_pattern: z.record(z.nativeEnum(DayOfWeek), z.record(z.string(), z.number())),
+  overall_average: z.record(z.string(), z.number()),
+  timezone: z.string(),
+});
+export type HourlySessionInsightsResponse = z.infer<typeof HourlySessionInsightsResponseSchema>;
+
+export const FrequentDocumentsResponseSchema = z.object({
+  most_frequently_referenced_documents: z.array(
+    z.object({
+      document_id: z.string(),
+      title: z.string(),
+      url: z.string(),
+      data_source_type: z.string(),
+      reference_count: z.number(),
+    }),
+  ),
+});
+export type FrequentDocumentsResponse = z.infer<typeof FrequentDocumentsResponseSchema>;
+
+export const TopQuestionsByUserResponseSchema = z.object({
+  top_user_questions: z.array(
+    z.object({
+      question: z.string(),
+      count: z.number(),
+    }),
+  ),
+});
+export type TopQuestionsByUserResponse = z.infer<typeof TopQuestionsByUserResponseSchema>;

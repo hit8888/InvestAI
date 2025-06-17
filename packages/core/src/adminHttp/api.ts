@@ -20,15 +20,23 @@ import {
   GenerateOtpPayload,
   GenerateTokens,
   LoginWithGoogleSsoPayload,
+  InsightsCommonRequest,
+  InsightsSummaryResponse,
   LeadsPayload,
   LoginWithEmailPasswordPayload,
   ReprocessWebpagesRequest,
   ReprocessWebpagesResponse,
+  SessionInsightsRequest,
+  DailySessionInsightsResponse,
   UpdateArtifactRequest,
   VerifyOtpPayload,
   CreateCustomDocumentRequest,
   CreateAndUpdateCustomDocumentResponse,
   UpdateCustomDocumentRequest,
+  WeeklySessionInsightsResponse,
+  HourlySessionInsightsResponse,
+  TopQuestionsByUserResponse,
+  FrequentDocumentsResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -179,3 +187,18 @@ export const bulkProcessDocuments = (payload: BulkProcessDocumentsRequest) =>
 
 export const bulkReprocessArtifacts = (payload: BulkReprocessArtifactsRequest) =>
   adminApiClient.post(`tenant/api/artifacts/bulk-reprocess/`, payload);
+
+export const getInsightsSummary = (payload: InsightsCommonRequest) =>
+  adminApiClient.post<InsightsSummaryResponse>(`tenant/api/analytics/ai-generated-summary/`, payload);
+
+export const getSessionInsights = <
+  T extends DailySessionInsightsResponse | WeeklySessionInsightsResponse | HourlySessionInsightsResponse,
+>(
+  payload: SessionInsightsRequest,
+) => adminApiClient.post<T>(`tenant/api/analytics/session-count-by-interval/`, payload);
+
+export const getFrequentSourcesInsights = (payload: InsightsCommonRequest) =>
+  adminApiClient.post<FrequentDocumentsResponse>(`tenant/api/analytics/most-frequently-referenced-documents/`, payload);
+
+export const getTopQuestionsByUser = (payload: InsightsCommonRequest) =>
+  adminApiClient.post<TopQuestionsByUserResponse>(`tenant/api/analytics/top-user-questions/`, payload);

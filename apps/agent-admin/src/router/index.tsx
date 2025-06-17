@@ -18,6 +18,7 @@ import EntryPointsPage from '../pages/EntryPointsPage';
 import AIPromptsPage from '../pages/AIPromptsPage';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import RedirectGuard from './RedirectGaurd.tsx';
+import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -117,6 +118,10 @@ const routes = [
                 element: <ProtectedRoute element={<PlaygroundPage />} />,
               },
             ],
+          },
+          {
+            path: 'insights',
+            element: <ProtectedRoute element={<InsightsPageContainer />} />,
           },
         ],
       },

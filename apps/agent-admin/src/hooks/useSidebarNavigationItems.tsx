@@ -7,6 +7,8 @@ import PanelConversationActiveIcon from '@breakout/design-system/components/icon
 import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
 import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent-icon';
 import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
+import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-insights-icon';
+import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/panel-insights-active-icon';
 import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
 
 import usePageRouteState from './usePageRouteState';
@@ -47,6 +49,7 @@ const useSidebarNavigationItems = () => {
     isAgentEntrypointsPage,
     isAgentAiPromptsPage,
     isTrainingPlaygroundPage,
+    isInsightsPage,
   } = usePageRouteState();
 
   const {
@@ -59,6 +62,7 @@ const useSidebarNavigationItems = () => {
     AGENT_DATA_SOURCES,
     TRAINING,
     TRAINING_PLAYGROUND,
+    INSIGHTS,
   } = AppRoutesEnum;
 
   const {
@@ -71,6 +75,7 @@ const useSidebarNavigationItems = () => {
     AGENT_AI_PROMPTS_LABEL,
     TRAINING_LABEL,
     TRAINING_PLAYGROUND_LABEL,
+    INSIGHT_LABEL,
   } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
@@ -173,6 +178,16 @@ const useSidebarNavigationItems = () => {
           isActive: isTrainingPlaygroundPage,
         },
       ],
+    },
+    {
+      navUrl: `${basicURL}/${INSIGHTS}`,
+      navItem: INSIGHT_LABEL,
+      navImg: isInsightsPage ? (
+        <PanelInsightsActiveIcon {...COMMON_SMALL_ICON_PROPS} />
+      ) : (
+        <PanelInsightsIcon {...COMMON_SMALL_ICON_PROPS} />
+      ),
+      isActive: isInsightsPage,
     },
   ];
 

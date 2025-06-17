@@ -16,6 +16,7 @@ const usePageRouteState = () => {
     AGENT_AI_PROMPTS,
     TRAINING,
     TRAINING_PLAYGROUND,
+    INSIGHTS,
   } = AppRoutesEnum;
 
   const isDashboardPage = location.pathname === '/';
@@ -31,6 +32,7 @@ const usePageRouteState = () => {
   const isAgentAiPromptsPage = location.pathname.includes(AGENT_AI_PROMPTS);
   const isTrainingPage = location.pathname.includes(TRAINING);
   const isTrainingPlaygroundPage = location.pathname.includes(TRAINING_PLAYGROUND);
+  const isInsightsPage = location.pathname.includes(INSIGHTS);
 
   const pathURL = location.pathname;
 
@@ -48,6 +50,7 @@ const usePageRouteState = () => {
     isAgentAiPromptsPage,
     isTrainingPage,
     isTrainingPlaygroundPage,
+    isInsightsPage,
     pathURL,
   };
 };

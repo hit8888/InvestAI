@@ -51,6 +51,7 @@ const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel
 
 export const CONVERSATION_LABEL_UPPERCASE = 'CONVERSATION';
 export const LEAD_LABEL_UPPERCASE = 'LEAD';
+export const INSIGHT_LABEL = 'INSIGHT';
 
 export const TABLE_COLUMN_WIDTH_SIZE = 200;
 
@@ -352,6 +353,7 @@ export enum AppRoutesEnum {
   AGENT_AI_PROMPTS = 'agent/ai-prompts',
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
+  INSIGHTS = 'insights',
 }
 
 export enum SidebarNavItemsEnum {
@@ -365,6 +367,7 @@ export enum SidebarNavItemsEnum {
   AGENT_AI_PROMPTS_LABEL = 'AI Prompts',
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
+  INSIGHT_LABEL = 'Insights',
 }
 
 // LEADS Page
