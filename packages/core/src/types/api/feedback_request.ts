@@ -10,6 +10,8 @@ export const FeedbackRequestPayloadSchema = z.object({
   positive_feedback: z.boolean(),
   category: z.string().nullable().optional(),
   remarks: z.string().nullable().optional(),
+  user_message: z.string().nullable().optional(),
+  ai_message: z.string().nullable().optional(),
 });
 
 export const getFeedbackRequestPayloadSchema = (isFeedbackThumbDown: boolean) => {

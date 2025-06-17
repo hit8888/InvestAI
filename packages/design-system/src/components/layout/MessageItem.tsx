@@ -96,6 +96,10 @@ const MessageItem = ({
   const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
 
+  const userMessageSameResponseIDForFeedback = messagesWithSameResponseId.find(
+    (msg) => msg.role === 'user' && msg.response_id === message.response_id,
+  );
+
   const discoveryMessage = messagesWithSameResponseId.find((msg) => isDiscoveryQuestion(msg));
   const isDiscoveryMessage = !!discoveryMessage;
   const isCurrentDiscoveryMessage = isDiscoveryQuestion(message);
@@ -241,11 +245,12 @@ const MessageItem = ({
                 {formattedTimestamp}
               </Typography>
             )}
-            {isSalesResponseComplete && (
+            {isSalesResponseComplete && !!userMessageSameResponseIDForFeedback && (
               <MessageFeedback
                 sessionId={sessionId}
                 viewType={viewType}
                 message={message}
+                userMessage={userMessageSameResponseIDForFeedback}
                 feedback={feedback}
                 onAddFeedback={handleAddFeedback}
                 onRemoveFeedback={handleRemoveFeedback}

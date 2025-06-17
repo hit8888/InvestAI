@@ -37,6 +37,7 @@ import { ViewType } from '@meaku/core/types/common';
 interface IProps {
   sessionId: string;
   message: WebSocketMessage;
+  userMessage: WebSocketMessage;
   feedback?: FeedbackRequestPayload;
   onAddFeedback: (feedback: Partial<FeedbackRequestPayload>) => void;
   onRemoveFeedback: () => void;
@@ -47,6 +48,7 @@ interface IProps {
 const MessageFeedback = ({
   sessionId,
   message,
+  userMessage,
   feedback,
   onAddFeedback,
   onRemoveFeedback,
@@ -165,6 +167,8 @@ const MessageFeedback = ({
         positive_feedback: positiveFeedbackValue,
         category: response.category,
         remarks: response.remarks,
+        user_message: userMessage.message.content ?? '',
+        ai_message: message.message.content ?? '',
       },
     });
   };
