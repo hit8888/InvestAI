@@ -20,7 +20,8 @@ export const useSlideArtifactScaleSystem = ({ targetWidth = 1600, targetHeight =
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        setScale(calculateScale(entry.target as HTMLElement));
+        const newScale = calculateScale(entry.target as HTMLElement);
+        setScale(newScale);
       }
     });
 

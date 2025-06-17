@@ -10,27 +10,25 @@ type CommonSlideArtifactContentProps = {
 const CommonSlideArtifactContent = ({ children }: CommonSlideArtifactContentProps) => {
   const { containerRef, scale } = useSlideArtifactScaleSystem();
   return (
-    <div className="h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0">
-      <AspectRatio ratio={16 / 9}>
-        <div ref={containerRef} className="relative aspect-video h-full w-full">
-          <div className="absolute h-full w-full overflow-hidden rounded-lg border border-gray-200">
-            <SlideBackgroundPattern patternColor="rgb(var(--primary) / 0.2)" />
-            <ArtifactWhiteBgEllipse />
+    <AspectRatio ratio={16 / 9}>
+      <div ref={containerRef} className="relative aspect-video h-full w-full">
+        <div className="absolute h-full w-full overflow-hidden rounded-lg border border-gray-200">
+          <SlideBackgroundPattern patternColor="rgb(var(--primary) / 0.2)" />
+          <ArtifactWhiteBgEllipse />
 
-            <div
-              className="relative z-10 h-full w-full origin-top-left p-2"
-              style={{
-                transform: `scale(${scale})`,
-                minHeight: '900px',
-                minWidth: '1600px',
-              }}
-            >
-              {children}
-            </div>
+          <div
+            className="relative z-10 h-full w-full origin-top-left p-2"
+            style={{
+              transform: `scale(${scale})`,
+              minHeight: '900px',
+              minWidth: '1600px',
+            }}
+          >
+            {children}
           </div>
         </div>
-      </AspectRatio>
-    </div>
+      </div>
+    </AspectRatio>
   );
 };
 
