@@ -57,14 +57,12 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }
       <AspectRatio ratio={16 / 9}>
         <div ref={containerRef} className="relative aspect-video h-full w-full">
           <div
-            className="relative z-10 h-full w-full origin-top-left p-2"
+            className="relative z-10 h-full min-h-[900px] w-full min-w-[1600px] origin-top-left p-2 mac-pro-14:min-w-[2000px] mac-pro-16:min-w-[2400px] full-hd:min-w-[2800px]"
             style={{
               transform: `scale(${scale})`,
-              minHeight: '900px',
-              minWidth: '1600px',
             }}
           >
-            {!is_filled && (
+            {(!is_filled || !isQualificationFormFilled) && (
               <p className="w-full pb-6 pr-6 text-right text-2xl font-semibold text-gray-500">{`${steps} of 2`}</p>
             )}
             {steps === 1 ? (

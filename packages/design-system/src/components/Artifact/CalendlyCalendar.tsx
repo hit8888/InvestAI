@@ -28,7 +28,7 @@ export const CalendlyCalendar = ({ calendarContent, handleSendUserMessage }: Pro
   });
 
   return (
-    <div className="h-full w-full sm:min-h-[600px]">
+    <div className="h-full w-full overflow-auto">
       <CalendlyWidget
         url={calendarContent.calendar_url}
         prefill={calendarContent.prefill_data}

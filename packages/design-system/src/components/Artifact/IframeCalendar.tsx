@@ -35,7 +35,7 @@ export const IframeCalendar = ({ calendarContent, handleSendUserMessage }: Props
   }, [calendarContent, handleSendUserMessage]);
 
   return (
-    <div className="h-full w-full overflow-auto sm:min-h-[400px]">
+    <div className="h-full w-full overflow-auto sm:min-h-[300px]">
       <iframe
         ref={iframeRef}
         src={calendarContent.calendar_url}

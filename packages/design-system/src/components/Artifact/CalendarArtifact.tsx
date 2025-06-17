@@ -38,8 +38,8 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
       className={cn(
         `h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0 `,
         {
-          'min-h-[400px] min-w-[600px]': isIframeOrHubSpotCalendar,
-          'xl:min-h-[680px] xl:min-w-[1200px]': !isIframeOrHubSpotCalendar,
+          'min-h-[300px] min-w-[600px]': isIframeOrHubSpotCalendar,
+          '2xl:min-h-[380px] 2xl:min-w-[1500px]': !isIframeOrHubSpotCalendar,
         },
       )}
     >
