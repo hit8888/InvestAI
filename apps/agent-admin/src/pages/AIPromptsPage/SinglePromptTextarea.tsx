@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CommonAIPromptsProps, getFilterAppliedValues, getSortedPrompts } from './utils';
 import Card from '../../components/AgentManagement/Card.tsx';
-import InfoCard from '../../components/AgentManagement/InfoCard.tsx';
 import { Prompt, usePrompts } from '../../queries/query/usePrompts.ts';
 import { useCreatePrompt } from '../../queries/mutation/usePromptMutations.ts';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
@@ -9,10 +8,10 @@ import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import LoadingState from './LoadingState.tsx';
 import PromptHeader from './PromptHeader.tsx';
 import PromptArea from './PromptArea.tsx';
-import AddMorePromptButton from './AddMorePromptButton.tsx';
 
 const SinglePromptTextarea = ({
   title,
+  infoTitle,
   promptType,
   description,
   exampleDescription,
@@ -41,7 +40,7 @@ const SinglePromptTextarea = ({
   useEffect(() => {
     if (prompts) {
       const sortedPrompts = getSortedPrompts(prompts);
-      setLocalPrompts(sortedPrompts.length > 0 ? sortedPrompts : [{ prompt: '', agent_id: agentId }]);
+      setLocalPrompts(sortedPrompts);
 
       // Store original values
       const originalValues: Record<string, string> = {};
@@ -66,8 +65,6 @@ const SinglePromptTextarea = ({
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <PromptHeader title={title} description={description} />
       <Card background={'GRAY25'} border={'GRAY200'}>
-        <InfoCard title={'Example:'} description={exampleDescription} />
-
         <PromptArea
           title={title}
           promptType={promptType}
@@ -78,13 +75,8 @@ const SinglePromptTextarea = ({
           originalPromptsRef={originalPromptsRef}
           createPromptMutation={createPromptMutation}
           error={error}
-        />
-
-        <AddMorePromptButton
-          agentId={agentId}
-          localPrompts={localPrompts}
-          setLocalPrompts={setLocalPrompts}
-          isMutationPending={createPromptMutation.isPending}
+          infoTitle={infoTitle}
+          exampleDescription={exampleDescription}
         />
       </Card>
     </div>

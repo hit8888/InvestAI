@@ -6,25 +6,37 @@ export type CommonAIPromptsProps = {
   textareaPlaceholder: string;
   exampleDescription: string;
   description: string;
+  infoTitle: string;
 };
+
+export const COMMON_AI_PROMPTS_DESCRIPTION =
+  'Set up your own rules to guide the assistant’s behavior. This field allows you to write specific instructions in plain English.';
 
 export const CommonAIPrompts: CommonAIPromptsProps[] = [
   {
     title: 'Agent Personality',
     promptType: 'trait',
     textareaPlaceholder: 'Describe how the assistant should interact with users…',
-    exampleDescription:
-      'Act as a friendly, enthusiastic, and highly knowledgeable sales expert who is eager to help customers discover the best solutions.',
-    description:
-      'Set up your own rules to guide the assistant’s behavior. This field allows you to write specific instructions in plain English.',
+    exampleDescription: 'Act as a helpful and clear product expert who guides users with confidence and empathy.',
+    description: `Guide your AI assistant's behavior and personality to optimize its interactions.`,
+    infoTitle: 'Instruction for Agent Personality:',
   },
   {
     title: 'Instructions',
     promptType: 'directive',
     textareaPlaceholder: 'Type your custom instructions here…',
-    exampleDescription: 'If the user asks anything about integrations, redirect them to the integrations page.',
-    description:
-      'Set up your own rules to guide the assistant’s behavior. This field allows you to write specific instructions in plain English.',
+    exampleDescription:
+      'If the user asks anything product-related, guide them to the most relevant feature using clear, concise language. Be helpful, not overwhelming.',
+    description: COMMON_AI_PROMPTS_DESCRIPTION,
+    infoTitle: 'General Instructions:',
+  },
+  {
+    title: 'Agent Response Word Count',
+    promptType: '',
+    textareaPlaceholder: '',
+    exampleDescription: '',
+    description: `Define the ideal length for the AI assistant's responses. Use this to control conciseness or provide more detailed answers.`,
+    infoTitle: '',
   },
 ];
 

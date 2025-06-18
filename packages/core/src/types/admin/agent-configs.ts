@@ -43,6 +43,11 @@ const baseAgentConfigSchema = z.object({
       banner_config: BannerConfigSchema,
       entry_point_alignment: z.string(),
     }),
+    'response_generation:prompt': z
+      .object({
+        response_size_type: z.enum(['STANDARD', 'DETAILED', 'BRIEF']),
+      })
+      .optional(),
   }),
 });
 

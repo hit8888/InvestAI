@@ -1,6 +1,6 @@
 import useInView from '@meaku/core/hooks/useInView';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { DemoPlayingStatus, MessageSenderRole } from '@meaku/core/types/common';
 import { getMessageTimestamp } from '@meaku/core/utils/index';
 import { ArtifactBaseType, MessageAnalyticsEventData, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
@@ -98,7 +98,7 @@ const MessageItem = ({
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
 
   const userMessageSameResponseIDForFeedback = messagesWithSameResponseId.find(
-    (msg) => msg.role === 'user' && msg.response_id === message.response_id,
+    (msg) => msg.role === MessageSenderRole.USER && msg.response_id === message.response_id,
   );
 
   const discoveryMessage = messagesWithSameResponseId.find((msg) => isDiscoveryQuestion(msg));

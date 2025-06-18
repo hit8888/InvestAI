@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const SourcesDefaultInfoIcon = ({ className = '', width, height, color, ...props }: Props) => {
+const DefaultInfoIcon = ({ className = '', width, height, color, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
@@ -22,4 +22,4 @@ const SourcesDefaultInfoIcon = ({ className = '', width, height, color, ...props
   );
 };
 
-export default SourcesDefaultInfoIcon;
+export default DefaultInfoIcon;

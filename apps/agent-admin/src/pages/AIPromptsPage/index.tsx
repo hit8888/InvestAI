@@ -1,22 +1,18 @@
 import PageContainer from '../../components/AgentManagement/PageContainer';
-import { CommonAIPrompts } from './utils';
+import { COMMON_AI_PROMPTS_DESCRIPTION, CommonAIPrompts } from './utils';
 import SinglePromptTextarea from './SinglePromptTextarea';
-
-const AIPromptsSubHeading = "Guide your AI assistant's behavior and personality to optimize its interactions.";
+import AgentResponseWordCount from './AgentResponseWordCount';
 
 const AIPromptsPage = () => {
+  const agentPersonality = CommonAIPrompts[0];
+  const instructions = CommonAIPrompts[1];
+  const agentResponseWordCount = CommonAIPrompts[2];
+
   return (
-    <PageContainer heading={'AI Prompts'} subHeading={AIPromptsSubHeading}>
-      {CommonAIPrompts.map((prompt) => (
-        <SinglePromptTextarea
-          key={prompt.title}
-          title={prompt.title}
-          promptType={prompt.promptType}
-          description={prompt.description}
-          textareaPlaceholder={prompt.textareaPlaceholder}
-          exampleDescription={prompt.exampleDescription}
-        />
-      ))}
+    <PageContainer heading={'AI Prompts'} subHeading={COMMON_AI_PROMPTS_DESCRIPTION}>
+      <SinglePromptTextarea key={agentPersonality.title} {...agentPersonality} />
+      <AgentResponseWordCount {...agentResponseWordCount} />
+      <SinglePromptTextarea key={instructions.title} {...instructions} />
     </PageContainer>
   );
 };
