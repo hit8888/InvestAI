@@ -53,32 +53,30 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }
   }
 
   return (
-    <div className="h-full w-full [&_[data-radix-aspect-ratio-wrapper]]:!h-full [&_[data-radix-aspect-ratio-wrapper]]:!pb-0">
-      <AspectRatio ratio={16 / 9}>
-        <div ref={containerRef} className="relative aspect-video h-full w-full">
-          <div
-            className="relative z-10 h-full min-h-[900px] w-full min-w-[1600px] origin-top-left p-2 mac-pro-14:min-w-[2000px] mac-pro-16:min-w-[2400px] full-hd:min-w-[2800px]"
-            style={{
-              transform: `scale(${scale})`,
-            }}
-          >
-            {(!is_filled || !isQualificationFormFilled) && (
-              <p className="w-full pb-6 pr-6 text-right text-2xl font-semibold text-gray-500">{`${steps} of 2`}</p>
-            )}
-            {steps === 1 ? (
-              <QualificationForm
-                handleIncrementSteps={handleIncrementSteps}
-                artifact={artifact}
-                handleSendUserMessage={handleSendUserMessage}
-              />
-            ) : null}
-            {steps === 2 ? (
-              <QualificationQuestions artifact={artifact} handleSendUserMessage={handleSendUserMessage} />
-            ) : null}
-          </div>
+    <AspectRatio ratio={16 / 9}>
+      <div ref={containerRef} className="relative aspect-video h-full w-full">
+        <div
+          className="relative z-10 h-full min-h-[900px] w-full min-w-[1600px] origin-top-left p-2"
+          style={{
+            transform: `scale(${scale})`,
+          }}
+        >
+          {(!is_filled || !isQualificationFormFilled) && (
+            <p className="w-full pb-6 pr-6 text-right text-2xl font-semibold text-gray-500">{`${steps} of 2`}</p>
+          )}
+          {steps === 1 ? (
+            <QualificationForm
+              handleIncrementSteps={handleIncrementSteps}
+              artifact={artifact}
+              handleSendUserMessage={handleSendUserMessage}
+            />
+          ) : null}
+          {steps === 2 ? (
+            <QualificationQuestions artifact={artifact} handleSendUserMessage={handleSendUserMessage} />
+          ) : null}
         </div>
-      </AspectRatio>
-    </div>
+      </div>
+    </AspectRatio>
   );
 };
 

@@ -46,7 +46,7 @@ const PopupContent = ({
         'popup-banner-box-shadow absolute flex min-w-[400px] max-w-[500px] cursor-pointer items-center justify-center rounded-3xl p-2',
         {
           '-top-36 left-2': isEntryPointOnTheBottomLeft,
-          '-left-24 -top-40 sm:-left-8 lg:-left-16 extraSmall:-left-12': isEntryPointOnTheCenterBottom,
+          '-left-24 -top-40 sm:-left-8 lg:-left-16 xs:-left-12': isEntryPointOnTheCenterBottom,
           '-top-36 right-0': isEntryPointOnTheBottomRight,
         },
       )}

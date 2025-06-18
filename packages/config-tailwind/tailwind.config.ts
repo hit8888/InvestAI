@@ -4,22 +4,23 @@ import type { Config } from "tailwindcss";
 import twAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
 
+// Tailwind Default Screen Resolution Breakpoints :- https://tailwindcss.com/docs/responsive-design
+// sm	40rem (640px)	@media (width >= 40rem) { ... }
+// md	48rem (768px)	@media (width >= 48rem) { ... }
+// lg	64rem (1024px)	@media (width >= 64rem) { ... }
+// xl	80rem (1280px)	@media (width >= 80rem) { ... }
+// 2xl	96rem (1536px)	@media (width >= 96rem) { ... }
+
 // We want each package to be responsible for its own content.
 const config: Omit<Config, "content"> = {
   theme: {
     extend: {
       screens: {
-        extraSmall: "360px",
-        hd: "1280px", // HD - 1280x720
-        "mac-air": "1280px", // MacBook Air - 1280x832
-        "hd-ready": "1366px", // HD Ready - 1366x768
-        desktop: "1440px", // Desktop - 1440x1024
-        "mac-pro-14": "1512px", // MacBook Pro 14 - 1512x982
-        "hd-plus": "1536px", // HD Plus - 1536x864
-        "mac-pro-16": "1728px", // MacBook Pro 16 - 1728x1117
-        "full-hd": "1920px", // Full HD Desktop - 1920x1080
-        "semi-qhd": "2200px", // Full HD Desktop - 2200x1080
-        qhd: "2560px", // QHD Desktop - 2560x1440
+        xs: "360px",
+        "3xl": "1728px",
+        "4xl": "1920px",
+        "5xl": "2200px",
+        "6xl": "2560px",
         "h-xs": { raw: "(max-height: 500px)" },
         "h-sm": { raw: "(min-height: 501px) and (max-height: 600px)" },
         "h-md": { raw: "(min-height: 601px) and (max-height: 900px)" },
