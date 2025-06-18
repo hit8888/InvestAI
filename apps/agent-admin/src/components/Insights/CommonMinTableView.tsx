@@ -15,9 +15,9 @@ interface CommonMinTableViewProps {
 
 const CommonMinTableView = ({ title, description, rows, columns = [], isLoading }: CommonMinTableViewProps) => {
   return (
-    <div className="py-6">
+    <div className="flex-1 py-6">
       <div className="mb-6">
-        <h1 className="mb-3 text-lg font-bold text-gray-900">{title}</h1>
+        <h1 className="mb-3 text-lg font-semibold text-gray-900">{title}</h1>
         <p className="text-sm leading-relaxed text-gray-500">{description}</p>
       </div>
 

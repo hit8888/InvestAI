@@ -23,10 +23,8 @@ const TopQuestionsByUsers = ({ start_date, end_date, timezone }: TopQuestionsByU
 
   return (
     <CommonMinTableView
-      title="Most Frequently Referenced Sources"
-      description={`This table displays the Sources most often retrieved by the AI agent to answer user questions. "Count"
-        reflects how many times each document was retrieved within the selected date range —the higher the count, the
-        more helpful the document has been in supporting user queries.`}
+      title="Top Questions Asked by Users"
+      description={`This table lists the most frequently asked questions by users during their conversations with the AI agent, sorted in descending order. “Count” indicates how many times each question was asked within the selected date range.`}
       rows={sources}
       columns={['Question', 'Count']}
       isLoading={isLoading}
