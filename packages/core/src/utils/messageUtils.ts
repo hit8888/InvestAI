@@ -23,6 +23,12 @@ export const isStreamMessage = (
   return message.message_type === 'STREAM' && message.actor === 'SALES';
 };
 
+export const checkIsLoadingTextMessage = (
+  message: WebSocketMessage,
+): message is WebSocketMessage & { message: { content: string } } => {
+  return message.message_type === 'LOADING_TEXT' && typeof message.message?.content === 'string';
+};
+
 export const isAIResponseInactiveMessage = (message: WebSocketMessage): boolean => {
   return (
     'event_type' in message.message &&
@@ -84,7 +90,7 @@ export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => 
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||
     (message.message_type === 'EVENT' && message.role === 'admin') ||
-    message.message_type === 'LOADING_TEXT'
+    checkIsLoadingTextMessage(message)
   );
 };
 
@@ -178,7 +184,7 @@ export const hasMatchingMessageType = (msg: WebSocketMessage, message: WebSocket
 };
 
 export const isLoadingTextToContentUpdate = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
-  return msg.message_type === 'LOADING_TEXT' && (isTextMessage(message) || isStreamMessage(message));
+  return checkIsLoadingTextMessage(msg) && (isTextMessage(message) || isStreamMessage(message));
 };
 
 export const hasMatchingEventType = (msg: WebSocketMessage, message: WebSocketMessage): boolean => {
@@ -587,8 +593,13 @@ const isDelayedMessage = (message: WebSocketMessage): boolean => {
 // Helper function to check if a group of messages with same response_id is ready to be shown
 const isMessageGroupReady = (messages: WebSocketMessage[]): boolean => {
   // If there's no stream message, the group is ready
-  const streamMessage = messages.find(isStreamMessage);
-  if (!streamMessage) return true;
+  const streamMessage = messages.find((msg) => isStreamMessage(msg));
+  const isDiscoveryQuestionMessage = messages.find((msg) => isDiscoveryQuestion(msg));
+  // Adding this condition to prevent discovery questions from showing up before the stream message arrives
+  if (!streamMessage) {
+    if (isDiscoveryQuestionMessage) return false;
+    return true;
+  }
 
   // If there is a stream message, check if it's complete
   return isStreamMessageComplete(streamMessage);
@@ -602,6 +613,7 @@ const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMess
   const nudgeMessage = messages.find((msg) => msg.role === MessageSenderRole.AI && !msg.actor && isTextMessage(msg));
 
   const streamMessage = messages.find(isStreamMessage);
+  const loadingMessage = messages.find((msg) => checkIsLoadingTextMessage(msg));
 
   const result: WebSocketMessage[] = [];
   if (userMessage) {
@@ -610,7 +622,11 @@ const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMess
   if (nudgeMessage) {
     result.push(nudgeMessage);
   }
-  if (streamMessage) {
+  // If there's no stream message yet but there's a loading message, show the loading message
+  // This prevents discovery questions from showing up before the stream message arrives
+  if (!streamMessage && loadingMessage) {
+    result.push(loadingMessage);
+  } else if (streamMessage) {
     result.push(streamMessage);
   }
   return result;
@@ -618,7 +634,7 @@ const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMess
 
 // Helper function to sort messages within a group
 const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
-  return messages.slice().sort((a, b) => {
+  const resultantMessages = messages.slice().sort((a, b) => {
     const aIsMainResponse = isMainResponse(a);
     const bIsMainResponse = isMainResponse(b);
     const aIsDelayed = isDelayedMessage(a);
@@ -653,6 +669,8 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
     // For all other cases, maintain their original order
     return 0;
   });
+
+  return resultantMessages;
 };
 
 // This function groups messages by response_id and then sorts them by the first occurrence of response_id

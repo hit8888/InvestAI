@@ -4,6 +4,7 @@ import {
   isPrimaryGoalCompletedMessage,
   isStreamMessageComplete,
   isTextMessage,
+  isCtaEvent,
 } from '@meaku/core/utils/messageUtils';
 import { useCallback } from 'react';
 
@@ -35,7 +36,11 @@ const useLatestMessageComplete = () => {
 
     // Check if any message is a complete stream message or a text message or a user event message with event_type as PRIMARY_GOAL_COMPLETED
     return currentResponseMessages.some(
-      (message) => isStreamMessageComplete(message) || isTextMessage(message) || isPrimaryGoalCompletedMessage(message),
+      (message) =>
+        isStreamMessageComplete(message) ||
+        isTextMessage(message) ||
+        isPrimaryGoalCompletedMessage(message) ||
+        isCtaEvent(message),
     );
   }, [store, latestResponseId]);
 

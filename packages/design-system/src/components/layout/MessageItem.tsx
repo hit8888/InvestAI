@@ -31,6 +31,7 @@ import {
   checkIsAdminJoinedMessage,
   checkIsAdminLeftMessage,
   isCtaEvent,
+  checkIsLoadingTextMessage,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -124,7 +125,7 @@ const MessageItem = ({
 
   const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
-  const isMessageLoading = isLoading || message.message_type === 'LOADING_TEXT';
+  const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
   const isCtaEventMessage = isCtaEvent(message);
 
   const shouldShowActiveOrb =

@@ -8,7 +8,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
-import { checkIsAIMessage, getMessageViewType } from '@meaku/core/utils/messageUtils';
+import { checkIsAIMessage, getMessageViewType, checkIsLoadingTextMessage } from '@meaku/core/utils/messageUtils';
 import ChatMessageTail from './ChatMessageTail';
 import ChatMessageTimestamp from './ChatMessageTimestamp';
 import ChatMessageSender from './ChatMessageSender';
@@ -46,6 +46,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
 
   const isAIMessage = checkIsAIMessage(message);
   const messageViewType = getMessageViewType(message.role as MessageSenderRole, viewType);
+  const isLoadingTextMessage = checkIsLoadingTextMessage(message);
 
   const handleMessageClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
@@ -64,7 +65,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
     );
 
   const renderMessageContent = () => {
-    if (message.message_type === 'LOADING_TEXT') {
+    if (isLoadingTextMessage) {
       return (
         <div className="flex h-8 items-center">
           <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
@@ -89,7 +90,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
       >
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
-        {(isAIMessage || message.message_type === 'LOADING_TEXT') && renderOrb()}
+        {(isAIMessage || isLoadingTextMessage) && renderOrb()}
 
         <div className="flex-col">
           <div
