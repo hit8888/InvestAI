@@ -29,7 +29,7 @@ const numbersOnlyRegex = /^\d*$/;
 const getZodType = (dataType: string) => {
   switch (dataType) {
     case 'string':
-      return z.string();
+      return z.string().min(1, 'Invalid input');
     case 'picklist':
       return z.string();
     case 'int':

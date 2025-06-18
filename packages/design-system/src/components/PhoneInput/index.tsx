@@ -13,9 +13,16 @@ type PhoneInputProps = {
   phoneLabel: string;
   isArtifactFormFilled: boolean;
   defaultCountry?: CountryCode;
+  className?: string;
 };
 
-const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled, defaultCountry = 'US' }: PhoneInputProps) => {
+const PhoneInputContainer = ({
+  field,
+  phoneLabel,
+  isArtifactFormFilled,
+  defaultCountry = 'US',
+  className,
+}: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   // TODO: Add default country based on user's IP address or something other logic
   // const getDefaultCountry = (): CountryCode => {
@@ -42,13 +49,17 @@ const PhoneInputContainer = ({ field, phoneLabel, isArtifactFormFilled, defaultC
         {
           'border-gray-400 ring-0 ': isFocused,
         },
+        className,
       )}
       readOnly={isArtifactFormFilled}
       placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}
       onFocus={() => setIsFocused(true)}
       {...field}
-      onBlur={() => setIsFocused(false)}
+      onBlur={() => {
+        field.onBlur();
+        setIsFocused(false);
+      }}
     />
   );
 };

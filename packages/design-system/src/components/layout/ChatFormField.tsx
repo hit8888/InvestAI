@@ -30,6 +30,7 @@ const getLabelWithRequiredIndicator = (label: string, isRequired: boolean): stri
 
 const ChatFormField = (props: IChatFormFieldProps) => {
   const { form, form_field, isArtifactFormFilled, fieldClassName } = props;
+  const fieldErrorMessage = form.formState.errors[form_field.field_name];
 
   const isIntField = form_field.data_type === 'int';
 
@@ -56,6 +57,10 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             field={field}
             defaultCountry={props.artifactMetadata.country_code as CountryCode}
+            className={cn(
+              fieldErrorMessage &&
+                'border-1 border border-destructive-600 [&>button]:bg-destructive-100 [&>input]:bg-destructive-25 [&_svg]:text-gray-900',
+            )}
           />
         );
       case 'picklist':
@@ -80,6 +85,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             className={cn(
               'border border-gray-300 bg-white text-customPrimaryText placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
               fieldClassName,
+              fieldErrorMessage && 'border-1 border border-destructive-600 bg-destructive-25',
             )}
             placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             type={getInputType(form_field.data_type)}
@@ -99,7 +105,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
           <div className="flex w-full items-center justify-center gap-2 space-y-0">
             <FormControl>{getFieldBasedOnDataType(field)}</FormControl>
           </div>
-          <FormMessage className={cn('font-medium text-red-500', fieldClassName)} />
+          <FormMessage className={cn('font-medium text-destructive-1000', fieldClassName)} />
         </FormItem>
       )}
     />
