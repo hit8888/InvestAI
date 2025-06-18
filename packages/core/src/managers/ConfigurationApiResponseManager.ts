@@ -33,6 +33,10 @@ export class ConfigurationApiResponseManager {
     return this.config.body.default_error_message;
   }
 
+  getDefaultArtifactUrl() {
+    return this.config.body.welcome_message.default_artifact_url;
+  }
+
   getInitialSuggestedQuestions() {
     return this.config.body.welcome_message.suggested_questions;
   }

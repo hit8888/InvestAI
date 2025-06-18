@@ -20,6 +20,7 @@ export const ConfigurationBodySchema = z.object({
     message: z.string(),
     suggested_questions: z.array(z.string()),
     bounce_message: z.boolean(),
+    default_artifact_url: z.string().nullable(),
   }),
   bottom_bar_config: BottomBarConfigSchema.optional(),
   disclaimer_message: z.string().optional(),

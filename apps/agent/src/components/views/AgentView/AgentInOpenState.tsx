@@ -49,6 +49,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
   const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
   const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
+  const defaultArtifactUrl = configurationApiResponseManager.getDefaultArtifactUrl();
 
   const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
 
@@ -115,7 +116,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
           />
 
           {/* Right Side Static Artifact Container */}
-          {!hasArtifactAiMessage ? <StaticArtifactContainer /> : null}
+          {!hasArtifactAiMessage ? <StaticArtifactContainer defaultArtifactUrl={defaultArtifactUrl} /> : null}
 
           {/* Right Side Artifact Container */}
           {nonDemoFlow && (
