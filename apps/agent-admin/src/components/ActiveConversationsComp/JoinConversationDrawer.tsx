@@ -55,7 +55,7 @@ const JoinConversationDrawer = ({
       setMessages([]);
       setChatSummary('');
     };
-  }, [isLoading, data, setChatHistory, setMessages, setChatSummary]);
+  }, [isLoading, data]);
 
   useEffect(() => {
     return () => {
