@@ -10,6 +10,8 @@ import JoinConversationBottomBar from './JoinConversationBottomBar';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 import { useMessageStore } from '../../hooks/useMessageStore';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../../assets/popup-sound.mp4';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
@@ -53,13 +55,16 @@ const JoinConversationDrawer = ({
       setMessages([]);
       setChatSummary('');
     };
-  }, [isLoading]);
+  }, [isLoading, data, setChatHistory, setMessages, setChatSummary]);
 
   useEffect(() => {
     return () => {
       setIsGeneratingAIResponse(false);
     };
   }, [setIsGeneratingAIResponse]);
+
+  const baseVolume = 0.5;
+  const { play } = useSound(popupsound, baseVolume);
 
   if (isError) {
     // TODO: track this error
@@ -69,6 +74,7 @@ const JoinConversationDrawer = ({
 
   const handleJoinButtonClick = () => {
     updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
+    play();
   };
 
   const handleSendMessage = (message: string) => {

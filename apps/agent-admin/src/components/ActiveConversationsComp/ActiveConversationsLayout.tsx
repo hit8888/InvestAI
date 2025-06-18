@@ -30,7 +30,9 @@ const ActiveConversationsLayout = () => {
   } = useJoinConversationStore();
 
   useEffect(() => {
-    setShowActiveConversations(Boolean(currentConversation));
+    if (currentConversation) {
+      setShowActiveConversations(Boolean(currentConversation));
+    }
   }, [currentConversation]);
 
   const handleExitConversation = () => {
@@ -116,8 +118,8 @@ const ActiveConversationsLayout = () => {
           isExpanded={showActiveConversations}
           onToggleView={() => setShowActiveConversations((prev) => !prev)}
         />
-        {showActiveConversations && activeConversations?.length ? (
-          <div className="w-full rounded-3xl">
+        {activeConversations?.length ? (
+          <div className={cn('w-full rounded-3xl', showActiveConversations ? 'block' : 'hidden')}>
             <div className="grid grid-cols-3 gap-4 overflow-hidden">
               {activeConversations.map((activeConversation) => (
                 <ActiveConversationCard
