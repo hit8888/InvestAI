@@ -7,6 +7,7 @@ import { useMessageStore } from './useMessageStore';
 import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import { getWebsocketBaseUrl } from '../utils/apiCalls';
+import useTabNotification from '@meaku/core/hooks/useTabNotification';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
@@ -115,6 +116,8 @@ const useAdminConversationsWebSocket = ({
     },
     [sessionId, sendMessage, handleAddAdminMessage],
   );
+
+  useTabNotification({ recentMessage: lastMessage });
 
   // @ts-expect-error type issue
   return { sendMessage: handleSendAdminMessage };

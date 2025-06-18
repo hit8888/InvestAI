@@ -12,6 +12,7 @@ import AgentInOpenState from './AgentInOpenState.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { OrbStatusEnum } from '@meaku/core/types/config';
+import useTabNotification from '@meaku/core/hooks/useTabNotification';
 interface IProps {
   fetchSessionData: () => void;
 }
@@ -19,7 +20,7 @@ interface IProps {
 const AgentView = ({ fetchSessionData }: IProps) => {
   const [showBubbles, setShowBubbles] = useState(false);
 
-  const { handleSendUserMessage } = useWebSocketChat();
+  const { handleSendUserMessage, lastMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
@@ -71,6 +72,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     }
     return isSideWiseEntryPoint ? 'items-end' : 'items-center';
   };
+
+  useTabNotification({ recentMessage: lastMessage });
 
   return (
     <div

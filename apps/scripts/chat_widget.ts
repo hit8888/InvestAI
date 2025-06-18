@@ -18,6 +18,7 @@ import {
 } from "./managers";
 import { type EntryPointAlignmentType } from "./lib/types";
 import { STORAGE_KEYS } from "lib/constants";
+import { TabNotificationManager } from "managers/TabNotificationManager";
 
 (function () {
   // Initialize managers
@@ -53,7 +54,7 @@ import { STORAGE_KEYS } from "lib/constants";
     configManager.getConfig().containerId,
   );
   const urlTrackingManager = UrlTrackingManager();
-
+  const tabNotificationManager = TabNotificationManager();
   HistoryManager(() => {
     const prospectId = localStorage.getItem(STORAGE_KEYS.PROSPECT_ID);
 
@@ -116,6 +117,10 @@ import { STORAGE_KEYS } from "lib/constants";
       }
 
       urlTrackingManager.init({
+        postMessage: messageManager.sendMessage.bind(null, iframe!),
+      });
+
+      tabNotificationManager.init({
         postMessage: messageManager.sendMessage.bind(null, iframe!),
       });
 

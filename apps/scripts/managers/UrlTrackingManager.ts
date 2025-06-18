@@ -82,7 +82,10 @@ function UrlTrackingManager() {
   function trackCurrentUrl(): void {
     if (!initialized) return;
 
-    const [currentUrl] = window.location.href.split("?");
+    const [currentUrl] = window.location.href
+      .split("?")[0]
+      .split("#")[0]
+      .replace(/\/$/, "");
     const timestamp = Date.now();
 
     // Check if URL is different from last entry
