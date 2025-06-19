@@ -28,7 +28,7 @@ const InsightsPage = () => {
     () => ({
       start_date: currentDateRange?.startDate ? moment(currentDateRange.startDate).format('YYYY-MM-DD') : '',
       end_date: currentDateRange?.endDate ? moment(currentDateRange.endDate).format('YYYY-MM-DD') : '',
-      timezone: moment().tz(timezone).zoneAbbr(),
+      timezone,
     }),
     [currentDateRange],
   );
