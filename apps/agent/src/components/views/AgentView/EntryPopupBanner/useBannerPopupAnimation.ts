@@ -4,25 +4,24 @@ import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 
 interface UseBannerPopupAnimationProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
-  setShowBubbles: (value: boolean) => void;
   hide_after?: number | null;
   show_at?: number;
+  setShowPopupContent: (value: boolean) => void;
+  showPopupContent: boolean;
 }
 
 interface UseBannerPopupAnimationReturn {
   showPopupContent: boolean;
-  isExiting: boolean;
   handleClosePopup: () => void;
 }
 
 export const useBannerPopupAnimation = ({
   setShowOrbAfterBubblesDisappear,
-  setShowBubbles,
   hide_after = 10,
   show_at = 10,
+  setShowPopupContent,
+  showPopupContent,
 }: UseBannerPopupAnimationProps): UseBannerPopupAnimationReturn => {
-  const [showPopupContent, setShowPopupContent] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
   const [hasShownOnce, setHasShownOnce] = useState(false);
 
   const { sessionData, handleUpdateSessionData } = useLocalStorageSession();
@@ -40,33 +39,20 @@ export const useBannerPopupAnimation = ({
     const showAtMs = show_at * 1000;
     const hideAfterMs = hide_after ? hide_after * 1000 : null;
 
-    // Show bubbles after show_at seconds
-    const bubbleTimer = setTimeout(() => {
-      setShowBubbles(true);
-    }, showAtMs);
-
-    // Show popup content after bubbles are fully animated
+    // Show popup content after show_at seconds
     const popupTimer = setTimeout(() => {
       setShowPopupContent(true);
-    }, showAtMs + 1000); // 1 second after bubbles
+    }, showAtMs);
 
     // Only set up exit timer if hide_after is provided
     if (hideAfterMs) {
       const exitTimer = setTimeout(() => {
-        setIsExiting(true);
         // First hide popup content
         setShowPopupContent(false);
+        setHasShownOnce(true);
 
-        // Then hide bubbles after popup content animation completes
-        setTimeout(() => {
-          setShowBubbles(false);
-          setHasShownOnce(true);
-        }, 500); // Match popup exit duration
-
-        // Show Orb Inside Entry bar After Bubbles Disappear
-        setTimeout(() => {
-          setShowOrbAfterBubblesDisappear(true);
-        }, 1500); // 1.5 seconds delay
+        // Show Orb Inside Entry bar After hide_after seconds
+        setShowOrbAfterBubblesDisappear(true);
       }, showAtMs + hideAfterMs);
 
       return () => {
@@ -76,9 +62,8 @@ export const useBannerPopupAnimation = ({
 
     return () => {
       clearTimeout(popupTimer);
-      clearTimeout(bubbleTimer);
     };
-  }, [hasShownOnce, isPopupInCooldown, setShowBubbles, setShowOrbAfterBubblesDisappear, show_at, hide_after]);
+  }, [hasShownOnce, isPopupInCooldown, setShowOrbAfterBubblesDisappear, show_at, hide_after]);
 
   const handleClosePopup = () => {
     handleUpdateSessionData({
@@ -86,12 +71,10 @@ export const useBannerPopupAnimation = ({
     });
     setShowOrbAfterBubblesDisappear(true);
     setShowPopupContent(false);
-    setShowBubbles(false);
   };
 
   return {
     showPopupContent,
-    isExiting,
     handleClosePopup,
   };
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi.tsx';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import PopupWithBubblesContainer from '../EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import EntryPointContentForBottomCenter from './EntryPointContentForBottomCenter.tsx';
@@ -17,8 +17,8 @@ interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleOpenAgent: () => void;
   hideBottomBar: boolean;
-  showBubbles: boolean;
-  setShowBubbles: (value: boolean) => void;
+  showPopupContent: boolean;
+  setShowPopupContent: (value: boolean) => void;
   entryPointAlignment: EntryPointAlignmentType;
 }
 
@@ -26,15 +26,14 @@ const EntryPointBottomBar = ({
   hideBottomBar,
   handleSendUserMessage,
   handleOpenAgent,
-  showBubbles,
-  setShowBubbles,
+  showPopupContent,
+  setShowPopupContent,
   entryPointAlignment,
 }: IProps) => {
-  const configurationApiResponseManager = useConfigurationApiResponseManager();
-  const { banner_config } = configurationApiResponseManager.getStyleConfig();
-  const agentName = configurationApiResponseManager.getAgentName();
+  const { banner_config, agentName } = useValuesFromConfigApi();
 
-  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(!banner_config?.show_banner);
+  const showBanner = !!banner_config?.show_banner;
+  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
 
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -74,12 +73,14 @@ const EntryPointBottomBar = ({
       })}
       style={containerStyle}
     >
-      <PopupWithBubblesContainer
-        showBubbles={isEntryPointOnTheBottomCenter ? showBubbles : false}
-        setShowBubbles={setShowBubbles}
-        setShowOrbAfterBubblesDisappear={isEntryPointOnTheBottomCenter ? setShowOrbAfterBubblesDisappear : () => {}}
-        popupBannerAlignment={entryPointAlignment}
-      />
+      {showBanner && (
+        <PopupWithBubblesContainer
+          showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
+          setShowPopupContent={setShowPopupContent}
+          popupBannerAlignment={entryPointAlignment}
+          setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
+        />
+      )}
       {isSideWiseEntryPoint ? (
         <SideWiseEntryPoint
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
@@ -87,7 +88,7 @@ const EntryPointBottomBar = ({
         />
       ) : (
         <EntryPointContentForBottomCenter
-          showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear}
+          showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear && !showPopupContent}
           entryPointAlignment={entryPointAlignment}
           handleSendUserMessage={handleSendUserMessage}
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}

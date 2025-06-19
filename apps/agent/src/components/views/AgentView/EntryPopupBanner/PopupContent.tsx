@@ -11,6 +11,8 @@ import { motion } from 'framer-motion';
 export type PopupContentProps = {
   agentName: string;
   orgName: string;
+  orbLogoUrl: string | undefined;
+  showOrb: boolean;
   header: string | undefined | null;
   subheader: string | undefined | null;
   handleClosePopup?: () => void;
@@ -20,6 +22,8 @@ export type PopupContentProps = {
 const PopupContent = ({
   agentName,
   orgName,
+  orbLogoUrl,
+  showOrb,
   header,
   subheader,
   handleClosePopup,
@@ -64,10 +68,11 @@ const PopupContent = ({
           {isEntryPointOnTheCenterBottom && (
             <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
               <Orb
-                showThreeStar
                 style={{ width: '40px', height: '40px', border: '1px solid #F2F4F7' }}
                 color={RGB_PRIMARY_COLOR}
                 state={OrbStatusEnum.waiting}
+                orbLogoUrl={orbLogoUrl}
+                showOrb={showOrb}
               />
             </div>
           )}

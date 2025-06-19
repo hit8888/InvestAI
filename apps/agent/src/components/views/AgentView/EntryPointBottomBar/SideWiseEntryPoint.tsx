@@ -1,7 +1,7 @@
 import EntryPointSuggestedQuestions from '@breakout/design-system/components/layout/EntryPointSuggestedQuestions';
 import InputOrb from '@breakout/design-system/components/layout/InputOrb';
 import { cn } from '@breakout/design-system/lib/cn';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi';
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
@@ -12,18 +12,11 @@ type SideWiseEntryPointProps = {
 };
 
 const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignment }: SideWiseEntryPointProps) => {
-  const configurationApiResponseManager = useConfigurationApiResponseManager();
-  const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
-  const invertTextColor = useConfigurationApiResponseManager().applyInvertTextColor();
+  const { initialSuggestedQuestions, invertTextColor, orbLogoUrl, showOrb } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const { setAgentOpen } = useUrlParams();
 
   const showSuggestedQuestions = initialSuggestedQuestions.length > 0 && !hasFirstUserMessageBeenSent;
-
-  const orbConfig = configurationApiResponseManager.getOrbConfig();
-  const orbLogoUrl = orbConfig?.logo_url ?? undefined;
-  // If we need to show orb, we need to set show_orb to true in the agent server config
-  const showOrb = orbConfig?.show_orb ?? undefined;
 
   const isEntryPointOnTheBottomRight = entryPointAlignment === EntryPointAlignment.RIGHT;
   const isEntryPointOnTheBottomLeft = entryPointAlignment === EntryPointAlignment.LEFT;

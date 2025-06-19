@@ -10,7 +10,7 @@ import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import AgentInOpenState from './AgentInOpenState.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useTabNotification from '@meaku/core/hooks/useTabNotification';
 interface IProps {
@@ -18,17 +18,17 @@ interface IProps {
 }
 
 const AgentView = ({ fetchSessionData }: IProps) => {
-  const [showBubbles, setShowBubbles] = useState(false);
+  const [showPopupContent, setShowPopupContent] = useState(false);
 
   const { handleSendUserMessage, lastMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
-  const { banner_config, entry_point_alignment } = useConfigurationApiResponseManager().getStyleConfig();
+  const { banner_config, entry_point_alignment } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
 
-  const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent && showBubbles;
+  const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent && showPopupContent;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();
@@ -92,8 +92,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
         handleSendUserMessage={handleSendMessage}
         handleOpenAgent={handleOpenAgent}
         hideBottomBar={shouldHideBottomBar}
-        showBubbles={showBubbles}
-        setShowBubbles={setShowBubbles}
+        showPopupContent={showPopupContent}
+        setShowPopupContent={setShowPopupContent}
         entryPointAlignment={entry_point_alignment ?? 'center'}
       />
     </div>

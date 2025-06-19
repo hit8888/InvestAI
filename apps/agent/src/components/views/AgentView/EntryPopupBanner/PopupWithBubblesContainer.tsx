@@ -1,29 +1,24 @@
 import { AnimatePresence } from 'framer-motion';
 import PopupContent from './PopupContent';
-import PopupBubble from './PopupBubble';
 import { useBannerPopupAnimation } from './useBannerPopupAnimation';
 import { useMessageStore } from '../../../../stores/useMessageStore';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi';
 
 interface ContainerProps {
   setShowOrbAfterBubblesDisappear: (value: boolean) => void;
-  showBubbles: boolean;
-  setShowBubbles: (value: boolean) => void;
   popupBannerAlignment: 'left' | 'center' | 'right';
+  setShowPopupContent: (value: boolean) => void;
+  showPopupContent: boolean;
 }
 
 const PopupWithBubblesContainer = ({
   setShowOrbAfterBubblesDisappear,
-  showBubbles,
-  setShowBubbles,
   popupBannerAlignment,
+  setShowPopupContent,
+  showPopupContent,
 }: ContainerProps) => {
-  const configurationApiResponseManager = useConfigurationApiResponseManager();
+  const { banner_config, orgName, agentName, orbLogoUrl, showOrb } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
-
-  const { banner_config } = configurationApiResponseManager.getStyleConfig();
-  const orgName = configurationApiResponseManager.getOrgName();
-  const agentName = configurationApiResponseManager.getAgentName();
 
   const show_banner = banner_config?.show_banner ?? true;
   const hide_after = banner_config?.hide_after ? banner_config?.hide_after : null;
@@ -31,9 +26,10 @@ const PopupWithBubblesContainer = ({
   const header = banner_config?.header;
   const subheader = banner_config?.subheader;
 
-  const { showPopupContent, isExiting, handleClosePopup } = useBannerPopupAnimation({
+  const { handleClosePopup } = useBannerPopupAnimation({
     setShowOrbAfterBubblesDisappear,
-    setShowBubbles,
+    setShowPopupContent,
+    showPopupContent,
     hide_after,
     show_at,
   });
@@ -45,16 +41,6 @@ const PopupWithBubblesContainer = ({
   return (
     <>
       <AnimatePresence>
-        {showBubbles && (
-          <>
-            <PopupBubble size={10} delay={0} index={0} isExiting={isExiting} />
-            <PopupBubble size={20} delay={0.4} index={1} isExiting={isExiting} />
-            <PopupBubble size={40} delay={0.8} index={2} isExiting={isExiting} />
-          </>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
         {showPopupContent && (
           <PopupContent
             handleClosePopup={handleClosePopup}
@@ -63,6 +49,8 @@ const PopupWithBubblesContainer = ({
             header={header}
             subheader={subheader}
             popupBannerAlignment={popupBannerAlignment}
+            orbLogoUrl={orbLogoUrl}
+            showOrb={showOrb}
           />
         )}
       </AnimatePresence>

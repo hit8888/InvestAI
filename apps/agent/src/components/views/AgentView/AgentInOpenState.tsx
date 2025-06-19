@@ -11,7 +11,7 @@ import StaticArtifactContainer from '@breakout/design-system/components/Artifact
 import { Demo } from './Demo/index.tsx';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import useLatestMessageComplete from '../../../hooks/useLatestMessageComplete.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
@@ -44,12 +44,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
 
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
-  const configurationApiResponseManager = useConfigurationApiResponseManager();
-
-  const ctaConfig = configurationApiResponseManager.getCTAConfig();
-  const logoURL = configurationApiResponseManager.getLogoUrl() ?? '';
-  const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
-  const defaultArtifactUrl = configurationApiResponseManager.getDefaultArtifactUrl();
+  const { ctaConfig, logoURL, invertTextColor, defaultArtifactUrl } = useValuesFromConfigApi();
 
   const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
 

@@ -7,7 +7,7 @@ import InputWaitingOrb from '@breakout/design-system/components/layout/InputWait
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
-import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
+import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi';
 import useDynamicPlaceholder from '../../../../hooks/useDynamicPlaceholder';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import { OrbStatusEnum } from '@meaku/core/types/config';
@@ -29,9 +29,7 @@ const EntryPointContentForBottomCenter = ({
   handleSuggestedQuestionOnClick,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const configurationApiResponseManager = useConfigurationApiResponseManager();
-  const initialSuggestedQuestions = configurationApiResponseManager.getInitialSuggestedQuestions();
-  const invertTextColor = configurationApiResponseManager.applyInvertTextColor();
+  const { initialSuggestedQuestions, invertTextColor, orbLogoUrl, showOrb } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const placeholderTexts = useDynamicPlaceholder(hasFirstUserMessageBeenSent);
 
@@ -52,11 +50,7 @@ const EntryPointContentForBottomCenter = ({
   const showSuggestedQuestions =
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
-  const orbConfig = configurationApiResponseManager.getOrbConfig();
-
-  const orbLogoUrl = orbConfig?.logo_url ?? undefined;
-  const showOrbFromConfig = !!orbConfig?.show_orb;
-  const showOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
+  const displayOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
 
   return (
     <div className="w-full rounded-2xl bg-gray-50 p-1">
@@ -67,15 +61,15 @@ const EntryPointContentForBottomCenter = ({
         <div className="relative flex-1">
           <InputOrb
             state={OrbStatusEnum.waiting}
-            showOrbFromConfig={showOrbFromConfig}
-            showOrb={showOrb}
+            showOrbFromConfig={showOrb}
+            showOrb={displayOrb}
             orbLogoUrl={orbLogoUrl}
           />
           <EntryPointChatInput
             shouldInputAutoFocus={isAgentOpen}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            showOrb={showOrb}
+            showOrb={displayOrb}
             placeholderText={placeholderTexts}
           />
         </div>
@@ -94,7 +88,7 @@ const EntryPointContentForBottomCenter = ({
           })}
         >
           {hasFirstUserMessageBeenSent && (
-            <InputWaitingOrb showOrb={showOrbFromConfig} state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
+            <InputWaitingOrb showOrb={showOrb} state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
           )}
           <ChatInputSendButton
             btnType="submit"
