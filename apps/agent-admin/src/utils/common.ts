@@ -948,17 +948,6 @@ export const getStringWithBothCommaAND = (bantItemsWithDash: string[]) => {
     : bantItemsWithDash[0] || '';
 };
 
-export const getNavLinkContainerAnimation = (isPanelOpen: boolean) => ({
-  animate: {
-    paddingRight: isPanelOpen ? '1rem' : '0.5rem',
-    width: isPanelOpen ? '100%' : 'auto',
-  },
-  transition: {
-    duration: 0.3,
-    ease: 'easeInOut',
-  },
-});
-
 export const getTransitionAnimation = () => ({
   transition: { duration: 0.5, ease: 'easeInOut' },
 });

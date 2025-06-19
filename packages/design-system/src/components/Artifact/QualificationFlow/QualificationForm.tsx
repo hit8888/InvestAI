@@ -66,7 +66,7 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <div className="flex w-full max-w-[40%] flex-col items-center justify-center gap-8">
-        <p className="w-full text-left text-5xl font-semibold text-customPrimaryText">How can we reach you?</p>
+        <p className="w-full text-left text-4xl font-semibold text-customPrimaryText">How can we reach you?</p>
         <Card className="w-full rounded-2xl border-none bg-inherit shadow-none">
           <CardContent className="flex flex-col gap-4 p-0">
             <Form {...form}>
@@ -74,7 +74,7 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
                 <div className="flex w-full flex-col items-start gap-6">
                   {formFields.map((field, i) => (
                     <ChatFormField
-                      fieldClassName="h-20 pl-6 text-3xl placeholder:text-3xl"
+                      fieldClassName="h-20 pl-6 text-3xl placeholder:text-2xl"
                       isArtifactFormFilled={false}
                       key={i}
                       form={form}

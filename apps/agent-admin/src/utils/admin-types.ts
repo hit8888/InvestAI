@@ -17,3 +17,18 @@ export type ConversationRightSideDetailsType = {
   itemKey: string;
   ItemIcon: React.ElementType; // If it's a React component
 };
+
+export interface NavLinkItemsType {
+  navUrl: string;
+  navItem: string;
+  isActive: boolean;
+  hasChildren?: boolean;
+  children?: NavItemChildrenType[];
+  navImg: React.ReactNode;
+}
+
+export interface NavItemChildrenType {
+  navItem: string;
+  navUrl: string;
+  isActive: boolean;
+}

@@ -14,6 +14,7 @@ import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-tr
 import usePageRouteState from './usePageRouteState';
 import { useParams } from 'react-router-dom';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { NavLinkItemsType } from '../utils/admin-types';
 
 const EXPANDED_TABS_KEY = 'expanded_tabs';
 
@@ -107,7 +108,7 @@ const useSidebarNavigationItems = () => {
 
   const basicURL = getDashboardBasicPathURL(tenantName ?? '');
 
-  const NAV_LINK_ITEMS = [
+  const NAV_LINK_ITEMS: NavLinkItemsType[] = [
     {
       navUrl: `${basicURL}/${LEADS}`,
       navItem: LEADS_LABEL,

@@ -1,16 +1,13 @@
-import { JSX } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS } from '../utils/constants';
-import { getNavLinkContainerAnimation } from '../utils/common';
 import PanelChevronDownIcon from '@breakout/design-system/components/icons/panel-chevrondown-icon';
 
 type NavLinkProps = {
   navUrl: string;
   navItem: string;
   isActive: boolean;
-  navImg?: JSX.Element;
+  navImg?: React.ReactNode;
   isPanelOpen: boolean;
   isChild?: boolean;
   hasChildren?: boolean;
@@ -53,7 +50,6 @@ const NavLinkSingleItem = ({
           'justify-between': hasChildren,
           'p-1.5 pl-2': isChild,
         })}
-        {...getNavLinkContainerAnimation(isPanelOpen)}
       >
         <div className="flex items-center gap-2">
           {navImg && (
@@ -68,7 +64,6 @@ const NavLinkSingleItem = ({
           )}
           <AnimatePresence>
             <motion.span
-              {...SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS}
               className={cn(`text-base transition-all duration-300`, {
                 'font-medium text-gray-900': isActive,
                 'text-gray-500': !isActive,

@@ -59,15 +59,14 @@ const TextMessage: React.FC<TextMessageProps> = ({
     }
   };
 
-  const renderOrb = () =>
-    shouldShowActiveOrb && (
-      <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
-    );
+  const renderOrb = () => (
+    <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+  );
 
   const renderMessageContent = () => {
     if (isLoadingTextMessage) {
       return (
-        <div className="flex h-8 items-center ">
+        <div className="flex flex-1 items-center">
           <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
         </div>
       );
@@ -83,18 +82,20 @@ const TextMessage: React.FC<TextMessageProps> = ({
     >
       <div
         className={cn('relative max-w-full rounded-2xl px-4 py-2', getChatMessageClass(messageViewType), {
-          'flex gap-4 py-4 pl-0': isAIMessage && isLastQuestionResponse,
+          'flex gap-7 py-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
           'flex gap-7 p-4 pl-0': isAIMessage && !isLastQuestionResponse,
           'pl-11': isAIMessage && !shouldShowActiveOrb,
         })}
       >
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
-        <div className="mb-0.5 flex max-w-8 items-end justify-center">
-          {(isAIMessage || isLoadingTextMessage) && renderOrb()}
-        </div>
+        {isAIMessage && !isLoadingTextMessage && shouldShowActiveOrb && (
+          <div className="flex w-[10%] items-end justify-center">{renderOrb()}</div>
+        )}
 
-        <div className="flex-col">
+        {isLoadingTextMessage && shouldShowActiveOrb && renderOrb()}
+
+        <div className="w-full">
           <div
             className={cn('prose w-full flex-1 text-base text-customPrimaryText', {
               'leading-snug': isAIMessage,
