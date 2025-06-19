@@ -206,15 +206,15 @@
   pointer-events: none;
 }
 
-.ring-primary:focus {
+.ring-primary-class:focus {
   animation: focus-ring-primary 2000ms ease-out;
 }
 
-.ring-destructive:focus {
+.ring-destructive-class:focus {
   animation: focus-ring-destructive 2000ms ease-out;
 }
 
-.ring-system:focus {
+.ring-system-class:focus {
   animation: focus-ring-system 2000ms ease-out;
 }
 
@@ -238,7 +238,7 @@
   animation: focus-bg-inverted-tertiary-light 2000ms ease-out;
 }
 
-.ring-inverted:focus {
+.ring-inverted-class:focus {
   animation: focus-ring-inverted 2000ms ease-out;
 }
 

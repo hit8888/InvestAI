@@ -2,7 +2,7 @@ import Card from '../../components/AgentManagement/Card';
 import { CommonAIPromptsProps } from './utils';
 import PromptHeader from './PromptHeader';
 import InfoCard from '../../components/AgentManagement/InfoCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@breakout/design-system/components/shadcn-ui/tabs';
 import DefaultInfoIcon from '@breakout/design-system/components/icons/sources-default-info-icon';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -13,14 +13,27 @@ import { useAgentConfigsMutation } from '../../queries/mutation/useAgentConfigsM
 import { toast } from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
 
+enum AgentResponseWordCountEnum {
+  BRIEF = 'BRIEF',
+  STANDARD = 'STANDARD',
+  DETAILED = 'DETAILED',
+}
+
 const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) => {
   const agentId = getTenantActiveAgentId();
   const { data: agentConfig, isError } = useAgentConfigsQuery({
     agentId: agentId,
     enabled: !!agentId,
   });
-  const agentResponseWordCount = agentConfig?.configs?.['response_generation:prompt']?.response_size_type || 'STANDARD'; // default value
+  const agentResponseWordCount =
+    agentConfig?.configs?.['response_generation:prompt']?.response_size_type ?? AgentResponseWordCountEnum.STANDARD; // default value
   const [selectedTab, setSelectedTab] = useState(agentResponseWordCount);
+
+  useEffect(() => {
+    if (agentResponseWordCount) {
+      setSelectedTab(agentResponseWordCount);
+    }
+  }, [agentResponseWordCount]);
 
   // Setup mutation
   const { mutateAsync: updateAgentConfig } = useAgentConfigsMutation();
@@ -78,11 +91,7 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <PromptHeader title={title} description={description} />
       <Card background={'GRAY25'} border={'GRAY200'}>
-        <Tabs
-          defaultValue={AgentResponseWordCountEnum.STANDARD}
-          className="flex w-full flex-col items-start gap-4"
-          onValueChange={handleTabChange}
-        >
+        <Tabs className="flex w-full flex-col items-start gap-4" onValueChange={handleTabChange}>
           {AgentResponseIdealLengthTabItems.map((item) => (
             <TabsContent key={item.itemKey} value={item.itemValue}>
               <InfoCard icon={DefaultInfoIcon} title={item.itemInfoTitle} description={item.itemDescription} />
@@ -108,12 +117,6 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
     </div>
   );
 };
-
-enum AgentResponseWordCountEnum {
-  BRIEF = 'BRIEF',
-  STANDARD = 'STANDARD',
-  DETAILED = 'DETAILED',
-}
 
 const AgentResponseIdealLengthTabItems = [
   {

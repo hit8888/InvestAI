@@ -5,8 +5,8 @@ const SparkleIcon = ({ className = 'fill-primary', color = 'white', ...props }: 
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      viewBox="0 0 18 18"
-      className={cn('h-6 w-6 fill-current', className)}
+      viewBox="0 0 16 16"
+      className={cn('h-4 w-4 fill-current', className)}
       {...props}
     >
       <path

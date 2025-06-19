@@ -32,6 +32,7 @@ import {
   checkIsAdminLeftMessage,
   isCtaEvent,
   checkIsLoadingTextMessage,
+  isSuggestionArtifact,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -123,13 +124,18 @@ const MessageItem = ({
 
   const isCurrentMsgUserInactiveMessage = isAIResponseInactiveMessage(message);
 
-  const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
+  const suggestionMessage = messagesWithSameResponseId.find((msg) => isSuggestionArtifact(msg));
+  const isSuggestionMessage = !!suggestionMessage;
+
+  const isActiveMessage = isSalesResponseMessage && !(isDiscoveryMessage || isSuggestionMessage);
+  const isSuggestionActiveMessage = !isSalesResponseMessage && isSuggestionMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
   const isCtaEventMessage = isCtaEvent(message);
 
   const shouldShowActiveOrb =
-    isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
+    isLastMessage &&
+    (isActiveMessage || isSuggestionActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 
@@ -185,7 +191,7 @@ const MessageItem = ({
 
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =
-    isLastMessage && hasSalesResponseCompleteAndIsArtifactMessage && message.message.artifact_type === 'SUGGESTIONS';
+    isLastMessage && hasSalesResponseCompleteAndIsArtifactMessage && isSuggestionArtifact(message);
 
   // To show the media artifact for admin, the media artifact message must exist, and the current message must not be a discovery message
   const shouldShowMediaArtifactForAdmin = mediaArtifactMessage && !isCurrentDiscoveryMessage;
@@ -217,7 +223,7 @@ const MessageItem = ({
         )}
 
         {isDiscoveryQuestion(message) && (
-          <div className="my-5 flex w-full items-start justify-start gap-4">
+          <div className="my-5 flex w-full items-end justify-start gap-4">
             {shouldShowActiveOrb && (
               <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
             )}
@@ -281,14 +287,19 @@ const MessageItem = ({
 
             {/* Show suggestion artifacts - store handles filtering */}
             {shouldShowSuggestions && (
-              <div className="ml-auto mt-3">
-                <SuggestionsArtifact
-                  suggestedQuestionOrientation="right"
-                  artifact={message.message.artifact_data.content as SuggestionArtifactContent}
-                  handleSendUserMessage={handleSendUserMessage}
-                  invertTextColor={invertTextColor}
-                  viewType={viewType}
-                />
+              <div className="flex w-full items-end justify-center">
+                {shouldShowActiveOrb && (
+                  <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
+                )}
+                <div className="ml-auto mt-3">
+                  <SuggestionsArtifact
+                    suggestedQuestionOrientation="right"
+                    artifact={message.message.artifact_data.content as SuggestionArtifactContent}
+                    handleSendUserMessage={handleSendUserMessage}
+                    invertTextColor={invertTextColor}
+                    viewType={viewType}
+                  />
+                </div>
               </div>
             )}
           </>

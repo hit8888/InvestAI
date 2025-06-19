@@ -67,7 +67,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
   const renderMessageContent = () => {
     if (isLoadingTextMessage) {
       return (
-        <div className="flex h-8 items-center">
+        <div className="flex h-8 items-center ">
           <AiResponseLoadingText color={'rgb(var(--system) / 0.4)'} text={message.message.content} />
         </div>
       );
@@ -90,7 +90,9 @@ const TextMessage: React.FC<TextMessageProps> = ({
       >
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
-        {(isAIMessage || isLoadingTextMessage) && renderOrb()}
+        <div className="mb-0.5 flex max-w-8 items-end justify-center">
+          {(isAIMessage || isLoadingTextMessage) && renderOrb()}
+        </div>
 
         <div className="flex-col">
           <div

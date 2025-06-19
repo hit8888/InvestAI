@@ -18,6 +18,7 @@ const useBrandingAgentConfigsQuery = ({ agentId, enabled = true }: IProps): UseQ
       return response.data;
     },
     enabled,
+    refetchOnMount: 'always',
   });
 
   return agentConfigsQuery;

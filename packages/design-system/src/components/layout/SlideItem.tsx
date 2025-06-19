@@ -17,7 +17,7 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
 
   return (
     <div
-      className="group/item w-full animate-gradient-sweep rounded-2xl p-[0.2rem] transition-all"
+      className="group/item h-full w-full animate-gradient-sweep rounded-2xl p-[0.2rem] transition-all"
       style={{
         background:
           'linear-gradient(90deg, transparent 0%, transparent 40%, rgba(156, 163, 175, 0.6) 50%, transparent 60%, transparent 100%)',
@@ -39,7 +39,7 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
           variant="title-18"
           align="center"
           textColor="textSecondary"
-          className={cn('w-full sm:text-xl md:text-3xl', {
+          className={cn('flex w-full flex-1 items-center justify-center sm:text-xl md:text-3xl', {
             'line-clamp-1': addLineClamp,
           })}
           title={addLineClamp ? title : ''}
