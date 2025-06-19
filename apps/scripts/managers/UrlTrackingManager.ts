@@ -82,7 +82,7 @@ function UrlTrackingManager() {
   function trackCurrentUrl(): void {
     if (!initialized) return;
 
-    const [currentUrl] = window.location.href
+    const currentUrl = window.location.href
       .split("?")[0]
       .split("#")[0]
       .replace(/\/$/, "");
