@@ -29,23 +29,22 @@ const parseWebSocketMessage = (message: MessageEvent | null): WebSocketMessage |
 
 const createNotificationTitle = (
   messageData: WebSocketMessage | null,
+  senderFirstName: string,
   maxLength: number = MAX_CONTENT_LENGTH,
 ): string => {
-  if (!messageData?.role || !messageData?.message?.content) {
+  if (!messageData?.role || !messageData?.message?.content?.trim()) {
     return '';
   }
 
   const role =
     messageData.role === MessageSenderRole.AI
-      ? 'Breakout'
-      : messageData.role.charAt(0).toUpperCase() + messageData.role.slice(1);
+      ? ''
+      : messageData.role?.charAt(0)?.toUpperCase() + messageData.role?.slice(1);
+  const senderName = senderFirstName || role || 'Breakout';
   const content = messageData.message.content.trim();
-
-  if (!content) return '';
-
   const truncatedContent = content.length > maxLength ? `${content.substring(0, maxLength)}...` : content;
 
-  return `${role} says ${truncatedContent}`;
+  return `${senderName}: "${truncatedContent}"`;
 };
 
 const isInIframe = window !== window.parent;
@@ -59,13 +58,23 @@ export default function useTabNotification({
   const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const initialTitleRef = useRef<string>(document.title);
   const currentNotificationTitleRef = useRef<string>('');
+  const currentSenderFirstNameRef = useRef<string>('');
   const isHiddenRef = useRef<boolean>(false);
 
   const notificationTitle = useMemo(() => {
     if (!isHiddenRef.current) return '';
 
     const messageData = parseWebSocketMessage(recentMessage);
-    return createNotificationTitle(messageData, maxContentLength);
+
+    if (messageData?.message_type === 'EVENT' && messageData?.message?.event_type === 'JOIN_SESSION') {
+      currentSenderFirstNameRef.current = messageData?.message?.event_data?.first_name;
+    }
+
+    if (messageData?.message_type === 'EVENT' && messageData?.message?.event_type === 'LEAVE_SESSION') {
+      currentSenderFirstNameRef.current = '';
+    }
+
+    return createNotificationTitle(messageData, currentSenderFirstNameRef.current, maxContentLength);
   }, [recentMessage, maxContentLength]);
 
   const setNotificationTitle = useCallback((title: string) => {
