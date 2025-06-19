@@ -214,13 +214,9 @@ const MessageItem = ({
           />
         )}
 
-        {checkIsAdminJoinedMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
-          <AdminJoinedInfo message={message} />
-        )}
+        {checkIsAdminJoinedMessage(message) && <AdminJoinedInfo message={message} viewType={viewType} />}
 
-        {checkIsAdminLeftMessage(message) && (viewType === ViewType.USER || viewType === ViewType.DASHBOARD) && (
-          <AdminExitInfo message={message} />
-        )}
+        {checkIsAdminLeftMessage(message) && <AdminExitInfo message={message} />}
 
         {isDiscoveryQuestion(message) && (
           <div className="my-5 flex w-full items-end justify-start gap-4">

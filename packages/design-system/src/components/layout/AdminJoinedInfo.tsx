@@ -1,14 +1,16 @@
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import { ViewType } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { CircleUserRound } from 'lucide-react';
 
 interface AdminJoinedInfoProps {
   message: WebSocketMessage;
+  viewType?: ViewType;
 }
 
 const PROFILE_ICON_WIDTH = 28;
 
-const AdminJoinedInfo = ({ message }: AdminJoinedInfoProps) => {
+const AdminJoinedInfo = ({ message, viewType }: AdminJoinedInfoProps) => {
   const scrollRef = useElementScrollIntoView<HTMLDivElement>();
 
   if (
@@ -25,6 +27,8 @@ const AdminJoinedInfo = ({ message }: AdminJoinedInfoProps) => {
   const adminName = fullName || 'Admin';
   const profileIconUrl = eventData?.profile_picture;
 
+  const messageText = viewType === ViewType.ADMIN ? `${adminName} joined the chat` : `${adminName} Is Here to Help!`;
+
   return (
     <div ref={scrollRef} className="flex justify-center py-4 pr-2">
       <div className="flex grow-0 items-center rounded-2xl bg-transparent_gray_3 p-4">
@@ -33,7 +37,7 @@ const AdminJoinedInfo = ({ message }: AdminJoinedInfoProps) => {
             {profileIconUrl ? <img src={profileIconUrl} /> : <CircleUserRound size={PROFILE_ICON_WIDTH} />}
           </div>
         </div>
-        <h2 className="text-lg font-medium text-customPrimaryText">{adminName} Is Here to Help!</h2>
+        <h2 className="text-lg font-medium text-customPrimaryText">{messageText}</h2>
       </div>
     </div>
   );

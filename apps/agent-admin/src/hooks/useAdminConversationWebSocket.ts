@@ -96,7 +96,11 @@ const useAdminConversationsWebSocket = ({
       setAISuggestionMessage(aiSuggestion);
       setIsGeneratingAIResponse(false);
     }
-  }, [lastMessage, setAISuggestionMessage, setIsGeneratingAIResponse]);
+
+    if (response.message && 'event_type' in response.message && response.message.event_type === 'JOIN_SESSION') {
+      handleAddAdminMessage(response);
+    }
+  }, [lastMessage, setAISuggestionMessage, setIsGeneratingAIResponse, handleAddAdminMessage]);
 
   const handleSendAdminMessage = useCallback(
     async ({ message, message_type }: WebSocketMessage) => {

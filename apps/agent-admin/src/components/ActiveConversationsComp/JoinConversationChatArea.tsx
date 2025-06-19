@@ -33,6 +33,16 @@ const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChat
     );
   }
 
+  const excludedMessagesEventTypes = ['JOIN_SESSION', 'LEAVE_SESSION'];
+  const lastMessageApplicableMessages = messages.filter((message) => {
+    if (message?.message && 'event_type' in message.message) {
+      return !excludedMessagesEventTypes.includes(message.message.event_type);
+    }
+
+    return true;
+  });
+  const lastMessageResponseId = lastMessageApplicableMessages[lastMessageApplicableMessages.length - 1]?.response_id;
+
   return (
     <div className="w-full grow overflow-hidden rounded-2xl border border-gray-200">
       <div className={cn('flex h-full w-full flex-1 gap-2 overflow-hidden')}>
@@ -55,7 +65,7 @@ const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChat
             allowFeedback={false}
             orbLogoUrl={''}
             showOrbFromConfig={true}
-            lastMessageResponseId={messages[messages.length - 1].response_id}
+            lastMessageResponseId={lastMessageResponseId}
             invertTextColor={false}
           />
         ) : (

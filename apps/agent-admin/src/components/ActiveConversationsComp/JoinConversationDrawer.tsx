@@ -10,8 +10,6 @@ import JoinConversationBottomBar from './JoinConversationBottomBar';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 import { useMessageStore } from '../../hooks/useMessageStore';
-import useSound from '@meaku/core/hooks/useSound';
-import popupsound from '../../assets/popup-sound.mp4';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
@@ -63,9 +61,6 @@ const JoinConversationDrawer = ({
     };
   }, [setIsGeneratingAIResponse]);
 
-  const baseVolume = 0.5;
-  const { play } = useSound(popupsound, baseVolume);
-
   if (isError) {
     // TODO: track this error
     console.error('Error while fetching conversation details');
@@ -74,7 +69,6 @@ const JoinConversationDrawer = ({
 
   const handleJoinButtonClick = () => {
     updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
-    play();
   };
 
   const handleSendMessage = (message: string) => {
@@ -90,7 +84,7 @@ const JoinConversationDrawer = ({
   return (
     <Drawer open={true} onOpenChange={onClose} direction="bottom">
       <DrawerOverlay className="fixed inset-0 bg-black/50" />
-      <DrawerContent className="z-[1000] mx-2 h-[90vh] rounded-2xl bg-primary-foreground px-2 pb-2">
+      <DrawerContent className="z-[1000] mx-2 h-[90vh] rounded-2xl bg-primary-foreground px-2 pb-2 outline-none">
         <JoinConversationHeader conversation={conversation} onExitConversation={onExitConversation} />
 
         <div className="flex w-full grow flex-col gap-2 overflow-hidden">
