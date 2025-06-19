@@ -39,17 +39,6 @@ const ActiveConversationsLayout = () => {
     const sessionId = currentConversation?.session_id;
 
     if (sessionId) {
-      const sendMessage = sendMessageFnMap[sessionId];
-
-      sendMessage({
-        message: {
-          content: '',
-          event_type: 'LEAVE_SESSION',
-          event_data: {}, // TODO: add event data
-        },
-        message_type: 'EVENT',
-      });
-
       updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
       setCurrentConversation(null);
       navigate('/conversations');
