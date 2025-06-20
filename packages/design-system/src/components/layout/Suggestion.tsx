@@ -1,6 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
+import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import BlackThreeStarIcon from '../icons/black-three-star-icon';
 import Typography from '../Typography';
 import { useTextTruncation } from '../../hooks/useTextTruncation';
@@ -25,6 +26,7 @@ const Suggestion = ({
   invertTextColor,
   viewType,
 }: IProps) => {
+  const { isTablet } = useScreenSize();
   const { textRef, isTextTruncated } = useTextTruncation({
     text: question,
     maxWidth: isQuestionInCycle ? 380 : undefined,
@@ -42,7 +44,7 @@ const Suggestion = ({
     <div
       onClick={() => handleClickOnSuggestedQuestion(question)}
       className={cn(
-        `flex w-fit cursor-pointer items-end justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out`,
+        `flex w-fit cursor-pointer items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out`,
         {
           'border border-gray-900 bg-white py-2 pl-2 pr-4 hover:bg-transparent_gray_6 focus:ring-4 focus:ring-gray-200':
             !isEntryPointQuestion,
@@ -76,14 +78,15 @@ const Suggestion = ({
             variant="label-14-medium"
             align="left"
             textColor={isEntryPointQuestion ? (invertTextColor ? 'default' : 'white') : 'textSecondary'}
-            className={cn('line-clamp-1 min-w-0 max-w-[350px] flex-1', {
+            className={cn('line-clamp-1 lg:line-clamp-2', {
+              'min-w-0 max-w-[350px] flex-1': isQuestionInCycle,
               'cursor-not-allowed hover:bg-transparent': !isClickEnabled,
             })}
           >
             {question}
           </Typography>
         }
-        showTooltip={isTextTruncated}
+        showTooltip={isQuestionInCycle ? isTextTruncated : isTablet}
         content={<p className="max-w-[350px]">{question}</p>}
       />
     </div>
