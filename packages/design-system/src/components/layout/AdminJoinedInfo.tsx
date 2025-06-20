@@ -27,7 +27,7 @@ const AdminJoinedInfo = ({ message, viewType }: AdminJoinedInfoProps) => {
   const adminName = fullName || 'Admin';
   const profileIconUrl = eventData?.profile_picture;
 
-  const messageText = viewType === ViewType.ADMIN ? `${adminName} joined the chat` : `${adminName} Is Here to Help!`;
+  const messageText = viewType === ViewType.ADMIN ? `${adminName} joined the chat` : `${adminName} is here to help.`;
 
   return (
     <div ref={scrollRef} className="flex justify-center py-4 pr-2">
