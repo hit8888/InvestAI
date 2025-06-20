@@ -5,6 +5,8 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { CONV_RIGHTSIDE_DETAILS_DATA_ITEMS } from '../../utils/constants';
 import { EnrichmentSource, LocationWithCityCountry } from '@meaku/core/types/admin/admin';
 import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/index';
+import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
+import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 
 const { LOCATION, EMAIL } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
@@ -27,15 +29,30 @@ const SingleProspectAndCompanyItemDataDisplay = ({
   itemLabelWidth,
   enrichmentSource,
 }: IProps) => {
+  const { textRef, isTextTruncated } = useTextTruncation({
+    text: itemValue as string,
+  });
   let content = (
-    <span
-      className={cn('text-base font-medium capitalize text-gray-900', {
-        'text-left': isKeyValueColumnwise,
-        'w-full max-w-full truncate text-right': !isKeyValueColumnwise,
-      })}
-    >
-      {itemValue as string}
-    </span>
+    <div className="max-w-full">
+      <TooltipWrapperDark
+        tooltipSide="top"
+        tooltipAlign="end"
+        tooltipSideOffsetValue={15}
+        trigger={
+          <span
+            ref={textRef}
+            className={cn('text-base font-medium capitalize text-gray-900', {
+              'text-left': isKeyValueColumnwise,
+              'line-clamp-1 w-full max-w-56 truncate text-right': !isKeyValueColumnwise,
+            })}
+          >
+            {itemValue as string}
+          </span>
+        }
+        showTooltip={isTextTruncated}
+        content={<p className="max-w-[350px] capitalize">{itemValue as string}</p>}
+      />
+    </div>
   );
   const isEmailField = itemLabel === EMAIL;
   switch (itemLabel) {
