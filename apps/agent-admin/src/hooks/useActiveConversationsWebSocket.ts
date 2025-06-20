@@ -91,7 +91,10 @@ const useActiveConversationsWebSocket = () => {
         handleAddAIMessage(response);
       } else if (response.role === MessageSenderRole.USER && response.session_id === currentConversation?.session_id) {
         handleAddUserMessage(response);
-        play();
+
+        if (document.visibilityState === 'hidden') {
+          play();
+        }
       }
 
       if (isTextMessage(response) || checkIsEventMessage(response)) {

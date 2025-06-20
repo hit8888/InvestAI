@@ -24,6 +24,8 @@ import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { AdminConversationJoinStatus, MessageSenderRole } from '@meaku/core/types/common';
 import { getWebsocketBaseUrl } from '../utils/common.ts';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../assets/popup-sound.mp4';
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL = 1000;
@@ -73,6 +75,9 @@ const useWebSocketChat = () => {
 
   const { sessionData } = useLocalStorageSession();
   const sessionId = sessionApiResponseManager?.getSessionId() ?? sessionData?.sessionId ?? '';
+
+  const baseVolume = 0.2;
+  const { play } = useSound(popupsound, baseVolume);
 
   const wsUrl = orgName
     ? `${getWebsocketBaseUrl()}/ws/chat?tenant=${orgName.toLowerCase()}&session_id=${sessionId}`
@@ -238,6 +243,10 @@ const useWebSocketChat = () => {
         handleAddAdminMessage(response);
       } else if (response.role === MessageSenderRole.ADMIN) {
         handleAddAdminMessage(response);
+
+        if (document.visibilityState === 'hidden') {
+          play();
+        }
       }
 
       setIsAMessageBeingProcessed(false);
