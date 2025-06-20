@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import useActiveConversationsWebSocket from '../hooks/useActiveConversationsWebSocket';
+import useActiveConversationsWebSocket, { LastMessage } from '../hooks/useActiveConversationsWebSocket';
 import useActiveConversations from '../queries/query/useActiveConversations';
 import { BuyerIntent } from '@meaku/core/types/common';
 import useSound from '@meaku/core/hooks/useSound';
@@ -28,7 +28,8 @@ export type ActiveConversationCard = {
 export interface ActiveConversation {
   agent_id: number;
   session_id: string;
-  last_user_message?: string;
+  last_user_message: string;
+  last_message_timestamp: string;
   buyer_intent: BuyerIntent;
   prospect: {
     name: string;
@@ -57,7 +58,7 @@ const defaultContext: ActiveConversationsContextType = {
 export const ActiveConversationsContext = createContext<ActiveConversationsContextType>(defaultContext);
 
 export const ActiveConversationsProvider = ({ children }: { children: React.ReactNode }) => {
-  const { lastMessageBySession } = useActiveConversationsWebSocket();
+  const { lastMessageBySession, setLastMessageBySession } = useActiveConversationsWebSocket();
   const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversations();
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
@@ -70,6 +71,21 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   useEffect(() => {
     if (conversations) {
       setActiveConversations(conversations);
+
+      const lastMessagesBySession = conversations.reduce(
+        (acc, conv) => {
+          if (conv.last_user_message) {
+            acc[conv.session_id] = {
+              message: conv.last_user_message,
+              timestamp: conv.last_message_timestamp,
+            };
+          }
+          return acc;
+        },
+        {} as Record<string, LastMessage>,
+      );
+
+      setLastMessageBySession(lastMessagesBySession);
     }
 
     if (sessionID && conversations) {
@@ -99,7 +115,8 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
           const sessionId = liveSessionIds?.find((sessionId) => conv.session_id === sessionId);
 
           if (sessionId) {
-            conv.last_user_message = lastMessageBySession[sessionId];
+            conv.last_user_message = lastMessageBySession[sessionId].message;
+            conv.last_message_timestamp = lastMessageBySession[sessionId].timestamp;
           }
 
           newConversations.push(conv);

@@ -18,6 +18,11 @@ import { getWebsocketBaseUrl } from '../utils/apiCalls.ts';
 import useSound from '@meaku/core/hooks/useSound';
 import popupsound from '../assets/popup-sound.mp4';
 
+export type LastMessage = {
+  message: string;
+  timestamp: string;
+};
+
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
 const MAX_RETRIES = 5;
@@ -30,7 +35,7 @@ const useActiveConversationsWebSocket = () => {
       ? `${getWebsocketBaseUrl()}/tenant/ws/active-conversations/events/?tenant=${tenant}&token=${token}`
       : '';
 
-  const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, string>>({});
+  const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, LastMessage>>({});
   const currentConversation = useJoinConversationStore((state) => state.currentConversation);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const handleAddUserMessage = useMessageStore((state) => state.handleAddAIMessage);
@@ -95,7 +100,10 @@ const useActiveConversationsWebSocket = () => {
         if (role === MessageSenderRole.USER && message.content) {
           setLastMessageBySession((lastMessageBySession) => ({
             ...lastMessageBySession,
-            [session_id]: message.content ?? '',
+            [session_id]: {
+              message: message.content ?? '',
+              timestamp: response.timestamp,
+            },
           }));
         }
       }
@@ -116,7 +124,7 @@ const useActiveConversationsWebSocket = () => {
     };
   }, []);
 
-  return { lastMessageBySession };
+  return { lastMessageBySession, setLastMessageBySession };
 };
 
 export default useActiveConversationsWebSocket;

@@ -1,5 +1,7 @@
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import ChipWithIcon from '@breakout/design-system/components/ChipWithIcon/ChipWithIcon';
+import moment from 'moment-timezone';
+import useTimeAgo from '@meaku/core/hooks/useTimeAgo';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import BuyerIntentChip from './BuyerIntentChip';
 
@@ -8,14 +10,19 @@ interface ActiveConversationCardProps {
   onCardClick: (conversation: ActiveConversation) => void;
 }
 
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversationCardProps) => {
   const {
     last_user_message,
+    last_message_timestamp,
     buyer_intent,
     prospect: { name, company, country, company_demographics },
   } = conversation;
 
   const countryFlagUrl = country ? findFlagUrlByCountryName(country) : '';
+  const lastMessageTimestamp = last_message_timestamp ? moment.utc(last_message_timestamp).tz(timezone).toDate() : '';
+  const timeAgoMessage = useTimeAgo(lastMessageTimestamp);
 
   return (
     <>
@@ -25,11 +32,15 @@ const ActiveConversationCard = ({ conversation, onCardClick }: ActiveConversatio
       >
         <div className="flex items-start">
           <div className="flex-1 overflow-hidden">
-            {name ? (
-              <div className="px-2 text-xs font-medium text-bluegray-1000">{name}</div>
-            ) : (
-              <div className="px-2 text-xs font-medium text-gray-500">User</div>
-            )}
+            <div className="flex justify-between">
+              {name ? (
+                <div className="px-2 text-xs font-medium text-bluegray-1000">{name}</div>
+              ) : (
+                <div className="px-2 text-xs font-medium text-gray-500">User</div>
+              )}
+
+              {timeAgoMessage ? <div className="px-2 text-xs font-medium text-gray-400">{timeAgoMessage}</div> : null}
+            </div>
 
             <div className="mt-1 h-6 overflow-hidden text-ellipsis whitespace-nowrap px-2 text-sm text-customPrimaryText">
               {last_user_message}
