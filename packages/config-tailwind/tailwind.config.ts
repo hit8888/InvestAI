@@ -220,7 +220,6 @@ const config: Omit<Config, "content"> = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
         "gradient-sweep": "gradient-sweep 4s linear infinite",
-        shimmer: "shimmer 4s linear infinite",
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-medium": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -297,14 +296,6 @@ const config: Omit<Config, "content"> = {
           },
           "50%": {
             opacity: "0.5",
-          },
-        },
-        shimmer: {
-          "0%": {
-            backgroundPosition: "-1000px 0",
-          },
-          "100%": {
-            backgroundPosition: "1000px 0",
           },
         },
       },

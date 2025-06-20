@@ -3,7 +3,7 @@ import { CommonAIPromptsProps } from './utils';
 import PromptHeader from './PromptHeader';
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import { useEffect, useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@breakout/design-system/components/shadcn-ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@breakout/design-system/components/shadcn-ui/tabs';
 import DefaultInfoIcon from '@breakout/design-system/components/icons/sources-default-info-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import useAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
@@ -87,16 +87,20 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
     return;
   }
 
+  const selectedTabItem = AgentResponseIdealLengthTabItems.find((item) => item.itemValue === selectedTab);
+
   return (
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <PromptHeader title={title} description={description} />
       <Card background={'GRAY25'} border={'GRAY200'}>
         <Tabs className="flex w-full flex-col items-start gap-4" onValueChange={handleTabChange}>
-          {AgentResponseIdealLengthTabItems.map((item) => (
-            <TabsContent key={item.itemKey} value={item.itemValue}>
-              <InfoCard icon={DefaultInfoIcon} title={item.itemInfoTitle} description={item.itemDescription} />
-            </TabsContent>
-          ))}
+          {selectedTabItem && selectedTab && (
+            <InfoCard
+              icon={DefaultInfoIcon}
+              title={selectedTabItem?.itemInfoTitle || ''}
+              description={selectedTabItem?.itemDescription || ''}
+            />
+          )}
           <TabsList className="mt-2 w-full p-0">
             <div className="flex w-full items-center justify-center gap-2 rounded-full bg-gray-100 p-2">
               {AgentResponseIdealLengthTabItems.map((item) => (

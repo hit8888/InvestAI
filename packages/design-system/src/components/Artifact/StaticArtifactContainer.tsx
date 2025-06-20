@@ -24,8 +24,7 @@ const StaticArtifactContainer = ({ defaultArtifactUrl }: IProps) => {
 
 const NudgeArtifactContent = () => {
   return (
-    <div className="relative flex h-full w-full items-center justify-center">
-      <div className="absolute inset-0 z-10 animate-shimmer bg-white bg-gradient-to-br from-gray-100 bg-[length:1000px_100%] opacity-55" />
+    <div className="shimmer-diagonal relative flex h-full w-full items-center justify-center">
       <FirstMessageArtifactIcon className="z-10 h-24 w-24 animate-pulse-medium text-gray-300" />
     </div>
   );

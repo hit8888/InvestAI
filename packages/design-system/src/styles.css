@@ -83,4 +83,22 @@
       box-shadow: none;
     }
   }
+
+  @keyframes shimmerBackground {
+    0% {
+      background-position: 100% 100%;
+    }
+
+    100% {
+      background-position: 0 0;
+    }
+  }
+
+  .shimmer-diagonal {
+    display: inline-block;
+    background: linear-gradient(to bottom right, #ffffff 40%, #f2f4f7 50%, #ffffff 60%);
+    background-size: 200% 200%;
+    background-repeat: no-repeat;
+    animation: shimmerBackground 4s infinite linear;
+  }
 }

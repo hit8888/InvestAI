@@ -82,7 +82,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
     >
       <div
         className={cn('relative max-w-full rounded-2xl px-4 py-2', getChatMessageClass(messageViewType), {
-          'flex gap-7 py-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
+          'flex w-full gap-4 py-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
           'flex gap-7 p-4 pl-0': isAIMessage && !isLastQuestionResponse,
           'pl-11': isAIMessage && !shouldShowActiveOrb,
         })}
@@ -90,7 +90,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
         {isAIMessage && !isLoadingTextMessage && shouldShowActiveOrb && (
-          <div className="flex w-[10%] items-end justify-center">{renderOrb()}</div>
+          <div className="flex w-[8%] items-end justify-start 4xl:w-[6%]">{renderOrb()}</div>
         )}
 
         {isLoadingTextMessage && shouldShowActiveOrb && renderOrb()}
