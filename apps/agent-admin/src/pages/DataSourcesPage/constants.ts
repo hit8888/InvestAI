@@ -44,7 +44,7 @@ export const DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT = {
     'Once you enter a valid URL and start fetching, all discovered links will appear here automatically.',
   [SourcesCardTypes.DOCUMENTS]: 'Accepted formats: PDF',
   [SourcesCardTypes.VIDEOS]: 'Accepted formats: MP4, MOV, WebM',
-  [SourcesCardTypes.SLIDES]: 'Accepted formats: PDF, PPTX, PNG',
+  [SourcesCardTypes.SLIDES]: 'Accepted formats: PNG, JPG, JPEG, GIF',
 };
 
 export const DATA_SOURCES_ACCEPTED_FILE_TYPES = {
@@ -62,9 +62,12 @@ export const DATA_SOURCES_ACCEPTED_FILE_TYPES = {
     'video/webm': ['.webm'],
   },
   [SourcesCardTypes.SLIDES]: {
-    'application/pdf': ['.pdf'],
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+    // 'application/pdf': ['.pdf'],
+    // 'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
     'image/png': ['.png'],
+    'image/jpg': ['.jpg'],
+    'image/jpeg': ['.jpeg'],
+    'image/gif': ['.gif'],
   },
 };
 
