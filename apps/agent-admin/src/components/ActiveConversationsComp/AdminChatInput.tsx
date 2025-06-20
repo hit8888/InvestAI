@@ -5,6 +5,7 @@ import TextArea from '@breakout/design-system/components/TextArea/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
+import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 
 type AdminChatInputProps = {
   onSendMessage: (message: string) => void;
@@ -57,11 +58,19 @@ const AdminChatInput = ({ onSendMessage, onAIResponseGenerationRequest }: AdminC
     onAIResponseGenerationRequest();
   };
 
+  const tooltipText = isGeneratingAIResponse ? 'Drafting AI response...' : 'Let AI draft a reply';
+
   return (
     <div className="flex w-full items-center">
-      <div className="cursor-pointer px-2 py-1" onClick={handleAIResponseGenerationRequest}>
-        <AiSparklesIcon className={cn('h-6 w-5', isGeneratingAIResponse && 'animate-bounce')} />
-      </div>
+      <TooltipWrapperDark
+        trigger={
+          <div className="cursor-pointer px-2 py-1" onClick={handleAIResponseGenerationRequest}>
+            <AiSparklesIcon className={cn('h-6 w-5', isGeneratingAIResponse && 'animate-bounce')} />
+          </div>
+        }
+        content={tooltipText}
+        showTooltip={true}
+      />
 
       <form onSubmit={onSubmit} className="flex w-full items-center gap-3">
         <TextArea
