@@ -99,9 +99,8 @@ export const TablePayloadSchema = z.object({
 export type ConversationsPayload = z.infer<typeof TablePayloadSchema>;
 export type DataSourcePayload = z.infer<typeof TablePayloadSchema>;
 
-export const AdditionalInfoSchema = z.union([
-  z.object({}), // Allow empty object `{}`
-  z.object({
+export const AdditionalInfoSchema = z
+  .object({
     loc: z.string(),
     city: z.string(),
     region: z.string(),
@@ -115,8 +114,8 @@ export const AdditionalInfoSchema = z.union([
     last_name: z.string().optional(),
     first_name: z.string().optional(),
     ip_address: z.string().optional(),
-  }),
-]);
+  })
+  .or(z.object({}));
 
 // Type for individual result item
 export const LeadResultSchema = z.object({

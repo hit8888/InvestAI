@@ -14,6 +14,7 @@ interface IProps {
   disableHoverableContent?: boolean;
   tooltipArrowClassName?: string;
   tooltipContentClassName?: string;
+  triggerWrapperClassName?: string;
 }
 
 const TooltipWrapperDark = ({
@@ -28,13 +29,14 @@ const TooltipWrapperDark = ({
   disableHoverableContent = false,
   tooltipArrowClassName,
   tooltipContentClassName,
+  triggerWrapperClassName,
 }: IProps) => {
   const isTooltipSideValueTop = tooltipSide === 'top';
   return (
     <TooltipProvider disableHoverableContent={disableHoverableContent} delayDuration={200}>
       <Tooltip defaultOpen={alwaysVisible}>
         <TooltipTrigger asChild>
-          <div className="block cursor-pointer">{trigger}</div>
+          <div className={cn(triggerWrapperClassName, 'block cursor-pointer')}>{trigger}</div>
         </TooltipTrigger>
         {showTooltip && (
           <TooltipContent

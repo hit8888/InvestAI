@@ -59,6 +59,7 @@ const specialCellMap: Record<string, SpecialCellConfig> = {
   country: {
     component: LocationCellValue,
     type: 'LocationWithCityCountry',
+    props: { showTooltip: true },
   },
   session_id: {
     component: SessionIDCellValue,

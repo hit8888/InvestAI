@@ -20,7 +20,7 @@ export type ButtonVariantTypes =
   | undefined;
 
 export const buttonVariants = cva(
-  'rounded-md flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed',
+  'rounded-lg flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed',
   {
     variants: {
       size: {
