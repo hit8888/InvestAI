@@ -2,34 +2,39 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import PanelChevronDownIcon from '@breakout/design-system/components/icons/panel-chevrondown-icon';
+import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 
 type NavLinkProps = {
-  navUrl: string;
+  navUrl?: string;
   navItem: string;
   isActive: boolean;
-  navImg?: React.ReactNode;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
+  activeIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   isPanelOpen: boolean;
   isChild?: boolean;
   hasChildren?: boolean;
   isExpanded?: boolean;
-  onExpand?: () => void;
+  onClick?: () => void;
 };
 
 const NavLinkSingleItem = ({
-  navUrl,
+  navUrl = '',
   navItem,
   isActive,
-  navImg,
+  icon,
+  activeIcon,
   isPanelOpen,
   isChild,
   hasChildren,
   isExpanded,
-  onExpand,
+  onClick,
 }: NavLinkProps) => {
+  const IconComponent = isActive ? activeIcon : icon;
+
   const handleClick = (e: React.MouseEvent) => {
-    if (hasChildren) {
+    if (hasChildren || !navUrl) {
       e.preventDefault();
-      onExpand?.();
+      onClick?.();
     }
   };
 
@@ -52,14 +57,14 @@ const NavLinkSingleItem = ({
         })}
       >
         <div className="flex items-center gap-2">
-          {navImg && (
+          {IconComponent && (
             <div
               className={cn(`flex items-center rounded-lg p-1`, {
                 'bg-white': isActive,
                 'bg-primary/10 group-hover:bg-white': !isActive,
               })}
             >
-              {navImg}
+              <IconComponent {...COMMON_SMALL_ICON_PROPS} />
             </div>
           )}
           <AnimatePresence>

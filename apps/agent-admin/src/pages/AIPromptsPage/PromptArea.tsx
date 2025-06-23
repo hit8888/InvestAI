@@ -82,8 +82,8 @@ const PromptArea = ({
 
       // Removing the prompt at the same index
       removeAndUpdatePrompts(index);
-    } catch (err: any) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       toast.error(`Error deleting prompt: ${err?.response?.data?.details || 'Unknown error'}`);
       console.error('Error deleting prompt:', err);
     }
@@ -233,7 +233,7 @@ const PromptArea = ({
               onChange={(e) => handlePromptChange(index, e.target.value)}
               onBlur={() => handlePromptSave(index)}
               placeholder={textareaPlaceholder}
-              className="flex w-full items-center rounded-lg p-2 placeholder:text-gray-400 
+              className="flex w-full items-center rounded-lg p-2 placeholder:text-gray-400
               focus:border focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-300"
             />
             <Button buttonStyle={'icon'} variant={'tertiary'} onClick={() => handleDeletePrompt(index)}>

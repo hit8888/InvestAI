@@ -19,6 +19,7 @@ import AIPromptsPage from '../pages/AIPromptsPage';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
+import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -122,6 +123,15 @@ const routes = [
           {
             path: 'insights',
             element: <ProtectedRoute element={<InsightsPageContainer />} />,
+          },
+          {
+            path: 'settings',
+            children: [
+              {
+                path: 'integrations',
+                element: <ProtectedRoute element={<IntegrationsPage />} />,
+              },
+            ],
           },
         ],
       },

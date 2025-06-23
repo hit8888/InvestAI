@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import usePageRouteState from '../../hooks/usePageRouteState';
-import { useSidebar } from '../../context/SidebarContext';
-import CompanyHeaderCTA from './CompanyHeaderCTA';
+import { SideNavView, useSidebar } from '../../context/SidebarContext';
+import HeaderCTA from './HeaderCTA';
 import NavigationBodyItems from './NavigationBodyItems';
-import UserProfileCTA from './UserProfileCTA';
+import SideBarFooter from './SideBarFooter';
+import NavLinkSingleItem from './NavLinkSingleItem';
+import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
 
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
@@ -20,7 +22,7 @@ const getSidebarContainerAnimation = (isOpen: boolean) => ({
 
 const Sidebar = () => {
   const { isLoginPage } = usePageRouteState();
-  const { isSidebarOpen: isOpen, toggleSidebar } = useSidebar();
+  const { isSidebarOpen: isOpen, sideNavView, setSideNavView } = useSidebar();
 
   if (isLoginPage) {
     return null;
@@ -31,9 +33,19 @@ const Sidebar = () => {
       className="sticky top-0 z-50 flex h-screen flex-col items-start border-r border-primary/10"
       {...getSidebarContainerAnimation(isOpen)}
     >
-      <CompanyHeaderCTA isOpen={isOpen} toggleSidebar={toggleSidebar} />
-      <NavigationBodyItems isOpen={isOpen} />
-      <UserProfileCTA isOpen={isOpen} />
+      <HeaderCTA />
+      <NavigationBodyItems />
+      {sideNavView === SideNavView.MAIN && (
+        <SideBarFooter>
+          <NavLinkSingleItem
+            isActive={false}
+            isPanelOpen={isOpen}
+            navItem="Settings"
+            icon={PanelSettingsIcon}
+            onClick={() => setSideNavView(SideNavView.SETTINGS)}
+          />
+        </SideBarFooter>
+      )}
     </motion.div>
   );
 };

@@ -8,30 +8,26 @@ const UserProfileCTA = ({ isOpen }: { isOpen: boolean }) => {
   const { userInfo } = useAuth();
   const userName = userInfo?.username || DEFAULT_USERNAME;
   return (
-    <motion.div className="flex flex-1 flex-col items-start gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 py-4 pb-2">
-      <div className="flex flex-1 flex-col items-start justify-end gap-2 self-stretch">
-        <div className="flex flex-col items-start justify-center gap-2 self-stretch rounded-2xl p-2">
-          <motion.div className="flex items-center gap-2 self-stretch" {...getTransitionAnimation()}>
-            <motion.div
-              className="flex flex-1 items-center gap-3 border border-primary/20 bg-primary/5 p-2"
-              {...getProfileCTAInnerContainerAnimation(isOpen)}
-            >
-              <ProfilePicActionButton />
-              <AnimatePresence>
-                {isOpen ? (
-                  <motion.div
-                    {...SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS}
-                    className="flex w-full flex-col items-start justify-center gap-0.5"
-                  >
-                    <p className="w-[80%] self-stretch text-sm font-semibold capitalize text-primary">{userName}</p>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
+    <div className="flex flex-col items-start justify-center gap-2 self-stretch rounded-2xl p-2">
+      <motion.div className="flex items-center gap-2 self-stretch" {...getTransitionAnimation()}>
+        <motion.div
+          className="flex flex-1 items-center gap-3 border border-primary/20 bg-primary/5 p-2"
+          {...getProfileCTAInnerContainerAnimation(isOpen)}
+        >
+          <ProfilePicActionButton />
+          <AnimatePresence>
+            {isOpen ? (
+              <motion.div
+                {...SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS}
+                className="flex w-full flex-col items-start justify-center gap-0.5"
+              >
+                <p className="w-[80%] self-stretch text-sm font-semibold capitalize text-primary">{userName}</p>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
 

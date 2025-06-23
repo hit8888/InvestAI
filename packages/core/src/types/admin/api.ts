@@ -595,3 +595,28 @@ export const TopQuestionsByUserResponseSchema = z.object({
   ),
 });
 export type TopQuestionsByUserResponse = z.infer<typeof TopQuestionsByUserResponseSchema>;
+
+export const IntegrationFormSchema = z.object({
+  key: z.string(),
+  data_type: z.string().nullable(),
+  label: z.string(),
+  description: z.string().nullable(),
+});
+export type IntegrationForm = z.infer<typeof IntegrationFormSchema>;
+
+export const IntegrationSchema = z.object({
+  integration_type: z.string(),
+  auth_type: z.string(),
+  integration_group: z.string(),
+  connected: z.boolean(),
+  name: z.string().nullable(),
+  description: z.string().nullable(),
+  integration_form: z.array(IntegrationFormSchema),
+});
+export type Integration = z.infer<typeof IntegrationSchema>;
+
+export const IntegrationsResponseSchema = z.object({
+  integrations: z.array(IntegrationSchema),
+});
+
+export type IntegrationsResponse = z.infer<typeof IntegrationsResponseSchema>;

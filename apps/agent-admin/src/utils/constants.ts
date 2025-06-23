@@ -354,6 +354,7 @@ export enum AppRoutesEnum {
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
   INSIGHTS = 'insights',
+  INTEGRATIONS = 'integrations',
 }
 
 export enum SidebarNavItemsEnum {
@@ -368,6 +369,7 @@ export enum SidebarNavItemsEnum {
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
   INSIGHT_LABEL = 'Insights',
+  INTEGRATIONS_LABEL = 'Integrations',
 }
 
 // LEADS Page

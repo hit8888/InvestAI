@@ -37,6 +37,7 @@ import {
   HourlySessionInsightsResponse,
   TopQuestionsByUserResponse,
   FrequentDocumentsResponse,
+  IntegrationsResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -202,3 +203,16 @@ export const getFrequentSourcesInsights = (payload: InsightsCommonRequest) =>
 
 export const getTopQuestionsByUser = (payload: InsightsCommonRequest) =>
   adminApiClient.post<TopQuestionsByUserResponse>(`tenant/api/analytics/top-user-questions/`, payload);
+
+export const getIntegrations = () => adminApiClient.get<IntegrationsResponse>(`/tenant/api/integrations/`);
+
+export const connectIntegration = (integrationType: string, formData?: Record<string, string>) => {
+  return adminApiClient.post(`/tenant/api/integration/${integrationType}/connect`, formData);
+};
+
+export const connectIntegrationCallback = (payload: { code: string; state: string }) =>
+  adminApiClient.get(`/tenant/integration/oauth2/callback?code=${payload.code}&state=${payload.state}`);
+
+export const disconnectIntegration = (integrationType: string) => {
+  return adminApiClient.post(`/tenant/api/integration/${integrationType}/disconnect`);
+};
