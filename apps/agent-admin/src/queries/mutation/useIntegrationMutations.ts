@@ -2,6 +2,7 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 import toast from 'react-hot-toast';
 
 import { connectIntegration, connectIntegrationCallback, disconnectIntegration } from '@meaku/core/adminHttp/api';
+import { getIntegrationNameFromType } from '../../utils/common';
 
 type IntegrationConnectResult = {
   login_url: string;
@@ -15,6 +16,7 @@ type IntegrationConnectVariables = {
 type IntegrationConnectCallbackVariables = {
   code: string;
   state: string;
+  integrationType?: string;
 };
 
 type IntegrationDisconnectVariables = {
@@ -43,14 +45,20 @@ const useIntegrationConnectCallback = (
     'mutationFn'
   >,
 ) => {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: ['integration-connect-callback'],
     mutationFn: async (payload) => {
       const { data } = await connectIntegrationCallback(payload);
       return data;
     },
-    onSuccess: () =>
-      toast.success('Agent will begin embedding and training on these pages.', { position: 'bottom-center' }),
+    onSuccess: (_, { integrationType }) => {
+      toast.success(`${getIntegrationNameFromType(integrationType)} connected successfully.`, {
+        position: 'bottom-center',
+      });
+      queryClient.invalidateQueries({ queryKey: ['integrations'] });
+    },
     onError: () => toast.error('Something went wrong. Please try again.', { position: 'bottom-center' }),
     ...options,
   });
@@ -70,7 +78,10 @@ const useIntegrationDisconnect = (
       return data;
     },
     onError: () => toast.error('Something went wrong. Please try again.', { position: 'bottom-center' }),
-    onSuccess: () => {
+    onSuccess: (_, { integrationType }) => {
+      toast.success(`${getIntegrationNameFromType(integrationType)} disconnected successfully.`, {
+        position: 'bottom-center',
+      });
       queryClient.invalidateQueries({ queryKey: ['integrations'] });
     },
     ...options,

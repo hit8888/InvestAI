@@ -19,10 +19,11 @@ const IntegrationsPage = () => {
   const { mutateAsync: disconnectIntegration, isPending: disconnectPending } = useIntegrationDisconnect();
   const { mutate: connectIntegrationCallback, isPending: connectCallbackPending } = useIntegrationConnectCallback();
   const { openPopup } = useOAuthPopup({
-    onSuccess: (data) => {
+    onSuccess: (data, metadata) => {
       connectIntegrationCallback({
         code: data.code,
         state: data.state,
+        integrationType: metadata?.oAuthType,
       });
     },
   });
@@ -32,7 +33,7 @@ const IntegrationsPage = () => {
       formData,
       integrationType,
     });
-    openPopup(response.login_url);
+    openPopup(response.login_url, { oAuthType: integrationType });
   };
 
   const handleToggleIntegrationStatus = (integrationToToggle: Integration) => {

@@ -9,8 +9,8 @@ interface OAuthPopupConfig {
   width?: number;
   height?: number;
   callbackPath?: string;
-  onSuccess?: (data: OAuthResponse) => void;
-  onError?: (error: Error) => void;
+  onSuccess?: (data: OAuthResponse, metadata?: Record<string, string>) => void;
+  onError?: (error: Error, metadata?: Record<string, string>) => void;
 }
 
 export const useOAuthPopup = ({
@@ -44,7 +44,7 @@ export const useOAuthPopup = ({
   }, [closePopup, clearTimer]);
 
   const openPopup = useCallback(
-    (url: string) => {
+    (url: string, metadata: Record<string, string> = {}) => {
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
 
@@ -75,11 +75,11 @@ export const useOAuthPopup = ({
             });
 
             if (data.error) {
-              onError?.(new Error(data.error_description || data.error));
+              onError?.(new Error(data.error_description || data.error), metadata);
             } else if (data.code || data.access_token) {
-              onSuccess?.(data);
+              onSuccess?.(data, metadata);
             } else {
-              onError?.(new Error('No authorization code or access token found in the response'));
+              onError?.(new Error('No authorization code or access token found in the response'), metadata);
             }
 
             cleanUp();

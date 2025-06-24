@@ -10,7 +10,7 @@ import attioLogo from '../../../assets/attio-icon.svg';
 import hubspotLogo from '../../../assets/hubspot-icon.svg';
 import ConnectIcon from '@breakout/design-system/components/icons/connect-icon';
 import type { Integration } from '@meaku/core/types/admin/api';
-import { toSentenceCase } from '@meaku/core/utils/index';
+import { getIntegrationNameFromType } from '../../../utils/common';
 
 const integrationIcons: { [key: string]: string } = {
   salesforce: salesforceLogo,
@@ -28,27 +28,12 @@ type IntegrationCardProps = {
   disableToggle?: boolean;
 };
 
-const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9\s]/g;
-
-const getDisplayName = (integration: Integration): string => {
-  let displayName = integration.name || integration.integration_type || '';
-
-  displayName = displayName.replace(SPECIAL_CHARS_REGEX, ' ').trim();
-  return toSentenceCase(displayName);
-};
-
 const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle, disableToggle }) => {
-  const {
-    integration_type: integrationType,
-    integration_group: integrationGroup,
-    name,
-    description,
-    connected,
-  } = data ?? {};
+  const { integration_type: integrationType, integration_group: integrationGroup, description, connected } = data ?? {};
   const icon = integrationIcons[integrationType?.toLowerCase()];
-  const displayName = getDisplayName(data);
+  const name = getIntegrationNameFromType(integrationType);
 
-  if (!displayName || !integrationType) {
+  if (!integrationType) {
     return null;
   }
 
@@ -66,7 +51,7 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle, disab
             {icon ? <img src={icon} alt={`${name} logo`} className="h-8" /> : <ConnectIcon height={24} width={24} />}
           </div>
           <Typography variant="label-16-semibold" textColor="black">
-            {displayName}
+            {name}
           </Typography>
         </div>
         <Typography variant="body-14" textColor="gray500" className="h-10">
