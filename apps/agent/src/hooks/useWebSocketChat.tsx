@@ -12,6 +12,8 @@ import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import {
+  checkIsAdminJoinedMessage,
+  checkIsAdminLeftMessage,
   hasUserSentInactiveMessage,
   isDemoAvailable,
   isDemoOptionsMessage,
@@ -234,12 +236,11 @@ const useWebSocketChat = () => {
       if (response.role === MessageSenderRole.AI) {
         handleUpdateOrbState(OrbStatusEnum.responding);
         handleAddAIMessage(response);
-      } else if (
-        response.role === MessageSenderRole.ADMIN &&
-        response.message_type === 'EVENT' &&
-        response.message.event_type === 'JOIN_SESSION'
-      ) {
+      } else if (response.role === MessageSenderRole.ADMIN && checkIsAdminJoinedMessage(response)) {
         setAdminJoinStatus(AdminConversationJoinStatus.JOINED);
+        handleAddAdminMessage(response);
+      } else if (response.role === MessageSenderRole.ADMIN && checkIsAdminLeftMessage(response)) {
+        setAdminJoinStatus(AdminConversationJoinStatus.EXIT);
         handleAddAdminMessage(response);
       } else if (response.role === MessageSenderRole.ADMIN) {
         handleAddAdminMessage(response);
