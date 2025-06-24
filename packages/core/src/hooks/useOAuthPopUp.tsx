@@ -67,7 +67,7 @@ export const useOAuthPopup = ({
 
         try {
           const currentUrl = new URL(popupRef.current.location.href);
-          if (currentUrl.pathname === callbackPath) {
+          if (currentUrl.href.includes(callbackPath)) {
             const data: OAuthResponse = {};
 
             currentUrl.searchParams.forEach((value, key) => {

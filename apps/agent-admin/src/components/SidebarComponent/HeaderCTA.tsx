@@ -4,16 +4,16 @@ import Separator from '@breakout/design-system/components/layout/separator';
 import { cn } from '@breakout/design-system/lib/cn';
 import { motion } from 'framer-motion';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
-import { ADMIN_DASHBOARD_COMPANY_NAME } from '../../utils/constants';
+import { ADMIN_DASHBOARD_COMPANY_NAME, SideNavView } from '../../utils/constants';
 import { useAuth } from '../../context/AuthProvider';
 import { getTransitionAnimation } from '../../utils/common';
-import { SideNavView, useSidebar } from '../../context/SidebarContext';
+import { useSidebar } from '../../context/SidebarContext';
 import Button from '@breakout/design-system/components/Button/index';
 import { ArrowLeftIcon } from 'lucide-react';
 import Typography from '@breakout/design-system/components/Typography/index';
 
 const HeaderCTA = () => {
-  const { isSidebarOpen: isOpen, toggleSidebar, sideNavView, setSideNavView } = useSidebar();
+  const { isSidebarOpen: isOpen, toggleSidebar, sideNavView, navigateToMainView } = useSidebar();
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;
   const isUserSuperAdmin = Boolean((orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin'));
@@ -28,7 +28,7 @@ const HeaderCTA = () => {
       <Button
         variant="tertiary"
         size="regular"
-        onClick={() => setSideNavView(SideNavView.MAIN)}
+        onClick={navigateToMainView}
         className="h-12 w-full items-center justify-center"
       >
         <ArrowLeftIcon className="h-4 w-4" />

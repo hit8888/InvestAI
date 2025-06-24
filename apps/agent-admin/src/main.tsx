@@ -2,7 +2,6 @@ import '@breakout/design-system/styles.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthProvider.tsx';
-import { SidebarProvider } from './context/SidebarContext.tsx';
 import { ConversationDetailsProvider } from './context/ConversationDetailsContext.tsx';
 import App from './App.tsx';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -15,11 +14,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={defaultQueryClient}>
       <AuthProvider>
-        <SidebarProvider>
-          <ConversationDetailsProvider>
-            <App />
-          </ConversationDetailsProvider>
-        </SidebarProvider>
+        <ConversationDetailsProvider>
+          <App />
+        </ConversationDetailsProvider>
       </AuthProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>

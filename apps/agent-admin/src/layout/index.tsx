@@ -3,6 +3,7 @@ import Sidebar from '../components/SidebarComponent/Sidebar';
 import usePageRouteState from '../hooks/usePageRouteState';
 import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
+import { SidebarProvider } from '../context/SidebarContext';
 
 const Root = () => {
   const { isDashboardPage, isLoginPage, isGoogleSsoCallbackPage } = usePageRouteState();
@@ -11,17 +12,19 @@ const Root = () => {
   const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isGoogleSsoCallbackPage;
 
   return (
-    <div className="flex w-full">
-      {notShowingSidebarCondition ? <Sidebar /> : null}
-      <div
-        className={cn({
-          'w-full': isLoginPage,
-          'flex-1': !isLoginPage,
-        })}
-      >
-        <Outlet />
+    <SidebarProvider>
+      <div className="flex w-full">
+        {notShowingSidebarCondition ? <Sidebar /> : null}
+        <div
+          className={cn({
+            'w-full': isLoginPage,
+            'flex-1': !isLoginPage,
+          })}
+        >
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 

@@ -13,11 +13,11 @@ import {
 import { useOAuthPopup } from '@meaku/core/hooks/useOAuthPopUp';
 
 const IntegrationsPage = () => {
-  const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
+  const [integrationFormToShow, setIntegrationFormToShow] = useState<Integration | null>(null);
   const { data, isLoading, error } = useIntegrationsQuery();
-  const { mutateAsync: connectIntegration } = useIntegrationConnect();
-  const { mutateAsync: disconnectIntegration } = useIntegrationDisconnect();
-  const { mutate: connectIntegrationCallback } = useIntegrationConnectCallback();
+  const { mutateAsync: connectIntegration, isPending: connectPending } = useIntegrationConnect();
+  const { mutateAsync: disconnectIntegration, isPending: disconnectPending } = useIntegrationDisconnect();
+  const { mutate: connectIntegrationCallback, isPending: connectCallbackPending } = useIntegrationConnectCallback();
   const { openPopup } = useOAuthPopup({
     onSuccess: (data) => {
       connectIntegrationCallback({
@@ -40,13 +40,22 @@ const IntegrationsPage = () => {
       disconnectIntegration({
         integrationType: integrationToToggle.integration_type,
       });
-      return;
-    }
-
-    setSelectedIntegration(integrationToToggle);
-    if (!integrationToToggle?.integration_form?.length) {
+    } else if (integrationToToggle?.integration_form?.length) {
+      setIntegrationFormToShow(integrationToToggle);
+    } else {
       handleConnectIntegration(integrationToToggle.integration_type);
     }
+  };
+
+  const handleIntegrationFormSubmit = (formData: Record<string, string>) => {
+    if (!integrationFormToShow) return;
+
+    handleConnectIntegration(integrationFormToShow.integration_type, formData);
+    setIntegrationFormToShow(null);
+  };
+
+  const handleIntegrationFormClose = () => {
+    setIntegrationFormToShow(null);
   };
 
   return (
@@ -61,15 +70,16 @@ const IntegrationsPage = () => {
         <IntegrationCard
           key={integration.integration_type}
           data={integration}
-          onToggle={() => handleToggleIntegrationStatus(integration)}
+          disableToggle={connectPending || disconnectPending || connectCallbackPending}
+          onToggle={handleToggleIntegrationStatus}
         />
       ))}
-      {selectedIntegration?.integration_form?.length ? (
+      {integrationFormToShow?.integration_form?.length ? (
         <IntegrationForm
           isOpen
-          formFields={selectedIntegration.integration_form}
-          onClose={() => setSelectedIntegration(null)}
-          onSubmit={(formData) => handleConnectIntegration(selectedIntegration.integration_type, formData)}
+          formFields={integrationFormToShow.integration_form}
+          onClose={handleIntegrationFormClose}
+          onSubmit={handleIntegrationFormSubmit}
         />
       ) : null}
     </PageContainer>

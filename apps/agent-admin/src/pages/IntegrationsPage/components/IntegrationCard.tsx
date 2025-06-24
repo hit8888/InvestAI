@@ -10,9 +10,11 @@ import attioLogo from '../../../assets/attio-icon.svg';
 import hubspotLogo from '../../../assets/hubspot-icon.svg';
 import ConnectIcon from '@breakout/design-system/components/icons/connect-icon';
 import type { Integration } from '@meaku/core/types/admin/api';
+import { toSentenceCase } from '@meaku/core/utils/index';
 
 const integrationIcons: { [key: string]: string } = {
   salesforce: salesforceLogo,
+  salesforce_sandbox: salesforceLogo,
   slack: slackLogo,
   gmail: gmailLogo,
   marketo: marketoLogo,
@@ -22,10 +24,20 @@ const integrationIcons: { [key: string]: string } = {
 
 type IntegrationCardProps = {
   data: Integration;
-  onToggle?: (status: boolean) => void;
+  onToggle?: (data: Integration) => void;
+  disableToggle?: boolean;
 };
 
-const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle }) => {
+const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9\s]/g;
+
+const getDisplayName = (integration: Integration): string => {
+  let displayName = integration.name || integration.integration_type || '';
+
+  displayName = displayName.replace(SPECIAL_CHARS_REGEX, ' ').trim();
+  return toSentenceCase(displayName);
+};
+
+const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle, disableToggle }) => {
   const {
     integration_type: integrationType,
     integration_group: integrationGroup,
@@ -34,6 +46,11 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle }) => 
     connected,
   } = data ?? {};
   const icon = integrationIcons[integrationType?.toLowerCase()];
+  const displayName = getDisplayName(data);
+
+  if (!displayName || !integrationType) {
+    return null;
+  }
 
   return (
     <Card className="w-[295px] rounded-2xl border border-gray-200 bg-gray-25 shadow-sm">
@@ -49,7 +66,7 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle }) => 
             {icon ? <img src={icon} alt={`${name} logo`} className="h-8" /> : <ConnectIcon height={24} width={24} />}
           </div>
           <Typography variant="label-16-semibold" textColor="black">
-            {name}
+            {displayName}
           </Typography>
         </div>
         <Typography variant="body-14" textColor="gray500" className="h-10">
@@ -57,21 +74,17 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle }) => 
         </Typography>
       </div>
       <div className="w-fit p-4">
-        <label
-          htmlFor={`integration-toggle-${name}`}
+        <div
           className="flex cursor-pointer items-center space-x-2 rounded-2xl border border-gray-200 bg-gray-100 px-4 py-2"
+          onClick={() => onToggle?.(data)}
         >
-          <Switch
-            id={`integration-toggle-${name}`}
-            checked={connected}
-            onCheckedChange={(newStatus) => onToggle?.(newStatus)}
-          >
+          <Switch disabled={disableToggle} checked={connected}>
             <ConnectIcon />
           </Switch>
           <Typography variant="label-14-medium" textColor="gray500">
             {connected ? 'Disconnect' : 'Connect'}
           </Typography>
-        </label>
+        </div>
       </div>
     </Card>
   );

@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import usePageRouteState from '../../hooks/usePageRouteState';
-import { SideNavView, useSidebar } from '../../context/SidebarContext';
+import { useSidebar } from '../../context/SidebarContext';
 import HeaderCTA from './HeaderCTA';
 import NavigationBodyItems from './NavigationBodyItems';
 import SideBarFooter from './SideBarFooter';
 import NavLinkSingleItem from './NavLinkSingleItem';
 import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
+import { SideNavView } from '../../utils/constants';
 
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
@@ -22,7 +23,7 @@ const getSidebarContainerAnimation = (isOpen: boolean) => ({
 
 const Sidebar = () => {
   const { isLoginPage } = usePageRouteState();
-  const { isSidebarOpen: isOpen, sideNavView, setSideNavView } = useSidebar();
+  const { isSidebarOpen: isOpen, sideNavView, navigateToSettingsView } = useSidebar();
 
   if (isLoginPage) {
     return null;
@@ -42,7 +43,7 @@ const Sidebar = () => {
             isPanelOpen={isOpen}
             navItem="Settings"
             icon={PanelSettingsIcon}
-            onClick={() => setSideNavView(SideNavView.SETTINGS)}
+            onClick={navigateToSettingsView}
           />
         </SideBarFooter>
       )}

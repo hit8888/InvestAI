@@ -3,7 +3,6 @@ import NavLinkSingleItem from './NavLinkSingleItem';
 import { cn } from '@breakout/design-system/lib/cn';
 import PanelNavArrowLiningIcon from '@breakout/design-system/components/icons/panel-navarrow-lining-icon';
 import PanelNavArrowLastLiningIcon from '@breakout/design-system/components/icons/panel-navarrow-lining-last-icon';
-import useSidebarNavigationItems from '../../hooks/useSidebarNavigationItems/useSidebarNavigationItems';
 import { getTransitionAnimation } from '../../utils/common';
 import { useLocation } from 'react-router-dom';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
@@ -19,11 +18,8 @@ type NavLinkItem = {
 };
 
 const NavigationBodyItems = () => {
-  const { isSidebarOpen: isOpen, sideNavView } = useSidebar();
+  const { isSidebarOpen: isOpen, groupedItems, ungroupedItems, expandedTabs, handleTabExpansion } = useSidebar();
   const location = useLocation();
-  const { groupedItems, ungroupedItems, expandedTabs, handleTabExpansion } = useSidebarNavigationItems({
-    sideNavView,
-  });
 
   const getNavigationChildrenItems = (navItem: NavLinkItem) => {
     return (

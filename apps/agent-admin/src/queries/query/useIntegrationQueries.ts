@@ -4,7 +4,7 @@ import { getIntegrations } from '@meaku/core/adminHttp/api';
 import { IntegrationsResponse } from '@meaku/core/types/admin/api';
 
 const useIntegrationsQuery = (options?: Omit<UseQueryOptions<IntegrationsResponse, Error>, 'queryFn'>) => {
-  const query = useQuery({
+  return useQuery({
     queryKey: ['integrations'],
     queryFn: async () => {
       const response = await getIntegrations();
@@ -12,8 +12,6 @@ const useIntegrationsQuery = (options?: Omit<UseQueryOptions<IntegrationsRespons
     },
     ...options,
   });
-
-  return query;
 };
 
 export { useIntegrationsQuery };
