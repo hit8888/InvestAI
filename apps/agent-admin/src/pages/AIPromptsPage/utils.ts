@@ -35,7 +35,7 @@ export const CommonAIPrompts: CommonAIPromptsProps[] = [
     promptType: '',
     textareaPlaceholder: '',
     exampleDescription: '',
-    description: `Define the ideal length for the AI assistant's responses. Use this to control conciseness or provide more detailed answers.`,
+    description: `Select the style of agent responses. Brief, standard or detailed.`,
     infoTitle: '',
   },
 ];

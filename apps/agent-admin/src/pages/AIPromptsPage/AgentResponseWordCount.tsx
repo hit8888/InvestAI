@@ -36,7 +36,7 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
   }, [agentResponseWordCount]);
 
   // Setup mutation
-  const { mutateAsync: updateAgentConfig } = useAgentConfigsMutation();
+  const { mutateAsync: updateAgentConfig, isPending: isUpdatingConfig } = useAgentConfigsMutation();
 
   const updateConfig = async (payload: Partial<AgentConfigPayload>) => {
     if (agentId) {
@@ -107,6 +107,7 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
                 <TabsTrigger
                   key={item.itemKey}
                   value={item.itemValue}
+                  disabled={isUpdatingConfig}
                   className={cn('flex-1 rounded-full bg-gray-100 p-2 text-gray-500', {
                     'ring-offset bg-white text-gray-900 ring-1 ring-gray-200': selectedTab === item.itemValue,
                   })}
@@ -127,16 +128,14 @@ const AgentResponseIdealLengthTabItems = [
     itemKey: 'brief',
     itemTitle: 'Brief',
     itemInfoTitle: 'Brief:',
-    itemDescription:
-      "Keep responses under 90 words (40 for low BI use cases). Great for quick answers, tooltips, or simple confirmations that don't require much context.",
+    itemDescription: 'Short responses - optimized for quick conversations.',
     itemValue: AgentResponseWordCountEnum.BRIEF,
   },
   {
     itemKey: 'standard',
     itemTitle: 'Standard',
     itemInfoTitle: 'Standard:',
-    itemDescription:
-      'Aim for up to 130 words (around 70 for low BI). Best for everyday help — clear, helpful responses with just enough detail to guide the user.',
+    itemDescription: 'Balanced length - clear and informative without being too long.',
     itemValue: AgentResponseWordCountEnum.STANDARD,
   },
   {
@@ -144,7 +143,7 @@ const AgentResponseIdealLengthTabItems = [
     itemTitle: 'Detailed',
     itemInfoTitle: 'Detailed:',
     itemDescription:
-      'Allow up to 190 words (100 for low BI). Ideal for step-by-step explanations, nuanced topics, or high-stakes moments that require context and clarity.',
+      'Descriptive responses - when the focus is to educate the visitor, ideal for documentation pages and learning content.',
     itemValue: AgentResponseWordCountEnum.DETAILED,
   },
 ];
