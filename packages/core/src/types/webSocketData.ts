@@ -252,8 +252,8 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       first_name: z.string(),
       last_name: z.string(),
       profile_picture: z.string().nullable(),
-      designation: z.string().nullable(),
-      department: z.string().nullable(),
+      designation: z.string().nullable().optional(),
+      department: z.string().nullable().optional(),
     }),
   }),
   z.object({

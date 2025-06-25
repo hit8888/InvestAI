@@ -6,6 +6,7 @@ import useSound from '@meaku/core/hooks/useSound';
 import { useNavigate, useParams } from 'react-router-dom';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
+import { ReadyState } from 'react-use-websocket';
 
 export type ActiveConversationCard = {
   sessionId: string;
@@ -48,17 +49,19 @@ export interface ActiveConversation {
 type ActiveConversationsContextType = {
   isLoading: boolean;
   activeConversations: ActiveConversation[] | null;
+  readyState: ReadyState;
 };
 
 const defaultContext: ActiveConversationsContextType = {
   isLoading: false,
   activeConversations: [],
+  readyState: WebSocket.CLOSED,
 };
 
 export const ActiveConversationsContext = createContext<ActiveConversationsContextType>(defaultContext);
 
 export const ActiveConversationsProvider = ({ children }: { children: React.ReactNode }) => {
-  const { lastMessageBySession, setLastMessageBySession } = useActiveConversationsWebSocket();
+  const { readyState, lastMessageBySession, setLastMessageBySession } = useActiveConversationsWebSocket();
   const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversations();
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
@@ -132,6 +135,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
       value={{
         isLoading: isLoading || !activeConversations,
         activeConversations,
+        readyState,
       }}
     >
       {children}

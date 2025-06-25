@@ -12,6 +12,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
@@ -19,6 +20,7 @@ const ActiveConversationsLayout = () => {
   const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
   const [showActiveConversations, setShowActiveConversations] = useState(false);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
+  const { userInfo } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -39,6 +41,17 @@ const ActiveConversationsLayout = () => {
     const sessionId = currentConversation?.session_id;
 
     if (sessionId) {
+      const sendMessage = sendMessageFnMap[sessionId];
+
+      sendMessage({
+        message: {
+          content: '',
+          event_type: 'LEAVE_SESSION',
+          event_data: {},
+        },
+        message_type: 'EVENT',
+      });
+
       updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
       setCurrentConversation(null);
       navigate('/conversations');
@@ -76,6 +89,31 @@ const ActiveConversationsLayout = () => {
       },
       message_type: 'EVENT',
     });
+  };
+
+  const handleWebSocketConnected = (sessionId: string) => {
+    const sessionStatus = sessionsStatus[sessionId];
+
+    if (sessionStatus === AdminConversationJoinStatus.JOINED) {
+      return;
+    }
+
+    const sendMessage = sendMessageFnMap[sessionId];
+
+    sendMessage({
+      message: {
+        content: '',
+        event_type: 'JOIN_SESSION',
+        event_data: {
+          first_name: userInfo?.first_name ?? '',
+          last_name: userInfo?.last_name ?? '',
+          profile_picture: userInfo?.profile_picture ?? '',
+        },
+      },
+      message_type: 'EVENT',
+    });
+
+    updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
   };
 
   const handleAIResponseGenerationRequest = (sessionId: string) => {
@@ -124,6 +162,7 @@ const ActiveConversationsLayout = () => {
                 key={conversation.session_id}
                 sessionId={conversation.session_id}
                 onWebSocketChange={handleWebSocketChange}
+                onConnected={handleWebSocketConnected}
               />
             ))}
 

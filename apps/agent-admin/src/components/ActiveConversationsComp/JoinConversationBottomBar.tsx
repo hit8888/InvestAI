@@ -44,7 +44,7 @@ const PendingJoinConversation = () => {
       <div className="animate-spin">
         <LoaderCircle />
       </div>
-      <span>Your request to join the conversation has been sent — waiting for the user to approve it.</span>
+      <span>Joining...</span>
     </div>
   );
 };

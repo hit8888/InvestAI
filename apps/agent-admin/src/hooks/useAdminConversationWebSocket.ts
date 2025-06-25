@@ -23,7 +23,6 @@ export type SendMessageFn = (message: Partial<WebSocketMessage>) => Promise<void
 export interface AdminConversationsWebSocketInfo {
   readyState: ReadyState;
   sendMessage: SendMessageFn;
-  lastMessage: MessageEvent<unknown> | null;
 }
 
 const useAdminConversationsWebSocket = ({
@@ -41,7 +40,7 @@ const useAdminConversationsWebSocket = ({
       ? `${getWebsocketBaseUrl()}/tenant/ws/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`
       : '';
 
-  const { lastMessage, sendMessage } = useWebSocket(
+  const { readyState, lastMessage, sendMessage } = useWebSocket(
     adminConversationsWsUrl,
     {
       share: true,
@@ -124,7 +123,7 @@ const useAdminConversationsWebSocket = ({
   useTabNotification({ recentMessage: lastMessage });
 
   // @ts-expect-error type issue
-  return { sendMessage: handleSendAdminMessage };
+  return { readyState, sendMessage: handleSendAdminMessage };
 };
 
 export default useAdminConversationsWebSocket;

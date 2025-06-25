@@ -19,6 +19,7 @@ export const AuthResponseSchema = z.object({
   email: z.string().email(),
   first_name: z.string(),
   last_name: z.string(),
+  profile_picture: z.string(),
   is_active: z.boolean(),
   is_staff: z.boolean(),
   date_joined: z.string().refine((date) => !isNaN(Date.parse(date)), {

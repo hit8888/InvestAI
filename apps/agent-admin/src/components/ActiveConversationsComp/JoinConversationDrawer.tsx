@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Drawer, DrawerContent, DrawerOverlay } from '@breakout/design-system/components/Drawer/index';
 import useActiveConversationDetailsDataQuery from '../../queries/query/useActiveConversationDetailsDataQuery';
 import JoinConversationHeader from './JoinConversationHeader';
 import JoinConversationChatArea from './JoinConversationChatArea';
-import { ActiveConversation } from '../../context/ActiveConversationsContext';
+import { ActiveConversation, ActiveConversationsContext } from '../../context/ActiveConversationsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
@@ -28,12 +28,18 @@ const JoinConversationDrawer = ({
 }: JoinConversationDrawerProps) => {
   const { session_id: sessionId } = conversation;
   const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse } = useJoinConversationStore();
+  const { readyState } = useContext(ActiveConversationsContext);
   const { chatHistory, setChatHistory, setChatSummary } = useActiveConversationDetails();
   const { setMessages } = useMessageStore();
 
   const queryOptions = useQueryOptions();
 
-  const { data, isLoading, isError } = useActiveConversationDetailsDataQuery({
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchChatHistory,
+  } = useActiveConversationDetailsDataQuery({
     sessionID: sessionId,
     queryOptions,
     queryParams: {
@@ -61,6 +67,12 @@ const JoinConversationDrawer = ({
     };
   }, [setIsGeneratingAIResponse]);
 
+  useEffect(() => {
+    if (readyState === WebSocket.OPEN) {
+      refetchChatHistory();
+    }
+  }, [readyState]);
+
   if (isError) {
     // TODO: track this error
     console.error('Error while fetching conversation details');
@@ -68,7 +80,7 @@ const JoinConversationDrawer = ({
   }
 
   const handleJoinButtonClick = () => {
-    updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
+    updateSessionStatus(sessionId, AdminConversationJoinStatus.PENDING);
   };
 
   const handleSendMessage = (message: string) => {

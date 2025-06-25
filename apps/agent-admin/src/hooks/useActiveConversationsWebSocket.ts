@@ -44,7 +44,7 @@ const useActiveConversationsWebSocket = () => {
   const baseVolume = 0.2;
   const { play } = useSound(popupsound, baseVolume);
 
-  const { lastMessage, getWebSocket } = useWebSocket(liveConversationsWsUrl, {
+  const { readyState, lastMessage, getWebSocket } = useWebSocket(liveConversationsWsUrl, {
     share: true,
     retryOnError: true,
     reconnectAttempts: MAX_RETRIES,
@@ -127,7 +127,7 @@ const useActiveConversationsWebSocket = () => {
     };
   }, []);
 
-  return { lastMessageBySession, setLastMessageBySession };
+  return { readyState, lastMessageBySession, setLastMessageBySession };
 };
 
 export default useActiveConversationsWebSocket;
