@@ -25,6 +25,7 @@ export const LeadsTableViewSchema = z.object({
   timeline: z.string(),
   product_interest: z.string(),
   session_id: z.string(),
+  buyer_intent: z.string(),
 });
 
 export const ConversationsTableViewSchema = z.object({

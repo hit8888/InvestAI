@@ -75,6 +75,7 @@ export const DefaultAuthResponse: AuthResponse = {
   email: '',
   first_name: '',
   last_name: '',
+  profile_picture: '',
   is_active: false,
   is_staff: false,
   date_joined: '',
@@ -386,7 +387,16 @@ export enum SidebarNavItemsEnum {
 
 // LEADS Page
 
-export const LEADS_PAGE_COLUMN_LISTS = ['email', 'name', 'company', 'product_interest', 'timeline', 'country', 'role'];
+export const LEADS_PAGE_COLUMN_LISTS = [
+  'email',
+  'name',
+  'company',
+  'product_interest',
+  'buyer_intent',
+  'timeline',
+  'country',
+  'role',
+];
 
 // CONVERSATION PAGE
 

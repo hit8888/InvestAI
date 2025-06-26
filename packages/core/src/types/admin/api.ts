@@ -114,6 +114,7 @@ export const AdditionalInfoSchema = z
     last_name: z.string().optional(),
     first_name: z.string().optional(),
     ip_address: z.string().optional(),
+    buyer_intent: z.string().optional(),
   })
   .or(z.object({}));
 

@@ -94,6 +94,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
       ? (response.additional_info as {
           city?: string;
           country?: string;
+          buyer_intent?: string;
         })
       : null;
   const mappedData: LeadsTableDisplayContent = {
@@ -108,6 +109,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     timeline: response.created_on ? response.created_on : '-',
     product_interest: response.product_interest || '-',
     session_id: response.session_id ?? '',
+    buyer_intent: additionalInfoData?.buyer_intent || '-',
   };
 
   return mappedData;
@@ -187,16 +189,42 @@ export const getProspectAndCompanyDetailsData = (
   return transformedData;
 };
 
+// Function to find header value for a key, including nested object structures
+export const getHeaderValueForKey = (
+  key: string,
+  columnHeaderLabelMapping: Record<string, string | Record<string, string>>,
+): string | Record<string, string> | undefined => {
+  // First, try direct key lookup
+  const directValue = columnHeaderLabelMapping[key];
+  if (directValue !== undefined) {
+    return directValue;
+  }
+
+  // If not found directly, search through nested objects
+  for (const value of Object.values(columnHeaderLabelMapping)) {
+    if (typeof value === 'object' && value !== null) {
+      // Check if the nested object contains our key
+      if (key in value) {
+        return value[key];
+      }
+    }
+  }
+
+  // If still not found, return undefined
+  return undefined;
+};
+
 // Convert column list to the required format
 export const getFormattedColumnsList = (
   columnsList: string[],
   columnHeaderLabelMapping: Record<string, string | Record<string, string>>,
 ) => {
   const formattedColumns = columnsList.map((key) => {
+    const headerValue = getHeaderValueForKey(key, columnHeaderLabelMapping);
     const newItem = {
       id: key,
       accessorKey: key,
-      header: columnHeaderLabelMapping[key],
+      header: headerValue,
       size: TABLE_COLUMN_WIDTH_SIZE, // Default size taken
     };
 

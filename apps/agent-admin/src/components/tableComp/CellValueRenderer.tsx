@@ -39,6 +39,7 @@ const cellValueMap: cellValueMapType = {
   summary: ConversationPreviewCellValue,
   bant_analysis: BANTAnalysisCellValue,
   buyer_intent_score: BuyerIntentCellValue,
+  buyer_intent: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
   url: UrlCellValue,
   updated_on: TimestampCellValue,
