@@ -7,8 +7,9 @@ import { EnrichmentSource, LocationWithCityCountry } from '@meaku/core/types/adm
 import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/index';
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
+import { Link } from 'react-router-dom';
 
-const { LOCATION, EMAIL } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
+const { LOCATION, EMAIL, LINKED_IN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
 type IProps = {
   itemLabel: string;
@@ -61,6 +62,20 @@ const SingleProspectAndCompanyItemDataDisplay = ({
       break;
     case EMAIL:
       content = <EmailCellValue value={itemValue as string} valueOrientation="right" />;
+      break;
+    case LINKED_IN:
+      content = (
+        <Link
+          to={itemValue as string}
+          target="_blank"
+          className={cn('text-base font-normal text-blue_sec-1000', {
+            'text-left': isKeyValueColumnwise,
+            'line-clamp-1 w-full max-w-56 truncate text-right': !isKeyValueColumnwise,
+          })}
+        >
+          {itemValue as string}
+        </Link>
+      );
       break;
     default:
       break;

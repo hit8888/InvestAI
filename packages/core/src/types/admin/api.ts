@@ -154,6 +154,8 @@ export const ProspectDetailsSchema = z.object({
   timeline: z.string().optional().nullable(),
   product_interest: z.string().optional().nullable(),
   enrichment_source: EnrichmentSourceEnum.optional().nullable(),
+  linkedin_url: z.string().optional().nullable(),
+  enriched_info: z.record(z.string(), z.string().optional().nullable()).optional().nullable(),
 });
 
 export const CompanyDetailsSchema = z.object({

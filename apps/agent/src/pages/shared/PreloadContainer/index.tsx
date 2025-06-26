@@ -136,7 +136,9 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const sessionQuery = useInitializeSessionDataQuery({
     agentId,
     initializeSessionPayload,
-    queryOptions: { enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl, retry: 1 },
+    queryOptions: {
+      enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl,
+    },
   });
 
   // set isInitApiSuccess to true when the session data is fetched from the server

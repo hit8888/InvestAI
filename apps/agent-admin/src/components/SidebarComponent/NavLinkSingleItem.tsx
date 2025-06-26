@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import PanelChevronDownIcon from '@breakout/design-system/components/icons/panel-chevrondown-icon';
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
+import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 type NavLinkProps = {
   navUrl?: string;
@@ -29,12 +31,19 @@ const NavLinkSingleItem = ({
   isExpanded,
   onClick,
 }: NavLinkProps) => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
   const IconComponent = isActive ? activeIcon : icon;
 
   const handleClick = (e: React.MouseEvent) => {
     if (hasChildren || !navUrl) {
       e.preventDefault();
       onClick?.();
+    }
+
+    if (navItem) {
+      trackAdminEvent(ANALYTICS_EVENT_NAMES.SIDE_NAV_ITEM_CLICKED, {
+        itemName: navItem,
+      });
     }
   };
 

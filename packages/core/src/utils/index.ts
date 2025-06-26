@@ -143,6 +143,15 @@ export const toSentenceCase = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
+export const ensureProtocol = (url: string): string => {
+  if (!url) return '';
+  try {
+    return new URL(url).href;
+  } catch {
+    return `https://${url}`;
+  }
+};
+
 export const MESSAGE_STATE = {
   EMPTY: 0,
   DEMO_START: 1,

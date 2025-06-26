@@ -57,6 +57,7 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
     email: z.string(),
     location: LocationWithCityCountrySchema,
     enrichmentSource: EnrichmentSourceEnum.or(z.string()),
+    linkedInUrl: z.string().optional(),
   }),
   company: z.object({
     name: z.string(),

@@ -28,6 +28,7 @@ import { ConversationRightSideDetailsType, FunnelData, FunnelStep } from './admi
 import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
+  ensureProtocol,
   LEADS_PAGE,
   SLIDES_PAGE,
   toSentenceCase,
@@ -163,6 +164,7 @@ export const getProspectAndCompanyDetailsData = (
     prospect_details: prospectDetails,
     company_details: companyDetails,
   } = conversation || {};
+  const linkedInUrl = ensureProtocol(prospectDetails?.enriched_info?.linkedin_url || '');
 
   const transformedData: TransformedProspectAndCompanyDetailsContent = {
     prospect: {
@@ -173,6 +175,7 @@ export const getProspectAndCompanyDetailsData = (
         country: prospectDetails?.country || (country as string) || '-',
       },
       enrichmentSource: prospectDetails?.enrichment_source || '',
+      linkedInUrl,
     },
     company: {
       name: companyDetails?.company_name || company || '-',

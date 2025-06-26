@@ -11,7 +11,7 @@ interface ConversationDetailsContextType {
   conversation: ConversationsTableDisplayContent | null;
   chatHistory: WebSocketMessage[];
   feedbackData: FeedbackRequestPayload[];
-  ProspectAndCompanyDetails: TransformedProspectAndCompanyDetailsContent | null;
+  prospectAndCompanyDetails: TransformedProspectAndCompanyDetailsContent | null;
   handleSetConversationDetails: (conversation: ConversationsTableDisplayContent | null) => void;
   handleSetChatHistoryDetails: (conversation: WebSocketMessage[]) => void;
   handleSetFeedbackDetails: (feedback: FeedbackRequestPayload[]) => void;
@@ -34,14 +34,14 @@ export const ConversationDetailsProvider: React.FC<{ children: ReactNode }> = ({
   const handleSetFeedbackDetails = (feedback: FeedbackRequestPayload[]) => {
     setFeedback(feedback);
   };
-  const ProspectAndCompanyDetails = conversation ? getProspectAndCompanyDetailsData(conversation) : null;
+  const prospectAndCompanyDetails = conversation ? getProspectAndCompanyDetailsData(conversation) : null;
   return (
     <ConversationDetailsContext
       value={{
         conversation,
         chatHistory,
         feedbackData,
-        ProspectAndCompanyDetails,
+        prospectAndCompanyDetails,
         handleSetConversationDetails,
         handleSetChatHistoryDetails,
         handleSetFeedbackDetails,

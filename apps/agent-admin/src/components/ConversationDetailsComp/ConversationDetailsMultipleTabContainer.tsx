@@ -13,7 +13,7 @@ type IProps = {
 
 const ConversationDetailsMultipleTabContainer = ({ isLoading }: IProps) => {
   const [currentTab, setCurrentTab] = useState(ConversationDetailsTabsValueEnum.SUMMARY_TAB);
-  const { ProspectAndCompanyDetails } = useConversationDetails();
+  const { prospectAndCompanyDetails } = useConversationDetails();
 
   const handleTabClick = (tabValue: ConversationDetailsTabsValueEnum) => {
     setCurrentTab(tabValue);
@@ -24,13 +24,13 @@ const ConversationDetailsMultipleTabContainer = ({ isLoading }: IProps) => {
       <MultipleTabSelectContainer currentTab={currentTab} handleTabClick={handleTabClick} isLoading={isLoading} />
       {isLoading ? (
         <ProspectAndCompanyDetailsDisplayContainerShimmer />
-      ) : ProspectAndCompanyDetails ? (
+      ) : prospectAndCompanyDetails ? (
         <ProspectAndCompanyDetailsDisplayContainer
           prospect={{
-            ...ProspectAndCompanyDetails.prospect,
+            ...prospectAndCompanyDetails.prospect,
           }}
           company={{
-            ...ProspectAndCompanyDetails.company,
+            ...prospectAndCompanyDetails.company,
           }}
         />
       ) : null}

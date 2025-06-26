@@ -41,19 +41,6 @@ apiClient.interceptors.response.use(
       },
     });
 
-    if (apiPath?.includes('/session/init')) {
-      const updatedConfig = {
-        ...error.config,
-        data: {
-          ...JSON.parse(error.config.data),
-          session_id: null,
-          prospect_id: null,
-        },
-      };
-
-      return apiClient(updatedConfig);
-    }
-
     return Promise.reject(error);
   },
 );

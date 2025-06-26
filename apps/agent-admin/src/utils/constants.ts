@@ -24,6 +24,7 @@ import SummaryIpAddressIcon from '@breakout/design-system/components/icons/summa
 import ProspectNameIcon from '@breakout/design-system/components/icons/person-icon';
 import ProspectEmailIcon from '@breakout/design-system/components/icons/email-icon';
 import LocationSmallIcon from '@breakout/design-system/components/icons/location-icon';
+import LinkedInIcon from '@breakout/design-system/components/icons/linkedin-icon';
 import CompanyNameIcon from '@breakout/design-system/components/icons/company-name-icon';
 import CompanyDomainIcon from '@breakout/design-system/components/icons/company-domain-icon';
 import CompanyFoundationDate from '@breakout/design-system/components/icons/company-foundation-date';
@@ -542,9 +543,10 @@ export enum CONV_RIGHTSIDE_DETAILS_DATA_ITEMS {
   NUMBER_OF_EMPLOYEES = 'Number of employees:',
   DOMAIN = 'Domain:',
   FOUNDATION_DATE = 'Foundation Date:',
+  LINKED_IN = 'LinkedIn:',
 }
 
-const { NAME, LOCATION, EMAIL, REVENUE, NUMBER_OF_EMPLOYEES, DOMAIN, FOUNDATION_DATE } =
+const { NAME, LOCATION, EMAIL, REVENUE, NUMBER_OF_EMPLOYEES, DOMAIN, FOUNDATION_DATE, LINKED_IN } =
   CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
 export const PROSPECT_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
@@ -562,6 +564,11 @@ export const PROSPECT_DETAILS_DATA_ITEMS: ConversationRightSideDetailsType[] = [
     itemLabel: LOCATION,
     itemKey: 'location',
     ItemIcon: LocationSmallIcon,
+  },
+  {
+    itemLabel: LINKED_IN,
+    itemKey: 'linkedInUrl',
+    ItemIcon: LinkedInIcon,
   },
 ];
 
