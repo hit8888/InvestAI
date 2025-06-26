@@ -28,7 +28,7 @@ const EntryPointChatInput = ({
         'h-12 w-full border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0 ',
         {
           'pl-14': showOrb,
-          'min-w-80 2xl:min-w-[600px]': !hasFirstUserMessageBeenSent,
+          'md:min-w-80 xs:min-w-40': !hasFirstUserMessageBeenSent,
         },
       )}
       placeholder={useTypewriter(placeholderText)}

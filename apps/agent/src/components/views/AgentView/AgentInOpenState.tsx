@@ -15,6 +15,7 @@ import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import useLatestMessageComplete from '../../../hooks/useLatestMessageComplete.ts';
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
+import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -74,7 +75,9 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
-  const hasArtifactAiMessage = aiMessages.some((message) => message.message_type === 'ARTIFACT');
+  const hasArtifactAiMessage = aiMessages.some(
+    (message) => message.message_type === 'ARTIFACT' && isMediaArtifact(message.message.artifact_type),
+  );
   return (
     <div
       className={cn(

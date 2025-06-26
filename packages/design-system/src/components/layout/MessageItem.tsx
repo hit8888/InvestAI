@@ -124,18 +124,13 @@ const MessageItem = ({
 
   const isCurrentMsgUserInactiveMessage = isAIResponseInactiveMessage(message);
 
-  const suggestionMessage = messagesWithSameResponseId.find((msg) => isSuggestionArtifact(msg));
-  const isSuggestionMessage = !!suggestionMessage;
-
-  const isActiveMessage = isSalesResponseMessage && !(isDiscoveryMessage || isSuggestionMessage);
-  const isSuggestionActiveMessage = !isSalesResponseMessage && isSuggestionMessage;
+  const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
   const isCtaEventMessage = isCtaEvent(message);
 
   const shouldShowActiveOrb =
-    isLastMessage &&
-    (isActiveMessage || isSuggestionActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
+    isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
 
   const showArtifactPreview = messageIndex >= totalMessages - 4;
 

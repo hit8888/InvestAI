@@ -634,7 +634,11 @@ const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMess
 
 // Helper function to sort messages within a group
 const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
-  const resultantMessages = messages.slice().sort((a, b) => {
+  const generatingArtifactMessages = messages.filter(isGeneratingMediaArtifactEvent);
+  // messing up with sorting if message is of type media artifact generating
+  const messagesToBeSorted = messages.slice().filter((msg) => !isGeneratingMediaArtifactEvent(msg));
+
+  const resultantMessages = messagesToBeSorted.sort((a, b) => {
     const aIsMainResponse = isMainResponse(a);
     const bIsMainResponse = isMainResponse(b);
     const aIsDelayed = isDelayedMessage(a);
@@ -651,10 +655,10 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
       const aIsDiscovery = isDiscoveryQuestion(a);
       const bIsDiscovery = isDiscoveryQuestion(b);
 
-      // if both are artifacts, prioritize media artifacts over suggested questions
+      // First priority: If both are artifacts, prioritize media artifacts over suggestion artifacts
       if (aIsArtifact && bIsArtifact) {
-        const aIsMediaArtifact = isMediaArtifact(a.message.artifact_type);
-        const bIsMediaArtifact = isMediaArtifact(b.message.artifact_type);
+        const aIsMediaArtifact = aIsArtifact && isMediaArtifact(a.message.artifact_type);
+        const bIsMediaArtifact = bIsArtifact && isMediaArtifact(b.message.artifact_type);
         const aIsSuggestion = isSuggestionArtifact(a);
         const bIsSuggestion = isSuggestionArtifact(b);
 
@@ -662,6 +666,7 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
         if (aIsSuggestion && bIsMediaArtifact) return 1;
       }
 
+      // Second priority: Any artifact should come before discovery questions
       if (aIsArtifact && bIsDiscovery) return -1;
       if (aIsDiscovery && bIsArtifact) return 1;
     }
@@ -670,7 +675,8 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
     return 0;
   });
 
-  return resultantMessages;
+  // Adding non-sorted messages back (e.g., at the end)
+  return [...resultantMessages, ...generatingArtifactMessages];
 };
 
 // This function groups messages by response_id and then sorts them by the first occurrence of response_id

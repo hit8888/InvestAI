@@ -1,6 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import dynamicIconImports from 'lucide-react/dynamicIconImports';
-import { useDynamicHeight } from '../../hooks/useDynamicHeight';
 import SlideItem from './SlideItem';
 import { SlideArtifactContent } from '@meaku/core/types/artifact';
 
@@ -36,9 +35,6 @@ const getItemClass = (totalItems: number) => {
 
 const SlideItems = ({ items, onItemClick }: IProps) => {
   const itemsLength = items.length;
-  const { maxHeight, setItemRef } = useDynamicHeight({
-    dependencies: [items],
-  });
 
   // Explicitly handle SlideItem layout for 5 items as per figma design
   // Link:- https://www.figma.com/design/LTtSceISNhOxccfdii2RaC/Breakout---%F0%9F%94%B5-Hackerearth-%F0%9F%94%B5?node-id=6465-53635&t=YwyFtnY1n5T5oep4-0
@@ -50,14 +46,12 @@ const SlideItems = ({ items, onItemClick }: IProps) => {
           <div className="flex w-1/2 flex-col gap-4">
             {items.slice(0, 2).map((item, idx) => (
               <div
-                ref={setItemRef(idx)}
                 key={item.title}
                 className={cn(
-                  'w-full',
+                  'w-full self-stretch',
                   // Adjust vertical position of first two items
                   idx === 0 ? 'translate-y-[50%]' : 'translate-y-[70%]',
                 )}
-                style={maxHeight > 0 ? { height: maxHeight } : undefined}
               >
                 <SlideItem
                   title={item.title}
@@ -73,16 +67,14 @@ const SlideItems = ({ items, onItemClick }: IProps) => {
           <div className="flex w-1/2 flex-col gap-4">
             {items.slice(2).map((item, idx) => (
               <div
-                ref={setItemRef(idx + 2)}
                 key={item.title}
                 className={cn(
-                  'w-full',
+                  'w-full self-stretch',
                   // Adjust vertical position of right column items
                   idx === 0 ? '-translate-y-[10%]' : '',
                   idx === 1 ? 'translate-y-0' : '',
                   idx === 2 ? 'translate-y-[10%]' : '',
                 )}
-                style={maxHeight > 0 ? { height: maxHeight } : undefined}
               >
                 <SlideItem
                   title={item.title}
@@ -101,16 +93,14 @@ const SlideItems = ({ items, onItemClick }: IProps) => {
   return (
     <div className="flex h-full w-full items-center justify-center overflow-auto" data-testid="slide-container">
       <div className={getLayoutClass(itemsLength)}>
-        {items.map((item, index) => (
+        {items.map((item) => (
           <div
-            ref={setItemRef(index)}
             className={cn(
               getItemClass(itemsLength),
-              'min-w-[200px]', // Minimum width to prevent squishing
+              'min-w-[200px] self-stretch', // Minimum width to prevent squishing
               'transition-all duration-300',
             )}
             key={item.title}
-            style={maxHeight > 0 ? { height: maxHeight } : undefined}
           >
             <SlideItem
               title={item.title}

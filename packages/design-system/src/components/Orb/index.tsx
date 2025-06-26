@@ -36,6 +36,7 @@ const Orb = ({ color, state, style = {}, orbLogoUrl, showThreeStar = false, show
         } as React.CSSProperties
       }
     >
+      <>{!showThreeStar && <ShiningRectangle className="relative -top-0.5" width="25" height="13" />}</>
       {showThreeStar && (
         <div className="inset-0 flex flex-col items-center  justify-center">
           <ShiningRectangle width="25" height="13" />

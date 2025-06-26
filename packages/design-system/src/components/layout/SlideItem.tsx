@@ -39,7 +39,7 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
           variant="title-18"
           align="center"
           textColor="textSecondary"
-          className={cn('flex w-full flex-1 items-center justify-center sm:text-xl md:text-3xl', {
+          className={cn('flex w-full flex-1 items-center justify-center sm:text-xl md:text-2xl', {
             'line-clamp-1': addLineClamp,
           })}
           title={addLineClamp ? title : ''}

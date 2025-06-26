@@ -78,9 +78,10 @@ const Suggestion = ({
             variant="label-14-medium"
             align="left"
             textColor={isEntryPointQuestion ? (invertTextColor ? 'default' : 'white') : 'textSecondary'}
-            className={cn('line-clamp-1 lg:line-clamp-2', {
-              'min-w-0 max-w-[350px] flex-1': isQuestionInCycle,
+            className={cn({
+              'line-clamp-1 min-w-0 max-w-[350px]': isQuestionInCycle,
               'cursor-not-allowed hover:bg-transparent': !isClickEnabled,
+              'line-clamp-1 lg:line-clamp-2': isTablet,
             })}
           >
             {question}
