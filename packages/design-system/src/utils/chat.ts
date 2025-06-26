@@ -3,7 +3,7 @@ import { FormFieldType } from '@meaku/core/types/webSocketData';
 
 export const createFormSchema = (form_fields: FormFieldType[]) => {
   form_fields.forEach((field) => {
-    const fieldSchema = getZodType(field.data_type);
+    const fieldSchema = getZodType(field.label, field.data_type);
 
     // Make the field required if is_required is not null or undefined
     if (field.is_required) {

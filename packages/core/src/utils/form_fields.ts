@@ -18,42 +18,76 @@ const FREE_EMAIL_DOMAINS = [
 ];
 
 // Function to check if email is a business email (not from common free providers)
-const isBusinessEmail = (email: string) => {
-  const domain = email.split('@')[1]?.toLowerCase();
+const isBusinessEmail = (email: string | null) => {
+  const domain = email?.split('@')[1]?.toLowerCase();
   return domain && !FREE_EMAIL_DOMAINS.includes(domain);
 };
 
-// Regex pattern to match only numbers
-const numbersOnlyRegex = /^\d*$/;
+// Function to check if email is valid
+const isEmail = (email: string | null) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return email && emailRegex.test(email);
+};
 
-const getZodType = (dataType: string) => {
+// Function to check if value is a number only
+const isNumberOnly = (value: string | null) => {
+  const numbersOnlyRegex = /^\d*$/;
+  return value && numbersOnlyRegex.test(value);
+};
+
+const checkIsPhoneNumber = (value: string | null) => {
+  return value && isValidPhoneNumber(value);
+};
+
+// Creates a Zod schema for required string fields that can be initially null
+const createRequiredStringSchema = (errorMessage: string) => {
+  return z
+    .string()
+    .nullable()
+    .default('')
+    .refine((val) => val && val.length > 0, {
+      message: errorMessage,
+    });
+};
+
+// Function to get email schema
+const getEmailSchema = () => {
+  return createRequiredStringSchema('Please enter your email').refine(isEmail, {
+    message: 'Please enter a valid email',
+  });
+};
+
+// Function to get zod type based on data type
+const getZodType = (label: string, dataType: string) => {
+  const errorMessage = `Please enter your ${label.toLowerCase()}`;
   switch (dataType) {
     case 'string':
-      return z.string().min(1, 'Invalid input');
+      return createRequiredStringSchema(errorMessage);
     case 'picklist':
       return z.string();
     case 'int':
-      return z
-        .string()
-        .refine((val) => numbersOnlyRegex.test(val), {
+      return createRequiredStringSchema(errorMessage)
+        .refine(isNumberOnly, {
           message: 'Only numbers are allowed',
         })
         .transform((val) => {
-          const num = parseInt(val, 10);
+          const num = parseInt(val || '0', 10);
           return num;
         });
     case 'email':
-      return z.string().email();
+      return getEmailSchema();
     case 'business_email':
-      return z.string().email().refine(isBusinessEmail, {
-        message: '* Please add your work email',
+      return getEmailSchema().refine(isBusinessEmail, {
+        message: 'Please add your work email',
       });
     case 'date':
       return z.date();
     case 'datetime':
       return z.string().datetime();
     case 'phone':
-      return z.string().refine(isValidPhoneNumber, { message: 'Invalid phone number' }); // E.164 format
+      return createRequiredStringSchema(errorMessage).refine(checkIsPhoneNumber, {
+        message: 'Invalid phone number',
+      });
     default:
       return z.string();
   }

@@ -193,7 +193,7 @@ export const getProspectAndCompanyDetailsData = (
 export const getHeaderValueForKey = (
   key: string,
   columnHeaderLabelMapping: Record<string, string | Record<string, string>>,
-): string | Record<string, string> | undefined => {
+): string | Record<string, string> => {
   // First, try direct key lookup
   const directValue = columnHeaderLabelMapping[key];
   if (directValue !== undefined) {
@@ -210,8 +210,8 @@ export const getHeaderValueForKey = (
     }
   }
 
-  // If still not found, return undefined
-  return undefined;
+  // If still not found, return empty string
+  return '';
 };
 
 // Convert column list to the required format
