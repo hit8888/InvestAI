@@ -26,6 +26,8 @@ export type LastMessage = {
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
 const MAX_RETRIES = 5;
+const INITIAL_RETRY_INTERVAL = 1000;
+const MAX_RETRY_INTERVAL = 20000;
 
 const useActiveConversationsWebSocket = () => {
   const tenant = getTenantFromLocalStorage();
@@ -36,6 +38,7 @@ const useActiveConversationsWebSocket = () => {
       : '';
 
   const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, LastMessage>>({});
+  const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
   const currentConversation = useJoinConversationStore((state) => state.currentConversation);
   const handleAddAIMessage = useMessageStore((state) => state.handleAddAIMessage);
   const handleAddUserMessage = useMessageStore((state) => state.handleAddAIMessage);
@@ -47,7 +50,13 @@ const useActiveConversationsWebSocket = () => {
   const { readyState, lastMessage, getWebSocket } = useWebSocket(liveConversationsWsUrl, {
     share: true,
     retryOnError: true,
+    shouldReconnect: () => true,
     reconnectAttempts: MAX_RETRIES,
+    reconnectInterval: (retryCount) => {
+      const interval = Math.min(retryInterval * Math.pow(2, retryCount - 1), MAX_RETRY_INTERVAL);
+      setRetryInterval(interval);
+      return interval;
+    },
     filter: (message) => {
       try {
         const messageData = JSON.parse(message.data);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { nanoid } from 'nanoid';
@@ -12,6 +12,8 @@ import useTabNotification from '@meaku/core/hooks/useTabNotification';
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins
 const MAX_RETRIES = 5;
+const INITIAL_RETRY_INTERVAL = 1000;
+const MAX_RETRY_INTERVAL = 20000;
 
 interface AdminConversationsWebSocketProps {
   sessionId: string;
@@ -29,6 +31,7 @@ const useAdminConversationsWebSocket = ({
   sessionId,
   enabled,
 }: AdminConversationsWebSocketProps): AdminConversationsWebSocketInfo => {
+  const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
   const handleAddAdminMessage = useMessageStore((state) => state.handleAddAdminMessage);
   const setAISuggestionMessage = useMessageStore((state) => state.setAISuggestionMessage);
   const setIsGeneratingAIResponse = useJoinConversationStore((state) => state.setIsGeneratingAIResponse);
@@ -45,7 +48,13 @@ const useAdminConversationsWebSocket = ({
     {
       share: true,
       retryOnError: true,
+      shouldReconnect: () => true,
       reconnectAttempts: MAX_RETRIES,
+      reconnectInterval: (retryCount) => {
+        const interval = Math.min(retryInterval * Math.pow(2, retryCount - 1), MAX_RETRY_INTERVAL);
+        setRetryInterval(interval);
+        return interval;
+      },
       filter: (message) => {
         try {
           const messageData = JSON.parse(message.data);
