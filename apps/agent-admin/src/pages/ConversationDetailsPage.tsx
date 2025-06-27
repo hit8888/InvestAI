@@ -92,7 +92,7 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
         />
       </div>
       <ConversationDetailsNavigatedHeader isLoading={isLoading} {...navigatedHeaderDynamicValues} />
-      <ConversationDetailsMultipleTabContainer isLoading={isLoading} />
+      <ConversationDetailsMultipleTabContainer isLoading={isLoading} isLeadsPage={isLeadsPage} />
     </div>
   );
 };

@@ -1,12 +1,11 @@
 import { useLocation } from 'react-router-dom';
-import { AppRoutesEnum } from '../utils/constants';
+import { AppRoutesEnum, OAUTH_CALLBACK_PAGES } from '../utils/constants';
 
 const usePageRouteState = () => {
   const location = useLocation();
   const {
     LEADS,
     LOGIN,
-    GOOGLE_SSO_CALLBACK,
     CONVERSATIONS,
     AGENT,
     AGENT_DATA_SOURCES,
@@ -20,7 +19,7 @@ const usePageRouteState = () => {
   } = AppRoutesEnum;
 
   const isDashboardPage = location.pathname === '/';
-  const isGoogleSsoCallbackPage = location.pathname.includes(GOOGLE_SSO_CALLBACK);
+  const isOAuthCallbackPage = OAUTH_CALLBACK_PAGES.some((path) => location.pathname.includes(path));
   const isLoginPage = location.pathname.includes(LOGIN);
   const isLeadsPage = location.pathname.includes(LEADS);
   const isConversationsPage = location.pathname.includes(CONVERSATIONS);
@@ -39,7 +38,7 @@ const usePageRouteState = () => {
   return {
     isDashboardPage,
     isLoginPage,
-    isGoogleSsoCallbackPage,
+    isOAuthCallbackPage,
     isLeadsPage,
     isConversationsPage,
     isAgentPage,

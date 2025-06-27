@@ -8,6 +8,7 @@ import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/inde
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { Link } from 'react-router-dom';
+import { extractLinkedInUsername } from '@meaku/core/utils/index';
 
 const { LOCATION, EMAIL, LINKED_IN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
@@ -73,7 +74,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
             'line-clamp-1 w-full max-w-56 truncate text-right': !isKeyValueColumnwise,
           })}
         >
-          {itemValue as string}
+          {extractLinkedInUsername(itemValue as string) || (itemValue as string)}
         </Link>
       );
       break;

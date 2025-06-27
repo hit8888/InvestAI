@@ -20,6 +20,7 @@ import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer'
 import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
 import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
+import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -33,11 +34,6 @@ const routes = [
       {
         path: '',
         element: <ProtectedRoute element={<Dashboard />} />,
-        children: [],
-      },
-      {
-        path: 'auth/google/callback',
-        element: <LoginPage />,
         children: [],
       },
       {
@@ -136,6 +132,16 @@ const routes = [
         ],
       },
     ],
+  },
+  {
+    path: '/auth/google/callback',
+    element: <OAuthCallbackPage />,
+    children: [],
+  },
+  {
+    path: '/tenant/integration/oauth2/callback',
+    element: <OAuthCallbackPage />,
+    children: [],
   },
   {
     path: '*',

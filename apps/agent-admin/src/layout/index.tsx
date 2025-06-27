@@ -6,10 +6,10 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { SidebarProvider } from '../context/SidebarContext';
 
 const Root = () => {
-  const { isDashboardPage, isLoginPage, isGoogleSsoCallbackPage } = usePageRouteState();
+  const { isDashboardPage, isLoginPage, isOAuthCallbackPage } = usePageRouteState();
   useAuthHandler();
 
-  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isGoogleSsoCallbackPage;
+  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isOAuthCallbackPage;
 
   return (
     <SidebarProvider>

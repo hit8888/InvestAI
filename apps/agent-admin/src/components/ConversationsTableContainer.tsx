@@ -33,12 +33,15 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
+import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 const ConversationsTableContainer = () => {
   const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
+  const { trackAdminEvent } = useAdminEventAnalytics();
 
   useInitializeFilterPreferences(CONVERSATIONS_PAGE);
 
@@ -112,6 +115,14 @@ const ConversationsTableContainer = () => {
 
   const haveNoRecords = totalRecords === 0;
 
+  const handleRowItemClick = (rowData: unknown) => {
+    const conversationDetails = (rowData ?? {}) as ConversationsTableDisplayContent;
+
+    trackAdminEvent(ANALYTICS_EVENT_NAMES.CONVERSATIONS_ROW_CLICKED, {
+      session_id: conversationDetails.session_id,
+    });
+  };
+
   // Handle error states
   if (isError || tableError) {
     return <ErrorState />;
@@ -138,6 +149,7 @@ const ConversationsTableContainer = () => {
             tableData={conversationsData}
             columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
             filterContainerHeight={filterContainerHeight}
+            onRowItemClick={handleRowItemClick}
           />
         </div>
         <div className="flex items-center justify-end gap-4 self-stretch">

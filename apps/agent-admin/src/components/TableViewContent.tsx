@@ -12,6 +12,7 @@ interface TableContentProps {
   columnHeaderData: ColumnDefinition[];
   filterContainerHeight?: number;
   pageType: PaginationPageType;
+  onRowItemClick?: (rowData: unknown) => void;
 }
 
 const DEFAULT_LOADING_ROW_COUNT = 10;
@@ -25,6 +26,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
   columnHeaderData,
   filterContainerHeight = 0,
   pageType,
+  onRowItemClick,
 }) => {
   const { isSidebarOpen } = useSidebar();
   if (isLoading) {
@@ -45,6 +47,7 @@ const TableViewContent: React.FC<TableContentProps> = ({
       filterContainerHeight={filterContainerHeight}
       isSidebarOpen={isSidebarOpen}
       pageType={pageType}
+      onRowItemClick={onRowItemClick}
     />
   );
 };

@@ -9,11 +9,11 @@ import { getDashboardBasicPathURL } from '../utils/common';
 const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
   const navigate = useNavigate();
-  const { isLoginPage, pathURL, isGoogleSsoCallbackPage } = usePageRouteState();
+  const { isLoginPage, pathURL, isOAuthCallbackPage } = usePageRouteState();
   const { LOGIN, LEADS } = AppRoutesEnum;
 
   useEffect(() => {
-    if (isGoogleSsoCallbackPage) {
+    if (isOAuthCallbackPage) {
       return;
     }
 

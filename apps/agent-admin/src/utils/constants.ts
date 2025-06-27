@@ -358,6 +358,7 @@ export enum AppRoutesEnum {
   LEADS = 'leads',
   LOGIN = 'login',
   GOOGLE_SSO_CALLBACK = 'auth/google/callback',
+  INTEGRATIONS_OAUTH_CALLBACK = 'tenant/integration/oauth2/callback',
   CONVERSATIONS = 'conversations',
   AGENT = 'agent',
   AGENT_DATA_SOURCES = 'agent/data-sources',
@@ -385,6 +386,8 @@ export enum SidebarNavItemsEnum {
   INSIGHT_LABEL = 'Insights',
   INTEGRATIONS_LABEL = 'Integrations',
 }
+
+export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
 
 // LEADS Page
 
@@ -421,9 +424,8 @@ export enum ConversationDetailsTabsLabelEnum {
 }
 
 export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
-  'summary',
-  'country',
   'timestamp',
+  'country',
   'product_of_interest',
   'buyer_intent_score',
   // 'bant_analysis',

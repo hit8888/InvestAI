@@ -7,6 +7,8 @@ import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters'
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import ChoosePresetsDateValue from '../ChoosePresetsDateValue';
 import moment from 'moment-timezone';
+import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 const ALLOWED_MONTHS_RANGE = 3;
 
@@ -16,6 +18,7 @@ interface IDateRangeSelectorProps {
 }
 
 const DateRangeSelector = ({ currentDateRange, onDateChange }: IDateRangeSelectorProps) => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
   const [isOpen, setIsOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRangeProp | undefined>();
   const [currentPreset, setCurrentPreset] = useState<PresetDateLabel>(PresetDateLabel.CustomRange);
@@ -26,6 +29,9 @@ const DateRangeSelector = ({ currentDateRange, onDateChange }: IDateRangeSelecto
   };
 
   const handleApplyDates = () => {
+    trackAdminEvent(ANALYTICS_EVENT_NAMES.INSIGHTS_APPLY_DATES, {
+      preset: currentPreset,
+    });
     onDateChange(dateRange);
     handleClose();
   };

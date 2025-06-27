@@ -41,6 +41,7 @@ interface TableViewProps {
   sortValue?: DataSourceSortValues;
   pageType: PaginationPageType;
   toggleDataSourcesDrawer?: (value: boolean) => void;
+  onRowItemClick?: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
 }
 
 const CommonTable = ({
@@ -58,6 +59,7 @@ const CommonTable = ({
   sortValue = {} as DataSourceSortValues,
   pageType,
   toggleDataSourcesDrawer = () => {},
+  onRowItemClick,
 }: TableViewProps) => {
   const navigate = useNavigate();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
@@ -78,6 +80,7 @@ const CommonTable = ({
 
   const handleRowItemClick = (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => {
     const detailsPageURL = 'session_id' in row ? row.session_id : null;
+    onRowItemClick?.(row);
     if (detailsPageURL) {
       navigate(`${detailsPageURL}`, {
         state: { from: isConversationsPage ? 'conversations' : 'leads' },
