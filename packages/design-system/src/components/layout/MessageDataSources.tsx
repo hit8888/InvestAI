@@ -9,6 +9,8 @@ import FaviconImage from '@breakout/design-system/components/layout/favicon-imag
 import { DataSourceType } from '@meaku/core/types/webSocketData';
 import { Badge } from '@breakout/design-system/components/layout/badge';
 import { ViewType } from '@meaku/core/types/common';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
   dataSources: DataSourceType[];
@@ -22,8 +24,16 @@ function truncateToPercentage(number: number) {
 
 const MessageDataSources = (props: IProps) => {
   const { dataSources, viewType } = props;
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const totalDocuments = dataSources.length;
+
+  const handleDataSourceClick = (doc: DataSourceType) => {
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DATA_SOURCE_CLICKED, {
+      url: doc.url,
+      title: doc.title || doc.data_source_name || doc.url,
+    });
+  };
 
   if (totalDocuments <= 0) {
     return null;
@@ -57,6 +67,7 @@ const MessageDataSources = (props: IProps) => {
                             'max-w-[80%]': viewType === ViewType.DASHBOARD,
                           })}
                           title={doc.title || doc.data_source_name || doc.url}
+                          onClick={() => handleDataSourceClick(doc)}
                         >
                           {doc.title || doc.data_source_name || doc.url}
                         </a>
