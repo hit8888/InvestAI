@@ -16,6 +16,7 @@ import useLatestMessageComplete from '../../../hooks/useLatestMessageComplete.ts
 import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
+import useForceEnableDelay from '../../../hooks/useForceEnableDelay.ts';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -38,7 +39,9 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const { isMessageComplete } = useLatestMessageComplete();
 
-  const disableMessageSend = isAMessageBeingProcessed || !isMessageComplete();
+  const defaultDisable = isAMessageBeingProcessed || !isMessageComplete();
+  const forceEnable = useForceEnableDelay(defaultDisable, 30000);
+  const disableMessageSend = defaultDisable && !forceEnable;
 
   const messages = useMessageStore((state) => state.messages);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
