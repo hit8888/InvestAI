@@ -29,6 +29,7 @@ const useDemoDetails = () => {
   const { lastMessage, handleSendUserMessage } = useWebSocketChat();
   const queueRef = useRef<ScriptStepType[]>([]);
   const [demoDetails, setDemoDetails] = useState<ScriptStepType | null>(null);
+  const wasDemoAvailable = useRef<boolean>(false);
 
   const parsedLastMessage = lastMessage ? (JSON.parse(lastMessage.data) as WebSocketMessage) : null;
 
@@ -40,23 +41,29 @@ const useDemoDetails = () => {
 
   const demoFeatures = eventData?.features ?? [];
 
-  const isDemoAvailable = messages.some((message) => {
-    const hasCompleteMessage = messages
+  const isDemoAvailable =
+    wasDemoAvailable.current ||
+    messages
       .filter((msg) => msg.response_id === latestResponseId)
-      .some((msg) => msg.message_type === 'STREAM' && msg.message.is_complete);
+      .some((message) => {
+        const hasCompleteMessage = messages
+          .filter((msg) => msg.response_id === latestResponseId)
+          .some((msg) => msg.message_type === 'STREAM' && msg.message.is_complete);
 
-    const latestResponseIdMessage = messages.find((msg) => msg.response_id === latestResponseId);
+        const latestResponseIdMessage = messages.find((msg) => msg.response_id === latestResponseId);
 
-    if (latestResponseIdMessage?.message_type === 'STREAM' && !hasCompleteMessage) return false;
+        if (latestResponseIdMessage?.message_type === 'STREAM' && !hasCompleteMessage) return false;
 
-    if (message.message_type === 'EVENT' && 'event_type' in message.message) {
-      const eventMessage = message.message;
-      if (eventMessage.event_type === 'DEMO_AVAILABLE' || eventMessage.event_type === 'DEMO_OPTIONS') {
-        return eventMessage.event_data.demo_available;
-      }
-    }
-    return false;
-  });
+        if (message.message_type === 'EVENT' && 'event_type' in message.message) {
+          const eventMessage = message.message;
+
+          if (eventMessage.event_type === 'DEMO_AVAILABLE' || eventMessage.event_type === 'DEMO_OPTIONS') {
+            wasDemoAvailable.current = eventMessage.event_data.demo_available ?? false;
+            return eventMessage.event_data.demo_available;
+          }
+        }
+        return false;
+      });
 
   useEffect(() => {
     if (draftDemoDetails) {

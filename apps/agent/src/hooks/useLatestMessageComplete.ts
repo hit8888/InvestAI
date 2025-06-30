@@ -29,7 +29,7 @@ const useLatestMessageComplete = () => {
 
     // Get all messages with the latest response ID
     const currentResponseMessages = messages.filter(
-      (message) => message.response_id === latestResponseId && message.role === 'ai',
+      (message) => message.response_id === latestResponseId && message.role === 'ai' && message.actor !== 'DEMO',
     );
 
     if (currentResponseMessages.length === 0) return true;
