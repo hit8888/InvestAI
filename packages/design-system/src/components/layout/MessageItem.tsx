@@ -214,7 +214,7 @@ const MessageItem = ({
         {checkIsAdminLeftMessage(message) && <AdminExitInfo message={message} />}
 
         {isDiscoveryQuestion(message) && (
-          <div className="my-5 flex w-full items-end justify-start gap-4">
+          <div className="my-5 flex w-full items-start justify-start gap-4">
             {shouldShowActiveOrb && (
               <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
             )}

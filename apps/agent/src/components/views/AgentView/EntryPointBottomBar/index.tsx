@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi.tsx';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
-import PopupWithBubblesContainer from '../EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import EntryPointContentForBottomCenter from './EntryPointContentForBottomCenter.tsx';
 import InsetAgentOpenButton from './InsetAgentOpenButton.tsx';
 import SideWiseEntryPoint from './SideWiseEntryPoint.tsx';
@@ -16,25 +15,19 @@ import { useMessageStore } from '../../../../stores/useMessageStore';
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleOpenAgent: () => void;
-  hideBottomBar: boolean;
   showPopupContent: boolean;
-  setShowPopupContent: (value: boolean) => void;
   entryPointAlignment: EntryPointAlignmentType;
+  showOrbAfterBubblesDisappear: boolean;
 }
 
 const EntryPointBottomBar = ({
-  hideBottomBar,
   handleSendUserMessage,
   handleOpenAgent,
   showPopupContent,
-  setShowPopupContent,
   entryPointAlignment,
+  showOrbAfterBubblesDisappear,
 }: IProps) => {
-  const { banner_config, agentName } = useValuesFromConfigApi();
-
-  const showBanner = !!banner_config?.show_banner;
-  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
-
+  const { agentName } = useValuesFromConfigApi();
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const { getParam } = useUrlParams();
@@ -68,19 +61,10 @@ const EntryPointBottomBar = ({
         'absolute bottom-4 left-1/2 -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90':
           isEntryPointOnTheBottomCenter,
         'relative w-full items-end justify-start': !isEntryPointOnTheBottomCenter,
-        hidden: hideBottomBar || isAgentOpen,
         'h-20 w-full': shouldShowOnlySidewiseEntryPointOrb,
       })}
       style={containerStyle}
     >
-      {showBanner && (
-        <PopupWithBubblesContainer
-          showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
-          setShowPopupContent={setShowPopupContent}
-          popupBannerAlignment={entryPointAlignment}
-          setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
-        />
-      )}
       {isSideWiseEntryPoint ? (
         <SideWiseEntryPoint
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}

@@ -39,22 +39,20 @@ const PopupWithBubblesContainer = ({
   if (!showBanner) return null;
 
   return (
-    <>
-      <AnimatePresence>
-        {showPopupContent && (
-          <PopupContent
-            handleClosePopup={handleClosePopup}
-            agentName={agentName}
-            orgName={orgName}
-            header={header}
-            subheader={subheader}
-            popupBannerAlignment={popupBannerAlignment}
-            orbLogoUrl={orbLogoUrl}
-            showOrb={showOrb}
-          />
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence>
+      {showPopupContent && (
+        <PopupContent
+          handleClosePopup={handleClosePopup}
+          agentName={agentName}
+          orgName={orgName}
+          header={header}
+          subheader={subheader}
+          popupBannerAlignment={popupBannerAlignment}
+          orbLogoUrl={orbLogoUrl}
+          showOrb={showOrb}
+        />
+      )}
+    </AnimatePresence>
   );
 };
 

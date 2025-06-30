@@ -15,6 +15,7 @@ interface IProps {
   isEntryPointQuestion: boolean;
   invertTextColor?: boolean;
   viewType?: ViewType;
+  tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 const Suggestion = ({
@@ -25,6 +26,7 @@ const Suggestion = ({
   isQuestionInCycle = false,
   invertTextColor,
   viewType,
+  tooltipSide = 'top',
 }: IProps) => {
   const { isTablet } = useScreenSize();
   const { textRef, isTextTruncated } = useTextTruncation({
@@ -69,7 +71,7 @@ const Suggestion = ({
         )}
       </div>
       <TooltipWrapperDark
-        tooltipSide="top"
+        tooltipSide={tooltipSide}
         tooltipAlign="end"
         tooltipSideOffsetValue={15}
         trigger={

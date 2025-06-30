@@ -31,7 +31,7 @@ const TooltipWrapperDark = ({
   tooltipContentClassName,
   triggerWrapperClassName,
 }: IProps) => {
-  const isTooltipSideValueTop = tooltipSide === 'top';
+  const isTooltipSideValueTop = tooltipSide === 'top' || tooltipSide === 'bottom';
   return (
     <TooltipProvider disableHoverableContent={disableHoverableContent} delayDuration={200}>
       <Tooltip defaultOpen={alwaysVisible}>

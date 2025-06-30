@@ -13,18 +13,23 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useTabNotification from '@meaku/core/hooks/useTabNotification';
+import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
+import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
 interface IProps {
   fetchSessionData: () => void;
 }
 
 const AgentView = ({ fetchSessionData }: IProps) => {
   const [showPopupContent, setShowPopupContent] = useState(false);
+  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
 
   const { handleSendUserMessage, lastMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
   const { banner_config, entry_point_alignment } = useValuesFromConfigApi();
+  const showPopupBanner = !!banner_config?.show_banner;
+
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
 
@@ -66,6 +71,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   };
 
   const isSideWiseEntryPoint = entry_point_alignment !== 'center';
+  const isEntryPointOnTheBottomCenter = entry_point_alignment === EntryPointAlignment.CENTER;
   const getItemAlignment = () => {
     if (!hasFirstUserMessageBeenSent) {
       return isSideWiseEntryPoint ? 'items-end justify-end' : 'items-end justify-center';
@@ -88,14 +94,27 @@ const AgentView = ({ fetchSessionData }: IProps) => {
         isCollapsible={isCollapsible}
         showAgentInOpenState={shouldShowAgent && isAgentOpen}
       />
-      <EntryPointBottomBar
-        handleSendUserMessage={handleSendMessage}
-        handleOpenAgent={handleOpenAgent}
-        hideBottomBar={shouldHideBottomBar}
-        showPopupContent={showPopupContent}
-        setShowPopupContent={setShowPopupContent}
-        entryPointAlignment={entry_point_alignment ?? 'center'}
-      />
+      <div
+        className={cn('flex h-full w-full flex-col items-center justify-end', {
+          hidden: shouldHideBottomBar || isAgentOpen,
+        })}
+      >
+        {showPopupBanner && (
+          <PopupWithBubblesContainer
+            showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
+            setShowPopupContent={setShowPopupContent}
+            popupBannerAlignment={entry_point_alignment ?? 'center'}
+            setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
+          />
+        )}
+        <EntryPointBottomBar
+          handleSendUserMessage={handleSendMessage}
+          handleOpenAgent={handleOpenAgent}
+          showPopupContent={showPopupContent}
+          entryPointAlignment={entry_point_alignment ?? 'center'}
+          showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear}
+        />
+      </div>
     </div>
   );
 };

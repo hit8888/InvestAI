@@ -90,7 +90,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
         {isAIMessage && !isLoadingTextMessage && shouldShowActiveOrb && (
-          <div className="flex w-10 items-end justify-start">{renderOrb()}</div>
+          <div className="flex w-10 items-start justify-start">{renderOrb()}</div>
         )}
 
         {isLoadingTextMessage && shouldShowActiveOrb && renderOrb()}

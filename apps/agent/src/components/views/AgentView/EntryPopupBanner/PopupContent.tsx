@@ -49,9 +49,9 @@ const PopupContent = ({
       className={cn(
         'popup-banner-box-shadow absolute flex min-w-[400px] max-w-[500px] cursor-pointer items-center justify-center rounded-3xl p-2',
         {
-          '-top-36 left-2': isEntryPointOnTheBottomLeft,
-          '-left-24 -top-40 sm:-left-8 lg:-left-16 xs:-left-12': isEntryPointOnTheCenterBottom,
-          '-top-36 right-0': isEntryPointOnTheBottomRight,
+          'bottom-32 left-12': isEntryPointOnTheBottomLeft,
+          'bottom-28 sm:left-8 md:left-12 lg:left-32': isEntryPointOnTheCenterBottom,
+          'bottom-32 right-8': isEntryPointOnTheBottomRight,
         },
       )}
       style={{ zIndex: 20 }}
@@ -62,7 +62,7 @@ const PopupContent = ({
       >
         <div
           className={cn('flex w-full items-start justify-center gap-2', {
-            'pl-14': isEntryPointOnTheCenterBottom,
+            'pl-12': isEntryPointOnTheCenterBottom,
           })}
         >
           {isEntryPointOnTheCenterBottom && (

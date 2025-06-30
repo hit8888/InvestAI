@@ -47,6 +47,7 @@ export const SuggestedQuestionsShowingInCycle = ({
           isQuestionInCycle={true} // questions are in cycle
           isEntryPointQuestion={true}
           invertTextColor={invertTextColor}
+          tooltipSide="bottom"
         />
       </motion.div>
     </div>
