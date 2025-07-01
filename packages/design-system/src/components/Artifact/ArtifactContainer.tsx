@@ -8,7 +8,6 @@ import {
   checkIsQualificationFormArtifact,
   getFormArtifactMessage,
   getFormFilledEvent,
-  isFormDataFilled,
   SupportedArtifactType,
 } from '@meaku/core/utils/messageUtils';
 import { ViewType } from '@meaku/core/types/common';
@@ -85,12 +84,7 @@ const ArtifactContainer = ({
 
   const formMetadata = isFormArtifact
     ? {
-        is_filled:
-          hasFormFilledMessage ||
-          isFormDataFilled(
-            (artifactMessage.message.artifact_data.content as FormArtifactContent)?.form_fields,
-            artifactMessage.message.artifact_data.metadata.filled_data,
-          ),
+        is_filled: hasFormFilledMessage || artifactMessage.message.artifact_data.metadata.is_filled,
         filled_data: hasFormFilledMessage
           ? formFilledMessage.message.event_data.form_data
           : artifactMessage.message.artifact_data.metadata?.filled_data,

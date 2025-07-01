@@ -16,6 +16,12 @@ import { createFormSchema } from '../../utils/chat';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { ViewType } from '@meaku/core/types/common';
 
+type FormFilledEventDataType = {
+  artifact_id: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form_data: Record<string, any>;
+};
+
 interface IFormProps {
   artifactId?: string;
   artifact?: FormArtifactContent;
@@ -25,11 +31,11 @@ interface IFormProps {
 }
 
 const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage, viewType }: IFormProps) => {
-  const [submitted, setSubmitted] = useState(artifactMetadata?.is_filled ?? false);
+  const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
+  const [submitted, setSubmitted] = useState(isArtifactFormFilled);
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
-  const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
   const formFields = artifact?.form_fields ?? [];
 
   const requiredFormFields = formFields.filter((field) => field.is_required) ?? [];
@@ -47,22 +53,30 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
 
   const formDisabled = viewType !== ViewType.USER;
 
+  const getFormFilledEventData = (values: FormSchemaType) => {
+    return {
+      artifact_id: artifactId ?? '',
+      form_data: values,
+    };
+  };
+
+  const sendFormFilledMessage = (eventData: FormFilledEventDataType) => {
+    handleSendUserMessage({
+      message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: eventData },
+      message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
+    });
+  };
+
   function onSubmit(values: FormSchemaType) {
     if (formDisabled) {
       return;
     }
+    const eventData = getFormFilledEventData(values);
 
-    const response_data = {
-      artifact_id: artifactId ?? '',
-      form_data: values,
-    };
-    handleSendUserMessage({
-      message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: response_data },
-      message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
-    });
+    sendFormFilledMessage(eventData);
     setSubmitted(true);
     setIsEditing(false); // Reset editing state after submit
-    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...response_data });
+    trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_FORM_SUBMITTED, { ...eventData });
   }
 
   // const handleEdit = () => {
