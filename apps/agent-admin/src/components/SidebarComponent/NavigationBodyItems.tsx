@@ -56,7 +56,7 @@ const NavigationBodyItems = () => {
     return (
       <>
         {navItem.children && (
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col pt-2">
             {navItem.children?.map((child: NavLinkItem, index: number) => (
               <div key={child.navItem} className="flex w-full">
                 <span className="-ml-6">
@@ -87,6 +87,7 @@ const NavigationBodyItems = () => {
       <TooltipWrapperDark
         tooltipSide="bottom"
         tooltipAlign="start"
+        tooltipSideOffsetValue={10}
         showArrow={false}
         tooltipContentClassName="!w-full !relative !top-1 !left-4 px-0 !bg-white !shadow-2xl"
         trigger={

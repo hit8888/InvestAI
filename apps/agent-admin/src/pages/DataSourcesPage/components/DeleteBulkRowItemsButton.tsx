@@ -8,8 +8,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/co
 import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
-import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { DeleteDocumentsResponse, DeleteWebpagesResponse } from '@meaku/core/types/admin/api';
+import { DeleteArtifactsResponse, DeleteDocumentsResponse, DeleteWebpagesResponse } from '@meaku/core/types/admin/api';
 
 const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {
   const { selectedIds, deselectAll } = useDataSourceTableStore();
@@ -21,6 +20,28 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
   const areSelectedItems = selectedIds.length > 0;
 
   if (!areSelectedItems) return null;
+
+  // Common function to handle bulk deletion for documents and artifacts
+  const handleBulkDeletion = async (
+    response: DeleteArtifactsResponse | DeleteDocumentsResponse,
+    itemType: 'documents' | 'artifacts',
+  ) => {
+    if (response) {
+      const { total_processed, total_deleted, total_failed } = response;
+
+      if (total_failed > 0) {
+        toast.error(`Failed to delete ${total_failed} out of ${total_processed} ${itemType}.`);
+      }
+
+      if (total_deleted > 0) {
+        // Invalidate and refetch the data
+        await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+        toast.success(`Successfully deleted ${total_deleted} out of ${total_processed} ${itemType}`);
+      }
+      // Clear selected items
+      deselectAll();
+    }
+  };
 
   const deleteBulkItems = async () => {
     let response;
@@ -44,43 +65,10 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
       }
     } else if (selectedType === SourcesCardTypes.DOCUMENTS) {
       response = await deleteDocuments({ document_ids: selectedIds });
-
-      // Handle bulk deletion response
-      if (response?.data) {
-        const data = response.data as unknown as DeleteDocumentsResponse;
-        const { total_processed, total_deleted, total_failed } = data;
-
-        if (total_failed > 0) {
-          // Clear selected items
-          deselectAll();
-          toast.error(`Failed to delete ${total_failed} out of ${total_processed} documents.`);
-          toast.error('Message: Document not found or already deleted.');
-        }
-
-        if (total_deleted > 0) {
-          // Invalidate and refetch the data
-          await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
-          // Clear selected items
-          deselectAll();
-          toast.success(`Successfully deleted ${total_deleted} out of ${total_processed} documents`);
-        }
-        return;
-      }
+      await handleBulkDeletion(response?.data, 'documents');
     } else if (isArtifactsPage) {
-      if (selectedIds.length > 1) {
-        toast.error('You can only delete one item at a time');
-        setIsDialogOpen(false);
-        return;
-      }
-      response = await deleteArtifacts(selectedIds[0]);
-    }
-
-    if (response?.status === 204) {
-      // Invalidate and refetch the data
-      await queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
-      // Clear selected items
-      deselectAll();
-      toast.success('Selected items deleted successfully');
+      response = await deleteArtifacts({ artifact_ids: selectedIds });
+      await handleBulkDeletion(response?.data, 'artifacts');
     }
   };
 
@@ -112,27 +100,9 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
     );
   };
 
-  const getTooltipContent = () => {
-    return (
-      <Typography className="max-w-96" variant={'body-14'} textColor="white">
-        You can only delete single row items at a time.
-      </Typography>
-    );
-  };
-
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <TooltipWrapperDark
-          tooltipSide="left"
-          tooltipAlign="center"
-          showArrow={false}
-          tooltipSideOffsetValue={15}
-          trigger={getTriggerButton()}
-          showTooltip={areSelectedItems && isArtifactsPage}
-          content={getTooltipContent()}
-        />
-      </DialogTrigger>
+      <DialogTrigger asChild>{getTriggerButton()}</DialogTrigger>
       <DialogContent className="data-sources-dialog-shadow flex max-w-md flex-col items-center justify-center gap-14 rounded-2xl border border-gray-200 bg-white p-4">
         <div className="flex flex-col items-center justify-center gap-1 self-stretch">
           <Typography variant={'title-24'} textColor={'textPrimary'} align={'center'}>

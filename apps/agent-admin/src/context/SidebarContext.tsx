@@ -6,6 +6,7 @@ import usePageRouteState from '../hooks/usePageRouteState';
 import { getDashboardBasicPathURL } from '../utils/common';
 
 const EXPANDED_TABS_KEY = 'expanded_tabs';
+const SIDEBAR_OPEN_KEY = 'sidebar_open';
 
 type SidebarContextProps = {
   isSidebarOpen: boolean;
@@ -29,6 +30,11 @@ const getInitialExpandedState = (): ExpandedTabsState => {
   return storedValue ? JSON.parse(storedValue) : {};
 };
 
+const getInitialSidebarState = (): boolean => {
+  const storedValue = localStorage.getItem(SIDEBAR_OPEN_KEY);
+  return storedValue ? JSON.parse(storedValue) : true;
+};
+
 const SidebarContext = createContext<SidebarContextProps | undefined>(undefined);
 
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -42,7 +48,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   } = usePageRouteState();
   const navigate = useNavigate();
   const { tenantName } = useParams();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(getInitialSidebarState);
   const [sideNavView, setSideNavView] = useState<SideNavView>(() => {
     if (pathURL.includes('settings')) {
       return SideNavView.SETTINGS;
@@ -83,7 +89,11 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [tenantName, sideNavView]);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
+    setIsSidebarOpen((prevState) => {
+      const newState = !prevState;
+      localStorage.setItem(SIDEBAR_OPEN_KEY, JSON.stringify(newState));
+      return newState;
+    });
   };
 
   const handleTabExpansion = (tabKey: string) => {

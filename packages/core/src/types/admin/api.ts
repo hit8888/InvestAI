@@ -490,6 +490,19 @@ export const DeleteDocumentsResponseSchema = z.object({
 });
 export type DeleteDocumentsResponse = z.infer<typeof DeleteDocumentsResponseSchema>;
 
+export const DeleteArtifactsRequestSchema = z.object({
+  artifact_ids: z.array(z.number()),
+});
+export type DeleteArtifactsRequest = z.infer<typeof DeleteArtifactsRequestSchema>;
+
+export const DeleteArtifactsResponseSchema = z.object({
+  deleted_artifacts: z.array(z.number()),
+  total_processed: z.number(),
+  total_deleted: z.number(),
+  total_failed: z.number(),
+});
+export type DeleteArtifactsResponse = z.infer<typeof DeleteArtifactsResponseSchema>;
+
 export const ReprocessWebpagesRequestSchema = z.object({
   webpage_ids: z.array(z.number()),
 });

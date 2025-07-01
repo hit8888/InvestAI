@@ -10,10 +10,13 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
   const showMoreButtonText = showTrimmed ? 'Read More' : 'Read Less';
 
   const renderTitleAndLabel = () => {
+    // If there is no title or labelled_by_name, don't render anything
+    if (!value.title || !value.labelled_by_name) return null;
+
     return (
       <div className="flex w-full items-center gap-2">
         {value.title && (
-          <Typography title={value.title} variant="label-14-semibold" className="line-clamp-1 flex-1 break-all">
+          <Typography variant="label-14-semibold" className="flex-1 break-all">
             {value.title}
           </Typography>
         )}

@@ -38,6 +38,8 @@ import {
   TopQuestionsByUserResponse,
   FrequentDocumentsResponse,
   IntegrationsResponse,
+  DeleteArtifactsRequest,
+  DeleteArtifactsResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -175,7 +177,8 @@ export const bulkAddDocuments = (payload: BulkAddDocumentsRequest) =>
 export const deleteWebpages = (payload: DeleteWebpagesRequest) =>
   adminApiClient.delete<DeleteWebpagesResponse>(`tenant/api/webpages/delete/`, { data: payload });
 
-export const deleteArtifacts = (id: number) => adminApiClient.delete(`tenant/api/artifacts/${id}`);
+export const deleteArtifacts = (payload: DeleteArtifactsRequest) =>
+  adminApiClient.delete<DeleteArtifactsResponse>(`tenant/api/artifacts/bulk/`, { data: payload });
 
 export const deleteDocuments = (payload: DeleteDocumentsRequest) =>
   adminApiClient.delete<DeleteDocumentsResponse>(`tenant/api/documents/bulk/`, { data: payload });
