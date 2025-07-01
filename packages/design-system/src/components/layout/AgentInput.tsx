@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
-import PoweredByBreakout from './PoweredByBreakout';
 import { cn } from '../../lib/cn';
 
 interface IProps {
@@ -55,7 +54,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
   const conditionForShowingTooltipAndDisabledButton = !isSendButtonDisabled && disableMessageSend;
 
   return (
-    <div className="input-bar-bg flex w-full flex-col items-center gap-2 rounded-b-2xl p-4 pb-2">
+    <div className="input-bar-bg flex w-full rounded-b-2xl p-4 pb-2">
       <form className="flex w-full items-center justify-between" onSubmit={handleSubmission}>
         <div className="relative z-10 flex w-full rounded-2xl border border-gray-200 bg-white p-1">
           <TextArea
@@ -86,8 +85,6 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
           </SendButtonWithTooltip>
         </div>
       </form>
-      {/* Powered By Breakout - Only visible when the agent is open for all conditions */}
-      <PoweredByBreakout />
     </div>
   );
 };

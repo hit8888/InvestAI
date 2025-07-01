@@ -58,7 +58,7 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ formFields, isOpen, o
                           showTooltip
                           showArrow={false}
                           tooltipSide="right"
-                          trigger={<Info className="h-4 w-4 text-[#4E46DC]" />}
+                          trigger={<Info className="h-4 w-4 text-breakout" />}
                           content={formField.description}
                         />
                       )}

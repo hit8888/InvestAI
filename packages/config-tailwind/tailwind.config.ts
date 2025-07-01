@@ -203,6 +203,9 @@ const config: Omit<Config, "content"> = {
         system: {
           DEFAULT: "rgb(var(--system))",
         },
+        breakout: {
+          DEFAULT: "#4E46DC",
+        },
         customPrimaryText: "#2D3454",
         customSecondaryText: "#5E6583",
         popupBannerBorder: "#F2F4F7",

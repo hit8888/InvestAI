@@ -153,7 +153,7 @@ const AdminLoginForm = forwardRef<AdminLoginFormRef, AdminLoginFormProps>(
                               'h-[55px] w-[45px] rounded-lg border text-center text-3xl font-semibold transition hover:shadow-md focus:!outline-none focus:ring-2',
                               form.formState.errors.otp
                                 ? `${errorInputClass} text-destructive-1000`
-                                : 'border-[#DCDAF8] bg-white text-[#4E46DC] focus:border-[#4E46DC] focus:ring-[#4E46DC]/50',
+                                : 'border-[#DCDAF8] bg-white text-breakout focus:border-breakout focus:ring-breakout/50',
                             )}
                             groupClassName="gap-4"
                           />
@@ -168,11 +168,11 @@ const AdminLoginForm = forwardRef<AdminLoginFormRef, AdminLoginFormProps>(
           <button
             className={cn(
               'flex items-center justify-center gap-1 rounded-lg px-4 py-3 text-sm font-semibold text-white', // Base styles: padding, text size, font weight, text color, border radius
-              'bg-[#4E46DC]', // Base background color
+              'bg-breakout', // Base background color
               'hover:bg-[#4038C8]', // Hover state background color
-              'focus:outline-none focus:ring-2 focus:ring-[#4E46DC] focus:ring-offset-1', // Focus styles
+              'focus:outline-none focus:ring-2 focus:ring-breakout focus:ring-offset-1', // Focus styles
               {
-                'disabled:cursor-not-allowed disabled:bg-[#4E46DC]/50': isLoading, // Disabled state with 50% opacity background
+                'disabled:cursor-not-allowed disabled:bg-breakout/50': isLoading, // Disabled state with 50% opacity background
               },
             )}
             disabled={isLoading}

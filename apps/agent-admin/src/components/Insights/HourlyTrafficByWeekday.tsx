@@ -4,11 +4,11 @@ import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '@meaku/tailwind-config';
 import { DayOfWeek, HourlySessionInsightsResponse } from '@meaku/core/types/admin/api';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
+import { BREAKOUT_COLOR } from '@meaku/core/utils/index';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fullConfig = resolveConfig(tailwindConfig as any);
 const colors = fullConfig.theme.colors;
-const CURRENT_LINE_COLOR = '#4E46DC';
 const chartHeightMultiplier = 1.1;
 
 interface HourlyTrafficByWeekdayProps {
@@ -56,7 +56,7 @@ export default function HourlyTrafficByWeekday({
             </>
           ) : (
             <>
-              <Badge dotColor={`[${CURRENT_LINE_COLOR}]`} label={currentDayOfWeek as string} />
+              <Badge dotColor={`[${BREAKOUT_COLOR}]`} label={currentDayOfWeek as string} />
               <Badge dotColor="gray-400" label="Overall Average" />
             </>
           )}
@@ -112,10 +112,10 @@ export default function HourlyTrafficByWeekday({
             <Line
               type="monotone"
               dataKey="current"
-              stroke={CURRENT_LINE_COLOR}
+              stroke={BREAKOUT_COLOR}
               strokeWidth={3}
               // @ts-expect-error dot prop type
-              dot={<PeakDot maxValue={currentMaxValue} valueField="current" stroke={CURRENT_LINE_COLOR} />}
+              dot={<PeakDot maxValue={currentMaxValue} valueField="current" stroke={BREAKOUT_COLOR} />}
             />
             <Line
               type="monotone"

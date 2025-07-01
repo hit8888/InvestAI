@@ -46,6 +46,7 @@ export const WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_DATA_SOURCE_SIDEBAR_CL
 
 export const RGB_PRIMARY_COLOR = 'rgb(var(--primary))';
 export const RGB_WHITE_SHADE_COLOR = 'rgba(255, 255, 255, 0.32)';
+export const BREAKOUT_COLOR = '#4E46DC';
 
 export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
   localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));

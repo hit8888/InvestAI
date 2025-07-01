@@ -7,6 +7,7 @@ import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import FeedbackHeader from './FeedbackHeader';
 import { checkIfCTAButtonDisabled } from '@meaku/core/utils/messageUtils';
+import PoweredByBreakout from './PoweredByBreakout';
 
 interface IProps {
   messages: WebSocketMessage[];
@@ -82,7 +83,8 @@ const AgentHeader = ({
         {ctaText}
       </Button>
 
-      <div className="flex items-center gap-2 pr-2">
+      <div className="flex items-center justify-center gap-4 pr-2">
+        <PoweredByBreakout />
         {!!handleCloseAgent && isCollapsible && (
           <Button
             buttonStyle="icon"
@@ -95,7 +97,7 @@ const AgentHeader = ({
               handleCloseAgent();
             }}
           >
-            <XIcon className="text-system" />
+            <XIcon className="text-gray-400" />
           </Button>
         )}
         {showFeedbackHeader ? <FeedbackHeader setActiveArtifact={setActiveArtifact} /> : null}

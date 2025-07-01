@@ -6,6 +6,7 @@ import tailwindConfig from '@meaku/tailwind-config';
 import { DayOfWeek, WeeklySessionInsightsResponse } from '@meaku/core/types/admin/api';
 import { useEffect, useState } from 'react';
 import InsightInfo from './InsightInfo';
+import { BREAKOUT_COLOR } from '@meaku/core/utils/index';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fullConfig = resolveConfig(tailwindConfig as any);
@@ -74,13 +75,13 @@ export default function WeeklyConversationPattern({
 
             <Bar
               dataKey="average"
-              fill={selectedDay ? '#4E46DC' : '#B8B5F1'}
+              fill={selectedDay ? BREAKOUT_COLOR : '#B8B5F1'}
               radius={[8, 8, 4, 4]}
               onClick={handleDayBarClick}
               style={{ cursor: 'pointer' }}
             >
               {weekly_pattern.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.day === selectedDay ? '#4E46DC' : '#B8B5F1'} />
+                <Cell key={`cell-${index}`} fill={entry.day === selectedDay ? BREAKOUT_COLOR : '#B8B5F1'} />
               ))}
               {/* @ts-expect-error bar label prop */}
               <LabelList dataKey="average" content={WeeklyBarChartCustomLabel} />

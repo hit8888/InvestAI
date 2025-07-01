@@ -27,7 +27,7 @@ const FeedbackHeader = ({ className = '', setActiveArtifact }: FeedbackHeaderPro
   const hashedSessionData = `${sessionId}`;
 
   return (
-    <div className={`mb-2 flex flex-1 justify-end gap-4 ${className}`}>
+    <div className={`flex flex-1 justify-end gap-4 ${className}`}>
       <CopyToClipboardButton textToCopy={hashedSessionData} toastMessage="Session ID Copied." btnVariant="secondary" />
       <Button onClick={handleRefreshChat} className="p-1" buttonStyle="icon" variant="secondary">
         <RefreshChatIcon className="text-primary" />

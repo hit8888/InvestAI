@@ -2,6 +2,11 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import TableShimmer from './TableShimmer';
 import { cn } from '@breakout/design-system/lib/cn';
 
+type DefaultRowData = {
+  text: string;
+  value: string | number;
+};
+
 type RowData = {
   icon?: React.ReactElement;
   text: string;
@@ -12,7 +17,7 @@ type RowData = {
 interface CommonMinTableViewProps {
   title: string;
   description?: string;
-  rows?: RowData[];
+  rows?: RowData[] | DefaultRowData[];
   columns?: string[];
   isLoading?: boolean;
   onRowClick?: (rowData: unknown) => void;
@@ -26,6 +31,12 @@ const CommonMinTableView = ({
   isLoading,
   onRowClick,
 }: CommonMinTableViewProps) => {
+  const handleRowClick = (rowData: unknown) => {
+    if (onRowClick && rowData) {
+      onRowClick(rowData);
+    }
+  };
+
   return (
     <div className="flex-1 py-6">
       <div className="mb-6">
@@ -60,10 +71,10 @@ const CommonMinTableView = ({
                   'grid grid-cols-12 gap-4 px-2 py-2 transition-colors hover:bg-gray-50',
                   onRowClick && 'cursor-pointer',
                 )}
-                onClick={() => onRowClick?.(row.rowData)}
+                onClick={() => handleRowClick((row as RowData).rowData)}
               >
                 <div className="col-span-9 flex items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap">
-                  {row.icon ? (
+                  {'icon' in row && row.icon ? (
                     <div className="flex-shrink-0">
                       <div className="flex h-6 w-6 items-center justify-center rounded-md bg-bluegray-200">
                         {row.icon}
