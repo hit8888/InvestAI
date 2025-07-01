@@ -1,4 +1,3 @@
-import Typography from '@breakout/design-system/components/Typography/index';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
 import CardTitleAndDescription from './CardTitleAndDescription';
 import AgentColorDisplayInput from './AgentColorDisplayInput';
@@ -10,6 +9,7 @@ import {
   COLOR_SECONDARY_TITLE,
 } from '../../utils/constants';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import BrandingSectionContainer from './BrandingSectionContainer';
 
 type AgentColorsContainerProps = {
   agentId: number;
@@ -39,25 +39,22 @@ const AgentColorsContainer = ({ agentId, agentConfigs, onUpdate }: AgentColorsCo
   };
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Typography variant="title-18">Colors</Typography>
-      <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6 pt-4">
-        {/* Primary Color Element */}
-        <div className="flex w-full flex-1 items-center gap-8 self-stretch">
-          <CardTitleAndDescription title={COLOR_PRIMARY_TITLE} description={COLOR_PRIMARY_SUBTITLE} />
-          <AgentColorDisplayInput initialColor={primaryColor} onColorBlur={(color) => handleColorUpdate(color, true)} />
-        </div>
-        <div className="w-full border-b border-gray-200"></div>
-        {/* Secondary Color Element */}
-        <div className="flex w-full items-center gap-8 self-stretch">
-          <CardTitleAndDescription title={COLOR_SECONDARY_TITLE} description={COLOR_SECONDARY_SUBTITLE} />
-          <AgentColorDisplayInput
-            initialColor={secondaryColor}
-            onColorBlur={(color) => handleColorUpdate(color, false)}
-          />
-        </div>
+    <BrandingSectionContainer title="Colors">
+      {/* Primary Color Element */}
+      <div className="flex w-full flex-1 items-center gap-8 self-stretch">
+        <CardTitleAndDescription title={COLOR_PRIMARY_TITLE} description={COLOR_PRIMARY_SUBTITLE} />
+        <AgentColorDisplayInput initialColor={primaryColor} onColorBlur={(color) => handleColorUpdate(color, true)} />
       </div>
-    </div>
+      <div className="w-full border-b border-gray-200"></div>
+      {/* Secondary Color Element */}
+      <div className="flex w-full items-center gap-8 self-stretch">
+        <CardTitleAndDescription title={COLOR_SECONDARY_TITLE} description={COLOR_SECONDARY_SUBTITLE} />
+        <AgentColorDisplayInput
+          initialColor={secondaryColor}
+          onColorBlur={(color) => handleColorUpdate(color, false)}
+        />
+      </div>
+    </BrandingSectionContainer>
   );
 };
 

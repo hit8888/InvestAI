@@ -8,6 +8,11 @@ import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 
+const DEFAULT_FONT_CONFIG = {
+  font_family: 'Inter',
+  font_url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+};
+
 // Common update function
 export const handleConfigUpdate = async (
   agentId: number,
@@ -36,6 +41,16 @@ export const handleConfigUpdate = async (
               updateFieldValues?.orb_config?.show_orb ??
               agentConfigsValues?.orb_config?.show_orb ??
               !!(agentConfigsValues?.orb_config?.logo_url ?? null), // logo_url shouldn't be null when show_orb is false
+          },
+          font_config: {
+            font_family:
+              updateFieldValues?.font_config?.font_family ??
+              agentConfigsValues?.font_config?.font_family ??
+              DEFAULT_FONT_CONFIG.font_family,
+            font_url:
+              updateFieldValues?.font_config?.font_url ??
+              agentConfigsValues?.font_config?.font_url ??
+              DEFAULT_FONT_CONFIG.font_url,
           },
         },
       },

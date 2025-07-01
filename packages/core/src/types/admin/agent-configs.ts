@@ -40,6 +40,12 @@ const baseAgentConfigSchema = z.object({
       primary: z.string(),
       secondary: z.string(),
       orb_config: OrbConfigSchema.optional(),
+      font_config: z
+        .object({
+          font_family: z.string(),
+          font_url: z.string().optional(),
+        })
+        .optional(),
       banner_config: BannerConfigSchema,
       entry_point_alignment: z.string(),
     }),

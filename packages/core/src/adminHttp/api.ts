@@ -46,6 +46,9 @@ import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import adminApiClient from './client';
 import { FeedbackRequestPayload } from '../types/api/feedback_request';
 
+export const getFonts = (payload: { family?: string; subset?: string; capability?: string; sort?: string }) =>
+  adminApiClient.get(`/core/api/fonts/`, { params: payload });
+
 export const loginWithEmailPassword = (payload: LoginWithEmailPasswordPayload) =>
   adminApiClient.post(`/core/api/login/`, payload);
 

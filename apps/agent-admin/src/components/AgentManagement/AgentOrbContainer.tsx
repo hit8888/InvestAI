@@ -9,6 +9,7 @@ import Orb from '@breakout/design-system/components/Orb/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
+import BrandingSectionContainer from './BrandingSectionContainer';
 
 type AgentOrbContainerProps = {
   agentId: number;
@@ -68,49 +69,46 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
   };
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Typography variant="title-18">Orb</Typography>
-      <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6">
-        <div className="flex flex-1 items-center gap-6 self-stretch">
-          <div className="flex flex-1 flex-col items-start gap-4">
-            <CardTitleAndDescription description={ORB_DESCRIPTION} />
-            <div
-              className={cn('flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 pr-3', {
-                'text-primary': useFavicon,
-              })}
-            >
-              <TooltipWrapperDark
-                showTooltip={useFaviconDisabled}
-                trigger={getCheckboxElement()}
-                content={getTooltipContentElement()}
-                tooltipAlign="center"
-                showArrow={false}
-              />
-              Use favicon.
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-gray-100 bg-white p-3">
-            <div className="flex aspect-square h-11 w-11 items-center justify-center rounded-full">
-              {useFavicon && !!shortLogo ? (
-                <img src={shortLogo} alt="Uploaded logo" className="h-full w-full object-fill" />
-              ) : (
-                <Orb
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  color={primary}
-                  state={OrbStatusEnum.idle}
-                />
-              )}
-            </div>
-            <Typography variant="caption-10-normal" textColor="gray500">
-              max 48 x 48
-            </Typography>
+    <BrandingSectionContainer title="Orb">
+      <div className="flex flex-1 items-center gap-6 self-stretch">
+        <div className="flex flex-1 flex-col items-start gap-4">
+          <CardTitleAndDescription description={ORB_DESCRIPTION} />
+          <div
+            className={cn('flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-100 p-2 pr-3', {
+              'text-primary': useFavicon,
+            })}
+          >
+            <TooltipWrapperDark
+              showTooltip={useFaviconDisabled}
+              trigger={getCheckboxElement()}
+              content={getTooltipContentElement()}
+              tooltipAlign="center"
+              showArrow={false}
+            />
+            Use favicon.
           </div>
         </div>
+        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-gray-100 bg-white p-3">
+          <div className="flex aspect-square h-11 w-11 items-center justify-center rounded-full">
+            {useFavicon && !!shortLogo ? (
+              <img src={shortLogo} alt="Uploaded logo" className="h-full w-full object-fill" />
+            ) : (
+              <Orb
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+                color={primary}
+                state={OrbStatusEnum.idle}
+              />
+            )}
+          </div>
+          <Typography variant="caption-10-normal" textColor="gray500">
+            max 48 x 48
+          </Typography>
+        </div>
       </div>
-    </div>
+    </BrandingSectionContainer>
   );
 };
 
