@@ -1,19 +1,31 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import TableShimmer from './TableShimmer';
+import { cn } from '@breakout/design-system/lib/cn';
+
+type RowData = {
+  icon?: React.ReactElement;
+  text: string;
+  value: string | number;
+  rowData: unknown;
+};
 
 interface CommonMinTableViewProps {
   title: string;
   description?: string;
-  rows?: {
-    icon?: React.ReactElement;
-    text: string;
-    value: string | number;
-  }[];
+  rows?: RowData[];
   columns?: string[];
   isLoading?: boolean;
+  onRowClick?: (rowData: unknown) => void;
 }
 
-const CommonMinTableView = ({ title, description, rows, columns = [], isLoading }: CommonMinTableViewProps) => {
+const CommonMinTableView = ({
+  title,
+  description,
+  rows,
+  columns = [],
+  isLoading,
+  onRowClick,
+}: CommonMinTableViewProps) => {
   return (
     <div className="flex-1 py-6">
       <div className="mb-6">
@@ -42,7 +54,14 @@ const CommonMinTableView = ({ title, description, rows, columns = [], isLoading 
             <TableShimmer />
           ) : (
             rows?.map((row, index) => (
-              <div key={index} className="grid grid-cols-12 gap-4 px-2 py-2 transition-colors hover:bg-gray-50">
+              <div
+                key={index}
+                className={cn(
+                  'grid grid-cols-12 gap-4 px-2 py-2 transition-colors hover:bg-gray-50',
+                  onRowClick && 'cursor-pointer',
+                )}
+                onClick={() => onRowClick?.(row.rowData)}
+              >
                 <div className="col-span-9 flex items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap">
                   {row.icon ? (
                     <div className="flex-shrink-0">

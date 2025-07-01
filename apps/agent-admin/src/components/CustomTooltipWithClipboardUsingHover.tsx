@@ -9,6 +9,7 @@ type IProps = {
   showTooltip?: boolean;
   tooltipAlign?: 'start' | 'center' | 'end';
   contentMaxWidth?: string;
+  showArrow?: boolean;
 };
 
 const CustomTooltipWithClipboardUsingHover = ({
@@ -18,12 +19,15 @@ const CustomTooltipWithClipboardUsingHover = ({
   showTooltip = true,
   tooltipAlign = 'end',
   contentMaxWidth = 'max-w-full',
+  showArrow = true,
 }: IProps) => {
   return (
     <TooltipWrapperDark
       trigger={children}
       showTooltip={showTooltip}
       tooltipAlign={tooltipAlign}
+      showArrow={showArrow}
+      tooltipArrowClassName={showArrow ? 'left-0' : ''}
       content={
         <div className={`flex w-fit items-center justify-between gap-2 ${contentMaxWidth}`}>
           <span className="text-sm font-medium">{tooltipText}</span>

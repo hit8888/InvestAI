@@ -74,11 +74,11 @@ const routes = [
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/webpages',
+                path: 'data-sources/webpages/:webPageID?',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/documents',
+                path: 'data-sources/documents/:documentID?',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {

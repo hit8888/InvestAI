@@ -5,7 +5,7 @@ import CustomTooltipWithClipboardUsingHover from '../../CustomTooltipWithClipboa
 const UrlCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {
   const getTrigger = () => {
     return (
-      <div className="w-[500px] truncate">
+      <div className="w-fit truncate">
         <a href={value} className="text-blue_sec-1000" target="_blank" rel="noopener noreferrer">
           {value}
         </a>
@@ -18,8 +18,9 @@ const UrlCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) =>
       tooltipText={value}
       toastMessage={'URL link copied'}
       showTooltip
+      showArrow
       tooltipAlign="start"
-      contentMaxWidth="max-w-[500px]"
+      contentMaxWidth="max-w-fit"
     >
       {getTrigger()}
     </CustomTooltipWithClipboardUsingHover>

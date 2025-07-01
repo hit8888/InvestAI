@@ -23,7 +23,7 @@ export const DataSourcesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (normalizedPath === normalizedDataSourcesPath) {
       return null;
     } else if (normalizedPath.includes(normalizedDataSourcesPath)) {
-      const type = normalizedPath.split(`${normalizedDataSourcesPath}/`)[1];
+      const type = normalizedPath.split(`${normalizedDataSourcesPath}/`)[1]?.split('/')[0];
       return type || null;
     }
     return null;

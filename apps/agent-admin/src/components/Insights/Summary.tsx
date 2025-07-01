@@ -61,9 +61,9 @@ const SummaryContent = ({ summary }: { summary?: string }) => {
   return (
     <div className="space-y-3">
       {summary ? (
-        <p className="text-sm leading-relaxed text-gray-900">
+        <div className="text-sm leading-relaxed text-gray-900">
           <GithubMarkdownRenderer markdown={summary} />
-        </p>
+        </div>
       ) : (
         <div className="block pl-7 text-sm text-gray-400">No summary available.</div>
       )}

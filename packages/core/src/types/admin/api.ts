@@ -592,11 +592,13 @@ export type HourlySessionInsightsResponse = z.infer<typeof HourlySessionInsights
 export const FrequentDocumentsResponseSchema = z.object({
   most_frequently_referenced_documents: z.array(
     z.object({
-      document_id: z.string(),
+      document_id: z.number().nullable(),
       title: z.string(),
       url: z.string(),
-      data_source_type: z.string(),
+      data_source_type: z.enum(['WEB_PAGE', 'PDF']),
       reference_count: z.number(),
+      web_page_id: z.number().nullable(),
+      data_source_id: z.number(),
     }),
   ),
 });

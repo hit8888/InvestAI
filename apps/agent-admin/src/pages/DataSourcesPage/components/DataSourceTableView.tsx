@@ -18,12 +18,18 @@ import { collectAppliedFilters, getAllFilterAppliedValues, getSortingAppliedValu
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore';
 import NudgeMessage from './NudgeMessage';
+import { useParams } from 'react-router-dom';
+import useDataSourceItemQuery from '../../../queries/query/useDataSourceItemQuery';
 
 interface DataSourceTableViewProps {
   pageType: PaginationPageType;
 }
 
 const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
+  const { webPageID, documentID } = useParams();
+  const dataSourceID = Number(webPageID || documentID);
+  const dataItemView = !!dataSourceID;
+
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: pageType as PaginationPageType,
   });
@@ -69,23 +75,57 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
-  const queryOptions = useQueryOptions();
+  const dataTableQueryOptions = useQueryOptions({ enabled: !dataItemView });
+  const dataItemQueryOptions = useQueryOptions({ enabled: dataItemView });
 
-  const { data, isLoading, isError } = useDataSourceTableViewQuery({
+  const {
+    data: tableData,
+    isLoading: tableDataLoading,
+    isError: tableDataError,
+  } = useDataSourceTableViewQuery({
     payload: debouncedPayloadData,
-    queryOptions,
+    queryOptions: dataTableQueryOptions,
     tableKey: pageType,
   });
 
+  const {
+    data: tableItemData,
+    isLoading: tableItemLoading,
+    isError: tableItemError,
+  } = useDataSourceItemQuery({
+    queryOptions: dataItemQueryOptions,
+    tableKey: pageType,
+    dataSourceID,
+  });
+
+  const isLoading = dataItemView ? tableItemLoading : tableDataLoading;
+  const isError = dataItemView ? tableItemError : tableDataError;
+
   useEffect(() => {
-    if (data) {
-      setTableData(data);
+    if (tableData && !dataItemView) {
+      setTableData(tableData);
     }
 
     return () => {
       setTableData(null);
     };
-  }, [data]);
+  }, [tableData, dataItemView]);
+
+  useEffect(() => {
+    if (tableItemData && dataItemView) {
+      setTableData({
+        current_page: 1,
+        page_size: 1,
+        total_pages: 1,
+        total_records: 1,
+        results: [tableItemData],
+      });
+    }
+
+    return () => {
+      setTableData(null);
+    };
+  }, [tableItemData, dataItemView]);
 
   const paginatedData = getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;

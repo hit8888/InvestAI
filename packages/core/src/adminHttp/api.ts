@@ -150,6 +150,12 @@ export const getDataSourceWebpagesData = (payload: DataSourcePayload) =>
 export const getDataSourceDocumentsData = (payload: DataSourcePayload) =>
   adminApiClient.post(`tenant/api/documents/query/`, payload);
 
+export const getDataSourceWebpagesItemData = (dataSourceID: number) =>
+  adminApiClient.get(`tenant/api/webpages/${dataSourceID}/`);
+
+export const getDataSourceDocumentsItemData = (dataSourceID: number) =>
+  adminApiClient.get(`tenant/api/documents/${dataSourceID}/`);
+
 export const getDataSourceArtifactsData = (payload: DataSourcePayload) =>
   adminApiClient.post(`/tenant/api/artifacts/query/`, payload);
 
