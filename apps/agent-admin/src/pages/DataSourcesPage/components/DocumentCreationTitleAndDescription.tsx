@@ -27,7 +27,7 @@ const DocumentCreationTitleAndDescription = ({
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter title"
+              placeholder="Enter Title"
               className="h-full w-full break-words border-none text-[54px] font-semibold leading-[1.2] focus-visible:ring-0"
             />
           }

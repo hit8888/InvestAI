@@ -68,7 +68,7 @@ const AgentFontStyleContainer = ({ agentId, agentConfigs, onUpdate }: AgentFontS
           menuContentSide="right"
           showIcon={false}
           menuItemClassName="p-4"
-          dropdownMenuHeader="Fonts"
+          dropdownMenuHeader="Select a font"
         />
       </div>
     </BrandingSectionContainer>

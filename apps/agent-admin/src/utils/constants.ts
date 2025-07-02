@@ -646,8 +646,8 @@ export const ORB_DESCRIPTION =
 
 export const FONT_STYLE_SUBTITLE = 'Choose a font to match your assistant’s UI with your brand and boost readability.';
 
-export const CUSTOM_DOCUMENT_DEFAULT_TITLE = 'Title';
-export const CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION = 'Write your document text…';
+export const CUSTOM_DOCUMENT_DEFAULT_TITLE = '';
+export const CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION = '';
 
 // Default values when no source is selected
 export const CUSTOM_DOCUMENT_DEFAULT_SOURCE = {

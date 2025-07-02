@@ -44,7 +44,7 @@ const FrequentSources = ({ start_date, end_date, timezone }: FrequentSourcesProp
 
   const sources = most_frequently_referenced_documents.map((doc) => ({
     rowData: doc,
-    text: doc.title,
+    text: doc.title || doc.url,
     value: doc.reference_count,
     icon: <FileText className="h-4 w-4 cursor-pointer text-bluegray-700" />,
   }));

@@ -26,6 +26,8 @@ type PromptAreaProps = {
   infoTitle: string;
   exampleDescription: string;
 };
+
+// TODO: Refactor to small components
 const PromptArea = ({
   title,
   promptType,
@@ -55,6 +57,44 @@ const PromptArea = ({
     setLocalPrompts(updatedPrompts);
   };
 
+  const handleResetToDefault = async () => {
+    try {
+      // Delete all existing prompts from the backend
+      const deletePromises = localPrompts
+        .filter((prompt) => prompt.id !== undefined)
+        .map((prompt) =>
+          deletePromptMutation.mutateAsync({
+            promptId: prompt.id!,
+          }),
+        );
+
+      if (deletePromises.length > 0) {
+        await Promise.all(deletePromises);
+        toast.success('All prompts reset to default successfully');
+      }
+
+      // Clear local state
+      setLocalPrompts([]);
+
+      // Clear original prompts reference
+      originalPromptsRef.current = {};
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      trackError(err, {
+        action: 'Reset to default',
+        component: 'handleResetToDefault function',
+        additionalData: {
+          agentId,
+          tenantName: getTenantIdentifier()?.['tenant-name'],
+          errorMessage: 'Unable to reset prompts to default',
+          error: err?.response?.data,
+        },
+      });
+      toast.error(`Error resetting prompts: ${err?.response?.data?.details || 'Unknown error'}`);
+      console.error('Error resetting prompts:', err);
+    }
+  };
+
   const handlePromptChange = (index: number, value: string) => {
     const updatedPrompts = [...localPrompts];
     updatedPrompts[index].prompt = value;
@@ -82,6 +122,7 @@ const PromptArea = ({
 
       // Removing the prompt at the same index
       removeAndUpdatePrompts(index);
+      setClickedOnEdit(false);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(`Error deleting prompt: ${err?.response?.data?.details || 'Unknown error'}`);
@@ -136,6 +177,7 @@ const PromptArea = ({
       if (!promptToSave.prompt.trim()) {
         await handleEmptyPrompt(promptToSave);
         removeAndUpdatePrompts(index);
+        setClickedOnEdit(false);
         return;
       }
 
@@ -149,6 +191,7 @@ const PromptArea = ({
       } else {
         await handleNewPromptCreation(promptToSave, index);
       }
+      setClickedOnEdit(false);
 
       toast.success(`${title} saved successfully`, {
         duration: 3000,
@@ -189,7 +232,7 @@ const PromptArea = ({
     arePromptsEqual;
 
   // Show original prompts when not clicked on edit and prompts exist
-  const showOriginalPrompts = !clickedOnEdit && arePromptsExisting && arePromptsExisting;
+  const showOriginalPrompts = !clickedOnEdit && arePromptsExisting;
   // Show no info provided when not clicked on edit and no prompts exist
   const showNoInfoProvided = !clickedOnEdit && !arePromptsExisting;
   // Show no info provided sad face icon when clicked on edit and no prompts exist
@@ -243,13 +286,18 @@ const PromptArea = ({
         ))}
 
       <PromptAreaFooterButtons
+        arePromptsExisting={arePromptsExisting}
         clickedOnEdit={clickedOnEdit}
+        setClickedOnEdit={setClickedOnEdit}
         handleClickOnEdit={handleClickOnEdit}
         agentId={agentId}
         localPrompts={localPrompts}
         setLocalPrompts={setLocalPrompts}
-        isMutationPending={createPromptMutation.isPending}
+        isMutationPending={
+          createPromptMutation.isPending || deletePromptMutation.isPending || updatePromptMutation.isPending
+        }
         isSaveButtonDisabled={isSaveButtonDisabled}
+        handleResetToDefault={handleResetToDefault}
       />
     </>
   );
