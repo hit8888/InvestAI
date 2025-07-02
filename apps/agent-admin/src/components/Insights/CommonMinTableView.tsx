@@ -31,9 +31,9 @@ const CommonMinTableView = ({
   isLoading,
   onRowClick,
 }: CommonMinTableViewProps) => {
-  const handleRowClick = (rowData: unknown) => {
-    if (onRowClick && rowData) {
-      onRowClick(rowData);
+  const handleRowClick = (row: RowData | DefaultRowData) => {
+    if (onRowClick && 'rowData' in row) {
+      onRowClick(row.rowData);
     }
   };
 
@@ -71,7 +71,7 @@ const CommonMinTableView = ({
                   'grid grid-cols-12 gap-4 px-2 py-2 transition-colors hover:bg-gray-50',
                   onRowClick && 'cursor-pointer',
                 )}
-                onClick={() => handleRowClick((row as RowData).rowData)}
+                onClick={() => handleRowClick(row)}
               >
                 <div className="col-span-9 flex items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap">
                   {'icon' in row && row.icon ? (
