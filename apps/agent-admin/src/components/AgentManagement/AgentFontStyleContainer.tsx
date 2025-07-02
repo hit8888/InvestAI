@@ -8,7 +8,9 @@ import { useState } from 'react';
 import { FONT_FAMILY_LIST } from '../../hooks/useFetchFontStyleOptions';
 
 const applyBasicFontUrl = (fontStyle: string) => {
-  const fontUrl = `https://fonts.googleapis.com/css2?family=${fontStyle}`;
+  // Replace all spaces with plus signs
+  const formattedFontStyle = fontStyle.trim().replace(/\s+/g, '+');
+  const fontUrl = `https://fonts.googleapis.com/css2?family=${formattedFontStyle}`;
   return fontUrl;
 };
 

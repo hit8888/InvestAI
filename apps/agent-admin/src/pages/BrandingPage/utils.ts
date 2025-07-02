@@ -8,6 +8,59 @@ import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 
+// Utility function to extract field-specific error messages
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const extractFieldError = (error: any): string | null => {
+  try {
+    // Handle nested error structure like the one you showed
+    if (error?.configs?.['agent_personalization:style']?.font_config?.font_url) {
+      const fontErrors = error.configs['agent_personalization:style'].font_config.font_url;
+      if (Array.isArray(fontErrors) && fontErrors.length > 0) {
+        return fontErrors[0]; // Return the first error message
+      }
+    }
+
+    // Handle orb config errors
+    if (error?.configs?.['agent_personalization:style']?.orb_config) {
+      const orbErrors = error.configs['agent_personalization:style'].orb_config;
+      for (const [key, value] of Object.entries(orbErrors)) {
+        if (Array.isArray(value) && value.length > 0) {
+          return `${key}: ${value[0]}`;
+        }
+      }
+    }
+
+    // Handle other nested config errors
+    if (error?.configs?.['agent_personalization:style']) {
+      const styleErrors = error.configs['agent_personalization:style'];
+      for (const [key, value] of Object.entries(styleErrors)) {
+        if (key !== 'font_config' && key !== 'orb_config' && Array.isArray(value) && value.length > 0) {
+          return `${key}: ${value[0]}`;
+        }
+      }
+    }
+
+    // Handle top-level config errors
+    if (error?.configs) {
+      for (const [key, value] of Object.entries(error.configs)) {
+        if (key !== 'agent_personalization:style' && Array.isArray(value) && value.length > 0) {
+          return `${key}: ${value[0]}`;
+        }
+      }
+    }
+
+    // Fallback to general error message
+    if (error?.message) {
+      return error.message;
+    }
+
+    return null;
+  } catch (parseError) {
+    console.error('Error parsing field error:', parseError);
+    return null;
+  }
+};
+
 const DEFAULT_FONT_CONFIG = {
   font_family: 'Inter',
   font_url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
@@ -76,7 +129,14 @@ export const handleConfigUpdate = async (
         errorMessage: 'Unable to update branding page agent configs',
       },
     });
-    toast.error(`Error updating agent configs: ${JSON.stringify(error)}`);
+    // Extract field-specific error message
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fieldError = extractFieldError((error as any)?.response?.data);
+    const errorMessage = fieldError
+      ? `Error updating ${fieldName}: ${fieldError}`
+      : `Error updating ${fieldName}. Please try again.`;
+
+    toast.error(errorMessage);
     console.error('Error updating agent configs', error);
   }
 };
