@@ -3,7 +3,12 @@ import { useArtifactStore } from '../../../stores/useArtifactStore';
 import { ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { ArtifactContent, FormArtifactContent } from '@meaku/core/types/artifact';
-import { checkIsArtifactMessage, SupportedArtifactType } from '@meaku/core/utils/messageUtils';
+import {
+  checkIsArtifactMessage,
+  getCtaEvent,
+  getFormFilledEvent,
+  SupportedArtifactType,
+} from '@meaku/core/utils/messageUtils';
 import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 import { ViewType } from '@meaku/core/types/common';
 import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
@@ -63,6 +68,11 @@ const ArtifactContainer = ({
   const artifactContentWithMetadata = {
     ...artifactContent,
     metadata: isFormArtifact ? formMetadata : qualificationQuestionFormMetadata,
+    ctaEvent: getCtaEvent(
+      messages,
+      getFormFilledEvent(messages, artifactMessage, 'QUALIFICATION_FORM_FILLED')?.response_id,
+      'right',
+    ),
   };
 
   return (

@@ -36,6 +36,9 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
   leads: {
     ...InitialSortValues,
   },
+  'link-clicks': {
+    ...InitialSortValues,
+  },
   conversations: {
     ...InitialSortValues,
   },

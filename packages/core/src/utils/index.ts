@@ -1,5 +1,5 @@
 import { SessionApiResponse, WebSocketMessage } from '../types';
-import { ConversationDetailsDataResponse } from '../types/admin/admin';
+import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
 import { OrganizationDetails } from '../types/admin/auth';
 import DateUtil from './dateUtils';
 
@@ -7,6 +7,7 @@ export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, i
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
+export const LINK_CLICKS_PAGE = 'link-clicks';
 export const WEBPAGES_PAGE = 'webpages';
 export const DOCUMENTS_PAGE = 'documents';
 export const VIDEOS_PAGE = 'videos';
@@ -20,10 +21,20 @@ export const DATA_SOURCE_TYPE_ENUM = {
   CUSTOM_DOCUMENT: 'CUSTOM_DOCUMENT',
 };
 
+export const PageTypeToTableName: Record<PaginationPageType, string> = {
+  [CONVERSATIONS_PAGE]: 'conversations',
+  [LEADS_PAGE]: 'leads',
+  [LINK_CLICKS_PAGE]: 'leads',
+  [WEBPAGES_PAGE]: 'webpages',
+  [DOCUMENTS_PAGE]: 'documents',
+  [VIDEOS_PAGE]: 'artifacts',
+  [SLIDES_PAGE]: 'artifacts',
+};
+
 export const PAGES_WITH_DRAWER_ENABLED = [DOCUMENTS_PAGE, VIDEOS_PAGE, SLIDES_PAGE];
 
 export const CONVERSATIONS_PINNED_COLUMNS = ['timestamp', 'country'];
-export const LEADS_PINNED_COLUMNS = ['email', 'name'];
+export const LEADS_PINNED_COLUMNS = ['timeline', 'country'];
 export const SHADOW_PINNED_COLUMNS = ['name', 'country'];
 
 export const NON_SORTABLE_COLUMNS = ['duration'];

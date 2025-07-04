@@ -5,6 +5,7 @@ import useFilterPreferencesQuery from '../queries/query/useFilterPreferencesQuer
 import { useQueryOptions } from './useQueryOptions';
 import { getSortValuesFromSortItems } from '../utils/common.ts';
 import { MainPageType } from '@meaku/core/types/admin/admin';
+import { PageTypeToTableName } from '@meaku/core/utils/index';
 
 export const useInitializeFilterPreferences = (page: MainPageType) => {
   const { initializeSortValues } = useSortFilterStore();
@@ -13,7 +14,7 @@ export const useInitializeFilterPreferences = (page: MainPageType) => {
 
   // Fetch filter preferences
   const { data } = useFilterPreferencesQuery({
-    tableName: page,
+    tableName: PageTypeToTableName[page],
     queryOptions,
   });
 

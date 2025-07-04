@@ -1,17 +1,26 @@
 import CustomPageHeader from '../components/CustomPageHeader';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import LeadsTableContainer from '../components/LeadsTableContainer';
-import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
-import PanelLeadsActiveIcon from '@breakout/design-system/components/icons/panel-leads-active-icon';
+import { COMMON_SMALL_ICON_PROPS, LEADS_PAGE_COLUMN_LISTS, LINK_CLICKS_PAGE_COLUMN_LISTS } from '../utils/constants';
+import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
+import ConversationTabs from '../components/ConversationTabs';
+import usePageRouteState from '../hooks/usePageRouteState';
+import { LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 
 // TODOS: COMMENTED CODE WILL BE USED LATER ON
 
 const LeadsPage = () => {
+  const { isLinkClicksPage } = usePageRouteState();
+
   // const totalNumberOfLeads = 1;
   return (
     <>
       <div className="flex flex-col items-start gap-6 self-stretch">
-        <CustomPageHeader headerTitle="Leads" headerIcon={<PanelLeadsActiveIcon {...COMMON_SMALL_ICON_PROPS} />} />
+        <CustomPageHeader
+          headerTitle="Conversations"
+          headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
+        />
+        <ConversationTabs />
         {/* <div className="flex h-64 w-full rounded-2xl border border-primary/10 p-4">
           <div className="flex w-full flex-col items-start gap-4 self-stretch">
             <div className="flex w-full items-center gap-6 self-stretch">
@@ -34,7 +43,11 @@ const LeadsPage = () => {
           </div>
         </div> */}
       </div>
-      <LeadsTableContainer />
+      <LeadsTableContainer
+        key={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
+        pageType={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
+        columnList={isLinkClicksPage ? LINK_CLICKS_PAGE_COLUMN_LISTS : LEADS_PAGE_COLUMN_LISTS}
+      />
     </>
   );
 };

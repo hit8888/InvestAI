@@ -4,7 +4,8 @@ import { AppRoutesEnum, OAUTH_CALLBACK_PAGES } from '../utils/constants';
 const usePageRouteState = () => {
   const location = useLocation();
   const {
-    LEADS,
+    ACTIVE_LEADS,
+    LINK_CLICKS,
     LOGIN,
     CONVERSATIONS,
     AGENT,
@@ -21,7 +22,8 @@ const usePageRouteState = () => {
   const isDashboardPage = location.pathname === '/';
   const isOAuthCallbackPage = OAUTH_CALLBACK_PAGES.some((path) => location.pathname.includes(path));
   const isLoginPage = location.pathname.includes(LOGIN);
-  const isLeadsPage = location.pathname.includes(LEADS);
+  const isLeadsPage = location.pathname.includes(ACTIVE_LEADS);
+  const isLinkClicksPage = location.pathname.includes(LINK_CLICKS);
   const isConversationsPage = location.pathname.includes(CONVERSATIONS);
   const isAgentPage = location.pathname.includes(AGENT);
   const isAgentDataSourcesPage = location.pathname.includes(AGENT_DATA_SOURCES);
@@ -41,6 +43,7 @@ const usePageRouteState = () => {
     isOAuthCallbackPage,
     isLeadsPage,
     isConversationsPage,
+    isLinkClicksPage,
     isAgentPage,
     isAgentDataSourcesPage,
     isAgentWorkflowPage,

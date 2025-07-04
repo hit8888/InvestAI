@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/CustomFilterDropdown';
 import { useAuth } from '../context/AuthProvider';
-import { AppRoutesEnum } from '../utils/constants';
 import { setupTenantAndAgent } from '../utils/apiCalls';
 import toast from 'react-hot-toast';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { DEFAULT_ROUTE } from '../utils/constants';
 
 const Dashboard = () => {
   const { userInfo } = useAuth();
@@ -21,7 +21,7 @@ const Dashboard = () => {
     if (orgItem) {
       await setupTenantAndAgent(orgItem);
       const basicPathURL = getDashboardBasicPathURL(orgItem['tenant-name'] ?? '');
-      navigate(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
+      navigate(`${basicPathURL}/${DEFAULT_ROUTE}`);
     } else {
       toast.error('Organization not found');
       navigate('/');

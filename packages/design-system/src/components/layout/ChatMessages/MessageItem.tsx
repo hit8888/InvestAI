@@ -102,7 +102,7 @@ const MessageItem = ({
   const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
-  const isCtaEventMessage = isCtaEvent(message);
+  const isCtaEventMessage = isCtaEvent(message, 'left');
 
   const shouldShowActiveOrb =
     isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
@@ -215,7 +215,7 @@ const MessageItem = ({
       {!!mediaArtifactMessage &&
         getMessageArtifactPreviewContent(mediaArtifactMessage, shouldShowMediaArtifactForAdmin)}
 
-      {isCtaEventMessage && <CtaEventMessage event={message} />}
+      {isCtaEventMessage && <CtaEventMessage event={message} handleSendUserMessage={handleSendUserMessage} />}
     </MessageItemErrorBoundary>
   );
 };

@@ -21,12 +21,8 @@ const ConversationDetailsPageContainer = ({ isLeadsPage }: IProps) => {
 
   const handleNavigationBasedOnRoute = useCallback(() => {
     const baseURL = getDashboardBasicPathURL(tenantName ?? '');
-    if (isLeadsPage) {
-      navigate(`${baseURL}/${AppRoutesEnum.LEADS}`);
-    } else {
-      navigate(`${baseURL}/${AppRoutesEnum.CONVERSATIONS}`);
-    }
-  }, [isLeadsPage, navigate, tenantName]);
+    navigate(`${baseURL}/${AppRoutesEnum.CONVERSATIONS}`);
+  }, [navigate, tenantName]);
 
   return (
     <ErrorBoundary>

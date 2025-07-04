@@ -12,6 +12,7 @@ export type QualificationFlowArtifactProps = {
     artifact_id: string;
     content: FormArtifactContent;
     metadata: FormArtifactMetadataType | QualificationQuestionMetadataType;
+    ctaEvent?: WebSocketMessage;
   };
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   viewType?: ViewType;
@@ -20,5 +21,6 @@ export type QualificationFlowArtifactProps = {
 export type ArtifactContentWithMetadataProps =
   | ({
       metadata: FormArtifactMetadataType | QualificationQuestionMetadataType;
+      ctaEvent?: WebSocketMessage;
     } & ArtifactContent)
   | null;

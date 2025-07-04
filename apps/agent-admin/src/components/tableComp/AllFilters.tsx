@@ -13,7 +13,7 @@ import { FilterType } from '@meaku/core/types/admin/filters';
 import ExportDownload from './ExportDownload';
 import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
 import SearchTableContentInput from '../SearchTableContentInput';
-import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 const {
@@ -122,7 +122,7 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     }
   };
 
-  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE;
+  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE || page === LINK_CLICKS_PAGE;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>

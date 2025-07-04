@@ -8,7 +8,7 @@ import CategorisedRadioHeaderLabel from './CategorisedRadioHeaderLabel';
 import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
 import { PageTypeProps } from '@meaku/core/types/admin/filters';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 import { cn } from '@breakout/design-system/lib/cn';
 
 type IProps = PageTypeProps & {
@@ -31,7 +31,8 @@ const SortFilter = ({ page, disabledState }: IProps) => {
     }
   };
 
-  const SORT_FEATURE_CONFIG_BASED_ON_PAGE = page === LEADS_PAGE ? SORT_FILTER_CONFIG.slice(0, 1) : SORT_FILTER_CONFIG;
+  const SORT_FEATURE_CONFIG_BASED_ON_PAGE =
+    page === LEADS_PAGE || page === LINK_CLICKS_PAGE ? SORT_FILTER_CONFIG.slice(0, 1) : SORT_FILTER_CONFIG;
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger

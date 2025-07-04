@@ -5,6 +5,7 @@ import { FilterItem } from '@meaku/core/types/admin/api';
 
 export const useAllFilterStore = create<AllFilterState>((set) => ({
   leads: { ...InitialFilterValues },
+  'link-clicks': { ...InitialFilterValues },
   conversations: { ...InitialFilterValues },
   webpages: { ...InitialFilterValues },
   documents: { ...InitialFilterValues },

@@ -93,6 +93,7 @@ export const ArtifactContentUi = ({
               artifact_id: activeArtifactId,
               content: artifactContent as FormArtifactContent,
               metadata: artifactContent.metadata,
+              ctaEvent: artifactContent.ctaEvent,
             }}
             handleSendUserMessage={handleSendUserMessage}
           />

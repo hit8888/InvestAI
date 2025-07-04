@@ -133,6 +133,7 @@ export type FilterValueTypes =
 
 export interface AllFilterState {
   leads: FilterValues;
+  'link-clicks': FilterValues;
   conversations: FilterValues;
   webpages: FilterValues;
   documents: FilterValues;

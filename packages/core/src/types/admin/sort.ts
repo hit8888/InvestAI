@@ -47,6 +47,7 @@ export type DataSourceSortValues = WebpagesSortValues | DocumentsSortValues | Ar
 
 export interface SortFilterState {
   leads: SortValues;
+  'link-clicks': SortValues;
   conversations: SortValues;
   webpages: WebpagesSortValues;
   documents: DocumentsSortValues;

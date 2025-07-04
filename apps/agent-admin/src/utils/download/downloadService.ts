@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast';
 import { downloadLeadsRowData, downloadConversationRowData } from '@meaku/core/adminHttp/api';
 import { createFilename, triggerDownload } from './downloadUtils';
 import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@meaku/core/types/admin/api';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
+import { LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 
 interface DownloadProps {
   page: string;
@@ -21,7 +21,7 @@ export const downloadTableData = async ({ page, payloadData, selectedOption }: D
 
   try {
     const response =
-      page === LEADS_PAGE
+      page === LEADS_PAGE || page === LINK_CLICKS_PAGE
         ? await downloadLeadsRowData(payloadData, fileType)
         : await downloadConversationRowData(payloadData, fileType);
 

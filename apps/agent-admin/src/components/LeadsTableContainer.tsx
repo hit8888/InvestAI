@@ -8,7 +8,7 @@ import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
-import { LEADS_PAGE_COLUMN_LISTS, PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE } from '../utils/constants';
+import { PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE } from '../utils/constants';
 import {
   collectAppliedFilters,
   getAllFilterAppliedValues,
@@ -19,10 +19,14 @@ import {
 
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { LeadsPayload } from '@meaku/core/types/admin/api';
-import { LeadsTableDisplayContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
+import {
+  LEADS_PAGE_TYPE,
+  LeadsTableDisplayContent,
+  LeadsTableViewContent,
+  LINK_CLICKS_PAGE_TYPE,
+} from '@meaku/core/types/admin/admin';
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
@@ -32,17 +36,23 @@ import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
-const LeadsTableContainer = () => {
+const LeadsTableContainer = ({
+  pageType,
+  columnList,
+}: {
+  pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE;
+  columnList: string[];
+}) => {
   const { transformedEntityMetadata } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
-    pageType: LEADS_PAGE,
+    pageType,
   });
   const { trackAdminEvent } = useAdminEventAnalytics();
 
-  useInitializeFilterPreferences(LEADS_PAGE);
+  useInitializeFilterPreferences(pageType);
 
-  const sortState = useSortFilterStore((state) => state.leads);
-  const filterState = useAllFilterStore((state) => state.leads);
+  const sortState = useSortFilterStore((state) => state[pageType]);
+  const filterState = useAllFilterStore((state) => state[pageType]);
 
   const [filterContainerHeight, setFilterContainerHeight] = useState(0);
 
@@ -60,18 +70,18 @@ const LeadsTableContainer = () => {
   }, [filterState]);
 
   const allAppliedFilterValues = useMemo(() => {
-    return getAllFilterAppliedValues(filterState, LEADS_PAGE);
-  }, [filterState]);
+    return getAllFilterAppliedValues(filterState, pageType);
+  }, [filterState, pageType]);
 
   const payloadData: LeadsPayload = useMemo(() => {
     return {
       filters: allAppliedFilterValues,
-      sort: getSortingAppliedValues(sortState, LEADS_PAGE),
+      sort: getSortingAppliedValues(sortState, pageType),
       search: filterState.searchTableContent,
       page: currentPage,
       page_size: itemsPerPage,
     };
-  }, [allAppliedFilterValues, sortState, currentPage, itemsPerPage, filterState.searchTableContent]);
+  }, [allAppliedFilterValues, sortState, pageType, filterState.searchTableContent, currentPage, itemsPerPage]);
 
   // Use debounced payload to prevent excessive API calls
   const debouncedPayloadData = useDebouncedValue(payloadData);
@@ -103,10 +113,7 @@ const LeadsTableContainer = () => {
   const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
-  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(
-    LEADS_PAGE_COLUMN_LISTS,
-    transformedEntityMetadata,
-  );
+  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(columnList, transformedEntityMetadata);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
   const haveNoRecords = totalRecords === 0;
@@ -132,13 +139,13 @@ const LeadsTableContainer = () => {
             isLoading={isLoading}
             payloadData={debouncedPayloadData}
             disabledState={haveNoRecords}
-            key={LEADS_PAGE}
-            page={LEADS_PAGE}
+            key={pageType}
+            page={pageType}
             onFiltersContainerHeightChange={setFilterContainerHeight}
           />
           <TableViewContent
-            pageType={LEADS_PAGE}
-            key={'leads-table-container'}
+            pageType={pageType}
+            key={`${pageType}-table-container`}
             isLoading={isLoading}
             totalRecords={totalRecords}
             tableData={leadsData}
@@ -150,7 +157,7 @@ const LeadsTableContainer = () => {
         <div className="flex items-center justify-end gap-4 self-stretch">
           <TablePagination
             isLoading={isLoading}
-            tableType={LEADS_PAGE}
+            tableType={pageType}
             totalPages={totalPages}
             totalItems={pageSize === 0 ? pageSize : totalRecords}
             itemsPerPage={itemsPerPage}

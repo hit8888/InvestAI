@@ -117,7 +117,6 @@ export const CtaEventDataSchema = z.object({
 export const QualificationQuestionMetadata = z.object({
   is_filled: z.boolean(),
   filled_data: z.array(QualificationResponsesSchema).optional(),
-  ctaMetadata: CtaEventDataSchema.optional(),
 });
 
 export type QualificationQuestionMetadataType = z.infer<typeof QualificationQuestionMetadata>;

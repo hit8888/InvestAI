@@ -29,18 +29,28 @@ import {
   DataSourceArtifactsResponseResultSchema,
   EnrichmentSourceEnum,
 } from './api';
-import { CONVERSATIONS_PAGE, DOCUMENTS_PAGE, LEADS_PAGE, SLIDES_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '../../utils';
+import {
+  CONVERSATIONS_PAGE,
+  DOCUMENTS_PAGE,
+  LEADS_PAGE,
+  LINK_CLICKS_PAGE,
+  SLIDES_PAGE,
+  VIDEOS_PAGE,
+  WEBPAGES_PAGE,
+} from '../../utils';
 
 export type CONVERSATIONS_PAGE_TYPE = typeof CONVERSATIONS_PAGE;
 export type LEADS_PAGE_TYPE = typeof LEADS_PAGE;
+export type LINK_CLICKS_PAGE_TYPE = typeof LINK_CLICKS_PAGE;
 export type WEBPAGES_PAGE_TYPE = typeof WEBPAGES_PAGE;
 export type DOCUMENTS_PAGE_TYPE = typeof DOCUMENTS_PAGE;
 export type VIDEOS_PAGE_TYPE = typeof VIDEOS_PAGE;
 export type SLIDES_PAGE_TYPE = typeof SLIDES_PAGE;
-export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE;
+export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE;
 
 export type PaginationPageType =
   | LEADS_PAGE_TYPE
+  | LINK_CLICKS_PAGE_TYPE
   | CONVERSATIONS_PAGE_TYPE
   | WEBPAGES_PAGE_TYPE
   | DOCUMENTS_PAGE_TYPE

@@ -4,19 +4,12 @@ import { useState } from 'react';
 import { QualificationFlowArtifactProps } from './QualificationTypes';
 import QualificationForm from './QualificationForm';
 import QualificationQuestions from './QualificationQuestions';
-import Typography from '../../Typography';
-import Button from '../../Button';
-import ArrowRight from '../../icons/ArrowRight';
 import { QualificationQuestionMetadataType } from '@meaku/core/types/artifact';
-
-const DEFAULT_FILLED_STATE_MESSAGES = {
-  TITLE: 'Thanks for telling us about your business!',
-  MESSAGE: 'You can create your account and get started',
-  LABEL: 'Sign Up',
-};
+import CtaEventMessage from '../../layout/ChatMessages/CtaEventMessage';
 
 const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }: QualificationFlowArtifactProps) => {
-  const { ctaMetadata, is_filled, filled_data } = (artifact.metadata as QualificationQuestionMetadataType) ?? {};
+  const { ctaEvent } = artifact;
+  const { is_filled, filled_data } = (artifact.metadata as QualificationQuestionMetadataType) ?? {};
   const { containerRef, scale } = useSlideArtifactScaleSystem();
   const isQualificationFormFilled = Array.isArray(filled_data); // If its array - qualification Question
   const stepNumberBasedOnFormOrQuestionFilled = isQualificationFormFilled && is_filled ? 2 : 1;
@@ -27,29 +20,8 @@ const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }
     setSteps((steps) => steps + 1);
   };
 
-  const handleSignUp = () => {
-    window.open(ctaMetadata?.url, '_blank');
-  };
-
-  if (isQualificationFormFilled && isUserView) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2">
-        <Typography variant="title-24" className="text-center">
-          {ctaMetadata?.title || DEFAULT_FILLED_STATE_MESSAGES.TITLE}
-        </Typography>
-        {ctaMetadata?.url && (
-          <div className="flex flex-col items-center justify-center gap-6">
-            <Typography variant="body-16" textColor="textPrimary" className="text-center">
-              {ctaMetadata?.message || DEFAULT_FILLED_STATE_MESSAGES.MESSAGE}
-            </Typography>
-            <Button variant="system" onClick={handleSignUp}>
-              {ctaMetadata?.label || DEFAULT_FILLED_STATE_MESSAGES.LABEL}
-              <ArrowRight width="16" height="16" />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
+  if (isQualificationFormFilled && isUserView && ctaEvent) {
+    return <CtaEventMessage event={ctaEvent} handleSendUserMessage={handleSendUserMessage} />;
   }
 
   return (

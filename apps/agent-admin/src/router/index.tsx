@@ -46,17 +46,24 @@ const routes = [
         element: <RedirectGuard />,
         children: [
           {
-            path: 'leads',
-            element: <ProtectedRoute element={<LeadsPageContainer />} />,
-            children: [],
+            path: 'conversations',
+            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
           },
           {
-            path: 'leads/:sessionID',
+            path: 'conversations/leads',
+            element: <ProtectedRoute element={<LeadsPageContainer />} />,
+          },
+          {
+            path: 'conversations/link-clicks',
+            element: <ProtectedRoute element={<LeadsPageContainer />} />,
+          },
+          {
+            path: 'conversations/leads/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
           },
           {
-            path: 'conversations',
-            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
+            path: 'conversations/link-clicks/:sessionID',
+            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
           },
           {
             path: 'conversations/live/:sessionID',

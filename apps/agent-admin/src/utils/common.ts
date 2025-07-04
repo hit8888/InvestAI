@@ -6,6 +6,7 @@ import {
   CONVERSATIONS_TABLE_FILTERS_CONFIG,
   DOCUMENTS_TABLE_FILTERS_CONFIG,
   LEADS_TABLE_FILTERS_CONFIG,
+  LINK_CLICKS_TABLE_FILTERS_CONFIG,
   SLIDE_TABLE_FILTERS_CONFIG,
   SortByIntentScore,
   SortBySessionLength,
@@ -30,6 +31,7 @@ import {
   DOCUMENTS_PAGE,
   ensureProtocol,
   LEADS_PAGE,
+  LINK_CLICKS_PAGE,
   SLIDES_PAGE,
   toSentenceCase,
   VIDEOS_PAGE,
@@ -111,6 +113,7 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     product_interest: response.product_interest || '-',
     session_id: response.session_id ?? '',
     buyer_intent: additionalInfoData?.buyer_intent || '-',
+    lead_type: getLeadTypeDisplayText(response.lead_type),
   };
 
   return mappedData;
@@ -342,7 +345,8 @@ export const getFilterHeaderLabel = (filterState: string) => {
 
 export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortValues, page: string) => {
   const isLeadsPage = page === LEADS_PAGE;
-  const isMainTabPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
+  const isLinkClicksPage = page === LINK_CLICKS_PAGE;
+  const isMainTabPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE || page === LINK_CLICKS_PAGE;
   const isWebpagesPage = page === WEBPAGES_PAGE;
   const isDocumentsPage = page === DOCUMENTS_PAGE;
   const isVideosPage = page === VIDEOS_PAGE;
@@ -365,7 +369,7 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
 
   if (isMainTabPage && timestampSort) {
     sortApplied.push({
-      field: isLeadsPage ? 'created_on' : 'timestamp',
+      field: isLeadsPage || isLinkClicksPage ? 'created_on' : 'timestamp',
       order: timestampSort ? (timestampSort === SortByTimestamp.NEWEST_FIRST ? 'desc' : 'asc') : 'desc',
     });
   }
@@ -550,6 +554,8 @@ export const getFiltersConfig = (page: string) => {
       return CONVERSATIONS_TABLE_FILTERS_CONFIG;
     case LEADS_PAGE:
       return LEADS_TABLE_FILTERS_CONFIG;
+    case LINK_CLICKS_PAGE:
+      return LINK_CLICKS_TABLE_FILTERS_CONFIG;
     case WEBPAGES_PAGE:
       return WEBPAGES_TABLE_FILTERS_CONFIG;
     case DOCUMENTS_PAGE:
@@ -567,7 +573,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const filterApplied: FilterItem[] = [];
   const isLeadsPage = page === LEADS_PAGE;
   const isConversationsPage = page === CONVERSATIONS_PAGE;
-  const isConversationsAndLeadsPage = isConversationsPage || isLeadsPage;
+  const isLinkClicksPage = page === LINK_CLICKS_PAGE;
   const isVideosPage = page === VIDEOS_PAGE;
   const isSlidesPage = page === SLIDES_PAGE;
   const {
@@ -663,11 +669,38 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   //   });
   // }
 
-  // For Conversations Page & Leads Page, we need to filter out test conversations
-  if (isConversationsAndLeadsPage) {
+  if (isConversationsPage) {
     filterApplied.push({
-      field: isLeadsPage ? 'is_valid' : 'is_test',
-      value: isLeadsPage ? !testConversationsIncluded : testConversationsIncluded, // For Leads Page, is_valid key is used to represent valid conversations
+      field: 'is_test',
+      value: testConversationsIncluded,
+      operator: 'eq',
+    });
+  }
+
+  if (isLeadsPage) {
+    filterApplied.push(
+      {
+        field: 'is_valid',
+        value: !testConversationsIncluded,
+        operator: 'eq',
+      },
+      {
+        field: 'email',
+        value: null,
+        operator: 'is_not_null',
+      },
+      {
+        field: 'lead_type',
+        value: 'GOAL_ACHIEVED',
+        operator: 'eq',
+      },
+    );
+  }
+
+  if (isLinkClicksPage) {
+    filterApplied.push({
+      field: 'email',
+      value: null,
       operator: 'eq',
     });
   }
@@ -1031,4 +1064,14 @@ export const getIntegrationNameFromType = (integrationType: string | undefined):
   }
 
   return toSentenceCase(integrationType.replace(SPECIAL_CHARS_REGEX, ' ').trim());
+};
+
+export const getLeadTypeDisplayText = (leadType: string | undefined): string => {
+  if (leadType === 'GOAL_ACHIEVED') {
+    return 'URL clicked';
+  } else if (leadType === 'GOAL_PRESENTED') {
+    return 'URL presented';
+  }
+
+  return '-';
 };

@@ -3,6 +3,7 @@ import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
   LEADS_PAGE,
+  LINK_CLICKS_PAGE,
   SLIDES_PAGE,
   VIDEOS_PAGE,
   WEBPAGES_PAGE,
@@ -21,6 +22,7 @@ export interface PaginationStateAndActions {
   documents: PaginationValues;
   videos: PaginationValues;
   slides: PaginationValues;
+  'link-clicks': PaginationValues;
   setPaginationValue: (page: PaginationPageType, key: keyof PaginationValues, value: number) => void;
   resetPaginationValue: (page: PaginationPageType) => void;
 }
@@ -34,6 +36,7 @@ export const InitialPaginationValues = {
 
 const pageTypes: PaginationPageType[] = [
   LEADS_PAGE,
+  LINK_CLICKS_PAGE,
   CONVERSATIONS_PAGE,
   WEBPAGES_PAGE,
   DOCUMENTS_PAGE,

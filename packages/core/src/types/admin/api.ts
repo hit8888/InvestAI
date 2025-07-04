@@ -47,7 +47,7 @@ export const OperatorSchema = z.enum([
   'icontains',
   'in',
   'not_in',
-  'is_null',
+  'isnull',
   'is_not_null',
   'exists',
   'not_exists',
@@ -138,6 +138,7 @@ export const LeadResultSchema = z.object({
   additional_info: AdditionalInfoSchema.optional().nullable(),
   created_on: z.string(), // ISO date string
   updated_on: z.string(), // ISO date string
+  lead_type: z.string().optional(),
 });
 
 export const EnrichmentSourceEnum = z.enum(['ip_enrichment', 'user_provided', 'crm_extracted', 'utm_extracted']);

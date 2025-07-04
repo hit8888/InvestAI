@@ -32,8 +32,6 @@ import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/ico
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import { ConversationRightSideDetailsType, NavLinkItem } from './admin-types';
 import { ExportFormat } from '@meaku/core/types/admin/api';
-import PanelLeadsIcon from '@breakout/design-system/components/icons/panel-leads-icon';
-import PanelLeadsActiveIcon from '@breakout/design-system/components/icons/panel-leads-active-icon';
 import PanelConversationIcon from '@breakout/design-system/components/icons/panel-conversation-icon';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
@@ -328,6 +326,10 @@ export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filte
   (item) => item.filterType !== IntentScore,
 );
 
+export const LINK_CLICKS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filter(
+  (item) => item.filterType !== IntentScore,
+);
+
 export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
   (item) => ![MeetingBooked].includes(item.filterType),
 );
@@ -355,11 +357,12 @@ export const SLIDE_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filt
 // Routes
 
 export enum AppRoutesEnum {
-  LEADS = 'leads',
   LOGIN = 'login',
   GOOGLE_SSO_CALLBACK = 'auth/google/callback',
   INTEGRATIONS_OAUTH_CALLBACK = 'tenant/integration/oauth2/callback',
   CONVERSATIONS = 'conversations',
+  ACTIVE_LEADS = 'conversations/leads',
+  LINK_CLICKS = 'conversations/link-clicks',
   AGENT = 'agent',
   AGENT_DATA_SOURCES = 'agent/data-sources',
   AGENT_WORKFLOW = 'agent/workflow',
@@ -373,7 +376,6 @@ export enum AppRoutesEnum {
 }
 
 export enum SidebarNavItemsEnum {
-  LEADS_LABEL = 'Leads',
   CONVERSATIONS_LABEL = 'Conversations',
   AGENT_LABEL = 'Agent',
   AGENT_DATA_SOURCES_LABEL = 'Data Sources',
@@ -389,6 +391,8 @@ export enum SidebarNavItemsEnum {
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
 
+export const DEFAULT_ROUTE = 'conversations';
+
 // LEADS Page
 
 export const LEADS_PAGE_COLUMN_LISTS = [
@@ -400,6 +404,16 @@ export const LEADS_PAGE_COLUMN_LISTS = [
   'timeline',
   'country',
   'role',
+];
+
+export const LINK_CLICKS_PAGE_COLUMN_LISTS = [
+  'timeline',
+  'country',
+  'lead_type',
+  'product_interest',
+  'buyer_intent',
+  'company',
+  'name',
 ];
 
 // CONVERSATION PAGE
@@ -669,12 +683,6 @@ export enum NavigationGroup {
 }
 
 export const MAIN_LINK_ITEMS: NavLinkItem[] = [
-  {
-    navUrl: `/${AppRoutesEnum.LEADS}`,
-    navItem: SidebarNavItemsEnum.LEADS_LABEL,
-    icon: PanelLeadsIcon,
-    activeIcon: PanelLeadsActiveIcon,
-  },
   {
     navUrl: `/${AppRoutesEnum.CONVERSATIONS}`,
     navItem: SidebarNavItemsEnum.CONVERSATIONS_LABEL,

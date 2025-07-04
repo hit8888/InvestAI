@@ -7,6 +7,7 @@ import ActiveConversationsLayout from '../components/ActiveConversationsComp/Act
 import { ActiveConversationsProvider } from '../context/ActiveConversationsContext';
 import { useAuth } from '../context/AuthProvider';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import ConversationTabs from '../components/ConversationTabs';
 
 const ConversationsPage = () => {
   const { userInfo } = useAuth();
@@ -22,6 +23,7 @@ const ConversationsPage = () => {
           headerTitle="Conversations"
           headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
         />
+        <ConversationTabs />
         {activeConversationsEnabled && (
           <ActiveConversationsProvider>
             <ActiveConversationsLayout />

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { setAuthInstance } from '@meaku/core/contexts/AuthInstance';
 import { AuthResponse } from '@meaku/core/types/admin/auth';
-import { AppRoutesEnum, DefaultAuthResponse } from '../utils/constants';
+import { DEFAULT_ROUTE, DefaultAuthResponse } from '../utils/constants';
 import { setupTenantAndAgent } from '../utils/apiCalls';
 import { getDashboardBasicPathURL } from '../utils/common';
 
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (tenantHavingAdminRole) {
       await setupTenantAndAgent(tenantHavingAdminRole);
       const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
-      callback(`${basicPathURL}/${AppRoutesEnum.LEADS}`);
+      callback(`${basicPathURL}/${DEFAULT_ROUTE}`);
     } else {
       callback('/');
     }

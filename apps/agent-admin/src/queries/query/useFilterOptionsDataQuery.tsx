@@ -3,7 +3,8 @@ import { getFilterOptionsData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { getTenantFromLocalStorage, PageTypeToTableName } from '@meaku/core/utils/index';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 type FilterOptionsVariables = FilterOptionsPayload;
 
@@ -18,7 +19,7 @@ type FilterOptionsDataKey = ReturnType<typeof getFilterOptionsDataKey>;
 
 interface IProps {
   payload: FilterOptionsVariables;
-  page: string;
+  page: PaginationPageType;
   queryOptions: BreakoutQueryOptions<FilterOptionsResponse, FilterOptionsDataKey>;
 }
 
@@ -28,7 +29,10 @@ const useFilterOptionsDataQuery = ({ payload, page, queryOptions }: IProps): Use
     queryKey: getFilterOptionsDataKey(payload, tenantName ?? '', page),
     queryFn: async (): Promise<FilterOptionsResponse> => {
       if (!tenantName) throw new Error('Tenant name is undefined');
-      const response: AxiosResponse<FilterOptionsResponse> = await getFilterOptionsData(payload, page);
+      const response: AxiosResponse<FilterOptionsResponse> = await getFilterOptionsData(
+        payload,
+        PageTypeToTableName[page],
+      );
       return response.data;
     },
     ...queryOptions,

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
-import { AppRoutesEnum } from '../utils/constants';
+import { AppRoutesEnum, DEFAULT_ROUTE } from '../utils/constants';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import { getDashboardBasicPathURL } from '../utils/common';
 
@@ -10,7 +10,7 @@ const useAuthHandler = () => {
   const { login, saveTokens } = useAuth();
   const navigate = useNavigate();
   const { isLoginPage, pathURL, isOAuthCallbackPage } = usePageRouteState();
-  const { LOGIN, LEADS } = AppRoutesEnum;
+  const { LOGIN } = AppRoutesEnum;
 
   useEffect(() => {
     if (isOAuthCallbackPage) {
@@ -29,10 +29,10 @@ const useAuthHandler = () => {
       login(); // Set isAuthenticated to true
 
       const tenantName = getTenantIdentifier()?.['tenant-name'] ?? '';
-      const leadsPath = `${getDashboardBasicPathURL(tenantName)}/${LEADS}`;
+      const defaultRoute = getDashboardBasicPathURL(`${tenantName}/${DEFAULT_ROUTE}`);
       if (isLoginPage) {
         if (tenantName) {
-          navigate(leadsPath);
+          navigate(defaultRoute);
         } else {
           navigate('/');
         }
@@ -41,7 +41,7 @@ const useAuthHandler = () => {
         const isBaseOrgPath = pathURL === basicPathURL || pathURL === `${basicPathURL}/`;
 
         if (isBaseOrgPath) {
-          navigate(leadsPath);
+          navigate(defaultRoute);
         } else {
           navigate(pathURL);
         }
