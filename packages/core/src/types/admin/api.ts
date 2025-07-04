@@ -196,7 +196,7 @@ export const ConversationsResponseResultSchema = z.object({
   email: z.string().nullable(),
   role: z.string().nullable(),
   country: z.string().nullable(),
-  user_message_count: z.number(),
+  user_message_count: z.number().nullable(),
   is_test: z.boolean(),
   prospect_details: ProspectDetailsSchema.optional().nullable(),
   company_details: CompanyDetailsSchema.optional().nullable(),

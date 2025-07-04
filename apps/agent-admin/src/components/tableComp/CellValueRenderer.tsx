@@ -100,6 +100,8 @@ const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {
 };
 
 const RenderCell = ({ id, info }: CellValueRendererProps) => {
+  if (!info) return <span>-</span>;
+
   return getCellValueBasedOnId({ id, info });
 };
 

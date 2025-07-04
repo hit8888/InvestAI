@@ -131,7 +131,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     company: response.company || '-',
     name: response.name || '-',
     email: response.email || '-',
-    timestamp: response.timestamp ? response.timestamp : '-',
+    timestamp: response.timestamp || '',
     summary: response.summary || '-',
     country: {
       city: prospectDetailsData?.city || '-',
