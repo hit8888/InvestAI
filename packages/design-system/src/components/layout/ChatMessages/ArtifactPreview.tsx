@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/des
 import { useState } from 'react';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
-import CustomVideoPlayer from './CustomVideoPlayer.tsx';
+import CustomVideoPlayer from '../CustomVideoPlayer.tsx';
 import {
   ArtifactEnum,
   ArtifactPreviewEnum,
@@ -15,12 +15,12 @@ import {
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
-import ArrowRight from '../icons/ArrowRight.tsx';
+import ArrowRight from '../../icons/ArrowRight.tsx';
 import { ViewType } from '@meaku/core/types/common';
-import FormArtifact from './FormArtifact.tsx';
-import QualificationFlowArtifact from '../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
+import FormArtifact from '../FormArtifact.tsx';
+import QualificationFlowArtifact from '../../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
 import CalendarArtifactPreview from './CalendarArtifactPreview.tsx';
-import { CalendarArtifact } from '../Artifact/CalendarArtifact.tsx';
+import { CalendarArtifact } from '../../Artifact/CalendarArtifact.tsx';
 interface IProps {
   viewType: ViewType;
   artifactId: string;

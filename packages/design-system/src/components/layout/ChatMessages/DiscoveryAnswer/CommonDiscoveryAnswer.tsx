@@ -1,4 +1,4 @@
-import { cn } from '../../../lib/cn';
+import { cn } from '@breakout/design-system/lib/cn';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
 import { getMessageViewType, isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
@@ -6,7 +6,7 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import ChatMessageTail from '../ChatMessageTail';
 import ChatMessageTimestamp from '../ChatMessageTimestamp';
 import ChatMessageSender from '../ChatMessageSender';
-import { getChatMessageClass, getDiscoveryAnswerContainerClass } from '../messageUtils';
+import { getChatMessageClass, getDiscoveryAnswerContainerClass } from '../../messageUtils';
 
 interface IProps {
   message: WebSocketMessage;

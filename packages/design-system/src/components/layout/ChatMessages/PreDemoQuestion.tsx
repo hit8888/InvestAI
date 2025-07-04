@@ -6,6 +6,10 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import Typography from '@breakout/design-system/components/Typography/index';
+import MessageItemLayout, {
+  Padding,
+  Orientation,
+} from '@breakout/design-system/components/layout/ChatMessages/MessageItemLayout';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -44,8 +48,8 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
   }
 
   return (
-    <div ref={preDemoQuestionRef} className="max-w-[424px] pb-2 pl-10">
-      <div className="mb-4 border-t-2 border-dashed border-gray-300"></div>
+    <MessageItemLayout elementRef={preDemoQuestionRef} paddingInline={Padding.INLINE} orientation={Orientation.COLUMN}>
+      <div className="border-t-2 border-dashed border-gray-300"></div>
 
       <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">
         <Typography as="span" variant="label-16-semibold" textColor="textPrimary">
@@ -60,8 +64,8 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
           </Button>
         </div>
       </div>
-    </div>
+    </MessageItemLayout>
   );
 };
 
-export { PreDemoQuestion };
+export default PreDemoQuestion;

@@ -1,7 +1,7 @@
-import Button from '../Button';
-import ArrowRight from '../icons/ArrowRight';
-import CalendarIcon from '../icons/calendar-icon';
-import Typography from '../Typography';
+import Button from '../../Button';
+import ArrowRight from '../../icons/ArrowRight';
+import CalendarIcon from '../../icons/calendar-icon';
+import Typography from '../../Typography';
 
 const CalendarArtifactPreview = ({ handleClick }: { handleClick: () => void }) => {
   return (

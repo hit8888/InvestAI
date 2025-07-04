@@ -1,9 +1,7 @@
 import React from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
-import Orb from '@breakout/design-system/components/Orb/index';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { OrbStatusEnum } from '@meaku/core/types/config';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
@@ -12,31 +10,26 @@ import { checkIsAIMessage, getMessageViewType, checkIsLoadingTextMessage } from 
 import ChatMessageTail from './ChatMessageTail';
 import ChatMessageTimestamp from './ChatMessageTimestamp';
 import ChatMessageSender from './ChatMessageSender';
-import { getChatMessageClass, getChatTextMessageContainerClass } from './messageUtils';
-import GithubMarkdownRenderer from './GithubMarkdownRenderer';
+import { getChatMessageClass, getChatTextMessageContainerClass } from '../messageUtils';
+import GithubMarkdownRenderer from '../GithubMarkdownRenderer';
+import MessageItemLayout from './MessageItemLayout';
 
 interface TextMessageProps {
   message: WebSocketMessage;
   viewType: ViewType;
   isLastQuestionResponse: boolean;
-  orbState: OrbStatusEnum;
-  primaryColor: string | null;
   shouldShowActiveOrb: boolean;
   isCurrentMsgUserInactiveMessage: boolean;
-  showOrbFromConfig: boolean;
-  orbLogoUrl: string | undefined | null;
+  renderOrb: () => React.ReactNode;
 }
 
 const TextMessage: React.FC<TextMessageProps> = ({
   message,
   viewType,
   isLastQuestionResponse,
-  orbState,
-  primaryColor,
   shouldShowActiveOrb,
   isCurrentMsgUserInactiveMessage,
-  orbLogoUrl,
-  showOrbFromConfig,
+  renderOrb,
 }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const isHumanMessage = message.role === MessageSenderRole.USER || message.role === MessageSenderRole.ADMIN;
@@ -59,10 +52,6 @@ const TextMessage: React.FC<TextMessageProps> = ({
     }
   };
 
-  const renderOrb = () => (
-    <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
-  );
-
   const renderMessageContent = () => {
     if (isLoadingTextMessage) {
       return (
@@ -76,21 +65,18 @@ const TextMessage: React.FC<TextMessageProps> = ({
   };
 
   return (
-    <div
-      ref={scrollToMessageRef}
-      className={cn('flex items-center', getChatTextMessageContainerClass(messageViewType))}
-    >
+    <MessageItemLayout elementRef={scrollToMessageRef} className={getChatTextMessageContainerClass(messageViewType)}>
       <div
-        className={cn('relative max-w-full rounded-2xl px-4 py-2', getChatMessageClass(messageViewType), {
-          'flex w-full gap-4 py-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
-          'flex gap-7 p-4 pl-0': isAIMessage && !isLastQuestionResponse,
+        className={cn('relative rounded-2xl', getChatMessageClass(messageViewType), {
+          'flex w-full gap-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
+          'flex gap-7 pl-0 pr-4': isAIMessage && !isLastQuestionResponse,
           'pl-11': isAIMessage && !shouldShowActiveOrb,
         })}
       >
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
         {isAIMessage && !isLoadingTextMessage && shouldShowActiveOrb && (
-          <div className="flex w-10 items-start justify-start">{renderOrb()}</div>
+          <div className="flex w-8 items-start justify-start">{renderOrb()}</div>
         )}
 
         {isLoadingTextMessage && shouldShowActiveOrb && renderOrb()}
@@ -103,12 +89,12 @@ const TextMessage: React.FC<TextMessageProps> = ({
             onClick={handleMessageClick}
           >
             {renderMessageContent()}
-            <ChatMessageTimestamp messageViewType={messageViewType} timestamp={message.timestamp} />
           </div>
         </div>
+        <ChatMessageTimestamp messageViewType={messageViewType} timestamp={message.timestamp} />
         <ChatMessageTail messageViewType={messageViewType} />
       </div>
-    </div>
+    </MessageItemLayout>
   );
 };
 

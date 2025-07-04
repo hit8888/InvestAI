@@ -30,7 +30,7 @@ import MessageSquare from '@breakout/design-system/components/icons/message-squa
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import SuccessToastMessage from './SuccessToastMessage';
+import SuccessToastMessage from '../SuccessToastMessage';
 import toast from 'react-hot-toast';
 import { ViewType } from '@meaku/core/types/common';
 
@@ -198,7 +198,7 @@ const MessageFeedback = ({
 
   return (
     <Dialog open={openDialog} onOpenChange={handleDialogOpenChange}>
-      <div className="my-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <DialogTrigger asChild>
           <FeedbackButton disabled={isMessageReadOnly} isFilled={isFeedbackThumbUp} onClick={onClickThumbUp} />
         </DialogTrigger>

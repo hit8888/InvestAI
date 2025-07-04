@@ -1,10 +1,10 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
-import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
+import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
-import BlackThreeStarIcon from '../icons/black-three-star-icon';
-import Typography from '../Typography';
-import { useTextTruncation } from '../../hooks/useTextTruncation';
+import BlackThreeStarIcon from '../../icons/black-three-star-icon';
+import Typography from '../../Typography';
+import { useTextTruncation } from '../../../hooks/useTextTruncation';
 import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {

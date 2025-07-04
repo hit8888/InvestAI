@@ -3,13 +3,15 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import MessageItemLayout, { Padding } from './MessageItemLayout';
 
 type IProps = {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
+  showDemoArtifactPreview: boolean;
 };
 
-const DemoArtifactPreview = ({ handleSendUserMessage, setDemoPlayingStatus }: IProps) => {
+const DemoArtifactPreview = ({ handleSendUserMessage, setDemoPlayingStatus, showDemoArtifactPreview }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const handleDemoPreviewClick = () => {
@@ -23,15 +25,17 @@ const DemoArtifactPreview = ({ handleSendUserMessage, setDemoPlayingStatus }: IP
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DEMO_STARTED);
   };
 
+  if (!showDemoArtifactPreview) return null;
+
   return (
-    <div className="my-4 pl-11 pr-6">
+    <MessageItemLayout paddingInline={Padding.INLINE}>
       <CommonArtifactPreview
         title="Initiated"
         isFetching={false}
         handleClick={handleDemoPreviewClick}
         artifactType="DEMO"
       />
-    </div>
+    </MessageItemLayout>
   );
 };
 

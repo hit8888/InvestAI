@@ -40,7 +40,7 @@ const MessageDataSources = (props: IProps) => {
   }
 
   return (
-    <div className="my-2 w-full rounded-xl border bg-primary-foreground bg-opacity-50 backdrop-blur-lg">
+    <div className="w-full rounded-xl border bg-primary-foreground bg-opacity-50 backdrop-blur-lg">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="sources" className="border-none px-3">
           <AccordionTrigger className={'text-customPrimaryText'}>Show sources:</AccordionTrigger>

@@ -1,10 +1,10 @@
-import SlidePreviewIcon from '../icons/SlidePreviewIcon';
-import VideoPreviewIcon from '../icons/VideoPreviewIcon';
-import DemoPreviewIcon from '../icons/DemoPreviewIcon';
+import SlidePreviewIcon from '../../icons/SlidePreviewIcon';
+import VideoPreviewIcon from '../../icons/VideoPreviewIcon';
+import DemoPreviewIcon from '../../icons/DemoPreviewIcon';
 import { ArtifactPreviewEnum } from '@meaku/core/types/artifact';
-import Typography from '../Typography';
-import { useTextTruncation } from '../../hooks/useTextTruncation';
-import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
+import Typography from '../../Typography';
+import { useTextTruncation } from '../../../hooks/useTextTruncation';
+import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
 
 type CommonArtifactPreviewProps = {
   artifactType: keyof typeof ArtifactPreviewEnum;
@@ -56,6 +56,8 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
             tooltipSide="top"
             tooltipAlign="end"
             tooltipSideOffsetValue={15}
+            tooltipAlignOffsetValue={-50}
+            showArrow={false}
             trigger={
               <>
                 {title && (

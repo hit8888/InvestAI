@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Suggestion } from './Suggestion';
 import { getSuggestionItemAnimation } from '@meaku/core/utils/entryPointAnimation';
 import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
-import { useCycle } from '../../hooks/useCycle';
+import { useCycle } from '../../../hooks/useCycle';
 
 type SuggestedQuestionsShowingInCycleProps = {
   questions: string[];

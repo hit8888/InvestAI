@@ -9,6 +9,7 @@ interface IProps {
   tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
   tooltipAlign?: 'start' | 'center' | 'end';
   tooltipSideOffsetValue?: number;
+  tooltipAlignOffsetValue?: number;
   showArrow?: boolean;
   alwaysVisible?: boolean;
   disableHoverableContent?: boolean;
@@ -23,7 +24,8 @@ const TooltipWrapperDark = ({
   content,
   tooltipSide = 'bottom',
   tooltipAlign = 'end',
-  tooltipSideOffsetValue = 80,
+  tooltipSideOffsetValue = 10,
+  tooltipAlignOffsetValue,
   showArrow = true,
   alwaysVisible = false,
   disableHoverableContent = false,
@@ -43,6 +45,7 @@ const TooltipWrapperDark = ({
             sideOffset={isTooltipSideValueTop ? tooltipSideOffsetValue : 5}
             align={tooltipAlign}
             side={tooltipSide}
+            alignOffset={tooltipAlignOffsetValue}
             className={cn(tooltipContentClassName, 'z-[9999] rounded-lg border-none bg-gray-900 px-3 py-2 text-white', {
               'pointer-events-none': alwaysVisible,
             })}

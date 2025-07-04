@@ -3,12 +3,12 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { Suggestion } from './Suggestion.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { cn } from '../../lib/cn.ts';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { ViewType } from '@meaku/core/types/common';
+import MessageItemLayout, { Alignment, Gap, Padding, Orientation } from './MessageItemLayout.tsx';
 
 interface IProps {
-  suggestedQuestionOrientation: 'left' | 'right';
+  suggestedQuestionOrientation?: 'left' | 'right';
   artifact?: SuggestionArtifactContent;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   invertTextColor?: boolean;
@@ -18,7 +18,7 @@ interface IProps {
 const SuggestionsArtifact = ({
   artifact,
   handleSendUserMessage,
-  suggestedQuestionOrientation,
+  suggestedQuestionOrientation = 'right',
   invertTextColor,
   viewType,
 }: IProps) => {
@@ -50,12 +50,12 @@ const SuggestionsArtifact = ({
   const sortedSuggestedQuestions = [...artifact.suggested_questions].sort((a, b) => b.length - a.length);
 
   return (
-    <div
-      ref={suggestionsRef}
-      className={cn('flex w-full flex-col items-start gap-2', {
-        'items-end pl-11': suggestedQuestionOrientation === 'right',
-        'pl-11 pr-6': suggestedQuestionOrientation === 'left',
-      })}
+    <MessageItemLayout
+      elementRef={suggestionsRef}
+      orientation={Orientation.COLUMN}
+      gap={Gap.SMALL}
+      paddingInline={Padding.INLINE_LEFT_ONLY}
+      align={suggestedQuestionOrientation as Alignment}
     >
       {sortedSuggestedQuestions.map((question, index) => (
         <Suggestion
@@ -68,7 +68,7 @@ const SuggestionsArtifact = ({
           viewType={viewType}
         />
       ))}
-    </div>
+    </MessageItemLayout>
   );
 };
 

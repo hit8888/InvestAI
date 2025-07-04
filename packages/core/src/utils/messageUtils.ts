@@ -29,14 +29,12 @@ export const checkIsLoadingTextMessage = (
   return message.message_type === 'LOADING_TEXT' && typeof message.message?.content === 'string';
 };
 
-export const isAIResponseInactiveMessage = (message: WebSocketMessage): boolean => {
-  return (
-    'event_type' in message.message &&
-    message.message.event_type === 'USER_INACTIVE' &&
-    message.role === 'ai' &&
-    message.actor === 'EVENT' &&
-    message.message_type === 'TEXT'
-  );
+export const isAIResponseInactiveMessage = (messages: WebSocketMessage[], message: WebSocketMessage): boolean => {
+  const userInactiveMessage = messages.find((msg) => hasUserSentInactiveMessage(msg));
+  const isUserInactiveMessage =
+    isDisplayedAsTextMessage(message) && userInactiveMessage?.response_id === message.response_id;
+
+  return isUserInactiveMessage;
 };
 
 export const hasUserSentInactiveMessage = (message: WebSocketMessage): boolean => {
@@ -587,7 +585,7 @@ const isMainResponse = (message: WebSocketMessage): boolean => {
 
 // Helper function to check if a message should be delayed (discovery, artifact)
 const isDelayedMessage = (message: WebSocketMessage): boolean => {
-  return isDiscoveryQuestion(message) || checkIsArtifactMessage(message);
+  return isDiscoveryQuestion(message) || checkIsArtifactMessage(message) || isCtaEvent(message);
 };
 
 // Helper function to check if a group of messages with same response_id is ready to be shown

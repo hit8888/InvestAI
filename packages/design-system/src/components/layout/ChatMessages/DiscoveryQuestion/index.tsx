@@ -1,24 +1,34 @@
+import { useEffect } from 'react';
+import { ReactNode } from 'react';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { SingleSelectQuestion } from './SingleSelectQuestion';
 import { MultiSelectQuestion } from './MultiSelectQuestion';
 import { EventData, OptionType } from './types';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { useEffect } from 'react';
-import { ReactNode } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import TextBasedDiscoveryQuestion from './TextBasedDiscoveryQuestion';
 import { ViewType } from '@meaku/core/types/common';
+import MessageItemLayout, { Alignment, Gap, Padding } from '../MessageItemLayout';
 
 interface IProps {
   message: WebSocketMessage;
   isLastMessage?: boolean;
   onSubmit: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   viewType: ViewType;
+  renderOrb: () => ReactNode;
+  shouldShowActiveOrb: boolean;
 }
 
-export default function DiscoveryQuestion({ message, isLastMessage = false, onSubmit, viewType }: IProps) {
+export default function DiscoveryQuestion({
+  message,
+  isLastMessage = false,
+  onSubmit,
+  viewType,
+  renderOrb,
+  shouldShowActiveOrb,
+}: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>({
     shouldScroll: viewType === ViewType.USER || (viewType === ViewType.ADMIN && isLastMessage),
@@ -132,8 +142,14 @@ export default function DiscoveryQuestion({ message, isLastMessage = false, onSu
   })();
 
   return (
-    <div className="w-full" ref={discoveryQuestionsRef}>
+    <MessageItemLayout
+      align={Alignment.LEFT}
+      gap={Gap.MEDIUM}
+      elementRef={discoveryQuestionsRef}
+      paddingInline={shouldShowActiveOrb ? Padding.NONE : Padding.INLINE}
+    >
+      {shouldShowActiveOrb && renderOrb()}
       {getDiscoveryQuestionContent}
-    </div>
+    </MessageItemLayout>
   );
 }

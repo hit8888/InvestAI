@@ -14,6 +14,7 @@ import ArtifactPreview from './ArtifactPreview';
 import { checkIsQualificationFormArtifact, BASE_ARTIFACT_TYPES } from '@meaku/core/utils/messageUtils';
 import { ViewType } from '@meaku/core/types/common';
 import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
+import MessageItemLayout, { Padding } from './MessageItemLayout';
 
 interface MessageArtifactPreviewProps {
   message: WebSocketMessage;
@@ -73,7 +74,7 @@ const MessageArtifactPreview = ({
   if (!isValidContent(content)) return null;
 
   return (
-    <div className="my-4 pl-11 pr-6">
+    <MessageItemLayout paddingInline={Padding.INLINE}>
       <ArtifactPreview
         viewType={viewType}
         artifactId={artifactData.artifact_id}
@@ -88,7 +89,7 @@ const MessageArtifactPreview = ({
         artifactContentWithMetadata={artifactContentWithMetadata}
         isQualificationFormArtifact={isQualificationFormArtifactValid}
       />
-    </div>
+    </MessageItemLayout>
   );
 };
 

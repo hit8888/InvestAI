@@ -120,7 +120,6 @@ const TooltipContent = ({ locationData }: { locationData: LocationData }) => {
       content={<span className="capitalize">{tooltipText}</span>}
       tooltipAlign="center"
       tooltipSide="top"
-      tooltipSideOffsetValue={10}
     />
   );
 };

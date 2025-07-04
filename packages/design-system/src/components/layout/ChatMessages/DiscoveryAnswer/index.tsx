@@ -2,6 +2,8 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import CommonDiscoveryAnswer from './CommonDiscoveryAnswer';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import { ViewType } from '@meaku/core/types/common';
+import { isDiscoveryAnswer } from '@meaku/core/utils/messageUtils';
+import MessageItemLayout, { Gap, Padding } from '../MessageItemLayout';
 
 type DiscoveryAnswerProps = {
   message: WebSocketMessage;
@@ -9,7 +11,9 @@ type DiscoveryAnswerProps = {
 };
 
 export const DiscoveryAnswer = ({ message, viewType }: DiscoveryAnswerProps) => {
+  const isDiscoveryAnswerMessage = isDiscoveryAnswer(message);
   if (
+    !isDiscoveryAnswerMessage ||
     !message.message ||
     message.message_type !== 'EVENT' ||
     !('event_type' in message.message) ||
@@ -26,12 +30,14 @@ export const DiscoveryAnswer = ({ message, viewType }: DiscoveryAnswerProps) => 
   const answerType = isMultiSelect ? MULTI_SELECT : SINGLE_SELECT;
 
   return (
-    <CommonDiscoveryAnswer
-      message={message}
-      viewType={viewType}
-      question={question}
-      responses={responses}
-      answerType={answerType}
-    />
+    <MessageItemLayout gap={Gap.MEDIUM} paddingInline={viewType === ViewType.USER ? Padding.INLINE : Padding.NONE}>
+      <CommonDiscoveryAnswer
+        message={message}
+        viewType={viewType}
+        question={question}
+        responses={responses}
+        answerType={answerType}
+      />
+    </MessageItemLayout>
   );
 };

@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo } from 'react';
 import { trackError } from '@meaku/core/utils/error';
-import Typography from '../Typography';
+import Typography from '../../Typography';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 interface Props {

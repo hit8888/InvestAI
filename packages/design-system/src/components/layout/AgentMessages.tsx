@@ -1,10 +1,10 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { useEffect, useRef } from 'react';
-import SuggestionsArtifact from './SuggestionsArtifact';
-import { PreDemoQuestion } from '../../../../../apps/agent/src/components/views/AgentView/Demo/PreDemoQuestion';
+import React, { useEffect, useRef, useMemo } from 'react';
+import SuggestionsArtifact from './ChatMessages/SuggestionsArtifact';
+import PreDemoQuestion from './ChatMessages/PreDemoQuestion';
+import MessageItem from './ChatMessages/MessageItem';
 import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import MessageItem from './MessageItem';
 import { DemoPlayingStatus, MessageSenderRole, ViewType } from '@meaku/core/types/common';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import {
@@ -93,6 +93,11 @@ const AgentMessages = ({
     }
   }, [viewType, messages]);
 
+  const getInitialFeedback = useMemo(() => {
+    return (message: WebSocketMessage) =>
+      feedbackData?.find((feedback) => feedback.response_id === message.response_id);
+  }, [feedbackData]);
+
   const aiMessages = messages.filter((message) => message.role === 'ai');
 
   const messagesSortedByResponseIdAndTimestamp = messagesGroupedByResponseIdAndTimestamp(messages);
@@ -101,8 +106,9 @@ const AgentMessages = ({
 
   return (
     <div
-      className={cn('w-[35%] shrink-0 overflow-y-auto', {
+      className={cn('shrink-0', {
         'w-full': !showRightPanel,
+        'w-[35%]': showRightPanel,
       })}
       onWheel={(e) => e.stopPropagation()}
       style={{
@@ -112,14 +118,16 @@ const AgentMessages = ({
     >
       <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2">
         <div
-          className={cn('mx-auto w-full', {
+          className={cn('mx-auto flex w-full flex-col gap-8', {
             'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
           })}
         >
           {messagesSortedByResponseIdAndTimestamp.map((message, idx) => {
             return (
-              <div key={idx}>
-                {shouldMessageScrollToTop(message) ? <div ref={currentMessageScrollToTop} className="p-0" /> : null}
+              <React.Fragment key={idx}>
+                {shouldMessageScrollToTop(message) ? (
+                  <div ref={currentMessageScrollToTop} className="hidden p-0" />
+                ) : null}
                 <MessageItem
                   isAMessageBeingProcessed={isAMessageBeingProcessed}
                   logoURL={logoURL}
@@ -127,27 +135,24 @@ const AgentMessages = ({
                   sessionId={sessionId}
                   primaryColor={primaryColor}
                   message={message}
-                  messageIndex={idx}
-                  totalMessages={messagesSortedByResponseIdAndTimestamp.length}
                   orbState={orbState}
                   setActiveArtifact={setActiveArtifact}
                   setDemoPlayingStatus={setDemoPlayingStatus}
                   handleSendUserMessage={handleSendUserMessage}
                   allowFeedback={allowFeedback}
-                  initialFeedback={feedbackData?.find((feedback) => feedback.response_id === message.response_id)}
+                  initialFeedback={getInitialFeedback(message)}
                   lastMessageResponseId={lastMessageResponseId}
                   messages={messagesSortedByResponseIdAndTimestamp}
                   orbLogoUrl={orbLogoUrl}
                   showOrbFromConfig={showOrbFromConfig}
                   invertTextColor={invertTextColor}
                 />
-              </div>
+              </React.Fragment>
             );
           })}
           {aiMessages.length <= 1 && !hasFirstUserMessageBeenSent && (
             <div className="w-full pt-4">
               <SuggestionsArtifact
-                suggestedQuestionOrientation="right"
                 handleSendUserMessage={handleSendUserMessage}
                 artifact={{
                   suggested_questions: initialSuggestedQuestions,
@@ -165,8 +170,6 @@ const AgentMessages = ({
             />
           )}
         </div>
-
-        <div className="p-1" />
       </div>
     </div>
   );

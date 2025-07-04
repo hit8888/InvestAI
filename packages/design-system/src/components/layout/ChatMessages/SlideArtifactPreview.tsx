@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import SlideArtifact from '../Artifact/SlideArtifact';
+import SlideArtifact from '../../Artifact/SlideArtifact';
 import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/types/artifact';
 import CommonArtifactPreview from './CommonArtifactPreview';
 import { ViewType } from '@meaku/core/types/common';

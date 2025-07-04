@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { OptionType } from './types';
 import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
 import { MultiSelectResponseOption } from './MultiSelectResponseItem';
-import Button from '../../Button';
+import Button from '../../../Button';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import { ViewType } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';

@@ -1,8 +1,8 @@
 import { Badge } from '@breakout/design-system/components/layout/badge';
 import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
-import Typography from '../Typography';
+import Typography from '../../Typography';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
-import { cn } from '../../lib/cn';
+import { cn } from '@breakout/design-system/lib/cn';
 import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
@@ -20,7 +20,7 @@ const MessageAnalytics = ({ analytics, invertTextColor, viewType }: IProps) => {
   }
 
   return (
-    <div ref={buyerIntentScoreRef} className="my-4 flex items-center gap-3">
+    <div ref={buyerIntentScoreRef} className="flex items-center gap-3">
       <Typography variant="label-14-semibold" textColor="textPrimary">
         Analytics:
       </Typography>

@@ -9,7 +9,6 @@ const TitleCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) 
       trigger={<p className="w-60 truncate 2xl:w-60">{value}</p>}
       content={value}
       tooltipAlign="center"
-      showArrow={false}
     />
   );
 };

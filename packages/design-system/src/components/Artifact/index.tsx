@@ -38,7 +38,7 @@ const Artifact = ({
   const activeArtifactType = activeArtifact?.artifact_type;
 
   return (
-    <div className={cn('w-[66%] pl-2 pr-4 pt-4', { 'w-full overflow-hidden pb-4': isMediaTakingFullWidth })}>
+    <div className={cn('w-full pl-2 pr-4 pt-4', { 'overflow-hidden pb-4': isMediaTakingFullWidth })}>
       <div className="flex h-full max-h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 p-2">
         <div className="group relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
           {isGeneratingArtifact ? (
