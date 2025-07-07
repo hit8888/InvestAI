@@ -45,6 +45,7 @@ export const SlideImageArtifactSchema = z.object({
 
 export const SuggestionArtifactSchema = z.object({
   suggested_questions: z.array(z.string()),
+  suggested_questions_short_form: z.array(z.string()).optional(),
   suggested_questions_type: z.enum(['STAR', 'BUBBLE']),
 });
 

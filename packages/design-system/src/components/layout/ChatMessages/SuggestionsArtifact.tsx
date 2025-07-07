@@ -23,10 +23,15 @@ const SuggestionsArtifact = ({
   viewType,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const shortFormQuestions = artifact?.suggested_questions_short_form;
+  const longFormQuestions = artifact?.suggested_questions;
+  const questionsToShow = (shortFormQuestions?.length ? shortFormQuestions : longFormQuestions) ?? [];
   const showSuggestionsArtifact: boolean =
-    (artifact?.suggested_questions.length ?? 0) > 0 && artifact?.suggested_questions_type === 'BUBBLE';
+    questionsToShow.length > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 
-  const handleSuggestedQuestionOnClick = (message: string) => {
+  const handleSuggestedQuestionOnClick = (originalIndex: number) => {
+    const message = longFormQuestions?.[originalIndex] ?? questionsToShow[originalIndex];
+
     handleSendUserMessage({
       message: { content: message, event_data: {}, event_type: 'SUGGESTED_QUESTION_CLICKED' },
       message_type: 'EVENT',
@@ -47,7 +52,9 @@ const SuggestionsArtifact = ({
     return <></>;
   }
 
-  const sortedSuggestedQuestions = [...artifact.suggested_questions].sort((a, b) => b.length - a.length);
+  const sortedSuggestedQuestions = questionsToShow
+    .map((question, index) => ({ question, originalIndex: index }))
+    .sort((a, b) => b.question.length - a.question.length);
 
   return (
     <MessageItemLayout
@@ -57,11 +64,11 @@ const SuggestionsArtifact = ({
       paddingInline={Padding.INLINE_LEFT_ONLY}
       align={suggestedQuestionOrientation as Alignment}
     >
-      {sortedSuggestedQuestions.map((question, index) => (
+      {sortedSuggestedQuestions.map(({ question, originalIndex }, index) => (
         <Suggestion
           key={question}
           question={question}
-          onSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+          onSuggestedQuestionOnClick={() => handleSuggestedQuestionOnClick(originalIndex)}
           itemIndex={index}
           isEntryPointQuestion={false}
           invertTextColor={invertTextColor}
