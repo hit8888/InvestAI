@@ -9,7 +9,7 @@ import { useMessageStore } from '../stores/useMessageStore.ts';
 import { trackError } from '../utils/error.ts';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import {
   checkIsAdminJoinedMessage,
@@ -158,7 +158,7 @@ const useWebSocketChat = () => {
   }, [sessionId]);
 
   const handleSendUserMessage = useCallback(
-    async ({ message, message_type }: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
+    async ({ message, message_type, response_id = nanoid() }: SendUserMessageParams) => {
       if (isAMessageBeingProcessed) {
         return;
       }
@@ -167,8 +167,6 @@ const useWebSocketChat = () => {
       if (!isMsgComplete) {
         return;
       }
-
-      const response_id = nanoid();
 
       // Sanitize the message content before creating payload
       const sanitizedMessage = sanitizeObject(message);

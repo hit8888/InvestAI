@@ -45,6 +45,7 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.QUALIFICATION_FORM_FILLED, event_data: response_data },
       message_type: 'EVENT',
+      response_id: artifact.response_id,
     });
 
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.QUALIFICATION_QUESTIONS_SUBMITTED, { ...response_data });

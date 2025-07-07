@@ -27,6 +27,7 @@ interface Props {
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   onSlideItemClick: (title: string) => void;
   isQualificationFormArtifact?: boolean;
+  activeArtifactResponseId?: string;
 }
 
 export const ArtifactContentUi = ({
@@ -41,6 +42,7 @@ export const ArtifactContentUi = ({
   onSlideItemClick,
   isQualificationFormArtifact,
   viewType,
+  activeArtifactResponseId,
 }: Props) => {
   if (!artifactType || !artifactContent) {
     return null;
@@ -94,6 +96,7 @@ export const ArtifactContentUi = ({
               content: artifactContent as FormArtifactContent,
               metadata: artifactContent.metadata,
               ctaEvent: artifactContent.ctaEvent,
+              response_id: activeArtifactResponseId,
             }}
             handleSendUserMessage={handleSendUserMessage}
           />
@@ -102,6 +105,7 @@ export const ArtifactContentUi = ({
         return (
           <FormArtifact
             artifactId={activeArtifactId}
+            artifactResponseId={activeArtifactResponseId}
             artifact={artifactContent as FormArtifactContent}
             artifactMetadata={artifactContent.metadata as FormArtifactMetadataType}
             handleSendUserMessage={handleSendUserMessage}

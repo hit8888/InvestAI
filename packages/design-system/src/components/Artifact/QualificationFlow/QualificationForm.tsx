@@ -41,6 +41,7 @@ const QualificationForm = ({ artifact, handleSendUserMessage, handleIncrementSte
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: response_data },
       message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
+      response_id: artifact.response_id,
     });
     handleIncrementSteps();
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.QUALIFICATION_FORM_SUBMITTED, { ...response_data });

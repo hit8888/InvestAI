@@ -10,7 +10,7 @@ export interface ArtifactProps {
   isMediaTakingFullWidth: boolean;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   logoURL: string;
-  activeArtifact: (ArtifactBaseType & { content?: ArtifactContent }) | null;
+  activeArtifact: (ArtifactBaseType & { content?: ArtifactContent; response_id?: string }) | null;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
   onSlideItemClick: (title: string) => void;
@@ -36,6 +36,7 @@ const Artifact = ({
 }: ArtifactProps) => {
   const activeArtifactId = activeArtifact?.artifact_id ?? '';
   const activeArtifactType = activeArtifact?.artifact_type;
+  const activeArtifactResponseId = activeArtifact?.response_id;
 
   return (
     <div className={cn('w-full pl-2 pr-4 pt-4', { 'overflow-hidden pb-4': isMediaTakingFullWidth })}>
@@ -57,6 +58,7 @@ const Artifact = ({
                 onSlideItemClick={onSlideItemClick}
                 isQualificationFormArtifact={isQualificationFormArtifact}
                 viewType={viewType}
+                activeArtifactResponseId={activeArtifactResponseId}
               />
               {viewType === ViewType.USER ? null : <div className="bg-gray absolute inset-0 z-10 bg-opacity-10" />}
             </>

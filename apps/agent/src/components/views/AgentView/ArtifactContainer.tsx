@@ -12,6 +12,7 @@ import {
 import { useGetArtifactLoadingState } from '../../../hooks/useGetArtifactLoadingState';
 import { ViewType } from '@meaku/core/types/common';
 import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
+import CtaEventMessage from '@breakout/design-system/components/layout/ChatMessages/CtaEventMessage';
 
 type IProps = {
   logoURL: string;
@@ -49,6 +50,7 @@ const ArtifactContainer = ({
         },
       )
     : null;
+  const artifactCtaEvent = getCtaEvent(messages, artifactMessage?.response_id, 'right');
 
   const artifactContent = artifactMessage
     ? ((artifactMessage.message as ArtifactMessageContent).artifact_data.content as ArtifactContent)
@@ -62,6 +64,7 @@ const ArtifactContainer = ({
   const artifactWithContent = {
     artifact_id: activeArtifact.artifact_id,
     artifact_type: activeArtifact.artifact_type as SupportedArtifactType,
+    response_id: artifactMessage?.response_id,
     content: artifactContent,
   };
 
@@ -74,6 +77,10 @@ const ArtifactContainer = ({
       'right',
     ),
   };
+
+  if (artifactCtaEvent) {
+    return <CtaEventMessage event={artifactCtaEvent} handleSendUserMessage={handleSendMessage} />;
+  }
 
   return (
     <Artifact

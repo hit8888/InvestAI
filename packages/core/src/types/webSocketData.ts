@@ -351,6 +351,10 @@ export type FormFieldType = z.infer<typeof FormFieldSchema>;
 
 export type DataSourceType = z.infer<typeof DataSourceSchema>;
 
+export type SendUserMessageParams = Pick<WebSocketMessage, 'message' | 'message_type'> & {
+  response_id?: WebSocketMessage['response_id'];
+};
+
 export enum AgentEventType {
   MESSAGE_ANALYTICS = 'MESSAGE_ANALYTICS',
   GENERATING_ARTIFACT = 'GENERATING_ARTIFACT',

@@ -64,21 +64,25 @@ const CtaEventMessage = (props: IProps) => {
 
   if (align === 'right') {
     return (
-      <div className="flex flex-col items-center justify-center gap-2">
-        <Typography variant="title-24" className="text-center">
-          {title || DEFAULT_MESSAGES[align].TITLE}
-        </Typography>
-        {url && (
-          <div className="flex flex-col items-center justify-center gap-6">
-            <Typography variant="body-16" textColor="textPrimary" className="text-center">
-              {message || DEFAULT_MESSAGES[align].MESSAGE}
+      <div className="w-[66%] pl-2 pr-4 pt-4">
+        <div className="flex h-full max-h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 p-2">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <Typography variant="title-24" className="text-center">
+              {title || DEFAULT_MESSAGES[align].TITLE}
             </Typography>
-            <Button variant="system" onClick={handleClick}>
-              {label || DEFAULT_MESSAGES[align].LABEL}
-              <ArrowRight width="16" height="16" />
-            </Button>
+            {url && (
+              <div className="flex flex-col items-center justify-center gap-6">
+                <Typography variant="body-16" textColor="textPrimary" className="text-center">
+                  {message || DEFAULT_MESSAGES[align].MESSAGE}
+                </Typography>
+                <Button variant="system" onClick={handleClick}>
+                  {label || DEFAULT_MESSAGES[align].LABEL}
+                  <ArrowRight width="16" height="16" />
+                </Button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }

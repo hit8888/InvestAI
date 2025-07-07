@@ -1,4 +1,4 @@
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
 import Card from '@breakout/design-system/components/layout/card';
 import CardContent from '@breakout/design-system/components/layout/card-content';
 import { Form, useForm } from '@breakout/design-system/components/layout/form';
@@ -26,11 +26,19 @@ interface IFormProps {
   artifactId?: string;
   artifact?: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
-  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  handleSendUserMessage: (data: SendUserMessageParams) => void;
   viewType: ViewType;
+  artifactResponseId?: string;
 }
 
-const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMessage, viewType }: IFormProps) => {
+const FormArtifact = ({
+  artifactId,
+  artifact,
+  artifactMetadata,
+  handleSendUserMessage,
+  viewType,
+  artifactResponseId,
+}: IFormProps) => {
   const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
   const [submitted, setSubmitted] = useState(isArtifactFormFilled);
   const [isEditing, setIsEditing] = useState(false);
@@ -64,6 +72,7 @@ const FormArtifact = ({ artifactId, artifact, artifactMetadata, handleSendUserMe
     handleSendUserMessage({
       message: { content: '', event_type: AgentEventType.FORM_FILLED, event_data: eventData },
       message_type: 'EVENT', // TODO: Need to add the Event type When user edits the form and submit it
+      response_id: artifactResponseId,
     });
   };
 

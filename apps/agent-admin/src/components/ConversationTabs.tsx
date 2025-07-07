@@ -26,7 +26,7 @@ const tabs: TabConfig[] = [
   },
   {
     path: `/${AppRoutesEnum.LINK_CLICKS}`,
-    label: 'High Interest',
+    label: 'High Intent Visitors',
     icon: LinkClicksIcon,
   },
 ];
