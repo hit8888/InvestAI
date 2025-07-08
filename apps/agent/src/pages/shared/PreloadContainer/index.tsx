@@ -40,7 +40,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
   const [waitingForParentUrl, setWaitingForParentUrl] = useState(true);
 
-  const { getParam } = useUrlParams();
+  const { getParam, setParam } = useUrlParams();
   const isAdmin = useIsAdmin();
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
@@ -52,17 +52,21 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 
   const isReadOnly = useAreMessagesReadonly();
 
-  const getParentURL = async (event: MessageEvent) => {
+  const handleEvents = async (event: MessageEvent) => {
     const { type, payload } = event.data;
 
-    if (type !== 'INIT') {
+    if (type === 'INIT') {
+      setParentURL(payload.url);
+      setWaitingForParentUrl(false);
+      return;
+    } else if (type === 'URL_TRACKING_UPDATE') {
+      const browsed_urls = JSON.stringify(payload.browsed_urls);
+      setParam('browsed_urls', browsed_urls);
       return;
     }
-    setParentURL(payload.url);
-    setWaitingForParentUrl(false);
   };
 
-  useAppEventsHook(getParentURL);
+  useAppEventsHook(handleEvents);
 
   // Set a timeout to stop waiting for parentUrl after PARENT_URL_TIMEOUT
   useEffect(() => {
@@ -130,6 +134,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     referrer: document.referrer,
     parent_url: getParentUrlValue(),
     experiment_tag: configQuery.data?.experiment_tag ?? null,
+    browsed_urls: getParam('browsed_urls') ? JSON.parse(getParam('browsed_urls') as string) : undefined,
   };
 
   //test build

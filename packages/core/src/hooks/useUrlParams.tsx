@@ -21,10 +21,21 @@ export const useUrlParams = () => {
     setParam('isAgentOpen', 'true');
   };
 
+  const removeParam = (key: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete(key);
+        return prev;
+      },
+      { replace: true },
+    );
+  };
+
   return {
     setParam,
     getParam,
     setAgentOpen,
+    removeParam,
     searchParams,
   };
 };

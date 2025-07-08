@@ -56,11 +56,21 @@ function UrlTrackingManager() {
   function sendHistoryChangeEvent(): void {
     const prospectId = localStorage.getItem(STORAGE_KEYS.PROSPECT_ID);
 
-    if (!prospectId || !firstInteractionTimestamp || !postMessage) return;
+    if (prospectId) {
+      updateProspect(prospectId, { browsed_urls: urls });
+      urls = [];
+      saveToStorage();
 
-    updateProspect(prospectId, { browsed_urls: urls });
-    urls = [];
-    saveToStorage();
+      return;
+    }
+
+    postMessage?.({
+      type: "URL_TRACKING_UPDATE",
+      payload: {
+        browsed_urls: urls,
+        firstInteractionTimestamp,
+      },
+    });
   }
 
   // Public API
@@ -104,8 +114,8 @@ function UrlTrackingManager() {
     if (!initialized || !hasInteracted || firstInteractionTimestamp) return;
 
     firstInteractionTimestamp = Date.now();
+    urls = [];
     saveToStorage();
-    sendHistoryChangeEvent();
   }
 
   return {

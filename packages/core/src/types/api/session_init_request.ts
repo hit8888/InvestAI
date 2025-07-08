@@ -38,4 +38,8 @@ export type InitializationPayload = {
   referrer?: string;
   parent_url?: string;
   experiment_tag?: string | null;
+  browsed_urls?: {
+    url: string;
+    timestamp: number;
+  }[];
 };

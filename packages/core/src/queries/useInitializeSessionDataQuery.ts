@@ -7,6 +7,7 @@ import { SessionApiResponse } from '../types/api/session_init_response';
 import { InitializationPayload } from '../types/api/session_init_request';
 import { AgentParams } from '../types/config';
 import { useRef } from 'react';
+import { useUrlParams } from '../hooks/useUrlParams';
 
 const getProspectIdFromSession = (sessionDataKey: string) => {
   const sessionData = JSON.parse(localStorage.getItem(sessionDataKey) ?? '{}');
@@ -41,6 +42,7 @@ const useInitializeSessionDataQuery = ({
   queryOptions,
 }: UseInitializeSessionDataOptions): UseQueryResult<SessionApiResponse> => {
   const { orgName = '' } = useParams<AgentParams>();
+  const { removeParam } = useUrlParams();
   const sessionDataKey = `${orgName?.toLowerCase()}-${agentId}`;
   const retryCount = useRef(0);
 
@@ -62,6 +64,8 @@ const useInitializeSessionDataQuery = ({
         prospect_id: prospectId,
       });
       const session = response.data as SessionApiResponse;
+
+      removeParam('browsed_urls');
       return session;
     },
     retry: (failureCount) => {
