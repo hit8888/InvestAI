@@ -78,9 +78,14 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     return () => clearTimeout(timer);
   }, [waitingForParentUrl]);
 
+  const getParentUrlValue = () => {
+    if (parentUrlParam) return decodeURIComponent(parentUrlParam);
+    return parentUrl || window.location.href;
+  };
+
   const configQuery = useConfigDataQuery({
     agentId,
-    parentUrl,
+    parentUrl: getParentUrlValue(),
     queryOptions: { enabled: !waitingForParentUrl },
   });
 
@@ -114,11 +119,6 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   useSetDistinctIdOnAppMount();
 
   const { mode } = useWidgetMode();
-
-  const getParentUrlValue = () => {
-    if (parentUrlParam) return decodeURIComponent(parentUrlParam);
-    return parentUrl || window.location.href;
-  };
 
   const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
