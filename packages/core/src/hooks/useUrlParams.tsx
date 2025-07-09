@@ -4,13 +4,9 @@ export const useUrlParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const setParam = (key: string, value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.set(key, value);
-        return prev;
-      },
-      { replace: true },
-    );
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set(key, value);
+    setSearchParams(newParams, { replace: true });
   };
 
   const getParam = (key: string) => {
@@ -22,13 +18,9 @@ export const useUrlParams = () => {
   };
 
   const removeParam = (key: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete(key);
-        return prev;
-      },
-      { replace: true },
-    );
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.delete(key);
+    setSearchParams(newParams, { replace: true });
   };
 
   return {
