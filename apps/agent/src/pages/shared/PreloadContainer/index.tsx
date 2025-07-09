@@ -54,7 +54,6 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 
   const handleEvents = async (event: MessageEvent) => {
     const { type, payload } = event.data;
-
     if (type === 'INIT') {
       setParentURL(payload.url);
       setWaitingForParentUrl(false);
@@ -84,6 +83,20 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 
   const getParentUrlValue = () => {
     if (parentUrlParam) return decodeURIComponent(parentUrlParam);
+
+    // If parentUrlParam is not available, check if parent_url parameter exists in parentUrl
+    if (parentUrl) {
+      try {
+        const url = new URL(parentUrl);
+        const parentUrlFromParam = url.searchParams.get('parent_url');
+        if (parentUrlFromParam) {
+          return decodeURIComponent(parentUrlFromParam);
+        }
+      } catch (error) {
+        console.warn('Invalid URL format in parentUrl:', error, parentUrl);
+      }
+    }
+
     return parentUrl || window.location.href;
   };
 
