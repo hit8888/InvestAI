@@ -13,6 +13,7 @@ import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useTabNotification from '@meaku/core/hooks/useTabNotification';
+import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
 import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
 interface IProps {
@@ -80,6 +81,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   };
 
   useTabNotification({ recentMessage: lastMessage });
+
+  useSendMessageOnQueryParams({ handleSendMessage });
 
   return (
     <div

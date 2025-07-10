@@ -40,18 +40,20 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isFetchButtonDisabled) {
+      fetchWebpage(urlLink);
+    }
+  };
+
   const getUrlLinkInputAndFetchButton = () => {
     if (!isWebpageDialog) return;
 
     return (
-      <div className="flex w-full items-center gap-6 self-stretch">
+      <form onSubmit={handleFormSubmit} className="flex w-full items-center gap-6 self-stretch">
         <DataSourceURLLinkInput inputValue={urlLink} onInputChange={handleUrlLinkInputValue} />
-        <Button
-          disabled={isFetchButtonDisabled}
-          onClick={() => fetchWebpage(urlLink)}
-          variant={'system'}
-          buttonStyle={'rightIcon'}
-        >
+        <Button type="submit" disabled={isFetchButtonDisabled} variant={'system'} buttonStyle={'rightIcon'}>
           {isFetched && !!dataSources.length ? 'Done' : isFetching ? 'Fetching...' : 'Fetch'}
           {isFetched ? (
             <FilledTickDoneIcon width="16" height="16" />
@@ -61,7 +63,7 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
             <SpinLoader width={4} height={4} />
           )}
         </Button>
-      </div>
+      </form>
     );
   };
 

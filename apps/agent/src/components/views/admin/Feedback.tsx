@@ -7,6 +7,7 @@ import Backdrop from '@breakout/design-system/components/layout/backdrop';
 import { useEffect } from 'react';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
@@ -28,6 +29,8 @@ const Feedback = () => {
   useEffect(() => {
     fetchSessionData();
   }, []);
+
+  useSendMessageOnQueryParams({ handleSendMessage });
 
   return (
     <Backdrop landingPageUrl={page_url} className="relative flex h-screen flex-col items-center justify-center">

@@ -11,6 +11,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { AgentEventType, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import {
   checkIsAdminJoinedMessage,
   checkIsAdminLeftMessage,
@@ -48,6 +49,9 @@ const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = [
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
+  const { getParam, removeParam } = useUrlParams();
+
+  const queryParamInitialMessage = getParam('query');
 
   const isAdmin = useIsAdmin();
   const getMessagePayload = useGetMessagePayload();
@@ -188,7 +192,17 @@ const useWebSocketChat = () => {
 
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
-      if (!hasFirstUserMessageBeenSent) {
+      if (queryParamInitialMessage) {
+        if (!hasFirstUserMessageBeenSent) {
+          trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
+        }
+        messageQueue.current.push(payload);
+        removeParam('query');
+        setHasFirstUserMessageBeenSent(true);
+        return;
+      }
+
+      if (!hasFirstUserMessageBeenSent && !queryParamInitialMessage) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         // For Showing the first message in the chat history instantly only for non-demo agents
         // For Demo agents, sessionId is generated when the user provides the email address
