@@ -90,24 +90,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login();
 
     const org = userData?.organizations;
-    const tenantHavingAdminRole = org?.find((item) => item?.['role'] === 'admin');
-
     // Check for saved redirect URL
-    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '{}');
+    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '""');
 
-    if (savedRedirectPath) {
+    if (savedRedirectPath && savedRedirectPath !== '/') {
       // Clear the saved path
       callback(savedRedirectPath);
       localStorage.removeItem('redirectAfterLogin');
       return;
     }
 
-    // If no saved path, proceed with default navigation
-    if (tenantHavingAdminRole) {
-      await setupTenantAndAgent(tenantHavingAdminRole);
-      const basicPathURL = getDashboardBasicPathURL(tenantHavingAdminRole['tenant-name'] ?? '');
+    // Check organization count
+    const orgCount = org?.length ?? 0;
+
+    if (orgCount > 1) {
+      // multiple orgs - redirect to '/'
+      callback('/');
+    } else if (orgCount === 1) {
+      // single org - redirect to organization dashboard
+      const singleOrg = org[0];
+      await setupTenantAndAgent(singleOrg);
+      const basicPathURL = getDashboardBasicPathURL(singleOrg['tenant-name'] ?? '');
       callback(`${basicPathURL}/${DEFAULT_ROUTE}`);
     } else {
+      // Default fallback
       callback('/');
     }
   };

@@ -28,6 +28,8 @@ export const AuthResponseSchema = z.object({
   last_login: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: 'Invalid date format. Expected ISO 8601 format.',
   }),
+  designation: z.string().nullable(),
+  department: z.string().nullable(),
   organizations: z.array(OrganizationDetailsSchema),
 });
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;

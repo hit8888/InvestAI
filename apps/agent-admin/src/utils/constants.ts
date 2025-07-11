@@ -79,6 +79,8 @@ export const DefaultAuthResponse: AuthResponse = {
   is_staff: false,
   date_joined: '',
   last_login: '',
+  designation: '',
+  department: '',
   organizations: [], // Assuming an empty array as the default for organizations
 };
 
