@@ -5,13 +5,13 @@ import {
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
+  ArtifactContentWithMetadataProps,
 } from '@meaku/core/types/artifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import { CalendarArtifact } from './CalendarArtifact';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
-import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
 import FormArtifact from '../layout/FormArtifact';
 import { ViewType } from '@meaku/core/types/common';
 
@@ -94,7 +94,7 @@ export const ArtifactContentUi = ({
             artifact={{
               artifact_id: activeArtifactId,
               content: artifactContent as FormArtifactContent,
-              metadata: artifactContent.metadata,
+              metadata: artifactContent.metadata as FormArtifactMetadataType,
               ctaEvent: artifactContent.ctaEvent,
               response_id: activeArtifactResponseId,
             }}

@@ -113,7 +113,7 @@ const DataSourceURLLinkInput = ({ inputValue, onInputChange }: DataSourceURLLink
     <div className="flex w-full items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3">
       <SourcesUrlLinkIcon width="16" height="16" className="text-blue_sec-1000" />
       <Input
-        className="h-4 w-full flex-1 border-none p-0 text-blue_sec-1000 outline-none focus:ring-0"
+        className="h-4 w-full flex-1 rounded-none border-none p-0 text-blue_sec-1000 outline-none focus:ring-0"
         value={inputValue}
         onChange={onInputChange}
       />

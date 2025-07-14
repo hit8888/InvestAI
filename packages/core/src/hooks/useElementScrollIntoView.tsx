@@ -26,7 +26,35 @@ const useElementScrollIntoView = <T extends HTMLElement>({
   useEffect(() => {
     if (shouldScroll && elementRef.current) {
       const timeoutId = setTimeout(() => {
-        scrollIntoViewWithOptions(elementRef.current, scrollOptions);
+        const element = elementRef.current;
+        if (!element) return;
+
+        try {
+          // Try the normal scrollIntoView first
+          setTimeout(() => {
+            scrollIntoViewWithOptions(element, scrollOptions);
+          }, 0);
+        } catch (error) {
+          // If that fails, try a simple fallback
+          console.warn('scrollIntoView failed, using fallback:', error);
+          try {
+            element.scrollIntoView();
+          } catch (fallbackError) {
+            console.warn('scrollIntoView failed, using fallback:', fallbackError);
+            // Last resort: manually scroll the element into view
+            const rect = element.getBoundingClientRect();
+            const container = document.getElementById('agent-messages-container') || document.documentElement;
+
+            if (container && container !== document.documentElement) {
+              container.scrollTop = container.scrollTop + rect.top - 100; // 100px offset
+            } else {
+              window.scrollTo({
+                top: window.pageYOffset + rect.top - 100,
+                behavior: 'smooth',
+              });
+            }
+          }
+        }
       }, delay);
 
       return () => clearTimeout(timeoutId);

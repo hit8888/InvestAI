@@ -50,6 +50,7 @@ export type ArtifactFormType = z.infer<typeof ArtifactFormSchema>;
 
 export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS', 'DISCOVERY_QUESTIONS', 'EVENT']);
 export const MessageTypeSchema = z.enum(['TEXT', 'STREAM', 'ARTIFACT', 'EVENT']);
+export const DeviceTypeSchema = z.enum(['MOBILE', 'DESKTOP']);
 
 export const BaseMessageContentSchema = z.object({
   content: z.string(),
@@ -305,6 +306,7 @@ export const WebSocketMessageSchema = z
     documents: z.array(DataSourceSchema).optional().nullable(),
     timestamp: z.string(),
     is_admin: z.boolean().optional(),
+    device_type: DeviceTypeSchema.optional().nullable(),
   })
   .and(
     z.discriminatedUnion('message_type', [

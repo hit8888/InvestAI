@@ -11,6 +11,7 @@ import { useEntryPointStyling } from '../../../../hooks/useEntryPointStyling';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { useMessageStore } from '../../../../stores/useMessageStore';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -27,6 +28,7 @@ const EntryPointBottomBar = ({
   entryPointAlignment,
   showOrbAfterBubblesDisappear,
 }: IProps) => {
+  const isMobile = useIsMobile();
   const { agentName } = useValuesFromConfigApi();
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
@@ -36,6 +38,7 @@ const EntryPointBottomBar = ({
 
   const { isEntryPointOnTheBottomCenter, isSideWiseEntryPoint, containerStyle } = useEntryPointStyling({
     entryPointAlignment,
+    isMobile,
   });
 
   const shouldShowOnlySidewiseEntryPointOrb = isSideWiseEntryPoint && !isAgentOpen && hasFirstUserMessageBeenSent;
@@ -72,6 +75,7 @@ const EntryPointBottomBar = ({
         />
       ) : (
         <EntryPointContentForBottomCenter
+          isMobile={isMobile}
           showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear && !showPopupContent}
           entryPointAlignment={entryPointAlignment}
           handleSendUserMessage={handleSendUserMessage}

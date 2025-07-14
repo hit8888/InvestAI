@@ -5,9 +5,10 @@ import { useEffect, useRef } from 'react';
 interface Props {
   calendarContent: CalendarArtifactContent;
   handleSendUserMessage?: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  onLoad?: () => void;
 }
 
-export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage }: Props) => {
+export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scriptLoadedRef = useRef(false);
 
@@ -103,6 +104,8 @@ export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage }: Prop
                 (iframe as HTMLIFrameElement).style.height = '90%'; // Adjust this value as needed
                 (iframe as HTMLIFrameElement).style.minHeight = '540px';
                 observer.disconnect(); // Stop observing once we've found and styled the iframe
+                // Call onLoad when iframe is ready
+                setTimeout(() => onLoad?.(), 500);
               }
             }
           });
@@ -121,6 +124,8 @@ export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage }: Prop
           (existingIframe as HTMLIFrameElement).style.height = '90%';
           (existingIframe as HTMLIFrameElement).style.minHeight = '540px';
           observer.disconnect();
+          // Call onLoad when iframe is ready
+          setTimeout(() => onLoad?.(), 500);
         }
       }
 

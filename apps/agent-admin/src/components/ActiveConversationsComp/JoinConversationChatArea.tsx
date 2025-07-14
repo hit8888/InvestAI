@@ -9,6 +9,7 @@ import { useMessageStore } from '../../hooks/useMessageStore';
 import { useGetArtifactLoadingState } from '../../hooks/useGetArtifactLoadingState';
 import useArtifactStore from '@meaku/core/stores/useArtifactStore';
 import { useSetArtifactOnNewMessage } from '../../hooks/useSetArtifactOnNewMessage';
+import { useCallback, useMemo } from 'react';
 
 interface JoinConversationChatAreaProps {
   sessionId: string;
@@ -18,6 +19,10 @@ interface JoinConversationChatAreaProps {
 const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
   const { messages } = useMessageStore();
+
+  // Memoize the empty function calling to avoid re-rendering the component
+  const handleEmptyFunction = useCallback(() => {}, []);
+  const emptyArray = useMemo(() => [], []);
 
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   const { hasGeneratingArtifactEvents } = useGetArtifactLoadingState();
@@ -52,12 +57,13 @@ const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChat
             sessionId={sessionId}
             isAMessageBeingProcessed={false}
             setActiveArtifact={setActiveArtifact}
-            setDemoPlayingStatus={() => {}}
+            setDemoPlayingStatus={handleEmptyFunction}
+            setIsArtifactPlaying={handleEmptyFunction}
             orbState={OrbStatusEnum.idle}
             messages={messages}
             showRightPanel={true}
-            handleSendUserMessage={() => {}}
-            initialSuggestedQuestions={[]}
+            handleSendUserMessage={handleEmptyFunction}
+            initialSuggestedQuestions={emptyArray}
             allowFullWidthForText={false}
             showDemoPreQuestions={false}
             primaryColor={'rgb(var(--primary))'}
@@ -75,8 +81,8 @@ const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChat
         <ArtifactContainer
           logoURL={logoURL}
           isMediaTakingFullWidth={true}
-          handleSendMessage={() => {}}
-          onSlideItemClick={() => {}}
+          handleSendMessage={handleEmptyFunction}
+          onSlideItemClick={handleEmptyFunction}
           messages={messages}
           viewType={ViewType.ADMIN}
           isGeneratingArtifact={hasGeneratingArtifactEvents}

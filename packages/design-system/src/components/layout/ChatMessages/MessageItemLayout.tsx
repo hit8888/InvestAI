@@ -1,5 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import React from 'react';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 // Defined proper enums for better type safety and IntelliSense
 export enum Alignment {
@@ -43,9 +44,10 @@ const MessageItemLayout = ({
   paddingInline,
   orientation,
 }: MessageItemLayoutProps) => {
+  const isMobile = useIsMobile();
   const finalAlign = align || Alignment.LEFT;
   const finalGap = gap || Gap.SMALL;
-  const finalPaddingInline = paddingInline || Padding.NONE;
+  const finalPaddingInline = isMobile ? Padding.NONE : paddingInline || Padding.NONE;
   const finalOrientation = orientation || Orientation.ROW;
 
   const alignmentClasses = {

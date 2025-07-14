@@ -1,21 +1,22 @@
-import { ArtifactMessageContent } from '../types/webSocketData';
+import { AgentEventType, ArtifactMessageContent } from '../types/webSocketData';
 
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { ArtifactContent, FormArtifactContent, QualificationResponsesType } from '@meaku/core/types/artifact';
-import { checkIsQualificationFormArtifact, getFormArtifactMessage, getFormFilledEvent } from '../utils/messageUtils';
+import { ArtifactContent, QualificationResponsesType } from '@meaku/core/types/artifact';
+import {
+  checkIsQualificationFormArtifact,
+  findArtifactMessageWithSameArtifactId,
+  getCtaEvent,
+} from '../utils/messageUtils';
+import { getFormArtifactMessage } from '../utils/messageUtils';
+import { getFormFilledEventByArtifactId } from '../utils/messageUtils';
 
 type IProps = {
-  artifactMessage:
-    | (WebSocketMessage & {
-        message: ArtifactMessageContent & { artifact_data: ArtifactContent | FormArtifactContent };
-      })
-    | null
-    | undefined;
+  artifactId: string;
   messages: WebSocketMessage[];
 };
 
-const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage, messages }: IProps) => {
-  if (!artifactMessage)
+const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, messages }: IProps) => {
+  if (!artifactId)
     return {
       isQualificationFormArtifact: false,
       isFormArtifact: false,
@@ -23,22 +24,31 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
       qualificationQuestionFormMetadata: {},
     };
 
+  // Find the message that corresponds to the active artifact
+  const artifactMessage = findArtifactMessageWithSameArtifactId(messages, artifactId);
+
+  const artifactContent =
+    ((artifactMessage?.message as ArtifactMessageContent)?.artifact_data?.content as ArtifactContent) ?? null;
+
   const messagesWithSameResponseId = messages.filter(
     (msg: WebSocketMessage) => msg.response_id === artifactMessage?.response_id,
   );
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const formFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'FORM_FILLED');
+  const formFilledMessage = getFormFilledEventByArtifactId(messages, formArtifactMessage, AgentEventType.FORM_FILLED);
 
   const hasFormArtifactMessage = !!formArtifactMessage;
   const hasFormFilledMessage = !!formFilledMessage;
 
-  const qualificationFormFilled = getFormFilledEvent(messages, artifactMessage, 'QUALIFICATION_FORM_FILLED');
+  const qualificationFormFilled = getFormFilledEventByArtifactId(
+    messages,
+    artifactMessage,
+    AgentEventType.QUALIFICATION_FORM_FILLED,
+  );
   const hasQualificationFormFilled = !!qualificationFormFilled;
 
   const isQualificationFormArtifact = artifactMessage && checkIsQualificationFormArtifact(artifactMessage);
-  const isFormArtifact =
-    artifactMessage && hasFormArtifactMessage && !checkIsQualificationFormArtifact(artifactMessage);
+  const isFormArtifact = artifactMessage && hasFormArtifactMessage && hasFormFilledMessage;
 
   const qualificationQuestionFormMetadata = isQualificationFormArtifact
     ? {
@@ -62,11 +72,27 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactMessage
       }
     : {};
 
+  const artifactCtaEvent = getCtaEvent(messages, artifactMessage?.response_id, 'right');
+  const ctaEvent = getCtaEvent(messages, qualificationFormFilled?.response_id, 'right');
+
+  const artifactContentWithMetadata = {
+    ...artifactContent,
+    metadata: {
+      formMetadata,
+      qualificationQuestionFormMetadata,
+    },
+    ctaEvent,
+  };
+
   return {
     isQualificationFormArtifact,
     isFormArtifact,
     formMetadata,
+    artifactCtaEvent,
+    artifactMessage,
+    artifactContent,
     qualificationQuestionFormMetadata,
+    artifactContentWithMetadata,
   };
 };
 

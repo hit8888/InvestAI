@@ -6,6 +6,9 @@ import { CalComCalendar } from './CalComCalendar';
 import { IframeCalendar } from './IframeCalendar';
 import { HubSpotCalendar } from './HubSpotCalendar';
 import { cn } from '../../lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import { useState } from 'react';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
@@ -13,25 +16,60 @@ interface Props {
 }
 
 export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Props) => {
+  const isMobile = useIsMobile();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const commonProps = {
+    calendarContent,
+    handleSendUserMessage,
+    onLoad: () => setIsLoading(false),
+  };
+
   const getCalendarContentBasedOnType = () => {
     switch (calendarContent.calendar_type) {
       case CalendarTypeEnum.CALENDLY:
-        return <CalendlyCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
+        return <CalendlyCalendar {...commonProps} />;
       case CalendarTypeEnum.CAL_COM:
-        return <CalComCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
+        return <CalComCalendar {...commonProps} />;
       case CalendarTypeEnum.IFRAME:
-        return <IframeCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
+        return <IframeCalendar {...commonProps} />;
       case CalendarTypeEnum.HUBSPOT:
-        return <HubSpotCalendar calendarContent={calendarContent} handleSendUserMessage={handleSendUserMessage} />;
+        return <HubSpotCalendar {...commonProps} />;
       default:
         return null;
     }
   };
 
+  const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: isMobile,
+  });
+
   const isIframeCalendar = calendarContent.calendar_type === CalendarTypeEnum.IFRAME;
   const isHubSpotCalendar = calendarContent.calendar_type === CalendarTypeEnum.HUBSPOT;
 
   const isIframeOrHubSpotCalendar = isIframeCalendar || isHubSpotCalendar;
+
+  const getCalendarLoadingIndicator = () => {
+    if (!isLoading) return null;
+
+    return (
+      <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-transparent_gray_3">
+        <div className="flex flex-col items-center gap-2">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-primary"></div>
+          <span className="text-sm text-gray-600">Loading calendar...</span>
+        </div>
+      </div>
+    );
+  };
+
+  if (isMobile) {
+    return (
+      <div ref={scrollToMessageRef} className="relative h-[500px] w-full rounded-2xl bg-transparent_gray_3 p-2">
+        {getCalendarLoadingIndicator()}
+        {getCalendarContentBasedOnType()}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -43,7 +81,12 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
         },
       )}
     >
-      <AspectRatio ratio={16 / 9}>{getCalendarContentBasedOnType()}</AspectRatio>
+      <AspectRatio ratio={16 / 9}>
+        <div className="relative h-full w-full">
+          {getCalendarLoadingIndicator()}
+          {getCalendarContentBasedOnType()}
+        </div>
+      </AspectRatio>
     </div>
   );
 };

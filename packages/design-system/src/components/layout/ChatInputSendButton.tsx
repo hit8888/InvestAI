@@ -1,6 +1,8 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '../Button';
 import { cn } from '@breakout/design-system/lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useMemo } from 'react';
 
 interface SendButtonProps {
   showButton: boolean;
@@ -19,23 +21,27 @@ const ChatInputSendButton = ({
   btnClassName,
   invertTextColor,
 }: SendButtonProps) => {
+  const isMobile = useIsMobile();
+
+  const getButtonVariant = useMemo(() => {
+    if (isMobile) return 'tertiary';
+    if (invertTextColor) return 'inverted_primary';
+    return 'primary';
+  }, [isMobile, invertTextColor]);
+
   if (!showButton) return null;
 
   return (
     <Button
       buttonStyle="icon"
-      variant={invertTextColor ? 'inverted_primary' : 'primary'}
-      className={cn('', btnClassName, {
-        'disabled:pointer-events-auto disabled:cursor-pointer': disabled,
-      })}
+      variant={getButtonVariant}
+      className={cn([btnClassName, disabled && 'disabled:pointer-events-auto disabled:cursor-pointer'])}
       type={btnType}
       onClick={onClick}
       disabled={disabled}
     >
       <SendIcon
-        className={cn('text-primary-foreground', {
-          'text-black': invertTextColor,
-        })}
+        className={cn(['text-primary-foreground', invertTextColor && 'text-black', isMobile && 'text-primary'])}
       />
     </Button>
   );

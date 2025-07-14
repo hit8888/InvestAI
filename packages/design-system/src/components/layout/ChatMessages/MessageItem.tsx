@@ -1,9 +1,9 @@
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
 import { SuggestionArtifactContent } from '@meaku/core/types/artifact';
-import MessageArtifactPreview from './MessageArtifactPreview';
+import ArtifactsHistory from './ArtifactsHistory.tsx';
 import TextMessage from './TextMessage';
 import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
@@ -11,14 +11,13 @@ import {
   checkIsMainResponseMessage,
   checkIsSalesResponseComplete,
   getFormArtifactMessage,
-  getFormFilledEvent,
+  getFormFilledEventByArtifactId,
   getMediaArtifactMessage,
   isAIResponseInactiveMessage,
   isDemoOptionsMessage,
   isDiscoveryQuestion,
   isDisplayedAsTextMessage,
   isMediaArtifact,
-  checkIsQualificationFormArtifact,
   checkIsAIMessage,
   isCtaEvent,
   checkIsLoadingTextMessage,
@@ -34,6 +33,7 @@ import AdminExitInfo from './AdminExitInfo.tsx';
 import DemoArtifactPreview from './DemoArtifactPreview.tsx';
 import CtaEventMessage from './CtaEventMessage.tsx';
 import MessageElementsDemoAgents from './MessageElementsDemoAgents.tsx';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -46,6 +46,7 @@ interface IProps {
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
+  setIsArtifactPlaying: (isPlaying: boolean) => void;
   allowFeedback: boolean;
   logoURL: string | null;
   initialFeedback?: FeedbackRequestPayload;
@@ -53,6 +54,8 @@ interface IProps {
   orbLogoUrl: string | undefined | null;
   showOrbFromConfig: boolean;
   invertTextColor: boolean;
+  elementRef: React.RefObject<HTMLDivElement | null>;
+  shouldMessageScrollToTop: boolean;
 }
 
 const MessageItem = ({
@@ -65,6 +68,7 @@ const MessageItem = ({
   orbState,
   setDemoPlayingStatus,
   setActiveArtifact,
+  setIsArtifactPlaying,
   handleSendUserMessage,
   allowFeedback,
   logoURL,
@@ -73,7 +77,10 @@ const MessageItem = ({
   orbLogoUrl,
   showOrbFromConfig,
   invertTextColor,
+  elementRef,
+  shouldMessageScrollToTop,
 }: IProps) => {
+  const isMobile = useIsMobile();
   // TODO: NEED TO REFACTOR THIS COMPONENT into Multiple Components - FOLLOW SINGLE RESPONSIBILITY PRINCIPLE
   const isAIMessage = checkIsAIMessage(message);
   const isTextMessage = isDisplayedAsTextMessage(message);
@@ -90,7 +97,11 @@ const MessageItem = ({
   const mediaArtifactMessage = getMediaArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const qualifiedFormFilledMessage = getFormFilledEvent(messages, formArtifactMessage, 'QUALIFICATION_FORM_FILLED');
+  const qualifiedFormFilledMessage = getFormFilledEventByArtifactId(
+    messages,
+    formArtifactMessage,
+    AgentEventType.QUALIFICATION_FORM_FILLED,
+  );
 
   const isLastMessage = lastMessageResponseId === message.response_id;
 
@@ -105,24 +116,27 @@ const MessageItem = ({
   const isCtaEventMessage = isCtaEvent(message, 'left');
 
   const shouldShowActiveOrb =
-    isLastMessage && (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage);
+    isLastMessage &&
+    (isActiveMessage || isMessageLoading || isDiscoveryActiveMessage || isCtaEventMessage) &&
+    !isMobile;
 
   const showMessageArtifactPreview =
     isArtifactMessage &&
-    ((isMediaArtifact(message.message.artifact_type) && !checkIsQualificationFormArtifact(message)) ||
-      !!qualifiedFormFilledMessage) &&
+    (isMediaArtifact(message.message.artifact_type) || !!qualifiedFormFilledMessage) &&
     isSalesResponseComplete;
 
   const getMessageArtifactPreviewContent = (message: WebSocketMessage, showMessageArtifactPreview: boolean) => {
     if (!showMessageArtifactPreview) return null;
     return (
-      <MessageArtifactPreview
+      <ArtifactsHistory
         message={message}
         messages={messages}
         viewType={viewType}
+        handleSendUserMessage={handleSendUserMessage}
         setDemoPlayingStatus={setDemoPlayingStatus}
         setActiveArtifact={setActiveArtifact}
         logoURL={logoURL}
+        setIsArtifactPlaying={setIsArtifactPlaying}
       />
     );
   };
@@ -155,6 +169,8 @@ const MessageItem = ({
       {/* Text Message */}
       {shouldShowTextMessage && (
         <TextMessage
+          elementRef={elementRef}
+          shouldMessageScrollToTop={shouldMessageScrollToTop}
           message={message}
           viewType={viewType}
           renderOrb={renderOrb}

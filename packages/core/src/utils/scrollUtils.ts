@@ -8,15 +8,29 @@ export const scrollIntoViewWithOptions = (
 ) => {
   if (!element) return;
 
+  // Simple mobile detection
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+    navigator.userAgent,
+  );
+
+  // Use instant scroll on mobile to avoid smooth scrolling issues
+  const finalOptions = isMobile ? { ...options, behavior: 'auto' as ScrollBehavior } : options;
+
   // Check if we're inside an iframe
   const isInIframe = checkIfInIframe();
 
   if (isInIframe) {
     // Custom scroll implementation for iframe content
-    scrollElementIntoViewInIframe(element, options);
+    scrollElementIntoViewInIframe(element, finalOptions);
   } else {
     // Use native scrollIntoView for non-iframe contexts
-    element.scrollIntoView(options);
+    try {
+      element.scrollIntoView(finalOptions);
+    } catch (error) {
+      // Fallback for browsers that don't support scrollIntoView options
+      console.warn('scrollIntoView with options failed, using fallback:', error);
+      element.scrollIntoView();
+    }
   }
 };
 
@@ -30,7 +44,12 @@ const scrollElementIntoViewInIframe = (element: HTMLElement, options: ScrollInto
 
   if (!scrollableContainer) {
     // Fallback to native scrollIntoView if no scrollable container found
-    element.scrollIntoView(options);
+    try {
+      element.scrollIntoView(options);
+    } catch (error) {
+      console.warn('Fallback scrollIntoView failed:', error);
+      element.scrollIntoView();
+    }
     return;
   }
 
@@ -80,13 +99,20 @@ const scrollElementIntoViewInIframe = (element: HTMLElement, options: ScrollInto
   }
 
   // Apply the scroll with smooth behavior
-  if (options.behavior === 'smooth') {
-    scrollableContainer.scrollTo({
-      top: scrollTop,
-      left: scrollLeft,
-      behavior: 'smooth',
-    });
-  } else {
+  try {
+    if (options.behavior === 'smooth') {
+      scrollableContainer.scrollTo({
+        top: scrollTop,
+        left: scrollLeft,
+        behavior: 'smooth',
+      });
+    } else {
+      scrollableContainer.scrollTop = scrollTop;
+      scrollableContainer.scrollLeft = scrollLeft;
+    }
+  } catch (error) {
+    // Fallback for browsers that don't support smooth scrolling
+    console.warn('Smooth scrolling not supported, using instant scroll:', error);
     scrollableContainer.scrollTop = scrollTop;
     scrollableContainer.scrollLeft = scrollLeft;
   }

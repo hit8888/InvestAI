@@ -1,13 +1,13 @@
-import ArtifactManager from '@meaku/core/managers/ArtifactManager';
 import {
   ArtifactContent,
   ArtifactEnum,
   FormArtifactContent,
   SlideArtifactContent,
-  SlideImageArtifactContent,
   VideoArtifactContent,
+  SlideImageArtifactContent,
+  ArtifactContentWithMetadataProps,
 } from '@meaku/core/types/artifact';
-import { ArtifactBaseType, ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import { checkIsArtifactMessage } from '@meaku/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
@@ -23,6 +23,7 @@ interface MessageArtifactPreviewProps {
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   logoURL: string | null;
   messages: WebSocketMessage[];
+  artifactTitle: string;
 }
 
 const MessageArtifactPreview = ({
@@ -32,16 +33,16 @@ const MessageArtifactPreview = ({
   setActiveArtifact,
   logoURL,
   messages,
+  artifactTitle,
 }: MessageArtifactPreviewProps) => {
-  const { isFormArtifact, formMetadata, qualificationQuestionFormMetadata } =
-    useNormalAndQualificationFormArtifactMetadataProvider({
-      artifactMessage: message as WebSocketMessage & {
-        message: ArtifactMessageContent & { artifact_data: ArtifactContent | FormArtifactContent };
-      },
-      messages,
-    });
+  const isArtifactMessage = checkIsArtifactMessage(message);
 
-  if (!checkIsArtifactMessage(message)) return null;
+  const { artifactContentWithMetadata } = useNormalAndQualificationFormArtifactMetadataProvider({
+    artifactId: isArtifactMessage ? (message.message?.artifact_data?.artifact_id ?? '') : '',
+    messages,
+  });
+
+  if (!isArtifactMessage) return null;
 
   const artifactData = message.message?.artifact_data;
   const artifactType = artifactData?.artifact_type;
@@ -52,7 +53,6 @@ const MessageArtifactPreview = ({
   // Only show preview for SLIDE, SLIDE_IMAGE, FORM and VIDEO artifacts
   if (!BASE_ARTIFACT_TYPES.includes(artifactType)) return null;
 
-  const artifactManager = new ArtifactManager(message.message);
   const content = artifactData.content;
 
   // Type guard to ensure content is of the correct type
@@ -66,11 +66,6 @@ const MessageArtifactPreview = ({
     );
   };
 
-  const artifactContentWithMetadata = {
-    content: content as FormArtifactContent,
-    metadata: isFormArtifact ? formMetadata : qualificationQuestionFormMetadata,
-  };
-
   if (!isValidContent(content)) return null;
 
   return (
@@ -82,11 +77,11 @@ const MessageArtifactPreview = ({
         setDemoPlayingStatus={setDemoPlayingStatus}
         setActiveArtifact={setActiveArtifact}
         logoURL={logoURL}
-        title={artifactManager.getArtifactTitle()}
+        title={artifactTitle}
         artifactContent={content}
         isError={!!artifactData.error}
         isFetching={false}
-        artifactContentWithMetadata={artifactContentWithMetadata}
+        artifactContentWithMetadata={artifactContentWithMetadata as ArtifactContentWithMetadataProps}
         isQualificationFormArtifact={isQualificationFormArtifactValid}
       />
     </MessageItemLayout>

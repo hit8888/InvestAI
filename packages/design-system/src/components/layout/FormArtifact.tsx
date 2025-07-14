@@ -15,6 +15,8 @@ import FormFilledThankYouContent from './FormFilledThankYouContent';
 import { createFormSchema } from '../../utils/chat';
 import { sanitizeObject } from '@meaku/core/utils/sanitize';
 import { ViewType } from '@meaku/core/types/common';
+import { cn } from '@breakout/design-system/lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 type FormFilledEventDataType = {
   artifact_id: string;
@@ -39,10 +41,12 @@ const FormArtifact = ({
   viewType,
   artifactResponseId,
 }: IFormProps) => {
-  const isArtifactFormFilled = artifactMetadata?.is_filled ?? false;
+  const { formMetadata: artifactFormMetadata } = artifactMetadata as { formMetadata: FormArtifactMetadataType };
+  const isArtifactFormFilled = artifactFormMetadata?.is_filled ?? false;
   const [submitted, setSubmitted] = useState(isArtifactFormFilled);
   const [isEditing, setIsEditing] = useState(false);
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const isMobile = useIsMobile();
 
   const formFields = artifact?.form_fields ?? [];
 
@@ -55,7 +59,7 @@ const FormArtifact = ({
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: artifactMetadata.filled_data ?? {},
+    defaultValues: artifactFormMetadata?.filled_data ?? {},
     mode: 'onTouched',
   });
 
@@ -117,14 +121,16 @@ const FormArtifact = ({
     return (
       <FormFilledThankYouContent
         formFields={formFields}
-        formValues={artifactMetadata}
+        formValues={artifactFormMetadata}
         // handleEdit={handleEdit}
       />
     );
   }
 
   return (
-    <Card className="w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3">
+    <Card
+      className={cn(['w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3', isMobile && 'max-w-full'])}
+    >
       <CardContent className="flex flex-col gap-4 p-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
@@ -135,7 +141,7 @@ const FormArtifact = ({
                   isArtifactFormFilled={isArtifactFormFilled}
                   form={form}
                   form_field={field}
-                  artifactMetadata={artifactMetadata}
+                  artifactMetadata={artifactFormMetadata}
                 />
               ))}
             </div>

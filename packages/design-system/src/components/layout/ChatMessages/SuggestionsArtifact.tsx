@@ -6,6 +6,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { ViewType } from '@meaku/core/types/common';
 import MessageItemLayout, { Alignment, Gap, Padding, Orientation } from './MessageItemLayout.tsx';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   suggestedQuestionOrientation?: 'left' | 'right';
@@ -22,10 +23,12 @@ const SuggestionsArtifact = ({
   invertTextColor,
   viewType,
 }: IProps) => {
+  const isMobile = useIsMobile();
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const shortFormQuestions = artifact?.suggested_questions_short_form;
   const longFormQuestions = artifact?.suggested_questions;
-  const questionsToShow = (shortFormQuestions?.length ? shortFormQuestions : longFormQuestions) ?? [];
+  const questionsToShow =
+    (isMobile ? (shortFormQuestions?.length ? shortFormQuestions : longFormQuestions) : longFormQuestions) ?? [];
   const showSuggestionsArtifact: boolean =
     questionsToShow.length > 0 && artifact?.suggested_questions_type === 'BUBBLE';
 

@@ -1,6 +1,9 @@
 import { QualificationQuestionMetadataType } from '@meaku/core/types/artifact';
 import QualificationAnsweredTickIcon from '../../icons/qualification-answered-tick-icon';
 import AgentDropdown from '../../Dropdown/AgentDropdown';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import Typography from '../../Typography';
+import { cn } from '@breakout/design-system/lib/cn';
 
 type IProps = {
   question: string;
@@ -19,6 +22,7 @@ const QualificationSingleQuestion = ({
   qualificationMetadata,
   hasQualificationMetadataFilledData,
 }: IProps) => {
+  const isMobile = useIsMobile();
   const addAsterisk = isRequired ? '*' : '';
   const isQuestionAnswered = hasQualificationMetadataFilledData && qualificationMetadata.is_filled;
   const sameQuestionAnswered =
@@ -27,15 +31,23 @@ const QualificationSingleQuestion = ({
 
   return (
     <div className="flex w-full flex-col items-start gap-6 self-stretch">
-      <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">{question}</p>
+      {isMobile ? (
+        <Typography variant="label-16-medium" textColor="textPrimary">
+          {question}
+        </Typography>
+      ) : (
+        <p className="w-[65%] text-3xl font-semibold text-customPrimaryText">{question}</p>
+      )}
       {isQuestionAnswered ? (
         <QualificationSingleQuestionAnswered answer={answeredValue} />
       ) : (
         <AgentDropdown
+          className={isMobile ? 'h-10 rounded-lg px-4 py-3' : ''}
+          dropdownOpenClassName={isMobile ? 'ring-4 ring-gray-200' : ''}
           options={dropdownOptions}
           placeholderLabel={`Select an option${addAsterisk}`}
           onCallback={handleSetAnswers}
-          fontToShown="text-3xl"
+          fontToShown={isMobile ? 'text-sm' : 'text-3xl'}
         />
       )}
     </div>
@@ -45,10 +57,20 @@ const QualificationSingleQuestion = ({
 export default QualificationSingleQuestion;
 
 const QualificationSingleQuestionAnswered = ({ answer }: { answer: string }) => {
+  const isMobile = useIsMobile();
   return (
-    <div className="w-inherit flex h-16 items-center justify-center gap-4 rounded-full bg-gray-600 p-2 pr-6 ring-4 ring-gray-200">
-      <QualificationAnsweredTickIcon className="text-white" width="48" height="48" />
-      <p className="text-2xl font-medium text-white">{answer}</p>
+    <div
+      className={cn([
+        'w-inherit flex h-16 items-center justify-center gap-4 rounded-full bg-gray-600 p-2 pr-6 ring-4 ring-gray-200',
+        isMobile && 'h-10 gap-2 py-2 pr-4',
+      ])}
+    >
+      <QualificationAnsweredTickIcon
+        className="text-white"
+        width={isMobile ? '24' : '48'}
+        height={isMobile ? '24' : '48'}
+      />
+      <p className={cn(['text-2xl font-medium text-white', isMobile && 'text-sm'])}>{answer}</p>
     </div>
   );
 };

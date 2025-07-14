@@ -12,6 +12,7 @@ import {
   messagesGroupedByResponseIdAndTimestamp,
   shouldMessageScrollToTop,
 } from '@meaku/core/utils/messageUtils';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   viewType: ViewType;
@@ -22,6 +23,7 @@ interface IProps {
   hasFirstUserMessageBeenSent?: boolean;
   isAMessageBeingProcessed: boolean;
   setDemoPlayingStatus: (value: DemoPlayingStatus) => void;
+  setIsArtifactPlaying: (isPlaying: boolean) => void;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   initialSuggestedQuestions: string[];
@@ -46,6 +48,7 @@ const AgentMessages = ({
   isAMessageBeingProcessed,
   hasFirstUserMessageBeenSent,
   setDemoPlayingStatus,
+  setIsArtifactPlaying,
   setActiveArtifact,
   handleSendUserMessage,
   initialSuggestedQuestions,
@@ -62,7 +65,7 @@ const AgentMessages = ({
 }: IProps) => {
   const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
-
+  const isMobile = useIsMobile();
   const handleScrollToBottom = () => {
     if (agentChatContainerRef.current) {
       const container = agentChatContainerRef.current;
@@ -87,7 +90,7 @@ const AgentMessages = ({
     if (
       lastMessage?.role === MessageSenderRole.AI &&
       currentMessageScrollToTop.current &&
-      viewType === ViewType.ADMIN
+      (viewType === ViewType.ADMIN || viewType === ViewType.USER)
     ) {
       handleScrollToBottom();
     }
@@ -103,32 +106,43 @@ const AgentMessages = ({
   const messagesSortedByResponseIdAndTimestamp = messagesGroupedByResponseIdAndTimestamp(messages);
 
   const isCurrentMessageComplete = checkIsCurrentMessageComplete(messages, lastMessageResponseId);
+  const agentMessagesContainerClassName = useMemo(() => {
+    if (isMobile || !showRightPanel) {
+      return 'w-full';
+    } else if (!isMobile && showRightPanel) {
+      return 'w-[35%] shrink-0';
+    } else if (!isMobile) {
+      return 'shrink-0';
+    }
+    return '';
+  }, [isMobile, showRightPanel]);
 
   return (
     <div
-      className={cn('shrink-0', {
-        'w-full': !showRightPanel,
-        'w-[35%]': showRightPanel,
-      })}
+      className={cn(agentMessagesContainerClassName)}
       onWheel={(e) => e.stopPropagation()}
       style={{
         height: '100%',
         overflow: viewType === ViewType.USER ? 'hidden' : 'auto',
       }}
     >
-      <div ref={agentChatContainerRef} className="h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2">
+      <div
+        id="agent-messages-container"
+        ref={agentChatContainerRef}
+        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4'])}
+      >
         <div
-          className={cn('mx-auto flex w-full flex-col gap-8', {
-            'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]': !showRightPanel && !allowFullWidthForText,
-          })}
+          className={cn([
+            'mx-auto flex w-full flex-col gap-8',
+            !showRightPanel && !allowFullWidthForText && 'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]',
+          ])}
         >
           {messagesSortedByResponseIdAndTimestamp.map((message, idx) => {
             return (
               <React.Fragment key={idx}>
-                {shouldMessageScrollToTop(message) ? (
-                  <div ref={currentMessageScrollToTop} className="hidden p-0" />
-                ) : null}
                 <MessageItem
+                  elementRef={currentMessageScrollToTop}
+                  shouldMessageScrollToTop={shouldMessageScrollToTop(message)}
                   isAMessageBeingProcessed={isAMessageBeingProcessed}
                   logoURL={logoURL}
                   viewType={viewType}
@@ -136,6 +150,7 @@ const AgentMessages = ({
                   primaryColor={primaryColor}
                   message={message}
                   orbState={orbState}
+                  setIsArtifactPlaying={setIsArtifactPlaying}
                   setActiveArtifact={setActiveArtifact}
                   setDemoPlayingStatus={setDemoPlayingStatus}
                   handleSendUserMessage={handleSendUserMessage}
@@ -151,16 +166,14 @@ const AgentMessages = ({
             );
           })}
           {aiMessages.length <= 1 && !hasFirstUserMessageBeenSent && (
-            <div className="w-full pt-4">
-              <SuggestionsArtifact
-                handleSendUserMessage={handleSendUserMessage}
-                artifact={{
-                  suggested_questions: initialSuggestedQuestions,
-                  suggested_questions_type: 'BUBBLE',
-                }}
-                invertTextColor={invertTextColor}
-              />
-            </div>
+            <SuggestionsArtifact
+              handleSendUserMessage={handleSendUserMessage}
+              artifact={{
+                suggested_questions: initialSuggestedQuestions,
+                suggested_questions_type: 'BUBBLE',
+              }}
+              invertTextColor={invertTextColor}
+            />
           )}
           {isCurrentMessageComplete && showDemoPreQuestions && (
             <PreDemoQuestion

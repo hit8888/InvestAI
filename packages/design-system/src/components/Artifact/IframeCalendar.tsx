@@ -5,9 +5,10 @@ import { useEffect, useRef } from 'react';
 interface Props {
   calendarContent: CalendarArtifactContent;
   handleSendUserMessage?: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  onLoad?: () => void;
 }
 
-export const IframeCalendar = ({ calendarContent, handleSendUserMessage }: Props) => {
+export const IframeCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Props) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -34,11 +35,16 @@ export const IframeCalendar = ({ calendarContent, handleSendUserMessage }: Props
     return () => window.removeEventListener('message', handleIframeMessage);
   }, [calendarContent, handleSendUserMessage]);
 
+  const handleIframeLoad = () => {
+    onLoad?.();
+  };
+
   return (
     <div className="h-full w-full overflow-auto sm:min-h-[300px]">
       <iframe
         ref={iframeRef}
         src={calendarContent.calendar_url}
+        onLoad={handleIframeLoad}
         style={{
           width: '100%',
           height: '100%',

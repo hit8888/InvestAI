@@ -20,6 +20,7 @@ interface IProps {
   entryPointAlignment: EntryPointAlignmentType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleSuggestedQuestionOnClick: (question: string) => void;
+  isMobile: boolean;
 }
 
 const EntryPointContentForBottomCenter = ({
@@ -27,6 +28,7 @@ const EntryPointContentForBottomCenter = ({
   entryPointAlignment,
   handleSendUserMessage,
   handleSuggestedQuestionOnClick,
+  isMobile,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
   const { initialSuggestedQuestions, invertTextColor, orbLogoUrl, showOrb } = useValuesFromConfigApi();
@@ -56,7 +58,10 @@ const EntryPointContentForBottomCenter = ({
     <div className="w-full rounded-2xl bg-gray-50 p-1">
       <form
         onSubmit={handleFormSubmission}
-        className="flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]"
+        className={cn([
+          'flex w-full items-center gap-2 rounded-xl border border-gray-100 bg-white p-[2px]',
+          isMobile && 'border-gray-300',
+        ])}
       >
         <div className="relative flex-1">
           <InputOrb
@@ -64,6 +69,7 @@ const EntryPointContentForBottomCenter = ({
             showOrbFromConfig={showOrb}
             showOrb={displayOrb}
             orbLogoUrl={orbLogoUrl}
+            showThreeStar={isMobile}
           />
           <EntryPointChatInput
             shouldInputAutoFocus={isAgentOpen}
@@ -74,13 +80,15 @@ const EntryPointContentForBottomCenter = ({
           />
         </div>
 
-        <EntryPointSuggestedQuestions
-          showSuggestedQuestions={showSuggestedQuestions}
-          initialSuggestedQuestions={initialSuggestedQuestions}
-          handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
-          questionAlignment={entryPointAlignment}
-          invertTextColor={invertTextColor}
-        />
+        {!isMobile && (
+          <EntryPointSuggestedQuestions
+            showSuggestedQuestions={showSuggestedQuestions}
+            initialSuggestedQuestions={initialSuggestedQuestions}
+            handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
+            questionAlignment={entryPointAlignment}
+            invertTextColor={invertTextColor}
+          />
+        )}
 
         <div
           className={cn('flex items-center justify-center pr-2', {
@@ -88,7 +96,12 @@ const EntryPointContentForBottomCenter = ({
           })}
         >
           {hasFirstUserMessageBeenSent && (
-            <InputWaitingOrb showOrb={showOrb} state={OrbStatusEnum.waiting} orbLogoUrl={orbLogoUrl} />
+            <InputWaitingOrb
+              showThreeStar={isMobile}
+              showOrb={showOrb}
+              state={OrbStatusEnum.waiting}
+              orbLogoUrl={orbLogoUrl}
+            />
           )}
           <ChatInputSendButton
             btnType="submit"

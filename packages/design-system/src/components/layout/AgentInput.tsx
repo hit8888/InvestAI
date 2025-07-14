@@ -6,6 +6,7 @@ import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
 import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
 import { cn } from '../../lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   handleSendMessage: (message: string) => void;
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible, invertTextColor }: IProps) => {
+  const isMobile = useIsMobile();
   const [inputValue, setInputValue] = useState<string>('');
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -54,17 +56,17 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
   const conditionForShowingTooltipAndDisabledButton = !isSendButtonDisabled && disableMessageSend;
 
   return (
-    <div className="input-bar-bg flex w-full rounded-b-2xl p-4 pb-2">
+    <div className={cn(['input-bar-bg flex w-full rounded-b-2xl p-4 pb-2', isMobile && 'p-0'])}>
       <form className="flex w-full items-center justify-between" onSubmit={handleSubmission}>
-        <div className="relative z-10 flex w-full rounded-2xl border border-gray-200 bg-white p-1">
+        <div
+          className={cn(['relative z-10 flex w-full rounded-2xl', !isMobile && 'border border-gray-200 bg-white p-1'])}
+        >
           <TextArea
             autoFocus={isCollapsible}
-            className={cn(
+            className={cn([
               'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
-              {
-                'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60': inputValue.length > 0,
-              },
-            )}
+              inputValue.length > 0 && 'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60',
+            ])}
             placeholder="Type your message here..."
             value={inputValue}
             onChange={handleInputValueChange}
@@ -79,7 +81,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
               showButton={!isSendButtonDisabled}
               onClick={handleSubmission}
               disabled={conditionForShowingTooltipAndDisabledButton}
-              btnClassName="absolute right-2 top-2 flex h-12 w-12 transform items-center justify-center !p-0"
+              btnClassName="absolute right-2 top-1/2 -translate-y-1/2 flex h-12 w-12 transform items-center justify-center !p-0"
               invertTextColor={invertTextColor}
             />
           </SendButtonWithTooltip>

@@ -1,10 +1,8 @@
-import SlidePreviewIcon from '../../icons/SlidePreviewIcon';
-import VideoPreviewIcon from '../../icons/VideoPreviewIcon';
-import DemoPreviewIcon from '../../icons/DemoPreviewIcon';
 import { ArtifactPreviewEnum } from '@meaku/core/types/artifact';
 import Typography from '../../Typography';
 import { useTextTruncation } from '../../../hooks/useTextTruncation';
 import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
+import { ARTIFACT_CONFIG } from '../../../utils/constant';
 
 type CommonArtifactPreviewProps = {
   artifactType: keyof typeof ArtifactPreviewEnum;
@@ -12,25 +10,6 @@ type CommonArtifactPreviewProps = {
   isFetching: boolean;
   handleClick: () => void;
 };
-
-const ARTIFACT_CONFIG = {
-  SLIDE: {
-    header: 'Slide',
-    icon: SlidePreviewIcon,
-  },
-  SLIDE_IMAGE: {
-    header: 'Slide',
-    icon: SlidePreviewIcon,
-  },
-  VIDEO: {
-    header: 'Video',
-    icon: VideoPreviewIcon,
-  },
-  DEMO: {
-    header: 'Demo',
-    icon: DemoPreviewIcon,
-  },
-} as const;
 
 const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }: CommonArtifactPreviewProps) => {
   const { header, icon: Icon } = ARTIFACT_CONFIG[artifactType];

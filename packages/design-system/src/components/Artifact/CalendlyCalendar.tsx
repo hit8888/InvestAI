@@ -1,13 +1,15 @@
 import { EventScheduledEvent, InlineWidget as CalendlyWidget, useCalendlyEventListener } from 'react-calendly';
 import { CalendarArtifactContent } from '@meaku/core/types/artifact';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import useDelayedCallback from '../../hooks/useDelayedCallback';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
   handleSendUserMessage?: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  onLoad?: () => void;
 }
 
-export const CalendlyCalendar = ({ calendarContent, handleSendUserMessage }: Props) => {
+export const CalendlyCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Props) => {
   useCalendlyEventListener({
     onEventScheduled: (e: EventScheduledEvent) => {
       if (handleSendUserMessage) {
@@ -26,6 +28,8 @@ export const CalendlyCalendar = ({ calendarContent, handleSendUserMessage }: Pro
       }
     },
   });
+
+  useDelayedCallback(onLoad);
 
   return (
     <div className="h-full w-full overflow-auto">

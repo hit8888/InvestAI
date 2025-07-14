@@ -170,7 +170,7 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
       const config = configManager.getConfig();
       const { tenantId, agentId, startTime, endTime } = config;
 
-      if (!tenantId || !agentId || deviceManager.isMobile()) {
+      if (!tenantId || !agentId) {
         return;
       }
 

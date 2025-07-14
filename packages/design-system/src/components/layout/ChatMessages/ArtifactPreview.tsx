@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 import CustomVideoPlayer from '../CustomVideoPlayer.tsx';
@@ -12,6 +12,7 @@ import {
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
+  ArtifactContentWithMetadataProps,
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
@@ -38,10 +39,7 @@ interface IProps {
   isError?: boolean;
   isFetching?: boolean;
   isQualificationFormArtifact: boolean;
-  artifactContentWithMetadata: {
-    content: FormArtifactContent;
-    metadata: FormArtifactMetadataType;
-  };
+  artifactContentWithMetadata: ArtifactContentWithMetadataProps | null;
 }
 
 const ArtifactPreview = ({
@@ -59,6 +57,9 @@ const ArtifactPreview = ({
   artifactContentWithMetadata,
 }: IProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Memoize the empty function calling to avoid re-rendering the component
+  const handleEmptyFunction = useCallback(() => {}, []);
 
   const handleArtifactOnClick = () => {
     setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
@@ -112,10 +113,10 @@ const ArtifactPreview = ({
         <QualificationFlowArtifact
           artifact={{
             artifact_id: artifactId,
-            content: artifactContentWithMetadata.content as FormArtifactContent,
+            content: artifactContentWithMetadata as FormArtifactContent,
             metadata: artifactContentWithMetadata?.metadata as FormArtifactMetadataType,
           }}
-          handleSendUserMessage={() => {}}
+          handleSendUserMessage={handleEmptyFunction}
           viewType={viewType}
         />
       );
@@ -123,9 +124,9 @@ const ArtifactPreview = ({
       formContent = (
         <FormArtifact
           artifactId={artifactId}
-          artifact={artifactContentWithMetadata.content as FormArtifactContent}
+          artifact={artifactContentWithMetadata as FormArtifactContent}
           artifactMetadata={artifactContentWithMetadata?.metadata as FormArtifactMetadataType}
-          handleSendUserMessage={() => {}}
+          handleSendUserMessage={handleEmptyFunction}
           viewType={viewType}
         />
       );
@@ -146,7 +147,7 @@ const ArtifactPreview = ({
         return (
           <CalendarArtifact
             calendarContent={artifactContent as CalendarArtifactContent}
-            handleSendUserMessage={() => {}}
+            handleSendUserMessage={handleEmptyFunction}
           />
         );
       }

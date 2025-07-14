@@ -57,3 +57,10 @@ export enum AdminConversationJoinStatus {
   DENIED = 'DENIED',
   EXIT = 'EXIT',
 }
+
+export enum DeviceType {
+  MOBILE = 'MOBILE',
+  DESKTOP = 'DESKTOP',
+}
+
+export type FormFilledEventType = 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED';

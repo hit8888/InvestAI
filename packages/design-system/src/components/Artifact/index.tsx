@@ -1,8 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { ArtifactContentUi } from './ArtifactContentUi';
 import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
-import { ArtifactContent } from '@meaku/core/types/artifact';
-import { ArtifactContentWithMetadataProps } from './QualificationFlow/QualificationTypes';
+import { ArtifactContent, ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
 import { ViewType } from '@meaku/core/types/common';
 
 export interface ArtifactProps {

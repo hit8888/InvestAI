@@ -8,10 +8,13 @@ import CardDescription from './card-description';
 import { FormArtifactMetadataType, FormFieldSchemaType } from '@meaku/core/types/artifact';
 import Typography from '../Typography';
 import { useMemo } from 'react';
+import { cn } from '@breakout/design-system/lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 type FormFilledThankYouContentProps = {
   formFields: FormFieldSchemaType[];
   formValues: FormArtifactMetadataType;
+  steps?: number;
   // handleEdit: () => void;
   // isformDisabled?: boolean;
 };
@@ -19,9 +22,12 @@ type FormFilledThankYouContentProps = {
 const FormFilledThankYouContent = ({
   formFields,
   formValues,
+  steps,
   // handleEdit,
   // isformDisabled,
 }: FormFilledThankYouContentProps) => {
+  const isMobile = useIsMobile();
+
   const formFilledLabelAndValues = useMemo(() => {
     return formFields
       .map((field) => {
@@ -43,9 +49,17 @@ const FormFilledThankYouContent = ({
       })
       .filter(Boolean); // Remove null values
   }, [formFields, formValues.filled_data]);
+
+  const hasFormFilledValues = formFilledLabelAndValues.length > 0;
+
   return (
-    <Card className="w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3">
-      <CardContent className="flex flex-col gap-6 p-4">
+    <Card
+      className={cn('w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3', {
+        'max-w-full': isMobile,
+      })}
+    >
+      <CardContent className="flex flex-col gap-4 p-4">
+        {steps && <Typography variant="label-16-semibold" textColor="gray500">{`1 of 2`}</Typography>}
         <div className="flex items-center gap-4">
           <CardHeader className="flex-1 gap-1 space-y-0 p-0">
             <CardTitle className="text-lg font-semibold text-customPrimaryText">
@@ -56,9 +70,10 @@ const FormFilledThankYouContent = ({
             </CardDescription>
           </CardHeader>
         </div>
-        <div className="flex w-full items-center gap-2 rounded-lg border border-dashed border-primary/40 p-2">
-          <div className="flex w-[60%] flex-1 flex-col gap-2">{formFilledLabelAndValues}</div>
-          {/* <Button
+        {hasFormFilledValues && (
+          <div className="flex w-full items-center gap-2 rounded-lg border border-dashed border-primary/40 p-2">
+            <div className="flex w-[60%] flex-1 flex-col gap-2">{formFilledLabelAndValues}</div>
+            {/* <Button
             onClick={handleEdit}
             size="md"
             disabled={isformDisabled}
@@ -67,7 +82,8 @@ const FormFilledThankYouContent = ({
             Edit
             <PencilIcon className="h-4 w-4 text-primary" />
           </Button> */}
-        </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

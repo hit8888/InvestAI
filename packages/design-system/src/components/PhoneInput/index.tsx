@@ -43,6 +43,7 @@ const PhoneInputContainer = ({
 
   return (
     <PhoneInput
+      autoComplete="on"
       defaultCountry={defaultCountry}
       className={cn(
         'custom-phone-input group w-full rounded-lg border border-gray-300 bg-white text-sm text-customPrimaryText',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
@@ -13,8 +13,11 @@ import ChatMessageSender from './ChatMessageSender';
 import { getChatMessageClass, getChatTextMessageContainerClass } from '../messageUtils';
 import GithubMarkdownRenderer from '../GithubMarkdownRenderer';
 import MessageItemLayout from './MessageItemLayout';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface TextMessageProps {
+  elementRef: React.RefObject<HTMLDivElement | null>;
+  shouldMessageScrollToTop: boolean;
   message: WebSocketMessage;
   viewType: ViewType;
   isLastQuestionResponse: boolean;
@@ -24,6 +27,8 @@ interface TextMessageProps {
 }
 
 const TextMessage: React.FC<TextMessageProps> = ({
+  elementRef,
+  shouldMessageScrollToTop,
   message,
   viewType,
   isLastQuestionResponse,
@@ -31,8 +36,12 @@ const TextMessage: React.FC<TextMessageProps> = ({
   isCurrentMsgUserInactiveMessage,
   renderOrb,
 }) => {
+  const isMobile = useIsMobile();
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const isHumanMessage = message.role === MessageSenderRole.USER || message.role === MessageSenderRole.ADMIN;
+  const isHumanMessage =
+    (message.role === MessageSenderRole.USER || message.role === MessageSenderRole.ADMIN) &&
+    viewType !== ViewType.DASHBOARD;
+
   const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
     shouldScroll: (isCurrentMsgUserInactiveMessage && isLastQuestionResponse) || isHumanMessage,
   });
@@ -64,15 +73,23 @@ const TextMessage: React.FC<TextMessageProps> = ({
     return <GithubMarkdownRenderer markdown={message.message.content || ''} />;
   };
 
+  const messageContainerClasses = useMemo(() => {
+    const baseClasses = 'relative rounded-2xl';
+    const messageClass = getChatMessageClass(messageViewType);
+
+    const conditionalClasses = {
+      'flex w-full gap-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
+      'flex gap-7 pl-0 pr-4': isAIMessage && !isLastQuestionResponse,
+      'pl-11': isAIMessage && !shouldShowActiveOrb && !isMobile,
+      'max-w-full md:max-w-lg': isAIMessage && isMobile,
+    };
+
+    return cn(baseClasses, messageClass, conditionalClasses);
+  }, [isAIMessage, isLastQuestionResponse, isLoadingTextMessage, shouldShowActiveOrb, isMobile, messageViewType]);
+
   return (
     <MessageItemLayout elementRef={scrollToMessageRef} className={getChatTextMessageContainerClass(messageViewType)}>
-      <div
-        className={cn('relative rounded-2xl', getChatMessageClass(messageViewType), {
-          'flex w-full gap-4 pl-0': (isAIMessage && isLastQuestionResponse) || isLoadingTextMessage,
-          'flex gap-7 pl-0 pr-4': isAIMessage && !isLastQuestionResponse,
-          'pl-11': isAIMessage && !shouldShowActiveOrb,
-        })}
-      >
+      <div ref={shouldMessageScrollToTop ? elementRef : null} className={messageContainerClasses}>
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 
         {isAIMessage && !isLoadingTextMessage && shouldShowActiveOrb && (

@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { PauseIcon, PlayIcon } from 'lucide-react';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -7,6 +7,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { ArtifactEnum } from '@meaku/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 import ReactPlayer from 'react-player';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   videoUrl: string;
@@ -26,6 +27,7 @@ const VideoArtifact = ({
   setIsArtifactPlaying,
 }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const isMobile = useIsMobile();
   const [isPlaying, setIsPlaying] = useState(false);
   const playerRef = useRef<ReactPlayer | null>(null);
 
@@ -67,7 +69,68 @@ const VideoArtifact = ({
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.VIDEO_ARTIFACT_PLAY);
   };
 
+  const reactPlayerConfig = {
+    file: {
+      attributes: {
+        style: { objectFit: 'fill', width: '100%', height: '100%' },
+        // Prevent video download through browser's context menu
+        controlsList: 'nodownload',
+        // Disable right-click context menu
+        onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+      },
+    },
+  };
+
+  const videoOnProgress = useCallback(
+    ({ played }: { played: number }) => {
+      if (played === 1) {
+        handleVideoOnEnd();
+      }
+    },
+    [handleVideoOnEnd],
+  );
+
+  const videoOnSeek = useCallback(
+    (seconds: number) => {
+      if (seconds === 0) {
+        handleRestartVideo();
+      }
+    },
+    [handleRestartVideo],
+  );
+
+  const renderVideoPlayer = () => {
+    return (
+      <div className="relative h-full w-full" onClick={handlePlayAndPause}>
+        <PlayAndPauseIconDisplay handlePlayAndPause={handlePlayAndPause} isPlaying={isPlaying} isMobile={isMobile} />
+        <ReactPlayer
+          ref={playerRef}
+          url={videoUrl}
+          playing={isPlaying}
+          width="100%"
+          height="100%"
+          onEnded={handleVideoOnEnd}
+          controls={true}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          config={reactPlayerConfig}
+          // Disable light mode (preview thumbnail)
+          light={false}
+          // Disable picture-in-picture mode
+          pip={true}
+          // Additional progress tracking for video completion
+          onProgress={videoOnProgress}
+          // Detect when video is seeked to start (restart)
+          onSeek={videoOnSeek}
+        />
+      </div>
+    );
+  };
+
   if (!videoUrl) return null;
+
+  if (isMobile) {
+    return renderVideoPlayer();
+  }
 
   return (
     <div
@@ -79,50 +142,7 @@ const VideoArtifact = ({
         },
       )}
     >
-      <AspectRatio ratio={16 / 9}>
-        <div className="relative h-full w-full" onClick={handlePlayAndPause}>
-          <PlayAndPauseIconDisplay handlePlayAndPause={handlePlayAndPause} isPlaying={isPlaying} />
-          <ReactPlayer
-            ref={playerRef}
-            url={videoUrl}
-            playing={isPlaying}
-            width="100%"
-            height="100%"
-            onEnded={handleVideoOnEnd}
-            controls={true}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-            config={{
-              file: {
-                attributes: {
-                  style: { objectFit: 'fill', width: '100%', height: '100%' },
-                  // Prevent video download through browser's context menu
-                  controlsList: 'nodownload',
-                  // Disable right-click context menu
-                  onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
-                },
-              },
-            }}
-            // Disable light mode (preview thumbnail)
-            light={false}
-            // Disable picture-in-picture mode
-            pip={true}
-            // Keep video playing when component unmounts
-            stepOnUnmount={false}
-            // Additional progress tracking for video completion
-            onProgress={({ played }) => {
-              if (played === 1) {
-                handleVideoOnEnd();
-              }
-            }}
-            // Detect when video is seeked to start (restart)
-            onSeek={(seconds) => {
-              if (seconds === 0) {
-                handleRestartVideo();
-              }
-            }}
-          />
-        </div>
-      </AspectRatio>
+      <AspectRatio ratio={16 / 9}>{renderVideoPlayer()}</AspectRatio>
     </div>
   );
 };
@@ -130,9 +150,14 @@ const VideoArtifact = ({
 type PlayAndPauseIconDisplayProps = {
   handlePlayAndPause: () => void;
   isPlaying: boolean;
+  isMobile: boolean;
 };
 
-const PlayAndPauseIconDisplay = ({ handlePlayAndPause, isPlaying }: PlayAndPauseIconDisplayProps) => {
+const PlayAndPauseIconDisplay = ({ handlePlayAndPause, isPlaying, isMobile }: PlayAndPauseIconDisplayProps) => {
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <div
       className={cn('absolute z-10 flex h-[80%] w-full cursor-pointer items-center justify-center', {

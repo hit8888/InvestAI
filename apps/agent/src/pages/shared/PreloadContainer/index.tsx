@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
@@ -23,8 +23,6 @@ import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import Typography from '@breakout/design-system/components/Typography/index';
-import { isMobileDevice } from '@meaku/core/utils/index';
 import { getFontElement } from './font-helper.ts';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
@@ -81,7 +79,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     return () => clearTimeout(timer);
   }, [waitingForParentUrl]);
 
-  const getParentUrlValue = () => {
+  const parentUrlValue = useMemo(() => {
     if (parentUrlParam) return decodeURIComponent(parentUrlParam);
 
     // If parentUrlParam is not available, check if parent_url parameter exists in parentUrl
@@ -98,11 +96,11 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     }
 
     return parentUrl || window.location.href;
-  };
+  }, [parentUrlParam, parentUrl]);
 
   const configQuery = useConfigDataQuery({
     agentId,
-    parentUrl: getParentUrlValue(),
+    parentUrl: parentUrlValue,
     queryOptions: { enabled: !waitingForParentUrl },
   });
 
@@ -145,7 +143,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     is_test,
     test_type: test_type as 'automated' | 'manual' | undefined,
     referrer: document.referrer,
-    parent_url: getParentUrlValue(),
+    parent_url: parentUrlValue,
     experiment_tag: configQuery.data?.experiment_tag ?? null,
     browsed_urls: getParam('browsed_urls') ? JSON.parse(getParam('browsed_urls') as string) : undefined,
   };
@@ -245,7 +243,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 
   if (mode === 'bottomBar') {
     return (
-      <div className="flex h-screen items-end justify-center pb-8">
+      <div className="flex h-[90vh] items-end justify-center pb-8 lg:h-screen">
         <div className="flex animate-spin items-center justify-center">
           <Orb color="#E6E6FA" style={{ width: '48px', height: '48px' }} state={OrbStatusEnum.waiting} />
         </div>
@@ -260,18 +258,6 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 };
 
 const PreloadContainer: FC<Props> = ({ children }) => {
-  if (isMobileDevice()) {
-    return (
-      <div className="flex h-screen items-end justify-center px-8 pb-16">
-        <div className="flex items-center justify-center gap-4 rounded-lg bg-gray-100 p-4">
-          <Orb color="#E6E6FA" style={{ width: '48px', height: '48px' }} state={OrbStatusEnum.waiting} />
-          <Typography variant="body-16" align={'center'}>
-            Mobile view is not currently supported, please open the link on your desktop
-          </Typography>
-        </div>
-      </div>
-    );
-  }
   return <PreloadContainerContent children={children} />;
 };
 

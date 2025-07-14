@@ -89,7 +89,7 @@ const Suggestion = ({
             {question}
           </Typography>
         }
-        showTooltip={isQuestionInCycle ? isTextTruncated : isTablet}
+        showTooltip={isTextTruncated}
         content={<p className="max-w-[350px]">{question}</p>}
       />
     </div>

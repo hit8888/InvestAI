@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import EntryPointBottomBar from './EntryPointBottomBar/index.tsx';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -16,11 +16,13 @@ import useTabNotification from '@meaku/core/hooks/useTabNotification';
 import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
 import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 interface IProps {
   fetchSessionData: () => void;
 }
 
 const AgentView = ({ fetchSessionData }: IProps) => {
+  const isMobile = useIsMobile();
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
 
@@ -84,13 +86,18 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   useSendMessageOnQueryParams({ handleSendMessage });
 
+  const containerClassName = useMemo(() => {
+    if (isAgentOpen && !isMobile) {
+      return 'mt-2 h-[95vh] rounded-3xl';
+    } else if (isMobile) {
+      return 'mt-2 h-[calc(100dvh-40px)]';
+    } else if (mode === 'embed' || mode === 'overlay') {
+      return 'mx-0 mt-0 h-[100vh] w-[100vw]';
+    }
+  }, [isMobile, isAgentOpen, mode]);
+
   return (
-    <div
-      className={cn(getItemAlignment(), 'mx-auto flex h-[95vh] w-[97vw]', {
-        'mt-2 rounded-3xl': isAgentOpen,
-        'mx-0 mt-0 h-[100vh] w-[100vw]': mode === 'embed' || mode === 'overlay',
-      })}
-    >
+    <div className={cn(getItemAlignment(), 'mx-auto flex w-[97vw]', containerClassName)}>
       <AgentInOpenState
         handleSendMessage={handleSendMessage}
         handleCloseAgent={handleCloseAgent}
@@ -102,7 +109,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
           hidden: shouldHideBottomBar || isAgentOpen,
         })}
       >
-        {showPopupBanner && (
+        {/* TODO: Remove the !isMobile condition once we have a proper popup banner for mobile */}
+        {showPopupBanner && !isMobile && (
           <PopupWithBubblesContainer
             showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
             setShowPopupContent={setShowPopupContent}

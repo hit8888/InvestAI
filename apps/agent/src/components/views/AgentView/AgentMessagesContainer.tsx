@@ -6,6 +6,7 @@ import { useAllowFeedback } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurationApiResponseManager';
 import { ViewType } from '@meaku/core/types/common';
+import { OrbStatusEnum } from '@meaku/core/types/index';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -13,6 +14,8 @@ interface IProps {
   isMediaTakingFullWidth: boolean;
   showDemoPreQuestions: boolean;
   viewType: ViewType;
+  orbState: OrbStatusEnum;
+  setIsArtifactPlaying: (isPlaying: boolean) => void;
 }
 
 const AgentMessagesContainer = ({
@@ -21,10 +24,11 @@ const AgentMessagesContainer = ({
   isMediaTakingFullWidth,
   showDemoPreQuestions,
   viewType,
+  orbState,
+  setIsArtifactPlaying,
 }: IProps) => {
   const messages = useMessageStore((state) => state.messages);
 
-  const orbState = useMessageStore((state) => state.orbState);
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -61,6 +65,7 @@ const AgentMessagesContainer = ({
       hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
       isAMessageBeingProcessed={isAMessageBeingProcessed}
       setActiveArtifact={setActiveArtifact}
+      setIsArtifactPlaying={setIsArtifactPlaying}
       setDemoPlayingStatus={setDemoPlayingStatus}
       handleSendUserMessage={handleSendMessage}
       initialSuggestedQuestions={initialSuggestedQuestions}

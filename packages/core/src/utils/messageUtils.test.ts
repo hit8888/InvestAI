@@ -9,7 +9,7 @@ import {
   getAnalyticsEvent,
   getDemoQuestionData,
   getFormArtifactMessage,
-  getFormFilledEvent,
+  getFormFilledEventByArtifactId,
   getSuggestionsArtifactMessage,
   isGeneratingMediaArtifactEvent,
   isMessageAnalyticsEvent,
@@ -508,7 +508,7 @@ describe('messageUtils', () => {
     });
   });
 
-  describe('getFormFilledEvent', () => {
+  describe('getFormFilledEventByArtifactId', () => {
     it('should return the form filled event that matches the form artifact id', () => {
       const formArtifact: WebSocketMessage & {
         message: ArtifactMessageContent & { artifact_data: FormArtifactContent };
@@ -576,7 +576,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, formArtifact, 'FORM_FILLED');
+      const result = getFormFilledEventByArtifactId(messages, formArtifact, 'FORM_FILLED');
       expect(result).toEqual(messages[1]);
     });
 
@@ -632,7 +632,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, formArtifact, 'FORM_FILLED');
+      const result = getFormFilledEventByArtifactId(messages, formArtifact, 'FORM_FILLED');
       expect(result).toBeUndefined();
     });
 
@@ -663,7 +663,7 @@ describe('messageUtils', () => {
         },
       ] as WebSocketMessage[];
 
-      const result = getFormFilledEvent(messages, undefined, 'FORM_FILLED');
+      const result = getFormFilledEventByArtifactId(messages, undefined, 'FORM_FILLED');
       expect(result).toBeUndefined();
     });
   });

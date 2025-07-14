@@ -8,12 +8,15 @@ import { useEffect } from 'react';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
   const [searchParams] = useSearchParams();
   const { handleSendUserMessage } = useWebSocketChat();
   const manager = useSessionApiResponseManager();
+  const isMobile = useIsMobile();
 
   const page_url = searchParams.get('url') || undefined;
 
@@ -34,7 +37,7 @@ const Feedback = () => {
 
   return (
     <Backdrop landingPageUrl={page_url} className="relative flex h-screen flex-col items-center justify-center">
-      <div className="flex h-[95vh] w-[98vw]">
+      <div className={cn(['flex h-[95vh] w-[98vw]', isMobile && 'calc(100dvh - 40px) mt-2'])}>
         <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
     </Backdrop>

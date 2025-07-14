@@ -1,6 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentHeader from '@breakout/design-system/components/layout/AgentHeader';
-import AgentInput from '@breakout/design-system/components/layout/AgentInput';
+import AgentMobileHeader from '@breakout/design-system/components/layout/AgentMobileHeader';
+import AgentActionPanel from '@breakout/design-system/components/layout/AgentActionPanel';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 import { useDemoDetails } from '../../../hooks/useDemoDetails.ts';
 import { DemoPlayingStatus, ViewType } from '@meaku/core/types/common';
@@ -8,6 +9,7 @@ import { useExpandWidthOnDemoFrame } from '../../../hooks/demoFlow/useExpandWidt
 import AgentMessagesContainer from './AgentMessagesContainer.tsx';
 import ArtifactContainer from './ArtifactContainer.tsx';
 import StaticArtifactContainer from '@breakout/design-system/components/Artifact/StaticArtifactContainer';
+import Orb from '@breakout/design-system/components/Orb/index';
 import { Demo } from './Demo/index.tsx';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSetArtifactOnNewMessage } from '../../../hooks/useSetArtifactOnNewMessage.ts';
@@ -17,6 +19,7 @@ import { useArtifactStore } from '../../../stores/useArtifactStore.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
 import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
 import useForceEnableDelay from '../../../hooks/useForceEnableDelay.ts';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
@@ -26,6 +29,7 @@ interface IProps {
 }
 
 const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, showAgentInOpenState }: IProps) => {
+  const isMobile = useIsMobile();
   const { isDemoAvailable, demoDetails, demoFeatures, onStepEnd, switchToDemo } = useDemoDetails();
   useExpandWidthOnDemoFrame(demoDetails);
   useSetArtifactOnNewMessage();
@@ -34,6 +38,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
 
   const isMediaTakingFullWidth = useMessageStore((state) => state.isMediaTakingFullWidth);
   const setMediaTakeFullScreenWidth = useMessageStore((state) => state.setMediaTakeFullScreenWidth);
+
+  const orbState = useMessageStore((state) => state.orbState);
 
   const isAMessageBeingProcessed = useMessageStore((state) => state.isAMessageBeingProcessed);
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -47,8 +53,10 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const setDemoPlayingStatus = useMessageStore((state) => state.setDemoPlayingStatus);
   const demoPlayingStatus = useMessageStore((state) => state.demoPlayingStatus);
 
+  const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
-  const { ctaConfig, logoURL, invertTextColor, defaultArtifactUrl } = useValuesFromConfigApi();
+  const { agentName, ctaConfig, logoURL, showOrb, invertTextColor, defaultArtifactUrl, orbLogoUrl } =
+    useValuesFromConfigApi();
 
   const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
 
@@ -75,11 +83,16 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
     });
   };
 
-  const nonDemoFlow = demoPlayingStatus === DemoPlayingStatus.INITIAL;
+  const showArtifactOnRightSide = demoPlayingStatus === DemoPlayingStatus.INITIAL && !isMobile;
 
   const aiMessages = messages.filter((message) => message.role === 'ai');
   const hasArtifactAiMessage = aiMessages.some(
     (message) => message.message_type === 'ARTIFACT' && isMediaArtifact(message.message.artifact_type),
+  );
+  const showStaticArtifactOnRightSide = !hasArtifactAiMessage && !isMobile;
+
+  const renderOrb = () => (
+    <Orb showThreeStar showOrb={showOrb} state={orbState} color={'rgb(var(--primary))'} orbLogoUrl={orbLogoUrl} />
   );
   return (
     <div
@@ -87,21 +100,34 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
         'custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 opacity-100 transition-all duration-300 ease-in-out',
         {
           'hidden opacity-0': !showAgentInOpenState,
+          'rounded-custom-20 p-0': isMobile,
         },
       )}
     >
       <div className="chat-window-shadow flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white">
-        <AgentHeader
-          messages={messages}
-          handleSendMessage={handleSendMessage}
-          handleCloseAgent={handleCloseAgent}
-          isHidden={hideAgentHeader}
-          isCollapsible={isCollapsible}
-          ctaConfig={ctaConfig}
-          showFeedbackHeader={isAdmin}
-          setActiveArtifact={setActiveArtifact}
-          invertTextColor={invertTextColor}
-        />
+        {isMobile ? (
+          <AgentMobileHeader
+            handleCloseAgent={handleCloseAgent}
+            isHidden={hideAgentHeader}
+            isCollapsible={isCollapsible}
+            renderOrb={renderOrb}
+            showFeedbackHeader={isAdmin}
+            agentName={agentName}
+            setActiveArtifact={setActiveArtifact}
+          />
+        ) : (
+          <AgentHeader
+            messages={messages}
+            handleSendMessage={handleSendMessage}
+            handleCloseAgent={handleCloseAgent}
+            isHidden={hideAgentHeader}
+            isCollapsible={isCollapsible}
+            ctaConfig={ctaConfig}
+            showFeedbackHeader={isAdmin}
+            setActiveArtifact={setActiveArtifact}
+            invertTextColor={invertTextColor}
+          />
+        )}
         <div
           className={cn('flex h-full w-full flex-1 overflow-hidden', {
             'gap-2': showMediaArtifactContainer,
@@ -113,19 +139,22 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             hasArtifactOrDemoInMessageHistory={showMediaArtifactContainer}
             isMediaTakingFullWidth={isMediaTakingFullWidth}
             showDemoPreQuestions={isDemoAvailable && !demoDetails}
+            setIsArtifactPlaying={setIsArtifactPlaying}
+            orbState={orbState}
             viewType={ViewType.USER}
           />
 
           {/* Right Side Static Artifact Container */}
-          {!hasArtifactAiMessage ? <StaticArtifactContainer defaultArtifactUrl={defaultArtifactUrl} /> : null}
+          {showStaticArtifactOnRightSide ? <StaticArtifactContainer defaultArtifactUrl={defaultArtifactUrl} /> : null}
 
           {/* Right Side Artifact Container */}
-          {nonDemoFlow && (
+          {showArtifactOnRightSide && (
             <ArtifactContainer
               logoURL={logoURL}
               isMediaTakingFullWidth={isMediaTakingFullWidth}
               handleSendMessage={handleSendMessage}
               onSlideItemClick={handleSlideItemClick}
+              setIsArtifactPlaying={setIsArtifactPlaying}
               viewType={ViewType.USER}
             />
           )}
@@ -145,8 +174,8 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
         </div>
         {/* Bottom Bar */}
         {!isMediaTakingFullWidth && (
-          <AgentInput
-            handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
+          <AgentActionPanel
+            handleSendMessage={handleSendMessage}
             disableMessageSend={disableMessageSend}
             messages={messages}
             isCollapsible={isCollapsible}

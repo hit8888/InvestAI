@@ -1,6 +1,7 @@
 import { useIsAdmin } from '../contexts/UrlDerivedDataProvider';
-import { WebSocketMessage, BaseMessageContent, EventMessageContent, MessageSenderRole } from '../types';
+import { WebSocketMessage, BaseMessageContent, EventMessageContent, MessageSenderRole, DeviceType } from '../types';
 import useSessionApiResponseManager from './useSessionApiResponseManager';
+import { useIsMobile } from '../contexts/DeviceManagerProvider';
 
 type MessagePayloadParams = {
   message: BaseMessageContent | EventMessageContent;
@@ -11,6 +12,7 @@ type MessagePayloadParams = {
 
 const useGetMessagePayload = () => {
   const is_admin = useIsAdmin();
+  const isMobile = useIsMobile();
 
   const sessionApiResponseManager = useSessionApiResponseManager();
   const session_id = sessionApiResponseManager ? sessionApiResponseManager.getSessionId() : '';
@@ -29,6 +31,7 @@ const useGetMessagePayload = () => {
       timestamp: new Date().toISOString(),
       message_type,
       message,
+      device_type: isMobile ? DeviceType.MOBILE : DeviceType.DESKTOP,
     };
 
     if (message_type === 'EVENT') {

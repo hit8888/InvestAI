@@ -13,9 +13,11 @@ import {
   CtaEventDataContent,
 } from '../types/webSocketData';
 import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
-import { MessageSenderRole, MessageViewType, ViewType } from '../types/common';
+import { MessageSenderRole, MessageViewType, ViewType, FormFilledEventType } from '../types/common';
 
 export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
+
+const { FORM_FILLED, QUALIFICATION_FORM_FILLED, GENERATING_ARTIFACT } = AgentEventType;
 
 export const isStreamMessage = (
   message: WebSocketMessage,
@@ -126,7 +128,7 @@ export const isHeartbeatEvent = (
 export const isGeneratingMediaArtifactEvent = (message: WebSocketMessage) =>
   message.message_type === 'EVENT' &&
   'event_type' in message.message &&
-  message.message.event_type === AgentEventType.GENERATING_ARTIFACT &&
+  message.message.event_type === GENERATING_ARTIFACT &&
   isMediaArtifact(message.message.event_data.artifact_type);
 
 export const isDemoAvailable = (message: WebSocketMessage): boolean => {
@@ -331,7 +333,29 @@ export const getAnalyticsEvent = (messagesWithSameResponseId: WebSocketMessage[]
   );
 };
 
-export const getFormFilledEvent = (
+export const checkMessageIsFormFilled = (msg: WebSocketMessage, eventType: FormFilledEventType) => {
+  return (
+    checkIsEventMessage(msg) &&
+    msg.message.event_type === eventType &&
+    'event_data' in msg.message &&
+    ((eventType === FORM_FILLED && 'form_data' in msg.message.event_data) ||
+      (eventType === QUALIFICATION_FORM_FILLED && 'qualification_responses' in msg.message.event_data))
+  );
+};
+
+export const checkIfFormFilledMessageExists = (messages: WebSocketMessage[], eventType: FormFilledEventType) => {
+  return messages.find(
+    (
+      msg,
+    ): msg is WebSocketMessage & {
+      message: EventMessageContent & {
+        event_data: ArtifactFormType;
+      };
+    } => checkMessageIsFormFilled(msg, eventType),
+  );
+};
+
+export const getFormFilledEventByArtifactId = (
   messages: WebSocketMessage[],
   formArtifactMessage:
     | (WebSocketMessage & {
@@ -339,7 +363,7 @@ export const getFormFilledEvent = (
       })
     | undefined
     | null,
-  eventType: 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED',
+  eventType: FormFilledEventType,
 ) => {
   if (!formArtifactMessage) {
     return undefined;
@@ -352,12 +376,10 @@ export const getFormFilledEvent = (
         event_data: ArtifactFormType;
       };
     } =>
-      checkIsEventMessage(msg) &&
-      msg.message.event_type === eventType &&
       'event_data' in msg.message &&
+      'artifact_id' in msg.message.event_data &&
       formArtifactMessage.message.artifact_data.artifact_id === msg.message.event_data.artifact_id &&
-      ((eventType === 'FORM_FILLED' && 'form_data' in msg.message.event_data) ||
-        (eventType === 'QUALIFICATION_FORM_FILLED' && 'qualification_responses' in msg.message.event_data)),
+      checkMessageIsFormFilled(msg, eventType),
   );
 };
 
@@ -569,6 +591,20 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
   );
 };
 
+export const findArtifactMessageWithSameArtifactId = (messages: WebSocketMessage[], artifactId: string) => {
+  return messages.find(
+    (
+      message,
+    ): message is WebSocketMessage & {
+      message: ArtifactMessageContent & { artifact_data: ArtifactContent | FormArtifactContent };
+    } => {
+      if (message.role !== 'ai' || !checkIsArtifactMessage(message)) return false;
+      const artifactData = (message.message as ArtifactMessageContent).artifact_data;
+      return artifactData.artifact_id === artifactId;
+    },
+  );
+};
+
 // User sends a message from Input
 const isUserTextMessage = (message: WebSocketMessage): boolean => {
   return message.role === 'user' && 'message_type' in message && message.message_type === 'TEXT';
@@ -758,11 +794,23 @@ export const checkIfCTAButtonDisabled = (messages: WebSocketMessage[]) => {
   );
   if (!qualificationFormMessage) return false;
 
-  const qualificationFormFilledMessage = getFormFilledEvent(
+  const qualificationFormFilledMessage = getFormFilledEventByArtifactId(
     messages,
     qualificationFormMessage,
-    'QUALIFICATION_FORM_FILLED',
+    QUALIFICATION_FORM_FILLED,
   );
 
   return !qualificationFormFilledMessage;
+};
+
+export const checkIfCTAButtonShown = (messages: WebSocketMessage[]) => {
+  const isFormFilledEventMessageExist = checkIfFormFilledMessageExists(messages, FORM_FILLED);
+  const isQualificationFormFiledEventMessageExist = checkIfFormFilledMessageExists(messages, QUALIFICATION_FORM_FILLED);
+
+  const isQualificationFormArtifact = messages.find((message) => checkIsQualificationFormArtifact(message));
+  if (isFormFilledEventMessageExist && !isQualificationFormArtifact) return false;
+
+  if (isQualificationFormFiledEventMessageExist) return false;
+
+  return true;
 };

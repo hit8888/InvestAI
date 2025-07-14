@@ -3,6 +3,9 @@ import Typography from '../../Typography';
 import Button from '@breakout/design-system/components/Button/index';
 import ArrowRight from '../../icons/ArrowRight';
 import MessageItemLayout, { Padding } from './MessageItemLayout';
+import { cn } from '@breakout/design-system/lib/cn';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 type IProps = {
   event: WebSocketMessage;
@@ -24,9 +27,14 @@ const DEFAULT_MESSAGES: Record<SupportedCtaAlign, { MESSAGE: string; LABEL: stri
 };
 
 const CtaEventMessage = (props: IProps) => {
+  const isMobile = useIsMobile();
   const { event, handleSendUserMessage } = props;
   const { event_data } = (event?.message as EventMessageContent) ?? {};
   const { label, message, url, align, title } = (event_data as CtaEventDataContent) ?? {};
+
+  const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
+    shouldScroll: isMobile && !!align,
+  });
 
   const handleClick = () => {
     if (!url) return;
@@ -48,8 +56,15 @@ const CtaEventMessage = (props: IProps) => {
 
   if (align === 'left') {
     return (
-      <MessageItemLayout paddingInline={Padding.INLINE}>
-        <div className="flex w-full max-w-[424px] items-center justify-between gap-4 rounded-2xl bg-transparent_gray_3 p-4">
+      <MessageItemLayout elementRef={scrollToMessageRef} paddingInline={Padding.INLINE}>
+        <div
+          className={cn(
+            'flex w-full max-w-[424px] items-center justify-between gap-4 rounded-2xl bg-transparent_gray_3 p-4',
+            {
+              'max-w-full': isMobile,
+            },
+          )}
+        >
           <Typography className="w-7/12" variant="title-18">
             {message ?? DEFAULT_MESSAGES[align].MESSAGE}
           </Typography>
@@ -64,7 +79,12 @@ const CtaEventMessage = (props: IProps) => {
 
   if (align === 'right') {
     return (
-      <div className="w-[66%] pl-2 pr-4 pt-4">
+      <div
+        ref={scrollToMessageRef}
+        className={cn('w-[66%] pl-2 pr-4 pt-4', {
+          'w-full max-w-lg p-0': isMobile,
+        })}
+      >
         <div className="flex h-full max-h-full w-full items-center justify-center rounded-[10px] border border-gray-200 bg-transparent_gray_3 p-2">
           <div className="flex flex-col items-center justify-center gap-2">
             <Typography variant="title-24" className="text-center">

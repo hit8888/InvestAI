@@ -2,10 +2,12 @@ import Cal from '@calcom/embed-react';
 import { CalendarArtifactContent } from '@meaku/core/types/artifact';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useEffect } from 'react';
+import useDelayedCallback from '../../hooks/useDelayedCallback';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
   handleSendUserMessage?: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  onLoad?: () => void;
 }
 
 interface CalComEventData {
@@ -23,7 +25,7 @@ interface CalComEventData {
   }[];
 }
 
-export const CalComCalendar = ({ calendarContent, handleSendUserMessage }: Props) => {
+export const CalComCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Props) => {
   useEffect(() => {
     if (!handleSendUserMessage) return;
 
@@ -52,6 +54,8 @@ export const CalComCalendar = ({ calendarContent, handleSendUserMessage }: Props
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [calendarContent, handleSendUserMessage]);
+
+  useDelayedCallback(onLoad);
 
   return (
     <div className="h-full w-full sm:min-h-[600px]">
