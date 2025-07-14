@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { trackError } from '@meaku/core/utils/error';
+import ReactCropperModal from './ReactCropperModal';
 
 interface AssetResponse {
   id: string;
@@ -82,15 +83,29 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   const agentId = getTenantActiveAgentId();
   const [imagePreview, setImagePreview] = useState<string | null>(initialImage ?? null);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showCropModal, setShowCropModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !file.type.startsWith('image/')) return;
 
+    // Set the selected file and show crop modal
+    setSelectedFile(file);
+    setShowCropModal(true);
+  };
+
+  const handleCropComplete = async (croppedImageBlob: Blob) => {
     try {
       setIsUploading(true);
-      const response = await uploadAssetsFile(file);
+
+      // Convert blob to file
+      const croppedFile = new File([croppedImageBlob], 'cropped-image.png', {
+        type: 'image/png',
+      });
+
+      const response = await uploadAssetsFile(croppedFile);
       const assetData = response.data as AssetResponse;
 
       // Set preview using the public_url from the response
@@ -103,8 +118,8 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         duration: 5000,
       });
       trackError(error, {
-        action: 'uploadAssetsFile Api call',
-        component: 'handleImageUpload function',
+        action: 'AgentImageUpload Api call',
+        component: 'AgentImageUpload function',
         additionalData: {
           agentId,
           tenantName: getTenantIdentifier()?.['tenant-name'],
@@ -116,8 +131,13 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
     }
   };
 
+  const handleCloseCropModal = () => {
+    setShowCropModal(false);
+    setSelectedFile(null);
+  };
+
   const triggerFileInput = () => {
-    if (!isUploading) {
+    if (!isUploading && !showCropModal) {
       fileInputRef.current?.click();
     }
   };
@@ -129,7 +149,6 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       </Typography>
     );
   };
-
   return (
     <div
       className={cn(
@@ -137,19 +156,30 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         {
           'px-2 py-1': !!imagePreview?.length,
           'border-dashed': !imagePreview?.length,
-          'cursor-not-allowed opacity-50': isUploading,
+          'cursor-not-allowed opacity-50': isUploading || showCropModal,
         },
       )}
       style={{ width, height }}
       onClick={triggerFileInput}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerFileInput();
+        }
+      }}
     >
       <input
         type="file"
         ref={fileInputRef}
         className="hidden"
         accept="image/*"
+        onClick={() => {
+          if (fileInputRef.current) fileInputRef.current.value = '';
+        }}
         onChange={handleImageUpload}
-        disabled={isUploading}
+        disabled={isUploading || showCropModal}
       />
 
       {imagePreview ? (
@@ -164,6 +194,16 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
           alwaysVisible={true}
         />
       )}
+
+      {/* Image Crop Modal */}
+      <ReactCropperModal
+        isOpen={showCropModal}
+        onClose={handleCloseCropModal}
+        imageFile={selectedFile}
+        onCropComplete={handleCropComplete}
+        outputWidth={isSquareLogo ? 60 : 240}
+        outputHeight={isSquareLogo ? 60 : 60}
+      />
     </div>
   );
 };
