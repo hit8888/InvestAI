@@ -8,7 +8,12 @@ import {
   BulkProcessDocumentsRequest,
   BulkReprocessArtifactsRequest,
   ConversationsPayload,
+  CreateAndUpdateCustomDocumentResponse,
+  CreateCustomDocumentRequest,
+  DailySessionInsightsResponse,
   DataSourcePayload,
+  DeleteArtifactsRequest,
+  DeleteArtifactsResponse,
   DeleteDocumentsRequest,
   DeleteDocumentsResponse,
   DeleteWebpagesRequest,
@@ -17,29 +22,24 @@ import {
   FetchSitemapRequest,
   FetchSitemapResponse,
   FilterOptionsPayload,
+  FrequentDocumentsResponse,
   GenerateOtpPayload,
   GenerateTokens,
-  LoginWithGoogleSsoPayload,
+  HourlySessionInsightsResponse,
   InsightsCommonRequest,
   InsightsSummaryResponse,
+  IntegrationsResponse,
   LeadsPayload,
   LoginWithEmailPasswordPayload,
+  LoginWithGoogleSsoPayload,
   ReprocessWebpagesRequest,
   ReprocessWebpagesResponse,
   SessionInsightsRequest,
-  DailySessionInsightsResponse,
-  UpdateArtifactRequest,
-  VerifyOtpPayload,
-  CreateCustomDocumentRequest,
-  CreateAndUpdateCustomDocumentResponse,
-  UpdateCustomDocumentRequest,
-  WeeklySessionInsightsResponse,
-  HourlySessionInsightsResponse,
   TopQuestionsByUserResponse,
-  FrequentDocumentsResponse,
-  IntegrationsResponse,
-  DeleteArtifactsRequest,
-  DeleteArtifactsResponse,
+  UpdateArtifactRequest,
+  UpdateCustomDocumentRequest,
+  VerifyOtpPayload,
+  WeeklySessionInsightsResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -232,3 +232,24 @@ export const disconnectIntegration = (integrationType: string) => {
 export const getCalendars = () => adminApiClient.get(`/tenant/api/calendars`);
 
 export const getMyCalendars = () => adminApiClient.get(`/tenant/api/calendars/my-calendars`);
+
+// LLMs.txt API endpoints
+export const generateLlmsTxt = (dataSourceId: number, maxPages?: number) => {
+  const payload = { data_source_id: dataSourceId, ...(maxPages && { max_pages: maxPages }) };
+  return adminApiClient.post(`/tenant/api/llm-txt/`, payload);
+};
+
+export const downloadLlmsTxt = (dataSourceId: number) => {
+  return adminApiClient.get(`/tenant/api/llm-txt/`, {
+    params: { data_source_id: dataSourceId },
+    responseType: 'blob',
+  });
+};
+
+export const getLlmsTxtDetails = (dataSourceId: number) => {
+  return adminApiClient.get(`/tenant/api/llm-txt/details/`, { params: { data_source_id: dataSourceId } });
+};
+
+export const getDataSourcesQuery = (payload: DataSourcePayload) => {
+  return adminApiClient.post(`/tenant/api/datasources/query/`, payload);
+};
