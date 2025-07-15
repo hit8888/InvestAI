@@ -127,7 +127,7 @@ const AgentMessages = ({
       <div
         id="agent-messages-container"
         ref={agentChatContainerRef}
-        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4 pt-16'])}
+        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4'])}
       >
         <div
           className={cn([

@@ -20,12 +20,12 @@ const MessageAnalytics = ({ analytics, invertTextColor, viewType }: IProps) => {
   }
 
   return (
-    <div ref={buyerIntentScoreRef} className="flex items-center gap-3">
+    <div ref={buyerIntentScoreRef} className="flex items-center justify-center gap-2">
       <Typography variant="label-14-semibold" textColor="textPrimary">
         Analytics:
       </Typography>
       <Badge
-        className={cn('bg-primary', {
+        className={cn('bg-primary py-0 leading-6', {
           'text-black': invertTextColor,
         })}
       >

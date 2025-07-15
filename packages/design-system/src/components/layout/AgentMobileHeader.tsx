@@ -36,7 +36,7 @@ const AgentMobileHeader = ({
   }
 
   return (
-    <div className="fixed top-0 z-50 flex w-full items-center gap-6 self-stretch rounded-t-none bg-primary p-2">
+    <div className="flex w-full items-center gap-6 self-stretch rounded-t-none bg-primary p-2">
       <div className="flex items-center gap-3">
         <div className="flex items-center justify-center rounded-full bg-white p-0.5">{renderOrb()}</div>
         <div className="flex flex-col items-start">

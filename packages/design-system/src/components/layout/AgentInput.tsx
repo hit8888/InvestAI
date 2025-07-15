@@ -62,7 +62,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, invertTex
         >
           <TextArea
             className={cn([
-              'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
+              'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:pt-0.5 placeholder:text-gray-400',
               inputValue.length > 0 && 'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60',
             ])}
             placeholder="Type your message here..."
