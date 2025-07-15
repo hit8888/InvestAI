@@ -17,6 +17,8 @@ import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQuery
 import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
 import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
+
 interface IProps {
   fetchSessionData: () => void;
 }
@@ -91,7 +93,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
       return 'mt-2 h-[95vh] rounded-3xl';
     } else if (isMobile) {
       return 'mx-0 w-full h-[100dvh]';
-    } else if (mode === 'embed' || mode === 'overlay') {
+    } else if (mode === WidgetMode.INLINE_EMBEDDED || mode === WidgetMode.EMBEDDED_MODAL) {
       return 'mx-0 mt-0 h-[100vh] w-[100vw]';
     } else return 'h-[95vh]';
   }, [isMobile, isAgentOpen, mode]);
