@@ -93,7 +93,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
       return 'mx-0 w-full h-[100dvh]';
     } else if (mode === 'embed' || mode === 'overlay') {
       return 'mx-0 mt-0 h-[100vh] w-[100vw]';
-    }
+    } else return 'h-[95vh]';
   }, [isMobile, isAgentOpen, mode]);
 
   return (
