@@ -6,7 +6,7 @@ import {
 import { updateBrandingAgentConfigs } from '@meaku/core/adminHttp/api';
 import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantIdentifier, deepCompare } from '@meaku/core/utils/index';
 
 // Utility function to extract field-specific error messages
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,6 +109,17 @@ export const handleConfigUpdate = async (
       },
     };
 
+    // Check if the new payload is different from the current configs
+    const nameChanged = payload.name !== agentConfigs.name;
+    const logoChanged = payload.metadata.logo !== agentConfigs.metadata.logo;
+    const styleChanged = deepCompare(
+      agentConfigs.configs['agent_personalization:style'],
+      payload.configs['agent_personalization:style'],
+    );
+    // If no changes detected, skip the API call
+    if (!nameChanged && !logoChanged && !styleChanged) {
+      return;
+    }
     // Validate the payload
     const validatedPayload = agentConfigPayloadSchema.parse(payload);
     await updateBrandingAgentConfigs(agentId, validatedPayload);

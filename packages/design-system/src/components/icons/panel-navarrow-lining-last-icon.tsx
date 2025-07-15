@@ -14,7 +14,6 @@ const PanelNavArrowLastLiningIcon = ({ className = 'text-primary', width, height
       fill="none"
       {...props}
     >
-      <rect width="56" height="64" fill="#FCFCFD" />
       <path
         d="M36 0H54H36ZM54 23H44C39.0294 23 35 18.9706 35 14H37C37 17.866 40.134 21 44 21H54V23ZM44 23C39.0294 23 35 18.9706 35 14V0H37V14C37 17.866 40.134 21 44 21V23ZM54 0V22V0Z"
         fill="#D0D5DD"

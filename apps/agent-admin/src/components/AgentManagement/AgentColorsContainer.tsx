@@ -21,6 +21,13 @@ const AgentColorsContainer = ({ agentId, agentConfigs, onUpdate }: AgentColorsCo
   const primaryColor = agentConfigs?.configs['agent_personalization:style']?.primary;
   const secondaryColor = agentConfigs?.configs['agent_personalization:style']?.secondary;
   const handleColorUpdate = async (color: string, isPrimary: boolean) => {
+    const currentColor = isPrimary ? primaryColor : secondaryColor;
+
+    // Check if the color has actually changed
+    if (currentColor === color) {
+      return;
+    }
+
     handleConfigUpdate(
       agentId,
       {

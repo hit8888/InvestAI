@@ -26,6 +26,13 @@ const AgentFontStyleContainer = ({ agentId, agentConfigs, onUpdate }: AgentFontS
     agentConfigs?.configs['agent_personalization:style']?.font_config?.font_family || null,
   );
   const handleFontStyleUpdate = async (fontStyle: string | null) => {
+    const currentFontFamily = agentConfigs?.configs['agent_personalization:style']?.font_config?.font_family;
+
+    // Check if the font style has actually changed
+    if (currentFontFamily === fontStyle) {
+      return;
+    }
+
     setFontStyleValue(fontStyle);
     handleConfigUpdate(
       agentId,
@@ -55,6 +62,7 @@ const AgentFontStyleContainer = ({ agentId, agentConfigs, onUpdate }: AgentFontS
       <div className="flex w-full flex-1 items-center gap-8 self-stretch">
         <CardTitleAndDescription description={FONT_STYLE_SUBTITLE} />
         <AgentDropdown
+          allowDeselect={false}
           isSearchable
           applyFontFamily
           options={FONT_FAMILY_LIST}

@@ -7,6 +7,7 @@ import FilterContent from './FilterContent';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { MULTI_VALUE_FILTER_TYPES } from '../../utils/constants';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 type SingleAppliedFilterProps = {
   filter: { key: string; label: string; value: string | string[] | boolean };
@@ -62,7 +63,9 @@ const SingleAppliedFilter = ({
         {MULTI_VALUE_FILTER_TYPES.includes(filter.key as FilterType) ? (
           <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
         ) : (
-          <span className="text-sm font-semibold capitalize text-gray-600">{filter.value}</span>
+          <Typography variant="label-14-medium" className="lowercase text-gray-600">
+            {filter.value}
+          </Typography>
         )}
         <span
           onClick={(e) => handleRemove(e as React.MouseEvent<HTMLButtonElement>)}

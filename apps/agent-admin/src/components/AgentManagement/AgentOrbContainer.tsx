@@ -26,6 +26,14 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
   const useFaviconDisabled = !shortLogo;
 
   const handleUseFaviconValue = (value: boolean) => {
+    const currentShowOrb = orb_config?.show_orb ?? !!orb_config?.logo_url;
+    const newShowOrb = !value;
+
+    // Check if the orb configuration has actually changed
+    if (currentShowOrb === newShowOrb) {
+      return;
+    }
+
     setUseFavicon(value);
     handleConfigUpdate(
       agentId,

@@ -30,10 +30,18 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
   const [orbLogo, setOrbLogo] = useState<string | null>(configOrbLogo);
 
   const handleAgentNameUpdate = async () => {
+    // Check if the name has actually changed
+    if (agentName === agentConfigs?.name) {
+      return;
+    }
     handleConfigUpdate(agentId, { name: agentName }, agentConfigs, onUpdate, 'Name');
   };
 
   const handleLogoUpdate = async (newLogo: string) => {
+    // Check if the logo has actually changed
+    if (newLogo === configLogo) {
+      return;
+    }
     setLogo(newLogo);
     handleConfigUpdate(
       agentId,
@@ -45,6 +53,10 @@ const AgentLogoAndNameContainer = ({ agentId, agentConfigs, onUpdate }: AgentLog
   };
 
   const handleOrbLogoUpdate = async (newOrbLogo: string | null) => {
+    // Check if the orb logo has actually changed
+    if (newOrbLogo === configOrbLogo) {
+      return;
+    }
     setOrbLogo(newOrbLogo);
     handleConfigUpdate(
       agentId,

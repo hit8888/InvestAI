@@ -31,6 +31,7 @@ interface DropdownProps {
   isSearchable?: boolean;
   dropdownMenuHeader?: string;
   applyFontFamily?: boolean;
+  allowDeselect?: boolean;
 }
 
 // Also Add check for is_required key
@@ -50,6 +51,7 @@ const AgentDropdown = ({
   isSearchable = false,
   dropdownMenuHeader,
   applyFontFamily = false,
+  allowDeselect = true,
 }: DropdownProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -66,11 +68,18 @@ const AgentDropdown = ({
   // Handle option toggle (select/deselect)
   const handleOptionClick = useCallback(
     (option: string) => {
-      setSelectedOption((prevSelected) => (prevSelected === option ? null : option));
-      onCallback?.(option); // Call the parent-provided callback
+      const isSameOption = selectedOption === option;
+      if (isSameOption && !allowDeselect) {
+        setIsDropdownOpen(false);
+        return;
+      }
+
+      const newSelectedOption = isSameOption ? null : option;
+      setSelectedOption(newSelectedOption);
+      onCallback?.(newSelectedOption);
       setIsDropdownOpen(false);
     },
-    [onCallback],
+    [onCallback, selectedOption, allowDeselect],
   );
 
   const clearSearchTerm = useCallback(() => {

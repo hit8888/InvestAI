@@ -2,6 +2,7 @@ import { SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
 import { OrganizationDetails } from '../types/admin/auth';
 import DateUtil from './dateUtils';
+import isEqual from 'lodash/isEqual';
 
 export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
 
@@ -176,3 +177,7 @@ export const MESSAGE_STATE = {
   FIRST_WELCOME_USER: 3,
   FIRST_WELCOME_LOADING_TEXT: 3,
 } as const;
+
+export const deepCompare = (obj1: unknown, obj2: unknown): boolean => {
+  return isEqual(obj1, obj2);
+};
