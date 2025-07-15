@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { nanoid } from 'nanoid';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';
 import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
@@ -21,6 +21,10 @@ interface AdminConversationsWebSocketProps {
 }
 
 export type SendMessageFn = (message: Partial<WebSocketMessage>) => Promise<void>;
+
+export type SendAdminMessageFn = (message: Partial<EventMessageContent>) => void;
+
+export type SendAdminMessageWithSessionIdFn = (sessionId: string, message: Partial<EventMessageContent>) => void;
 
 export interface AdminConversationsWebSocketInfo {
   readyState: ReadyState;

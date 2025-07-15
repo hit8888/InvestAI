@@ -7,7 +7,7 @@ import { useTableWidth } from '@breakout/design-system/hooks/useTableWidth';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import JoinConversationDrawer from './JoinConversationDrawer';
 import WebSocketManager from './WebSocketManager';
-import { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
+import { SendAdminMessageWithSessionIdFn, SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import { useSidebar } from '../../context/SidebarContext';
 import { ActiveConversationDetailsProvider } from '../../context/ActiveConversationDetailsContext';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
@@ -54,12 +54,12 @@ const ActiveConversationsLayout = () => {
 
       updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
       setCurrentConversation(null);
-      navigate('/conversations');
+      navigate('/active-conversations');
     }
   };
 
   const handleCardClick = (conversation: ActiveConversation) => {
-    navigate(`/conversations/live/${conversation.session_id}`);
+    navigate(`/active-conversations/live/${conversation.session_id}`);
 
     if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
       updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
@@ -68,7 +68,7 @@ const ActiveConversationsLayout = () => {
 
   const handleCloseJoinConversationDrawer = () => {
     setCurrentConversation(null);
-    navigate('/conversations');
+    navigate('/active-conversations');
   };
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {
@@ -78,14 +78,16 @@ const ActiveConversationsLayout = () => {
     }));
   }, []);
 
-  const handleSendMessage = (sessionId: string, textMessage: string) => {
+  const handleSendMessage: SendAdminMessageWithSessionIdFn = (sessionId, payload) => {
     const sendMessage = sendMessageFnMap[sessionId];
 
-    sendMessage({
+    sendMessage?.({
       message: {
-        content: textMessage,
         event_type: 'ADMIN_RESPONSE',
-        event_data: {},
+        content: payload.content ?? '',
+        event_data: {
+          ...(payload?.event_data ?? {}),
+        },
       },
       message_type: 'EVENT',
     });

@@ -1,4 +1,5 @@
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type LiveConversationsHeaderProps = {
   isLoading?: boolean;
@@ -13,17 +14,23 @@ const LiveConversationsHeader = ({
   isExpanded,
   onToggleView,
 }: LiveConversationsHeaderProps) => {
+  if (isLoading) {
+    return (
+      <>
+        <Skeleton className="h-4 w-44" />
+        <Skeleton className="h-4 w-24" />
+      </>
+    );
+  }
+
+  if (totalActiveChats === 0) {
+    return <NoLiveConversations />;
+  }
+
   return (
     <div className="flex w-full items-center justify-between gap-4">
-      <div className="flex items-center gap-4">
-        <p className="text-lg font-semibold text-primary">Live conversations</p>
-        {isLoading ? null : <LiveConversationsCount totalActiveChats={totalActiveChats} />}
-      </div>
-
-      {!isLoading && totalActiveChats === 0 ? <NoLiveConversations /> : null}
-      {!isLoading && totalActiveChats > 0 ? (
-        <ViewToggleButton isExpanded={isExpanded} onToggleView={onToggleView} />
-      ) : null}
+      <LiveConversationsCount totalActiveChats={totalActiveChats} />
+      <ViewToggleButton isExpanded={isExpanded} onToggleView={onToggleView} />
     </div>
   );
 };
@@ -44,9 +51,7 @@ const LiveConversationsCount = ({ totalActiveChats }: Pick<LiveConversationsHead
 };
 
 const NoLiveConversations = () => {
-  return (
-    <div className="text-xs text-gray-500">No Live Conversations currently. See below for the recent conversations</div>
-  );
+  return <div className="text-xs text-gray-500">No Live Conversations currently.</div>;
 };
 
 const ViewToggleButton = ({

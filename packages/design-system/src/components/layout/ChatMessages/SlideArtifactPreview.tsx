@@ -30,7 +30,7 @@ const SlideArtifactPreview = ({
   const handleOpenDialog = () => {
     if (viewType === ViewType.USER) {
       handleArtifactOnClick();
-    } else if (viewType === ViewType.DASHBOARD) {
+    } else {
       setOpenDialog(true);
     }
   };

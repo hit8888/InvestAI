@@ -21,6 +21,7 @@ import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
 import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
 import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
+import ActiveConversationsPage from '../pages/ActiveConversationsPage/ActiveConversationsPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -66,12 +67,16 @@ const routes = [
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
           },
           {
-            path: 'conversations/live/:sessionID',
-            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
-          },
-          {
             path: 'conversations/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
+          },
+          {
+            path: 'active-conversations',
+            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
+          },
+          {
+            path: 'active-conversations/live/:sessionID',
+            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
           },
           {
             path: 'agent',

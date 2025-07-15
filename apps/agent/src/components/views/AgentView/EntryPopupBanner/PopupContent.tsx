@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Button from '@breakout/design-system/components/Button/index';
 import PopupCloseIcon from '@breakout/design-system/components/icons/popup-close-icon';
 import Orb from '@breakout/design-system/components/Orb/index';
@@ -7,6 +8,8 @@ import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 import { motion } from 'framer-motion';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../../../../assets/popup-sound.mp4';
 
 export type PopupContentProps = {
   agentName: string;
@@ -32,6 +35,12 @@ const PopupContent = ({
   const isEntryPointOnTheCenterBottom = popupBannerAlignment === 'center';
   const isEntryPointOnTheBottomLeft = popupBannerAlignment === 'left';
   const isEntryPointOnTheBottomRight = popupBannerAlignment === 'right';
+
+  const { play } = useSound(popupsound, 0.35);
+
+  useEffect(() => {
+    play();
+  }, [play]);
 
   const { setAgentOpen } = useUrlParams();
   const handleBannerClose = (event: React.MouseEvent<HTMLButtonElement>) => {

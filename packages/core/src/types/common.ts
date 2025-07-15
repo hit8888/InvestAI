@@ -11,6 +11,13 @@ export const DataSourceSchema = z.object({
   similarity_score: z.number().optional().nullable(),
 });
 
+export const BrowsedUrlSchema = z.object({
+  url: z.string().nullable(),
+  timestamp: z.number().nullable(),
+});
+
+export type BrowsedUrl = z.infer<typeof BrowsedUrlSchema>;
+
 export enum DemoPlayingStatus {
   PLAYING = 'PLAYING',
   STARTED = 'STARTED',

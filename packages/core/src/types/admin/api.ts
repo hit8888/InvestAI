@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { WebSocketMessageSchema } from '../webSocketData';
 import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
+import { BrowsedUrlSchema } from '../common';
 
 // LoginWithEmailPasswordPayload
 export const LoginWithEmailPasswordPayloadSchema = z.object({
@@ -240,9 +241,30 @@ export const ConversationDetailsResponseSchema = z.object({
   feedback: z.array(FeedbackRequestPayloadSchema).optional(),
 });
 
+export const ActiveConversationSessionSchema = z.object({
+  session_id: z.string().nullable().optional(),
+  start_time: z.string().nullable(),
+  end_time: z.string().nullable().optional(),
+  ip_address: z.string().nullable().optional(),
+  parent_url: z.string().nullable(),
+  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+  referrer: z.string().nullable().optional(),
+  is_live: z.boolean().nullable().optional(),
+  agent_id: z.number().nullable().optional(),
+  buyer_intent_score: z.number().nullable().optional(),
+  is_test: z.boolean().nullable().optional(),
+  test_type: z.string().nullable().optional(),
+  experiment_tag: z.string().nullable().optional(),
+  metadata: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+});
+
 export const ActiveConversationDetailsResponseSchema = z.object({
   chat_history: z.array(WebSocketMessageSchema),
   chat_summary: z.string(),
+  prospect: z.object({
+    browsed_urls: z.array(BrowsedUrlSchema),
+  }),
+  session: ActiveConversationSessionSchema,
 });
 
 // Schema for Filter Options - Payload & Response
@@ -355,6 +377,8 @@ export const DataSourceDocumentsResponseResultSchema = z.object({
   updated_on: z.string(),
   status: z.string(),
 });
+
+export type DataSourceDocumentsResponseResult = z.infer<typeof DataSourceDocumentsResponseResultSchema>;
 
 export const DataSourceArtifactsResponseResultSchema = z.object({
   id: z.number(),
@@ -639,3 +663,15 @@ export const IntegrationsResponseSchema = z.object({
 });
 
 export type IntegrationsResponse = z.infer<typeof IntegrationsResponseSchema>;
+
+export const CalendarSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  calendar_type: z.string().optional(),
+  calendar_url: z.string().optional(),
+  is_primary: z.boolean().optional(),
+  owner_type: z.string().optional(),
+  owner_name: z.string().optional(),
+});
+
+export type CalendarResponse = z.infer<typeof CalendarSchema>;

@@ -365,6 +365,7 @@ export enum AppRoutesEnum {
   CONVERSATIONS = 'conversations',
   ACTIVE_LEADS = 'conversations/leads',
   LINK_CLICKS = 'conversations/link-clicks',
+  ACTIVE_CONVERSATIONS = 'active-conversations',
   AGENT = 'agent',
   AGENT_DATA_SOURCES = 'agent/data-sources',
   AGENT_WORKFLOW = 'agent/workflow',
@@ -379,6 +380,7 @@ export enum AppRoutesEnum {
 
 export enum SidebarNavItemsEnum {
   CONVERSATIONS_LABEL = 'Conversations',
+  ACTIVE_CONVERSATIONS_LABEL = 'Live Conversations',
   AGENT_LABEL = 'Agent',
   AGENT_DATA_SOURCES_LABEL = 'Data Sources',
   AGENT_BRANDING_LABEL = 'Branding',
@@ -690,6 +692,13 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
     navItem: SidebarNavItemsEnum.CONVERSATIONS_LABEL,
     icon: PanelConversationIcon,
     activeIcon: PanelConversationActiveIcon,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}`,
+    navItem: SidebarNavItemsEnum.ACTIVE_CONVERSATIONS_LABEL,
+    icon: PanelConversationActiveIcon,
+    activeIcon: PanelConversationActiveIcon,
+    requiredFeatureFlag: 'active_conversations_enabled',
   },
   {
     navUrl: `/${AppRoutesEnum.AGENT}`,

@@ -13,7 +13,7 @@ import {
   SuggestionArtifactSchema,
   VideoArtifactSchema,
 } from './artifact';
-import { DataSourceSchema } from './common';
+import { BrowsedUrlSchema, DataSourceSchema } from './common';
 
 export const ScriptStepDTO = z.object({
   message: z.string(),
@@ -260,7 +260,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('ADMIN_RESPONSE'),
-    event_data: z.object({}),
+    event_data: z.object({
+      type: z.string().optional(),
+      url: z.string().optional(),
+      calendar_id: z.number().optional(),
+    }),
   }),
   z.object({
     content: z.string(),
@@ -287,7 +291,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     content: z.string(),
     event_type: z.literal('URL_TRACKING'),
     event_data: z.object({
-      recent_history: z.array(z.object({ url: z.string(), timestamp: z.number() })),
+      recent_history: z.array(BrowsedUrlSchema),
     }),
   }),
   z.object({

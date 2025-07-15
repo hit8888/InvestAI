@@ -1,3 +1,5 @@
+import { BrowsedUrl } from '../common';
+
 export type BrowserSignature = {
   userAgent: string;
   platform: string;
@@ -38,8 +40,5 @@ export type InitializationPayload = {
   referrer?: string;
   parent_url?: string;
   experiment_tag?: string | null;
-  browsed_urls?: {
-    url: string;
-    timestamp: number;
-  }[];
+  browsed_urls?: BrowsedUrl[];
 };

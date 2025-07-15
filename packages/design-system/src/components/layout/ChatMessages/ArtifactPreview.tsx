@@ -69,7 +69,7 @@ const ArtifactPreview = ({
     });
 
     const dialogEnabledArtifactTypes = ['VIDEO', 'FORM', 'CALENDAR'];
-    if (dialogEnabledArtifactTypes.includes(artifactType ?? '') && viewType === ViewType.DASHBOARD) {
+    if (dialogEnabledArtifactTypes.includes(artifactType ?? '') && viewType !== ViewType.USER) {
       setIsDialogOpen(true);
     }
   };

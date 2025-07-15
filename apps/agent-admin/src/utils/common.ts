@@ -906,18 +906,7 @@ export function generateConversationSummaryContent(
     ? Math.ceil((lastMessage.getTime() - firstMessage.getTime()) / (1000 * 60))
     : 0; // in minutes
 
-  // Calculate highest intent score
-  const highestIntentScore =
-    sessionData?.buyer_intent_score ??
-    (isChatHistoryAvailable && Array.isArray(chatHistory) && chatHistory.length > 0
-      ? chatHistory.reduce((maxScore, msg) => {
-          if (msg.message_type === 'EVENT' && msg.message?.event_type === 'MESSAGE_ANALYTICS') {
-            const score = (msg.message?.event_data as { buyer_intent_score: number }).buyer_intent_score ?? 0;
-            return Math.max(maxScore, score);
-          }
-          return maxScore;
-        }, 0)
-      : 0);
+  const highestIntentScore = sessionData?.buyer_intent_score ?? getHighestIntentScore(chatHistory).buyer_intent_score;
 
   // Count messages
   const aiMessageCount = chatHistory.filter(
@@ -1075,3 +1064,46 @@ export const getLeadTypeDisplayText = (leadType: string | undefined): string => 
 
   return '-';
 };
+
+export function getHighestIntentScore(chatHistory: WebSocketMessage[]): {
+  buyer_intent_score: number;
+  buyer_intent: string;
+} {
+  if (!Array.isArray(chatHistory) || chatHistory.length === 0) {
+    return {
+      buyer_intent_score: 0,
+      buyer_intent: '',
+    };
+  }
+  const highestIntentScore = chatHistory.reduce(
+    (
+      maxScore: { buyer_intent_score: number; buyer_intent: string },
+      msg: WebSocketMessage,
+    ): { buyer_intent_score: number; buyer_intent: string } => {
+      if (msg.message_type === 'EVENT' && msg.message?.event_type === 'MESSAGE_ANALYTICS') {
+        const scoreRaw = (msg.message?.event_data as { buyer_intent_score?: number | string; buyer_intent?: string })
+          ?.buyer_intent_score;
+        const intent = (msg.message?.event_data as { buyer_intent_score?: number | string; buyer_intent?: string })
+          ?.buyer_intent;
+        const score = typeof scoreRaw === 'number' ? scoreRaw : Number(scoreRaw);
+        return {
+          buyer_intent_score: Math.max(maxScore.buyer_intent_score, isNaN(score) ? 0 : score),
+          buyer_intent: intent || '',
+        };
+      }
+      return {
+        buyer_intent_score: maxScore.buyer_intent_score,
+        buyer_intent: maxScore.buyer_intent,
+      };
+    },
+    {
+      buyer_intent_score: 0,
+      buyer_intent: '',
+    },
+  );
+
+  return {
+    buyer_intent_score: highestIntentScore.buyer_intent_score,
+    buyer_intent: highestIntentScore.buyer_intent,
+  };
+}

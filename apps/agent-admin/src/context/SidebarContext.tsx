@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { NavigationGroup, SIDE_NAV_VIEW_TO_ITEMS, SidebarNavItemsEnum, SideNavView } from '../utils/constants';
 import usePageRouteState from '../hooks/usePageRouteState';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { useAuth } from './AuthProvider';
+import { OrganizationDetails } from '@meaku/core/types/admin/auth';
 
 const EXPANDED_TABS_KEY = 'expanded_tabs';
 const SIDEBAR_OPEN_KEY = 'sidebar_open';
@@ -23,6 +25,12 @@ type SidebarContextProps = {
 
 type ExpandedTabsState = {
   [key: string]: boolean;
+};
+
+const hasFeatureFlag = (organization: OrganizationDetails | undefined, featureFlag: string | undefined) => {
+  if (!featureFlag) return true;
+
+  return organization?.[featureFlag as keyof OrganizationDetails] === true;
 };
 
 const getInitialExpandedState = (): ExpandedTabsState => {
@@ -46,8 +54,11 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     isTrainingPlaygroundPage,
     pathURL,
   } = usePageRouteState();
+  const { userInfo } = useAuth();
+  const orgList = userInfo?.organizations;
   const navigate = useNavigate();
   const { tenantName } = useParams();
+  const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
   const [isSidebarOpen, setIsSidebarOpen] = useState(getInitialSidebarState);
   const [sideNavView, setSideNavView] = useState<SideNavView>(() => {
     if (pathURL.includes('settings')) {
@@ -66,10 +77,12 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const { groupedItems, ungroupedItems } = useMemo(() => {
     const basicURL = getDashboardBasicPathURL(tenantName ?? '');
-    const items = SIDE_NAV_VIEW_TO_ITEMS[sideNavView].map((item) => ({
-      ...item,
-      navUrl: `${basicURL}${item.navUrl}`,
-    }));
+    const items = SIDE_NAV_VIEW_TO_ITEMS[sideNavView]
+      .map((item) => ({
+        ...item,
+        navUrl: `${basicURL}${item.navUrl}`,
+      }))
+      .filter((item) => hasFeatureFlag(organization, item.requiredFeatureFlag));
 
     const groupedItems = new Map<NavigationGroup, typeof items>();
     const ungroupedItems: typeof items = [];
@@ -86,7 +99,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
 
     return { groupedItems, ungroupedItems };
-  }, [tenantName, sideNavView]);
+  }, [tenantName, sideNavView, organization]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => {

@@ -6,3 +6,8 @@ export enum DISCOVERY_QUESTION_ANSWER_TYPE {
   MULTI_SELECT = 'MULTI_SELECT',
   TEXT = 'TEXT',
 }
+
+export const EMPTY_ARRAY = [];
+export const EMPTY_OBJECT = Object.freeze({});
+export const EMPTY_FUNCTION = () => {};
+export const EMPTY_STRING = '';

@@ -40,4 +40,12 @@ export type NavLinkItem = {
   activeIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   children?: NavLinkItem[];
   group?: NavigationGroup;
+  requiredFeatureFlag?: string;
 };
+
+export enum ActiveConversationAttachmentOption {
+  DOCUMENT = 'document',
+  MY_CALENDAR = 'my-calendar',
+  ALL_CALENDAR = 'all-calendar',
+  NONE = '',
+}

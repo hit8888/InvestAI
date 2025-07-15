@@ -1,13 +1,16 @@
-import { LoaderCircle, TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
-import AdminChatInput from './AdminChatInput';
-import JoinConversationButton from './JoinConversationButton';
+import AdminChatInput, { ExitButton, JoinButtons } from './AdminChatInput';
+import Typography from '@breakout/design-system/components/Typography/index';
+import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
 
 type JoinConversationBottomBarProps = {
   sessionStatus: AdminConversationJoinStatus;
   onJoinButtonClick: () => void;
-  onSendMessage: (message: string) => void;
+  onSendMessage: SendAdminMessageFn;
   onAIResponseGenerationRequest: () => void;
+  onExit: () => void;
+  onClose: () => void;
 };
 
 const JoinConversationBottomBar = ({
@@ -15,46 +18,42 @@ const JoinConversationBottomBar = ({
   onJoinButtonClick,
   onSendMessage,
   onAIResponseGenerationRequest,
+  onExit,
+  onClose,
 }: JoinConversationBottomBarProps) => {
   const renderContent = (sessionStatus: AdminConversationJoinStatus) => {
     switch (sessionStatus) {
-      case AdminConversationJoinStatus.PENDING:
-        return <PendingJoinConversation />;
       case AdminConversationJoinStatus.JOINED:
         return (
-          <AdminChatInput onSendMessage={onSendMessage} onAIResponseGenerationRequest={onAIResponseGenerationRequest} />
+          <AdminChatInput onSendMessage={onSendMessage} onAIResponseGenerationRequest={onAIResponseGenerationRequest}>
+            <ExitButton onExit={onExit} />
+          </AdminChatInput>
         );
       case AdminConversationJoinStatus.DENIED:
         return <JoinConversationDenied />;
       default:
-        return <JoinConversationButton onJoinConversationClick={onJoinButtonClick} />;
+        return (
+          <AdminChatInput
+            disabled
+            onSendMessage={onSendMessage}
+            onAIResponseGenerationRequest={onAIResponseGenerationRequest}
+          >
+            <JoinButtons status={sessionStatus} onJoin={onJoinButtonClick} onClose={onClose} />
+          </AdminChatInput>
+        );
     }
   };
 
-  return (
-    <div className="w-full rounded-2xl border border-gray-200 bg-white px-1 py-1">
-      <div className="w-full rounded-2xl border border-gray-300 bg-white p-3">{renderContent(sessionStatus)}</div>
-    </div>
-  );
-};
-
-const PendingJoinConversation = () => {
-  return (
-    <div className="flex gap-3 text-customSecondaryText">
-      <div className="animate-spin">
-        <LoaderCircle />
-      </div>
-      <span>Joining...</span>
-    </div>
-  );
+  return renderContent(sessionStatus);
 };
 
 const JoinConversationDenied = () => {
   return (
     <div className="flex gap-3 text-warning-1000">
       <TriangleAlert />
-
-      <span>User currently do not need human support.</span>
+      <Typography variant="body-14" textColor="error" as="span">
+        User currently do not need human support.
+      </Typography>
     </div>
   );
 };

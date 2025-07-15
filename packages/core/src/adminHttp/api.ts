@@ -228,3 +228,7 @@ export const connectIntegrationCallback = (payload: { code: string; state: strin
 export const disconnectIntegration = (integrationType: string) => {
   return adminApiClient.post(`/tenant/api/integration/${integrationType}/disconnect`);
 };
+
+export const getCalendars = () => adminApiClient.get(`/tenant/api/calendars`);
+
+export const getMyCalendars = () => adminApiClient.get(`/tenant/api/calendars/my-calendars`);

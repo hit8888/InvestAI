@@ -15,13 +15,12 @@ const LeadsPage = () => {
   // const totalNumberOfLeads = 1;
   return (
     <>
-      <div className="flex flex-col items-start gap-6 self-stretch">
-        <CustomPageHeader
-          headerTitle="Conversations"
-          headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
-        />
-        <ConversationTabs />
-        {/* <div className="flex h-64 w-full rounded-2xl border border-primary/10 p-4">
+      <CustomPageHeader
+        headerTitle="Conversations"
+        headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
+      />
+      <ConversationTabs />
+      {/* <div className="flex h-64 w-full rounded-2xl border border-primary/10 p-4">
           <div className="flex w-full flex-col items-start gap-4 self-stretch">
             <div className="flex w-full items-center gap-6 self-stretch">
               <div className="flex w-full items-center gap-6">
@@ -42,7 +41,6 @@ const LeadsPage = () => {
             </div>
           </div>
         </div> */}
-      </div>
       <LeadsTableContainer
         key={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
         pageType={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
