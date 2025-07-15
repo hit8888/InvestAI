@@ -52,8 +52,11 @@ const AttachmentSelectionDialog = ({ selectedOption, onSendMessage, onClose }: A
 
     if (itemType === 'document') {
       const document = itemData as DataSourceDocumentsResponseResult;
+      const documentName = document.asset?.name || document.title;
+      const documentUrl = document.asset?.public_url;
+
       onSendMessage({
-        content: `Admin has shared a document [${document.asset?.name}](${document.asset?.public_url}) with you`,
+        content: `Admin has shared a document [${documentName}](${documentUrl}) with you`,
         event_data: {
           type: 'document',
           url: document.asset?.public_url,
@@ -88,8 +91,9 @@ const AttachmentSelectionDialog = ({ selectedOption, onSendMessage, onClose }: A
 
     return documentsData.map((document) => {
       const documentName = document.asset?.name || document.title;
+      const documentUrl = document.asset?.public_url;
 
-      if (!documentName) {
+      if (!documentName || !documentUrl) {
         return null;
       }
 

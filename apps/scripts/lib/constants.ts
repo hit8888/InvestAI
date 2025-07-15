@@ -38,7 +38,7 @@ export const RESPONSIVE_SIZES: AllResponsiveSizes = {
   TABLET: {
     DEFAULT: {
       WIDTH: "max(380px, 100vw)",
-      HEIGHT: "max(600px, 100vh)",
+      HEIGHT: "max(600px, 100dvh)",
     },
     COLLAPSED: {
       CENTER_WIDTH_INITIAL: "max(380px, 100vw)",

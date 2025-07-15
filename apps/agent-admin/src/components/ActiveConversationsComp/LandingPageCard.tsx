@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Typography from '@breakout/design-system/components/Typography/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { toSentenceCase } from '@meaku/core/utils/index';
@@ -21,9 +22,11 @@ const LandingPageCard = ({ source, url, timestamp }: LandingPageCardProps) => {
             <Typography variant="label-14-medium" textColor="default">
               Landing page:
             </Typography>
-            <Typography variant="body-14" className="flex-1 truncate text-blue_sec-1000">
-              {url}
-            </Typography>
+            <Link to={url} target="_blank" rel="noopener noreferrer" className="truncate">
+              <Typography variant="body-14" className="flex-1 truncate text-blue_sec-1000">
+                {url}
+              </Typography>
+            </Link>
           </div>
           {timestamp && (
             <Typography variant="caption-12-normal" textColor="gray500">
