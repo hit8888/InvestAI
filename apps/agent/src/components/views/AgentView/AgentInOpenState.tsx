@@ -100,11 +100,16 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
         'custom-blur flex h-full flex-1 flex-col overflow-hidden rounded-3xl border border-gray-200 p-3 opacity-100 transition-all duration-300 ease-in-out',
         {
           'hidden opacity-0': !showAgentInOpenState,
-          'rounded-custom-20 p-0': isMobile,
+          'rounded-none p-0': isMobile,
         },
       )}
     >
-      <div className="chat-window-shadow flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white">
+      <div
+        className={cn([
+          'chat-window-shadow relative flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white',
+          isMobile && 'rounded-none',
+        ])}
+      >
         {isMobile ? (
           <AgentMobileHeader
             handleCloseAgent={handleCloseAgent}
@@ -178,7 +183,6 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             handleSendMessage={handleSendMessage}
             disableMessageSend={disableMessageSend}
             messages={messages}
-            isCollapsible={isCollapsible}
             invertTextColor={invertTextColor}
           />
         )}

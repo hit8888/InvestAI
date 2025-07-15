@@ -12,11 +12,10 @@ interface IProps {
   handleSendMessage: (message: string) => void;
   disableMessageSend: boolean;
   messages: WebSocketMessage[];
-  isCollapsible: boolean;
   invertTextColor?: boolean;
 }
 
-const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollapsible, invertTextColor }: IProps) => {
+const AgentInput = ({ handleSendMessage, disableMessageSend, messages, invertTextColor }: IProps) => {
   const isMobile = useIsMobile();
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -62,7 +61,6 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, isCollaps
           className={cn(['relative z-10 flex w-full rounded-2xl', !isMobile && 'border border-gray-200 bg-white p-1'])}
         >
           <TextArea
-            autoFocus={isCollapsible}
             className={cn([
               'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:text-gray-400',
               inputValue.length > 0 && 'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60',

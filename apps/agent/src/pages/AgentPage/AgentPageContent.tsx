@@ -8,9 +8,12 @@ import { Toaster } from 'react-hot-toast';
 import AgentView from '../../components/views/AgentView';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
 import { useUpdateSessionOnSessionInit } from '../shared/hooks/useUpdateSessionOnSessionInit';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const Agent = () => {
   const { getParam } = useUrlParams();
+  const isMobile = useIsMobile();
   const { orgName } = useParams<{ orgName: string }>();
 
   const sessionApiResponseManager = useSessionApiResponseManager();
@@ -29,9 +32,9 @@ const Agent = () => {
   return (
     <>
       {isShowingBGCover && (
-        <div className="fixed inset-0 z-0 h-screen w-screen overflow-hidden">
+        <div className={cn('h-full w-full', !isMobile && 'fixed inset-0 z-0 h-screen w-screen overflow-hidden')}>
           <div
-            className="absolute inset-0 h-full w-full bg-contain bg-center bg-no-repeat"
+            className={cn('absolute inset-0 h-full w-full bg-contain bg-center bg-no-repeat', isMobile && 'bg-cover')}
             style={{
               backgroundImage: `url('${CDN_URL_FOR_ASSETS}/agents-website-SS/${orgName}.png')`,
             }}

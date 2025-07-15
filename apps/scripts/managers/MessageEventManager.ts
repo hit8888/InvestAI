@@ -72,6 +72,8 @@ export function MessageEventManager(
     postMessage,
   } = dependencies;
 
+  let originalBodyOverflow: string | null = null;
+
   // Origin validation
   const isValidOrigin = (eventOrigin: string): boolean => {
     try {
@@ -178,6 +180,16 @@ export function MessageEventManager(
       event.data.entryPointAlignment ?? EntryPointAlignment.CENTER;
     state.hasFirstUserMessageBeenSent =
       event.data.hasFirstUserMessageBeenSent ?? false;
+
+    if (state.isAgentOpen) {
+      if (originalBodyOverflow === null) {
+        originalBodyOverflow = document.body.style.overflow;
+      }
+      document.body.style.overflow = "hidden";
+    } else if (originalBodyOverflow !== null) {
+      document.body.style.overflow = originalBodyOverflow;
+      originalBodyOverflow = null;
+    }
 
     urlManager.updateParentUrlParam(
       "isAgentOpen",

@@ -9,19 +9,11 @@ interface IProps {
   handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   disableMessageSend: boolean;
   messages: WebSocketMessage[];
-  isCollapsible: boolean;
   invertTextColor?: boolean;
   ctaConfig?: CTAConfigType;
 }
 
-const AgentActionPanel = ({
-  handleSendMessage,
-  disableMessageSend,
-  messages,
-  isCollapsible,
-  invertTextColor,
-  ctaConfig,
-}: IProps) => {
+const AgentActionPanel = ({ handleSendMessage, disableMessageSend, messages, invertTextColor, ctaConfig }: IProps) => {
   const isMobile = useIsMobile();
 
   return (
@@ -38,7 +30,6 @@ const AgentActionPanel = ({
         handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}
         disableMessageSend={disableMessageSend}
         messages={messages}
-        isCollapsible={isCollapsible}
         invertTextColor={invertTextColor}
       />
     </div>

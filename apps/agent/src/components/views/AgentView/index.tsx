@@ -90,7 +90,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     if (isAgentOpen && !isMobile) {
       return 'mt-2 h-[95vh] rounded-3xl';
     } else if (isMobile) {
-      return 'mt-2 h-[calc(100dvh-40px)]';
+      return 'mx-0 w-full h-[100dvh]';
     } else if (mode === 'embed' || mode === 'overlay') {
       return 'mx-0 mt-0 h-[100vh] w-[100vw]';
     }

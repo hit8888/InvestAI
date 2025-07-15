@@ -79,6 +79,8 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
     let embeddedContainer: HTMLElement | null = null;
     let bottomContainer: HTMLElement | null = null;
     const initialMessageSent: boolean = false;
+    const isMobile =
+      deviceManager.isMobile() || deviceManager.getDeviceType() === "TABLET";
 
     try {
       let iframe: HTMLIFrameElement;
@@ -89,6 +91,7 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
           embeddedContainerManager.createContainer(
             config.containerId,
             IFRAME_SRC,
+            isMobile,
           );
         if (container) {
           embeddedContainer = container;
@@ -103,7 +106,11 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
       if (!config.containerId || config.showBottomBar) {
         bottomContainer = bottomBarContainerManager.createContainer();
         if (!currentContainer) {
-          iframe = agentIframeManager.create(bottomContainer, IFRAME_SRC);
+          iframe = agentIframeManager.create(
+            bottomContainer,
+            IFRAME_SRC,
+            isMobile,
+          );
           currentContainer = bottomContainer;
         }
       }

@@ -6,15 +6,19 @@ export function AgentIframeManager() {
   const create = (
     container: HTMLElement,
     iframeSrc: string,
+    isMobile: boolean,
   ): HTMLIFrameElement => {
     iframe = document.createElement("iframe");
     Object.assign(iframe.style, {
       width: "100%",
       height: "100%",
       border: "none",
-      borderRadius: "36px",
+      borderRadius: isMobile ? "0" : "36px",
     });
     iframe.allow = "geolocation *; microphone *; camera *; clipboard-write";
+    iframe.setAttribute("allowfullscreen", "true");
+    iframe.setAttribute("mozallowfullscreen", "mozallowfullscreen");
+    iframe.setAttribute("webkitallowfullscreen", "webkitallowfullscreen");
     iframe.id = WIDGET_IDS.BREAKOUT_AGENT;
     iframe.src = iframeSrc;
 

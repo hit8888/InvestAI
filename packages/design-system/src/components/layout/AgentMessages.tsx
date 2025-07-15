@@ -108,11 +108,9 @@ const AgentMessages = ({
   const isCurrentMessageComplete = checkIsCurrentMessageComplete(messages, lastMessageResponseId);
   const agentMessagesContainerClassName = useMemo(() => {
     if (isMobile || !showRightPanel) {
-      return 'w-full';
+      return 'w-full shrink-0';
     } else if (!isMobile && showRightPanel) {
       return 'w-[35%] shrink-0';
-    } else if (!isMobile) {
-      return 'shrink-0';
     }
     return '';
   }, [isMobile, showRightPanel]);
@@ -129,7 +127,7 @@ const AgentMessages = ({
       <div
         id="agent-messages-container"
         ref={agentChatContainerRef}
-        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4'])}
+        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4 pt-16'])}
       >
         <div
           className={cn([

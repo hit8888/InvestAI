@@ -38,6 +38,7 @@ export function StyleManager(
     const deviceType = getDeviceType ? getDeviceType() : "DESKTOP";
     const sizes = getResponsiveSize(deviceType, !isAgentOpen);
 
+    const isMobile = deviceType === "TABLET";
     let width: string, height: string;
 
     const isSidewiseEntryPoint = entryPointAlignment !== "center";
@@ -80,12 +81,12 @@ export function StyleManager(
     };
 
     Object.assign(styles, {
-      bottom: "-10px",
+      bottom: isMobile ? "0" : "-10px",
       left: ENTRY_POINT_LEFT_MAP[entryPointAlignment] ?? "50%",
       right: ENTRY_POINT_RIGHT_MAP[entryPointAlignment] ?? "auto",
       transform:
         ENTRY_POINT_TRANSFORM_MAP[entryPointAlignment] ?? "translateX(-50%)",
-      borderRadius: "12px",
+      borderRadius: isMobile ? "0" : "12px",
     });
 
     Object.assign(container.style, styles);

@@ -305,7 +305,6 @@ const config: Omit<Config, "content"> = {
       borderRadius: {
         "custom-56": "56px",
         "custom-50": "50px",
-        "custom-20": "20px",
       },
       opacity: {
         "2.5": "0.025", // Add 2.5% opacity

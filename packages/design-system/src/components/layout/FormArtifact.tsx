@@ -129,7 +129,7 @@ const FormArtifact = ({
 
   return (
     <Card
-      className={cn(['w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3', isMobile && 'max-w-full'])}
+      className={cn(['w-full max-w-[404px] rounded-2xl border-none bg-transparent_gray_3', isMobile && 'max-w-lg'])}
     >
       <CardContent className="flex flex-col gap-4 p-4">
         <Form {...form}>

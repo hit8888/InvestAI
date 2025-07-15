@@ -24,43 +24,33 @@ const PhoneInputContainer = ({
   className,
 }: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  // TODO: Add default country based on user's IP address or something other logic
-  // const getDefaultCountry = (): CountryCode => {
-  //   // Get the user's language setting
-  //   const language = navigator.language;
 
-  //   // Extract region code from language
-  //   const regionCode = language.split('-')[1];
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
 
-  //   // For English language without region code, default to US
-  //   if (language.startsWith('en') && !regionCode) {
-  //     return 'US';
-  //   }
-
-  //   // Return region code or default to 'US'
-  //   return (regionCode ? regionCode.toUpperCase() : 'US') as CountryCode;
-  // };
+  const handleBlur = () => {
+    field.onBlur();
+    setIsFocused(false);
+  };
 
   return (
     <PhoneInput
-      autoComplete="on"
+      autoComplete="tel"
       defaultCountry={defaultCountry}
-      className={cn(
+      className={cn([
         'custom-phone-input group w-full rounded-lg border border-gray-300 bg-white text-sm text-customPrimaryText',
-        {
-          'border-gray-400 ring-0 ': isFocused,
-        },
+        isFocused && 'border-gray-400 ring-0',
         className,
-      )}
+      ])}
+      autoCorrect="on"
+      spellCheck="true"
       readOnly={isArtifactFormFilled}
       placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}
-      onFocus={() => setIsFocused(true)}
+      onFocus={handleFocus}
       {...field}
-      onBlur={() => {
-        field.onBlur();
-        setIsFocused(false);
-      }}
+      onBlur={handleBlur}
     />
   );
 };

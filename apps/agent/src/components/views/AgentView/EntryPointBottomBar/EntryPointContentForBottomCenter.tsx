@@ -52,7 +52,10 @@ const EntryPointContentForBottomCenter = ({
   const showSuggestedQuestions =
     initialSuggestedQuestions.length > 0 && inputValue.length <= 0 && !hasFirstUserMessageBeenSent;
 
-  const displayOrb = !hasFirstUserMessageBeenSent && !inputValue && showOrbAfterBubblesDisappear;
+  const showRightSideOrb = hasFirstUserMessageBeenSent && !isMobile; // only in desktop
+  const showLeftSideOrb = (hasFirstUserMessageBeenSent && isMobile) || !hasFirstUserMessageBeenSent; // Mobile - always, Desktop - only if no user message been sent
+
+  const displayOrb = showLeftSideOrb && !inputValue && showOrbAfterBubblesDisappear;
 
   return (
     <div className="w-full rounded-2xl bg-gray-50 p-1">
@@ -92,10 +95,10 @@ const EntryPointContentForBottomCenter = ({
 
         <div
           className={cn('flex items-center justify-center pr-2', {
-            'pr-1': !hasFirstUserMessageBeenSent,
+            'pr-1': !showRightSideOrb,
           })}
         >
-          {hasFirstUserMessageBeenSent && (
+          {showRightSideOrb && (
             <InputWaitingOrb
               showThreeStar={isMobile}
               showOrb={showOrb}

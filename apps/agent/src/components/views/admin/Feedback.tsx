@@ -37,7 +37,7 @@ const Feedback = () => {
 
   return (
     <Backdrop landingPageUrl={page_url} className="relative flex h-screen flex-col items-center justify-center">
-      <div className={cn(['flex h-[95vh] w-[98vw]', isMobile && 'calc(100dvh - 40px) mt-2'])}>
+      <div className={cn(['flex h-[95vh] w-[98vw]', isMobile && 'mx-0 h-[100dvh] w-full'])}>
         <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
     </Backdrop>

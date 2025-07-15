@@ -48,6 +48,21 @@ const ChatFormField = (props: IChatFormFieldProps) => {
     }
   };
 
+  // Handling auto complete for different fields
+  const getAutoCompleteValue = (label: string) => {
+    const lowerLabel = label.toLowerCase();
+
+    if (lowerLabel.includes('name')) return 'name';
+    if (lowerLabel.includes('email')) return 'email';
+    if (lowerLabel.includes('phone') || lowerLabel.includes('tel')) return 'tel';
+    if (lowerLabel.includes('address')) return 'street-address';
+    if (lowerLabel.includes('company') || lowerLabel.includes('organization')) return 'organization';
+    if (lowerLabel.includes('job') || lowerLabel.includes('title')) return 'job-title';
+
+    // Default for unknown types
+    return 'on';
+  };
+
   const getFieldBasedOnDataType = (field: ControllerRenderProps<FieldValues, string>) => {
     switch (form_field.data_type) {
       case 'phone':
@@ -81,12 +96,15 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             readOnly={isArtifactFormFilled}
             {...field}
             value={field.value ?? ''}
-            autoComplete="on"
-            className={cn(
+            autoComplete={getAutoCompleteValue(form_field.label)}
+            autoCorrect="on" // For iOS
+            autoCapitalize="words" // For names
+            spellCheck="true" // Enable spell checking
+            className={cn([
               'border border-gray-300 bg-white text-customPrimaryText placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
               fieldClassName,
               fieldErrorMessage && 'border-1 border border-destructive-600 bg-destructive-25',
-            )}
+            ])}
             placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             type={getInputType(form_field.data_type)}
             onKeyDown={handleKeyDown}

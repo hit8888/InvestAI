@@ -4,12 +4,14 @@ export function EmbeddedContainerManager(
   createIframe?: (
     container: HTMLElement,
     iframeSrc: string,
+    isMobile: boolean,
   ) => HTMLIFrameElement,
   sendMessage?: (iframe: HTMLIFrameElement, message: object) => void,
 ) {
   const createContainer = (
     targetId: string,
     iframeSrc: string,
+    isMobile: boolean,
   ): {
     container: HTMLElement | null;
     iframe?: HTMLIFrameElement;
@@ -39,7 +41,7 @@ export function EmbeddedContainerManager(
     targetContainer.appendChild(container);
 
     if (createIframe) {
-      const iframe = createIframe(container, iframeSrc);
+      const iframe = createIframe(container, iframeSrc, isMobile);
 
       // Send initial config for embedded mode
       if (sendMessage) {
