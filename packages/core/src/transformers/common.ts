@@ -24,5 +24,6 @@ export const convertServerConversationDataToClientConversationData = (
     session_id: response.session_id || '-',
     prospect_details: response.prospect_details || {},
     company_details: response.company_details || {},
+    agent_modal: response.agent_modal,
   };
 };

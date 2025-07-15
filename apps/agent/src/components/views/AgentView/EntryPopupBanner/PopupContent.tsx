@@ -9,7 +9,7 @@ import { OrbStatusEnum } from '@meaku/core/types/config';
 import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 import { motion } from 'framer-motion';
 import useSound from '@meaku/core/hooks/useSound';
-import popupsound from '../../../../assets/popup-sound.mp4';
+import popupsound from '../../../../assets/banner-sound.mp3';
 
 export type PopupContentProps = {
   agentName: string;

@@ -1,7 +1,7 @@
 import CrmIcon from '../icons/crm_enrichment_icon.tsx';
 import OutboundCampaignIcon from '../icons/outbound_campaign_enrichment_icon.tsx';
 import UserInputIcon from '../icons/user_input_enrichment_icon.tsx';
-import EnrichmentIcon from '../icons/enrichment_icon.tsx';
+import AiSparklesIcon from '../icons/ai-sparkles-icon.tsx';
 import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark.tsx';
 import { EnrichmentSource } from '@meaku/core/types/admin/admin';
 import { ReactElement } from 'react';
@@ -26,8 +26,12 @@ const ENRICHMENT_SOURCE_TO_DISPLAY_CONFIG: Record<
     tooltipContent: 'From User Input',
   },
   ip_enrichment: {
-    icon: <EnrichmentIcon />,
-    tooltipContent: 'From Enrichment',
+    icon: (
+      <div className="rounded-lg bg-gray-100 p-1">
+        <AiSparklesIcon className="h-4 w-4" />
+      </div>
+    ),
+    tooltipContent: 'Enriched via 3rd party sources',
   },
 };
 

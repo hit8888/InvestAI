@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 
-export type WidgetMode = 'embed' | 'overlay' | 'bottomBar';
+export enum WidgetMode {
+  BOTTOM_BAR = 'BOTTOM_BAR',
+  EMBEDDED_MODAL = 'EMBEDDED_MODAL',
+  INLINE_EMBEDDED = 'INLINE_EMBEDDED',
+}
 
 interface WidgetModeContextType {
   mode: WidgetMode;
@@ -12,10 +16,10 @@ const determineInitialMode = (): WidgetMode => {
   const containerId = urlParams.get('container_id');
 
   if (!containerId) {
-    return 'bottomBar';
+    return WidgetMode.BOTTOM_BAR;
   }
 
-  return 'embed';
+  return WidgetMode.INLINE_EMBEDDED;
 };
 
 const WidgetModeContext = createContext<WidgetModeContextType | undefined>(undefined);

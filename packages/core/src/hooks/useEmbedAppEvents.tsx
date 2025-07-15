@@ -5,7 +5,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from './useLocalStorageSession';
 import { WebSocketMessage } from '../types/webSocketData';
-import { useWidgetMode } from '../contexts/WidgetModeProvider';
+import { useWidgetMode, WidgetMode } from '../contexts/WidgetModeProvider';
 import { useAppEventsHook } from './useAppEventsHook';
 import { EntryPointAlignmentType } from '../types/entryPoint';
 import useConfigurationApiResponseManager from './useConfigurationApiResponseManager';
@@ -50,7 +50,7 @@ export const useEmbedAppEvents = ({
   };
 
   const handleEmbedAndOpenAgent = () => {
-    setMode('embed');
+    setMode(WidgetMode.INLINE_EMBEDDED);
     handleOpenAndShowAgent();
   };
 
@@ -65,7 +65,7 @@ export const useEmbedAppEvents = ({
     switch (type) {
       case 'PARENT_FORM_MESSAGE':
         setIsCollapsible(true);
-        setMode('overlay');
+        setMode(WidgetMode.EMBEDDED_MODAL);
         handleOpenAndShowAgent();
         trackAgentbotEvent(ANALYTICS_EVENT_NAMES.PARENT_FORM_MESSAGE, {
           ...event.data.data,
@@ -86,7 +86,7 @@ export const useEmbedAppEvents = ({
         if (!event.data.isCollapsible) {
           handleEmbedAndOpenAgent();
         } else {
-          setMode('bottomBar');
+          setMode(WidgetMode.BOTTOM_BAR);
         }
         fetchSessionData();
         break;

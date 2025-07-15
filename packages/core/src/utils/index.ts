@@ -1,3 +1,4 @@
+import { SPECIAL_CHARS_REGEX } from '../constants/regex';
 import { SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
 import { OrganizationDetails } from '../types/admin/auth';
@@ -156,6 +157,11 @@ export const toSentenceCase = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
+export const toDisplayText = (text?: string | null) => {
+  if (!text) return '';
+  return toSentenceCase(text.replace(SPECIAL_CHARS_REGEX, ' ').trim());
+};
+
 export const ensureProtocol = (url: string): string => {
   if (!url) return '';
   try {
@@ -168,6 +174,15 @@ export const ensureProtocol = (url: string): string => {
 export const extractLinkedInUsername = (url: string): string => {
   const match = url.match(/linkedin\.com\/in\/([^/?]+)/);
   return match ? match[1] : '';
+};
+
+export const jsonSafeParse = (jsonString: string) => {
+  try {
+    const data = JSON.parse(jsonString);
+    return { data };
+  } catch (error) {
+    return { error };
+  }
 };
 
 export const MESSAGE_STATE = {

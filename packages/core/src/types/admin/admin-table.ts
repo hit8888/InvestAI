@@ -50,6 +50,7 @@ export const ConversationsTableViewSchema = z.object({
   session_id: z.string(),
   prospect_details: ProspectDetailsSchema,
   company_details: CompanyDetailsSchema,
+  agent_modal: z.string().optional().nullable(),
 });
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({

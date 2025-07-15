@@ -33,7 +33,7 @@ import {
   LEADS_PAGE,
   LINK_CLICKS_PAGE,
   SLIDES_PAGE,
-  toSentenceCase,
+  toDisplayText,
   VIDEOS_PAGE,
   WEBPAGES_PAGE,
 } from '@meaku/core/utils/index';
@@ -55,7 +55,6 @@ import {
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
 
-const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9\s]/g;
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
 const {
@@ -1048,11 +1047,8 @@ export const getOrderedBuyerIntent = (intentScores: string[]): string[] => {
 };
 
 export const getIntegrationNameFromType = (integrationType: string | undefined): string => {
-  if (!integrationType) {
-    return 'Integration';
-  }
-
-  return toSentenceCase(integrationType.replace(SPECIAL_CHARS_REGEX, ' ').trim());
+  if (!integrationType) return 'Integration';
+  return toDisplayText(integrationType);
 };
 
 export const getLeadTypeDisplayText = (leadType: string | undefined): string => {

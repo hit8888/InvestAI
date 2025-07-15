@@ -86,18 +86,26 @@ const AttachmentSelectionDialog = ({ selectedOption, onSendMessage, onClose }: A
       return renderFallback();
     }
 
-    return documentsData.map((document) => (
-      <div
-        key={document.id}
-        className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 hover:bg-gray-50"
-        onClick={() => handleItemSelect(selectedOption, document)}
-      >
-        <DataSourcePdfIcon color="#9590EA" width="20" height="20" />
-        <Typography variant="body-14" textColor="textPrimary" className="flex-grow">
-          {document.asset?.name}
-        </Typography>
-      </div>
-    ));
+    return documentsData.map((document) => {
+      const documentName = document.asset?.name || document.title;
+
+      if (!documentName) {
+        return null;
+      }
+
+      return (
+        <div
+          key={document.id}
+          className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-2 hover:bg-gray-50"
+          onClick={() => handleItemSelect(selectedOption, document)}
+        >
+          <DataSourcePdfIcon color="#9590EA" width="20" height="20" />
+          <Typography variant="body-14" textColor="textPrimary" className="flex-grow">
+            {documentName}
+          </Typography>
+        </div>
+      );
+    });
   };
 
   const renderCalendars = () => {

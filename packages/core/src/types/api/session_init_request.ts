@@ -1,3 +1,4 @@
+import { WidgetMode } from '../../contexts/WidgetModeProvider';
 import { BrowsedUrl } from '../common';
 
 export type BrowserSignature = {
@@ -40,5 +41,6 @@ export type InitializationPayload = {
   referrer?: string;
   parent_url?: string;
   experiment_tag?: string | null;
+  agent_modal?: WidgetMode;
   browsed_urls?: BrowsedUrl[];
 };

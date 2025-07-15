@@ -201,6 +201,7 @@ export const ConversationsResponseResultSchema = z.object({
   is_test: z.boolean(),
   prospect_details: ProspectDetailsSchema.optional().nullable(),
   company_details: CompanyDetailsSchema.optional().nullable(),
+  agent_modal: z.string().optional().nullable(),
 });
 
 export const PaginationDataSchema = z.object({

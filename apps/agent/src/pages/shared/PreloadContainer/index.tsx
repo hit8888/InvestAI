@@ -15,7 +15,7 @@ import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
-import { useWidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
+import { useWidgetMode, WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 import { cn } from '@breakout/design-system/lib/cn';
 import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
@@ -23,6 +23,7 @@ import Button from '@breakout/design-system/components/Button/index';
 import { useAppEventsHook } from '@meaku/core/hooks/useAppEventsHook';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { jsonSafeParse } from '@meaku/core/utils/index';
 import { getFontElement } from './font-helper.ts';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
 
@@ -43,6 +44,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
   const parentUrlParam = getParam('parent_url');
+  const { data: browsedUrls } = jsonSafeParse(getParam('browsed_urls') ?? '');
 
   const setIsInitApiSuccess = useMessageStore((state) => state.setIsInitApiSuccess);
 
@@ -145,7 +147,8 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     referrer: document.referrer,
     parent_url: parentUrlValue,
     experiment_tag: configQuery.data?.experiment_tag ?? null,
-    browsed_urls: getParam('browsed_urls') ? JSON.parse(getParam('browsed_urls') as string) : undefined,
+    ...(browsedUrls && { browsed_urls: browsedUrls }),
+    ...(mode && { agent_modal: mode }),
   };
 
   //test build
@@ -241,7 +244,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     });
   }
 
-  if (mode === 'bottomBar') {
+  if (mode === WidgetMode.BOTTOM_BAR) {
     return (
       <div className="flex h-[90vh] items-end justify-center pb-8 lg:h-screen">
         <div className="flex animate-spin items-center justify-center">

@@ -169,6 +169,9 @@ export const getDemoQuestionData = (message: WebSocketMessage | undefined): Demo
 export const isSuggestionArtifact = (msg: WebSocketMessage) =>
   msg.message_type === 'ARTIFACT' && 'artifact_type' in msg.message && msg.message.artifact_type === 'SUGGESTIONS';
 
+export const isCalendarArtifact = (msg: WebSocketMessage) =>
+  msg.message_type === 'ARTIFACT' && 'artifact_type' in msg.message && msg.message.artifact_type === 'CALENDAR';
+
 export const filterOutSuggestions = (messages: WebSocketMessage[]) =>
   messages.filter((msg) => !isSuggestionArtifact(msg));
 
@@ -308,7 +311,7 @@ export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {
 export const checkIsMainResponseMessage = (message: WebSocketMessage): boolean => {
   return (
     (message.actor === 'SALES' && (isStreamMessage(message) || isTextMessage(message))) ||
-    (message.actor === 'ARTIFACT' && isTextMessage(message)) || //Being used for form acknowledgement
+    (message.actor === 'ARTIFACT' && (isTextMessage(message) || isCalendarArtifact(message))) || //Being used for form acknowledgement
     (message.actor === 'EVENT' && (isStreamMessage(message) || isTextMessage(message)))
   );
 };
@@ -317,7 +320,10 @@ export const checkIsSalesResponseComplete = (messagesWithSameResponseId: WebSock
   return messagesWithSameResponseId.some(
     (message) =>
       checkIsMainResponseMessage(message) &&
-      (isStreamMessageComplete(message) || isTextMessage(message) || isSuggestionArtifact(message)),
+      (isStreamMessageComplete(message) ||
+        isTextMessage(message) ||
+        isSuggestionArtifact(message) ||
+        isCalendarArtifact(message)),
   );
 };
 

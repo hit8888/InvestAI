@@ -1,10 +1,11 @@
 import { Component, ReactNode } from 'react';
 import { trackError } from '@meaku/core/utils/error';
+import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 
 interface Props {
   children: ReactNode;
   // Add context props
-  mode?: 'bottomBar' | 'embed' | 'overlay';
+  mode?: WidgetMode;
   agentId?: string;
   onError?: (error: Error, errorInfo: { componentStack: string }) => void;
 }
