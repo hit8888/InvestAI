@@ -253,3 +253,7 @@ export const getLlmsTxtDetails = (dataSourceId: number) => {
 export const getDataSourcesQuery = (payload: DataSourcePayload) => {
   return adminApiClient.post(`/tenant/api/datasources/query/`, payload);
 };
+
+export const getConversationProcessingTimeLog = (payload: InsightsCommonRequest) => {
+  return adminApiClient.post(`/tenant/api/analytics/processing-time-logs/`, payload);
+};

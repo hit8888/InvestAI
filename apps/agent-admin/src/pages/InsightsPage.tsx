@@ -11,6 +11,8 @@ import { DayOfWeek } from '@meaku/core/types/admin/api';
 import HourlyTrafficByWeekday from '../components/Insights/HourlyTrafficByWeekday';
 import FrequentSources from '../components/Insights/FrequentSources';
 import TopQuestionsByUsers from '../components/Insights/TopQuestionsByUsers';
+import ConversationProcessingTimeLog from '../components/Insights/ConversationProcessingTimeLog';
+import { useAuth } from '../context/AuthProvider';
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const firstDateOfLastMonth = moment().subtract(1, 'month').startOf('month');
@@ -21,6 +23,7 @@ const defaultDateRange = {
 };
 
 const InsightsPage = () => {
+  const { userInfo } = useAuth();
   const [currentDateRange, setCurrentDateRange] = useState<DateRangeProp | undefined>(defaultDateRange);
   const [currentDayOfWeek, setCurrentDayOfWeek] = useState<DayOfWeek | undefined>(undefined);
 
@@ -62,6 +65,9 @@ const InsightsPage = () => {
         <div className="flex gap-12">
           <FrequentSources {...insightsCommonQueryParams} />
           <TopQuestionsByUsers {...insightsCommonQueryParams} />
+        </div>
+        <div className="flex gap-12">
+          {userInfo?.is_staff && <ConversationProcessingTimeLog {...insightsCommonQueryParams} />}
         </div>
       </div>
     </div>

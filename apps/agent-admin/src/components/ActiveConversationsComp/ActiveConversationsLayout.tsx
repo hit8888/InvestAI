@@ -18,7 +18,7 @@ const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
   const { widthStyle } = useTableWidth({ isSidebarOpen });
   const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
-  const [showActiveConversations, setShowActiveConversations] = useState(false);
+  const [showActiveConversations, setShowActiveConversations] = useState(true);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
   const { userInfo } = useAuth();
   const navigate = useNavigate();
@@ -132,6 +132,12 @@ const ActiveConversationsLayout = () => {
       message_type: 'EVENT',
     });
   };
+
+  useEffect(() => {
+    return () => {
+      setCurrentConversation(null);
+    };
+  }, [setCurrentConversation]);
 
   return (
     <div

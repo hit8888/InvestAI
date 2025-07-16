@@ -395,7 +395,7 @@ export enum SidebarNavItemsEnum {
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
 
-export const DEFAULT_ROUTE = 'conversations';
+export const DEFAULT_ROUTE = 'active-conversations';
 
 // LEADS Page
 
@@ -688,17 +688,17 @@ export enum NavigationGroup {
 
 export const MAIN_LINK_ITEMS: NavLinkItem[] = [
   {
+    navUrl: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}`,
+    navItem: SidebarNavItemsEnum.ACTIVE_CONVERSATIONS_LABEL,
+    icon: PanelConversationIcon,
+    activeIcon: PanelConversationActiveIcon,
+    requiredFeatureFlag: 'active_conversations_enabled',
+  },
+  {
     navUrl: `/${AppRoutesEnum.CONVERSATIONS}`,
     navItem: SidebarNavItemsEnum.CONVERSATIONS_LABEL,
     icon: PanelConversationIcon,
     activeIcon: PanelConversationActiveIcon,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}`,
-    navItem: SidebarNavItemsEnum.ACTIVE_CONVERSATIONS_LABEL,
-    icon: PanelConversationActiveIcon,
-    activeIcon: PanelConversationActiveIcon,
-    requiredFeatureFlag: 'active_conversations_enabled',
   },
   {
     navUrl: `/${AppRoutesEnum.AGENT}`,

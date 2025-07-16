@@ -7,6 +7,8 @@ import SideBarFooter from './SideBarFooter';
 import NavLinkSingleItem from './NavLinkSingleItem';
 import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
 import { SideNavView } from '../../utils/constants';
+import { LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthProvider';
 
 const getSidebarContainerAnimation = (isOpen: boolean) => ({
   animate: {
@@ -22,6 +24,7 @@ const getSidebarContainerAnimation = (isOpen: boolean) => ({
 });
 
 const Sidebar = () => {
+  const { logout } = useAuth();
   const { isLoginPage } = usePageRouteState();
   const { isSidebarOpen: isOpen, sideNavView, navigateToSettingsView } = useSidebar();
 
@@ -44,6 +47,17 @@ const Sidebar = () => {
             navItem="Settings"
             icon={PanelSettingsIcon}
             onClick={navigateToSettingsView}
+          />
+        </SideBarFooter>
+      )}
+      {sideNavView === SideNavView.SETTINGS && (
+        <SideBarFooter>
+          <NavLinkSingleItem
+            isActive={false}
+            isPanelOpen={isOpen}
+            navItem="Logout"
+            icon={() => <LogOut width="16" height="16" className="text-primary" />}
+            onClick={logout}
           />
         </SideBarFooter>
       )}

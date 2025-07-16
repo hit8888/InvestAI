@@ -32,6 +32,7 @@ interface DropdownProps {
   dropdownMenuHeader?: string;
   applyFontFamily?: boolean;
   allowDeselect?: boolean;
+  searchPlaceholder?: string;
 }
 
 // Also Add check for is_required key
@@ -52,6 +53,7 @@ const AgentDropdown = ({
   dropdownMenuHeader,
   applyFontFamily = false,
   allowDeselect = true,
+  searchPlaceholder,
 }: DropdownProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -164,6 +166,7 @@ const AgentDropdown = ({
               searchTerm={searchTerm}
               handleInputChange={handleInputChange}
               clearSearchTerm={clearSearchTerm}
+              placeholder={searchPlaceholder}
             />
           )}
           <DropdownMenuGroup className="max-h-[300px] overflow-y-auto">

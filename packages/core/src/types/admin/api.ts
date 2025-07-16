@@ -642,6 +642,22 @@ export const TopQuestionsByUserResponseSchema = z.object({
 });
 export type TopQuestionsByUserResponse = z.infer<typeof TopQuestionsByUserResponseSchema>;
 
+export const ConversationProcessingTimeLogResponseSchema = z.object({
+  processing_time_logs: z.array(
+    z.object({
+      session_id: z.string(),
+      response_id: z.string(),
+      user_message_time: z.string(),
+      ai_message_time: z.string(),
+      processing_time: z.number(),
+      user_message_content: z.string(),
+    }),
+  ),
+  average_processing_time: z.number(),
+  total_entries: z.number(),
+});
+export type ConversationProcessingTimeLogResponse = z.infer<typeof ConversationProcessingTimeLogResponseSchema>;
+
 export const IntegrationFormSchema = z.object({
   key: z.string(),
   data_type: z.string().nullable(),

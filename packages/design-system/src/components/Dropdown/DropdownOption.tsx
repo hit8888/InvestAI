@@ -52,7 +52,7 @@ const DropdownOption = React.memo(
             </>
           )}
         </>
-        {menuOptionTitle}
+        <span className="truncate">{menuOptionTitle}</span>
       </DropdownMenuItem>
     );
   },

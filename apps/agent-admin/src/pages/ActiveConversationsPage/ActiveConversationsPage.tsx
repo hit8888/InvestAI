@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import withPageViewWrapper from '../../pages/PageViewWrapper';
 import CustomPageHeader from '../../components/CustomPageHeader';
-import { COMMON_SMALL_ICON_PROPS, DEFAULT_ROUTE } from '../../utils/constants';
+import { AppRoutesEnum, COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsLayout from '../../components/ActiveConversationsComp/ActiveConversationsLayout';
 import { ActiveConversationsProvider } from '../../context/ActiveConversationsContext';
 import { useAuth } from '../../context/AuthProvider';
@@ -17,7 +17,7 @@ const ActiveConversationsBasePage = () => {
   const activeConversationsEnabled = organization?.active_conversations_enabled;
 
   if (!activeConversationsEnabled) {
-    return <Navigate to={`/${DEFAULT_ROUTE}`} replace />;
+    return <Navigate to={`/${AppRoutesEnum.CONVERSATIONS}`} replace />;
   }
 
   return (

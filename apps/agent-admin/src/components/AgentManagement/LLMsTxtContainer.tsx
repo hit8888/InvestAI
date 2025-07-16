@@ -191,8 +191,9 @@ const LLMsTxtContainer = () => {
               dropdownOpenClassName="ring-4 ring-gray-200"
               menuContentAlign="end"
               menuContentSide="bottom"
-              menuItemClassName="p-4 lowercase truncate"
+              menuItemClassName="p-4 lowercase"
               isSearchable={true}
+              searchPlaceholder="Search data sources..."
             />
           </div>
         </div>

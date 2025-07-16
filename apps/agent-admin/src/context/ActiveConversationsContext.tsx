@@ -97,7 +97,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
       if (currentConversation) {
         setCurrentConversation(currentConversation);
       } else {
-        navigate('/conversations');
+        navigate('/active-conversations');
       }
     }
   }, [conversations, sessionID, setCurrentConversation]);
@@ -125,7 +125,11 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
           newConversations.push(conv);
         });
 
-        return newConversations;
+        return newConversations.sort((a, b) => {
+          const aTimestamp = new Date(a.last_message_timestamp).getTime();
+          const bTimestamp = new Date(b.last_message_timestamp).getTime();
+          return bTimestamp - aTimestamp;
+        });
       });
     }
   }, [lastMessageBySession]);

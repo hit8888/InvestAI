@@ -1,4 +1,4 @@
-import { ChevronUp, ChevronDown } from 'lucide-react';
+// import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type LiveConversationsHeaderProps = {
@@ -11,8 +11,8 @@ type LiveConversationsHeaderProps = {
 const LiveConversationsHeader = ({
   isLoading,
   totalActiveChats,
-  isExpanded,
-  onToggleView,
+  // isExpanded,
+  // onToggleView,
 }: LiveConversationsHeaderProps) => {
   if (isLoading) {
     return (
@@ -30,7 +30,7 @@ const LiveConversationsHeader = ({
   return (
     <div className="flex w-full items-center justify-between gap-4">
       <LiveConversationsCount totalActiveChats={totalActiveChats} />
-      <ViewToggleButton isExpanded={isExpanded} onToggleView={onToggleView} />
+      {/* <ViewToggleButton isExpanded={isExpanded} onToggleView={onToggleView} /> */}
     </div>
   );
 };
@@ -40,7 +40,7 @@ const LiveConversationsCount = ({ totalActiveChats }: Pick<LiveConversationsHead
     return null;
   }
 
-  const chatsLabel = totalActiveChats === 1 ? 'chat' : 'chats';
+  const chatsLabel = totalActiveChats === 1 ? 'Live User' : 'Live Users';
 
   return (
     <div className="flex items-center justify-center gap-2.5 rounded-[30px] bg-primary/10 px-3 py-1">
@@ -54,22 +54,22 @@ const NoLiveConversations = () => {
   return <div className="text-xs text-gray-500">No Live Conversations currently.</div>;
 };
 
-const ViewToggleButton = ({
-  isExpanded,
-  onToggleView,
-}: Pick<LiveConversationsHeaderProps, 'isExpanded' | 'onToggleView'>) => {
-  const actionButtonText = isExpanded ? 'Collapse' : 'Expand';
-  const Icon = isExpanded ? ChevronUp : ChevronDown;
+// const ViewToggleButton = ({
+//   isExpanded,
+//   onToggleView,
+// }: Pick<LiveConversationsHeaderProps, 'isExpanded' | 'onToggleView'>) => {
+//   const actionButtonText = isExpanded ? 'Collapse' : 'Expand';
+//   const Icon = isExpanded ? ChevronUp : ChevronDown;
 
-  return (
-    <div
-      onClick={onToggleView}
-      className="flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-xs font-medium text-bluegray-1000 transition-colors hover:bg-gray-100"
-    >
-      <span>{actionButtonText}</span>
-      <Icon size={16} className="text-bluegray-1000" />
-    </div>
-  );
-};
+//   return (
+//     <div
+//       onClick={onToggleView}
+//       className="flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-xs font-medium text-bluegray-1000 transition-colors hover:bg-gray-100"
+//     >
+//       <span>{actionButtonText}</span>
+//       <Icon size={16} className="text-bluegray-1000" />
+//     </div>
+//   );
+// };
 
 export default LiveConversationsHeader;
