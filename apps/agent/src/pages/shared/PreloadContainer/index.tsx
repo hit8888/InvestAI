@@ -26,6 +26,8 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { jsonSafeParse } from '@meaku/core/utils/index';
 import { getFontElement } from './font-helper.ts';
 import { useMessageStore } from '../../../stores/useMessageStore.ts';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { DeviceType } from '@meaku/core/types/common';
 
 interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
@@ -36,6 +38,7 @@ const PARENT_URL_TIMEOUT = 2;
 const PreloadContainerContent: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<AgentParams>();
   const { sessionData } = useLocalStorageSession();
+  const isMobile = useIsMobile();
   const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
   const [waitingForParentUrl, setWaitingForParentUrl] = useState(true);
 
@@ -45,6 +48,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const test_type = getParam('test_type') ?? undefined;
   const parentUrlParam = getParam('parent_url');
   const { data: browsedUrls } = jsonSafeParse(getParam('browsed_urls') ?? '');
+  const deviceType = isMobile ? DeviceType.MOBILE : DeviceType.DESKTOP;
 
   const setIsInitApiSuccess = useMessageStore((state) => state.setIsInitApiSuccess);
 
@@ -139,6 +143,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
 
   const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
+    device_type: deviceType,
     session_id: sessionData.sessionId,
     prospect_id: sessionData.prospectId,
     browser_signature: getBrowserSignature(),

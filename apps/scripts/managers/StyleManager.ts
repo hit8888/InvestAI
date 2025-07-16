@@ -81,7 +81,7 @@ export function StyleManager(
     };
 
     Object.assign(styles, {
-      bottom: "10px",
+      bottom: "0",
       left: ENTRY_POINT_LEFT_MAP[entryPointAlignment] ?? "50%",
       right: ENTRY_POINT_RIGHT_MAP[entryPointAlignment] ?? "auto",
       transform:
