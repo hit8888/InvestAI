@@ -219,18 +219,6 @@ const PromptArea = ({
   // Check if prompts exist in the localPrompts array
   const arePromptsExisting = localPrompts.length > 0;
 
-  // Check if prompts are equal to original prompts in the originalPromptsRef object
-  const arePromptsEqual =
-    localPrompts.length === Object.keys(originalPromptsRef.current).length &&
-    localPrompts.every((prompt) => prompt.prompt.trim() === originalPromptsRef.current[prompt.id?.toString() ?? '']);
-
-  // Check if save button should be disabled
-  const isSaveButtonDisabled =
-    clickedOnEdit &&
-    localPrompts.length > 0 &&
-    localPrompts.length === Object.keys(originalPromptsRef.current).length &&
-    arePromptsEqual;
-
   // Show original prompts when not clicked on edit and prompts exist
   const showOriginalPrompts = !clickedOnEdit && arePromptsExisting;
   // Show no info provided when not clicked on edit and no prompts exist
@@ -296,7 +284,6 @@ const PromptArea = ({
         isMutationPending={
           createPromptMutation.isPending || deletePromptMutation.isPending || updatePromptMutation.isPending
         }
-        isSaveButtonDisabled={isSaveButtonDisabled}
         handleResetToDefault={handleResetToDefault}
       />
     </>

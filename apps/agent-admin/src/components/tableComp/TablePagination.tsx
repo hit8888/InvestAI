@@ -75,12 +75,12 @@ const TablePagination: React.FC<PaginationProps> = ({
       {/* Navigation buttons */}
       <div className="flex items-center gap-2">
         <NavigationArrowButton
-          conditionOnBtn={isFirstPage}
+          isDisabled={isFirstPage}
           onButtonClick={() => handlePageChange(currentPage - 1)}
           PaginationArrow={PaginationPreviousArrow}
         />
         <NavigationArrowButton
-          conditionOnBtn={isLastPage}
+          isDisabled={isLastPage}
           onButtonClick={() => handlePageChange(currentPage + 1)}
           PaginationArrow={PaginationNextArrow}
         />

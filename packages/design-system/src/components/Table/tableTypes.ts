@@ -27,7 +27,6 @@ export type HeaderContentProps = DataSourceStoreProps & {
 
 export type CustomSingleBodyRowItemProps = {
   row: Row<CommonDataSourceResponse>;
-  index: number;
   isIdSelected: (id: number) => boolean;
   toggleSelectId: (id: number) => void;
   handleDataSourcesDrawerToggle: () => void;

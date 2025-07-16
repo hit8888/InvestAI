@@ -6,7 +6,6 @@ import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
 
 const TableBodyRowItemHavingCheckbox = ({
   row,
-  index,
   isIdSelected,
   toggleSelectId,
   handleDataSourcesDrawerToggle,
@@ -23,9 +22,6 @@ const TableBodyRowItemHavingCheckbox = ({
     toggleSelectId(rowId);
   }, [toggleSelectId, rowId]);
 
-  const isEvenRow = index % 2 === 0;
-  const isOddRow = !isEvenRow;
-
   const handleRowItemClick = () => {
     if (isRowItemClickAllowed) {
       toggleSelectId(rowId);
@@ -37,8 +33,6 @@ const TableBodyRowItemHavingCheckbox = ({
     <tr
       key={row.id}
       className={cn('flex w-full items-start self-stretch', {
-        'bg-white': isEvenRow,
-        'bg-gray-25': isOddRow,
         'bg-primary/5': isRowSelected,
         'cursor-pointer': isRowItemClickAllowed,
       })}

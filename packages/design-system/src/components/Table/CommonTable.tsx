@@ -129,13 +129,12 @@ const CommonTable = ({
     return <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />;
   };
 
-  const getTableBodyRowItem = (row: Row<any>, index: number) => {
+  const getTableBodyRowItem = (row: Row<any>) => {
     if (isDataSourcesPage) {
       return (
         <TableBodyRowItemHavingCheckbox
           key={row.id}
           row={row}
-          index={index}
           allowedToOpenDrawer={allowedToOpenDrawer}
           isIdSelected={isIdSelected}
           toggleSelectId={toggleSelectId}
@@ -143,7 +142,7 @@ const CommonTable = ({
         />
       );
     }
-    return <CustomSingleBodyRowItem key={row.id} row={row} index={index} handleRowItemClick={handleRowItemClick} />;
+    return <CustomSingleBodyRowItem key={row.id} row={row} handleRowItemClick={handleRowItemClick} />;
   };
 
   const tableInitialState = isDataSourcesPage
@@ -182,11 +181,7 @@ const CommonTable = ({
                 position: 'relative',
               }}
             >
-              <thead className="w-full">
-                {table.getHeaderGroups().map((headerGroup) => {
-                  return getTableHeaderRowItem(headerGroup);
-                })}
-              </thead>
+              <thead className="w-full">{table.getHeaderGroups().map(getTableHeaderRowItem)}</thead>
             </table>
           </div>
         </div>
@@ -206,15 +201,9 @@ const CommonTable = ({
               zIndex: 4,
             }}
           >
-            {table.getHeaderGroups().map((headerGroup) => {
-              return getTableHeaderRowItem(headerGroup);
-            })}
+            {table.getHeaderGroups().map(getTableHeaderRowItem)}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row, index) => {
-              return getTableBodyRowItem(row, index);
-            })}
-          </tbody>
+          <tbody>{table.getRowModel().rows.map(getTableBodyRowItem)}</tbody>
         </table>
       </div>
     </div>

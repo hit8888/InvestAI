@@ -73,8 +73,8 @@ const ConversationTabs = () => {
               width="16"
               height="16"
               className={cn({
-                'text-primary': isActive,
-                'text-primary/60': !isActive,
+                'text-white': isActive,
+                'text-primary': !isActive,
               })}
             />
           </SingleTabDisplay>

@@ -21,6 +21,40 @@ const NavigationBodyItems = () => {
   const { isSidebarOpen: isOpen, groupedItems, ungroupedItems, expandedTabs, handleTabExpansion } = useSidebar();
   const location = useLocation();
 
+  const renderNavItemWithChildren = (
+    navItem: NavLinkItem,
+    options: {
+      isPanelOpen: boolean;
+      isChild: boolean;
+      insideTooltip: boolean;
+    },
+  ) => {
+    const { isPanelOpen, isChild, insideTooltip } = options;
+    if (!navItem.children) return null;
+
+    return (
+      <>
+        {navItem.children?.map((child: NavLinkItem, index: number) => (
+          <div key={child.navItem} className="flex w-full items-center gap-1">
+            <span className={insideTooltip ? '-ml-6' : ''}>
+              {index === navItem.children!.length - 1 ? (
+                <PanelNavArrowLastLiningIcon className="shrink-0" width="56" height="44" />
+              ) : (
+                <PanelNavArrowLiningIcon className="shrink-0" width="56" height="44" />
+              )}
+            </span>
+            <NavLinkSingleItem
+              {...child}
+              isChild={isChild}
+              isPanelOpen={isPanelOpen}
+              isActive={location.pathname.includes(child.navUrl)}
+            />
+          </div>
+        ))}
+      </>
+    );
+  };
+
   const getNavigationChildrenItems = (navItem: NavLinkItem) => {
     return (
       navItem.children &&
@@ -32,21 +66,7 @@ const NavigationBodyItems = () => {
           exit={{ opacity: 0, height: 0 }}
           className="flex flex-col"
         >
-          {navItem.children.map((child: NavLinkItem, index: number) => (
-            <div key={child.navItem} className="flex w-full">
-              {index === navItem.children!.length - 1 ? (
-                <PanelNavArrowLastLiningIcon width="56" height="36" />
-              ) : (
-                <PanelNavArrowLiningIcon width={56} height={36} />
-              )}
-              <NavLinkSingleItem
-                {...child}
-                isChild
-                isPanelOpen={isOpen}
-                isActive={location.pathname.includes(child.navUrl)}
-              />
-            </div>
-          ))}
+          {renderNavItemWithChildren(navItem, { isPanelOpen: isOpen, isChild: true, insideTooltip: false })}
         </motion.div>
       )
     );
@@ -54,29 +74,9 @@ const NavigationBodyItems = () => {
 
   const getTooltipContent = (navItem: NavLinkItem) => {
     return (
-      <>
-        {navItem.children && (
-          <div className="flex w-full flex-col pt-2">
-            {navItem.children?.map((child: NavLinkItem, index: number) => (
-              <div key={child.navItem} className="flex w-full">
-                <span className="-ml-6">
-                  {index === (navItem.children?.length ?? 0) - 1 ? (
-                    <PanelNavArrowLastLiningIcon height={36} />
-                  ) : (
-                    <PanelNavArrowLiningIcon height={36} />
-                  )}
-                </span>
-                <NavLinkSingleItem
-                  {...child}
-                  isPanelOpen={true}
-                  isChild={true}
-                  isActive={location.pathname.includes(child.navUrl)}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </>
+      <div className="flex w-full flex-col">
+        {renderNavItemWithChildren(navItem, { isPanelOpen: true, isChild: true, insideTooltip: true })}
+      </div>
     );
   };
 

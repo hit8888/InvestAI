@@ -18,12 +18,11 @@ const FilterMenuOption = ({ menuOptionTitle, onMenuOptionClicked, isSelectedOpti
       }}
       className={cn(
         'relative flex w-full cursor-pointer select-none items-center px-4 py-2 text-sm capitalize outline-none',
-        'focus:bg-primary/5 focus:text-primary',
-        'data-[highlighted]:bg-primary/5 data-[highlighted]:text-primary',
+        'focus:bg-gray-50 focus:text-system',
+        'data-[highlighted]:bg-primary/5 data-[highlighted]:text-system',
         {
-          'bg-primary/10 text-primary': isSelectedOption,
-          'text-gray-700': !isSelectedOption,
-          'hover:bg-primary/10': !isSelectedOption,
+          'bg-gray-200 text-system data-[highlighted]:bg-gray-200': isSelectedOption,
+          'text-gray-700 hover:bg-gray-100 data-[highlighted]:bg-gray-100': !isSelectedOption,
         },
       )}
     >

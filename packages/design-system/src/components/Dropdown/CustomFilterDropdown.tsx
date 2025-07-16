@@ -10,13 +10,6 @@ import {
   DropdownMenuTrigger,
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
 
-export const COMMON_ICON_PROPS = {
-  width: '24',
-  height: '25',
-  viewBox: '0 0 24 25',
-  color: 'rgb(var(--primary))',
-};
-
 // Define the type for the options
 interface DropdownProps {
   options: string[];
@@ -44,9 +37,14 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={toggleDropdown}>
       <DropdownMenuTrigger
-        className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg 
-        border border-primary/20 bg-primary/2.5 p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-primary/10 
-        focus:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/60"
+        className={cn(
+          `inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg 
+        border border-gray-300 bg-white p-2 text-sm font-semibold text-gray-500 shadow-sm hover:bg-gray-25 
+        focus:bg-gray-25 focus:outline-none`,
+          {
+            'ring-4 ring-gray-200': isDropdownOpen,
+          },
+        )}
       >
         <span>{selectedOption || filterLabel}</span>
         {staticValue && <span className="font-normal">{staticValue}</span>}
@@ -56,7 +54,7 @@ const CustomFilterDropdown: React.FC<DropdownProps> = ({ options, filterLabel, s
             'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
           })}
         >
-          <DropdownIcon {...COMMON_ICON_PROPS} />
+          <DropdownIcon className="text-system" width="24" height="24" />
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent

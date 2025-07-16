@@ -1,32 +1,25 @@
 import { cn } from '@breakout/design-system/lib/cn';
-
 import { PAGINATION_ARROW_ICONS } from '../../utils/constants';
+import Button from '@breakout/design-system/components/Button/index';
 
 interface NavigationArrowBtnProps {
-  conditionOnBtn: boolean;
+  isDisabled: boolean;
   onButtonClick: () => void;
   PaginationArrow: React.FC<{ color: string }>;
 }
 
-const NavigationArrowButton = ({ conditionOnBtn, onButtonClick, PaginationArrow }: NavigationArrowBtnProps) => {
+const NavigationArrowButton = ({ isDisabled, onButtonClick, PaginationArrow }: NavigationArrowBtnProps) => {
   return (
-    <div
-      className={cn(`flex h-9 w-9 items-center justify-center gap-2 rounded-lg border-[1.5px] p-2`, {
-        'cursor-not-allowed border-gray-300': conditionOnBtn,
-        'border-primary hover:bg-primary/10 focus:bg-primary/10': !conditionOnBtn,
-      })}
+    <Button
+      onClick={onButtonClick}
+      className={cn([!isDisabled && 'border border-gray-300 bg-gray-25', isDisabled && 'disabled:border-gray-200'])}
+      variant="system_secondary"
+      buttonStyle="icon"
+      disabled={isDisabled}
     >
-      <button
-        onClick={onButtonClick}
-        className={cn(`flex items-center gap-2`, {
-          'cursor-not-allowed': conditionOnBtn,
-        })}
-        disabled={conditionOnBtn}
-      >
-        {/* Static Color used below ('#D0D5DD') for disable condition - which will be applicable for all clients */}
-        <PaginationArrow {...PAGINATION_ARROW_ICONS} color={conditionOnBtn ? '#D0D5DD' : 'rgb(var(--primary))'} />
-      </button>
-    </div>
+      {/* Static Color used below ('#D0D5DD') for disable condition - which will be applicable for all clients */}
+      <PaginationArrow {...PAGINATION_ARROW_ICONS} color={isDisabled ? '#D0D5DD' : 'rgb(var(--system))'} />
+    </Button>
   );
 };
 

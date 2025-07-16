@@ -53,7 +53,7 @@ const NavLinkSingleItem = ({
       onClick={handleClick}
       className={cn(`flex cursor-pointer flex-col items-center`, {
         'w-full items-start p-2': isPanelOpen,
-        'items-center justify-center p-0 pl-4 pr-2': isChild,
+        'items-center justify-center p-0 pr-2': isChild,
       })}
     >
       <motion.div

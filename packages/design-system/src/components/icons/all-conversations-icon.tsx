@@ -3,14 +3,7 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const AllConversationsIcon = ({
-  className = 'text-primary',
-  width,
-  height,
-  color = '#4E46DC',
-  viewBox,
-  ...props
-}: Props) => {
+const AllConversationsIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}

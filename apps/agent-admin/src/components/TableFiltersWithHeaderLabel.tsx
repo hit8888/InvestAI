@@ -1,16 +1,18 @@
 import { PageTypeProps } from '@meaku/core/types/admin/filters';
 import AllFiltersContainer from './tableComp/AllFilters';
 import SortFilter from './tableComp/SortFilter';
-import { ConversationsPayload, LeadsPayload } from '@meaku/core/types/admin/api';
+import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
 import TableFiltersWithHeaderLabelShimmer from './ShimmerComponent/TableFiltersWithHeaderLabelShimmer';
 import { useFiltersContainerHeight } from '../hooks/useFiltersContainerHeight';
 import { useEffect } from 'react';
+import ExportDownload from './tableComp/ExportDownload';
 import SearchTableContentInput from './SearchTableContentInput';
+import { CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 
 type IProps = PageTypeProps & {
   disabledState?: boolean;
   isLoading: boolean;
-  payloadData: ConversationsPayload | LeadsPayload;
+  payloadData: ConversationsPayload | LeadsPayload | DataSourcePayload;
   onFiltersContainerHeightChange?: (height: number) => void;
 };
 
@@ -33,20 +35,26 @@ const TableFiltersWithHeaderLabel = ({
   if (isLoading) {
     return <TableFiltersWithHeaderLabelShimmer />;
   }
+  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE || page === LINK_CLICKS_PAGE;
   return (
-    <>
-      <div
-        ref={filtersRef}
-        className="sticky top-0 z-[99] flex w-full items-start justify-between self-stretch bg-white py-4"
-      >
-        <AllFiltersContainer page={page} payloadData={payloadData} />
-        <div className="flex w-fit items-center justify-end gap-2">
-          <SearchTableContentInput page={page} />
-          <SortFilter page={page} key={page} disabledState={disabledState} />
-        </div>
-      </div>
-    </>
+    <div
+      ref={filtersRef}
+      className="sticky top-0 z-[99] flex w-full items-start justify-between self-stretch bg-white py-4"
+    >
+      <FlexContainer>
+        <AllFiltersContainer page={page} isLeadsAndConversationsPage={isLeadsAndConversationsPage} />
+        <SortFilter page={page} key={page} disabledState={disabledState} />
+      </FlexContainer>
+      <FlexContainer>
+        <SearchTableContentInput page={page} />
+        {isLeadsAndConversationsPage && <ExportDownload page={page} payloadData={payloadData} />}
+      </FlexContainer>
+    </div>
   );
+};
+
+const FlexContainer = ({ children }: { children: React.ReactNode }) => {
+  return <div className="flex w-fit items-center justify-end gap-4">{children}</div>;
 };
 
 export default TableFiltersWithHeaderLabel;

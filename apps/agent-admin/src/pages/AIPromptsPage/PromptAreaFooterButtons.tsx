@@ -22,7 +22,6 @@ type PromptAreaFooterButtonsProps = {
   clickedOnEdit: boolean;
   setClickedOnEdit: (clickedOnEdit: boolean) => void;
   handleClickOnEdit: () => void;
-  isSaveButtonDisabled: boolean;
   handleResetToDefault: () => void;
 };
 
@@ -35,7 +34,6 @@ const PromptAreaFooterButtons = ({
   clickedOnEdit,
   setClickedOnEdit,
   handleClickOnEdit,
-  isSaveButtonDisabled,
   handleResetToDefault,
 }: PromptAreaFooterButtonsProps) => {
   const handleAddPrompt = () => {
@@ -92,7 +90,7 @@ const PromptAreaFooterButtons = ({
         getButtonUI({
           key: 'save-or-edit',
           onClick: handleClickOnEdit,
-          disabled: isMutationPending || isSaveButtonDisabled,
+          disabled: isMutationPending,
           rightIcon: clickedOnEdit ? <SaveIcon /> : <EditIcon />,
           label: clickedOnEdit ? 'Save' : 'Edit',
           variant: 'primary',

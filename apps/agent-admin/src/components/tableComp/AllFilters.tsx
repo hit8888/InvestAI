@@ -10,11 +10,7 @@ import AllFiltersIcon from '@breakout/design-system/components/icons/all-filters
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { collectAppliedFilters, getFilterHeaderLabel } from '../../utils/common';
 import { FilterType } from '@meaku/core/types/admin/filters';
-import ExportDownload from './ExportDownload';
-import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
 import SearchTableContentInput from '../SearchTableContentInput';
-import { CONVERSATIONS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
-import { LEADS_PAGE } from '@meaku/core/utils/index';
 
 const {
   AllFilters,
@@ -35,10 +31,10 @@ const {
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
-  payloadData: ConversationsPayload | LeadsPayload | DataSourcePayload;
+  isLeadsAndConversationsPage: boolean;
 }
 
-const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) => {
+const AllFiltersContainer = ({ page, isLeadsAndConversationsPage }: AllFiltersContainerProps) => {
   const filters = useAllFilterStore();
   const [filterState, setFilterState] = useState(AllFilters);
   const [isOpen, setIsOpen] = useState(false);
@@ -122,18 +118,15 @@ const AllFiltersContainer = ({ page, payloadData }: AllFiltersContainerProps) =>
     }
   };
 
-  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE || page === LINK_CLICKS_PAGE;
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
         {!isLeadsAndConversationsPage && <SearchTableContentInput page={page} />}
-        {isLeadsAndConversationsPage && <ExportDownload page={page} payloadData={payloadData} />}
         <PopoverTrigger className="popover-styling border-gray-200-styling flex items-center gap-2 self-stretch">
           <span className="h-5 w-5">
             <AllFiltersIcon className="h-6 w-6 text-system" />
           </span>
-          <p className="text-sm font-medium text-gray-600">All Filters</p>
+          <p className="text-sm font-medium text-gray-600">Filters</p>
           {appliedFilters.length > 0 && (
             <p className="flex h-5 w-5 items-center justify-center rounded-full bg-system p-0.5">
               <span className="text-xs font-medium text-white">{appliedFilters.length}</span>

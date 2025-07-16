@@ -33,11 +33,7 @@ const EmailCellValue: React.FC<IProps> = ({ value, valueOrientation = 'left' }) 
         <>
           {getEmailCellValue()}
           {!isValueDash ? (
-            <CopyToClipboardButton
-              copyIconClassname="h-4 w-4"
-              textToCopy={value}
-              toastMessage={COPIED_FIELD_TEXTS.EMAIL}
-            />
+            <CopyToClipboardButton btnClassName="h-4 w-4" textToCopy={value} toastMessage={COPIED_FIELD_TEXTS.EMAIL} />
           ) : null}
         </>
       ) : (

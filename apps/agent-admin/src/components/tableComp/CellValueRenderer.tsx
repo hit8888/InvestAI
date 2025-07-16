@@ -38,8 +38,6 @@ const cellValueMap: cellValueMapType = {
   timeline: TimestampCellValue,
   summary: ConversationPreviewCellValue,
   bant_analysis: BANTAnalysisCellValue,
-  buyer_intent_score: BuyerIntentCellValue,
-  buyer_intent: BuyerIntentCellValue,
   meeting_status: MeetingStatusCellValue,
   url: UrlCellValue,
   updated_on: TimestampCellValue,
@@ -82,6 +80,20 @@ const specialCellMap: Record<string, SpecialCellConfig> = {
   source_name: {
     component: SourceNameCellValue,
     type: 'SourceNameValue',
+  },
+  buyer_intent_score: {
+    component: BuyerIntentCellValue,
+    type: 'string',
+    props: {
+      chipClassName: 'absolute',
+    },
+  },
+  buyer_intent: {
+    component: BuyerIntentCellValue,
+    type: 'string',
+    props: {
+      chipClassName: 'absolute',
+    },
   },
 };
 

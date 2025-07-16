@@ -3,14 +3,14 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const DropdownIcon = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const DropdownIcon = ({ className = 'text-primary', width, height, color, ...props }: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
-      viewBox={viewBox}
+      viewBox="0 0 24 24"
       fill="none"
       {...props}
     >

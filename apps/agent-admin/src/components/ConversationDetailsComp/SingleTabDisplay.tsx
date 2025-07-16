@@ -1,3 +1,4 @@
+import Typography from '@breakout/design-system/components/Typography/index';
 import { cn } from '@breakout/design-system/lib/cn';
 import { JSX } from 'react';
 
@@ -17,24 +18,23 @@ const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }:
       })}
     >
       <div
-        className={cn('flex items-center gap-2 p-2', {
-          'rounded-lg bg-primary/20': isTabSelected,
+        className={cn('flex items-center gap-2', {
+          'rounded-lg': isTabSelected,
         })}
       >
         <div
-          className={cn('flex items-center rounded-lg bg-primary/2.5 p-1', {
-            'bg-white': isTabSelected,
+          className={cn('flex items-center rounded-lg bg-primary/5 p-1', {
+            'bg-primary': isTabSelected,
           })}
         >
           {children}
         </div>
-        <div
-          className={cn('text-base font-normal text-gray-500', {
-            'font-medium text-primary': isTabSelected,
-          })}
+        <Typography
+          variant={isTabSelected ? 'label-16-medium' : 'body-16'}
+          textColor={isTabSelected ? 'primary' : 'gray500'}
         >
           {tabLabel}
-        </div>
+        </Typography>
       </div>
     </div>
   );
