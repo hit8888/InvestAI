@@ -1,4 +1,3 @@
-import { DataSourcePayload } from '@meaku/core/types/admin/api';
 import { useFiltersContainerHeight } from '../../../hooks/useFiltersContainerHeight';
 import { useEffect } from 'react';
 import AllFiltersContainer from '../../../components/tableComp/AllFilters';
@@ -12,7 +11,6 @@ import EditBulkRowItemsButton from './EditBulkRowItemsButton';
 
 type IProps = {
   onFilterContainerHeightChange: (height: number) => void;
-  payloadData: DataSourcePayload;
   page: PaginationPageType;
   isLoading: boolean;
   totalRecords: number;
@@ -21,7 +19,6 @@ type IProps = {
 
 const DataSourceTableHeader = ({
   onFilterContainerHeightChange,
-  payloadData,
   page,
   isLoading,
   totalRecords,
@@ -50,7 +47,7 @@ const DataSourceTableHeader = ({
       ref={filtersRef}
       className="sticky top-0 z-20 flex w-full flex-1 content-end items-end justify-between self-stretch bg-white py-4"
     >
-      <AllFiltersContainer page={page} payloadData={payloadData} />
+      <AllFiltersContainer page={page} isLeadsAndConversationsPage={false} />
       <div className="flex items-center justify-end gap-4">
         <EditBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
         <ReembedBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />

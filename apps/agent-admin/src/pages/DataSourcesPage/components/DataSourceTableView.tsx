@@ -151,7 +151,6 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         totalRecords={totalRecords}
         isLoading={isLoading}
         areFiltersApplied={areFiltersApplied}
-        payloadData={debouncedPayloadData}
         onFilterContainerHeightChange={setFilterContainerHeight}
       />
       {isAllDataSourcesSelectedPerPage && <NudgeMessage itemsSelected={results.length} pageType={pageType} />}
