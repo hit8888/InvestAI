@@ -356,6 +356,7 @@ export const DataSourceAssetItemSchema = z.object({
   description: z.string().optional().nullable(),
   key: z.string(),
   public_url: z.string(),
+  is_cancelled: z.boolean().default(false),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
 
@@ -422,6 +423,7 @@ export type FetchSitemapResponse = z.infer<typeof FetchSitemapResponseSchema>;
 export const AddWebpagesSitemapLinksRequestSchema = z.object({
   main_url: z.string(),
   urls: z.array(z.string()),
+  cancelled_urls: z.array(z.string()),
 });
 export type AddWebpagesSitemapLinksRequest = z.infer<typeof AddWebpagesSitemapLinksRequestSchema>;
 

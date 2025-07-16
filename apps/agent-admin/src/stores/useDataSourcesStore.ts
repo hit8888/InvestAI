@@ -37,9 +37,19 @@ export const useDataSourcesStore = create<DataSourcesState>((set) => ({
     })),
 
   removeDataSource: (id) =>
-    set((state) => ({
-      dataSources: state.dataSources.filter((source) => source.id !== id),
-    })),
+    set((state) => {
+      const dataSource = state.dataSources.find((source) => source.id === id);
+      if (dataSource?.type === 'webpage') {
+        return {
+          dataSources: state.dataSources.map((source) =>
+            source.id === id ? { ...source, is_cancelled: true } : source,
+          ),
+        };
+      }
+      return {
+        dataSources: state.dataSources.filter((source) => source.id !== id),
+      };
+    }),
 
   removeAllDataSources: () =>
     set(() => ({

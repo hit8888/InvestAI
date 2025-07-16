@@ -27,7 +27,8 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
           }
           await addWebpagesSitemapLinks({
             main_url: mainUrl,
-            urls: dataSources.map((source) => source.public_url),
+            urls: dataSources.filter((source) => !source.is_cancelled).map((source) => source.public_url),
+            cancelled_urls: dataSources.filter((source) => source.is_cancelled).map((source) => source.public_url),
           });
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
           toast.success('Successfully added webpage sources');

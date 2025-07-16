@@ -23,8 +23,10 @@ type DataSourceDialogContentProps = {
 const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
   const [urlLink, setUrlLink] = useState('');
   const { selectedType, isUploading } = useDataSources();
-  const { dataSources } = useDataSourcesStore();
+  const { dataSources: allDataSources } = useDataSourcesStore();
   const { fetchProgress, isFetching, isFetched, fetchWebpage, resetFetch } = useSitemapFetch();
+
+  const dataSources = allDataSources.filter((source) => !source.is_cancelled);
 
   // Reset the data sources when the component unmounts
   useEffect(() => {

@@ -49,6 +49,7 @@ export const useSitemapFetch = (): useSitemapFetchReturn => {
         type: 'webpage',
         key: url,
         public_url: url,
+        is_cancelled: false,
       }));
 
       // Clear existing data sources and add new ones
