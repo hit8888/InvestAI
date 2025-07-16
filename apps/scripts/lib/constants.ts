@@ -45,7 +45,7 @@ export const RESPONSIVE_SIZES: AllResponsiveSizes = {
       CENTER_WIDTH_MESSAGE_SENT: "max(440px, 30vw)",
       CENTER_HEIGHT_WITH_BUBBLE: "max(280px, 30vh)",
       CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
-      CENTER_HEIGHT: "max(140px, 10vh)",
+      CENTER_HEIGHT: "max(80px, 10vh)",
       SIDEWISE_WIDTH_MESSAGE_SENT: "80px",
       SIDEWISE_WIDTH_INITIAL: "500px",
       SIDEWISE_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",

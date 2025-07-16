@@ -91,7 +91,11 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
           isDirectAccess={isDirectAccess}
         />
       </div>
-      <ConversationDetailsNavigatedHeader isLoading={isLoading} {...navigatedHeaderDynamicValues} />
+      <ConversationDetailsNavigatedHeader
+        isDirectAccess={isDirectAccess}
+        isLoading={isLoading}
+        {...navigatedHeaderDynamicValues}
+      />
       <ConversationDetailsMultipleTabContainer isLoading={isLoading} isLeadsPage={isLeadsPage} />
     </div>
   );

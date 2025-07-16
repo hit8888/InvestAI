@@ -3,15 +3,12 @@ import AgentMessages from '@breakout/design-system/components/layout/AgentMessag
 import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
-import { useCallback, useMemo } from 'react';
+import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
 
 const LogTabDisplayContent = () => {
   const { chatHistory, conversation, feedbackData } = useConversationDetails();
   const logoURL = getTenantIdentifier()?.['logo'];
 
-  // Memoize the empty function calling to avoid re-rendering the component
-  const handleEmptyFunction = useCallback(() => {}, []);
-  const emptyArray = useMemo(() => [], []);
   return (
     <div className="flex max-h-[900px] w-full flex-col overflow-auto bg-gray-25">
       {chatHistory?.length && conversation?.session_id ? (
@@ -19,14 +16,14 @@ const LogTabDisplayContent = () => {
           viewType={ViewType.DASHBOARD}
           sessionId={conversation?.session_id}
           isAMessageBeingProcessed={false}
-          setActiveArtifact={handleEmptyFunction}
-          setDemoPlayingStatus={handleEmptyFunction}
-          setIsArtifactPlaying={handleEmptyFunction}
+          setActiveArtifact={EMPTY_FUNCTION}
+          setDemoPlayingStatus={EMPTY_FUNCTION}
+          setIsArtifactPlaying={EMPTY_FUNCTION}
           orbState={OrbStatusEnum.idle}
           messages={chatHistory}
           showRightPanel={false}
-          handleSendUserMessage={handleEmptyFunction}
-          initialSuggestedQuestions={emptyArray}
+          handleSendUserMessage={EMPTY_FUNCTION}
+          initialSuggestedQuestions={EMPTY_ARRAY}
           allowFullWidthForText={true}
           showDemoPreQuestions={false}
           primaryColor={'rgb(var(--primary))'}

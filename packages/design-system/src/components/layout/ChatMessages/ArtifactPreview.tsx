@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { DemoPlayingStatus } from '@meaku/core/types/common';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 import CustomVideoPlayer from '../CustomVideoPlayer.tsx';
@@ -22,6 +22,7 @@ import FormArtifact from '../FormArtifact.tsx';
 import QualificationFlowArtifact from '../../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
 import CalendarArtifactPreview from './CalendarArtifactPreview.tsx';
 import { CalendarArtifact } from '../../Artifact/CalendarArtifact.tsx';
+import { EMPTY_FUNCTION } from '@meaku/core/constants/index';
 interface IProps {
   viewType: ViewType;
   artifactId: string;
@@ -57,9 +58,6 @@ const ArtifactPreview = ({
   artifactContentWithMetadata,
 }: IProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // Memoize the empty function calling to avoid re-rendering the component
-  const handleEmptyFunction = useCallback(() => {}, []);
 
   const handleArtifactOnClick = () => {
     setDemoPlayingStatus(DemoPlayingStatus.INITIAL);
@@ -116,7 +114,7 @@ const ArtifactPreview = ({
             content: artifactContentWithMetadata as FormArtifactContent,
             metadata: artifactContentWithMetadata?.metadata as FormArtifactMetadataType,
           }}
-          handleSendUserMessage={handleEmptyFunction}
+          handleSendUserMessage={EMPTY_FUNCTION}
           viewType={viewType}
         />
       );
@@ -126,7 +124,7 @@ const ArtifactPreview = ({
           artifactId={artifactId}
           artifact={artifactContentWithMetadata as FormArtifactContent}
           artifactMetadata={artifactContentWithMetadata?.metadata as FormArtifactMetadataType}
-          handleSendUserMessage={handleEmptyFunction}
+          handleSendUserMessage={EMPTY_FUNCTION}
           viewType={viewType}
         />
       );
@@ -147,7 +145,7 @@ const ArtifactPreview = ({
         return (
           <CalendarArtifact
             calendarContent={artifactContent as CalendarArtifactContent}
-            handleSendUserMessage={handleEmptyFunction}
+            handleSendUserMessage={EMPTY_FUNCTION}
           />
         );
       }

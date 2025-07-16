@@ -6,6 +6,8 @@ import { SlideArtifactContent, SlideImageArtifactContent } from '@meaku/core/typ
 import CommonArtifactPreview from './CommonArtifactPreview';
 import { ViewType } from '@meaku/core/types/common';
 
+const viewTypesWithoutDialog = [ViewType.USER];
+
 interface IProps {
   handleArtifactOnClick: () => void;
   isFetching: boolean;
@@ -27,8 +29,10 @@ const SlideArtifactPreview = ({
 }: IProps) => {
   const [openDialog, setOpenDialog] = useState(false);
 
+  const isViewTypeWithoutDialog = viewTypesWithoutDialog.includes(viewType);
+
   const handleOpenDialog = () => {
-    if (viewType === ViewType.USER) {
+    if (isViewTypeWithoutDialog) {
       handleArtifactOnClick();
     } else {
       setOpenDialog(true);
@@ -76,7 +80,7 @@ const SlideArtifactPreview = ({
       />
     );
   };
-  return viewType === ViewType.USER ? (
+  return isViewTypeWithoutDialog ? (
     <>{showButtonDisplay()}</>
   ) : (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>

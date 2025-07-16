@@ -90,10 +90,10 @@ const ConversationsTableContainer = () => {
 
   // When data changes, update the store
   useEffect(() => {
-    if (data && !(allAppliedFilterValues.length > 0)) {
+    if (data) {
       setTableData(data);
     }
-  }, [data, allAppliedFilterValues, setTableData]);
+  }, [data, setTableData]);
 
   const tableManager = useMemo(() => {
     if (!data) return null;

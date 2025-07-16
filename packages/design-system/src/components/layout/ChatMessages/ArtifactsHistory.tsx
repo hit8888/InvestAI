@@ -8,7 +8,7 @@ import { checkIsArtifactMessage } from '@meaku/core/utils/messageUtils';
 import ArtifactsCardMobile from './ArtifactsCardMobile';
 import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
 import { ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
-import { useCallback } from 'react';
+import { EMPTY_FUNCTION } from '@meaku/core/constants/index';
 
 interface IProps {
   message: WebSocketMessage;
@@ -34,9 +34,6 @@ const ArtifactsHistory = ({
   const isMobile = useIsMobile();
   const isArtifactMessage = checkIsArtifactMessage(message);
 
-  // Memoize the empty function calling to avoid re-rendering the component
-  const handleEmptyFunction = useCallback(() => {}, []);
-
   const { isQualificationFormArtifact, artifactContentWithMetadata } =
     useNormalAndQualificationFormArtifactMetadataProvider({
       artifactId: isArtifactMessage ? message.message.artifact_data?.artifact_id : '',
@@ -61,14 +58,14 @@ const ArtifactsHistory = ({
     return (
       <ArtifactContentUi
         logoURL={logoURL ?? ''}
-        handleToggleFullScreen={handleEmptyFunction}
+        handleToggleFullScreen={EMPTY_FUNCTION}
         setIsArtifactPlaying={setIsArtifactPlaying}
         artifactType={artifactType}
         artifactContent={artifactContentWithMetadata as ArtifactContentWithMetadataProps}
         activeArtifactId={activeArtifactId}
         handleSendUserMessage={handleSendUserMessage}
         isMediaTakingFullWidth={false}
-        onSlideItemClick={handleEmptyFunction}
+        onSlideItemClick={EMPTY_FUNCTION}
         isQualificationFormArtifact={isQualificationFormArtifact}
         viewType={viewType}
       />

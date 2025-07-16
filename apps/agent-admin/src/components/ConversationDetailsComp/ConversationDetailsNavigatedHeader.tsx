@@ -2,15 +2,22 @@ import Separator from '@breakout/design-system/components/layout/separator';
 import SessionIDIcon from '@breakout/design-system/components/icons/sessionid-icon';
 import CompanyNameIcon from '@breakout/design-system/components/icons/company-name-icon';
 import SingleDetailsWithIconHeaderValue from './SingleDetailsWithIconHeaderValue';
-// import ConversationDetailsNavigationButtons from './ConversationDetailsNavigationButtons';
+import ConversationDetailsNavigationButtons from './ConversationDetailsNavigationButtons';
 
 type IProps = {
   companyName: string;
   sessionID: string;
   companyLogoUrl: string;
   isLoading: boolean;
+  isDirectAccess: boolean;
 };
-const ConversationDetailsNavigatedHeader = ({ companyName, sessionID, companyLogoUrl, isLoading }: IProps) => {
+const ConversationDetailsNavigatedHeader = ({
+  companyName,
+  sessionID,
+  companyLogoUrl,
+  isLoading,
+  isDirectAccess,
+}: IProps) => {
   return (
     <div className="flex max-h-14 w-full items-center gap-6">
       <SingleDetailsWithIconHeaderValue isLoading={isLoading} headerLabel="Company name:" itemValue={companyName}>
@@ -31,7 +38,7 @@ const ConversationDetailsNavigatedHeader = ({ companyName, sessionID, companyLog
       >
         <SessionIDIcon width={'24'} height={'24'} />
       </SingleDetailsWithIconHeaderValue>
-      {/* <ConversationDetailsNavigationButtons /> */}
+      <ConversationDetailsNavigationButtons sessionID={sessionID} isDirectAccess={isDirectAccess} />
     </div>
   );
 };

@@ -36,7 +36,7 @@ const Feedback = () => {
   useSendMessageOnQueryParams({ handleSendMessage });
 
   return (
-    <Backdrop landingPageUrl={page_url} className="relative flex h-screen flex-col items-center justify-center">
+    <Backdrop landingPageUrl={page_url} className="relative flex h-full flex-col items-center justify-center">
       <div className={cn(['flex h-[95vh] w-[98vw]', isMobile && 'mx-0 h-[100dvh] w-full'])}>
         <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
