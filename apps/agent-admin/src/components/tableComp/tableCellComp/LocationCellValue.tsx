@@ -87,10 +87,9 @@ const extractLocationData = (value: string | LocationWithCityCountry): LocationD
 const buildLocationParts = (locationData: LocationData): string[] => {
   const { city, normalizedCountry } = locationData;
 
-  return [
-    city && city !== '-' ? city : undefined,
-    normalizedCountry && normalizedCountry !== '-' ? normalizedCountry : undefined,
-  ].filter((part): part is string => Boolean(part));
+  return [city && city !== '-' ? city : undefined, normalizedCountry ? normalizedCountry : undefined].filter(
+    (part): part is string => Boolean(part),
+  );
 };
 
 // Component sub-components

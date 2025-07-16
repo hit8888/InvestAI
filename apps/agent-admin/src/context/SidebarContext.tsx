@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { NavigationGroup, SIDE_NAV_VIEW_TO_ITEMS, SidebarNavItemsEnum, SideNavView } from '../utils/constants';
@@ -75,31 +75,36 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const isTrainingTabActive = isTrainingPlaygroundPage;
 
-  const { groupedItems, ungroupedItems } = useMemo(() => {
-    const basicURL = getDashboardBasicPathURL(tenantName ?? '');
-    const items = SIDE_NAV_VIEW_TO_ITEMS[sideNavView]
-      .map((item) => ({
-        ...item,
-        navUrl: `${basicURL}${item.navUrl}`,
-      }))
-      .filter((item) => hasFeatureFlag(organization, item.requiredFeatureFlag));
+  const getSideNavItems = useCallback(
+    (view: SideNavView) => {
+      const basicURL = getDashboardBasicPathURL(tenantName ?? '');
+      const items = SIDE_NAV_VIEW_TO_ITEMS[view]
+        .map((item) => ({
+          ...item,
+          navUrl: `${basicURL}${item.navUrl}`,
+        }))
+        .filter((item) => hasFeatureFlag(organization, item.requiredFeatureFlag));
 
-    const groupedItems = new Map<NavigationGroup, typeof items>();
-    const ungroupedItems: typeof items = [];
+      const groupedItems = new Map<NavigationGroup, typeof items>();
+      const ungroupedItems: typeof items = [];
 
-    items.forEach((item) => {
-      if ('group' in item && item.group) {
-        if (!groupedItems.has(item.group)) {
-          groupedItems.set(item.group, []);
+      items.forEach((item) => {
+        if ('group' in item && item.group) {
+          if (!groupedItems.has(item.group)) {
+            groupedItems.set(item.group, []);
+          }
+          groupedItems.get(item.group)!.push(item);
+        } else {
+          ungroupedItems.push(item);
         }
-        groupedItems.get(item.group)!.push(item);
-      } else {
-        ungroupedItems.push(item);
-      }
-    });
+      });
 
-    return { groupedItems, ungroupedItems };
-  }, [tenantName, sideNavView, organization]);
+      return { groupedItems, ungroupedItems };
+    },
+    [organization, tenantName],
+  );
+
+  const { groupedItems, ungroupedItems } = useMemo(() => getSideNavItems(sideNavView), [sideNavView, getSideNavItems]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => {
@@ -121,13 +126,17 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const navigateToMainView = () => {
+    const defaultRoute = getSideNavItems(SideNavView.MAIN).ungroupedItems[0].navUrl;
+
     setSideNavView(SideNavView.MAIN);
-    navigate(SIDE_NAV_VIEW_TO_ITEMS[SideNavView.MAIN][0].navUrl);
+    navigate(defaultRoute);
   };
 
   const navigateToSettingsView = () => {
+    const defaultRoute = getSideNavItems(SideNavView.SETTINGS).ungroupedItems[0].navUrl;
+
     setSideNavView(SideNavView.SETTINGS);
-    navigate(SIDE_NAV_VIEW_TO_ITEMS[SideNavView.SETTINGS][0].navUrl);
+    navigate(defaultRoute);
   };
 
   useEffect(() => {
