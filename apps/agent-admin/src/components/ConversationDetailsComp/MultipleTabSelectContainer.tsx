@@ -1,4 +1,8 @@
-import { ConversationDetailsTabsLabelEnum, ConversationDetailsTabsValueEnum } from '../../utils/constants';
+import {
+  ConversationDetailsTabsLabelEnum,
+  ConversationDetailsTabsValueEnum,
+  STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE,
+} from '../../utils/constants';
 import SingleTabDisplay from './SingleTabDisplay';
 
 // import ActivityTabIcon from '@breakout/design-system/components/icons/activity-tab-icon';
@@ -61,11 +65,14 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
   ];
 
   return (
-    <div className="flex flex-1 flex-col items-start self-stretch border-b border-t border-primary/10 pt-4">
+    <div className="flex flex-1 flex-col items-start self-stretch border-b border-primary/10">
       <div
-        className={cn('flex items-start self-stretch border-b border-primary/10', {
-          'border-b-0': isLoading,
-        })}
+        className={cn(
+          `sticky top-[${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px] z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4`,
+          {
+            'border-b-0': isLoading,
+          },
+        )}
       >
         {isLoading ? (
           <MultipleClickableTabShimmer tabsLength={tabs.length} />
@@ -81,8 +88,8 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
                 width="16"
                 height="16"
                 className={cn({
-                  'text-primary': isActive,
-                  'text-primary/60': !isActive,
+                  'text-white': isActive,
+                  'text-primary': !isActive,
                 })}
               />
             </SingleTabDisplay>

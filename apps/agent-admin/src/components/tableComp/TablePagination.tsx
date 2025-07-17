@@ -53,7 +53,7 @@ const TablePagination: React.FC<PaginationProps> = ({
   }
 
   return (
-    <div className="flex items-center justify-end gap-4">
+    <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 self-stretch bg-white p-4">
       <div className="flex items-start gap-2">
         {/* Items per page dropdown */}
         <CustomFilterDropdown

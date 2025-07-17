@@ -3,6 +3,7 @@ import SessionIDIcon from '@breakout/design-system/components/icons/sessionid-ic
 import CompanyNameIcon from '@breakout/design-system/components/icons/company-name-icon';
 import SingleDetailsWithIconHeaderValue from './SingleDetailsWithIconHeaderValue';
 import ConversationDetailsNavigationButtons from './ConversationDetailsNavigationButtons';
+import { CONVERSATION_DETAILS_BREADCRUMB_HEIGHT } from '../../utils/constants';
 
 type IProps = {
   companyName: string;
@@ -19,7 +20,9 @@ const ConversationDetailsNavigatedHeader = ({
   isDirectAccess,
 }: IProps) => {
   return (
-    <div className="flex max-h-14 w-full items-center gap-6">
+    <div
+      className={`sticky top-[${CONVERSATION_DETAILS_BREADCRUMB_HEIGHT}px] z-10 flex w-full items-center gap-6 border-b border-primary/10 bg-white py-4`}
+    >
       <SingleDetailsWithIconHeaderValue isLoading={isLoading} headerLabel="Company name:" itemValue={companyName}>
         {companyLogoUrl.length > 0 ? (
           <img src={companyLogoUrl} alt={`${companyName}-logo`} />

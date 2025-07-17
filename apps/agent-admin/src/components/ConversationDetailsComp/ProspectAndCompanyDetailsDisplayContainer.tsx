@@ -2,6 +2,7 @@ import {
   COMMON_SMALL_ICON_PROPS,
   COMPANY_DETAILS_DATA_ITEMS,
   PROSPECT_DETAILS_DATA_ITEMS,
+  STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE,
 } from '../../utils/constants';
 import { getConversationRightSideDetailsItems } from '../../utils/common';
 import SingleProspectAndCompanyItemDataDisplay from './SingleProspectAndCompanyItemDataDisplay';
@@ -19,8 +20,10 @@ const ProspectAndCompanyDetailsDisplayContainer = ({
 
   if (isProspectItemsEmpty && isCompanyItemsEmpty) return;
   return (
-    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-t border-primary/10">
-      <div className="hide-scrollbar sticky top-10 flex max-h-screen w-full flex-col items-start overflow-auto">
+    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-primary/10">
+      <div
+        className={`hide-scrollbar sticky top-[${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px] flex max-h-screen w-full flex-col items-start overflow-auto`}
+      >
         {/* Prospect Section */}
         {!isProspectItemsEmpty && (
           <div className="flex w-full flex-col items-start gap-4 p-4">

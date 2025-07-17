@@ -59,7 +59,7 @@ const ConversationTabs = () => {
   };
 
   return (
-    <div className={cn('flex items-start self-stretch border-b border-primary/10')}>
+    <div className="sticky top-0 z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4">
       {tabs.map(({ path, label, icon: Icon }) => {
         const isActive = isTabActive(path);
         return (

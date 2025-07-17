@@ -3,8 +3,9 @@ import PreviousArrowBig from '@breakout/design-system/components/icons/previous-
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { useTableStore } from '../../stores/useTableStore';
-import { ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ConversationsTableViewContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
+import { useNavigate } from 'react-router-dom';
+import useLocationPath from '@meaku/core/hooks/useLocationPath';
 
 type IProps = {
   sessionID: string;
@@ -13,10 +14,10 @@ type IProps = {
 
 const ConversationDetailsNavigationButtons = ({ sessionID, isDirectAccess }: IProps) => {
   const navigate = useNavigate();
-  const { tenantName } = useParams<{ tenantName?: string }>();
+  const { getConversationPath } = useLocationPath();
   const { data: tableData } = useTableStore();
 
-  const tableDataResults = tableData?.results as ConversationsTableViewContent[];
+  const tableDataResults = tableData?.results as ConversationsTableViewContent[] | LeadsTableViewContent[];
 
   const currentIndex = tableDataResults?.findIndex((result) => result?.session_id === sessionID) ?? -1;
 
@@ -26,20 +27,16 @@ const ConversationDetailsNavigationButtons = ({ sessionID, isDirectAccess }: IPr
   const previousSessionID = isPreviousDisabled ? undefined : tableDataResults?.[currentIndex - 1]?.session_id;
   const nextSessionID = isNextDisabled ? undefined : tableDataResults?.[currentIndex + 1]?.session_id;
 
-  const getConversationPath = (sessionId: string) =>
-    tenantName ? `/${tenantName}/conversations/${sessionId}` : `/conversations/${sessionId}`;
-
-  const handlePrevious = () => {
-    if (previousSessionID) {
-      navigate(getConversationPath(previousSessionID));
+  const handleNavigation = (sessionId: string | undefined | null) => {
+    if (sessionId) {
+      navigate(getConversationPath(sessionId), {
+        state: { from: 'conversation-details' },
+      });
     }
   };
 
-  const handleNext = () => {
-    if (nextSessionID) {
-      navigate(getConversationPath(nextSessionID));
-    }
-  };
+  const handlePrevious = () => handleNavigation(previousSessionID);
+  const handleNext = () => handleNavigation(nextSessionID);
 
   // This is to avoid showing the navigation buttons when user lands on details page directly via URL
   // Because in that case, we don't have the table data in the store

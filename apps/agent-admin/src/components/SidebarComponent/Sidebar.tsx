@@ -4,7 +4,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import HeaderCTA from './HeaderCTA';
 import NavigationBodyItems from './NavigationBodyItems';
 import SideBarFooter from './SideBarFooter';
-import NavLinkSingleItem from './NavLinkSingleItem';
+import { NavLinkSingleItem } from './NavLinkSingleItem';
 import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
 import { SideNavView } from '../../utils/constants';
 import { LogOut } from 'lucide-react';

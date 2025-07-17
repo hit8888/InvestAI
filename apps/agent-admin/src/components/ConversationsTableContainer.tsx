@@ -130,42 +130,38 @@ const ConversationsTableContainer = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
-      <div className="flex flex-col items-start gap-4 self-stretch">
-        <div className="flex flex-col items-start self-stretch bg-white">
-          <TableFiltersWithHeaderLabel
-            isLoading={isLoading}
-            payloadData={debouncedPayloadData}
-            disabledState={haveNoRecords}
-            key={CONVERSATIONS_PAGE}
-            page={CONVERSATIONS_PAGE}
-            onFiltersContainerHeightChange={setFilterContainerHeight}
-          />
-          <TableViewContent
-            pageType={CONVERSATIONS_PAGE}
-            key={'conversations-table-container'}
-            isConversationTable={true}
-            isLoading={isLoading}
-            totalRecords={totalRecords}
-            tableData={conversationsData}
-            columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
-            filterContainerHeight={filterContainerHeight}
-            onRowItemClick={handleRowItemClick}
-          />
-        </div>
-        <div className="flex items-center justify-end gap-4 self-stretch">
-          <TablePagination
-            isLoading={isLoading}
-            tableType={CONVERSATIONS_PAGE}
-            paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE}
-            totalPages={totalPages}
-            totalItems={pageSize === 0 ? pageSize : totalRecords}
-            itemsPerPage={itemsPerPage}
-            onItemsPerPageChange={handleItemsPerPageChange}
-            handlePageChange={handlePageChange}
-            currentPage={currentPage}
-          />
-        </div>
+      <div className="flex flex-1 flex-col items-start self-stretch">
+        <TableFiltersWithHeaderLabel
+          isLoading={isLoading}
+          payloadData={debouncedPayloadData}
+          disabledState={haveNoRecords}
+          key={CONVERSATIONS_PAGE}
+          page={CONVERSATIONS_PAGE}
+          onFiltersContainerHeightChange={setFilterContainerHeight}
+        />
+        <TableViewContent
+          pageType={CONVERSATIONS_PAGE}
+          key={'conversations-table-container'}
+          isConversationTable={true}
+          isLoading={isLoading}
+          totalRecords={totalRecords}
+          tableData={conversationsData}
+          columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
+          filterContainerHeight={filterContainerHeight}
+          onRowItemClick={handleRowItemClick}
+        />
       </div>
+      <TablePagination
+        isLoading={isLoading}
+        tableType={CONVERSATIONS_PAGE}
+        paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE}
+        totalPages={totalPages}
+        totalItems={pageSize === 0 ? pageSize : totalRecords}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
+      />
     </div>
   );
 };

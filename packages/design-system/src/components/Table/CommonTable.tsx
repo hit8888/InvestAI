@@ -168,7 +168,7 @@ const CommonTable = ({
       {/* Sticky Header Container */}
       {isHeaderSticky && (
         <div
-          className="sticky left-0 right-0 z-50 bg-white"
+          className="sticky left-0 right-0 z-10 bg-white"
           style={{
             ...widthStyle,
             top: `${filterContainerHeight}px`,

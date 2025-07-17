@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import { NavigationGroup, SIDE_NAV_VIEW_TO_ITEMS, SidebarNavItemsEnum, SideNavView } from '../utils/constants';
 import usePageRouteState from '../hooks/usePageRouteState';
@@ -57,6 +57,12 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const comingFromSettings = useMemo(() => {
+    return location.state?.from === 'settings';
+  }, [location.state]);
+
   const { tenantName } = useParams();
   const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
   const [isSidebarOpen, setIsSidebarOpen] = useState(getInitialSidebarState);
@@ -127,16 +133,24 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const navigateToMainView = () => {
     const defaultRoute = getSideNavItems(SideNavView.MAIN).ungroupedItems[0].navUrl;
-
     setSideNavView(SideNavView.MAIN);
-    navigate(defaultRoute);
+    if (comingFromSettings) {
+      navigate(-1);
+    } else {
+      // direct landing on integration page
+      navigate(defaultRoute);
+    }
   };
 
   const navigateToSettingsView = () => {
     const defaultRoute = getSideNavItems(SideNavView.SETTINGS).ungroupedItems[0].navUrl;
 
     setSideNavView(SideNavView.SETTINGS);
-    navigate(defaultRoute);
+    navigate(defaultRoute, {
+      state: {
+        from: 'settings',
+      },
+    });
   };
 
   useEffect(() => {

@@ -96,10 +96,10 @@ const LeadsTableContainer = ({
 
   // When data changes, update the store
   useEffect(() => {
-    if (data && !(allAppliedFilterValues.length > 0)) {
+    if (data) {
       setTableData(data);
     }
-  }, [data, allAppliedFilterValues, setTableData]);
+  }, [data, setTableData]);
 
   const tableManager = useMemo(() => {
     if (!data) return null;
@@ -133,41 +133,37 @@ const LeadsTableContainer = ({
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
-      <div className="flex flex-col items-start gap-4 self-stretch">
-        <div className="flex flex-col items-start self-stretch bg-white">
-          <TableFiltersWithHeaderLabel
-            isLoading={isLoading}
-            payloadData={debouncedPayloadData}
-            disabledState={haveNoRecords}
-            key={pageType}
-            page={pageType}
-            onFiltersContainerHeightChange={setFilterContainerHeight}
-          />
-          <TableViewContent
-            pageType={pageType}
-            key={`${pageType}-table-container`}
-            isLoading={isLoading}
-            totalRecords={totalRecords}
-            tableData={leadsData}
-            columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
-            filterContainerHeight={filterContainerHeight}
-            onRowItemClick={handleRowItemClick}
-          />
-        </div>
-        <div className="flex items-center justify-end gap-4 self-stretch">
-          <TablePagination
-            isLoading={isLoading}
-            tableType={pageType}
-            totalPages={totalPages}
-            totalItems={pageSize === 0 ? pageSize : totalRecords}
-            itemsPerPage={itemsPerPage}
-            onItemsPerPageChange={handleItemsPerPageChange}
-            handlePageChange={handlePageChange}
-            currentPage={currentPage}
-            paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE}
-          />
-        </div>
+      <div className="flex flex-col items-start self-stretch bg-white">
+        <TableFiltersWithHeaderLabel
+          isLoading={isLoading}
+          payloadData={debouncedPayloadData}
+          disabledState={haveNoRecords}
+          key={pageType}
+          page={pageType}
+          onFiltersContainerHeightChange={setFilterContainerHeight}
+        />
+        <TableViewContent
+          pageType={pageType}
+          key={`${pageType}-table-container`}
+          isLoading={isLoading}
+          totalRecords={totalRecords}
+          tableData={leadsData}
+          columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
+          filterContainerHeight={filterContainerHeight}
+          onRowItemClick={handleRowItemClick}
+        />
       </div>
+      <TablePagination
+        isLoading={isLoading}
+        tableType={pageType}
+        totalPages={totalPages}
+        totalItems={pageSize === 0 ? pageSize : totalRecords}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
+        paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE}
+      />
     </div>
   );
 };

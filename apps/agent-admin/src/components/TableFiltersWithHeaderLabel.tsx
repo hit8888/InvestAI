@@ -8,6 +8,9 @@ import { useEffect } from 'react';
 import ExportDownload from './tableComp/ExportDownload';
 import SearchTableContentInput from './SearchTableContentInput';
 import { CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING } from '../utils/constants';
+
+const CONVERSATION_TABS_CONTAINER_HEIGHT = 58;
 
 type IProps = PageTypeProps & {
   disabledState?: boolean;
@@ -28,18 +31,20 @@ const TableFiltersWithHeaderLabel = ({
   // Notify parent component of height changes
   useEffect(() => {
     if (onFiltersContainerHeightChange) {
-      onFiltersContainerHeightChange(height);
+      onFiltersContainerHeightChange(height + CONVERSATION_TABS_CONTAINER_HEIGHT);
     }
   }, [height, onFiltersContainerHeightChange]);
 
   if (isLoading) {
     return <TableFiltersWithHeaderLabelShimmer />;
   }
+
+  if (disabledState) return null;
   const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE || page === LINK_CLICKS_PAGE;
   return (
     <div
       ref={filtersRef}
-      className="sticky top-0 z-[99] flex w-full items-start justify-between self-stretch bg-white py-4"
+      className={`sticky top-[${CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING}px] z-10 flex w-full items-start justify-between self-stretch bg-white py-4`}
     >
       <FlexContainer>
         <AllFiltersContainer page={page} isLeadsAndConversationsPage={isLeadsAndConversationsPage} />

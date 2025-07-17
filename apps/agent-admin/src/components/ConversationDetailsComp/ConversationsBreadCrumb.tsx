@@ -6,6 +6,7 @@ import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadc
 import Separator from '@breakout/design-system/components/layout/separator';
 import ConversationsBreadCrumbShimmer from '../ShimmerComponent/ConversationsBreadCrumbShimmer';
 import { BreadcrumbItemComponent } from './BreadcrumbItemComponent';
+import useLocationPath from '@meaku/core/hooks/useLocationPath';
 
 type IProps = {
   isLoading: boolean;
@@ -21,6 +22,7 @@ const ConversationsBreadCrumb = ({
   breadCrumbItems,
 }: IProps) => {
   const navigate = useNavigate();
+  const { getConversationPath } = useLocationPath();
 
   const handleNavigateBack = useCallback(() => {
     if (isDirectAccess) {
@@ -30,6 +32,10 @@ const ConversationsBreadCrumb = ({
       navigate(-1);
     }
   }, [navigate, isDirectAccess]);
+
+  const handleNavigate = () => {
+    navigate(getConversationPath(''));
+  };
 
   if (isLoading) {
     return <ConversationsBreadCrumbShimmer />;
@@ -50,7 +56,7 @@ const ConversationsBreadCrumb = ({
               item={item}
               isLast={index === breadCrumbItems.length - 1}
               showSeparator={index < breadCrumbItems.length - 1}
-              onNavigate={handleNavigateBack}
+              onNavigate={handleNavigate}
             />
           ))}
         </BreadcrumbList>

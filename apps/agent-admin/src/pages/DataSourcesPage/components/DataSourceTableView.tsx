@@ -162,19 +162,17 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         totalRecords={totalRecords}
         filterContainerHeight={filterContainerHeight}
       />
-      <div className="flex items-center justify-end gap-4 self-stretch pt-6">
-        <TablePagination
-          isLoading={isLoading}
-          tableType={pageType as PaginationPageType}
-          paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE}
-          totalPages={totalPages}
-          totalItems={pageSize === 0 ? pageSize : totalRecords}
-          itemsPerPage={itemsPerPage}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          handlePageChange={handlePageChange}
-          currentPage={currentPage}
-        />
-      </div>
+      <TablePagination
+        isLoading={isLoading}
+        tableType={pageType as PaginationPageType}
+        paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE}
+        totalPages={totalPages}
+        totalItems={pageSize === 0 ? pageSize : totalRecords}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        handlePageChange={handlePageChange}
+        currentPage={currentPage}
+      />
     </div>
   );
 };
