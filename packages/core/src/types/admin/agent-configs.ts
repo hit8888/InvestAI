@@ -48,6 +48,7 @@ const baseAgentConfigSchema = z.object({
         .optional(),
       banner_config: BannerConfigSchema,
       entry_point_alignment: z.string(),
+      entry_point_alignment_mobile: z.string().optional(),
     }),
     'response_generation:prompt': z
       .object({

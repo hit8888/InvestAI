@@ -4,13 +4,6 @@ import Section from '../components/AgentManagement/Section.tsx';
 import CardItem from '../components/AgentManagement/CardItem.tsx';
 import CardTitleAndDescription from '../components/AgentManagement/CardTitleAndDescription.tsx';
 import Input from '@breakout/design-system/components/layout/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@breakout/design-system/components/layout/select';
 import { Switch } from '@breakout/design-system/components/layout/switch';
 import Button from '@breakout/design-system/components/Button/index';
 import { useEffect, useState } from 'react';
@@ -25,6 +18,15 @@ import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
 import { trackError } from '@meaku/core/utils/error';
 import toast from 'react-hot-toast';
+import AgentDropdown from '@breakout/design-system/components/Dropdown/AgentDropdown';
+
+const PLACEMENT_OPTIONS_ENUM = {
+  CENTER: 'center',
+  RIGHT: 'right',
+  LEFT: 'left',
+};
+
+const { CENTER, RIGHT } = PLACEMENT_OPTIONS_ENUM;
 
 const EntryPointsPage = () => {
   const tenantName = getTenantFromLocalStorage();
@@ -39,7 +41,8 @@ const EntryPointsPage = () => {
   // State for form values
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
   const [isBannerEnabled, setIsBannerEnabled] = useState(false);
-  const [entryPointAlignment, setEntryPointAlignment] = useState<string>('CENTER');
+  const [entryPointAlignment, setEntryPointAlignment] = useState<string>('');
+  const [entryPointAlignmentMobile, setEntryPointAlignmentMobile] = useState<string>('');
   const [bannerHeader, setBannerHeader] = useState<string>('');
   const [bannerSubheader, setBannerSubheader] = useState<string>('');
   const [agentName, setAgentName] = useState<string>('');
@@ -95,7 +98,8 @@ const EntryPointsPage = () => {
       setAgentName(name);
 
       // Set entry point alignment
-      setEntryPointAlignment(styleConfig?.entry_point_alignment || 'center');
+      setEntryPointAlignment(styleConfig?.entry_point_alignment || CENTER);
+      setEntryPointAlignmentMobile(styleConfig?.entry_point_alignment_mobile || RIGHT);
 
       // Set banner config
       setIsBannerEnabled(styleConfig?.banner_config.show_banner);
@@ -169,16 +173,26 @@ const EntryPointsPage = () => {
   };
 
   // Handler for updating entry point alignment
-  const handleAlignmentChange = (value: string) => {
-    setEntryPointAlignment(value);
+  const handleAlignmentChange = (value: string | null, isMobile: boolean = false) => {
+    const defaultValue = isMobile ? RIGHT : CENTER;
+    const selectedValue = value || defaultValue;
+    if (isMobile) {
+      setEntryPointAlignmentMobile(selectedValue);
+    } else {
+      setEntryPointAlignment(selectedValue);
+    }
 
     if (!agentConfig) return;
+
+    const styleUpdate = isMobile
+      ? { entry_point_alignment_mobile: selectedValue }
+      : { entry_point_alignment: selectedValue };
 
     const payload: Partial<AgentConfigPayload> = {
       configs: {
         'agent_personalization:style': {
           ...agentConfig.configs['agent_personalization:style'],
-          entry_point_alignment: value,
+          ...styleUpdate,
         },
       },
     };
@@ -282,26 +296,24 @@ const EntryPointsPage = () => {
     <PageContainer heading={'Entry Points'} subHeading={subHeading} isLoading={isLoading} error={error}>
       <Section heading={'Configuration'}>
         <Card background={'GRAY25'} border={'GRAY200'}>
-          <CardItem>
+          <CardItem className="flex flex-col items-start justify-start gap-6">
             <CardTitleAndDescription
               title={'Placement'}
               description={'Select the position that works best with your overall page layout and user flow.'}
               isMandatoryField={false}
             />
-            <Select value={entryPointAlignment} onValueChange={handleAlignmentChange}>
-              <SelectTrigger className={'flex-1'}>
-                <SelectValue placeholder="Select a Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem className={'border-b'} value="center">
-                  Center
-                </SelectItem>
-                <SelectItem className={'border-b'} value="right">
-                  Right
-                </SelectItem>
-                <SelectItem value="left">Left</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex w-full items-start gap-6">
+              <PlacementDropdown
+                defaultValue={entryPointAlignment}
+                onCallback={(value) => handleAlignmentChange(value, false)}
+                label="Website Placement"
+              />
+              <PlacementDropdown
+                defaultValue={entryPointAlignmentMobile}
+                onCallback={(value) => handleAlignmentChange(value, true)}
+                label="Mobile Placement"
+              />
+            </div>
           </CardItem>
         </Card>
       </Section>
@@ -412,6 +424,31 @@ const EntryPointsPage = () => {
         </Card>
       </Section>
     </PageContainer>
+  );
+};
+
+type PlacementDropdownProps = {
+  defaultValue: string;
+  onCallback: (value: string | null) => void;
+  label: string;
+};
+
+const PlacementDropdown = ({ defaultValue, onCallback, label }: PlacementDropdownProps) => {
+  return (
+    <div className="flex w-full flex-col items-start gap-2">
+      <Typography variant="label-16-medium">{label}</Typography>
+      <AgentDropdown
+        defaultValue={defaultValue}
+        className="h-10 w-72 rounded-lg px-4 py-3 uppercase"
+        fontToShown="text-sm"
+        dropdownOpenClassName="ring-4 ring-gray-200"
+        showIcon={false}
+        menuItemClassName="p-2 pl-4 uppercase"
+        placeholderLabel={'Select a Placement'}
+        options={Object.values(PLACEMENT_OPTIONS_ENUM)}
+        onCallback={onCallback}
+      />
+    </div>
   );
 };
 

@@ -5,7 +5,13 @@ import { StyleConfig } from '@meaku/core/types/api/session_init_response';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
-const STYLE_CONFIG_KEYS_NOT_TO_CONSIDER = ['banner_config', 'function', 'orb_config', 'entry_point_alignment'] as const;
+const STYLE_CONFIG_KEYS_NOT_TO_CONSIDER = [
+  'banner_config',
+  'function',
+  'orb_config',
+  'entry_point_alignment',
+  'entry_point_alignment_mobile',
+] as const;
 
 type StyleConfigKeysToOmit = (typeof STYLE_CONFIG_KEYS_NOT_TO_CONSIDER)[number];
 

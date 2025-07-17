@@ -32,7 +32,11 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
-  const { banner_config, entry_point_alignment } = useValuesFromConfigApi();
+  const { banner_config, entryPointAlignmentDesktop, entryPointAlignmentMobile } = useValuesFromConfigApi();
+
+  const entry_point_alignment = isMobile
+    ? entryPointAlignmentMobile || entryPointAlignmentDesktop
+    : entryPointAlignmentDesktop;
   const showPopupBanner = !!banner_config?.show_banner;
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);

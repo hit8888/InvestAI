@@ -2,7 +2,8 @@ import useConfigurationApiResponseManager from '@meaku/core/hooks/useConfigurati
 
 const useValuesFromConfigApi = () => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
-  const { banner_config, entry_point_alignment } = configurationApiResponseManager.getStyleConfig();
+  const { banner_config, entry_point_alignment, entry_point_alignment_mobile } =
+    configurationApiResponseManager.getStyleConfig();
   const agentName = configurationApiResponseManager.getAgentName();
   const orgName = configurationApiResponseManager.getOrgName();
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
@@ -16,7 +17,8 @@ const useValuesFromConfigApi = () => {
   const showOrb = orbConfig?.show_orb || false;
   return {
     banner_config,
-    entry_point_alignment,
+    entryPointAlignmentDesktop: entry_point_alignment,
+    entryPointAlignmentMobile: entry_point_alignment_mobile,
     agentName,
     orgName,
     initialSuggestedQuestions,

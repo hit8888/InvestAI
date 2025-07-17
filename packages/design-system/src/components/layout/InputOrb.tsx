@@ -14,7 +14,7 @@ interface InputOrbProps {
 const InputOrb = ({ showOrb, orbLogoUrl, style, showThreeStar, state, showOrbFromConfig }: InputOrbProps) => {
   if (!showOrb) return;
   return (
-    <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2">
+    <div className="absolute left-2 top-1/2 z-10 -translate-y-1/2">
       <InputWaitingOrb
         state={state ?? OrbStatusEnum.waiting}
         style={style}

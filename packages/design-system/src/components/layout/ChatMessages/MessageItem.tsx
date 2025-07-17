@@ -13,7 +13,6 @@ import {
   getFormArtifactMessage,
   getFormFilledEventByArtifactId,
   getMediaArtifactMessage,
-  isAIResponseInactiveMessage,
   isDemoOptionsMessage,
   isDiscoveryQuestion,
   isDisplayedAsTextMessage,
@@ -108,8 +107,6 @@ const MessageItem = ({
   const isLastQuestionResponse = isLastMessage && isSalesResponseMessage;
   const isLoading = isAMessageBeingProcessed && isLastQuestionResponse;
 
-  const isCurrentMsgUserInactiveMessage = isAIResponseInactiveMessage(messagesWithSameResponseId, message);
-
   const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
@@ -176,7 +173,6 @@ const MessageItem = ({
           renderOrb={renderOrb}
           shouldShowActiveOrb={shouldShowActiveOrb}
           isLastQuestionResponse={isLastQuestionResponse}
-          isCurrentMsgUserInactiveMessage={isCurrentMsgUserInactiveMessage}
         />
       )}
 

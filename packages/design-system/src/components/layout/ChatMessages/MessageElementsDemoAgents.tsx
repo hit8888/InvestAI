@@ -83,7 +83,6 @@ const MessageElementsDemoAgents = ({
       )}
       {isAnalyticsEvent && (
         <MessageAnalytics
-          viewType={viewType}
           invertTextColor={invertTextColor}
           analytics={analyticsEvent.message.event_data as MessageAnalyticsEventData}
         />

@@ -16,18 +16,19 @@ import Typography from '../Typography';
 
 // Define the type for the options
 interface DropdownProps {
+  className?: string;
+  menuItemClassName?: string;
+  menuGroupClassname?: string;
+  dropdownOpenClassName?: string;
   options: string[];
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
-  className?: string;
   fontToShown?: string;
   showTooltipContent?: boolean;
   menuContentAlign?: 'start' | 'center' | 'end';
   menuContentSide?: 'top' | 'right' | 'bottom' | 'left';
   defaultValue?: string;
-  dropdownOpenClassName?: string;
   showIcon?: boolean;
-  menuItemClassName?: string;
   isSearchable?: boolean;
   dropdownMenuHeader?: string;
   applyFontFamily?: boolean;
@@ -37,18 +38,19 @@ interface DropdownProps {
 
 // Also Add check for is_required key
 const AgentDropdown = ({
+  className,
+  menuItemClassName,
+  menuGroupClassname,
+  dropdownOpenClassName,
   options,
   placeholderLabel,
   onCallback,
-  className,
   fontToShown,
   showTooltipContent = false,
   defaultValue,
-  dropdownOpenClassName,
   menuContentAlign = 'start',
   menuContentSide = 'bottom',
   showIcon = true,
-  menuItemClassName,
   isSearchable = false,
   dropdownMenuHeader,
   applyFontFamily = false,
@@ -169,7 +171,7 @@ const AgentDropdown = ({
               placeholder={searchPlaceholder}
             />
           )}
-          <DropdownMenuGroup className="max-h-[300px] overflow-y-auto">
+          <DropdownMenuGroup className={cn(['max-h-[300px] overflow-y-auto', menuGroupClassname])}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <DropdownOption
