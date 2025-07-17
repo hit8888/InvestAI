@@ -35,7 +35,7 @@ const SingleDetailsWithIconHeaderValue = ({
         <div className="text-sm font-normal text-gray-500">
           {isLoading ? <Skeleton className="h-3.5 w-28" /> : headerLabel}
         </div>
-        <div className="text-base font-medium text-primary/60" title={itemValue}>
+        <div className="text-base font-medium text-primary/60">
           {isLoading ? (
             <Skeleton className="h-3.5 w-28" />
           ) : isTakingFullWidth ? (

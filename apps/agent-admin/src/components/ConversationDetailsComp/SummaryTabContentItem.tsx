@@ -115,7 +115,7 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       ) : isLabelValueDash ? (
         <>{getNoInformationProvidedLabel(`This ${NO_INFORMATION_PROVIDED_LABEL}`)}</>
       ) : (
-        <div className="flex max-w-[50%] justify-end">{getSummaryListValueContent(listValue)}</div>
+        <div className="flex justify-end">{getSummaryListValueContent(listValue)}</div>
       )}
     </div>
   );

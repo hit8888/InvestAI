@@ -8,6 +8,7 @@ type IProps = {
   children?: React.ReactNode;
   showTooltip?: boolean;
   tooltipAlign?: 'start' | 'center' | 'end';
+  tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
   contentMaxWidth?: string;
   showArrow?: boolean;
 };
@@ -18,6 +19,7 @@ const CustomTooltipWithClipboardUsingHover = ({
   toastMessage,
   showTooltip = true,
   tooltipAlign = 'end',
+  tooltipSide = 'bottom',
   contentMaxWidth = 'max-w-full',
   showArrow = true,
 }: IProps) => {
@@ -26,13 +28,14 @@ const CustomTooltipWithClipboardUsingHover = ({
       trigger={children}
       showTooltip={showTooltip}
       tooltipAlign={tooltipAlign}
+      tooltipSide={tooltipSide}
       showArrow={showArrow}
       tooltipArrowClassName={showArrow ? 'left-0' : ''}
       content={
         <div className={`flex w-fit items-center justify-between gap-2 ${contentMaxWidth}`}>
           <span className="text-sm font-medium">{tooltipText}</span>
           <CopyToClipboardButton
-            copyIconClassname="h-4 w-4 text-white"
+            copyIconClassname="h-4 w-4 text-white hover:text-system"
             textToCopy={tooltipText}
             toastMessage={toastMessage}
             btnClassName="h-6 w-6 rounded-lg bg-primary-foreground/25 p-1"

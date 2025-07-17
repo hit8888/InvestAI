@@ -21,7 +21,10 @@ const ConversationDetailsNavigatedHeader = ({
 }: IProps) => {
   return (
     <div
-      className={`sticky top-[${CONVERSATION_DETAILS_BREADCRUMB_HEIGHT}px] z-10 flex w-full items-center gap-6 border-b border-primary/10 bg-white py-4`}
+      className="sticky z-10 flex w-full items-center gap-6 border-b border-primary/10 bg-white py-4"
+      style={{
+        top: `${CONVERSATION_DETAILS_BREADCRUMB_HEIGHT}px`,
+      }}
     >
       <SingleDetailsWithIconHeaderValue isLoading={isLoading} headerLabel="Company name:" itemValue={companyName}>
         {companyLogoUrl.length > 0 ? (

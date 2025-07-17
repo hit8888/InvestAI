@@ -44,7 +44,10 @@ const TableFiltersWithHeaderLabel = ({
   return (
     <div
       ref={filtersRef}
-      className={`sticky top-[${CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING}px] z-10 flex w-full items-start justify-between self-stretch bg-white py-4`}
+      className="sticky z-10 flex w-full items-start justify-between self-stretch bg-white py-4"
+      style={{
+        top: `${CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING}px`,
+      }}
     >
       <FlexContainer>
         <AllFiltersContainer page={page} isLeadsAndConversationsPage={isLeadsAndConversationsPage} />

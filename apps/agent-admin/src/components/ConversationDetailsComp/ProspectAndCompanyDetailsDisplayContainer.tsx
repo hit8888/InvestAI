@@ -22,7 +22,10 @@ const ProspectAndCompanyDetailsDisplayContainer = ({
   return (
     <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-primary/10">
       <div
-        className={`hide-scrollbar sticky top-[${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px] flex max-h-screen w-full flex-col items-start overflow-auto`}
+        className="hide-scrollbar sticky flex max-h-screen w-full flex-col items-start overflow-auto"
+        style={{
+          top: `${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px`,
+        }}
       >
         {/* Prospect Section */}
         {!isProspectItemsEmpty && (

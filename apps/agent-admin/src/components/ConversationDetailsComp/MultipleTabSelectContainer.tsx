@@ -67,12 +67,13 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
   return (
     <div className="flex flex-1 flex-col items-start self-stretch border-b border-primary/10">
       <div
-        className={cn(
-          `sticky top-[${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px] z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4`,
-          {
-            'border-b-0': isLoading,
-          },
-        )}
+        className={cn([
+          'sticky z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4',
+          isLoading && 'border-b-0',
+        ])}
+        style={{
+          top: `${STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE}px`,
+        }}
       >
         {isLoading ? (
           <MultipleClickableTabShimmer tabsLength={tabs.length} />
