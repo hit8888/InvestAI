@@ -16,7 +16,7 @@ import FilterUserMessagesCountIcon from '@breakout/design-system/components/icon
 import SummaryConversationIcon from '@breakout/design-system/components/icons/summary-conv-icon';
 import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
 import SummarySessionDurationIcon from '@breakout/design-system/components/icons/summary-sessionduration-icon';
-// import SummaryEntryPointIcon from '@breakout/design-system/components/icons/summary-entrypoint-icon';
+import SummaryEntryPointIcon from '@breakout/design-system/components/icons/summary-entrypoint-icon';
 import SummaryProductOfInterestIcon from '@breakout/design-system/components/icons/summary-product-icon';
 import SummaryIntentScoreIcon from '@breakout/design-system/components/icons/summary-intentscore-icon';
 import SummaryLengthOfConvIcon from '@breakout/design-system/components/icons/summary-lengthofconv-icon';
@@ -42,6 +42,7 @@ import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-in
 import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/panel-insights-active-icon';
 import PanelIntegrationsIcon from '@breakout/design-system/components/icons/panel-integrations-icon';
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
+import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
 
 const {
   DateRange,
@@ -467,7 +468,7 @@ export interface SummaryTabContentList {
   listKey: string;
   listLabel: string;
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  listValue: string | number | BANTItem[];
+  listValue: string | number | BANTItem[] | ParentUrlItem;
 }
 
 export interface BANTItem {
@@ -477,11 +478,22 @@ export interface BANTItem {
   itemValue: string | number;
 }
 
+export interface ParentUrlItem {
+  itemLabel: string;
+  itemValue: string;
+}
+
 export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabContentList[] = [
   {
     listKey: 'summary',
     listLabel: 'Summary of the conversation:',
     listIcon: SummaryConversationIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'browsingHistorySummary',
+    listLabel: "User's Browsing History Summary:",
+    listIcon: History,
     listValue: '',
   },
   {
@@ -533,12 +545,24 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listIcon: SummaryLengthOfConvIcon,
     listValue: '',
   },
-  // {
-  //   listKey: 'entryPoint',
-  //   listLabel: 'Entry Point:',
-  //   listIcon: SummaryEntryPointIcon,
-  //   listValue: 'www.example.com/products/ai',
-  // },
+  {
+    listKey: 'parentUrl',
+    listLabel: 'Webpage where conversation started:',
+    listIcon: Link,
+    listValue: '',
+  },
+  {
+    listKey: 'entryPoint',
+    listLabel: 'Entry point for conversation:',
+    listIcon: SummaryEntryPointIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'deviceType',
+    listLabel: 'Device Type:',
+    listIcon: MonitorSmartphone,
+    listValue: '',
+  },
   {
     listKey: 'ipAddress',
     listLabel: 'IP Address:',
@@ -549,6 +573,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listKey: 'sessionDuration',
     listLabel: 'Session Duration:',
     listIcon: SummarySessionDurationIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'trafficSource',
+    listLabel: 'Traffic Source:',
+    listIcon: ExternalLink,
     listValue: '',
   },
 ];

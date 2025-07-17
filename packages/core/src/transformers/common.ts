@@ -25,5 +25,10 @@ export const convertServerConversationDataToClientConversationData = (
     prospect_details: response.prospect_details || {},
     company_details: response.company_details || {},
     agent_modal: response.agent_modal,
+    parent_url: response.parent_url,
+    parent_url_title: response.parent_url_title,
+    query_params: response.query_params || {},
+    device_type: response.device_type,
+    browsing_analysis_summary: response.browsing_analysis_summary,
   };
 };

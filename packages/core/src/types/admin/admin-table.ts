@@ -51,6 +51,11 @@ export const ConversationsTableViewSchema = z.object({
   prospect_details: ProspectDetailsSchema,
   company_details: CompanyDetailsSchema,
   agent_modal: z.string().optional().nullable(),
+  parent_url: z.string().optional().nullable(),
+  parent_url_title: z.string().optional().nullable(),
+  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+  device_type: z.string().optional().nullable(),
+  browsing_analysis_summary: z.string().optional().nullable(),
 });
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({

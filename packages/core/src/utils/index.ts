@@ -196,3 +196,12 @@ export const MESSAGE_STATE = {
 export const deepCompare = (obj1: unknown, obj2: unknown): boolean => {
   return isEqual(obj1, obj2);
 };
+
+export const isUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};

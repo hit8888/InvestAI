@@ -202,6 +202,11 @@ export const ConversationsResponseResultSchema = z.object({
   prospect_details: ProspectDetailsSchema.optional().nullable(),
   company_details: CompanyDetailsSchema.optional().nullable(),
   agent_modal: z.string().optional().nullable(),
+  parent_url: z.string().optional().nullable(),
+  parent_url_title: z.string().optional().nullable(),
+  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+  device_type: z.string().optional().nullable(),
+  browsing_analysis_summary: z.string().optional().nullable(),
 });
 
 export const PaginationDataSchema = z.object({

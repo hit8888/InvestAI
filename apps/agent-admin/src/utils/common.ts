@@ -30,6 +30,7 @@ import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
   ensureProtocol,
+  isUrl,
   LEADS_PAGE,
   LINK_CLICKS_PAGE,
   SLIDES_PAGE,
@@ -922,6 +923,11 @@ export function generateConversationSummaryContent(
           ...item,
           listValue: sessionData.summary || 'No summary available',
         };
+      case 'browsingHistorySummary':
+        return {
+          ...item,
+          listValue: sessionData.browsing_analysis_summary || '-',
+        };
       case 'intentScore':
         return {
           ...item,
@@ -944,11 +950,21 @@ export function generateConversationSummaryContent(
             ? `${totalMessageCount} messages exchanged, including ${userMessageCount} user queries and ${aiMessageCount} AI responses.`
             : '-',
         };
-      // case 'entryPoint':
-      //   return {
-      //     ...item,
-      //     listValue: sessionData.entry_point || 'Not available',
-      //   };
+      case 'parentUrl':
+        return {
+          ...item,
+          listValue: sessionData.parent_url
+            ? {
+                itemLabel: sessionData.parent_url_title ?? new URL(sessionData.parent_url).hostname,
+                itemValue: sessionData.parent_url,
+              }
+            : '-',
+        };
+      case 'entryPoint':
+        return {
+          ...item,
+          listValue: toDisplayText(sessionData.agent_modal) || '-',
+        };
       case 'ipAddress':
         return {
           ...item,
@@ -958,6 +974,18 @@ export function generateConversationSummaryContent(
         return {
           ...item,
           listValue: `${sessionDuration} minutes`,
+        };
+      case 'trafficSource':
+        return {
+          ...item,
+          listValue: isUrl(sessionData.query_params?.utm_source ?? '')
+            ? new URL(sessionData.query_params?.utm_source ?? '').hostname
+            : (sessionData.query_params?.utm_source ?? '-'),
+        };
+      case 'deviceType':
+        return {
+          ...item,
+          listValue: toDisplayText(sessionData.device_type) || '-',
         };
       default:
         return item;

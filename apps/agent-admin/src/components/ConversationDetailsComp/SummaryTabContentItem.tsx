@@ -1,4 +1,4 @@
-import { BANTItem, SummaryTabContentList, NO_INFORMATION_PROVIDED_LABEL } from '../../utils/constants';
+import { BANTItem, SummaryTabContentList, NO_INFORMATION_PROVIDED_LABEL, ParentUrlItem } from '../../utils/constants';
 import IntentScoreStockupIcon from '@breakout/design-system/components/icons/intent-score-stockup-icon';
 import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
 import SummaryListChildrenItem from './SummaryListChildrenItem';
@@ -10,11 +10,13 @@ import GithubMarkdownRenderer from '@breakout/design-system/components/layout/Gi
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
-  const isEntryPoint = listKey === 'entryPoint';
+  const isParentUrl = listKey === 'parentUrl';
   const isSummaryItem = listKey === 'summary';
   const isBantAnalysisItem = listKey === 'bantAnalysis';
+  const isBrowsingHistorySummaryItem = listKey === 'browsingHistorySummary';
+  const isLabelValueDash = listValue === '-';
 
-  const getSummaryListValueContent = (listValue: string | number | BANTItem[]) => {
+  const getSummaryListValueContent = (listValue: string | number | BANTItem[] | ParentUrlItem) => {
     if (isIntentScore) {
       const isValueNumerical = !isNaN(Number(listValue)) && listValue !== '';
       return isValueNumerical ? (
@@ -23,14 +25,16 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
         <BuyerIntentCellValue value={listValue as string} />
       );
     }
-    if (isEntryPoint) {
+    if (isParentUrl && !isLabelValueDash) {
+      const { itemLabel, itemValue } = listValue as ParentUrlItem;
+
       return (
-        <Link to={listValue as string} className="flex-1 text-base font-normal text-blue_sec-1000">
-          {listValue as string}
+        <Link to={itemValue} className="truncate text-base font-normal text-blue_sec-1000" target="_blank">
+          {itemLabel}
         </Link>
       );
     }
-    if (isSummaryItem) {
+    if (isSummaryItem || isBrowsingHistorySummaryItem) {
       return <GithubMarkdownRenderer markdown={listValue as string} />;
     }
     return <p className="flex-1 text-base font-normal text-gray-900">{listValue as string}</p>;
@@ -66,14 +70,14 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
     }
   };
 
-  const isLabelValueDash = listValue === '-';
   return (
     <div
       className={cn(
         'flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
         {
           'w-full flex-row items-center justify-between': isLabelValueDash,
-          'flex-col justify-center': (isSummaryItem || isBantAnalysisItem) && !isLabelValueDash,
+          'flex-col justify-center':
+            (isSummaryItem || isBantAnalysisItem || isBrowsingHistorySummaryItem) && !isLabelValueDash,
         },
       )}
       key={listKey}
@@ -111,7 +115,7 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       ) : isLabelValueDash ? (
         <>{getNoInformationProvidedLabel(`This ${NO_INFORMATION_PROVIDED_LABEL}`)}</>
       ) : (
-        <div className="flex justify-end">{getSummaryListValueContent(listValue)}</div>
+        <div className="flex max-w-[50%] justify-end">{getSummaryListValueContent(listValue)}</div>
       )}
     </div>
   );
