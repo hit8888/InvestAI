@@ -5,7 +5,6 @@ import ArrowRight from '../../icons/ArrowRight';
 import MessageItemLayout, { Padding } from './MessageItemLayout';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 type IProps = {
   event: WebSocketMessage;
@@ -32,10 +31,6 @@ const CtaEventMessage = (props: IProps) => {
   const { event_data } = (event?.message as EventMessageContent) ?? {};
   const { label, message, url, align, title } = (event_data as CtaEventDataContent) ?? {};
 
-  const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: isMobile && !!align,
-  });
-
   const handleClick = () => {
     if (!url) return;
 
@@ -56,7 +51,7 @@ const CtaEventMessage = (props: IProps) => {
 
   if (align === 'left') {
     return (
-      <MessageItemLayout elementRef={scrollToMessageRef} paddingInline={Padding.INLINE}>
+      <MessageItemLayout paddingInline={Padding.INLINE}>
         <div
           className={cn(
             'flex w-full max-w-[424px] items-center justify-between gap-4 rounded-2xl bg-transparent_gray_3 p-4',
@@ -80,7 +75,6 @@ const CtaEventMessage = (props: IProps) => {
   if (align === 'right') {
     return (
       <div
-        ref={scrollToMessageRef}
         className={cn('w-[66%] pl-2 pr-4 pt-4', {
           'w-full max-w-lg p-0': isMobile,
         })}

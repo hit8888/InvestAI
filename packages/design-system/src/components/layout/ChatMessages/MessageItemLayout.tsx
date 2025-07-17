@@ -28,22 +28,13 @@ export enum Orientation {
 interface MessageItemLayoutProps {
   children: React.ReactNode;
   className?: string;
-  elementRef?: React.RefObject<HTMLDivElement | null>;
   align?: Alignment;
   gap?: Gap;
   paddingInline?: Padding;
   orientation?: Orientation;
 }
 
-const MessageItemLayout = ({
-  children,
-  className,
-  elementRef,
-  align,
-  gap,
-  paddingInline,
-  orientation,
-}: MessageItemLayoutProps) => {
+const MessageItemLayout = ({ children, className, align, gap, paddingInline, orientation }: MessageItemLayoutProps) => {
   const isMobile = useIsMobile();
   const finalAlign = align || Alignment.LEFT;
   const finalGap = gap || Gap.SMALL;
@@ -82,7 +73,6 @@ const MessageItemLayout = ({
         finalGap && gapClasses[finalGap],
         className,
       )}
-      ref={elementRef}
     >
       {children}
     </div>

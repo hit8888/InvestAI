@@ -1,4 +1,3 @@
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { ViewType } from '@meaku/core/types/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { checkIsAdminJoinedMessage } from '@meaku/core/utils/messageUtils';
@@ -13,7 +12,6 @@ interface AdminJoinedInfoProps {
 const PROFILE_ICON_WIDTH = 28;
 
 const AdminJoinedInfo = ({ message, viewType }: AdminJoinedInfoProps) => {
-  const scrollRef = useElementScrollIntoView<HTMLDivElement>();
   const isAdminJoinedMessage = checkIsAdminJoinedMessage(message);
 
   if (
@@ -34,7 +32,7 @@ const AdminJoinedInfo = ({ message, viewType }: AdminJoinedInfoProps) => {
   const messageText = viewType === ViewType.ADMIN ? `${adminName} joined the chat` : `${adminName} is here to help.`;
 
   return (
-    <MessageItemLayout elementRef={scrollRef} align={Alignment.CENTER} paddingInline={Padding.INLINE}>
+    <MessageItemLayout align={Alignment.CENTER} paddingInline={Padding.INLINE}>
       <div className="flex grow-0 items-center rounded-2xl bg-transparent_gray_3 p-4">
         <div className="mr-4 h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
           <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-300">

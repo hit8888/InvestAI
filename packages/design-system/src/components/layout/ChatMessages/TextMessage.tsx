@@ -4,7 +4,6 @@ import { AiResponseLoadingText } from '@breakout/design-system/components/AiResp
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
 import { checkIsAIMessage, getMessageViewType, checkIsLoadingTextMessage } from '@meaku/core/utils/messageUtils';
 import ChatMessageTail from './ChatMessageTail';
@@ -22,7 +21,6 @@ interface TextMessageProps {
   viewType: ViewType;
   isLastQuestionResponse: boolean;
   shouldShowActiveOrb: boolean;
-  isCurrentMsgUserInactiveMessage: boolean;
   renderOrb: () => React.ReactNode;
 }
 
@@ -33,18 +31,10 @@ const TextMessage: React.FC<TextMessageProps> = ({
   viewType,
   isLastQuestionResponse,
   shouldShowActiveOrb,
-  isCurrentMsgUserInactiveMessage,
   renderOrb,
 }) => {
   const isMobile = useIsMobile();
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const isHumanMessage =
-    (message.role === MessageSenderRole.USER || message.role === MessageSenderRole.ADMIN) &&
-    viewType !== ViewType.DASHBOARD;
-
-  const scrollToMessageRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: (isCurrentMsgUserInactiveMessage && isLastQuestionResponse) || isHumanMessage,
-  });
 
   const isAIMessage = checkIsAIMessage(message);
   const messageViewType = getMessageViewType(message.role as MessageSenderRole, viewType);
@@ -88,7 +78,7 @@ const TextMessage: React.FC<TextMessageProps> = ({
   }, [isAIMessage, isLastQuestionResponse, isLoadingTextMessage, shouldShowActiveOrb, isMobile, messageViewType]);
 
   return (
-    <MessageItemLayout elementRef={scrollToMessageRef} className={getChatTextMessageContainerClass(messageViewType)}>
+    <MessageItemLayout className={getChatTextMessageContainerClass(messageViewType)}>
       <div ref={shouldMessageScrollToTop ? elementRef : null} className={messageContainerClasses}>
         <ChatMessageSender messageViewType={messageViewType} role={message.role} />
 

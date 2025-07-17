@@ -61,12 +61,16 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, invertTex
           className={cn(['relative z-10 flex w-full rounded-2xl', !isMobile && 'border border-gray-200 bg-white p-1'])}
         >
           <TextArea
-            className={cn([
-              'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText placeholder:pt-0.5 placeholder:text-gray-400',
-              inputValue.length > 0 && 'ring-2 ring-primary/60 focus:ring-2 focus:ring-primary/60',
-            ])}
+            className={cn(
+              'rounded-xl border py-3 pl-3 pr-16 text-base text-customPrimaryText ring-0 placeholder:pt-0.5 placeholder:text-gray-400 focus:ring-1 focus:ring-primary/70',
+              {
+                'caret-gray-400': inputValue.length === 0,
+                'caret-customPrimaryText': inputValue.length > 0,
+              },
+            )}
             placeholder="Type your message here..."
             value={inputValue}
+            id="agent-input"
             onChange={handleInputValueChange}
             onKeyDown={handleKeyDown}
             ref={textAreaRef}

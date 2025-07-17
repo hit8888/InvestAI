@@ -6,7 +6,6 @@ import { MultiSelectQuestion } from './MultiSelectQuestion';
 import { EventData, OptionType } from './types';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
 import TextBasedDiscoveryQuestion from './TextBasedDiscoveryQuestion';
 import { ViewType } from '@meaku/core/types/common';
@@ -30,9 +29,6 @@ export default function DiscoveryQuestion({
   shouldShowActiveOrb,
 }: IProps) {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const discoveryQuestionsRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: viewType === ViewType.USER || (viewType === ViewType.ADMIN && isLastMessage),
-  });
 
   // TODO: Block of code (Line 29-39) is a duplicate of the Code Block (Line 81 - 91)  below.
   // We should refactor this to use a single check.
@@ -145,7 +141,6 @@ export default function DiscoveryQuestion({
     <MessageItemLayout
       align={Alignment.LEFT}
       gap={Gap.MEDIUM}
-      elementRef={discoveryQuestionsRef}
       paddingInline={shouldShowActiveOrb ? Padding.NONE : Padding.INLINE}
     >
       {shouldShowActiveOrb && renderOrb()}

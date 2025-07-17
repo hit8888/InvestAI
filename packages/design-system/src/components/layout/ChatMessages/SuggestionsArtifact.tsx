@@ -3,7 +3,6 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { Suggestion } from './Suggestion.tsx';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { ViewType } from '@meaku/core/types/common';
 import MessageItemLayout, { Alignment, Gap, Padding, Orientation } from './MessageItemLayout.tsx';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
@@ -46,11 +45,6 @@ const SuggestionsArtifact = ({
     });
   };
 
-  const suggestionsRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: showSuggestionsArtifact,
-    delay: 0,
-  });
-
   if (!artifact || !showSuggestionsArtifact) {
     return <></>;
   }
@@ -61,7 +55,6 @@ const SuggestionsArtifact = ({
 
   return (
     <MessageItemLayout
-      elementRef={suggestionsRef}
       orientation={Orientation.COLUMN}
       gap={Gap.SMALL}
       paddingInline={Padding.INLINE_LEFT_ONLY}

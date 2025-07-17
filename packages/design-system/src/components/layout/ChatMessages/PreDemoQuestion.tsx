@@ -4,7 +4,6 @@ import { DemoPlayingStatus } from '@meaku/core/types/common';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import Typography from '@breakout/design-system/components/Typography/index';
 import MessageItemLayout, {
   Padding,
@@ -19,7 +18,6 @@ interface IProps {
 
 const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setDemoPlayingStatus }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const preDemoQuestionRef = useElementScrollIntoView<HTMLDivElement>();
 
   const [showPreDemoQuestions, setShowPreDemoQuestions] = useState(true);
   const [showDemoTopics, setShowDemoTopics] = useState(false);
@@ -48,7 +46,7 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
   }
 
   return (
-    <MessageItemLayout elementRef={preDemoQuestionRef} paddingInline={Padding.INLINE} orientation={Orientation.COLUMN}>
+    <MessageItemLayout paddingInline={Padding.INLINE} orientation={Orientation.COLUMN}>
       <div className="border-t-2 border-dashed border-gray-300"></div>
 
       <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">

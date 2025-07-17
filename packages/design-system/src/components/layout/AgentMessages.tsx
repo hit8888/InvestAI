@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import SuggestionsArtifact from './ChatMessages/SuggestionsArtifact';
 import PreDemoQuestion from './ChatMessages/PreDemoQuestion';
 import MessageItem from './ChatMessages/MessageItem';
@@ -13,6 +13,9 @@ import {
   shouldMessageScrollToTop,
 } from '@meaku/core/utils/messageUtils';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { ChevronsDown } from 'lucide-react';
+import Button from '../Button';
+import throttle from 'lodash/throttle';
 
 interface IProps {
   viewType: ViewType;
@@ -63,12 +66,18 @@ const AgentMessages = ({
   showOrbFromConfig,
   invertTextColor,
 }: IProps) => {
-  const agentChatContainerRef = useRef<HTMLDivElement>(null);
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
+  const parentContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const lastGroupRef = useRef<HTMLDivElement>(null);
+  const groupStartScrollTargetRef = useRef<HTMLDivElement>(null);
+  const groupEndScrollTargetRef = useRef<HTMLDivElement>(null);
+  const agentMessagesContainerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = React.useState<number>(0);
+  const [showDownArrow, setShowDownArrow] = React.useState<boolean>(false);
   const handleScrollToBottom = () => {
-    if (agentChatContainerRef.current) {
-      const container = agentChatContainerRef.current;
+    if (parentContainerRef.current) {
+      const container = parentContainerRef.current;
       const lastUserMessage = currentMessageScrollToTop.current;
 
       if (lastUserMessage) {
@@ -82,6 +91,11 @@ const AgentMessages = ({
         });
       }
     }
+  };
+
+  const handleScrollToBottomOfContainer = () => {
+    groupEndScrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    setShowDownArrow(false);
   };
 
   useEffect(() => {
@@ -115,8 +129,74 @@ const AgentMessages = ({
     return '';
   }, [isMobile, showRightPanel]);
 
+  useLayoutEffect(() => {
+    if (parentContainerRef.current && messagesSortedByResponseIdAndTimestamp.length > 0) {
+      // Scroll to the scroll target div to ensure content above is visible
+      setTimeout(() => {
+        if (groupStartScrollTargetRef.current) {
+          groupStartScrollTargetRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [messagesSortedByResponseIdAndTimestamp.length]);
+
+  useEffect(() => {
+    if (parentContainerRef.current) {
+      const container = parentContainerRef.current;
+      setContainerHeight(container.getBoundingClientRect().height - 32);
+    }
+  }, [messagesSortedByResponseIdAndTimestamp.length]);
+
+  // Check scroll position when messages change
+  useLayoutEffect(() => {
+    const container = parentContainerRef.current;
+    if (!container) return;
+
+    // Small delay to ensure DOM is updated
+    const lastGroupParent = groupStartScrollTargetRef?.current?.parentElement;
+    if (lastGroupParent) {
+      const lastGroupHeight = lastGroupParent.offsetHeight;
+      const containerHeight = container.offsetHeight;
+
+      // Show arrow if the last group's parent has more content than the container
+      const hasMoreContent = lastGroupHeight > containerHeight;
+      setShowDownArrow(hasMoreContent);
+    }
+  }, [messages]);
+
+  // Add scroll event listener to hide arrow when scrolled to end
+  useEffect(() => {
+    const scrollContainer = agentMessagesContainerRef?.current;
+    if (!scrollContainer) return;
+
+    const checkScrollPosition = throttle(() => {
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const clientHeight = scrollContainer.clientHeight;
+
+      // Check if we're at the bottom (within 10px threshold)
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
+
+      // Hide arrow when scrolled to the end
+      if (isAtBottom) {
+        setShowDownArrow(false);
+      }
+    }, 200);
+
+    // Initial check
+    checkScrollPosition();
+
+    // Add scroll event listener
+    scrollContainer.addEventListener('scroll', checkScrollPosition);
+
+    return () => {
+      scrollContainer.removeEventListener('scroll', checkScrollPosition);
+    };
+  }, [messages.length]);
+
   return (
     <div
+      ref={parentContainerRef}
       className={cn(agentMessagesContainerClassName)}
       onWheel={(e) => e.stopPropagation()}
       style={{
@@ -125,9 +205,8 @@ const AgentMessages = ({
       }}
     >
       <div
-        id="agent-messages-container"
-        ref={agentChatContainerRef}
-        className={cn(['h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4'])}
+        ref={agentMessagesContainerRef}
+        className={cn(['relative h-full flex-1 space-y-4 overflow-y-auto p-2 pl-4 pr-2', isMobile && 'p-4'])}
       >
         <div
           className={cn([
@@ -135,31 +214,80 @@ const AgentMessages = ({
             !showRightPanel && !allowFullWidthForText && 'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]',
           ])}
         >
-          {messagesSortedByResponseIdAndTimestamp.map((message, idx) => {
+          {/* Spacer to push content to bottom */}
+          <div style={{ flex: 1, minHeight: 0 }} />
+
+          {messagesSortedByResponseIdAndTimestamp.map((group, ind) => {
+            const isLastGroup = ind === messagesSortedByResponseIdAndTimestamp.length - 1;
             return (
-              <React.Fragment key={idx}>
-                <MessageItem
-                  elementRef={currentMessageScrollToTop}
-                  shouldMessageScrollToTop={shouldMessageScrollToTop(message)}
-                  isAMessageBeingProcessed={isAMessageBeingProcessed}
-                  logoURL={logoURL}
-                  viewType={viewType}
-                  sessionId={sessionId}
-                  primaryColor={primaryColor}
-                  message={message}
-                  orbState={orbState}
-                  setIsArtifactPlaying={setIsArtifactPlaying}
-                  setActiveArtifact={setActiveArtifact}
-                  setDemoPlayingStatus={setDemoPlayingStatus}
-                  handleSendUserMessage={handleSendUserMessage}
-                  allowFeedback={allowFeedback}
-                  initialFeedback={getInitialFeedback(message)}
-                  lastMessageResponseId={lastMessageResponseId}
-                  messages={messagesSortedByResponseIdAndTimestamp}
-                  orbLogoUrl={orbLogoUrl}
-                  showOrbFromConfig={showOrbFromConfig}
-                  invertTextColor={invertTextColor}
-                />
+              <React.Fragment key={ind}>
+                <div
+                  className={cn(' flex flex-col gap-8')}
+                  style={
+                    isLastGroup && containerHeight > 0
+                      ? {
+                          minHeight: `${containerHeight}px`,
+                        }
+                      : undefined
+                  }
+                  ref={isLastGroup ? lastGroupRef : null}
+                >
+                  {/* Empty div for scrolling into view */}
+                  {isLastGroup && (
+                    <div
+                      key="last-group-start"
+                      ref={groupStartScrollTargetRef}
+                      style={{ height: '1px', marginTop: -32 }}
+                    />
+                  )}
+                  {group.map((message, idx) => {
+                    return (
+                      <MessageItem
+                        key={idx}
+                        elementRef={currentMessageScrollToTop}
+                        shouldMessageScrollToTop={shouldMessageScrollToTop(message)}
+                        isAMessageBeingProcessed={isAMessageBeingProcessed}
+                        logoURL={logoURL}
+                        viewType={viewType}
+                        sessionId={sessionId}
+                        primaryColor={primaryColor}
+                        message={message}
+                        orbState={orbState}
+                        setIsArtifactPlaying={setIsArtifactPlaying}
+                        setActiveArtifact={setActiveArtifact}
+                        setDemoPlayingStatus={setDemoPlayingStatus}
+                        handleSendUserMessage={handleSendUserMessage}
+                        allowFeedback={allowFeedback}
+                        initialFeedback={getInitialFeedback(message)}
+                        lastMessageResponseId={lastMessageResponseId}
+                        messages={group}
+                        orbLogoUrl={orbLogoUrl}
+                        showOrbFromConfig={showOrbFromConfig}
+                        invertTextColor={invertTextColor}
+                      />
+                    );
+                  })}
+                  {/* End scroll target for initial mount */}
+                  {isLastGroup && (
+                    <div
+                      key="last-group-end"
+                      ref={groupEndScrollTargetRef}
+                      style={{ height: '1px', marginBottom: -32 }}
+                    />
+                  )}
+                </div>
+                {showDownArrow && isLastGroup && (
+                  <div className="sticky bottom-0 left-0 flex items-center justify-start">
+                    <Button
+                      variant="system_secondary"
+                      className="duration-[2000ms] size-7 animate-pulse rounded-full p-1"
+                      size="small"
+                      onClick={handleScrollToBottomOfContainer}
+                    >
+                      <ChevronsDown />
+                    </Button>
+                  </div>
+                )}
               </React.Fragment>
             );
           })}

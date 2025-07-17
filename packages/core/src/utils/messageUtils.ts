@@ -681,7 +681,15 @@ const getIncompleteGroupMessages = (messages: WebSocketMessage[]): WebSocketMess
   return result;
 };
 
-// Helper function to sort messages within a group
+// This function, sortMessageGroup, takes an array of WebSocketMessage objects that all belong to the same group (for example, they share the same response_id).
+// Its purpose is to sort these messages so that they are displayed in the correct order in the chat UI.
+// The sorting rules are as follows:
+// 1. Main response messages (like the main AI response) should always appear before "delayed" messages (such as discovery questions, artifacts, or CTA events).
+// 2. If both messages are delayed, artifact messages should come before discovery questions.
+//    - If both are artifact messages, media artifacts are prioritized over suggestion artifacts.
+// 3. Messages that indicate a media artifact is being generated are not sorted with the others, but are instead appended at the end of the group.
+// 4. For all other cases, the original order of the messages is preserved.
+// The function returns a new array of messages, sorted according to these rules, ready to be rendered in the chat interface.
 const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
   const generatingArtifactMessages = messages.filter(isGeneratingMediaArtifactEvent);
   // messing up with sorting if message is of type media artifact generating
@@ -732,7 +740,7 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
 // It ensures that main responses (stream/text) appear before delayed messages (discovery, artifacts, pre-demo)
 // and artifacts appear before discovery questions when both are delayed
 // Incomplete stream messages are shown immediately along with their user message, while other messages wait for stream completion
-export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessage[]) => {
+export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessage[]): WebSocketMessage[][] => {
   // Group messages by response_id
   const messageGroups = new Map<string, WebSocketMessage[]>();
   messages.forEach((msg) => {
@@ -757,17 +765,17 @@ export const messagesGroupedByResponseIdAndTimestamp = (messages: WebSocketMessa
   });
 
   // Process each group
-  const result: WebSocketMessage[] = [];
+  const result: WebSocketMessage[][] = [];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const [_, groupMessages] of sortedGroups) {
     const incompleteMessages = getIncompleteGroupMessages(groupMessages);
     const checkMessageGroupReady = isMessageGroupReady(groupMessages);
     if (checkMessageGroupReady) {
       // If stream is complete or there's no stream, show all messages in order
-      result.push(...sortMessageGroup(groupMessages));
+      result.push(sortMessageGroup(groupMessages));
     } else if (incompleteMessages.length > 0) {
       // If there's an incomplete stream, show user message and stream message
-      result.push(...incompleteMessages);
+      result.push(incompleteMessages);
     }
   }
 

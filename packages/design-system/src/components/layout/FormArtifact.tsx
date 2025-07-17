@@ -8,7 +8,6 @@ import { getFormSchemaTypeDefinition } from '@meaku/core/utils/form_fields';
 import { useState } from 'react';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import ChatFormField from './ChatFormField';
 import { FormArtifactContent, FormArtifactMetadataType } from '@meaku/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
@@ -108,11 +107,6 @@ const FormArtifact = ({
 
   const isSubmitBtnDisabled = !form.formState.isValid || form.formState.isSubmitting || !areAllFieldsFilled;
 
-  const submitButtonRef = useElementScrollIntoView<HTMLButtonElement>({
-    shouldScroll: (isSubmitBtnDisabled && viewType === ViewType.USER) || viewType === ViewType.ADMIN,
-    delay: 0,
-  });
-
   if (!artifact) {
     return <></>;
   }
@@ -146,12 +140,7 @@ const FormArtifact = ({
               ))}
             </div>
             <div className="flex justify-end">
-              <Button
-                ref={submitButtonRef}
-                type="submit"
-                disabled={formDisabled || isSubmitBtnDisabled}
-                data-testid="submit-form-btn"
-              >
+              <Button type="submit" disabled={formDisabled || isSubmitBtnDisabled} data-testid="submit-form-btn">
                 Submit
               </Button>
             </div>

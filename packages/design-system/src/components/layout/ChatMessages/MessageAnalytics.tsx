@@ -1,26 +1,20 @@
 import { Badge } from '@breakout/design-system/components/layout/badge';
 import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
 import Typography from '../../Typography';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 import { cn } from '@breakout/design-system/lib/cn';
-import { ViewType } from '@meaku/core/types/common';
 
 interface IProps {
   analytics: MessageAnalyticsEventData;
   invertTextColor: boolean;
-  viewType: ViewType;
 }
 
-const MessageAnalytics = ({ analytics, invertTextColor, viewType }: IProps) => {
-  const buyerIntentScoreRef = useElementScrollIntoView<HTMLDivElement>({
-    shouldScroll: viewType === ViewType.USER || viewType === ViewType.ADMIN,
-  });
+const MessageAnalytics = ({ analytics, invertTextColor }: IProps) => {
   if (!analytics || !analytics.buyer_intent_score) {
     return null;
   }
 
   return (
-    <div ref={buyerIntentScoreRef} className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-2">
       <Typography variant="label-14-semibold" textColor="textPrimary">
         Analytics:
       </Typography>

@@ -94,6 +94,20 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const renderOrb = () => (
     <Orb showThreeStar showOrb={showOrb} state={orbState} color={'rgb(var(--primary))'} orbLogoUrl={orbLogoUrl} />
   );
+
+  const handleClickonAgent = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Check if the click target is a clickable element
+    const target = e.target as HTMLElement;
+    const isClickable = target.closest('button, a, input, textarea, select, [role="button"], [tabindex]');
+
+    // Only focus if the click is not on a clickable element
+    if (!isClickable) {
+      const searchbarInput = document.querySelector('textarea#agent-input') as HTMLTextAreaElement;
+      setTimeout(() => {
+        searchbarInput?.focus();
+      }, 100);
+    }
+  };
   return (
     <div
       className={cn(
@@ -109,6 +123,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
           'chat-window-shadow relative flex h-full flex-1 flex-col overflow-hidden rounded-2xl bg-white',
           isMobile && 'rounded-none',
         ])}
+        onClick={handleClickonAgent}
       >
         {isMobile ? (
           <AgentMobileHeader
