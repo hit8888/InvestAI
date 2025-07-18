@@ -98,6 +98,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
         setCurrentConversation(currentConversation);
       } else {
         navigate('/active-conversations');
+        setCurrentConversation(null);
       }
     }
   }, [conversations, sessionID, setCurrentConversation]);

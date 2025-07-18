@@ -1,8 +1,8 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import useActiveConversationDetailsDataQuery from '../../queries/query/useActiveConversationDetailsDataQuery';
 import JoinConversationChatArea from './JoinConversationChatArea';
-import { ActiveConversation, ActiveConversationsContext } from '../../context/ActiveConversationsContext';
+import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
@@ -10,6 +10,7 @@ import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
+import { checkIsAdminJoinedMessage, checkIsAdminLeftMessage } from '@meaku/core/utils/messageUtils';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
@@ -28,27 +29,24 @@ const JoinConversationDrawer = ({
 }: JoinConversationDrawerProps) => {
   const { session_id: sessionId } = conversation;
   const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse } = useJoinConversationStore();
-  const { readyState } = useContext(ActiveConversationsContext);
   const { chatHistory, setChatHistory, setChatSummary, setBrowsedUrls, setSession } = useActiveConversationDetails();
   const { setMessages } = useMessageStore();
 
   const queryOptions = useQueryOptions();
 
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch: refetchChatHistory,
-  } = useActiveConversationDetailsDataQuery({
+  const { data, isFetching, isError } = useActiveConversationDetailsDataQuery({
     sessionID: sessionId,
-    queryOptions,
+    queryOptions: {
+      ...queryOptions,
+      staleTime: 0,
+    },
     queryParams: {
       chat_summary_required: 'true',
     },
   });
 
   useEffect(() => {
-    if (isLoading || !data) return;
+    if (isFetching || !data) return;
 
     setChatHistory(data.chat_history);
     setMessages(data.chat_history);
@@ -61,19 +59,27 @@ const JoinConversationDrawer = ({
       setMessages([]);
       setChatSummary('');
     };
-  }, [isLoading, data]);
+  }, [isFetching, data]);
+
+  useEffect(() => {
+    if (isFetching || !data) return;
+
+    const currentAdminSessionEvents = data.chat_history.filter(
+      (message) => checkIsAdminJoinedMessage(message) || checkIsAdminLeftMessage(message),
+    );
+    const mostRecentSessionEvent = currentAdminSessionEvents[currentAdminSessionEvents.length - 1];
+
+    if (mostRecentSessionEvent && checkIsAdminJoinedMessage(mostRecentSessionEvent)) {
+      // Auto-reconnect: set session status to JOINED if most recent event is JOIN_SESSION
+      updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
+    }
+  }, [isFetching, data, sessionId, updateSessionStatus]);
 
   useEffect(() => {
     return () => {
       setIsGeneratingAIResponse(false);
     };
   }, [setIsGeneratingAIResponse]);
-
-  useEffect(() => {
-    if (readyState === WebSocket.OPEN) {
-      refetchChatHistory();
-    }
-  }, [readyState]);
 
   if (isError) {
     // TODO: track this error
@@ -110,7 +116,7 @@ const JoinConversationDrawer = ({
           onPointerDownOutside={(e) => e.preventDefault()}
         >
           <div className="flex h-full w-full grow flex-col gap-2 overflow-hidden">
-            <JoinConversationChatArea sessionId={sessionId} isLoading={isLoading} />
+            <JoinConversationChatArea sessionId={sessionId} isLoading={isFetching} />
 
             {!chatHistory || chatHistory.length === 0 ? null : (
               <JoinConversationBottomBar
