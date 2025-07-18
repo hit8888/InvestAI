@@ -1,29 +1,29 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 export const useFiltersContainerHeight = () => {
-  const filtersRef = useRef<HTMLDivElement>(null);
+  const [node, setNode] = useState<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
+  const filtersRef = useCallback((element: HTMLDivElement) => {
+    setNode(element);
+  }, []);
+
   useEffect(() => {
-    const updateHeight = () => {
-      if (filtersRef.current) {
-        setHeight(filtersRef.current.offsetHeight);
-      }
-    };
+    if (node) {
+      const updateHeight = () => {
+        setHeight(node.offsetHeight);
+      };
 
-    // Initial measurement
-    updateHeight();
+      updateHeight();
 
-    // Set up ResizeObserver to track height changes
-    const resizeObserver = new ResizeObserver(updateHeight);
-    if (filtersRef.current) {
-      resizeObserver.observe(filtersRef.current);
+      const resizeObserver = new ResizeObserver(updateHeight);
+      resizeObserver.observe(node);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
     }
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [filtersRef.current, setHeight]);
+  }, [node]);
 
   return { filtersRef, height };
 };

@@ -17,6 +17,7 @@ const HeaderTitle = ({ header }: HeaderTitleProps) => {
 };
 
 const HeaderCellContent = ({
+  showActionItems,
   isFirstColumn,
   header,
   selectAll,
@@ -75,7 +76,7 @@ const HeaderCellContent = ({
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center justify-center gap-4">
-        {isFirstColumn && (
+        {isFirstColumn && showActionItems && (
           <Checkbox
             checked={isAllSelected}
             indeterminate={isIndeterminate}
@@ -86,24 +87,26 @@ const HeaderCellContent = ({
         )}
         <HeaderTitle header={header} />
       </div>
-      <Button
-        onClick={handleSortValueChange}
-        className={cn({
-          'bg-white': sortingDirection === 'desc',
-          'bg-gray-400': sortingDirection === 'asc',
-          'cursor-default opacity-0': isNonSortableColumn,
-        })}
-        variant="system_tertiary"
-        buttonStyle={'icon'}
-      >
-        <SortFilterIcon
-          className={cn('h-4 w-4', {
-            'text-gray-700': !sortingDirection,
-            'text-primary': sortingDirection,
-            'rotate-180': sortingDirection === 'desc',
+      {showActionItems && (
+        <Button
+          onClick={handleSortValueChange}
+          className={cn({
+            'bg-white': sortingDirection === 'desc',
+            'bg-gray-400': sortingDirection === 'asc',
+            'cursor-default opacity-0': isNonSortableColumn,
           })}
-        />
-      </Button>
+          variant="system_tertiary"
+          buttonStyle={'icon'}
+        >
+          <SortFilterIcon
+            className={cn('h-4 w-4', {
+              'text-gray-700': !sortingDirection,
+              'text-primary': sortingDirection,
+              'rotate-180': sortingDirection === 'desc',
+            })}
+          />
+        </Button>
+      )}
     </div>
   );
 };

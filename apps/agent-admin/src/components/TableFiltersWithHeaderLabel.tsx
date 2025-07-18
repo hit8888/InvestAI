@@ -8,9 +8,7 @@ import { useEffect } from 'react';
 import ExportDownload from './tableComp/ExportDownload';
 import SearchTableContentInput from './SearchTableContentInput';
 import { CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
-import { CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING } from '../utils/constants';
-
-const CONVERSATION_TABS_CONTAINER_HEIGHT = 58;
+import { TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING } from '../utils/constants';
 
 type IProps = PageTypeProps & {
   disabledState?: boolean;
@@ -31,7 +29,7 @@ const TableFiltersWithHeaderLabel = ({
   // Notify parent component of height changes
   useEffect(() => {
     if (onFiltersContainerHeightChange) {
-      onFiltersContainerHeightChange(height + CONVERSATION_TABS_CONTAINER_HEIGHT);
+      onFiltersContainerHeightChange(height + TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING);
     }
   }, [height, onFiltersContainerHeightChange]);
 
@@ -46,7 +44,7 @@ const TableFiltersWithHeaderLabel = ({
       ref={filtersRef}
       className="sticky z-10 flex w-full items-start justify-between self-stretch bg-white py-4"
       style={{
-        top: `${CONVERSATION_TABS_CONTAINER_HEIGHT_WITH_PADDING}px`,
+        top: `${TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING}px`,
       }}
     >
       <FlexContainer>

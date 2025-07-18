@@ -43,6 +43,7 @@ interface TableViewProps {
   pageType: PaginationPageType;
   toggleDataSourcesDrawer?: (value: boolean) => void;
   onRowItemClick?: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
+  showActionItems?: boolean;
 }
 
 const CommonTable = ({
@@ -61,6 +62,7 @@ const CommonTable = ({
   pageType,
   toggleDataSourcesDrawer = () => {},
   onRowItemClick,
+  showActionItems = true,
 }: TableViewProps) => {
   const navigate = useNavigate();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
@@ -123,6 +125,7 @@ const CommonTable = ({
           pageType={pageType}
           setSortValue={setSortValue}
           sortValue={sortValue}
+          showActionItems={showActionItems}
         />
       );
     }
@@ -139,6 +142,7 @@ const CommonTable = ({
           isIdSelected={isIdSelected}
           toggleSelectId={toggleSelectId}
           handleDataSourcesDrawerToggle={handleDataSourcesDrawerToggle}
+          showActionItems={showActionItems}
         />
       );
     }

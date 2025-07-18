@@ -142,17 +142,20 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
   }, [selectedIds, results]);
 
   if (isError || dataSourceTableError) return <ErrorState />;
+  const showActionItems = !dataItemView;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start self-stretch">
-      <DataSourceTableHeader
-        key={pageType}
-        page={pageType}
-        totalRecords={totalRecords}
-        isLoading={isLoading}
-        areFiltersApplied={areFiltersApplied}
-        onFilterContainerHeightChange={setFilterContainerHeight}
-      />
+      {showActionItems && (
+        <DataSourceTableHeader
+          key={pageType}
+          page={pageType}
+          totalRecords={totalRecords}
+          isLoading={isLoading}
+          areFiltersApplied={areFiltersApplied}
+          onFilterContainerHeightChange={setFilterContainerHeight}
+        />
+      )}
       {isAllDataSourcesSelectedPerPage && <NudgeMessage itemsSelected={results.length} pageType={pageType} />}
       <DataSourceTableViewContent
         columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
@@ -161,18 +164,21 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
         isLoading={isLoading}
         totalRecords={totalRecords}
         filterContainerHeight={filterContainerHeight}
+        showActionItems={showActionItems}
       />
-      <TablePagination
-        isLoading={isLoading}
-        tableType={pageType as PaginationPageType}
-        paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE}
-        totalPages={totalPages}
-        totalItems={pageSize === 0 ? pageSize : totalRecords}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={handleItemsPerPageChange}
-        handlePageChange={handlePageChange}
-        currentPage={currentPage}
-      />
+      {showActionItems && (
+        <TablePagination
+          isLoading={isLoading}
+          tableType={pageType as PaginationPageType}
+          paginationPerPageOptions={PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE}
+          totalPages={totalPages}
+          totalItems={pageSize === 0 ? pageSize : totalRecords}
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          handlePageChange={handlePageChange}
+          currentPage={currentPage}
+        />
+      )}
     </div>
   );
 };

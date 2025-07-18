@@ -11,6 +11,7 @@ const TableHeaderRowItemHavingCheckbox = ({
   setSortValue,
   pageType,
   sortValue,
+  showActionItems, // checkbox + sorting button
 }: CustomSingleHeaderRowItemProps) => {
   return (
     <tr key={headerGroup.id} className="relative flex w-full items-start">
@@ -46,6 +47,7 @@ const TableHeaderRowItemHavingCheckbox = ({
               getSelectedIds={getSelectedIds}
               results={results}
               isFirstColumn={isFirstColumn}
+              showActionItems={showActionItems}
               header={header}
               setSortValue={setSortValue}
               pageType={pageType}

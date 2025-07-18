@@ -10,6 +10,7 @@ const TableBodyRowItemHavingCheckbox = ({
   toggleSelectId,
   handleDataSourcesDrawerToggle,
   allowedToOpenDrawer,
+  showActionItems,
 }: CustomSingleBodyRowItemProps) => {
   const rowId = row.original.id;
   const isRowSelected = isIdSelected(rowId);
@@ -63,6 +64,7 @@ const TableBodyRowItemHavingCheckbox = ({
           >
             <RowCellContent
               onToggleSelect={handleToggleSelect}
+              showActionItems={showActionItems}
               isFirstColumn={isFirstColumn}
               cell={cell}
               isRowSelected={isRowSelected}

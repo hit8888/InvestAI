@@ -14,23 +14,25 @@ const CellContent = memo(({ cell }: { cell: Cell<CommonDataSourceResponse, unkno
 
 CellContent.displayName = 'CellContent';
 
-const RowCellContent = memo(({ isFirstColumn, cell, isRowSelected, onToggleSelect }: RowCellContentProps) => {
-  if (isFirstColumn) {
-    return (
-      <div className="flex w-full items-center gap-4">
-        <Checkbox
-          checked={isRowSelected}
-          className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
-          onCheckedChange={onToggleSelect}
-          onClick={(e) => e.stopPropagation()}
-          haveBlackBackground={false}
-        />
-        <CellContent cell={cell} />
-      </div>
-    );
-  }
-  return <CellContent cell={cell} />;
-});
+const RowCellContent = memo(
+  ({ showActionItems, isFirstColumn, cell, isRowSelected, onToggleSelect }: RowCellContentProps) => {
+    if (isFirstColumn && showActionItems) {
+      return (
+        <div className="flex w-full items-center gap-4">
+          <Checkbox
+            checked={isRowSelected}
+            className={`flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none`}
+            onCheckedChange={onToggleSelect}
+            onClick={(e) => e.stopPropagation()}
+            haveBlackBackground={false}
+          />
+          <CellContent cell={cell} />
+        </div>
+      );
+    }
+    return <CellContent cell={cell} />;
+  },
+);
 
 RowCellContent.displayName = 'RowCellContent';
 

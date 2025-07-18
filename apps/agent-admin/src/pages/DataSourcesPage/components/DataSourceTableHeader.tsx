@@ -8,6 +8,7 @@ import ReembedBulkRowItemsButton from './ReembedBulkRowItemsButton';
 import DeleteBulkRowItemsButton from './DeleteBulkRowItemsButton';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import EditBulkRowItemsButton from './EditBulkRowItemsButton';
+import { TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING } from '../../../utils/constants';
 
 type IProps = {
   onFilterContainerHeightChange: (height: number) => void;
@@ -30,7 +31,7 @@ const DataSourceTableHeader = ({
   // Notify parent component of height changes
   useEffect(() => {
     if (onFilterContainerHeightChange) {
-      onFilterContainerHeightChange(height);
+      onFilterContainerHeightChange(height + TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING);
     }
   }, [height, onFilterContainerHeightChange]);
 
@@ -45,7 +46,8 @@ const DataSourceTableHeader = ({
   return (
     <div
       ref={filtersRef}
-      className="sticky top-0 z-20 flex w-full flex-1 content-end items-end justify-between self-stretch bg-white py-4"
+      className="sticky z-20 flex w-full flex-1 content-end items-end justify-between self-stretch bg-white py-4"
+      style={{ top: `${TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING}px` }}
     >
       <AllFiltersContainer page={page} isLeadsAndConversationsPage={false} />
       <div className="flex items-center justify-end gap-4">

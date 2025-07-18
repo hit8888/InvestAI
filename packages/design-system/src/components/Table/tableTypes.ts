@@ -14,6 +14,7 @@ export type DataSourceStoreProps = {
 
 export type CustomSingleHeaderRowItemProps = DataSourceStoreProps & {
   headerGroup: HeaderGroup<CommonDataSourceResponse>;
+  showActionItems: boolean;
 };
 
 export type HeaderTitleProps = {
@@ -22,6 +23,7 @@ export type HeaderTitleProps = {
 
 export type HeaderContentProps = DataSourceStoreProps & {
   isFirstColumn: boolean;
+  showActionItems: boolean;
   header: Header<CommonDataSourceResponse, unknown>;
 };
 
@@ -31,9 +33,11 @@ export type CustomSingleBodyRowItemProps = {
   toggleSelectId: (id: number) => void;
   handleDataSourcesDrawerToggle: () => void;
   allowedToOpenDrawer: boolean;
+  showActionItems: boolean;
 };
 
 export type RowCellContentProps = {
+  showActionItems: boolean;
   isFirstColumn: boolean;
   cell: Cell<CommonDataSourceResponse, unknown>;
   isRowSelected: boolean;

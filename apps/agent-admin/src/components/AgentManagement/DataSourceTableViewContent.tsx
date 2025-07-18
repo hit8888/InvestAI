@@ -16,6 +16,7 @@ interface TableContentProps {
   columnHeaderData: ColumnDefinition[];
   filterContainerHeight: number;
   pageType: PaginationPageType;
+  showActionItems: boolean;
 }
 
 const DEFAULT_LOADING_ROW_COUNT = 10;
@@ -29,6 +30,7 @@ const DataSourceTableViewContent = memo(
     columnHeaderData,
     filterContainerHeight,
     pageType,
+    showActionItems,
   }: TableContentProps) => {
     const { toggleDataSourcesDrawer } = useDataSourcesDrawer();
     const { results } = useDataSourceTableStore();
@@ -62,6 +64,7 @@ const DataSourceTableViewContent = memo(
         sortValue={sortValue}
         isSidebarOpen={isSidebarOpen}
         toggleDataSourcesDrawer={toggleDataSourcesDrawer}
+        showActionItems={showActionItems}
       />
     );
   },
