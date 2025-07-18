@@ -226,7 +226,8 @@ const AgentMessages = ({
                   style={
                     isLastGroup && containerHeight > 0
                       ? {
-                          minHeight: `${containerHeight}px`,
+                          minHeight:
+                            aiMessages.length > 1 || hasFirstUserMessageBeenSent ? `${containerHeight}px` : undefined,
                         }
                       : undefined
                   }
@@ -267,6 +268,14 @@ const AgentMessages = ({
                       />
                     );
                   })}
+                  {isLastGroup && isCurrentMessageComplete && showDemoPreQuestions && (
+                    <PreDemoQuestion
+                      isAMessageBeingProcessed={isAMessageBeingProcessed}
+                      setDemoPlayingStatus={setDemoPlayingStatus}
+                      handleSendUserMessage={handleSendUserMessage}
+                    />
+                  )}
+
                   {/* End scroll target for initial mount */}
                   {isLastGroup && (
                     <div
@@ -299,13 +308,6 @@ const AgentMessages = ({
                 suggested_questions_type: 'BUBBLE',
               }}
               invertTextColor={invertTextColor}
-            />
-          )}
-          {isCurrentMessageComplete && showDemoPreQuestions && (
-            <PreDemoQuestion
-              isAMessageBeingProcessed={isAMessageBeingProcessed}
-              setDemoPlayingStatus={setDemoPlayingStatus}
-              handleSendUserMessage={handleSendUserMessage}
             />
           )}
         </div>
