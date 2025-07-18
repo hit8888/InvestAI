@@ -12,6 +12,9 @@ import HourlyTrafficByWeekday from '../components/Insights/HourlyTrafficByWeekda
 import FrequentSources from '../components/Insights/FrequentSources';
 import TopQuestionsByUsers from '../components/Insights/TopQuestionsByUsers';
 import ConversationProcessingTimeLog from '../components/Insights/ConversationProcessingTimeLog';
+import BuyerIntentDistribution from '../components/Insights/BuyerIntentDistribution';
+import CountryDistribution from '../components/Insights/CountryDistribution';
+import ProductInterestDistribution from '../components/Insights/ProductInterestDistribution';
 import { useAuth } from '../context/AuthProvider';
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -66,9 +69,17 @@ const InsightsPage = () => {
           <FrequentSources {...insightsCommonQueryParams} />
           <TopQuestionsByUsers {...insightsCommonQueryParams} />
         </div>
+
         <div className="flex gap-12">
-          {userInfo?.is_staff && <ConversationProcessingTimeLog {...insightsCommonQueryParams} />}
+          <BuyerIntentDistribution {...insightsCommonQueryParams} />
+          <CountryDistribution {...insightsCommonQueryParams} />
         </div>
+
+        <div className="flex gap-12">
+          <ProductInterestDistribution {...insightsCommonQueryParams} />
+        </div>
+
+        {userInfo?.is_staff && <ConversationProcessingTimeLog {...insightsCommonQueryParams} />}
       </div>
     </div>
   );

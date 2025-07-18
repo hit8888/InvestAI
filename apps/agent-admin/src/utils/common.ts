@@ -25,7 +25,13 @@ import {
   LocationWithCityCountry,
   TransformedProspectAndCompanyDetailsContent,
 } from '@meaku/core/types/admin/admin';
-import { ConversationRightSideDetailsType, FunnelData, FunnelStep } from './admin-types';
+import {
+  ConversationRightSideDetailsType,
+  FunnelData,
+  FunnelStep,
+  DistributionItem,
+  PieChartDataItem,
+} from './admin-types';
 import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
@@ -1131,3 +1137,37 @@ export function getHighestIntentScore(chatHistory: WebSocketMessage[]): {
     buyer_intent: highestIntentScore.buyer_intent,
   };
 }
+
+export const processDistributionData = <T extends DistributionItem>(
+  data: T[],
+  nameField: keyof T,
+  groupingThreshold: number = 5,
+  othersLabel: string = 'Other Items',
+): PieChartDataItem[] => {
+  const processedData = data.length > groupingThreshold ? data.slice(0, groupingThreshold) : data;
+  const othersData = data.length > groupingThreshold ? data.slice(groupingThreshold) : [];
+
+  const chartData: PieChartDataItem[] = processedData.map((item) => ({
+    name: item[nameField] as string,
+    value: item.count,
+    percentage: item.percentage,
+  }));
+
+  if (othersData.length > 0) {
+    const othersCount = othersData.reduce((sum, item) => sum + item.count, 0);
+    const othersPercentage = othersData.reduce((sum, item) => sum + item.percentage, 0);
+
+    chartData.push({
+      name: othersLabel,
+      value: othersCount,
+      percentage: othersPercentage,
+      groupedItems: othersData.map((item) => ({
+        name: item[nameField] as string,
+        value: item.count,
+        percentage: item.percentage,
+      })),
+    });
+  }
+
+  return chartData;
+};

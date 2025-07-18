@@ -257,3 +257,15 @@ export const getDataSourcesQuery = (payload: DataSourcePayload) => {
 export const getConversationProcessingTimeLog = (payload: InsightsCommonRequest) => {
   return adminApiClient.post(`/tenant/api/analytics/processing-time-logs/`, payload);
 };
+
+export const getBuyerIntentDistribution = (payload: InsightsCommonRequest) => {
+  return adminApiClient.post(`/tenant/api/analytics/buyer-intent-distribution/`, payload);
+};
+
+export const getProductInterestDistribution = (payload: InsightsCommonRequest) => {
+  return adminApiClient.post(`/tenant/api/analytics/product-interest-distribution/`, payload);
+};
+
+export const getCountryDistribution = (payload: InsightsCommonRequest) => {
+  return adminApiClient.post(`/tenant/api/analytics/country-distribution/`, payload);
+};

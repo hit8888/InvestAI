@@ -49,3 +49,20 @@ export enum ActiveConversationAttachmentOption {
   ALL_CALENDAR = 'all-calendar',
   NONE = '',
 }
+
+export interface DistributionItem {
+  count: number;
+  percentage: number;
+  [key: string]: string | number; // Allow for different name fields like buyer_intent, country_name, product_name
+}
+
+export interface PieChartDataItem {
+  name: string;
+  value: number;
+  percentage: number;
+  groupedItems?: Array<{
+    name: string;
+    value: number;
+    percentage: number;
+  }>;
+}

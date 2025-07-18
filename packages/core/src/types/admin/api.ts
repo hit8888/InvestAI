@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { WebSocketMessageSchema } from '../webSocketData';
 import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
-import { BrowsedUrlSchema } from '../common';
+import { BrowsedUrlSchema, BuyerIntent } from '../common';
 
 // LoginWithEmailPasswordPayload
 export const LoginWithEmailPasswordPayloadSchema = z.object({
@@ -662,6 +662,39 @@ export const ConversationProcessingTimeLogResponseSchema = z.object({
   total_entries: z.number(),
 });
 export type ConversationProcessingTimeLogResponse = z.infer<typeof ConversationProcessingTimeLogResponseSchema>;
+
+export const BuyerIntentDistributionResponseSchema = z.object({
+  buyer_intent_distribution: z.array(
+    z.object({
+      buyer_intent: z.nativeEnum(BuyerIntent),
+      count: z.number(),
+      percentage: z.number(),
+    }),
+  ),
+});
+export type BuyerIntentDistributionResponse = z.infer<typeof BuyerIntentDistributionResponseSchema>;
+
+export const ProductInterestDistributionResponseSchema = z.object({
+  product_interest_distribution: z.array(
+    z.object({
+      product_name: z.string(),
+      count: z.number(),
+      percentage: z.number(),
+    }),
+  ),
+});
+export type ProductInterestDistributionResponse = z.infer<typeof ProductInterestDistributionResponseSchema>;
+
+export const CountryDistributionResponseSchema = z.object({
+  country_distribution: z.array(
+    z.object({
+      country_name: z.string(),
+      count: z.number(),
+      percentage: z.number(),
+    }),
+  ),
+});
+export type CountryDistributionResponse = z.infer<typeof CountryDistributionResponseSchema>;
 
 export const IntegrationFormSchema = z.object({
   key: z.string(),
