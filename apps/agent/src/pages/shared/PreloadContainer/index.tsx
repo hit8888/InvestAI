@@ -10,7 +10,7 @@ import useInitializeSessionDataQuery from '@meaku/core/queries/useInitializeSess
 import { getBrowserSignature } from '../../../utils/tracking.ts';
 import { trackError } from '../../../utils/error.ts';
 import { useAreMessagesReadonly, useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
-import { useSetDistinctIdOnAppMount } from '../../../hooks/useSetDistinctIdOnAppMount.ts';
+import { useSetDistinctIdOnAppMount } from '@meaku/core/hooks/useSetDistinctIdOnAppMount';
 import { IAllApiResponsesWithQuery } from '@meaku/core/types/types';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';

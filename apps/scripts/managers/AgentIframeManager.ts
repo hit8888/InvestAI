@@ -10,10 +10,11 @@ export function AgentIframeManager() {
   ): HTMLIFrameElement => {
     iframe = document.createElement("iframe");
     Object.assign(iframe.style, {
+      display: "block",
       width: "100%",
       height: "100%",
       border: "none",
-      borderRadius: isMobile ? "0" : "36px",
+      borderRadius: isMobile ? "0" : "24px",
     });
     iframe.allow = "geolocation *; microphone *; camera *; clipboard-write";
     iframe.setAttribute("allowfullscreen", "true");

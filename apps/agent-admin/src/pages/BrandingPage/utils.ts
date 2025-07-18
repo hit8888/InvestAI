@@ -112,7 +112,7 @@ export const handleConfigUpdate = async (
     // Check if the new payload is different from the current configs
     const nameChanged = payload.name !== agentConfigs.name;
     const logoChanged = payload.metadata.logo !== agentConfigs.metadata.logo;
-    const styleChanged = deepCompare(
+    const styleChanged = !deepCompare(
       agentConfigs.configs['agent_personalization:style'],
       payload.configs['agent_personalization:style'],
     );

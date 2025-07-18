@@ -93,12 +93,12 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   useSendMessageOnQueryParams({ handleSendMessage });
 
   const containerClassName = useMemo(() => {
-    if (isAgentOpen && !isMobile) {
+    if (isAgentOpen && !isMobile && mode === WidgetMode.BOTTOM_BAR) {
       return 'mt-2 h-[95vh] rounded-3xl';
     } else if (isMobile) {
       return 'mx-0 w-full h-[100dvh]';
     } else if (mode === WidgetMode.INLINE_EMBEDDED || mode === WidgetMode.EMBEDDED_MODAL) {
-      return 'mx-0 mt-0 h-[100vh] w-[100vw]';
+      return 'mx-0 mt-0 h-[100vh] w-[100vw] rounded-3xl';
     } else return 'h-[95vh]';
   }, [isMobile, isAgentOpen, mode]);
 
