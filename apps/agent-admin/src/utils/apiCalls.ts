@@ -15,11 +15,18 @@ export const getAllAgentsForTenant = async () => {
   }
 };
 
-export const setupTenantAndAgent = async (tenantData: OrganizationDetails) => {
-  setTenantIdentifier(tenantData);
+export const getAgentIdFromTenant = async (): Promise<number | null> => {
   const agents = await getAllAgentsForTenant();
   if (agents.length > 0) {
-    const agentId = agents[0].id; // taking first agent as default and must be active agent coming from backend
+    return agents[0].id; // taking first agent as default and must be active agent coming from backend
+  }
+  return null;
+};
+
+export const setupTenantAndAgent = async (tenantData: OrganizationDetails) => {
+  setTenantIdentifier(tenantData);
+  const agentId = await getAgentIdFromTenant();
+  if (agentId) {
     setTenantIdentifier({ ...tenantData, agentId }); // Adding agentId to tenantIdentifier
   } else {
     toast.error('No agents found for tenant');

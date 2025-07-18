@@ -83,7 +83,7 @@ export const getAccessTokenFromLocalStorage = () => {
   return localStorage.getItem('accessToken');
 };
 
-export const getTenantActiveAgentId = () => {
+export const getTenantActiveAgentId = (): number => {
   const tenantIdentifier = getTenantIdentifier();
   return tenantIdentifier?.agentId ?? 1;
 };
