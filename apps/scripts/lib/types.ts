@@ -179,6 +179,7 @@ export interface IframeMessage {
   sessionId?: string;
   prospectId?: string;
   apiBaseUrl?: string;
+  isAgentEnabled?: boolean;
   config: {
     tracking_config: TrackingConfigType;
   };

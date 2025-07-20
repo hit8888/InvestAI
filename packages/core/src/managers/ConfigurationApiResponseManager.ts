@@ -25,6 +25,10 @@ export class ConfigurationApiResponseManager {
     return this.config.org_name;
   }
 
+  getAgentEnabledValue() {
+    return this.config.is_enabled;
+  }
+
   getLogoUrl() {
     return this.config.logo;
   }

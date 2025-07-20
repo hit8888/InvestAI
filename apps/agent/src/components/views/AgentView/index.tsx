@@ -32,7 +32,8 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
 
-  const { banner_config, entryPointAlignmentDesktop, entryPointAlignmentMobile } = useValuesFromConfigApi();
+  const { banner_config, entryPointAlignmentDesktop, entryPointAlignmentMobile, isAgentEnabled } =
+    useValuesFromConfigApi();
 
   const entry_point_alignment = isMobile
     ? entryPointAlignmentMobile || entryPointAlignmentDesktop
@@ -65,6 +66,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   };
 
   const { shouldHideBottomBar, isCollapsible, mode, shouldShowAgent } = useEmbedAppEvents({
+    isAgentEnabled,
     fetchSessionData,
     handleOpenAgent,
     showBanner: !!showBanner,

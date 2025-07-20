@@ -70,6 +70,7 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
     const IFRAME_SRC = iframeURLManager.getIframeSrc(config);
     const postMessage = messageManager.sendMessage;
 
+    const isAgentEnabled = false;
     const isAgentOpen = false;
     const iFrameSource: Window | MessagePort | ServiceWorker | null = null;
     const showBanner = false;
@@ -134,6 +135,7 @@ import { TabNotificationManager } from "managers/TabNotificationManager";
       // Initialize message event manager
       const messageEventState = {
         iFrameSource,
+        isAgentEnabled,
         isAgentOpen,
         showBanner,
         entryPointAlignment,

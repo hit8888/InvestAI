@@ -11,6 +11,7 @@ import { EntryPointAlignmentType } from '../types/entryPoint';
 import useConfigurationApiResponseManager from './useConfigurationApiResponseManager';
 
 interface IProps {
+  isAgentEnabled: boolean;
   fetchSessionData: () => void;
   handleOpenAgent: () => void;
   showBanner: boolean;
@@ -23,6 +24,7 @@ interface IProps {
 }
 
 export const useEmbedAppEvents = ({
+  isAgentEnabled,
   fetchSessionData,
   handleOpenAgent,
   showBanner,
@@ -141,6 +143,7 @@ export const useEmbedAppEvents = ({
   // Effect for sending chat state to parent
   useEffect(() => {
     const payload = {
+      isAgentEnabled,
       chatOpen: isAgentOpen,
       tooltipOpen: false,
       showBanner,
@@ -148,7 +151,7 @@ export const useEmbedAppEvents = ({
       entryPointAlignment,
     };
     window.parent.postMessage(payload, '*');
-  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment]);
+  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment, isAgentEnabled]);
 
   useEffect(() => {
     const apiBaseUrl = ENV.VITE_BASE_API_URL;

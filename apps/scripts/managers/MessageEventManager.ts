@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from "lib/constants";
+import { STORAGE_KEYS, WIDGET_IDS } from "lib/constants";
 import { initDomDetectors } from "../dom-detectors";
 import type {
   Config,
@@ -38,6 +38,7 @@ export interface MessageEventDependencies {
   };
   overlayManager: {
     getWrapper: () => HTMLDivElement | null;
+    destroy: () => void;
   };
   urlTrackingManager: {
     trackCurrentUrl: () => void;
@@ -48,6 +49,7 @@ export interface MessageEventDependencies {
 
 export interface MessageEventState {
   iFrameSource: Window | MessagePort | ServiceWorker | null;
+  isAgentEnabled: boolean;
   isAgentOpen: boolean;
   showBanner: boolean;
   entryPointAlignment: EntryPointAlignmentType | null;
@@ -73,6 +75,37 @@ export function MessageEventManager(
   } = dependencies;
 
   let originalBodyOverflow: string | null = null;
+
+  /**
+   * Sets the display style of the parent div of a given iframe ID.
+   * @param iframeId The ID of the iframe.
+   * @param displayStyle The CSS display value ('block' or 'none').
+   */
+  const setParentDivDisplay = (
+    iframeId: string,
+    displayStyle: "block" | "none",
+  ): void => {
+    const iframeElement = document.getElementById(
+      iframeId,
+    ) as HTMLIFrameElement | null;
+
+    if (iframeElement) {
+      const parentDiv = iframeElement.parentNode;
+
+      // Type guard to ensure parentDiv is an HTMLElement and specifically a DIV
+      if (parentDiv instanceof HTMLElement && parentDiv.tagName === "DIV") {
+        parentDiv.style.display = displayStyle;
+      } else {
+        // Optional: Log a warning if the parent is not a DIV or not an HTMLElement
+        console.warn(
+          `Parent of iframe with ID '${iframeId}' is not a DIV element or not an HTMLElement.`,
+        );
+      }
+    } else {
+      // Optional: Log a warning if the iframe itself is not found
+      console.warn(`Iframe with ID '${iframeId}' not found.`);
+    }
+  };
 
   // Origin validation
   const isValidOrigin = (eventOrigin: string): boolean => {
@@ -181,6 +214,7 @@ export function MessageEventManager(
     state.hasFirstUserMessageBeenSent =
       event.data.hasFirstUserMessageBeenSent ?? false;
 
+    // Handling the overflow of the body when the agent is open or closed
     if (state.isAgentOpen) {
       if (originalBodyOverflow === null) {
         originalBodyOverflow = document.body.style.overflow;
@@ -189,6 +223,18 @@ export function MessageEventManager(
     } else if (originalBodyOverflow !== null) {
       document.body.style.overflow = originalBodyOverflow;
       originalBodyOverflow = null;
+    }
+
+    // Checking if the agent is enabled or not
+    // Applying the display style to the parent div of the iframe
+    if (event.data.isAgentEnabled === true) {
+      setParentDivDisplay(WIDGET_IDS.BREAKOUT_AGENT, "block");
+    } else if (event.data.isAgentEnabled === false) {
+      setParentDivDisplay(WIDGET_IDS.BREAKOUT_AGENT, "none");
+      // Destroy the overlay manager if present
+      if (overlayManager) {
+        overlayManager.destroy();
+      }
     }
 
     urlManager.updateParentUrlParam(

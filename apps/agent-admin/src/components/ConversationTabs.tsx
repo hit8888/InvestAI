@@ -21,12 +21,12 @@ const tabs: TabConfig[] = [
   },
   {
     path: `/${AppRoutesEnum.ACTIVE_LEADS}`,
-    label: 'Active Leads',
+    label: 'Breakout Captured Leads',
     icon: ActiveLeadsIcon,
   },
   {
     path: `/${AppRoutesEnum.LINK_CLICKS}`,
-    label: 'High Intent Visitors',
+    label: 'Non Captured Leads',
     icon: LinkClicksIcon,
   },
 ];

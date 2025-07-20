@@ -45,6 +45,7 @@ export const ConfigurationSchema = z.object({
   agent_id: z.number(),
   agent_name: z.string(),
   org_name: z.string(),
+  is_enabled: z.boolean(),
   logo: z.string().nullable(),
   header: z.object({
     title: z.string().nullable(),

@@ -4,6 +4,8 @@ const useValuesFromConfigApi = () => {
   const configurationApiResponseManager = useConfigurationApiResponseManager();
   const { banner_config, entry_point_alignment, entry_point_alignment_mobile } =
     configurationApiResponseManager.getStyleConfig();
+
+  const isAgentEnabled = configurationApiResponseManager.getAgentEnabledValue();
   const agentName = configurationApiResponseManager.getAgentName();
   const orgName = configurationApiResponseManager.getOrgName();
   const ctaConfig = configurationApiResponseManager.getCTAConfig();
@@ -16,6 +18,7 @@ const useValuesFromConfigApi = () => {
   // If we need to show orb, we need to set show_orb to true in the agent server config
   const showOrb = orbConfig?.show_orb || false;
   return {
+    isAgentEnabled,
     banner_config,
     entryPointAlignmentDesktop: entry_point_alignment,
     entryPointAlignmentMobile: entry_point_alignment_mobile,
