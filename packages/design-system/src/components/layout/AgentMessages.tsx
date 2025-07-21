@@ -11,6 +11,7 @@ import {
   checkIsCurrentMessageComplete,
   messagesGroupedByResponseIdAndTimestamp,
   shouldMessageScrollToTop,
+  willMessageRenderHTML,
 } from '@meaku/core/utils/messageUtils';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { ChevronsDown } from 'lucide-react';
@@ -194,6 +195,17 @@ const AgentMessages = ({
     };
   }, [messages.length]);
 
+  // Find the last group with renderable items
+  const lastGroupWithContentIndex = useMemo(() => {
+    for (let i = messagesSortedByResponseIdAndTimestamp.length - 1; i >= 0; i--) {
+      const group = messagesSortedByResponseIdAndTimestamp[i];
+      if (group.some((message) => willMessageRenderHTML(message))) {
+        return i;
+      }
+    }
+    return -1;
+  }, [messagesSortedByResponseIdAndTimestamp]);
+
   return (
     <div
       ref={parentContainerRef}
@@ -218,23 +230,33 @@ const AgentMessages = ({
           <div style={{ flex: 1, minHeight: 0 }} />
 
           {messagesSortedByResponseIdAndTimestamp.map((group, ind) => {
-            const isLastGroup = ind === messagesSortedByResponseIdAndTimestamp.length - 1;
+            const isLastGroupWithContent = ind === lastGroupWithContentIndex;
+
+            // Check if there's at least one item in the group that will render HTML
+            const hasRenderableItems = group.some((message) => willMessageRenderHTML(message));
+
+            if (!hasRenderableItems) {
+              return null;
+            }
+
             return (
               <React.Fragment key={ind}>
                 <div
                   className={cn(' flex flex-col gap-8')}
                   style={
-                    isLastGroup && containerHeight > 0
+                    hasRenderableItems && containerHeight > 0
                       ? {
                           minHeight:
-                            aiMessages.length > 1 || hasFirstUserMessageBeenSent ? `${containerHeight}px` : undefined,
+                            isLastGroupWithContent && (aiMessages.length > 1 || hasFirstUserMessageBeenSent)
+                              ? `${containerHeight}px`
+                              : undefined,
                         }
                       : undefined
                   }
-                  ref={isLastGroup ? lastGroupRef : null}
+                  ref={isLastGroupWithContent ? lastGroupRef : null}
                 >
                   {/* Empty div for scrolling into view */}
-                  {isLastGroup && (
+                  {isLastGroupWithContent && (
                     <div
                       key="last-group-start"
                       ref={groupStartScrollTargetRef}
@@ -268,7 +290,7 @@ const AgentMessages = ({
                       />
                     );
                   })}
-                  {isLastGroup && isCurrentMessageComplete && showDemoPreQuestions && (
+                  {isLastGroupWithContent && isCurrentMessageComplete && showDemoPreQuestions && (
                     <PreDemoQuestion
                       isAMessageBeingProcessed={isAMessageBeingProcessed}
                       setDemoPlayingStatus={setDemoPlayingStatus}
@@ -277,7 +299,7 @@ const AgentMessages = ({
                   )}
 
                   {/* End scroll target for initial mount */}
-                  {isLastGroup && (
+                  {isLastGroupWithContent && hasRenderableItems && (
                     <div
                       key="last-group-end"
                       ref={groupEndScrollTargetRef}
@@ -285,7 +307,7 @@ const AgentMessages = ({
                     />
                   )}
                 </div>
-                {showDownArrow && isLastGroup && (
+                {showDownArrow && isLastGroupWithContent && hasRenderableItems && (
                   <div className="sticky bottom-0 left-0 flex items-center justify-start">
                     <Button
                       variant="system_secondary"

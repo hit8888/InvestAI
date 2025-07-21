@@ -828,3 +828,37 @@ export const checkIfCTAButtonShown = (messages: WebSocketMessage[]) => {
 
   return true;
 };
+
+/**
+ * Determines if a single message will render any HTML on screen
+ * @param message - The WebSocket message to check
+ * @returns Boolean indicating if the message will render HTML
+ */
+export const willMessageRenderHTML = (message: WebSocketMessage): boolean => {
+  // Admin messages always render
+  if (checkIsAdminJoinedMessage(message) || checkIsAdminLeftMessage(message)) return true;
+
+  // Discovery answers always render
+  if (isDiscoveryAnswer(message)) return true;
+
+  // CTA events always render
+  if (isCtaEvent(message, 'left')) return true;
+
+  // Demo options always render
+  if (isDemoOptionsMessage(message)) return true;
+
+  // Discovery questions always render
+  if (isDiscoveryQuestion(message)) return true;
+
+  // Text messages with content render
+  if (isDisplayedAsTextMessage(message) && message.message.content !== '') return true;
+
+  // Artifact messages render (except suggestions which need additional context)
+  if (checkIsArtifactMessage(message)) {
+    // Suggestions need additional context to determine rendering, so we default to true
+    // and let the consuming component decide. Other artifacts are always rendered.
+    return true;
+  }
+
+  return false;
+};
