@@ -1,4 +1,4 @@
-import { wrapCreateBrowserRouter } from '@sentry/react';
+import { wrapCreateBrowserRouterV6 } from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
 
@@ -23,7 +23,7 @@ import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
 import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
 import ActiveConversationsPage from '../pages/ActiveConversationsPage/ActiveConversationsPage.tsx';
 
-const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
+const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
 const { LOGIN } = AppRoutesEnum;
 

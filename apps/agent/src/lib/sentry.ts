@@ -1,26 +1,12 @@
-import * as Sentry from '@sentry/react';
-import { useEffect } from 'react';
-import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
+import { initSentry } from '@meaku/core/lib/sentry';
 import { ENV } from '@meaku/core/types/env';
 import { getWebsocketBaseUrl, isDev } from '../utils/common';
 
-const WEBSOCKET_URL = `${getWebsocketBaseUrl()}/ws/chat`;
+if (!isDev) {
+  const WEBSOCKET_URL = `${getWebsocketBaseUrl()}/ws/chat`;
 
-Sentry.init({
-  dsn: isDev ? '' : ENV.VITE_SENTRY_DSN,
-  integrations: [
-    Sentry.reactRouterV6BrowserTracingIntegration({
-      useEffect,
-      useLocation,
-      useNavigationType,
-      createRoutesFromChildren,
-      matchRoutes,
-    }),
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
-  tracesSampleRate: 1.0,
-  tracePropagationTargets: [ENV.VITE_BASE_API_URL, WEBSOCKET_URL],
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
-});
+  initSentry({
+    dsn: ENV.VITE_SENTRY_DSN,
+    tracePropagationTargets: [ENV.VITE_BASE_API_URL, WEBSOCKET_URL],
+  });
+}

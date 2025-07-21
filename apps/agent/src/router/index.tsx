@@ -1,10 +1,10 @@
-import { wrapCreateBrowserRouter } from '@sentry/react';
+import { wrapCreateBrowserRouterV6 } from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import AgentPage from '../pages/AgentPage';
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
 import FeedbackAdmin from '../pages/FeedbackAdmin';
 
-const sentryCreateBrowserRouter = wrapCreateBrowserRouter(createBrowserRouter);
+const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
 const router = sentryCreateBrowserRouter([
   {

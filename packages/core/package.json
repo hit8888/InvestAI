@@ -22,7 +22,8 @@
     "./transformers/*": "./src/transformers/*.ts",
     "./contexts/*": "./src/contexts/*.tsx",
     "./stores/*": "./src/stores/*.ts",
-    "./adminHttp/*": "./src/adminHttp/*.ts"
+    "./adminHttp/*": "./src/adminHttp/*.ts",
+    "./lib/*": "./src/lib/*.ts"
   },
   "type": "module",
   "devDependencies": {
