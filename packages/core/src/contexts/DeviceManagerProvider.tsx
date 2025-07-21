@@ -14,10 +14,9 @@ const DeviceManagerProvider = ({ children }: { children: React.ReactNode }) => {
   // 1. The device is actually a mobile device, OR
   // 2. The screen size indicates mobile or tablet view
   // 3. The app is inside an iframe
-  const isMobile =
-    isMobileDeviceDetected && isInsideIframe
-      ? true
-      : isMobileDeviceDetected || isMobileFromScreenSize || isTabletFromScreenSize;
+  const isMobile = isInsideIframe
+    ? isMobileDeviceDetected
+    : isMobileDeviceDetected || isMobileFromScreenSize || isTabletFromScreenSize;
 
   const contextValue = React.useMemo(() => ({ isMobile }), [isMobile]);
 
