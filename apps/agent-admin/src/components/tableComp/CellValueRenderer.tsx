@@ -108,7 +108,13 @@ const getCellValueBasedOnId = ({ id, info }: CellValueRendererProps) => {
 
   // Handle standard cases
   const Component = cellValueMap[id];
-  return Component ? <Component value={info as string} /> : <span>{info as string}</span>;
+  return Component ? (
+    <Component value={info as string} />
+  ) : (
+    <span title={info as string} className="line-clamp-1">
+      {info as string}
+    </span>
+  );
 };
 
 const RenderCell = ({ id, info }: CellValueRendererProps) => {

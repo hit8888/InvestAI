@@ -15,10 +15,11 @@ export const convertServerConversationDataToClientConversationData = (
     timeline: response.timeline || '-',
     summary: response.summary || '-',
     country: response.country || '-',
-    buyer_intent_score: response.buyer_intent, // Need to Find Logic or Directly getting from api
-    bant_analysis: '-', // Need to Find Logic or Directly getting from api
+    buyer_intent: response.buyer_intent,
+    buyer_intent_score: response.buyer_intent_score,
+    bant_analysis: '-',
     user_message_count: `${response.user_message_count || 0}`,
-    meeting_status: '-', // Static for now, can be dynamic if additional info is provided
+    meeting_status: '-',
     product_of_interest: response.product_of_interest || '-',
     ip_address: response.ip_address || '-',
     session_id: response.session_id || '-',

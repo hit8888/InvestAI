@@ -148,10 +148,11 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     authority: response.role || '-',
     need: response.need || '-',
     timeline: response.timeline || '-',
-    buyer_intent_score: response.buyer_intent ?? '-', // Need to Find Logic or Directly getting from api
-    bant_analysis: '-', // Need to Find Logic or Directly getting from api
+    buyer_intent_score: response.buyer_intent_score ?? '-',
+    buyer_intent: response.buyer_intent ?? '-',
+    bant_analysis: '-',
     user_message_count: `${response.user_message_count || 0}`,
-    meeting_status: '-', // Static for now, can be dynamic if additional info is provided
+    meeting_status: '-',
     product_of_interest: response.product_of_interest || '-',
     ip_address: response.ip_address || '-',
     session_id: response.session_id || '-',
@@ -1062,6 +1063,15 @@ export const transformEntityDataToColumnHeaderLabelMapping = (inputArray: Entity
       result[key_name] = display_name;
     }
   });
+
+  return result;
+};
+
+export const transformEntityDataToColumnList = (inputArray: EntityMetadataResponseType) => {
+  const result: string[] = inputArray
+    .filter((item) => item.is_display)
+    .sort((a, b) => a.table_order - b.table_order)
+    .map((item) => item.key_name);
 
   return result;
 };

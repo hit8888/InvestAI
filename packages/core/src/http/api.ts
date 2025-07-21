@@ -6,7 +6,13 @@ import { UpdateProspectPayload } from '../types/api/update_prospect_request';
 import apiClient from './client';
 
 export const getConfig = (agentId: string, payload: ConfigPayload) =>
-  apiClient.post(`/tenant/chat/agent/${agentId}/config/`, { ...payload });
+  apiClient.post(
+    `/tenant/chat/agent/${agentId}/config/`,
+    { ...payload },
+    {
+      timeout: 15000, // allow enough time for the chat config request.
+    },
+  );
 
 export const initializeSession = (agentId: string, payload: InitializationPayload) =>
   apiClient.post(`/tenant/chat/agent/${agentId}/session/init/`, payload);

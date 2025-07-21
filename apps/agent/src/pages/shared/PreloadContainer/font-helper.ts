@@ -38,6 +38,7 @@ export const getFontElement = (agentConfig: ConfigurationApiResponse | undefined
   const fontLinkElement = document.createElement('link');
   fontLinkElement.href = font_url;
   fontLinkElement.rel = 'stylesheet';
+  fontLinkElement.crossOrigin = 'anonymous';
   fontLinkElement.type = 'text/css';
 
   fontLinkElement.onerror = () => {

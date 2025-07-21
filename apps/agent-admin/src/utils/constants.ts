@@ -404,19 +404,8 @@ export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoute
 
 export const DEFAULT_ROUTE = 'active-conversations';
 
-// LEADS Page
-
-export const LEADS_PAGE_COLUMN_LISTS = [
-  'email',
-  'name',
-  'company',
-  'product_interest',
-  'buyer_intent',
-  'timeline',
-  'country',
-  'role',
-];
-
+// TODO: Hardcoded values for now, will be removed once we have a proper way to get the column list for link clicks page
+// - Need to add another entity type for this in the server backend
 export const LINK_CLICKS_PAGE_COLUMN_LISTS = [
   'timeline',
   'country',
@@ -426,8 +415,6 @@ export const LINK_CLICKS_PAGE_COLUMN_LISTS = [
   'company',
   'name',
 ];
-
-// CONVERSATION PAGE
 
 export enum ConversationChipLabelEnum {
   TOTAL_TRAFFIC = 'TOTAL_TRAFFIC',
@@ -447,21 +434,6 @@ export enum ConversationDetailsTabsLabelEnum {
   SUMMARY_TAB_LABEL = 'Summary',
   ACTIVITY_TAB_LABEL = 'Activity',
 }
-
-export const CONVERSATIONS_PAGE_COLUMN_LISTS = [
-  'timestamp',
-  'country',
-  'product_of_interest',
-  'buyer_intent_score',
-  // 'bant_analysis',
-  'user_message_count',
-  'company',
-  'email',
-  'name',
-  // 'meeting_status',
-  'ip_address',
-  'session_id',
-];
 
 export interface FunnelData {
   funnelChipType: string;

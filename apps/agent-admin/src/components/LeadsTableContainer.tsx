@@ -8,7 +8,7 @@ import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
-import { PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE } from '../utils/constants';
+import { PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE, LINK_CLICKS_PAGE_COLUMN_LISTS } from '../utils/constants';
 import {
   collectAppliedFilters,
   getAllFilterAppliedValues,
@@ -35,15 +35,16 @@ import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import usePageRouteState from '../hooks/usePageRouteState.tsx';
 
-const LeadsTableContainer = ({
-  pageType,
-  columnList,
-}: {
-  pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE;
-  columnList: string[];
-}) => {
-  const { transformedEntityMetadata } = useEntityMetadata();
+const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE }) => {
+  const { isLinkClicksPage } = usePageRouteState();
+  const { entityMetadataHeaderMapping, entityMetadataColumnList } = useEntityMetadata();
+
+  // TODO: Remove this once we have a proper way to get the column list for link clicks page
+  // Link Clicks page contains different ordering and displaying of columns
+  // - Need to add another entity type for this in the server backend
+  const columnList = isLinkClicksPage ? LINK_CLICKS_PAGE_COLUMN_LISTS : entityMetadataColumnList;
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType,
   });
@@ -113,11 +114,10 @@ const LeadsTableContainer = ({
   const paginatedData = tableManager?.getPaginatedTableData() ?? { total_records: 0, total_pages: 1, page_size: 0 };
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
-  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(columnList, transformedEntityMetadata);
+  const leadsPageColumns: ColumnDefinition[] = getFormattedColumnsList(columnList, entityMetadataHeaderMapping);
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
   const haveNoRecords = totalRecords === 0;
-
   const handleRowItemClick = (rowData: unknown) => {
     const leadDetails = (rowData ?? {}) as LeadsTableDisplayContent;
 

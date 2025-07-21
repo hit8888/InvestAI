@@ -10,10 +10,7 @@ import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
 
-import {
-  CONVERSATIONS_PAGE_COLUMN_LISTS,
-  PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE,
-} from '../utils/constants';
+import { PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE } from '../utils/constants';
 import {
   collectAppliedFilters,
   getAllFilterAppliedValues,
@@ -37,7 +34,7 @@ import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 const ConversationsTableContainer = () => {
-  const { transformedEntityMetadata } = useEntityMetadata();
+  const { entityMetadataHeaderMapping, entityMetadataColumnList } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
@@ -108,8 +105,8 @@ const ConversationsTableContainer = () => {
   const { page_size: pageSize, total_records: totalRecords, total_pages: totalPages } = paginatedData;
 
   const conversationsPageColumns: ColumnDefinition[] = getFormattedColumnsList(
-    CONVERSATIONS_PAGE_COLUMN_LISTS,
-    transformedEntityMetadata,
+    entityMetadataColumnList,
+    entityMetadataHeaderMapping,
   );
   const resultantConversationsColumns = useFormattedColumns(conversationsPageColumns);
 

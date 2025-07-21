@@ -1,7 +1,7 @@
 import CustomPageHeader from '../components/CustomPageHeader';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import LeadsTableContainer from '../components/LeadsTableContainer';
-import { COMMON_SMALL_ICON_PROPS, LEADS_PAGE_COLUMN_LISTS, LINK_CLICKS_PAGE_COLUMN_LISTS } from '../utils/constants';
+import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import ConversationTabs from '../components/ConversationTabs';
 import usePageRouteState from '../hooks/usePageRouteState';
@@ -44,7 +44,6 @@ const LeadsPage = () => {
       <LeadsTableContainer
         key={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
         pageType={isLinkClicksPage ? LINK_CLICKS_PAGE : LEADS_PAGE}
-        columnList={isLinkClicksPage ? LINK_CLICKS_PAGE_COLUMN_LISTS : LEADS_PAGE_COLUMN_LISTS}
       />
     </>
   );
