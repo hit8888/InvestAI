@@ -34,6 +34,7 @@ const LogTabDisplayContent = () => {
           orbLogoUrl={''}
           showOrbFromConfig={true}
           invertTextColor={false}
+          enableScrollToBottom={false}
         />
       ) : (
         <p className="gradient-text mt-20 h-screen w-full text-center text-4xl font-semibold">

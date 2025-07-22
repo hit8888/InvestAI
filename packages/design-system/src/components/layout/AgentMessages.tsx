@@ -41,6 +41,7 @@ interface IProps {
   orbLogoUrl: string | undefined | null;
   showOrbFromConfig: boolean;
   invertTextColor: boolean;
+  enableScrollToBottom?: boolean;
 }
 
 const AgentMessages = ({
@@ -66,6 +67,7 @@ const AgentMessages = ({
   orbLogoUrl,
   showOrbFromConfig,
   invertTextColor,
+  enableScrollToBottom = true,
 }: IProps) => {
   const currentMessageScrollToTop = useRef<HTMLDivElement>(null);
   const parentContainerRef = useRef<HTMLDivElement>(null);
@@ -105,11 +107,12 @@ const AgentMessages = ({
     if (
       lastMessage?.role === MessageSenderRole.AI &&
       currentMessageScrollToTop.current &&
-      (viewType === ViewType.ADMIN || viewType === ViewType.USER)
+      (viewType === ViewType.ADMIN || viewType === ViewType.USER) &&
+      enableScrollToBottom
     ) {
       handleScrollToBottom();
     }
-  }, [viewType, messages]);
+  }, [viewType, messages, enableScrollToBottom]);
 
   const getInitialFeedback = useMemo(() => {
     return (message: WebSocketMessage) =>
@@ -244,7 +247,7 @@ const AgentMessages = ({
                 <div
                   className={cn(' flex flex-col gap-8')}
                   style={
-                    hasRenderableItems && containerHeight > 0
+                    hasRenderableItems && containerHeight > 0 && enableScrollToBottom
                       ? {
                           minHeight:
                             isLastGroupWithContent && (aiMessages.length > 1 || hasFirstUserMessageBeenSent)
@@ -256,7 +259,7 @@ const AgentMessages = ({
                   ref={isLastGroupWithContent ? lastGroupRef : null}
                 >
                   {/* Empty div for scrolling into view */}
-                  {isLastGroupWithContent && (
+                  {isLastGroupWithContent && enableScrollToBottom && (
                     <div
                       key="last-group-start"
                       ref={groupStartScrollTargetRef}
@@ -299,7 +302,7 @@ const AgentMessages = ({
                   )}
 
                   {/* End scroll target for initial mount */}
-                  {isLastGroupWithContent && hasRenderableItems && (
+                  {isLastGroupWithContent && hasRenderableItems && enableScrollToBottom && (
                     <div
                       key="last-group-end"
                       ref={groupEndScrollTargetRef}
