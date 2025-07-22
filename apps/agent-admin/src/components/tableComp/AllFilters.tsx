@@ -19,6 +19,7 @@ const {
   Location,
   MeetingBooked,
   ProductOfInterest,
+  ProductInterest,
   Company,
   UserMessagesCount,
   TestConversationIncluded,
@@ -68,23 +69,12 @@ const AllFiltersContainer = ({ page, isLeadsAndConversationsPage }: AllFiltersCo
         handleFilterRemove(key, undefined);
         break;
       case IntentScore:
-        handleFilterRemove(key, []);
-        break;
       case Location:
-        handleFilterRemove(key, []);
-        break;
       case Company:
-        handleFilterRemove(key, []);
-        break;
+      case ProductInterest:
       case ProductOfInterest:
-        handleFilterRemove(key, []);
-        break;
       case Sources:
-        handleFilterRemove(key, []);
-        break;
       case FileType:
-        handleFilterRemove(key, []);
-        break;
       case Status:
         handleFilterRemove(key, []);
         break;

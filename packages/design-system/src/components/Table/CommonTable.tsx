@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { useReactTable, getCoreRowModel, ColumnDef, HeaderGroup, Row } from '@tanstack/react-table';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { DataSourceSortValues, SortCategory, SortOrder } from '@meaku/core/types/admin/sort';
+import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@meaku/core/types/admin/sort';
 import {
   CONVERSATIONS_PAGE,
   CONVERSATIONS_PINNED_COLUMNS,
@@ -39,7 +39,7 @@ interface TableViewProps {
   getSelectedIds?: () => number[];
   results?: CommonDataSourceResponse[];
   setSortValue?: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;
-  sortValue?: DataSourceSortValues;
+  sortValue?: DataSourceSortValues | SortValues;
   pageType: PaginationPageType;
   toggleDataSourcesDrawer?: (value: boolean) => void;
   onRowItemClick?: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
@@ -58,7 +58,7 @@ const CommonTable = ({
   getSelectedIds = () => [],
   results = [],
   setSortValue = () => {},
-  sortValue = {} as DataSourceSortValues,
+  sortValue = {} as DataSourceSortValues | SortValues,
   pageType,
   toggleDataSourcesDrawer = () => {},
   onRowItemClick,
@@ -124,12 +124,20 @@ const CommonTable = ({
           results={results}
           pageType={pageType}
           setSortValue={setSortValue}
-          sortValue={sortValue}
+          sortValue={sortValue as DataSourceSortValues}
           showActionItems={showActionItems}
         />
       );
     }
-    return <CustomSingleHeaderRowItem key={headerGroup.id} headerGroup={headerGroup} />;
+    return (
+      <CustomSingleHeaderRowItem
+        pageType={pageType}
+        setSortValue={setSortValue}
+        sortValue={sortValue as SortValues}
+        key={headerGroup.id}
+        headerGroup={headerGroup}
+      />
+    );
   };
 
   const getTableBodyRowItem = (row: Row<any>) => {

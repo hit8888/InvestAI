@@ -1,6 +1,5 @@
 import { PageTypeProps } from '@meaku/core/types/admin/filters';
 import AllFiltersContainer from './tableComp/AllFilters';
-import SortFilter from './tableComp/SortFilter';
 import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
 import TableFiltersWithHeaderLabelShimmer from './ShimmerComponent/TableFiltersWithHeaderLabelShimmer';
 import { useFiltersContainerHeight } from '../hooks/useFiltersContainerHeight';
@@ -49,7 +48,6 @@ const TableFiltersWithHeaderLabel = ({
     >
       <FlexContainer>
         <AllFiltersContainer page={page} isLeadsAndConversationsPage={isLeadsAndConversationsPage} />
-        <SortFilter page={page} key={page} disabledState={disabledState} />
       </FlexContainer>
       <FlexContainer>
         <SearchTableContentInput page={page} />

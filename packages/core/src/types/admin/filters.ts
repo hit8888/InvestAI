@@ -48,6 +48,7 @@ export enum FilterType {
   Location = 'location',
   MeetingBooked = 'meetingBooked',
   ProductOfInterest = 'productOfInterest',
+  ProductInterest = 'productInterest',
   Sources = 'sources',
   FileType = 'fileType',
   UsageCount = 'usageCount',
@@ -82,6 +83,7 @@ export interface FilterValues {
   location: string[];
   company: string[];
   productOfInterest: string[];
+  productInterest: string[];
   sources: string[];
   status: string[];
   fileType: string[];
@@ -100,6 +102,7 @@ export const InitialFilterValues: FilterValues = {
   location: [],
   company: [],
   productOfInterest: [],
+  productInterest: [],
   sources: [],
   status: [],
   fileType: [],

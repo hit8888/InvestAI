@@ -2,7 +2,7 @@ import { CellValueProps } from '@meaku/core/types/admin/admin-table';
 import React from 'react';
 import CustomTooltipWithClipboardUsingHover from '../../CustomTooltipWithClipboardUsingHover';
 
-const MAX_WIDTH_CLASS = 'max-w-[500px]';
+const MAX_WIDTH_CLASS = 'max-w-[300px]';
 
 const UrlCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {
   const getTrigger = () => {

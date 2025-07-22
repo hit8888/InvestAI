@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 import { SortFilterState } from '@meaku/core/types/admin/sort';
-import { SortByTimestamp } from '../utils/constants';
-
-const InitialSortValues = {
-  timestampSort: SortByTimestamp.NEWEST_FIRST,
-  sessionLengthSort: null,
-  intentScoreSort: null,
-};
+import { INITIAL_SORT_VALUES } from '../utils/constants';
 
 const commonInitialSortValues = {
   updated_onSort: null,
@@ -34,13 +28,13 @@ const documentsInitialSortValues = {
 
 export const useSortFilterStore = create<SortFilterState>((set) => ({
   leads: {
-    ...InitialSortValues,
+    ...INITIAL_SORT_VALUES,
   },
   'link-clicks': {
-    ...InitialSortValues,
+    ...INITIAL_SORT_VALUES,
   },
   conversations: {
-    ...InitialSortValues,
+    ...INITIAL_SORT_VALUES,
   },
   webpages: {
     ...webpagesInitialSortValues,
@@ -79,7 +73,7 @@ export const useSortFilterStore = create<SortFilterState>((set) => ({
   resetPageSorts: (page) =>
     set((state) => ({
       ...state,
-      [page]: { ...InitialSortValues },
+      [page]: { ...INITIAL_SORT_VALUES },
     })),
   initializeSortValues: (page, sortValues) =>
     set((state) => ({

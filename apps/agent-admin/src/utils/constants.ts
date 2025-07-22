@@ -1,5 +1,4 @@
 import { AuthResponse } from '@meaku/core/types/admin/auth';
-import { SortFilterConfig } from '@meaku/core/types/admin/sort';
 import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@meaku/core/types/admin/filters';
 import FilterProductOfInterestIcon from '@breakout/design-system/components/icons/filter-productofinterest-icon';
 import FilterLocationIcon from '@breakout/design-system/components/icons/filter-location-icon';
@@ -43,6 +42,7 @@ import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/pa
 import PanelIntegrationsIcon from '@breakout/design-system/components/icons/panel-integrations-icon';
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
+import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 
 const {
   DateRange,
@@ -58,6 +58,7 @@ const {
   Sources,
   Status,
   FileType,
+  ProductInterest,
 } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
 
@@ -123,7 +124,7 @@ export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';
 export const LOGOUT_BUTTON_TITLE = 'Logout';
 export const EXPORT_DOWNLOAD_LABEL = 'Download';
 
-export const MULTI_VALUE_FILTER_TYPES = [Location, ProductOfInterest, Company, Status, Sources];
+export const MULTI_VALUE_FILTER_TYPES = [Location, ProductOfInterest, ProductInterest, Company, Status, Sources];
 
 export enum COPIED_FIELD_TEXTS {
   EMAIL = 'Email Copied',
@@ -133,58 +134,6 @@ export enum COPIED_FIELD_TEXTS {
 export const EXPORT_DOWNLOAD_RADIO_OPTIONS = [
   { value: ExportFormat.XLSX, label: 'Export to XLSX' },
   { value: ExportFormat.CSV, label: 'Export to CSV' },
-];
-
-// SORTING FEATURE SUPPORT VARIABLES
-export enum SortByTimestamp {
-  NEWEST_FIRST = 'newest',
-  OLDEST_FIRST = 'oldest',
-}
-
-export const SORT_BY_TIMESTAMP_RADIO_OPTIONS = [
-  { value: SortByTimestamp.NEWEST_FIRST, label: 'Newest first' },
-  { value: SortByTimestamp.OLDEST_FIRST, label: 'Oldest first' },
-];
-
-export enum SortBySessionLength {
-  LONG_FIRST = 'long',
-  SHORT_FIRST = 'short',
-}
-
-export const SORT_BY_SESSION_LENGTH_RADIO_OPTIONS = [
-  { value: SortBySessionLength.LONG_FIRST, label: 'Longest sessions first' },
-  { value: SortBySessionLength.SHORT_FIRST, label: 'Shortest sessions first' },
-];
-
-export enum SortByIntentScore {
-  HIGHEST_FIRST = 'lead',
-  LOWEST_FIRST = 'low',
-}
-
-export const SORT_BY_INTENT_SCORE_RADIO_OPTIONS = [
-  { value: SortByIntentScore.HIGHEST_FIRST, label: 'Highest intent first' },
-  { value: SortByIntentScore.LOWEST_FIRST, label: 'Lowest intent first' },
-];
-
-export const SORT_FILTER_CONFIG: SortFilterConfig[] = [
-  {
-    headerLabel: 'By Timestamp:',
-    radioOptions: SORT_BY_TIMESTAMP_RADIO_OPTIONS,
-    category: 'timestamp' as const,
-    stateKey: 'timestampSort',
-  },
-  {
-    headerLabel: 'By Session Length:',
-    radioOptions: SORT_BY_SESSION_LENGTH_RADIO_OPTIONS,
-    category: 'sessionLength' as const,
-    stateKey: 'sessionLengthSort',
-  },
-  {
-    headerLabel: 'By Intent Score:',
-    radioOptions: SORT_BY_INTENT_SCORE_RADIO_OPTIONS,
-    category: 'intentScore' as const,
-    stateKey: 'intentScoreSort',
-  },
 ];
 
 // ALL FILTERS FEATURE SUPPORT VARIABLES
@@ -229,6 +178,14 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
     filterApplied: false,
     filterKey: ProductOfInterest,
     filterType: ProductOfInterest,
+  },
+  {
+    filterIcon: FilterProductOfInterestIcon,
+    filterLabel: 'Product Interest',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: ProductInterest,
+    filterType: ProductInterest,
   },
   {
     filterIcon: FilterCompanyIcon,
@@ -331,36 +288,43 @@ export const DATE_RANGE_PRESET_OPTIONS = [
   { value: '0', label: CustomRange },
 ];
 
-export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filter(
-  (item) => item.filterType !== IntentScore,
+const LEADS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, IntentScore, UserMessagesCount, ProductOfInterest];
+const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked];
+const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
+const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType];
+const DOCUMENTS_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, Sources];
+const VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS = [Duration, Sources, UsageCount, FileType];
+
+export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
+  (item) => !LEADS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
-export const LINK_CLICKS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.slice(0, 3).filter(
-  (item) => item.filterType !== IntentScore,
+export const LINK_CLICKS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
+  (item) => !LEADS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
-  (item) => ![MeetingBooked].includes(item.filterType),
+  (item) => !CONVERSATIONS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
 export const WEBPAGES_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, UsageCount, FileType].includes(item.filterType),
+  (item) => !WEBPAGES_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
 export const DOCUMENTS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, Sources, UsageCount].includes(item.filterType),
+  (item) => !DOCUMENTS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
 export const VIDEOS_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, Sources, UsageCount, FileType].includes(item.filterType),
+  (item) => !VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
 export const SLIDE_TABLE_FILTERS_CONFIG = DATA_SOURCES_TABLE_FILTERS_CONFIG.filter(
-  (item) => ![Duration, Sources, UsageCount, FileType].includes(item.filterType),
+  (item) => !VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Routes
@@ -764,4 +728,78 @@ export const SETTINGS_LINK_ITEMS: NavLinkItem[] = [
 export const SIDE_NAV_VIEW_TO_ITEMS = {
   [SideNavView.MAIN]: MAIN_LINK_ITEMS,
   [SideNavView.SETTINGS]: SETTINGS_LINK_ITEMS,
+};
+
+export const INITIAL_SORT_VALUES: SortValues = {
+  timestampSort: null,
+  timelineSort: null,
+  user_message_countSort: null,
+  buyer_intentSort: null,
+  session_idSort: null,
+  nameSort: null,
+  emailSort: null,
+  roleSort: null,
+  countrySort: null,
+  companySort: null,
+  product_interestSort: null,
+  product_of_interestSort: null,
+  ip_addressSort: null,
+  lead_typeSort: null,
+};
+
+export const FIELD_TO_SORT_KEY_MAP: Record<string, keyof SortValues> = {
+  created_on: 'timestampSort',
+  timestamp: 'timestampSort',
+  user_message_count: 'user_message_countSort',
+  buyer_intent: 'buyer_intentSort',
+  timeline: 'timelineSort',
+  session_id: 'session_idSort',
+  name: 'nameSort',
+  email: 'emailSort',
+  role: 'roleSort',
+  country: 'countrySort',
+  company: 'companySort',
+  product_interest: 'product_interestSort',
+  product_of_interest: 'product_of_interestSort',
+  ip_address: 'ip_addressSort',
+  lead_type: 'lead_typeSort',
+};
+
+export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
+  timestampSort: 'timestamp',
+  user_message_countSort: 'user_message_count',
+  buyer_intentSort: 'buyer_intent',
+  timelineSort: 'timeline',
+  session_idSort: 'session_id',
+  nameSort: 'name',
+  emailSort: 'email',
+  roleSort: 'role',
+  countrySort: 'country',
+  companySort: 'company',
+  product_interestSort: 'product_interest',
+  product_of_interestSort: 'product_of_interest',
+  ip_addressSort: 'ip_address',
+  lead_typeSort: 'lead_type',
+};
+
+export const WEBPAGES_SORT_KEY_TO_FIELD_MAP: Record<keyof WebpagesSortValues, string> = {
+  updated_onSort: 'updated_on',
+  statusSort: 'status',
+  titleSort: 'title',
+  urlSort: 'url',
+};
+
+export const DOCUMENTS_SORT_KEY_TO_FIELD_MAP: Record<keyof DocumentsSortValues, string> = {
+  updated_onSort: 'updated_on',
+  statusSort: 'status',
+  source_nameSort: 'source_name',
+  data_source_typeSort: 'data_source_type',
+  descriptionSort: 'description',
+};
+
+export const ARTIFACTS_SORT_KEY_TO_FIELD_MAP: Record<keyof ArtifactsSortValues, string> = {
+  updated_onSort: 'updated_on',
+  statusSort: 'status',
+  assetSort: 'asset',
+  descriptionSort: 'description',
 };

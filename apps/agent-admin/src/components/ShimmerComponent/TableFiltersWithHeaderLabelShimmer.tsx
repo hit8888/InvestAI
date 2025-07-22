@@ -5,7 +5,6 @@ const TableFiltersWithHeaderLabelShimmer = () => {
     <div className="flex w-full items-start justify-between self-stretch bg-white py-4">
       <div className="flex items-center gap-4">
         <Skeleton className="h-10 w-24" />
-        <Skeleton className="h-10 w-24" />
       </div>
       <div className="flex items-center gap-4">
         <Skeleton className="h-10 w-60" />

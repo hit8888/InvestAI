@@ -4,17 +4,20 @@ import {
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
   ConversationChipLabelEnum,
   CONVERSATIONS_TABLE_FILTERS_CONFIG,
+  ARTIFACTS_SORT_KEY_TO_FIELD_MAP,
+  DOCUMENTS_SORT_KEY_TO_FIELD_MAP,
   DOCUMENTS_TABLE_FILTERS_CONFIG,
+  FIELD_TO_SORT_KEY_MAP,
+  INITIAL_SORT_VALUES,
   LEADS_TABLE_FILTERS_CONFIG,
   LINK_CLICKS_TABLE_FILTERS_CONFIG,
   SLIDE_TABLE_FILTERS_CONFIG,
-  SortByIntentScore,
-  SortBySessionLength,
-  SortByTimestamp,
+  SORT_KEY_TO_FIELD_MAP,
   SummaryTabContentList,
   TABLE_COLUMN_WIDTH_SIZE,
   USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD,
   VIDEOS_TABLE_FILTERS_CONFIG,
+  WEBPAGES_SORT_KEY_TO_FIELD_MAP,
   WEBPAGES_TABLE_FILTERS_CONFIG,
 } from './constants';
 import {
@@ -46,13 +49,7 @@ import {
 } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
-import {
-  SortValues,
-  WebpagesSortValues,
-  DocumentsSortValues,
-  ArtifactsSortValues,
-  DataSourceSortValues,
-} from '@meaku/core/types/admin/sort';
+import { SortValues, DataSourceSortValues, SortKeyToFieldMap } from '@meaku/core/types/admin/sort';
 import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
@@ -72,6 +69,7 @@ const {
   Company,
   MeetingBooked,
   ProductOfInterest,
+  ProductInterest,
   UserMessagesCount,
   TestConversationIncluded,
   UsageCount,
@@ -332,6 +330,7 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'Meeting booked',
         width: '254px',
       };
+    case ProductInterest:
     case ProductOfInterest:
       return {
         label: 'Product of Interest',
@@ -350,6 +349,19 @@ export const getFilterHeaderLabel = (filterState: string) => {
   }
 };
 
+export const applySortingforFields = (
+  sortState: SortValues | DataSourceSortValues,
+  sortKeyToFieldMap: SortKeyToFieldMap,
+  excludeFields?: string[],
+) => {
+  const sortApplied: SortItem[] = [];
+  for (const [sortKey, field] of Object.entries(sortKeyToFieldMap)) {
+    const order = (sortState as SortValues)[sortKey as keyof SortValues];
+    if (order && !excludeFields?.includes(field)) sortApplied.push({ field, order });
+  }
+  return sortApplied;
+};
+
 export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortValues, page: string) => {
   const isLeadsPage = page === LEADS_PAGE;
   const isLinkClicksPage = page === LINK_CLICKS_PAGE;
@@ -359,136 +371,27 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
   const isVideosPage = page === VIDEOS_PAGE;
   const isSlidesPage = page === SLIDES_PAGE;
   const sortApplied: SortItem[] = [];
-  const { timestampSort, sessionLengthSort, intentScoreSort } = sortState as SortValues;
-  const { updated_onSort, statusSort, titleSort, urlSort } = sortState as WebpagesSortValues;
-  const {
-    updated_onSort: updated_onSortDocuments,
-    source_nameSort,
-    data_source_typeSort: data_source_typeSortDocuments,
-    statusSort: statusSortDocuments,
-  } = sortState as DocumentsSortValues;
-  const {
-    updated_onSort: updated_onSortArtifacts,
-    statusSort: statusSortArtifacts,
-    assetSort,
-    descriptionSort,
-  } = sortState as ArtifactsSortValues;
+  const { timestampSort } = sortState as SortValues;
 
   if (isMainTabPage && timestampSort) {
     sortApplied.push({
       field: isLeadsPage || isLinkClicksPage ? 'created_on' : 'timestamp',
-      order: timestampSort ? (timestampSort === SortByTimestamp.NEWEST_FIRST ? 'desc' : 'asc') : 'desc',
+      order: timestampSort ? timestampSort : 'desc',
     });
   }
 
+  sortApplied.push(...applySortingforFields(sortState, SORT_KEY_TO_FIELD_MAP, ['timestamp']));
+
   if (isWebpagesPage) {
-    if (updated_onSort) {
-      sortApplied.push({
-        field: 'updated_on',
-        order: updated_onSort,
-      });
-    }
-
-    if (statusSort) {
-      sortApplied.push({
-        field: 'status',
-        order: statusSort,
-      });
-    }
-
-    if (titleSort) {
-      sortApplied.push({
-        field: 'title',
-        order: titleSort,
-      });
-    }
-
-    if (urlSort) {
-      sortApplied.push({
-        field: 'url',
-        order: urlSort,
-      });
-    }
+    sortApplied.push(...applySortingforFields(sortState, WEBPAGES_SORT_KEY_TO_FIELD_MAP));
   }
 
   if (isDocumentsPage) {
-    if (source_nameSort) {
-      sortApplied.push({
-        field: 'asset',
-        order: source_nameSort,
-      });
-    }
-
-    if (statusSortDocuments) {
-      sortApplied.push({
-        field: 'status',
-        order: statusSortDocuments,
-      });
-    }
-
-    if (data_source_typeSortDocuments) {
-      sortApplied.push({
-        field: 'data_source_type',
-        order: data_source_typeSortDocuments,
-      });
-    }
-
-    if (updated_onSortDocuments) {
-      sortApplied.push({
-        field: 'updated_on',
-        order: updated_onSortDocuments,
-      });
-    }
-
-    if (descriptionSort) {
-      sortApplied.push({
-        field: 'title',
-        order: descriptionSort,
-      });
-    }
+    sortApplied.push(...applySortingforFields(sortState, DOCUMENTS_SORT_KEY_TO_FIELD_MAP));
   }
 
   if (isVideosPage || isSlidesPage) {
-    if (updated_onSortArtifacts) {
-      sortApplied.push({
-        field: 'updated_on',
-        order: updated_onSortArtifacts,
-      });
-    }
-
-    if (statusSortArtifacts) {
-      sortApplied.push({
-        field: 'status',
-        order: statusSortArtifacts,
-      });
-    }
-
-    if (assetSort) {
-      sortApplied.push({
-        field: 'asset',
-        order: assetSort,
-      });
-    }
-
-    if (descriptionSort) {
-      sortApplied.push({
-        field: 'title',
-        order: descriptionSort,
-      });
-    }
-  }
-
-  if (sessionLengthSort) {
-    sortApplied.push({
-      field: 'user_message_count',
-      order: sessionLengthSort === SortBySessionLength.LONG_FIRST ? 'desc' : 'asc',
-    });
-  }
-  if (intentScoreSort) {
-    sortApplied.push({
-      field: 'buyer_intent_score', // TODO: use buyer_intent
-      order: intentScoreSort === SortByIntentScore.HIGHEST_FIRST ? 'desc' : 'asc',
-    });
+    sortApplied.push(...applySortingforFields(sortState, ARTIFACTS_SORT_KEY_TO_FIELD_MAP));
   }
 
   if (isMainTabPage && sortApplied.length === 0) {
@@ -502,37 +405,23 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
 };
 
 export const getSortValuesFromSortItems = (sortItems: SortItem[]): SortValues => {
-  const sortValues: SortValues = {
-    timestampSort: null,
-    sessionLengthSort: null,
-    intentScoreSort: null,
-  };
+  const sortValues: SortValues = INITIAL_SORT_VALUES;
 
   if (sortItems.length === 0) {
-    sortValues.timestampSort = SortByTimestamp.NEWEST_FIRST;
+    sortValues.timestampSort = 'desc';
     return sortValues;
   }
 
   sortItems.forEach((item) => {
-    switch (item.field) {
-      case 'created_on':
-      case 'timestamp':
-        sortValues.timestampSort = item.order === 'desc' ? SortByTimestamp.NEWEST_FIRST : SortByTimestamp.OLDEST_FIRST;
-        break;
-      case 'user_message_count':
-        sortValues.sessionLengthSort =
-          item.order === 'desc' ? SortBySessionLength.LONG_FIRST : SortBySessionLength.SHORT_FIRST;
-        break;
-      case 'buyer_intent_score': // TODO: use buyer_intent
-        sortValues.intentScoreSort =
-          item.order === 'desc' ? SortByIntentScore.HIGHEST_FIRST : SortByIntentScore.LOWEST_FIRST;
-        break;
+    const sortKey = FIELD_TO_SORT_KEY_MAP[item.field];
+    if (sortKey) {
+      (sortValues as SortValues)[sortKey] = item.order;
     }
   });
 
   // If no timestamp sort is set, default to the newest first
   if (!sortValues.timestampSort) {
-    sortValues.timestampSort = SortByTimestamp.NEWEST_FIRST;
+    sortValues.timestampSort = 'desc';
   }
 
   return sortValues;
@@ -588,6 +477,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     intentScore,
     location,
     productOfInterest,
+    productInterest,
     // meetingBooked,
     userMessagesCount,
     company,
@@ -664,6 +554,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push({
       field: 'product_of_interest',
       value: productOfInterest,
+      operator: 'in',
+    });
+  }
+
+  if (productInterest.length > 0) {
+    filterApplied.push({
+      field: 'product_interest',
+      value: productInterest,
       operator: 'in',
     });
   }
@@ -753,6 +651,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     intentScore,
     location,
     productOfInterest,
+    productInterest,
     meetingBooked,
     userMessagesCount,
     company,
@@ -856,6 +755,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: ProductOfInterest,
       label: 'Product',
       value: productOfInterest,
+    });
+  }
+
+  if (productInterest.length > 0) {
+    appliedFilters.push({
+      key: ProductInterest,
+      label: 'Product',
+      value: productInterest,
     });
   }
 

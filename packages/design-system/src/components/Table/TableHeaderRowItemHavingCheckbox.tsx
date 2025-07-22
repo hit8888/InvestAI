@@ -34,8 +34,7 @@ const TableHeaderRowItemHavingCheckbox = ({
               {
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
-                'min-w-[600px]': isUrlColumn,
-                'min-w-[500px]': isSourceNameColumn || isDescriptionColumn,
+                'min-w-[400px]': isSourceNameColumn || isDescriptionColumn || isUrlColumn,
                 'min-w-32': isLastColumn || isStatusColumn || isDurationColumn,
                 'min-w-48': isDataSourceTypeColumn,
               },

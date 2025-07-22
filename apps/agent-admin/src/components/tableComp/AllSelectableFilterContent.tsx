@@ -25,6 +25,7 @@ const AllSelectableFilterContent = ({
     Location,
     MeetingBooked,
     ProductOfInterest,
+    ProductInterest,
     Company,
     UserMessagesCount,
     Duration,
@@ -53,6 +54,7 @@ const AllSelectableFilterContent = ({
       location,
       company,
       productOfInterest,
+      productInterest,
       userMessagesCount,
       meetingBooked,
       sources,
@@ -78,6 +80,8 @@ const AllSelectableFilterContent = ({
         return status.length > 0;
       case ProductOfInterest:
         return productOfInterest.length > 0;
+      case ProductInterest:
+        return productInterest.length > 0;
       case Duration:
         return duration.minDuration > 0 && duration.maxDuration <= USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD;
       case UsageCount:
@@ -98,6 +102,7 @@ const AllSelectableFilterContent = ({
       location,
       company,
       productOfInterest,
+      productInterest,
       userMessagesCount,
       meetingBooked,
       duration,
@@ -135,6 +140,8 @@ const AllSelectableFilterContent = ({
           : 'Any';
       case ProductOfInterest:
         return productOfInterest.length > 0 ? `${productOfInterest.length} selected` : 'Any';
+      case ProductInterest:
+        return productInterest.length > 0 ? `${productInterest.length} selected` : 'Any';
       case MeetingBooked:
         return meetingBooked || 'Any';
       default:

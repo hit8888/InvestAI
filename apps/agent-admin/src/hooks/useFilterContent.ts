@@ -11,7 +11,7 @@ import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 interface UseFilterContentProps {
   page: PaginationPageType;
-  field: 'company' | 'country' | 'product_of_interest';
+  field: 'company' | 'country' | 'product_of_interest' | 'product_interest';
   enableSearch?: boolean;
 }
 

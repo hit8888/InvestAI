@@ -4,11 +4,13 @@ import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import { useFilterContent } from '../../hooks/useFilterContent';
 
 const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
-  const { ProductOfInterest } = FilterType;
+  const { ProductOfInterest, ProductInterest } = FilterType;
+
+  const isProductOfInterest = filterState === ProductOfInterest;
 
   const { filters, setFilter, resultantOptions, isLoading, isError, data } = useFilterContent({
     page,
-    field: 'product_of_interest',
+    field: isProductOfInterest ? 'product_of_interest' : 'product_interest',
     enableSearch: false,
   });
 
@@ -20,10 +22,10 @@ const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover 
   return (
     <CommonCheckboxesFilterContent
       filterState={filterState}
-      keyValue={ProductOfInterest}
+      keyValue={isProductOfInterest ? ProductOfInterest : ProductInterest}
       checkboxOptions={resultantOptions ?? []}
-      selectedOptions={filters.productOfInterest}
-      onSelectionChange={(value) => setFilter(page, ProductOfInterest, value)}
+      selectedOptions={isProductOfInterest ? filters.productOfInterest : filters.productInterest}
+      onSelectionChange={(value) => setFilter(page, isProductOfInterest ? ProductOfInterest : ProductInterest, value)}
       handleClosePopover={handleClosePopover}
     />
   );

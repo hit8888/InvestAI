@@ -19,6 +19,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
     MeetingBooked,
     Location,
     ProductOfInterest,
+    ProductInterest,
     UserMessagesCount,
     Sources,
     Status,
@@ -51,7 +52,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       {filterState === Status ? (
         <StatusFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
-      {filterState === ProductOfInterest ? (
+      {[ProductOfInterest, ProductInterest].includes(filterState) ? (
         <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === UserMessagesCount ? <UserMessagesCountFilterContent page={page} /> : null}

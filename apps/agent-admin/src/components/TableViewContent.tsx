@@ -4,6 +4,8 @@ import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import { useSidebar } from '../context/SidebarContext';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { SortValues } from '@meaku/core/types/admin/sort';
+import { useSortFilterStore } from '../stores/useSortFilterStore';
 interface TableContentProps {
   tableData: unknown[];
   isConversationTable?: boolean;
@@ -29,6 +31,8 @@ const TableViewContent: React.FC<TableContentProps> = ({
   onRowItemClick,
 }) => {
   const { isSidebarOpen } = useSidebar();
+  const { setSortValue } = useSortFilterStore();
+  const sortValue = useSortFilterStore((state) => state[pageType] as SortValues);
   if (isLoading) {
     return <TableViewShimmer columnCount={DEFAULT_LOADING_COLUMNS_COUNT} rowCount={DEFAULT_LOADING_ROW_COUNT} />;
   }
@@ -48,6 +52,8 @@ const TableViewContent: React.FC<TableContentProps> = ({
       isSidebarOpen={isSidebarOpen}
       pageType={pageType}
       onRowItemClick={onRowItemClick}
+      setSortValue={setSortValue}
+      sortValue={sortValue}
     />
   );
 };

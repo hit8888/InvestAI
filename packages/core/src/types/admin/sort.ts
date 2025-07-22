@@ -2,8 +2,19 @@ import { PaginationPageType } from './admin';
 
 export type SortCategory =
   | 'timestamp'
-  | 'sessionLength'
-  | 'intentScore'
+  | 'timeline'
+  | 'user_message_count'
+  | 'buyer_intent'
+  | 'session_id'
+  | 'name'
+  | 'email'
+  | 'role'
+  | 'country'
+  | 'company'
+  | 'product_interest'
+  | 'product_of_interest'
+  | 'ip_address'
+  | 'lead_type'
   | 'updated_on'
   | 'status'
   | 'data_source_type'
@@ -17,9 +28,20 @@ export type SortCategory =
 export type SortOrder = 'asc' | 'desc' | null;
 
 export type SortValues = {
-  timestampSort: string | null;
-  sessionLengthSort: string | null;
-  intentScoreSort: string | null;
+  timestampSort: SortOrder;
+  timelineSort: SortOrder;
+  user_message_countSort: SortOrder;
+  buyer_intentSort: SortOrder;
+  session_idSort: SortOrder;
+  nameSort: SortOrder;
+  emailSort: SortOrder;
+  roleSort: SortOrder;
+  countrySort: SortOrder;
+  companySort: SortOrder;
+  product_interestSort: SortOrder;
+  ip_addressSort: SortOrder;
+  lead_typeSort: SortOrder;
+  product_of_interestSort: SortOrder;
 };
 
 export type CommonSortValues = {
@@ -44,6 +66,12 @@ export type ArtifactsSortValues = CommonSortValues & {
 };
 
 export type DataSourceSortValues = WebpagesSortValues | DocumentsSortValues | ArtifactsSortValues;
+
+export type SortKeyToFieldMap =
+  | Record<keyof SortValues, string>
+  | Record<keyof WebpagesSortValues, string>
+  | Record<keyof DocumentsSortValues, string>
+  | Record<keyof ArtifactsSortValues, string>;
 
 export interface SortFilterState {
   leads: SortValues;
