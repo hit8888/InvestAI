@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import FooterButton from '../tableComp/FooterButton';
 import DateRangePicker from '@breakout/design-system/components/layout/DateRangePicker';
@@ -9,20 +9,32 @@ import ChoosePresetsDateValue from '../ChoosePresetsDateValue';
 import moment from 'moment-timezone';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { DATE_RANGE_PRESET_OPTIONS } from '../../utils/constants';
 
 const ALLOWED_MONTHS_RANGE = 3;
 
 interface IDateRangeSelectorProps {
   currentDateRange: DateRangeProp | undefined;
   onDateChange: (dateRange: DateRangeProp | undefined) => void;
+  presetOptions?: typeof DATE_RANGE_PRESET_OPTIONS;
+  defaultPreset?: PresetDateLabel;
 }
 
-const DateRangeSelector = ({ currentDateRange, onDateChange }: IDateRangeSelectorProps) => {
+const DateRangeSelector = ({
+  currentDateRange,
+  onDateChange,
+  presetOptions = DATE_RANGE_PRESET_OPTIONS,
+  defaultPreset = PresetDateLabel.CustomRange,
+}: IDateRangeSelectorProps) => {
   const { trackAdminEvent } = useAdminEventAnalytics();
   const [isOpen, setIsOpen] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRangeProp | undefined>();
-  const [currentPreset, setCurrentPreset] = useState<PresetDateLabel>(PresetDateLabel.CustomRange);
+  const [dateRange, setDateRange] = useState<DateRangeProp | undefined>(currentDateRange);
+  const [currentPreset, setCurrentPreset] = useState<PresetDateLabel>(defaultPreset);
   const { CustomRange } = PresetDateLabel;
+
+  useEffect(() => {
+    setDateRange(currentDateRange);
+  }, [currentDateRange]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -82,8 +94,13 @@ const DateRangeSelector = ({ currentDateRange, onDateChange }: IDateRangeSelecto
         onPointerDownOutside={handleClose}
       >
         <div className="flex w-full p-4">
-          <ChoosePresetsDateValue currentPreset={currentPreset} onDateChange={onPresetAndCustomDateChange} />
+          <ChoosePresetsDateValue
+            currentPreset={currentPreset}
+            onDateChange={onPresetAndCustomDateChange}
+            options={presetOptions}
+          />
           <DateRangePicker
+            key={`${currentPreset}-${dateRange?.startDate?.getTime()}-${dateRange?.endDate?.getTime()}`}
             isCustomRange={isCustomRange}
             date={dateRange}
             onDateChange={setDateRange}

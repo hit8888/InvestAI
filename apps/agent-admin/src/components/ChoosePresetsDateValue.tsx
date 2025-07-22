@@ -5,13 +5,15 @@ import { DATE_RANGE_PRESET_OPTIONS } from '../utils/constants';
 const ChoosePresetsDateValue = ({
   currentPreset,
   onDateChange,
+  options = DATE_RANGE_PRESET_OPTIONS,
 }: {
   currentPreset: PresetDateLabel;
   onDateChange: (dateRange: DateRangeProp | undefined, presetValue: string) => void;
+  options?: typeof DATE_RANGE_PRESET_OPTIONS;
 }) => {
   return (
     <div className="flex w-32 flex-col items-start gap-0.5">
-      {DATE_RANGE_PRESET_OPTIONS.map((option) => (
+      {options.map((option) => (
         <SinglePresetDateValue
           key={option.label}
           presetValue={option.value}

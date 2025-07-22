@@ -38,6 +38,7 @@ export enum PresetDateLabel {
   Yesterday = 'Yesterday',
   Last7Days = 'Last 7 days',
   Last30Days = 'Last 30 days',
+  Last90Days = 'Last 90 days',
   CustomRange = 'Custom Range',
 }
 

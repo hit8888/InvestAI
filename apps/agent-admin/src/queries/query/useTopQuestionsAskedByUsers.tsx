@@ -1,4 +1,4 @@
-import { getTopQuestionsByUser } from '@meaku/core/adminHttp/api';
+import { getTopQuestionsAskedByUser } from '@meaku/core/adminHttp/api';
 import { TopQuestionsByUserResponse } from '@meaku/core/types/admin/api';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { useQuery } from '@tanstack/react-query';
@@ -11,15 +11,15 @@ interface IProps {
   enabled?: boolean;
 }
 
-const useTopQuestionsByUsers = ({ start_date, end_date, timezone, enabled = true }: IProps) => {
+const useTopQuestionsAskedByUsers = ({ start_date, end_date, timezone, enabled = true }: IProps) => {
   const tenantName = getTenantFromLocalStorage();
 
   const hasAllRequiredParams = Boolean(start_date && end_date && timezone);
 
-  const topQuestionsByUsersInsightsQuery = useQuery({
-    queryKey: ['top-questions-by-users', tenantName, start_date, end_date, timezone],
+  const topQuestionsAskedByUsersQuery = useQuery({
+    queryKey: ['top-questions-asked-by-users', tenantName, start_date, end_date, timezone],
     queryFn: async (): Promise<TopQuestionsByUserResponse> => {
-      const response: AxiosResponse<TopQuestionsByUserResponse> = await getTopQuestionsByUser({
+      const response: AxiosResponse<TopQuestionsByUserResponse> = await getTopQuestionsAskedByUser({
         start_date,
         end_date,
         timezone,
@@ -30,7 +30,7 @@ const useTopQuestionsByUsers = ({ start_date, end_date, timezone, enabled = true
     enabled: enabled && hasAllRequiredParams,
   });
 
-  return topQuestionsByUsersInsightsQuery;
+  return topQuestionsAskedByUsersQuery;
 };
 
-export default useTopQuestionsByUsers;
+export default useTopQuestionsAskedByUsers;

@@ -1,29 +1,28 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import DateRangeSelector from '../components/Insights/DateRangeSelector';
 import { useMemo, useState } from 'react';
-import { DateRangeProp } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
 import Separator from '@breakout/design-system/components/layout/separator';
 import Summary from '../components/Insights/Summary';
 import moment from 'moment-timezone';
+import DateUtil from '@meaku/core/utils/dateUtils';
 import DailySessionInsight from '../components/Insights/DailySessionInsight';
 import WeeklyConversationPattern from '../components/Insights/WeeklyConversationPattern';
 import { DayOfWeek } from '@meaku/core/types/admin/api';
 import HourlyTrafficByWeekday from '../components/Insights/HourlyTrafficByWeekday';
 import FrequentSources from '../components/Insights/FrequentSources';
-import TopQuestionsByUsers from '../components/Insights/TopQuestionsByUsers';
+import TopQuestionsAskedByUsers from '../components/Insights/TopQuestionsAskedByUsers';
 import ConversationProcessingTimeLog from '../components/Insights/ConversationProcessingTimeLog';
 import BuyerIntentDistribution from '../components/Insights/BuyerIntentDistribution';
 import CountryDistribution from '../components/Insights/CountryDistribution';
 import ProductInterestDistribution from '../components/Insights/ProductInterestDistribution';
 import { useAuth } from '../context/AuthProvider';
+import TopQuestionsClickedByUsers from '../components/Insights/TopQuestionsClickedByUsers';
+import { INSIGHTS_DATE_RANGE_PRESET_OPTIONS } from '../utils/constants';
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const firstDateOfLastMonth = moment().subtract(1, 'month').startOf('month');
-const lastDateOfLastMonth = moment().subtract(1, 'month').endOf('month');
-const defaultDateRange = {
-  startDate: firstDateOfLastMonth.toDate(),
-  endDate: lastDateOfLastMonth.toDate(),
-};
+// Use Last 30 days as default (same logic as SinglePresetDateValue)
+const defaultDateRange = DateUtil.getDateRangeForPresetValue(-30);
 
 const InsightsPage = () => {
   const { userInfo } = useAuth();
@@ -48,7 +47,12 @@ const InsightsPage = () => {
       <div className="flex-start flex w-full flex-col gap-4 self-stretch">
         <div className="flex w-full justify-between">
           <Typography variant={'title-24'}>Insights</Typography>
-          <DateRangeSelector currentDateRange={currentDateRange} onDateChange={setCurrentDateRange} />
+          <DateRangeSelector
+            currentDateRange={currentDateRange}
+            onDateChange={setCurrentDateRange}
+            presetOptions={INSIGHTS_DATE_RANGE_PRESET_OPTIONS}
+            defaultPreset={PresetDateLabel.Last30Days}
+          />
         </div>
 
         <Separator />
@@ -67,7 +71,11 @@ const InsightsPage = () => {
 
         <div className="flex gap-12">
           <FrequentSources {...insightsCommonQueryParams} />
-          <TopQuestionsByUsers {...insightsCommonQueryParams} />
+        </div>
+
+        <div className="flex gap-12">
+          <TopQuestionsAskedByUsers {...insightsCommonQueryParams} />
+          <TopQuestionsClickedByUsers {...insightsCommonQueryParams} />
         </div>
 
         <div className="flex gap-12">

@@ -60,7 +60,7 @@ const {
   FileType,
   ProductInterest,
 } = FilterType;
-const { Today, Yesterday, Last7Days, Last30Days, CustomRange } = PresetDateLabel;
+const { Today, Yesterday, Last7Days, Last30Days, Last90Days, CustomRange } = PresetDateLabel;
 
 export const CONVERSATION_LABEL_UPPERCASE = 'CONVERSATION';
 export const LEAD_LABEL_UPPERCASE = 'LEAD';
@@ -285,6 +285,13 @@ export const DATE_RANGE_PRESET_OPTIONS = [
   { value: '-1', label: Yesterday },
   { value: '-7', label: Last7Days },
   { value: '-30', label: Last30Days },
+  { value: '0', label: CustomRange },
+];
+
+export const INSIGHTS_DATE_RANGE_PRESET_OPTIONS = [
+  { value: '-7', label: Last7Days },
+  { value: '-30', label: Last30Days },
+  { value: '-90', label: Last90Days },
   { value: '0', label: CustomRange },
 ];
 

@@ -63,8 +63,8 @@ const CommonMinTableView = ({
         <div className="divide-y divide-gray-200">
           {isLoading ? (
             <TableShimmer />
-          ) : (
-            rows?.map((row, index) => (
+          ) : rows && rows.length > 0 ? (
+            rows.map((row, index) => (
               <div
                 key={index}
                 className={cn(
@@ -90,6 +90,14 @@ const CommonMinTableView = ({
                 </div>
               </div>
             ))
+          ) : (
+            <div className="flex h-32 items-center justify-center">
+              <div className="text-center">
+                <Typography variant="body-14" textColor="gray400">
+                  No data available
+                </Typography>
+              </div>
+            </div>
           )}
         </div>
       </div>

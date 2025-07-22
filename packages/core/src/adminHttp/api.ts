@@ -213,8 +213,11 @@ export const getSessionInsights = <
 export const getFrequentSourcesInsights = (payload: InsightsCommonRequest) =>
   adminApiClient.post<FrequentDocumentsResponse>(`tenant/api/analytics/most-frequently-referenced-documents/`, payload);
 
-export const getTopQuestionsByUser = (payload: InsightsCommonRequest) =>
-  adminApiClient.post<TopQuestionsByUserResponse>(`tenant/api/analytics/top-user-questions/`, payload);
+export const getTopQuestionsAskedByUser = (payload: InsightsCommonRequest) =>
+  adminApiClient.post<TopQuestionsByUserResponse>(`tenant/api/analytics/top-user-questions-asked/`, payload);
+
+export const getTopQuestionsClickedByUser = (payload: InsightsCommonRequest) =>
+  adminApiClient.post<TopQuestionsByUserResponse>(`tenant/api/analytics/top-user-questions-clicked/`, payload);
 
 export const getIntegrations = () => adminApiClient.get<IntegrationsResponse>(`/tenant/api/integrations/`);
 
