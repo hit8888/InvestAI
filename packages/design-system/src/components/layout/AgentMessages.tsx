@@ -314,8 +314,8 @@ const AgentMessages = ({
                   <div className="sticky bottom-0 left-0 flex items-center justify-start">
                     <Button
                       variant="system_secondary"
-                      className="duration-[2000ms] size-7 animate-pulse rounded-full p-1"
-                      size="small"
+                      buttonStyle="icon"
+                      className="duration-[2000ms] size-7 animate-pulse rounded-full bg-white p-1"
                       onClick={handleScrollToBottomOfContainer}
                     >
                       <ChevronsDown />

@@ -55,7 +55,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
 
   const setIsArtifactPlaying = useArtifactStore((state) => state.setIsArtifactPlaying);
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
-  const { agentName, ctaConfig, logoURL, showOrb, invertTextColor, defaultArtifactUrl, orbLogoUrl } =
+  const { agentName, logoURL, showOrb, ctaConfig, invertTextColor, defaultArtifactUrl, orbLogoUrl } =
     useValuesFromConfigApi();
 
   const showMediaArtifactContainer = hasFirstUserMessageBeenSent;
@@ -137,15 +137,11 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
           />
         ) : (
           <AgentHeader
-            messages={messages}
-            handleSendMessage={handleSendMessage}
             handleCloseAgent={handleCloseAgent}
             isHidden={hideAgentHeader}
             isCollapsible={isCollapsible}
-            ctaConfig={ctaConfig}
             showFeedbackHeader={isAdmin}
             setActiveArtifact={setActiveArtifact}
-            invertTextColor={invertTextColor}
           />
         )}
         <div
@@ -198,6 +194,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             handleSendMessage={handleSendMessage}
             disableMessageSend={disableMessageSend}
             messages={messages}
+            ctaConfig={ctaConfig}
             invertTextColor={invertTextColor}
           />
         )}

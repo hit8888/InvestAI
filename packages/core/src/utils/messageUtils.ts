@@ -19,6 +19,10 @@ export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
 const { FORM_FILLED, QUALIFICATION_FORM_FILLED, GENERATING_ARTIFACT } = AgentEventType;
 
+export const getMessagesWithSameResponseId = (messages: WebSocketMessage[], responseId: string) => {
+  return messages.filter((msg) => msg.response_id === responseId);
+};
+
 export const isStreamMessage = (
   message: WebSocketMessage,
 ): message is WebSocketMessage & { message: StreamMessageContent } => {
@@ -309,11 +313,32 @@ export const isDiscoveryAnswer = (message: WebSocketMessage): boolean => {
 };
 
 export const checkIsMainResponseMessage = (message: WebSocketMessage): boolean => {
+  // isSuggestionArtifact(message) is added - bcoz we also show the suggestions when inactive event is send and we receive suggestions artifact
   return (
     (message.actor === 'SALES' && (isStreamMessage(message) || isTextMessage(message))) ||
-    (message.actor === 'ARTIFACT' && (isTextMessage(message) || isCalendarArtifact(message))) || //Being used for form acknowledgement
+    (message.actor === 'ARTIFACT' &&
+      (isTextMessage(message) || isCalendarArtifact(message) || isSuggestionArtifact(message))) || //Being used for form acknowledgement
     (message.actor === 'EVENT' && (isStreamMessage(message) || isTextMessage(message)))
   );
+};
+
+export const checkIsLatestSalesResponseMessage = (
+  messagesWithSameResponseId: WebSocketMessage[],
+  message: WebSocketMessage,
+): boolean => {
+  const completeSalesResponseMessages = messagesWithSameResponseId.filter(
+    (msg) => checkIsMainResponseMessage(msg) && isStreamMessage(msg),
+  );
+
+  if (completeSalesResponseMessages.length === 0) {
+    return false;
+  }
+
+  const latestMessage = completeSalesResponseMessages.reduce((latest, current) =>
+    new Date(current.timestamp) > new Date(latest.timestamp) ? current : latest,
+  );
+
+  return message === latestMessage;
 };
 
 export const checkIsSalesResponseComplete = (messagesWithSameResponseId: WebSocketMessage[]): boolean => {

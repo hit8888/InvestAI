@@ -5,6 +5,35 @@ export function TimeManager() {
     return timeRegex.test(time);
   };
 
+  /**
+   * @function isWithinTimeRange
+   * @description Checks if the current time is within a specified time range for a given timezone, considering weekdays only.
+   * This function is designed to determine whether an operation (like showing a chat agent) should be active based on business hours.
+   *
+   * @param {string | null} startTime - The start time of the operational window in "HH:mm" (24-hour) format. If null, it defaults to "00:00".
+   * @param {string | null} endTime - The end time of the operational window in "HH:mm" (24-hour) format. If null, it defaults to "24:00".
+   * @param {string} [timezone="UTC"] - The IANA timezone identifier (e.g., "America/New_York"). It defaults to "UTC" if not provided or if the provided timezone is invalid.
+   *
+   * @returns {boolean} - Returns `true` if:
+   *  - The current time is within the specified `startTime` and `endTime` on a weekday.
+   *  - The current day is a Saturday or Sunday (agent is always shown on weekends).
+   *  - `startTime` or `endTime` are not provided (no time restriction).
+   *  - The provided time format is invalid.
+   *  - An error occurs during execution.
+   *  Returns `false` if the current time is outside the specified range on a weekday.
+   *
+   * @logic
+   * 1. **Timezone Validation**: It first validates the provided `timezone`. If invalid, it logs a warning and falls back to "UTC".
+   * 2. **Time Format Validation**: It validates that `startTime` and `endTime` strings are in the "HH:mm" format. If not, it logs a warning and returns `true`.
+   * 3. **Date and Day Calculation**: It gets the current date, time, and day of the week based on the specified timezone.
+   * 4. **Weekend Check**: It checks if the current day is Saturday or Sunday. If so, it immediately returns `true`, effectively disabling time-based restrictions on weekends.
+   * 5. **Time Range Check**:
+   *    - For weekdays, it proceeds to check the time.
+   *    - It handles cases where `startTime` or `endTime` are null by setting default values ("00:00" and "24:00" respectively).
+   *    - It converts the current time, start time, and end time to minutes since midnight for easy comparison.
+   *    - It correctly handles time ranges that span across midnight (e.g., 22:00 to 06:00).
+   * 6. **Error Handling**: The entire logic is wrapped in a `try...catch` block. In case of any unexpected errors, it logs the error and returns `true` as a fallback.
+   */
   const isWithinTimeRange = (
     startTime: string | null,
     endTime: string | null,

@@ -38,12 +38,12 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const entry_point_alignment = isMobile
     ? entryPointAlignmentMobile || entryPointAlignmentDesktop
     : entryPointAlignmentDesktop;
-  const showPopupBanner = !!banner_config?.show_banner;
+  const showPopupBanner = !!banner_config?.show_banner && !isAgentOpen;
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
 
-  const showBanner = banner_config?.show_banner && !hasFirstUserMessageBeenSent && showPopupContent;
+  const showBanner = !!banner_config?.show_banner && !hasFirstUserMessageBeenSent && showPopupContent;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
     if (!hasFirstUserMessageBeenSent) {
       fetchSessionData();
@@ -69,7 +69,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     isAgentEnabled,
     fetchSessionData,
     handleOpenAgent,
-    showBanner: !!showBanner,
+    showBanner,
     hasFirstUserMessageBeenSent,
     entryPointAlignment: entry_point_alignment ?? 'center',
     handleSendUserMessage,

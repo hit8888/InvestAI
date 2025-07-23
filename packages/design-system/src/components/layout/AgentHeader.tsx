@@ -1,48 +1,25 @@
 import Button from '@breakout/design-system/components/Button/index';
 import { XIcon } from 'lucide-react'; //TODO: Expos this for design system
-import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
-import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import FeedbackHeader from './FeedbackHeader';
 import PoweredByBreakout from './PoweredByBreakout';
-import AgentCTA from './AgentCTA';
 
 interface IProps {
-  messages: WebSocketMessage[];
-  handleSendMessage: (message: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleCloseAgent?: () => void;
   isHidden?: boolean;
-  ctaConfig?: CTAConfigType;
   isCollapsible: boolean;
   setActiveArtifact: (artifact: ArtifactBaseType | null) => void;
   showFeedbackHeader: boolean;
-  invertTextColor?: boolean;
 }
 
-const AgentHeader = ({
-  handleSendMessage,
-  messages,
-  handleCloseAgent,
-  isHidden,
-  ctaConfig,
-  isCollapsible,
-  setActiveArtifact,
-  showFeedbackHeader,
-  invertTextColor,
-}: IProps) => {
+const AgentHeader = ({ handleCloseAgent, isHidden, isCollapsible, setActiveArtifact, showFeedbackHeader }: IProps) => {
   if (isHidden) {
     return null;
   }
 
   return (
-    <div className="flex items-center justify-between p-2 pb-3">
-      <AgentCTA
-        handleSendMessage={handleSendMessage}
-        messages={messages}
-        ctaConfig={ctaConfig}
-        invertTextColor={invertTextColor}
-      />
-
-      <div className="flex flex-1 items-center justify-end gap-4 pr-2">
+    <div className="flex items-center justify-between py-2">
+      <div className="flex flex-1 items-center justify-end gap-4 pr-4">
         <PoweredByBreakout />
         {!!handleCloseAgent && isCollapsible && (
           <Button

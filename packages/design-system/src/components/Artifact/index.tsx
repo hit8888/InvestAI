@@ -41,7 +41,7 @@ const Artifact = ({
 
   return (
     <div
-      className={cn(isArtifactTypeCalendar ? 'w-2/3' : 'w-full', 'pl-2 pr-4 pt-4', {
+      className={cn(isArtifactTypeCalendar ? 'w-2/3' : 'w-full', 'pl-2 pr-4', {
         'overflow-hidden pb-4': isMediaTakingFullWidth,
       })}
     >

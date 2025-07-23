@@ -9,6 +9,7 @@ import MessageItemErrorBoundary from './MessageItemErrorBoundary';
 import {
   checkIsArtifactMessage,
   checkIsMainResponseMessage,
+  checkIsLatestSalesResponseMessage,
   checkIsSalesResponseComplete,
   getFormArtifactMessage,
   getFormFilledEventByArtifactId,
@@ -21,6 +22,7 @@ import {
   isCtaEvent,
   checkIsLoadingTextMessage,
   isSuggestionArtifact,
+  getMessagesWithSameResponseId,
 } from '@meaku/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
@@ -86,8 +88,10 @@ const MessageItem = ({
   const isArtifactMessage = checkIsArtifactMessage(message);
   const isSalesResponseMessage = checkIsMainResponseMessage(message);
 
-  const messagesWithSameResponseId = messages.filter((msg) => msg.response_id === message.response_id);
+  const messagesWithSameResponseId = getMessagesWithSameResponseId(messages, message.response_id);
   const isSalesResponseComplete = checkIsSalesResponseComplete(messagesWithSameResponseId);
+
+  const isLatestSalesResponseMessage = checkIsLatestSalesResponseMessage(messagesWithSameResponseId, message);
 
   const discoveryMessage = messagesWithSameResponseId.find((msg) => isDiscoveryQuestion(msg));
   const isDiscoveryMessage = !!discoveryMessage;
@@ -107,7 +111,7 @@ const MessageItem = ({
   const isLastQuestionResponse = isLastMessage && isSalesResponseMessage;
   const isLoading = isAMessageBeingProcessed && isLastQuestionResponse;
 
-  const isActiveMessage = isSalesResponseMessage && !isDiscoveryMessage;
+  const isActiveMessage = isLatestSalesResponseMessage && !isDiscoveryMessage;
   const isDiscoveryActiveMessage = !isSalesResponseMessage && isDiscoveryMessage;
   const isMessageLoading = isLoading || checkIsLoadingTextMessage(message);
   const isCtaEventMessage = isCtaEvent(message, 'left');

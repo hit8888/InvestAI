@@ -55,7 +55,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, invertTex
   const conditionForShowingTooltipAndDisabledButton = !isSendButtonDisabled && disableMessageSend;
 
   return (
-    <div className={cn(['input-bar-bg flex w-full rounded-b-2xl p-4 pb-2', isMobile && 'p-0'])}>
+    <div className={cn(['input-bar-bg flex w-full rounded-b-2xl', isMobile && 'p-0'])}>
       <form className="flex w-full items-center justify-between" onSubmit={handleSubmission}>
         <div
           className={cn(['relative z-10 flex w-full rounded-2xl', !isMobile && 'border border-gray-200 bg-white p-1'])}
