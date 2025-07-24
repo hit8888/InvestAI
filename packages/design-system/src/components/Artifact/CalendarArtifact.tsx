@@ -8,6 +8,7 @@ import { HubSpotCalendar } from './HubSpotCalendar';
 import { cn } from '../../lib/cn';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useState } from 'react';
+import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
@@ -44,6 +45,8 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
 
   const isIframeOrHubSpotCalendar = isIframeCalendar || isHubSpotCalendar;
 
+  const calendarContainerRef = useElementScrollIntoView<HTMLDivElement>({ shouldScroll: isMobile });
+
   const getCalendarLoadingIndicator = () => {
     if (!isLoading) return null;
 
@@ -59,7 +62,7 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
 
   if (isMobile) {
     return (
-      <div className="relative h-[500px] w-full rounded-2xl bg-transparent_gray_3 p-2">
+      <div ref={calendarContainerRef} className="relative h-[500px] w-full rounded-2xl bg-transparent_gray_3 p-2">
         {getCalendarLoadingIndicator()}
         {getCalendarContentBasedOnType()}
       </div>

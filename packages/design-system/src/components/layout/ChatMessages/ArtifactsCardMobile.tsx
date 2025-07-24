@@ -1,7 +1,7 @@
 import { ARTIFACT_CONFIG } from '../../../utils/constant';
 import Typography from '../../Typography';
 import { ArtifactEnum } from '@meaku/core/types/index';
-import { Dialog, DialogContent, DialogOverlay, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import { useState } from 'react';
 
 interface ArtifactsCardMobileProps {
@@ -41,7 +41,6 @@ const ArtifactsCardMobile = ({ artifactType, title, children }: ArtifactsCardMob
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
-      <DialogOverlay className="!bg-[rgba(16, 24, 40, 0.50)]" />
       <DialogTrigger asChild>{getDialogTrigger()}</DialogTrigger>
       <DialogContent className="w-[95%] max-w-full bg-white !p-0 h-sm:h-48">
         {isDialogOpen ? (

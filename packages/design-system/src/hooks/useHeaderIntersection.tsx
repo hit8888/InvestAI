@@ -1,6 +1,7 @@
 // Intersection observer for header stickiness
 // And preserve the scroll position during the sticky transition.
 import { RefObject, useEffect } from 'react';
+export const STICKY_TOP_VALUE_HEADER_INTERSECTION = 132;
 
 interface UseHeaderIntersectionProps {
   headerRef: RefObject<HTMLDivElement | null>;
@@ -18,7 +19,7 @@ export const useHeaderIntersection = ({
   useEffect(() => {
     const options = {
       threshold: [0], // Detect as soon as it starts leaving
-      rootMargin: '-72px', // Push top boundary down
+      rootMargin: `-${STICKY_TOP_VALUE_HEADER_INTERSECTION}px`, // Push top boundary down
     };
 
     const observer = new IntersectionObserver((entries) => {

@@ -42,7 +42,7 @@ export default function WeeklyConversationPattern({
     }
   }, [busiest_day]);
 
-  const maxBound = Math.max(...weekly_pattern.map((d) => d.average)) * chartHeightMultiplier;
+  const maxBound = Math.ceil(Math.max(...weekly_pattern.map((d) => d.average)) * chartHeightMultiplier);
 
   const handleDayBarClick = (e: { payload: { day: DayOfWeek } }) => {
     const dayOfWeek = e.payload.day;

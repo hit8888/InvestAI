@@ -89,7 +89,7 @@ const CtaEventMessage = (props: IProps) => {
                 <Typography variant="body-16" textColor="textPrimary" className="text-center">
                   {message || DEFAULT_MESSAGES[align].MESSAGE}
                 </Typography>
-                <Button variant="system" onClick={handleClick}>
+                <Button autoFocus variant="system" onClick={handleClick}>
                   {label || DEFAULT_MESSAGES[align].LABEL}
                   <ArrowRight width="16" height="16" />
                 </Button>

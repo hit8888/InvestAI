@@ -49,8 +49,8 @@ const BuyerIntentDistribution = ({ start_date, end_date, timezone }: BuyerIntent
       <CommonPieChart
         data={chartData}
         chartColors={generateDistributionColors(chartData)}
-        legendFormatter={(value) => `${value} Intent`}
-        tooltipFormatter={(name) => `${name} Intent`}
+        legendFormatter={(value) => `${value.toLowerCase()} Intent`}
+        tooltipFormatter={(name) => `${name.toLowerCase()} Intent`}
         tooltipSuffix="conversations"
         isLoading={isLoading}
       />

@@ -75,6 +75,7 @@ const PromptArea = ({
 
       // Clear local state
       setLocalPrompts([]);
+      setClickedOnEdit(false);
 
       // Clear original prompts reference
       originalPromptsRef.current = {};

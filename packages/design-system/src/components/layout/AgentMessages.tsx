@@ -124,14 +124,6 @@ const AgentMessages = ({
   const messagesSortedByResponseIdAndTimestamp = messagesGroupedByResponseIdAndTimestamp(messages);
 
   const isCurrentMessageComplete = checkIsCurrentMessageComplete(messages, lastMessageResponseId);
-  const agentMessagesContainerClassName = useMemo(() => {
-    if (isMobile || !showRightPanel) {
-      return 'w-full shrink-0';
-    } else if (!isMobile && showRightPanel) {
-      return 'w-[35%] shrink-0';
-    }
-    return '';
-  }, [isMobile, showRightPanel]);
 
   useLayoutEffect(() => {
     if (parentContainerRef.current && messagesSortedByResponseIdAndTimestamp.length > 0) {
@@ -209,10 +201,12 @@ const AgentMessages = ({
     return -1;
   }, [messagesSortedByResponseIdAndTimestamp]);
 
+  const isViewTypeAdmin = viewType === ViewType.ADMIN;
+
   return (
     <div
       ref={parentContainerRef}
-      className={cn(agentMessagesContainerClassName)}
+      className={cn('w-full', isViewTypeAdmin && 'w-[50%]')}
       onWheel={(e) => e.stopPropagation()}
       style={{
         height: '100%',
@@ -229,9 +223,6 @@ const AgentMessages = ({
             !showRightPanel && !allowFullWidthForText && 'sm:max-w-[85%] lg:max-w-[80%] xl:max-w-[70%] 2xl:max-w-[60%]',
           ])}
         >
-          {/* Spacer to push content to bottom */}
-          <div style={{ flex: 1, minHeight: 0 }} />
-
           {messagesSortedByResponseIdAndTimestamp.map((group, ind) => {
             const isLastGroupWithContent = ind === lastGroupWithContentIndex;
 
@@ -286,7 +277,7 @@ const AgentMessages = ({
                         allowFeedback={allowFeedback}
                         initialFeedback={getInitialFeedback(message)}
                         lastMessageResponseId={lastMessageResponseId}
-                        messages={group}
+                        messages={messages}
                         orbLogoUrl={orbLogoUrl}
                         showOrbFromConfig={showOrbFromConfig}
                         invertTextColor={invertTextColor}

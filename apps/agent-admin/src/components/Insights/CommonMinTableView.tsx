@@ -38,22 +38,24 @@ const CommonMinTableView = ({
   };
 
   return (
-    <div className="flex-1 py-6">
-      <div className="mb-6">
-        <h1 className="mb-3 text-lg font-semibold text-gray-900">{title}</h1>
-        <p className="text-sm leading-relaxed text-gray-500">{description}</p>
+    <div className="flex flex-1 flex-col gap-6 py-6">
+      <div className="flex flex-col gap-2">
+        <Typography variant="title-18">{title}</Typography>
+        <Typography variant="caption-12-normal" textColor="gray500">
+          {description}
+        </Typography>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-        <div className="border-b border-gray-200 bg-gray-50">
-          <div className="grid grid-cols-12 gap-4 px-2 py-2">
-            <div className="col-span-9">
-              <Typography variant="caption-12-normal" textColor="gray500">
+      <div className="overflow-hidden rounded-lg border border-gray-300 bg-white">
+        <div className="border-b border-gray-300 bg-gray-100">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-9 px-2 py-2">
+              <Typography variant="caption-12-medium" textColor="gray500">
                 {columns[0]}
               </Typography>
             </div>
-            <div className="col-span-3 text-center">
-              <Typography variant="caption-12-normal" textColor="gray500">
+            <div className="col-span-3 border-l border-gray-300 px-2 py-2 text-center">
+              <Typography variant="caption-12-medium" textColor="gray500">
                 {columns[1]}
               </Typography>
             </div>
@@ -68,12 +70,12 @@ const CommonMinTableView = ({
               <div
                 key={index}
                 className={cn(
-                  'grid grid-cols-12 gap-4 px-2 py-2 transition-colors hover:bg-gray-50',
+                  'grid grid-cols-12 gap-4  transition-colors hover:bg-gray-50',
                   onRowClick && 'cursor-pointer',
                 )}
                 onClick={() => handleRowClick(row)}
               >
-                <div className="col-span-9 flex items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="col-span-9 flex items-center gap-3 overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2">
                   {'icon' in row && row.icon ? (
                     <div className="flex-shrink-0">
                       <div className="flex h-6 w-6 items-center justify-center rounded-md bg-bluegray-200">
@@ -85,7 +87,7 @@ const CommonMinTableView = ({
                     {row.text}
                   </span>
                 </div>
-                <div className="col-span-3 flex items-center justify-center">
+                <div className="col-span-3 flex items-center justify-center border-l border-gray-200">
                   <span className="text-sm text-gray-900">{row.value}</span>
                 </div>
               </div>

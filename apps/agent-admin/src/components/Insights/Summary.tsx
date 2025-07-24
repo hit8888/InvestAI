@@ -22,7 +22,7 @@ const Summary = ({ start_date, end_date, timezone }: SummaryProps) => {
   return (
     <div className="py-6">
       <div className="rounded-2xl bg-gradient-to-r from-blue-700 via-pink-500 to-sky-400 p-0.5">
-        <div className="rounded-2xl bg-white p-6">
+        <div className="rounded-2xl bg-white p-4">
           <div className="mb-4 flex items-center justify-between">
             <div className="abc flex items-center gap-2">
               <AiSparklesIcon className="h-6 w-5" />

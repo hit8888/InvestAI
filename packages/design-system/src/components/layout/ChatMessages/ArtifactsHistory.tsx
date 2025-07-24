@@ -33,18 +33,17 @@ const ArtifactsHistory = ({
 }: IProps) => {
   const isMobile = useIsMobile();
   const isArtifactMessage = checkIsArtifactMessage(message);
+  const currentArtifactId = isArtifactMessage ? message.message.artifact_data?.artifact_id : '';
 
   const { isQualificationFormArtifact, artifactContentWithMetadata } =
     useNormalAndQualificationFormArtifactMetadataProvider({
-      artifactId: isArtifactMessage ? message.message.artifact_data?.artifact_id : '',
+      artifactId: currentArtifactId,
       messages,
     });
 
   if (!isArtifactMessage) return null;
 
   const artifactType = isArtifactMessage ? message.message.artifact_data?.artifact_type : undefined;
-
-  const activeArtifactId = isArtifactMessage ? message.message.artifact_data?.artifact_id : '';
 
   const artifactManager = new ArtifactManager(message.message);
   const artifactTitle = artifactManager.getArtifactTitle();
@@ -62,7 +61,7 @@ const ArtifactsHistory = ({
         setIsArtifactPlaying={setIsArtifactPlaying}
         artifactType={artifactType}
         artifactContent={artifactContentWithMetadata as ArtifactContentWithMetadataProps}
-        activeArtifactId={activeArtifactId}
+        activeArtifactId={currentArtifactId}
         handleSendUserMessage={handleSendUserMessage}
         isMediaTakingFullWidth={false}
         onSlideItemClick={EMPTY_FUNCTION}

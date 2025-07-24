@@ -5,6 +5,7 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { checkIfCTAButtonDisabled, checkIfCTAButtonShown } from '@meaku/core/utils/messageUtils';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   messages: WebSocketMessage[];
@@ -12,12 +13,11 @@ interface IProps {
   isHidden?: boolean;
   ctaConfig?: CTAConfigType;
   invertTextColor?: boolean;
-  isMobile?: boolean;
 }
 
-const AgentCTA = ({ handleSendMessage, messages, isHidden, ctaConfig, invertTextColor, isMobile }: IProps) => {
+const AgentCTA = ({ handleSendMessage, messages, isHidden, ctaConfig, invertTextColor }: IProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-
+  const isMobile = useIsMobile();
   const isCTAButtonDisabled = checkIfCTAButtonDisabled(messages);
   const shouldCTAButtonShow = checkIfCTAButtonShown(messages);
 
@@ -42,13 +42,13 @@ const AgentCTA = ({ handleSendMessage, messages, isHidden, ctaConfig, invertText
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CTA_BUTTON_CLICKED, { ctaMessage, ctaText });
   }, [ctaUrl, ctaMessage, ctaText, handleSendMessage, trackAgentbotEvent]);
 
-  if (isHidden || !shouldCTAButtonShow) {
+  if (isHidden || (!shouldCTAButtonShow && isMobile)) {
     return null;
   }
 
   return (
     <Button
-      variant={isMobile ? 'secondary' : invertTextColor ? 'inverted_primary' : 'primary'}
+      variant={invertTextColor ? 'inverted_secondary' : 'secondary'}
       onClick={handlePrimaryCta}
       data-testid="contact-sales-btn"
       disabled={isCTAButtonDisabled}

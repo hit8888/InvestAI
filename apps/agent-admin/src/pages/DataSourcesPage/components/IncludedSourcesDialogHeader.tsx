@@ -20,8 +20,8 @@ const IncludedSourcesDialogHeader = ({ numberOfSources, handleDeleteAll }: IProp
             {`Included ${label}`}
           </Typography>
           <div className="flex items-center justify-center gap-2 rounded-custom-50 bg-gray-200 py-1 pl-2 pr-3">
-            <Icon width="16" height="" className="text-gray-500" />
-            <Typography>{`${numberOfSources} ${label}`}</Typography>
+            <Icon width="16" height="16" className="text-gray-500" />
+            <Typography variant="label-14-medium" textColor="gray500">{`${numberOfSources} ${label}`}</Typography>
           </div>
         </div>
         <Button onClick={handleDeleteAll} variant={'destructive_secondary'} buttonStyle={'rightIcon'}>

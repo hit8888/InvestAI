@@ -56,7 +56,7 @@ export default function HourlyTrafficByWeekday({
             </>
           ) : (
             <>
-              <Badge dotColor={`[${BREAKOUT_COLOR}]`} label={currentDayOfWeek as string} />
+              <Badge dotColor="breakout" label={currentDayOfWeek as string} />
               <Badge dotColor="gray-400" label="Overall Average" />
             </>
           )}

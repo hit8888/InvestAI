@@ -11,10 +11,20 @@ interface IProps {
   messages: WebSocketMessage[];
   invertTextColor?: boolean;
   ctaConfig?: CTAConfigType;
+  hasFirstUserMessageBeenSent: boolean;
 }
 
-const AgentActionPanel = ({ handleSendMessage, disableMessageSend, messages, invertTextColor, ctaConfig }: IProps) => {
+const AgentActionPanel = ({
+  handleSendMessage,
+  disableMessageSend,
+  messages,
+  invertTextColor,
+  ctaConfig,
+  hasFirstUserMessageBeenSent,
+}: IProps) => {
   const isMobile = useIsMobile();
+
+  const isCTAHidden = !isMobile && hasFirstUserMessageBeenSent;
 
   return (
     <div
@@ -29,7 +39,7 @@ const AgentActionPanel = ({ handleSendMessage, disableMessageSend, messages, inv
         messages={messages}
         ctaConfig={ctaConfig}
         invertTextColor={invertTextColor}
-        isMobile={isMobile}
+        isHidden={isCTAHidden}
       />
       <AgentInput
         handleSendMessage={(message) => handleSendMessage({ message: { content: message }, message_type: 'TEXT' })}

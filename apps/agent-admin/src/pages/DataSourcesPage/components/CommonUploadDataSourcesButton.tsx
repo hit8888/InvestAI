@@ -3,13 +3,7 @@ import { useDataSources } from '../../../context/DataSourcesContext';
 import { SourcesCardTypes, SOURCES_DIALOG_DESCRIPTION_MAPPED_OBJECT } from '../constants';
 import AddMorePlusIcon from '@breakout/design-system/components/icons/sources-add-more-plus-icon';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import { useState } from 'react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import DataSourceDialogContent from './DataSourceDialogContent';
@@ -47,14 +41,9 @@ const CommonUploadDataSourcesButton = () => {
           <AddMorePlusIcon width="16" height="16" />
         </Button>
       </DialogTrigger>
-      <DialogContent
-        onInteractOutside={(event) => event.preventDefault()}
-        className="data-sources-dialog-shadow w-full max-w-3xl rounded-2xl border border-gray-200 bg-white p-4"
-      >
-        <DialogHeader className="flex w-full items-start gap-2 text-start">
-          <DialogTitle>
-            <Typography variant={'title-24'} className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
-          </DialogTitle>
+      <DialogContent className="data-sources-dialog-shadow w-full max-w-3xl rounded-2xl border border-gray-200 bg-white p-4">
+        <DialogHeader className="flex w-full items-start gap-1 space-y-0 text-start">
+          <Typography variant={'title-24'} className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
           {selectedType ? (
             <Typography variant={'body-16'} className="text-customSecondaryText">
               {

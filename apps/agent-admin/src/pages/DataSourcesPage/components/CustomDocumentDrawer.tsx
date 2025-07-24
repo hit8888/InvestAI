@@ -1,4 +1,4 @@
-import { Drawer, DrawerContent, DrawerOverlay } from '@breakout/design-system/components/Drawer/index';
+import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import CustomDocumentDrawerContentContainer from './CustomDocumentDrawerContentContainer';
 
 type CustomDocumentDrawerProps = {
@@ -9,8 +9,7 @@ type CustomDocumentDrawerProps = {
 
 const CustomDocumentDrawer = ({ open, onClose, isClickedOnCreateButton = true }: CustomDocumentDrawerProps) => {
   return (
-    <Drawer open={open} dismissible={false} onOpenChange={onClose} direction="right">
-      <DrawerOverlay className="fixed inset-0 bg-transparent_gray_16" />
+    <Drawer open={open} onOpenChange={onClose} direction="right">
       {open && (
         <DrawerContent className="z-[1000] ml-[50%] h-[100vh] w-1/2 rounded-none bg-primary-foreground bg-white">
           <CustomDocumentDrawerContentContainer onClose={onClose} isClickedOnCreateButton={isClickedOnCreateButton} />

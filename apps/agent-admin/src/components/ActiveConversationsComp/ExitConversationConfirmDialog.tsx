@@ -12,7 +12,7 @@ const ExitConversationConfirmDialog = ({ isOpen, onSubmit, onClose }: ExitConver
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogOverlay className="pointer-events-none top-[3.8rem] z-[1000] mx-2 mb-2 rounded-2xl bg-black/30" />
+      <DialogOverlay className="pointer-events-none top-[3.8rem] z-[1000] mx-2 mb-2 rounded-2xl" />
       <DialogContent className="z-[1000] rounded-2xl border border-gray-300 bg-white p-4">
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-1">

@@ -15,11 +15,11 @@ const SourceNameCellValue = ({ value }: { value: SourceNameValue }) => {
         <DataSourcePdfIcon className="text-bluegray-700" width={16} height={16} />
       </div>
       {isUrl ? (
-        <Link to={url} target="_blank" className="w-fit max-w-[400px] truncate text-blue_sec-1000">
+        <Link to={url} title={name} target="_blank" className="w-fit max-w-[300px] truncate text-blue_sec-1000">
           {name}
         </Link>
       ) : (
-        <Typography variant="body-14" className="w-fit max-w-[400px] truncate">
+        <Typography title={name} variant="body-14" className="w-fit max-w-[300px] truncate">
           {name}
         </Typography>
       )}

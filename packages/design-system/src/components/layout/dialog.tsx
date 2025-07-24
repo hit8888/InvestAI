@@ -33,7 +33,7 @@ const DialogContent = React.forwardRef<
   <DialogPortal>
     <DialogTitle className="sr-only" />
     <DialogDescription className="sr-only" />
-    <DialogOverlay className={'bg-primary-foreground/50'} />
+    <DialogOverlay className={'bg-transparent_gray_16 backdrop-blur-[1px]'} />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

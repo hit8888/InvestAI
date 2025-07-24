@@ -158,6 +158,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
             setIsArtifactPlaying={setIsArtifactPlaying}
             orbState={orbState}
             viewType={ViewType.USER}
+            ctaConfig={ctaConfig}
           />
 
           {/* Right Side Static Artifact Container */}
@@ -193,6 +194,7 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
           <AgentActionPanel
             handleSendMessage={handleSendMessage}
             disableMessageSend={disableMessageSend}
+            hasFirstUserMessageBeenSent={hasFirstUserMessageBeenSent}
             messages={messages}
             ctaConfig={ctaConfig}
             invertTextColor={invertTextColor}

@@ -3,13 +3,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogOverlay,
-} from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@breakout/design-system/components/layout/dialog';
 
 interface ReactCropperModalProps {
   isOpen: boolean;
@@ -153,7 +147,6 @@ const ReactCropperModal: React.FC<ReactCropperModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogOverlay className="bg-black/80" />
       <DialogContent className="max-w-4xl bg-white">
         <DialogHeader>
           <DialogTitle>

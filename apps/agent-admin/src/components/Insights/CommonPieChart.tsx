@@ -56,7 +56,7 @@ const CustomTooltip = ({ active, payload, tooltipFormatter, tooltipSuffix }: Cus
       <div className="max-w-xs rounded-xl border border-gray-100 bg-white p-4 shadow-xl backdrop-blur-sm">
         <div className="mb-2 flex items-center gap-2">
           <div className="h-3 w-3 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
-          <p className="text-sm font-bold text-gray-900">{displayName}</p>
+          <p className="text-sm font-bold capitalize text-gray-900">{displayName}</p>
         </div>
         <div className="space-y-1">
           <p className="text-sm font-medium text-gray-700">
@@ -169,13 +169,14 @@ const CommonPieChart = ({
             height={45}
             formatter={legendFormatter}
             wrapperStyle={{
-              fontSize: '13px',
+              fontSize: '14px',
               color: colors.gray[700],
               paddingTop: '8px',
               maxHeight: '60px',
               overflow: 'auto',
               fontWeight: '500',
               lineHeight: '1.2',
+              textTransform: 'capitalize',
             }}
           />
         </PieChart>
