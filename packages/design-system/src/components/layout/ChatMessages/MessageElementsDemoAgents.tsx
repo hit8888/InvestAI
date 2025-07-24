@@ -59,17 +59,24 @@ const MessageElementsDemoAgents = ({
   const analyticsEvent = getAnalyticsEvent(messagesWithSameResponseId);
   const isAnalyticsEvent = !!analyticsEvent;
 
-  if (!showMessageElementForDemoAgents) return null;
+  // Check if the layout container should be shown
+  const hasDocuments = (message.documents?.length ?? 0) > 0;
+  const canShowFeedback = isSalesResponseComplete && !!userMessageSameResponseIDForFeedback;
+  const showTimestamp = viewType !== ViewType.USER;
+
+  const showLayoutContainer = hasDocuments || showTimestamp || canShowFeedback || isAnalyticsEvent;
+
+  if (!showMessageElementForDemoAgents || !showLayoutContainer) return null;
 
   return (
     <MessageItemLayout orientation={Orientation.COLUMN} gap={Gap.MEDIUM} paddingInline={Padding.INLINE}>
-      <MessageDataSources viewType={viewType} dataSources={message.documents ?? []} />
-      {viewType !== ViewType.USER && (
+      {hasDocuments && <MessageDataSources viewType={viewType} dataSources={message.documents ?? []} />}
+      {showTimestamp && (
         <Typography className="w-full" variant="caption-12-medium" textColor="gray400">
           {formattedTimestamp}
         </Typography>
       )}
-      {isSalesResponseComplete && !!userMessageSameResponseIDForFeedback && (
+      {canShowFeedback && (
         <MessageFeedback
           sessionId={sessionId}
           viewType={viewType}

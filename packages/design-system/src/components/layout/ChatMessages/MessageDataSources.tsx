@@ -26,18 +26,12 @@ const MessageDataSources = (props: IProps) => {
   const { dataSources, viewType } = props;
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
-  const totalDocuments = dataSources.length;
-
   const handleDataSourceClick = (doc: DataSourceType) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.DATA_SOURCE_CLICKED, {
       url: doc.url,
       title: doc.title || doc.data_source_name || doc.url,
     });
   };
-
-  if (totalDocuments <= 0) {
-    return null;
-  }
 
   return (
     <div className="w-full rounded-xl border bg-primary-foreground bg-opacity-50 backdrop-blur-lg">
