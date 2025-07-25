@@ -10,8 +10,6 @@ import { getAgentIdFromTenant } from '../utils/apiCalls';
 import { useEffect, useState } from 'react';
 
 const AGENT_BASE_URL = import.meta.env.VITE_AGENT_BASE_URL;
-const AGENT_STG_BASE_URL = import.meta.env.VITE_AGENT_STG_BASE_URL;
-const APP_ENV = import.meta.env.VITE_APP_ENV;
 
 const PlaygroundPage = () => {
   const { tenantName: tenantNameParam } = useParams();
@@ -36,10 +34,7 @@ const PlaygroundPage = () => {
 
   const tenantName = matchingOrg?.['tenant-name'] ?? getTenantFromLocalStorage();
   const userEmail = getUserEmailFromLocalStorage() || '';
-
-  const isStaging = APP_ENV !== 'production';
-
-  const agentBaseUrl = isStaging ? AGENT_STG_BASE_URL : AGENT_BASE_URL;
+  const agentBaseUrl = AGENT_BASE_URL;
 
   // REMINDER: This is for testing purposes only. Comment above line and uncomment below line.
   // const agentBaseUrl = 'http://localhost:5173';
