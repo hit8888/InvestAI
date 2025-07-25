@@ -253,7 +253,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     return (
       <div className="flex h-[90vh] items-end justify-center pb-8 lg:h-screen">
         <div className="flex animate-spin items-center justify-center">
-          <Orb color="#E6E6FA" style={{ width: '48px', height: '48px' }} state={OrbStatusEnum.waiting} />
+          <Orb color="#E6E6FA" style={{ width: '12px', height: '12px' }} state={OrbStatusEnum.waiting} />
         </div>
       </div>
     );

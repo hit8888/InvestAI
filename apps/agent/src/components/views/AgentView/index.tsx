@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import EntryPointBottomBar from './EntryPointBottomBar/index.tsx';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
@@ -18,6 +18,8 @@ import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContai
 import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
+import useSound from '@meaku/core/hooks/useSound';
+import popupsound from '../../../assets/banner-sound.mp3';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -27,6 +29,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const isMobile = useIsMobile();
   const [showPopupContent, setShowPopupContent] = useState(false);
   const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
+  const { play } = useSound(popupsound, 0.1);
 
   const { handleSendUserMessage, lastMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
@@ -103,6 +106,12 @@ const AgentView = ({ fetchSessionData }: IProps) => {
       return 'mx-0 mt-0 h-[100vh] w-[100vw] rounded-3xl';
     } else return 'h-[95vh]';
   }, [isMobile, isAgentOpen, mode]);
+
+  useEffect(() => {
+    if (shouldHideBottomBar || isAgentOpen) return;
+
+    play();
+  }, []);
 
   return (
     <div className={cn(getItemAlignment(), 'mx-auto flex w-[97vw]', containerClassName)}>

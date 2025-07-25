@@ -7,7 +7,7 @@ type UseSendMessageOnQueryParamsProps = {
 };
 
 const useSendMessageOnQueryParams = ({ handleSendMessage }: UseSendMessageOnQueryParamsProps) => {
-  const { getParam } = useUrlParams();
+  const { getParam, removeParam } = useUrlParams();
   const isFirstMessageSent = useRef(false);
 
   // "query" params is the message that is sent to the agent when the page is loaded
@@ -16,11 +16,14 @@ const useSendMessageOnQueryParams = ({ handleSendMessage }: UseSendMessageOnQuer
   useEffect(() => {
     if (queryParamInitialMessage && !isFirstMessageSent.current) {
       isFirstMessageSent.current = true;
-      handleSendMessage({
-        message: {
-          content: queryParamInitialMessage,
-        },
-        message_type: 'TEXT',
+      setTimeout(() => {
+        handleSendMessage({
+          message: {
+            content: queryParamInitialMessage,
+          },
+          message_type: 'TEXT',
+        });
+        removeParam('query');
       });
     }
   }, [queryParamInitialMessage]);

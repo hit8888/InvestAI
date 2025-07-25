@@ -11,7 +11,6 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
 import { AgentEventType, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
-import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import {
   checkIsAdminJoinedMessage,
   checkIsAdminLeftMessage,
@@ -19,6 +18,7 @@ import {
   isDemoAvailable,
   isDemoOptionsMessage,
   isMessageAnalyticsEvent,
+  willMessageRenderHTML,
 } from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
@@ -49,9 +49,6 @@ const UPDATE_LATEST_RESPONSE_ID_FOR_EVENT_TYPE = [
 
 const useWebSocketChat = () => {
   const { orgName = '' } = useParams<AgentParams>();
-  const { getParam, removeParam } = useUrlParams();
-
-  const queryParamInitialMessage = getParam('query');
 
   const isAdmin = useIsAdmin();
   const getMessagePayload = useGetMessagePayload();
@@ -192,17 +189,7 @@ const useWebSocketChat = () => {
 
       handleUpdateOrbState(OrbStatusEnum.thinking);
 
-      if (queryParamInitialMessage) {
-        if (!hasFirstUserMessageBeenSent) {
-          trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
-        }
-        messageQueue.current.push(payload);
-        removeParam('query');
-        setHasFirstUserMessageBeenSent(true);
-        return;
-      }
-
-      if (!hasFirstUserMessageBeenSent && !queryParamInitialMessage) {
+      if (!hasFirstUserMessageBeenSent) {
         trackEvent(ANALYTICS_EVENT_NAMES.USER_SENT_FIRST_MESSAGE);
         // For Showing the first message in the chat history instantly only for non-demo agents
         // For Demo agents, sessionId is generated when the user provides the email address
@@ -220,11 +207,11 @@ const useWebSocketChat = () => {
         handleAddUserMessage(updatedPayload);
         sendMessage(JSON.stringify(updatedPayload));
         resetInactivityTimer();
+      }
 
-        if (adminJoinStatus !== AdminConversationJoinStatus.JOINED) {
-          setIsAMessageBeingProcessed(true);
-          handleAnimatedOrb(response_id);
-        }
+      if (adminJoinStatus !== AdminConversationJoinStatus.JOINED) {
+        setIsAMessageBeingProcessed(true);
+        handleAnimatedOrb(response_id);
       }
     },
     [readyState, sessionId, isAMessageBeingProcessed, adminJoinStatus],
@@ -245,6 +232,13 @@ const useWebSocketChat = () => {
 
       if (response.actor === 'DEMO' && !isDemoOptionsMessage(response) && !isDemoAvailable(response)) return;
 
+      if (
+        (willMessageRenderHTML(response) && response.message_type === 'TEXT') ||
+        (response.message_type === 'STREAM' && response.message.is_complete)
+      ) {
+        play();
+      }
+
       if (response.role === MessageSenderRole.AI) {
         handleUpdateOrbState(OrbStatusEnum.responding);
         handleAddAIMessage(response);
@@ -256,10 +250,6 @@ const useWebSocketChat = () => {
         handleAddAdminMessage(response);
       } else if (response.role === MessageSenderRole.ADMIN) {
         handleAddAdminMessage(response);
-
-        if (document.visibilityState === 'hidden') {
-          play();
-        }
       }
 
       setIsAMessageBeingProcessed(false);
@@ -287,9 +277,6 @@ const useWebSocketChat = () => {
 
     messageQueue.current.forEach((payload) => {
       const updatedPayload = { ...payload, session_id: sessionId };
-      handleAddUserMessage(updatedPayload);
-      setIsAMessageBeingProcessed(true);
-      handleAnimatedOrb(updatedPayload.response_id);
       sendMessage(JSON.stringify(updatedPayload));
       resetInactivityTimer();
     });
