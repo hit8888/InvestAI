@@ -1,16 +1,16 @@
 import {
-  CalendarArtifactContent,
   FormArtifactContent,
   FormArtifactMetadataType,
   SlideArtifactContent,
   SlideImageArtifactContent,
   VideoArtifactContent,
   ArtifactContentWithMetadataProps,
+  AdditionalCalendarArtifactContent,
 } from '@meaku/core/types/artifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import { CalendarArtifact } from './CalendarArtifact';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { SendUserMessageParams } from '@meaku/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import FormArtifact from '../layout/FormArtifact';
 import { ViewType } from '@meaku/core/types/common';
@@ -21,7 +21,7 @@ interface Props {
   artifactContent: ArtifactContentWithMetadataProps;
   activeArtifactId: string;
   logoURL: string;
-  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  handleSendUserMessage: (data: SendUserMessageParams) => void;
   isMediaTakingFullWidth: boolean;
   handleToggleFullScreen: () => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
@@ -82,9 +82,10 @@ export const ArtifactContentUi = ({
     case 'CALENDAR':
       return (
         <CalendarArtifact
-          key={(artifactContent as CalendarArtifactContent).calendar_url}
-          calendarContent={artifactContent as CalendarArtifactContent}
+          key={(artifactContent as AdditionalCalendarArtifactContent).calendar_url}
+          calendarContent={artifactContent as AdditionalCalendarArtifactContent}
           handleSendUserMessage={handleSendUserMessage}
+          artifactResponseId={activeArtifactResponseId}
         />
       );
     case 'FORM':

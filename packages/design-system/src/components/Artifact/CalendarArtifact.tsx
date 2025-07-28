@@ -1,6 +1,6 @@
-import { CalendarArtifactContent, CalendarTypeEnum } from '@meaku/core/types/artifact';
+import { AdditionalCalendarArtifactContent, CalendarTypeEnum } from '@meaku/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
 import { CalendlyCalendar } from './CalendlyCalendar';
 import { CalComCalendar } from './CalComCalendar';
 import { IframeCalendar } from './IframeCalendar';
@@ -9,19 +9,39 @@ import { cn } from '../../lib/cn';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useState } from 'react';
 import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import CalendarBookingSuccessfull from './CalendarBookingSuccessfull';
 
 interface Props {
-  calendarContent: CalendarArtifactContent;
-  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  calendarContent: AdditionalCalendarArtifactContent;
+  handleSendUserMessage: (data: SendUserMessageParams) => void;
+  artifactResponseId?: string;
 }
 
-export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Props) => {
+export const CalendarArtifact = ({ calendarContent, handleSendUserMessage, artifactResponseId }: Props) => {
   const isMobile = useIsMobile();
   const [isLoading, setIsLoading] = useState(true);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sendUserMessage = (data: any) => {
+    handleSendUserMessage({
+      message: {
+        content: '',
+        event_type: AgentEventType.CALENDAR_SUBMIT,
+        event_data: {
+          calendar_type: calendarContent.calendar_type,
+          calendar_url: calendarContent.calendar_url,
+          form_data: data,
+          artifact_id: calendarContent.artifact_id ?? '',
+        },
+      },
+      message_type: 'EVENT',
+      response_id: artifactResponseId,
+    });
+  };
+
   const commonProps = {
     calendarContent,
-    handleSendUserMessage,
+    handleSendUserMessage: sendUserMessage,
     onLoad: () => setIsLoading(false),
   };
 
@@ -47,6 +67,12 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
 
   const calendarContainerRef = useElementScrollIntoView<HTMLDivElement>({ shouldScroll: isMobile });
 
+  // console.log('calendarContent', calendarContent);
+  const isCalendarBookingSuccessfull =
+    !isIframeOrHubSpotCalendar &&
+    calendarContent?.metadata?.calendarContent?.event?.uri &&
+    calendarContent?.metadata?.calendarContent?.invitee?.uri;
+
   const getCalendarLoadingIndicator = () => {
     if (!isLoading) return null;
 
@@ -59,6 +85,10 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage }: Pro
       </div>
     );
   };
+
+  if (isCalendarBookingSuccessfull) {
+    return <CalendarBookingSuccessfull />;
+  }
 
   if (isMobile) {
     return (

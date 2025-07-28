@@ -70,4 +70,4 @@ export enum DeviceType {
   DESKTOP = 'DESKTOP',
 }
 
-export type FormFilledEventType = 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED';
+export type FormFilledEventType = 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED' | 'CALENDAR_SUBMIT';

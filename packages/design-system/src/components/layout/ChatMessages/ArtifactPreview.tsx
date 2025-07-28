@@ -13,6 +13,7 @@ import {
   SlideImageArtifactContent,
   VideoArtifactContent,
   ArtifactContentWithMetadataProps,
+  AdditionalCalendarArtifactContent,
 } from '@meaku/core/types/artifact';
 import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
@@ -144,7 +145,7 @@ const ArtifactPreview = ({
       case 'CALENDAR': {
         return (
           <CalendarArtifact
-            calendarContent={artifactContent as CalendarArtifactContent}
+            calendarContent={artifactContent as AdditionalCalendarArtifactContent}
             handleSendUserMessage={EMPTY_FUNCTION}
           />
         );

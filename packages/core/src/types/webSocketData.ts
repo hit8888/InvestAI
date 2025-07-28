@@ -105,6 +105,13 @@ export const DemoEventDataSchema = z.object({
   resume_demo: z.boolean().nullable(),
 });
 
+export const CalendarSubmitEventDataSchema = z.object({
+  calendar_type: z.nativeEnum(CalendarTypeEnum),
+  calendar_url: z.string(),
+  form_data: z.record(z.string(), z.any()),
+  artifact_id: z.string(),
+});
+
 export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
@@ -240,11 +247,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('CALENDAR_SUBMIT'),
-    event_data: z.object({
-      calendar_type: z.nativeEnum(CalendarTypeEnum),
-      calendar_url: z.string(),
-      form_data: z.record(z.string(), z.any()),
-    }),
+    event_data: CalendarSubmitEventDataSchema,
   }),
   z.object({
     content: z.string(),
@@ -356,6 +359,8 @@ export type ChatHistory = WebSocketMessage[];
 export type FormFieldType = z.infer<typeof FormFieldSchema>;
 
 export type DataSourceType = z.infer<typeof DataSourceSchema>;
+
+export type CalendarSubmitEventData = z.infer<typeof CalendarSubmitEventDataSchema>;
 
 export type SendUserMessageParams = Pick<WebSocketMessage, 'message' | 'message_type'> & {
   response_id?: WebSocketMessage['response_id'];

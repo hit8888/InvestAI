@@ -12,12 +12,18 @@ import {
   DemoEventDataSchema,
   CtaEventDataContent,
 } from '../types/webSocketData';
-import { ArtifactContent, FormArtifactContent, MediaArtifactContent, SuggestionArtifactContent } from '../types';
+import {
+  ArtifactContent,
+  CalendarArtifactContent,
+  FormArtifactContent,
+  MediaArtifactContent,
+  SuggestionArtifactContent,
+} from '../types';
 import { MessageSenderRole, MessageViewType, ViewType, FormFilledEventType } from '../types/common';
 
 export const USER_EVENTS_NOT_FOR_SCROLL_TO_TOP = ['HEARTBEAT', 'USER_INACTIVE'];
 
-const { FORM_FILLED, QUALIFICATION_FORM_FILLED, GENERATING_ARTIFACT } = AgentEventType;
+const { FORM_FILLED, QUALIFICATION_FORM_FILLED, GENERATING_ARTIFACT, CALENDAR_SUBMIT } = AgentEventType;
 
 export const getMessagesWithSameResponseId = (messages: WebSocketMessage[], responseId: string) => {
   return messages.filter((msg) => msg.response_id === responseId);
@@ -370,6 +376,7 @@ export const checkMessageIsFormFilled = (msg: WebSocketMessage, eventType: FormF
     msg.message.event_type === eventType &&
     'event_data' in msg.message &&
     ((eventType === FORM_FILLED && 'form_data' in msg.message.event_data) ||
+      (eventType === CALENDAR_SUBMIT && 'form_data' in msg.message.event_data) ||
       (eventType === QUALIFICATION_FORM_FILLED && 'qualification_responses' in msg.message.event_data))
   );
 };
@@ -390,7 +397,9 @@ export const getFormFilledEventByArtifactId = (
   messages: WebSocketMessage[],
   formArtifactMessage:
     | (WebSocketMessage & {
-        message: ArtifactMessageContent & { artifact_data: ArtifactContent | FormArtifactContent };
+        message: ArtifactMessageContent & {
+          artifact_data: ArtifactContent | FormArtifactContent | CalendarArtifactContent;
+        };
       })
     | undefined
     | null,
@@ -619,6 +628,18 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
         artifact_data: FormArtifactContent;
       };
     } => checkIsFormArtifactBase(msg),
+  );
+};
+
+export const getCalendarArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
+  return messagesWithSameResponseId.find(
+    (
+      msg,
+    ): msg is WebSocketMessage & {
+      message: ArtifactMessageContent & {
+        artifact_data: CalendarArtifactContent;
+      };
+    } => checkIsArtifactMessage(msg) && msg.message.artifact_type === 'CALENDAR' && 'artifact_data' in msg.message,
   );
 };
 

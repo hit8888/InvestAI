@@ -1,13 +1,13 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { ArtifactContentUi } from './ArtifactContentUi';
-import { WebSocketMessage, ArtifactBaseType } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
 import { ArtifactContent, ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
 import { ViewType } from '@meaku/core/types/common';
 
 export interface ArtifactProps {
   viewType: ViewType;
   isMediaTakingFullWidth: boolean;
-  handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  handleSendUserMessage: (data: SendUserMessageParams) => void;
   logoURL: string;
   activeArtifact: (ArtifactBaseType & { content?: ArtifactContent; response_id?: string }) | null;
   handleToggleFullScreen: () => void;

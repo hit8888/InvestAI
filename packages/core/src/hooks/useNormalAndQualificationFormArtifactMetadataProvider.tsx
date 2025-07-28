@@ -5,6 +5,7 @@ import { ArtifactContent, QualificationResponsesType } from '@meaku/core/types/a
 import {
   checkIsQualificationFormArtifact,
   findArtifactMessageWithSameArtifactId,
+  getCalendarArtifactMessage,
   getCtaEvent,
 } from '../utils/messageUtils';
 import { getFormArtifactMessage } from '../utils/messageUtils';
@@ -34,11 +35,19 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
     (msg: WebSocketMessage) => msg.response_id === artifactMessage?.response_id,
   );
 
+  const calendarArtifactMessage = getCalendarArtifactMessage(messagesWithSameResponseId);
+
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
   const formFilledMessage = getFormFilledEventByArtifactId(messages, formArtifactMessage, AgentEventType.FORM_FILLED);
+  const calendarFilledMessage = getFormFilledEventByArtifactId(
+    messages,
+    calendarArtifactMessage,
+    AgentEventType.CALENDAR_SUBMIT,
+  );
 
   const hasFormArtifactMessage = !!formArtifactMessage;
   const hasFormFilledMessage = !!formFilledMessage;
+  const calendarArtifactContent = calendarFilledMessage?.message.event_data ?? null;
 
   const qualificationFormFilled = getFormFilledEventByArtifactId(
     messages,
@@ -75,11 +84,17 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
   const artifactCtaEvent = getCtaEvent(messages, artifactMessage?.response_id, 'right');
   const ctaEvent = getCtaEvent(messages, qualificationFormFilled?.response_id, 'right');
 
+  // Get the artifact type from the artifact message
+  const artifactType = (artifactMessage?.message as ArtifactMessageContent)?.artifact_type;
+
   const artifactContentWithMetadata = {
     ...artifactContent,
+    artifact_type: artifactType,
+    artifact_id: calendarArtifactMessage ? calendarArtifactMessage.message.artifact_data.artifact_id : artifactId,
     metadata: {
       formMetadata,
       qualificationQuestionFormMetadata,
+      calendarContent: calendarArtifactContent,
     },
     ctaEvent,
   };

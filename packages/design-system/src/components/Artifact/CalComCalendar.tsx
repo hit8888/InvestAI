@@ -1,12 +1,12 @@
 import Cal from '@calcom/embed-react';
 import { CalendarArtifactContent } from '@meaku/core/types/artifact';
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useEffect } from 'react';
 import useDelayedCallback from '../../hooks/useDelayedCallback';
 
 interface Props {
   calendarContent: CalendarArtifactContent;
-  handleSendUserMessage?: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleSendUserMessage?: (data: any) => void;
   onLoad?: () => void;
 }
 
@@ -30,18 +30,7 @@ export const CalComCalendar = ({ calendarContent, handleSendUserMessage, onLoad 
     if (!handleSendUserMessage) return;
 
     const handleBookingSuccessful = (data: CalComEventData) => {
-      handleSendUserMessage({
-        message: {
-          content: '',
-          event_type: AgentEventType.CALENDAR_SUBMIT,
-          event_data: {
-            calendar_type: calendarContent.calendar_type,
-            calendar_url: calendarContent.calendar_url,
-            form_data: data,
-          },
-        },
-        message_type: 'EVENT',
-      });
+      handleSendUserMessage(data);
     };
 
     // Listen for successful bookings

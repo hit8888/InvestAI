@@ -1,4 +1,3 @@
-import '@meaku/core/lib/polyfills';
 import '@breakout/design-system/styles.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

@@ -1,5 +1,6 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
+import legacy from '@vitejs/plugin-legacy';
 import dotenv from 'dotenv';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,6 +15,9 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [
     react(),
+    legacy({
+      targets: ['Safari >= 14'],
+    }),
     sentryVitePlugin({
       org: 'breakout',
       project: 'react-frontend',

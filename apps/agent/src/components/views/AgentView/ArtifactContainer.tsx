@@ -1,6 +1,6 @@
 import Artifact from '@breakout/design-system/components/Artifact/index';
 import { useArtifactStore } from '../../../stores/useArtifactStore';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { SendUserMessageParams } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
 import { SupportedArtifactType } from '@meaku/core/utils/messageUtils';
@@ -13,7 +13,7 @@ type IProps = {
   logoURL: string;
   isMediaTakingFullWidth: boolean;
   viewType: ViewType;
-  handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
+  handleSendMessage: (data: SendUserMessageParams) => void;
   onSlideItemClick: (title: string) => void;
   setIsArtifactPlaying: (isPlaying: boolean) => void;
 };

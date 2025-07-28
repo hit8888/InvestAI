@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ViewType } from '@meaku/core/types/common';
-import { SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { CalendarSubmitEventData, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM', 'CALENDAR']);
 
@@ -148,6 +148,7 @@ export enum CalendarTypeEnum {
 }
 
 export const CalendarArtifactSchema = z.object({
+  artifact_id: z.string().optional(),
   calendar_url: z.string(),
   calendar_type: z.nativeEnum(CalendarTypeEnum),
   prefill_data: z.record(z.string(), z.any()).optional(),
@@ -177,10 +178,46 @@ export type QualificationFlowArtifactProps = {
 
 export type ArtifactContentWithMetadataProps =
   | ({
+      artifact_type: 'FORM';
       metadata: {
         formMetadata: FormArtifactMetadataType;
         qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
+        calendarContent: CalendarSubmitEventData | null;
+      };
+      ctaEvent?: WebSocketMessage;
+    } & FormArtifactContent)
+  | ({
+      artifact_type: 'CALENDAR';
+      metadata: {
+        formMetadata: FormArtifactMetadataType;
+        qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
+        calendarContent: {
+          event: { uri: string };
+          invitee: { uri: string };
+        } | null;
+      };
+      ctaEvent?: WebSocketMessage;
+    } & CalendarArtifactContent)
+  | ({
+      artifact_type: 'SLIDE' | 'VIDEO' | 'SLIDE_IMAGE' | 'SUGGESTIONS';
+      metadata: {
+        formMetadata: FormArtifactMetadataType;
+        qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
+        calendarContent: CalendarSubmitEventData | null;
       };
       ctaEvent?: WebSocketMessage;
     } & ArtifactContent)
   | null;
+
+export type AdditionalCalendarArtifactContent = CalendarArtifactContent & {
+  artifact_type: 'CALENDAR';
+  metadata: {
+    formMetadata: FormArtifactMetadataType;
+    qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
+    calendarContent: {
+      event: { uri: string };
+      invitee: { uri: string };
+    } | null;
+  };
+  ctaEvent?: WebSocketMessage;
+};
