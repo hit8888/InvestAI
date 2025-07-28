@@ -47,19 +47,19 @@ const PreDemoQuestion = ({ handleSendUserMessage, isAMessageBeingProcessed, setD
 
   return (
     <MessageItemLayout paddingInline={Padding.INLINE} orientation={Orientation.COLUMN}>
-      <div className="border-t-2 border-dashed border-gray-300"></div>
-
-      <div className="mt-4 flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">
-        <Typography as="span" variant="label-16-semibold" textColor="textPrimary">
-          Would you like to see an interactive demo?
-        </Typography>
-        <div className="flex justify-between">
-          <Button onClick={handleNotForNowButtonClick} disabled={showDemoTopics} variant="system_tertiary">
-            Not for now
-          </Button>
-          <Button disabled={showDemoTopics} onClick={handleYesLetsDoItButtonClick}>
-            Yes, lets do that!
-          </Button>
+      <div className="w-full border-t-2 border-dashed border-gray-300 pt-4">
+        <div className="flex flex-col gap-6 rounded-2xl bg-transparent_gray_3 p-4">
+          <Typography as="span" variant="label-16-semibold" textColor="textPrimary">
+            Would you like to see an interactive demo?
+          </Typography>
+          <div className="flex justify-between">
+            <Button onClick={handleNotForNowButtonClick} disabled={showDemoTopics} variant="system_tertiary">
+              Not for now
+            </Button>
+            <Button disabled={showDemoTopics} onClick={handleYesLetsDoItButtonClick}>
+              Yes, lets do that!
+            </Button>
+          </div>
         </div>
       </div>
     </MessageItemLayout>

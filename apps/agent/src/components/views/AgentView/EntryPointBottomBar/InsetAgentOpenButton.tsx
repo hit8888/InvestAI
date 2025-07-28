@@ -14,7 +14,12 @@ const InsetAgentOpenButton = ({ handleOpenAgent, openInsetAgentButton }: IProps)
   };
   if (!openInsetAgentButton) return null;
 
-  return <button className="absolute inset-0 z-50 rounded-xl" onClick={handleClickOpenAgent}></button>;
+  return (
+    <button
+      className="focus:ring-inset-1 absolute inset-0 z-50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
+      onClick={handleClickOpenAgent}
+    ></button>
+  );
 };
 
 export default InsetAgentOpenButton;

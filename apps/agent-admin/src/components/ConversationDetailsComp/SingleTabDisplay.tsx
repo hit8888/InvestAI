@@ -1,5 +1,6 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import { cn } from '@breakout/design-system/lib/cn';
+import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 import { JSX } from 'react';
 
 type IProps = {
@@ -11,9 +12,9 @@ type IProps = {
 
 const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }: IProps) => {
   return (
-    <div
+    <AccessibleDiv
       onClick={handleTabClick}
-      className={cn('flex cursor-pointer flex-col items-start px-4 pb-4', {
+      className={cn('flex flex-col items-start px-4 pb-4', {
         'border-b-2 border-primary': isTabSelected,
       })}
     >
@@ -36,7 +37,7 @@ const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }:
           {tabLabel}
         </Typography>
       </div>
-    </div>
+    </AccessibleDiv>
   );
 };
 

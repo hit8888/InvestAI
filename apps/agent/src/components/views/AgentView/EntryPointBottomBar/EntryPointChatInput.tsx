@@ -9,6 +9,7 @@ interface EntryPointChatInputProps {
   showOrb: boolean;
   placeholderText: string;
   shouldInputAutoFocus: boolean;
+  disabled: boolean;
 }
 
 const EntryPointChatInput = ({
@@ -17,6 +18,7 @@ const EntryPointChatInput = ({
   showOrb,
   placeholderText,
   shouldInputAutoFocus,
+  disabled,
 }: EntryPointChatInputProps) => {
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   return (
@@ -24,6 +26,7 @@ const EntryPointChatInput = ({
       autoFocus={shouldInputAutoFocus}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       className={cn(
         'h-12 w-full border-none text-gray-900 outline-none ring-0 placeholder:text-blueGray-400 focus:ring-0 ',
         {

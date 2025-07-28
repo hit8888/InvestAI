@@ -3,7 +3,7 @@ import { POPUP_BANNER_COOLDOWN_TIME } from '../../../../constants/localStorage';
 import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
 
 interface UseBannerPopupAnimationProps {
-  setShowOrbAfterBubblesDisappear: (value: boolean) => void;
+  setShowOrbAfterBannerDisappear: (value: boolean) => void;
   hide_after?: number | null;
   show_at?: number;
   setShowPopupContent: (value: boolean) => void;
@@ -16,7 +16,7 @@ interface UseBannerPopupAnimationReturn {
 }
 
 export const useBannerPopupAnimation = ({
-  setShowOrbAfterBubblesDisappear,
+  setShowOrbAfterBannerDisappear,
   hide_after = 10,
   show_at = 10,
   setShowPopupContent,
@@ -52,7 +52,7 @@ export const useBannerPopupAnimation = ({
         setHasShownOnce(true);
 
         // Show Orb Inside Entry bar After hide_after seconds
-        setShowOrbAfterBubblesDisappear(true);
+        setShowOrbAfterBannerDisappear(true);
       }, showAtMs + hideAfterMs);
 
       return () => {
@@ -63,13 +63,13 @@ export const useBannerPopupAnimation = ({
     return () => {
       clearTimeout(popupTimer);
     };
-  }, [hasShownOnce, isPopupInCooldown, setShowOrbAfterBubblesDisappear, show_at, hide_after]);
+  }, [hasShownOnce, isPopupInCooldown, setShowOrbAfterBannerDisappear, show_at, hide_after]);
 
   const handleClosePopup = () => {
     handleUpdateSessionData({
       popupLastClosed: Date.now().toString(),
     });
-    setShowOrbAfterBubblesDisappear(true);
+    setShowOrbAfterBannerDisappear(true);
     setShowPopupContent(false);
   };
 

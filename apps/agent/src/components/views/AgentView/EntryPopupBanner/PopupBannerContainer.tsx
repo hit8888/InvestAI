@@ -3,19 +3,25 @@ import PopupContent from './PopupContent';
 import { useBannerPopupAnimation } from './useBannerPopupAnimation';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 import useValuesFromConfigApi from '../../../../hooks/useValuesFromConfigApi';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 
 interface ContainerProps {
-  setShowOrbAfterBubblesDisappear: (value: boolean) => void;
+  setShowOrbAfterBannerDisappear: (value: boolean) => void;
   popupBannerAlignment: 'left' | 'center' | 'right';
   setShowPopupContent: (value: boolean) => void;
   showPopupContent: boolean;
+  handleSendMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
 }
 
-const PopupWithBubblesContainer = ({
-  setShowOrbAfterBubblesDisappear,
+const PopupBannerContainer = ({
+  setShowOrbAfterBannerDisappear,
   popupBannerAlignment,
   setShowPopupContent,
   showPopupContent,
+  handleSendMessage,
 }: ContainerProps) => {
   const { banner_config, orgName, agentName, orbLogoUrl, showOrb } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
@@ -27,14 +33,29 @@ const PopupWithBubblesContainer = ({
   const subheader = banner_config?.subheader;
 
   const { handleClosePopup } = useBannerPopupAnimation({
-    setShowOrbAfterBubblesDisappear,
+    setShowOrbAfterBannerDisappear,
     setShowPopupContent,
     showPopupContent,
     hide_after,
     show_at,
   });
 
+  const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const { setAgentOpen } = useUrlParams();
+
   const showBanner = show_banner && !hasFirstUserMessageBeenSent;
+
+  const handlePopupContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setAgentOpen();
+    if (subheader) {
+      handleSendMessage({ message: { content: `Elaborate on ${subheader}` }, message_type: 'TEXT' });
+      trackAgentbotEvent(ANALYTICS_EVENT_NAMES.BANNER_CLICKED_FIRST_MESSAGE, {
+        message: subheader,
+        isAgentOpen: true,
+      });
+    }
+  };
 
   if (!showBanner) return null;
 
@@ -42,6 +63,7 @@ const PopupWithBubblesContainer = ({
     <AnimatePresence>
       {showPopupContent && (
         <PopupContent
+          handlePopupContentClick={handlePopupContentClick}
           handleClosePopup={handleClosePopup}
           agentName={agentName}
           orgName={orgName}
@@ -56,4 +78,4 @@ const PopupWithBubblesContainer = ({
   );
 };
 
-export default PopupWithBubblesContainer;
+export default PopupBannerContainer;

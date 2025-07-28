@@ -1,5 +1,5 @@
 import { getTenantIdentifier } from '@meaku/core/utils/index';
-import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
+import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ViewType } from '@meaku/core/types/common';

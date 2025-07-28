@@ -156,7 +156,9 @@ const DataSourceTableView = ({ pageType }: DataSourceTableViewProps) => {
           onFilterContainerHeightChange={setFilterContainerHeight}
         />
       )}
-      {isAllDataSourcesSelectedPerPage && <NudgeMessage itemsSelected={results.length} pageType={pageType} />}
+      {isAllDataSourcesSelectedPerPage && showActionItems && (
+        <NudgeMessage itemsSelected={results.length} pageType={pageType} />
+      )}
       <DataSourceTableViewContent
         columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
         tableData={results}

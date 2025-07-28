@@ -1,4 +1,4 @@
-import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
+import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
 import { useMessageStore } from '../../../stores/useMessageStore';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useArtifactStore } from '../../../stores/useArtifactStore';

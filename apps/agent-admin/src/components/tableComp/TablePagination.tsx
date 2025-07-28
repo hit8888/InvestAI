@@ -2,7 +2,7 @@ import React from 'react';
 import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/CustomFilterDropdown';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
-import NavigationArrowButton from './NavigationArrowButton';
+import PaginationArrowButton from './PaginationArrowButton';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
@@ -74,12 +74,12 @@ const TablePagination: React.FC<PaginationProps> = ({
 
       {/* Navigation buttons */}
       <div className="flex items-center gap-2">
-        <NavigationArrowButton
+        <PaginationArrowButton
           isDisabled={isFirstPage}
           onButtonClick={() => handlePageChange(currentPage - 1)}
           PaginationArrow={PaginationPreviousArrow}
         />
-        <NavigationArrowButton
+        <PaginationArrowButton
           isDisabled={isLastPage}
           onButtonClick={() => handlePageChange(currentPage + 1)}
           PaginationArrow={PaginationNextArrow}

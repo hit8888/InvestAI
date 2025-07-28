@@ -8,7 +8,7 @@ interface NavigationArrowBtnProps {
   PaginationArrow: React.FC<{ color: string }>;
 }
 
-const NavigationArrowButton = ({ isDisabled, onButtonClick, PaginationArrow }: NavigationArrowBtnProps) => {
+const PaginationArrowButton = ({ isDisabled, onButtonClick, PaginationArrow }: NavigationArrowBtnProps) => {
   return (
     <Button
       onClick={onButtonClick}
@@ -23,4 +23,4 @@ const NavigationArrowButton = ({ isDisabled, onButtonClick, PaginationArrow }: N
   );
 };
 
-export default NavigationArrowButton;
+export default PaginationArrowButton;

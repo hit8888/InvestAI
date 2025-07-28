@@ -3,6 +3,7 @@ import Typography from '../../Typography';
 import { useTextTruncation } from '../../../hooks/useTextTruncation';
 import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
 import { ARTIFACT_CONFIG } from '../../../utils/constant';
+import { AccessibleDiv } from '../../accessibility';
 
 type CommonArtifactPreviewProps = {
   artifactType: keyof typeof ArtifactPreviewEnum;
@@ -18,10 +19,9 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
   });
 
   return (
-    <div
-      tabIndex={0}
+    <AccessibleDiv
       onClick={handleClick}
-      className="flex w-full max-w-[424px] cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 pr-4 ring-system hover:bg-transparent_gray_6"
+      className="flex w-full max-w-[424px] items-center gap-2 rounded-lg border border-gray-300 bg-transparent_gray_3 p-2 pr-4 ring-system hover:bg-transparent_gray_6"
     >
       <div className="flex items-center justify-center rounded-lg bg-transparent_gray_3 p-1">
         <Icon className="text-gray-600" height={18} width={18} />
@@ -56,7 +56,7 @@ const CommonArtifactPreview = ({ title, isFetching, artifactType, handleClick }:
           />
         </div>
       )}
-    </div>
+    </AccessibleDiv>
   );
 };
 

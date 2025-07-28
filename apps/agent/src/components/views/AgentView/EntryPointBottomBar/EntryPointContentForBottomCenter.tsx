@@ -16,7 +16,7 @@ import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 interface IProps {
-  showOrbAfterBubblesDisappear: boolean;
+  showOrbAfterBannerDisappear: boolean;
   entryPointAlignment: EntryPointAlignmentType;
   handleSendUserMessage: (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => void;
   handleSuggestedQuestionOnClick: (question: string) => void;
@@ -24,7 +24,7 @@ interface IProps {
 }
 
 const EntryPointContentForBottomCenter = ({
-  showOrbAfterBubblesDisappear,
+  showOrbAfterBannerDisappear,
   entryPointAlignment,
   handleSendUserMessage,
   handleSuggestedQuestionOnClick,
@@ -55,7 +55,7 @@ const EntryPointContentForBottomCenter = ({
   const showRightSideOrb = hasFirstUserMessageBeenSent && !isMobile; // only in desktop
   const showLeftSideOrb = (hasFirstUserMessageBeenSent && isMobile) || !hasFirstUserMessageBeenSent; // Mobile - always, Desktop - only if no user message been sent
 
-  const displayOrb = showLeftSideOrb && !inputValue && showOrbAfterBubblesDisappear;
+  const displayOrb = showLeftSideOrb && !inputValue && showOrbAfterBannerDisappear;
 
   return (
     <div className="w-full rounded-2xl bg-gray-50 p-1">
@@ -80,6 +80,7 @@ const EntryPointContentForBottomCenter = ({
             onChange={(e) => setInputValue(e.target.value)}
             showOrb={displayOrb}
             placeholderText={placeholderTexts}
+            disabled={!isAgentOpen && hasFirstUserMessageBeenSent}
           />
         </div>
 

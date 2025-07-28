@@ -1,5 +1,5 @@
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
-import AgentMessages from '@breakout/design-system/components/layout/AgentMessages';
+import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
 import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { getTenantIdentifier } from '@meaku/core/utils/index';

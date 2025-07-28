@@ -1,6 +1,7 @@
 import { flexRender, Row } from '@tanstack/react-table';
 import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
+import AccessibleTableRow from '../accessibility/AccessibleTableRow';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
 import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
 
@@ -19,10 +20,11 @@ const CustomSingleBodyRowItem = ({ row, handleRowItemClick }: CustomSingleBodyRo
     }
   };
   return (
-    <tr
+    <AccessibleTableRow
       onClick={handleSingleRowItemClick}
+      clickable={!!detailsPageURL}
       key={row.id}
-      className={cn(['flex w-full items-start self-stretch bg-white', detailsPageURL && 'cursor-pointer'])}
+      className={cn('flex w-full items-start self-stretch bg-white')}
     >
       {row.getVisibleCells().map((cell) => {
         const isLastColumn = row.getVisibleCells().indexOf(cell) === row.getVisibleCells().length - 1;
@@ -51,7 +53,7 @@ const CustomSingleBodyRowItem = ({ row, handleRowItemClick }: CustomSingleBodyRo
           </td>
         );
       })}
-    </tr>
+    </AccessibleTableRow>
   );
 };
 

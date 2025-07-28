@@ -1,4 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
+import AccessibleDiv from '../../accessibility/AccessibleDiv';
 import SparkleIcon from '@breakout/design-system/components/icons/sparkle';
 import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
 import BlackThreeStarIcon from '../../icons/black-three-star-icon';
@@ -43,8 +44,9 @@ const Suggestion = ({
   };
 
   return (
-    <div
+    <AccessibleDiv
       onClick={() => handleClickOnSuggestedQuestion(question)}
+      disabled={!isClickEnabled}
       className={cn(
         `flex w-fit cursor-pointer items-center justify-end gap-2 rounded-full py-1 transition-all duration-300 ease-in-out`,
         {
@@ -94,7 +96,7 @@ const Suggestion = ({
         showTooltip={isTextTruncated}
         content={<p className={cn('max-w-[350px]', { 'max-w-[250px]': isMobile })}>{question}</p>}
       />
-    </div>
+    </AccessibleDiv>
   );
 };
 

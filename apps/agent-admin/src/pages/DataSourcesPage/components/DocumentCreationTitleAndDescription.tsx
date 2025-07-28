@@ -22,7 +22,7 @@ const DocumentCreationTitleAndDescription = ({
     <div className="h-full w-full self-stretch bg-gray-100 p-4">
       <div className="flex h-full flex-col gap-4 self-stretch bg-white px-11 py-8">
         <TooltipWrapperDark
-          showTooltip={isSelected}
+          showTooltip={isSelected && title.length > 0}
           trigger={
             <Input
               value={title}

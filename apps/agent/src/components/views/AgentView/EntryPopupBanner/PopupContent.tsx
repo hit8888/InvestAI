@@ -4,7 +4,6 @@ import PopupCloseIcon from '@breakout/design-system/components/icons/popup-close
 import Orb from '@breakout/design-system/components/Orb/index';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
 import { motion } from 'framer-motion';
@@ -20,6 +19,7 @@ export type PopupContentProps = {
   subheader: string | undefined | null;
   handleClosePopup?: () => void;
   popupBannerAlignment: 'left' | 'center' | 'right';
+  handlePopupContentClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const PopupContent = ({
@@ -31,6 +31,7 @@ const PopupContent = ({
   subheader,
   handleClosePopup,
   popupBannerAlignment,
+  handlePopupContentClick,
 }: PopupContentProps) => {
   const isEntryPointOnTheCenterBottom = popupBannerAlignment === 'center';
   const isEntryPointOnTheBottomLeft = popupBannerAlignment === 'left';
@@ -42,7 +43,6 @@ const PopupContent = ({
     play();
   }, [play]);
 
-  const { setAgentOpen } = useUrlParams();
   const handleBannerClose = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     handleClosePopup?.();
@@ -50,7 +50,7 @@ const PopupContent = ({
 
   return (
     <motion.div
-      onClick={setAgentOpen}
+      onClick={handlePopupContentClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}

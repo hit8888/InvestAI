@@ -18,7 +18,7 @@ interface IProps {
   handleOpenAgent: () => void;
   showPopupContent: boolean;
   entryPointAlignment: EntryPointAlignmentType;
-  showOrbAfterBubblesDisappear: boolean;
+  showOrbAfterBannerDisappear: boolean;
 }
 
 const EntryPointBottomBar = ({
@@ -26,7 +26,7 @@ const EntryPointBottomBar = ({
   handleOpenAgent,
   showPopupContent,
   entryPointAlignment,
-  showOrbAfterBubblesDisappear,
+  showOrbAfterBannerDisappear,
 }: IProps) => {
   const isMobile = useIsMobile();
   const { agentName } = useValuesFromConfigApi();
@@ -90,7 +90,7 @@ const EntryPointBottomBar = ({
       ) : (
         <EntryPointContentForBottomCenter
           isMobile={isMobile}
-          showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear && !showPopupContent}
+          showOrbAfterBannerDisappear={showOrbAfterBannerDisappear && !showPopupContent}
           entryPointAlignment={entryPointAlignment}
           handleSendUserMessage={handleSendUserMessage}
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}

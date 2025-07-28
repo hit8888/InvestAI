@@ -1,3 +1,4 @@
+import Button from '@breakout/design-system/components/Button/index';
 import {
   BreadcrumbItem,
   BreadcrumbPage,
@@ -18,8 +19,6 @@ export const BreadcrumbItemComponent = ({ item, isLast, showSeparator, onNavigat
       onNavigate();
     }
   };
-  const role = !isLast ? 'button' : undefined;
-  const tabIndex = !isLast ? 0 : undefined;
   return (
     <>
       <BreadcrumbItem
@@ -28,9 +27,17 @@ export const BreadcrumbItemComponent = ({ item, isLast, showSeparator, onNavigat
           'cursor-pointer  text-gray-400': !isLast,
         })}
       >
-        <div onClick={handleClick} role={role} tabIndex={tabIndex}>
-          {isLast ? <BreadcrumbPage className="font-semibold text-primary">{item}</BreadcrumbPage> : item}
-        </div>
+        {isLast ? (
+          <BreadcrumbPage className="font-semibold capitalize text-system">{item}</BreadcrumbPage>
+        ) : (
+          <Button
+            className="p-0 text-base font-medium capitalize text-gray-400 hover:bg-transparent"
+            variant="system_tertiary"
+            onClick={handleClick}
+          >
+            {item}
+          </Button>
+        )}
       </BreadcrumbItem>
       {showSeparator && <BreadcrumbSeparator className="text-base font-medium text-gray-400">/</BreadcrumbSeparator>}
     </>

@@ -26,10 +26,10 @@ const SlideItem = ({ icon, title, onClick, addLineClamp }: IProps) => {
       }}
     >
       <button
-        type="button"
-        className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow flex h-full w-full cursor-pointer flex-col items-center gap-8 rounded-2xl
-        border border-gray-100 bg-white p-4 text-center ring-system hover:scale-[101%] hover:border-gray-600 focus:border-gray-600"
         onClick={handleClick}
+        type="button"
+        className="slideitem-default-boxshadow hover:slideitem-hover-boxshadow flex h-full w-full flex-col items-center gap-8 rounded-2xl
+        border border-gray-100 bg-white p-4 text-center ring-system hover:scale-[101%] hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-1"
       >
         <div className="flex h-20 w-full items-center justify-center rounded-lg border border-gray-100 bg-gray-25 group-hover/item:bg-gray-50">
           <DynamicIcon icon={icon} className="h-12 w-12 text-customPrimaryText" />

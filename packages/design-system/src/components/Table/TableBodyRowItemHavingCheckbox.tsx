@@ -1,5 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { useCallback } from 'react';
+import AccessibleTableRow from '../accessibility/AccessibleTableRow';
 import { CustomSingleBodyRowItemProps } from './tableTypes';
 import RowCellContent from './RowCellContent';
 import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
@@ -31,13 +32,13 @@ const TableBodyRowItemHavingCheckbox = ({
   };
 
   return (
-    <tr
+    <AccessibleTableRow
       key={row.id}
+      onClick={handleRowItemClick}
+      clickable={isRowItemClickAllowed}
       className={cn('flex w-full items-start self-stretch', {
         'bg-primary/5': isRowSelected,
-        'cursor-pointer': isRowItemClickAllowed,
       })}
-      onClick={handleRowItemClick}
     >
       {row.getVisibleCells().map((cell) => {
         const isFirstColumn = row.getVisibleCells().indexOf(cell) === 0;
@@ -71,7 +72,7 @@ const TableBodyRowItemHavingCheckbox = ({
           </td>
         );
       })}
-    </tr>
+    </AccessibleTableRow>
   );
 };
 

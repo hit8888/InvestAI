@@ -7,6 +7,7 @@ import Separator from '@breakout/design-system/components/layout/separator';
 import ConversationsBreadCrumbShimmer from '../ShimmerComponent/ConversationsBreadCrumbShimmer';
 import { BreadcrumbItemComponent } from './BreadcrumbItemComponent';
 import useLocationPath from '@meaku/core/hooks/useLocationPath';
+import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 
 type IProps = {
   isLoading: boolean;
@@ -46,13 +47,13 @@ const ConversationsBreadCrumb = ({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <div onClick={handleNavigateBack} className="cursor-pointer" role="button" tabIndex={0}>
+            <AccessibleDiv onClick={handleNavigateBack}>
               <BreadcrumbLeftArrow width={'16'} height={'16'} className="text-gray-400" />
-            </div>
+            </AccessibleDiv>
           </BreadcrumbItem>
           {breadCrumbItems.map((item, index) => (
             <BreadcrumbItemComponent
-              key={item}
+              key={`${item}-${index}`}
               item={item}
               isLast={index === breadCrumbItems.length - 1}
               showSeparator={index < breadCrumbItems.length - 1}

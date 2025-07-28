@@ -4,6 +4,7 @@ import { DescriptionValue } from '@meaku/core/types/admin/admin-table';
 import Typography from '@breakout/design-system/components/Typography/index';
 import SparkleThreeStarIcon from '@breakout/design-system/components/icons/sparkle-three-star';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
+import Button from '@breakout/design-system/components/Button/index';
 
 const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
   const [showTrimmed, setShowTrimmed] = useState(true);
@@ -31,7 +32,7 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     );
   };
 
-  const handleShowMore = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleShowMore = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setShowTrimmed((showMore) => !showMore);
   };
@@ -51,12 +52,13 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
         </div>
       )}
       {value.description && (
-        <div
+        <Button
+          variant="tertiary"
           onClick={handleShowMore}
-          className={`flex cursor-pointer items-center gap-2 self-end rounded-md px-3 py-1.5 text-sm font-medium text-primary`}
+          className={`flex items-center gap-2 self-end rounded-md px-3 py-1.5 text-sm font-medium text-primary`}
         >
           <span>{showMoreButtonText}</span>
-        </div>
+        </Button>
       )}
     </div>
   );

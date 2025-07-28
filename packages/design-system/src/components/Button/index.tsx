@@ -20,7 +20,7 @@ export type ButtonVariantTypes =
   | undefined;
 
 export const buttonVariants = cva(
-  'rounded-lg flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed',
+  'rounded-lg flex items-center justify-center gap-2 cursor-pointer text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:cursor-not-allowed focus:outline-none focus:ring-2',
   {
     variants: {
       size: {
@@ -38,19 +38,20 @@ export const buttonVariants = cva(
         primary:
           'bg-primary text-white border-2 border-borderStroke hover:bg-primary/80 focus:bg-primary active:bg-primary ring-primary-class disabled:bg-primary/30',
         secondary:
-          'text-primary border border-primary hover:bg-primary/5 focus:bg-primary/5 active:bg-primary/5 ring-primary-class disabled:border-primary/30 disabled:text-primary/30',
-        tertiary: 'text-primary hover:bg-primary/5 bg-tertiary disabled:text-primary/30',
+          'text-primary border border-primary hover:bg-primary/5 focus:bg-primary/5 active:bg-primary/5 ring-primary-class focus:ring-primary disabled:border-primary/30 disabled:text-primary/30',
+        tertiary: 'text-primary hover:bg-primary/5 bg-tertiary disabled:text-primary/30 focus:ring-primary',
         destructive:
           'bg-destructive-1000 border-2 text-white border-borderStroke hover:bg-destructive-800 focus:bg-destructive-1000 ring-destructive-class disabled:bg-destructive-300',
         destructive_secondary:
           'text-destructive-1000 border border-destructive-1000 hover:bg-destructive-50 focus:bg-destructive-50 ring-destructive-class disabled:border-destructive-300 disabled:text-destructive-300',
         destructive_tertiary:
-          'text-destructive-1000 hover:bg-destructive-50 bg-destructive-tertiary disabled:text-destructive-300',
+          'text-destructive-1000 hover:bg-destructive-50 bg-destructive-tertiary disabled:text-destructive-300 focus:ring-destructive-1000',
         system:
           'bg-gray-600 border-2 text-white border-borderStroke hover:bg-gray-500 focus:bg-gray-600 ring-system-class disabled:bg-gray-300',
         system_secondary:
-          'text-gray-600 border border-gray-600 hover:bg-gray-50 focus:bg-gray-50 ring-system-class disabled:border-gray-300 disabled:text-gray-300',
-        system_tertiary: 'text-gray-600 hover:bg-gray-50 bg-system-tertiary disabled:text-gray-300',
+          'text-gray-600 border border-gray-600 hover:bg-gray-50 focus:bg-gray-50 ring-system-class focus:ring-system disabled:border-gray-300 disabled:text-gray-300',
+        system_tertiary:
+          'text-gray-600 hover:bg-gray-50 bg-system-tertiary focus:ring-system-class disabled:text-gray-300 focus:ring-system',
         inverted_primary:
           'bg-primary/60 border-2 text-customPrimaryText border-borderStroke hover:bg-primary/50 focus:bg-primary/60 ring-inverted-class disabled:bg-primary/30 disabled:text-gray-300',
         inverted_secondary:

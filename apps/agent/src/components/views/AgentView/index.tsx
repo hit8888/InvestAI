@@ -14,7 +14,7 @@ import useValuesFromConfigApi from '../../../hooks/useValuesFromConfigApi.tsx';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import useTabNotification from '@meaku/core/hooks/useTabNotification';
 import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
-import PopupWithBubblesContainer from './EntryPopupBanner/PopupWithBubblesContainer.tsx';
+import PopupBannerContainer from './EntryPopupBanner/PopupBannerContainer.tsx';
 import { EntryPointAlignment } from '@meaku/core/types/entryPoint';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
@@ -28,7 +28,7 @@ interface IProps {
 const AgentView = ({ fetchSessionData }: IProps) => {
   const isMobile = useIsMobile();
   const [showPopupContent, setShowPopupContent] = useState(false);
-  const [showOrbAfterBubblesDisappear, setShowOrbAfterBubblesDisappear] = useState(true);
+  const [showOrbAfterBannerDisappear, setShowOrbAfterBannerDisappear] = useState(true);
   const { play } = useSound(popupsound, 0.1);
 
   const { handleSendUserMessage, lastMessage } = useWebSocketChat();
@@ -128,11 +128,12 @@ const AgentView = ({ fetchSessionData }: IProps) => {
       >
         {/* TODO: Remove the !isMobile condition once we have a proper popup banner for mobile */}
         {showPopupBanner && !isMobile && (
-          <PopupWithBubblesContainer
+          <PopupBannerContainer
+            handleSendMessage={handleSendMessage}
             showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
             setShowPopupContent={setShowPopupContent}
             popupBannerAlignment={entry_point_alignment ?? 'center'}
-            setShowOrbAfterBubblesDisappear={setShowOrbAfterBubblesDisappear}
+            setShowOrbAfterBannerDisappear={setShowOrbAfterBannerDisappear}
           />
         )}
         <EntryPointBottomBar
@@ -140,7 +141,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
           handleOpenAgent={handleOpenAgent}
           showPopupContent={showPopupContent}
           entryPointAlignment={entry_point_alignment ?? 'center'}
-          showOrbAfterBubblesDisappear={showOrbAfterBubblesDisappear}
+          showOrbAfterBannerDisappear={showOrbAfterBannerDisappear}
         />
       </div>
     </div>

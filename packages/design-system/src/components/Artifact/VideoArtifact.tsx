@@ -8,6 +8,7 @@ import { ArtifactEnum } from '@meaku/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 import ReactPlayer from 'react-player';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { AccessibleDiv } from '../accessibility';
 
 interface IProps {
   videoUrl: string;
@@ -101,7 +102,7 @@ const VideoArtifact = ({
 
   const renderVideoPlayer = () => {
     return (
-      <div className="relative h-full w-full" onClick={handlePlayAndPause}>
+      <AccessibleDiv className="relative h-full w-full" onClick={handlePlayAndPause}>
         <PlayAndPauseIconDisplay handlePlayAndPause={handlePlayAndPause} isPlaying={isPlaying} isMobile={isMobile} />
         <ReactPlayer
           ref={playerRef}
@@ -122,7 +123,7 @@ const VideoArtifact = ({
           // Detect when video is seeked to start (restart)
           onSeek={videoOnSeek}
         />
-      </div>
+      </AccessibleDiv>
     );
   };
 
