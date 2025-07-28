@@ -15,10 +15,11 @@ import {
   checkIsAdminJoinedMessage,
   checkIsAdminLeftMessage,
   hasUserSentInactiveMessage,
+  isCtaEvent,
   isDemoAvailable,
   isDemoOptionsMessage,
+  isDisplayedAsTextMessage,
   isMessageAnalyticsEvent,
-  willMessageRenderHTML,
 } from '@meaku/core/utils/messageUtils';
 import useLatestMessageComplete from './useLatestMessageComplete.ts';
 import { useIsAdmin } from '@meaku/core/contexts/UrlDerivedDataProvider';
@@ -233,7 +234,11 @@ const useWebSocketChat = () => {
       if (response.actor === 'DEMO' && !isDemoOptionsMessage(response) && !isDemoAvailable(response)) return;
 
       if (
-        (willMessageRenderHTML(response) && response.message_type === 'TEXT') ||
+        isCtaEvent(response, 'left') ||
+        checkIsAdminJoinedMessage(response) ||
+        checkIsAdminLeftMessage(response) ||
+        isDemoOptionsMessage(response) ||
+        (isDisplayedAsTextMessage(response) && response.message_type !== 'STREAM') ||
         (response.message_type === 'STREAM' && response.message.is_complete)
       ) {
         play();
