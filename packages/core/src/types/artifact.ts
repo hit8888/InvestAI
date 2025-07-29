@@ -215,8 +215,10 @@ export type AdditionalCalendarArtifactContent = CalendarArtifactContent & {
     formMetadata: FormArtifactMetadataType;
     qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
     calendarContent: {
-      event: { uri: string };
-      invitee: { uri: string };
+      form_data: {
+        event: { uri: string };
+        invitee: { uri: string };
+      };
     } | null;
   };
   ctaEvent?: WebSocketMessage;

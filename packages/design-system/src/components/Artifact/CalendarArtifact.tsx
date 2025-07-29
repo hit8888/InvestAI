@@ -70,8 +70,8 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage, artif
   // console.log('calendarContent', calendarContent);
   const isCalendarBookingSuccessfull =
     !isIframeOrHubSpotCalendar &&
-    calendarContent?.metadata?.calendarContent?.event?.uri &&
-    calendarContent?.metadata?.calendarContent?.invitee?.uri;
+    calendarContent?.metadata?.calendarContent?.form_data?.event?.uri &&
+    calendarContent?.metadata?.calendarContent?.form_data?.invitee?.uri;
 
   const getCalendarLoadingIndicator = () => {
     if (!isLoading) return null;
