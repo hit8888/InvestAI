@@ -68,7 +68,7 @@ const AgentInput = ({ handleSendMessage, disableMessageSend, messages, invertTex
                 'caret-customPrimaryText': inputValue.length > 0,
               },
             )}
-            placeholder="Type your message here..."
+            placeholder="Ask anything here..."
             value={inputValue}
             id="agent-input"
             onChange={handleInputValueChange}
