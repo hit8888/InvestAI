@@ -71,3 +71,14 @@ export enum DeviceType {
 }
 
 export type FormFilledEventType = 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED' | 'CALENDAR_SUBMIT';
+
+export enum PlaygroundView {
+  USER_PREVIEW = 'USER_PREVIEW',
+  ADMIN_VIEW = 'ADMIN_VIEW',
+}
+
+export enum AgentResponseWordCountEnum {
+  BRIEF = 'BRIEF',
+  STANDARD = 'STANDARD',
+  DETAILED = 'DETAILED',
+}

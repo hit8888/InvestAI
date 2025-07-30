@@ -89,7 +89,10 @@ const AgentInOpenState = ({ handleSendMessage, handleCloseAgent, isCollapsible, 
   const hasArtifactAiMessage = aiMessages.some(
     (message) => message.message_type === 'ARTIFACT' && isMediaArtifact(message.message.artifact_type),
   );
-  const showStaticArtifactOnRightSide = !hasArtifactAiMessage && !isMobile;
+
+  // we only show the static artifact on the right side
+  // if there are more than 1 ai messages ( other than welcome message that we show instantly ) and there is no artifact ai message
+  const showStaticArtifactOnRightSide = aiMessages.length > 1 && !hasArtifactAiMessage && !isMobile;
 
   const renderOrb = () => (
     <Orb showThreeStar showOrb={showOrb} state={orbState} color={'rgb(var(--primary))'} orbLogoUrl={orbLogoUrl} />

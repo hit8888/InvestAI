@@ -43,6 +43,7 @@ import PanelIntegrationsIcon from '@breakout/design-system/components/icons/pane
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
+import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
 
 const {
   DateRange,
@@ -810,3 +811,41 @@ export const ARTIFACTS_SORT_KEY_TO_FIELD_MAP: Record<keyof ArtifactsSortValues, 
   assetSort: 'asset',
   descriptionSort: 'description',
 };
+
+export const PLAYGROUND_VIEW_TAB_ITEMS = [
+  {
+    itemKey: 'user',
+    itemTitle: 'User Preview',
+    itemValue: PlaygroundView.USER_PREVIEW,
+  },
+  {
+    itemKey: 'admin',
+    itemTitle: 'Admin View',
+    itemValue: PlaygroundView.ADMIN_VIEW,
+  },
+];
+
+export const AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS = [
+  {
+    itemKey: 'brief',
+    itemTitle: 'Brief',
+    itemInfoTitle: 'Brief:',
+    itemDescription: 'Short responses - optimized for quick conversations.',
+    itemValue: AgentResponseWordCountEnum.BRIEF,
+  },
+  {
+    itemKey: 'standard',
+    itemTitle: 'Standard',
+    itemInfoTitle: 'Standard:',
+    itemDescription: 'Balanced length - clear and informative without being too long.',
+    itemValue: AgentResponseWordCountEnum.STANDARD,
+  },
+  {
+    itemKey: 'detailed',
+    itemTitle: 'Detailed',
+    itemInfoTitle: 'Detailed:',
+    itemDescription:
+      'Descriptive responses - when the focus is to educate the visitor, ideal for documentation pages and learning content.',
+    itemValue: AgentResponseWordCountEnum.DETAILED,
+  },
+];

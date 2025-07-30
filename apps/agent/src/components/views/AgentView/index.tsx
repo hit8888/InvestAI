@@ -20,6 +20,7 @@ import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 import useSound from '@meaku/core/hooks/useSound';
 import popupsound from '../../../assets/banner-sound.mp3';
+import { PlaygroundView } from '@meaku/core/types/common';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -34,6 +35,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const { handleSendUserMessage, lastMessage } = useWebSocketChat();
   const { getParam, setParam, setAgentOpen } = useUrlParams();
   const isAgentOpen = getParam('isAgentOpen') === 'true';
+  const view = getParam('view');
 
   const { banner_config, entryPointAlignmentDesktop, entryPointAlignmentMobile, isAgentEnabled } =
     useValuesFromConfigApi();
@@ -113,13 +115,20 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     play();
   }, []);
 
+  const agentInopenState = shouldShowAgent || view === PlaygroundView.USER_PREVIEW;
+
+  let isAgentCollapsible = isCollapsible;
+  if (view) {
+    isAgentCollapsible = view !== PlaygroundView.USER_PREVIEW && isCollapsible;
+  }
+
   return (
     <div className={cn(getItemAlignment(), 'mx-auto flex w-[97vw]', containerClassName)}>
       <AgentInOpenState
         handleSendMessage={handleSendMessage}
         handleCloseAgent={handleCloseAgent}
-        isCollapsible={isCollapsible}
-        showAgentInOpenState={shouldShowAgent && isAgentOpen}
+        isCollapsible={isAgentCollapsible}
+        showAgentInOpenState={agentInopenState && isAgentOpen}
       />
       <div
         className={cn('flex h-full w-full flex-col items-center justify-end', {

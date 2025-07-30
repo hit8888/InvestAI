@@ -10,6 +10,7 @@ import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiRespons
 import useSendMessageOnQueryParams from '@meaku/core/hooks/useSendMessageOnQueryParams';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { cn } from '@breakout/design-system/lib/cn';
+import { PlaygroundView } from '@meaku/core/types/common';
 
 const Feedback = () => {
   const sessionQuery = useContextSelector(ApiProviderContext, (state) => state.sessionQuery);
@@ -18,6 +19,7 @@ const Feedback = () => {
   const manager = useSessionApiResponseManager();
   const isMobile = useIsMobile();
 
+  const view = searchParams.get('view');
   const page_url = searchParams.get('url') || undefined;
 
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
@@ -37,7 +39,13 @@ const Feedback = () => {
 
   return (
     <Backdrop landingPageUrl={page_url} className="relative flex h-full flex-col items-center justify-center">
-      <div className={cn(['flex h-[95vh] w-[98vw]', isMobile && 'mx-0 h-[100dvh] w-full'])}>
+      <div
+        className={cn([
+          'flex h-[95vh] w-[98vw]',
+          isMobile && 'mx-0 h-[100dvh] w-full',
+          view === PlaygroundView.ADMIN_VIEW && 'h-[100vh]',
+        ])}
+      >
         <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />
       </div>
     </Backdrop>

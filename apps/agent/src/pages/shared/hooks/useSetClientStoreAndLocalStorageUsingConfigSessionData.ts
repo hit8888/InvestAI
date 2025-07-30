@@ -99,11 +99,13 @@ const useSetClientStoreAndLocalStorageUsingConfigSessionData = ({
       if (isAdmin && messages.length === DEMO_START) {
         return;
       }
+
+      const userMessages = messages.filter((message) => message.role === 'user');
       // The messages length will be always INITIAL_MESSAGES_STATE_LENGTH for demo and non demo path
       // For Demo => sessionID and prospectID is initially generated when the user provides the email address and start the chat
       // For Non-Demo agent + chat_widget + isAgentOpen = true => messages.length = INITIAL_MESSAGES_STATE_LENGTH,
       // Adding the check for messages.length > INITIAL_MESSAGES_STATE_LENGTH to handle the case where the agent view will be open and chat messages does not go on the leftside and suggested questions should be visible
-      setHasFirstUserMessageBeenSent(messages.length > EMPTY);
+      setHasFirstUserMessageBeenSent(userMessages.length > EMPTY);
     }
   }, [handleUpdateSessionData, isReadOnly, isAdmin, prospectId, sessionId]);
 };
