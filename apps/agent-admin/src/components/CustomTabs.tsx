@@ -29,7 +29,7 @@ const CustomTabs = ({
   return (
     <Tabs value={selectedTab} className="flex flex-col items-start gap-4" onValueChange={handleTabChange}>
       {renderTabInfo && renderTabInfo()}
-      <TabsList className="mt-2 w-full p-0">
+      <TabsList className="w-full p-0">
         <div
           className={cn(
             'flex w-full items-center justify-center gap-2 rounded-full bg-gray-100 p-2',

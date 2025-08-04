@@ -1,5 +1,5 @@
+import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import AgentConfigHeader from '../../components/AgentManagement/AgentConfigHeader';
-import Shimmer from '../../components/AgentManagement/Shimmer';
 
 type LoadingStateProps = {
   title: string;
@@ -16,7 +16,18 @@ const LoadingState = ({ title, description }: LoadingStateProps) => {
         subHeadingVariant={'body-14'}
       />
       <div className="flex max-w-2xl flex-col gap-12 self-stretch">
-        <Shimmer type={'ai-prompts'} />
+        <ShimmerSection />
+      </div>
+    </div>
+  );
+};
+
+const ShimmerSection = () => {
+  return (
+    <div className="flex w-full flex-col gap-6 rounded-2xl border border-gray-200 bg-gray-25 p-6 pt-4">
+      <Skeleton className="h-10 w-full" />
+      <div className="flex w-full justify-end">
+        <Skeleton className="h-10 w-20" />
       </div>
     </div>
   );

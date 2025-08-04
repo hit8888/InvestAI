@@ -13,10 +13,15 @@ import { trackError } from '@meaku/core/utils/error';
 import CustomTabs from '../../components/CustomTabs';
 import { AgentResponseWordCountEnum } from '@meaku/core/types/common';
 import { AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS } from '../../utils/constants';
+import LoadingState from './LoadingState';
 
 const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) => {
   const agentId = getTenantActiveAgentId();
-  const { data: agentConfig, isError } = useAgentConfigsQuery({
+  const {
+    data: agentConfig,
+    isError,
+    isLoading,
+  } = useAgentConfigsQuery({
     agentId: agentId,
     enabled: !!agentId,
   });
@@ -76,6 +81,10 @@ const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) =>
 
     updateConfig(payload);
   };
+
+  if (isLoading) {
+    return <LoadingState title={title} description={description} />;
+  }
 
   const hasError = isError || !agentConfig || !agentConfig.configs || Object.keys(agentConfig.configs).length === 0;
   if (hasError) {

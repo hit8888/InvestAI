@@ -35,7 +35,8 @@ const AccessibleTableRow = React.forwardRef<HTMLTableRowElement, AccessibleTable
         onClick={isInteractive ? handleClick : undefined}
         className={cn(
           {
-            'cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1': isInteractive,
+            'relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1':
+              isInteractive,
             'cursor-not-allowed opacity-50': disabled,
           },
           className,

@@ -32,7 +32,7 @@ const AccessibleDiv = React.forwardRef<HTMLDivElement, AccessibleDivProps>(
         onKeyDown={handleKeyDown}
         onClick={handleClick}
         className={cn(
-          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
           {
             'cursor-not-allowed opacity-50': disabled,
             'cursor-pointer': !disabled,

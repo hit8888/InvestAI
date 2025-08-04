@@ -83,16 +83,9 @@ const MessageFeedback = ({
     },
     onSuccess: (_data, { payload: { category } }) => {
       if (category?.length) {
-        toast.custom(
-          <SuccessToastMessage
-            title="Thanks for your feedback!"
-            subtitle="We appreciate your input and will use it to improve."
-          />,
-          {
-            position: 'bottom-center',
-            duration: 3000,
-          },
-        );
+        SuccessToastMessage({
+          title: 'Thanks for your feedback!',
+        });
       }
     },
   });

@@ -134,6 +134,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   }), //In case of message without url
   z.object({
     content: z.string(),
+    event_type: z.literal('BOOK_MEETING'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
     event_type: z.literal('SUGGESTED_QUESTION_CLICKED'),
     event_data: z.object({}),
   }),
