@@ -1,6 +1,5 @@
 import Button from '@breakout/design-system/components/Button/index';
 import { EditIcon, PlusIcon, SaveIcon } from 'lucide-react';
-import RestartIcon from '@breakout/design-system/components/icons/restart-icon';
 import { Prompt } from '../../queries/query/usePrompts';
 import { cn } from '@breakout/design-system/lib/cn';
 
@@ -22,7 +21,6 @@ type PromptAreaFooterButtonsProps = {
   clickedOnEdit: boolean;
   setClickedOnEdit: (clickedOnEdit: boolean) => void;
   handleClickOnEdit: () => void;
-  handleResetToDefault: () => void;
 };
 
 const PromptAreaFooterButtons = ({
@@ -34,7 +32,6 @@ const PromptAreaFooterButtons = ({
   clickedOnEdit,
   setClickedOnEdit,
   handleClickOnEdit,
-  handleResetToDefault,
 }: PromptAreaFooterButtonsProps) => {
   const handleAddPrompt = () => {
     setClickedOnEdit(true);
@@ -76,13 +73,6 @@ const PromptAreaFooterButtons = ({
             disabled: isMutationPending,
             rightIcon: <PlusIcon />,
             label: 'Add',
-          })}
-          {getButtonUI({
-            key: 'reset-to-default',
-            onClick: handleResetToDefault,
-            disabled: isMutationPending,
-            rightIcon: <RestartIcon />,
-            label: 'Reset to Default',
           })}
         </div>
       )}

@@ -57,45 +57,6 @@ const PromptArea = ({
     setLocalPrompts(updatedPrompts);
   };
 
-  const handleResetToDefault = async () => {
-    try {
-      // Delete all existing prompts from the backend
-      const deletePromises = localPrompts
-        .filter((prompt) => prompt.id !== undefined)
-        .map((prompt) =>
-          deletePromptMutation.mutateAsync({
-            promptId: prompt.id!,
-          }),
-        );
-
-      if (deletePromises.length > 0) {
-        await Promise.all(deletePromises);
-        toast.success('All prompts reset to default successfully');
-      }
-
-      // Clear local state
-      setLocalPrompts([]);
-      setClickedOnEdit(false);
-
-      // Clear original prompts reference
-      originalPromptsRef.current = {};
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      trackError(err, {
-        action: 'Reset to default',
-        component: 'handleResetToDefault function',
-        additionalData: {
-          agentId,
-          tenantName: getTenantIdentifier()?.['tenant-name'],
-          errorMessage: 'Unable to reset prompts to default',
-          error: err?.response?.data,
-        },
-      });
-      toast.error(`Error resetting prompts: ${err?.response?.data?.details || 'Unknown error'}`);
-      console.error('Error resetting prompts:', err);
-    }
-  };
-
   const handlePromptChange = (index: number, value: string) => {
     const updatedPrompts = [...localPrompts];
     updatedPrompts[index].prompt = value;
@@ -285,7 +246,6 @@ const PromptArea = ({
         isMutationPending={
           createPromptMutation.isPending || deletePromptMutation.isPending || updatePromptMutation.isPending
         }
-        handleResetToDefault={handleResetToDefault}
       />
     </>
   );
