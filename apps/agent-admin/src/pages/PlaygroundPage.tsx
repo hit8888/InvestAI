@@ -43,11 +43,13 @@ const PlaygroundPage = () => {
           />
         </div>
       </div>
-      <div className="relative z-10 h-[88vh] self-stretch">
-        <div id="embedded-breakout-agent" className="relative flex h-full w-full flex-col items-start justify-start">
-          <iframe height={'100%'} width={'100%'} src={iframeSrc} />
+      {iframeSrc.length > 0 ? (
+        <div className="relative z-10 h-[88vh] self-stretch">
+          <div id="embedded-breakout-agent" className="relative flex h-full w-full flex-col items-start justify-start">
+            <iframe height={'100%'} width={'100%'} src={iframeSrc} />
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 };

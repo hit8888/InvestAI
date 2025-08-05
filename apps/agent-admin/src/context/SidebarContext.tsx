@@ -53,6 +53,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     isAgentAiPromptsPage,
     isTrainingPlaygroundPage,
     pathURL,
+    isAgentPage,
+    isTrainingPage,
   } = usePageRouteState();
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;
@@ -88,6 +90,12 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
         .map((item) => ({
           ...item,
           navUrl: `${basicURL}${item.navUrl}`,
+          ...(item.children && {
+            children: item.children.map((child) => ({
+              ...child,
+              navUrl: `${basicURL}${child.navUrl}`,
+            })),
+          }),
         }))
         .filter((item) => hasFeatureFlag(organization, item.requiredFeatureFlag));
 
@@ -174,6 +182,33 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return hasChanges ? newState : prev;
     });
   }, [isAgentTabActive, isTrainingTabActive]);
+
+  // Navigate to first child item if user lands on parent routes
+  useEffect(() => {
+    if (!tenantName) return;
+
+    const findAndNavigateToFirstChild = (label: SidebarNavItemsEnum) => {
+      const item = ungroupedItems.find((item) => item.navItem === label);
+
+      if (item?.children && item.children.length > 0) {
+        const firstChildUrl = item.children[0].navUrl;
+        navigate(firstChildUrl, { replace: true });
+      }
+    };
+
+    // Check if user is on a parent route that has children
+    const handleParentRouteRedirect = () => {
+      if (isAgentPage) {
+        // Find agent navigation item
+        findAndNavigateToFirstChild(SidebarNavItemsEnum.AGENT_LABEL);
+      } else if (isTrainingPage) {
+        // Find training navigation item
+        findAndNavigateToFirstChild(SidebarNavItemsEnum.TRAINING_LABEL);
+      }
+    };
+
+    handleParentRouteRedirect();
+  }, [isAgentPage, isTrainingPage, tenantName, ungroupedItems, navigate]);
 
   return (
     <SidebarContext
