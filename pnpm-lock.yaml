@@ -285,6 +285,9 @@ importers:
       react-dropzone:
         specifier: ^14.3.8
         version: 14.3.8(react@19.0.0)
+      react-hook-form:
+        specifier: ^7.54.2
+        version: 7.54.2(react@19.0.0)
       react-hot-toast:
         specifier: ^2.4.1
         version: 2.5.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)

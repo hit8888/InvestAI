@@ -1,85 +1,19 @@
-import { useCreateCustomDocument, useUpdateCustomDocument } from '../../../queries/mutation/useDocumentMutation';
-import { toast } from 'react-hot-toast';
 import Button from '@breakout/design-system/components/Button/index';
+
 import Typography from '@breakout/design-system/components/Typography/index';
 import { XIcon } from 'lucide-react';
-import { CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION, CUSTOM_DOCUMENT_DEFAULT_TITLE } from '../../../utils/constants';
 
 type DocumentCreationHeaderProps = {
   onClose: () => void;
-  id: number;
-  title: string;
-  data: string;
-  relevant_queries: string[];
-  isSelected: boolean;
-  checkIfAnyFieldIsChanged: boolean;
+  isEditing: boolean;
 };
 
-const DocumentCreationHeader = ({
-  onClose,
-  id,
-  title,
-  data,
-  relevant_queries,
-  isSelected,
-  checkIfAnyFieldIsChanged,
-}: DocumentCreationHeaderProps) => {
-  const createCustomDocument = useCreateCustomDocument();
-  const updateCustomDocument = useUpdateCustomDocument();
-
-  const checkIfTitleIsChanged = title !== CUSTOM_DOCUMENT_DEFAULT_TITLE;
-  const checkIfDescriptionIsChanged = data !== CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION;
-
-  const handleSaveAndAdd = () => {
-    if (!isSelected) {
-      if (!checkIfTitleIsChanged && !checkIfDescriptionIsChanged) {
-        toast.error('Please change the title and description');
-        return;
-      }
-      if (!checkIfTitleIsChanged) {
-        toast.error('Please change the title');
-        return;
-      }
-      if (!checkIfDescriptionIsChanged) {
-        toast.error('Please change the description');
-        return;
-      }
-    }
-
-    try {
-      if (isSelected && checkIfAnyFieldIsChanged) {
-        updateCustomDocument.mutateAsync({
-          id,
-          payload: {
-            title: title,
-            data: data,
-            relevant_queries: relevant_queries,
-          },
-        });
-        toast.success('Document updated successfully');
-      } else if (!isSelected && checkIfAnyFieldIsChanged) {
-        createCustomDocument.mutateAsync({
-          title: title,
-          data: data,
-          relevant_queries: relevant_queries,
-        });
-        toast.success('Document created successfully');
-      }
-      onClose();
-    } catch (error) {
-      toast.error('Failed to create document');
-      console.error(error);
-    }
-  };
-
+const DocumentCreationHeader = ({ onClose, isEditing }: DocumentCreationHeaderProps) => {
   return (
     <div className="flex items-center gap-2.5 self-stretch border-b border-gray-200 p-4">
       <Typography variant="title-24" textColor="black" className="flex-1">
-        Document creation
+        {isEditing ? 'Edit Document' : 'Create Document'}
       </Typography>
-      <Button onClick={handleSaveAndAdd} variant="primary">
-        Save & Add
-      </Button>
       <Button onClick={onClose} variant="tertiary" buttonStyle="icon">
         <XIcon className="h-6 w-6 text-system" />
       </Button>

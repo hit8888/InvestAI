@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const useDataSourceEditDrawerPagination = (totalItems: number) => {
-  const [itemIndex, setItemIndex] = useState(0);
+const useDataSourceEditDrawerPagination = (activeItemIndex: number, totalItems: number) => {
+  const [itemIndex, setItemIndex] = useState(activeItemIndex);
   const isFirstItem = itemIndex === 0;
   const isLastItem = itemIndex === totalItems - 1;
 

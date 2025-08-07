@@ -8,18 +8,21 @@ type EditBulkRowItemsDrawerContentContainerProps = {
 };
 
 const EditBulkRowItemsDrawerContentContainer = ({ onClose }: EditBulkRowItemsDrawerContentContainerProps) => {
-  const { getSelectedDataSources } = useDataSourceTableStore();
-  const selectedDataSources = getSelectedDataSources();
-  const paginationState = useDataSourceEditDrawerPagination(selectedDataSources.length);
+  const { results, getSelectedIds } = useDataSourceTableStore();
+  const selectedIds = getSelectedIds();
+
+  const selectedItems = selectedIds
+    .map((id) => results.find((item) => item.id === id))
+    .filter((item) => item !== undefined);
+  const paginatedItems = selectedItems.length > 1 ? selectedItems : results;
+
+  const activeItemIndex = paginatedItems.findIndex((item) => selectedIds.includes(item.id));
+  const paginationState = useDataSourceEditDrawerPagination(activeItemIndex, paginatedItems.length);
 
   return (
     <div className="flex flex-col gap-4">
-      <EditDrawerPaginationHeader
-        selectedDataSources={selectedDataSources}
-        onClose={onClose}
-        paginationState={paginationState}
-      />
-      <DisplayAndEditDataSourceDetails selectedDataSources={selectedDataSources} paginationState={paginationState} />
+      <EditDrawerPaginationHeader items={paginatedItems} onClose={onClose} paginationState={paginationState} />
+      <DisplayAndEditDataSourceDetails selectedDataSources={paginatedItems} paginationState={paginationState} />
     </div>
   );
 };

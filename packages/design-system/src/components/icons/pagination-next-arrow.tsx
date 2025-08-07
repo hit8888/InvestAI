@@ -3,7 +3,14 @@ import React from 'react';
 
 type Props = React.SVGProps<SVGSVGElement>;
 
-const PaginationNextArrow = ({ className = 'text-primary', width, height, color, viewBox, ...props }: Props) => {
+const PaginationNextArrow = ({
+  className = 'text-primary',
+  width = 16,
+  height = 16,
+  color,
+  viewBox = '0 0 16 16',
+  ...props
+}: Props) => {
   return (
     <svg
       className={cn('fill-current', className)}

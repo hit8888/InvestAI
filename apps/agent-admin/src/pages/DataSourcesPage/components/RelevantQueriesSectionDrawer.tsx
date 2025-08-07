@@ -1,10 +1,8 @@
 import Input from '@breakout/design-system/components/layout/input';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { updateArtifact } from '@meaku/core/adminHttp/api';
-import { useEffect, useState } from 'react';
-import { CommonEditDrawerSectionProps } from '../utils';
-import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
-import { toast } from 'react-hot-toast';
+import { Trash2Icon } from 'lucide-react';
+import { DisplayAndEditDataSourceDetailsSectionsProps } from '../types';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const getTypeText = (type: string) => {
   if (type === 'VIDEO') return 'video';
@@ -13,66 +11,29 @@ const getTypeText = (type: string) => {
   return '';
 };
 
-type RelevantQueriesSectionDrawerProps = CommonEditDrawerSectionProps & {
-  onCallBack?: (relevant_queries: string[]) => void;
-};
-
 const RelevantQueriesSectionDrawer = ({
   type,
   relevant_queries,
-  id,
-  title,
-  data,
-  onCallBack,
-}: RelevantQueriesSectionDrawerProps) => {
-  const initiateQueries = () => {
-    if (relevant_queries.length >= 4) {
-      return relevant_queries;
-    }
-    return [...relevant_queries, ...Array(4 - relevant_queries.length).fill('')];
-  };
-
-  const { updateSingleDataSource } = useDataSourceTableStore();
-  const [queries, setQueries] = useState<string[]>(() => initiateQueries());
-
-  useEffect(() => {
-    const newQueries = initiateQueries();
-    setQueries(newQueries);
-  }, [relevant_queries]);
-
+  setValue,
+}: DisplayAndEditDataSourceDetailsSectionsProps) => {
   const handleQueryChange = (index: number, value: string) => {
-    const newQueries = [...queries];
-    newQueries[index] = value;
-    setQueries(newQueries);
+    setValue(`relevant_queries.${index}`, value);
   };
 
-  const handleBlur = async (index: number) => {
-    const currentValue = queries[index];
+  const handleDeleteQuestion = (index: number) => {
+    const newQueries = relevant_queries.filter((_, i) => i !== index);
 
-    // Skip if the value hasn't changed or is empty
-    if (currentValue === relevant_queries[index]) {
-      return;
-    }
-
-    const newRelevantQueries = queries.filter((item) => item.trim().length > 0);
-
-    try {
-      if (onCallBack) {
-        onCallBack(newRelevantQueries);
-        return;
+    // If the array will have less than 4 items after deletion, add empty strings to maintain minimum 4
+    if (newQueries.length < 4) {
+      while (newQueries.length < 4) {
+        newQueries.push('');
       }
-      await updateArtifact(id, { title, data, relevant_queries: newRelevantQueries });
-
-      // Update the data source in the table store
-      updateSingleDataSource(id, { relevant_queries: newRelevantQueries });
-      toast.success('Your updates have been saved');
-    } catch (err) {
-      console.error('Error saving query:', err);
-      toast.error('Error saving query');
     }
+
+    setValue('relevant_queries', newQueries);
   };
 
-  const typeText = getTypeText(type);
+  const typeText = getTypeText(type || '');
 
   return (
     <div className="flex flex-1 flex-col gap-2">
@@ -81,15 +42,23 @@ const RelevantQueriesSectionDrawer = ({
         textColor="black"
       >{`Add sample questions matching the ${typeText}`}</Typography>
       <div className="grid w-full grid-cols-2 gap-4">
-        {queries.map((query, index) => (
-          <Input
-            key={index}
-            value={query}
-            onChange={(e) => handleQueryChange(index, e.target.value)}
-            onBlur={() => handleBlur(index)}
-            placeholder={`Question ${index + 1}`}
-            className="h-11 w-full rounded-lg focus:border-gray-300 focus:ring-4 focus:ring-gray-200"
-          />
+        {relevant_queries.map((query: string, index: number) => (
+          <div key={index} className="relative">
+            <Input
+              value={query}
+              onChange={(e) => handleQueryChange(index, e.target.value)}
+              placeholder={`Question ${index + 1}`}
+              className="h-11 w-full rounded-lg pr-10 focus:border-gray-300 focus:ring-4 focus:ring-gray-200"
+              data-question-index={index}
+            />
+            <button
+              onClick={() => handleDeleteQuestion(index)}
+              className={cn('absolute right-2 top-1/2 -translate-y-1/2 p-1 text-red-500', { hidden: !query.length })}
+              title="Delete question"
+            >
+              <Trash2Icon className="h-4 w-4" />
+            </button>
+          </div>
         ))}
       </div>
     </div>

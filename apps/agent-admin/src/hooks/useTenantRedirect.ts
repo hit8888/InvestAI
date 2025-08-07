@@ -12,7 +12,7 @@ export const useTenantRedirect = () => {
   const { userInfo, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !userInfo) {
       return;
     }
 

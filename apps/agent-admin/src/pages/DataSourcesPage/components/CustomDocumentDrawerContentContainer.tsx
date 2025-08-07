@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import RelevantQueriesSectionDrawer from './RelevantQueriesSectionDrawer';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import DocumentCreationHeader from './DocumentCreationHeader';
@@ -8,6 +7,11 @@ import {
   CUSTOM_DOCUMENT_DEFAULT_TITLE,
   CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION,
 } from '../../../utils/constants';
+import Button from '@breakout/design-system/components/Button/index';
+import { PlusIcon } from 'lucide-react';
+import { useCreateCustomDocument, useUpdateCustomDocument } from '../../../queries/mutation/useDocumentMutation';
+import toast from 'react-hot-toast';
+import { useDataSourceForm } from '../../../hooks/useDataSourceForm';
 
 type CustomDocumentDrawerContentContainerProps = {
   onClose: () => void;
@@ -34,54 +38,106 @@ const CustomDocumentDrawerContentContainer = ({
   const selectedSource = isSelected ? (selectedDataSources[0] as SelectedSource) : CUSTOM_DOCUMENT_DEFAULT_SOURCE;
   const { relevant_queries = [], title = '', data = '', id } = selectedSource;
 
-  const [titleHeader, setTitleHeader] = useState(title || CUSTOM_DOCUMENT_DEFAULT_TITLE);
-  const [description, setDescription] = useState(data || CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION);
-  const [updatedRelevantQueries, setUpdatedRelevantQueries] = useState<string[]>(relevant_queries);
+  const { watchedValues, setValue, hasFormContentChanged, handleAddQuestion, control } = useDataSourceForm({
+    title: title || '',
+    data: data || '',
+    relevant_queries,
+    defaultTitle: CUSTOM_DOCUMENT_DEFAULT_TITLE,
+    defaultData: CUSTOM_DOCUMENT_DEFAULT_DESCRIPTION,
+  });
 
-  const handleUpdateRelevantQueries = (relevant_queries: string[]) => {
-    setUpdatedRelevantQueries(relevant_queries);
-  };
+  const checkIfAnyFieldIsChanged = hasFormContentChanged();
 
-  useEffect(() => {
-    if (relevant_queries.length > 0) {
-      setUpdatedRelevantQueries(relevant_queries);
-    }
-  }, [relevant_queries]);
-
-  const checkIfTitleIsChanged = title !== titleHeader;
-  const checkIfDescriptionIsChanged = data !== description;
-  const checkIfRelevantQueriesAreChanged =
-    relevant_queries.length !== updatedRelevantQueries.length ||
-    relevant_queries.some((query, index) => query !== updatedRelevantQueries[index]);
-
-  const queryProps = {
-    id,
+  const commonProps = {
+    title: watchedValues.title,
+    data: watchedValues.data,
     type: 'DOCUMENT',
-    title: checkIfTitleIsChanged ? titleHeader : title || '',
-    data: checkIfDescriptionIsChanged ? description : data || '',
-    relevant_queries: checkIfRelevantQueriesAreChanged ? updatedRelevantQueries : relevant_queries,
+    relevant_queries: watchedValues.relevant_queries,
+    id,
+    setValue,
   };
 
-  const checkIfAnyFieldIsChanged =
-    checkIfTitleIsChanged || checkIfDescriptionIsChanged || checkIfRelevantQueriesAreChanged;
+  const { mutateAsync: createCustomDocument, isPending: isCreating } = useCreateCustomDocument();
+  const { mutateAsync: updateCustomDocument, isPending: isUpdating } = useUpdateCustomDocument();
+
+  const handleSaveAndAdd = async () => {
+    if (watchedValues.title === '') {
+      toast.error('Title is required');
+      return;
+    }
+
+    if (watchedValues.data === '') {
+      toast.error('Description is required');
+      return;
+    }
+
+    const payload = {
+      title: watchedValues.title,
+      data: watchedValues.data,
+      relevant_queries: watchedValues.relevant_queries.filter((q) => !!q.trim()),
+    };
+
+    try {
+      if (isSelected && checkIfAnyFieldIsChanged) {
+        await updateCustomDocument({
+          id,
+          payload,
+        });
+        toast.success('Document updated successfully');
+      } else if (!isSelected && checkIfAnyFieldIsChanged) {
+        await createCustomDocument(payload);
+        toast.success('Document created successfully');
+      }
+
+      onClose();
+    } catch (error) {
+      toast.error('Failed to create document');
+      console.error(error);
+    }
+  };
+
+  const getSubmitLabel = () => {
+    if (isCreating) return 'Creating ...';
+    if (isUpdating) return 'Saving ...';
+    return isSelected ? 'Save' : 'Create';
+  };
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <DocumentCreationHeader
-        onClose={onClose}
-        {...queryProps}
-        isSelected={isSelected}
-        checkIfAnyFieldIsChanged={checkIfAnyFieldIsChanged}
-      />
-      <DocumentCreationTitleAndDescription
-        title={titleHeader}
-        description={description}
-        setTitle={setTitleHeader}
-        setDescription={setDescription}
-        isSelected={isSelected}
-      />
-      <div className="p-4">
-        <RelevantQueriesSectionDrawer onCallBack={handleUpdateRelevantQueries} {...queryProps} />
+    <div className="flex h-full w-full flex-col overflow-auto">
+      <DocumentCreationHeader isEditing={isSelected} onClose={onClose} />
+      <div
+        className="flex max-h-[calc(100vh-65px)] w-full flex-1 flex-col gap-4 overflow-auto p-4 pb-0"
+        id="datasource-container"
+      >
+        <DocumentCreationTitleAndDescription title={watchedValues.title} control={control} isSelected={isSelected} />
+        <RelevantQueriesSectionDrawer key={`queries-${id}`} {...commonProps} />
+        <div className="sticky bottom-0 -ml-3.5 flex w-[calc(100%+28px)] justify-between bg-white p-3">
+          <Button
+            variant="secondary"
+            onClick={handleAddQuestion}
+            leftIcon={<PlusIcon className="h-4 w-4" />}
+            disabled={
+              !watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1] ||
+              watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1].trim() === ''
+            }
+          >
+            Add Question
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSaveAndAdd}
+            disabled={
+              isCreating ||
+              isUpdating ||
+              !checkIfAnyFieldIsChanged ||
+              watchedValues.title === '' ||
+              watchedValues.data === ''
+            }
+            className="gap-3"
+          >
+            {getSubmitLabel()}
+          </Button>
+        </div>
       </div>
     </div>
   );
