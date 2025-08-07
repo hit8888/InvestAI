@@ -1,19 +1,11 @@
-// import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type LiveConversationsHeaderProps = {
   isLoading?: boolean;
   totalActiveChats: number;
-  isExpanded?: boolean;
-  onToggleView?: () => void;
 };
 
-const LiveConversationsHeader = ({
-  isLoading,
-  totalActiveChats,
-  // isExpanded,
-  // onToggleView,
-}: LiveConversationsHeaderProps) => {
+const LiveConversationsHeader = ({ isLoading, totalActiveChats }: LiveConversationsHeaderProps) => {
   if (isLoading) {
     return (
       <>
@@ -23,23 +15,14 @@ const LiveConversationsHeader = ({
     );
   }
 
-  if (totalActiveChats === 0) {
-    return <NoLiveConversations />;
-  }
-
-  return (
+  return totalActiveChats > 0 ? (
     <div className="flex w-full items-center justify-between gap-4">
       <LiveConversationsCount totalActiveChats={totalActiveChats} />
-      {/* <ViewToggleButton isExpanded={isExpanded} onToggleView={onToggleView} /> */}
     </div>
-  );
+  ) : null;
 };
 
 const LiveConversationsCount = ({ totalActiveChats }: Pick<LiveConversationsHeaderProps, 'totalActiveChats'>) => {
-  if (totalActiveChats === 0) {
-    return null;
-  }
-
   const chatsLabel = totalActiveChats === 1 ? 'Live User' : 'Live Users';
 
   return (
@@ -49,27 +32,5 @@ const LiveConversationsCount = ({ totalActiveChats }: Pick<LiveConversationsHead
     </div>
   );
 };
-
-const NoLiveConversations = () => {
-  return <div className="text-xs text-gray-500">No Live Conversations currently.</div>;
-};
-
-// const ViewToggleButton = ({
-//   isExpanded,
-//   onToggleView,
-// }: Pick<LiveConversationsHeaderProps, 'isExpanded' | 'onToggleView'>) => {
-//   const actionButtonText = isExpanded ? 'Collapse' : 'Expand';
-//   const Icon = isExpanded ? ChevronUp : ChevronDown;
-
-//   return (
-//     <div
-//       onClick={onToggleView}
-//       className="flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-xs font-medium text-bluegray-1000 transition-colors hover:bg-gray-100"
-//     >
-//       <span>{actionButtonText}</span>
-//       <Icon size={16} className="text-bluegray-1000" />
-//     </div>
-//   );
-// };
 
 export default LiveConversationsHeader;

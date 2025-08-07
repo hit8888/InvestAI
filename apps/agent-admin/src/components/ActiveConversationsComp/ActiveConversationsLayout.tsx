@@ -13,6 +13,7 @@ import { ActiveConversationDetailsProvider } from '../../context/ActiveConversat
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
+import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
@@ -147,12 +148,7 @@ const ActiveConversationsLayout = () => {
       style={widthStyle}
     >
       <>
-        <LiveConversationsHeader
-          isLoading={isLoading}
-          totalActiveChats={activeConversations?.length ?? 0}
-          isExpanded={showActiveConversations}
-          onToggleView={() => setShowActiveConversations((prev) => !prev)}
-        />
+        <LiveConversationsHeader isLoading={isLoading} totalActiveChats={activeConversations?.length ?? 0} />
         {activeConversations?.length ? (
           <div className={cn('w-full rounded-3xl', showActiveConversations ? 'block' : 'hidden')}>
             <div className="grid grid-cols-3 gap-4 overflow-hidden">
@@ -186,7 +182,13 @@ const ActiveConversationsLayout = () => {
               ) : null}
             </ActiveConversationDetailsProvider>
           </div>
-        ) : null}
+        ) : (
+          <NoDataFound
+            className="min-h-[80vh]"
+            title="No Live conversations yet"
+            description="No website visitor is having a conversation right now. Time to get more traffic."
+          />
+        )}
       </>
     </div>
   );

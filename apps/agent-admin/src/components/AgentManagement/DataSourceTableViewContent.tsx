@@ -8,6 +8,7 @@ import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
 import { DataSourceSortValues } from '@meaku/core/types/admin/sort';
 import { useDataSourcesDrawer } from '../../context/DataSourcesDrawerContext';
+import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 
 interface TableContentProps {
   tableData: unknown[];
@@ -44,7 +45,9 @@ const DataSourceTableViewContent = memo(
     }
 
     if (!totalRecords) {
-      return <p className="w-full text-center text-2xl font-semibold text-gray-900">{`No ${pageType} added`}</p>;
+      const title = `No ${pageType} added`;
+      const description = `It's empty here, Time to upload ${pageType}.`;
+      return <NoDataFound title={title} description={description} className="min-h-[60vh]" />;
     }
 
     return (

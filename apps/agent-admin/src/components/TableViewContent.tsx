@@ -6,6 +6,7 @@ import { useSidebar } from '../context/SidebarContext';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { SortValues } from '@meaku/core/types/admin/sort';
 import { useSortFilterStore } from '../stores/useSortFilterStore';
+import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 interface TableContentProps {
   tableData: unknown[];
   isConversationTable?: boolean;
@@ -38,9 +39,11 @@ const TableViewContent: React.FC<TableContentProps> = ({
   }
 
   if (!totalRecords) {
-    return (
-      <p className="w-full text-center text-4xl font-semibold text-gray-900">{`${isConversationTable ? 'No conversations yet' : 'Waiting for activity'}`}</p>
-    );
+    const title = isConversationTable ? 'No conversations yet' : 'Waiting for activity';
+    const description = isConversationTable
+      ? 'No interactions or conversations from website visitors yet, Time to get more traffic.'
+      : 'No leads generated from website visitor conversations yet, Time to get more leads.';
+    return <NoDataFound className="min-h-[60vh]" title={title} description={description} />;
   }
 
   return (
