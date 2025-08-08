@@ -1,4 +1,3 @@
-// @ts-expect-error - Temporarily ignoring type errors until types are fixed
 import { Connect } from '@calcom/atoms';
 
 const GoogleConnect = () => {

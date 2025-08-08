@@ -1,29 +1,16 @@
-// @ts-expect-error - Temporarily ignoring type errors until types are fixed
 import { AvailabilitySettings } from '@calcom/atoms';
-import { getBrowserTimezone } from './utils';
+import toast from 'react-hot-toast';
 
 const Availability = () => {
   return (
     <AvailabilitySettings
-      schedule={{
-        name: 'Availability',
-        id: 1,
-        availability: [],
-        isLastSchedule: false,
-        isDefault: true,
-        workingHours: [],
-        dateOverrides: [],
-        timeZone: getBrowserTimezone(),
-        schedule: [],
+      enableOverrides
+      onUpdateSuccess={() => {
+        toast.success('Updated schedule successfully');
       }}
-      weekStart="monday"
-      backPath="/"
-      handleSubmit={async () => {}}
-      handleDelete={() => {}}
-      isDeleting={false}
-      isSaving={false}
-      isLoading={false}
-      timeFormat={null}
+      onDeleteSuccess={() => {
+        toast.success('Deleted schedule successfully');
+      }}
       customClassNames={{
         containerClassName: '!px-0',
         subtitlesClassName: 'text-primary',

@@ -7,7 +7,7 @@ import CalendarForm from './CalendarForm';
 import Card from '../../components/AgentManagement/Card';
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
-import LoadingState from '../AIPromptsPage/LoadingState';
+import LoadingState from '../ControlsPage/LoadingState';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { toast } from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';

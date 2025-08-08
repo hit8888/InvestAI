@@ -6,7 +6,7 @@ import Button from '@breakout/design-system/components/Button/index';
 import { getBrowserTimezone } from './utils';
 import CalendarItem from './CalendarItem';
 import Card from '../../components/AgentManagement/Card';
-import LoadingState from '../AIPromptsPage/LoadingState';
+import LoadingState from '../ControlsPage/LoadingState';
 import useManagedCalendars from '../../queries/query/useManagedCalendarsQuery';
 
 const calOauthClientId = import.meta.env.VITE_CAL_OAUTH_CLIENT_ID;
