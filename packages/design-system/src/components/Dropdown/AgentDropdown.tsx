@@ -20,14 +20,14 @@ interface DropdownProps {
   menuItemClassName?: string;
   menuGroupClassname?: string;
   dropdownOpenClassName?: string;
-  options: string[];
+  options: string[] | { value: string; label: string }[];
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
   fontToShown?: string;
   showTooltipContent?: boolean;
   menuContentAlign?: 'start' | 'center' | 'end';
   menuContentSide?: 'top' | 'right' | 'bottom' | 'left';
-  defaultValue?: string;
+  defaultValue?: string | { value: string; label: string };
   showIcon?: boolean;
   isSearchable?: boolean;
   dropdownMenuHeader?: string;
@@ -65,20 +65,25 @@ const AgentDropdown = ({
 
   useEffect(() => {
     if (defaultValue && !selectedOption) {
-      setSelectedOption(defaultValue);
+      // Extract value from defaultValue regardless of its type
+      const valueToSet = typeof defaultValue === 'string' ? defaultValue : defaultValue.value;
+      setSelectedOption(valueToSet);
     }
   }, [defaultValue]);
 
   // Handle option toggle (select/deselect)
   const handleOptionClick = useCallback(
-    (option: string) => {
-      const isSameOption = selectedOption === option;
+    (option: string | { value: string; label: string }) => {
+      // Get the value to compare (consistent for both string and object options)
+      const optionValue = typeof option === 'string' ? option : option.value;
+      const isSameOption = selectedOption === optionValue;
+
       if (isSameOption && !allowDeselect) {
         setIsDropdownOpen(false);
         return;
       }
 
-      const newSelectedOption = isSameOption ? null : option;
+      const newSelectedOption = isSameOption ? null : optionValue;
       setSelectedOption(newSelectedOption);
       onCallback?.(newSelectedOption);
       setIsDropdownOpen(false);
@@ -101,8 +106,23 @@ const AgentDropdown = ({
   }, []);
 
   const filteredOptions = useMemo(() => {
-    return options.filter((option) => option.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
+    return options.filter((option) => {
+      if (typeof option === 'string') {
+        return option.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+      }
+      return option.label.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+    });
   }, [options, debouncedSearchTerm]);
+
+  const LabelForSelectedOption = useMemo(() => {
+    const option = options.find((option) => {
+      if (typeof option === 'string') {
+        return option === selectedOption;
+      }
+      return option.value === selectedOption;
+    });
+    return typeof option === 'string' ? option : option?.label;
+  }, [selectedOption, options]);
 
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={toggleDropdown}>
@@ -111,7 +131,7 @@ const AgentDropdown = ({
           `inline-flex h-16 w-full max-w-[800px] cursor-pointer 
           items-center justify-between gap-2 rounded-xl 
           border border-gray-300 bg-white p-6 text-xl 
-          text-customPrimaryText shadow-sm hover:bg-gray-25 focus:outline-none`,
+          text-customPrimaryText shadow-sm hover:bg-gray-25 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0`,
           {
             'ring-4 ring-primary/20': isDropdownOpen,
             [dropdownOpenClassName || '']: isDropdownOpen,
@@ -139,9 +159,11 @@ const AgentDropdown = ({
         {selectedOption ? (
           <span
             className={cn('truncate', fontToShown)}
-            style={{ fontFamily: applyFontFamily ? selectedOption : undefined }}
+            style={{
+              fontFamily: applyFontFamily ? selectedOption : undefined,
+            }}
           >
-            {selectedOption}
+            {LabelForSelectedOption}
           </span>
         ) : null}
         <span
@@ -175,13 +197,13 @@ const AgentDropdown = ({
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <DropdownOption
-                  key={option}
+                  key={typeof option === 'string' ? option : option.value}
                   showIcon={showIcon}
-                  menuOptionTitle={option}
+                  menuOptionTitle={typeof option === 'string' ? option : option.label}
                   applyFontFamily={applyFontFamily}
                   menuItemClassName={menuItemClassName}
                   onMenuOptionClicked={() => handleOptionClick(option)}
-                  isSelectedOption={selectedOption === option}
+                  isSelectedOption={selectedOption === (typeof option === 'string' ? option : option.value)}
                 />
               ))
             ) : (

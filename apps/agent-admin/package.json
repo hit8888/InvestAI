@@ -13,6 +13,7 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@calcom/atoms": "1.2.0",
     "@hookform/resolvers": "^3.9.1",
     "@sentry/react": "^8.30.0",
     "@sentry/vite-plugin": "^2.22.4",

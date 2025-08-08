@@ -55,7 +55,7 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
     );
   };
 
-  const getCheckboxElement = () => {
+  const getToggleElement = () => {
     return (
       <Switch
         checked={useFavicon}
@@ -88,7 +88,7 @@ const AgentOrbContainer = ({ agentId, agentConfigs, onUpdate }: AgentOrbContaine
           >
             <TooltipWrapperDark
               showTooltip={useFaviconDisabled}
-              trigger={getCheckboxElement()}
+              trigger={getToggleElement()}
               content={getTooltipContentElement()}
               tooltipAlign="center"
               showArrow={false}

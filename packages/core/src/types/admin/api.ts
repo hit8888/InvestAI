@@ -776,9 +776,28 @@ export const CalendarSchema = z.object({
   name: z.string(),
   calendar_type: z.string().optional(),
   calendar_url: z.string().optional(),
+  description: z.string().optional(),
   is_primary: z.boolean().optional(),
+  timezone: z.string().optional(),
+  metadata: z.record(z.string()).optional(),
   owner_type: z.string().optional(),
   owner_name: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+  is_managed: z.boolean().optional(),
+  access_token: z.string().optional(),
 });
 
 export type CalendarResponse = z.infer<typeof CalendarSchema>;
+
+export const CalendarFormDataSchema = z.object({
+  name: z.string(),
+  calendar_type: z.string(),
+  calendar_url: z.string(),
+  description: z.string().optional(),
+  is_primary: z.boolean().optional(),
+  timezone: z.string().optional(),
+  metadata: z.record(z.string()).optional(),
+});
+
+export type CalendarFormData = z.infer<typeof CalendarFormDataSchema>;

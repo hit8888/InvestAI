@@ -7,6 +7,7 @@ import {
   BulkAddDocumentsResponse,
   BulkProcessDocumentsRequest,
   BulkReprocessArtifactsRequest,
+  CalendarFormData,
   ConversationsPayload,
   CreateAndUpdateCustomDocumentResponse,
   CreateCustomDocumentRequest,
@@ -234,9 +235,25 @@ export const disconnectIntegration = (integrationType: string) => {
   return adminApiClient.post(`/tenant/api/integration/${integrationType}/disconnect`);
 };
 
-export const getCalendars = () => adminApiClient.get(`/tenant/api/calendars`);
+export const getCalendars = () => adminApiClient.get(`/tenant/api/calendars/`);
 
-export const getMyCalendars = () => adminApiClient.get(`/tenant/api/calendars/my-calendars`);
+export const getMyCalendars = () => adminApiClient.get(`/tenant/api/calendars/my-calendars/`);
+
+export const getManagedCalendars = () => adminApiClient.get(`/tenant/api/calendars/managed-calendars/`);
+
+export const createCalendar = (payload: CalendarFormData) => adminApiClient.post(`/tenant/api/calendars/`, payload);
+
+export const updateCalendar = (calendarId: number, payload: Partial<CalendarFormData>) =>
+  adminApiClient.put(`/tenant/api/calendars/${calendarId}/`, payload);
+
+export const deleteCalendar = (calendarId: number) => adminApiClient.delete(`/tenant/api/calendars/${calendarId}/`);
+
+// Create breakout calendar
+export const createBreakoutCalendar = (payload: { timezone?: string }) =>
+  adminApiClient.post(`/tenant/api/calendars/create-managed-calendar/`, payload);
+
+// Refresh user token
+export const refreshUserToken = () => adminApiClient.post(`/tenant/api/calendars/refresh-user-token/`);
 
 // LLMs.txt API endpoints
 export const generateLlmsTxt = (dataSourceId: number, maxPages?: number) => {

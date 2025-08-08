@@ -11,16 +11,25 @@ interface PageContainerProps {
   isLoading?: boolean;
   error?: Error | boolean | null;
   className?: string;
+  containerClassName?: string;
 }
 
-const PageContainer = ({ heading, subHeading, isLoading, error, children, className }: PageContainerProps) => {
+const PageContainer = ({
+  heading,
+  subHeading,
+  isLoading,
+  error,
+  children,
+  className,
+  containerClassName,
+}: PageContainerProps) => {
   if (isLoading) return <DataSourceLoadingState heading={heading} subHeading={subHeading ?? ''} />;
 
   if (error) return <ErrorState />;
 
   return (
     <div className="flex w-full flex-shrink-0 flex-col items-start gap-4 bg-white p-14">
-      <div className="flex-start flex w-full flex-col gap-11 self-stretch">
+      <div className={cn('flex-start flex w-full flex-col gap-11 self-stretch', containerClassName)}>
         <AgentConfigHeader headerLabel={heading} subHeading={subHeading} />
         <div className={cn('flex max-w-2xl flex-col gap-12 self-stretch', className)}>{children}</div>
       </div>

@@ -9,6 +9,8 @@ interface ImportMetaEnv extends import('vite/types/importMeta').ImportMetaEnv {
   readonly VITE_LOGROCKET_APP_ID: string;
   readonly VITE_APP_ENV: string;
   readonly VITE_AGENT_BASE_URL: string;
+  readonly VITE_CAL_OAUTH_CLIENT_ID: string;
+  readonly VITE_CAL_API_URL: string;
 }
 
 interface ImportMeta extends import('vite/types/importMeta').ImportMeta {

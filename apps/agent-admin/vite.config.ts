@@ -25,6 +25,12 @@ export default defineConfig({
     }),
   ],
 
+  define: {
+    // Define process.env variables that Cal.com component expects
+    'process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA': JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA || ''),
+    'process.env.NEXT_PUBLIC_CALCOM_VERSION': JSON.stringify(process.env.CALCOM_VERSION || 'v1.0.0'),
+  },
+
   resolve: {
     alias: [
       {

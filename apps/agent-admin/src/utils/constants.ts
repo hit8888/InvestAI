@@ -351,6 +351,7 @@ export enum AppRoutesEnum {
   AGENT_BRANDING = 'agent/branding',
   AGENT_ENTRYPOINTS = 'agent/entrypoints',
   AGENT_CONTROLS = 'agent/controls',
+  AGENT_CALENDAR = 'agent/calendar',
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
   INSIGHTS = 'insights',
@@ -366,6 +367,7 @@ export enum SidebarNavItemsEnum {
   AGENT_WORKFLOW_LABEL = 'Workflow',
   AGENT_ENTRYPOINTS_LABEL = 'Entry Points',
   AGENT_CONTROLS_LABEL = 'Controls',
+  AGENT_CALENDAR_LABEL = 'Calendar',
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
   INSIGHT_LABEL = 'Insights',
@@ -701,6 +703,10 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
       {
         navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
         navItem: SidebarNavItemsEnum.AGENT_CONTROLS_LABEL,
+      },
+      {
+        navUrl: `/${AppRoutesEnum.AGENT_CALENDAR}`,
+        navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
       },
     ],
   },
