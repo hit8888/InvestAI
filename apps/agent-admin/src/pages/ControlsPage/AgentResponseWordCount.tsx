@@ -1,5 +1,5 @@
 import Card from '../../components/AgentManagement/Card';
-import { CommonAIPromptsProps } from './utils';
+import { CommonControlsProps } from './utils';
 import PromptHeader from './PromptHeader';
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ import { AgentResponseWordCountEnum } from '@meaku/core/types/common';
 import { AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS } from '../../utils/constants';
 import LoadingState from './LoadingState';
 
-const AgentResponseWordCount = ({ title, description }: CommonAIPromptsProps) => {
+const AgentResponseWordCount = ({ title, description }: CommonControlsProps) => {
   const agentId = getTenantActiveAgentId();
   const {
     data: agentConfig,

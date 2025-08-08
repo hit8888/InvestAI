@@ -71,6 +71,54 @@ export const SortSchema = z.object({
 });
 export type SortItem = z.infer<typeof SortSchema>;
 
+// TenantMetadata
+export const TenantMetadataSchema = z.object({
+  account_identifier: z.string(),
+  name: z.string(),
+  metadata: z.object({
+    logo: z.string().optional(),
+    products_and_description: z
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+        }),
+      )
+      .optional(),
+    support: z
+      .object({
+        phone: z.string().optional(),
+        email: z.string().optional(),
+        website_url: z.string().optional(),
+      })
+      .optional(),
+    custom_domain_exclusion_list: z.array(z.string()).optional(),
+  }),
+});
+export type TenantMetadataResponse = z.infer<typeof TenantMetadataSchema>;
+
+// TenantMetadataUpdateRequest - for updating only specific fields
+export const TenantMetadataUpdateRequestSchema = z
+  .object({
+    products_and_description: z
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+        }),
+      )
+      .optional(),
+    support: z
+      .object({
+        phone: z.string().optional(),
+        email: z.string().optional(),
+        website_url: z.string().optional(),
+      })
+      .optional(),
+  })
+  .partial();
+export type TenantMetadataUpdateRequest = z.infer<typeof TenantMetadataUpdateRequestSchema>;
+
 // LeadsPayload
 export const LeadsPayloadSchema = z.object({
   filters: z.array(FilterSchema),

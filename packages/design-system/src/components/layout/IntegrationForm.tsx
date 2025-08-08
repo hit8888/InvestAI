@@ -34,8 +34,8 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ formFields, isOpen, o
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="flex w-[420px] max-w-none flex-col gap-6 rounded-2xl bg-white p-4">
         <DialogHeader className="items-center space-y-1 p-0 text-center">
-          <DialogTitle className="text-2xl font-semibold text-[#101828]">Complete Integration Setup</DialogTitle>
-          <DialogDescription className="text-center text-base text-[#667085]">
+          <DialogTitle className="text-2xl font-semibold text-gray-900">Complete Integration Setup</DialogTitle>
+          <DialogDescription className="text-center text-base text-gray-500">
             To continue, we need a few details to properly configure this integration for your workspace.
           </DialogDescription>
         </DialogHeader>
@@ -52,7 +52,7 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ formFields, isOpen, o
                 render={({ field }) => (
                   <FormItem className="space-y-1">
                     <div className="flex items-center space-x-1 pl-4 pr-1">
-                      <FormLabel className="flex-1 text-xs font-medium text-[#667085]">{formField.label}</FormLabel>
+                      <FormLabel className="flex-1 text-xs font-medium text-gray-500">{formField.label}</FormLabel>
                       {formField.description && (
                         <TooltipWrapperDark
                           showTooltip
@@ -85,7 +85,7 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ formFields, isOpen, o
                 type="submit"
                 variant="system"
                 size="medium"
-                className="px-4 py-3 disabled:bg-[#D0D5DD]"
+                className="px-4 py-3 disabled:bg-gray-300"
                 disabled={!form.formState.isValid || form.formState.isSubmitting}
               >
                 Continue

@@ -62,7 +62,7 @@ const AgentMessagesContainer = ({
     if (isMobile || !hasArtifactOrDemoInMessageHistory) {
       return 'w-full shrink-0';
     } else if (!isMobile && hasArtifactOrDemoInMessageHistory) {
-      return 'w-[35%] shrink-0';
+      return 'w-[35%] shrink-0 pb-1';
     }
     return '';
   }, [isMobile, hasArtifactOrDemoInMessageHistory]);
@@ -101,7 +101,7 @@ const AgentMessagesContainer = ({
         invertTextColor={invertTextColor ?? false}
       />
       {shouldCTAButtonShow && (
-        <div className="flex w-full flex-col items-start justify-start p-4 pb-0">
+        <div className="flex items-center p-4 pb-0">
           <AgentCTA
             handleSendMessage={handleSendMessage}
             messages={messages}

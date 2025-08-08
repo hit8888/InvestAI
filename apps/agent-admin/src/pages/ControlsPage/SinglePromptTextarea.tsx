@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CommonAIPromptsProps, getFilterAppliedValues, getSortedPrompts } from './utils';
+import { CommonControlsProps, getFilterAppliedValues, getSortedPrompts } from './utils.ts';
 import Card from '../../components/AgentManagement/Card.tsx';
 import { Prompt, usePrompts } from '../../queries/query/usePrompts.ts';
 import { useCreatePrompt } from '../../queries/mutation/usePromptMutations.ts';
@@ -16,7 +16,7 @@ const SinglePromptTextarea = ({
   description,
   exampleDescription,
   textareaPlaceholder,
-}: CommonAIPromptsProps) => {
+}: CommonControlsProps) => {
   const agentId = getTenantActiveAgentId();
 
   const allAppliedFilterValues = useMemo(() => {

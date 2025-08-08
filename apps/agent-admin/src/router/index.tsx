@@ -15,7 +15,7 @@ import { AppRoutesEnum } from '../utils/constants';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
-import AIPromptsPage from '../pages/AIPromptsPage';
+import ControlsPage from '../pages/ControlsPage/index.tsx';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
@@ -114,8 +114,8 @@ const routes = [
                 element: <ProtectedRoute element={<EntryPointsPage />} />,
               },
               {
-                path: 'ai-prompts',
-                element: <ProtectedRoute element={<AIPromptsPage />} />,
+                path: 'controls',
+                element: <ProtectedRoute element={<ControlsPage />} />,
               },
             ],
           },

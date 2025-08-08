@@ -50,7 +50,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     isAgentDataSourcesPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
-    isAgentAiPromptsPage,
+    isAgentControlsPage,
     isTrainingPlaygroundPage,
     pathURL,
     isAgentPage,
@@ -79,7 +79,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { AGENT_LABEL, TRAINING_LABEL } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
-    isAgentBrandingPage || isAgentEntrypointsPage || isAgentAiPromptsPage || isAgentDataSourcesPage;
+    isAgentBrandingPage || isAgentEntrypointsPage || isAgentControlsPage || isAgentDataSourcesPage;
 
   const isTrainingTabActive = isTrainingPlaygroundPage;
 

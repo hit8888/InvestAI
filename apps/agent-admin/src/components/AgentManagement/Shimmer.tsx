@@ -1,7 +1,7 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type ShimmerProps = {
-  type?: 'agent-config' | 'ai-prompts';
+  type?: 'agent-config' | 'controls';
 };
 
 const Shimmer = ({ type = 'agent-config' }: ShimmerProps) => {

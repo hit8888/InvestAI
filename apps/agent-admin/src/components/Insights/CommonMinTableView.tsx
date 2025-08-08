@@ -1,5 +1,5 @@
 import Typography from '@breakout/design-system/components/Typography/index';
-import TableShimmer from './TableShimmer';
+import TableShimmer from '../common/TableShimmer';
 import { cn } from '@breakout/design-system/lib/cn';
 
 type DefaultRowData = {

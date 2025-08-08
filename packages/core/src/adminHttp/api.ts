@@ -35,6 +35,8 @@ import {
   ReprocessWebpagesRequest,
   ReprocessWebpagesResponse,
   SessionInsightsRequest,
+  TenantMetadataResponse,
+  TenantMetadataUpdateRequest,
   TopQuestionsByUserResponse,
   UpdateArtifactRequest,
   UpdateCustomDocumentRequest,
@@ -272,3 +274,9 @@ export const getProductInterestDistribution = (payload: InsightsCommonRequest) =
 export const getCountryDistribution = (payload: InsightsCommonRequest) => {
   return adminApiClient.post(`/tenant/api/analytics/country-distribution/`, payload);
 };
+
+export const getTenantMetadata = (tenantIdentifier: string) =>
+  adminApiClient.get<TenantMetadataResponse>(`/core/api/organization/${tenantIdentifier}/metadata/`);
+
+export const updateTenantMetadata = (tenantIdentifier: string, payload: TenantMetadataUpdateRequest) =>
+  adminApiClient.patch<TenantMetadataResponse>(`/core/api/organization/${tenantIdentifier}/metadata/`, payload);
