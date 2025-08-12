@@ -41,11 +41,12 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const [parentUrl, setParentURL] = useState<string | undefined>(undefined);
   const [waitingForParentUrl, setWaitingForParentUrl] = useState(true);
 
-  const { getParam, setParam } = useUrlParams();
+  const { getParam, setParam, removeParam } = useUrlParams();
   const isAdmin = useIsAdmin();
   const is_test = getParam('is_test') === 'true' || isAdmin;
   const test_type = getParam('test_type') ?? undefined;
   const parentUrlParam = getParam('parent_url');
+  const sessionIdFromUrl = getParam('session_id');
   const { data: browsedUrls } = jsonSafeParse(getParam('browsed_urls') ?? '');
   const deviceType = isMobile ? DeviceType.MOBILE : DeviceType.DESKTOP;
 
@@ -54,6 +55,9 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
 
   const isReadOnly = useAreMessagesReadonly();
+
+  const sessionIdFromUrlExists = typeof sessionIdFromUrl === 'string'; // Empty session_id ("") is valid and  is used to reset the session
+  const activeSessionId = sessionIdFromUrlExists ? sessionIdFromUrl : sessionData.sessionId;
 
   const handleEvents = async (event: MessageEvent) => {
     const { type, payload } = event.data;
@@ -143,7 +147,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   const initializeSessionPayload: InitializationPayload = {
     is_admin: isAdmin,
     device_type: deviceType,
-    session_id: sessionData.sessionId,
+    session_id: activeSessionId,
     prospect_id: sessionData.prospectId,
     browser_signature: getBrowserSignature(),
     is_test,
@@ -160,7 +164,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     agentId,
     initializeSessionPayload,
     queryOptions: {
-      enabled: !isReadOnly && !!agentId && !!sessionData.sessionId && !waitingForParentUrl,
+      enabled: !isReadOnly && !!agentId && !waitingForParentUrl && (sessionIdFromUrlExists || !!sessionData.sessionId),
     },
   });
 
@@ -168,6 +172,11 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   useEffect(() => {
     if (sessionQuery.isSuccess) {
       setIsInitApiSuccess(true);
+
+      // Remove session_id from URL once session fetching is complete
+      if (sessionIdFromUrlExists) {
+        removeParam('session_id');
+      }
     } else {
       setIsInitApiSuccess(false);
     }
@@ -181,7 +190,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
         error_message: error.message,
         error_type: 'session_init_api_error',
         agent_id: agentId,
-        session_id: sessionData.sessionId,
+        session_id: activeSessionId,
         prospect_id: sessionData.prospectId,
         mode,
       });
@@ -218,7 +227,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
         mode,
         failed_query: configQuery.error ? 'config' : 'session_init',
         parent_url: parentUrl,
-        session_id: sessionData.sessionId,
+        session_id: activeSessionId,
         prospect_id: sessionData.prospectId,
       });
     }
