@@ -11,6 +11,7 @@ const useManagedCalendars = (options?: BreakoutQueryOptions<CalendarResponse[], 
       const response: AxiosResponse<CalendarResponse[]> = await getManagedCalendars();
       return response.data;
     },
+    refetchOnMount: 'always',
     ...options,
   });
 

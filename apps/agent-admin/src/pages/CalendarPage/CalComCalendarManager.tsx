@@ -1,69 +1,87 @@
 import '@calcom/atoms/globals.min.css';
 import { CalProvider } from '@calcom/atoms';
-import useManagedCalendarAccessToken from '../../hooks/useManagedCalendarAccessToken';
 import CalComCalendarDisplay from './CalComCalendarDisplay';
 import Button from '@breakout/design-system/components/Button/index';
 import { getBrowserTimezone } from './utils';
-import CalendarItem from './CalendarItem';
-import Card from '../../components/AgentManagement/Card';
 import LoadingState from '../ControlsPage/LoadingState';
 import useManagedCalendars from '../../queries/query/useManagedCalendarsQuery';
+import { useCreateManagedCalendar } from '../../queries/mutation/useManagedCalendarMutations';
+import { useState } from 'react';
+import { Loader } from 'lucide-react';
 
 const calOauthClientId = import.meta.env.VITE_CAL_OAUTH_CLIENT_ID;
 const calApiUrl = import.meta.env.VITE_CAL_API_URL;
 
 const CalComCalendarManager = () => {
-  const { accessToken, getValidAccessToken } = useManagedCalendarAccessToken();
+  const { data: managedCalendars, isLoading: isCalendarsLoading } = useManagedCalendars();
+  const timezone = getBrowserTimezone();
 
-  const handleCreateManagedCalendar = async () => {
-    try {
-      await getValidAccessToken(getBrowserTimezone());
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // Get mutation hook for creating calendar
+  const createManagedCalendarMutation = useCreateManagedCalendar();
 
-  const { data: managedCalendars, isLoading } = useManagedCalendars();
-  const hasCalendars = managedCalendars && managedCalendars.length > 0;
-
-  if (isLoading) {
+  // Show loading state while calendars are loading
+  if (isCalendarsLoading) {
     return <LoadingState title="Loading calendars..." description="Please wait while we load your calendars." />;
   }
 
-  if (hasCalendars) {
+  // Check if we have an existing managed calendar with access token
+  const existingAccessToken = managedCalendars?.[0]?.access_token;
+
+  // If we have an access token, show the CalProvider
+  if (existingAccessToken) {
     return (
-      <Card background="GRAY25" border="GRAY200" className="w-full">
-        <div className="flex w-full flex-col gap-4">
-          {managedCalendars?.map((calendar) => (
-            <CalendarItem key={calendar.id} calendar={calendar} showActions={false} />
-          ))}
-        </div>
-      </Card>
+      <CalProvider
+        accessToken={existingAccessToken}
+        clientId={calOauthClientId ?? ''}
+        options={{
+          apiUrl: calApiUrl ?? '',
+        }}
+      >
+        <CalComCalendarDisplay />
+      </CalProvider>
     );
   }
 
+  // No access token available, show create button with lifted state
   return (
-    <CalProvider
-      accessToken={accessToken!}
-      clientId={calOauthClientId ?? ''}
-      options={{
-        apiUrl: calApiUrl ?? '',
-      }}
-    >
-      {accessToken ? (
-        <CalComCalendarDisplay />
-      ) : (
-        <CreateManagedCalendarButton handleCreateManagedCalendar={handleCreateManagedCalendar} />
-      )}
-    </CalProvider>
+    <CreateManagedCalendarButton createManagedCalendarMutation={createManagedCalendarMutation} timezone={timezone} />
   );
 };
 
-const CreateManagedCalendarButton = ({ handleCreateManagedCalendar }: { handleCreateManagedCalendar: () => void }) => {
+interface CreateManagedCalendarButtonProps {
+  createManagedCalendarMutation: ReturnType<typeof useCreateManagedCalendar>;
+  timezone?: string;
+}
+
+const CreateManagedCalendarButton = ({ createManagedCalendarMutation, timezone }: CreateManagedCalendarButtonProps) => {
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleCreateManagedCalendar = async () => {
+    try {
+      await createManagedCalendarMutation.mutateAsync({ timezone });
+      setIsSuccess(true);
+    } catch (error) {
+      console.error(error);
+      // Error is handled by the mutation's error state
+    }
+  };
+
+  const isLoading = createManagedCalendarMutation.isPending;
+  const error = createManagedCalendarMutation.error;
+
   return (
-    <Button onClick={handleCreateManagedCalendar} variant="primary" className="w-full">
-      Create Managed Calendar
-    </Button>
+    <div className="flex flex-col gap-4">
+      <Button
+        onClick={handleCreateManagedCalendar}
+        variant="primary"
+        className="w-full"
+        disabled={isLoading || isSuccess}
+      >
+        {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+        {isSuccess ? 'Calendar Created' : isLoading ? 'Creating Calendar...' : 'Create Managed Calendar'}
+      </Button>
+      {error && <div className="text-destructive-1000">{JSON.stringify(error.message)}</div>}
+    </div>
   );
 };
 

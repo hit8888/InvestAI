@@ -9,29 +9,28 @@ import CopyToClipboardButton from '@breakout/design-system/components/layout/Cop
 import { Pencil, X } from 'lucide-react';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import ExampleInfoIcon from '@breakout/design-system/components/icons/example-info-icon';
+import { getBrowserTimezone } from './utils';
 
 interface CalendarItemProps {
   calendar: CalendarResponse;
-  onEdit?: (calendarId: number, updates: Partial<CalendarFormData>) => void;
-  onDelete?: (calendarId: number) => void;
-  onStartEdit?: (calendarId: number) => void;
-  onCancelEdit?: () => void;
-  isEditing?: boolean;
-  isUpdating?: boolean;
-  isDeleting?: boolean;
-  showActions?: boolean;
+  onEdit: (calendarId: number, updates: Partial<CalendarFormData>) => void;
+  onDelete: (calendarId: number) => void;
+  onStartEdit: (calendarId: number) => void;
+  onCancelEdit: () => void;
+  isEditing: boolean;
+  isUpdating: boolean;
+  isDeleting: boolean;
 }
 
 const CalendarItem = ({
   calendar,
-  onEdit = () => {},
-  onDelete = () => {},
-  onStartEdit = () => {},
-  onCancelEdit = () => {},
-  isEditing = false,
-  isUpdating = false,
-  isDeleting = false,
-  showActions = true,
+  onEdit,
+  onDelete,
+  onStartEdit,
+  onCancelEdit,
+  isEditing,
+  isUpdating,
+  isDeleting,
 }: CalendarItemProps) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -58,11 +57,11 @@ const CalendarItem = ({
         <CalendarForm
           initialData={{
             name: calendar.name,
-            calendar_type: calendar.calendar_type ?? 'personal',
+            calendar_type: calendar.calendar_type ?? 'CALENDLY',
             calendar_url: calendar.calendar_url ?? '',
             description: calendar.description ?? '',
             is_primary: calendar.is_primary ?? false,
-            timezone: calendar.timezone ?? 'IST',
+            timezone: calendar.timezone ?? getBrowserTimezone(),
             metadata: calendar.metadata ?? {},
           }}
           onSubmit={handleEdit}
@@ -149,16 +148,14 @@ const CalendarItem = ({
             )}
           </div>
         </div>
-        {showActions && (
-          <div className="flex flex-col gap-2 pr-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <button type="button" onClick={() => onStartEdit(calendar.id)}>
-              <Pencil className="h-4 w-4 text-gray-500" />
-            </button>
-            <button type="button" onClick={() => setShowDeleteConfirm(true)}>
-              <DeleteIcon className="h-4 w-4 text-destructive-1000" />
-            </button>
-          </div>
-        )}
+        <div className="flex flex-col gap-2 pr-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <button type="button" onClick={() => onStartEdit(calendar.id)}>
+            <Pencil className="h-4 w-4 text-gray-500" />
+          </button>
+          <button type="button" onClick={() => setShowDeleteConfirm(true)}>
+            <DeleteIcon className="h-4 w-4 text-destructive-1000" />
+          </button>
+        </div>
       </div>
     </Card>
   );

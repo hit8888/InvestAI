@@ -37,3 +37,23 @@ export const getBrowserTimezone = () => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return timezone;
 };
+
+// Mapping between URL paths and CalendarTabsEnum
+export const TAB_TO_PATH_MAP: Record<CalendarTabsEnum, string> = {
+  [CalendarTabsEnum.ADD_CALENDAR]: 'calendar',
+  [CalendarTabsEnum.CREATE_CALENDAR]: 'managed-calendar',
+};
+
+export const PATH_TO_TAB_MAP: Record<string, CalendarTabsEnum> = {
+  calendar: CalendarTabsEnum.ADD_CALENDAR,
+  'managed-calendar': CalendarTabsEnum.CREATE_CALENDAR,
+};
+
+// Helper functions
+export const getTabFromPath = (path: string): CalendarTabsEnum => {
+  return PATH_TO_TAB_MAP[path] || CalendarTabsEnum.ADD_CALENDAR;
+};
+
+export const getPathFromTab = (tab: CalendarTabsEnum): string => {
+  return TAB_TO_PATH_MAP[tab];
+};

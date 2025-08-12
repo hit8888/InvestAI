@@ -122,6 +122,10 @@ const routes = [
                 path: 'calendar',
                 element: <ProtectedRoute element={<CalendarPage />} />,
               },
+              {
+                path: 'managed-calendar',
+                element: <ProtectedRoute element={<CalendarPage />} />,
+              },
             ],
           },
           {
