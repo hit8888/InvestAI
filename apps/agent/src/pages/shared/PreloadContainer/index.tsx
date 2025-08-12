@@ -16,7 +16,6 @@ import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
 import { useWidgetMode, WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
-import { cn } from '@breakout/design-system/lib/cn';
 import AgentShimmer from '../../../components/views/AgentView/AgentShimmer';
 import Orb from '@breakout/design-system/components/Orb/index';
 import Button from '@breakout/design-system/components/Button/index';
@@ -259,7 +258,7 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
     );
   }
   return (
-    <div className={cn('mx-0 mt-0 flex h-[100vh] w-[100vw] justify-center rounded-3xl')}>
+    <div className="mx-0 mt-0 flex h-screen w-screen justify-center rounded-3xl">
       <AgentShimmer />
     </div>
   );

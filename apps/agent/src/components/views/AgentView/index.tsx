@@ -101,12 +101,12 @@ const AgentView = ({ fetchSessionData }: IProps) => {
 
   const containerClassName = useMemo(() => {
     if (isAgentOpen && !isMobile && mode === WidgetMode.BOTTOM_BAR) {
-      return 'mt-2 h-[95vh] rounded-3xl';
+      return 'mt-2 h-agent-open rounded-3xl';
     } else if (isMobile) {
-      return 'mx-0 w-full h-[100dvh]';
+      return 'mx-0 w-full h-dvh';
     } else if (mode === WidgetMode.INLINE_EMBEDDED || mode === WidgetMode.EMBEDDED_MODAL) {
-      return 'mx-0 mt-0 h-[100vh] w-[100vw] rounded-3xl';
-    } else return 'h-[95vh]';
+      return 'mx-0 mt-0 h-screen w-screen rounded-3xl';
+    } else return 'h-agent-open';
   }, [isMobile, isAgentOpen, mode]);
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   }
 
   return (
-    <div className={cn(getItemAlignment(), 'mx-auto flex w-[97vw]', containerClassName)}>
+    <div className={cn(getItemAlignment(), 'mx-auto flex w-agent-open', containerClassName)}>
       <AgentInOpenState
         handleSendMessage={handleSendMessage}
         handleCloseAgent={handleCloseAgent}

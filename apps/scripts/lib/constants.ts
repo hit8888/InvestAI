@@ -20,7 +20,7 @@ export const RESPONSIVE_SIZES: AllResponsiveSizes = {
   DESKTOP: {
     DEFAULT: {
       WIDTH: "max(420px, 100vw)",
-      HEIGHT: "max(700px, 90vh)",
+      HEIGHT: "max(700px, 100vh)",
     },
     COLLAPSED: {
       CENTER_WIDTH_INITIAL: "max(420px, 100vw)",

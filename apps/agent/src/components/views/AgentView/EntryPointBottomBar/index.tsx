@@ -60,7 +60,7 @@ const EntryPointBottomBar = ({
 
   const openInsetAgentButton = useMemo(() => {
     if (isMobile) {
-      return true;
+      return isEntryPointOnTheBottomCenter;
     } else {
       if (hasFirstUserMessageBeenSent) {
         return true;

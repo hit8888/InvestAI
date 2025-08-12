@@ -41,9 +41,9 @@ const Feedback = () => {
     <Backdrop landingPageUrl={page_url} className="relative flex h-full flex-col items-center justify-center">
       <div
         className={cn([
-          'flex h-[95vh] w-[98vw]',
-          isMobile && 'mx-0 h-[100dvh] w-full',
-          view === PlaygroundView.ADMIN_VIEW && 'h-[100vh]',
+          'flex h-agent-open w-agent-open',
+          isMobile && 'mx-0 h-dvh w-full',
+          view === PlaygroundView.ADMIN_VIEW && 'h-screen',
         ])}
       >
         <AgentInOpenState showAgentInOpenState={true} handleSendMessage={handleSendMessage} isCollapsible={true} />

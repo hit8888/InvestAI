@@ -11,7 +11,7 @@ const EditBulkRowItemsDrawer = ({ open, onClose }: EditBulkRowItemsDrawerProps) 
     <Drawer open={open} onOpenChange={onClose} direction="right">
       <DrawerOverlay className="fixed inset-0 bg-transparent_gray_16" />
       {open && (
-        <DrawerContent className="z-[1000] ml-[50%] h-[100vh] w-1/2 rounded-none bg-primary-foreground bg-white">
+        <DrawerContent className="z-[1000] ml-[50%] h-screen w-1/2 rounded-none bg-primary-foreground bg-white">
           <EditBulkRowItemsDrawerContentContainer onClose={onClose} />
         </DrawerContent>
       )}
