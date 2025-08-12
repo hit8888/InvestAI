@@ -38,10 +38,10 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
   };
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex w-full flex-col items-start gap-2">
       {renderTitleAndLabel()}
       {value.description && (
-        <div className="w-[85%] text-sm text-gray-900">
+        <div className="w-full text-sm text-gray-900">
           <GithubMarkdownRenderer
             markdown={
               showTrimmed
