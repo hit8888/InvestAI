@@ -11,8 +11,6 @@ import LoadingState from '../ControlsPage/LoadingState';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { toast } from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
-import CalendarHeader from './CalendarHeader';
-import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
 import { Plus } from 'lucide-react';
 
 const CalendarList = () => {
@@ -121,18 +119,13 @@ const CalendarList = () => {
   );
 
   const renderEmptyState = () => (
-    <Card background="GRAY25" border="GRAY200" className="w-full gap-4">
-      <div className="flex w-full items-center justify-start gap-2.5 rounded-lg border border-gray-200 bg-gray-100 p-2">
-        <NoInfoProvidedSadFaceIcon className="h-4 w-4 text-gray-500" />
-        <Typography textColor="textSecondary" variant="caption-12-normal">
-          No calendars added yet
-        </Typography>
-      </div>
-      <div className="flex w-full justify-end">
-        <Button variant="primary" onClick={() => setShowAddForm(true)}>
-          Add +
-        </Button>
-      </div>
+    <Card background="GRAY25" border="GRAY200" className="flex w-full flex-row items-center justify-between p-4">
+      <Typography variant="body-14" textColor="gray500">
+        Add a new calendar to manage your availability
+      </Typography>
+      <Button variant="primary" onClick={() => setShowAddForm(true)}>
+        Add Calendar
+      </Button>
     </Card>
   );
 
@@ -146,8 +139,6 @@ const CalendarList = () => {
     if (showAddForm) {
       return renderAddForm();
     }
-
-    return renderEmptyState();
   };
 
   if (isLoading) {
@@ -160,9 +151,7 @@ const CalendarList = () => {
 
   return (
     <div className="flex w-full flex-col items-start gap-6 self-stretch">
-      {!hasCalendars && (
-        <CalendarHeader title="Add New Calendar" description="Connect a new calendar to manage your availability" />
-      )}
+      {!hasCalendars && !showAddForm && renderEmptyState()}
       {renderMainContent()}
     </div>
   );

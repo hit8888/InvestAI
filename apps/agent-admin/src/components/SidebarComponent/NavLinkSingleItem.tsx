@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import PanelChevronDownIcon from '@breakout/design-system/components/icons/panel-chevrondown-icon';
 import PanelNavArrowLastLiningIcon from '@breakout/design-system/components/icons/panel-navarrow-lining-last-icon';
@@ -22,6 +22,7 @@ type IProps = {
 
 export const NavigationItemWithChildren = ({ navItem, options }: IProps) => {
   const { isPanelOpen, isChild, insideTooltip } = options;
+  const location = useLocation();
   if (!navItem.children) return null;
 
   return (

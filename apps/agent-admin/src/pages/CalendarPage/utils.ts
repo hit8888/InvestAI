@@ -1,3 +1,5 @@
+import { AppRoutesEnum } from '../../utils/constants';
+
 export enum CalendarTabsEnum {
   ADD_CALENDAR = 'add-calendar',
   CREATE_CALENDAR = 'create-calendar',
@@ -40,20 +42,64 @@ export const getBrowserTimezone = () => {
 
 // Mapping between URL paths and CalendarTabsEnum
 export const TAB_TO_PATH_MAP: Record<CalendarTabsEnum, string> = {
-  [CalendarTabsEnum.ADD_CALENDAR]: 'calendar',
-  [CalendarTabsEnum.CREATE_CALENDAR]: 'managed-calendar',
+  [CalendarTabsEnum.ADD_CALENDAR]: AppRoutesEnum.ADD_CALENDAR,
+  [CalendarTabsEnum.CREATE_CALENDAR]: AppRoutesEnum.CALENDAR,
 };
 
 export const PATH_TO_TAB_MAP: Record<string, CalendarTabsEnum> = {
-  calendar: CalendarTabsEnum.ADD_CALENDAR,
-  'managed-calendar': CalendarTabsEnum.CREATE_CALENDAR,
+  [AppRoutesEnum.ADD_CALENDAR]: CalendarTabsEnum.ADD_CALENDAR,
+  [AppRoutesEnum.CALENDAR]: CalendarTabsEnum.CREATE_CALENDAR,
 };
 
-// Helper functions
+// Helper functions to normalize path segments
+export const normalizePathSegment = (path: string): string => {
+  // Normalize the path by removing trailing slashes and trimming whitespace
+  return path?.trim().replace(/\/+$/, '') || '';
+};
+
 export const getTabFromPath = (path: string): CalendarTabsEnum => {
-  return PATH_TO_TAB_MAP[path] || CalendarTabsEnum.ADD_CALENDAR;
+  const normalizedPath = normalizePathSegment(path);
+
+  // Handle empty path or root path - default to CREATE_CALENDAR (base calendar page)
+  if (!normalizedPath || normalizedPath === '/' || normalizedPath === 'calendar') {
+    return CalendarTabsEnum.CREATE_CALENDAR;
+  }
+
+  // Check for specific paths
+  if (normalizedPath === AppRoutesEnum.ADD_CALENDAR) {
+    return CalendarTabsEnum.ADD_CALENDAR;
+  }
+
+  // Default to CREATE_CALENDAR for unknown paths
+  return CalendarTabsEnum.CREATE_CALENDAR;
 };
 
 export const getPathFromTab = (tab: CalendarTabsEnum): string => {
   return TAB_TO_PATH_MAP[tab];
+};
+
+// Helper function to build navigation path for calendar tabs
+export const buildNavigationPath = (currentPath: string, newSegment: string): string => {
+  // Remove trailing slash and get path segments
+  const cleanPath = currentPath.replace(/\/+$/, '');
+  const pathSegments = cleanPath.split('/').filter(Boolean);
+
+  // Find the settings index to build the base path correctly
+  const settingsIndex = pathSegments.findIndex((segment) => segment === AppRoutesEnum.SETTINGS);
+
+  if (settingsIndex >= 0) {
+    // Use everything up to and including 'settings'
+    const basePath = `/${pathSegments.slice(0, settingsIndex + 1).join('/')}`;
+    return `${basePath}/${newSegment}`;
+  } else {
+    // Fallback: assume we need to add settings
+    const tenantIndex = pathSegments.findIndex(
+      (segment) =>
+        ![AppRoutesEnum.SETTINGS, AppRoutesEnum.CALENDAR, AppRoutesEnum.ADD_CALENDAR].includes(
+          segment as AppRoutesEnum,
+        ),
+    );
+    const basePath = tenantIndex >= 0 ? `/${pathSegments.slice(0, tenantIndex + 1).join('/')}/settings` : '/settings';
+    return `${basePath}/${newSegment}`;
+  }
 };

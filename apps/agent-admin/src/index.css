@@ -119,3 +119,10 @@
   display: none;
   /* Chrome, Safari, Edge */
 }
+
+/* Override Cal.com availability form layout for xl screens */
+@media (min-width: 1280px) {
+  .calcom-atoms #availability-form {
+    flex-direction: column !important;
+  }
+}

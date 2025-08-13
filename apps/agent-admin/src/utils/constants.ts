@@ -41,6 +41,8 @@ import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-in
 import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/panel-insights-active-icon';
 import PanelIntegrationsIcon from '@breakout/design-system/components/icons/panel-integrations-icon';
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
+import CalendarIcon from '@breakout/design-system/components/icons/panel-calendar-icon';
+import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
@@ -351,10 +353,12 @@ export enum AppRoutesEnum {
   AGENT_BRANDING = 'agent/branding',
   AGENT_ENTRYPOINTS = 'agent/entrypoints',
   AGENT_CONTROLS = 'agent/controls',
-  AGENT_CALENDAR = 'agent/calendar',
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
   INSIGHTS = 'insights',
+  SETTINGS = 'settings',
+  CALENDAR = 'calendar',
+  ADD_CALENDAR = 'calendar/add-calendar',
   INTEGRATIONS = 'integrations',
 }
 
@@ -704,10 +708,6 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
         navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
         navItem: SidebarNavItemsEnum.AGENT_CONTROLS_LABEL,
       },
-      {
-        navUrl: `/${AppRoutesEnum.AGENT_CALENDAR}`,
-        navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
-      },
     ],
   },
   {
@@ -732,10 +732,18 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
 
 export const SETTINGS_LINK_ITEMS: NavLinkItem[] = [
   {
-    navUrl: `/settings/${AppRoutesEnum.INTEGRATIONS}`,
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.INTEGRATIONS}`,
     navItem: SidebarNavItemsEnum.INTEGRATIONS_LABEL,
     icon: PanelIntegrationsIcon,
     activeIcon: PanelIntegrationsActiveIcon,
+    group: NavigationGroup.WORKSPACE_SETTINGS,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.CALENDAR}`,
+    navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
+    icon: CalendarIcon,
+    activeIcon: CalendarActiveIcon,
+    group: NavigationGroup.WORKSPACE_SETTINGS,
   },
 ];
 

@@ -439,7 +439,7 @@ export type DataSourceDocumentsResponseResult = z.infer<typeof DataSourceDocumen
 
 export const DataSourceArtifactsResponseResultSchema = z.object({
   id: z.number(),
-  title: z.string(),
+  title: z.string().nullable(),
   data: z.string(),
   relevant_queries: z.array(z.string()),
   status: z.string(),

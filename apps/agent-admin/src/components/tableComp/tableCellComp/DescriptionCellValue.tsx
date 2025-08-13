@@ -11,12 +11,13 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
   const showMoreButtonText = showTrimmed ? 'Read More' : 'Read Less';
 
   const renderTitleAndLabel = () => {
-    const showLabel = value.title && value.labelled_by_name;
+    const title = value?.title || '';
+    const showLabel = title.length > 0 && value?.labelled_by_name;
     return (
       <div className="flex w-full items-center gap-2">
-        {value.title && (
+        {title.length > 0 && (
           <Typography variant="label-14-semibold" className="flex-1 break-all">
-            {value.title}
+            {title}
           </Typography>
         )}
         {showLabel && (

@@ -29,7 +29,7 @@ const HeaderCTA = () => {
         variant="tertiary"
         size="regular"
         onClick={navigateToMainView}
-        className="h-12 w-full items-center justify-center"
+        className="w-full items-center justify-center"
       >
         <ArrowLeftIcon className="h-4 w-4" />
         {isOpen && (
@@ -76,41 +76,43 @@ const HeaderCTA = () => {
     );
   };
 
+  const isMainView = sideNavView === SideNavView.MAIN;
+
   return (
-    <div
-      className={`flex flex-col items-start justify-center gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-2 pb-4 pt-4`}
-    >
+    <div className="flex flex-col items-start justify-center gap-4 self-stretch border border-[rgb(var(--primary-foreground)/0.32)] bg-primary/2.5 px-4 py-2">
       <motion.div
         className={cn('flex w-full items-center justify-between px-2 pb-2', {
-          'flex-row p-2': isOpen,
+          'flex-row p-0': isOpen,
           'flex-col p-0': !isOpen,
           'justify-between': isTenantLogoUrlPresent,
           'justify-start': !isTenantLogoUrlPresent,
         })}
         {...getTransitionAnimation()}
       >
-        {sideNavView === SideNavView.MAIN ? renderTenantLogo() : renderBackToDashboardButton()}
+        {isMainView ? renderTenantLogo() : renderBackToDashboardButton()}
       </motion.div>
-      <div className="relative w-full">
-        <button
-          onClick={toggleSidebar}
-          className={cn(
-            `sidebar-collapsible-btn-shadow absolute -right-5 -top-3 z-50 flex h-6 w-6 items-center justify-center
+      {isMainView && (
+        <div className="relative w-full">
+          <button
+            onClick={toggleSidebar}
+            className={cn(
+              `sidebar-collapsible-btn-shadow absolute -right-8 -top-3 z-50 flex h-6 w-6 items-center justify-center
             rounded-full border border-gray-200 bg-gray-25`,
-            {
-              'border-primary': !isOpen,
-            },
-          )}
-        >
-          <PanelCloseIcon
-            className={cn(`z-50 h-3 w-3 text-primary transition-transform duration-300 `, {
-              'rotate-0': isOpen,
-              'rotate-180': !isOpen,
-            })}
-          />
-        </button>
-        <Separator className="w-[95%]" />
-      </div>
+              {
+                'border-primary': !isOpen,
+              },
+            )}
+          >
+            <PanelCloseIcon
+              className={cn(`z-50 h-3 w-3 text-primary transition-transform duration-300 `, {
+                'rotate-0': isOpen,
+                'rotate-180': !isOpen,
+              })}
+            />
+          </button>
+          <Separator className="w-[95%]" />
+        </div>
+      )}
     </div>
   );
 };

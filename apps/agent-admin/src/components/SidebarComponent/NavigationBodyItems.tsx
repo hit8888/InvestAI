@@ -64,18 +64,18 @@ const NavigationBodyItems = () => {
     >
       {/* Render ungrouped items first */}
       {ungroupedItems.length > 0 && (
-        <div className={cn('flex w-full flex-col', { 'gap-2': !isOpen })}>{ungroupedItems.map(renderNavItem)}</div>
+        <div className={cn('flex w-full flex-col pl-2', { 'gap-2': !isOpen })}>{ungroupedItems.map(renderNavItem)}</div>
       )}
 
       {/* Render grouped items */}
       {Array.from(groupedItems.entries()).map(([groupName, groupItems]) => (
-        <div key={groupName} className="w-full">
+        <div key={groupName} className="flex w-full flex-col gap-2">
           {isOpen && (
             <Typography variant="caption-12-medium" className="bg-gray-100 px-4 py-2 text-gray-900">
               {groupName}
             </Typography>
           )}
-          <div className={cn('flex flex-col', { 'gap-2': !isOpen })}>{groupItems.map(renderNavItem)}</div>
+          <div className={cn('flex flex-col pl-2', { 'gap-2': !isOpen })}>{groupItems.map(renderNavItem)}</div>
         </div>
       ))}
     </motion.div>

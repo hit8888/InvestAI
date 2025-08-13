@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { CalendarCheck2, CalendarPlus } from 'lucide-react';
-import { CalendarTabsEnum, getPathFromTab } from './utils';
+import { CalendarTabsEnum, getPathFromTab, buildNavigationPath } from './utils';
 import SingleTabDisplay from '../../components/ConversationDetailsComp/SingleTabDisplay';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCalendarTab } from './useCalendarTab';
 
 type TabConfig = {
   key: CalendarTabsEnum;
@@ -14,32 +15,26 @@ type TabConfig = {
 
 const CALENDAR_TABS: TabConfig[] = [
   {
-    key: CalendarTabsEnum.ADD_CALENDAR,
-    label: 'Add Calendar',
-    icon: CalendarPlus,
-  },
-  {
     key: CalendarTabsEnum.CREATE_CALENDAR,
     label: 'Create Calendar',
     icon: CalendarCheck2,
   },
+  {
+    key: CalendarTabsEnum.ADD_CALENDAR,
+    label: 'Add Calendar',
+    icon: CalendarPlus,
+  },
 ];
 
-type CalendarTabsProps = {
-  activeTab: CalendarTabsEnum;
-  setActiveTab: (tab: CalendarTabsEnum) => void;
-};
-
-const CalendarTabs = ({ activeTab, setActiveTab }: CalendarTabsProps) => {
+const CalendarTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const activeTab = useCalendarTab();
 
   const handleTabClick = (tab: CalendarTabsEnum) => {
-    setActiveTab(tab);
     const newPath = getPathFromTab(tab);
-    // Navigate to the new path while preserving the base path structure
-    const basePath = location.pathname.split('/').slice(0, -1).join('/');
-    navigate(`${basePath}/${newPath}`);
+    const navigationPath = buildNavigationPath(location.pathname, newPath);
+    navigate(navigationPath);
   };
   return (
     <div className="sticky top-0 z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4">

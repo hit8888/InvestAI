@@ -11,7 +11,10 @@ const CustomDocumentDrawer = ({ open, onClose, isClickedOnCreateButton = true }:
   return (
     <Drawer open={open} onOpenChange={onClose} direction="right">
       {open && (
-        <DrawerContent className="z-[1000] ml-[50%] h-screen w-1/2 rounded-none bg-primary-foreground bg-white">
+        <DrawerContent
+          className="z-[1000] ml-[50%] h-screen w-1/2 rounded-none bg-primary-foreground bg-white"
+          data-vaul-no-drag
+        >
           <CustomDocumentDrawerContentContainer onClose={onClose} isClickedOnCreateButton={isClickedOnCreateButton} />
         </DrawerContent>
       )}

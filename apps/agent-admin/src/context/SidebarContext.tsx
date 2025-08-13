@@ -52,7 +52,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     isAgentEntrypointsPage,
     isAgentControlsPage,
     isTrainingPlaygroundPage,
-    isAgentCalendarPage,
     pathURL,
     isAgentPage,
     isTrainingPage,
@@ -80,11 +79,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { AGENT_LABEL, TRAINING_LABEL } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
-    isAgentBrandingPage ||
-    isAgentEntrypointsPage ||
-    isAgentControlsPage ||
-    isAgentDataSourcesPage ||
-    isAgentCalendarPage;
+    isAgentBrandingPage || isAgentEntrypointsPage || isAgentControlsPage || isAgentDataSourcesPage;
 
   const isTrainingTabActive = isTrainingPlaygroundPage;
 
@@ -156,10 +151,11 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const navigateToSettingsView = () => {
-    const defaultRoute = getSideNavItems(SideNavView.SETTINGS).ungroupedItems[0].navUrl;
+    const defaultRoute = getSideNavItems(SideNavView.SETTINGS).groupedItems.get(NavigationGroup.WORKSPACE_SETTINGS)?.[0]
+      .navUrl;
 
     setSideNavView(SideNavView.SETTINGS);
-    navigate(defaultRoute, {
+    navigate(defaultRoute!, {
       state: {
         from: 'settings',
       },

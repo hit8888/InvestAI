@@ -8,6 +8,7 @@ import useManagedCalendars from '../../queries/query/useManagedCalendarsQuery';
 import { useCreateManagedCalendar } from '../../queries/mutation/useManagedCalendarMutations';
 import { useState } from 'react';
 import { Loader } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const calOauthClientId = import.meta.env.VITE_CAL_OAUTH_CLIENT_ID;
 const calApiUrl = import.meta.env.VITE_CAL_API_URL;
@@ -62,12 +63,11 @@ const CreateManagedCalendarButton = ({ createManagedCalendarMutation, timezone }
       setIsSuccess(true);
     } catch (error) {
       console.error(error);
-      // Error is handled by the mutation's error state
+      toast.error('Failed to create managed calendar');
     }
   };
 
   const isLoading = createManagedCalendarMutation.isPending;
-  const error = createManagedCalendarMutation.error;
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,7 +80,6 @@ const CreateManagedCalendarButton = ({ createManagedCalendarMutation, timezone }
         {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
         {isSuccess ? 'Calendar Created' : isLoading ? 'Creating Calendar...' : 'Create Managed Calendar'}
       </Button>
-      {error && <div className="text-destructive-1000">{JSON.stringify(error.message)}</div>}
     </div>
   );
 };

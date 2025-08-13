@@ -118,14 +118,6 @@ const routes = [
                 path: 'controls',
                 element: <ProtectedRoute element={<ControlsPage />} />,
               },
-              {
-                path: 'calendar',
-                element: <ProtectedRoute element={<CalendarPage />} />,
-              },
-              {
-                path: 'managed-calendar',
-                element: <ProtectedRoute element={<CalendarPage />} />,
-              },
             ],
           },
           {
@@ -147,6 +139,14 @@ const routes = [
               {
                 path: 'integrations',
                 element: <ProtectedRoute element={<IntegrationsPage />} />,
+              },
+              {
+                path: 'calendar',
+                element: <ProtectedRoute element={<CalendarPage />} />,
+              },
+              {
+                path: 'calendar/add-calendar',
+                element: <ProtectedRoute element={<CalendarPage />} />,
               },
             ],
           },

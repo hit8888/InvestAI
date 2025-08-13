@@ -1,24 +1,24 @@
 import PageContainer from '../../components/AgentManagement/PageContainer';
-import { CALENDAR_MANAGEMENT_DESCRIPTION, getTabFromPath } from './utils';
+import { CALENDAR_MANAGEMENT_DESCRIPTION } from './utils';
 import CalendarList from './CalendarList';
-import { useState, useEffect } from 'react';
 import { CalendarTabsEnum } from './utils';
 import CalComCalendarManager from './CalComCalendarManager';
 import CalendarTabs from './CalendarTabs';
-import { useLocation } from 'react-router-dom';
+import { useCalendarTab } from './useCalendarTab';
 
 const CalendarPage = () => {
-  const location = useLocation();
-  const [activeTab, setActiveTab] = useState<CalendarTabsEnum>(CalendarTabsEnum.ADD_CALENDAR);
+  const currentTab = useCalendarTab();
 
-  // Sync active tab with URL path
-  useEffect(() => {
-    const pathSegment = location.pathname.split('/').pop(); // Get the last segment of the path
-    if (pathSegment) {
-      const tabFromPath = getTabFromPath(pathSegment);
-      setActiveTab(tabFromPath);
+  const renderTabContent = () => {
+    switch (currentTab) {
+      case CalendarTabsEnum.ADD_CALENDAR:
+        return <CalendarList />;
+      case CalendarTabsEnum.CREATE_CALENDAR:
+        return <CalComCalendarManager />;
+      default:
+        return <CalComCalendarManager />;
     }
-  }, [location.pathname]);
+  };
 
   return (
     <PageContainer
@@ -27,9 +27,8 @@ const CalendarPage = () => {
       heading={'Calendar Management'}
       subHeading={CALENDAR_MANAGEMENT_DESCRIPTION}
     >
-      <CalendarTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      {activeTab === CalendarTabsEnum.ADD_CALENDAR ? <CalendarList /> : null}
-      {activeTab === CalendarTabsEnum.CREATE_CALENDAR ? <CalComCalendarManager /> : null}
+      <CalendarTabs />
+      {renderTabContent()}
     </PageContainer>
   );
 };

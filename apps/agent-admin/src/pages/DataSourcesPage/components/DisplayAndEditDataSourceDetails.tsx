@@ -33,7 +33,7 @@ const DisplayAndEditDataSourceDetails = ({
   const { type } = asset as DataSourceItem;
 
   const { watchedValues, setValue, hasFormContentChanged, handleAddQuestion, isDirty } = useDataSourceForm({
-    title,
+    title: title || '',
     data,
     relevant_queries,
   });
@@ -81,32 +81,34 @@ const DisplayAndEditDataSourceDetails = ({
   };
 
   return (
-    <div className="flex max-h-[calc(100vh-82px)] w-full flex-col gap-4 overflow-auto p-4" id="datasource-container">
+    <div className="flex h-full max-h-full w-full flex-col gap-4 overflow-auto p-4" id="datasource-container">
       <AssetDisplaySection asset={asset} />
       <TitleSectionEditDrawer key={`title-${id}`} {...commonProps} />
       <DescriptionSectionEditDrawer key={`data-${id}`} {...commonProps} />
       <RelevantQueriesSectionDrawer key={`queries-${id}`} {...commonProps} />
-      <div className="sticky -bottom-4 flex justify-between bg-white py-3">
-        <Button
-          variant="secondary"
-          onClick={handleAddQuestion}
-          leftIcon={<PlusIcon className="h-4 w-4" />}
-          disabled={
-            !watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1] ||
-            watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1].trim() === ''
-          }
-        >
-          Add Question
-        </Button>
+      <div className="sticky -bottom-4 flex w-full justify-end bg-white">
+        <div className="flex w-full justify-between py-3">
+          <Button
+            variant="secondary"
+            onClick={handleAddQuestion}
+            leftIcon={<PlusIcon className="h-4 w-4" />}
+            disabled={
+              !watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1] ||
+              watchedValues.relevant_queries[watchedValues.relevant_queries.length - 1].trim() === ''
+            }
+          >
+            Add Question
+          </Button>
 
-        <Button
-          variant="primary"
-          onClick={handleSave}
-          disabled={isSaving || !hasChanges}
-          leftIcon={isSaving ? <Loader2Icon className="h-4 w-4 animate-spin" /> : undefined}
-        >
-          {isSaving ? 'Saving ...' : 'Save'}
-        </Button>
+          <Button
+            variant="primary"
+            onClick={handleSave}
+            disabled={isSaving || !hasChanges}
+            leftIcon={isSaving ? <Loader2Icon className="h-4 w-4 animate-spin" /> : undefined}
+          >
+            {isSaving ? 'Saving ...' : 'Save'}
+          </Button>
+        </div>
       </div>
     </div>
   );

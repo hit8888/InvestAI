@@ -20,7 +20,7 @@ const EditBulkRowItemsDrawerContentContainer = ({ onClose }: EditBulkRowItemsDra
   const paginationState = useDataSourceEditDrawerPagination(activeItemIndex, paginatedItems.length);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4">
       <EditDrawerPaginationHeader items={paginatedItems} onClose={onClose} paginationState={paginationState} />
       <DisplayAndEditDataSourceDetails selectedDataSources={paginatedItems} paginationState={paginationState} />
     </div>
