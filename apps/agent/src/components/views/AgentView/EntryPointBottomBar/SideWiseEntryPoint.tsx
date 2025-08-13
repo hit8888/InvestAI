@@ -43,7 +43,7 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
   return (
     <div
       className={cn('relative flex w-full items-center p-2', {
-        'justify-end': isEntryPointOnTheBottomRight && hasFirstUserMessageBeenSent,
+        'justify-end': isEntryPointOnTheBottomRight,
       })}
     >
       {isEntryPointOnTheBottomLeft && <>{getEntryPointOrb()}</>}

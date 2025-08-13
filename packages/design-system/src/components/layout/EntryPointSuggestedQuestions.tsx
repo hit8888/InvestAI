@@ -6,6 +6,7 @@ import { SuggestedQuestionsShowingInCycle } from './ChatMessages/SuggestedQuesti
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import { useCycle } from '../../hooks/useCycle';
 
 type EntryPointSuggestedQuestionsProps = {
   showSuggestedQuestions: boolean;
@@ -25,6 +26,11 @@ const EntryPointSuggestedQuestions = ({
   invertTextColor,
 }: EntryPointSuggestedQuestionsProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
+  const { currentItemIndex, cycleCompleted } = useCycle({
+    itemsLength: initialSuggestedQuestions.length,
+    showItems: showSuggestedQuestions,
+    cycleOnlyOnce: showOneByOne,
+  });
   const isQuestionAlignmentRight = questionAlignment === EntryPointAlignment.RIGHT;
   const isQuestionAlignmentLeft = questionAlignment === EntryPointAlignment.LEFT;
   const isQuestionAlignmentCenter = questionAlignment === EntryPointAlignment.CENTER;
@@ -33,6 +39,11 @@ const EntryPointSuggestedQuestions = ({
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.ENTRY_CLICKED_FIRST_TIME, { isAgentOpen: false });
     handleSuggestedQuestionOnClick(question);
   };
+
+  // Don't render anything if the cycle is completed
+  if (cycleCompleted) {
+    return null;
+  }
 
   return (
     <div
@@ -59,7 +70,7 @@ const EntryPointSuggestedQuestions = ({
             {showOneByOne ? (
               <SuggestedQuestionsShowingInCycle
                 questions={initialSuggestedQuestions}
-                showQuestions={showSuggestedQuestions}
+                currentItemIndex={currentItemIndex}
                 onQuestionClick={handleSuggestedQuestionOnClickAndTrack}
                 questionAlignment={questionAlignment}
                 invertTextColor={invertTextColor}
