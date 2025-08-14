@@ -245,7 +245,7 @@ export const Messages = ({
                 style={calculateMinHeight(isLastGroup) ? { minHeight: calculateMinHeight(isLastGroup) } : undefined}
               >
                 {/* Scroll target marker at the start of the last group */}
-                {isLastGroup && <div ref={scrollTargetRef} className="-my-2 h-0 w-0" aria-hidden="true" />}
+                {isLastGroup && <div ref={scrollTargetRef} className="-my-1 h-0 w-0" aria-hidden="true" />}
                 {messageGroup.map((message, messageIndex) => (
                   <Message
                     key={`${message.response_id}-${messageIndex}`}
@@ -272,7 +272,7 @@ export const Messages = ({
                         onClick={() =>
                           sendUserMessage?.(question, { event_type: MessageEventType.SUGGESTED_QUESTION_CLICKED })
                         }
-                        className="inline-block max-w-full cursor-pointer rounded-xl bg-card px-3 py-2 text-sm text-foreground hover:bg-muted"
+                        className="inline-block max-w-full cursor-pointer rounded-[108px] bg-card px-4 py-2 text-sm text-foreground hover:bg-muted font-normal"
                       >
                         {question}
                       </div>
@@ -308,7 +308,7 @@ export const Messages = ({
                       onClick={() =>
                         sendUserMessage?.(question, { event_type: MessageEventType.SUGGESTED_QUESTION_CLICKED })
                       }
-                      className="inline-block max-w-full cursor-pointer rounded-xl bg-card px-3 py-2 text-sm text-foreground hover:bg-muted"
+                      className="inline-block max-w-full cursor-pointer rounded-[108px] bg-card px-4 py-2 text-sm text-foreground hover:bg-muted font-normal"
                     >
                       {question}
                     </div>

@@ -1,6 +1,6 @@
 import { cn } from '@meaku/saral';
 
-export const WaveLoader = ({ className = 'bg-accent' }: { className?: string }) => (
+export const WaveLoader = ({ className = 'bg-foreground' }: { className?: string }) => (
   <div className="flex items-center justify-center space-x-1">
     <div
       className={cn('size-1.5 rounded-full', className)}

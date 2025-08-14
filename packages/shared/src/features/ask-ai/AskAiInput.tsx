@@ -21,15 +21,19 @@ export const AskAiInput = ({ disabled, sendUserMessage }: AskAiInputProps) => {
       <Input
         placeholder="Type your message..."
         name="message"
-        className="h-[52px] rounded-xl !border-muted py-[6px] pr-12 focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:ring-offset-0"
+        className="h-[56px] rounded-xl border py-2 pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:ring-offset-0"
         disabled={disabled}
         autoComplete="off"
         aria-autocomplete="none"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <Button className="absolute right-5 px-2" size="xs" disabled={disabled || !isInputValuePresent}>
-        <Icons.SendHorizonal className="h-4 w-4" />
+      <Button
+        className="absolute size-10 right-5 px-2 rounded-lg"
+        size="xs"
+        disabled={disabled || !isInputValuePresent}
+      >
+        <Icons.SendHorizonal className="size-5" />
       </Button>
     </form>
   );

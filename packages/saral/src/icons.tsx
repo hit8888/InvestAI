@@ -29,7 +29,7 @@ export {
   AlertCircle,
   Info,
   ZoomIn,
-  Code,
+  Gamepad2,
 } from 'lucide-react';
 
 // Re-export the IconProps type from lucide-react

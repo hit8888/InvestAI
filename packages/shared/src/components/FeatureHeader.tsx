@@ -26,9 +26,9 @@ export const FeatureHeader = ({
   // Need to check if all buttons should be hidden based on different CTAs button
   const allButtonInHeaderHidden = !shouldBookMeetingCTAButtonShow && !ctas?.length;
   return (
-    <div className="flex flex-col border-b p-3">
+    <div className="flex flex-col p-3 gap-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 -ml-1">
           {icon}
           <div
             className={`transition-all duration-300 ease-in-out ${
@@ -59,11 +59,11 @@ export const FeatureHeader = ({
         className={`transition-all duration-300 ease-in-out ${
           welcomeMessage && title
             ? 'max-h-32 scale-100 overflow-visible opacity-100'
-            : 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0'
+            : 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0 -my-2'
         }`}
       >
         {welcomeMessage && title && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <Typography variant="heading" fontWeight="semibold">
               {title}
             </Typography>
@@ -81,7 +81,7 @@ export const FeatureHeader = ({
         } ${allButtonInHeaderHidden ? 'hidden' : ''}`}
       >
         {ctas && ctas.length > 0 && (
-          <div className="mt-3 inline-flex gap-2">
+          <div className="inline-flex gap-2">
             {ctas?.map((cta) =>
               cta.url ? (
                 <a

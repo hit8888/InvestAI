@@ -41,8 +41,8 @@ const AskAiContent: React.FC<AskAiContentProps> = ({
 
   return (
     <div
-      className="flex w-full flex-col space-y-1 rounded-lg border bg-card shadow-lg"
-      style={{ height: 'min(100vh, 680px)' }}
+      className="flex w-full flex-col space-y-1 rounded-[20px] border border-border-dark bg-card"
+      style={{ boxShadow: '0 0 24px 0 rgba(0, 0, 0, 0.24)', height: 'min(100vh, 680px)' }}
     >
       <FeatureHeader
         title={`${askaiConfig?.agent_name} - AI Copilot`}
@@ -57,8 +57,8 @@ const AskAiContent: React.FC<AskAiContentProps> = ({
         ctas={askaiConfig?.ctas ?? []}
         sendUserMessage={sendUserMessage}
       />
-      <div className="h-10 w-full flex-1 space-y-3 p-2 pt-0">
-        <div className="flex h-full w-full flex-col rounded-md border bg-background">
+      <div className="h-10 w-full flex-1  p-2 pt-0">
+        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
           <div className="relative h-[calc(100%-76px)] flex-1">
             {isInitialising ? (
               <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">

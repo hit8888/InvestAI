@@ -142,7 +142,6 @@ export const Message = ({
     !isFormArtifact &&
     !isCalendarArtifact &&
     !isDiscoveryQuestion &&
-    !isSuggestionsArtifact &&
     !isCtaEvent
   ) {
     return null;

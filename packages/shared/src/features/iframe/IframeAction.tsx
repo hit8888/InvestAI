@@ -23,7 +23,7 @@ const IframeAction: React.FC<IframeActionProps> = ({ config, isActive, onClick, 
       onClick={onClick}
       className={isActive ? 'rounded-2xl' : 'rounded-full'}
     >
-      <Icons.Code className="size-5" />
+      <Icons.Gamepad2 className="size-5" />
     </Button>
   );
 
