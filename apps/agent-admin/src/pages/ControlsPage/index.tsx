@@ -35,24 +35,18 @@ const ControlsPage = () => {
     website_url: support?.website_url || '',
   };
 
-  const showSupport = supportData.email || supportData.phone || supportData.website_url;
-
   return (
     <PageContainer heading={PageContainerHeader} subHeading={CONTROLS_PAGE_HEADER_DESCRIPTION}>
-      {products_and_description && (
-        <AgentProductDescription
-          key={PRODUCT_DESCRIPTION}
-          productDescriptions={products_and_description}
-          {...commonProps}
-          {...agentProductDescription}
-        />
-      )}
       <SinglePromptTextarea key={AGENT_PERSONALITY} {...agentPersonality} />
       <AgentResponseWordCount {...agentResponseWordCount} />
       <SinglePromptTextarea key={INSTRUCTIONS} {...instructions} />
-      {showSupport && (
-        <AgentSupportSystem key={SUPPORT} support={supportData} {...commonProps} {...agentSupportSystem} />
-      )}
+      <AgentProductDescription
+        key={PRODUCT_DESCRIPTION}
+        productDescriptions={products_and_description ?? []}
+        {...commonProps}
+        {...agentProductDescription}
+      />
+      <AgentSupportSystem key={SUPPORT} support={supportData} {...commonProps} {...agentSupportSystem} />
     </PageContainer>
   );
 };
