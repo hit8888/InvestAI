@@ -22,6 +22,7 @@ export interface CollapsedSizes {
   readonly CENTER_HEIGHT: string;
   readonly SIDEWISE_WIDTH_MESSAGE_SENT: string;
   readonly SIDEWISE_WIDTH_INITIAL: string;
+  readonly SIDEWISE_WIDTH_INITIAL_CYCLE_COMPLETED: string;
   readonly SIDEWISE_HEIGHT_WITH_BUBBLE: string;
   readonly SIDEWISE_HEIGHT: string;
   readonly SIDEWISE_HEIGHT_MESSAGE_SENT: string;
@@ -173,6 +174,7 @@ export interface IframeMessage {
   isCollapsible?: boolean;
   chatOpen?: boolean;
   showBanner?: boolean;
+  cycleCompleted?: boolean;
   entryPointAlignment?: EntryPointAlignmentType;
   hasFirstUserMessageBeenSent?: boolean;
   sessionId?: string;

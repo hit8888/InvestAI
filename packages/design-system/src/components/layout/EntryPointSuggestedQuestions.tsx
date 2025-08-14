@@ -6,7 +6,6 @@ import { SuggestedQuestionsShowingInCycle } from './ChatMessages/SuggestedQuesti
 import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { useCycle } from '../../hooks/useCycle';
 
 type EntryPointSuggestedQuestionsProps = {
   showSuggestedQuestions: boolean;
@@ -15,6 +14,8 @@ type EntryPointSuggestedQuestionsProps = {
   showOneByOne?: boolean;
   questionAlignment?: EntryPointAlignmentType;
   invertTextColor?: boolean;
+  currentItemIndex?: number;
+  cycleCompleted?: boolean;
 };
 
 const EntryPointSuggestedQuestions = ({
@@ -24,13 +25,10 @@ const EntryPointSuggestedQuestions = ({
   showOneByOne = false,
   questionAlignment = EntryPointAlignment.LEFT,
   invertTextColor,
+  currentItemIndex = 0,
+  cycleCompleted = false,
 }: EntryPointSuggestedQuestionsProps) => {
   const { trackAgentbotEvent } = useAgentbotAnalytics();
-  const { currentItemIndex, cycleCompleted } = useCycle({
-    itemsLength: initialSuggestedQuestions.length,
-    showItems: showSuggestedQuestions,
-    cycleOnlyOnce: showOneByOne,
-  });
   const isQuestionAlignmentRight = questionAlignment === EntryPointAlignment.RIGHT;
   const isQuestionAlignmentLeft = questionAlignment === EntryPointAlignment.LEFT;
   const isQuestionAlignmentCenter = questionAlignment === EntryPointAlignment.CENTER;

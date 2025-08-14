@@ -15,6 +15,7 @@ interface IProps {
   fetchSessionData: () => void;
   handleOpenAgent: () => void;
   showBanner: boolean;
+  cycleCompleted: boolean;
   hasFirstUserMessageBeenSent: boolean;
   entryPointAlignment: EntryPointAlignmentType;
   handleSendUserMessage: ({
@@ -28,6 +29,7 @@ export const useEmbedAppEvents = ({
   fetchSessionData,
   handleOpenAgent,
   showBanner,
+  cycleCompleted,
   hasFirstUserMessageBeenSent,
   entryPointAlignment,
   handleSendUserMessage,
@@ -147,11 +149,12 @@ export const useEmbedAppEvents = ({
       chatOpen: isAgentOpen,
       tooltipOpen: false,
       showBanner,
+      cycleCompleted,
       hasFirstUserMessageBeenSent,
       entryPointAlignment,
     };
     window.parent.postMessage(payload, '*');
-  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment, isAgentEnabled]);
+  }, [isAgentOpen, showBanner, hasFirstUserMessageBeenSent, entryPointAlignment, isAgentEnabled, cycleCompleted]);
 
   useEffect(() => {
     const apiBaseUrl = ENV.VITE_BASE_API_URL;

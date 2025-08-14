@@ -32,6 +32,7 @@ export function StyleManager(
     isAgentOpen: boolean,
     hideBottomBar: boolean,
     showBanner: boolean,
+    cycleCompleted: boolean,
     entryPointAlignment: EntryPointAlignmentType,
     hasFirstUserMessageBeenSent: boolean,
   ): void => {
@@ -52,7 +53,9 @@ export function StyleManager(
             ? (sizes as CollapsedSizes).SIDEWISE_WIDTH_MESSAGE_SENT
             : (sizes as CollapsedSizes).CENTER_WIDTH_MESSAGE_SENT
           : isSidewiseEntryPoint
-            ? (sizes as CollapsedSizes).SIDEWISE_WIDTH_INITIAL
+            ? cycleCompleted
+              ? (sizes as CollapsedSizes).SIDEWISE_WIDTH_INITIAL_CYCLE_COMPLETED
+              : (sizes as CollapsedSizes).SIDEWISE_WIDTH_INITIAL
             : (sizes as CollapsedSizes).CENTER_WIDTH_INITIAL;
 
         height = showBanner
@@ -98,6 +101,7 @@ export function StyleManager(
       isAgentOpen: boolean;
       hideBottomBar: boolean;
       showBanner: boolean;
+      cycleCompleted: boolean;
       entryPointAlignment: EntryPointAlignmentType;
       hasFirstUserMessageBeenSent: boolean;
     },
@@ -114,6 +118,7 @@ export function StyleManager(
         params.isAgentOpen,
         params.hideBottomBar,
         params.showBanner,
+        params.cycleCompleted,
         params.entryPointAlignment,
         params.hasFirstUserMessageBeenSent,
       );

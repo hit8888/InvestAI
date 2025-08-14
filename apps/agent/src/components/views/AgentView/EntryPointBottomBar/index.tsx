@@ -19,6 +19,8 @@ interface IProps {
   showPopupContent: boolean;
   entryPointAlignment: EntryPointAlignmentType;
   showOrbAfterBannerDisappear: boolean;
+  currentItemIndex: number;
+  cycleCompleted: boolean;
 }
 
 const EntryPointBottomBar = ({
@@ -27,6 +29,8 @@ const EntryPointBottomBar = ({
   showPopupContent,
   entryPointAlignment,
   showOrbAfterBannerDisappear,
+  currentItemIndex,
+  cycleCompleted,
 }: IProps) => {
   const isMobile = useIsMobile();
   const { agentName } = useValuesFromConfigApi();
@@ -74,7 +78,7 @@ const EntryPointBottomBar = ({
     if (isEntryPointOnTheBottomCenter) {
       return `absolute ${isMobile ? 'bottom-1' : 'bottom-4'} left-1/2 -translate-x-1/2 transform animate-gradient-rotate items-center justify-center rounded-2xl bg-gradient-to-bl from-primary/90 via-transparent to-primary/90`;
     } else if (!isEntryPointOnTheBottomCenter) {
-      return 'relative w-full items-end justify-start';
+      return 'relative items-end justify-end';
     } else if (shouldShowOnlySidewiseEntryPointOrb) {
       return 'h-20 w-full';
     }
@@ -86,6 +90,8 @@ const EntryPointBottomBar = ({
         <SideWiseEntryPoint
           handleSuggestedQuestionOnClick={handleSuggestedQuestionOnClick}
           entryPointAlignment={entryPointAlignment}
+          currentItemIndex={currentItemIndex}
+          cycleCompleted={cycleCompleted}
         />
       ) : (
         <EntryPointContentForBottomCenter

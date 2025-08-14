@@ -22,6 +22,7 @@ export interface MessageEventDependencies {
       isAgentOpen: boolean,
       hideBottomBar: boolean,
       showBanner: boolean,
+      cycleCompleted: boolean,
       entryPointAlignment: EntryPointAlignmentType,
       hasFirstUserMessageBeenSent: boolean,
     ) => void;
@@ -31,6 +32,7 @@ export interface MessageEventDependencies {
         isAgentOpen: boolean;
         hideBottomBar: boolean;
         showBanner: boolean;
+        cycleCompleted: boolean;
         entryPointAlignment: EntryPointAlignmentType;
         hasFirstUserMessageBeenSent: boolean;
       },
@@ -52,6 +54,7 @@ export interface MessageEventState {
   isAgentEnabled: boolean;
   isAgentOpen: boolean;
   showBanner: boolean;
+  cycleCompleted: boolean;
   entryPointAlignment: EntryPointAlignmentType | null;
   hasFirstUserMessageBeenSent: boolean;
   initialMessageSent: boolean;
@@ -213,7 +216,7 @@ export function MessageEventManager(
       event.data.entryPointAlignment ?? EntryPointAlignment.CENTER;
     state.hasFirstUserMessageBeenSent =
       event.data.hasFirstUserMessageBeenSent ?? false;
-
+    state.cycleCompleted = event.data.cycleCompleted ?? false;
     // Handling the overflow of the body when the agent is open or closed
     if (state.isAgentOpen) {
       if (originalBodyOverflow === null) {
@@ -251,6 +254,7 @@ export function MessageEventManager(
         state.isAgentOpen,
         config.hideBottomBar,
         state.showBanner,
+        state.cycleCompleted,
         state.entryPointAlignment || EntryPointAlignment.CENTER,
         state.hasFirstUserMessageBeenSent,
       );
@@ -260,6 +264,7 @@ export function MessageEventManager(
         isAgentOpen: state.isAgentOpen,
         hideBottomBar: config.hideBottomBar,
         showBanner: state.showBanner,
+        cycleCompleted: state.cycleCompleted,
         entryPointAlignment:
           state.entryPointAlignment || EntryPointAlignment.CENTER,
         hasFirstUserMessageBeenSent: state.hasFirstUserMessageBeenSent,

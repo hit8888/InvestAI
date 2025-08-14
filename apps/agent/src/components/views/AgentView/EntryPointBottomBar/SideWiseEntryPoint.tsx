@@ -9,9 +9,16 @@ import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
 type SideWiseEntryPointProps = {
   handleSuggestedQuestionOnClick: (question: string) => void;
   entryPointAlignment: EntryPointAlignmentType;
+  currentItemIndex: number;
+  cycleCompleted: boolean;
 };
 
-const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignment }: SideWiseEntryPointProps) => {
+const SideWiseEntryPoint = ({
+  handleSuggestedQuestionOnClick,
+  entryPointAlignment,
+  currentItemIndex,
+  cycleCompleted,
+}: SideWiseEntryPointProps) => {
   const { initialSuggestedQuestions, invertTextColor, orbLogoUrl, showOrb } = useValuesFromConfigApi();
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const { setAgentOpen } = useUrlParams();
@@ -42,7 +49,7 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
   };
   return (
     <div
-      className={cn('relative flex w-full items-center p-2', {
+      className={cn('relative flex items-center p-2', {
         'justify-end': isEntryPointOnTheBottomRight,
       })}
     >
@@ -55,6 +62,8 @@ const SideWiseEntryPoint = ({ handleSuggestedQuestionOnClick, entryPointAlignmen
           questionAlignment={entryPointAlignment}
           showOneByOne={isEntryPointOnTheBottomLeft || isEntryPointOnTheBottomRight}
           invertTextColor={invertTextColor}
+          currentItemIndex={currentItemIndex}
+          cycleCompleted={cycleCompleted}
         />
       )}
       {isEntryPointOnTheBottomRight && <>{getEntryPointOrb()}</>}

@@ -21,6 +21,8 @@ import { WidgetMode } from '@meaku/core/contexts/WidgetModeProvider';
 import useSound from '@meaku/core/hooks/useSound';
 import popupsound from '../../../assets/banner-sound.mp3';
 import { PlaygroundView } from '@meaku/core/types/common';
+import { useCycle } from '@breakout/design-system/hooks/useCycle';
+import { useEntryPointStyling } from '../../../hooks/useEntryPointStyling.ts';
 
 interface IProps {
   fetchSessionData: () => void;
@@ -37,16 +39,24 @@ const AgentView = ({ fetchSessionData }: IProps) => {
   const isAgentOpen = getParam('isAgentOpen') === 'true';
   const view = getParam('view');
 
-  const { banner_config, entryPointAlignmentDesktop, entryPointAlignmentMobile, isAgentEnabled } =
-    useValuesFromConfigApi();
+  const {
+    banner_config,
+    entryPointAlignmentDesktop,
+    entryPointAlignmentMobile,
+    isAgentEnabled,
+    initialSuggestedQuestions,
+  } = useValuesFromConfigApi();
 
   const entry_point_alignment = isMobile
     ? entryPointAlignmentMobile || entryPointAlignmentDesktop
     : entryPointAlignmentDesktop;
+  const validEntryPointAlignment = entry_point_alignment ?? EntryPointAlignment.CENTER;
   const showPopupBanner = !!banner_config?.show_banner && !isAgentOpen;
 
   const hasFirstUserMessageBeenSent = useMessageStore((state) => state.hasFirstUserMessageBeenSent);
   const handleUpdateOrbState = useMessageStore((state) => state.handleUpdateOrbState);
+
+  const showSuggestedQuestions = initialSuggestedQuestions.length > 0 && !hasFirstUserMessageBeenSent;
 
   const showBanner = !!banner_config?.show_banner && !hasFirstUserMessageBeenSent && showPopupContent;
   const handleSendMessage = (data: Pick<WebSocketMessage, 'message' | 'message_type'>) => {
@@ -70,13 +80,30 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_OPEN, { isAgentOpen });
   };
 
+  const {
+    isEntryPointOnTheBottomCenter,
+    isEntryPointOnTheBottomRight,
+    isEntryPointOnTheBottomLeft,
+    isSideWiseEntryPoint,
+  } = useEntryPointStyling({
+    entryPointAlignment: validEntryPointAlignment,
+    isMobile,
+  });
+
+  const { currentItemIndex, cycleCompleted } = useCycle({
+    itemsLength: initialSuggestedQuestions.length,
+    showItems: showSuggestedQuestions,
+    cycleOnlyOnce: isSideWiseEntryPoint,
+  });
+
   const { shouldHideBottomBar, isCollapsible, mode, shouldShowAgent } = useEmbedAppEvents({
     isAgentEnabled,
     fetchSessionData,
     handleOpenAgent,
     showBanner,
+    cycleCompleted,
     hasFirstUserMessageBeenSent,
-    entryPointAlignment: entry_point_alignment ?? 'center',
+    entryPointAlignment: validEntryPointAlignment,
     handleSendUserMessage,
   });
 
@@ -86,11 +113,15 @@ const AgentView = ({ fetchSessionData }: IProps) => {
     trackAgentbotEvent(ANALYTICS_EVENT_NAMES.CHAT_AREA_CLOSE, { isAgentOpen });
   };
 
-  const isSideWiseEntryPoint = entry_point_alignment !== 'center';
-  const isEntryPointOnTheBottomCenter = entry_point_alignment === EntryPointAlignment.CENTER;
   const getItemAlignment = () => {
     if (!hasFirstUserMessageBeenSent) {
-      return isSideWiseEntryPoint ? 'items-end justify-end' : 'items-end justify-center';
+      if (isEntryPointOnTheBottomRight) {
+        return 'items-end justify-end';
+      } else if (isEntryPointOnTheBottomLeft) {
+        return 'items-end justify-start';
+      } else {
+        return 'items-end justify-center';
+      }
     }
     return isSideWiseEntryPoint ? 'items-end' : 'items-center';
   };
@@ -131,8 +162,9 @@ const AgentView = ({ fetchSessionData }: IProps) => {
         showAgentInOpenState={agentInopenState && isAgentOpen}
       />
       <div
-        className={cn('flex h-full w-full flex-col items-center justify-end', {
+        className={cn('flex flex-col items-center justify-end', {
           hidden: shouldHideBottomBar || isAgentOpen,
+          'h-full w-full': isEntryPointOnTheBottomCenter,
         })}
       >
         {/* TODO: Remove the !isMobile condition once we have a proper popup banner for mobile */}
@@ -141,7 +173,7 @@ const AgentView = ({ fetchSessionData }: IProps) => {
             handleSendMessage={handleSendMessage}
             showPopupContent={isEntryPointOnTheBottomCenter ? showPopupContent : false}
             setShowPopupContent={setShowPopupContent}
-            popupBannerAlignment={entry_point_alignment ?? 'center'}
+            popupBannerAlignment={validEntryPointAlignment}
             setShowOrbAfterBannerDisappear={setShowOrbAfterBannerDisappear}
           />
         )}
@@ -149,8 +181,10 @@ const AgentView = ({ fetchSessionData }: IProps) => {
           handleSendUserMessage={handleSendMessage}
           handleOpenAgent={handleOpenAgent}
           showPopupContent={showPopupContent}
-          entryPointAlignment={entry_point_alignment ?? 'center'}
+          entryPointAlignment={validEntryPointAlignment}
           showOrbAfterBannerDisappear={showOrbAfterBannerDisappear}
+          currentItemIndex={currentItemIndex}
+          cycleCompleted={cycleCompleted}
         />
       </div>
     </div>
