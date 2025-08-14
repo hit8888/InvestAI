@@ -23,8 +23,6 @@ const useAnalytics = () => {
   const sendBatchEvents = useCallback(
     debounce(async () => {
       if (eventQueueRef.current.length === 0) return;
-      if (!isProduction) return;
-
       try {
         await apiClient.post('/tenant/chat/api/track/batch/', {
           batch_timestamp: Date.now(),
@@ -40,16 +38,16 @@ const useAnalytics = () => {
   );
 
   const trackEvent = (eventName: string, properties: Record<string, unknown> = {}, is_test: boolean = false) => {
-    if (is_test) return;
+    if (!isProduction || is_test) return;
     try {
       eventQueueRef.current.push({
         event_name: eventName,
         properties: {
           ...commonProperties,
-          ...properties,
           timestamp: Date.now(),
           distinct_id,
           utmParams: sessionData.utmParams,
+          ...properties,
         },
       });
       sendBatchEvents();

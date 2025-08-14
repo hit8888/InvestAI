@@ -1,0 +1,36 @@
+// Re-export specific icons that we need
+export {
+  Wand,
+  PhoneCall,
+  Video,
+  Calendar,
+  FileText,
+  MessageCircle,
+  Phone,
+  Settings,
+  Plus,
+  X,
+  Search,
+  Menu,
+  Home,
+  User,
+  Heart,
+  Star,
+  Eye,
+  EyeOff,
+  Lock,
+  Unlock,
+  Download,
+  Upload,
+  Trash2,
+  Edit,
+  Copy,
+  Check,
+  AlertCircle,
+  Info,
+  ZoomIn,
+  Code,
+} from 'lucide-react';
+
+// Re-export the IconProps type from lucide-react
+export type { LucideProps as IconProps } from 'lucide-react';

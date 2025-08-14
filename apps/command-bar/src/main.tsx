@@ -1,0 +1,13 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import App from './App';
+import RootContainer from './containers/RootContainer';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <RootContainer>
+      <App />
+    </RootContainer>
+  </StrictMode>,
+);

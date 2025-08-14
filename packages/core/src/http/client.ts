@@ -14,7 +14,7 @@ const apiClient = axios.create({
 // Add request interceptor to set x-tenant-name header before each request
 apiClient.interceptors.request.use(
   (config) => {
-    config.headers['x-tenant-name'] = getTenantFromUrl();
+    config.headers['x-tenant-name'] = config.headers['x-tenant-name'] || getTenantFromUrl();
     return config;
   },
   (error) => {
@@ -44,5 +44,9 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const setTenantHeader = (tenantId: string) => {
+  apiClient.defaults.headers.common['x-tenant-name'] = tenantId;
+};
 
 export default apiClient;

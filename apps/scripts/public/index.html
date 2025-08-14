@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Breakout Control Center</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body id="bo-bc-container">
+    <div class="container">
+      <div class="panel">
+        <div class="config-grid">
+          <div class="config-group">
+            <h4>Basic Settings</h4>
+            <div class="form-group">
+              <label for="widgetType">Widget Type</label>
+              <select id="widgetType">
+                <option value="agent">🤖 Agent Widget</option>
+                <option value="command-bar" selected>
+                  ⌨️ Command Bar Widget
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tenantId">Tenant ID *</label
+              ><input type="text" id="tenantId" value="hackerearth" required />
+            </div>
+            <div class="form-group">
+              <label for="agentId">Agent ID</label
+              ><input type="text" id="agentId" value="1" />
+            </div>
+            <div class="form-group">
+              <label for="maxHeight">Max Height</label
+              ><input
+                type="text"
+                id="maxHeight"
+                placeholder="e.g., 88vh, 600px"
+              />
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h4>Display Options</h4>
+            <div class="checkbox-group">
+              <input type="checkbox" id="embedMode" /><label for="embedMode"
+                >Embed Mode</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="hideBottomBar" /><label
+                for="hideBottomBar"
+                >Hide Bottom Bar</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="showBottomBar" /><label
+                for="showBottomBar"
+                >Show Bottom Bar</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="allowExternalButtons" /><label
+                for="allowExternalButtons"
+                >Allow External Buttons</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="isCollapsible" /><label
+                for="isCollapsible"
+                >Is Collapsible</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="feedbackEnabled" /><label
+                for="feedbackEnabled"
+                >Feedback Enabled</label
+              >
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="bc" checked /><label for="bc"
+                >Show Background</label
+              >
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h4>User & Time Settings</h4>
+            <div class="form-group">
+              <label for="userEmail">User Email</label
+              ><input
+                type="email"
+                id="userEmail"
+                placeholder="user@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="initialMessage">Initial Message</label
+              ><textarea
+                id="initialMessage"
+                rows="2"
+                placeholder="Enter initial message"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="startTime">Start Time (UTC 24h)</label
+              ><input type="time" id="startTime" />
+            </div>
+            <div class="form-group">
+              <label for="endTime">End Time (UTC 24h)</label
+              ><input type="time" id="endTime" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap">
+          <button class="btn" onclick="loadWidget()" id="loadButton">
+            Load Widget
+          </button>
+          <button
+            class="btn"
+            onclick="resetStorage()"
+            id="resetButton"
+            style="background: #dc3545"
+          >
+            Reset Storage
+          </button>
+        </div>
+      </div>
+
+      <div class="panel" id="widget-preview-panel" style="display: none">
+        <h3 style="margin-bottom: 0.75rem">Widget Preview</h3>
+        <div id="embedded-widget">
+          🎯<br />Configure your widget and click "Load Widget" to see it in
+          action
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

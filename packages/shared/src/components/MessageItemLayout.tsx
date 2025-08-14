@@ -1,0 +1,80 @@
+import { cn } from '@meaku/saral';
+import React from 'react';
+
+// Defined proper enums for better type safety and IntelliSense
+export enum Alignment {
+  LEFT = 'left',
+  RIGHT = 'right',
+  CENTER = 'center',
+}
+
+export enum Gap {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+}
+
+export enum Padding {
+  NONE = 'none',
+  INLINE = 'inline',
+  INLINE_LEFT_ONLY = 'inline-left-only',
+}
+
+export enum Orientation {
+  ROW = 'row',
+  COLUMN = 'column',
+}
+
+interface MessageItemLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+  align?: Alignment;
+  gap?: Gap;
+  paddingInline?: Padding;
+  orientation?: Orientation;
+}
+
+const MessageItemLayout = ({ children, className, align, gap, paddingInline, orientation }: MessageItemLayoutProps) => {
+  const finalAlign = align || Alignment.LEFT;
+  const finalGap = gap || Gap.SMALL;
+  const finalPaddingInline = paddingInline || Padding.NONE;
+  const finalOrientation = orientation || Orientation.ROW;
+
+  const alignmentClasses = {
+    [Alignment.LEFT]: finalOrientation === Orientation.COLUMN ? 'items-start' : 'justify-start',
+    [Alignment.RIGHT]: finalOrientation === Orientation.COLUMN ? 'items-end' : 'justify-end',
+    [Alignment.CENTER]: 'justify-center',
+  };
+
+  const paddingClasses = {
+    [Padding.NONE]: 'pl-0',
+    [Padding.INLINE_LEFT_ONLY]: 'pl-11',
+    [Padding.INLINE]: 'pl-11 pr-6', // Inline padding is used for messages that are not the last message in the conversation
+  };
+
+  const gapClasses = {
+    [Gap.SMALL]: 'gap-2',
+    [Gap.MEDIUM]: 'gap-4',
+  };
+
+  const orientationClasses = {
+    [Orientation.ROW]: 'flex-row',
+    [Orientation.COLUMN]: 'flex-col',
+  };
+
+  return (
+    <div
+      className={cn(
+        'flex',
+        alignmentClasses[finalAlign],
+        orientationClasses[finalOrientation],
+        paddingClasses[finalPaddingInline],
+        finalGap && gapClasses[finalGap],
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default MessageItemLayout;

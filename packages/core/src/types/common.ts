@@ -12,8 +12,8 @@ export const DataSourceSchema = z.object({
 });
 
 export const BrowsedUrlSchema = z.object({
-  url: z.string().nullable(),
-  timestamp: z.number().nullable(),
+  url: z.string(),
+  timestamp: z.number(),
 });
 
 export type BrowsedUrl = z.infer<typeof BrowsedUrlSchema>;
@@ -81,4 +81,17 @@ export enum AgentResponseWordCountEnum {
   BRIEF = 'BRIEF',
   STANDARD = 'STANDARD',
   DETAILED = 'DETAILED',
+}
+
+export interface CommandBarSettings {
+  tenant_id: string;
+  agent_id: string;
+  visible?: boolean;
+  message?: string;
+  start_time?: string;
+  end_time?: string;
+  parent_url?: string;
+  session_id?: string;
+  browsed_urls?: BrowsedUrl[];
+  bc?: boolean;
 }

@@ -1,0 +1,26 @@
+.custom-phone-input {
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s ease-in-out;
+}
+
+/* Style the actual input field */
+.custom-phone-input .PhoneInputInput {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+}
+
+.custom-phone-input .PhoneInputInput::placeholder {
+  color: #98a2b3;
+  font-size: 14px;
+}
+
+/* Remove default input styles */
+.custom-phone-input .PhoneInputInput:focus {
+  box-shadow: none;
+  outline: none;
+}

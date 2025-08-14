@@ -3,7 +3,7 @@ import { withWhiteLabelConfig } from '../withWhiteLabelConfig';
 import { useContextSelector } from 'use-context-selector';
 import { ApiProviderContext } from '@meaku/core/contexts/Context';
 import { useUrlParams } from '@meaku/core/hooks/useUrlParams';
-import { CDN_URL_FOR_ASSETS } from '../../constants/chat';
+import { CDN_URL_FOR_ASSETS } from '@meaku/core/constants/index';
 import { Toaster } from 'react-hot-toast';
 import AgentView from '../../components/views/AgentView';
 import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';

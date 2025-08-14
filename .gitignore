@@ -38,8 +38,10 @@ yarn-error.log*
 
 # ui
 dist/
+dist-wc/
 
 *storybook.log
 
-#Webstorm
+# IDEs
 .idea/
+.vscode/

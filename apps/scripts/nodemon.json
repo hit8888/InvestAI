@@ -1,5 +1,6 @@
 {
-  "watch": ["*.ts"],
-  "ignore": ["dist/*", "build/*"],
-  "ext": "ts"
+  "watch": ["src/**/*.ts"],
+  "ignore": ["dist/*"],
+  "ext": "ts",
+  "exec": "rm -rf dist && pnpm build"
 }

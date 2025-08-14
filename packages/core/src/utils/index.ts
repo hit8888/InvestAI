@@ -205,3 +205,8 @@ export const isUrl = (url: string): boolean => {
     return false;
   }
 };
+
+export const sanitizeUrl = (url?: string): string => {
+  if (!url) return '';
+  return url.split('?')[0].split('#')[0].replace(/\/$/, '');
+};

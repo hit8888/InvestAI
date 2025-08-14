@@ -13,8 +13,6 @@ export const NEGATIVE_FEEDBACK_CATEGORIES = [
   'Other..',
 ];
 
-export const CDN_URL_FOR_ASSETS = 'https://assets.getbreakout.ai';
-
 export const CHAT_ASSET_DELAY_THRESHOLD_IN_MILLISECONDS = 1000;
 
 // Taken 8 Seconds because the sentence is explicitly matching

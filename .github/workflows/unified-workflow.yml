@@ -189,7 +189,7 @@ jobs:
           fi
 
           echo "Uploading scripts to S3..."
-          aws s3 sync apps/scripts/build s3://frontendscripts/${ENVIRONMENT}
+          aws s3 sync apps/scripts/dist s3://frontendscripts/${ENVIRONMENT}
 
           if [ $? -eq 0 ]; then
             echo "Scripts uploaded to S3 for ${ENVIRONMENT} environment."

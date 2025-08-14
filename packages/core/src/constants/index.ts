@@ -1,6 +1,8 @@
 export const AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT = 'Cannot send a message while AI is responding';
 export const SUGGESTED_QUESTIONS_INTERVAL_DURATION_IN_CYCLE_IN_MS = 6000;
 
+export const CDN_URL_FOR_ASSETS = 'https://assets.getbreakout.ai';
+
 export enum DISCOVERY_QUESTION_ANSWER_TYPE {
   SINGLE_SELECT = 'SINGLE_SELECT',
   MULTI_SELECT = 'MULTI_SELECT',

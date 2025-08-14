@@ -1,10 +1,15 @@
 {
   "name": "scripts",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "scripts": {
-    "build": "tsc && tsc-alias && esbuild ./dist/*.js ./dist/**/*.js --minify --outdir=build --format=iife --bundle",
-    "dev": "nodemon --watch . --ignore dist/ --ignore build/ --ext ts --exec 'pnpm build'",
+    "build:chat-widget": "NODE_ENV=production VITE_ENTRY_POINT=chat_widget vite build",
+    "build:command-bar": "NODE_ENV=production VITE_ENTRY_POINT=command_bar_widget vite build",
+    "build": "rm -rf dist && pnpm run build:chat-widget && pnpm run build:command-bar",
+    "dev:chat-widget": "NODE_ENV=development VITE_ENTRY_POINT=chat_widget vite build",
+    "dev:command-bar": "NODE_ENV=development VITE_ENTRY_POINT=command_bar_widget vite build",
+    "dev": "nodemon --watch src --ext ts --exec 'pnpm run dev:chat-widget && pnpm run dev:command-bar'",
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui"
   },
@@ -15,9 +20,9 @@
     "@meaku/typescript-config": "workspace:*",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.5.4",
-    "esbuild": "^0.25.0",
-    "tsc-alias": "^1.8.10",
+    "@vitejs/plugin-legacy": "^7.1.0",
+    "nodemon": "^3.0.0",
     "typescript": "^5.0.0",
-    "nodemon": "^3.0.0"
+    "vite": "^7.0.6"
   }
 }

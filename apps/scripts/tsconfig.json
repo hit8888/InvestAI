@@ -3,7 +3,6 @@
   "include": ["."],
   "exclude": [
     "dist",
-    "build",
     "node_modules",
     "**/*.spec.ts",
     "**/playwright.config.ts"
@@ -20,6 +19,6 @@
     "noEmit": false,
     "allowImportingTsExtensions": false,
     "moduleResolution": "node",
-    "module": "none"
+    "module": "ESNext"
   }
 }

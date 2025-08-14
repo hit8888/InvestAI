@@ -742,6 +742,10 @@ const sortMessageGroup = (messages: WebSocketMessage[]): WebSocketMessage[] => {
   const messagesToBeSorted = messages.slice().filter((msg) => !isGeneratingMediaArtifactEvent(msg));
 
   const resultantMessages = messagesToBeSorted.sort((a, b) => {
+    // Always show user messages first
+    if (a.role === MessageSenderRole.USER && b.role !== MessageSenderRole.USER) return -1;
+    if (a.role !== MessageSenderRole.USER && b.role === MessageSenderRole.USER) return 1;
+
     const aIsMainResponse = isMainResponse(a);
     const bIsMainResponse = isMainResponse(b);
     const aIsDelayed = isDelayedMessage(a);

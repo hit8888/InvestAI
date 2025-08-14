@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* use this site to convert from hexcode to hsl - https://colordesigner.io/convert/hextohsl */
+@layer base {
+  :root,
+  :host {
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 220 9% 15%; /* #272A2E */
+    --card: 210 12.5% 96.86%; /* #F6F7F8 */
+    --card-foreground: 214.29 8.24% 16.67%; /* #272A2E */
+    --popover: 0 0% 100%; /* #FFFFFF */
+    --popover-foreground: 220 9% 15%; /* #272A2E */
+    --primary: 252 87% 59%; /* #613CF1 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary-subtle: 253.33 47.37% 96.27%; /* #F3F1FA */
+    --secondary: 214.29 8.24% 16.67%; /* #272A2E */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+    --muted: 210 13.04% 90.98%; /* #E5E8EB */
+    --muted-foreground: 216 2.96% 33.14%; /* #525457 */
+    --base-foreground: 210 13.04% 81.96%; /* #CBD1D7 */
+    --accent: 210 1.57% 49.8%; /* #7d7f81 */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
+    --destructive: 0 65.08% 50.59%; /* #D32F2F */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+    --border: 210 2.33% 83.14%; /* #d3d4d5 */
+    --input: 220 1.75% 66.47%; /* #a8a9ab */
+    --ring: 214.29 8.24% 16.67%; /* #272A2E */
+    --link: 211.18 95.33% 58.04%; /* #2E90FA */
+    --radius: 0.5rem;
+    --shadow-elevation-md: 0 0 24px 0 rgba(0, 0, 0, 0.24);
+    --positive-dark: 134.79 77.17% 36.08%; /* #15A338 */
+  }
+
+  .dark,
+  :host([data-theme='dark']) {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 252 87% 59%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-subtle: 252 20% 15%; /* #2A2830 */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 10% 92%; /* #E5E8EB */
+    --muted-foreground: 214 8% 17% / 0.7;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --link: 211.18 95.33% 58.04%; /* #2E90FA */
+    --ring: 212.7 26.8% 83.9%;
+    --positive-dark: 134.79 77.17% 36.08%; /* #15A338 */
+  }
+
+  .bg-positive-dark {
+    background-color: hsl(var(--positive-dark));
+  }
+
+  .text-positive-dark {
+    color: hsl(var(--positive-dark));
+  }
+
+  .text-container {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--input-color, var(--fallback-color));
+  }
+
+  .text-state {
+    background: linear-gradient(90deg, var(--input-color, --fallback-color) 0%, #e0e5ea 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-animation 500ms linear infinite alternate-reverse;
+    background-size: 200% 100%; /* Adjust this value as needed */
+  }
+
+  @keyframes text-animation {
+    0% {
+      background-position: 0% 0%;
+    }
+    12.5% {
+      background-position: 12.5% 0%;
+    }
+    25% {
+      background-position: 25% 0%;
+    }
+    37.5% {
+      background-position: 37.5% 0%;
+    }
+    50% {
+      background-position: 50% 0%;
+    }
+    62.5% {
+      background-position: 62.5% 0%;
+    }
+    75% {
+      background-position: 75% 0%;
+    }
+    87.5% {
+      background-position: 87.5% 0%;
+    }
+    100% {
+      background-position: 100% 0%;
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  :host {
+    @apply bg-background font-sans text-foreground;
+  }
+}
+
+@keyframes highBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 0.4;
+  }
+}
