@@ -1010,9 +1010,6 @@ importers:
       react-calendly:
         specifier: ^4.3.1
         version: 4.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      zod:
-        specifier: ^3.23.8
-        version: 3.25.76
     devDependencies:
       '@calcom/embed-react':
         specifier: ^1.5.2
@@ -1119,6 +1116,12 @@ importers:
       vitest:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.13.1)(jsdom@26.0.0)(terser@5.38.1)
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+      zustand:
+        specifier: 5.0.0-rc.2
+        version: 5.0.0-rc.2(@types/react@19.1.9)(immer@10.1.1)(react@19.1.1)(use-sync-external-store@1.4.0(react@19.1.1))
 
 packages:
 

@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+
 import { hexToHSL } from '@meaku/core/utils/color';
 import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
 
@@ -6,9 +7,7 @@ interface UseStyleConfigProps {
   styleConfig?: ConfigurationApiResponse['style_config'];
 }
 
-export const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
   useEffect(() => {
     if (!styleConfig) return;
 
@@ -35,21 +34,19 @@ export const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
 
         try {
           const value = hexToHSL(hexValue);
+          const boBcContainer = document.querySelector('#bo-bc-container') as HTMLElement;
+          const shadowHosts = document.querySelectorAll('[id^="breakout-"]');
 
-          // Try to inject into shadow root first (web component)
-          const shadowRoot = containerRef.current?.getRootNode() as ShadowRoot;
-          if (shadowRoot && shadowRoot.host) {
-            // We're in a shadow root, inject CSS variables into the shadow root
-            (shadowRoot.host as HTMLElement).style.setProperty(`--${formattedKey}`, value);
-          } else if (containerRef.current) {
-            // Fallback to regular DOM injection
-            containerRef.current.style.setProperty(`--${formattedKey}`, value);
-          }
+          shadowHosts.forEach((host) => {
+            const hostElement = host as HTMLElement;
+            hostElement.style.setProperty(`--${formattedKey}`, value);
+          });
+          boBcContainer?.style.setProperty(`--${formattedKey}`, value);
         } catch (error) {
-          console.error('Error converting hex to HSL:', error);
+          console.error('Error setting style config', error);
         }
       });
   }, [styleConfig]);
-
-  return containerRef;
 };
+
+export default useStyleConfig;

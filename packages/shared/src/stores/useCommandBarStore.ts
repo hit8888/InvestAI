@@ -6,9 +6,10 @@ import {
   SuggestionsArtifactData,
   type Message,
   type StreamResponseEventData,
-} from '@meaku/shared/types/message';
-import { groupMessagesByResponseId } from '@meaku/shared/utils/message-utils';
+} from '../types/message';
+import { groupMessagesByResponseId } from '../utils/message-utils';
 import type { CommandBarSettings } from '@meaku/core/types/common';
+import { InitSessionResponse } from '../types/responses';
 
 export interface SessionData {
   sessionId: string;
@@ -28,7 +29,7 @@ interface CommandBarState {
   settings: CommandBarSettings;
 
   // Session data
-  sessionData: SessionData | null;
+  sessionData: InitSessionResponse | null;
 
   // Suggested questions
   suggestedQuestions: string[];
@@ -54,6 +55,7 @@ interface CommandBarState {
   setConfig: (config: ConfigurationApiResponse) => void;
   setSettings: (settings: CommandBarSettings) => void;
   updateSettings: (settings: Partial<CommandBarSettings>) => void;
+  setSessionData: (sessionData: InitSessionResponse) => void;
 
   // Utility methods
   getLastMessage: () => Message | undefined;
@@ -494,6 +496,10 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
         ...settings,
       },
     }));
+  },
+
+  setSessionData: (sessionData) => {
+    set({ sessionData });
   },
 
   // Utility methods

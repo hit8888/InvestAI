@@ -5,8 +5,8 @@ interface FeatureHeaderProps {
   title: string;
   welcomeMessage?: string;
   icon?: ReactNode;
-  onClose: () => void;
-  onExpand: () => void;
+  onClose?: () => void;
+  onExpand?: () => void;
   isExpanded?: boolean;
   shouldBookMeetingCTAButtonShow?: boolean;
   ctas?: { text: string; message?: string; url?: string }[];

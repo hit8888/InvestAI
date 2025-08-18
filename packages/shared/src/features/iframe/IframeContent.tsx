@@ -1,55 +1,36 @@
 import { useState } from 'react';
+
 import PreviewDialog from '../../components/PreviewDialog';
-import { CommandBarModuleConfigType, ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
 import { Input, Button, Label } from '@meaku/saral';
 import useUpdateProspectMutation from '../../network/http/mutations/useUpdateProspectMutation';
-import { useQueryClient } from '@tanstack/react-query';
-import { dynamicConfigDataKey } from '../../network/http/queries/useDynamicConfigDataQuery';
-import { CommandBarSettings } from '@meaku/core/types/common';
+import { FeatureContentProps } from '../';
+import { useCommandBarStore } from '../../stores/useCommandBarStore';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 
-interface IframeContentProps {
-  config: ConfigurationApiResponse;
-  settings: CommandBarSettings;
-  featureConfig: CommandBarModuleConfigType;
-  onClose: () => void;
-}
-
-export const IframeContent = ({ config, settings, featureConfig, onClose }: IframeContentProps) => {
-  const { name, module_configs: moduleConfig } = featureConfig;
-  const { gated, url } = moduleConfig;
-  const queryClient = useQueryClient();
+export const IframeContent = ({ onClose }: FeatureContentProps) => {
+  const { config } = useCommandBarStore();
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.IFRAME);
+  const [email, setEmail] = useState('');
 
   const { mutate, isSuccess, isPending } = useUpdateProspectMutation({
     onSuccess: () => {
-      if (!settings.parent_url) return;
+      if (!featureConfig || !config.command_bar) return;
 
-      queryClient.setQueryData(
-        dynamicConfigDataKey(settings.parent_url),
-        (oldData: ConfigurationApiResponse | undefined) => {
-          if (!oldData) return oldData;
-
-          const updateModule = (module: CommandBarModuleConfigType) =>
-            module.id === featureConfig.id
-              ? { ...module, module_configs: { ...module.module_configs, gated: false } }
-              : module;
-
-          return {
-            ...oldData,
-            command_bar: {
-              ...oldData.command_bar,
-              modules: (oldData.command_bar?.modules ?? []).map(updateModule),
-            },
-          };
-        },
-      );
+      setLocalStorageData({
+        prospect_info_collected: true,
+      });
     },
   });
 
-  const [email, setEmail] = useState('');
-
-  if (!url) {
+  if (!featureConfig?.module_configs?.url) {
     return null;
   }
+
+  const { name, module_configs: moduleConfig } = featureConfig;
+  const { gated, url } = moduleConfig;
+  const showEmailForm = gated && !isSuccess && !getLocalStorageData()?.prospect_info_collected;
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +46,7 @@ export const IframeContent = ({ config, settings, featureConfig, onClose }: Ifra
 
   return (
     <PreviewDialog open title={name} onOpenChange={onClose}>
-      {gated && !isSuccess ? (
+      {showEmailForm ? (
         <div className="flex h-full flex-col items-center justify-center p-6">
           <form onSubmit={handleEmailSubmit} className="w-80 space-y-4">
             <div className="space-y-2">
@@ -94,4 +75,3 @@ export const IframeContent = ({ config, settings, featureConfig, onClose }: Ifra
 };
 
 export default IframeContent;
-export type { IframeContentProps };

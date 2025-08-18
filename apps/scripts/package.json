@@ -4,9 +4,12 @@
   "type": "module",
   "description": "",
   "scripts": {
+    "build": "npm run build:with-deps",
+    "build:with-deps": "rm -rf dist && npm run build:deps && npm run copy:deps && npm run build:chat-widget && npm run build:command-bar",
+    "build:deps": "cp .env ../command-bar/.env 2>/dev/null || echo 'No .env file to copy' && cd ../.. && pnpm turbo run build --filter=command-bar",
+    "copy:deps": "mkdir -p dist/breakout-command-bar && cp -r ../command-bar/dist/* ./dist/breakout-command-bar/",
     "build:chat-widget": "NODE_ENV=production VITE_ENTRY_POINT=chat_widget vite build",
     "build:command-bar": "NODE_ENV=production VITE_ENTRY_POINT=command_bar_widget vite build",
-    "build": "rm -rf dist && pnpm run build:chat-widget && pnpm run build:command-bar",
     "dev:chat-widget": "NODE_ENV=development VITE_ENTRY_POINT=chat_widget vite build",
     "dev:command-bar": "NODE_ENV=development VITE_ENTRY_POINT=command_bar_widget vite build",
     "dev": "nodemon --watch src --ext ts --exec 'pnpm run dev:chat-widget && pnpm run dev:command-bar'",

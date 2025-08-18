@@ -11,13 +11,23 @@
       rel="stylesheet"
     />
     <title>Breakout Command Bar</title>
+
+    <style>
+      .breakout-embed-container {
+        width: 600px;
+      }
+    </style>
   </head>
   <body id="bo-bc-container">
     <!-- React App Root -->
     <div id="root"></div>
 
+    <div class="breakout-embed-container">
+      <breakout-book-meeting id="breakout-book-meeting" agent-id="2" tenant-id="hubspot"></breakout-book-meeting>
+    </div>
+
     <!-- Web Component -->
-    <breakout-command-bar agent-id="2" tenant-id="hubspot"></breakout-command-bar>
+    <breakout-command-bar id="breakout-command-bar" agent-id="2" tenant-id="hubspot"></breakout-command-bar>
 
     <!-- Scripts -->
     <script type="module" src="/src/main.tsx"></script>

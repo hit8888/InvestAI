@@ -1,26 +1,22 @@
-import React from 'react';
 import { Button, Icons } from '@meaku/saral';
-import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
 import BlackTooltip from '../../components/BlackTooltip';
+import { FeatureActionProps } from '../';
 
-interface IframeActionProps {
-  config: CommandBarModuleConfigType;
-  isActive: boolean;
-  onClick: () => void;
-  actionId: string;
-}
+const IframeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.IFRAME);
 
-const IframeAction: React.FC<IframeActionProps> = ({ config, isActive, onClick, actionId }) => {
-  if (!config.module_configs.url) {
+  if (!featureConfig?.module_configs?.url) {
     return null;
   }
 
   const button = (
     <Button
-      data-button-id={`action-${actionId}`}
+      data-action-id={`action-${CommandBarModuleTypeSchema.enum.IFRAME}`}
       size="icon"
       variant={isActive ? 'default_active' : 'outline'}
-      onClick={onClick}
+      onClick={() => onClick?.(featureConfig)}
       className={isActive ? 'rounded-2xl' : 'rounded-full'}
     >
       <Icons.Gamepad2 className="size-5" />
@@ -31,7 +27,9 @@ const IframeAction: React.FC<IframeActionProps> = ({ config, isActive, onClick, 
     return button;
   }
 
-  return <BlackTooltip content={config.tooltip_text ?? config.name}>{button}</BlackTooltip>;
+  return (
+    <BlackTooltip content={featureConfig.module_configs.tooltip_text ?? featureConfig.name}>{button}</BlackTooltip>
+  );
 };
 
 export default IframeAction;

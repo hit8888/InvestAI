@@ -1,13 +1,27 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { querySelector } from '../utils/dom-utils';
+import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 
 export interface FeatureContentWrapperProps {
   children: React.ReactNode;
-  bottom: number;
+  activeFeature: CommandBarModuleType | null;
   isExpanded: boolean;
 }
 
-const FeatureContentWrapper = ({ children, bottom, isExpanded }: FeatureContentWrapperProps) => {
+const getActiveFeatureBottomOffset = (activeFeature: CommandBarModuleType) => {
+  const buttonElement = querySelector(`[data-action-id="action-${activeFeature}"]`) as HTMLButtonElement;
+
+  if (!buttonElement) return 0;
+  const rect = buttonElement.getBoundingClientRect();
+  return window.innerHeight - rect.bottom;
+};
+
+const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureContentWrapperProps) => {
+  if (!activeFeature) return null;
+
+  const bottom = getActiveFeatureBottomOffset(activeFeature);
+
   return (
     <motion.div
       layout

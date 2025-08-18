@@ -3,25 +3,39 @@ import { getConfig } from '../api';
 import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
 import type { ConfigPayload } from '@meaku/core/types/api/agent_config_request';
 import type { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { sanitizeUrl } from '@meaku/core/utils/index';
+import { useCommandBarStore } from '../../../stores';
 
 export const dynamicConfigDataKey = (parent_url: string): unknown[] => ['dynamic-config', parent_url];
 
 type DynamicConfigDataKey = ReturnType<typeof dynamicConfigDataKey>;
 
-type DynamicConfigDataQueryPayload = ConfigPayload & {
-  agentId: string;
+type DynamicConfigDataQueryPayload = Partial<ConfigPayload> & {
+  agentId?: string;
 };
 
 const useDynamicConfigDataQuery = (
   payload: DynamicConfigDataQueryPayload,
   options: BreakoutQueryOptions<ConfigurationApiResponse, DynamicConfigDataKey> = {},
 ): UseQueryResult<ConfigurationApiResponse> => {
-  const { agentId, ...requestPayload } = payload;
+  const { settings, config } = useCommandBarStore();
 
   const query = useQuery({
-    queryKey: dynamicConfigDataKey(requestPayload?.parent_url ?? ''),
+    queryKey: dynamicConfigDataKey(settings.parent_url ?? ''),
     queryFn: async () => {
-      const response = await getConfig(agentId, requestPayload);
+      const response = await getConfig(settings.agent_id, {
+        parent_url: settings.parent_url,
+        session_id: config.session_id,
+        prospect_id: config.prospect_id,
+        nudge_disabled: false,
+        browsed_urls: settings.browsed_urls ?? [
+          {
+            url: sanitizeUrl(settings.parent_url),
+            timestamp: Date.now(),
+          },
+        ],
+        ...payload,
+      });
       return response.data;
     },
     ...options,

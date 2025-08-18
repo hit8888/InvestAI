@@ -1,15 +1,11 @@
 import React from 'react';
 import { Button, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
-import { OrbConfigType } from '@meaku/core/types/api/configuration_response';
 import { motion } from 'framer-motion';
 import BlackTooltip from '../../components/BlackTooltip';
-
-interface AskAiActionProps {
-  isActive: boolean;
-  orgConfig: OrbConfigType | undefined;
-  onClick: () => void;
-  actionId: string;
-}
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { FeatureActionProps } from '../';
+import { useCommandBarStore } from '../../stores/useCommandBarStore';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
 
 const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -27,18 +23,28 @@ const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const AskAiAction: React.FC<AskAiActionProps> = ({ isActive, onClick, orgConfig, actionId }) => {
-  const btnContent = !orgConfig?.show_orb ? (
+const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+  const { config } = useCommandBarStore();
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.ASK_AI);
+  const { orb_config: orbConfig } = config.style_config;
+
+  const btnContent = !orbConfig?.show_orb ? (
     <Button
-      data-button-id={`action-${actionId}`}
+      data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
       size="icon"
-      onClick={onClick}
+      onClick={() => onClick?.(featureConfig)}
       className="rounded-full border bg-background p-1 hover:bg-background/50"
     >
-      <img src={orgConfig?.logo_url ?? undefined} alt="orb" className="h-full w-full rounded-full object-cover" />
+      <img src={orbConfig?.logo_url ?? undefined} alt="orb" className="h-full w-full rounded-full object-cover" />
     </Button>
   ) : (
-    <Button data-button-id={`action-${actionId}`} size="icon" onClick={onClick} className="rounded-full" asChild>
+    <Button
+      data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
+      size="icon"
+      onClick={() => onClick?.(featureConfig)}
+      className="rounded-full"
+      asChild
+    >
       <div className="orb-container relative h-14 w-14 overflow-hidden p-1">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/50 via-white/10 to-transparent blur-md" />
         <div className="relative inset-0 z-10 flex flex-col items-center justify-center">

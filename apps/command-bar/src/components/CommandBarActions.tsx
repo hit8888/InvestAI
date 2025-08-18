@@ -1,94 +1,60 @@
 import React from 'react';
 import { TooltipProvider } from '@meaku/saral';
 import { AskAiAction, BookMeetingAction, SummarizeAction, IframeAction } from '@meaku/shared/features';
-import { Message, MessageEventType } from '@meaku/shared/types/message';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
-  OrbConfigType,
+  CommandBarModuleTypeSchema,
 } from '@meaku/core/types/api/configuration_response';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
 
 interface CommandBarActionsProps {
-  actions: CommandBarModuleConfigType[];
-  activeButton: CommandBarModuleType | null;
-  onActiveButtonChange: (buttonType: CommandBarModuleType | null) => void;
-  sendUserMessage: (message: string, overrides?: Partial<Message>) => void;
-  messages: Message[];
-  orgConfig: OrbConfigType | undefined;
+  activeFeature: CommandBarModuleType | null;
+  setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
 }
 
-const CommandBarActions: React.FC<CommandBarActionsProps> = ({
-  actions,
-  activeButton,
-  onActiveButtonChange,
-  sendUserMessage,
-  messages,
-  orgConfig,
-}) => {
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME } = CommandBarModuleTypeSchema.enum;
+
+const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, setActiveFeature }) => {
+  const { config } = useCommandBarStore();
   const { trackEvent } = useCommandBarAnalytics();
 
-  const handleButtonClick = (actionType: CommandBarModuleType) => {
-    onActiveButtonChange(activeButton === actionType ? null : actionType);
+  const { modules = [] } = config.command_bar ?? {};
+
+  const handleClick = (featureConfig: CommandBarModuleConfigType | undefined) => {
+    if (!featureConfig) {
+      return;
+    }
+
+    const { module_type } = featureConfig;
+
+    setActiveFeature(activeFeature === module_type ? null : module_type);
     trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.ACTION_CLICK, {
-      action_type: actionType,
+      action_type: module_type,
     });
   };
 
-  const orderedActions = [...actions].sort((a, b) => {
-    if (a.module_type === 'ASK_AI' && b.module_type !== 'ASK_AI') return 1;
-    if (a.module_type !== 'ASK_AI' && b.module_type === 'ASK_AI') return -1;
+  // This is to ensure that the ask ai button is always the first button in the command bar
+  const orderedActions = [...modules].sort((a, b) => {
+    if (a.module_type === ASK_AI && b.module_type !== ASK_AI) return 1;
+    if (a.module_type !== ASK_AI && b.module_type === ASK_AI) return -1;
     return 0;
   });
 
-  const isBookMeetingEventPresent = messages.some(
-    (message) =>
-      message.event_type === MessageEventType.BOOK_MEETING ||
-      message.event_type === MessageEventType.FORM_ARTIFACT ||
-      message.event_type === MessageEventType.CALENDAR_ARTIFACT,
-  );
+  const renderActionComponent = (featureConfig: CommandBarModuleConfigType) => {
+    const isActive = activeFeature === featureConfig.module_type;
 
-  const renderActionComponent = (action: CommandBarModuleConfigType) => {
-    const isActive = activeButton === action.module_type;
-    const onClick = () => handleButtonClick(action.module_type);
-
-    switch (action.module_type) {
-      case 'ASK_AI':
-        return (
-          <AskAiAction
-            actionId={action.id.toString()}
-            key={action.id}
-            isActive={isActive}
-            onClick={onClick}
-            orgConfig={orgConfig}
-          />
-        );
-      case 'BOOK_MEETING':
-        return (
-          <BookMeetingAction
-            actionId={action.id.toString()}
-            isBookMeetingEventPresent={isBookMeetingEventPresent}
-            sendUserMessage={sendUserMessage}
-            key={action.id}
-            isActive={isActive}
-            onClick={onClick}
-          />
-        );
-      case 'SUMMARIZE':
-        return (
-          <SummarizeAction actionId={action.id.toString()} key={action.id} isActive={isActive} onClick={onClick} />
-        );
-      case 'IFRAME':
-        return (
-          <IframeAction
-            actionId={action.id.toString()}
-            config={action}
-            key={action.id}
-            isActive={isActive}
-            onClick={onClick}
-          />
-        );
+    switch (featureConfig.module_type) {
+      case ASK_AI:
+        return <AskAiAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
+      case BOOK_MEETING:
+        return <BookMeetingAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
+      case SUMMARIZE:
+        return <SummarizeAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
+      case IFRAME:
+        return <IframeAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
       default:
         return null;
     }

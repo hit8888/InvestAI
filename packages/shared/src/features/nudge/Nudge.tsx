@@ -1,35 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Cta, Nudge as NudgeType } from '@meaku/core/types/api/configuration_response';
 import { Button, Icons, KatyIcon, Markdown } from '@meaku/saral';
 import useNudgeQuery from '../../network/http/queries/useNudgeQuery';
-import type { CommandBarModuleType, ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
+import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import useDelayedQuery from '@meaku/core/hooks/useDelayedQuery';
-import { CommandBarSettings } from '@meaku/core/types/common';
 import NudgeTimeoutLoader from './components/NudgeTimeoutLoader';
 import NudgeAsset from './components/NudgeAsset';
 import { useMouseDismissible } from './hooks/useMouseDismissible';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useCommandBarStore } from '../../stores/useCommandBarStore';
+import { useWsClient } from '../../hooks/useWsClient';
 
 interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
-  config: ConfigurationApiResponse;
-  settings: CommandBarSettings;
   onClose?: () => void;
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;
-  sendUserMessage: (message: string) => void;
 }
 
-const Nudge: React.FC<NudgeProps> = ({
-  activeFeature,
-  onClose,
-  setActiveFeature,
-  settings,
-  config,
-  sendUserMessage,
-}) => {
+const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
+  const { config, settings } = useCommandBarStore();
+  const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: initialNudge } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(initialNudge ?? null);

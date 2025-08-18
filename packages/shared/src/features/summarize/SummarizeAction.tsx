@@ -1,20 +1,18 @@
-import React from 'react';
 import { Button, Icons } from '@meaku/saral';
 import BlackTooltip from '../../components/BlackTooltip';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { FeatureActionProps } from '../';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-interface SummarizeActionProps {
-  isActive: boolean;
-  onClick: () => void;
-  actionId: string;
-}
+const SummarizeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.SUMMARIZE);
 
-const SummarizeAction: React.FC<SummarizeActionProps> = ({ isActive, onClick, actionId }) => {
   const button = (
     <Button
-      data-button-id={`action-${actionId}`}
+      data-action-id={`action-${CommandBarModuleTypeSchema.enum.SUMMARIZE}`}
       size="icon"
       variant={isActive ? 'default_active' : 'outline'}
-      onClick={onClick}
+      onClick={() => onClick?.(featureConfig)}
       className={isActive ? 'rounded-2xl' : 'rounded-full'}
     >
       <Icons.FileText className="size-5" />

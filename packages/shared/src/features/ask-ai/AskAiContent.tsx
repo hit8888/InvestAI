@@ -1,38 +1,46 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { Icons, KatyIcon } from '@meaku/saral';
-import type { FeatureContentProps } from '..';
-import type { Message as MessageType } from '../../types/message';
+import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
 import { Messages } from './Messages';
 import { useAvatarSelection } from '../../hooks/useAvatarSelection';
 import { checkIfCTAButtonShown } from '../../utils/common';
+import { useCommandBarStore } from '../../stores/useCommandBarStore';
+import { useWsClient } from '../../hooks/useWsClient';
 
-type AskAiContentProps = FeatureContentProps & {
-  suggestedQuestions: string[];
-  isStreaming: boolean;
-  getRenderableMessages: () => MessageType[];
-  isDiscoveryQuestionShown: () => boolean;
-  clearSuggestedQuestionsIfDiscoveryShown: () => void;
-};
+const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
+  const {
+    suggestedQuestions,
+    isStreaming,
+    getRenderableMessages,
+    isDiscoveryQuestionShown,
+    clearSuggestedQuestionsIfDiscoveryShown,
+    isLoading,
+    messages,
+    settings,
+    config,
+    sessionData,
+  } = useCommandBarStore();
 
-const AskAiContent: React.FC<AskAiContentProps> = ({
-  onClose,
-  onExpand,
-  askaiConfig,
-  isInitialising,
-  isLoading = false,
-  sendUserMessage,
-  messages,
-  isExpanded,
-  config,
-  settings,
-  suggestedQuestions,
-  isStreaming,
-  getRenderableMessages,
-  isDiscoveryQuestionShown,
-  clearSuggestedQuestionsIfDiscoveryShown,
-}) => {
+  const askaiConfig = useMemo(
+    () => ({
+      agent_name: config?.agent_name ?? '',
+      welcome_message: config?.body?.welcome_message ?? '',
+      ctas: [
+        {
+          text: config.body.cta_config?.text ?? 'Contact Sales',
+          message: config.body.cta_config?.message ?? 'I want to book a demo for the product.',
+          url: config.body.cta_config?.url ?? '',
+        },
+      ],
+      welcomeQuestions: config?.body?.welcome_message?.suggested_questions ?? [],
+    }),
+    [config],
+  );
+
+  const { sendUserMessage } = useWsClient();
+
   // Use session_id if available, otherwise use a combination of agentId and prospectId
   const avatarKey = config.session_id || `${settings.agent_id}-${config.prospect_id}`;
   const { selectedAvatar, isAvatarLoaded } = useAvatarSelection(avatarKey);
@@ -60,7 +68,7 @@ const AskAiContent: React.FC<AskAiContentProps> = ({
       <div className="h-10 w-full flex-1  p-2 pt-0">
         <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
           <div className="relative h-[calc(100%-76px)] flex-1">
-            {isInitialising ? (
+            {!sessionData ? (
               <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
                 <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
                 <p className="text-xs text-muted-foreground">Initialising...</p>
@@ -78,7 +86,7 @@ const AskAiContent: React.FC<AskAiContentProps> = ({
               clearSuggestedQuestionsIfDiscoveryShown={clearSuggestedQuestionsIfDiscoveryShown}
             />
           </div>
-          <AskAiInput sendUserMessage={sendUserMessage} disabled={(isInitialising || isLoading) ?? false} />
+          <AskAiInput sendUserMessage={sendUserMessage} disabled={(!sessionData || isLoading) ?? false} />
         </div>
       </div>
     </div>

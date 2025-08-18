@@ -13,6 +13,7 @@ export function WebComponentManager() {
     await loadScript(url);
 
     const element = document.createElement(tagName);
+    element.id = tagName;
 
     Object.entries(attributes).forEach(([key, value]) => {
       element.setAttribute(key, value);

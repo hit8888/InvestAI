@@ -33,7 +33,9 @@
     "react-phone-number-input": "^3.4.11",
     "react-hook-form": "^7.53.2",
     "react-calendly": "^4.3.1",
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "zustand": "5.0.0-rc.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.9",
@@ -70,9 +72,8 @@
     "lucide-react": "^0.528.0",
     "react-phone-number-input": "^3.4.11",
     "react-hook-form": "^7.53.2",
-    "nanoid": "^5.0.7"
-  },
-  "dependencies": {
+    "nanoid": "^5.0.7",
+    "zustand": "5.0.0-rc.2",
     "zod": "^3.23.8"
   }
 }

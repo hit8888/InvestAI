@@ -5,17 +5,18 @@ import type { CommandBarSettings } from '@meaku/core/types/common';
 import { getLocalStorageData, setLocalStorageData, setActiveTenantData } from '@meaku/core/utils/storage-utils';
 import { setTenantHeader } from '@meaku/core/http/client';
 import useStaticConfigDataQuery from '@meaku/shared/network/http/queries/useStaticConfigDataQuery';
-import { useCommandBarStore } from '../stores/useCommandBarStore';
+import { useCommandBarStore } from '@meaku/shared/stores';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { CDN_URL_FOR_ASSETS } from '@meaku/core/constants/index';
+import useStyleConfig from '../hooks/useStyleConfig';
+import useBrandCoverImage from '../hooks/useBrandCoverImage';
 
-interface Props {
+interface PreloadContainerProps {
   children: ReactNode;
   settings: CommandBarSettings;
 }
 
-const PreloadContainer: FC<Props> = ({ children, settings: initialSettings }) => {
+const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initialSettings }) => {
   const { config, setConfig, setSettings } = useCommandBarStore();
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
 
@@ -70,18 +71,9 @@ const PreloadContainer: FC<Props> = ({ children, settings: initialSettings }) =>
     }
   }, [initialSettings, setSettings]);
 
-  useEffect(() => {
-    const boBcContainer = document.querySelector('#bo-bc-container') as HTMLElement;
+  useBrandCoverImage(initialSettings.tenant_id, initialSettings.bc);
 
-    if (!boBcContainer || !initialSettings.bc) return;
-
-    boBcContainer.style.backgroundImage = `url('${CDN_URL_FOR_ASSETS}/agents-website-SS/${initialSettings.tenant_id}.png')`;
-    boBcContainer.style.backgroundSize = 'contain';
-    boBcContainer.style.backgroundPosition = 'center';
-    boBcContainer.style.backgroundRepeat = 'no-repeat';
-    boBcContainer.style.overflow = 'hidden';
-    boBcContainer.style.height = '100vh';
-  }, [initialSettings.bc, initialSettings.tenant_id]);
+  useStyleConfig({ styleConfig: config?.style_config });
 
   if (staticConfigQuery.isSuccess && !!config.command_bar) {
     return children;

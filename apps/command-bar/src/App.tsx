@@ -6,9 +6,9 @@ import { cn } from '@meaku/saral';
 import CommandBarActions from './components/CommandBarActions';
 import FeatureContentContainer from './components/FeatureContentContainer';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { useChat } from './hooks/useChat';
+import { useWsClient } from '@meaku/shared/hooks/useWsClient';
 import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
-import { useCommandBarStore } from './stores';
+import { useCommandBarStore } from '@meaku/shared/stores';
 import { Nudge } from '@meaku/shared/features';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
@@ -17,82 +17,54 @@ import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
 import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics/index';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import { useStyleConfig } from './hooks/useStyleConfig';
 import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useUpdateProspectMutation';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+
+const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
-  const [activeButton, setActiveButton] = useState<CommandBarModuleType | null>(null);
+  const [activeFeature, setActiveFeature] = useState<CommandBarModuleType | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { setConfig, isLoading, messages, initMessages, settings, config, updateSettings } = useCommandBarStore();
-  const containerRef = useStyleConfig({ styleConfig: config?.style_config });
+  const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
   const { modules = [], ui, dynamic_config_start_delay_ms = 5000 } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
   const dynamicConfigEnabled = useDelayedQuery(dynamic_config_start_delay_ms);
   const dynamicConfigQuery = useDynamicConfigDataQuery(
-    {
-      agentId: settings.agent_id,
-      parent_url: settings.parent_url,
-      session_id: config.session_id,
-      prospect_id: config.prospect_id,
-      nudge_disabled: !!activeButton,
-      browsed_urls: settings.browsed_urls ?? [
-        {
-          url: sanitizeUrl(settings.parent_url),
-          timestamp: Date.now(),
-        },
-      ],
-    },
-    {
-      enabled: dynamicConfigEnabled,
-    },
+    { nudge_disabled: !!activeFeature },
+    { enabled: dynamicConfigEnabled },
   );
-  const { data: sessionData, isLoading: isSessionDataLoading } = useSessionDataQuery(
-    {
-      agentId: settings.agent_id,
-      session_id: settings.session_id ?? config.session_id,
-      prospect_id: config.prospect_id,
-    },
-    {
-      enabled: !!activeButton || !!config.session_id,
-    },
-  );
+  const { data: sessionData } = useSessionDataQuery({}, { enabled: !!activeFeature || !!config.session_id });
 
   const updateProspectMutation = useUpdateProspectMutation();
 
-  const { sendUserMessage, initialiseSocket } = useChat();
+  const { initialiseSocket } = useWsClient();
 
   const handleSetActiveButton = (button: CommandBarModuleType | null) => {
     if (!button) {
-      setActiveButton(null);
+      setActiveFeature(null);
       return;
     }
 
     const moduleSupported = modules.find((m) => m.module_type === button);
 
     if (moduleSupported) {
-      setActiveButton(button);
+      setActiveFeature(button);
     } else {
-      setActiveButton('ASK_AI');
+      setActiveFeature(ASK_AI);
     }
   };
 
   const handleClose = () => {
-    setActiveButton(null);
+    setActiveFeature(null);
     setIsExpanded(false);
     trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.CLOSE_COMMAND_BAR, {
-      action_type: activeButton,
+      action_type: activeFeature,
     });
-  };
-
-  const getActiveModule = () => {
-    if (!activeButton) return null;
-    const action = modules.find((a) => a.module_type === activeButton);
-    return action ?? null;
   };
 
   useEffect(() => {
@@ -106,6 +78,7 @@ function App() {
         session_id: sessionId,
         prospect_id: prospectId,
       });
+      setSessionData(sessionData);
       initMessages(sessionData.chat_history);
       initialiseSocket(sessionId, settings.tenant_id);
       removeParamFromUrl('session_id');
@@ -167,7 +140,6 @@ function App() {
 
   return (
     <motion.div
-      ref={containerRef}
       className={containerClasses}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -175,37 +147,17 @@ function App() {
     >
       <div key="root-content" className="flex items-end gap-4">
         {dynamicConfigQuery?.isFetched && (
-          <Nudge
-            settings={settings}
-            config={config}
-            activeFeature={activeButton}
-            setActiveFeature={handleSetActiveButton}
-            sendUserMessage={sendUserMessage}
-          />
+          <Nudge activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
         )}
         <FeatureContentContainer
-          settings={settings}
-          position={position}
-          module={getActiveModule()}
+          activeFeature={activeFeature}
+          isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
-          isExpanded={isExpanded}
-          config={config}
-          messages={messages}
-          isInitialising={isSessionDataLoading}
-          isLoading={isLoading}
-          sendUserMessage={sendUserMessage}
         />
 
         {/* Right side - button container */}
-        <CommandBarActions
-          messages={messages}
-          sendUserMessage={sendUserMessage}
-          actions={modules}
-          activeButton={activeButton}
-          onActiveButtonChange={handleSetActiveButton}
-          orgConfig={config.style_config.orb_config}
-        />
+        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
       </div>
     </motion.div>
   );

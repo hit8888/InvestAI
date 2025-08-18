@@ -1,40 +1,18 @@
-import React from 'react';
 import { Button, Icons } from '@meaku/saral';
-import { Message, MessageEventType } from '../../types/message';
 import BlackTooltip from '../../components/BlackTooltip';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { FeatureActionProps } from '../';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-interface BookMeetingActionProps {
-  isActive: boolean;
-  isBookMeetingEventPresent: boolean;
-  onClick: () => void;
-  sendUserMessage: (message: string, overrides?: Partial<Message>) => void;
-  actionId: string;
-}
-
-const BookMeetingAction: React.FC<BookMeetingActionProps> = ({
-  isActive,
-  onClick,
-  sendUserMessage,
-  isBookMeetingEventPresent,
-  actionId,
-}) => {
-  const handleBookAMeeting = () => {
-    // When clicked directly on book a meeting button, before init api initialised, below book a meeting event is not sent to the server
-    // It should be in the queue, when init api is initialised, it should be sent to the server
-    if (!isBookMeetingEventPresent) {
-      sendUserMessage('', {
-        event_type: MessageEventType.BOOK_MEETING,
-      });
-    }
-    onClick();
-  };
+const BookMeetingAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.BOOK_MEETING);
 
   const button = (
     <Button
-      data-button-id={`action-${actionId}`}
+      data-action-id={`action-${CommandBarModuleTypeSchema.enum.BOOK_MEETING}`}
       size="icon"
       variant={isActive ? 'default_active' : 'outline'}
-      onClick={handleBookAMeeting}
+      onClick={() => onClick?.(featureConfig)}
       className={isActive ? 'rounded-2xl' : 'rounded-full'}
     >
       <Icons.Calendar className="size-5" />

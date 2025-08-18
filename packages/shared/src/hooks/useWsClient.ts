@@ -1,12 +1,19 @@
 import { useEffect, useRef } from 'react';
 
-import { wsClient } from '../network/websocket/client';
-import { useCommandBarStore } from '../stores/useCommandBarStore';
-import type { Message } from '@meaku/shared/types/message';
-import { getUserMessage } from '@meaku/shared/utils/chat-utils';
+import { useCommandBarStore } from '../stores';
+import type { Message } from '../types/message';
+import { getUserMessage } from '../utils/chat-utils';
 import { jsonSafeParse } from '@meaku/core/utils/index';
+import { ENV } from '../constants/env';
+import WebSocketClient from '@meaku/core/networkClients/wsClient/wsClient';
 
-export const useChat = () => {
+export const wsClient = new WebSocketClient(`${ENV.VITE_BASE_WS_URL}/ws/chat`, {
+  heartbeat: {
+    interval: 60000,
+  },
+});
+
+export const useWsClient = () => {
   const { addMessage, updateSuggestedQuestions } = useCommandBarStore();
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
 

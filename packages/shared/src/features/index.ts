@@ -1,6 +1,4 @@
-import type { Message } from '../types/message';
-import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
-import type { CommandBarSettings } from '@meaku/core/types/common';
+import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
 
 // Action components
 export { default as AskAiAction } from './ask-ai/AskAiAction';
@@ -17,29 +15,14 @@ export { default as IframeContent } from './iframe/IframeContent';
 // Nudge component
 export { default as Nudge } from './nudge/Nudge';
 
+// Types
 export interface FeatureContentProps {
-  onClose: () => void;
-  onExpand: () => void;
-  isExpanded: boolean;
-  askaiConfig?: {
-    agent_name: string;
-    welcome_message: {
-      message: string;
-      suggested_questions: string[];
-      bounce_message: boolean;
-      default_artifact_url: string | null;
-    };
-    ctas: {
-      text: string;
-      message: string;
-      url: string;
-    }[];
-    welcomeQuestions: string[];
-  };
-  messages?: Message[];
-  isInitialising?: boolean;
-  isLoading?: boolean;
-  sendUserMessage?: (message: string, overrides?: Partial<Message>) => void;
-  config: ConfigurationApiResponse;
-  settings: CommandBarSettings;
+  onClose?: () => void;
+  onExpand?: () => void;
+  isExpanded?: boolean;
+}
+
+export interface FeatureActionProps {
+  isActive?: boolean;
+  onClick?: (featureConfig: CommandBarModuleConfigType | undefined) => void;
 }
