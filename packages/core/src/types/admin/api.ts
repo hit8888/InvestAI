@@ -801,3 +801,15 @@ export const CalendarFormDataSchema = z.object({
 });
 
 export type CalendarFormData = z.infer<typeof CalendarFormDataSchema>;
+
+export const ReachoutEmailPayloadSchema = z.object({
+  session_id: z.string(),
+});
+export type ReachoutEmailPayload = z.infer<typeof ReachoutEmailPayloadSchema>;
+
+export const ReachoutEmailResponseSchema = z.object({
+  subject: z.string(),
+  main_body: z.string(),
+  session_id: z.string(),
+});
+export type ReachoutEmailResponse = z.infer<typeof ReachoutEmailResponseSchema>;

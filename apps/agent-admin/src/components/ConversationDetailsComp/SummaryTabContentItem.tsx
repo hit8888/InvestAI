@@ -7,6 +7,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { getStringWithBothCommaAND } from '../../utils/common';
 import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
+import ReachoutEmail from './ReachoutEmail';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
@@ -70,6 +71,14 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
     }
   };
 
+  if (listKey === 'reachoutEmail') {
+    return (
+      <div className="flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4">
+        <ReachoutEmail />
+      </div>
+    );
+  }
+
   return (
     <div
       className={cn(
@@ -83,15 +92,17 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       key={listKey}
     >
       <div className="flex w-[50%] items-center justify-center gap-2">
-        <div className="flex items-center justify-center rounded-lg bg-primary/10 p-1">
-          <ItemIcon
-            width="16"
-            height="16"
-            className={cn('text-primary', {
-              'text-primary/30': isLabelValueDash,
-            })}
-          />
-        </div>
+        {ItemIcon && (
+          <div className="flex items-center justify-center rounded-lg bg-primary/10 p-1">
+            <ItemIcon
+              width="16"
+              height="16"
+              className={cn('text-primary', {
+                'text-primary/30': isLabelValueDash,
+              })}
+            />
+          </div>
+        )}
         <p
           className={cn('flex-1 text-sm font-medium text-gray-500', {
             'text-gray-300': isLabelValueDash,

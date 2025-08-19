@@ -423,7 +423,7 @@ export interface FunnelData {
 export interface SummaryTabContentList {
   listKey: string;
   listLabel: string;
-  listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   listValue: string | number | BANTItem[] | ParentUrlItem;
 }
 
@@ -444,6 +444,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listKey: 'summary',
     listLabel: 'Summary of the conversation:',
     listIcon: SummaryConversationIcon,
+    listValue: '',
+  },
+  {
+    listKey: 'reachoutEmail',
+    listLabel: '',
+    listIcon: null,
     listValue: '',
   },
   {

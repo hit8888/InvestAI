@@ -24,6 +24,7 @@ import {
   FetchSitemapResponse,
   FilterOptionsPayload,
   FrequentDocumentsResponse,
+  ReachoutEmailPayload,
   GenerateOtpPayload,
   GenerateTokens,
   HourlySessionInsightsResponse,
@@ -297,3 +298,7 @@ export const getTenantMetadata = (tenantIdentifier: string) =>
 
 export const updateTenantMetadata = (tenantIdentifier: string, payload: TenantMetadataUpdateRequest) =>
   adminApiClient.patch<TenantMetadataResponse>(`/core/api/organization/${tenantIdentifier}/metadata/`, payload);
+
+export const reachoutEmail = (payload: ReachoutEmailPayload) => {
+  return adminApiClient.post(`/tenant/api/generate-reachout-email/`, payload);
+};
