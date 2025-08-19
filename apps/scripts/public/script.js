@@ -1,33 +1,113 @@
-function getConfig() {
-  return {
-    widgetType: document.getElementById("widgetType").value,
-    tenantId: document.getElementById("tenantId").value,
-    agentId: document.getElementById("agentId").value,
-    embedMode: document.getElementById("embedMode").checked,
-    maxHeight: document.getElementById("maxHeight").value,
-    hideBottomBar: document.getElementById("hideBottomBar").checked,
-    showBottomBar: document.getElementById("showBottomBar").checked,
-    allowExternalButtons: document.getElementById("allowExternalButtons")
-      .checked,
-    isCollapsible: document.getElementById("isCollapsible").checked,
-    feedbackEnabled: document.getElementById("feedbackEnabled").checked,
-    bc: document.getElementById("bc").checked,
-    userEmail: document.getElementById("userEmail").value,
-    initialMessage: document.getElementById("initialMessage").value,
-    startTime: document.getElementById("startTime").value,
-    endTime: document.getElementById("endTime").value,
-  };
-}
+// DOM Element IDs and Selectors
+const ELEMENTS = {
+  WIDGET_PREVIEW: "widget-preview-panel",
+  EMBEDDED_WIDGET: "embedded-widget",
+  CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
+  FORM_FIELDS: {
+    widgetType: "widgetType",
+    tenantId: "tenantId",
+    agentId: "agentId",
+    embedMode: "embedMode",
+    maxHeight: "maxHeight",
+    hideBottomBar: "hideBottomBar",
+    showBottomBar: "showBottomBar",
+    allowExternalButtons: "allowExternalButtons",
+    isCollapsible: "isCollapsible",
+    feedbackEnabled: "feedbackEnabled",
+    bc: "bc",
+    userEmail: "userEmail",
+    initialMessage: "initialMessage",
+    startTime: "startTime",
+    endTime: "endTime",
+  },
+};
 
-function createScriptTag(config) {
-  const script = document.createElement("script");
-  script.src =
-    config.widgetType === "agent" ? "chat_widget.js" : "command_bar_widget.js";
+// Widget Configuration
+const WIDGET_CONFIG = {
+  SCRIPT_NAMES: {
+    agent: "chat_widget.js",
+    "command-bar": "command_bar_widget.js",
+  },
+  DEFAULT_TYPE: "command-bar",
+  QUERY_PARAMS: {
+    tenantId: "bo_tenant_id",
+    agentId: "bo_agent_id",
+    widgetType: "bo_widget_type",
+  },
+};
 
-  const attrs = {
+// UI Management
+const UI = {
+  showElement: (elementId) => {
+    const element = document.getElementById(elementId);
+    if (element) element.style.display = "block";
+  },
+  hideElement: (selector) => {
+    const element = document.querySelector(selector);
+    if (element) element.style.display = "none";
+  },
+  resetEmbeddedWidget: () => {
+    const widget = document.getElementById(ELEMENTS.EMBEDDED_WIDGET);
+    if (widget) {
+      widget.innerHTML = "";
+      widget.classList.remove("loaded");
+    }
+  },
+  handleContainers: (isEmbedMode) => {
+    if (isEmbedMode) {
+      UI.showElement(ELEMENTS.WIDGET_PREVIEW);
+      UI.resetEmbeddedWidget();
+    }
+    UI.hideElement(ELEMENTS.CONFIG_PANEL);
+  },
+};
+
+// Form Management
+const Form = {
+  getValue: (id) => document.getElementById(id)?.value || "",
+  getChecked: (id) => document.getElementById(id)?.checked || false,
+
+  getConfig: () => {
+    const fields = ELEMENTS.FORM_FIELDS;
+    return {
+      widgetType: Form.getValue(fields.widgetType),
+      tenantId: Form.getValue(fields.tenantId),
+      agentId: Form.getValue(fields.agentId),
+      embedMode: Form.getChecked(fields.embedMode),
+      maxHeight: Form.getValue(fields.maxHeight),
+      hideBottomBar: Form.getChecked(fields.hideBottomBar),
+      showBottomBar: Form.getChecked(fields.showBottomBar),
+      allowExternalButtons: Form.getChecked(fields.allowExternalButtons),
+      isCollapsible: Form.getChecked(fields.isCollapsible),
+      feedbackEnabled: Form.getChecked(fields.feedbackEnabled),
+      bc: Form.getChecked(fields.bc),
+      userEmail: Form.getValue(fields.userEmail),
+      initialMessage: Form.getValue(fields.initialMessage),
+      startTime: Form.getValue(fields.startTime),
+      endTime: Form.getValue(fields.endTime),
+    };
+  },
+};
+
+// Widget Script Management
+const WidgetScript = {
+  create: (widgetType, attributes) => {
+    const script = document.createElement("script");
+    script.src = WIDGET_CONFIG.SCRIPT_NAMES[widgetType];
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (value) script.setAttribute(key, value);
+    });
+    return script;
+  },
+
+  load: (script) => {
+    document.head.appendChild(script);
+  },
+
+  createAttributes: (config) => ({
     "tenant-id": config.tenantId,
     "agent-id": config.agentId,
-    "container-id": config.embedMode ? "embedded-widget" : null,
+    "container-id": config.embedMode ? ELEMENTS.EMBEDDED_WIDGET : null,
     "max-height": config.maxHeight || null,
     "hide-bottom-bar": config.hideBottomBar ? "true" : null,
     "show-bottom-bar": config.showBottomBar ? "true" : null,
@@ -39,44 +119,58 @@ function createScriptTag(config) {
     "initial-message": config.initialMessage || null,
     "start-time": config.startTime || null,
     "end-time": config.endTime || null,
+  }),
+};
+
+// Main Functions
+function loadWidgetFromQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  const config = {
+    tenantId: params.get(WIDGET_CONFIG.QUERY_PARAMS.tenantId),
+    agentId: params.get(WIDGET_CONFIG.QUERY_PARAMS.agentId),
+    widgetType:
+      params.get(WIDGET_CONFIG.QUERY_PARAMS.widgetType) ||
+      WIDGET_CONFIG.DEFAULT_TYPE,
   };
 
-  Object.entries(attrs).forEach(([key, value]) => {
-    if (value) script.setAttribute(key, value);
-  });
-
-  return script;
+  if (config.tenantId && config.agentId) {
+    const script = WidgetScript.create(config.widgetType, {
+      "tenant-id": config.tenantId,
+      "agent-id": config.agentId,
+    });
+    UI.handleContainers();
+    WidgetScript.load(script);
+    return true;
+  }
+  return false;
 }
 
 function loadWidget() {
-  const config = getConfig();
+  const config = Form.getConfig();
   if (!config.tenantId) return;
 
-  // Show widget preview panel if embed mode is selected
-  const widgetPreviewPanel = document.getElementById("widget-preview-panel");
-  if (config.embedMode) {
-    widgetPreviewPanel.style.display = "block";
-  }
-
-  const embeddedWidget = document.getElementById("embedded-widget");
-  embeddedWidget.innerHTML = "";
-  embeddedWidget.classList.remove("loaded");
-
-  const configContainer = document.querySelector(
-    ".container > .panel:not(#widget-preview-panel)",
+  const script = WidgetScript.create(
+    config.widgetType,
+    WidgetScript.createAttributes(config),
   );
-  configContainer.style.display = "none";
-
-  const script = createScriptTag(config);
-  document.head.appendChild(script);
+  UI.handleContainers(config.embedMode);
+  WidgetScript.load(script);
 }
 
 function resetStorage() {
   localStorage.clear();
   sessionStorage.clear();
-  document.cookie.split(";").forEach(function (c) {
+  document.cookie.split(";").forEach((c) => {
     document.cookie = c
       .replace(/^ +/, "")
       .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
   });
 }
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+  const loaded = loadWidgetFromQueryParams();
+  if (!loaded) {
+    UI.showElement(ELEMENTS.CONFIG_PANEL.slice(1)); // Remove leading dot for getElementById
+  }
+});
