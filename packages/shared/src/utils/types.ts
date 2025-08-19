@@ -49,6 +49,10 @@ export const StreamMessageContentSchema = BaseMessageContentSchema.extend({
   is_complete: z.boolean().optional(),
 });
 
+export const SummarizeMessageContentSchema = BaseMessageContentSchema.extend({
+  url: z.string(),
+});
+
 export const MessageAnalyticsEventDataSchema = z.object({
   buyer_intent_score: z.number(),
 });

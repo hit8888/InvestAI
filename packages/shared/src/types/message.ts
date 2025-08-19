@@ -21,6 +21,7 @@ import {
   GeneratingArtifactEventDataSchema,
   MessageAnalyticsEventDataSchema,
   StreamMessageContentSchema,
+  SummarizeMessageContentSchema,
 } from '../utils/types';
 import { z } from 'zod';
 
@@ -52,6 +53,8 @@ export const MessageEventType = {
   JOIN_SESSION: 'JOIN_SESSION',
   LEAVE_SESSION: 'LEAVE_SESSION',
   GENERATING_ARTIFACT: 'GENERATING_ARTIFACT',
+  SUMMARIZE: 'SUMMARIZE',
+  SUMMARY_STREAM: 'SUMMARY_STREAM',
 } as const;
 
 export type EventTypeType =
@@ -75,6 +78,8 @@ export type EventTypeType =
   | 'JOIN_SESSION'
   | 'LEAVE_SESSION'
   | 'GENERATING_ARTIFACT'
+  | 'SUMMARIZE'
+  | 'SUMMARY_STREAM'
   | string; // future-proofing
 
 // Individual event data structures
@@ -201,6 +206,14 @@ export const MessageSchema = z
       z.object({
         event_type: z.literal('STREAM_RESPONSE'),
         event_data: StreamMessageContentSchema,
+      }),
+      z.object({
+        event_type: z.literal('SUMMARY_STREAM'),
+        event_data: StreamMessageContentSchema,
+      }),
+      z.object({
+        event_type: z.literal('SUMMARIZE'),
+        event_data: SummarizeMessageContentSchema,
       }),
       z.object({
         event_type: z.literal('DISCOVERY_QUESTIONS'),

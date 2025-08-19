@@ -31,7 +31,8 @@
     --link: 211.18 95.33% 58.04%; /* #2E90FA */
     --radius: 0.5rem;
     --shadow-elevation-md: 0 0 24px 0 rgba(0, 0, 0, 0.24);
-    --positive-dark: 134.79 77.17% 36.08%; /* #15A338 */
+    --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
+    --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
   }
 
   .dark,
@@ -57,61 +58,8 @@
     --input: 217.2 32.6% 17.5%;
     --link: 211.18 95.33% 58.04%; /* #2E90FA */
     --ring: 212.7 26.8% 83.9%;
-    --positive-dark: 134.79 77.17% 36.08%; /* #15A338 */
-  }
-
-  .bg-positive-dark {
-    background-color: hsl(var(--positive-dark));
-  }
-
-  .text-positive-dark {
-    color: hsl(var(--positive-dark));
-  }
-
-  .text-container {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 24px;
-    color: var(--input-color, var(--fallback-color));
-  }
-
-  .text-state {
-    background: linear-gradient(90deg, var(--input-color, --fallback-color) 0%, #e0e5ea 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: text-animation 500ms linear infinite alternate-reverse;
-    background-size: 200% 100%; /* Adjust this value as needed */
-  }
-
-  @keyframes text-animation {
-    0% {
-      background-position: 0% 0%;
-    }
-    12.5% {
-      background-position: 12.5% 0%;
-    }
-    25% {
-      background-position: 25% 0%;
-    }
-    37.5% {
-      background-position: 37.5% 0%;
-    }
-    50% {
-      background-position: 50% 0%;
-    }
-    62.5% {
-      background-position: 62.5% 0%;
-    }
-    75% {
-      background-position: 75% 0%;
-    }
-    87.5% {
-      background-position: 87.5% 0%;
-    }
-    100% {
-      background-position: 100% 0%;
-    }
+    --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
+    --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
   }
 
   * {
@@ -120,17 +68,5 @@
 
   :host {
     @apply bg-background font-sans text-foreground;
-  }
-}
-
-@keyframes highBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-3px);
-    opacity: 0.4;
   }
 }

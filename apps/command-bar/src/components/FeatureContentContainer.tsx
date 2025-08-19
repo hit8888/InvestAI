@@ -8,12 +8,19 @@ const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME } = CommandBarModuleTypeSchema.e
 
 interface FeatureContentContainerProps {
   activeFeature: CommandBarModuleType | null;
+  setActiveFeature: (feature: CommandBarModuleType) => void;
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;
 }
 
-const FeatureContentContainer = ({ activeFeature, isExpanded, onClose, onExpand }: FeatureContentContainerProps) => {
+const FeatureContentContainer = ({
+  activeFeature,
+  setActiveFeature,
+  isExpanded,
+  onClose,
+  onExpand,
+}: FeatureContentContainerProps) => {
   const { config } = useCommandBarStore();
 
   const { modules = [] } = config.command_bar ?? {};
@@ -25,23 +32,45 @@ const FeatureContentContainer = ({ activeFeature, isExpanded, onClose, onExpand 
     case ASK_AI:
       return (
         <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <AskAiContent isExpanded={isExpanded} onClose={onClose} onExpand={onExpand} />
+          <AskAiContent
+            isExpanded={isExpanded}
+            onClose={onClose}
+            onExpand={onExpand}
+            setActiveFeature={setActiveFeature}
+          />
         </FeatureContentWrapper>
       );
     case BOOK_MEETING:
       return (
         <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <BookMeetingContent isExpanded={isExpanded} onClose={onClose} onExpand={onExpand} />
+          <BookMeetingContent
+            isExpanded={isExpanded}
+            onClose={onClose}
+            onExpand={onExpand}
+            setActiveFeature={setActiveFeature}
+          />
         </FeatureContentWrapper>
       );
     case SUMMARIZE:
       return (
         <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <SummarizeContent isExpanded={isExpanded} onClose={onClose} onExpand={onExpand} />
+          <SummarizeContent
+            isExpanded={isExpanded}
+            onClose={onClose}
+            onExpand={onExpand}
+            setActiveFeature={setActiveFeature}
+          />
         </FeatureContentWrapper>
       );
     case IFRAME:
-      return <IframeContent isExpanded={isExpanded} onClose={onClose} onExpand={onExpand} />;
+      return (
+        <IframeContent
+          isExpanded={isExpanded}
+          onClose={onClose}
+          onExpand={onExpand}
+          setActiveFeature={setActiveFeature}
+        />
+      );
     default:
       return null;
   }

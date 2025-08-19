@@ -1,4 +1,4 @@
-import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 
 // Action components
 export { default as AskAiAction } from './ask-ai/AskAiAction';
@@ -20,6 +20,7 @@ export interface FeatureContentProps {
   onClose?: () => void;
   onExpand?: () => void;
   isExpanded?: boolean;
+  setActiveFeature?: (feature: CommandBarModuleType) => void;
 }
 
 export interface FeatureActionProps {

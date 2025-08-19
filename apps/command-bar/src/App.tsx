@@ -38,11 +38,14 @@ function App() {
     { nudge_disabled: !!activeFeature },
     { enabled: dynamicConfigEnabled },
   );
-  const { data: sessionData } = useSessionDataQuery({}, { enabled: !!activeFeature || !!config.session_id });
+  const { data: sessionData } = useSessionDataQuery(
+    {},
+    { enabled: !!activeFeature || !!config.session_id || !!settings.message },
+  );
 
   const updateProspectMutation = useUpdateProspectMutation();
 
-  const { initialiseSocket } = useWsClient();
+  const { initialiseSocket, sendUserMessage } = useWsClient();
 
   const handleSetActiveButton = (button: CommandBarModuleType | null) => {
     if (!button) {
@@ -136,6 +139,14 @@ function App() {
     }
   });
 
+  useEffect(() => {
+    if (settings.message) {
+      sendUserMessage(settings.message);
+      setActiveFeature(ASK_AI);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.message]);
+
   const containerClasses = cn('fixed', position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4');
 
   return (
@@ -151,6 +162,7 @@ function App() {
         )}
         <FeatureContentContainer
           activeFeature={activeFeature}
+          setActiveFeature={handleSetActiveButton}
           isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}

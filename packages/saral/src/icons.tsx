@@ -30,6 +30,8 @@ export {
   Info,
   ZoomIn,
   Gamepad2,
+  ClipboardPen,
+  XCircle,
 } from 'lucide-react';
 
 // Re-export the IconProps type from lucide-react

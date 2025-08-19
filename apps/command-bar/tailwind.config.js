@@ -36,6 +36,10 @@ export default {
     'text-card-foreground',
     'bg-popover',
     'text-popover-foreground',
+    'bg-positive-dark',
+    'text-positive-dark',
+    'bg-positive-light',
+    'text-positive-light',
   ],
   theme: {
     extend: {
@@ -93,6 +97,8 @@ export default {
         },
         positive: {
           DEFAULT: 'hsl(var(--positive-100))',
+          dark: 'hsl(var(--positive-dark))',
+          light: 'hsl(var(--positive-light))',
         },
       },
       borderRadius: {
@@ -102,6 +108,26 @@ export default {
       },
       boxShadow: {
         'elevation-md': 'var(--shadow-elevation-md)',
+      },
+      animation: {
+        'text-state': 'text-animation 500ms linear infinite alternate-reverse',
+        'high-bounce': 'highBounce 1s ease-in-out infinite',
+      },
+      keyframes: {
+        highBounce: {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+            opacity: '1',
+          },
+          '50%': {
+            transform: 'translateY(-3px)',
+            opacity: '0.4',
+          },
+        },
+        'text-animation': {
+          '0%': { 'background-position': '0% 0%' },
+          '100%': { 'background-position': '100% 0%' },
+        },
       },
     },
   },

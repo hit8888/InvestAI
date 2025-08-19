@@ -9,7 +9,7 @@ export interface FeatureContentWrapperProps {
   isExpanded: boolean;
 }
 
-const getActiveFeatureBottomOffset = (activeFeature: CommandBarModuleType) => {
+export const getActiveFeatureBottomOffset = (activeFeature: CommandBarModuleType) => {
   const buttonElement = querySelector(`[data-action-id="action-${activeFeature}"]`) as HTMLButtonElement;
 
   if (!buttonElement) return 0;

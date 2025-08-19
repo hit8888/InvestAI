@@ -142,14 +142,17 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
       ].includes(newMessage.event_type);
 
       // Handle STREAM_RESPONSE events - replace existing stream messages
-      if (newMessage.event_type === MessageEventType.STREAM_RESPONSE) {
+      const STREAM_EVENT_TYPES = [MessageEventType.STREAM_RESPONSE, MessageEventType.SUMMARY_STREAM];
+      if (STREAM_EVENT_TYPES.includes(newMessage.event_type as (typeof STREAM_EVENT_TYPES)[number])) {
         const streamData = newMessage.event_data as StreamResponseEventData;
         const isComplete = streamData?.is_complete === true;
         const isStreaming = streamData?.is_complete === false;
 
         // Find existing stream message for this response_id
         const existingStreamIndex = updatedMessages.findIndex(
-          (msg) => msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE,
+          (msg) =>
+            msg.response_id === newMessage.response_id &&
+            STREAM_EVENT_TYPES.includes(msg.event_type as (typeof STREAM_EVENT_TYPES)[number]),
         );
 
         if (existingStreamIndex !== -1) {
