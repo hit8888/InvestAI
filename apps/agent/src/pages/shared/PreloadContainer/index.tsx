@@ -32,7 +32,7 @@ interface Props {
   children: (props: IAllApiResponsesWithQuery) => ReactElement;
 }
 
-const PARENT_URL_TIMEOUT = 2;
+const PARENT_URL_TIMEOUT = 5000;
 
 const PreloadContainerContent: FC<Props> = ({ children }) => {
   const { agentId = '' } = useParams<AgentParams>();
