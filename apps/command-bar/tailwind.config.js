@@ -48,6 +48,7 @@ export default {
       },
       colors: {
         border: 'hsl(var(--border))',
+        borderDark: 'hsl(var(--border-dark))',
         input: 'hsl(var(--input))',
         link: 'hsl(var(--link))',
         ring: 'hsl(var(--ring))',

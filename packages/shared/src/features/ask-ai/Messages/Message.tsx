@@ -6,7 +6,8 @@ import type {
   SlideImageArtifactData,
 } from '../../../types/message';
 import { TextArtifact } from './TextArtifact';
-import { VideoArtifact, ImageArtifact } from '@meaku/saral';
+import { ImageArtifact } from './ImageArtifact';
+import { VideoArtifact } from './VideoArtifact';
 import { FormArtifact } from './FormArtifact';
 import { AskAiCalendarArtifact } from './AskAiCalendarArtifact';
 import { DiscoveryQuestion } from './DiscoveryQuestion';

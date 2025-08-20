@@ -105,6 +105,10 @@ export type { VideoArtifactProps } from './video-artifact';
 export { ImageArtifact } from './image-artifact';
 export type { ImageArtifactProps } from './image-artifact';
 
+// Export side drawer component
+export { default as SideDrawer } from './side-drawer';
+export type { SideDrawerProps, SideDrawerPosition } from './side-drawer';
+
 // Export custom icons
 export * from './custom-Icons';
 

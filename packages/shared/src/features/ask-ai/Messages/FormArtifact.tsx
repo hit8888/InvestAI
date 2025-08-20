@@ -125,7 +125,7 @@ export const FormArtifact = ({
   }
 
   return (
-    <div className="mt-3 w-full border-none">
+    <div className="mt-3 w-full border-none max-w-md mx-auto">
       <div className="flex flex-col gap-4">
         {content.default_message && (
           <div className="mb-4">

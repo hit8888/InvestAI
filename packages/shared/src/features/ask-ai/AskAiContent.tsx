@@ -4,12 +4,14 @@ import { Icons, KatyIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
 import { Messages } from './Messages';
+import { SidebarArtifactDrawer } from './components/SidebarArtifactDrawer';
+import { SidebarArtifactProvider, useSidebarArtifactContext } from './context/SidebarArtifactContext';
 import { useAvatarSelection } from '../../hooks/useAvatarSelection';
 import { checkIfCTAButtonShown } from '../../utils/common';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import { useWsClient } from '../../hooks/useWsClient';
 
-const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
+const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const {
     suggestedQuestions,
     isStreaming,
@@ -22,6 +24,17 @@ const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) =>
     config,
     sessionData,
   } = useCommandBarStore();
+
+  const {
+    sideBarArtifact,
+    isSideDrawerOpen,
+    calculatedWidth,
+    currentVideo,
+    videoError,
+    videoRef,
+    closeSidebar,
+    toggleVideoPlayPause,
+  } = useSidebarArtifactContext();
 
   const askaiConfig = useMemo(
     () => ({
@@ -49,7 +62,7 @@ const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) =>
 
   return (
     <div
-      className="flex w-full flex-col space-y-1 rounded-[20px] border border-border-dark bg-card"
+      className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card"
       style={{ boxShadow: '0 0 24px 0 rgba(0, 0, 0, 0.24)', height: 'min(100vh, 680px)' }}
     >
       <FeatureHeader
@@ -66,14 +79,25 @@ const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) =>
         sendUserMessage={sendUserMessage}
       />
       <div className="h-10 w-full flex-1  p-2 pt-0">
-        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
-          <div className="relative h-[calc(100%-76px)] flex-1">
+        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background" id="ask-ai-messages">
+          <div className="h-[calc(100%-80px)] flex-1 relative">
             {!sessionData ? (
-              <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
+              <div className="absolute bottom-20 flex w-full items-center justify-center gap-3">
                 <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
                 <p className="text-xs text-muted-foreground">Initialising...</p>
               </div>
             ) : null}
+
+            <SidebarArtifactDrawer
+              isOpen={isSideDrawerOpen}
+              calculatedWidth={calculatedWidth}
+              artifact={sideBarArtifact}
+              currentVideo={currentVideo}
+              videoError={videoError}
+              videoRef={videoRef}
+              onPlayPauseToggle={toggleVideoPlayPause}
+              onClose={closeSidebar}
+            />
             <Messages
               messages={messages ?? []}
               sendUserMessage={sendUserMessage}
@@ -93,4 +117,12 @@ const AskAiContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) =>
   );
 };
 
-export default AskAiContent;
+const AskAiContentWrapper = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
+  return (
+    <SidebarArtifactProvider>
+      <AskAiContentInner onClose={onClose} onExpand={onExpand} isExpanded={isExpanded} />
+    </SidebarArtifactProvider>
+  );
+};
+
+export default AskAiContentWrapper;

@@ -26,7 +26,7 @@ export const Avatar17: React.FC<Avatar17Props> = ({ size = 50, className = '' })
           height="49.0232"
           rx="24.5116"
           stroke="white"
-          stroke-width="0.976801"
+          strokeWidth="0.976801"
         />
       </g>
       <defs>
@@ -37,9 +37,9 @@ export const Avatar17: React.FC<Avatar17Props> = ({ size = 50, className = '' })
           width="59.5238"
           height="59.5238"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

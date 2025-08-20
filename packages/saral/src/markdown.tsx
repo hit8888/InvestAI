@@ -18,7 +18,7 @@ const MessageUnorderedList = (props: React.HTMLAttributes<HTMLUListElement>) => 
 );
 
 const MessageParagraph = (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className="mb-2 text-inherit [&:last-child]:mb-0 [&:only-child]:mb-0" {...props} />
+  <p className="mb-2 text-inherit [&:empty]:mb-0 [&:last-child]:mb-0 [&:only-child]:mb-0" {...props} />
 );
 
 const MessageBlockquote = (props: React.HTMLAttributes<HTMLQuoteElement>) => (

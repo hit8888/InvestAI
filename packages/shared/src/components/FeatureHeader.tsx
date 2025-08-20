@@ -44,12 +44,12 @@ export const FeatureHeader = ({
         </div>
         <div className="flex items-center gap-2">
           {onExpand && (
-            <Button size="icon" variant="ghost" onClick={onExpand} className="size-[30px] rounded-full">
+            <Button size="icon" variant="ghost" onClick={onExpand} className="size-[30px] rounded-[108px]">
               {isExpanded ? <Icons.Minimize2 className="size-3" /> : <Icons.Maximize2 className="size-3" />}
             </Button>
           )}
           {onClose && (
-            <Button size="icon" variant="ghost" onClick={onClose} className="size-[30px] rounded-full">
+            <Button size="icon" variant="ghost" onClick={onClose} className="size-[30px] rounded-[108px]">
               <Icons.X className="h-4 w-4" />
             </Button>
           )}

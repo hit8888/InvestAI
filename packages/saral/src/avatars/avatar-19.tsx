@@ -26,20 +26,20 @@ export const Avatar19: React.FC<Avatar19Props> = ({ size = 50, className = '' })
           height="49.0232"
           rx="24.5116"
           stroke="white"
-          stroke-width="0.976801"
+          strokeWidth="0.976801"
         />
       </g>
       <defs>
         <filter
-          id="filter0_d_786_2593"
+          id="filter0_d_786_2587"
           x="0.238095"
           y="0.238095"
           width="59.5238"
           height="59.5238"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

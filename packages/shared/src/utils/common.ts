@@ -85,6 +85,7 @@ export const isDiscoveryQuestion = (message: Message): boolean => {
 
 export const checkIsArtifactMessage = (message: Message) => {
   return (
+    message.event_data &&
     'artifact_data' in message.event_data &&
     'artifact_type' in message.event_data &&
     (isMediaArtifact(message.event_data.artifact_type) || isSuggestionArtifact(message))
@@ -197,7 +198,7 @@ export const checkIsFormArtifactBase = (
   return (
     checkIsArtifactMessage(message) &&
     message.event_type === 'FORM_ARTIFACT' &&
-    !!message.event_data.artifact_data?.content
+    !!message.event_data?.artifact_data?.content
   );
 };
 
@@ -216,6 +217,7 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: Message[]) =>
 export const isGeneratingMediaArtifactEvent = (message: Message) =>
   'event_type' in message &&
   message.event_type === GENERATING_ARTIFACT &&
+  message.event_data &&
   isMediaArtifact(message.event_data.artifact_type);
 
 // Helper function to check if a message is a main response (stream or text)
@@ -456,6 +458,7 @@ export const getFormFilledEventByArtifactId = (
       event_data: ArtifactFormType;
     } =>
       'event_data' in msg &&
+      msg.event_data &&
       'artifact_id' in msg.event_data &&
       formArtifactMessage.event_data.artifact_data.artifact_id === msg.event_data.artifact_id &&
       checkMessageIsFormFilled(msg, eventType),

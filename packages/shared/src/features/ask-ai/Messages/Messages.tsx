@@ -324,7 +324,7 @@ export const Messages = ({
 
       {/* Down Arrow Button */}
       {showDownArrow && (
-        <div className="absolute bottom-2 left-3 z-10">
+        <div className="absolute bottom-20 left-3 z-10">
           <button
             onClick={() => {
               scrollContainerRef.current?.scrollTo({

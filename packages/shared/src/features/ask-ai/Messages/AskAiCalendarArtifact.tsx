@@ -46,7 +46,7 @@ export const AskAiCalendarArtifact = ({
   }
 
   return (
-    <div className="relative mt-4 h-[500px] w-full rounded-xl border border-gray-300 bg-gray-100 p-2">
+    <div className="relative mt-4 h-[500px] w-full rounded-xl border  p-2 max-w-md mx-auto">
       {getCalendarLoadingIndicator()}
       {getCalendarContentBasedOnType()}
     </div>
