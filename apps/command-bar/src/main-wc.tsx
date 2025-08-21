@@ -4,10 +4,10 @@ import { BookMeetingContent, AskAiContent, SummarizeContent } from '@meaku/share
 import { injectCSSIntoShadowRoot, setupConnectedCallbackIfShadowRootExists } from './utils/wc';
 import { createWc } from './hoc/createWc';
 
-const CommandBarWc = createWc(CommandBar);
-const BookMeetingWc = createWc(BookMeetingContent);
-const AskAiWc = createWc(AskAiContent);
-const SummarizeWc = createWc(SummarizeContent);
+const CommandBarWc = createWc(CommandBar, ENV.VITE_WC_TAG_NAME);
+const BookMeetingWc = createWc(BookMeetingContent, ENV.VITE_BOOK_MEETING_WC_TAG_NAME);
+const AskAiWc = createWc(AskAiContent, 'breakout-ask-ai');
+const SummarizeWc = createWc(SummarizeContent, 'breakout-summarize');
 
 setupConnectedCallbackIfShadowRootExists(CommandBarWc, (shadowRoot) => {
   injectCSSIntoShadowRoot(shadowRoot);

@@ -81,13 +81,13 @@ export function getBoundingClientRect(selector: string, webComponentTag = ENV.VI
 }
 
 /**
- * Checks if we're currently in a web component context
- * @param webComponentTag - Optional web component tag name
- * @returns True if we're in a web component context
+ * Gets the shadow root of a web component
+ * @param webComponentTag - Web component tag name
+ * @returns The shadow root or null if not found
  */
-export function isInWebComponentContext(webComponentTag = ENV.VITE_WC_TAG_NAME): boolean {
+export function getShadowRoot(webComponentTag: string): ShadowRoot | null {
   const host = document.querySelector(webComponentTag);
-  return !!host?.shadowRoot;
+  return host?.shadowRoot || null;
 }
 
 /**

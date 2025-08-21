@@ -3,14 +3,17 @@ import type { ComponentType } from 'react';
 
 import RootContainer from '../containers/RootContainer';
 import type { SettingsContainerProps } from '../containers/SettingsContainer';
+import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
 
-export function createWc(WrappedComponent: ComponentType) {
+export function createWc(WrappedComponent: ComponentType, rootNodeId: string) {
   return r2wc(
     (props: SettingsContainerProps) => {
       return (
-        <RootContainer settings={props}>
-          <WrappedComponent />
-        </RootContainer>
+        <ShadowRootProvider rootNodeId={rootNodeId}>
+          <RootContainer settings={props}>
+            <WrappedComponent />
+          </RootContainer>
+        </ShadowRootProvider>
       );
     },
     {
