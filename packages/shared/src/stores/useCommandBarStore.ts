@@ -132,6 +132,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
       // Check if this is an artifact message (excluding SUGGESTIONS_ARTIFACT which is handled separately)
       const isArtifact = [
         'FORM_ARTIFACT',
+        'QUALIFICATION_FORM_ARTIFACT',
         'CALENDAR_ARTIFACT',
         'VIDEO_ARTIFACT',
         'SLIDE_ARTIFACT',
@@ -269,7 +270,9 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
         // Clear suggested questions when user sends a message (they'll be set again if the response has them)
         // Don't set loading for FORM_FILLED events as they are responses to existing artifacts
         const shouldSetLoading =
-          newMessage.event_type !== 'FORM_FILLED' && newMessage.event_type !== 'QUALIFICATION_FORM_FILLED';
+          newMessage.event_type !== 'FORM_FILLED' &&
+          newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
+          newMessage.event_type !== 'CALENDAR_SUBMIT';
 
         return {
           messages: orderedMessages,
@@ -527,6 +530,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
       'VIDEO_ARTIFACT',
       'SLIDE_IMAGE_ARTIFACT',
       'FORM_ARTIFACT',
+      'QUALIFICATION_FORM_ARTIFACT',
       'CALENDAR_ARTIFACT',
       'DISCOVERY_QUESTIONS',
     ];
@@ -586,6 +590,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
     const filteredMessages = state.messages.filter((message) => {
       const artifactTypes = [
         'FORM_ARTIFACT',
+        'QUALIFICATION_FORM_ARTIFACT',
         'CALENDAR_ARTIFACT',
         'VIDEO_ARTIFACT',
         'SLIDE_ARTIFACT',

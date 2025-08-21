@@ -41,12 +41,12 @@ export const useSidebarArtifact = () => {
             const aspectRatio = video.videoWidth / video.videoHeight;
             const containerHeight = window.innerHeight - 200;
             const calculatedWidth = Math.min(Math.max(containerHeight * aspectRatio + 80, 700), 800);
-            console.log('Video dimensions:', {
-              videoWidth: video.videoWidth,
-              videoHeight: video.videoHeight,
-              aspectRatio,
-              calculatedWidth,
-            });
+            // console.log('Video dimensions:', {
+            //   videoWidth: video.videoWidth,
+            //   videoHeight: video.videoHeight,
+            //   aspectRatio,
+            //   calculatedWidth,
+            // });
             resolve(calculatedWidth);
           } catch (error) {
             console.error('Error calculating video dimensions:', error);
@@ -67,12 +67,12 @@ export const useSidebarArtifact = () => {
             const aspectRatio = img.naturalWidth / img.naturalHeight;
             const containerHeight = window.innerHeight - 200;
             const calculatedWidth = Math.min(Math.max(containerHeight * aspectRatio + 80, 700), 800);
-            console.log('Image dimensions:', {
-              naturalWidth: img.naturalWidth,
-              naturalHeight: img.naturalHeight,
-              aspectRatio,
-              calculatedWidth,
-            });
+            // console.log('Image dimensions:', {
+            //   naturalWidth: img.naturalWidth,
+            //   naturalHeight: img.naturalHeight,
+            //   aspectRatio,
+            //   calculatedWidth,
+            // });
             resolve(calculatedWidth);
           } catch (error) {
             console.error('Error calculating image dimensions:', error);
@@ -95,12 +95,12 @@ export const useSidebarArtifact = () => {
     title: string,
     shouldPlay?: boolean,
   ) => {
-    console.log('Opening sidebar:', { url, artifactType, title, shouldPlay });
+    // console.log('Opening sidebar:', { url, artifactType, title, shouldPlay });
 
     try {
       // Calculate width first
       const width = await calculateDimensions(url, artifactType);
-      console.log('Calculated width:', width);
+      // console.log('Calculated width:', width);
 
       // Set all state at once to ensure sidebar opens with correct width
       setCalculatedWidth(width);
@@ -116,7 +116,7 @@ export const useSidebarArtifact = () => {
 
       // Open sidebar after all state is set
       setIsSideDrawerOpen(true);
-      console.log('SideDrawer should now be open with width:', width);
+      // console.log('SideDrawer should now be open with width:', width);
     } catch (error) {
       console.error('Error opening sidebar:', error);
       // Fallback: open with default width
@@ -181,7 +181,7 @@ export const useSidebarArtifact = () => {
 
   // Debug state changes
   useEffect(() => {
-    console.log('State changed:', { isSideDrawerOpen, sideBarArtifact, currentVideo, currentImage });
+    // console.log('State changed:', { isSideDrawerOpen, sideBarArtifact, currentVideo, currentImage });
   }, [isSideDrawerOpen, sideBarArtifact, currentVideo, currentImage]);
 
   return {

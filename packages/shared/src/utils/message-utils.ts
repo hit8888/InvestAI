@@ -48,7 +48,6 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
           if (
             [
               'FORM_ARTIFACT',
-              'CALENDAR_ARTIFACT',
               'VIDEO_ARTIFACT',
               'SLIDE_IMAGE_ARTIFACT',
               'SUGGESTIONS_ARTIFACT',
@@ -59,8 +58,12 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
           }
 
           // Qualification questions
-          if (message.event_type === 'DISCOVERY_QUESTIONS') {
-            return 3; // Qualification questions = 3
+          if (message.event_type === 'DISCOVERY_QUESTIONS' || message.event_type === 'QUALIFICATION_FORM_ARTIFACT') {
+            return 3;
+          }
+
+          if (message.event_type === 'CALENDAR_ARTIFACT') {
+            return 4;
           }
 
           // Other AI messages (TEXT_RESPONSE, etc.)

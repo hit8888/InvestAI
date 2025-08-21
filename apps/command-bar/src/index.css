@@ -7,11 +7,11 @@
   :root,
   :host {
     --background: 0 0% 100%; /* #FFFFFF */
-    --foreground: 220 9% 15%; /* #272A2E */
+    --foreground: 214.29 8.24% 16.67%; /* #272A2E */
     --card: 210 12.5% 96.86%; /* #F6F7F8 */
     --card-foreground: 214.29 8.24% 16.67%; /* #272A2E */
     --popover: 0 0% 100%; /* #FFFFFF */
-    --popover-foreground: 220 9% 15%; /* #272A2E */
+    --popover-foreground: 214.29 8.24% 16.67%; /* #272A2E */
     --primary: 252 87% 59%; /* #613CF1 */
     --primary-foreground: 0 0% 100%; /* #FFFFFF */
     --primary-subtle: 253.33 47.37% 96.27%; /* #F3F1FA */
@@ -29,8 +29,10 @@
     --input: 220 1.75% 66.47%; /* #a8a9ab */
     --ring: 214.29 8.24% 16.67%; /* #272A2E */
     --link: 211.18 95.33% 58.04%; /* #2E90FA */
+    --action-btn-icon: 226.25 46.15% 20.39%; /* #1C274C */
     --radius: 0.5rem;
     --shadow-elevation-md: 0 0 24px 0 rgba(0, 0, 0, 0.24);
+    --shadow-action-btn: 0 0 0.521px 0 rgba(0, 0, 0, 0.3), 0 1.042px 3.125px 0 rgba(0, 0, 0, 0.15);
     --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
     --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
   }

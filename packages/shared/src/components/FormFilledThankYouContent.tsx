@@ -1,21 +1,13 @@
 import { useMemo } from 'react';
-import { Typography } from '@meaku/saral';
-import { CheckIcon } from 'lucide-react';
+import { Icons, Typography } from '@meaku/saral';
 import { FormFieldSchemaType } from '../utils/artifact';
 
 type FormFilledThankYouContentProps = {
   formFields: FormFieldSchemaType[];
   formValues: Record<string, string>;
-  showSteps?: boolean;
-  className?: string;
 };
 
-const FormFilledThankYouContent = ({
-  formFields,
-  formValues,
-  showSteps,
-  className = '',
-}: FormFilledThankYouContentProps) => {
+const FormFilledThankYouContent = ({ formFields, formValues }: FormFilledThankYouContentProps) => {
   const formFilledLabelAndValues = useMemo(() => {
     return formFields
       .map((field) => {
@@ -41,33 +33,15 @@ const FormFilledThankYouContent = ({
   const hasFormFilledValues = formFilledLabelAndValues.length > 0;
 
   return (
-    <div className={`w-full ${className}`}>
-      {showSteps && (
-        <Typography className="mb-2 font-medium text-primary" variant="body-small">
-          Step 1 of 2
-        </Typography>
-      )}
-      <div className="relative flex h-full flex-1 flex-col items-start items-center justify-center gap-4">
-        <div className="absolute -bottom-2 -left-3 -right-3 top-0 z-10 bg-gradient-to-b from-black/15 to-black/20" />
-        <div className="relative z-10 z-20 mb-2 mt-3 flex w-full flex-col rounded-xl bg-background">
-          <div className="bg-positive-light flex w-full items-start justify-start gap-2 rounded-xl p-3">
-            <div className="flex items-center justify-center rounded-full bg-white/20 p-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white p-1">
-                <CheckIcon className="text-positive-dark h-6 w-6" />
-              </span>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography variant="heading" className="text-white">
-                Thank you for sharing your details!
-              </Typography>
-              <Typography variant="body-small" className="text-white/70">
-                Info Submitted! Let me know if you have any questions or need help.
-              </Typography>
-            </div>
-          </div>
-
-          {hasFormFilledValues && <div className="flex flex-col gap-1 p-4">{formFilledLabelAndValues}</div>}
+    <div className="w-full flex flex-col gap-5 pt-4">
+      <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
+          <Icons.Check className="stroke-4 size-5 text-background" />
         </div>
+        <Typography variant="heading-xl" className="text-center font-medium">
+          Details Submitted
+        </Typography>
+        {hasFormFilledValues && <div className="flex flex-col gap-1 p-4">{formFilledLabelAndValues}</div>}
       </div>
     </div>
   );

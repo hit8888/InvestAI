@@ -1,6 +1,6 @@
 import { MessageEventType, type Message as MessageType } from '../../../types/message';
 import { Message } from './Message';
-import { AvatarComponentProps, Typography } from '@meaku/saral';
+import { AvatarComponentProps, KatyIcon, Typography } from '@meaku/saral';
 import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { WaveLoader } from '../../../components/WaveLoader';
 import { Sparkles, ChevronDown } from 'lucide-react';
@@ -64,30 +64,6 @@ export const Messages = ({
     return Array.from(groupMap.values());
   }, [renderableMessages]);
 
-  // Extract filled form artifact IDs from FORM_FILLED events
-  const filledFormArtifactIds = useMemo(() => {
-    return renderableMessages
-      .filter(
-        (message) =>
-          message.event_type === MessageEventType.FORM_FILLED &&
-          message.event_data &&
-          'artifact_id' in message.event_data,
-      )
-      .map((message) => (message.event_data as { artifact_id: string }).artifact_id);
-  }, [renderableMessages]);
-
-  // Extract filled qualification artifact IDs from QUALIFICATION_FORM_FILLED events
-  const filledQualificationArtifactIds = useMemo(() => {
-    return renderableMessages
-      .filter(
-        (message) =>
-          message.event_type === MessageEventType.QUALIFICATION_FORM_FILLED &&
-          message.event_data &&
-          'artifact_id' in message.event_data,
-      )
-      .map((message) => (message.event_data as { artifact_id: string }).artifact_id);
-  }, [renderableMessages]);
-
   // Extract filled calendar URLs from CALENDAR_SUBMIT events
   const filledCalendarUrls = useMemo(() => {
     const calendarSubmitMessages = renderableMessages.filter(
@@ -102,20 +78,17 @@ export const Messages = ({
       .filter((url) => url && url !== ''); // Filter out empty strings
   }, [renderableMessages]);
 
-  const getFilledData = (artifactId: string) => {
+  const getFilledData = (responseId: string) => {
     const formfilledMessage = renderableMessages.find(
-      (message) =>
-        message.event_type === MessageEventType.FORM_FILLED && message.event_data?.artifact_id === artifactId,
+      (message) => message.event_type === MessageEventType.FORM_FILLED && message.response_id === responseId,
     );
     return (formfilledMessage?.event_data as { form_data: Record<string, string> })?.form_data;
   };
 
-  const getQualificationFilledData = (artifactId: string, responseId?: string) => {
+  const getQualificationFilledData = (responseId: string) => {
     const qualificationFilledMessage = renderableMessages.find(
       (message) =>
-        message.event_type === MessageEventType.QUALIFICATION_FORM_FILLED &&
-        message.event_data?.artifact_id === artifactId &&
-        (!responseId || message.response_id === responseId),
+        message.event_type === MessageEventType.QUALIFICATION_FORM_FILLED && message.response_id === responseId,
     );
     return (
       (qualificationFilledMessage?.event_data as { qualification_responses: Array<{ id: string; answer: string }> })
@@ -123,8 +96,8 @@ export const Messages = ({
     );
   };
 
-  const isQualificationFilled = (artifactId: string, responseId?: string) => {
-    return getQualificationFilledData(artifactId, responseId).length > 0;
+  const isQualificationFilled = (responseId: string) => {
+    return getQualificationFilledData(responseId).length > 0;
   };
 
   // Calculate container height when messages change
@@ -223,20 +196,7 @@ export const Messages = ({
           {groupedMessages.map((messageGroup, groupIndex) => {
             const isLastGroup = groupIndex === groupedMessages.length - 1;
             const shouldShowSuggestedQuestions =
-              isLastGroup &&
-              suggestedQuestions.length > 0 &&
-              !isStreaming &&
-              !isDiscoveryQuestionShown() &&
-              (() => {
-                // Don't show suggested questions if the last message is a calendar or form artifact
-                const lastMessage = messages[messages.length - 1];
-                const isLastMessageCalendarArtifact = lastMessage?.event_type === MessageEventType.CALENDAR_ARTIFACT;
-                const isLastMessageFormArtifact =
-                  lastMessage?.event_type === MessageEventType.FORM_ARTIFACT ||
-                  lastMessage?.event_type === MessageEventType.FORM_FILLED;
-
-                return !isLastMessageCalendarArtifact && !isLastMessageFormArtifact;
-              })();
+              isLastGroup && suggestedQuestions.length > 0 && !isStreaming && !isDiscoveryQuestionShown();
 
             return (
               <div
@@ -251,9 +211,7 @@ export const Messages = ({
                     key={`${message.response_id}-${messageIndex}`}
                     message={message}
                     sendUserMessage={sendUserMessage}
-                    filledFormArtifactIds={filledFormArtifactIds}
                     getFilledData={getFilledData}
-                    filledQualificationArtifactIds={filledQualificationArtifactIds}
                     getQualificationFilledData={getQualificationFilledData}
                     isQualificationFilled={isQualificationFilled}
                     filledCalendarUrls={filledCalendarUrls}
@@ -281,7 +239,8 @@ export const Messages = ({
                 )}
                 {/* Show loader after the last message in the last group */}
                 {isLastGroup && isLoading && (
-                  <div className="ml-7 mr-auto flex min-h-11 max-w-[80%] items-center justify-start rounded-xl px-3">
+                  <div className="mr-auto flex gap-2 min-h-11 max-w-[80%] items-center justify-start rounded-xl">
+                    {selectedAvatar ? <selectedAvatar.Component className="size-7" /> : <KatyIcon className="size-7" />}
                     <WaveLoader />
                   </div>
                 )}
@@ -324,7 +283,7 @@ export const Messages = ({
 
       {/* Down Arrow Button */}
       {showDownArrow && (
-        <div className="absolute bottom-20 left-3 z-10">
+        <div className="absolute bottom-0 left-3 z-10">
           <button
             onClick={() => {
               scrollContainerRef.current?.scrollTo({

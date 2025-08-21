@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ArtifactEnumSchema } from './artifact';
 import { CtaEventDataSchema, FormFieldSchema } from './artifact';
 import { CalendarTypeEnum } from './enum';
-import { Message, SendUserMessageParams } from '../types/message';
+import { Message } from '../types/message';
 
 export const DataSourceSchema = z.object({
   id: z.number(),
@@ -89,17 +89,3 @@ export type FormFieldType = z.infer<typeof FormFieldSchema>;
 export type DataSourceType = z.infer<typeof DataSourceSchema>;
 
 export type CalendarSubmitEventData = z.infer<typeof CalendarSubmitEventDataSchema>;
-export interface MessageGroupProps {
-  group: Message[];
-  groupIndex: number;
-  isLastGroupWithContent: boolean;
-  containerHeight: number;
-  enableScrollToBottom: boolean;
-  aiMessages: Message[];
-  hasFirstUserMessageBeenSent?: boolean;
-  lastGroupRef: React.RefObject<HTMLDivElement | null>;
-  groupStartScrollTargetRef: React.RefObject<HTMLDivElement | null>;
-  groupEndScrollTargetRef: React.RefObject<HTMLDivElement | null>;
-  messages: Message[];
-  handleSendUserMessage: (data: SendUserMessageParams) => void;
-}

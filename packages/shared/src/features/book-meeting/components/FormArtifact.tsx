@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Form, useForm } from '@meaku/saral';
+import { Button, Form, Typography, useForm } from '@meaku/saral';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -8,21 +8,21 @@ import { FormArtifactContent, FormArtifactMetadataType } from '../../../utils/ar
 import FormFilledThankYouContent from '../../../components/FormFilledThankYouContent';
 import { createFormSchema } from '../utils';
 import { sanitizeObject } from '../sanitize';
-import { ViewType } from '../../../utils/enum';
 import { MessageEventType, SendUserMessageParams } from '../../../types/message';
+import { handleEmailDomainCheck } from '../../../helpers/checkEmailDomain';
 
 type FormFilledEventDataType = {
   artifact_id: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form_data: Record<string, any>;
+  qualification: boolean | undefined;
 };
 
 interface IFormProps {
   artifactId?: string;
-  artifact?: FormArtifactContent;
+  artifact: FormArtifactContent;
   artifactMetadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: SendUserMessageParams) => void;
-  viewType: ViewType;
   artifactResponseId?: string;
   calendarMessageExist?: boolean;
 }
@@ -32,7 +32,6 @@ const FormArtifact = ({
   artifact,
   artifactMetadata,
   handleSendUserMessage,
-  viewType,
   artifactResponseId,
   calendarMessageExist,
 }: IFormProps) => {
@@ -40,6 +39,7 @@ const FormArtifact = ({
   const isArtifactFormFilled = artifactFormMetadata?.is_filled ?? false;
   const [submitted, setSubmitted] = useState(isArtifactFormFilled);
   const { trackEvent } = useCommandBarAnalytics();
+  const [emailError, setEmailError] = useState('');
 
   const formFields = artifact?.form_fields ?? [];
 
@@ -49,17 +49,16 @@ const FormArtifact = ({
 
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(formSchema) as any,
-    defaultValues: artifactFormMetadata?.filled_data ?? {},
+    resolver: zodResolver(formSchema as any) as any,
+    defaultValues: artifact?.default_data ?? artifactFormMetadata?.filled_data ?? {},
     mode: 'onTouched',
   });
-
-  const formDisabled = viewType !== ViewType.USER;
 
   const getFormFilledEventData = (values: Record<string, unknown>) => {
     return {
       artifact_id: artifactId ?? '',
       form_data: values,
+      qualification: artifact.qualification,
     };
   };
 
@@ -74,15 +73,28 @@ const FormArtifact = ({
     });
   };
 
-  function onSubmit(values: Record<string, unknown>) {
-    if (formDisabled) {
-      return;
-    }
+  async function onSubmit(values: Record<string, unknown>) {
     const eventData = getFormFilledEventData(values);
 
-    sendFormFilledMessage(eventData);
-    setSubmitted(true);
-    trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.FORM_SUBMITTED, { ...eventData });
+    try {
+      const res = await handleEmailDomainCheck(values.user_email as string);
+      if (res?.valid) {
+        sendFormFilledMessage(eventData);
+        setSubmitted(true);
+        if (artifact.qualification) {
+          trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.QUALIFICATION_FORM_SUBMITTED, { ...eventData });
+        } else {
+          trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.FORM_SUBMITTED, { ...eventData });
+        }
+      } else {
+        setEmailError(res?.reason ?? 'Invalid email domain');
+        setTimeout(() => {
+          setEmailError('');
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Error checking email domain:', error);
+    }
   }
 
   // Watch all form fields
@@ -101,35 +113,36 @@ const FormArtifact = ({
   }
 
   if (submitted) {
-    return (
-      <FormFilledThankYouContent
-        className="flex min-h-[300px] flex-col"
-        formFields={formFields}
-        formValues={artifactFormMetadata.filled_data ?? {}}
-      />
-    );
+    return <FormFilledThankYouContent formFields={formFields} formValues={artifactFormMetadata?.filled_data ?? {}} />;
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
-        <div className="flex w-full flex-col items-start gap-5">
-          {formFields.map((field, i) => (
-            <ChatFormField
-              fieldClassName="pl-2 border-none bg-gray-100 focus-visible:ring-offset-0"
-              key={i}
-              isArtifactFormFilled={isArtifactFormFilled}
-              form={form}
-              form_field={field}
-              artifactMetadata={artifactFormMetadata}
-            />
-          ))}
-        </div>
-        <Button type="submit" disabled={formDisabled || isSubmitBtnDisabled} data-testid="submit-form-btn">
-          Submit
-        </Button>
-      </form>
-    </Form>
+    <div className="flex w-full max-w-full flex-col gap-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
+          <div className="flex w-full flex-col items-start gap-5">
+            {formFields.map((field, i) => (
+              <ChatFormField
+                fieldClassName="pl-2 border-none bg-gray-100 focus-visible:ring-offset-0"
+                key={i}
+                isArtifactFormFilled={isArtifactFormFilled}
+                form={form}
+                form_field={field}
+                artifactMetadata={artifactFormMetadata}
+              />
+            ))}
+            {emailError && (
+              <Typography variant="body-small" className="text-red-600">
+                {emailError}
+              </Typography>
+            )}
+          </div>
+          <Button type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
+            Submit
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 };
 

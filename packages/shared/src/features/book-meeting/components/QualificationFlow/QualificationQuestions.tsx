@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Icons, Typography } from '@meaku/saral';
+import { Button, Icons } from '@meaku/saral';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import {
@@ -11,21 +11,32 @@ import {
 import QualificationSingleQuestion from './QualificationSingleQuestion';
 import { MessageEventType } from '../../../../types/message';
 
-type QualificationQuestionsProps = QualificationFlowArtifactProps & {
-  handleIncrementSteps: () => void;
-};
-
-const QualificationQuestions = ({
-  artifact,
-  handleSendUserMessage,
-  handleIncrementSteps,
-}: QualificationQuestionsProps) => {
+const QualificationQuestions = ({ artifact, handleSendUserMessage }: QualificationFlowArtifactProps) => {
   const qualificationQuestions = artifact.content.qualification_questions;
   const { qualificationQuestionFormMetadata: qualificationMetadata } = artifact.metadata as {
     qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
   };
   const { trackEvent } = useCommandBarAnalytics();
-  const [qualificationAnswers, setQualificationAnswers] = useState<Array<QualificationResponsesType>>([]);
+  const [qualificationAnswers, setQualificationAnswers] = useState<Array<QualificationResponsesType>>(() => {
+    const initialAnswers: Array<QualificationResponsesType> = [];
+
+    // Initialize with default answers from default_answer_index
+    qualificationQuestions?.forEach((question) => {
+      if (question.default_answer_index !== undefined && question.default_answer_index !== null) {
+        const defaultOption = question.response_options[question.default_answer_index - 1];
+        if (defaultOption?.value) {
+          initialAnswers.push({
+            question: question.question,
+            answer: defaultOption.value,
+            answer_type: question.answer_type,
+            id: question.id ?? '',
+          });
+        }
+      }
+    });
+
+    return initialAnswers;
+  });
 
   const handleSetAnswers = (question: string, answer: string, answer_type: string, id: string) => {
     setQualificationAnswers((prevAnswers) => {
@@ -56,7 +67,6 @@ const QualificationQuestions = ({
         response_id: artifact.response_id,
       },
     });
-    handleIncrementSteps();
 
     trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.QUALIFICATION_QUESTIONS_SUBMITTED, { ...response_data });
   };
@@ -79,9 +89,6 @@ const QualificationQuestions = ({
 
   return (
     <div className="flex h-full w-full max-w-lg flex-col justify-start overflow-auto p-1">
-      <Typography className="mb-4 font-medium text-primary" variant="body-small">
-        Step 2 of 2
-      </Typography>
       {qualificationQuestions.map((item, index) => (
         <QualificationSingleQuestion
           key={item.question}

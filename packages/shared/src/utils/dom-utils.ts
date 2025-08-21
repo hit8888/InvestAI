@@ -89,3 +89,31 @@ export function isInWebComponentContext(webComponentTag = ENV.VITE_WC_TAG_NAME):
   const host = document.querySelector(webComponentTag);
   return !!host?.shadowRoot;
 }
+
+/**
+ * Detect shadow DOM context and get the appropriate portal container
+ * @returns Portal container or undefined if not found
+ */
+export const getPortalContainerForWebComponentShadowRoot = (): Element | DocumentFragment | null | undefined => {
+  if (typeof window === 'undefined') {
+    return undefined;
+  }
+
+  const webComponentTags = ['breakout-command-bar', 'breakout-book-meeting', 'breakout-ask-ai', 'breakout-summarize'];
+
+  // Check specific web component tags first
+  for (const tag of webComponentTags) {
+    const shadowRoot = document.querySelector(tag)?.shadowRoot;
+    if (shadowRoot) {
+      return shadowRoot;
+    }
+  }
+
+  // Fallback: check any elements with breakout- prefix
+  const breakoutShadowRoot = document.querySelector('[id^="breakout-"]')?.shadowRoot;
+  if (breakoutShadowRoot) {
+    return breakoutShadowRoot;
+  }
+
+  return undefined;
+};

@@ -54,6 +54,7 @@ export default {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        actionBtnIcon: 'hsl(var(--action-btn-icon))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -109,6 +110,7 @@ export default {
       },
       boxShadow: {
         'elevation-md': 'var(--shadow-elevation-md)',
+        'action-btn': 'var(--shadow-action-btn)',
       },
       animation: {
         'text-state': 'text-animation 500ms linear infinite alternate-reverse',

@@ -4,7 +4,7 @@ import { ConfigPayload } from '@meaku/core/types/api/agent_config_request';
 import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
 import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
 import { UpdateProspectPayload } from '@meaku/core/types/api/update_prospect_request';
-import { InitSessionResponse } from '../../types/responses';
+import { FormConfigResponse, InitSessionResponse } from '../../types/responses';
 
 export const getNudge = (agentId: string, payload: ConfigPayload) =>
   apiClient.post(`/tenant/chat/v2/agent/${agentId}/config/`, { ...payload });
@@ -26,3 +26,8 @@ export const initializeSession = (agentId: string, payload: InitializationPayloa
 
 export const updateProspect = (prospectId: string, payload: UpdateProspectPayload) =>
   apiClient.post(`/tenant/chat/prospect/${prospectId}/update/`, payload);
+
+export const getBookMeetingForm = (agentId: string, prospectId?: string) =>
+  apiClient.get<FormConfigResponse>(`/tenant/chat/agent/${agentId}/form/`, {
+    params: { prospect_id: prospectId },
+  });

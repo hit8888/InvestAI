@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Icons } from '@meaku/saral';
 import { QualificationQuestionType } from '../../../utils/artifact';
+import { getPortalContainerForWebComponentShadowRoot } from '../../../utils/dom-utils';
 
 interface QualificationQuestionsProps {
   qualificationQuestions: QualificationQuestionType[];
@@ -16,16 +17,35 @@ export const QualificationQuestions = ({
   filledData,
 }: QualificationQuestionsProps) => {
   const [qualificationAnswers, setQualificationAnswers] = useState<Record<string, string>>(() => {
+    const initialAnswers: Record<string, string> = {};
+
     // Initialize with filled data if available
     if (filledData && filledData.length > 0) {
-      const initialAnswers: Record<string, string> = {};
       filledData.forEach((item) => {
         initialAnswers[item.id] = item.answer;
       });
-      return initialAnswers;
     }
-    return {};
+
+    // Initialize with default answers from default_answer_index
+    qualificationQuestions.forEach((question) => {
+      const questionId = question.id ?? '';
+      // Only set default if not already filled from filledData
+      if (
+        !initialAnswers[questionId] &&
+        question.default_answer_index !== undefined &&
+        question.default_answer_index !== null
+      ) {
+        const defaultOption = question.response_options[question.default_answer_index - 1];
+        if (defaultOption?.value) {
+          initialAnswers[questionId] = defaultOption.value;
+        }
+      }
+    });
+
+    return initialAnswers;
   });
+
+  const portalContainer = useMemo(() => getPortalContainerForWebComponentShadowRoot(), []);
 
   if (qualificationQuestions.length === 0) {
     return null;
@@ -39,7 +59,8 @@ export const QualificationQuestions = ({
 
   // Check if all questions have been answered
   const areAllQuestionsAnswered = qualificationQuestions.every((question) => {
-    const answer = qualificationAnswers[question.id ?? ''];
+    const questionId = question.id ?? '';
+    const answer = qualificationAnswers[questionId];
     return answer !== undefined && answer !== '';
   });
 
@@ -73,7 +94,7 @@ export const QualificationQuestions = ({
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select an answer" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent portalContainer={portalContainer}>
                   {question.response_options.map((option, optionIndex) => (
                     <SelectItem key={option.value || `option-${optionIndex}`} value={option.value ?? ''}>
                       {option.value}

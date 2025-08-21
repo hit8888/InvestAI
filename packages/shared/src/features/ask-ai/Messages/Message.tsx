@@ -9,20 +9,20 @@ import { TextArtifact } from './TextArtifact';
 import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
 import { FormArtifact } from './FormArtifact';
+import { QualificationFormArtifact } from './QualificationFormArtifact';
 import { AskAiCalendarArtifact } from './AskAiCalendarArtifact';
 import { DiscoveryQuestion } from './DiscoveryQuestion';
 import CtaEventMessage from '../../book-meeting/components/CtaEventMessage';
 import { FormArtifactContent, FormArtifactMetadataType, CalendarArtifactContent } from '../../../utils/artifact';
 import { SendUserMessageParams } from '../../../types/message';
+import { useMemo } from 'react';
 
 interface MessageProps {
   message: MessageType;
   sendUserMessage?: (message: string, overrides?: Partial<MessageType>) => void;
-  filledFormArtifactIds: string[];
-  getFilledData: (artifactId: string) => Record<string, string>;
-  filledQualificationArtifactIds: string[];
-  getQualificationFilledData: (artifactId: string, responseId?: string) => Array<{ id: string; answer: string }>;
-  isQualificationFilled: (artifactId: string, responseId?: string) => boolean;
+  getFilledData: (responseId: string) => Record<string, string>;
+  getQualificationFilledData: (responseId: string) => Array<{ id: string; answer: string }>;
+  isQualificationFilled: (responseId: string) => boolean;
   filledCalendarUrls?: string[];
   selectedAvatar?: {
     Component: React.ComponentType<AvatarComponentProps>;
@@ -34,7 +34,6 @@ interface MessageProps {
 export const Message = ({
   message,
   sendUserMessage,
-  filledFormArtifactIds,
   getFilledData,
   getQualificationFilledData,
   isQualificationFilled,
@@ -64,12 +63,22 @@ export const Message = ({
     : null;
 
   const isFormArtifact = message.event_type === 'FORM_ARTIFACT';
+  const isQualificationFormArtifact = message.event_type === 'QUALIFICATION_FORM_ARTIFACT';
   const isCalendarArtifact = message.event_type === 'CALENDAR_ARTIFACT';
   const isDiscoveryQuestion = message.event_type === 'DISCOVERY_QUESTIONS';
   const isSuggestionsArtifact = message.event_type === 'SUGGESTIONS_ARTIFACT';
 
   // Extract form artifact data
   const formArtifactData = isFormArtifact
+    ? ((message.event_data as ArtifactEventData).artifact_data as {
+        artifact_id: string;
+        content: FormArtifactContent;
+        metadata: FormArtifactMetadataType;
+      })
+    : null;
+
+  // Extract qualification form artifact data
+  const qualificationFormArtifactData = isQualificationFormArtifact
     ? ((message.event_data as ArtifactEventData).artifact_data as {
         artifact_id: string;
         content: FormArtifactContent;
@@ -86,8 +95,8 @@ export const Message = ({
       })
     : null;
 
-  const qualificationQuestionsAnswered = formArtifactData
-    ? isQualificationFilled(formArtifactData.artifact_id, message.response_id)
+  const qualificationQuestionsAnswered = qualificationFormArtifactData
+    ? isQualificationFilled(message.response_id)
     : false;
 
   // Check if calendar artifact has been submitted by comparing URLs
@@ -117,18 +126,20 @@ export const Message = ({
     'pr-3 flex py-2 rounded-xl relative text-foreground font-normal text-sm leading-[22px] animate-in fade-in slide-in-from-bottom-2 duration-800':
       true,
     'mr-auto max-w-full pl-10': message.role === 'ai',
+    hidden: isTextArtifact && !textContent.length,
     'ml-auto max-w-[70%] bg-card  pl-3': message.role === 'user',
     [typographyVariants({ variant: 'body', fontWeight: 'normal' })]: true,
     '!max-w-full w-full':
       isVideoArtifact ||
       isImageArtifact ||
       isFormArtifact ||
+      isQualificationFormArtifact ||
       isCalendarArtifact ||
       isDiscoveryQuestion ||
       isSuggestionsArtifact ||
       isCtaEvent,
-    'py-0 pr-0 pl-10': isFormArtifact || isDiscoveryQuestion,
-    'p-0': isCalendarArtifact || isFormArtifact || isCtaEvent,
+    'py-0 pr-4 pl-10': isDiscoveryQuestion,
+    'p-0': isCalendarArtifact || isFormArtifact || isQualificationFormArtifact || isCtaEvent,
   });
 
   const svgClassName = cn({
@@ -136,11 +147,14 @@ export const Message = ({
     'fill-card -right-[5px]': message.role === 'user',
   });
 
+  const formFilledData = useMemo(() => getFilledData(message.response_id), [message.response_id]);
+
   if (
     !isTextArtifact &&
     !videoArtifactData &&
     !imageArtifactData &&
     !isFormArtifact &&
+    !isQualificationFormArtifact &&
     !isCalendarArtifact &&
     !isDiscoveryQuestion &&
     !isCtaEvent
@@ -152,6 +166,7 @@ export const Message = ({
     <div className={containerClassName}>
       {message.role === 'ai' &&
         !isFormArtifact &&
+        !isQualificationFormArtifact &&
         !isCalendarArtifact &&
         !isDiscoveryQuestion &&
         !isVideoArtifact &&
@@ -180,16 +195,27 @@ export const Message = ({
           content={formArtifactData.content}
           metadata={formArtifactData.metadata}
           handleSendUserMessage={handleSendUserMessage}
-          isFilled={filledFormArtifactIds.includes(formArtifactData.artifact_id)}
-          filledData={getFilledData(formArtifactData.artifact_id)}
+          isFilled={formArtifactData.metadata.is_filled || !!formFilledData}
+          filledData={formFilledData}
           responseId={message.response_id}
-          qualificationQuestionsAnswered={qualificationQuestionsAnswered}
-          qualificationFilledData={getQualificationFilledData(formArtifactData.artifact_id, message.response_id)}
+        />
+      )}
+      {isQualificationFormArtifact && qualificationFormArtifactData && sendUserMessage && (
+        <QualificationFormArtifact
+          artifactId={qualificationFormArtifactData.artifact_id}
+          content={qualificationFormArtifactData.content}
+          handleSendUserMessage={handleSendUserMessage}
+          isFilled={qualificationQuestionsAnswered}
+          filledData={getQualificationFilledData(message.response_id)}
+          responseId={message.response_id}
         />
       )}
       {isCalendarArtifact && calendarArtifactData && sendUserMessage && (
         <AskAiCalendarArtifact
-          content={calendarArtifactData.content}
+          content={{
+            ...calendarArtifactData.content,
+            artifact_id: calendarArtifactData.artifact_id,
+          }}
           metadata={calendarArtifactData.metadata}
           handleSendUserMessage={handleSendUserMessage}
           isSubmitted={isCalendarSubmitted}

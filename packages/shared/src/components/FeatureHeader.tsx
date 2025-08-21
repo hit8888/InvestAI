@@ -23,10 +23,13 @@ export const FeatureHeader = ({
   sendUserMessage,
   shouldBookMeetingCTAButtonShow,
 }: FeatureHeaderProps) => {
-  // Need to check if all buttons should be hidden based on different CTAs button
-  const allButtonInHeaderHidden = !shouldBookMeetingCTAButtonShow && !ctas?.length;
+  // Check if all buttons should be hidden - only hide if no CTAs exist or no CTAs would be rendered
+  const hasUrlBasedCtas = ctas?.some((cta) => cta.url);
+  const hasMessageBasedCtas = ctas?.some((cta) => !cta.url);
+  const allButtonInHeaderHidden =
+    !ctas?.length || (!hasUrlBasedCtas && (!hasMessageBasedCtas || !shouldBookMeetingCTAButtonShow));
   return (
-    <div className="flex flex-col p-3 gap-4">
+    <div className="flex flex-col p-3 gap-4 border-b border-gray-100">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 -ml-1">
           {icon}
@@ -37,7 +40,7 @@ export const FeatureHeader = ({
                 : 'pointer-events-auto max-h-8 scale-100 opacity-100'
             }`}
           >
-            <Typography variant="heading" fontWeight="semibold">
+            <Typography variant="heading" fontWeight="medium" className="text-foreground">
               {title}
             </Typography>
           </div>

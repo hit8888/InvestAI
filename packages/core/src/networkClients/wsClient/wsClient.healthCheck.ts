@@ -7,7 +7,7 @@ export class HealthCheckManager {
   private heartbeatTimeoutTimer: NodeJS.Timeout | null = null;
   private heartbeatConfig: HeartbeatConfig | null = null;
 
-  private readonly RESPONSE_TIMEOUT = 30000;
+  private readonly RESPONSE_TIMEOUT = Infinity;
   private readonly MAX_RETRY_COUNT = 3;
 
   // Default heartbeat configuration
@@ -85,6 +85,7 @@ export class HealthCheckManager {
 
   // Response timeout methods
   startResponseTimeout(onTimeout: () => void): void {
+    if (this.RESPONSE_TIMEOUT === Infinity) return;
     this.clearResponseTimeout();
 
     this.responseTimeout = setTimeout(() => {

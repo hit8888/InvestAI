@@ -147,7 +147,10 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.message]);
 
-  const containerClasses = cn('fixed', position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4');
+  const containerClasses = cn(
+    'fixed z-[2147483647]',
+    position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4',
+  );
 
   return (
     <motion.div

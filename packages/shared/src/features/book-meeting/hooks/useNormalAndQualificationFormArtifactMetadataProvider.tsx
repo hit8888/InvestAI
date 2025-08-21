@@ -1,23 +1,26 @@
+import { FormArtifactContent } from '@meaku/core/types/artifact';
 import { ArtifactMessageContent } from '../../../types/message';
 
 import { Message, MessageEventType } from '../../../types/message';
 import { ArtifactContent, QualificationResponsesType } from '../../../utils/artifact';
 import {
   checkIsQualificationFormArtifact,
-  findArtifactMessageWithSameArtifactId,
+  findArtifactMessageWithSameEventTypeAndResponseId,
   getCalendarArtifactMessage,
   getCtaEvent,
   getFormArtifactMessage,
+  getQualificationFormArtifactMessage,
   getFormFilledEventByArtifactId,
 } from '../../../utils/common';
 
 type IProps = {
-  artifactId: string;
+  messageEventType: string | undefined;
   messages: Message[];
+  responseId: string;
 };
 
-const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, messages }: IProps) => {
-  if (!artifactId)
+const useNormalAndQualificationFormArtifactMetadataProvider = ({ messageEventType, messages, responseId }: IProps) => {
+  if (!messageEventType)
     return {
       isQualificationFormArtifact: false,
       isFormArtifact: false,
@@ -25,10 +28,10 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
       qualificationQuestionFormMetadata: {},
     };
 
-  // Find the message that corresponds to the active artifact
-  const artifactMessage = findArtifactMessageWithSameArtifactId(messages, artifactId);
+  // Find the message that corresponds to same event type and response id
+  const artifactMessage = findArtifactMessageWithSameEventTypeAndResponseId(messages, messageEventType, responseId);
 
-  const artifactContent =
+  let artifactContent =
     ((artifactMessage?.event_data as ArtifactMessageContent)?.artifact_data?.content as ArtifactContent) ?? null;
 
   const messagesWithSameResponseId = messages.filter(
@@ -38,10 +41,30 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
   const calendarArtifactMessage = getCalendarArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
-  const formFilledMessage = getFormFilledEventByArtifactId(messages, formArtifactMessage, MessageEventType.FORM_FILLED);
+  const qualificationFormArtifactMessage = getQualificationFormArtifactMessage(messagesWithSameResponseId);
+
+  if (qualificationFormArtifactMessage) {
+    artifactContent = {
+      ...artifactContent,
+      qualification: (
+        (qualificationFormArtifactMessage?.event_data as ArtifactMessageContent)?.artifact_data
+          ?.content as FormArtifactContent
+      )?.qualification,
+      qualification_questions: (
+        (qualificationFormArtifactMessage?.event_data as ArtifactMessageContent)?.artifact_data
+          ?.content as FormArtifactContent
+      )?.qualification_questions,
+    };
+  }
+
+  const formFilledMessage = getFormFilledEventByArtifactId(
+    messages,
+    formArtifactMessage?.response_id ?? '',
+    MessageEventType.FORM_FILLED,
+  );
   const calendarFilledMessage = getFormFilledEventByArtifactId(
     messages,
-    calendarArtifactMessage,
+    calendarArtifactMessage?.response_id ?? '',
     MessageEventType.CALENDAR_SUBMIT,
   );
 
@@ -51,7 +74,7 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
 
   const qualificationFormFilled = getFormFilledEventByArtifactId(
     messages,
-    artifactMessage,
+    qualificationFormArtifactMessage?.response_id ?? '',
     MessageEventType.QUALIFICATION_FORM_FILLED,
   );
   const hasQualificationFormFilled = !!qualificationFormFilled;
@@ -88,7 +111,9 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
   const artifactContentWithMetadata = {
     ...artifactContent,
     artifact_type: artifactType,
-    artifact_id: calendarArtifactMessage ? calendarArtifactMessage.event_data.artifact_data.artifact_id : artifactId,
+    artifact_id: calendarArtifactMessage
+      ? calendarArtifactMessage.event_data.artifact_data.artifact_id
+      : artifactMessage?.event_data?.artifact_data?.artifact_id,
     metadata: {
       formMetadata,
       qualificationQuestionFormMetadata,

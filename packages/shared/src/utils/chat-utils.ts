@@ -2,10 +2,10 @@ import { nanoid } from 'nanoid';
 import { MessageRole, MessageEventType, type Message } from '../types/message';
 
 export const getUserMessage = (message: string, overrides?: Partial<Message>): Partial<Message> => {
-  const { event_type, event_data, ...safeOverrides } = overrides ?? {};
+  const { event_type, event_data, response_id, ...safeOverrides } = overrides ?? {};
 
   return {
-    response_id: overrides?.response_id ?? nanoid(),
+    response_id: response_id ?? nanoid(),
     role: MessageRole.USER,
     event_type: event_type ?? MessageEventType.TEXT_REQUEST,
     event_data: event_data ?? { content: message },

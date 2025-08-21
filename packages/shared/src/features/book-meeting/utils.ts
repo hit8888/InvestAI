@@ -1,6 +1,7 @@
 import { z, ZodSchema } from 'zod';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import { FormFieldType } from '../../utils/types';
+import { MessageEventType } from '../../types/message';
 
 // List of common free email providers
 const FREE_EMAIL_DOMAINS = [
@@ -112,3 +113,14 @@ export const createFormSchema = (form_fields: FormFieldType[]) => {
 
   return z.object(schemaShape);
 };
+
+export const BOOK_MEETING_EVENTS = [
+  MessageEventType.BOOK_MEETING,
+  MessageEventType.FORM_FILLED,
+  MessageEventType.FORM_ARTIFACT,
+  MessageEventType.QUALIFICATION_FORM_ARTIFACT,
+  MessageEventType.CALENDAR_ARTIFACT,
+  MessageEventType.QUALIFICATION_FORM_FILLED,
+  MessageEventType.CALENDAR_SUBMIT,
+  MessageEventType.CTA_EVENT,
+];

@@ -39,7 +39,7 @@ export const AskAiCalendarArtifact = ({
 
   if (isCalendarBookingSuccessfull) {
     return (
-      <div className="mt-4 w-full p-2 pl-10">
+      <div className="mt-4 w-full px-10 py-4">
         <CalendarBookingSuccessfull />
       </div>
     );

@@ -1,13 +1,7 @@
 import { QualificationQuestionMetadataType, QualificationResponsesType } from '../../../../utils/artifact';
-import {
-  Icons,
-  InlineSelectTrigger,
-  InlineSelect,
-  InlineSelectContent,
-  InlineSelectItem,
-  Typography,
-  InlineSelectValue,
-} from '@meaku/saral';
+import { Icons, Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@meaku/saral';
+import { getPortalContainerForWebComponentShadowRoot } from '../../../../utils/dom-utils';
+import { useMemo } from 'react';
 
 type IProps = {
   question: string;
@@ -35,6 +29,7 @@ const QualificationSingleQuestion = ({
   const answeredValue = sameQuestionAnswered ? sameQuestionAnswered.answer : 'No Answer';
 
   const answer = answers.find((item) => item.question === question)?.answer;
+  const portalContainer = useMemo(() => getPortalContainerForWebComponentShadowRoot(), []);
   return (
     <div className="flex w-full flex-col items-start gap-4 self-stretch p-2">
       <Typography variant="body-small" className="font-medium">
@@ -43,23 +38,18 @@ const QualificationSingleQuestion = ({
       {isQuestionAnswered ? (
         <QualificationSingleQuestionAnswered answer={answeredValue} />
       ) : (
-        <InlineSelect
-          value={answer || ''}
-          className="w-full"
-          onValueChange={handleSetAnswers}
-          placeholder="Select an answer"
-        >
-          <InlineSelectTrigger className="w-full">
-            <InlineSelectValue placeholder={`Select an answer${addAsterisk}`} />
-          </InlineSelectTrigger>
-          <InlineSelectContent>
+        <Select value={answer || ''} onValueChange={(value) => handleSetAnswers(value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={`Select an answer${addAsterisk}`} />
+          </SelectTrigger>
+          <SelectContent portalContainer={portalContainer}>
             {dropdownOptions.map((option, optionIndex) => (
-              <InlineSelectItem key={`${option}-${optionIndex}`} value={option ?? ''}>
+              <SelectItem key={option || `option-${optionIndex}`} value={option ?? ''}>
                 {option}
-              </InlineSelectItem>
+              </SelectItem>
             ))}
-          </InlineSelectContent>
-        </InlineSelect>
+          </SelectContent>
+        </Select>
       )}
     </div>
   );

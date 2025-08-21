@@ -14,18 +14,16 @@ export const CalendarBookingSuccessfull = ({ title, description }: IProps) => {
   const descriptionText = description || DEFAULT_DESCRIPTION;
   return (
     <div className="flex flex-col gap-5">
-      <div className="w-full">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <div className="flex items-center justify-center rounded-full border-[12px] border-green-100 bg-green-500 p-2">
-            <Icons.Check className="stroke-4 size-5  text-background" />
-          </div>
-          <Typography variant="heading" className="text-center">
-            {titleText}
-          </Typography>
-          <Typography variant="body-small" className="text-center text-muted-foreground">
-            {descriptionText}
-          </Typography>
+      <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
+          <Icons.Check className="stroke-4 size-5  text-background" />
         </div>
+        <Typography variant="heading" className="text-center">
+          {titleText}
+        </Typography>
+        <Typography variant="body-small" className="text-center text-muted-foreground">
+          {descriptionText}
+        </Typography>
       </div>
     </div>
   );

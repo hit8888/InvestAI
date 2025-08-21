@@ -3,7 +3,16 @@ import { CalendarSubmitEventData } from './types';
 import { CalendarTypeEnum, ViewType } from './enum';
 import { Message, SendUserMessageParams } from '../types/message';
 
-export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM', 'CALENDAR']);
+export const ArtifactEnumSchema = z.enum([
+  'SLIDE',
+  'VIDEO',
+  'SLIDE_IMAGE',
+  'NONE',
+  'SUGGESTIONS',
+  'FORM',
+  'CALENDAR',
+  'QUALIFICATION_FORM',
+]);
 
 export const SlideItemSchema = z.object({
   title: z.string(),
@@ -69,6 +78,7 @@ export const QualificationQuestionSchema = z.object({
   question: z.string(),
   response_options: z.array(QualificationSelectOptionSchema),
   is_required: z.boolean(),
+  default_answer_index: z.number().optional().nullable(),
 });
 export type QualificationQuestionType = z.infer<typeof QualificationQuestionSchema>;
 
@@ -115,6 +125,7 @@ export const FormArtifactSchema = z.object({
   form_fields: z.array(FormFieldSchema),
   qualification: z.boolean().optional(),
   qualification_questions: z.array(QualificationQuestionSchema).optional(),
+  default_data: z.record(z.string(), z.string()).optional(),
 });
 
 export type SlideArtifactContent = z.infer<typeof SlideArtifactSchema>;
@@ -158,7 +169,8 @@ export type QualificationFlowArtifactProps = {
 
 export type ArtifactContentWithMetadataProps =
   | ({
-      artifact_type: 'FORM';
+      event_type: 'FORM_ARTIFACT';
+      artifact_id: string;
       metadata: {
         formMetadata: FormArtifactMetadataType;
         qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
@@ -167,7 +179,8 @@ export type ArtifactContentWithMetadataProps =
       ctaEvent?: Message;
     } & FormArtifactContent)
   | ({
-      artifact_type: 'CALENDAR';
+      event_type: 'CALENDAR_ARTIFACT';
+      artifact_id: string;
       metadata: {
         formMetadata: FormArtifactMetadataType;
         qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
@@ -180,6 +193,7 @@ export type ArtifactContentWithMetadataProps =
     } & CalendarArtifactContent)
   | ({
       artifact_type: 'SLIDE' | 'VIDEO' | 'SLIDE_IMAGE' | 'SUGGESTIONS';
+      artifact_id: string;
       metadata: {
         formMetadata: FormArtifactMetadataType;
         qualificationQuestionFormMetadata: QualificationQuestionMetadataType;
@@ -190,7 +204,7 @@ export type ArtifactContentWithMetadataProps =
   | null;
 
 export type AdditionalCalendarArtifactContent = CalendarArtifactContent & {
-  artifact_type: 'CALENDAR';
+  event_type: 'CALENDAR_ARTIFACT';
   metadata: {
     formMetadata: FormArtifactMetadataType;
     qualificationQuestionFormMetadata: QualificationQuestionMetadataType;

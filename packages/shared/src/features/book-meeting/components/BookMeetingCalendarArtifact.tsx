@@ -22,7 +22,11 @@ export const BookMeetingCalendarArtifact = ({ calendarContent, handleSendUserMes
     calendarContent?.metadata?.calendarContent?.form_data?.invitee?.uri;
 
   if (isCalendarBookingSuccessfull) {
-    return <CalendarBookingSuccessfull />;
+    return (
+      <div className="p-8">
+        <CalendarBookingSuccessfull />
+      </div>
+    );
   }
 
   return (

@@ -42,7 +42,7 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
       data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
       size="icon"
       onClick={() => onClick?.(featureConfig)}
-      className="rounded-full"
+      className="rounded-full cursor-pointer"
       asChild
     >
       <div className="orb-container relative h-14 w-14 overflow-hidden p-1">

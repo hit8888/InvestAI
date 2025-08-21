@@ -42,6 +42,7 @@ export const MessageEventType = {
   SLIDE_IMAGE_ARTIFACT: 'SLIDE_IMAGE_ARTIFACT',
   SUGGESTIONS_ARTIFACT: 'SUGGESTIONS_ARTIFACT',
   FORM_ARTIFACT: 'FORM_ARTIFACT',
+  QUALIFICATION_FORM_ARTIFACT: 'QUALIFICATION_FORM_ARTIFACT',
   CALENDAR_ARTIFACT: 'CALENDAR_ARTIFACT',
   QUALIFICATION_FORM_FILLED: 'QUALIFICATION_FORM_FILLED',
   CALENDAR_SUBMIT: 'CALENDAR_SUBMIT',
@@ -55,6 +56,7 @@ export const MessageEventType = {
   GENERATING_ARTIFACT: 'GENERATING_ARTIFACT',
   SUMMARIZE: 'SUMMARIZE',
   SUMMARY_STREAM: 'SUMMARY_STREAM',
+  CTA_EVENT: 'CTA_EVENT',
 } as const;
 
 export type EventTypeType =
@@ -67,6 +69,7 @@ export type EventTypeType =
   | 'SLIDE_IMAGE_ARTIFACT'
   | 'SUGGESTIONS_ARTIFACT'
   | 'FORM_ARTIFACT'
+  | 'QUALIFICATION_FORM_ARTIFACT'
   | 'CALENDAR_ARTIFACT'
   | 'FORM_FILLED'
   | 'QUALIFICATION_FORM_FILLED'
@@ -80,6 +83,7 @@ export type EventTypeType =
   | 'GENERATING_ARTIFACT'
   | 'SUMMARIZE'
   | 'SUMMARY_STREAM'
+  | 'CTA_EVENT'
   | string; // future-proofing
 
 // Individual event data structures
@@ -272,6 +276,10 @@ export const MessageSchema = z
       }),
       z.object({
         event_type: z.literal('FORM_ARTIFACT'),
+        event_data: ArtifactMessageContentSchema,
+      }),
+      z.object({
+        event_type: z.literal('QUALIFICATION_FORM_ARTIFACT'),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({

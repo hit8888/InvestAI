@@ -16,12 +16,6 @@ const BlackTooltip = ({ children, content }: BlackTooltipProps) => {
         sideOffset={10}
         className="border-none bg-gray-900 px-3 py-2 text-sm text-white"
         arrowClassName="fill-gray-900"
-        animation={{
-          initial: { x: 8, opacity: 0 },
-          animate: { x: 0, opacity: 1 },
-          exit: { x: 8, opacity: 0 },
-          transition: { duration: 0.15, ease: 'easeInOut' },
-        }}
       >
         {content}
       </TooltipContent>

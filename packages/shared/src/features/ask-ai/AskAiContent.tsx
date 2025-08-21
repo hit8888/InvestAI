@@ -7,9 +7,11 @@ import { Messages } from './Messages';
 import { SidebarArtifactDrawer } from './components/SidebarArtifactDrawer';
 import { SidebarArtifactProvider, useSidebarArtifactContext } from './context/SidebarArtifactContext';
 import { useAvatarSelection } from '../../hooks/useAvatarSelection';
-import { checkIfCTAButtonShown } from '../../utils/common';
+import { checkIfSubmissionEventsPresent } from '../../utils/common';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import { useWsClient } from '../../hooks/useWsClient';
+import { useFormArtifactMessage } from '../../hooks/useFormArtifactMessage';
+import { MessageEventType } from '../../types/message';
 
 const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const {
@@ -23,6 +25,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     settings,
     config,
     sessionData,
+    addMessage,
   } = useCommandBarStore();
 
   const {
@@ -58,12 +61,22 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   const avatarKey = config.session_id || `${settings.agent_id}-${config.prospect_id}`;
   const { selectedAvatar, isAvatarLoaded } = useAvatarSelection(avatarKey);
 
-  const shouldBookMeetingCTAButtonShow = checkIfCTAButtonShown(messages ?? []);
+  const shouldBookMeetingCTAButtonShow = checkIfSubmissionEventsPresent(messages ?? []);
+
+  // Add form artifact message for consistent UI when form filled exists but no artifact message
+  useFormArtifactMessage({
+    messages: messages ?? [],
+    sessionData,
+    addMessage,
+    artifactEventTypes: [MessageEventType.FORM_ARTIFACT],
+    checkFormFilled: true,
+    queryEnabled: !shouldBookMeetingCTAButtonShow,
+  });
 
   return (
     <div
-      className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card"
-      style={{ boxShadow: '0 0 24px 0 rgba(0, 0, 0, 0.24)', height: 'min(100vh, 680px)' }}
+      className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
+      style={{ height: 'min(100vh, 680px)' }}
     >
       <FeatureHeader
         title={`${askaiConfig?.agent_name} - AI Copilot`}
@@ -74,7 +87,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         onClose={onClose}
         onExpand={onExpand}
         isExpanded={isExpanded}
-        shouldBookMeetingCTAButtonShow={shouldBookMeetingCTAButtonShow}
+        shouldBookMeetingCTAButtonShow={shouldBookMeetingCTAButtonShow && !!sessionData}
         ctas={askaiConfig?.ctas ?? []}
         sendUserMessage={sendUserMessage}
       />
