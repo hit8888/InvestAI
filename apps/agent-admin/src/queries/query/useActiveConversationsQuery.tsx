@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 
-const useActiveConversations = () => {
+const useActiveConversationsQuery = () => {
   const getaActiveConversationsQueryKey = (): unknown[] => {
     const tenant = getTenantFromLocalStorage();
     return ['active-conversations', tenant];
@@ -21,4 +21,4 @@ const useActiveConversations = () => {
   return activeConversationsQueryData;
 };
 
-export default useActiveConversations;
+export default useActiveConversationsQuery;

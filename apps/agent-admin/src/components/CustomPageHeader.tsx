@@ -2,7 +2,7 @@ import { JSX } from 'react';
 import Separator from '@breakout/design-system/components/layout/separator';
 
 type CustomPageHeaderProps = {
-  headerTitle: string;
+  headerTitle: string | JSX.Element;
   headerIcon?: JSX.Element;
 };
 

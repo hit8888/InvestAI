@@ -12,19 +12,20 @@ import AccountSignalsCard from './AccountSignalsCard';
 import ContactDetailsCard from './ContactDetailsCard';
 import UserActivity from './UserActivity';
 import LandingPageCard from './LandingPageCard';
-import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
+import { ActiveConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
 
 interface JoinConversationChatAreaProps {
+  conversationDetails?: ActiveConversationDetailsDataResponse;
   sessionId: string;
   isLoading?: boolean;
 }
 
-const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChatAreaProps) => {
+const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
   const { messages } = useMessageStore();
-  const { browsedUrls, session } = useActiveConversationDetails();
+  const { prospect: { browsed_urls: browsedUrls = [] } = {}, session } = conversationDetails ?? {};
   const { currentConversation } = useJoinConversationStore();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   useSetArtifactOnNewMessage();
@@ -103,7 +104,7 @@ const JoinConversationChatArea = ({ sessionId, isLoading }: JoinConversationChat
             </div>
             <div className="flex h-full w-2/5 flex-col gap-4 overflow-y-auto py-2">
               <ContactDetailsCard conversation={currentConversation} />
-              <SummaryCard />
+              <SummaryCard chatSummary={conversationDetails?.chat_summary} />
               <AccountSignalsCard conversation={currentConversation} />
             </div>
           </div>

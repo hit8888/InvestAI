@@ -1,9 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import withPageViewWrapper from '../../pages/PageViewWrapper';
-import CustomPageHeader from '../../components/CustomPageHeader';
-import { AppRoutesEnum, COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
+import { AppRoutesEnum } from '../../utils/constants';
 import ActiveConversationsLayout from '../../components/ActiveConversationsComp/ActiveConversationsLayout';
 import { ActiveConversationsProvider } from '../../context/ActiveConversationsContext';
 import { useAuth } from '../../context/AuthProvider';
@@ -22,10 +20,6 @@ const ActiveConversationsBasePage = () => {
 
   return (
     <ActiveConversationsProvider>
-      <CustomPageHeader
-        headerTitle="Live Conversations"
-        headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
-      />
       <ActiveConversationsLayout />
     </ActiveConversationsProvider>
   );

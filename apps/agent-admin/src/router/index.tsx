@@ -76,6 +76,14 @@ const routes = [
             element: <ProtectedRoute element={<ActiveConversationsPage />} />,
           },
           {
+            path: 'active-conversations/assigned',
+            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
+          },
+          {
+            path: 'active-conversations/pinned',
+            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
+          },
+          {
             path: 'active-conversations/live/:sessionID',
             element: <ProtectedRoute element={<ActiveConversationsPage />} />,
           },

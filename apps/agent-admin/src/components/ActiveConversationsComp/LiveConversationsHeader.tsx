@@ -7,23 +7,14 @@ type LiveConversationsHeaderProps = {
 
 const LiveConversationsHeader = ({ isLoading, totalActiveChats }: LiveConversationsHeaderProps) => {
   if (isLoading) {
-    return (
-      <>
-        <Skeleton className="h-4 w-44" />
-        <Skeleton className="h-4 w-24" />
-      </>
-    );
+    return <Skeleton className="h-4 w-24" />;
   }
 
-  return totalActiveChats > 0 ? (
-    <div className="flex w-full items-center justify-between gap-4">
-      <LiveConversationsCount totalActiveChats={totalActiveChats} />
-    </div>
-  ) : null;
+  return totalActiveChats > 0 ? <LiveConversationsCount totalActiveChats={totalActiveChats} /> : null;
 };
 
 const LiveConversationsCount = ({ totalActiveChats }: Pick<LiveConversationsHeaderProps, 'totalActiveChats'>) => {
-  const chatsLabel = totalActiveChats === 1 ? 'Live User' : 'Live Users';
+  const chatsLabel = totalActiveChats === 1 ? 'Chat' : 'Chats';
 
   return (
     <div className="flex items-center justify-center gap-2.5 rounded-[30px] bg-primary/10 px-3 py-1">

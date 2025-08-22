@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
-import useActiveConversationDetailsDataQuery from '../../queries/query/useActiveConversationDetailsDataQuery';
+import useActiveConversationDetailsQuery from '../../queries/query/useActiveConversationDetailsQuery';
 import JoinConversationChatArea from './JoinConversationChatArea';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
-import { useQueryOptions } from '../../hooks/useQueryOptions';
-import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
 import { checkIsAdminJoinedMessage, checkIsAdminLeftMessage } from '@meaku/core/utils/messageUtils';
@@ -29,37 +27,24 @@ const JoinConversationDrawer = ({
 }: JoinConversationDrawerProps) => {
   const { session_id: sessionId } = conversation;
   const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse } = useJoinConversationStore();
-  const { chatHistory, setChatHistory, setChatSummary, setBrowsedUrls, setSession } = useActiveConversationDetails();
-  const { setMessages } = useMessageStore();
+  const { messages, setMessages } = useMessageStore();
 
-  const queryOptions = useQueryOptions();
-
-  const { data, isFetching, isError } = useActiveConversationDetailsDataQuery({
-    sessionID: sessionId,
-    queryOptions: {
-      ...queryOptions,
-      staleTime: 0,
+  const { data, isFetching, isError } = useActiveConversationDetailsQuery(
+    {},
+    {
+      refetchOnMount: 'always',
     },
-    queryParams: {
-      chat_summary_required: 'true',
-    },
-  });
+  );
 
   useEffect(() => {
     if (isFetching || !data) return;
 
-    setChatHistory(data.chat_history);
     setMessages(data.chat_history);
-    setChatSummary(data.chat_summary);
-    setBrowsedUrls(data.prospect?.browsed_urls ?? []);
-    setSession(data.session);
 
     return () => {
-      setChatHistory([]);
       setMessages([]);
-      setChatSummary('');
     };
-  }, [isFetching, data]);
+  }, [isFetching, data, setMessages]);
 
   useEffect(() => {
     if (isFetching || !data) return;
@@ -116,9 +101,9 @@ const JoinConversationDrawer = ({
           onPointerDownOutside={(e) => e.preventDefault()}
         >
           <div className="flex h-full w-full grow flex-col gap-2 overflow-hidden">
-            <JoinConversationChatArea sessionId={sessionId} isLoading={isFetching} />
+            <JoinConversationChatArea conversationDetails={data} sessionId={sessionId} isLoading={isFetching} />
 
-            {!chatHistory || chatHistory.length === 0 ? null : (
+            {messages.length === 0 ? null : (
               <JoinConversationBottomBar
                 sessionStatus={sessionStatus}
                 onSendMessage={handleSendMessage}

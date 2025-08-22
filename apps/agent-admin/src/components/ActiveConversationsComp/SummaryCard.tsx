@@ -3,13 +3,15 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { useActiveConversationDetails } from '../../context/ActiveConversationDetailsContext';
 
 const SUMMARY_TRIM_LENGTH = 150;
 
-const SummaryCard = () => {
+interface SummaryCardProps {
+  chatSummary?: string;
+}
+
+const SummaryCard = ({ chatSummary }: SummaryCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { chatSummary } = useActiveConversationDetails();
 
   const summaryText =
     chatSummary || 'No summary available yet. The AI will generate a summary as the conversation progresses.';

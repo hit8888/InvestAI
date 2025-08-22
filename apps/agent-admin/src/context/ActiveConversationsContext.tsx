@@ -1,12 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
 import useActiveConversationsWebSocket, { LastMessage } from '../hooks/useActiveConversationsWebSocket';
-import useActiveConversations from '../queries/query/useActiveConversations';
+import useActiveConversationsQuery from '../queries/query/useActiveConversationsQuery';
 import { BuyerIntent } from '@meaku/core/types/common';
 import useSound from '@meaku/core/hooks/useSound';
 import { useNavigate, useParams } from 'react-router-dom';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
 import { ReadyState } from 'react-use-websocket';
+import { BrowsedUrl } from '@meaku/core/types/common';
 
 export type ActiveConversationCard = {
   sessionId: string;
@@ -32,6 +33,7 @@ export interface ActiveConversation {
   last_user_message: string;
   last_message_timestamp: string;
   buyer_intent: BuyerIntent;
+  is_self_assigned: boolean;
   prospect: {
     name: string;
     email: string;
@@ -42,6 +44,12 @@ export interface ActiveConversation {
       employee_count: number;
       company_logo_url: string;
       website_url: string;
+    };
+    browsed_urls: BrowsedUrl[];
+  };
+  session: {
+    query_params: {
+      utm_source: string;
     };
   };
 }
@@ -62,7 +70,7 @@ export const ActiveConversationsContext = createContext<ActiveConversationsConte
 
 export const ActiveConversationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { readyState, lastMessageBySession, setLastMessageBySession } = useActiveConversationsWebSocket();
-  const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversations();
+  const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversationsQuery();
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
   const { setCurrentConversation } = useJoinConversationStore();

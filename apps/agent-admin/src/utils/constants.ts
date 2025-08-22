@@ -364,7 +364,7 @@ export enum AppRoutesEnum {
 
 export enum SidebarNavItemsEnum {
   CONVERSATIONS_LABEL = 'Conversations',
-  ACTIVE_CONVERSATIONS_LABEL = 'Live Conversations',
+  ACTIVE_CONVERSATIONS_LABEL = 'Live Visitors',
   AGENT_LABEL = 'Agent',
   AGENT_DATA_SOURCES_LABEL = 'Data Sources',
   AGENT_BRANDING_LABEL = 'Branding',
