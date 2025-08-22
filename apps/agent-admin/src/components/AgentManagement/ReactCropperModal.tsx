@@ -56,45 +56,24 @@ const ReactCropperModal: React.FC<ReactCropperModalProps> = ({
     setIsProcessing(true);
     try {
       const cropper = cropperRef.current?.cropper;
-      const cropData = cropper.getData(true); // get crop box data
-      const sourceCanvas = cropper.getCroppedCanvas();
+      const isSquare = outputWidth === outputHeight;
+      const exportWidth = isSquare ? Math.max(256, outputWidth * 4) : outputWidth * 2;
+      const exportHeight = isSquare ? exportWidth : outputHeight * 2;
 
-      const outputAspect = outputWidth / outputHeight;
-      const cropAspect = cropData.width / cropData.height;
+      const exportedCanvas = cropper.getCroppedCanvas({
+        width: exportWidth,
+        height: exportHeight,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+        fillColor: 'transparent',
+      });
 
-      const canvas = document.createElement('canvas');
-      canvas.width = outputWidth;
-      canvas.height = outputHeight;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        console.error('Could not get canvas context');
-        // Display an error message to the user
+      if (!exportedCanvas) {
+        console.error('Could not export cropped canvas');
         return;
       }
 
-      // Fill with transparent background
-      ctx.clearRect(0, 0, outputWidth, outputHeight);
-
-      // Calculate draw size and position to fit crop into 4:1
-      let drawWidth = outputWidth;
-      let drawHeight = outputHeight;
-      let dx = 0;
-      let dy = 0;
-      if (cropAspect > outputAspect) {
-        // Crop is wider than 4:1, fit width
-        drawWidth = outputWidth;
-        drawHeight = outputWidth / cropAspect;
-        dy = (outputHeight - drawHeight) / 2;
-      } else {
-        // Crop is taller than 4:1, fit height
-        drawHeight = outputHeight;
-        drawWidth = outputHeight * cropAspect;
-        dx = (outputWidth - drawWidth) / 2;
-      }
-
-      ctx.drawImage(sourceCanvas, 0, 0, sourceCanvas.width, sourceCanvas.height, dx, dy, drawWidth, drawHeight);
-
-      canvas.toBlob(
+      exportedCanvas.toBlob(
         (blob: Blob | null) => {
           if (blob) {
             onCropComplete(blob);
