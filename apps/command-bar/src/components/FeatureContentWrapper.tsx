@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { querySelector } from '../utils/dom-utils';
+
+import { querySelector } from '@meaku/shared/utils/dom-utils';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { ENV } from '@meaku/shared/constants/env';
 
 export interface FeatureContentWrapperProps {
   children: React.ReactNode;
@@ -9,8 +11,11 @@ export interface FeatureContentWrapperProps {
   isExpanded: boolean;
 }
 
-export const getActiveFeatureBottomOffset = (activeFeature: CommandBarModuleType) => {
-  const buttonElement = querySelector(`[data-action-id="action-${activeFeature}"]`) as HTMLButtonElement;
+const getActiveFeatureBottomOffset = (activeFeature: CommandBarModuleType) => {
+  const buttonElement = querySelector(
+    `[data-action-id="action-${activeFeature}"]`,
+    ENV.VITE_WC_TAG_NAME,
+  ) as HTMLButtonElement;
 
   if (!buttonElement) return 0;
   const rect = buttonElement.getBoundingClientRect();

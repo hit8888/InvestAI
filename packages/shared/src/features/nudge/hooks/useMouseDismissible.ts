@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface UseMouseDismissibleProps {
   displayDuration?: number;
@@ -8,6 +8,11 @@ interface UseMouseDismissibleProps {
 export const useMouseDismissible = ({ displayDuration, onDismiss }: UseMouseDismissibleProps) => {
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [shouldDismiss, setShouldDismiss] = useState(false);
+
+  const handleDismiss = useCallback(() => {
+    setIsMouseOver(false);
+    onDismiss?.();
+  }, [onDismiss]);
 
   useEffect(() => {
     if (!displayDuration || displayDuration <= 0) {
@@ -22,7 +27,7 @@ export const useMouseDismissible = ({ displayDuration, onDismiss }: UseMouseDism
     }, displayDuration);
 
     return () => clearTimeout(timeout);
-  }, [displayDuration, onDismiss]);
+  }, [displayDuration]);
 
   useEffect(() => {
     if (!isMouseOver && shouldDismiss) {
@@ -33,5 +38,6 @@ export const useMouseDismissible = ({ displayDuration, onDismiss }: UseMouseDism
   return {
     isMouseOver,
     setIsMouseOver,
+    handleDismiss,
   };
 };

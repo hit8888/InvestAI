@@ -2,12 +2,15 @@ import { useEffect } from 'react';
 
 import { hexToHSL } from '@meaku/core/utils/color';
 import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
+import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
 
 interface UseStyleConfigProps {
   styleConfig?: ConfigurationApiResponse['style_config'];
 }
 
 const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
+  const { root: shadowRoot } = useShadowRoot();
+
   useEffect(() => {
     if (!styleConfig) return;
 
@@ -35,18 +38,15 @@ const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
         try {
           const value = hexToHSL(hexValue);
           const boBcContainer = document.querySelector('#bo-bc-container') as HTMLElement;
-          const shadowHosts = document.querySelectorAll('[id^="breakout-"]');
+          const shadowRootElement = shadowRoot?.host as HTMLElement;
 
-          shadowHosts.forEach((host) => {
-            const hostElement = host as HTMLElement;
-            hostElement.style.setProperty(`--${formattedKey}`, value);
-          });
+          shadowRootElement?.style.setProperty(`--${formattedKey}`, value);
           boBcContainer?.style.setProperty(`--${formattedKey}`, value);
         } catch (error) {
           console.error('Error setting style config', error);
         }
       });
-  }, [styleConfig]);
+  }, [styleConfig, shadowRoot]);
 };
 
 export default useStyleConfig;

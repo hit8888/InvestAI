@@ -1,7 +1,6 @@
 import { QualificationQuestionMetadataType, QualificationResponsesType } from '../../../../utils/artifact';
 import { Icons, Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@meaku/saral';
-import { getPortalContainerForWebComponentShadowRoot } from '../../../../utils/dom-utils';
-import { useMemo } from 'react';
+import { useShadowRoot } from '../../../../containers/ShadowRootProvider';
 
 type IProps = {
   question: string;
@@ -29,7 +28,8 @@ const QualificationSingleQuestion = ({
   const answeredValue = sameQuestionAnswered ? sameQuestionAnswered.answer : 'No Answer';
 
   const answer = answers.find((item) => item.question === question)?.answer;
-  const portalContainer = useMemo(() => getPortalContainerForWebComponentShadowRoot(), []);
+  const { root: shadowRoot } = useShadowRoot();
+
   return (
     <div className="flex w-full flex-col items-start gap-4 self-stretch p-2">
       <Typography variant="body-small" className="font-medium">
@@ -42,7 +42,7 @@ const QualificationSingleQuestion = ({
           <SelectTrigger className="w-full">
             <SelectValue placeholder={`Select an answer${addAsterisk}`} />
           </SelectTrigger>
-          <SelectContent portalContainer={portalContainer}>
+          <SelectContent portalContainer={shadowRoot}>
             {dropdownOptions.map((option, optionIndex) => (
               <SelectItem key={option || `option-${optionIndex}`} value={option ?? ''}>
                 {option}

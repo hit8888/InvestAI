@@ -33,7 +33,7 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
       data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
       size="icon"
       onClick={() => onClick?.(featureConfig)}
-      className="rounded-full border bg-background hover:bg-background/50 mb-1"
+      className="rounded-full bg-background hover:bg-background/50 mb-1"
     >
       <img src={orbConfig?.logo_url ?? undefined} alt="orb" className="h-full w-full rounded-full object-cover" />
     </Button>

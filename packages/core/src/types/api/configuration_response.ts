@@ -48,6 +48,7 @@ export const NudgeAssetSchema = z.object({
 });
 
 export const NudgeSchema = z.object({
+  id: z.string(),
   header_text: z.string(),
   main_body_text: z.string(),
   footer_text: z.string(),

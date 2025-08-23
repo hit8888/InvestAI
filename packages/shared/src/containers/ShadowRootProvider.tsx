@@ -2,24 +2,24 @@ import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { getShadowRoot } from '../utils/dom-utils';
 
 interface ShadowRootContextType {
-  rootNodeId: string | null;
-  shadowRoot: ShadowRoot | null;
+  hostId: string | null;
+  root: ShadowRoot | null;
 }
 
 const ShadowRootContext = createContext<ShadowRootContextType | null>(null);
 
 interface ShadowRootProviderProps {
-  rootNodeId: string | null;
+  hostId: string | null;
   children: ReactNode;
 }
 
-const ShadowRootProvider = ({ rootNodeId, children }: ShadowRootProviderProps) => {
+const ShadowRootProvider = ({ hostId, children }: ShadowRootProviderProps) => {
   const contextValue = useMemo(
     () => ({
-      rootNodeId,
-      shadowRoot: rootNodeId ? getShadowRoot(rootNodeId) : null,
+      hostId,
+      root: hostId ? getShadowRoot(hostId) : null,
     }),
-    [rootNodeId],
+    [hostId],
   );
 
   return <ShadowRootContext.Provider value={contextValue}>{children}</ShadowRootContext.Provider>;

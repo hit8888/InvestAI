@@ -1,7 +1,7 @@
 import { AskAiContent, BookMeetingContent, SummarizeContent, IframeContent } from '@meaku/shared/features';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import FeatureContentWrapper from '@meaku/shared/components/FeatureContentWrapper';
+import FeatureContentWrapper from './FeatureContentWrapper';
 import { useCommandBarStore } from '@meaku/shared/stores';
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME } = CommandBarModuleTypeSchema.enum;

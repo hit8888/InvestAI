@@ -6,7 +6,7 @@ import RootContainer from './containers/RootContainer';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RootContainer>
+    <RootContainer hostId={null}>
       <App />
     </RootContainer>
   </StrictMode>,

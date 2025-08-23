@@ -2,14 +2,13 @@ import { Icons } from '@meaku/saral';
 import type { FeatureContentProps } from '..';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import { getActiveFeatureBottomOffset } from '../../components/FeatureContentWrapper';
 import { SummarySuccess } from './components/SummarySuccess';
 import { SummaryError } from './components/SummaryError';
 import { SummaryInitial } from './components/SummaryInitial';
 import { SummaryFooter } from './components/SummaryFooter';
 import { useSummary } from './hooks/useSummary';
 
-const { ASK_AI, SUMMARIZE } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: FeatureContentProps) => {
   const { summaryContent, isSummarizing, handleSummarize, hasError } = useSummary();
@@ -19,10 +18,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
   };
 
   return (
-    <div
-      className="flex w-full min-h-64 flex-col space-y-1 rounded-[20px] border border-border-dark bg-card pb-3 shadow-elevation-md"
-      style={{ maxHeight: `calc(100dvh - ${getActiveFeatureBottomOffset(SUMMARIZE) + 24}px)` }}
-    >
+    <div className="flex w-full min-h-64 flex-col space-y-1 rounded-[20px] border border-border-dark bg-card pb-3 shadow-elevation-md max-h-[480px]">
       <FeatureHeader
         title="Summary"
         icon={<Icons.ClipboardPen className="size-5" />}
