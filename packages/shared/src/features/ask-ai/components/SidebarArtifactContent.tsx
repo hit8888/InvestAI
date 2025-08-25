@@ -43,8 +43,8 @@ export const SidebarArtifactContent = ({
     }
   };
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col w-full min-h-0 h-full">
+      <div className="flex justify-between items-center w-full rounded-t-[20px] flex-shrink-0 p-4 bg-white border-b sticky top-0 z-10">
         <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
           {artifact.title}
         </Typography>
@@ -54,11 +54,11 @@ export const SidebarArtifactContent = ({
           </button>
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
+      <div className="flex-1 flex items-center justify-center overflow-hidden w-full p-4 pt-0 min-h-0">
         {artifact.artifactType === 'VIDEO' ? (
           <>
             {videoError ? (
-              <div className="flex flex-col items-center justify-center text-center p-6">
+              <div className="flex flex-col items-center justify-center text-center p-6 w-full">
                 <Icons.AlertCircle className="h-12 w-12 text-destructive mb-4" />
                 <Typography variant="body" className="text-destructive mb-2">
                   Video Error
@@ -74,32 +74,36 @@ export const SidebarArtifactContent = ({
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col border rounded-xl overflow-hidden">
-                <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3">
+              <div className="flex flex-col border rounded-xl overflow-hidden w-full">
+                <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3 flex-shrink-0">
                   <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
                     {artifact.title}
                   </Typography>
                 </div>
-                <video
-                  ref={videoRef}
-                  src={artifact.url}
-                  controls
-                  className="max-h-full max-w-full object-contain"
-                  onPlay={handleVideoPlay}
-                  onPause={handleVideoPause}
-                  onEnded={handleVideoEnded}
-                  onError={() => {
-                    // Handle video loading errors
-                    if (!videoError) {
-                      // This will be handled by the play().catch() in the hook
-                    }
-                  }}
-                />
+                <div className="w-full overflow-hidden">
+                  <video
+                    ref={videoRef}
+                    src={artifact.url}
+                    controls
+                    className="w-full h-auto max-w-full object-contain"
+                    onPlay={handleVideoPlay}
+                    onPause={handleVideoPause}
+                    onEnded={handleVideoEnded}
+                    onError={() => {
+                      // Handle video loading errors
+                      if (!videoError) {
+                        // This will be handled by the play().catch() in the hook
+                      }
+                    }}
+                  />
+                </div>
               </div>
             )}
           </>
         ) : (
-          <img src={artifact.url} alt="Artifact" className="max-h-full max-w-full object-contain border rounded-xl" />
+          <div className="w-full flex items-center justify-center overflow-hidden">
+            <img src={artifact.url} alt="Artifact" className="w-full h-auto max-w-full object-contain rounded-xl" />
+          </div>
         )}
       </div>
     </div>

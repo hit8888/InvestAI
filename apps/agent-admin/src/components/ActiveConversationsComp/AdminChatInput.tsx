@@ -1,6 +1,6 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import TextArea from '@breakout/design-system/components/TextArea/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
@@ -12,13 +12,16 @@ import { AdminConversationJoinStatus } from '@meaku/core/types/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import AttachmentPopover from './AttachmentPopover';
 import AttachmentSelectionDialog from './AttachmentSelectionDialog';
+
 import { ActiveConversationAttachmentOption } from '../../utils/admin-types';
+import { useDebouncedTyping } from '@meaku/shared/hooks/useDebouncedTyping';
 
 type ChatInputContainerProps = {
   onSendMessage: SendAdminMessageFn;
   onAIResponseGenerationRequest: () => void;
   disabled?: boolean;
   children?: React.ReactNode;
+  onTypingChange?: (isTyping: boolean) => void;
 };
 
 type ExitButtonProps = {
@@ -57,6 +60,7 @@ const AdminChatInput = ({
   onAIResponseGenerationRequest,
   disabled = false,
   children,
+  onTypingChange,
 }: ChatInputContainerProps) => {
   const [inputValue, setInputValue] = useState('');
   const [selectedAttachmentOption, setSelectedAttachmentOption] = useState<ActiveConversationAttachmentOption>(
@@ -65,6 +69,25 @@ const AdminChatInput = ({
   const aiSuggestionMessage = useMessageStore((state) => state.aiSuggestionMessage);
   const setAISuggestionMessage = useMessageStore((state) => state.setAISuggestionMessage);
   const { isGeneratingAIResponse } = useJoinConversationStore();
+
+  const sendTypingEvent = useCallback(
+    (isTyping: boolean) => {
+      if (isTyping) {
+        // Send ADMIN_TYPING event
+        onSendMessage({
+          event_type: 'ADMIN_TYPING',
+          content: '',
+          event_data: {},
+        });
+      }
+    },
+    [onSendMessage],
+  );
+
+  const { debouncedTypingDetection, stopTyping } = useDebouncedTyping({
+    onTypingChange,
+    onSendTypingEvent: sendTypingEvent,
+  });
 
   useEffect(() => {
     if (aiSuggestionMessage && !disabled) {
@@ -76,6 +99,7 @@ const AdminChatInput = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!disabled) {
       setInputValue(e.target.value);
+      debouncedTypingDetection();
     }
   };
 
@@ -98,6 +122,10 @@ const AdminChatInput = ({
 
     if (trimmedInputValue.length <= 0) return;
 
+    // Clear typing indicator when sending message
+    stopTyping();
+
+    // Send the actual message
     onSendMessage({
       content: trimmedInputValue,
     });

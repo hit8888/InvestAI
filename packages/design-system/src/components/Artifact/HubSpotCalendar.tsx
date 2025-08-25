@@ -70,7 +70,6 @@ export const HubSpotCalendar = ({ calendarContent, handleSendUserMessage, onLoad
       script.async = true;
       script.onload = () => {
         scriptLoadedRef.current = true;
-        console.log('HubSpot meetings script loaded');
         // Apply iframe height styles after script loads
         setTimeout(applyIframeStyles, 100);
       };

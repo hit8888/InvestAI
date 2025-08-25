@@ -322,6 +322,9 @@ importers:
       '@meaku/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@meaku/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@meaku/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/config-tailwind

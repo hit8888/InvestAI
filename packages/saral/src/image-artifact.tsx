@@ -19,7 +19,7 @@ export const ImageArtifact = ({ title, url, onOverlayClick }: ImageArtifactProps
           {title}
         </Typography>
       )}
-      <img src={url} alt={title || 'Image'} className="h-full w-full" loading="lazy" />
+      <img src={url} alt={title || 'Image'} className="h-auto w-full max-w-full object-contain" loading="lazy" />
       <Dialog>
         <DialogTrigger asChild>
           <div

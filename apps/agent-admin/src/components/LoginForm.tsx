@@ -35,7 +35,6 @@ const LoginForm = () => {
     {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       onSuccess: (data: any) => {
-        // console.log('🚀 ~ file: LoginForm.tsx:33 ~ }=useLoginWithEmailPassword ~ data:', data);
         saveTokens(data.access, data.refresh, data.user);
         handleLoginAndRedirection(data.user, navigate);
       },
@@ -51,7 +50,6 @@ const LoginForm = () => {
   const { mutateAsync: verifyOtp, isPending: isVerifyOtpPending } = useVerifyOtp({
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
-      // console.log('🚀 ~ file: LoginForm.tsx:51 ~ data:', data);
       handleResetForm();
       saveTokens(data.access, data.refresh, data.user);
       handleLoginAndRedirection(data.user, navigate);

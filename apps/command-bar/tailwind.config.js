@@ -53,6 +53,7 @@ export default {
         link: 'hsl(var(--link))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
+        backgroundLight: 'hsl(var(--background-light))',
         foreground: 'hsl(var(--foreground))',
         actionBtnIcon: 'hsl(var(--action-btn-icon))',
         actionBtnIconHover: 'hsl(var(--action-btn-icon-hover))',
@@ -116,6 +117,7 @@ export default {
       animation: {
         'text-state': 'text-animation 500ms linear infinite alternate-reverse',
         'high-bounce': 'highBounce 1s ease-in-out infinite',
+        'quick-flash': 'quick-flash 3s ease-in-out infinite',
         'slide-in-right': 'slideInFromRight 0.5s ease-out forwards',
       },
       keyframes: {
@@ -132,6 +134,20 @@ export default {
         'text-animation': {
           '0%': { 'background-position': '0% 0%' },
           '100%': { 'background-position': '100% 0%' },
+        },
+        'quick-flash': {
+          '0%, 95%': {
+            opacity: '1',
+            scale: '1',
+          },
+          '97%': {
+            opacity: '0.8',
+            scale: '1.25',
+          },
+          '100%': {
+            opacity: '1',
+            scale: '1',
+          },
         },
         slideInFromRight: {
           '0%': { transform: 'translateX(10%)', opacity: '0' },

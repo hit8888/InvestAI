@@ -45,6 +45,7 @@
     "@breakout/design-system": "workspace:*",
     "@eslint/js": "^9.17.0",
     "@meaku/core": "workspace:*",
+    "@meaku/shared": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
     "@types/node": "^22.5.4",
     "@types/react": "^19.0.2",

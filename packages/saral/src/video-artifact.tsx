@@ -43,7 +43,12 @@ export const VideoArtifact = ({ title, url, showControls = false, onOverlayClick
           {title}
         </Typography>
       )}
-      <video controls={showControls} className="h-fit w-full object-cover" preload="metadata" title={title}>
+      <video
+        controls={showControls}
+        className="h-auto w-full max-w-full object-contain"
+        preload="metadata"
+        title={title}
+      >
         <source src={url} type="video/mp4" />
         <source src={url} type="video/webm" />
         <source src={url} type="video/ogg" />
