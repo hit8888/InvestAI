@@ -14,15 +14,19 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [
     react(),
-    sentryVitePlugin({
-      org: 'breakout',
-      project: 'react-frontend',
-      authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
-      sourcemaps: {
-        assets: './dist/**',
-        filesToDeleteAfterUpload: ['./dist/**/*.map'],
-      },
-    }),
+    ...(process.env.VITE_APP_ENV === 'production'
+      ? [
+          sentryVitePlugin({
+            org: 'breakout',
+            project: 'react-frontend',
+            authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
+            sourcemaps: {
+              assets: './dist/**',
+              filesToDeleteAfterUpload: ['./dist/**/*.map'],
+            },
+          }),
+        ]
+      : []),
   ],
 
   define: {
