@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsc -w -p tsconfig.json",
-    "build": "vite build",
+    "build": "tsc -p tsconfig.json",
     "watch": "vite build --watch",
     "preview": "vite preview",
     "lint": "eslint .",
