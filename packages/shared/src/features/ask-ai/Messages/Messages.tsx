@@ -7,7 +7,6 @@ import { getLastGroupMinHeight } from './utils';
 import { AdminSessionHeader, SuggestedQuestions, ScrollToBottomButton, MessageGroup } from './components';
 
 interface MessagesProps {
-  messages: MessageType[];
   sendUserMessage?: (message: string, overrides?: Partial<MessageType>) => void;
   selectedAvatar?: {
     Component: React.ComponentType<AvatarComponentProps>;
@@ -29,7 +28,6 @@ interface MessagesProps {
 }
 
 export const Messages = ({
-  messages,
   sendUserMessage,
   selectedAvatar,
   suggestedQuestions,
@@ -107,11 +105,8 @@ export const Messages = ({
                 adminSessionInfo={adminSessionInfo}
                 messagesWithinAdminSessions={messagesWithinAdminSessions}
                 suggestedQuestions={suggestedQuestions}
-                isStreaming={isStreaming}
                 isLoading={isLoading}
                 isAdminTyping={isAdminTyping}
-                isDiscoveryQuestionShown={isDiscoveryQuestionShown}
-                messages={messages}
                 lastMessageMarkerRef={lastMessageMarkerRef}
               />
             );
@@ -130,11 +125,8 @@ export const Messages = ({
               >
                 <SuggestedQuestions
                   suggestedQuestions={suggestedQuestions}
-                  isStreaming={isStreaming}
-                  isDiscoveryQuestionShown={isDiscoveryQuestionShown}
                   sendUserMessage={sendUserMessage}
-                  messages={messages}
-                  isLastGroup={true}
+                  showTryAsking={true}
                 />
               </div>
             )}

@@ -1,4 +1,5 @@
 import { ConversationDetailsDataResponse, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
+// import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
 import { convertServerConversationDataToClientConversationData } from '@meaku/core/transformers/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/index';

@@ -9,21 +9,8 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
   "sideEffects": false,
-  "exports": {
-    "./hooks/*": "./src/hooks/*.ts",
-    "./stores/*": "./src/stores/*.ts",
-    "./components/*": "./src/components/*.tsx",
-    "./features/*": "./src/features/*.tsx",
-    "./utils/*": "./src/utils/*.ts",
-    "./types/*": "./src/types/*.ts",
-    "./constants/*": "./src/constants/*.ts",
-    "./helpers/*": "./src/helpers/*.tsx",
-    "./containers/*": "./src/containers/*.tsx",
-    "./network/*": "./src/network/*.ts"
-  },
   "license": "MIT",
   "type": "module",
   "peerDependencies": {

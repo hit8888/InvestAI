@@ -10,6 +10,7 @@ function scriptsPlugin(env: Record<string, string>) {
         "VITE_COMMAND_BAR_BASE_URL",
         "VITE_COMMAND_BAR_TAG_NAME",
       ];
+      console.log("\nRequired environment variables:", process.env.NODE_ENV);
       console.table(
         Object.fromEntries(
           requiredVars.map((key) => [key, env[key] || "❌ not set"]),
@@ -17,7 +18,7 @@ function scriptsPlugin(env: Record<string, string>) {
       );
     },
     closeBundle() {
-      // Build completed
+      console.log("🎉 Build completed successfully!");
     },
   };
 }

@@ -137,7 +137,6 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               onClose={closeSidebar}
             />
             <Messages
-              messages={messages ?? []}
               sendUserMessage={sendUserMessage}
               selectedAvatar={selectedAvatar}
               suggestedQuestions={suggestedQuestions}

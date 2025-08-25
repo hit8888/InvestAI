@@ -17,6 +17,7 @@ import { ConversationEvent } from './ConversationEvent';
 import { FormArtifactContent, FormArtifactMetadataType, CalendarArtifactContent } from '../../../utils/artifact';
 import { SendUserMessageParams } from '../../../types/message';
 import { useMessageProcessor } from '../hooks/useMessageProcessor';
+import MessageTail from './components/MessageTail';
 
 interface MessageProps {
   message: MessageType;
@@ -135,30 +136,6 @@ export const Message = ({
     }
   };
 
-  const containerClassName = cn({
-    'pr-3 flex py-2 rounded-xl relative text-foreground font-normal text-sm leading-[22px] animate-in fade-in slide-in-from-bottom-2 duration-800':
-      true,
-    'mr-auto max-w-full pl-10': message.role === 'ai' || isAdminResponse,
-    'ml-auto max-w-[70%] bg-card  pl-3': message.role === 'user',
-    [typographyVariants({ variant: 'body', fontWeight: 'normal' })]: true,
-    '!max-w-full w-full':
-      isVideoArtifact ||
-      isImageArtifact ||
-      isFormArtifact ||
-      isQualificationFormArtifact ||
-      isCalendarArtifact ||
-      isDiscoveryQuestion ||
-      isSuggestionsArtifact ||
-      isCtaEvent,
-    'py-0 pr-0 pl-10': isFormArtifact || isDiscoveryQuestion,
-    'p-0': isCalendarArtifact || isCtaEvent,
-  });
-
-  const svgClassName = cn({
-    'absolute bottom-0': true,
-    'fill-card -right-[5px]': message.role === 'user',
-  });
-
   // Check if this is a conversation event (JOIN_SESSION or LEAVE_SESSION)
   const isJoinSessionEvent =
     eventType === 'JOIN_SESSION' ||
@@ -171,6 +148,30 @@ export const Message = ({
     ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'LEAVE_SESSION');
 
   const isConversationEvent = isJoinSessionEvent || isLeaveSessionEvent;
+
+  const isFormFilled =
+    (isFormArtifact && formArtifactData && formArtifactData.metadata.is_filled) || !!getFilledData(message.response_id);
+
+  const containerClassName = cn({
+    'pr-3 flex py-2 rounded-xl relative text-foreground font-normal text-sm leading-[22px] animate-in fade-in slide-in-from-bottom-2 duration-800':
+      true,
+    'mr-auto max-w-full pl-10': message.role === 'ai' || isAdminResponse,
+    hidden: isTextArtifact && !textContent.length,
+    'ml-auto max-w-[70%] bg-card  pl-3': message.role === 'user',
+    [typographyVariants({ variant: 'body', fontWeight: 'normal' })]: true,
+    '!max-w-full w-full':
+      isVideoArtifact ||
+      isImageArtifact ||
+      isFormArtifact ||
+      isQualificationFormArtifact ||
+      isCalendarArtifact ||
+      isDiscoveryQuestion ||
+      isSuggestionsArtifact ||
+      isCtaEvent,
+    'py-0 pr-4 pl-10': isDiscoveryQuestion || isFormArtifact,
+    'py-0 px-4 justify-center': isQualificationFormArtifact,
+    'p-0': isCalendarArtifact || isCtaEvent || (isFormArtifact && isFormFilled),
+  });
 
   if (
     !isTextArtifact &&
@@ -229,7 +230,7 @@ export const Message = ({
           content={formArtifactData.content}
           metadata={formArtifactData.metadata}
           handleSendUserMessage={handleSendUserMessage}
-          isFilled={formArtifactData.metadata.is_filled || !!getFilledData(message.response_id)}
+          isFilled={isFormFilled}
           filledData={getFilledData(message.response_id)}
           responseId={message.response_id}
         />
@@ -269,21 +270,7 @@ export const Message = ({
         <CtaEventMessage event={message} handleSendUserMessage={handleSendUserMessage} />
       )}
       {isConversationEvent && <ConversationEvent message={message} />}
-      {message.role === 'user' && (
-        <svg
-          width="17"
-          height="21"
-          viewBox="0 0 17 21"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={svgClassName}
-        >
-          <path
-            d="M16.8876 20.1846C11.6876 20.9846 6.55425 18.1212 4.88758 16.2879C6.60545 12.1914 -4.00033 2.24186 2.99967 2.24148C4.61828 2.24148 6.00073 -1.9986 11.8876 1.1846C11.9088 2.47144 11.8876 6.92582 11.8876 7.6842C11.8876 18.1842 17.8876 19.5813 16.8876 20.1846Z"
-            fill="inherit"
-          />
-        </svg>
-      )}
+      <MessageTail role={message.role} />
     </div>
   );
 };

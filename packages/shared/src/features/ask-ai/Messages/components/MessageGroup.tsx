@@ -30,11 +30,8 @@ interface MessageGroupProps {
   } | null;
   messagesWithinAdminSessions: Set<string>;
   suggestedQuestions: string[];
-  isStreaming: boolean;
   isLoading: boolean;
   isAdminTyping: boolean;
-  isDiscoveryQuestionShown: () => boolean;
-  messages: MessageType[];
   lastMessageMarkerRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -52,11 +49,8 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   adminSessionInfo,
   messagesWithinAdminSessions,
   suggestedQuestions,
-  isStreaming,
   isLoading,
   isAdminTyping,
-  isDiscoveryQuestionShown,
-  messages,
   lastMessageMarkerRef,
 }) => {
   return (
@@ -87,14 +81,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
         />
       ))}
 
-      <SuggestedQuestions
-        suggestedQuestions={suggestedQuestions}
-        isStreaming={isStreaming}
-        isDiscoveryQuestionShown={isDiscoveryQuestionShown}
-        sendUserMessage={sendUserMessage}
-        messages={messages}
-        isLastGroup={isLastGroup}
-      />
+      <SuggestedQuestions suggestedQuestions={suggestedQuestions} sendUserMessage={sendUserMessage} />
 
       {/* Show loader after the last message in the last group */}
       {isLastGroup && isLoading && !hasActiveAdminSession && (

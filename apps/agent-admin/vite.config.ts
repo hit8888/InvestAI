@@ -32,12 +32,10 @@ export default defineConfig({
   },
 
   resolve: {
-    alias: [
-      {
-        find: '@breakout/design-system',
-        replacement: path.resolve(__dirname, '../../packages/design-system/src'),
-      },
-    ],
+    alias: {
+      '@breakout/design-system': path.resolve(__dirname, '../../packages/design-system/src'),
+      '@meaku/shared': path.resolve(__dirname, '../../packages/shared/src'),
+    },
   },
 
   build: {

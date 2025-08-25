@@ -66,15 +66,13 @@ export const QualificationFormArtifact = ({
 
   return (
     <div className="mt-3 w-full border-none max-w-md px-4">
-      <div className="flex flex-col gap-4">
-        <div className="flex w-full flex-col gap-5 rounded-xl">
-          <QualificationQuestions
-            qualificationQuestions={qualificationQuestions}
-            isFilled={isFilled}
-            filledData={filledData}
-            onSubmit={handleQualificationQuestionsSubmit}
-          />
-        </div>
+      <div className="flex w-full flex-col items-center gap-5 rounded-xl">
+        <QualificationQuestions
+          qualificationQuestions={qualificationQuestions}
+          isFilled={isFilled}
+          filledData={filledData}
+          onSubmit={handleQualificationQuestionsSubmit}
+        />
       </div>
     </div>
   );

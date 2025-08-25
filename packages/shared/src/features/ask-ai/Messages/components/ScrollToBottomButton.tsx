@@ -10,7 +10,7 @@ export const ScrollToBottomButton: React.FC<ScrollToBottomButtonProps> = ({ show
   if (!showDownArrow) return null;
 
   return (
-    <div className="absolute bottom-4 left-4 z-10">
+    <div className="absolute bottom-0 left-4 z-10">
       <button
         onClick={onScrollToBottom}
         className="flex size-8 animate-bounce items-center justify-center rounded-full bg-background border border-border shadow-lg transition-colors hover:bg-card"
