@@ -17,7 +17,6 @@ import {
   cn,
   Button,
 } from '@meaku/saral';
-import { useShadowRoot } from '../../containers/ShadowRootProvider';
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined };
 
@@ -40,7 +39,6 @@ export const CountrySelect = ({
   onChange,
 }: CountrySelectProps) => {
   const [searchValue, setSearchValue] = useState('');
-  const { root: shadowRoot } = useShadowRoot();
 
   return (
     <Popover>
@@ -53,10 +51,7 @@ export const CountrySelect = ({
           <ChevronsUpDown className={cn('-mr-2 size-4 opacity-50', disabled ? 'hidden' : 'opacity-100')} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        portalContainer={shadowRoot}
-        className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4"
-      >
+      <PopoverContent className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4">
         <Command shouldFilter={true} filter={(value: string) => filterCountries(value, searchValue)}>
           <CommandInput placeholder="Search country..." value={searchValue} onValueChange={setSearchValue} />
           <CommandList>

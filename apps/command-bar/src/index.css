@@ -7,7 +7,6 @@
   :root,
   :host {
     --background: 0 0% 100%; /* #FFFFFF */
-    --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
     --foreground: 214.29 8.24% 16.67%; /* #272A2E */
     --card: 210 12.5% 96.86%; /* #F6F7F8 */
     --card-foreground: 214.29 8.24% 16.67%; /* #272A2E */
@@ -42,7 +41,6 @@
   .dark,
   :host([data-theme='dark']) {
     --background: 222.2 84% 4.9%;
-    --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;

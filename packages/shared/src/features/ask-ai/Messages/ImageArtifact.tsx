@@ -53,12 +53,12 @@ export const ImageArtifact = ({ title, url, alt = '' }: ImageArtifactProps) => {
           />
           <div
             onClick={handleButtonClick}
-            className="absolute bottom-1 top-1 left-1 right-1 rounded-xl  bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer z-10"
+            className="absolute bottom-2 top-2 left-2 right-2 bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer z-10"
           >
             <Icons.Expand className="size-6 duration-300" />
           </div>
           {isThisImageExpanded && (
-            <div className="absolute bottom-1 top-1 left-1 right-1 rounded-xl bg-white/20 backdrop-blur-sm opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 flex-col">
+            <div className="absolute bottom-2 top-2 left-2 right-2 bg-white/20 backdrop-blur-sm opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 flex-col">
               <div className="flex flex-col gap-2 bg-background rounded-xl p-2 pr-3 border">
                 <Typography variant="body-small" fontWeight="medium" className="text-accent">
                   Currently Viewing in

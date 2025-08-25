@@ -67,6 +67,7 @@ export const CalendarArtifact = ({ calendarContent, handleSendUserMessage, artif
 
   const calendarContainerRef = useElementScrollIntoView<HTMLDivElement>({ shouldScroll: isMobile });
 
+  // console.log('calendarContent', calendarContent);
   const isCalendarBookingSuccessfull =
     !isIframeOrHubSpotCalendar &&
     calendarContent?.metadata?.calendarContent?.form_data?.event?.uri &&

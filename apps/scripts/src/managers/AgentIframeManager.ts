@@ -27,6 +27,7 @@ export function AgentIframeManager() {
 
     iframe.onload = () => {
       iframeLoaded = true;
+      console.log("Agent loaded successfully");
     };
 
     container.appendChild(iframe);

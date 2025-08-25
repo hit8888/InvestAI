@@ -65,7 +65,7 @@ export const QualificationQuestions = ({
   });
 
   return (
-    <>
+    <div className="w-full">
       {qualificationQuestions.map((question, index) => {
         const questionId = question.id ?? '';
         const answer = qualificationAnswers[questionId];
@@ -74,7 +74,7 @@ export const QualificationQuestions = ({
         return (
           <div
             key={question.id || `question-${index}`}
-            className={isQuestionFilled ? 'w-full flex flex-col items-start gap-2' : 'w-full flex flex-col gap-4'}
+            className={isQuestionFilled ? 'mb-4 flex flex-col items-start gap-2' : 'mb-4 flex flex-col gap-4'}
           >
             <Typography variant="body-small" className="font-medium">
               {question.question}
@@ -107,13 +107,13 @@ export const QualificationQuestions = ({
         );
       })}
       {!isFilled && (
-        <div className="flex w-full justify-end">
+        <div className="mt-4 flex w-full justify-end">
           <Button onClick={handleSubmit} disabled={!areAllQuestionsAnswered} size="sm" className="w-full gap-2">
             Submit
             <Icons.ArrowRight className="size-4" />
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 };

@@ -65,7 +65,6 @@ const reactMarkdownComponents: Partial<Components> = {
   tr: MessageTr,
   th: ({ children, ...props }) => (children != null ? <MessageTh {...props}>{children}</MessageTh> : null),
   td: ({ children, ...props }) => (children != null ? <MessageTd {...props}>{children}</MessageTd> : null),
-  img: () => null,
 };
 
 interface MarkdownProps extends Options {

@@ -307,11 +307,6 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('CTA_EVENT'),
     event_data: CtaEventDataSchema,
   }),
-  z.object({
-    content: z.string(),
-    event_type: z.literal('ADMIN_TYPING'),
-    event_data: z.object({}),
-  }),
 ]);
 
 export const WebSocketMessageSchema = z
@@ -393,5 +388,4 @@ export enum AgentEventType {
   HEARTBEAT_ACK = 'HEARTBEAT_ACK',
   DISCOVERY_ANSWER = 'DISCOVERY_ANSWER',
   CALENDAR_SUBMIT = 'CALENDAR_SUBMIT',
-  ADMIN_TYPING = 'ADMIN_TYPING',
 }

@@ -54,7 +54,6 @@ export const MessageEventType = {
   JOIN_SESSION: 'JOIN_SESSION',
   LEAVE_SESSION: 'LEAVE_SESSION',
   GENERATING_ARTIFACT: 'GENERATING_ARTIFACT',
-  ADMIN_TYPING: 'ADMIN_TYPING',
   SUMMARIZE: 'SUMMARIZE',
   SUMMARY_STREAM: 'SUMMARY_STREAM',
   CTA_EVENT: 'CTA_EVENT',
@@ -82,8 +81,6 @@ export type EventTypeType =
   | 'JOIN_SESSION'
   | 'LEAVE_SESSION'
   | 'GENERATING_ARTIFACT'
-  | 'TYPING'
-  | 'ADMIN_TYPING'
   | 'SUMMARIZE'
   | 'SUMMARY_STREAM'
   | 'CTA_EVENT'
@@ -322,12 +319,6 @@ export const MessageSchema = z
         event_type: z.literal('QUALIFICATION_FORM_FILLED'),
         event_data: QualificationQuestionAnswerSchema,
       }),
-      z.object({
-        content: z.string(),
-        event_type: z.literal('ADMIN_TYPING'),
-        event_data: z.object({}),
-      }),
-
       z.object({
         content: z.string(),
         event_type: z.literal('DEMO_OPTIONS'),

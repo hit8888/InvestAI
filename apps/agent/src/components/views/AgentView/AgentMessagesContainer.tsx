@@ -67,12 +67,12 @@ const AgentMessagesContainer = ({
     return '';
   }, [isMobile, hasArtifactOrDemoInMessageHistory]);
 
+  if (isMediaTakingFullWidth) return null;
+
   const sessionId = sessionApiResponseManager?.getSessionId() ?? '';
   const feedbackData = sessionApiResponseManager?.getFeedback();
 
   const shouldCTAButtonShow = checkIfCTAButtonShown(messages) && !isMobile;
-
-  if (isMediaTakingFullWidth) return null;
 
   return (
     <div className={cn(agentMessagesContainerClassName, 'flex flex-col items-start justify-start')}>

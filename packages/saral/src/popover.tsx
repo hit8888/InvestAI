@@ -8,11 +8,9 @@ const PopoverTrigger = PopoverPrimitive.Trigger;
 
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> & {
-    portalContainer?: Element | DocumentFragment | null | undefined;
-  }
->(({ className, align = 'center', sideOffset = 4, portalContainer, ...props }, ref) => (
-  <PopoverPrimitive.Portal container={portalContainer}>
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
+  <PopoverPrimitive.Portal>
     <PopoverPrimitive.Content
       ref={ref}
       align={align}

@@ -11,9 +11,6 @@ import { groupMessagesByResponseId } from '../utils/message-utils';
 import type { CommandBarSettings } from '@meaku/core/types/common';
 import { InitSessionResponse } from '../types/responses';
 
-// Typing indicator timeout duration in milliseconds
-const TYPING_INDICATOR_TIMEOUT = 2000;
-
 export interface SessionData {
   sessionId: string;
   tenantId: string;
@@ -42,9 +39,6 @@ interface CommandBarState {
   isConfigLoading: boolean;
   isStreaming: boolean;
 
-  // Admin typing state
-  isAdminTyping: boolean;
-
   // Temporary holding for artifacts during streaming
   pendingArtifacts: Message[];
 
@@ -57,7 +51,6 @@ interface CommandBarState {
   clearMessages: () => void;
 
   setLoading: (loading: boolean) => void;
-  setAdminTyping: (isTyping: boolean) => void;
   updateSuggestedQuestions: (questions: string[]) => void;
   setConfig: (config: ConfigurationApiResponse) => void;
   setSettings: (settings: CommandBarSettings) => void;
@@ -113,111 +106,110 @@ const shouldShowDiscoveryQuestions = (
   return !hasStreamResponseAfter;
 };
 
-export const useCommandBarStore = create<CommandBarState>()((set, get) => {
-  // Store timeout reference for typing indicator
-  let typingTimeoutId: NodeJS.Timeout | null = null;
+export const useCommandBarStore = create<CommandBarState>()((set, get) => ({
+  // Initial state
+  messages: [],
+  config: {} as ConfigurationApiResponse,
+  settings: {} as CommandBarSettings,
+  sessionData: null,
+  suggestedQuestions: [],
+  isLoading: false,
+  isConfigLoading: false,
+  isStreaming: false,
+  pendingArtifacts: [],
 
-  const clearTypingTimeout = () => {
-    if (typingTimeoutId) {
-      clearTimeout(typingTimeoutId);
-      typingTimeoutId = null;
-    }
-  };
+  // Message methods
+  addMessage: (message) => {
+    const newMessage = {
+      ...message,
+      timestamp: new Date().toISOString(),
+    } as Message;
 
-  const setTypingWithTimeout = (isTyping: boolean) => {
-    clearTypingTimeout();
+    set((state) => {
+      let updatedMessages = [...state.messages];
+      let updatedPendingArtifacts = [...state.pendingArtifacts];
 
-    if (isTyping) {
-      set({ isAdminTyping: true });
-      // Set timeout to automatically hide typing indicator
-      typingTimeoutId = setTimeout(() => {
-        set({ isAdminTyping: false });
-        typingTimeoutId = null;
-      }, TYPING_INDICATOR_TIMEOUT);
-    } else {
-      set({ isAdminTyping: false });
-    }
-  };
+      // Check if this is an artifact message (excluding SUGGESTIONS_ARTIFACT which is handled separately)
+      const isArtifact = [
+        'FORM_ARTIFACT',
+        'QUALIFICATION_FORM_ARTIFACT',
+        'CALENDAR_ARTIFACT',
+        'VIDEO_ARTIFACT',
+        'SLIDE_ARTIFACT',
+        'SLIDE_IMAGE_ARTIFACT',
+        'GENERATING_ARTIFACT',
+        'DISCOVERY_QUESTIONS',
+        'CTA_EVENT',
+      ].includes(newMessage.event_type);
 
-  return {
-    // Initial state
-    messages: [],
-    config: {} as ConfigurationApiResponse,
-    settings: {} as CommandBarSettings,
-    sessionData: null,
-    suggestedQuestions: [],
-    isLoading: false,
-    isConfigLoading: false,
-    isStreaming: false,
-    isAdminTyping: false,
-    pendingArtifacts: [],
+      // Handle STREAM_RESPONSE events - replace existing stream messages
+      const STREAM_EVENT_TYPES = [MessageEventType.STREAM_RESPONSE, MessageEventType.SUMMARY_STREAM];
+      if (STREAM_EVENT_TYPES.includes(newMessage.event_type as (typeof STREAM_EVENT_TYPES)[number])) {
+        const streamData = newMessage.event_data as StreamResponseEventData;
+        const isComplete = streamData?.is_complete === true;
+        const isStreaming = streamData?.is_complete === false;
 
-    // Message methods
-    addMessage: (message) => {
-      const newMessage = {
-        ...message,
-        timestamp: new Date().toISOString(),
-      } as Message;
+        // Find existing stream message for this response_id
+        const existingStreamIndex = updatedMessages.findIndex(
+          (msg) =>
+            msg.response_id === newMessage.response_id &&
+            STREAM_EVENT_TYPES.includes(msg.event_type as (typeof STREAM_EVENT_TYPES)[number]),
+        );
 
-      set((state) => {
-        let updatedMessages = [...state.messages];
-        let updatedPendingArtifacts = [...state.pendingArtifacts];
-
-        // Check if this is an artifact message (excluding SUGGESTIONS_ARTIFACT which is handled separately)
-        const isArtifact = [
-          'FORM_ARTIFACT',
-          'QUALIFICATION_FORM_ARTIFACT',
-          'CALENDAR_ARTIFACT',
-          'VIDEO_ARTIFACT',
-          'SLIDE_ARTIFACT',
-          'SLIDE_IMAGE_ARTIFACT',
-          'GENERATING_ARTIFACT',
-          'DISCOVERY_QUESTIONS',
-          'CTA_EVENT',
-        ].includes(newMessage.event_type);
-
-        // Handle STREAM_RESPONSE events - replace existing stream messages
-        if (newMessage.event_type === MessageEventType.STREAM_RESPONSE) {
-          const streamData = newMessage.event_data as StreamResponseEventData;
-          const isComplete = streamData?.is_complete === true;
-          const isStreaming = streamData?.is_complete === false;
-
-          // Find existing stream message for this response_id
-          const existingStreamIndex = updatedMessages.findIndex(
-            (msg) => msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE,
+        if (existingStreamIndex !== -1) {
+          // Check if there's a FORM_FILLED event between the existing stream and now
+          const messagesAfterExistingStream = updatedMessages.slice(existingStreamIndex + 1);
+          const hasFormFilledBetween = messagesAfterExistingStream.some(
+            (msg) => msg.event_type === 'FORM_FILLED' && msg.response_id === newMessage.response_id,
           );
 
-          if (existingStreamIndex !== -1) {
-            // Check if there's a form-related event between the existing stream and now
-            const messagesAfterExistingStream = updatedMessages.slice(existingStreamIndex + 1);
-            const hasFormFilledBetween = messagesAfterExistingStream.some(
-              (msg) =>
-                (msg.event_type === 'FORM_FILLED' ||
-                  msg.event_type === 'QUALIFICATION_FORM_FILLED' ||
-                  msg.event_type === 'CALENDAR_SUBMIT') &&
-                msg.response_id === newMessage.response_id,
-            );
-
-            if (hasFormFilledBetween) {
-              // Don't replace - add as new message if there's a form filled event between
-              updatedMessages.push(newMessage);
-            } else {
-              // Replace existing stream message
-              updatedMessages[existingStreamIndex] = {
-                ...newMessage,
-                timestamp: updatedMessages[existingStreamIndex].timestamp, // Preserve original timestamp
-              } as Message;
-            }
-          } else {
-            // Add new stream message
+          if (hasFormFilledBetween) {
+            // Don't replace - add as new message if there's a form filled event between
             updatedMessages.push(newMessage);
+          } else {
+            // Replace existing stream message
+            updatedMessages[existingStreamIndex] = {
+              ...newMessage,
+              timestamp: updatedMessages[existingStreamIndex].timestamp, // Preserve original timestamp
+            } as Message;
           }
+        } else {
+          // Add new stream message
+          updatedMessages.push(newMessage);
+        }
 
-          // If stream is complete, add any pending artifacts to messages
-          if (isComplete && updatedPendingArtifacts.length > 0) {
-            updatedMessages = [...updatedMessages, ...updatedPendingArtifacts];
-            updatedPendingArtifacts = []; // Clear pending artifacts
-          }
+        // If stream is complete, add any pending artifacts to messages
+        if (isComplete && updatedPendingArtifacts.length > 0) {
+          updatedMessages = [...updatedMessages, ...updatedPendingArtifacts];
+          updatedPendingArtifacts = []; // Clear pending artifacts
+        }
+
+        // Apply grouping and ordering logic
+        const groupedMessages = groupMessagesByResponseId(updatedMessages);
+        const orderedMessages = groupedMessages.flat();
+
+        return {
+          messages: orderedMessages,
+          pendingArtifacts: updatedPendingArtifacts,
+          isStreaming,
+          ...(isComplete && { isStreaming: false }),
+          isLoading: false, // Turn off loading as soon as any stream response is received
+        };
+      }
+
+      // Handle artifacts - hold them if streaming, otherwise add to messages
+      if (isArtifact) {
+        if (state.isStreaming) {
+          // Hold artifact during streaming
+          updatedPendingArtifacts.push(newMessage);
+
+          return {
+            pendingArtifacts: updatedPendingArtifacts,
+            isLoading: false, // Turn off loading as soon as any artifact event arrives
+          };
+        } else {
+          // Add artifact to messages if not streaming
+          updatedMessages.push(newMessage);
 
           // Apply grouping and ordering logic
           const groupedMessages = groupMessagesByResponseId(updatedMessages);
@@ -226,127 +218,72 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           return {
             messages: orderedMessages,
             pendingArtifacts: updatedPendingArtifacts,
-            isStreaming,
-            ...(isComplete && { isStreaming: false }),
-            isLoading: false, // Turn off loading as soon as any stream response is received
+            isLoading: false, // Turn off loading as soon as any artifact event arrives
           };
         }
+      }
 
-        // Handle artifacts - hold them if streaming, otherwise add to messages
-        if (isArtifact) {
+      // Handle SUGGESTIONS_ARTIFACT events specifically for suggested questions
+      if (newMessage.event_type === 'SUGGESTIONS_ARTIFACT') {
+        const eventData = newMessage.event_data as ArtifactEventData;
+        const artifactData = eventData.artifact_data as SuggestionsArtifactData;
+        const suggestedQuestions = artifactData?.content?.suggested_questions;
+
+        if (suggestedQuestions && Array.isArray(suggestedQuestions)) {
+          // Add to messages if not streaming, otherwise hold in pending artifacts
           if (state.isStreaming) {
-            // Hold artifact during streaming
             updatedPendingArtifacts.push(newMessage);
-
             return {
               pendingArtifacts: updatedPendingArtifacts,
               isLoading: false, // Turn off loading as soon as any artifact event arrives
             };
           } else {
-            // Add artifact to messages if not streaming
             updatedMessages.push(newMessage);
 
             // Apply grouping and ordering logic
             const groupedMessages = groupMessagesByResponseId(updatedMessages);
             const orderedMessages = groupedMessages.flat();
 
+            // Check if this SUGGESTIONS_ARTIFACT is from the last group
+            const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
+            const isFromLastGroup = lastGroup.some((msg) => msg.response_id === newMessage.response_id);
+
             return {
               messages: orderedMessages,
               pendingArtifacts: updatedPendingArtifacts,
+              // Only set suggested questions if it's from the last group and not currently loading
+              ...(isFromLastGroup && !state.isLoading ? { suggestedQuestions } : {}),
               isLoading: false, // Turn off loading as soon as any artifact event arrives
             };
           }
         }
+      }
 
-        // Handle SUGGESTIONS_ARTIFACT events specifically for suggested questions
-        if (newMessage.event_type === 'SUGGESTIONS_ARTIFACT') {
-          const eventData = newMessage.event_data as ArtifactEventData;
-          const artifactData = eventData.artifact_data as SuggestionsArtifactData;
-          const suggestedQuestions = artifactData?.content?.suggested_questions;
+      // Handle user messages
+      if (newMessage.role === 'user') {
+        updatedMessages.push(newMessage);
 
-          if (suggestedQuestions && Array.isArray(suggestedQuestions)) {
-            // Add to messages if not streaming, otherwise hold in pending artifacts
-            if (state.isStreaming) {
-              updatedPendingArtifacts.push(newMessage);
-              return {
-                pendingArtifacts: updatedPendingArtifacts,
-                isLoading: false, // Turn off loading as soon as any artifact event arrives
-              };
-            } else {
-              updatedMessages.push(newMessage);
+        // Apply grouping and ordering logic
+        const groupedMessages = groupMessagesByResponseId(updatedMessages);
+        const orderedMessages = groupedMessages.flat();
 
-              // Apply grouping and ordering logic
-              const groupedMessages = groupMessagesByResponseId(updatedMessages);
-              const orderedMessages = groupedMessages.flat();
+        // Clear suggested questions when user sends a message (they'll be set again if the response has them)
+        // Don't set loading for FORM_FILLED events as they are responses to existing artifacts
+        const shouldSetLoading =
+          newMessage.event_type !== 'FORM_FILLED' &&
+          newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
+          newMessage.event_type !== 'CALENDAR_SUBMIT';
 
-              // Check if this SUGGESTIONS_ARTIFACT is from the last group
-              const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
-              const isFromLastGroup = lastGroup.some((msg) => msg.response_id === newMessage.response_id);
+        return {
+          messages: orderedMessages,
+          pendingArtifacts: updatedPendingArtifacts,
+          suggestedQuestions: [], // Clear suggestions when user sends a message
+          isLoading: shouldSetLoading, // Only set loading for non-form-filled user messages
+        };
+      }
 
-              return {
-                messages: orderedMessages,
-                pendingArtifacts: updatedPendingArtifacts,
-                // Only set suggested questions if it's from the last group and not currently loading
-                ...(isFromLastGroup && !state.isLoading ? { suggestedQuestions } : {}),
-                isLoading: false, // Turn off loading as soon as any artifact event arrives
-              };
-            }
-          }
-        }
-
-        // Handle user messages
-        if (newMessage.role === 'user') {
-          updatedMessages.push(newMessage);
-
-          // Apply grouping and ordering logic
-          const groupedMessages = groupMessagesByResponseId(updatedMessages);
-          const orderedMessages = groupedMessages.flat();
-
-          // Clear suggested questions when user sends a message (they'll be set again if the response has them)
-          // Don't set loading for FORM_FILLED events as they are responses to existing artifacts
-          const shouldSetLoading =
-            newMessage.event_type !== 'FORM_FILLED' &&
-            newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
-            newMessage.event_type !== 'CALENDAR_SUBMIT';
-
-          return {
-            messages: orderedMessages,
-            pendingArtifacts: updatedPendingArtifacts,
-            suggestedQuestions: [], // Clear suggestions when user sends a message
-            isLoading: shouldSetLoading, // Only set loading for non-form-filled user messages
-          };
-        }
-
-        // Handle TEXT_RESPONSE events
-        if (newMessage.event_type === 'TEXT_RESPONSE') {
-          updatedMessages.push(newMessage);
-
-          // Apply grouping and ordering logic
-          const groupedMessages = groupMessagesByResponseId(updatedMessages);
-          const orderedMessages = groupedMessages.flat();
-
-          return {
-            messages: orderedMessages,
-            pendingArtifacts: updatedPendingArtifacts,
-            isLoading: false, // Turn off loading as soon as any text response arrives
-          };
-        }
-
-        // Handle ADMIN_TYPING events - update global typing state with timeout
-        if (
-          newMessage.event_type === 'ADMIN_TYPING' ||
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ((newMessage as any).message_type === 'EVENT' && (newMessage as any).message?.event_type === 'ADMIN_TYPING')
-        ) {
-          // Use the timeout mechanism to handle typing state
-          setTypingWithTimeout(true);
-          // Don't add ADMIN_TYPING messages to the messages array, just update the global state
-          return {
-            pendingArtifacts: updatedPendingArtifacts,
-          };
-        }
-
-        // Handle all other messages
+      // Handle TEXT_RESPONSE events
+      if (newMessage.event_type === 'TEXT_RESPONSE') {
         updatedMessages.push(newMessage);
 
         // Apply grouping and ordering logic
@@ -356,114 +293,280 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         return {
           messages: orderedMessages,
           pendingArtifacts: updatedPendingArtifacts,
-          isLoading: false, // Keep loading false for other messages
+          isLoading: false, // Turn off loading as soon as any text response arrives
         };
-      });
-    },
-
-    updateMessage: (id, updates) => {
-      set((state) => ({
-        messages: state.messages.map((msg) => (msg.response_id === id ? ({ ...msg, ...updates } as Message) : msg)),
-      }));
-    },
-
-    removeMessage: (id) => {
-      set((state) => ({
-        messages: state.messages.filter((msg) => msg.response_id !== id),
-      }));
-    },
-
-    clearMessages: () => {
-      clearTypingTimeout();
-      set({ messages: [], pendingArtifacts: [], isStreaming: false, isLoading: false, isAdminTyping: false });
-    },
-
-    // Loading state
-    setLoading: (loading) => {
-      set({ isLoading: loading });
-    },
-
-    setAdminTyping: (isTyping) => {
-      setTypingWithTimeout(isTyping);
-    },
-
-    updateSuggestedQuestions: (questions) => {
-      set({ suggestedQuestions: questions });
-    },
-
-    clearSuggestedQuestions: () => {
-      set({ suggestedQuestions: [] });
-    },
-
-    setConfig: (config) => {
-      set({ config });
-
-      // Only set default suggested questions if there's no chat history
-      const state = get();
-      if (config?.body?.welcome_message?.suggested_questions && state.messages.length === 0) {
-        set({ suggestedQuestions: config.body.welcome_message.suggested_questions });
       }
-    },
 
-    setMessages: (messages) => {
-      // Apply grouping and ordering logic to the messages
-      const groupedMessages = groupMessagesByResponseId(messages);
+      // Handle all other messages
+      updatedMessages.push(newMessage);
+
+      // Apply grouping and ordering logic
+      const groupedMessages = groupMessagesByResponseId(updatedMessages);
       const orderedMessages = groupedMessages.flat();
 
-      // Use the utility function to determine if discovery questions should be shown
-      const shouldShowDiscovery = shouldShowDiscoveryQuestions(orderedMessages);
+      return {
+        messages: orderedMessages,
+        pendingArtifacts: updatedPendingArtifacts,
+        isLoading: false, // Keep loading false for other messages
+      };
+    });
+  },
 
-      // Filter messages to only show discovery questions from the last group when conditions are met
-      const filteredMessages = orderedMessages.filter((message) => {
-        if (message.event_type === 'DISCOVERY_QUESTIONS') {
-          // Check if this discovery question is in the last group
-          const messageGroupIndex = groupedMessages.findIndex((group) =>
-            group.some((msg) => msg.response_id === message.response_id),
-          );
-          const isInLastGroup = messageGroupIndex === groupedMessages.length - 1;
+  updateMessage: (id, updates) => {
+    set((state) => ({
+      messages: state.messages.map((msg) => (msg.response_id === id ? ({ ...msg, ...updates } as Message) : msg)),
+    }));
+  },
 
-          return isInLastGroup && shouldShowDiscovery;
-        }
+  removeMessage: (id) => {
+    set((state) => ({
+      messages: state.messages.filter((msg) => msg.response_id !== id),
+    }));
+  },
 
-        // Show all other messages
-        return true;
-      });
+  clearMessages: () => {
+    set({ messages: [], pendingArtifacts: [], isStreaming: false, isLoading: false });
+  },
 
-      // Find SUGGESTIONS_ARTIFACT message from the last group only
-      const lastGroupForSuggestions = groupedMessages[groupedMessages.length - 1] || [];
-      const lastGroupSuggestionsMessage = lastGroupForSuggestions.find(
-        (msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT',
-      );
+  // Loading state
+  setLoading: (loading) => {
+    set({ isLoading: loading });
+  },
+
+  updateSuggestedQuestions: (questions) => {
+    set({ suggestedQuestions: questions });
+  },
+
+  clearSuggestedQuestions: () => {
+    set({ suggestedQuestions: [] });
+  },
+
+  setConfig: (config) => {
+    set({ config });
+
+    // Only set default suggested questions if there's no chat history
+    const state = get();
+    if (config?.body?.welcome_message?.suggested_questions && state.messages.length === 0) {
+      set({ suggestedQuestions: config.body.welcome_message.suggested_questions });
+    }
+  },
+
+  setMessages: (messages) => {
+    // Apply grouping and ordering logic to the messages
+    const groupedMessages = groupMessagesByResponseId(messages);
+    const orderedMessages = groupedMessages.flat();
+
+    // Use the utility function to determine if discovery questions should be shown
+    const shouldShowDiscovery = shouldShowDiscoveryQuestions(orderedMessages);
+
+    // Filter messages to only show discovery questions from the last group when conditions are met
+    const filteredMessages = orderedMessages.filter((message) => {
+      if (message.event_type === 'DISCOVERY_QUESTIONS') {
+        // Check if this discovery question is in the last group
+        const messageGroupIndex = groupedMessages.findIndex((group) =>
+          group.some((msg) => msg.response_id === message.response_id),
+        );
+        const isInLastGroup = messageGroupIndex === groupedMessages.length - 1;
+
+        return isInLastGroup && shouldShowDiscovery;
+      }
+
+      // Show all other messages
+      return true;
+    });
+
+    // Find SUGGESTIONS_ARTIFACT message from the last group only
+    const lastGroupForSuggestions = groupedMessages[groupedMessages.length - 1] || [];
+    const lastGroupSuggestionsMessage = lastGroupForSuggestions.find(
+      (msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT',
+    );
+
+    let latestSuggestedQuestions: string[] = [];
+    if (lastGroupSuggestionsMessage) {
+      const eventData = lastGroupSuggestionsMessage.event_data as ArtifactEventData;
+      const artifactData = eventData.artifact_data as SuggestionsArtifactData;
+      latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
+    }
+
+    set({
+      messages: filteredMessages,
+      // Show suggested questions from SUGGESTIONS_ARTIFACT if available, otherwise keep existing suggestions
+      ...(latestSuggestedQuestions.length > 0 && { suggestedQuestions: latestSuggestedQuestions }),
+    });
+
+    // Clear suggested questions if they're not from the last group
+    get().clearSuggestedQuestionsIfNotFromLastGroup();
+  },
+
+  initMessages: (messages) => {
+    const state = get();
+
+    // Apply grouping and ordering logic to the messages
+    const groupedMessages = groupMessagesByResponseId(messages);
+    const orderedMessages = groupedMessages.flat();
+
+    // Use the utility function to determine if discovery questions should be shown
+    const shouldShowDiscovery = shouldShowDiscoveryQuestions(orderedMessages);
+
+    // Filter messages to only show discovery questions from the last group when conditions are met
+    const filteredMessages = orderedMessages.filter((message) => {
+      if (message.event_type === 'DISCOVERY_QUESTIONS') {
+        // Check if this discovery question is in the last group
+        const messageGroupIndex = groupedMessages.findIndex((group) =>
+          group.some((msg) => msg.response_id === message.response_id),
+        );
+        const isInLastGroup = messageGroupIndex === groupedMessages.length - 1;
+
+        return isInLastGroup && shouldShowDiscovery;
+      }
+
+      // Show all other messages
+      return true;
+    });
+
+    if (state.messages.length === 0) {
+      // Find the latest SUGGESTIONS_ARTIFACT message and extract suggested questions
+      const latestSuggestionsMessage = filteredMessages
+        .filter((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT')
+        .pop();
 
       let latestSuggestedQuestions: string[] = [];
-      if (lastGroupSuggestionsMessage) {
-        const eventData = lastGroupSuggestionsMessage.event_data as ArtifactEventData;
+      if (latestSuggestionsMessage) {
+        const eventData = latestSuggestionsMessage.event_data as ArtifactEventData;
         const artifactData = eventData.artifact_data as SuggestionsArtifactData;
         latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
       }
 
       set({
         messages: filteredMessages,
-        // Show suggested questions from SUGGESTIONS_ARTIFACT if available, otherwise keep existing suggestions
+        // Show suggested questions from SUGGESTIONS_ARTIFACT if available, otherwise keep default from config
         ...(latestSuggestedQuestions.length > 0 && { suggestedQuestions: latestSuggestedQuestions }),
       });
 
       // Clear suggested questions if they're not from the last group
       get().clearSuggestedQuestionsIfNotFromLastGroup();
-    },
+    } else {
+      // Combine existing and new messages, then apply grouping and ordering
+      const allMessages = [...state.messages, ...filteredMessages];
+      const allGroupedMessages = groupMessagesByResponseId(allMessages);
+      const allOrderedMessages = allGroupedMessages.flat();
 
-    initMessages: (messages) => {
-      const state = get();
+      // Use the utility function to determine if discovery questions should be shown for combined messages
+      const allShouldShowDiscovery = shouldShowDiscoveryQuestions(allOrderedMessages);
 
-      // Apply grouping and ordering logic to the messages
-      const groupedMessages = groupMessagesByResponseId(messages);
-      const orderedMessages = groupedMessages.flat();
+      const allFilteredMessages = allOrderedMessages.filter((message) => {
+        if (message.event_type === 'DISCOVERY_QUESTIONS') {
+          const allMessageGroupIndex = allGroupedMessages.findIndex((group) =>
+            group.some((msg) => msg.response_id === message.response_id),
+          );
+          const allIsInLastGroup = allMessageGroupIndex === allGroupedMessages.length - 1;
 
-      // Use the utility function to determine if discovery questions should be shown
-      const shouldShowDiscovery = shouldShowDiscoveryQuestions(orderedMessages);
+          return allIsInLastGroup && allShouldShowDiscovery;
+        }
 
-      // Filter messages to only show discovery questions from the last group when conditions are met
-      const filteredMessages = orderedMessages.filter((message) => {
+        return true;
+      });
+
+      // Find SUGGESTIONS_ARTIFACT message from the last group only
+      const allLastGroupForSuggestions = allGroupedMessages[allGroupedMessages.length - 1] || [];
+      const allLastGroupSuggestionsMessage = allLastGroupForSuggestions.find(
+        (msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT',
+      );
+
+      let latestSuggestedQuestions: string[] = [];
+      if (allLastGroupSuggestionsMessage) {
+        const eventData = allLastGroupSuggestionsMessage.event_data as ArtifactEventData;
+        const artifactData = eventData.artifact_data as SuggestionsArtifactData;
+        latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
+      }
+
+      set({
+        messages: allFilteredMessages,
+        // Only update suggested questions if we found a SUGGESTIONS_ARTIFACT event
+        ...(latestSuggestedQuestions.length > 0 && { suggestedQuestions: latestSuggestedQuestions }),
+      });
+
+      // Clear suggested questions if they're not from the last group
+      get().clearSuggestedQuestionsIfNotFromLastGroup();
+    }
+  },
+
+  setSettings: (settings) => {
+    set({ settings });
+  },
+
+  updateSettings: (settings) => {
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        ...settings,
+      },
+    }));
+  },
+
+  setSessionData: (sessionData) => {
+    set({ sessionData });
+  },
+
+  // Utility methods
+  getLastMessage: () => {
+    const state = get();
+    return state.messages[state.messages.length - 1];
+  },
+
+  getGroupedMessages: () => {
+    const messages = get().messages;
+    const grouped = groupMessagesByResponseId(messages);
+    return grouped;
+  },
+
+  // Check if a message is renderable
+  isMessageRenderable: (message: Message) => {
+    const renderableTypes = [
+      'TEXT_REQUEST',
+      'TEXT_RESPONSE',
+      'STREAM_RESPONSE',
+      'SUGGESTED_QUESTION_CLICKED',
+      'VIDEO_ARTIFACT',
+      'SLIDE_IMAGE_ARTIFACT',
+      'FORM_ARTIFACT',
+      'QUALIFICATION_FORM_ARTIFACT',
+      'CALENDAR_ARTIFACT',
+      'DISCOVERY_QUESTIONS',
+    ];
+    return renderableTypes.includes(message.event_type);
+  },
+
+  // Check if we have any renderable messages
+  hasRenderableMessages: () => {
+    const state = get();
+    return state.messages.some(state.isMessageRenderable);
+  },
+
+  // Get messages that should be rendered (filter out artifacts during streaming)
+  getRenderableMessages: () => {
+    const state = get();
+
+    // Clear suggested questions if they're not from the last group
+    state.clearSuggestedQuestionsIfNotFromLastGroup();
+
+    // Use the utility function to determine if discovery questions should be shown
+    const shouldShowDiscovery = shouldShowDiscoveryQuestions(state.messages, state.isStreaming, state.isLoading);
+
+    // Debug logging
+    // console.log('Discovery Debug:', {
+    //   hasDiscoveryInLastGroup,
+    //   isStreaming: state.isStreaming,
+    //   isLoading: state.isLoading,
+    //   shouldShowDiscovery,
+    //   lastGroup: lastGroup.map((msg) => ({ type: msg.event_type, role: msg.role })),
+    // });
+
+    if (!state.isStreaming) {
+      // If not streaming, filter messages based on discovery question conditions
+      const groupedMessages = groupMessagesByResponseId(state.messages);
+      const filteredMessages = state.messages.filter((message) => {
+        // If it's a discovery question, only show it if it's in the last group and conditions are met
         if (message.event_type === 'DISCOVERY_QUESTIONS') {
           // Check if this discovery question is in the last group
           const messageGroupIndex = groupedMessages.findIndex((group) =>
@@ -478,222 +581,70 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         return true;
       });
 
-      if (state.messages.length === 0) {
-        // Find the latest SUGGESTIONS_ARTIFACT message and extract suggested questions
-        const latestSuggestionsMessage = filteredMessages
-          .filter((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT')
-          .pop();
-
-        let latestSuggestedQuestions: string[] = [];
-        if (latestSuggestionsMessage) {
-          const eventData = latestSuggestionsMessage.event_data as ArtifactEventData;
-          const artifactData = eventData.artifact_data as SuggestionsArtifactData;
-          latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
-        }
-
-        set({
-          messages: filteredMessages,
-          // Show suggested questions from SUGGESTIONS_ARTIFACT if available, otherwise keep default from config
-          ...(latestSuggestedQuestions.length > 0 && { suggestedQuestions: latestSuggestedQuestions }),
-        });
-
-        // Clear suggested questions if they're not from the last group
-        get().clearSuggestedQuestionsIfNotFromLastGroup();
-      } else {
-        // Combine existing and new messages, then apply grouping and ordering
-        const allMessages = [...state.messages, ...filteredMessages];
-        const allGroupedMessages = groupMessagesByResponseId(allMessages);
-        const allOrderedMessages = allGroupedMessages.flat();
-
-        // Use the utility function to determine if discovery questions should be shown for combined messages
-        const allShouldShowDiscovery = shouldShowDiscoveryQuestions(allOrderedMessages);
-
-        const allFilteredMessages = allOrderedMessages.filter((message) => {
-          if (message.event_type === 'DISCOVERY_QUESTIONS') {
-            const allMessageGroupIndex = allGroupedMessages.findIndex((group) =>
-              group.some((msg) => msg.response_id === message.response_id),
-            );
-            const allIsInLastGroup = allMessageGroupIndex === allGroupedMessages.length - 1;
-
-            return allIsInLastGroup && allShouldShowDiscovery;
-          }
-
-          return true;
-        });
-
-        // Find SUGGESTIONS_ARTIFACT message from the last group only
-        const allLastGroupForSuggestions = allGroupedMessages[allGroupedMessages.length - 1] || [];
-        const allLastGroupSuggestionsMessage = allLastGroupForSuggestions.find(
-          (msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT',
-        );
-
-        let latestSuggestedQuestions: string[] = [];
-        if (allLastGroupSuggestionsMessage) {
-          const eventData = allLastGroupSuggestionsMessage.event_data as ArtifactEventData;
-          const artifactData = eventData.artifact_data as SuggestionsArtifactData;
-          latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
-        }
-
-        set({
-          messages: allFilteredMessages,
-          // Only update suggested questions if we found a SUGGESTIONS_ARTIFACT event
-          ...(latestSuggestedQuestions.length > 0 && { suggestedQuestions: latestSuggestedQuestions }),
-        });
-
-        // Clear suggested questions if they're not from the last group
-        get().clearSuggestedQuestionsIfNotFromLastGroup();
-      }
-    },
-
-    setSettings: (settings) => {
-      set({ settings });
-    },
-
-    updateSettings: (settings) => {
-      set((state) => ({
-        settings: {
-          ...state.settings,
-          ...settings,
-        },
-      }));
-    },
-
-    setSessionData: (sessionData) => {
-      set({ sessionData });
-    },
-
-    // Utility methods
-    getLastMessage: () => {
-      const state = get();
-      return state.messages[state.messages.length - 1];
-    },
-
-    getGroupedMessages: () => {
-      const messages = get().messages;
-      const grouped = groupMessagesByResponseId(messages);
-      return grouped;
-    },
-
-    // Check if a message is renderable
-    isMessageRenderable: (message: Message) => {
-      const renderableTypes = [
-        'TEXT_REQUEST',
-        'TEXT_RESPONSE',
-        'STREAM_RESPONSE',
-        'SUGGESTED_QUESTION_CLICKED',
-        'VIDEO_ARTIFACT',
-        'SLIDE_IMAGE_ARTIFACT',
-        'FORM_ARTIFACT',
-        'QUALIFICATION_FORM_ARTIFACT',
-        'CALENDAR_ARTIFACT',
-        'DISCOVERY_QUESTIONS',
-        'FORM_FILLED',
-        'QUALIFICATION_FORM_FILLED',
-        'CALENDAR_SUBMIT',
-      ];
-      return renderableTypes.includes(message.event_type);
-    },
-
-    // Check if we have any renderable messages
-    hasRenderableMessages: () => {
-      const state = get();
-      return state.messages.some(state.isMessageRenderable);
-    },
-
-    // Get messages that should be rendered (filter out artifacts during streaming)
-    getRenderableMessages: () => {
-      const state = get();
-
-      // Clear suggested questions if they're not from the last group
-      state.clearSuggestedQuestionsIfNotFromLastGroup();
-
-      // Use the utility function to determine if discovery questions should be shown
-      const shouldShowDiscovery = shouldShowDiscoveryQuestions(state.messages, state.isStreaming, state.isLoading);
-
-      if (!state.isStreaming) {
-        // If not streaming, filter messages based on discovery question conditions
-        const groupedMessages = groupMessagesByResponseId(state.messages);
-        const filteredMessages = state.messages.filter((message) => {
-          // If it's a discovery question, only show it if it's in the last group and conditions are met
-          if (message.event_type === 'DISCOVERY_QUESTIONS') {
-            // Check if this discovery question is in the last group
-            const messageGroupIndex = groupedMessages.findIndex((group) =>
-              group.some((msg) => msg.response_id === message.response_id),
-            );
-            const isInLastGroup = messageGroupIndex === groupedMessages.length - 1;
-
-            return isInLastGroup && shouldShowDiscovery;
-          }
-
-          // Show all other messages
-          return true;
-        });
-
-        // Re-apply grouping and ordering to preserve the correct order
-        const reGroupedMessages = groupMessagesByResponseId(filteredMessages);
-        return reGroupedMessages.flat();
-      }
-
-      // If streaming, filter out artifacts but keep other messages
-      const filteredMessages = state.messages.filter((message) => {
-        const artifactTypes = [
-          'FORM_ARTIFACT',
-          'CALENDAR_ARTIFACT',
-          'VIDEO_ARTIFACT',
-          'SLIDE_ARTIFACT',
-          'SLIDE_IMAGE_ARTIFACT',
-          'GENERATING_ARTIFACT',
-          'DISCOVERY_QUESTIONS',
-          'QUALIFICATION_FORM_ARTIFACT',
-        ];
-
-        // Keep all non-artifact messages
-        if (!artifactTypes.includes(message.event_type)) {
-          return true;
-        }
-
-        // Filter out artifacts during streaming
-        return false;
-      });
-
       // Re-apply grouping and ordering to preserve the correct order
       const reGroupedMessages = groupMessagesByResponseId(filteredMessages);
       return reGroupedMessages.flat();
-    },
+    }
 
-    // Check if discovery questions are currently being shown
-    isDiscoveryQuestionShown: () => {
-      const state = get();
-      return shouldShowDiscoveryQuestions(state.messages, state.isStreaming, state.isLoading);
-    },
+    // If streaming, filter out artifacts but keep other messages
+    const filteredMessages = state.messages.filter((message) => {
+      const artifactTypes = [
+        'FORM_ARTIFACT',
+        'QUALIFICATION_FORM_ARTIFACT',
+        'CALENDAR_ARTIFACT',
+        'VIDEO_ARTIFACT',
+        'SLIDE_ARTIFACT',
+        'SLIDE_IMAGE_ARTIFACT',
+        'GENERATING_ARTIFACT',
+        'DISCOVERY_QUESTIONS',
+      ];
 
-    // Clear suggested questions when discovery questions are shown
-    clearSuggestedQuestionsIfDiscoveryShown: () => {
-      const state = get();
-
-      if (state.isDiscoveryQuestionShown()) {
-        set({ suggestedQuestions: [] });
-      }
-    },
-
-    // Clear suggested questions if they're not from the last group
-    clearSuggestedQuestionsIfNotFromLastGroup: () => {
-      const state = get();
-
-      // If there are no messages, keep default suggested questions from config
-      if (state.messages.length === 0) {
-        return;
+      // Keep all non-artifact messages
+      if (!artifactTypes.includes(message.event_type)) {
+        return true;
       }
 
-      // Group messages by response_id to check if suggested questions are in the last group
-      const groupedMessages = groupMessagesByResponseId(state.messages);
-      const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
-      const hasSuggestionsInLastGroup = lastGroup.some((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT');
+      // Filter out artifacts during streaming
+      return false;
+    });
 
-      // If there are no suggested questions in the last group, clear them
-      if (!hasSuggestionsInLastGroup && state.suggestedQuestions.length > 0) {
-        set({ suggestedQuestions: [] });
-      }
-    },
-  };
-});
+    // Re-apply grouping and ordering to preserve the correct order
+    const reGroupedMessages = groupMessagesByResponseId(filteredMessages);
+    return reGroupedMessages.flat();
+  },
+
+  // Check if discovery questions are currently being shown
+  isDiscoveryQuestionShown: () => {
+    const state = get();
+    return shouldShowDiscoveryQuestions(state.messages, state.isStreaming, state.isLoading);
+  },
+
+  // Clear suggested questions when discovery questions are shown
+  clearSuggestedQuestionsIfDiscoveryShown: () => {
+    const state = get();
+
+    if (state.isDiscoveryQuestionShown()) {
+      set({ suggestedQuestions: [] });
+    }
+  },
+
+  // Clear suggested questions if they're not from the last group
+  clearSuggestedQuestionsIfNotFromLastGroup: () => {
+    const state = get();
+
+    // If there are no messages, keep default suggested questions from config
+    if (state.messages.length === 0) {
+      return;
+    }
+
+    // Group messages by response_id to check if suggested questions are in the last group
+    const groupedMessages = groupMessagesByResponseId(state.messages);
+    const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
+    const hasSuggestionsInLastGroup = lastGroup.some((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT');
+
+    // If there are no suggested questions in the last group, clear them
+    if (!hasSuggestionsInLastGroup && state.suggestedQuestions.length > 0) {
+      set({ suggestedQuestions: [] });
+    }
+  },
+}));

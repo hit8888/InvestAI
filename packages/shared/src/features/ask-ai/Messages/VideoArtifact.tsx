@@ -28,8 +28,8 @@ export const VideoArtifact = ({ title, url }: VideoArtifactProps) => {
   };
 
   const buttonClasses = isThisVideoPlaying
-    ? 'h-7 rounded-2 gap-1 pr-3 !bg-primary/15 !border !text-foreground'
-    : 'h-7 rounded-full gap-1 pr-3 pl-0 py-4';
+    ? 'h-7 rounded-2 gap-1 px-3 !bg-primary/15 !border !text-foreground'
+    : 'h-7 rounded-[77px] gap-1 px-3';
 
   if (!cleanedUrl) {
     return null;

@@ -4,7 +4,7 @@ import { FormFieldSchemaType } from '../utils/artifact';
 
 type FormFilledThankYouContentProps = {
   formFields: FormFieldSchemaType[];
-  formValues: Record<string, string> | undefined;
+  formValues: Record<string, string>;
 };
 
 const FormFilledThankYouContent = ({ formFields, formValues }: FormFilledThankYouContentProps) => {

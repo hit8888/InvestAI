@@ -3,10 +3,22 @@
   "type": "module",
   "version": "0.1.0",
   "description": "Saral Design System - React components based on shadcn/ui",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "tsc -w -p tsconfig.json",
-    "build": "tsc -p tsconfig.json",
+    "dev": "vite",
+    "build": "vite build",
     "watch": "vite build --watch",
     "preview": "vite preview",
     "lint": "eslint .",

@@ -3,7 +3,6 @@ import { SidebarArtifactContent } from './SidebarArtifactContent';
 
 interface SidebarArtifactDrawerProps {
   isOpen: boolean;
-  targetRef: React.RefObject<HTMLElement | null>;
   calculatedWidth: number;
   artifact: {
     url: string;
@@ -27,13 +26,18 @@ export const SidebarArtifactDrawer = ({
   currentVideo,
   videoError,
   videoRef,
-  targetRef,
   onPlayPauseToggle,
   onClose,
 }: SidebarArtifactDrawerProps) => {
   return (
-    <SideDrawer isOpen={isOpen} targetRef={targetRef} side="left" onClose={onClose}>
-      <div className="h-full w-full overflow-hidden" style={{ width: `${calculatedWidth}px` }}>
+    <SideDrawer
+      isOpen={isOpen}
+      position={{ top: 0, right: 0 }}
+      className="!h-[calc(100%+90px)]"
+      side="left"
+      onClose={onClose}
+    >
+      <div className="p-4 h-full min-w-[800px]" style={{ width: `${calculatedWidth}px` }}>
         {artifact && (
           <SidebarArtifactContent
             artifact={artifact}

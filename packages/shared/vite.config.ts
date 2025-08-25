@@ -10,8 +10,6 @@ const viteConfig = defineViteConfig({
   resolve: {
     alias: {
       '@/features': resolve(__dirname, './src/features'),
-      '@meaku/saral': resolve(__dirname, '../saral/src'),
-      '@meaku/core': resolve(__dirname, '../core/src'),
     },
   },
 });
