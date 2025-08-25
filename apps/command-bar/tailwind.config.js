@@ -55,6 +55,7 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         actionBtnIcon: 'hsl(var(--action-btn-icon))',
+        actionBtnIconHover: 'hsl(var(--action-btn-icon-hover))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -115,6 +116,7 @@ export default {
       animation: {
         'text-state': 'text-animation 500ms linear infinite alternate-reverse',
         'high-bounce': 'highBounce 1s ease-in-out infinite',
+        'slide-in-right': 'slideInFromRight 0.5s ease-out forwards',
       },
       keyframes: {
         highBounce: {
@@ -130,6 +132,10 @@ export default {
         'text-animation': {
           '0%': { 'background-position': '0% 0%' },
           '100%': { 'background-position': '100% 0%' },
+        },
+        slideInFromRight: {
+          '0%': { transform: 'translateX(10%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
         },
       },
     },

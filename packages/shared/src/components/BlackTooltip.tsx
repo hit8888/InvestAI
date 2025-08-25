@@ -7,14 +7,14 @@ type BlackTooltipProps = {
 
 const BlackTooltip = ({ children, content }: BlackTooltipProps) => {
   return (
-    <Tooltip delayDuration={0}>
+    <Tooltip delayDuration={300}>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent
         arrowPadding={0}
         side="left"
         align="center"
         sideOffset={10}
-        className="border-none bg-gray-900 px-3 py-2 text-sm text-white"
+        className="border-none bg-gray-900 px-3 py-2 text-sm text-white animate-slide-in-right overflow-visible"
         arrowClassName="fill-gray-900"
       >
         {content}

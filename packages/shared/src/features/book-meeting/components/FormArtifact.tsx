@@ -117,7 +117,7 @@ const FormArtifact = ({
   }
 
   return (
-    <div className="flex w-full max-w-full flex-col gap-4">
+    <div className="flex w-full max-w-md mx-auto flex-col gap-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" data-testid="contact-form">
           <div className="flex w-full flex-col items-start gap-5">

@@ -30,6 +30,7 @@
     --ring: 214.29 8.24% 16.67%; /* #272A2E */
     --link: 211.18 95.33% 58.04%; /* #2E90FA */
     --action-btn-icon: 226.25 46.15% 20.39%; /* #1C274C */
+    --action-btn-icon-hover: 248.57 46.67% 94.12%; /* #EBE9F7 */
     --radius: 0.5rem;
     --shadow-elevation-md: 0 0 24px 0 rgba(0, 0, 0, 0.24);
     --shadow-action-btn: 0 0 0.521px 0 rgba(0, 0, 0, 0.3), 0 1.042px 3.125px 0 rgba(0, 0, 0, 0.15);

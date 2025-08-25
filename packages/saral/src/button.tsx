@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         default_active: 'bg-black text-white',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'shadow-action-btn text-foreground bg-background hover:bg-primary/10 hover:text-actionBtnIcon',
+        outline: 'shadow-action-btn text-foreground bg-background hover:bg-actionBtnIconHover hover:text-actionBtnIcon',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
           'bg-muted text-muted-foreground hover:bg-muted/20 hover:muted-foreground/50 hover:shadow-md hover:border transition-all',
