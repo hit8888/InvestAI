@@ -105,9 +105,13 @@ export type { VideoArtifactProps } from './video-artifact';
 export { ImageArtifact } from './image-artifact';
 export type { ImageArtifactProps } from './image-artifact';
 
+// Export image with fallback component
+export { ImageWithFallback } from './image-with-fallback';
+export type { ImageWithFallbackProps } from './image-with-fallback';
+
 // Export side drawer component
 export { default as SideDrawer } from './side-drawer';
-export type { SideDrawerProps, SideDrawerPosition } from './side-drawer';
+export type { SideDrawerProps } from './side-drawer';
 
 // Export custom icons
 export * from './custom-Icons';

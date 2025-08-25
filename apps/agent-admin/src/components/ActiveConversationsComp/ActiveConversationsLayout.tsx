@@ -12,6 +12,7 @@ import { useSidebar } from '../../context/SidebarContext';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
+import { EventMessageContent } from '@meaku/core/types/webSocketData';
 import NoActiveConversationsFound from './NoActiveConversationsFound';
 import CustomPageHeader from '../CustomPageHeader';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
@@ -19,6 +20,48 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
+
+// Helper functions to create type-safe event messages
+const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
+  content,
+  event_type: 'ADMIN_RESPONSE',
+  event_data: {
+    type: eventData.type as string | undefined,
+    url: eventData.url as string | undefined,
+    calendar_id: eventData.calendar_id as number | undefined,
+  },
+});
+
+const createLeaveSessionEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
+  content,
+  event_type: 'LEAVE_SESSION',
+  event_data: eventData,
+});
+
+const createJoinSessionEvent = (
+  content: string,
+  eventData: {
+    first_name: string;
+    last_name: string;
+    profile_picture: string | null;
+  },
+): EventMessageContent => ({
+  content,
+  event_type: 'JOIN_SESSION',
+  event_data: {
+    first_name: eventData.first_name,
+    last_name: eventData.last_name,
+    profile_picture: eventData.profile_picture,
+  },
+});
+
+const createResponseSuggestionsEvent = (content: string, eventData: { query?: string }): EventMessageContent => ({
+  content,
+  event_type: 'RESPONSE_SUGGESTIONS',
+  event_data: {
+    query: eventData.query,
+  },
+});
 
 const ActiveConversationsLayout = () => {
   const { isSidebarOpen } = useSidebar();
@@ -96,11 +139,7 @@ const ActiveConversationsLayout = () => {
       const sendMessage = sendMessageFnMap[sessionId];
 
       sendMessage({
-        message: {
-          content: '',
-          event_type: 'LEAVE_SESSION',
-          event_data: {},
-        },
+        message: createLeaveSessionEvent('', {}),
         message_type: 'EVENT',
       });
 
@@ -133,15 +172,47 @@ const ActiveConversationsLayout = () => {
   const handleSendMessage: SendAdminMessageWithSessionIdFn = (sessionId, payload) => {
     const sendMessage = sendMessageFnMap[sessionId];
 
-    sendMessage?.({
-      message: {
-        event_type: 'ADMIN_RESPONSE',
-        content: payload.content ?? '',
-        event_data: {
-          ...(payload?.event_data ?? {}),
-        },
-      },
-      message_type: 'EVENT',
+    if (!sendMessage) return;
+
+    const eventType = payload.event_type ?? 'ADMIN_RESPONSE';
+    const content = payload.content ?? '';
+    const eventData = payload.event_data ?? {};
+
+    let message: EventMessageContent;
+
+    switch (eventType) {
+      case 'ADMIN_RESPONSE':
+        message = createAdminResponseEvent(content, eventData);
+        break;
+      case 'LEAVE_SESSION':
+        message = createLeaveSessionEvent(content, eventData);
+        break;
+      case 'JOIN_SESSION':
+        message = createJoinSessionEvent(
+          content,
+          eventData as {
+            first_name: string;
+            last_name: string;
+            profile_picture: string | null;
+          },
+        );
+        break;
+      case 'RESPONSE_SUGGESTIONS':
+        message = createResponseSuggestionsEvent(content, eventData as { query?: string });
+        break;
+      default:
+        // For other event types, we'll use a generic approach
+        // This maintains type safety while allowing for extensibility
+        message = {
+          content,
+          event_type: eventType,
+          event_data: eventData,
+        } as EventMessageContent;
+    }
+
+    sendMessage({
+      message,
+      message_type: 'EVENT' as const,
     });
   };
 
@@ -155,15 +226,11 @@ const ActiveConversationsLayout = () => {
     const sendMessage = sendMessageFnMap[sessionId];
 
     sendMessage({
-      message: {
-        content: '',
-        event_type: 'JOIN_SESSION',
-        event_data: {
-          first_name: userInfo?.first_name ?? '',
-          last_name: userInfo?.last_name ?? '',
-          profile_picture: userInfo?.profile_picture ?? '',
-        },
-      },
+      message: createJoinSessionEvent('', {
+        first_name: userInfo?.first_name ?? '',
+        last_name: userInfo?.last_name ?? '',
+        profile_picture: userInfo?.profile_picture ?? '',
+      }),
       message_type: 'EVENT',
     });
 
@@ -174,13 +241,9 @@ const ActiveConversationsLayout = () => {
     setIsGeneratingAIResponse(true);
     const sendMessage = sendMessageFnMap[sessionId];
     sendMessage({
-      message: {
-        content: '',
-        event_type: 'RESPONSE_SUGGESTIONS',
-        event_data: {
-          query: currentConversation?.last_user_message,
-        },
-      },
+      message: createResponseSuggestionsEvent('', {
+        query: currentConversation?.last_user_message,
+      }),
       message_type: 'EVENT',
     });
   };

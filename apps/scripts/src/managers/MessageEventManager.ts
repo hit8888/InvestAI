@@ -123,7 +123,6 @@ export function MessageEventManager(
 
   // Message type handlers
   const handleIframeReady = (event: MessageEvent<IframeMessage>): void => {
-    console.log("Iframe is ready to receive messages");
     state.iFrameSource = event.source;
 
     if (state.iFrameSource && "postMessage" in state.iFrameSource) {

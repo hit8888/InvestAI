@@ -28,6 +28,10 @@ export default defineConfig({
       : []),
   ],
 
+  server: {
+    port: 3001,
+  },
+
   resolve: {
     alias: {
       '@meaku/saral': path.resolve(__dirname, '../../packages/saral/src'),

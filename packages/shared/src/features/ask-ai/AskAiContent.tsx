@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { Icons, KatyIcon } from '@meaku/saral';
+import { Icons, KatyIcon, ImageWithFallback } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
 import { Messages } from './Messages';
@@ -10,6 +10,7 @@ import { useAvatarSelection } from '../../hooks/useAvatarSelection';
 import { checkIfSubmissionEventsPresent } from '../../utils/common';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import { useWsClient } from '../../hooks/useWsClient';
+import { useAdminSession } from './hooks/useAdminSession';
 import { useFormArtifactMessage } from '../../hooks/useFormArtifactMessage';
 import { MessageEventType } from '../../types/message';
 
@@ -21,6 +22,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     isDiscoveryQuestionShown,
     clearSuggestedQuestionsIfDiscoveryShown,
     isLoading,
+    isAdminTyping,
     messages,
     settings,
     config,
@@ -73,35 +75,58 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     queryEnabled: !shouldBookMeetingCTAButtonShow,
   });
 
+  // Use custom hook to get admin session information
+  const { adminSessionInfo, hasActiveAdminSession } = useAdminSession(messages);
+
+  const targetRef = useRef<HTMLDivElement>(null);
+
   return (
     <div
       className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
       style={{ height: 'min(100vh, 680px)' }}
+      ref={targetRef}
     >
       <FeatureHeader
-        title={`${askaiConfig?.agent_name} - AI Copilot`}
-        welcomeMessage={messages?.length === 0 ? askaiConfig?.welcome_message.message : undefined}
+        title={
+          hasActiveAdminSession && adminSessionInfo
+            ? `${adminSessionInfo.name}`
+            : `${askaiConfig?.agent_name} - AI Copilot`
+        }
+        subtitle={isAdminTyping ? `${adminSessionInfo?.name || 'Admin'} is typing...` : undefined}
+        welcomeMessage={messages?.length === 0 && !isAdminTyping ? askaiConfig?.welcome_message.message : undefined}
         icon={
-          isAvatarLoaded && selectedAvatar ? <selectedAvatar.Component size={48} /> : <KatyIcon className="h-12 w-12" />
+          hasActiveAdminSession && adminSessionInfo?.profilePicture ? (
+            <ImageWithFallback
+              src={adminSessionInfo.profilePicture}
+              alt={adminSessionInfo.name}
+              size={48}
+              showOnlineIndicator={true}
+              onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
+            />
+          ) : isAvatarLoaded && selectedAvatar ? (
+            <selectedAvatar.Component size={48} />
+          ) : (
+            <KatyIcon className="h-12 w-12" />
+          )
         }
         onClose={onClose}
         onExpand={onExpand}
         isExpanded={isExpanded}
-        shouldBookMeetingCTAButtonShow={shouldBookMeetingCTAButtonShow && !!sessionData}
-        ctas={askaiConfig?.ctas ?? []}
+        ctas={shouldBookMeetingCTAButtonShow && Boolean(sessionData) ? (askaiConfig?.ctas ?? []) : []}
         sendUserMessage={sendUserMessage}
       />
       <div className="h-10 w-full flex-1  p-2 pt-0">
-        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background" id="ask-ai-messages">
-          <div className="h-[calc(100%-80px)] flex-1 relative">
-            {!sessionData ? (
-              <div className="absolute bottom-20 flex w-full items-center justify-center gap-3">
+        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
+          <div className="relative h-[calc(100%-76px)] flex-1">
+            {!sessionData && !hasActiveAdminSession ? (
+              <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
                 <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
                 <p className="text-xs text-muted-foreground">Initialising...</p>
               </div>
             ) : null}
 
             <SidebarArtifactDrawer
+              targetRef={targetRef}
               isOpen={isSideDrawerOpen}
               calculatedWidth={calculatedWidth}
               artifact={sideBarArtifact}
@@ -112,18 +137,23 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               onClose={closeSidebar}
             />
             <Messages
-              messages={messages ?? []}
               sendUserMessage={sendUserMessage}
               selectedAvatar={selectedAvatar}
               suggestedQuestions={suggestedQuestions}
               isStreaming={isStreaming}
               isLoading={isLoading}
+              isAdminTyping={isAdminTyping}
               getRenderableMessages={getRenderableMessages}
               isDiscoveryQuestionShown={isDiscoveryQuestionShown}
               clearSuggestedQuestionsIfDiscoveryShown={clearSuggestedQuestionsIfDiscoveryShown}
+              adminSessionInfo={adminSessionInfo}
+              hasActiveAdminSession={hasActiveAdminSession}
             />
           </div>
-          <AskAiInput sendUserMessage={sendUserMessage} disabled={(!sessionData || isLoading) ?? false} />
+          <AskAiInput
+            sendUserMessage={sendUserMessage}
+            disabled={!sessionData || (isLoading && !hasActiveAdminSession)}
+          />
         </div>
       </div>
     </div>

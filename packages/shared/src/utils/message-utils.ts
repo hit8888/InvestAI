@@ -41,6 +41,31 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
             // Check if this is the first stream response in the group
             const streamResponsesInGroup = group.filter((msg) => msg.event_type === 'STREAM_RESPONSE');
             const isFirstStream = streamResponsesInGroup.indexOf(message) === 0;
+
+            // If this is not the first stream, check if there are form events between streams
+            if (!isFirstStream) {
+              const messageIndex = group.indexOf(message);
+              const previousStreamIndex = group.findIndex(
+                (msg, index) => index < messageIndex && msg.event_type === 'STREAM_RESPONSE',
+              );
+
+              if (previousStreamIndex !== -1) {
+                // Check if there are form events between the previous stream and this one
+                const messagesBetweenStreams = group.slice(previousStreamIndex + 1, messageIndex);
+                const hasFormEventsBetween = messagesBetweenStreams.some(
+                  (msg) =>
+                    msg.event_type === 'FORM_FILLED' ||
+                    msg.event_type === 'QUALIFICATION_FORM_FILLED' ||
+                    msg.event_type === 'CALENDAR_SUBMIT',
+                );
+
+                if (hasFormEventsBetween) {
+                  // If there are form events between, treat this as a new stream (priority 1)
+                  return 1;
+                }
+              }
+            }
+
             return isFirstStream ? 1 : 4; // First stream = 1, subsequent streams = 4
           }
 
@@ -117,4 +142,179 @@ export const isMessageGroupComplete = (messageGroup: Message[]): boolean => {
  */
 export const getResponseIdFromGroup = (messageGroup: Message[]): string => {
   return messageGroup[0]?.response_id || '';
+};
+
+/**
+ * Extracts the event type from a message, handling both flat and nested WebSocket message structures
+ * @param message - The message object to extract event type from
+ * @returns The event type string or empty string if not found
+ */
+export const extractMessageEventType = (message: Message): string => {
+  // Handle flat message structure (direct event_type property)
+  if (message.event_type) {
+    return message.event_type;
+  }
+
+  // Handle WebSocketMessage structure for STREAM messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'STREAM') {
+    return 'STREAM_RESPONSE';
+  }
+
+  // Handle WebSocketMessage structure for ARTIFACT messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'ARTIFACT' && (message as any).message?.artifact_type) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return `${(message as any).message.artifact_type}_ARTIFACT`;
+  }
+
+  // Handle WebSocketMessage structure for EVENT messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'EVENT' && (message as any).message?.event_type) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (message as any).message.event_type;
+  }
+
+  return '';
+};
+
+/**
+ * Extracts the event data from a message, handling both flat and nested WebSocket message structures
+ * @param message - The message object to extract event data from
+ * @returns The event data object or null if not found
+ */
+export const extractMessageEventData = (message: Message): Record<string, unknown> | null => {
+  // Handle flat message structure (direct event_data property)
+  if (message.event_data) {
+    return message.event_data;
+  }
+
+  // Handle WebSocketMessage structure for STREAM messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'STREAM' && (message as any).message) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (message as any).message;
+  }
+
+  // Handle WebSocketMessage structure for ARTIFACT messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'ARTIFACT' && (message as any).message) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (message as any).message;
+  }
+
+  // Handle WebSocketMessage structure for EVENT messages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((message as any).message_type === 'EVENT' && (message as any).message?.event_data) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (message as any).message.event_data;
+  }
+
+  return null;
+};
+
+/**
+ * Checks if a message is a JOIN_SESSION event
+ * @param message - The message to check
+ * @returns True if the message is a JOIN_SESSION event
+ */
+export const isJoinSessionEvent = (message: Message): boolean => {
+  const eventType = extractMessageEventType(message);
+  return (
+    eventType === 'JOIN_SESSION' ||
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'JOIN_SESSION')
+  );
+};
+
+/**
+ * Checks if a message is a LEAVE_SESSION event
+ * @param message - The message to check
+ * @returns True if the message is a LEAVE_SESSION event
+ */
+export const isLeaveSessionEvent = (message: Message): boolean => {
+  const eventType = extractMessageEventType(message);
+  return (
+    eventType === 'LEAVE_SESSION' ||
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'LEAVE_SESSION')
+  );
+};
+
+/**
+ * Checks if a message is an ADMIN_RESPONSE event
+ * @param message - The message to check
+ * @returns True if the message is an ADMIN_RESPONSE event
+ */
+export const isAdminResponseEvent = (message: Message): boolean => {
+  const eventType = extractMessageEventType(message);
+  return (
+    eventType === 'ADMIN_RESPONSE' ||
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'ADMIN_RESPONSE')
+  );
+};
+
+/**
+ * Identifies admin session blocks from messages
+ * @param messages - Array of messages to analyze
+ * @returns Array of admin session blocks with start and end indices
+ */
+export const identifyAdminSessionBlocks = (messages: Message[]): Array<{ startIndex: number; endIndex: number }> => {
+  const blocks: Array<{ startIndex: number; endIndex: number }> = [];
+  let currentBlockStart: number | null = null;
+
+  messages.forEach((message, index) => {
+    if (isJoinSessionEvent(message)) {
+      currentBlockStart = index;
+    } else if (isLeaveSessionEvent(message) && currentBlockStart !== null) {
+      blocks.push({ startIndex: currentBlockStart, endIndex: index });
+      currentBlockStart = null;
+    }
+  });
+
+  // Handle case where admin session is still active (no LEAVE_SESSION event)
+  if (currentBlockStart !== null) {
+    blocks.push({ startIndex: currentBlockStart, endIndex: messages.length - 1 });
+  }
+
+  return blocks;
+};
+
+/**
+ * Groups messages by response_id, handling admin sessions as special groups
+ * @param messages - Array of messages to group
+ * @returns Array of message groups
+ */
+export const groupMessagesWithAdminSessions = (messages: Message[]): Message[][] => {
+  if (messages.length === 0) return [];
+
+  const adminSessionBlocks = identifyAdminSessionBlocks(messages);
+  const groups: Message[][] = [];
+  let currentIndex = 0;
+
+  // Process each admin session block
+  adminSessionBlocks.forEach(({ startIndex, endIndex }) => {
+    // Add any messages before this admin session block
+    if (currentIndex < startIndex) {
+      const messagesBeforeAdminSession = messages.slice(currentIndex, startIndex);
+      const regularGroups = groupMessagesByResponseId(messagesBeforeAdminSession);
+      groups.push(...regularGroups);
+    }
+
+    // Add the admin session group
+    const adminSessionMessages = messages.slice(startIndex, endIndex + 1);
+    groups.push(adminSessionMessages);
+
+    currentIndex = endIndex + 1;
+  });
+
+  // Add any remaining messages after the last admin session
+  if (currentIndex < messages.length) {
+    const remainingMessages = messages.slice(currentIndex);
+    const regularGroups = groupMessagesByResponseId(remainingMessages);
+    groups.push(...regularGroups);
+  }
+
+  return groups;
 };

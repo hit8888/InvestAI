@@ -9,6 +9,7 @@ interface AskAiInputProps {
 
 export const AskAiInput = ({ disabled, sendUserMessage }: AskAiInputProps) => {
   const [message, setMessage] = useState('');
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendUserMessage?.(message);
@@ -26,7 +27,16 @@ export const AskAiInput = ({ disabled, sendUserMessage }: AskAiInputProps) => {
         autoComplete="off"
         aria-autocomplete="none"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => {
+          setMessage(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            handleSubmit(e as any);
+          }
+        }}
       />
       <Button
         className="absolute size-10 right-5 px-2 rounded-lg"

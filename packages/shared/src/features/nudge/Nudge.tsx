@@ -13,6 +13,8 @@ import { useWsClient } from '../../hooks/useWsClient';
 import NudgeHeader from './components/NudgeHeader';
 import NudgeBody from './components/NudgeBody';
 import useShowNudgeBody from './hooks/useShowNudgeBody';
+import useSound from '@meaku/core/hooks/useSound';
+import goodIdeaHighDing from '../../assets/good-idea-high-ding.wav';
 
 interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
@@ -27,6 +29,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(initialNudge ?? null);
   const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!nudgeToShow?.header_text);
+  const { play } = useSound(goodIdeaHighDing, 0.1);
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
     displayDuration: nudgeToShow?.display_duration,
@@ -91,8 +94,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_LOAD);
       setNudgeToShow(nudge);
+      play();
     },
-    [trackEvent],
+    [trackEvent, play],
   );
 
   useEffect(() => {

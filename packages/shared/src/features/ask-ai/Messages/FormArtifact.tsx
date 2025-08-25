@@ -15,7 +15,7 @@ interface FormArtifactProps {
   metadata: FormArtifactMetadataType;
   handleSendUserMessage: (data: SendUserMessageParams) => void;
   isFilled: boolean;
-  filledData: Record<string, string>;
+  filledData: Record<string, string> | undefined;
   responseId?: string;
 }
 

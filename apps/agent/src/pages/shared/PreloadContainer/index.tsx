@@ -78,7 +78,6 @@ const PreloadContainerContent: FC<Props> = ({ children }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (parentUrl) {
-        console.log('Parent URL found');
         setWaitingForParentUrl(false);
       } else if (!parentUrl && waitingForParentUrl) {
         setWaitingForParentUrl(false);

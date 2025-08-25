@@ -1,27 +1,10 @@
 import React from 'react';
 import { Button, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
-import { motion } from 'framer-motion';
 import BlackTooltip from '../../components/BlackTooltip';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureActionProps } from '../';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
-
-const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <motion.div
-      initial={{ y: 0 }}
-      animate={{ y: [0, -6, 0] }}
-      transition={{
-        duration: 2.4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-};
 
 const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
   const { config } = useCommandBarStore();
@@ -33,7 +16,7 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
       data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
       size="icon"
       onClick={() => onClick?.(featureConfig)}
-      className="rounded-full bg-background hover:bg-background/50 mb-1"
+      className="rounded-full border bg-background hover:bg-background-light mb-1"
     >
       <img src={orbConfig?.logo_url ?? undefined} alt="orb" className="h-full w-full rounded-full object-cover" />
     </Button>
@@ -62,9 +45,9 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
   }
 
   return (
-    <MotionWrapper>
+    <div>
       <BlackTooltip content="Ask our AI assistant anything!">{btnContent}</BlackTooltip>
-    </MotionWrapper>
+    </div>
   );
 };
 

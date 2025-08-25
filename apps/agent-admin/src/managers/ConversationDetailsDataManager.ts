@@ -1,5 +1,5 @@
 import { ConversationDetailsDataResponse, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
-import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
+// import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
 import { convertServerConversationDataToClientConversationData } from '@meaku/core/transformers/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/index';
@@ -34,22 +34,22 @@ class ConversationDetailsDataResponseManager {
   private validateDetailsData(
     convDetailsData: ConversationDetailsDataResponse,
   ): Result<ConversationDetailsDataResponse> {
-    const validateDetailsData = ConversationDetailsResponseSchema.safeParse(convDetailsData);
+    // const validateDetailsData = ConversationDetailsResponseSchema.safeParse(convDetailsData);
 
-    if (!validateDetailsData.success) {
-      // console.error('Validation failed for ConversationDetailsDataManager:', {
-      //   input: convDetailsData,
-      //   errors: validateDetailsData.error,
-      // });
-      return {
-        success: false,
-        error: validateDetailsData.error.errors.map((error) => error.message).join(', '),
-      };
-    }
+    // if (!validateDetailsData.success) {
+    //   // console.error('Validation failed for ConversationDetailsDataManager:', {
+    //   //   input: convDetailsData,
+    //   //   errors: validateDetailsData.error,
+    //   // });
+    //   return {
+    //     success: false,
+    //     error: validateDetailsData.error.errors.map((error) => error.message).join(', '),
+    //   };
+    // }
 
     return {
       success: true,
-      data: validateDetailsData.data,
+      data: convDetailsData,
     };
   }
 

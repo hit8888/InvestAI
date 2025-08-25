@@ -3,17 +3,18 @@ import { Icons, Button, buttonVariants, Typography } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
 interface FeatureHeaderProps {
   title: string;
+  subtitle?: string;
   welcomeMessage?: string;
   icon?: ReactNode;
   onClose?: () => void;
   onExpand?: () => void;
   isExpanded?: boolean;
-  shouldBookMeetingCTAButtonShow?: boolean;
   ctas?: { text: string; message?: string; url?: string }[];
   sendUserMessage?: (message: string, overrides?: Partial<Message>) => void;
 }
 export const FeatureHeader = ({
   title,
+  subtitle,
   icon,
   onClose,
   onExpand,
@@ -21,13 +22,8 @@ export const FeatureHeader = ({
   ctas,
   isExpanded,
   sendUserMessage,
-  shouldBookMeetingCTAButtonShow,
 }: FeatureHeaderProps) => {
-  // Check if all buttons should be hidden - only hide if no CTAs exist or no CTAs would be rendered
-  const hasUrlBasedCtas = ctas?.some((cta) => cta.url);
-  const hasMessageBasedCtas = ctas?.some((cta) => !cta.url);
-  const allButtonInHeaderHidden =
-    !ctas?.length || (!hasUrlBasedCtas && (!hasMessageBasedCtas || !shouldBookMeetingCTAButtonShow));
+  // Need to check if all buttons should be hidden based on different CTAs button
   return (
     <div className="flex flex-col p-3 gap-4 border-b border-gray-100">
       <div className="flex items-center justify-between">
@@ -40,9 +36,16 @@ export const FeatureHeader = ({
                 : 'pointer-events-auto max-h-8 scale-100 opacity-100'
             }`}
           >
-            <Typography variant="heading" fontWeight="medium" className="text-foreground">
-              {title}
-            </Typography>
+            <div className="flex flex-col">
+              <Typography variant="heading" fontWeight="semibold">
+                {title}
+              </Typography>
+              {subtitle && (
+                <Typography variant="body-small" fontWeight="normal" className="text-muted-foreground">
+                  {subtitle}
+                </Typography>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -80,8 +83,8 @@ export const FeatureHeader = ({
         className={`transition-all duration-300 ease-in-out ${
           ctas && ctas.length > 0
             ? 'max-h-16 scale-100 overflow-visible opacity-100'
-            : 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0'
-        } ${allButtonInHeaderHidden ? 'hidden' : ''}`}
+            : 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0 -my-2'
+        }`}
       >
         {ctas && ctas.length > 0 && (
           <div className="inline-flex gap-2">
@@ -98,7 +101,7 @@ export const FeatureHeader = ({
                 </a>
               ) : (
                 <React.Fragment key={cta.text}>
-                  {shouldBookMeetingCTAButtonShow && (
+                  {
                     <Button
                       size="xs"
                       key={cta.message ?? cta.text}
@@ -113,7 +116,7 @@ export const FeatureHeader = ({
                     >
                       {cta.text}
                     </Button>
-                  )}
+                  }
                 </React.Fragment>
               ),
             )}

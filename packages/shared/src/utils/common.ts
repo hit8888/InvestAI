@@ -71,7 +71,7 @@ export const isCalendarArtifact = (msg: Message) => msg.event_type === MessageEv
 
 export const checkIsQualificationFormArtifact = (message: Message): boolean => {
   if (!checkIsFormArtifactBase(message)) return false;
-  const content = message.event_data?.artifact_data.content;
+  const content = message.event_data?.artifact_data?.content;
   return content !== null && 'qualification' in content && Boolean(content.qualification);
 };
 
@@ -100,7 +100,11 @@ export const getCalendarArtifactMessage = (messagesWithSameResponseId: Message[]
       event_data: ArtifactMessageContent & {
         artifact_data: CalendarArtifactContent;
       };
-    } => checkIsArtifactMessage(msg) && msg.event_type === 'CALENDAR_ARTIFACT' && 'artifact_data' in msg.event_data,
+    } =>
+      checkIsArtifactMessage(msg) &&
+      msg.event_type === 'CALENDAR_ARTIFACT' &&
+      msg.event_data &&
+      'artifact_data' in msg.event_data,
   );
 };
 
