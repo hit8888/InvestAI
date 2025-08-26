@@ -156,7 +156,7 @@ export const Message = ({
     'pr-3 flex py-2 rounded-xl relative text-foreground font-normal text-sm leading-[22px] animate-in fade-in slide-in-from-bottom-2 duration-800':
       true,
     'mr-auto max-w-full pl-10': message.role === 'ai' || isAdminResponse,
-    hidden: isTextArtifact && !textContent.length,
+    hidden: isTextArtifact && !textContent?.length,
     'ml-auto max-w-[70%] bg-card  pl-3': message.role === 'user',
     [typographyVariants({ variant: 'body', fontWeight: 'normal' })]: true,
     '!max-w-full w-full':

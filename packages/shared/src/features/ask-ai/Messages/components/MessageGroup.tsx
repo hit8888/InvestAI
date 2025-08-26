@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { type Message as MessageType } from '../../../../types/message';
 import { Message } from '../Message';
 import { WaveLoader } from '../../../../components/WaveLoader';
@@ -30,8 +30,10 @@ interface MessageGroupProps {
   } | null;
   messagesWithinAdminSessions: Set<string>;
   suggestedQuestions: string[];
+  isStreaming: boolean;
   isLoading: boolean;
   isAdminTyping: boolean;
+  isDiscoveryQuestionShown: () => boolean;
   lastMessageMarkerRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -49,10 +51,16 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   adminSessionInfo,
   messagesWithinAdminSessions,
   suggestedQuestions,
+  isStreaming,
+  isDiscoveryQuestionShown,
   isLoading,
   isAdminTyping,
   lastMessageMarkerRef,
 }) => {
+  const shouldShowSuggestedQuestions = useMemo(() => {
+    return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
+  }, [isLastGroup, suggestedQuestions, isDiscoveryQuestionShown, isStreaming]);
+
   return (
     <div
       key={`group-${groupIndex}`}
@@ -81,7 +89,9 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
         />
       ))}
 
-      <SuggestedQuestions suggestedQuestions={suggestedQuestions} sendUserMessage={sendUserMessage} />
+      {shouldShowSuggestedQuestions && (
+        <SuggestedQuestions suggestedQuestions={suggestedQuestions} sendUserMessage={sendUserMessage} />
+      )}
 
       {/* Show loader after the last message in the last group */}
       {isLastGroup && isLoading && !hasActiveAdminSession && (
