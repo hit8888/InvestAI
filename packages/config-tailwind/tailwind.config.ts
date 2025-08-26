@@ -310,7 +310,7 @@ const config: Omit<Config, "content"> = {
         "2.5": "0.025", // Add 2.5% opacity
       },
       height: {
-        "agent-open": "98vh",
+        "agent-open": "95vh",
       },
       width: {
         "agent-open": "98vw",
