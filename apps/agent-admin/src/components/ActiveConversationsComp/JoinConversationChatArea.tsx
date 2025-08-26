@@ -25,7 +25,10 @@ interface JoinConversationChatAreaProps {
 const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
   const { messages } = useMessageStore();
-  const { prospect: { browsed_urls: browsedUrls = [] } = {}, session } = conversationDetails ?? {};
+  const {
+    prospect: { browsed_urls: browsedUrls = [], parent_url: parentUrl, query_params: queryParams } = {},
+    session: { start_time: startTime } = {},
+  } = conversationDetails ?? {};
   const { currentConversation } = useJoinConversationStore();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   useSetArtifactOnNewMessage();
@@ -96,9 +99,9 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
               </div>
               <div className="sticky bottom-0 mx-2">
                 <LandingPageCard
-                  source={session?.query_params?.utm_source ?? ''}
-                  url={session?.parent_url ?? ''}
-                  timestamp={session?.start_time ?? ''}
+                  source={queryParams?.utm_source ?? ''}
+                  url={parentUrl ?? ''}
+                  timestamp={startTime ?? ''}
                 />
               </div>
             </div>

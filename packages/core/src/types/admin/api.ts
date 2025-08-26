@@ -295,30 +295,18 @@ export const ConversationDetailsResponseSchema = z.object({
   feedback: z.array(FeedbackRequestPayloadSchema).optional(),
 });
 
-export const ActiveConversationSessionSchema = z.object({
-  session_id: z.string().nullable().optional(),
-  start_time: z.string().nullable(),
-  end_time: z.string().nullable().optional(),
-  ip_address: z.string().nullable().optional(),
-  parent_url: z.string().nullable(),
-  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
-  referrer: z.string().nullable().optional(),
-  is_live: z.boolean().nullable().optional(),
-  agent_id: z.number().nullable().optional(),
-  buyer_intent_score: z.number().nullable().optional(),
-  is_test: z.boolean().nullable().optional(),
-  test_type: z.string().nullable().optional(),
-  experiment_tag: z.string().nullable().optional(),
-  metadata: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
-});
-
 export const ActiveConversationDetailsResponseSchema = z.object({
   chat_history: z.array(WebSocketMessageSchema),
   chat_summary: z.string(),
   prospect: z.object({
     browsed_urls: z.array(BrowsedUrlSchema),
+    ip_address: z.string().nullable().optional(),
+    parent_url: z.string().nullable(),
+    query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   }),
-  session: ActiveConversationSessionSchema,
+  session: z.object({
+    start_time: z.string().nullable(),
+  }),
 });
 
 // Schema for Filter Options - Payload & Response

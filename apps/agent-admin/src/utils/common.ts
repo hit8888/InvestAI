@@ -152,7 +152,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     user_message_count: `${response.user_message_count || 0}`,
     meeting_status: '-',
     product_of_interest: response.product_of_interest || '-',
-    ip_address: response.ip_address || '-',
+    ip_address: response.ip_address || response.prospect_details?.ip_address || '-',
     session_id: response.session_id || '-',
     prospect_details: response?.prospect_details || {},
     company_details: response?.company_details || {},

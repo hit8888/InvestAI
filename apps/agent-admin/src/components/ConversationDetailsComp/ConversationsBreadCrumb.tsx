@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList } from '@breakout/design-system/components/shadcn-ui/breadcrumb';
 
 import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadcrumb-left-arrow';
@@ -8,31 +8,36 @@ import ConversationsBreadCrumbShimmer from '../ShimmerComponent/ConversationsBre
 import { BreadcrumbItemComponent } from './BreadcrumbItemComponent';
 import useLocationPath from '@meaku/core/hooks/useLocationPath';
 import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
+import { CONVERSATION_TABS, isTabActive } from '../ConversationTabs';
+import { getDashboardBasicPathURL } from '../../utils/common';
 
 type IProps = {
   isLoading: boolean;
-  breadCrumbItems: string[];
-  handleNavigateBasedOnRoute: () => void;
   isDirectAccess: boolean;
 };
 
-const ConversationsBreadCrumb = ({
-  isLoading,
-  handleNavigateBasedOnRoute,
-  isDirectAccess,
-  breadCrumbItems,
-}: IProps) => {
+const ConversationsBreadCrumb = ({ isLoading, isDirectAccess }: IProps) => {
   const navigate = useNavigate();
   const { getConversationPath } = useLocationPath();
+  const location = useLocation();
+  const { tenantName } = useParams();
+
+  const fromTab = useMemo(() => {
+    const currentTab = CONVERSATION_TABS.find((tab) => isTabActive(tab.path, location.pathname));
+    return currentTab;
+  }, [location.pathname]);
+
+  const breadCrumbItems = useMemo(() => [fromTab?.label || 'All Conversations', 'Prospect'], [fromTab]);
 
   const handleNavigateBack = useCallback(() => {
-    if (isDirectAccess) {
-      handleNavigateBasedOnRoute();
+    if (isDirectAccess && fromTab) {
+      const baseURL = getDashboardBasicPathURL(tenantName ?? '');
+      navigate(`${baseURL}${fromTab.path}`);
     } else {
       // If came from table view, go back in history
       navigate(-1);
     }
-  }, [navigate, isDirectAccess]);
+  }, [fromTab, isDirectAccess, navigate, tenantName]);
 
   const handleNavigate = () => {
     navigate(getConversationPath(''));

@@ -13,11 +13,10 @@ import { useQueryOptions } from '../hooks/useQueryOptions';
 
 type IProps = {
   isDirectAccess: boolean;
-  handleNavigateBasedOnRoute: () => void;
   isLeadsPage: boolean;
 };
 
-const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, isLeadsPage }: IProps) => {
+const ConversationDetailsPage = ({ isDirectAccess, isLeadsPage }: IProps) => {
   const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
     useConversationDetails();
   const { sessionID } = useParams<string>();
@@ -28,16 +27,6 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
     sessionID: sessionID || '',
     companyLogoUrl: '',
   };
-
-  // If Multiple Tab is enabled, then we need to show the breadcrumb items as per the tab,
-  // Also attaching the tab link to the breadcrumb items
-  // These are for particular use case
-  const breadCrumbItems = useMemo(() => {
-    if (isLeadsPage) {
-      return ['Leads', 'Prospect'];
-    }
-    return ['Conversations', 'Prospect'];
-  }, [isLeadsPage]);
 
   const queryOptions = useQueryOptions();
 
@@ -84,12 +73,7 @@ const ConversationDetailsPage = ({ isDirectAccess, handleNavigateBasedOnRoute, i
   return (
     <div className="flex w-full flex-1 flex-col items-start self-stretch">
       <div className="sticky top-0 z-10 w-full bg-white pt-2">
-        <ConversationsBreadCrumb
-          breadCrumbItems={breadCrumbItems}
-          isLoading={isLoading}
-          handleNavigateBasedOnRoute={handleNavigateBasedOnRoute}
-          isDirectAccess={isDirectAccess}
-        />
+        <ConversationsBreadCrumb isLoading={isLoading} isDirectAccess={isDirectAccess} />
       </div>
       <ConversationDetailsNavigatedHeader
         isDirectAccess={isDirectAccess}

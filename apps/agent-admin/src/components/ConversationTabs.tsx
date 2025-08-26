@@ -13,7 +13,7 @@ type TabConfig = {
   icon: React.ElementType;
 };
 
-const tabs: TabConfig[] = [
+export const CONVERSATION_TABS: TabConfig[] = [
   {
     path: `/${AppRoutesEnum.CONVERSATIONS}`,
     label: 'All Conversations',
@@ -31,6 +31,25 @@ const tabs: TabConfig[] = [
   },
 ];
 
+export const isTabActive = (tabPath: string, pathname: string) => {
+  const tenantName = getTenantFromLocalStorage();
+
+  const normalizedPath = tenantName ? pathname.replace(`/${tenantName}`, '') : pathname;
+  if (normalizedPath === '/') return tabPath === `/${AppRoutesEnum.CONVERSATIONS}`;
+
+  // For main conversations tab, ensure we're not in a sub-section
+  if (tabPath === `/${AppRoutesEnum.CONVERSATIONS}`) {
+    return (
+      normalizedPath === `/${AppRoutesEnum.CONVERSATIONS}` ||
+      (normalizedPath.startsWith(`/${AppRoutesEnum.CONVERSATIONS}/`) &&
+        !normalizedPath.includes('/leads') &&
+        !normalizedPath.includes('/link-clicks'))
+    );
+  }
+
+  return normalizedPath.includes(tabPath);
+};
+
 const ConversationTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,27 +60,10 @@ const ConversationTabs = () => {
     navigate(basePath);
   };
 
-  const isTabActive = (tabPath: string) => {
-    const normalizedPath = tenantName ? location.pathname.replace(`/${tenantName}`, '') : location.pathname;
-    if (normalizedPath === '/') return tabPath === `/${AppRoutesEnum.CONVERSATIONS}`;
-
-    // For main conversations tab, ensure we're not in a sub-section
-    if (tabPath === `/${AppRoutesEnum.CONVERSATIONS}`) {
-      return (
-        normalizedPath === `/${AppRoutesEnum.CONVERSATIONS}` ||
-        (normalizedPath.startsWith(`/${AppRoutesEnum.CONVERSATIONS}/`) &&
-          !normalizedPath.includes('/leads') &&
-          !normalizedPath.includes('/link-clicks'))
-      );
-    }
-
-    return normalizedPath.includes(tabPath);
-  };
-
   return (
     <div className="sticky top-0 z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4">
-      {tabs.map(({ path, label, icon: Icon }) => {
-        const isActive = isTabActive(path);
+      {CONVERSATION_TABS.map(({ path, label, icon: Icon }) => {
+        const isActive = isTabActive(path, location.pathname);
         return (
           <SingleTabDisplay
             key={path}
