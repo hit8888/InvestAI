@@ -13,8 +13,7 @@ import useBrandingAgentConfigsQuery from '../queries/query/useAgentConfigsQuery'
 import { useAgentConfigsMutation } from '../queries/mutation/useAgentConfigsMutation';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import { getDefaultBannerHeader, getDefaultBannerSubHeader } from '@meaku/core/utils/bannerConfig';
-import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { getTenantActiveAgentId, getTenantFromLocalStorage, getTenantIdentifier } from '@meaku/core/utils/index';
 import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
 import { trackError } from '@meaku/core/utils/error';
 import toast from 'react-hot-toast';
@@ -36,7 +35,7 @@ const EntryPointsPage = () => {
   const subHeading =
     'Set up conversation starters that guide users toward meaningful interactions. Customize each element by clicking on any editable field.';
 
-  const embedCode = `<script src="https://script.getbreakout.ai/chat_widget.js" tenant-id="${tenantName}" agent-id="${agentId}" async ></script>`;
+  const embedCode = `<script src="https://script.getbreakout.ai/command_bar_widget.js" tenant-id="${tenantName}" agent-id="${agentId}" async ></script>`;
 
   // State for form values
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
