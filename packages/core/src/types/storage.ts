@@ -5,6 +5,7 @@ export interface TenantStorageData {
   agentId?: string;
   distinctId?: string;
   prospect_info_collected?: boolean;
+  tenantName?: string;
 }
 
 export interface StorageData {

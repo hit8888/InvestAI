@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useEffect } from 'react';
+import { type FC, type ReactNode, useCallback, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 
 import type { CommandBarSettings } from '@meaku/core/types/common';
@@ -10,6 +10,7 @@ import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalytics
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useStyleConfig from '../hooks/useStyleConfig';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
+import { ConfigurationApiResponse } from '@meaku/core/index';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -32,38 +33,49 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       agentId: initialSettings.agent_id,
     },
     {
-      enabled: !!initialSettings.tenant_id && !!initialSettings.agent_id,
+      enabled: !getLocalStorageData()?.prospectId,
     },
   );
 
-  useEffect(() => {
-    const storageData = getLocalStorageData();
-
-    if (!storageData) {
-      setLocalStorageData({
-        distinctId: nanoid(),
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (staticConfigQuery.data) {
-      const { prospectId, sessionId, distinctId } = getLocalStorageData() ?? {};
+  const initialiseCommandBar = useCallback(
+    (initialConfig: ConfigurationApiResponse = {} as ConfigurationApiResponse) => {
+      const { prospectId, sessionId, distinctId, tenantName: storageTenantName } = getLocalStorageData() ?? {};
+      const tenantName = initialConfig.org_name ?? storageTenantName;
 
       setConfig({
-        ...staticConfigQuery.data,
+        ...initialConfig,
         session_id: sessionId,
         prospect_id: prospectId,
       });
       updateCommonProperties({
-        tenant_name: staticConfigQuery.data.org_name,
+        tenant_name: tenantName,
         session_id: sessionId,
         prospect_id: prospectId,
         distinct_id: distinctId,
       });
+      setLocalStorageData({ tenantName });
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.PAGE_LOAD);
+    },
+    [setConfig, trackEvent, updateCommonProperties],
+  );
+
+  useEffect(() => {
+    const { prospectId } = getLocalStorageData() ?? {};
+
+    if (!prospectId) {
+      setLocalStorageData({
+        distinctId: nanoid(),
+      });
+    } else {
+      initialiseCommandBar();
     }
-  }, [staticConfigQuery.data, setConfig, trackEvent, updateCommonProperties]);
+  }, [initialiseCommandBar]);
+
+  useEffect(() => {
+    if (staticConfigQuery.data) {
+      initialiseCommandBar(staticConfigQuery.data);
+    }
+  }, [staticConfigQuery.data, initialiseCommandBar]);
 
   useEffect(() => {
     if (initialSettings) {
@@ -75,7 +87,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
 
   useStyleConfig({ styleConfig: config?.style_config });
 
-  if (staticConfigQuery.isSuccess && !!config.command_bar) {
+  if (staticConfigQuery.isSuccess || config.prospect_id) {
     return children;
   }
 

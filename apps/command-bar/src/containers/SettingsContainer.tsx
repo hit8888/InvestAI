@@ -16,7 +16,7 @@ type CamelCase<T> = {
 type WebComponentAttributes = CamelCase<CommandBarSettings>;
 
 export type SettingsContainerProps = {
-  children: (settings: CommandBarSettings) => ReactElement;
+  children: (settings: CommandBarSettings) => ReactElement | null;
 } & Partial<WebComponentAttributes>;
 
 const SettingsContainer: FC<SettingsContainerProps> = ({

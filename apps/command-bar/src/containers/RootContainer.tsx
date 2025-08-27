@@ -18,16 +18,18 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
     <ShadowRootProvider hostId={hostId}>
       <QueryClientProvider client={defaultQueryClient}>
         <SettingsContainer {...propSettings}>
-          {(settings) => (
-            <CommandBarAnalyticsProvider
-              initialProperties={{
-                agent_id: settings.agent_id,
-                page_url: settings.parent_url,
-              }}
-            >
-              <PreloadContainer settings={settings}>{children}</PreloadContainer>
-            </CommandBarAnalyticsProvider>
-          )}
+          {(settings) =>
+            settings.agent_id && settings.tenant_id ? (
+              <CommandBarAnalyticsProvider
+                initialProperties={{
+                  agent_id: settings.agent_id,
+                  page_url: settings.parent_url,
+                }}
+              >
+                <PreloadContainer settings={settings}>{children}</PreloadContainer>
+              </CommandBarAnalyticsProvider>
+            ) : null
+          }
         </SettingsContainer>
         <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       </QueryClientProvider>

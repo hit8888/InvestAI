@@ -12,7 +12,6 @@ import { useCommandBarStore } from '@meaku/shared/stores';
 import { Nudge } from '@meaku/shared/features';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
-import useDelayedQuery from '@meaku/core/hooks/useDelayedQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
 import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics/index';
@@ -30,14 +29,10 @@ function App() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
-  const { modules = [], ui, dynamic_config_start_delay_ms = 5000 } = config.command_bar ?? {};
+  const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
-  const dynamicConfigEnabled = useDelayedQuery(dynamic_config_start_delay_ms);
-  const dynamicConfigQuery = useDynamicConfigDataQuery(
-    { nudge_disabled: !!activeFeature },
-    { enabled: dynamicConfigEnabled },
-  );
+  const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
     {},
     { enabled: !!activeFeature || !!config.session_id || !!settings.message },
@@ -93,8 +88,9 @@ function App() {
     if (dynamicConfigQuery.data) {
       const prospectId = dynamicConfigQuery.data.prospect_id ?? config.prospect_id;
       const sessionId = dynamicConfigQuery.data.session_id ?? config.session_id;
+      const tenantName = dynamicConfigQuery.data.org_name;
 
-      setLocalStorageData({ prospectId, sessionId });
+      setLocalStorageData({ prospectId, sessionId, tenantName });
       setConfig(dynamicConfigQuery.data);
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.COMMAND_BAR_LOAD, {
         session_id: sessionId,
@@ -160,7 +156,7 @@ function App() {
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <div key="root-content" className="flex items-end gap-4">
-        {dynamicConfigQuery?.isFetched && (
+        {dynamicConfigQuery?.isFetched && nudgeConfig && (
           <Nudge activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
         )}
         <FeatureContentContainer
