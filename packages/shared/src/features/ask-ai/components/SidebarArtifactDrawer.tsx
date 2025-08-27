@@ -31,19 +31,18 @@ export const SidebarArtifactDrawer = ({
   onPlayPauseToggle,
   onClose,
 }: SidebarArtifactDrawerProps) => {
+  if (!artifact) return null;
   return (
     <SideDrawer isOpen={isOpen} targetRef={targetRef} side="left" onClose={onClose}>
       <div className="h-full w-full overflow-hidden" style={{ width: `${calculatedWidth}px` }}>
-        {artifact && (
-          <SidebarArtifactContent
-            artifact={artifact}
-            currentVideo={currentVideo}
-            videoError={videoError}
-            videoRef={videoRef}
-            onPlayPauseToggle={onPlayPauseToggle}
-            onClose={onClose}
-          />
-        )}
+        <SidebarArtifactContent
+          artifact={artifact}
+          currentVideo={currentVideo}
+          videoError={videoError}
+          videoRef={videoRef}
+          onPlayPauseToggle={onPlayPauseToggle}
+          onClose={onClose}
+        />
       </div>
     </SideDrawer>
   );
