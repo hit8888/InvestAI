@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/breakout-command-bar/wc' : '/',
+  base: process.env.NODE_ENV === 'production' ? process.env.VITE_COMMAND_BAR_BASE_URL : '/',
   plugins: [
     react(),
     ...(process.env.VITE_SENTRY_AUTH_TOKEN

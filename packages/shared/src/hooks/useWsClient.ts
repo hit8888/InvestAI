@@ -6,6 +6,7 @@ import { getUserMessage } from '../utils/chat-utils';
 import { jsonSafeParse } from '@meaku/core/utils/index';
 import { ENV } from '../constants/env';
 import WebSocketClient from '@meaku/core/networkClients/wsClient/wsClient';
+import { useIncomingMessageSound } from './useIncomingMessageSound';
 
 export const wsClient = new WebSocketClient(`${ENV.VITE_BASE_WS_URL}/ws/chat`, {
   heartbeat: {
@@ -14,8 +15,9 @@ export const wsClient = new WebSocketClient(`${ENV.VITE_BASE_WS_URL}/ws/chat`, {
 });
 
 export const useWsClient = () => {
-  const { addMessage, updateSuggestedQuestions } = useCommandBarStore();
+  const { addMessage, updateSuggestedQuestions, isMessageRenderable } = useCommandBarStore();
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
+  const { playSoundForMessage } = useIncomingMessageSound();
 
   const initialiseSocket = async (sessionId: string, tenantId: string) => {
     if (!sessionId || !tenantId) {
@@ -43,6 +45,10 @@ export const useWsClient = () => {
 
       if (data) {
         addMessage(data);
+
+        if (isMessageRenderable(data)) {
+          playSoundForMessage(data.response_id);
+        }
       }
     };
 

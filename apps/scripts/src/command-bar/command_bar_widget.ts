@@ -28,7 +28,7 @@ import { env } from "../env";
   const webComponentManager = WebComponentManager();
 
   const initializeWidget = async (): Promise<void> => {
-    const webComponentUrl = env.COMMAND_BAR_BASE_URL;
+    const webComponentUrl = `${env.COMMAND_BAR_BASE_URL}/${env.COMMAND_BAR_TAG_NAME}.js`;
     const tagName = env.COMMAND_BAR_TAG_NAME;
 
     if (!webComponentUrl || !tagName) {
