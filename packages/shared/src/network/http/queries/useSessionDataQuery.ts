@@ -25,6 +25,8 @@ const useSessionDataQuery = (
       const response = await initializeSession(settings.agent_id, {
         session_id: config.session_id,
         prospect_id: config.prospect_id,
+        is_test: settings.is_test,
+        is_admin: settings.is_admin,
         ...payload,
       });
       return response.data;

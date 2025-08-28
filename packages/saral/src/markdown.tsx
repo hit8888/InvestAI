@@ -1,6 +1,30 @@
 import ReactMarkdown, { Components, Options } from 'react-markdown';
 import gfm from 'remark-gfm';
 
+const MessageH1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h1 className="mb-2 text-2xl font-semibold text-foreground" {...props} />
+);
+
+const MessageH2 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h2 className="mb-2 text-xl font-semibold text-foreground" {...props} />
+);
+
+const MessageH3 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h3 className="mb-2 text-lg font-semibold text-foreground" {...props} />
+);
+
+const MessageH4 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h4 className="mb-2 text-base font-semibold text-foreground" {...props} />
+);
+
+const MessageH5 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h5 className="mb-2 text-sm font-semibold text-foreground" {...props} />
+);
+
+const MessageH6 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h6 className="mb-2 text-xs font-semibold text-foreground" {...props} />
+);
+
 const MessageLink = (props: React.LinkHTMLAttributes<HTMLAnchorElement>) => (
   <a className="text-link break-all underline" {...props} target="_blank" rel="noreferrer" />
 );
@@ -53,6 +77,12 @@ const MessageTd = (props: React.TdHTMLAttributes<HTMLTableCellElement>) => (
 );
 
 const reactMarkdownComponents: Partial<Components> = {
+  h1: MessageH1,
+  h2: MessageH2,
+  h3: MessageH3,
+  h4: MessageH4,
+  h5: MessageH5,
+  h6: MessageH6,
   a: MessageLink,
   strong: MessageStrong,
   li: MessageListItem,

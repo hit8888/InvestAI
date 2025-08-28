@@ -29,6 +29,8 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
   endTime: propEndTime,
   sessionId: propSessionId,
   bc: propBc,
+  isAdmin: propIsAdmin,
+  isTest: propIsTest,
 }) => {
   const settings = useMemo((): CommandBarSettings => {
     const urlParams = getUrlParams();
@@ -44,8 +46,21 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
       session_id: urlParams.session_id ?? propSessionId,
       browsed_urls: jsonSafeParse(urlParams.browsed_urls).data,
       bc: jsonSafeParse(urlParams.bc).data ?? propBc,
+      is_test: jsonSafeParse(urlParams.is_test).data ?? propIsTest ?? false,
+      is_admin: jsonSafeParse(urlParams.is_admin).data ?? propIsAdmin ?? false,
     };
-  }, [propTenantId, propAgentId, propVisible, propMessage, propStartTime, propEndTime, propSessionId, propBc]);
+  }, [
+    propTenantId,
+    propAgentId,
+    propVisible,
+    propMessage,
+    propStartTime,
+    propEndTime,
+    propSessionId,
+    propBc,
+    propIsAdmin,
+    propIsTest,
+  ]);
 
   return children(settings);
 };

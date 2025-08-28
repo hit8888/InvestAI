@@ -94,4 +94,6 @@ export interface CommandBarSettings {
   session_id?: string;
   browsed_urls?: BrowsedUrl[];
   bc?: boolean;
+  is_test?: boolean;
+  is_admin?: boolean;
 }
