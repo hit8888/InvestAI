@@ -6,7 +6,7 @@ import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles
 import { useMessageStore } from '../../hooks/useMessageStore';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { LogOut, LoaderCircle } from 'lucide-react';
+import { LogOut, LoaderCircle, ArrowLeft, Plus } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
 import { AdminConversationJoinStatus } from '@meaku/core/types/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
@@ -44,12 +44,25 @@ export const JoinButtons = ({ status, onJoin, onClose }: JoinButtonsProps) => {
   const isPending = status === AdminConversationJoinStatus.PENDING;
 
   return (
-    <div className="flex gap-2">
-      <Button onClick={onJoin} variant="primary" size="small" disabled={isPending} className="h-9 w-14">
-        {isPending ? <LoaderCircle size={16} className="animate-spin" /> : 'Join'}
+    <div className="flex gap-4">
+      <Button
+        onClick={onClose}
+        variant="destructive_secondary"
+        buttonStyle="leftIcon"
+        className="font-normal"
+        leftIcon={<ArrowLeft size={16} />}
+      >
+        Back to All Chats
       </Button>
-      <Button onClick={onClose} variant="destructive_secondary" size="small">
-        Close
+      <Button
+        onClick={onJoin}
+        variant="primary"
+        disabled={isPending}
+        buttonStyle="rightIcon"
+        className="font-normal"
+        rightIcon={isPending ? <LoaderCircle size={16} className="animate-spin" /> : <Plus size={16} />}
+      >
+        {isPending ? 'Joining...' : 'Join Conversation'}
       </Button>
     </div>
   );
@@ -155,7 +168,7 @@ const AdminChatInput = ({
   const tooltipText = isGeneratingAIResponse ? 'Drafting AI response...' : 'Let AI draft a reply';
 
   return (
-    <div className="flex w-full items-center gap-4">
+    <div className="flex w-full items-center gap-4 p-2 pt-0">
       <div className={cn('flex flex-grow items-center gap-3 rounded-xl border border-gray-300 bg-white p-3')}>
         {!disabled && (
           <TooltipWrapperDark

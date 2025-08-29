@@ -33,13 +33,9 @@ const JoinConversationBottomBar = ({
         return <JoinConversationDenied />;
       default:
         return (
-          <AdminChatInput
-            disabled
-            onSendMessage={onSendMessage}
-            onAIResponseGenerationRequest={onAIResponseGenerationRequest}
-          >
+          <div className="flex w-full items-center justify-center rounded-b-3xl border-t border-gray-200 bg-gray-25 p-2.5">
             <JoinButtons status={sessionStatus} onJoin={onJoinButtonClick} onClose={onClose} />
-          </AdminChatInput>
+          </div>
         );
     }
   };

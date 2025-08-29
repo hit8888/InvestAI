@@ -607,6 +607,13 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         'QUALIFICATION_FORM_FILLED',
         'CALENDAR_SUBMIT',
       ];
+
+      const ADMIN_SESSION_EVENTS = ['JOIN_SESSION', 'LEAVE_SESSION', 'ADMIN_RESPONSE', 'ADMIN_TYPING'];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (ADMIN_SESSION_EVENTS.includes((message as any).message?.event_type)) {
+        return true;
+      }
+
       return renderableTypes.includes(message.event_type);
     },
 

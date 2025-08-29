@@ -9,8 +9,11 @@ export const AdminSessionHeader: React.FC<AdminSessionHeaderProps> = ({ hasActiv
   if (!hasActiveAdminSession) return null;
 
   return (
-    <div className="sticky top-0 z-10 rounded-t-xl bg-background p-4 pb-1">
-      <Typography variant="body" className="text-center border border-primary p-3 rounded-xl">
+    <div className="sticky top-0 z-10 rounded-t-xl bg-background p-2 flex justify-center">
+      <Typography
+        variant="body"
+        className="text-center font-medium border bg-primary/10 rounded-xl max-w-md px-4 py-1 text-primary"
+      >
         Your Request is Being Handled by Our Expert
       </Typography>
     </div>

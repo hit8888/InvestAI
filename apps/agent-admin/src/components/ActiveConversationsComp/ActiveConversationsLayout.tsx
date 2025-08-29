@@ -20,6 +20,7 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
+import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
@@ -83,6 +84,22 @@ const ActiveConversationsLayout = () => {
     setIsGeneratingAIResponse,
   } = useJoinConversationStore();
 
+  // Initialize admin session cleanup hook with comprehensive cleanup handling
+  // This handles ALL scenarios where admin can leave without proper cleanup:
+  // 1. Browser tab close/refresh (beforeunload event)
+  // 2. Navigation away from session URL (popstate/route change)
+  // 3. Component unmount (React cleanup)
+  // 4. Explicit drawer close (user interaction)
+  // 5. Explicit exit button (user interaction)
+  const { handleExitConversation, handleCloseConversationDrawer } = useAdminSessionCleanup({
+    currentConversation,
+    sendMessageFnMap,
+    updateSessionStatus,
+    setCurrentConversation,
+    createLeaveSessionEvent,
+    sessionsStatus,
+  });
+
   const pinnedConversations = useMemo(() => {
     if (!activeConversations) return [];
     return activeConversations.filter((conversation) => pinnedSessionIds.includes(conversation.session_id));
@@ -132,34 +149,12 @@ const ActiveConversationsLayout = () => {
     }
   }, [currentConversation]);
 
-  const handleExitConversation = () => {
-    const sessionId = currentConversation?.session_id;
-
-    if (sessionId) {
-      const sendMessage = sendMessageFnMap[sessionId];
-
-      sendMessage({
-        message: createLeaveSessionEvent('', {}),
-        message_type: 'EVENT',
-      });
-
-      updateSessionStatus(sessionId, AdminConversationJoinStatus.EXIT);
-      setCurrentConversation(null);
-      navigate('/active-conversations');
-    }
-  };
-
   const handleCardClick = (conversation: ActiveConversation) => {
     navigate(`/active-conversations/live/${conversation.session_id}`);
 
     if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
       updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
     }
-  };
-
-  const handleCloseJoinConversationDrawer = () => {
-    setCurrentConversation(null);
-    navigate('/active-conversations');
   };
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {
@@ -299,7 +294,7 @@ const ActiveConversationsLayout = () => {
               onSendMessage={handleSendMessage}
               onExitConversation={handleExitConversation}
               onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
-              onClose={handleCloseJoinConversationDrawer}
+              onClose={handleCloseConversationDrawer}
             />
           ) : null}
         </div>

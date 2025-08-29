@@ -94,7 +94,7 @@ const JoinConversationDrawer = ({
           <div className="hidden" />
         </PopoverTrigger>
         <PopoverContent
-          className="z-50 m-2 h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] rounded-2xl border-none bg-primary-foreground p-2 shadow-none outline-none"
+          className="z-50 m-2 h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] rounded-2xl border-none bg-primary-foreground shadow-none outline-none"
           side="bottom"
           align="center"
           sideOffset={0}

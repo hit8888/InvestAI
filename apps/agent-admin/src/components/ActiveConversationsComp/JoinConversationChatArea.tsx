@@ -62,7 +62,7 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
   }
 
   return (
-    <div className="flex w-full grow overflow-hidden">
+    <div className="flex w-full grow overflow-hidden p-2 pb-0">
       <div className={cn('flex h-full w-full flex-1 gap-2 overflow-hidden')}>
         {messages?.length ? (
           <AgentMessages
