@@ -66,11 +66,19 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       setLocalStorageData({
         distinctId: nanoid(),
       });
-    } else {
+    }
+  }, []);
+
+  // Initialise command bar if prospect id already exists
+  useEffect(() => {
+    const { prospectId } = getLocalStorageData() ?? {};
+
+    if (prospectId && !config.prospect_id) {
       initialiseCommandBar();
     }
-  }, [initialiseCommandBar]);
+  }, [config.prospect_id, initialiseCommandBar]);
 
+  // Initialise command bar after static config is available (prospect id does not exist)
   useEffect(() => {
     if (staticConfigQuery.data) {
       initialiseCommandBar(staticConfigQuery.data);
