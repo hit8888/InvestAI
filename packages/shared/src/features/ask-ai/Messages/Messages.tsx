@@ -25,6 +25,7 @@ interface MessagesProps {
     profilePicture?: string | null;
   } | null;
   hasActiveAdminSession?: boolean;
+  isExpanded?: boolean;
 }
 
 export const Messages = ({
@@ -39,6 +40,7 @@ export const Messages = ({
   clearSuggestedQuestionsIfDiscoveryShown,
   adminSessionInfo,
   hasActiveAdminSession = false,
+  isExpanded = false,
 }: MessagesProps) => {
   // Clear suggested questions if discovery questions are shown
   React.useEffect(() => {
@@ -60,12 +62,13 @@ export const Messages = ({
 
   // Use custom hooks for different concerns
   const { containerRef, containerHeight } = useContainerHeight(renderableMessages.length);
-  const { scrollContainerRef, lastMessageMarkerRef, showDownArrow, handleScrollPosition, scrollToBottomHandler } =
+  const { scrollContainerRef, lastMessageMarkerRef, showDownArrow, handleScroll, scrollToBottomHandler } =
     useScrollManagement({
       groupedMessagesLength: groupedMessages.length,
       hasActiveAdminSession,
       renderableMessagesLength: renderableMessages.length,
       isAdminTyping,
+      isStreaming,
     });
   const {
     filledFormArtifactIds,
@@ -86,7 +89,7 @@ export const Messages = ({
           }
         `}
       </style>
-      <div className="h-full overflow-y-auto" ref={scrollContainerRef} onScroll={handleScrollPosition}>
+      <div className="h-full overflow-y-auto" ref={scrollContainerRef} onScroll={handleScroll}>
         <AdminSessionHeader hasActiveAdminSession={hasActiveAdminSession} />
         <div className="flex h-full flex-col gap-6 p-3">
           {groupedMessages.map((messageGroup, groupIndex) => {
@@ -115,6 +118,7 @@ export const Messages = ({
                 isLoading={isLoading}
                 isAdminTyping={isAdminTyping}
                 lastMessageMarkerRef={lastMessageMarkerRef}
+                isExpanded={isExpanded}
                 shouldShowSessionIndicator={shouldShowIndicator}
               />
             );
@@ -131,11 +135,7 @@ export const Messages = ({
                   transition: 'min-height 0.3s ease-in-out',
                 }}
               >
-                <SuggestedQuestions
-                  suggestedQuestions={suggestedQuestions}
-                  sendUserMessage={sendUserMessage}
-                  showTryAsking={true}
-                />
+                <SuggestedQuestions suggestedQuestions={suggestedQuestions} sendUserMessage={sendUserMessage} />
               </div>
             )}
         </div>

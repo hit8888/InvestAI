@@ -8,8 +8,8 @@ export const checkScrollPosition = (
   const scrollHeight = scrollContainer.scrollHeight;
   const clientHeight = scrollContainer.clientHeight;
 
-  // Show arrow if there's more content below (within 10px threshold)
-  const hasMoreContent = scrollTop + clientHeight < scrollHeight - 10;
+  // Show arrow if there's more content below (within 2px threshold for very responsive detection)
+  const hasMoreContent = scrollTop + clientHeight < scrollHeight - 2;
   setShowDownArrow(hasMoreContent);
 };
 

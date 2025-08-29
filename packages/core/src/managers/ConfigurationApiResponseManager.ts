@@ -23,6 +23,10 @@ export class ConfigurationApiResponseManager {
     return this.config.logo;
   }
 
+  getCoverImageUrl() {
+    return this.config.cover_image;
+  }
+
   getDefaultErrorMessage() {
     return this.config.body.default_error_message;
   }

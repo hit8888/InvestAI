@@ -1,13 +1,18 @@
 import { Button, Icons } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
+import { useEffect, useRef } from 'react';
+import { Typography } from '@meaku/saral';
 
 interface VideoArtifactProps {
   title: string;
   url: string;
+  isLatestMessage?: boolean;
+  isExpanded?: boolean;
 }
 
-export const VideoArtifact = ({ title, url }: VideoArtifactProps) => {
-  const { currentVideo, openSidebar, toggleVideoPlayPause } = useSidebarArtifactContext();
+export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: VideoArtifactProps) => {
+  const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady } = useSidebarArtifactContext();
+  const hasAutoOpened = useRef(false);
 
   const cleanUrl = (url: string): string => {
     return url.replace(/^@+/, '');
@@ -17,7 +22,21 @@ export const VideoArtifact = ({ title, url }: VideoArtifactProps) => {
   // Check if this specific video is currently open and playing
   const isThisVideoPlaying = currentVideo?.url === cleanedUrl && currentVideo?.isPlaying;
 
+  // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
+  // Disable auto-opening when Ask AI is in expanded mode
+  useEffect(() => {
+    if (cleanedUrl && !currentVideo && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded) {
+      hasAutoOpened.current = true;
+      openSidebar(cleanedUrl, 'VIDEO', title, false);
+    }
+  }, [cleanedUrl, title, currentVideo, isLatestMessage, isContainerReady, isExpanded, openSidebar]);
+
   const handleButtonClick = () => {
+    // Disable sidebar functionality when Ask AI is in expanded mode
+    if (isExpanded) {
+      return;
+    }
+
     if (currentVideo?.url === cleanedUrl) {
       // If this video is currently open, toggle play/pause
       toggleVideoPlayPause();
@@ -35,6 +54,25 @@ export const VideoArtifact = ({ title, url }: VideoArtifactProps) => {
     return null;
   }
 
+  // When expanded, render video inline without sidebar functionality
+  if (isExpanded) {
+    return (
+      <div className="w-full">
+        <div className="flex flex-col border rounded-xl overflow-hidden w-full">
+          <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3 flex-shrink-0">
+            <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
+              {title}
+            </Typography>
+          </div>
+          <div className="w-full overflow-hidden">
+            <video src={cleanedUrl} controls className="w-full h-auto max-w-full object-contain" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Normal sidebar mode - render play button
   return (
     <div className="w-full">
       <Button

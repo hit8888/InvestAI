@@ -63,6 +63,16 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
                   // If there are form events between, treat this as a new stream (priority 1)
                   return 1;
                 }
+
+                // Check if this is the same stream content being updated (same content, different is_complete)
+                const previousStream = group[previousStreamIndex];
+                const previousContent = (previousStream.event_data as { content?: string })?.content;
+                const currentContent = (message.event_data as { content?: string })?.content;
+
+                if (previousContent === currentContent) {
+                  // Same content, different is_complete - treat as same stream, use same priority
+                  return 1;
+                }
               }
             }
 
@@ -79,7 +89,11 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
               'GENERATING_ARTIFACT',
             ].includes(message.event_type)
           ) {
-            return 2; // Artifacts = 2
+            // Video and image artifacts should appear immediately after text content
+            if (message.event_type === 'VIDEO_ARTIFACT' || message.event_type === 'SLIDE_IMAGE_ARTIFACT') {
+              return 1.5; // Between first stream (1) and other artifacts (2)
+            }
+            return 2; // Other artifacts = 2
           }
 
           // Qualification questions
@@ -101,12 +115,12 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
       const orderA = getMessageOrder(a);
       const orderB = getMessageOrder(b);
 
-      // If orders are different, sort by order
+      // First sort by priority order
       if (orderA !== orderB) {
         return orderA - orderB;
       }
 
-      // If orders are the same, maintain chronological order
+      // Then sort by timestamp for consistent ordering
       return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
     });
   });

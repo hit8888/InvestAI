@@ -1,10 +1,10 @@
 import { SideDrawer } from '@meaku/saral';
 import { SidebarArtifactContent } from './SidebarArtifactContent';
+import { RefObject } from 'react';
 
 interface SidebarArtifactDrawerProps {
+  targetRef: RefObject<HTMLDivElement | null>;
   isOpen: boolean;
-  targetRef: React.RefObject<HTMLElement | null>;
-  calculatedWidth: number;
   artifact: {
     url: string;
     artifactType: 'VIDEO' | 'SLIDE_IMAGE';
@@ -15,26 +15,27 @@ interface SidebarArtifactDrawerProps {
     isPlaying: boolean;
   } | null;
   videoError: string | null;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  videoRef: RefObject<HTMLVideoElement | null>;
   onPlayPauseToggle: () => void;
   onClose: () => void;
+  onVideoError?: (error: string) => void;
 }
 
 export const SidebarArtifactDrawer = ({
+  targetRef,
   isOpen,
-  calculatedWidth,
   artifact,
   currentVideo,
   videoError,
   videoRef,
-  targetRef,
   onPlayPauseToggle,
   onClose,
+  onVideoError,
 }: SidebarArtifactDrawerProps) => {
   if (!artifact) return null;
   return (
     <SideDrawer isOpen={isOpen} targetRef={targetRef} side="left" onClose={onClose}>
-      <div className="h-full w-full overflow-hidden" style={{ width: `${calculatedWidth}px` }}>
+      <div className="h-full w-full overflow-hidden">
         <SidebarArtifactContent
           artifact={artifact}
           currentVideo={currentVideo}
@@ -42,6 +43,7 @@ export const SidebarArtifactDrawer = ({
           videoRef={videoRef}
           onPlayPauseToggle={onPlayPauseToggle}
           onClose={onClose}
+          onVideoError={onVideoError}
         />
       </div>
     </SideDrawer>

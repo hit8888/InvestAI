@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { Icons, KatyIcon, ImageWithFallback } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
@@ -33,12 +33,13 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   const {
     sideBarArtifact,
     isSideDrawerOpen,
-    calculatedWidth,
     currentVideo,
     videoError,
     videoRef,
     closeSidebar,
     toggleVideoPlayPause,
+    handleVideoError,
+    setContainerReady,
   } = useSidebarArtifactContext();
 
   const askaiConfig = useMemo(
@@ -80,11 +81,41 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
 
   const targetRef = useRef<HTMLDivElement>(null);
 
+  // Callback to set container ready when the ref is attached to the DOM element
+  const containerRefCallback = useCallback(
+    (node: HTMLDivElement | null) => {
+      // Update the stable ref
+      targetRef.current = node;
+
+      if (node) {
+        // Use requestAnimationFrame to ensure the element is fully rendered and positioned
+        requestAnimationFrame(() => {
+          setContainerReady(true);
+        });
+      }
+    },
+    [setContainerReady],
+  );
+
+  // Use useLayoutEffect as a fallback to ensure container is ready after DOM updates
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      setContainerReady(true);
+    }
+  }, [setContainerReady]);
+
+  // Close sidebar when switching to expanded mode
+  useEffect(() => {
+    if (isExpanded && isSideDrawerOpen) {
+      closeSidebar();
+    }
+  }, [isExpanded, isSideDrawerOpen, closeSidebar]);
+
   return (
     <div
       className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
-      style={{ height: 'min(100vh, 680px)' }}
-      ref={targetRef}
+      style={{ height: 'min(100vh, 730px)' }}
+      ref={containerRefCallback}
     >
       <FeatureHeader
         title={
@@ -114,6 +145,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         isExpanded={isExpanded}
         ctas={shouldBookMeetingCTAButtonShow && Boolean(sessionData) ? (askaiConfig?.ctas ?? []) : []}
         sendUserMessage={sendUserMessage}
+        coverImage={config?.cover_image || undefined}
       />
       <div className="h-10 w-full flex-1  p-2 pt-0">
         <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
@@ -128,13 +160,13 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
             <SidebarArtifactDrawer
               targetRef={targetRef}
               isOpen={isSideDrawerOpen}
-              calculatedWidth={calculatedWidth}
               artifact={sideBarArtifact}
               currentVideo={currentVideo}
               videoError={videoError}
               videoRef={videoRef}
               onPlayPauseToggle={toggleVideoPlayPause}
               onClose={closeSidebar}
+              onVideoError={handleVideoError}
             />
             <Messages
               sendUserMessage={sendUserMessage}
@@ -148,6 +180,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               clearSuggestedQuestionsIfDiscoveryShown={clearSuggestedQuestionsIfDiscoveryShown}
               adminSessionInfo={adminSessionInfo}
               hasActiveAdminSession={hasActiveAdminSession}
+              isExpanded={isExpanded}
             />
           </div>
           <AskAiInput

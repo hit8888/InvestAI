@@ -182,27 +182,32 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           const isComplete = streamData?.is_complete === true;
           const isStreaming = streamData?.is_complete === false;
 
-          // Find existing stream message for this response_id
-          const existingStreamIndex = updatedMessages.findIndex(
-            (msg) => msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE,
-          );
+          // Find existing stream message for this response_id where new message contains old message content
+          const newStreamData = newMessage.event_data as StreamResponseEventData;
+          const newStreamContent = newStreamData?.content || '';
+
+          const existingStreamIndex = updatedMessages.findIndex((msg) => {
+            if (msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE) {
+              const existingStreamData = msg.event_data as StreamResponseEventData;
+              const existingContent = existingStreamData?.content || '';
+
+              // Check if new message contains the old message content (incremental update)
+              return newStreamContent.includes(existingContent) && existingContent.length > 0;
+            }
+            return false;
+          });
 
           if (existingStreamIndex !== -1) {
-            // Check if there's a form-related event between the existing stream and now
-            const messagesAfterExistingStream = updatedMessages.slice(existingStreamIndex + 1);
-            const hasFormFilledBetween = messagesAfterExistingStream.some(
-              (msg) =>
-                (msg.event_type === 'FORM_FILLED' ||
-                  msg.event_type === 'QUALIFICATION_FORM_FILLED' ||
-                  msg.event_type === 'CALENDAR_SUBMIT') &&
-                msg.response_id === newMessage.response_id,
-            );
+            // Check if the existing stream response is already complete
+            const existingStream = updatedMessages[existingStreamIndex];
+            const existingStreamData = existingStream.event_data as StreamResponseEventData;
+            const isExistingStreamComplete = existingStreamData?.is_complete === true;
 
-            if (hasFormFilledBetween) {
-              // Don't replace - add as new message if there's a form filled event between
+            if (isExistingStreamComplete) {
+              // If the existing stream is complete, add as new message
               updatedMessages.push(newMessage);
             } else {
-              // Replace existing stream message
+              // Replace existing stream message if it's not complete
               updatedMessages[existingStreamIndex] = {
                 ...newMessage,
                 timestamp: updatedMessages[existingStreamIndex].timestamp, // Preserve original timestamp
@@ -234,8 +239,16 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
 
         // Handle artifacts - hold them if streaming, otherwise add to messages
         if (isArtifact) {
-          if (state.isStreaming) {
-            // Hold artifact during streaming
+          // Check if there's an incomplete stream for this response_id
+          const hasIncompleteStream = updatedMessages.some(
+            (msg) =>
+              msg.response_id === newMessage.response_id &&
+              msg.event_type === MessageEventType.STREAM_RESPONSE &&
+              (msg.event_data as StreamResponseEventData)?.is_complete === false,
+          );
+
+          if (state.isStreaming || hasIncompleteStream) {
+            // Hold artifact during streaming or if there's an incomplete stream
             updatedPendingArtifacts.push(newMessage);
 
             return {
@@ -243,7 +256,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
               isLoading: false, // Turn off loading as soon as any artifact event arrives
             };
           } else {
-            // Add artifact to messages if not streaming
+            // Add artifact to messages if not streaming and no incomplete stream
             updatedMessages.push(newMessage);
 
             // Apply grouping and ordering logic
@@ -304,16 +317,18 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
 
           // Clear suggested questions when user sends a message (they'll be set again if the response has them)
           // Don't set loading for FORM_FILLED events as they are responses to existing artifacts
+          // Always set loading for BOOK_MEETING events to show wave loader
           const shouldSetLoading =
-            newMessage.event_type !== 'FORM_FILLED' &&
-            newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
-            newMessage.event_type !== 'CALENDAR_SUBMIT';
+            newMessage.event_type === 'BOOK_MEETING' ||
+            (newMessage.event_type !== 'FORM_FILLED' &&
+              newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
+              newMessage.event_type !== 'CALENDAR_SUBMIT');
 
           return {
             messages: orderedMessages,
             pendingArtifacts: updatedPendingArtifacts,
             suggestedQuestions: [], // Clear suggestions when user sends a message
-            isLoading: shouldSetLoading, // Only set loading for non-form-filled user messages
+            isLoading: shouldSetLoading, // Set loading for BOOK_MEETING and non-form-filled user messages
           };
         }
 
@@ -581,6 +596,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         'TEXT_RESPONSE',
         'STREAM_RESPONSE',
         'SUGGESTED_QUESTION_CLICKED',
+        'BOOK_MEETING',
         'VIDEO_ARTIFACT',
         'SLIDE_IMAGE_ARTIFACT',
         'FORM_ARTIFACT',
@@ -625,8 +641,8 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
             return isInLastGroup && shouldShowDiscovery;
           }
 
-          // Show all other messages
-          return true;
+          // Show all other messages that are renderable
+          return state.isMessageRenderable(message);
         });
 
         // Re-apply grouping and ordering to preserve the correct order
@@ -647,9 +663,9 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           'QUALIFICATION_FORM_ARTIFACT',
         ];
 
-        // Keep all non-artifact messages
+        // Keep all renderable messages that are not artifacts
         if (!artifactTypes.includes(message.event_type)) {
-          return true;
+          return state.isMessageRenderable(message);
         }
 
         // Filter out artifacts during streaming

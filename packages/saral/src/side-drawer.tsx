@@ -26,7 +26,7 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   contentClassName,
   animationDuration = 300,
   offset = 0,
-  maxWidth = 800, // Default max width for media display
+  maxWidth = 1000, // Default max width for media display
   minWidth = 400, // Increased minimum width for better usability
 }) => {
   const [mounted, setMounted] = useState(false);
@@ -45,15 +45,14 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
 
     // Use maximum available height, leaving some margin for better UX
     const maxDrawerHeight = viewportHeight - 32; // 16px margin top and bottom
-    const drawerHeight = Math.min(targetRect.height - 124, maxDrawerHeight);
+    const drawerHeight = Math.min(targetRect.height, maxDrawerHeight);
 
-    // Align drawer bottom with target element bottom, but ensure it fits in viewport
-    let top = targetRect.bottom - drawerHeight;
+    // Align drawer top with target element top, but ensure it fits in viewport
+    let top = targetRect.top;
 
     // Ensure drawer doesn't go below viewport
-    const maxTop = viewportHeight - drawerHeight;
-    if (top > maxTop) {
-      top = maxTop;
+    if (top + drawerHeight > viewportHeight) {
+      top = viewportHeight - drawerHeight - 16;
     }
 
     // Ensure drawer doesn't go above viewport

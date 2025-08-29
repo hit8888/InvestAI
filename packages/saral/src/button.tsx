@@ -14,7 +14,7 @@ const buttonVariants = cva(
         outline: 'shadow-action-btn text-foreground bg-background hover:bg-backgroundLight hover:text-actionBtnIcon',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
-          'bg-muted text-muted-foreground hover:bg-muted/20 hover:muted-foreground/50 hover:shadow-md hover:border transition-all',
+          'bg-muted text-muted-foreground hover:bg-muted/90 hover:muted-foreground/90 hover:shadow-md hover:border transition-all',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {

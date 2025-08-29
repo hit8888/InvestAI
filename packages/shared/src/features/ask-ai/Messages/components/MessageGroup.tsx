@@ -35,6 +35,7 @@ interface MessageGroupProps {
   isAdminTyping: boolean;
   isDiscoveryQuestionShown: () => boolean;
   lastMessageMarkerRef: React.RefObject<HTMLDivElement | null>;
+  isExpanded?: boolean;
   shouldShowSessionIndicator: boolean;
 }
 
@@ -57,6 +58,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   isLoading,
   isAdminTyping,
   lastMessageMarkerRef,
+  isExpanded = false,
   shouldShowSessionIndicator,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
@@ -77,20 +79,27 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
         transition: 'min-height 0.3s ease-in-out',
       }}
     >
-      {messageGroup.map((message, messageIndex) => (
-        <Message
-          key={`${message.response_id}-${messageIndex}`}
-          message={message}
-          sendUserMessage={sendUserMessage}
-          getFilledData={getFilledData}
-          getQualificationFilledData={getQualificationFilledData}
-          filledCalendarUrls={filledCalendarUrls}
-          selectedAvatar={selectedAvatar}
-          adminSessionInfo={adminSessionInfo}
-          isWithinAdminSession={messagesWithinAdminSessions.has(message.response_id || '')}
-          shouldShowSessionIndicator={shouldShowSessionIndicator}
-        />
-      ))}
+      {messageGroup.map((message, messageIndex) => {
+        const isLastMessageInGroup = messageIndex === messageGroup.length - 1;
+        const isLatestMessage = isLastGroup && isLastMessageInGroup;
+
+        return (
+          <Message
+            key={`${message.response_id}-${messageIndex}`}
+            message={message}
+            sendUserMessage={sendUserMessage}
+            getFilledData={getFilledData}
+            getQualificationFilledData={getQualificationFilledData}
+            filledCalendarUrls={filledCalendarUrls}
+            selectedAvatar={selectedAvatar}
+            adminSessionInfo={adminSessionInfo}
+            isWithinAdminSession={messagesWithinAdminSessions.has(message.response_id || '')}
+            isLatestMessage={isLatestMessage}
+            isExpanded={isExpanded}
+            shouldShowSessionIndicator={shouldShowSessionIndicator}
+          />
+        );
+      })}
 
       {shouldShowSuggestedQuestions && (
         <SuggestedQuestions suggestedQuestions={suggestedQuestions} sendUserMessage={sendUserMessage} />

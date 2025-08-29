@@ -131,6 +131,7 @@ export const ConfigurationSchema = z.object({
   org_name: z.string(),
   is_enabled: z.boolean(),
   logo: z.string().nullable(),
+  cover_image: z.string().nullable().optional(),
   header: z.object({
     title: z.string().nullable(),
     sub_title: z.string().nullable(),

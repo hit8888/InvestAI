@@ -36,6 +36,8 @@ interface MessageProps {
     profilePicture?: string | null;
   } | null;
   isWithinAdminSession?: boolean;
+  isLatestMessage?: boolean;
+  isExpanded?: boolean;
   shouldShowSessionIndicator?: boolean;
 }
 
@@ -48,6 +50,8 @@ export const Message = ({
   selectedAvatar,
   adminSessionInfo,
   isWithinAdminSession = false,
+  isLatestMessage = false,
+  isExpanded = false,
   shouldShowSessionIndicator = false,
 }: MessageProps) => {
   const { eventType, eventData, isTextArtifact, isAdminResponse, isVideoArtifact, isImageArtifact, isCtaEvent } =
@@ -215,10 +219,20 @@ export const Message = ({
         </div>
       )}
       {videoArtifactData && (
-        <VideoArtifact title={videoArtifactData.content.title} url={videoArtifactData.content.video_url} />
+        <VideoArtifact
+          title={videoArtifactData.content.title}
+          url={videoArtifactData.content.video_url}
+          isLatestMessage={isLatestMessage}
+          isExpanded={isExpanded}
+        />
       )}
       {imageArtifactData && (
-        <ImageArtifact title={imageArtifactData.content.title} url={imageArtifactData.content.image_url} />
+        <ImageArtifact
+          title={imageArtifactData.content.title}
+          url={imageArtifactData.content.image_url}
+          isLatestMessage={isLatestMessage}
+          isExpanded={isExpanded}
+        />
       )}
       {isFormArtifact && formArtifactData && sendUserMessage && (
         <FormArtifact
@@ -241,7 +255,7 @@ export const Message = ({
           responseId={message.response_id}
         />
       )}
-      {isCalendarArtifact && calendarArtifactData && sendUserMessage && (
+      {isCalendarArtifact && calendarArtifactData && sendUserMessage && isCalendarSubmitted && (
         <AskAiCalendarArtifact
           content={{
             ...calendarArtifactData.content,

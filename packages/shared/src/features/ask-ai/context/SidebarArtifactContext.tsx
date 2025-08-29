@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useSidebarArtifact } from '../hooks/useSidebarArtifact';
 
-interface SidebarArtifactContextType {
+export interface SidebarArtifactContextType {
   // State
   sideBarArtifact: {
     url: string;
@@ -9,7 +9,7 @@ interface SidebarArtifactContextType {
     title: string;
   } | null;
   isSideDrawerOpen: boolean;
-  calculatedWidth: number;
+  _calculatedWidth: number;
   currentVideo: {
     url: string;
     isPlaying: boolean;
@@ -20,6 +20,7 @@ interface SidebarArtifactContextType {
   } | null;
   videoError: string | null;
   videoRef: React.RefObject<HTMLVideoElement | null>;
+  isContainerReady: boolean;
 
   // Actions
   openSidebar: (
@@ -30,6 +31,8 @@ interface SidebarArtifactContextType {
   ) => Promise<void>;
   closeSidebar: () => void;
   toggleVideoPlayPause: () => void;
+  handleVideoError: (error: string) => void;
+  setContainerReady: (ready: boolean) => void;
 }
 
 const SidebarArtifactContext = createContext<SidebarArtifactContextType | undefined>(undefined);

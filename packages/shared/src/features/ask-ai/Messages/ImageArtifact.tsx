@@ -1,16 +1,40 @@
 import { Button, Icons, Typography } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
+import { useEffect, useRef } from 'react';
 
 interface ImageArtifactProps {
   title: string;
   url: string;
   alt?: string;
+  isLatestMessage?: boolean;
+  isExpanded?: boolean;
 }
 
-export const ImageArtifact = ({ title, url, alt = '' }: ImageArtifactProps) => {
-  const { openSidebar, closeSidebar, currentImage } = useSidebarArtifactContext();
+export const ImageArtifact = ({
+  title,
+  url,
+  alt = '',
+  isLatestMessage = false,
+  isExpanded = false,
+}: ImageArtifactProps) => {
+  const { openSidebar, closeSidebar, currentImage, isContainerReady } = useSidebarArtifactContext();
+  const hasAutoOpened = useRef(false);
+
+  // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
+  // Disable auto-opening when Ask AI is in expanded mode
+  useEffect(() => {
+    if (url && !currentImage && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded) {
+      hasAutoOpened.current = true;
+      openSidebar(url, 'SLIDE_IMAGE', title);
+    }
+  }, [url, title, currentImage, isLatestMessage, isContainerReady, isExpanded, openSidebar]);
 
   const handleButtonClick = () => {
+    // Disable sidebar functionality when Ask AI is in expanded mode
+    if (isExpanded) {
+      return;
+    }
+
     if (isThisImageExpanded) {
       // If image is already expanded, close the sidebar
       closeSidebar();
@@ -25,6 +49,24 @@ export const ImageArtifact = ({ title, url, alt = '' }: ImageArtifactProps) => {
 
   if (!url) {
     return null;
+  }
+
+  // When expanded, render image inline without sidebar functionality
+  if (isExpanded) {
+    return (
+      <div className="w-full">
+        <div className="flex flex-col border rounded-xl overflow-hidden w-full">
+          <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3 flex-shrink-0">
+            <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
+              {title}
+            </Typography>
+          </div>
+          <div className="w-full overflow-hidden">
+            <img src={url} alt={alt || title} className="w-full h-auto max-w-full object-contain" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
