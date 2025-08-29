@@ -35,6 +35,7 @@ interface MessageGroupProps {
   isAdminTyping: boolean;
   isDiscoveryQuestionShown: () => boolean;
   lastMessageMarkerRef: React.RefObject<HTMLDivElement | null>;
+  shouldShowSessionIndicator: boolean;
 }
 
 export const MessageGroup: React.FC<MessageGroupProps> = ({
@@ -56,6 +57,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   isLoading,
   isAdminTyping,
   lastMessageMarkerRef,
+  shouldShowSessionIndicator,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
     return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
@@ -86,6 +88,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
           selectedAvatar={selectedAvatar}
           adminSessionInfo={adminSessionInfo}
           isWithinAdminSession={messagesWithinAdminSessions.has(message.response_id || '')}
+          shouldShowSessionIndicator={shouldShowSessionIndicator}
         />
       ))}
 

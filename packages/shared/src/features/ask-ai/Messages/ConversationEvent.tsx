@@ -1,22 +1,17 @@
 import { Typography, ImageWithFallback } from '@meaku/saral';
 import { Message } from '../../../types/message';
+import { isJoinSessionEvent, isLeaveSessionEvent } from '../../../utils/message-utils';
 
 interface ConversationEventProps {
   message: Message;
+  shouldShowSessionIndicator?: boolean;
 }
 
-export const ConversationEvent = ({ message }: ConversationEventProps) => {
-  const isJoinSessionEvent =
-    message.event_type === 'JOIN_SESSION' ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'JOIN_SESSION');
+export const ConversationEvent = ({ message, shouldShowSessionIndicator = false }: ConversationEventProps) => {
+  const isJoinSessionEventPresent = isJoinSessionEvent(message);
+  const isLeaveSessionEventPresent = isLeaveSessionEvent(message);
 
-  const isLeaveSessionEvent =
-    message.event_type === 'LEAVE_SESSION' ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'LEAVE_SESSION');
-
-  if (!isJoinSessionEvent && !isLeaveSessionEvent) {
+  if (!isJoinSessionEventPresent && !isLeaveSessionEventPresent) {
     return null;
   }
 
@@ -58,8 +53,8 @@ export const ConversationEvent = ({ message }: ConversationEventProps) => {
   const profilePicture = eventData?.profile_picture;
 
   // Determine the event type and message
-  const isJoinEvent = isJoinSessionEvent;
-  const eventMessage = isJoinEvent ? 'Joined The Chat' : 'Left The Chat';
+  const isJoinEvent = isJoinSessionEventPresent;
+  const eventMessage = isJoinEvent ? ' joined the conversation' : 'left the conversation';
 
   return (
     <div className="flex items-center justify-center py-2 text-sm text-muted-foreground w-full">
@@ -72,7 +67,7 @@ export const ConversationEvent = ({ message }: ConversationEventProps) => {
                 src={profilePicture}
                 alt={`${userName}'s profile`}
                 size={18}
-                showOnlineIndicator={false}
+                showOnlineIndicator={isJoinEvent && shouldShowSessionIndicator}
               />
             </div>
           )}

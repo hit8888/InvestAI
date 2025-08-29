@@ -282,6 +282,29 @@ export const identifyAdminSessionBlocks = (messages: Message[]): Array<{ startIn
 };
 
 /**
+ * Determines if the current session state should show online indicator
+ * Shows indicator if there's a JOIN_SESSION event without a subsequent LEAVE_SESSION
+ * @param messages - Array of all messages in chronological order
+ * @returns True if online indicator should be shown
+ */
+export const shouldShowSessionIndicator = (messages: Message[]): boolean => {
+  // Iterate backwards from the end of the array to find the last relevant session event.
+  // This is more efficient than iterating from the start.
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i];
+    if (isJoinSessionEvent(message)) {
+      return true; // Last event was a join, so the session is active.
+    }
+    if (isLeaveSessionEvent(message)) {
+      return false; // Last event was a leave, so the session is not active.
+    }
+  }
+
+  // If no session events are found, the session is not active.
+  return false;
+};
+
+/**
  * Groups messages by response_id, handling admin sessions as special groups
  * @param messages - Array of messages to group
  * @returns Array of message groups

@@ -18,6 +18,7 @@ import { FormArtifactContent, FormArtifactMetadataType, CalendarArtifactContent 
 import { SendUserMessageParams } from '../../../types/message';
 import { useMessageProcessor } from '../hooks/useMessageProcessor';
 import MessageTail from './components/MessageTail';
+import { isJoinSessionEvent, isLeaveSessionEvent } from '../../../utils/message-utils';
 
 interface MessageProps {
   message: MessageType;
@@ -35,6 +36,7 @@ interface MessageProps {
     profilePicture?: string | null;
   } | null;
   isWithinAdminSession?: boolean;
+  shouldShowSessionIndicator?: boolean;
 }
 
 export const Message = ({
@@ -46,6 +48,7 @@ export const Message = ({
   selectedAvatar,
   adminSessionInfo,
   isWithinAdminSession = false,
+  shouldShowSessionIndicator = false,
 }: MessageProps) => {
   const { eventType, eventData, isTextArtifact, isAdminResponse, isVideoArtifact, isImageArtifact, isCtaEvent } =
     useMessageProcessor(message);
@@ -137,17 +140,10 @@ export const Message = ({
   };
 
   // Check if this is a conversation event (JOIN_SESSION or LEAVE_SESSION)
-  const isJoinSessionEvent =
-    eventType === 'JOIN_SESSION' ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'JOIN_SESSION');
+  const isJoinSessionEventPresent = isJoinSessionEvent(message);
+  const isLeaveSessionEventPresent = isLeaveSessionEvent(message);
 
-  const isLeaveSessionEvent =
-    eventType === 'LEAVE_SESSION' ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((message as any).message_type === 'EVENT' && (message as any).message?.event_type === 'LEAVE_SESSION');
-
-  const isConversationEvent = isJoinSessionEvent || isLeaveSessionEvent;
+  const isConversationEvent = isJoinSessionEventPresent || isLeaveSessionEventPresent;
 
   const isFormFilled =
     (isFormArtifact && formArtifactData && formArtifactData.metadata.is_filled) || !!getFilledData(message.response_id);
@@ -205,7 +201,7 @@ export const Message = ({
               src={adminSessionInfo.profilePicture}
               alt={adminSessionInfo.name}
               size={28}
-              showOnlineIndicator={true}
+              showOnlineIndicator={isJoinSessionEventPresent || shouldShowSessionIndicator}
             />
           </div>
         ) : selectedAvatar ? (
@@ -269,7 +265,9 @@ export const Message = ({
       {isCtaEvent && sendUserMessage && (
         <CtaEventMessage event={message} handleSendUserMessage={handleSendUserMessage} />
       )}
-      {isConversationEvent && <ConversationEvent message={message} />}
+      {isConversationEvent && (
+        <ConversationEvent message={message} shouldShowSessionIndicator={shouldShowSessionIndicator} />
+      )}
       <MessageTail role={message.role} />
     </div>
   );

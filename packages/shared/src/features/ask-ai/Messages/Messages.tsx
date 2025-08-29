@@ -1,7 +1,7 @@
 import { type Message as MessageType } from '../../../types/message';
 import { AvatarComponentProps } from '@meaku/saral';
 import React, { useMemo } from 'react';
-import { groupMessagesWithAdminSessions } from '../../../utils/message-utils';
+import { groupMessagesWithAdminSessions, shouldShowSessionIndicator } from '../../../utils/message-utils';
 import { useScrollManagement, useContainerHeight, useMessageData } from './hooks';
 import { getLastGroupMinHeight } from './utils';
 import { AdminSessionHeader, SuggestedQuestions, ScrollToBottomButton, MessageGroup } from './components';
@@ -51,6 +51,11 @@ export const Messages = ({
   // Group messages using the declarative helper function
   const groupedMessages = useMemo(() => {
     return groupMessagesWithAdminSessions(renderableMessages);
+  }, [renderableMessages]);
+
+  // Calculate session indicator state
+  const shouldShowIndicator = useMemo(() => {
+    return shouldShowSessionIndicator(renderableMessages);
   }, [renderableMessages]);
 
   // Use custom hooks for different concerns
@@ -110,6 +115,7 @@ export const Messages = ({
                 isLoading={isLoading}
                 isAdminTyping={isAdminTyping}
                 lastMessageMarkerRef={lastMessageMarkerRef}
+                shouldShowSessionIndicator={shouldShowIndicator}
               />
             );
           })}
