@@ -96,7 +96,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   // Only enable vector tracking when it's not admin/test
   // AND the prospect_id was NOT initially present in localStorage (first-time visitor)
   const enableVectorTracking =
-    ENV.VITE_APP_ENV !== 'production' && !initialSettings.is_admin && !initialSettings.is_test;
+    ENV.VITE_APP_ENV === 'production' && !initialSettings.is_admin && !initialSettings.is_test;
   useVectorTracking({
     tenantId: initialSettings.tenant_id,
     prospectId: config.prospect_id,

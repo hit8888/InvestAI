@@ -255,7 +255,7 @@ export const Message = ({
           responseId={message.response_id}
         />
       )}
-      {isCalendarArtifact && calendarArtifactData && sendUserMessage && isCalendarSubmitted && (
+      {isCalendarArtifact && calendarArtifactData && sendUserMessage && (
         <AskAiCalendarArtifact
           content={{
             ...calendarArtifactData.content,
