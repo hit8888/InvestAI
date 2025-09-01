@@ -10,7 +10,8 @@ import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalytics
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useStyleConfig from '../hooks/useStyleConfig';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
-import { ConfigurationApiResponse } from '@meaku/core/index';
+import { ConfigurationApiResponse, ENV } from '@meaku/core/index';
+import { useVectorTracking } from '../hooks/useVectorTracking';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -90,6 +91,17 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       setSettings(initialSettings);
     }
   }, [initialSettings, setSettings]);
+
+  // Initialize Vector tracking when prospect_id and tenant_id are available
+  // Only enable vector tracking when it's not admin/test
+  // AND the prospect_id was NOT initially present in localStorage (first-time visitor)
+  const enableVectorTracking =
+    ENV.VITE_APP_ENV !== 'production' && !initialSettings.is_admin && !initialSettings.is_test;
+  useVectorTracking({
+    tenantId: initialSettings.tenant_id,
+    prospectId: config.prospect_id,
+    enabled: enableVectorTracking,
+  });
 
   useBrandCoverImage(initialSettings.tenant_id, initialSettings.bc);
 
