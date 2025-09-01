@@ -20,6 +20,7 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
+import useNewConversationToast from '../../hooks/useNewConversationToast';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
 
 // Helper functions to create type-safe event messages
@@ -242,6 +243,13 @@ const ActiveConversationsLayout = () => {
       message_type: 'EVENT',
     });
   };
+
+  const handleJoinButtonInToast = (conversation: ActiveConversation) => {
+    handleCardClick(conversation);
+    updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.PENDING);
+  };
+
+  useNewConversationToast(currentTabConversations, handleJoinButtonInToast);
 
   useEffect(() => {
     return () => {

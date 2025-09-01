@@ -66,7 +66,7 @@ const ActiveConversationCategoryColumn = ({
           <ActiveConversationCard
             key={conversation.session_id}
             conversation={conversation}
-            onCardClick={onCardClick}
+            onCardClick={() => onCardClick(conversation)}
             isPinned={pinnedSessionIds.includes(conversation.session_id)}
             onTogglePinned={() => onTogglePinned(conversation.session_id)}
           />

@@ -309,6 +309,33 @@ export const ActiveConversationDetailsResponseSchema = z.object({
   }),
 });
 
+export const DataSourceAssetItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  description: z.string().optional().nullable(),
+  key: z.string(),
+  public_url: z.string(),
+  is_cancelled: z.boolean().default(false),
+});
+export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
+
+export const WebpagesScreenshotsResponseSchema = z.object({
+  available_screenshot_webpages: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      url: z.string(),
+      screenshot: DataSourceAssetItemSchema,
+    }),
+  ),
+  triggered_generation: z.array(z.number()),
+  ignored_urls: z.array(z.string()),
+  total_requested: z.number(),
+  total_available: z.number(),
+  total_triggered: z.number(),
+});
+
 // Schema for Filter Options - Payload & Response
 export const FilterOptionsPayloadSchema = z.object({
   field: z.string(),
@@ -391,17 +418,6 @@ export const DataSourceWebpagesResponseResultSchema = z.object({
   created_on: z.string(),
   updated_on: z.string(),
 });
-
-export const DataSourceAssetItemSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.string(),
-  description: z.string().optional().nullable(),
-  key: z.string(),
-  public_url: z.string(),
-  is_cancelled: z.boolean().default(false),
-});
-export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
 
 export const DataSourceDocumentsResponseResultSchema = z.object({
   id: z.number(),

@@ -8,24 +8,8 @@ import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
 import { ReadyState } from 'react-use-websocket';
 import { BrowsedUrl } from '@meaku/core/types/common';
-
-export type ActiveConversationCard = {
-  sessionId: string;
-  companyLogoUrl: string;
-  companyName: string;
-  userName: string;
-  location: {
-    city: string;
-    country: string;
-  };
-  duration: string;
-  messageCount: number;
-  lastInput: string;
-  timePassedAfterInactive: string;
-  isTyping: boolean;
-  isActive: boolean;
-  buyerIntentLabel: string;
-};
+import { DataSourceItem } from '@meaku/core/types/admin/api';
+import useWebpageScreenshotsActiveConversation from '../hooks/useWebpageScreenshotsActiveConversation';
 
 export interface ActiveConversation {
   agent_id: number;
@@ -45,8 +29,10 @@ export interface ActiveConversation {
       company_logo_url: string;
       website_url: string;
     };
+    parent_url: string;
     browsed_urls: BrowsedUrl[];
   };
+  webpage_screenshot?: DataSourceItem | undefined;
   session: {
     query_params: {
       utm_source: string;
@@ -79,9 +65,16 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   const baseVolume = 0.35;
   const { play } = useSound(popupsound, baseVolume);
 
+  const { isWebpagesScreenshotsLoading, handleWebpageScreenshotData } = useWebpageScreenshotsActiveConversation({
+    conversations,
+    activeConversations,
+    setActiveConversations,
+  });
+
   useEffect(() => {
     if (conversations) {
-      setActiveConversations(conversations);
+      const newConversations = handleWebpageScreenshotData(conversations);
+      setActiveConversations(newConversations);
 
       const lastMessagesBySession = conversations.reduce(
         (acc, conv) => {
@@ -146,7 +139,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   return (
     <ActiveConversationsContext.Provider
       value={{
-        isLoading: isLoading || !activeConversations,
+        isLoading: isLoading || !activeConversations || isWebpagesScreenshotsLoading,
         activeConversations,
         readyState,
       }}

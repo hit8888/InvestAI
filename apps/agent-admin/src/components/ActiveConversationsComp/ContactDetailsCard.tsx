@@ -45,16 +45,16 @@ const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
         label: 'Revenue:',
         value: company_revenue,
         renderValue: (value: unknown) => {
-          const revenue = value as number;
-          return revenue ? <span>{NumberUtil.formatCurrency(revenue)}</span> : null;
+          const revenue = Number(value);
+          return value != null && !isNaN(revenue) ? <span>{NumberUtil.formatCurrency(revenue)}</span> : null;
         },
       },
       {
         label: 'Company Size:',
         value: employee_count,
         renderValue: (value: unknown) => {
-          const count = value as number;
-          return count ? <span>{NumberUtil.formatNumber(count)}</span> : null;
+          const count = Number(value);
+          return value != null && !isNaN(count) ? <span>{NumberUtil.formatNumber(count)}</span> : null;
         },
       },
       {

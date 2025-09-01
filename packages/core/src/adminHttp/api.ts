@@ -301,3 +301,7 @@ export const updateTenantMetadata = (tenantIdentifier: string, payload: TenantMe
 export const reachoutEmail = (payload: ReachoutEmailPayload) => {
   return adminApiClient.post(`/tenant/api/generate-reachout-email/`, payload);
 };
+
+export const getWebpageScreenshots = (payload: { urls: string[] }) => {
+  return adminApiClient.post(`/tenant/api/webpages/screenshots/`, payload);
+};

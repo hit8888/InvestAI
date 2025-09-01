@@ -1,8 +1,10 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
-import { Pin, MessageSquareText, User } from 'lucide-react';
+import { MessageSquareText } from 'lucide-react';
+// import { Pin, User } from 'lucide-react';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { AppRoutesEnum } from '../../utils/constants';
+import SingleTabDisplay from '../ConversationDetailsComp/SingleTabDisplay';
 
 type TabConfig = {
   path: string;
@@ -11,21 +13,21 @@ type TabConfig = {
 };
 
 const tabs: TabConfig[] = [
-  {
-    path: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/assigned`,
-    label: 'Assigned',
-    icon: User,
-  },
+  // {
+  //   path: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/assigned`,
+  //   label: 'Assigned',
+  //   icon: User,
+  // },
   {
     path: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}`,
     label: 'All Conversations',
     icon: MessageSquareText,
   },
-  {
-    path: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/pinned`,
-    label: 'Pinned Conversations',
-    icon: Pin,
-  },
+  // {
+  //   path: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/pinned`,
+  //   label: 'Pinned Conversations',
+  //   icon: Pin,
+  // },
 ];
 
 const ActiveConversationTabs = ({ hasPinnedConversations }: { hasPinnedConversations: boolean }) => {
@@ -59,22 +61,21 @@ const ActiveConversationTabs = ({ hasPinnedConversations }: { hasPinnedConversat
       {tabs.map(({ path, label, icon: Icon }) => {
         const isActive = isTabActive(path);
         return (
-          <button
+          <SingleTabDisplay
             key={path}
-            onClick={() => handleTabClick(path)}
-            className={cn(
-              'flex items-center gap-1 border-b-2 px-4 py-3 text-sm font-medium transition-colors',
-              isActive ? 'border-primary text-primary' : 'border-transparent text-gray-600 hover:text-primary',
-            )}
+            handleTabClick={() => handleTabClick(path)}
+            tabLabel={label}
+            isTabSelected={isActive}
           >
             <Icon
-              className={cn('rounded-full p-1 transition-colors', {
-                'fill-current text-primary':
-                  hasPinnedConversations && path === `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/pinned`,
+              width="16"
+              height="16"
+              className={cn({
+                'text-white': isActive,
+                'text-primary': hasPinnedConversations && path === `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}/pinned`,
               })}
             />
-            {label}
-          </button>
+          </SingleTabDisplay>
         );
       })}
     </div>

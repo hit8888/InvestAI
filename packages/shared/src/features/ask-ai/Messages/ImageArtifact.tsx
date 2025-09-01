@@ -73,11 +73,9 @@ export const ImageArtifact = ({
     <div className="w-full">
       <div className="flex justify-end group flex-col border rounded-xl overflow-hidden relative">
         <div className="p-3 bg-primary/10 flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <Typography variant="body-small" fontWeight="medium">
-              {title}
-            </Typography>
-          </div>
+          <Typography variant="body-small" fontWeight="medium" className="max-w-72">
+            {title}
+          </Typography>
           <Button
             variant={isThisImageExpanded ? 'secondary' : 'default'}
             size="sm"

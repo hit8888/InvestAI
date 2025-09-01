@@ -31,7 +31,7 @@ const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }:
           {children}
         </div>
         <Typography
-          variant={isTabSelected ? 'label-16-medium' : 'body-16'}
+          variant={isTabSelected ? 'label-14-medium' : 'body-14'}
           textColor={isTabSelected ? 'primary' : 'gray500'}
         >
           {tabLabel}
