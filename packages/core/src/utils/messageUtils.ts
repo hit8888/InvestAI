@@ -248,7 +248,7 @@ export const shouldUpdateMessage = (msg: WebSocketMessage, message: WebSocketMes
     return true; // For other matching types, no additional checks needed
   }
 };
-export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'FORM', 'CALENDAR'] as const;
+export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'FORM', 'CALENDAR', 'QUALIFICATION_FORM'] as const;
 export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 

@@ -7,7 +7,7 @@ async function checkEmailDomainMX(domain: string) {
   if (data.Status === 3) {
     return {
       valid: false,
-      reason: 'Domain does not exist',
+      reason: 'Please enter a valid domain',
     };
   }
 
@@ -25,7 +25,7 @@ async function checkEmailDomainMX(domain: string) {
     if (data.Authority && data.Authority.length > 0) {
       return {
         valid: false,
-        reason: 'Domain exists but no MX records found',
+        reason: 'Please enter a valid domain',
       };
     }
   }
@@ -33,7 +33,7 @@ async function checkEmailDomainMX(domain: string) {
   // Handle other status codes or unexpected responses
   return {
     valid: false,
-    reason: `DNS query failed with status ${data.Status}`,
+    reason: 'Please enter a valid domain',
   };
 }
 
