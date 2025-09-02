@@ -2,7 +2,16 @@ import { z } from 'zod';
 import { ViewType } from '@meaku/core/types/common';
 import { CalendarSubmitEventData, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
 
-export const ArtifactEnumSchema = z.enum(['SLIDE', 'VIDEO', 'SLIDE_IMAGE', 'NONE', 'SUGGESTIONS', 'FORM', 'CALENDAR']);
+export const ArtifactEnumSchema = z.enum([
+  'SLIDE',
+  'VIDEO',
+  'SLIDE_IMAGE',
+  'NONE',
+  'SUGGESTIONS',
+  'FORM',
+  'CALENDAR',
+  'QUALIFICATION_FORM',
+]);
 
 export enum ArtifactEnum {
   SLIDE = 'SLIDE',
@@ -12,6 +21,7 @@ export enum ArtifactEnum {
   SUGGESTIONS = 'SUGGESTIONS',
   FORM = 'FORM',
   CALENDAR = 'CALENDAR',
+  QUALIFICATION_FORM = 'QUALIFICATION_FORM',
 }
 
 export enum ArtifactPreviewEnum {

@@ -631,6 +631,21 @@ export const getFormArtifactMessage = (messagesWithSameResponseId: WebSocketMess
   );
 };
 
+export const getQualificationFormArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
+  return messagesWithSameResponseId.find(
+    (
+      msg,
+    ): msg is WebSocketMessage & {
+      message: ArtifactMessageContent & {
+        artifact_data: FormArtifactContent;
+      };
+    } =>
+      checkIsArtifactMessage(msg) &&
+      msg.message.artifact_type === 'QUALIFICATION_FORM' &&
+      !!msg.message.artifact_data?.content,
+  );
+};
+
 export const getCalendarArtifactMessage = (messagesWithSameResponseId: WebSocketMessage[]) => {
   return messagesWithSameResponseId.find(
     (

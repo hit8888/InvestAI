@@ -7,9 +7,10 @@ import {
   findArtifactMessageWithSameArtifactId,
   getCalendarArtifactMessage,
   getCtaEvent,
+  getFormArtifactMessage,
+  getFormFilledEventByArtifactId,
+  getQualificationFormArtifactMessage,
 } from '../utils/messageUtils';
-import { getFormArtifactMessage } from '../utils/messageUtils';
-import { getFormFilledEventByArtifactId } from '../utils/messageUtils';
 
 type IProps = {
   artifactId: string;
@@ -38,6 +39,7 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
   const calendarArtifactMessage = getCalendarArtifactMessage(messagesWithSameResponseId);
 
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
+  const qualificationFormArtifactMessage = getQualificationFormArtifactMessage(messagesWithSameResponseId);
   const formFilledMessage = getFormFilledEventByArtifactId(messages, formArtifactMessage, AgentEventType.FORM_FILLED);
   const calendarFilledMessage = getFormFilledEventByArtifactId(
     messages,
@@ -88,7 +90,9 @@ const useNormalAndQualificationFormArtifactMetadataProvider = ({ artifactId, mes
   const artifactType = (artifactMessage?.message as ArtifactMessageContent)?.artifact_type;
 
   const artifactContentWithMetadata = {
-    ...artifactContent,
+    ...(qualificationFormArtifactMessage && !calendarArtifactMessage
+      ? qualificationFormArtifactMessage.message.artifact_data.content
+      : artifactContent),
     artifact_type: artifactType,
     artifact_id: calendarArtifactMessage ? calendarArtifactMessage.message.artifact_data.artifact_id : artifactId,
     metadata: {

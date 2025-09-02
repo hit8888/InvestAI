@@ -108,7 +108,11 @@ const QualificationForm = ({
         <Card className="w-full rounded-2xl border-none bg-transparent shadow-none">
           <CardContent className="flex flex-col gap-4 p-0">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className={cn(['flex flex-col gap-8', isMobile && 'gap-4'])}>
+              <form
+                data-testid="contact-form"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className={cn(['flex flex-col gap-8', isMobile && 'gap-4'])}
+              >
                 <div className="flex w-full flex-col items-start gap-6">
                   {formFields.map((field, i) => (
                     <ChatFormField
@@ -126,6 +130,7 @@ const QualificationForm = ({
                 </div>
                 <div className="flex justify-end">
                   <Button
+                    data-testid="submit-form-btn"
                     className={cn([!isMobile && 'h-12 w-28 rounded-xl p-0 text-xl'])}
                     type="submit"
                     buttonStyle={isMobile ? 'rightIcon' : 'default'}

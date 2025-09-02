@@ -1,7 +1,5 @@
 import { ChatHistory, WebSocketMessage } from '../types/webSocketData';
-import { SessionApiResponse, SessionSchema } from '../types/api/session_init_response';
-import { trackError } from '../utils/error';
-import { getTenantActiveAgentId, getTransformedResponse } from '../utils';
+import { SessionApiResponse } from '../types/api/session_init_response';
 
 const WELCOME_MESSAGE_STATE = 1;
 const USER_WELCOME_MESSAGE_STATE = 2;
@@ -10,28 +8,7 @@ export class SessionApiResponseManager {
   private session: SessionApiResponse;
 
   constructor(response: SessionApiResponse) {
-    const transformedResponse = getTransformedResponse(response);
-    const validatedSession = SessionSchema.safeParse(transformedResponse);
-    if (!validatedSession.success) {
-      // console.error('Validation failed for SessionApiResponseManager:', {
-      //   input: response,
-      //   errors: validatedSession.error,
-      // });
-      trackError(validatedSession.error.errors, {
-        component: 'SessionApiResponseManager',
-        action: 'constructor',
-      });
-      // Fallback to empty session to avoid aborting the render
-      this.session = {
-        agent_id: Number(getTenantActiveAgentId()),
-        session_id: '',
-        prospect_id: '',
-        chat_history: [],
-        feedback: [],
-      };
-    } else {
-      this.session = validatedSession.data;
-    }
+    this.session = response;
   }
 
   getSessionId() {
