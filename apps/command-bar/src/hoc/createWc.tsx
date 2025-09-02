@@ -27,6 +27,7 @@ export function createWc(WrappedComponent: ComponentType, hostId: string) {
         parentUrl: 'string',
         isAdmin: 'boolean',
         isTest: 'boolean',
+        queryParams: 'json',
       },
       shadow: 'open',
     },

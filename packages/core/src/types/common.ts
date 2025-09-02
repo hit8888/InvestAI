@@ -96,4 +96,5 @@ export interface CommandBarSettings {
   bc?: boolean;
   is_test?: boolean;
   is_admin?: boolean;
+  query_params?: Record<string, string>;
 }

@@ -27,6 +27,7 @@ const useSessionDataQuery = (
         prospect_id: config.prospect_id,
         is_test: settings.is_test,
         is_admin: settings.is_admin,
+        query_params: settings.query_params,
         ...payload,
       });
       return response.data;

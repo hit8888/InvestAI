@@ -43,4 +43,5 @@ export type InitializationPayload = {
   experiment_tag?: string | null;
   agent_modal?: WidgetMode;
   browsed_urls?: BrowsedUrl[];
+  query_params?: Record<string, string>;
 };

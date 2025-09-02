@@ -31,6 +31,9 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
   bc: propBc,
   isAdmin: propIsAdmin,
   isTest: propIsTest,
+  browsedUrls: propBrowsedUrls,
+  queryParams: propQueryParams,
+  parentUrl: propParentUrl,
 }) => {
   const settings = useMemo((): CommandBarSettings => {
     const urlParams = getUrlParams();
@@ -42,12 +45,13 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
       message: urlParams.message ?? propMessage,
       start_time: urlParams.start_time ?? propStartTime,
       end_time: urlParams.end_time ?? propEndTime,
-      parent_url: urlParams.parent_url ?? window.location.href,
+      parent_url: urlParams.parent_url ?? propParentUrl ?? window.location.href,
       session_id: urlParams.session_id ?? propSessionId,
-      browsed_urls: jsonSafeParse(urlParams.browsed_urls).data,
+      browsed_urls: jsonSafeParse(urlParams.browsed_urls).data ?? propBrowsedUrls,
       bc: jsonSafeParse(urlParams.bc).data ?? propBc,
       is_test: jsonSafeParse(urlParams.is_test).data ?? propIsTest ?? false,
       is_admin: jsonSafeParse(urlParams.is_admin).data ?? propIsAdmin ?? false,
+      query_params: jsonSafeParse(urlParams.query_params).data ?? propQueryParams,
     };
   }, [
     propTenantId,
@@ -56,10 +60,13 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
     propMessage,
     propStartTime,
     propEndTime,
+    propParentUrl,
     propSessionId,
+    propBrowsedUrls,
     propBc,
-    propIsAdmin,
     propIsTest,
+    propIsAdmin,
+    propQueryParams,
   ]);
 
   return children(settings);
