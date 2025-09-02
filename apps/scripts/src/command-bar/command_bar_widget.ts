@@ -1,5 +1,6 @@
 import { ConfigManager, TimeManager, WebComponentManager } from "../managers";
 import { env } from "../env";
+import { BreakoutFormManager } from "../managers/BreakoutFormManager";
 
 (function () {
   const scriptAttributes = (() => {
@@ -26,6 +27,15 @@ import { env } from "../env";
   const timeManager = TimeManager();
   const configManager = ConfigManager();
   const webComponentManager = WebComponentManager();
+  const breakoutFormManager = BreakoutFormManager({
+    onFormSubmit: (_, message: string) => {
+      const tagName = env.COMMAND_BAR_TAG_NAME;
+
+      if (message && tagName) {
+        document.getElementById(tagName)?.setAttribute("message", message);
+      }
+    },
+  });
 
   const initializeWidget = async (): Promise<void> => {
     const webComponentUrl = `${env.COMMAND_BAR_BASE_URL}/${env.COMMAND_BAR_TAG_NAME}.js`;
@@ -56,6 +66,7 @@ import { env } from "../env";
       }
 
       await initializeWidget();
+      breakoutFormManager.setupFormEventListeners();
     },
   };
 

@@ -23,7 +23,7 @@ export const RESPONSIVE_SIZES: AllResponsiveSizes = {
       HEIGHT: "max(700px, 88vh)",
     },
     COLLAPSED: {
-      CENTER_WIDTH_INITIAL: "max(420px, 100vw)",
+      CENTER_WIDTH_INITIAL: "max(420px, 80vw)",
       CENTER_WIDTH_MESSAGE_SENT: "max(440px, 25vw)",
       CENTER_HEIGHT_WITH_BUBBLE: "min(280px, 40vh)",
       CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",
@@ -42,7 +42,7 @@ export const RESPONSIVE_SIZES: AllResponsiveSizes = {
       HEIGHT: "max(600px, 100dvh)",
     },
     COLLAPSED: {
-      CENTER_WIDTH_INITIAL: "max(380px, 100vw)",
+      CENTER_WIDTH_INITIAL: "max(380px, 80vw)",
       CENTER_WIDTH_MESSAGE_SENT: "max(440px, 30vw)",
       CENTER_HEIGHT_WITH_BUBBLE: "max(280px, 30vh)",
       CENTER_HEIGHT_MESSAGE_SENT: "max(100px, 10vh)",

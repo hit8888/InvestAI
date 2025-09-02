@@ -21,7 +21,7 @@ export const useEntryPointStyling = ({ entryPointAlignment, isMobile }: UseEntry
       return '410px';
     }
     if (isMobile) return '90vw';
-    return 'calc(66.66% + 110px)';
+    return 'calc(83.33% + 110px)';
   };
 
   return {

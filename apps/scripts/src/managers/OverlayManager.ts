@@ -1,4 +1,5 @@
 import { WIDGET_IDS, Z_INDEX } from "../agent/lib/constants";
+import { BreakoutFormManager } from "./BreakoutFormManager";
 
 export function OverlayManager(
   postMessage: (iframe: HTMLIFrameElement, message: object) => void,
@@ -11,6 +12,7 @@ export function OverlayManager(
   let embeddedContainer: HTMLElement | null = null;
   let bottomContainer: HTMLElement | null = null;
   let isInitialized = false;
+  let formManager: ReturnType<typeof BreakoutFormManager> | null = null;
 
   const createOverlayElements = (): void => {
     if (isInitialized) return;
@@ -68,7 +70,7 @@ export function OverlayManager(
       }
     });
 
-    window.addEventListener("submit", handleFormSubmit);
+    formManager?.setupFormEventListeners();
   };
 
   const handleClose = (): void => {
@@ -92,23 +94,6 @@ export function OverlayManager(
       }
     }
     hide();
-  };
-
-  const handleFormSubmit = (e: Event): void => {
-    const form = e.target as HTMLFormElement;
-    if (!form.hasAttribute("data-breakout-form")) {
-      return;
-    }
-    e.preventDefault();
-
-    const input = form.querySelector('input[type="text"]') as HTMLInputElement;
-    const message = input.value.trim();
-
-    if (iframe) {
-      showWithIframe(form.id, message);
-    }
-
-    input.value = "";
   };
 
   const showWithIframe = (formId: string, message: string): void => {
@@ -164,6 +149,9 @@ export function OverlayManager(
     embeddedContainer = embeddedContainerParam;
     bottomContainer = bottomContainerParam;
     createOverlayElements();
+    formManager = BreakoutFormManager({
+      onFormSubmit: showWithIframe,
+    });
     setupEventListeners();
   };
 
@@ -191,7 +179,7 @@ export function OverlayManager(
 
   const destroy = (): void => {
     window.removeEventListener("message", handleClose);
-    window.removeEventListener("submit", handleFormSubmit);
+    formManager?.removeFormEventListeners();
 
     if (overlay && overlay.parentNode) {
       overlay.parentNode.removeChild(overlay);
@@ -201,6 +189,7 @@ export function OverlayManager(
     wrapper = null;
     iframe = null;
     currentContainer = null;
+    formManager = null;
     isInitialized = false;
   };
 
