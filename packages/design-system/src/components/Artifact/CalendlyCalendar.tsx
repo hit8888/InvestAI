@@ -29,11 +29,6 @@ export const CalendlyCalendar = ({ calendarContent, handleSendUserMessage, onLoa
           height: '100%',
           width: '100%',
         }}
-        utm={{
-          utmSource: 'Breakout',
-          utmMedium: 'chat',
-          utmCampaign: 'Breakout Agent',
-        }}
       />
     </div>
   );
