@@ -24,7 +24,7 @@ interface JoinConversationChatAreaProps {
 
 const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
-  const { messages } = useMessageStore();
+  const { messages, isUserTyping } = useMessageStore();
   const {
     prospect: { browsed_urls: browsedUrls = [], parent_url: parentUrl, query_params: queryParams } = {},
     session: { start_time: startTime } = {},
@@ -86,6 +86,8 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
             showOrbFromConfig={true}
             lastMessageResponseId={lastMessageResponseId}
             invertTextColor={false}
+            enableScrollToBottom={false}
+            isTyping={isUserTyping}
           />
         ) : (
           <p className="mt-20 w-full text-center text-2xl font-semibold">There is no log for this session.</p>

@@ -312,6 +312,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
     event_type: z.literal('ADMIN_TYPING'),
     event_data: z.object({}),
   }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('USER_TYPING'),
+    event_data: z.object({}),
+  }),
 ]);
 
 export const WebSocketMessageSchema = z

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 dotenv.config();
 
@@ -22,6 +23,10 @@ export default defineConfig({
         assets: './dist/**',
         filesToDeleteAfterUpload: ['./dist/**/*.map'],
       },
+    }),
+    codeInspectorPlugin({
+      bundler: 'vite',
+      editor: 'cursor',
     }),
   ],
 

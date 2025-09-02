@@ -186,6 +186,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           </div>
           <AskAiInput
             sendUserMessage={sendUserMessage}
+            hasActiveAdminSession={hasActiveAdminSession}
             disabled={!sessionData || (isLoading && !hasActiveAdminSession)}
           />
         </div>

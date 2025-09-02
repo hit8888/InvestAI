@@ -231,8 +231,19 @@ const config: Omit<Config, "content"> = {
         "typing-dot2": "typing-dot 1.2s infinite 0.2s",
         "typing-dot3": "typing-dot 1.2s infinite 0.4s",
         flip: "flip 2s ease-in-out infinite",
+        "high-bounce": "highBounce 4s ease-in-out infinite",
       },
       keyframes: {
+        highBounce: {
+          "0%, 100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
+          "50%": {
+            transform: "translateY(-3px)",
+            opacity: "0.4",
+          },
+        },
         ripple: {
           "0%": {
             transform: "scale(.8)",

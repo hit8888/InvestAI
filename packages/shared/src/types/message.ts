@@ -55,6 +55,7 @@ export const MessageEventType = {
   LEAVE_SESSION: 'LEAVE_SESSION',
   GENERATING_ARTIFACT: 'GENERATING_ARTIFACT',
   ADMIN_TYPING: 'ADMIN_TYPING',
+  USER_TYPING: 'USER_TYPING',
   SUMMARIZE: 'SUMMARIZE',
   SUMMARY_STREAM: 'SUMMARY_STREAM',
   CTA_EVENT: 'CTA_EVENT',
@@ -84,6 +85,7 @@ export type EventTypeType =
   | 'GENERATING_ARTIFACT'
   | 'TYPING'
   | 'ADMIN_TYPING'
+  | 'USER_TYPING'
   | 'SUMMARIZE'
   | 'SUMMARY_STREAM'
   | 'CTA_EVENT'
@@ -325,6 +327,11 @@ export const MessageSchema = z
       z.object({
         content: z.string(),
         event_type: z.literal('ADMIN_TYPING'),
+        event_data: z.object({}),
+      }),
+      z.object({
+        content: z.string(),
+        event_type: z.literal('USER_TYPING'),
         event_data: z.object({}),
       }),
 

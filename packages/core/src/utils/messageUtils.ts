@@ -531,6 +531,12 @@ export const isHumanMessageInDashboardView = (messageViewType: MessageViewType) 
   );
 };
 
+export const isHumanMessageInAdminView = (messageViewType: MessageViewType) => {
+  return [MessageViewType.USER_MESSAGE_IN_ADMIN_VIEW, MessageViewType.ADMIN_MESSAGE_IN_ADMIN_VIEW].includes(
+    messageViewType,
+  );
+};
+
 // Check if the messages have the same session_id and response_id
 export const hasMessagesMatchingIds = (msg1: WebSocketMessage, msg2: WebSocketMessage): boolean => {
   return msg1.session_id === msg2.session_id && msg1.response_id === msg2.response_id;

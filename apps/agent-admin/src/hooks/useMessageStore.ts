@@ -18,7 +18,32 @@ interface State {
   setMediaTakeFullScreenWidth: (value: boolean | ((prevState: boolean) => boolean)) => void;
   aiSuggestionMessage: string;
   setAISuggestionMessage: (message: string) => void;
+  isUserTyping: boolean;
 }
+
+const typingIndicatorTimeoutManager = (() => {
+  let typingTimeoutId: NodeJS.Timeout | null = null;
+  const TYPING_INDICATOR_TIMEOUT = 2000;
+
+  const resetTypingTimeout = () => {
+    if (typingTimeoutId) {
+      clearTimeout(typingTimeoutId);
+      typingTimeoutId = null;
+    }
+  };
+
+  const startTypingTimeout = (callback: () => void) => {
+    typingTimeoutId = setTimeout(() => {
+      callback();
+      resetTypingTimeout();
+    }, TYPING_INDICATOR_TIMEOUT);
+  };
+
+  return {
+    resetTypingTimeout,
+    startTypingTimeout,
+  };
+})();
 
 export const useMessageStore = create<State>()(
   devtools(
@@ -38,6 +63,23 @@ export const useMessageStore = create<State>()(
         }),
       handleAddAIMessage: (message: WebSocketMessage) =>
         set((state) => {
+          if (
+            (message.message_type === 'EVENT' && message.message?.event_type === 'USER_TYPING') ||
+            ('event_type' in message && message.event_type === 'USER_TYPING')
+          ) {
+            typingIndicatorTimeoutManager.resetTypingTimeout();
+            state.isUserTyping = true;
+            typingIndicatorTimeoutManager.startTypingTimeout(() => {
+              set((state) => {
+                state.isUserTyping = false;
+              });
+            });
+
+            return;
+          } else {
+            state.isUserTyping = false;
+          }
+
           const isDiscoveryMessage = isDiscoveryQuestion(message);
           const latestResponseId = state.latestResponseId;
 
@@ -78,6 +120,7 @@ export const useMessageStore = create<State>()(
         }),
       orbState: OrbStatusEnum.idle,
       aiSuggestionMessage: '',
+      isUserTyping: false,
       setAISuggestionMessage: (message: string) =>
         set((state) => {
           state.aiSuggestionMessage = message;

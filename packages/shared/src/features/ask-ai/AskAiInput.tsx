@@ -1,19 +1,38 @@
 import { Button, Icons, Input } from '@meaku/saral';
-import { useState } from 'react';
-import { Message } from '../../types/message';
+import { useCallback, useState } from 'react';
+import { Message, MessageEventType } from '../../types/message';
+import { useDebouncedTyping } from '../../hooks/useDebouncedTyping';
 
 interface AskAiInputProps {
   disabled: boolean;
   sendUserMessage?: (message: string, overrides?: Partial<Message>) => void;
+  hasActiveAdminSession?: boolean;
 }
 
-export const AskAiInput = ({ disabled, sendUserMessage }: AskAiInputProps) => {
+export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }: AskAiInputProps) => {
   const [message, setMessage] = useState('');
+
+  const sendTypingEvent = useCallback(
+    (isTyping: boolean) => {
+      if (isTyping && hasActiveAdminSession) {
+        sendUserMessage?.('', {
+          event_data: {},
+          event_type: MessageEventType.USER_TYPING,
+        });
+      }
+    },
+    [sendUserMessage, hasActiveAdminSession],
+  );
+
+  const { debouncedTypingDetection, stopTyping } = useDebouncedTyping({
+    onSendTypingEvent: sendTypingEvent,
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     sendUserMessage?.(message);
     setMessage('');
+    stopTyping();
   };
 
   const isInputValuePresent = message.trim() !== '';
@@ -29,6 +48,7 @@ export const AskAiInput = ({ disabled, sendUserMessage }: AskAiInputProps) => {
         value={message}
         onChange={(e) => {
           setMessage(e.target.value);
+          debouncedTypingDetection();
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {

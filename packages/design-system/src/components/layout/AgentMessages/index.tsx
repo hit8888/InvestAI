@@ -10,6 +10,7 @@ import { IProps } from './types';
 import DownArrowButton from './DownArrowButton';
 import { shouldShowSuggestions } from './utils';
 import MessageGroup from './MessageGroup';
+import TypingIndicator from './TypingIndicator';
 
 const AgentMessages = ({
   viewType,
@@ -35,6 +36,7 @@ const AgentMessages = ({
   showOrbFromConfig,
   invertTextColor,
   enableScrollToBottom = true,
+  isTyping,
 }: IProps) => {
   const isMobile = useIsMobile();
 
@@ -130,6 +132,8 @@ const AgentMessages = ({
                   showOrbFromConfig={showOrbFromConfig}
                   invertTextColor={invertTextColor}
                 />
+
+                {isLastGroupWithContent && hasRenderableItems && isTyping && <TypingIndicator />}
 
                 {/* Down Arrow Button - positioned after the last group */}
                 {isLastGroupWithContent && hasRenderableItems && (

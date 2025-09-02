@@ -1,5 +1,5 @@
 import { MessageViewType } from '@meaku/core/types/common';
-import { isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
+import { isHumanMessageInAdminView, isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
 import Typography from '../../Typography';
 import { getMessageTimestamp } from '@meaku/core/utils/index';
 
@@ -9,7 +9,7 @@ interface ChatMessageTimestampProps {
 }
 
 const ChatMessageTimestamp = ({ messageViewType, timestamp }: ChatMessageTimestampProps) => {
-  if (!timestamp || !isHumanMessageInDashboardView(messageViewType)) {
+  if (!timestamp || !(isHumanMessageInDashboardView(messageViewType) || isHumanMessageInAdminView(messageViewType))) {
     return null;
   }
 

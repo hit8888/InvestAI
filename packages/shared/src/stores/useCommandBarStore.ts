@@ -322,7 +322,8 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
             newMessage.event_type === 'BOOK_MEETING' ||
             (newMessage.event_type !== 'FORM_FILLED' &&
               newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
-              newMessage.event_type !== 'CALENDAR_SUBMIT');
+              newMessage.event_type !== 'CALENDAR_SUBMIT' &&
+              newMessage.event_type !== 'USER_TYPING');
 
           return {
             messages: orderedMessages,

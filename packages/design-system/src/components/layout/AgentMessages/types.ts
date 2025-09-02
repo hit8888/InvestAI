@@ -30,6 +30,7 @@ export interface IProps {
   showOrbFromConfig: boolean;
   invertTextColor: boolean;
   enableScrollToBottom?: boolean;
+  isTyping?: boolean;
 }
 
 export interface MessageGroupProps extends Omit<IProps, 'initialSuggestedQuestions' | 'allowFullWidthForText'> {
