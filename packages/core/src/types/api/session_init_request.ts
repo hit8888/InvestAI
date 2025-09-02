@@ -44,4 +44,5 @@ export type InitializationPayload = {
   agent_modal?: WidgetMode;
   browsed_urls?: BrowsedUrl[];
   query_params?: Record<string, string>;
+  command_bar?: boolean;
 };

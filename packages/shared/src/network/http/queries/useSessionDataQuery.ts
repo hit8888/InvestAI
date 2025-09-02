@@ -28,6 +28,7 @@ const useSessionDataQuery = (
         is_test: settings.is_test,
         is_admin: settings.is_admin,
         query_params: settings.query_params,
+        command_bar: true,
         ...payload,
       });
       return response.data;
