@@ -1,16 +1,9 @@
-import Typography from '@breakout/design-system/components/Typography/index';
 import { AvailabilitySettings } from '@calcom/atoms';
 import toast from 'react-hot-toast';
 
-const Availability = () => {
+export const Availability = () => {
   return (
     <div className="flex w-full flex-col gap-8">
-      <div className="flex w-full flex-col gap-2">
-        <Typography variant="title-18">Availability</Typography>
-        <Typography variant="body-14" textColor="gray500">
-          Manage your availability and schedule
-        </Typography>
-      </div>
       <AvailabilitySettings
         enableOverrides
         disableToasts
@@ -28,5 +21,3 @@ const Availability = () => {
     </div>
   );
 };
-
-export default Availability;

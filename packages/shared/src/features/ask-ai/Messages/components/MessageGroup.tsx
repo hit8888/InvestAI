@@ -37,6 +37,7 @@ interface MessageGroupProps {
   lastMessageMarkerRef: React.RefObject<HTMLDivElement | null>;
   isExpanded?: boolean;
   shouldShowSessionIndicator: boolean;
+  onExpand?: () => void;
 }
 
 export const MessageGroup: React.FC<MessageGroupProps> = ({
@@ -60,6 +61,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   lastMessageMarkerRef,
   isExpanded = false,
   shouldShowSessionIndicator,
+  onExpand,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
     return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
@@ -97,6 +99,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
             isLatestMessage={isLatestMessage}
             isExpanded={isExpanded}
             shouldShowSessionIndicator={shouldShowSessionIndicator}
+            onExpand={onExpand}
           />
         );
       })}

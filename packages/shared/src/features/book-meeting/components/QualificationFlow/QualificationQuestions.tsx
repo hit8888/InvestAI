@@ -101,14 +101,14 @@ const QualificationQuestions = ({ artifact, handleSendUserMessage }: Qualificati
           handleSetAnswers={(answer) => handleEachQuestionSetAnswers(answer, item)}
         />
       ))}
-      <div className="flex w-full justify-end pr-0 pt-4">
+      <div className="flex w-full pt-4">
         {!hasQualificationMetadataFilledData ? (
           <Button
             autoFocus
             onClick={handleSubmitQualificationQuestions}
             disabled={isSubmitBtnDisabled}
             size="sm"
-            className="gap-2"
+            className="gap-2 w-full"
           >
             Submit
             <Icons.ArrowRight className="size-4" />

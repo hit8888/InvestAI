@@ -45,4 +45,5 @@ export enum CalendarTypeEnum {
   CAL_COM = 'CAL_COM',
   IFRAME = 'IFRAME',
   HUBSPOT = 'HUBSPOT',
+  BREAKOUT = 'BREAKOUT',
 }

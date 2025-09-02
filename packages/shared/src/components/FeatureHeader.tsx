@@ -82,7 +82,7 @@ export const FeatureHeader = ({
               </div>
             </div>
           </div>
-          {!welcomeMessage && getHeaderActions()}
+          {!coverImage && getHeaderActions()}
         </div>
         <div
           className={`transition-all duration-300 ease-in-out ${

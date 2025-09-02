@@ -1,5 +1,5 @@
 import { EventScheduledEvent, InlineWidget as CalendlyWidget, useCalendlyEventListener } from 'react-calendly';
-import { CalendarArtifactContent } from '@meaku/core/types/artifact';
+import { CalendarArtifactContent } from '../../utils/artifact';
 import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
 
 interface Props {

@@ -869,3 +869,24 @@ export const AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS = [
     itemValue: AgentResponseWordCountEnum.DETAILED,
   },
 ];
+
+export const CREATE_CALENDAR_TAB_ITEMS_VALUES = {
+  AVAILABILITY: 'availability',
+  EVENT_TYPES: 'event-types',
+};
+
+export const CREATE_CALENDAR_TAB_ITEMS = [
+  {
+    itemKey: 'availability',
+    itemTitle: 'Availability',
+    itemDescription: 'Manage your availability and schedule',
+    itemValue: CREATE_CALENDAR_TAB_ITEMS_VALUES.AVAILABILITY,
+  },
+  {
+    itemKey: 'event-types',
+    itemTitle: 'Event Types',
+    itemDescription:
+      'Create and manage your event types - enables a user to create events that others can use to book them',
+    itemValue: CREATE_CALENDAR_TAB_ITEMS_VALUES.EVENT_TYPES,
+  },
+];

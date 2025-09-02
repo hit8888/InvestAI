@@ -5,6 +5,7 @@ import { Message, SendUserMessageParams, MessageEventType } from '../../../types
 
 interface IProps {
   messages: Message[];
+  onExpand: () => void;
   handleSendUserMessage: (data: SendUserMessageParams) => void;
 }
 
@@ -14,7 +15,7 @@ const artifactPriorityOrder = {
   [MessageEventType.CALENDAR_ARTIFACT]: 3,
 };
 
-const BookMeetingFlowContainer = ({ messages, handleSendUserMessage }: IProps) => {
+const BookMeetingFlowContainer = ({ messages, handleSendUserMessage, onExpand }: IProps) => {
   // Filter messages to get explicit event messages for form, qualification form, and calendar flows
   const artifactMessages = messages.filter(
     (message) =>
@@ -40,6 +41,7 @@ const BookMeetingFlowContainer = ({ messages, handleSendUserMessage }: IProps) =
         message={message}
         messages={messages}
         handleSendUserMessage={handleSendUserMessage}
+        onExpand={onExpand}
       />
     );
   };

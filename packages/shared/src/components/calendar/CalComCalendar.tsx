@@ -1,8 +1,8 @@
 import Cal from '@calcom/embed-react';
 import { useEffect } from 'react';
-import { CalendarArtifactContent } from '@meaku/core/types/artifact';
+import { CalendarArtifactContent } from '../../utils/artifact';
 import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
-import { CalendarMessageHandler, CalComEventData } from '@meaku/core/types/calendar';
+import { CalendarMessageHandler, CalComEventData } from '../../types/calendar';
 
 interface Props {
   calendarContent: CalendarArtifactContent;

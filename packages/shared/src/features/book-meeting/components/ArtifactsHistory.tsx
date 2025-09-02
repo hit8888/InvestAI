@@ -11,9 +11,10 @@ interface IProps {
   message: Message;
   messages: Message[];
   handleSendUserMessage: (data: SendUserMessageParams) => void;
+  onExpand: () => void;
 }
 
-const ArtifactsHistory = ({ message, messages, handleSendUserMessage }: IProps) => {
+const ArtifactsHistory = ({ message, messages, handleSendUserMessage, onExpand }: IProps) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [delayComplete, setDelayComplete] = useState(false);
 
@@ -75,6 +76,7 @@ const ArtifactsHistory = ({ message, messages, handleSendUserMessage }: IProps) 
       handleSendUserMessage={handleSendUserMessage}
       activeArtifactResponseId={message.response_id}
       calendarMessageExist={calendarMessageExist}
+      onExpand={onExpand}
     />
   );
 };

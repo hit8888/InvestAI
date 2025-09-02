@@ -28,7 +28,13 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
       );
     }
 
-    return <BookMeetingFlowContainer messages={filteredMessages} handleSendUserMessage={handleSendUserMessage} />;
+    return (
+      <BookMeetingFlowContainer
+        onExpand={onExpand!}
+        messages={filteredMessages}
+        handleSendUserMessage={handleSendUserMessage}
+      />
+    );
   };
 
   return (

@@ -5,11 +5,12 @@ import { CalendarTabsEnum } from './utils';
 import CalComCalendarManager from './CalComCalendarManager';
 import CalendarTabs from './CalendarTabs';
 import { useCalendarTab } from './useCalendarTab';
+import { useMemo } from 'react';
 
 const CalendarPage = () => {
   const currentTab = useCalendarTab();
 
-  const renderTabContent = () => {
+  const renderTabContent = useMemo(() => {
     switch (currentTab) {
       case CalendarTabsEnum.ADD_CALENDAR:
         return <CalendarList />;
@@ -18,17 +19,17 @@ const CalendarPage = () => {
       default:
         return <CalComCalendarManager />;
     }
-  };
+  }, [currentTab]);
 
   return (
     <PageContainer
-      className="gap-6"
+      className="max-w-4xl gap-6"
       containerClassName="gap-6"
       heading={'Calendar Management'}
       subHeading={CALENDAR_MANAGEMENT_DESCRIPTION}
     >
       <CalendarTabs />
-      {renderTabContent()}
+      {renderTabContent}
     </PageContainer>
   );
 };

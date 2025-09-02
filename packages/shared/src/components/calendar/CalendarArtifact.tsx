@@ -1,6 +1,8 @@
-import { CalendarArtifactContent } from '../../../utils/artifact';
-import { SendUserMessageParams } from '../../../types/message';
-import { CalendarBookingSuccessfull, useCommonCalendarArtifact } from '../../../components/calendar';
+import { CalendarArtifactContent } from '../../utils/artifact';
+import { SendUserMessageParams } from '../../types/message';
+import { CalendarBookingSuccessfull, useCommonCalendarArtifact } from './index';
+import { cn } from '@meaku/saral';
+import { useEffect } from 'react';
 
 interface AskAiCalendarArtifactProps {
   content: CalendarArtifactContent;
@@ -8,6 +10,7 @@ interface AskAiCalendarArtifactProps {
   metadata?: Record<string, unknown>;
   isSubmitted?: boolean;
   artifactResponseId?: string;
+  onExpand: () => void;
 }
 
 // Type guard to safely check if calendar booking was successful
@@ -20,33 +23,43 @@ const isCalendarBookingSuccessful = (metadata: Record<string, unknown> | undefin
   return typeof eventUri === 'string' && typeof inviteeUri === 'string';
 };
 
-export const AskAiCalendarArtifact = ({
+export const CalendarArtifact = ({
   content,
   handleSendUserMessage,
   metadata,
   isSubmitted = false,
   artifactResponseId,
+  onExpand,
 }: AskAiCalendarArtifactProps) => {
-  const { getCalendarContentBasedOnType, getCalendarLoadingIndicator, isIframeOrHubSpotCalendar } =
+  const { getCalendarContentBasedOnType, getCalendarLoadingIndicator, isIframeOrHubSpotCalendar, isBreakoutCalendar } =
     useCommonCalendarArtifact({
       content,
+      metadata,
       handleSendUserMessage,
       artifactResponseId,
     });
+
+  useEffect(() => {
+    if (isBreakoutCalendar) {
+      onExpand?.();
+    }
+  }, [isBreakoutCalendar]);
 
   const isCalendarBookingSuccessfull =
     isSubmitted || (!isIframeOrHubSpotCalendar && isCalendarBookingSuccessful(metadata));
 
   if (isCalendarBookingSuccessfull) {
     return (
-      <div className="mt-4 w-full px-10 py-4">
+      <div className="p-8">
         <CalendarBookingSuccessfull />
       </div>
     );
   }
 
   return (
-    <div className="relative mt-4 h-[500px] w-full rounded-xl border  p-2 max-w-md mx-auto">
+    <div
+      className={cn('h-[500px] w-full rounded-md p-2 border-none bg-card mt-4', isBreakoutCalendar && 'mt-0 bg-none')}
+    >
       {getCalendarLoadingIndicator()}
       {getCalendarContentBasedOnType()}
     </div>

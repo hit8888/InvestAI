@@ -181,6 +181,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               adminSessionInfo={adminSessionInfo}
               hasActiveAdminSession={hasActiveAdminSession}
               isExpanded={isExpanded}
+              onExpand={onExpand}
             />
           </div>
           <AskAiInput

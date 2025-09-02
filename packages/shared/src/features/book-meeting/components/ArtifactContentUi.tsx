@@ -3,8 +3,9 @@ import {
   FormArtifactMetadataType,
   ArtifactContentWithMetadataProps,
   AdditionalCalendarArtifactContent,
+  CalendarArtifactContent,
 } from '../../../utils/artifact';
-import { BookMeetingCalendarArtifact } from './BookMeetingCalendarArtifact';
+import { CalendarArtifact } from '../../../components/calendar';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import { SendUserMessageParams } from '../../../types/message';
 import FormArtifact from './FormArtifact';
@@ -16,6 +17,7 @@ interface Props {
   isQualificationFormArtifact?: boolean;
   activeArtifactResponseId?: string;
   calendarMessageExist?: boolean;
+  onExpand: () => void;
 }
 
 export const ArtifactContentUi = ({
@@ -24,6 +26,7 @@ export const ArtifactContentUi = ({
   handleSendUserMessage,
   activeArtifactResponseId,
   calendarMessageExist,
+  onExpand,
 }: Props) => {
   if (!messageEventType || !artifactContent) {
     return null;
@@ -32,11 +35,13 @@ export const ArtifactContentUi = ({
   switch (messageEventType) {
     case 'CALENDAR_ARTIFACT':
       return (
-        <BookMeetingCalendarArtifact
+        <CalendarArtifact
           key={(artifactContent as AdditionalCalendarArtifactContent).calendar_url}
-          calendarContent={artifactContent as AdditionalCalendarArtifactContent}
+          content={artifactContent as CalendarArtifactContent}
+          metadata={artifactContent.metadata}
           handleSendUserMessage={handleSendUserMessage}
           artifactResponseId={activeArtifactResponseId}
+          onExpand={onExpand}
         />
       );
     case 'FORM_ARTIFACT':

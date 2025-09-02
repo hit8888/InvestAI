@@ -802,6 +802,7 @@ export const CalendarFormDataSchema = z.object({
   is_primary: z.boolean().optional(),
   timezone: z.string().optional(),
   metadata: z.record(z.string()).optional(),
+  event_type: z.string().optional(),
 });
 
 export type CalendarFormData = z.infer<typeof CalendarFormDataSchema>;

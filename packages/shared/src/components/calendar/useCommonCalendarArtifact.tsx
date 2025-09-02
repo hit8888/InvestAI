@@ -1,20 +1,24 @@
 import { useState } from 'react';
-import { CalendarArtifactContent, CalendarTypeEnum } from '@meaku/core/types/artifact';
-import { CalendarEventData } from '@meaku/core/types/calendar';
+import { CalendarArtifactContent } from '../../utils/artifact';
+import { CalendarEventData } from '../../types/calendar';
 import { CalendlyCalendar } from './CalendlyCalendar';
 import { CalComCalendar } from './CalComCalendar';
 import { IframeCalendar } from './IframeCalendar';
 import { HubSpotCalendar } from './HubSpotCalendar';
 import { SendUserMessageParams, MessageEventType } from '../../types/message';
+import BreakoutCalendar from './BreakoutCalendar';
+import { CalendarTypeEnum } from '../../utils/enum';
 
 type CommonCalendarArtifactProps = {
   content: CalendarArtifactContent;
+  metadata?: Record<string, unknown>;
   handleSendUserMessage: (data: SendUserMessageParams) => void;
   artifactResponseId?: string;
 };
 
-const useCommonCalendarArtifact = ({
+export const useCommonCalendarArtifact = ({
   content,
+  metadata,
   handleSendUserMessage,
   artifactResponseId,
 }: CommonCalendarArtifactProps) => {
@@ -52,6 +56,8 @@ const useCommonCalendarArtifact = ({
         return <IframeCalendar {...commonProps} />;
       case CalendarTypeEnum.HUBSPOT:
         return <HubSpotCalendar {...commonProps} />;
+      case CalendarTypeEnum.BREAKOUT:
+        return <BreakoutCalendar metadata={metadata} {...commonProps} />;
       default:
         return null;
     }
@@ -59,6 +65,7 @@ const useCommonCalendarArtifact = ({
 
   const isIframeCalendar = content.calendar_type === CalendarTypeEnum.IFRAME;
   const isHubSpotCalendar = content.calendar_type === CalendarTypeEnum.HUBSPOT;
+  const isBreakoutCalendar = content.calendar_type === CalendarTypeEnum.BREAKOUT;
 
   const isIframeOrHubSpotCalendar = isIframeCalendar || isHubSpotCalendar;
 
@@ -79,7 +86,6 @@ const useCommonCalendarArtifact = ({
     getCalendarContentBasedOnType,
     getCalendarLoadingIndicator,
     isIframeOrHubSpotCalendar,
+    isBreakoutCalendar,
   };
 };
-
-export default useCommonCalendarArtifact;

@@ -10,7 +10,7 @@ import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
 import { FormArtifact } from './FormArtifact';
 import { QualificationFormArtifact } from './QualificationFormArtifact';
-import { AskAiCalendarArtifact } from './AskAiCalendarArtifact';
+import { CalendarArtifact } from '../../../components/calendar';
 import { DiscoveryQuestion } from './DiscoveryQuestion';
 import CtaEventMessage from '../../book-meeting/components/CtaEventMessage';
 import { ConversationEvent } from './ConversationEvent';
@@ -39,6 +39,7 @@ interface MessageProps {
   isLatestMessage?: boolean;
   isExpanded?: boolean;
   shouldShowSessionIndicator?: boolean;
+  onExpand?: () => void;
 }
 
 export const Message = ({
@@ -53,6 +54,7 @@ export const Message = ({
   isLatestMessage = false,
   isExpanded = false,
   shouldShowSessionIndicator = false,
+  onExpand,
 }: MessageProps) => {
   const { eventType, eventData, isTextArtifact, isAdminResponse, isVideoArtifact, isImageArtifact, isCtaEvent } =
     useMessageProcessor(message);
@@ -256,7 +258,7 @@ export const Message = ({
         />
       )}
       {isCalendarArtifact && calendarArtifactData && sendUserMessage && (
-        <AskAiCalendarArtifact
+        <CalendarArtifact
           content={{
             ...calendarArtifactData.content,
             artifact_id: calendarArtifactData.artifact_id,
@@ -265,6 +267,7 @@ export const Message = ({
           handleSendUserMessage={handleSendUserMessage}
           isSubmitted={isCalendarSubmitted}
           artifactResponseId={message.response_id}
+          onExpand={onExpand!}
         />
       )}
 
