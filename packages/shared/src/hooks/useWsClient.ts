@@ -47,7 +47,7 @@ export const useWsClient = () => {
         addMessage(data);
 
         if (isMessageRenderable(data)) {
-          playSoundForMessage(data.response_id);
+          playSoundForMessage(data);
         }
       }
     };
