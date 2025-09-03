@@ -6,6 +6,7 @@ import { Message, SendUserMessageParams } from '../../../types/message';
 
 type IProps = {
   event: Message;
+  showIcon: boolean;
   handleSendUserMessage?: (data: SendUserMessageParams) => void;
 };
 
@@ -16,7 +17,7 @@ const DEFAULT_MESSAGES: { MESSAGE: string; LABEL: string; TITLE?: string } = {
 };
 
 const CtaEventMessage = (props: IProps) => {
-  const { event, handleSendUserMessage } = props;
+  const { event, handleSendUserMessage, showIcon } = props;
   const { label, message, url, align, title } = (event.event_data as CtaEventDataContent) ?? {};
 
   const handleClick = () => {
@@ -40,9 +41,11 @@ const CtaEventMessage = (props: IProps) => {
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex flex-col items-center justify-center gap-2 p-4">
-        <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
-          <Icons.Check className="stroke-4 size-5 text-background" />
-        </div>
+        {showIcon && (
+          <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
+            <Icons.Check className="stroke-4 size-5 text-background" />
+          </div>
+        )}
         <Typography variant="heading-xl" className="text-center font-medium">
           {title || DEFAULT_MESSAGES.TITLE}
         </Typography>

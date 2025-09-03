@@ -280,7 +280,7 @@ export const Message = ({
         />
       )}
       {isCtaEvent && sendUserMessage && (
-        <CtaEventMessage event={message} handleSendUserMessage={handleSendUserMessage} />
+        <CtaEventMessage showIcon={false} event={message} handleSendUserMessage={handleSendUserMessage} />
       )}
       {isConversationEvent && (
         <ConversationEvent message={message} shouldShowSessionIndicator={shouldShowSessionIndicator} />

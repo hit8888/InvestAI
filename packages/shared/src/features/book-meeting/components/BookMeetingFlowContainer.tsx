@@ -64,6 +64,7 @@ const BookMeetingFlowContainer = ({ messages, handleSendUserMessage, onExpand }:
           key={`cta-${ctaEventMessage.response_id}-${ctaEventMessage.timestamp}`}
           event={ctaEventMessage}
           handleSendUserMessage={handleSendUserMessage}
+          showIcon
         />
       )}
     </div>
