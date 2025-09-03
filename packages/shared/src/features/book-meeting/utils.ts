@@ -123,4 +123,5 @@ export const BOOK_MEETING_EVENTS = [
   MessageEventType.QUALIFICATION_FORM_FILLED,
   MessageEventType.CALENDAR_SUBMIT,
   MessageEventType.CTA_EVENT,
+  MessageEventType.PRIMARY_GOAL_CTA_CLICKED,
 ];

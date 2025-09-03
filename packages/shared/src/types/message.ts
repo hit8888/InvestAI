@@ -59,6 +59,7 @@ export const MessageEventType = {
   SUMMARIZE: 'SUMMARIZE',
   SUMMARY_STREAM: 'SUMMARY_STREAM',
   CTA_EVENT: 'CTA_EVENT',
+  PRIMARY_GOAL_CTA_CLICKED: 'PRIMARY_GOAL_CTA_CLICKED',
 } as const;
 
 export type EventTypeType =
@@ -89,6 +90,7 @@ export type EventTypeType =
   | 'SUMMARIZE'
   | 'SUMMARY_STREAM'
   | 'CTA_EVENT'
+  | 'PRIMARY_GOAL_CTA_CLICKED'
   | string; // future-proofing
 
 // Individual event data structures
@@ -309,6 +311,13 @@ export const MessageSchema = z
         event_type: z.literal('BOOK_MEETING'),
         event_data: z.object({}),
       }), //In case of message without url
+      z.object({
+        content: z.string(),
+        event_type: z.literal('PRIMARY_GOAL_CTA_CLICKED'),
+        event_data: z.object({
+          url: z.string().optional(),
+        }),
+      }),
       z.object({
         content: z.string(),
         event_type: z.literal('GENERATING_ARTIFACT'),

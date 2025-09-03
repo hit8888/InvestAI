@@ -6,7 +6,6 @@ import { Message, SendUserMessageParams } from '../../../types/message';
 
 type IProps = {
   event: Message;
-  showPreview?: boolean;
   handleSendUserMessage?: (data: SendUserMessageParams) => void;
 };
 
@@ -27,7 +26,8 @@ const CtaEventMessage = (props: IProps) => {
       message: '',
       overrides: {
         event_data: { url },
-        event_type: 'BOOK_MEETING',
+        event_type: 'PRIMARY_GOAL_CTA_CLICKED',
+        response_id: event.response_id,
       },
     });
     window.open(url, '_blank');

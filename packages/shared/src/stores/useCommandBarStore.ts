@@ -321,6 +321,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
             (newMessage.event_type !== 'FORM_FILLED' &&
               newMessage.event_type !== 'QUALIFICATION_FORM_FILLED' &&
               newMessage.event_type !== 'CALENDAR_SUBMIT' &&
+              newMessage.event_type !== 'PRIMARY_GOAL_CTA_CLICKED' &&
               newMessage.event_type !== 'USER_TYPING');
 
           return {
@@ -605,6 +606,8 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         'FORM_FILLED',
         'QUALIFICATION_FORM_FILLED',
         'CALENDAR_SUBMIT',
+        'CTA_EVENT',
+        'PRIMARY_GOAL_CTA_CLICKED',
       ];
 
       const ADMIN_SESSION_EVENTS = ['JOIN_SESSION', 'LEAVE_SESSION', 'ADMIN_RESPONSE', 'ADMIN_TYPING'];
