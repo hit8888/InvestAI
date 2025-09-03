@@ -200,7 +200,10 @@ export const MainVideoPlayer = ({
                 onWatchNow={onWatchNow}
                 isGlobalLoading={false}
                 variant="recommendation"
-                onLater={() => setShowOverlay(false)}
+                onLater={() => {
+                  setShowOverlay(false);
+                  setHasEnded(false);
+                }}
               />
             </div>
           </div>

@@ -118,7 +118,7 @@ export default {
         'high-bounce': 'highBounce 1s ease-in-out infinite',
         'slide-in-right': 'slideInFromRight 0.5s ease-out forwards',
         'quick-flash': 'quick-flash 3s ease-in-out infinite',
-        'slide-in-right': 'slideInFromRight 0.5s ease-out forwards',
+        'scale-in-right': 'scaleInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
       },
       keyframes: {
         highBounce: {
@@ -152,6 +152,18 @@ export default {
         slideInFromRight: {
           '0%': { transform: 'translateX(10%)', opacity: '0' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        scaleInRight: {
+          '0%': {
+            transform: 'scale(0) translateX(16px)',
+            opacity: '0',
+            transformOrigin: 'right center',
+          },
+          '100%': {
+            transform: 'scale(1) translateX(0)',
+            opacity: '1',
+            transformOrigin: 'right center',
+          },
         },
       },
     },

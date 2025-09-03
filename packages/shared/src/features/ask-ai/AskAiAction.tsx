@@ -3,12 +3,12 @@ import { Button, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
 import BlackTooltip from '../../components/BlackTooltip';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureActionProps } from '../';
-import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
+import { useCommandBarStore } from '../../stores/useCommandBarStore';
 
 const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
-  const { config } = useCommandBarStore();
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.ASK_AI);
+  const { config } = useCommandBarStore();
   const { orb_config: orbConfig } = config.style_config;
 
   const btnContent = !orbConfig?.show_orb ? (
@@ -16,7 +16,7 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
       data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
       size="icon"
       onClick={() => onClick?.(featureConfig)}
-      className="rounded-full bg-background hover:bg-background-light mb-1"
+      className="rounded-full bg-background hover:bg-background-light"
     >
       <img src={orbConfig?.logo_url ?? undefined} alt="orb" className="h-full w-full rounded-full object-cover" />
     </Button>
@@ -44,11 +44,7 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
     return btnContent;
   }
 
-  return (
-    <div>
-      <BlackTooltip content="Ask our AI assistant anything!">{btnContent}</BlackTooltip>
-    </div>
-  );
+  return <BlackTooltip content="Ask our AI assistant anything!">{btnContent}</BlackTooltip>;
 };
 
 export default AskAiAction;

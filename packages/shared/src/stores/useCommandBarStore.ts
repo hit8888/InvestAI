@@ -183,6 +183,10 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           const isStreaming = streamData?.is_complete === false;
           const newStreamContent = streamData?.content || '';
 
+          if (newMessage.event_data.content === '') {
+            return state;
+          }
+
           const existingStreamIndex = updatedMessages.findIndex((msg) => {
             if (msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE) {
               const existingStreamData = msg.event_data as StreamResponseEventData;

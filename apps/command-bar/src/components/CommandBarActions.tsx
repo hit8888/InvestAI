@@ -74,7 +74,7 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
 
   return (
     <TooltipProvider>
-      <div className="relative flex flex-col gap-2.5">{orderedActions.map(renderActionComponent)}</div>
+      <div className="flex flex-col gap-2.5">{orderedActions.map(renderActionComponent)}</div>
     </TooltipProvider>
   );
 };

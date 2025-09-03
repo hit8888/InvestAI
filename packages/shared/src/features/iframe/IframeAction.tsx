@@ -1,8 +1,8 @@
 import { Button, Icons } from '@meaku/saral';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import useFeatureConfig from '../../hooks/useFeatureConfig';
 import BlackTooltip from '../../components/BlackTooltip';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureActionProps } from '../';
+import useFeatureConfig from '../../hooks/useFeatureConfig';
 
 const IframeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.IFRAME);
