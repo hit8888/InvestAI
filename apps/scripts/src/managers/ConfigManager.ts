@@ -13,6 +13,17 @@ export function ConfigManager(deviceType?: "DESKTOP" | "TABLET") {
     const defaultHeight =
       constants.RESPONSIVE_SIZES[defaultDeviceType].DEFAULT.HEIGHT;
 
+    // Extract bo_message from parent window URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const boMessage = urlParams.get("bo_message");
+
+    // Update config.initialMessage if bo_message exists
+    let initialMessage = scriptElement?.getAttribute("initial-message");
+
+    if (!initialMessage && !!boMessage) {
+      initialMessage = boMessage;
+    }
+
     return {
       tenantId: scriptElement?.getAttribute("tenant-id") ?? null,
       agentId: scriptElement?.getAttribute("agent-id") || "1",
@@ -25,7 +36,7 @@ export function ConfigManager(deviceType?: "DESKTOP" | "TABLET") {
       feedbackEnabled:
         scriptElement?.getAttribute("feedback-enabled") === "true",
       userEmail: scriptElement?.getAttribute("user-email") ?? "",
-      initialMessage: scriptElement?.getAttribute("initial-message") ?? "",
+      initialMessage: initialMessage ?? "",
       startTime: scriptElement?.getAttribute("start-time") ?? null,
       endTime: scriptElement?.getAttribute("end-time") ?? null,
     };
