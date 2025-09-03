@@ -28,7 +28,7 @@ const mobileStyles = {
   right: '0px',
   marginRight: '0px',
   transform: 'translateY(50%)',
-  height: '100vh',
+  height: '100dvh',
   width: '100vw',
 } as const;
 
@@ -66,7 +66,7 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
       style={isMobile ? mobileStyles : defaultStyles}
     >
       <motion.div
-        className="space-y-2"
+        className="h-full space-y-2"
         initial={{ width: isMobile ? '100%' : 450 }}
         animate={{ width: isMobile ? '100%' : isExpanded ? 750 : 450 }}
         transition={{ width: { duration: 0.3, ease: 'easeInOut' } }}

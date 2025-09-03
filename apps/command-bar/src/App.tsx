@@ -144,7 +144,7 @@ function App() {
   }, [settings.message]);
 
   const containerClasses = cn(
-    'fixed z-[2147483647]',
+    'fixed z-[2147483646]',
     position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4',
   );
 
