@@ -5,12 +5,14 @@ export { default as AskAiAction } from './ask-ai/AskAiAction';
 export { default as BookMeetingAction } from './book-meeting/BookMeetingAction';
 export { default as SummarizeAction } from './summarize/SummarizeAction';
 export { default as IframeAction } from './iframe/IframeAction';
+export { default as VideoLibraryAction } from './video-library/VideoLibraryAction';
 
 // Content components
 export { default as AskAiContent } from './ask-ai/AskAiContent';
 export { default as BookMeetingContent } from './book-meeting/BookMeetingContent';
 export { default as SummarizeContent } from './summarize/SummarizeContent';
 export { default as IframeContent } from './iframe/IframeContent';
+export { default as VideoLibraryContent } from './video-library/VideoLibraryContent';
 
 // Nudge component
 export { default as Nudge } from './nudge/Nudge';

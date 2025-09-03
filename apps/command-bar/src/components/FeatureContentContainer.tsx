@@ -1,10 +1,16 @@
-import { AskAiContent, BookMeetingContent, SummarizeContent, IframeContent } from '@meaku/shared/features';
+import {
+  AskAiContent,
+  BookMeetingContent,
+  SummarizeContent,
+  IframeContent,
+  VideoLibraryContent,
+} from '@meaku/shared/features';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import FeatureContentWrapper from './FeatureContentWrapper';
 import { useCommandBarStore } from '@meaku/shared/stores';
 
-const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
 interface FeatureContentContainerProps {
   activeFeature: CommandBarModuleType | null;
@@ -70,6 +76,17 @@ const FeatureContentContainer = ({
           onExpand={onExpand}
           setActiveFeature={setActiveFeature}
         />
+      );
+    case VIDEO_LIBRARY:
+      return (
+        <FeatureContentWrapper activeFeature={activeFeature} isExpanded={true}>
+          <VideoLibraryContent
+            isExpanded={isExpanded}
+            onClose={onClose}
+            onExpand={onExpand}
+            setActiveFeature={setActiveFeature}
+          />
+        </FeatureContentWrapper>
       );
     default:
       return null;

@@ -6,6 +6,7 @@ export interface TenantStorageData {
   distinctId?: string;
   prospect_info_collected?: boolean;
   tenantName?: string;
+  watchedVideos?: string[];
 }
 
 export interface StorageData {

@@ -54,7 +54,7 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
       <motion.div
         className="space-y-2"
         initial={{ width: 450 }}
-        animate={{ width: isExpanded ? 680 : 450 }}
+        animate={{ width: isExpanded ? 750 : 450 }}
         transition={{ width: { duration: 0.3, ease: 'easeInOut' } }}
       >
         {children}

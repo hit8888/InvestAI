@@ -1,6 +1,12 @@
 import React from 'react';
 import { TooltipProvider } from '@meaku/saral';
-import { AskAiAction, BookMeetingAction, SummarizeAction, IframeAction } from '@meaku/shared/features';
+import {
+  AskAiAction,
+  BookMeetingAction,
+  SummarizeAction,
+  IframeAction,
+  VideoLibraryAction,
+} from '@meaku/shared/features';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
@@ -15,7 +21,7 @@ interface CommandBarActionsProps {
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
 }
 
-const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
 const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, setActiveFeature }) => {
   const { config } = useCommandBarStore();
@@ -55,6 +61,8 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
         return <SummarizeAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
       case IFRAME:
         return <IframeAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
+      case VIDEO_LIBRARY:
+        return <VideoLibraryAction key={featureConfig.id} isActive={isActive} onClick={handleClick} />;
       default:
         return null;
     }

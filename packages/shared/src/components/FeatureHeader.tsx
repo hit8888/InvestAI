@@ -4,6 +4,7 @@ import { Message, MessageEventType } from '../types/message';
 
 interface FeatureHeaderProps {
   title: string;
+  titleClassName?: string;
   subtitle?: string;
   welcomeMessage?: string;
   icon?: ReactNode;
@@ -17,6 +18,7 @@ interface FeatureHeaderProps {
 
 export const FeatureHeader = ({
   title,
+  titleClassName = '',
   subtitle,
   icon,
   onClose,
@@ -71,7 +73,7 @@ export const FeatureHeader = ({
               }`}
             >
               <div className="flex flex-col">
-                <Typography variant="heading" fontWeight="semibold">
+                <Typography variant="heading" fontWeight="semibold" className={titleClassName}>
                   {title}
                 </Typography>
                 {subtitle && (
