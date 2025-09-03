@@ -177,7 +177,7 @@ export const NavLinkSingleItem = ({
         showArrow={false}
         tooltipContentClassName="!w-full !relative !top-1 !left-4 px-0 !bg-white !shadow-2xl"
         trigger={getTooltipTrigger()}
-        showTooltip={!isPanelOpen}
+        showTooltip={!isPanelOpen && !!hasChildren}
         content={getTooltipContent(navItem as NavLinkItem)}
       />
     </div>

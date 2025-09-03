@@ -150,13 +150,17 @@ const ActiveConversationsLayout = () => {
     }
   }, [currentConversation]);
 
-  const handleCardClick = (conversation: ActiveConversation) => {
-    navigate(`/active-conversations/live/${conversation.session_id}`);
+  // Handle card click to navigate to the conversation
+  const handleCardClick = useCallback(
+    (conversation: ActiveConversation) => {
+      navigate(`/active-conversations/live/${conversation.session_id}`);
 
-    if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
-      updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
-    }
-  };
+      if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
+        updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
+      }
+    },
+    [updateSessionStatus],
+  );
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {
     setSendMessageFnMap((sendMessageFnMap) => ({
@@ -244,11 +248,15 @@ const ActiveConversationsLayout = () => {
     });
   };
 
-  const handleJoinButtonInToast = (conversation: ActiveConversation) => {
-    handleCardClick(conversation);
-    updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.PENDING);
-  };
+  const handleJoinButtonInToast = useCallback(
+    (conversation: ActiveConversation) => {
+      handleCardClick(conversation);
+      updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.PENDING);
+    },
+    [handleCardClick, updateSessionStatus],
+  );
 
+  // Show new conversation Notification Toast when a new conversation is added
   useNewConversationToast(currentTabConversations, handleJoinButtonInToast);
 
   useEffect(() => {

@@ -181,10 +181,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           const streamData = newMessage.event_data as StreamResponseEventData;
           const isComplete = streamData?.is_complete === true;
           const isStreaming = streamData?.is_complete === false;
-
-          // Find existing stream message for this response_id where new message contains old message content
-          const newStreamData = newMessage.event_data as StreamResponseEventData;
-          const newStreamContent = newStreamData?.content || '';
+          const newStreamContent = streamData?.content || '';
 
           const existingStreamIndex = updatedMessages.findIndex((msg) => {
             if (msg.response_id === newMessage.response_id && msg.event_type === MessageEventType.STREAM_RESPONSE) {
@@ -192,7 +189,8 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
               const existingContent = existingStreamData?.content || '';
 
               // Check if new message contains the old message content (incremental update)
-              return newStreamContent.includes(existingContent) && existingContent.length > 0;
+              // For empty content, we still want to match and replace
+              return newStreamContent.includes(existingContent);
             }
             return false;
           });

@@ -91,28 +91,27 @@ const HeaderCTA = () => {
       >
         {isMainView ? renderTenantLogo() : renderBackToDashboardButton()}
       </motion.div>
-      {isMainView && (
-        <div className="relative w-full">
-          <button
-            onClick={toggleSidebar}
-            className={cn(
-              `sidebar-collapsible-btn-shadow absolute -right-8 -top-3 z-50 flex h-6 w-6 items-center justify-center
+      <div className="relative w-full">
+        <button
+          onClick={toggleSidebar}
+          className={cn(
+            `sidebar-collapsible-btn-shadow absolute -right-8 -top-3 z-50 flex h-6 w-6 items-center justify-center
             rounded-full border border-gray-200 bg-gray-25`,
-              {
-                'border-primary': !isOpen,
-              },
-            )}
-          >
-            <PanelCloseIcon
-              className={cn(`z-50 h-3 w-3 text-primary transition-transform duration-300 `, {
-                'rotate-0': isOpen,
-                'rotate-180': !isOpen,
-              })}
-            />
-          </button>
-          <Separator className="w-[95%]" />
-        </div>
-      )}
+            {
+              'border-primary': !isOpen,
+              '-top-6': !isMainView,
+            },
+          )}
+        >
+          <PanelCloseIcon
+            className={cn(`z-50 h-3 w-3 text-primary transition-transform duration-300 `, {
+              'rotate-0': isOpen,
+              'rotate-180': !isOpen,
+            })}
+          />
+        </button>
+        {isMainView && <Separator className="w-[95%]" />}
+      </div>
     </div>
   );
 };
