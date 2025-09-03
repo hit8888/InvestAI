@@ -15,6 +15,8 @@ import NudgeBody from './components/NudgeBody';
 import useShowNudgeBody from './hooks/useShowNudgeBody';
 import useSound from '@meaku/core/hooks/useSound';
 import goodIdeaHighDing from '../../assets/good-idea-high-ding.wav';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { cn } from '@meaku/saral';
 
 interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
@@ -23,12 +25,16 @@ interface NudgeProps {
 }
 
 const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
+  const isMobile = useIsMobile();
   const { config, settings } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: initialNudge } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(initialNudge ?? null);
-  const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!nudgeToShow?.header_text);
+  const showNudgeBody = useShowNudgeBody(
+    !!nudgeToShow && (!isMobile || !nudgeToShow?.header_text),
+    !!nudgeToShow?.header_text,
+  );
   const { play } = useSound(goodIdeaHighDing, 0.35);
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
@@ -124,7 +130,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
       {nudgeToShow && (
         <motion.div
           key={nudgeToShow.id}
-          className="w-80 relative"
+          className={cn('w-80 relative', {
+            'max-w-[calc(100vw-104px)]': isMobile, // 16px (left gap) + 56px (action width) + 16px (gap) + 16px (right gap)
+          })}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8, y: -10 }}

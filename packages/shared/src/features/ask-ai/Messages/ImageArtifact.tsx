@@ -1,6 +1,7 @@
 import { Button, Icons, Typography } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useEffect, useRef } from 'react';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface ImageArtifactProps {
   title: string;
@@ -19,15 +20,24 @@ export const ImageArtifact = ({
 }: ImageArtifactProps) => {
   const { openSidebar, closeSidebar, currentImage, isContainerReady } = useSidebarArtifactContext();
   const hasAutoOpened = useRef(false);
+  const isMobile = useIsMobile();
 
   // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
   // Disable auto-opening when Ask AI is in expanded mode
   useEffect(() => {
-    if (url && !currentImage && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded) {
+    if (
+      url &&
+      !currentImage &&
+      !hasAutoOpened.current &&
+      isLatestMessage &&
+      isContainerReady &&
+      !isExpanded &&
+      !isMobile
+    ) {
       hasAutoOpened.current = true;
       openSidebar(url, 'SLIDE_IMAGE', title);
     }
-  }, [url, title, currentImage, isLatestMessage, isContainerReady, isExpanded, openSidebar]);
+  }, [url, title, currentImage, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
 
   const handleButtonClick = () => {
     // Disable sidebar functionality when Ask AI is in expanded mode

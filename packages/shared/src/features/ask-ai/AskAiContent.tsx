@@ -13,8 +13,10 @@ import { useWsClient } from '../../hooks/useWsClient';
 import { useAdminSession } from './hooks/useAdminSession';
 import { useFormArtifactMessage } from '../../hooks/useFormArtifactMessage';
 import { MessageEventType } from '../../types/message';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
+  const isMobile = useIsMobile();
   const {
     suggestedQuestions,
     isStreaming,
@@ -114,7 +116,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   return (
     <div
       className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
-      style={{ height: 'min(100vh, 730px)' }}
+      style={{ height: isMobile ? '100vh' : `min(100vh, 730px)` }}
       ref={containerRefCallback}
     >
       <FeatureHeader

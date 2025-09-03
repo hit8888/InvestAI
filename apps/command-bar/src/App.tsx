@@ -159,6 +159,7 @@ function App() {
         {dynamicConfigQuery?.isFetched && nudgeConfig && (
           <Nudge activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
         )}
+        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
         <FeatureContentContainer
           activeFeature={activeFeature}
           setActiveFeature={handleSetActiveButton}
@@ -166,9 +167,6 @@ function App() {
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
-
-        {/* Right side - button container */}
-        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
       </div>
     </motion.div>
   );

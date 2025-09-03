@@ -2,6 +2,7 @@ import { Button, Icons } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useEffect, useRef } from 'react';
 import { Typography } from '@meaku/saral';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface VideoArtifactProps {
   title: string;
@@ -13,6 +14,7 @@ interface VideoArtifactProps {
 export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: VideoArtifactProps) => {
   const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady } = useSidebarArtifactContext();
   const hasAutoOpened = useRef(false);
+  const isMobile = useIsMobile();
 
   const cleanUrl = (url: string): string => {
     return url.replace(/^@+/, '');
@@ -25,11 +27,19 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
   // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
   // Disable auto-opening when Ask AI is in expanded mode
   useEffect(() => {
-    if (cleanedUrl && !currentVideo && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded) {
+    if (
+      cleanedUrl &&
+      !currentVideo &&
+      !hasAutoOpened.current &&
+      isLatestMessage &&
+      isContainerReady &&
+      !isExpanded &&
+      !isMobile
+    ) {
       hasAutoOpened.current = true;
       openSidebar(cleanedUrl, 'VIDEO', title, false);
     }
-  }, [cleanedUrl, title, currentVideo, isLatestMessage, isContainerReady, isExpanded, openSidebar]);
+  }, [cleanedUrl, title, currentVideo, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
 
   const handleButtonClick = () => {
     // Disable sidebar functionality when Ask AI is in expanded mode

@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { Icons, Button, buttonVariants, Typography } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface FeatureHeaderProps {
   title: string;
@@ -29,9 +30,11 @@ export const FeatureHeader = ({
   sendUserMessage,
   coverImage,
 }: FeatureHeaderProps) => {
+  const isMobile = useIsMobile();
+
   const getHeaderActions = () => (
     <div className="flex items-center gap-2">
-      {onExpand && (
+      {onExpand && !isMobile && (
         <Button size="icon" variant="ghost" onClick={onExpand} className="size-[30px] rounded-[108px]">
           {isExpanded ? <Icons.Minimize2 className="size-3" /> : <Icons.Maximize2 className="size-3" />}
         </Button>

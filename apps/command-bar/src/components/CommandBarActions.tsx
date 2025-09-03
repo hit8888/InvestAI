@@ -15,6 +15,7 @@ import {
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface CommandBarActionsProps {
   activeFeature: CommandBarModuleType | null;
@@ -26,6 +27,7 @@ const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarMod
 const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, setActiveFeature }) => {
   const { config } = useCommandBarStore();
   const { trackEvent } = useCommandBarAnalytics();
+  const isMobile = useIsMobile();
 
   const { modules = [] } = config.command_bar ?? {};
 
@@ -43,11 +45,13 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
   };
 
   // This is to ensure that the ask ai button is always the first button in the command bar
-  const orderedActions = [...modules].sort((a, b) => {
-    if (a.module_type === ASK_AI && b.module_type !== ASK_AI) return 1;
-    if (a.module_type !== ASK_AI && b.module_type === ASK_AI) return -1;
-    return 0;
-  });
+  const orderedActions = [...modules]
+    .sort((a, b) => {
+      if (a.module_type === ASK_AI && b.module_type !== ASK_AI) return 1;
+      if (a.module_type !== ASK_AI && b.module_type === ASK_AI) return -1;
+      return 0;
+    })
+    .filter((module) => (isMobile ? module.module_type === ASK_AI : true));
 
   const renderActionComponent = (featureConfig: CommandBarModuleConfigType) => {
     const isActive = activeFeature === featureConfig.module_type;
