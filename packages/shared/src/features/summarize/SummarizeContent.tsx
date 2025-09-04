@@ -27,7 +27,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
         isExpanded={isExpanded}
         ctas={[]}
       />
-      <div className="flex flex-1 min-h-0 flex-col gap-4 px-4">
+      <div className="flex flex-1 min-h-0 flex-col justify-center gap-4 px-4">
         {summaryContent ? (
           <div className="flex flex-1 min-h-0 flex-col gap-4">
             {!hasError ? (

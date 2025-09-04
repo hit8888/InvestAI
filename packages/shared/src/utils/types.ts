@@ -39,7 +39,11 @@ export type ArtifactFormType = z.infer<typeof ArtifactFormSchema>;
 export const MessageTypeSchema = z.enum(['TEXT', 'STREAM', 'ARTIFACT', 'EVENT']);
 export const DeviceTypeSchema = z.enum(['MOBILE', 'DESKTOP']);
 
-export type FormFilledEventType = 'FORM_FILLED' | 'QUALIFICATION_FORM_FILLED' | 'CALENDAR_SUBMIT';
+export type FormFilledEventType =
+  | 'FORM_FILLED'
+  | 'QUALIFICATION_FORM_FILLED'
+  | 'CALENDAR_SUBMIT'
+  | 'PRIMARY_GOAL_CTA_CLICKED';
 
 export const BaseMessageContentSchema = z.object({
   content: z.string(),

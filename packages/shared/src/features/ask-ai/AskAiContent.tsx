@@ -120,11 +120,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
       ref={containerRefCallback}
     >
       <FeatureHeader
-        title={
-          hasActiveAdminSession && adminSessionInfo
-            ? `${adminSessionInfo.name}`
-            : `${askaiConfig?.agent_name} - AI Copilot`
-        }
+        title={hasActiveAdminSession && adminSessionInfo ? `${adminSessionInfo.name}` : `${askaiConfig?.agent_name}`}
         subtitle={isAdminTyping ? `${adminSessionInfo?.name || 'Admin'} is typing...` : undefined}
         welcomeMessage={messages?.length === 0 && !isAdminTyping ? askaiConfig?.welcome_message.message : undefined}
         icon={

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Message, MessageEventType } from '../types/message';
 import { InitSessionResponse } from '../types/responses';
 import { convertBookMeetingFormDataToFormArtifactMessage } from '../utils/common';
@@ -41,6 +41,12 @@ export const useFormArtifactMessage = ({
   // Filter for artifact event messages
   const artifactEventMessages = messages.filter((message) => artifactEventTypes.includes(message.event_type));
 
+  // Find form filled message if checking is enabled - memoized to prevent infinite loops
+  const formFilledMessage = useMemo(() => {
+    if (!checkFormFilled) return undefined;
+    return messages.find((message) => message.event_type === MessageEventType.FORM_FILLED);
+  }, [messages, checkFormFilled]);
+
   // Fetch book meeting form data for consistency
   const { data: bookMeetingFormData, isLoading: isFormDataLoading } = useBookMeetingFormQuery(
     {
@@ -62,12 +68,6 @@ export const useFormArtifactMessage = ({
       return;
     }
 
-    // Find form filled message if checking is enabled
-    let formFilledMessage: Message | undefined;
-    if (checkFormFilled) {
-      formFilledMessage = messages.find((message) => message.event_type === MessageEventType.FORM_FILLED);
-    }
-
     // Create and add the form artifact message
     const formArtifactMessage = convertBookMeetingFormDataToFormArtifactMessage(
       bookMeetingFormData,
@@ -76,7 +76,13 @@ export const useFormArtifactMessage = ({
     );
 
     addMessage(formArtifactMessage);
-  }, [bookMeetingFormData, messages, sessionData, addMessage, artifactEventTypes, checkFormFilled]);
+  }, [
+    bookMeetingFormData,
+    artifactEventMessages.length,
+    sessionData?.session_id,
+    addMessage,
+    formFilledMessage?.response_id,
+  ]);
 
   return {
     isFormDataLoading,

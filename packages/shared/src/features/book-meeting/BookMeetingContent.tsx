@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { SendUserMessageParams } from '../../types/message';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { PhoneCall } from 'lucide-react';
@@ -12,9 +13,12 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
   const { sendUserMessage } = useWsClient();
   useSessionDataQuery({}, { enabled: true });
 
-  const handleSendUserMessage = (data: SendUserMessageParams) => {
-    sendUserMessage?.(data.message, data.overrides);
-  };
+  const handleSendUserMessage = useCallback(
+    (data: SendUserMessageParams) => {
+      sendUserMessage?.(data.message, data.overrides);
+    },
+    [sendUserMessage],
+  );
 
   const { isFormDataLoading, filteredMessages, hasFilteredMessages } = useBookMeetingContentHelper({ onClose });
 
@@ -38,7 +42,7 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
   };
 
   return (
-    <div className="h-full min-h-[400px] w-full flex flex-col rounded-[20px] border border-border-dark shadow-elevation-md !bg-white">
+    <div className="h-full min-h-[200px] w-full flex flex-col rounded-[20px] border border-border-dark shadow-elevation-md !bg-white">
       <FeatureHeader
         title="Book a Call"
         welcomeMessage={''}

@@ -4,7 +4,7 @@ import { ArtifactContent, CalendarArtifactContent, FormArtifactContent } from '.
 import { Message, MessageEventType, ArtifactMessageContent } from '../types/message';
 import { FormConfigResponse } from '../types/responses';
 
-const { FORM_FILLED, QUALIFICATION_FORM_FILLED, CALENDAR_SUBMIT } = MessageEventType;
+const { FORM_FILLED, QUALIFICATION_FORM_FILLED, CALENDAR_SUBMIT, PRIMARY_GOAL_CTA_CLICKED } = MessageEventType;
 
 export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'FORM', 'CALENDAR', 'QUALIFICATION_FORM'] as const;
 export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES] as const;
@@ -27,18 +27,13 @@ export const checkMessageIsFormFilled = (msg: Message, eventType: FormFilledEven
     'event_data' in msg &&
     ((eventType === FORM_FILLED && 'form_data' in msg.event_data) ||
       (eventType === CALENDAR_SUBMIT && 'form_data' in msg.event_data) ||
+      (eventType === PRIMARY_GOAL_CTA_CLICKED && 'url' in msg.event_data) ||
       (eventType === QUALIFICATION_FORM_FILLED && 'qualification_responses' in msg.event_data))
   );
 };
 
-const checkIfFormFilledMessageExists = (messages: Message[], eventType: FormFilledEventType) => {
-  return messages.find(
-    (
-      msg,
-    ): msg is Message & {
-      event_data: ArtifactFormType;
-    } => checkMessageIsFormFilled(msg, eventType),
-  );
+const checkIfUserTriggeredMessageExist = (messages: Message[], eventType: FormFilledEventType) => {
+  return messages.some((msg): msg is Message => checkMessageIsFormFilled(msg, eventType));
 };
 
 export const getMessagesWithSameResponseId = (messages: Message[], responseId: string) => {
@@ -156,20 +151,30 @@ export const getFormFilledEventByArtifactId = (
 };
 
 export const checkIfSubmissionEventsPresent = (messages: Message[], hideContent: boolean = false) => {
-  const isFormFilledEventMessageExist = checkIfFormFilledMessageExists(messages, FORM_FILLED);
-  const isQualificationFormFiledEventMessageExist = checkIfFormFilledMessageExists(messages, QUALIFICATION_FORM_FILLED);
-  const isCalendarSubmitEventMessageExist = checkIfFormFilledMessageExists(messages, CALENDAR_SUBMIT);
+  const isFormFilledEventMessageExist = checkIfUserTriggeredMessageExist(messages, FORM_FILLED);
+  const isQualificationFormFiledEventMessageExist = checkIfUserTriggeredMessageExist(
+    messages,
+    QUALIFICATION_FORM_FILLED,
+  );
+  const isCalendarSubmitEventMessageExist = checkIfUserTriggeredMessageExist(messages, CALENDAR_SUBMIT);
+  const isPrimaryCtaClickedEventMessageExist = checkIfUserTriggeredMessageExist(messages, PRIMARY_GOAL_CTA_CLICKED);
 
   const isQualificationFormArtifact = messages.find((message) => checkIsQualificationFormArtifact(message));
   const isCalendarArtifactExist = messages.find((message) => isCalendarArtifact(message));
+  const isCTAEventMessageExist = messages.find((message) => isCtaEvent(message));
 
   // If qualification form is filled
   if (isQualificationFormFiledEventMessageExist) {
     // Check if calendar artifact is present, if yes show CTA (return true)
     if (isCalendarArtifactExist && hideContent) {
-      return true;
+      return !isCalendarSubmitEventMessageExist;
     }
-    // If no calendar artifact after qualification form filled, hide CTA
+
+    if (isCTAEventMessageExist) {
+      return !isPrimaryCtaClickedEventMessageExist;
+    }
+
+    // If there is no calendar artifact or CTA event after qualification form filled, hide CTA
     return false;
   }
 
@@ -180,7 +185,12 @@ export const checkIfSubmissionEventsPresent = (messages: Message[], hideContent:
       // Hide CTA if calendar is submitted
       return !isCalendarSubmitEventMessageExist;
     }
-    // If no calendar artifact, hide CTA (original behavior)
+
+    if (isCTAEventMessageExist) {
+      return !isPrimaryCtaClickedEventMessageExist;
+    }
+
+    // If there is no calendar artifact or CTA event after form filled, hide CTA
     return false;
   }
 

@@ -12,7 +12,8 @@ type UseBookMeetingContentHelperProps = {
 const CLOSE_DELAY = 5000;
 
 const useBookMeetingContentHelper = ({ onClose }: UseBookMeetingContentHelperProps) => {
-  const { messages, sessionData, addMessage } = useCommandBarStore();
+  const { getRenderableMessages, sessionData, addMessage } = useCommandBarStore();
+  const messages = getRenderableMessages();
 
   const shouldBookMeetingContentClose = useMemo(() => !checkIfSubmissionEventsPresent(messages, true), [messages]);
 
