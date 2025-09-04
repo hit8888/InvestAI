@@ -20,6 +20,7 @@ import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useU
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -41,6 +42,9 @@ function App() {
   const updateProspectMutation = useUpdateProspectMutation();
 
   const { initialiseSocket, sendUserMessage } = useWsClient();
+
+  // Initialize user left tracking
+  useUserLeftTracking(sendUserMessage);
 
   const handleSetActiveButton = (button: CommandBarModuleType | null) => {
     if (!button) {

@@ -1,28 +1,28 @@
 import { useEffect, useRef } from 'react';
 import { ActiveConversation } from 'src/context/ActiveConversationsContext';
 import toast, { ToastOptions } from 'react-hot-toast';
-import { X } from 'lucide-react';
-import SuccessToastIcon from '@breakout/design-system/components/icons/success-toast-icon';
 import Typography from '@breakout/design-system/components/Typography/index';
+import Button from '@breakout/design-system/components/Button/index';
+import NewLeadsToastIcon from '../components/ActiveConversationsComp/NewLeadsToastIcon';
 
-const TOAST_DURATION = 60000;
+const TOAST_DURATION = 5000;
 
 // Global toast tracking to prevent duplicates across component re-renders
-const globalToastTracker = {
+export const globalToastTracker = {
   shownToasts: new Set<string>(),
   activeToastIds: new Set<string>(),
 };
 
 const getToastTitle = (companyName: string | undefined) => {
   if (!companyName) {
-    return 'Someone is here';
+    return 'A new visitor matches your lead criteria.';
   }
-  return `Someone from ${companyName} is here`;
+  return `A new visitor from ${companyName} matches your lead criteria.`;
 };
 
 const showNewConversationToast = (
   conversation: ActiveConversation,
-  handleCardClick: (conversation: ActiveConversation) => void,
+  handleJoinButtonInToast: (conversation: ActiveConversation) => void,
 ) => {
   // Check global tracker first to prevent duplicates
   if (globalToastTracker.shownToasts.has(conversation.session_id)) {
@@ -32,34 +32,38 @@ const showNewConversationToast = (
   const title = getToastTitle(conversation?.prospect?.company);
 
   const getToastContent = (toastId: string | undefined) => (
-    <div className="success-toast-shadow flex w-full max-w-lg flex-1 items-center gap-2 rounded-lg border-2 border-gray-300 bg-gray-50 px-2.5 py-1">
-      <div className="flex w-full items-center gap-2">
-        <SuccessToastIcon width={'18'} height={'18'} className="text-positive-1000" />
+    <div className="success-toast-shadow flex w-fit items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-2.5 py-2">
+      <div className="flex flex-1 items-center gap-2">
+        <NewLeadsToastIcon />
         <Typography variant="label-14-medium" textColor="default">
+          New Potential Lead!
+        </Typography>
+        <Typography variant="body-14" textColor="gray500" className="max-w-xl flex-1">
           {title}
         </Typography>
       </div>
-      <div className="flex items-center gap-2">
-        <button
-          className="text-sm text-primary"
+      <div className="flex items-center gap-4">
+        <Button
+          variant="primary"
           onClick={() => {
-            handleCardClick(conversation);
+            handleJoinButtonInToast(conversation);
             toast.dismiss(toastId);
             // Remove from active toasts when dismissed
             globalToastTracker.activeToastIds.delete(conversation.session_id);
           }}
         >
-          Join
-        </button>
-        <button
+          View Lead
+        </Button>
+        <Button
+          variant="secondary"
           onClick={() => {
             toast.dismiss(toastId);
             // Remove from active toasts when dismissed
             globalToastTracker.activeToastIds.delete(conversation.session_id);
           }}
         >
-          <X className="size-4" />
-        </button>
+          Dismiss
+        </Button>
       </div>
     </div>
   );
@@ -75,14 +79,14 @@ const showNewConversationToast = (
 
   toast.custom((t: ToastOptions) => getToastContent(t.id), {
     id: `new-convo-${conversation.session_id}`,
-    position: 'top-right',
+    position: 'top-center',
     duration: TOAST_DURATION,
   });
 };
 
 const useNewConversationToast = (
   currentTabConversations: ActiveConversation[] | null,
-  handleCardClick: (conversation: ActiveConversation) => void,
+  handleJoinButtonInToast: (conversation: ActiveConversation) => void,
 ) => {
   // Track previous conversations to detect new ones
   const previousConversationsRef = useRef<Set<string>>(new Set());
@@ -108,7 +112,7 @@ const useNewConversationToast = (
         const conversation = currentTabConversations.find((conv) => conv.session_id === sessionId);
         if (conversation) {
           // Show toast for the new conversation (global tracking handled inside showNewConversationToast)
-          showNewConversationToast(conversation, handleCardClick);
+          showNewConversationToast(conversation, handleJoinButtonInToast);
         }
       }
     });

@@ -9,6 +9,7 @@ import { Link2 as LinkIcon, Briefcase } from 'lucide-react';
 // import { cn } from '@breakout/design-system/lib/cn';
 import { toSentenceCase } from '@meaku/core/utils/index';
 import NumberUtil from '@meaku/core/utils/numberUtils';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 interface ActiveConversationCardProps {
   conversation: ActiveConversation;
@@ -32,6 +33,7 @@ const ActiveConversationCard = ({
     prospect: { company, country, company_demographics, browsed_urls },
     session,
     webpage_screenshot,
+    hasUserLeft,
   } = conversation;
   const { company_revenue, employee_count } = company_demographics;
 
@@ -67,6 +69,15 @@ const ActiveConversationCard = ({
           </div>
           <span className="font-semibold text-gray-900">{company ?? 'Unknown'}</span>
         </div>
+        {hasUserLeft ? (
+          <Typography variant="caption-12-medium" textColor="error">
+            User has left this chat.
+          </Typography>
+        ) : (
+          <Typography variant="caption-12-normal" textColor="gray400">
+            Browsing
+          </Typography>
+        )}
 
         {/* TODO: Uncomment this when we have a way to pin conversations */}
         {/* User status and pin */}

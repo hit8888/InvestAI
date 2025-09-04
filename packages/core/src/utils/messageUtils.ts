@@ -494,6 +494,10 @@ export const checkIsAdminLeftMessage = (message: WebSocketMessage): boolean => {
   return message.message_type === 'EVENT' && message.message.event_type === 'LEAVE_SESSION';
 };
 
+export const checkIsUserLeftMessage = (message: WebSocketMessage): boolean => {
+  return message.message_type === 'EVENT' && message.message.event_type === 'USER_LEFT';
+};
+
 export function getMessageViewType(messageSenderRole: MessageSenderRole, viewType: ViewType): MessageViewType {
   if (messageSenderRole === MessageSenderRole.ADMIN) {
     switch (viewType) {
@@ -907,7 +911,8 @@ export const checkIfCTAButtonShown = (messages: WebSocketMessage[]) => {
  */
 export const willMessageRenderHTML = (message: WebSocketMessage): boolean => {
   // Admin messages always render
-  if (checkIsAdminJoinedMessage(message) || checkIsAdminLeftMessage(message)) return true;
+  if (checkIsAdminJoinedMessage(message) || checkIsAdminLeftMessage(message) || checkIsUserLeftMessage(message))
+    return true;
 
   // Discovery answers always render
   if (isDiscoveryAnswer(message)) return true;

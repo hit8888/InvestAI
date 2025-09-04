@@ -33,6 +33,7 @@ export interface ActiveConversation {
     browsed_urls: BrowsedUrl[];
   };
   webpage_screenshot?: DataSourceItem | undefined;
+  hasUserLeft?: boolean;
   session: {
     query_params: {
       utm_source: string;
@@ -55,7 +56,8 @@ const defaultContext: ActiveConversationsContextType = {
 export const ActiveConversationsContext = createContext<ActiveConversationsContextType>(defaultContext);
 
 export const ActiveConversationsProvider = ({ children }: { children: React.ReactNode }) => {
-  const { readyState, lastMessageBySession, setLastMessageBySession } = useActiveConversationsWebSocket();
+  const { readyState, lastMessageBySession, setLastMessageBySession, hasUserLeftBySession, cleanupExpiredSessions } =
+    useActiveConversationsWebSocket();
   const { data: conversations, isLoading, refetch: refetchActiveConversations } = useActiveConversationsQuery();
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
@@ -73,7 +75,11 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
 
   useEffect(() => {
     if (conversations) {
-      const newConversations = handleWebpageScreenshotData(conversations);
+      const newConversations =
+        handleWebpageScreenshotData(conversations)?.map((conv) => ({
+          ...conv,
+          hasUserLeft: hasUserLeftBySession[conv.session_id] || false,
+        })) || [];
       setActiveConversations(newConversations);
 
       const lastMessagesBySession = conversations.reduce(
@@ -90,6 +96,10 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
       );
 
       setLastMessageBySession(lastMessagesBySession);
+
+      // Clean up hasUserLeftBySession for conversations that are no longer active
+      const activeSessionIds = conversations.map((conv) => conv.session_id);
+      cleanupExpiredSessions(activeSessionIds);
     }
 
     if (sessionID && conversations) {
@@ -124,6 +134,9 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
             conv.last_message_timestamp = lastMessageBySession[sessionId].timestamp;
           }
 
+          // Set hasUserLeft based on the session-specific state
+          conv.hasUserLeft = hasUserLeftBySession[conv.session_id] || false;
+
           newConversations.push(conv);
         });
 
@@ -134,7 +147,7 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
         });
       });
     }
-  }, [lastMessageBySession]);
+  }, [lastMessageBySession, hasUserLeftBySession]);
 
   return (
     <ActiveConversationsContext.Provider

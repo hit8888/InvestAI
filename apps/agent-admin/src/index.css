@@ -120,6 +120,50 @@
   /* Chrome, Safari, Edge */
 }
 
+.toast-icon-outer-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(var(--primary));
+  width: 32px;
+  height: 32px;
+  animation: outerPulse 2s infinite ease-in-out;
+}
+
+.toast-icon-inner-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(var(--primary));
+  width: 24px;
+  height: 24px;
+  animation: innerPulse 2s infinite ease-in-out;
+}
+
+@keyframes outerPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes innerPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
 /* Override Cal.com availability form layout for xl screens */
 @media (min-width: 1280px) {
   .calcom-atoms #availability-form {

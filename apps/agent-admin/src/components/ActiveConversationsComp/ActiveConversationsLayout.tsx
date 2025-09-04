@@ -20,8 +20,9 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
-import useNewConversationToast from '../../hooks/useNewConversationToast';
+import useNewConversationToast, { globalToastTracker } from '../../hooks/useNewConversationToast';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
+import toast from 'react-hot-toast';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
@@ -158,6 +159,12 @@ const ActiveConversationsLayout = () => {
       if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
         updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
       }
+
+      // Dismiss the toast for this conversation when card is clicked
+      toast.dismiss(`new-convo-${conversation.session_id}`);
+
+      // Remove from global toast tracker to prevent showing the toast again
+      globalToastTracker.activeToastIds.delete(conversation.session_id);
     },
     [updateSessionStatus],
   );

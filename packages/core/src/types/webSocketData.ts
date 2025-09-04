@@ -314,6 +314,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   }),
   z.object({
     content: z.string(),
+    event_type: z.literal('USER_LEFT'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
     event_type: z.literal('USER_TYPING'),
     event_data: z.object({}),
   }),
@@ -399,4 +404,5 @@ export enum AgentEventType {
   DISCOVERY_ANSWER = 'DISCOVERY_ANSWER',
   CALENDAR_SUBMIT = 'CALENDAR_SUBMIT',
   ADMIN_TYPING = 'ADMIN_TYPING',
+  USER_LEFT = 'USER_LEFT',
 }

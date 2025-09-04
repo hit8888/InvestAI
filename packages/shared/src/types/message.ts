@@ -59,6 +59,7 @@ export const MessageEventType = {
   SUMMARIZE: 'SUMMARIZE',
   SUMMARY_STREAM: 'SUMMARY_STREAM',
   CTA_EVENT: 'CTA_EVENT',
+  USER_LEFT: 'USER_LEFT',
   PRIMARY_GOAL_CTA_CLICKED: 'PRIMARY_GOAL_CTA_CLICKED',
 } as const;
 
@@ -90,6 +91,7 @@ export type EventTypeType =
   | 'SUMMARIZE'
   | 'SUMMARY_STREAM'
   | 'CTA_EVENT'
+  | 'USER_LEFT'
   | 'PRIMARY_GOAL_CTA_CLICKED'
   | string; // future-proofing
 
@@ -364,6 +366,11 @@ export const MessageSchema = z
       z.object({
         content: z.string(),
         event_type: z.literal('HEARTBEAT_ACK'),
+        event_data: z.object({}),
+      }),
+      z.object({
+        content: z.string(),
+        event_type: z.literal('USER_LEFT'),
         event_data: z.object({}),
       }),
       z.object({

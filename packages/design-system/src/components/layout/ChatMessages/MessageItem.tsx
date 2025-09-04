@@ -35,6 +35,7 @@ import DemoArtifactPreview from './DemoArtifactPreview.tsx';
 import CtaEventMessage from './CtaEventMessage.tsx';
 import MessageElementsDemoAgents from './MessageElementsDemoAgents.tsx';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import UserLeftInfo from './UserLeftInfo.tsx';
 
 interface IProps {
   isAMessageBeingProcessed: boolean;
@@ -182,6 +183,7 @@ const MessageItem = ({
 
       <AdminJoinedInfo message={message} viewType={viewType} />
       <AdminExitInfo message={message} />
+      <UserLeftInfo message={message} viewType={viewType} />
 
       {isCurrentDiscoveryMessage && (
         <DiscoveryQuestion
