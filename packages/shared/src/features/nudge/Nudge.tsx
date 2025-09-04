@@ -31,10 +31,11 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const { nudge: nudgeConfig, nudge_data: initialNudge } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(initialNudge ?? null);
-  const showNudgeBody = useShowNudgeBody(
-    !!nudgeToShow && (!isMobile || !nudgeToShow?.header_text),
-    !!nudgeToShow?.header_text,
-  );
+
+  const { main_body_text = '', ctas, assets, display_duration, header_text: raw_header_text = '' } = nudgeToShow ?? {};
+  const header_text = isMobile ? '' : raw_header_text;
+
+  const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
   const { play } = useSound(goodIdeaHighDing, 0.35);
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
@@ -71,8 +72,6 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
       },
     },
   );
-
-  const { main_body_text = '', ctas, assets, header_text = '', display_duration } = nudgeToShow ?? {};
 
   // Group assets by alignment
   const topAssets = assets?.filter((asset) => asset.alignment === 'TOP') || [];
