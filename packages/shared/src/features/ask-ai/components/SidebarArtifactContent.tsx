@@ -114,6 +114,7 @@ export const SidebarArtifactContent = ({
               <div className="flex flex-col border rounded-xl overflow-hidden w-full">
                 <div className="w-full overflow-hidden">
                   <video
+                    key={artifact.url}
                     ref={videoRef}
                     src={artifact.url}
                     controls
@@ -133,6 +134,7 @@ export const SidebarArtifactContent = ({
         ) : (
           <div className="w-full flex items-center justify-center overflow-hidden">
             <img
+              key={artifact.url}
               src={artifact.url}
               alt="Artifact"
               className={`w-full h-auto max-w-full object-contain rounded-xl transition-all duration-700 ease-out delay-200 ${

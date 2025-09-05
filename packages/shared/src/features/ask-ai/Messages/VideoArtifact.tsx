@@ -11,35 +11,29 @@ interface VideoArtifactProps {
   isExpanded?: boolean;
 }
 
+const cleanUrl = (url: string): string => {
+  return url.replace(/^@+/, '');
+};
+
 export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: VideoArtifactProps) => {
-  const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady } = useSidebarArtifactContext();
+  const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady, sideBarArtifact } =
+    useSidebarArtifactContext();
   const hasAutoOpened = useRef(false);
   const isMobile = useIsMobile();
-
-  const cleanUrl = (url: string): string => {
-    return url.replace(/^@+/, '');
-  };
   const cleanedUrl = cleanUrl(url);
 
   // Check if this specific video is currently open and playing
-  const isThisVideoPlaying = currentVideo?.url === cleanedUrl && currentVideo?.isPlaying;
+  const isThisVideoPlaying =
+    currentVideo?.url === cleanedUrl && currentVideo?.isPlaying && sideBarArtifact?.artifactType === 'VIDEO';
 
   // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
   // Disable auto-opening when Ask AI is in expanded mode
   useEffect(() => {
-    if (
-      cleanedUrl &&
-      !currentVideo &&
-      !hasAutoOpened.current &&
-      isLatestMessage &&
-      isContainerReady &&
-      !isExpanded &&
-      !isMobile
-    ) {
+    if (cleanedUrl && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded && !isMobile) {
       hasAutoOpened.current = true;
       openSidebar(cleanedUrl, 'VIDEO', title, false);
     }
-  }, [cleanedUrl, title, currentVideo, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
+  }, [cleanedUrl, title, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
 
   const handleButtonClick = () => {
     // Disable sidebar functionality when Ask AI is in expanded mode
@@ -50,6 +44,7 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
     if (currentVideo?.url === cleanedUrl) {
       // If this video is currently open, toggle play/pause
       toggleVideoPlayPause();
+      openSidebar(cleanedUrl, 'VIDEO', title, !currentVideo?.isPlaying);
     } else {
       // If this video is not open, open sidebar and start playing
       openSidebar(cleanedUrl, 'VIDEO', title, true);

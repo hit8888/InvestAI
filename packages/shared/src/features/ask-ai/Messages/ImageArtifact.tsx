@@ -18,26 +18,18 @@ export const ImageArtifact = ({
   isLatestMessage = false,
   isExpanded = false,
 }: ImageArtifactProps) => {
-  const { openSidebar, closeSidebar, currentImage, isContainerReady } = useSidebarArtifactContext();
+  const { openSidebar, closeSidebar, currentImage, isContainerReady, sideBarArtifact } = useSidebarArtifactContext();
   const hasAutoOpened = useRef(false);
   const isMobile = useIsMobile();
 
   // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
   // Disable auto-opening when Ask AI is in expanded mode
   useEffect(() => {
-    if (
-      url &&
-      !currentImage &&
-      !hasAutoOpened.current &&
-      isLatestMessage &&
-      isContainerReady &&
-      !isExpanded &&
-      !isMobile
-    ) {
+    if (url && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded && !isMobile) {
       hasAutoOpened.current = true;
       openSidebar(url, 'SLIDE_IMAGE', title);
     }
-  }, [url, title, currentImage, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
+  }, [url, title, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
 
   const handleButtonClick = () => {
     // Disable sidebar functionality when Ask AI is in expanded mode
@@ -55,7 +47,8 @@ export const ImageArtifact = ({
   };
 
   // Check if this specific image is currently expanded in the sidebar
-  const isThisImageExpanded = currentImage?.url === url && currentImage?.isExpanded;
+  const isThisImageExpanded =
+    currentImage?.url === url && currentImage?.isExpanded && sideBarArtifact?.artifactType === 'SLIDE_IMAGE';
 
   if (!url) {
     return null;
