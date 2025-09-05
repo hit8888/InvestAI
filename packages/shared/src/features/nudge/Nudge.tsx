@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Cta, Nudge as NudgeType } from '@meaku/core/types/api/configuration_response';
-import useNudgeQuery from '../../network/http/queries/useNudgeQuery';
+import useNudgePollingQuery from '../../network/http/queries/useNudgeQuery';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import useDelayedQuery from '@meaku/core/hooks/useDelayedQuery';
+import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import { useMouseDismissible } from './hooks/useMouseDismissible';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
@@ -14,7 +14,7 @@ import NudgeHeader from './components/NudgeHeader';
 import NudgeBody from './components/NudgeBody';
 import useShowNudgeBody from './hooks/useShowNudgeBody';
 import useSound from '@meaku/core/hooks/useSound';
-import goodIdeaHighDing from '../../assets/good-idea-high-ding.wav';
+import bannerSound from '../../assets/banner-sound.mp3';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { cn } from '@meaku/saral';
 
@@ -24,19 +24,34 @@ interface NudgeProps {
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;
 }
 
+const DEFAULT_POLLING_FREQUENCY_MS = 30 * 1000;
+const DEFAULT_MAX_POLLING_COUNT = 0;
+const DEFAULT_DISPLAY_DURATION = 10 * 1000;
+
 const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const isMobile = useIsMobile();
   const { config, settings } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
-  const { nudge: nudgeConfig, nudge_data: initialNudge } = config.command_bar ?? {};
+  const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
-  const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(initialNudge ?? null);
+  const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(nudgeData ?? null);
 
-  const { main_body_text = '', ctas, assets, display_duration, header_text: raw_header_text = '' } = nudgeToShow ?? {};
+  const {
+    polling_enabled,
+    max_polling_count = DEFAULT_MAX_POLLING_COUNT,
+    polling_frequency_ms = DEFAULT_POLLING_FREQUENCY_MS,
+  } = nudgeConfig ?? {};
+  const {
+    main_body_text = '',
+    ctas,
+    assets,
+    display_duration = DEFAULT_DISPLAY_DURATION,
+    header_text: raw_header_text = '',
+  } = nudgeToShow ?? {};
   const header_text = isMobile ? '' : raw_header_text;
 
   const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
-  const { play } = useSound(goodIdeaHighDing, 0.35);
+  const { play } = useSound(bannerSound, 0.2);
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
     displayDuration: nudgeToShow?.display_duration,
@@ -46,29 +61,28 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
     }, [onClose]),
   });
 
-  const isQueryEnabled = useDelayedQuery(
-    (nudgeConfig?.polling_frequency_ms ?? 0) + (initialNudge?.display_duration ?? 0),
-  );
+  const isNudgePollingEnabled = useDelayedEnable(polling_enabled ? polling_frequency_ms + display_duration : Infinity);
 
-  const nudgeQuery = useNudgeQuery(
+  useNudgePollingQuery(
     {
       agentId: settings.agent_id,
-      prospect_id: config.prospect_id!,
+      prospect_id: config.prospect_id,
       session_id: config.session_id,
       nudge_disabled: !!activeFeature,
       parent_url: settings.parent_url,
     },
     {
-      enabled: isQueryEnabled && !isMouseOver && !!config.prospect_id,
+      enabled: isNudgePollingEnabled && !isMouseOver,
       refetchInterval: (query) => {
         if (query.state.error) {
           return false;
         }
 
-        if (query.state.dataUpdateCount >= (nudgeConfig?.max_polling_count ?? 0)) {
+        if (query.state.dataUpdateCount >= max_polling_count) {
           return false;
         }
-        return nudgeConfig?.polling_enabled ? nudgeConfig.polling_frequency_ms : false;
+
+        return polling_frequency_ms;
       },
     },
   );
@@ -107,16 +121,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   useEffect(() => {
     if (activeFeature) return;
 
-    handleNudgeLoad(nudgeQuery.data);
+    handleNudgeLoad(nudgeData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleNudgeLoad, nudgeQuery.data]);
-
-  useEffect(() => {
-    if (activeFeature) return;
-
-    handleNudgeLoad(initialNudge);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleNudgeLoad, initialNudge]);
+  }, [handleNudgeLoad, nudgeData]);
 
   useEffect(() => {
     if (activeFeature) {

@@ -119,6 +119,7 @@ const WidgetScript = {
     "initial-message": config.initialMessage || null,
     "start-time": config.startTime || null,
     "end-time": config.endTime || null,
+    "is-test": "true",
   }),
 };
 

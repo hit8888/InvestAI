@@ -89,7 +89,7 @@ export const CommandBarConfigSchema = z.object({
   dynamic_config_start_delay_ms: z.number(),
   modules: z.array(CommandBarModuleConfigSchema),
   nudge: NudgeConfigSchema,
-  nudge_data: NudgeSchema,
+  nudge_data: NudgeSchema.nullable(),
 });
 
 export const ConfigurationBodySchema = z.object({
