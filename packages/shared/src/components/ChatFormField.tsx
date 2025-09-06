@@ -1,4 +1,4 @@
-import { FormControl, FormField, FormItem, FormMessage, UseFormReturnType, Input, cn } from '@meaku/saral';
+import { cn, FormControl, FormField, FormItem, FormMessage, Input, UseFormReturnType } from '@meaku/saral';
 import { FormFieldType } from '../utils/types';
 import { getInputType } from '../utils/chat-utils';
 import PhoneInputContainer from './PhoneInput';
@@ -82,6 +82,36 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             {...field}
           />
         );
+      case 'int':
+        return (
+          <Input
+            readOnly={isArtifactFormFilled}
+            {...field}
+            value={field.value ?? ''}
+            autoComplete={getAutoCompleteValue(form_field.label)}
+            autoCorrect="on" // For iOS
+            autoCapitalize="words" // For names
+            spellCheck="true" // Enable spell checking
+            className={cn([
+              'text-customPrimaryText border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
+              fieldClassName,
+              fieldErrorMessage && 'border border-destructive-600 bg-destructive-25',
+            ])}
+            placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
+            type="number"
+            onKeyDown={handleKeyDown}
+            min="0"
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === '') {
+                field.onChange('');
+              } else {
+                const numValue = parseInt(value, 10);
+                field.onChange(isNaN(numValue) ? value : numValue);
+              }
+            }}
+          />
+        );
       default:
         return (
           <Input
@@ -100,7 +130,6 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             type={getInputType(form_field.data_type)}
             onKeyDown={handleKeyDown}
-            min={isIntField ? '0' : undefined}
           />
         );
     }

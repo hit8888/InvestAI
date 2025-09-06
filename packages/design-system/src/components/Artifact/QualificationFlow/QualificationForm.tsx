@@ -54,9 +54,24 @@ const QualificationForm = ({
   });
 
   function onSubmit(values: FormSchemaType) {
+    // Convert any integer field strings to numbers before sending
+    const sanitizedValues: Record<string, unknown> = { ...values };
+
+    formFields?.forEach((field) => {
+      if (field.data_type === 'int') {
+        const val = sanitizedValues[field.field_name];
+        if (typeof val === 'string') {
+          const parsed = parseInt(val as string, 10);
+          if (!isNaN(parsed)) {
+            sanitizedValues[field.field_name] = parsed;
+          }
+        }
+      }
+    });
+
     const response_data = {
       artifact_id: artifactId ?? '',
-      form_data: values,
+      form_data: sanitizedValues,
       qualification: artifact.content.qualification,
     };
     handleSendUserMessage({

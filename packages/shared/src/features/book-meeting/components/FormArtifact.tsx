@@ -45,7 +45,7 @@ const FormArtifact = ({
 
   const requiredFormFields = formFields.filter((field) => field.is_required) ?? [];
 
-  const formSchema = createFormSchema(requiredFormFields);
+  const formSchema = createFormSchema(formFields);
 
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,10 +54,25 @@ const FormArtifact = ({
     mode: 'onTouched',
   });
 
+  // Convert string values of integer fields to actual numbers before forming the payload
   const getFormFilledEventData = (values: Record<string, unknown>) => {
+    const sanitizedValues: Record<string, unknown> = { ...values };
+
+    formFields.forEach((field) => {
+      if (field.data_type === 'int') {
+        const val = sanitizedValues[field.field_name];
+        if (typeof val === 'string') {
+          const parsed = parseInt(val, 10);
+          if (!isNaN(parsed)) {
+            sanitizedValues[field.field_name] = parsed;
+          }
+        }
+      }
+    });
+
     return {
       artifact_id: artifactId ?? '',
-      form_data: values,
+      form_data: sanitizedValues,
       qualification: artifact.qualification,
     };
   };

@@ -31,12 +31,6 @@ const isEmail = (email: string | null) => {
   return email && emailRegex.test(email);
 };
 
-// Function to check if value is a number only
-const isNumberOnly = (value: string | null) => {
-  const numbersOnlyRegex = /^\d*$/;
-  return value && numbersOnlyRegex.test(value);
-};
-
 const checkIsPhoneNumber = (value: string | null) => {
   return value && isValidPhoneNumber(value);
 };
@@ -59,6 +53,19 @@ const getEmailSchema = () => {
   });
 };
 
+// Function to create integer schema with validation and transformation
+const createIntegerSchema = (errorMessage: string) => {
+  return z.preprocess(
+    // Preprocess to handle null, undefined, and numbers by converting them to strings.
+    (val) => String(val ?? ''),
+    z
+      .string()
+      .min(1, { message: errorMessage })
+      .regex(/^\d+$/, { message: 'Only numbers are allowed' })
+      .transform((val) => parseInt(val, 10)),
+  );
+};
+
 // Function to get zod type based on data type
 const getZodType = (label: string, dataType: string) => {
   const errorMessage = `Please enter your ${label.toLowerCase()}`;
@@ -68,14 +75,7 @@ const getZodType = (label: string, dataType: string) => {
     case 'picklist':
       return z.string();
     case 'int':
-      return createRequiredStringSchema(errorMessage)
-        .refine(isNumberOnly, {
-          message: 'Only numbers are allowed',
-        })
-        .transform((val) => {
-          const num = parseInt(val || '0', 10);
-          return num;
-        });
+      return createIntegerSchema(errorMessage);
     case 'email':
       return getEmailSchema();
     case 'business_email':
