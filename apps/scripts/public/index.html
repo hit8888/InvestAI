@@ -13,148 +13,164 @@
   <body id="bo-bc-container">
     <div class="container">
       <div class="panel">
-        <div
-          class="info-section"
-          style="
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            background: #f8f9fa;
-            border-radius: 4px;
-            border-left: 4px solid #007bff;
-          "
-        >
-          <h4 style="margin: 0 0 0.5rem 0; color: #007bff">
-            Auto-load with Query Parameters
-          </h4>
-          <p style="margin: 0; font-size: 0.9rem; color: #6c757d">
+        <div class="info-section">
+          <h4>Auto-load with Query Parameters</h4>
+          <p>
             You can auto-load the widget by adding
             <code>?bo_tenant_id=YOUR_TENANT&bo_agent_id=YOUR_AGENT</code> to the
             URL.
           </p>
-          <p style="margin: 0; font-size: 0.9rem; color: #6c757d">
-            Query params need to be prefixed with <code>bo_</code>
-          </p>
+          <p>Query params need to be prefixed with <code>bo_</code></p>
         </div>
-        <div class="config-grid">
-          <div class="config-group">
-            <h4>Basic Settings</h4>
-            <div class="form-group">
-              <label for="widgetType">Widget Type</label>
-              <select id="widgetType">
-                <option value="agent">🤖 Agent Widget</option>
-                <option value="command-bar" selected>
-                  ⌨️ Command Bar Widget
-                </option>
-              </select>
+        <form id="widget_form" onsubmit="loadWidget(); return false;">
+          <div class="config-grid">
+            <div class="config-group">
+              <h4>Mandatory Settings</h4>
+              <div class="form-group">
+                <label for="tenant_id">Tenant ID *</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="tenant_id"
+                  name="tenant_id"
+                  value="hackerearth"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="agent_id">Agent ID *</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="agent_id"
+                  name="agent_id"
+                  value="1"
+                  required
+                />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="tenantId">Tenant ID *</label
-              ><input type="text" id="tenantId" value="hackerearth" required />
-            </div>
-            <div class="form-group">
-              <label for="agentId">Agent ID</label
-              ><input type="text" id="agentId" value="1" />
-            </div>
-            <div class="form-group">
-              <label for="maxHeight">Max Height</label
-              ><input
-                type="text"
-                id="maxHeight"
-                placeholder="e.g., 88vh, 600px"
-              />
+
+            <div class="config-group">
+              <h4>Additional Settings</h4>
+              <div class="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="bc"
+                  name="bc"
+                  value="true"
+                  checked
+                /><label for="bc">Show Background</label>
+              </div>
+              <div class="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="visible"
+                  name="visible"
+                  value="true"
+                  checked
+                /><label for="visible">Visible</label>
+              </div>
+              <div class="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="is_test"
+                  name="is_test"
+                  value="true"
+                  checked
+                /><label for="is_test">Test Mode</label>
+              </div>
+              <div class="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="is_admin"
+                  name="is_admin"
+                  value="true"
+                /><label for="is_admin">Admin Mode</label>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label
+                ><textarea
+                  id="message"
+                  name="message"
+                  rows="2"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="parent_url">Parent URL</label
+                ><input
+                  type="text"
+                  id="parent_url"
+                  name="parent_url"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="session_id">Session ID</label
+                ><input
+                  type="text"
+                  id="session_id"
+                  name="session_id"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="browsed_urls">Browsed URLs</label>
+                <textarea
+                  id="browsed_urls"
+                  name="browsed_urls"
+                  rows="4"
+                  class="form-control json-input"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="query_params">Query Parameters</label>
+                <textarea
+                  id="query_params"
+                  name="query_params"
+                  rows="4"
+                  class="form-control json-input"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="start_time">Start Time (UTC 24h)</label
+                ><input
+                  type="time"
+                  id="start_time"
+                  name="start_time"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="end_time">End Time (UTC 24h)</label
+                ><input
+                  type="time"
+                  id="end_time"
+                  name="end_time"
+                  class="form-control"
+                />
+              </div>
             </div>
           </div>
 
-          <div class="config-group">
-            <h4>Display Options</h4>
-            <div class="checkbox-group">
-              <input type="checkbox" id="embedMode" /><label for="embedMode"
-                >Embed Mode</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="hideBottomBar" /><label
-                for="hideBottomBar"
-                >Hide Bottom Bar</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="showBottomBar" /><label
-                for="showBottomBar"
-                >Show Bottom Bar</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="allowExternalButtons" /><label
-                for="allowExternalButtons"
-                >Allow External Buttons</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="isCollapsible" /><label
-                for="isCollapsible"
-                >Is Collapsible</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="feedbackEnabled" /><label
-                for="feedbackEnabled"
-                >Feedback Enabled</label
-              >
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="bc" checked /><label for="bc"
-                >Show Background</label
-              >
-            </div>
+          <div class="button-container">
+            <button type="submit" class="btn" id="loadButton">
+              Load Widget
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="resetStorage()"
+              id="resetButton"
+            >
+              Reset Storage
+            </button>
           </div>
-
-          <div class="config-group">
-            <h4>User & Time Settings</h4>
-            <div class="form-group">
-              <label for="userEmail">User Email</label
-              ><input
-                type="email"
-                id="userEmail"
-                placeholder="user@example.com"
-              />
-            </div>
-            <div class="form-group">
-              <label for="initialMessage">Initial Message</label
-              ><textarea
-                id="initialMessage"
-                rows="2"
-                placeholder="Enter initial message"
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="startTime">Start Time (UTC 24h)</label
-              ><input type="time" id="startTime" />
-            </div>
-            <div class="form-group">
-              <label for="endTime">End Time (UTC 24h)</label
-              ><input type="time" id="endTime" />
-            </div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 12px; flex-wrap: wrap">
-          <button class="btn" onclick="loadWidget()" id="loadButton">
-            Load Widget
-          </button>
-          <button
-            class="btn"
-            onclick="resetStorage()"
-            id="resetButton"
-            style="background: #dc3545"
-          >
-            Reset Storage
-          </button>
-        </div>
+        </form>
       </div>
 
       <div class="panel" id="widget-preview-panel" style="display: none">
-        <h3 style="margin-bottom: 0.75rem">Widget Preview</h3>
+        <h3>Widget Preview</h3>
         <div id="embedded-widget">
           🎯<br />Configure your widget and click "Load Widget" to see it in
           action

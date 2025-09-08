@@ -19,11 +19,12 @@ interface CommandBarAnalyticsContextType {
 const CommandBarAnalyticsContext = createContext<CommandBarAnalyticsContextType | null>(null);
 
 interface CommandBarAnalyticsProviderProps {
+  enabled?: boolean;
   children: ReactNode;
   initialProperties: CommonProperties;
 }
 
-const CommandBarAnalyticsProvider = ({ children, initialProperties }: CommandBarAnalyticsProviderProps) => {
+const CommandBarAnalyticsProvider = ({ children, initialProperties, enabled }: CommandBarAnalyticsProviderProps) => {
   const { trackEvent: trackBaseEvent } = useAnalytics();
   const commonPropertiesRef = useRef<CommonProperties>(initialProperties);
 
@@ -37,9 +38,11 @@ const CommandBarAnalyticsProvider = ({ children, initialProperties }: CommandBar
         ...commonPropertiesRef.current,
         ...properties,
       };
-      trackBaseEvent(eventName, payload);
+      if (enabled) {
+        trackBaseEvent(eventName, payload);
+      }
     },
-    [trackBaseEvent],
+    [trackBaseEvent, enabled],
   );
 
   const contextValue = {

@@ -1,177 +1,138 @@
-// DOM Element IDs and Selectors
-const ELEMENTS = {
-  WIDGET_PREVIEW: "widget-preview-panel",
-  EMBEDDED_WIDGET: "embedded-widget",
-  CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
-  FORM_FIELDS: {
-    widgetType: "widgetType",
-    tenantId: "tenantId",
-    agentId: "agentId",
-    embedMode: "embedMode",
-    maxHeight: "maxHeight",
-    hideBottomBar: "hideBottomBar",
-    showBottomBar: "showBottomBar",
-    allowExternalButtons: "allowExternalButtons",
-    isCollapsible: "isCollapsible",
-    feedbackEnabled: "feedbackEnabled",
-    bc: "bc",
-    userEmail: "userEmail",
-    initialMessage: "initialMessage",
-    startTime: "startTime",
-    endTime: "endTime",
+// Constants
+const CONFIG = {
+  SCRIPT_NAME: "command_bar_widget.js",
+  QUERY_PREFIX: "bo_",
+  SELECTORS: {
+    FORM: "#widget_form",
+    WIDGET_PREVIEW: "#widget-preview-panel",
+    EMBEDDED_WIDGET: "#embedded-widget",
+    CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
   },
+  REQUIRED_FIELDS: ["tenant_id", "agent_id"],
 };
 
-// Widget Configuration
-const WIDGET_CONFIG = {
-  SCRIPT_NAMES: {
-    agent: "chat_widget.js",
-    "command-bar": "command_bar_widget.js",
-  },
-  DEFAULT_TYPE: "command-bar",
-  QUERY_PARAMS: {
-    tenantId: "bo_tenant_id",
-    agentId: "bo_agent_id",
-    widgetType: "bo_widget_type",
-  },
+// DOM Utilities
+const DOM = {
+  get: (selector) => document.querySelector(selector),
+  show: (element) => element?.style.removeProperty("display"),
+  hide: (element) => element && (element.style.display = "none"),
+  remove: (element) => element?.remove(),
 };
 
-// UI Management
-const UI = {
-  showElement: (elementId) => {
-    const element = document.getElementById(elementId);
-    if (element) element.style.display = "block";
-  },
-  hideElement: (selector) => {
-    const element = document.querySelector(selector);
-    if (element) element.style.display = "none";
-  },
-  resetEmbeddedWidget: () => {
-    const widget = document.getElementById(ELEMENTS.EMBEDDED_WIDGET);
-    if (widget) {
-      widget.innerHTML = "";
-      widget.classList.remove("loaded");
-    }
-  },
-  handleContainers: (isEmbedMode) => {
-    if (isEmbedMode) {
-      UI.showElement(ELEMENTS.WIDGET_PREVIEW);
-      UI.resetEmbeddedWidget();
-    }
-    UI.hideElement(ELEMENTS.CONFIG_PANEL);
-  },
-};
+// UI Controller
+class UIController {
+  static showForm() {
+    DOM.show(DOM.get(CONFIG.SELECTORS.CONFIG_PANEL));
+  }
 
-// Form Management
-const Form = {
-  getValue: (id) => document.getElementById(id)?.value || "",
-  getChecked: (id) => document.getElementById(id)?.checked || false,
+  static hideForm() {
+    DOM.hide(DOM.get(CONFIG.SELECTORS.CONFIG_PANEL));
+  }
 
-  getConfig: () => {
-    const fields = ELEMENTS.FORM_FIELDS;
-    return {
-      widgetType: Form.getValue(fields.widgetType),
-      tenantId: Form.getValue(fields.tenantId),
-      agentId: Form.getValue(fields.agentId),
-      embedMode: Form.getChecked(fields.embedMode),
-      maxHeight: Form.getValue(fields.maxHeight),
-      hideBottomBar: Form.getChecked(fields.hideBottomBar),
-      showBottomBar: Form.getChecked(fields.showBottomBar),
-      allowExternalButtons: Form.getChecked(fields.allowExternalButtons),
-      isCollapsible: Form.getChecked(fields.isCollapsible),
-      feedbackEnabled: Form.getChecked(fields.feedbackEnabled),
-      bc: Form.getChecked(fields.bc),
-      userEmail: Form.getValue(fields.userEmail),
-      initialMessage: Form.getValue(fields.initialMessage),
-      startTime: Form.getValue(fields.startTime),
-      endTime: Form.getValue(fields.endTime),
-    };
-  },
-};
+  static removeExistingWidget() {
+    DOM.remove(DOM.get(`script[src="${CONFIG.SCRIPT_NAME}"]`));
+  }
+}
 
-// Widget Script Management
-const WidgetScript = {
-  create: (widgetType, attributes) => {
-    const script = document.createElement("script");
-    script.src = WIDGET_CONFIG.SCRIPT_NAMES[widgetType];
-    Object.entries(attributes).forEach(([key, value]) => {
-      if (value) script.setAttribute(key, value);
+// Form Controller
+class FormController {
+  static getConfig() {
+    const form = DOM.get(CONFIG.SELECTORS.FORM);
+    if (!form) return null;
+
+    const formData = new FormData(form);
+    const config = {};
+
+    formData.forEach((value, key) => {
+      if (value) config[key] = value;
     });
+
+    return config;
+  }
+
+  static isValid(config) {
+    return CONFIG.REQUIRED_FIELDS.every((field) => config?.[field]);
+  }
+}
+
+// Widget Controller
+class WidgetController {
+  static create(config) {
+    const script = document.createElement("script");
+    script.src = CONFIG.SCRIPT_NAME;
+    script.setAttribute("tenant-id", config.tenant_id);
+    script.setAttribute("agent-id", config.agent_id);
     return script;
-  },
+  }
 
-  load: (script) => {
+  static load(script) {
     document.head.appendChild(script);
-  },
+  }
 
-  createAttributes: (config) => ({
-    "tenant-id": config.tenantId,
-    "agent-id": config.agentId,
-    "container-id": config.embedMode ? ELEMENTS.EMBEDDED_WIDGET : null,
-    "max-height": config.maxHeight || null,
-    "hide-bottom-bar": config.hideBottomBar ? "true" : null,
-    "show-bottom-bar": config.showBottomBar ? "true" : null,
-    "allow-external-buttons": config.allowExternalButtons ? "true" : null,
-    "is-collapsible": !config.isCollapsible ? "false" : null,
-    "feedback-enabled": !config.feedbackEnabled ? "false" : null,
-    bc: config.bc ? "true" : null,
-    "user-email": config.userEmail || null,
-    "initial-message": config.initialMessage || null,
-    "start-time": config.startTime || null,
-    "end-time": config.endTime || null,
-    "is-test": "true",
-  }),
-};
+  static updateBrowserUrl(config) {
+    const params = new URLSearchParams();
+    Object.entries(config).forEach(([key, value]) => {
+      if (value) {
+        params.set(`${CONFIG.QUERY_PREFIX}${key}`, value.toString());
+      }
+    });
+    window.location.href = `${window.location.pathname}?${params.toString()}`;
+  }
+
+  static parseUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const config = {};
+
+    params.forEach((value, key) => {
+      if (key.startsWith(CONFIG.QUERY_PREFIX)) {
+        const configKey = key.replace(CONFIG.QUERY_PREFIX, "");
+        config[configKey] = value;
+      }
+    });
+
+    return config;
+  }
+}
+
+// Storage Controller
+class StorageController {
+  static reset() {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    document.cookie.split(";").forEach((cookie) => {
+      const expiry = "=;expires=" + new Date().toUTCString() + ";path=/";
+      document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, expiry);
+    });
+  }
+}
 
 // Main Functions
 function loadWidgetFromQueryParams() {
-  const params = new URLSearchParams(window.location.search);
-  const config = {
-    tenantId: params.get(WIDGET_CONFIG.QUERY_PARAMS.tenantId),
-    agentId: params.get(WIDGET_CONFIG.QUERY_PARAMS.agentId),
-    widgetType:
-      params.get(WIDGET_CONFIG.QUERY_PARAMS.widgetType) ||
-      WIDGET_CONFIG.DEFAULT_TYPE,
-  };
+  const config = WidgetController.parseUrlParams();
 
-  if (config.tenantId && config.agentId) {
-    const script = WidgetScript.create(config.widgetType, {
-      "tenant-id": config.tenantId,
-      "agent-id": config.agentId,
-    });
-    UI.handleContainers();
-    WidgetScript.load(script);
+  if (FormController.isValid(config)) {
+    UIController.removeExistingWidget();
+    const script = WidgetController.create(config);
+    UIController.hideForm();
+    WidgetController.load(script);
     return true;
   }
   return false;
 }
 
 function loadWidget() {
-  const config = Form.getConfig();
-  if (!config.tenantId) return;
-
-  const script = WidgetScript.create(
-    config.widgetType,
-    WidgetScript.createAttributes(config),
-  );
-  UI.handleContainers(config.embedMode);
-  WidgetScript.load(script);
+  const config = FormController.getConfig();
+  if (!FormController.isValid(config)) return;
+  WidgetController.updateBrowserUrl(config);
 }
 
 function resetStorage() {
-  localStorage.clear();
-  sessionStorage.clear();
-  document.cookie.split(";").forEach((c) => {
-    document.cookie = c
-      .replace(/^ +/, "")
-      .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-  });
+  StorageController.reset();
 }
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   const loaded = loadWidgetFromQueryParams();
-  if (!loaded) {
-    UI.showElement(ELEMENTS.CONFIG_PANEL.slice(1)); // Remove leading dot for getElementById
-  }
+  if (!loaded) UIController.showForm();
 });

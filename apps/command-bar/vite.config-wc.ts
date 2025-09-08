@@ -18,7 +18,7 @@ export default defineConfig({
       ? [
           sentryVitePlugin({
             org: 'breakout',
-            project: 'breakout-command-bar',
+            project: 'command-bar',
             authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
             sourcemaps: {
               assets: './dist/wc/**',

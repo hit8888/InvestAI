@@ -3,6 +3,7 @@ import { ENV } from '@meaku/shared/constants/env';
 import { BookMeetingContent, AskAiContent, SummarizeContent, VideoLibraryContent } from '@meaku/shared/features';
 import { injectCSSIntoShadowRoot, setupConnectedCallbackIfShadowRootExists } from './utils/wc';
 import { createWc } from './hoc/createWc';
+import './utils/sentry.ts';
 
 const CommandBarWc = createWc(CommandBar, ENV.VITE_WC_TAG_NAME);
 const BookMeetingWc = createWc(BookMeetingContent, ENV.VITE_BOOK_MEETING_WC_TAG_NAME);

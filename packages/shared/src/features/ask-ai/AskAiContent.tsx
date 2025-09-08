@@ -116,7 +116,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   return (
     <div
       className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
-      style={{ height: isMobile ? '100%' : `min(100vh, 730px)` }}
+      style={{ height: isMobile ? '100%' : `min(calc(100vh - 32px), 730px)` }}
       ref={containerRefCallback}
     >
       <FeatureHeader

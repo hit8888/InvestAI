@@ -23,6 +23,7 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
             {(settings) =>
               settings.agent_id && settings.tenant_id ? (
                 <CommandBarAnalyticsProvider
+                  enabled={!settings.is_test}
                   initialProperties={{
                     agent_id: settings.agent_id,
                     page_url: settings.parent_url,
