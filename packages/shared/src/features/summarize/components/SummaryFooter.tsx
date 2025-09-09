@@ -6,16 +6,14 @@ interface SummaryFooterProps {
 
 export const SummaryFooter = ({ onAskAIClick }: SummaryFooterProps) => {
   return (
-    <Typography variant="body-small" fontWeight="normal" className="text-gray-600 text-center inline">
+    <Typography variant="body" fontWeight="medium" className="text-foreground/70 text-center inline">
       Looking for something else?
-      <Typography
-        variant="body-small"
-        fontWeight="semibold"
-        className="text-primary text-center inline cursor-pointer pl-1"
+      <span
+        className="text-xs font-semibold text-primary text-center inline cursor-pointer pl-1"
         onClick={onAskAIClick}
       >
         Try Ask AI
-      </Typography>
+      </span>
     </Typography>
   );
 };

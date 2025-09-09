@@ -1,4 +1,4 @@
-export const KatyIcon = (props: React.SVGProps<SVGSVGElement>) => {
+const KatyIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="40"
@@ -50,3 +50,5 @@ export const KatyIcon = (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export default KatyIcon;

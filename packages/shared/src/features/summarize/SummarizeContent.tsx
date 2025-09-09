@@ -10,6 +10,41 @@ import { useSummary } from './hooks/useSummary';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
+const getSummaryState = (
+  summaryContent: string,
+  hasError: boolean,
+  isSummarizing: boolean,
+  handleSummarize: () => void,
+) => {
+  if (hasError) {
+    return <SummaryError onRetry={handleSummarize} isSummarizing={isSummarizing} />;
+  }
+
+  return <SummarySuccess content={summaryContent} />;
+};
+
+/**
+ * Renders the main content area based on the current summary state
+ */
+const renderSummaryContent = (
+  summaryContent: string | undefined,
+  hasError: boolean,
+  isSummarizing: boolean,
+  handleSummarize: () => void,
+  handleAskAIClick: () => void,
+) => {
+  if (summaryContent) {
+    return (
+      <div className="flex flex-1 min-h-0 flex-col gap-4">
+        {getSummaryState(summaryContent, hasError, isSummarizing, handleSummarize)}
+        <SummaryFooter onAskAIClick={handleAskAIClick} />
+      </div>
+    );
+  }
+
+  return <SummaryInitial onSummarize={handleSummarize} isSummarizing={isSummarizing} />;
+};
+
 const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: FeatureContentProps) => {
   const { summaryContent, isSummarizing, handleSummarize, hasError } = useSummary();
 
@@ -18,7 +53,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
   };
 
   return (
-    <div className="flex w-full min-h-64 flex-col space-y-1 rounded-[20px] border border-border-dark bg-card pb-3 shadow-elevation-md max-h-[480px]">
+    <div className="flex w-full min-h-64 flex-col rounded-[20px] border border-border-dark bg-background pb-3 shadow-elevation-md max-h-[480px]">
       <FeatureHeader
         title="Summary"
         icon={<Icons.ClipboardPen className="size-5" />}
@@ -27,19 +62,8 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
         isExpanded={isExpanded}
         ctas={[]}
       />
-      <div className="flex flex-1 min-h-0 flex-col justify-center gap-4 px-4">
-        {summaryContent ? (
-          <div className="flex flex-1 min-h-0 flex-col gap-4">
-            {!hasError ? (
-              <SummarySuccess content={summaryContent} />
-            ) : (
-              <SummaryError onRetry={handleSummarize} isSummarizing={isSummarizing} />
-            )}
-            <SummaryFooter onAskAIClick={handleAskAIClick} />
-          </div>
-        ) : (
-          <SummaryInitial onSummarize={handleSummarize} isSummarizing={isSummarizing} />
-        )}
+      <div className="flex flex-1 min-h-0 flex-col justify-center gap-4 px-4 pt-4">
+        {renderSummaryContent(summaryContent, hasError, isSummarizing, handleSummarize, handleAskAIClick)}
       </div>
     </div>
   );

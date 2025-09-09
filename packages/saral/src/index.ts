@@ -58,8 +58,6 @@ export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipArrow 
 // Export scroll area components
 export { ScrollArea, ScrollBar } from './scroll-area';
 
-// Export custom icons
-export { KatyIcon } from './custom-Icons/Katy';
 // Export form components
 export { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, useForm } from './form';
 export type { UseFormReturnType } from './form';

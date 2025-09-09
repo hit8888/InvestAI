@@ -8,6 +8,7 @@
   :host {
     --background: 0 0% 100%; /* #FFFFFF */
     --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
+    --background-subtle: 0 0% 95.29%; /* #F3F3F3 */
     --foreground: 214.29 8.24% 16.67%; /* #272A2E */
     --card: 210 12.5% 96.86%; /* #F6F7F8 */
     --card-foreground: 214.29 8.24% 16.67%; /* #272A2E */
@@ -21,6 +22,7 @@
     --muted: 210 13.04% 90.98%; /* #E5E8EB */
     --muted-foreground: 0 0% 0% / 0.6; /* #000, 0.6 opacity */
     --base-foreground: 210 13.04% 81.96%; /* #CBD1D7 */
+    --text-accent: 0 6.67% 14.71%; /* #282323 */
     --accent: 210 1.57% 49.8%; /* #7d7f81 */
     --accent-foreground: 0 0% 100%; /* #FFFFFF */
     --destructive: 0 65.08% 50.59%; /* #D32F2F */
@@ -41,6 +43,7 @@
   .dark,
   :host([data-theme='dark']) {
     --background: 222.2 84% 4.9%;
+    --background-subtle: 0 0% 95.29%; /* #F3F3F3 */
     --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;

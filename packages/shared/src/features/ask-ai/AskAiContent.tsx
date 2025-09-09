@@ -14,6 +14,7 @@ import { useAdminSession } from './hooks/useAdminSession';
 import { useFormArtifactMessage } from '../../hooks/useFormArtifactMessage';
 import { MessageEventType } from '../../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import PoweredByBreakout from '../../components/PoweredByBreakout';
 
 const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const isMobile = useIsMobile();
@@ -115,7 +116,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
 
   return (
     <div
-      className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
+      className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
       style={{ height: isMobile ? '100%' : `min(calc(100vh - 32px), 730px)` }}
       ref={containerRefCallback}
     >
@@ -189,6 +190,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           />
         </div>
       </div>
+      <PoweredByBreakout />
     </div>
   );
 };

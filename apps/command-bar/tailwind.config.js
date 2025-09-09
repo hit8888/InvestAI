@@ -54,6 +54,8 @@ export default {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         backgroundLight: 'hsl(var(--background-light))',
+        textAccent: 'hsl(var(--text-accent))',
+        backgroundSubtle: 'hsl(var(--background-subtle))',
         foreground: 'hsl(var(--foreground))',
         actionBtnIcon: 'hsl(var(--action-btn-icon))',
         primary: {
@@ -116,7 +118,6 @@ export default {
       animation: {
         'text-state': 'text-animation 500ms linear infinite alternate-reverse',
         'high-bounce': 'highBounce 1s ease-in-out infinite',
-        'slide-in-right': 'slideInFromRight 0.5s ease-out forwards',
         'quick-flash': 'quick-flash 3s ease-in-out infinite',
         'scale-in-right': 'scaleInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
       },
@@ -148,10 +149,6 @@ export default {
             opacity: '1',
             scale: '1',
           },
-        },
-        slideInFromRight: {
-          '0%': { transform: 'translateX(10%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
         },
         scaleInRight: {
           '0%': {

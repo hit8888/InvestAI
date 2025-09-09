@@ -1,5 +1,6 @@
 import { Icons, Typography } from '@meaku/saral';
 import { TextArtifact } from '../../../features/ask-ai/Messages/TextArtifact';
+import { ThumbsUp } from '@meaku/saral';
 
 interface SummarySuccessProps {
   content: string;
@@ -10,19 +11,18 @@ const savedMinutes = Math.floor(Math.random() * (20 - 15 + 1)) + 15; // Random n
 export const SummarySuccess = ({ content }: SummarySuccessProps) => {
   return (
     <>
-      <div className="flex flex-col gap-3 bg-positive-dark rounded-xl p-3">
-        <Typography variant="body-small" fontWeight="normal" className="text-white">
+      <div className="flex flex-col gap-3 bg-backgroundSubtle rounded-xl p-2.5">
+        <Typography variant="body-small" fontWeight="semibold" className="text-textAccent">
           You just saved
-          <Typography variant="body-small" fontWeight="semibold" className="pl-1 inline">
-            {savedMinutes} mins!
-          </Typography>
+          <span className="pl-1 inline text-xs text-positive-dark font-bold">{savedMinutes} mins!</span>
         </Typography>
         <Typography
           variant="body"
-          fontWeight="normal"
-          className="flex items-center gap-2 text-white bg-positive-light p-3 rounded-xl"
+          fontWeight="medium"
+          className="flex relative items-center gap-2 text-textAccent bg-white px-3 py-2 rounded-xl"
         >
-          <Icons.Check className="size-4 inline bg-white rounded-full p-1 text-positive-dark" />
+          <ThumbsUp className="absolute right-[10%] bottom-7" />
+          <Icons.Check className="size-4 bg-positive-dark rounded-full p-1 text-white" />
           Summary Complete
         </Typography>
       </div>
