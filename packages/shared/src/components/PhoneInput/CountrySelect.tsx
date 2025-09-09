@@ -2,8 +2,11 @@ import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { useState } from 'react';
+import { filterCountries } from '@meaku/core/utils/country-select-utils';
 
 import {
+  Button,
+  cn,
   Command,
   CommandEmpty,
   CommandGroup,
@@ -14,8 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
   ScrollArea,
-  cn,
-  Button,
 } from '@meaku/saral';
 import { useShadowRoot } from '../../containers/ShadowRootProvider';
 
@@ -26,11 +27,6 @@ type CountrySelectProps = {
   value: RPNInput.Country;
   options: CountryEntry[];
   onChange: (country: RPNInput.Country) => void;
-};
-
-const filterCountries = (value: string, search: string) => {
-  if (!search) return 1;
-  return value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0;
 };
 
 export const CountrySelect = ({
@@ -57,11 +53,17 @@ export const CountrySelect = ({
         portalContainer={shadowRoot}
         className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4"
       >
-        <Command shouldFilter={true} filter={(value: string) => filterCountries(value, searchValue)}>
-          <CommandInput placeholder="Search country..." value={searchValue} onValueChange={setSearchValue} />
+        <Command shouldFilter={true} filter={(value: string) => filterCountries(countryList)(value, searchValue)}>
+          <CommandInput
+            placeholder="Search by country, code, or +code (e.g., US, UK, +91)..."
+            value={searchValue}
+            onValueChange={setSearchValue}
+          />
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandEmpty>
+                No country found. Try searching by country name, code (US, UK), or calling code (+91, +1).
+              </CommandEmpty>
               <CommandGroup>
                 {countryList.map(({ value, label }) =>
                   value ? (

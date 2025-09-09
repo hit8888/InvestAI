@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../Popover/index';
 import { ScrollArea } from '../shadcn-ui/scroll-area';
 import { cn } from '../../lib/cn';
 import Button from '../Button';
+import { filterCountries } from '@meaku/core/utils/country-select-utils';
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined };
 
@@ -16,11 +17,6 @@ type CountrySelectProps = {
   value: RPNInput.Country;
   options: CountryEntry[];
   onChange: (country: RPNInput.Country) => void;
-};
-
-const filterCountries = (value: string, search: string) => {
-  if (!search) return 1;
-  return value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0;
 };
 
 export const CountrySelect = ({
@@ -43,11 +39,17 @@ export const CountrySelect = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4">
-        <Command shouldFilter={true} filter={(value) => filterCountries(value, searchValue)}>
-          <CommandInput placeholder="Search country..." value={searchValue} onValueChange={setSearchValue} />
+        <Command shouldFilter={true} filter={(value: string) => filterCountries(countryList)(value, searchValue)}>
+          <CommandInput
+            placeholder="Search by country, code, or +code (e.g., US, UK, +91)..."
+            value={searchValue}
+            onValueChange={setSearchValue}
+          />
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandEmpty>
+                No country found. Try searching by country name, code (US, UK), or calling code (+91, +1).
+              </CommandEmpty>
               <CommandGroup>
                 {countryList.map(({ value, label }) =>
                   value ? (
