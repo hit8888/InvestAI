@@ -21,6 +21,8 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
+import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
+import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -32,6 +34,8 @@ function App() {
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
+
+  const totalAnimationDelay = useEntryAnimationTiming(modules);
 
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
@@ -157,20 +161,25 @@ function App() {
       className={containerClasses}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      transition={COMPONENT_TRANSITIONS.APP_CONTAINER}
     >
       <div key="root-content" className="flex items-end gap-4">
         {dynamicConfigQuery?.isFetched && nudgeConfig && (
-          <Nudge activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
+          <Nudge
+            activeFeature={activeFeature}
+            setActiveFeature={handleSetActiveButton}
+            animationDelay={totalAnimationDelay}
+          />
         )}
-        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
         <FeatureContentContainer
+          key={activeFeature}
           activeFeature={activeFeature}
           setActiveFeature={handleSetActiveButton}
           isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
+        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
       </div>
     </motion.div>
   );

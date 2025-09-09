@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { Icons } from '@meaku/saral';
 import { useCarousel } from '../../../hooks/useCarousel';
 import { VideoThumbnail } from './VideoThumbnail';
@@ -12,6 +12,7 @@ interface VideoCarouselProps {
   onVideoSelect: (videoId: string) => void;
   onWatchNow?: (videoId: string) => void;
   isLoading?: boolean;
+  videosPerRow?: number;
 }
 
 export const VideoCarousel = ({
@@ -22,42 +23,23 @@ export const VideoCarousel = ({
   onVideoSelect,
   onWatchNow,
   isLoading = false,
+  videosPerRow = 4,
 }: VideoCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Filter out the currently selected main video from the carousel
   const filteredVideoIds = videoIds.filter((videoId) => videoId !== selectedVideoId);
 
-  const {
-    currentIndex,
-    onNext: hookOnNext,
-    onPrev,
-    goToIndex,
-    canGoPrev,
-  } = useCarousel({
+  // Use the enhanced carousel hook with page-based navigation
+  const { onNext, onPrev, goToPage, canGoNext, canGoPrev, totalPages, currentPage } = useCarousel({
     totalItems: filteredVideoIds.length,
-    itemsPerView: 2,
+    itemsPerView: videosPerRow,
     initialIndex: 0,
+    pageBased: true, // Enable page-based navigation
   });
 
-  // Override canGoNext to stop when last video is visible (when currentIndex reaches totalItems - 2)
-  const canGoNext = currentIndex < filteredVideoIds.length - 2;
-
-  // Override onNext to respect our custom canGoNext logic
-  const onNext = useCallback(() => {
-    if (canGoNext) {
-      hookOnNext();
-    }
-  }, [canGoNext, hookOnNext]);
-
-  // Calculate translateX for smooth scrolling - move by exactly one video width
-  const translateX = -(currentIndex * 50); // 50% video width
-
-  // Show at least 2 video thumbnails when loading, even if no videos yet
-  const videoIdsToRender =
-    isLoading && filteredVideoIds.length === 0
-      ? ['loading-1', 'loading-2'] // Placeholder IDs for loading state
-      : filteredVideoIds;
+  // Calculate translateX for page-based navigation
+  const translateX = -(currentPage * 100); // Move by 100% for each page
 
   // Always show recommendations section, even if no videos available
 
@@ -94,30 +76,35 @@ export const VideoCarousel = ({
         ) : (
           <div
             ref={carouselRef}
-            className="flex transition-transform duration-300 ease-in-out"
+            className="flex transition-transform duration-[800ms] ease-in-out"
             style={{
               transform: `translateX(${translateX}%)`,
             }}
           >
-            {/* Render all videos in a simple horizontal layout */}
-            {videoIdsToRender.map((videoId: string) => {
-              return (
-                <VideoThumbnail
-                  key={videoId}
-                  videoId={videoId}
-                  getVideoById={getVideoById}
-                  getVideoUrl={getVideoUrl}
-                  onClick={onVideoSelect}
-                  onWatchNow={onWatchNow}
-                  isGlobalLoading={isLoading}
-                />
-              );
-            })}
+            {/* Render videos in pages */}
+            {Array.from({ length: totalPages }, (_, pageIndex) => (
+              <div key={pageIndex} className="w-full flex-shrink-0 flex">
+                {filteredVideoIds
+                  .slice(pageIndex * videosPerRow, (pageIndex + 1) * videosPerRow)
+                  .map((videoId: string) => (
+                    <VideoThumbnail
+                      key={videoId}
+                      videoId={videoId}
+                      getVideoById={getVideoById}
+                      getVideoUrl={getVideoUrl}
+                      onClick={onVideoSelect}
+                      onWatchNow={onWatchNow}
+                      isGlobalLoading={isLoading}
+                      widthClass={`w-1/${videosPerRow}`}
+                    />
+                  ))}
+              </div>
+            ))}
           </div>
         )}
 
         {/* Navigation Arrows */}
-        {!isLoading && filteredVideoIds.length > 2 && (
+        {!isLoading && totalPages > 1 && (
           <>
             {canGoPrev && (
               <button
@@ -148,16 +135,16 @@ export const VideoCarousel = ({
           </>
         )}
       </div>
-      {!isLoading && filteredVideoIds.length > 2 && (
+      {!isLoading && totalPages > 1 && (
         <div className="flex justify-center mt-1 gap-2">
-          {Array.from({ length: Math.max(1, filteredVideoIds.length - 1) }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, pageIndex) => (
             <button
-              key={index}
-              onClick={() => goToIndex(index)}
+              key={pageIndex}
+              onClick={() => goToPage(pageIndex)}
               className={`size-1.5 rounded-full transition-all duration-200 ${
-                currentIndex === index ? 'bg-primary scale-[1.8]' : 'bg-gray-300 hover:bg-gray-400'
+                currentPage === pageIndex ? 'bg-primary scale-[1.8]' : 'bg-gray-300 hover:bg-gray-400'
               }`}
-              aria-label={`Go to video ${index + 1}`}
+              aria-label={`Go to page ${pageIndex + 1}`}
             />
           ))}
         </div>

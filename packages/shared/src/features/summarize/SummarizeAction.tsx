@@ -4,7 +4,7 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { FeatureActionProps } from '../';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-const SummarizeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+const SummarizeAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialTooltip }) => {
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.SUMMARIZE);
 
   const button = (
@@ -23,7 +23,11 @@ const SummarizeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) =>
     return button;
   }
 
-  return <BlackTooltip content="Get a quick summary of any page">{button}</BlackTooltip>;
+  return (
+    <BlackTooltip content="Get a quick summary of any page" initialTooltip={initialTooltip}>
+      {button}
+    </BlackTooltip>
+  );
 };
 
 export default SummarizeAction;

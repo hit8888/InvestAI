@@ -25,7 +25,14 @@ export interface FeatureContentProps {
   setActiveFeature?: (feature: CommandBarModuleType) => void;
 }
 
+// Types
+export type InitialTooltipConfig = {
+  delay: number;
+  duration: number;
+};
+
 export interface FeatureActionProps {
   isActive?: boolean;
   onClick?: (featureConfig: CommandBarModuleConfigType | undefined) => void;
+  initialTooltip?: InitialTooltipConfig; // Configuration for initial tooltip sequence
 }

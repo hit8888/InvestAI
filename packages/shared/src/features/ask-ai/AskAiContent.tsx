@@ -146,9 +146,9 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         sendUserMessage={sendUserMessage}
         coverImage={config?.cover_image || undefined}
       />
-      <div className="h-10 w-full flex-1  p-2 pt-0">
+      <div className="h-full w-full flex-1  p-2 pt-0">
         <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
-          <div className="relative h-[calc(100%-76px)] flex-1">
+          <div className="relative h-full flex-1">
             {!sessionData && !hasActiveAdminSession ? (
               <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
                 <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />

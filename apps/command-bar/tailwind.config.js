@@ -120,6 +120,7 @@ export default {
         'high-bounce': 'highBounce 1s ease-in-out infinite',
         'quick-flash': 'quick-flash 3s ease-in-out infinite',
         'scale-in-right': 'scaleInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+        'scale-out-right': 'scaleOutRight 0.2s ease-in forwards',
       },
       keyframes: {
         highBounce: {
@@ -159,6 +160,18 @@ export default {
           '100%': {
             transform: 'scale(1) translateX(0)',
             opacity: '1',
+            transformOrigin: 'right center',
+          },
+        },
+        scaleOutRight: {
+          '0%': {
+            transform: 'scale(1) translateX(0)',
+            opacity: '1',
+            transformOrigin: 'right center',
+          },
+          '100%': {
+            transform: 'scale(0) translateX(16px)',
+            opacity: '0',
             transformOrigin: 'right center',
           },
         },

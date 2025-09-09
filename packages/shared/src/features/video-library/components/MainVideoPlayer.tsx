@@ -115,19 +115,19 @@ export const MainVideoPlayer = ({
   // Show shimmer when loading - match exact layout of actual video player
   if (isLoading) {
     return (
-      <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col">
+      <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[400px]">
         {/* Title shimmer */}
         <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
           <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
         </div>
         <div className="relative flex-1 min-h-0">
           {/* Video container shimmer - takes full available height */}
-          <div className="relative w-full h-full bg-muted/20 rounded-md overflow-hidden">
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-200 via-gray-50 to-gray-100 animate-pulse"></div>
+          <div className="relative w-full h-full bg-black rounded-md overflow-hidden">
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse"></div>
             {/* Play icon placeholder */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-gray-400 rounded-full ml-1"></div>
+              <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 bg-gray-600 rounded-full ml-1"></div>
               </div>
             </div>
           </div>
@@ -141,12 +141,14 @@ export const MainVideoPlayer = ({
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col">
-      {video.title && (
-        <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
+    <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[400px]">
+      <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
+        {video.title ? (
           <h3 className="text-sm font-semibold text-primary">{video.title}</h3>
-        </div>
-      )}
+        ) : (
+          <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
+        )}
+      </div>
       <div className="relative flex-1 min-h-0">
         {/* Video container that fills available height */}
         <div className="relative w-full h-full bg-muted/20 rounded-md overflow-hidden">
@@ -155,7 +157,7 @@ export const MainVideoPlayer = ({
             key={videoId} // Force re-render when video changes
             src={videoUrl}
             controls
-            className="absolute inset-0 w-full h-full object-contain"
+            className="w-full h-full min-h-[400px] object-cover"
             preload="metadata"
             title={video.title}
             onPlay={handlePlay}

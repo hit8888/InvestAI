@@ -61,4 +61,14 @@ export default defineConfig({
       },
     },
   },
+
+  // Suppress Redux warning in development
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
+
+  // Suppress specific warnings
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 });

@@ -223,15 +223,14 @@ const config: Omit<Config, "content"> = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-rotate": "gradient-rotate 3s linear infinite",
         "gradient-sweep": "gradient-sweep 4s linear infinite",
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-medium": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         slowSpin: "spin 4s linear infinite",
-        "typing-dot1": "typing-dot 1.2s infinite 0.0s",
-        "typing-dot2": "typing-dot 1.2s infinite 0.2s",
-        "typing-dot3": "typing-dot 1.2s infinite 0.4s",
-        flip: "flip 2s ease-in-out infinite",
         "high-bounce": "highBounce 4s ease-in-out infinite",
+        "fade-in-0": "fadeIn 0.2s ease-out forwards",
+        "fade-out-0": "fadeOut 0.2s ease-in forwards",
+        "zoom-in-95": "zoomIn95 0.2s ease-out forwards",
+        "zoom-out-95": "zoomOut95 0.2s ease-in forwards",
       },
       keyframes: {
         highBounce: {
@@ -294,22 +293,48 @@ const config: Omit<Config, "content"> = {
             backgroundPosition: "-200% 50%",
           },
         },
-        "typing-dot": {
-          "0%": { opacity: 0 },
-          "50%": { opacity: 1 },
-          "100%": { opacity: 0 },
-        },
-        flip: {
-          "0%": { transform: "rotateX(0deg)" },
-          "50%": { transform: "rotateX(180deg)" },
-          "100%": { transform: "rotateX(0deg)" },
-        },
         pulse: {
           "0%, 100%": {
             opacity: "1",
           },
           "50%": {
             opacity: "0.5",
+          },
+        },
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        fadeOut: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
+        zoomIn95: {
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.95)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scale(1)",
+          },
+        },
+        zoomOut95: {
+          "0%": {
+            opacity: "1",
+            transform: "scale(1)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "scale(0.95)",
           },
         },
       },

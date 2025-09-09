@@ -4,7 +4,7 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { FeatureActionProps } from '../';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-const IframeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+const IframeAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialTooltip }) => {
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.IFRAME);
 
   if (!featureConfig?.module_configs?.url) {
@@ -28,7 +28,12 @@ const IframeAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
   }
 
   return (
-    <BlackTooltip content={featureConfig.module_configs.tooltip_text ?? featureConfig.name}>{button}</BlackTooltip>
+    <BlackTooltip
+      content={featureConfig.module_configs.tooltip_text ?? featureConfig.name}
+      initialTooltip={initialTooltip}
+    >
+      {button}
+    </BlackTooltip>
   );
 };
 

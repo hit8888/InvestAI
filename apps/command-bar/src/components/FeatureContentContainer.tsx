@@ -20,6 +20,15 @@ interface FeatureContentContainerProps {
   onExpand: () => void;
 }
 
+// Component mapping for cleaner code
+const CONTENT_COMPONENTS = {
+  [ASK_AI]: AskAiContent,
+  [BOOK_MEETING]: BookMeetingContent,
+  [SUMMARIZE]: SummarizeContent,
+  [IFRAME]: IframeContent,
+  [VIDEO_LIBRARY]: VideoLibraryContent,
+} as const;
+
 const FeatureContentContainer = ({
   activeFeature,
   setActiveFeature,
@@ -28,69 +37,34 @@ const FeatureContentContainer = ({
   onExpand,
 }: FeatureContentContainerProps) => {
   const { config } = useCommandBarStore();
-
   const { modules = [] } = config.command_bar ?? {};
   const module = modules.find((m) => m.module_type === activeFeature);
 
-  if (!module) return null;
+  if (!module || !activeFeature) return null;
 
-  switch (activeFeature) {
-    case ASK_AI:
-      return (
-        <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <AskAiContent
-            isExpanded={isExpanded}
-            onClose={onClose}
-            onExpand={onExpand}
-            setActiveFeature={setActiveFeature}
-          />
-        </FeatureContentWrapper>
-      );
-    case BOOK_MEETING:
-      return (
-        <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <BookMeetingContent
-            isExpanded={isExpanded}
-            onClose={onClose}
-            onExpand={onExpand}
-            setActiveFeature={setActiveFeature}
-          />
-        </FeatureContentWrapper>
-      );
-    case SUMMARIZE:
-      return (
-        <FeatureContentWrapper activeFeature={activeFeature} isExpanded={isExpanded}>
-          <SummarizeContent
-            isExpanded={isExpanded}
-            onClose={onClose}
-            onExpand={onExpand}
-            setActiveFeature={setActiveFeature}
-          />
-        </FeatureContentWrapper>
-      );
-    case IFRAME:
-      return (
-        <IframeContent
-          isExpanded={isExpanded}
-          onClose={onClose}
-          onExpand={onExpand}
-          setActiveFeature={setActiveFeature}
-        />
-      );
-    case VIDEO_LIBRARY:
-      return (
-        <FeatureContentWrapper activeFeature={activeFeature} isExpanded={true}>
-          <VideoLibraryContent
-            isExpanded={isExpanded}
-            onClose={onClose}
-            onExpand={onExpand}
-            setActiveFeature={setActiveFeature}
-          />
-        </FeatureContentWrapper>
-      );
-    default:
-      return null;
+  const ContentComponent = CONTENT_COMPONENTS[activeFeature as keyof typeof CONTENT_COMPONENTS];
+  if (!ContentComponent) return null;
+
+  const commonProps = {
+    isExpanded,
+    onClose,
+    onExpand,
+    setActiveFeature,
+  };
+
+  // Special cases that don't use FeatureContentWrapper
+  if (activeFeature === IFRAME) {
+    return <ContentComponent {...commonProps} />;
   }
+
+  // Special case for VIDEO_LIBRARY (always expanded)
+  const wrapperIsExpanded = activeFeature === VIDEO_LIBRARY ? true : isExpanded;
+
+  return (
+    <FeatureContentWrapper activeFeature={activeFeature} isExpanded={wrapperIsExpanded}>
+      <ContentComponent {...commonProps} />
+    </FeatureContentWrapper>
+  );
 };
 
 export default FeatureContentContainer;

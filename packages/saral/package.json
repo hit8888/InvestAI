@@ -31,10 +31,10 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.53.2",
-    "tailwind-merge": "^2.2.1",
-    "zod": "link:@hookform/resolvers/zod",
     "react-markdown": "^9.0.1",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "tailwind-merge": "^2.2.1",
+    "zod": "link:@hookform/resolvers/zod"
   },
   "devDependencies": {
     "@types/react": "^19.0.8",

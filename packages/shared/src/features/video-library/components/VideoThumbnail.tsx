@@ -12,6 +12,7 @@ interface VideoThumbnailProps {
   isGlobalLoading?: boolean;
   variant?: 'carousel' | 'recommendation';
   onLater?: () => void;
+  widthClass?: string;
 }
 
 export const VideoThumbnail = ({
@@ -23,6 +24,7 @@ export const VideoThumbnail = ({
   isGlobalLoading = false,
   variant = 'carousel',
   onLater,
+  widthClass = 'w-1/2',
 }: VideoThumbnailProps) => {
   const { isVideoWatched } = useWatchedVideos();
   const isWatched = isVideoWatched(videoId);
@@ -80,6 +82,7 @@ export const VideoThumbnail = ({
                 muted
                 controls={false}
                 onLoadedMetadata={handleLoadedMetadata}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
               {/* Duration Pill */}
               {duration && (
@@ -143,12 +146,21 @@ export const VideoThumbnail = ({
   // Carousel variant (default)
   return (
     <div
-      className={`group relative flex-shrink-0 w-1/2 p-1 ${!isPlaceholder ? 'cursor-pointer' : ''}`}
+      className={`group relative flex-shrink-0 ${widthClass} p-1 ${!isPlaceholder ? 'cursor-pointer' : ''}`}
       onClick={() => !isPlaceholder && onClick(videoId)}
     >
-      <div className="bg-background p-2 bg-card shadow-md rounded-[10px] overflow-hidden mb-2 relative flex h-24">
-        {/* Left Half - Video Preview */}
-        <div className="w-1/2 relative group">
+      <div className="bg-card shadow-md rounded-[10px] overflow-hidden mb-2 relative flex flex-col h-40 gap-2 p-2">
+        {/* Duration - Top */}
+        {shouldShowShimmer || duration === null ? (
+          <div className="w-16 h-5 bg-gray-200/50 rounded animate-pulse border"></div>
+        ) : duration ? (
+          <div className="w-fit bg-background text-[11px] px-1.5 py-0.5 rounded border">
+            {formatDuration(duration)} min
+          </div>
+        ) : null}
+
+        {/* Video Preview - Middle */}
+        <div className="w-full h-[60px] relative group">
           {shouldShowShimmer ? (
             /* Shimmer effect for loading state */
             <div className="w-full h-full bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-[10px]">
@@ -165,6 +177,7 @@ export const VideoThumbnail = ({
                 muted
                 controls={false}
                 onLoadedMetadata={handleLoadedMetadata}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
               {/* Play Button Overlay - Always visible with white background */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -172,13 +185,6 @@ export const VideoThumbnail = ({
                   <Icons.Play className="size-3 text-foreground fill-foreground" />
                 </div>
               </div>
-              {/* Duration Pill */}
-              {duration && (
-                <div className="absolute top-0.5 left-0.5 text-foreground bg-background px-1 py-0.5 rounded-md shadow-md border text-[10px] font-medium flex items-center gap-0.5">
-                  <Icons.Clock className="size-3" />
-                  {formatDuration(duration)} min
-                </div>
-              )}
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-[10px]">
@@ -187,24 +193,20 @@ export const VideoThumbnail = ({
           )}
         </div>
 
-        {/* Right Half - Video Title */}
-        <div className="w-1/2 p-3 flex items-center rounded-[10px] rounded-l-none">
-          <div className="w-full">
-            {shouldShowShimmer ? (
-              <div className="space-y-2">
-                <div className="h-3 bg-gray-300 rounded animate-pulse w-full"></div>
-                <div className="h-3 bg-gray-300 rounded animate-pulse w-3/4"></div>
-              </div>
-            ) : (
-              <Typography variant="body-small" fontWeight="medium">
-                {video?.title || ''}
-              </Typography>
-            )}
+        {/* Title - Bottom */}
+        <div className="flex-1 flex flex-col justify-between">
+          {shouldShowShimmer ? (
+            <div className="space-y-2">
+              <div className="h-3 bg-gray-300 rounded animate-pulse w-full"></div>
+              <div className="h-3 bg-gray-300 rounded animate-pulse w-3/4"></div>
+            </div>
+          ) : (
+            <Typography variant="body-small" fontWeight="normal" className="line-clamp-2">
+              {video?.title || ''}
+            </Typography>
+          )}
 
-            {isWatched && (
-              <div className="text-[10px] text-muted-foreground absolute top-2 right-2 italic">watched</div>
-            )}
-          </div>
+          {isWatched && <div className="text-[10px] text-muted-foreground italic">watched</div>}
         </div>
       </div>
     </div>

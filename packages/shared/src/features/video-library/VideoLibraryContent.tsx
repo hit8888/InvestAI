@@ -1,14 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { VideoLibraryIcon, Icons, Button, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
+import { VideoLibraryIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
 import useVideoLibraryQuery from '../../network/http/queries/useVideoLibraryQuery';
 import { MainVideoPlayer } from './components/MainVideoPlayer';
 import { VideoCarousel } from './components/VideoCarousel';
+import { VideoLibraryShimmer } from './components/VideoLibraryShimmer';
+import { VideoLibraryCTAs } from './components/VideoLibraryCTAs';
+import { VideoLibraryEmptyState } from './components/VideoLibraryEmptyState';
+import { VideoLibraryErrorState } from './components/VideoLibraryErrorState';
 import { Video } from './types';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { trackError } from '../../utils/error';
 
 const { ASK_AI, BOOK_MEETING } = CommandBarModuleTypeSchema.enum;
 
@@ -24,14 +29,14 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   // Create video config for React Query
   const videoConfig = {
     agentId: config.agent_id?.toString() || '',
-    moduleId: featureConfig?.id?.toString() || '', // Use empty string to disable query if featureConfig is not available
+    moduleId: featureConfig?.id?.toString() || '',
     tenantName: config.org_name || '',
     sessionId: config.session_id || '',
     prospectId: config.prospect_id || '',
   };
 
   // Use React Query hook
-  const { data: videos = [], isLoading, error } = useVideoLibraryQuery(videoConfig);
+  const { data: videos = [], isLoading, error, refetch } = useVideoLibraryQuery(videoConfig);
 
   // Set first video as selected when videos load
   useEffect(() => {
@@ -39,6 +44,23 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
       setSelectedVideoId(videos[0].id);
     }
   }, [videos, selectedVideoId]);
+
+  // Track errors when they occur
+  useEffect(() => {
+    if (error) {
+      trackError(error, {
+        component: 'VideoLibraryContent',
+        action: 'useVideoLibraryQuery',
+        sessionId: config.session_id,
+        additionalData: {
+          agentId: config.agent_id,
+          moduleId: featureConfig?.id,
+          tenantName: config.org_name,
+          prospectId: config.prospect_id,
+        },
+      });
+    }
+  }, [error, config.session_id, config.agent_id, featureConfig?.id, config.org_name, config.prospect_id]);
 
   // Helper functions - memoized to prevent unnecessary re-renders
   const getVideoById = useCallback(
@@ -61,126 +83,77 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   };
 
   const handleVideoSelect = (newVideoId: string) => {
-    // State 1: If main video is playing -> set new video and start playing
-    // State 2: If main video is paused -> just set new video (don't start playing)
+    const wasPlaying = isMainVideoPlaying;
+    setWasPlayingBeforeChange(wasPlaying);
     setSelectedVideoId(newVideoId);
-    setWasPlayingBeforeChange(isMainVideoPlaying); // Auto-play only if current video was playing
   };
 
-  const handleWatchNow = (newVideoId: string) => {
-    // State 3: Overlay "Watch now" - always set video and start playing
-    setSelectedVideoId(newVideoId);
-    setWasPlayingBeforeChange(true); // Always auto-play
+  const handleWatchNow = (videoId: string) => {
+    handleVideoSelect(videoId);
   };
 
-  // Get all video IDs for the carousel (including the selected video)
-  const carouselVideoIds = videos.map((video) => video.id);
+  // Get carousel video IDs (exclude currently selected video)
+  const carouselVideoIds = videos.filter((video) => video.id !== selectedVideoId).map((video) => video.id);
+
+  const renderContent = () => {
+    if (isLoading) {
+      return <VideoLibraryShimmer />;
+    }
+
+    if (error) {
+      return <VideoLibraryErrorState onRetry={refetch} error={error} />;
+    }
+
+    if (videos.length === 0) {
+      return <VideoLibraryEmptyState />;
+    }
+
+    return (
+      <div className="h-full flex flex-col p-4">
+        {/* Main Video */}
+        <div className="flex-shrink-0 max-h-[400px] min-h-[300px] mb-4 z-50">
+          <MainVideoPlayer
+            videoId={selectedVideoId}
+            getVideoById={getVideoById}
+            getVideoUrl={getVideoUrl}
+            onPlayingStateChange={setIsMainVideoPlaying}
+            isLoading={isLoading}
+            wasPlaying={wasPlayingBeforeChange}
+            allVideoIds={carouselVideoIds}
+            onVideoSelect={handleVideoSelect}
+            onWatchNow={handleWatchNow}
+          />
+        </div>
+
+        {/* Video Recommendations Carousel */}
+        <div className="flex-shrink-0 mb-4">
+          <VideoCarousel
+            videoIds={carouselVideoIds}
+            selectedVideoId={selectedVideoId}
+            getVideoById={getVideoById}
+            getVideoUrl={getVideoUrl}
+            onVideoSelect={handleVideoSelect}
+            onWatchNow={handleWatchNow}
+            isLoading={isLoading}
+            videosPerRow={4}
+          />
+        </div>
+
+        {/* CTAs */}
+        <VideoLibraryCTAs
+          onBookMeetingClick={handleBookMeetingClick}
+          onAskAIClick={handleAskAIClick}
+          orbConfig={orbConfig}
+          showBookMeeting={!!bookMeetingFeatureConfig}
+        />
+      </div>
+    );
+  };
 
   return (
-    <div
-      className="flex w-full flex-col space-y-1 rounded-[20px] relative border border-border-dark bg-background shadow-elevation-md"
-      style={{ minHeight: 'min(100vh, 730px)' }}
-    >
-      <FeatureHeader
-        title="Video Library"
-        titleClassName="font-normal"
-        icon={<VideoLibraryIcon className="h-5 w-5" />}
-        onClose={onClose}
-      />
-      <div className="w-full flex-1 flex p-2 pt-0">
-        <div className="w-full rounded-[16px] border flex flex-col">
-          <div className="relative flex-1 overflow-hidden">
-            {error ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center text-muted-foreground">
-                  <Icons.Video className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p className="text-sm">Failed to load videos</p>
-                </div>
-              </div>
-            ) : isLoading || videos.length > 0 ? (
-              <div className="h-full flex flex-col p-4">
-                {/* Main Video */}
-                <div className="flex-1 min-h-0">
-                  <MainVideoPlayer
-                    videoId={selectedVideoId}
-                    getVideoById={getVideoById}
-                    getVideoUrl={getVideoUrl}
-                    onPlayingStateChange={setIsMainVideoPlaying}
-                    isLoading={isLoading}
-                    wasPlaying={wasPlayingBeforeChange}
-                    allVideoIds={carouselVideoIds}
-                    onVideoSelect={handleVideoSelect}
-                    onWatchNow={handleWatchNow}
-                  />
-                </div>
-
-                {/* Video Recommendations Carousel */}
-                <div className="flex-shrink-0 mb-6">
-                  <VideoCarousel
-                    videoIds={carouselVideoIds}
-                    selectedVideoId={selectedVideoId}
-                    getVideoById={getVideoById}
-                    getVideoUrl={getVideoUrl}
-                    onVideoSelect={handleVideoSelect}
-                    onWatchNow={handleWatchNow}
-                    isLoading={isLoading}
-                  />
-                </div>
-
-                {/* CTAs */}
-                <div className="flex gap-3 px-1 flex-shrink-0">
-                  {bookMeetingFeatureConfig && (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="w-full flex !font-normal items-center justify-center gap-2"
-                      onClick={handleBookMeetingClick}
-                    >
-                      <Icons.Calendar className="h-4 w-4" />
-                      Book a Demo
-                    </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full !font-normal text-muted-foreground flex items-center justify-center gap-2"
-                    onClick={handleAskAIClick}
-                  >
-                    Have Questions?
-                    <span className="text-primary flex items-center gap-1">
-                      Try Ask AI
-                      {!orbConfig?.show_orb ? (
-                        <img
-                          src={orbConfig?.logo_url ?? undefined}
-                          alt="Ask AI"
-                          className="h-4 w-4 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="relative h-4 w-4 overflow-hidden">
-                          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/50 via-white/10 to-transparent blur-sm" />
-                          <div className="relative inset-0 z-10 flex flex-col items-center justify-center">
-                            <ShiningRectangle width={8} height={4} />
-                            <div className="relative -top-0.5">
-                              <ThreeStarInsideOrbIcon width={10} height={8} />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </span>
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center text-muted-foreground">
-                  <Icons.Video className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p className="text-sm">No videos available</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+    <div className="flex w-full h-full flex-col space-y-1 rounded-[20px] border border-border-dark bg-card pb-3 shadow-elevation-md">
+      <FeatureHeader title="Video Library" icon={<VideoLibraryIcon className="size-5" />} onClose={onClose} ctas={[]} />
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">{renderContent()}</div>
     </div>
   );
 };

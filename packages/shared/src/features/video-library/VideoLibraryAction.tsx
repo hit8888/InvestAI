@@ -4,7 +4,7 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { FeatureActionProps } from '../';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-const VideoLibraryAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+const VideoLibraryAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialTooltip }) => {
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.VIDEO_LIBRARY);
 
   const button = (
@@ -23,7 +23,11 @@ const VideoLibraryAction: React.FC<FeatureActionProps> = ({ isActive, onClick })
     return button;
   }
 
-  return <BlackTooltip content="Video Library">{button}</BlackTooltip>;
+  return (
+    <BlackTooltip content="Video Library" initialTooltip={initialTooltip}>
+      {button}
+    </BlackTooltip>
+  );
 };
 
 export default VideoLibraryAction;

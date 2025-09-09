@@ -4,7 +4,7 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { FeatureActionProps } from '../';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 
-const BookMeetingAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) => {
+const BookMeetingAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialTooltip }) => {
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.BOOK_MEETING);
 
   const button = (
@@ -23,7 +23,11 @@ const BookMeetingAction: React.FC<FeatureActionProps> = ({ isActive, onClick }) 
     return button;
   }
 
-  return <BlackTooltip content="Book a call">{button}</BlackTooltip>;
+  return (
+    <BlackTooltip content="Book a call" initialTooltip={initialTooltip}>
+      {button}
+    </BlackTooltip>
+  );
 };
 
 export default BookMeetingAction;

@@ -22,19 +22,21 @@ interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
   onClose?: () => void;
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;
+  animationDelay?: number; // Delay in seconds before showing nudge
 }
 
 const DEFAULT_POLLING_FREQUENCY_MS = 30 * 1000;
 const DEFAULT_MAX_POLLING_COUNT = 0;
 const DEFAULT_DISPLAY_DURATION = 10 * 1000;
 
-const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
+const Nudge = ({ activeFeature, onClose, setActiveFeature, animationDelay = 0 }: NudgeProps) => {
   const isMobile = useIsMobile();
   const { config, settings } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(nudgeData ?? null);
+  const [isAnimationComplete, setIsAnimationComplete] = useState<boolean>(false);
 
   const {
     polling_enabled,
@@ -52,6 +54,17 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
   const { play } = useSound(bannerSound, 0.2);
+
+  // Handle animation delay for nudge appearance
+  useEffect(() => {
+    if (animationDelay > 0) {
+      const timer = setTimeout(() => {
+        setIsAnimationComplete(true);
+      }, animationDelay * 1000); // Convert seconds to milliseconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [animationDelay]);
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
     displayDuration: nudgeToShow?.display_duration,
@@ -133,7 +146,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   return (
     <AnimatePresence mode="wait">
-      {nudgeToShow && (
+      {nudgeToShow && isAnimationComplete && (
         <motion.div
           key={nudgeToShow.id}
           className={cn('w-80 relative', {
