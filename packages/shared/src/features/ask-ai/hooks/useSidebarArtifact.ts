@@ -272,6 +272,7 @@ export const useSidebarArtifact = () => {
     openSidebar,
     closeSidebar,
     toggleVideoPlayPause,
+    setCurrentVideo,
     handleVideoError,
     setContainerReady,
   };

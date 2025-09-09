@@ -1,6 +1,6 @@
 import { Button, Icons, Typography } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 interface ImageArtifactProps {
@@ -18,9 +18,20 @@ export const ImageArtifact = ({
   isLatestMessage = false,
   isExpanded = false,
 }: ImageArtifactProps) => {
-  const { openSidebar, closeSidebar, currentImage, isContainerReady, sideBarArtifact } = useSidebarArtifactContext();
+  const { openSidebar, closeSidebar, currentImage, setCurrentVideo, isContainerReady, sideBarArtifact } =
+    useSidebarArtifactContext();
   const hasAutoOpened = useRef(false);
   const isMobile = useIsMobile();
+
+  const handleVideoPlayingWhenNewImageComesUp = useCallback(() => {
+    // if current video is playing and new image comes up or click on image artifact, stop playing the video
+    setCurrentVideo((current) => {
+      if (current?.isPlaying) {
+        return { ...current, isPlaying: false };
+      }
+      return current;
+    });
+  }, [setCurrentVideo]);
 
   // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
   // Disable auto-opening when Ask AI is in expanded mode
@@ -28,8 +39,18 @@ export const ImageArtifact = ({
     if (url && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded && !isMobile) {
       hasAutoOpened.current = true;
       openSidebar(url, 'SLIDE_IMAGE', title);
+      handleVideoPlayingWhenNewImageComesUp();
     }
-  }, [url, title, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
+  }, [
+    url,
+    title,
+    isLatestMessage,
+    isContainerReady,
+    isExpanded,
+    openSidebar,
+    isMobile,
+    handleVideoPlayingWhenNewImageComesUp,
+  ]);
 
   const handleButtonClick = () => {
     // Disable sidebar functionality when Ask AI is in expanded mode
@@ -43,6 +64,7 @@ export const ImageArtifact = ({
     } else {
       // If image is not expanded, open the sidebar
       openSidebar(url, 'SLIDE_IMAGE', title);
+      handleVideoPlayingWhenNewImageComesUp();
     }
   };
 

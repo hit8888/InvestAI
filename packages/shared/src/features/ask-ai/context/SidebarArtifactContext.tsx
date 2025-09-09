@@ -30,6 +30,7 @@ export interface SidebarArtifactContextType {
     shouldPlay?: boolean,
   ) => Promise<void>;
   closeSidebar: () => void;
+  setCurrentVideo: React.Dispatch<React.SetStateAction<{ url: string; isPlaying: boolean } | null>>;
   toggleVideoPlayPause: () => void;
   handleVideoError: (error: string) => void;
   setContainerReady: (ready: boolean) => void;

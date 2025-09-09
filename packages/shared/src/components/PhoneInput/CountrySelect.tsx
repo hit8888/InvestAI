@@ -36,6 +36,7 @@ export const CountrySelect = ({
   onChange,
 }: CountrySelectProps) => {
   const [searchValue, setSearchValue] = useState('');
+  const [open, setOpen] = useState(false);
   const { root: shadowRoot } = useShadowRoot();
 
   const selectedCountryCode = useMemo(() => {
@@ -43,14 +44,14 @@ export const CountrySelect = ({
   }, [countryList, selectedCountry]);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           className="flex h-10 gap-2 rounded-e-none rounded-s-lg border-none bg-card hover:bg-card px-3"
           disabled={disabled}
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />
-          <span className="text-sm text-[#9CA3AF] font-medium">{`+${selectedCountryCode}`}</span>
+          <span className="text-sm w-10 text-[#9CA3AF] font-medium">{`+${selectedCountryCode}`}</span>
           <ChevronDownIcon
             className={cn('-mr-2 size-4 opacity-50 text-[#9CA3AF]', disabled ? 'hidden' : 'opacity-100')}
           />
@@ -82,7 +83,10 @@ export const CountrySelect = ({
                       country={value}
                       countryName={label}
                       selectedCountry={selectedCountry}
-                      onChange={onChange}
+                      onChange={(country) => {
+                        setOpen(false);
+                        onChange(country);
+                      }}
                     />
                   ) : null,
                 )}
@@ -106,8 +110,7 @@ const CountrySelectOption = ({ country, countryName, selectedCountry, onChange }
   return (
     <CommandItem
       value={countryName}
-      className={`my-2 cursor-pointer gap-2 hover:!bg-[#E8E8E8] hover:!text-black data-[selected=true]:!bg-[#E8E8E8] data-[selected=true]:!text-black 
-        ${isSelectedCountry ? '!bg-[#E8E8E8] !text-black' : ''}`}
+      className="my-2 cursor-pointer gap-2 hover:!bg-[#E8E8E8] hover:!text-black data-[selected=true]:!bg-[#E8E8E8] data-[selected=true]:!text-black"
       onSelect={() => onChange(country)}
     >
       <FlagComponent country={country} countryName={countryName} />
