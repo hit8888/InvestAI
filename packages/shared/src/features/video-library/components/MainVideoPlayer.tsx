@@ -157,7 +157,7 @@ export const MainVideoPlayer = ({
             key={videoId} // Force re-render when video changes
             src={videoUrl}
             controls
-            className="w-full h-full min-h-[400px] object-cover"
+            className="w-full h-full min-h-full object-cover"
             preload="metadata"
             title={video.title}
             onPlay={handlePlay}
