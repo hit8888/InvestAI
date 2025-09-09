@@ -297,12 +297,17 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
               // Check if this SUGGESTIONS_ARTIFACT is from the last group
               const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
               const isFromLastGroup = lastGroup.some((msg) => msg.response_id === newMessage.response_id);
+              const isLastGroupContainsCalendarArtifact = lastGroup.some(
+                (msg) => msg.event_type === 'CALENDAR_ARTIFACT',
+              );
 
               return {
                 messages: orderedMessages,
                 pendingArtifacts: updatedPendingArtifacts,
                 // Only set suggested questions if it's from the last group and not currently loading
-                ...(isFromLastGroup && !state.isLoading ? { suggestedQuestions } : {}),
+                ...(!isLastGroupContainsCalendarArtifact && isFromLastGroup && !state.isLoading
+                  ? { suggestedQuestions }
+                  : {}),
                 isLoading: false, // Turn off loading as soon as any artifact event arrives
               };
             }
@@ -674,6 +679,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           'GENERATING_ARTIFACT',
           'DISCOVERY_QUESTIONS',
           'QUALIFICATION_FORM_ARTIFACT',
+          'SUGGESTIONS_ARTIFACT',
         ];
 
         // Keep all renderable messages that are not artifacts
