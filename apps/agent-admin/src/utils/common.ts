@@ -156,6 +156,7 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     session_id: response.session_id || '-',
     prospect_details: response?.prospect_details || {},
     company_details: response?.company_details || {},
+    assigned_user_email: response.assigned_user_email || '-',
   };
 
   return mappedData;

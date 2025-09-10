@@ -57,6 +57,7 @@ export const ConversationsTableViewSchema = z.object({
   query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
+  assigned_user_email: z.string().optional().nullable(),
 });
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({
