@@ -8,7 +8,7 @@ import type {
 import { TextArtifact } from './TextArtifact';
 import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
-import { FormArtifact } from './FormArtifact';
+import FormArtifact from '../../../components/FormArtifact';
 import { QualificationFormArtifact } from './QualificationFormArtifact';
 import { CalendarArtifact } from '../../../components/calendar';
 import { DiscoveryQuestion } from './DiscoveryQuestion';
@@ -239,12 +239,12 @@ export const Message = ({
       {isFormArtifact && formArtifactData && sendUserMessage && (
         <FormArtifact
           artifactId={formArtifactData.artifact_id}
-          content={formArtifactData.content}
-          metadata={formArtifactData.metadata}
+          artifact={formArtifactData.content}
+          artifactMetadata={formArtifactData.metadata}
           handleSendUserMessage={handleSendUserMessage}
           isFilled={isFormFilled}
           filledData={getFilledData(message.response_id)}
-          responseId={message.response_id}
+          artifactResponseId={message.response_id}
         />
       )}
       {isQualificationFormArtifact && qualificationFormArtifactData && sendUserMessage && (

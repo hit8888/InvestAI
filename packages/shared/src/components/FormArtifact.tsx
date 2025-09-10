@@ -3,13 +3,13 @@ import { Button, Form, Typography, useForm } from '@meaku/saral';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import ChatFormField from '../../../components/ChatFormField';
-import { FormArtifactContent, FormArtifactMetadataType } from '../../../utils/artifact';
-import FormFilledThankYouContent from '../../../components/FormFilledThankYouContent';
-import { createFormSchema } from '../utils';
-import { sanitizeObject } from '../sanitize';
-import { MessageEventType, SendUserMessageParams } from '../../../types/message';
-import { handleEmailDomainCheck } from '../../../helpers/checkEmailDomain';
+import { FormArtifactContent, FormArtifactMetadataType } from '../utils/artifact';
+import FormFilledThankYouContent from './FormFilledThankYouContent';
+import { sanitizeObject } from '../features/book-meeting/sanitize';
+import { MessageEventType, SendUserMessageParams } from '../types/message';
+import { handleEmailDomainCheck } from '../helpers/checkEmailDomain';
+import ChatFormField from './ChatFormField';
+import { createFormSchema } from '../features/book-meeting/utils';
 
 type FormFilledEventDataType = {
   artifact_id: string;
@@ -25,6 +25,8 @@ interface IFormProps {
   handleSendUserMessage: (data: SendUserMessageParams) => void;
   artifactResponseId?: string;
   calendarMessageExist?: boolean;
+  isFilled?: boolean;
+  filledData?: Record<string, string> | undefined;
 }
 
 const FormArtifact = ({
@@ -34,6 +36,8 @@ const FormArtifact = ({
   handleSendUserMessage,
   artifactResponseId,
   calendarMessageExist,
+  isFilled,
+  filledData,
 }: IFormProps) => {
   const { formMetadata: artifactFormMetadata } = artifactMetadata as { formMetadata: FormArtifactMetadataType };
   const isArtifactFormFilled = artifactFormMetadata?.is_filled ?? false;
@@ -50,7 +54,7 @@ const FormArtifact = ({
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(formSchema as any) as any,
-    defaultValues: artifact?.default_data ?? artifactFormMetadata?.filled_data ?? {},
+    defaultValues: artifact?.default_data ?? filledData ?? {},
     mode: 'onTouched',
   });
 
@@ -127,8 +131,8 @@ const FormArtifact = ({
     return <></>;
   }
 
-  if (submitted) {
-    return <FormFilledThankYouContent formFields={formFields} formValues={artifactFormMetadata?.filled_data ?? {}} />;
+  if (submitted || isFilled) {
+    return <FormFilledThankYouContent formFields={formFields} formValues={filledData ?? {}} />;
   }
 
   return (

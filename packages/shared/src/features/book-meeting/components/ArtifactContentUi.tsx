@@ -8,7 +8,7 @@ import {
 import { CalendarArtifact } from '../../../components/calendar';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import { SendUserMessageParams } from '../../../types/message';
-import FormArtifact from './FormArtifact';
+import FormArtifact from '../../../components/FormArtifact';
 
 interface Props {
   messageEventType: string | undefined;
@@ -53,6 +53,7 @@ export const ArtifactContentUi = ({
           artifactMetadata={artifactContent.metadata as FormArtifactMetadataType}
           handleSendUserMessage={handleSendUserMessage}
           calendarMessageExist={calendarMessageExist}
+          filledData={artifactContent.metadata.formMetadata?.filled_data}
         />
       );
     case 'QUALIFICATION_FORM_ARTIFACT':

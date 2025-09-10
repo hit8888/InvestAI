@@ -66,14 +66,14 @@ export const CountrySelect = ({
             className="pl-2 py-1 focus:ring-2 focus:ring-gray-200"
             containerClassName="shadow-sm border-none px-1"
             showSearchIcon={false}
-            placeholder="Search by country, code, or +code (e.g., US, UK, +91)..."
+            placeholder="Search by country, code"
             value={searchValue}
             onValueChange={setSearchValue}
           />
           <CommandList>
             <ScrollArea className="h-72">
               <CommandEmpty>
-                No country found. Try searching by country name, code (US, UK), or calling code (+91, +1).
+                No country found. Try searching by country name, code (US, UK), or calling code (9, 91, +91).
               </CommandEmpty>
               <CommandGroup>
                 {countryList.map(({ value, label }) =>

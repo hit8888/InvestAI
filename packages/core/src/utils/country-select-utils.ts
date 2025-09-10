@@ -21,10 +21,18 @@ const smartFilterCountries = (countryEntry: CountryEntry, search: string): boole
   }
 
   // 2. Match calling code with or without + (e.g., "+91" or "91" matches India)
+  // Also support prefix matching (e.g., "9" matches "+91")
   try {
     callingCode = RPNInput.getCountryCallingCode(countryCode);
     if (callingCode) {
+      // Exact match with or without +
       if (searchLower === `+${callingCode}` || searchLower === callingCode) {
+        return true;
+      }
+      // Prefix match without + (e.g., "9" matches "+91", "1" matches "+1")
+      // Prefix match with + (e.g., "+9" matches "+91")
+      const searchWithoutPlus = searchLower.startsWith('+') ? searchLower.slice(1) : searchLower;
+      if (callingCode.startsWith(searchWithoutPlus)) {
         return true;
       }
     }

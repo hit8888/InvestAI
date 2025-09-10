@@ -63,7 +63,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             isArtifactFormFilled={isArtifactFormFilled}
             phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             field={field}
-            defaultCountry={props.artifactMetadata.country_code as CountryCode}
+            defaultCountry={props.artifactMetadata?.country_code as CountryCode}
             className={cn(
               fieldErrorMessage &&
                 'border border-destructive-600 [&>button]:bg-destructive-100 [&>input]:bg-destructive-25 [&_svg]:text-gray-900',

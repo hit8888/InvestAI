@@ -82,7 +82,7 @@ export const Messages = ({
   } = useMessageData(renderableMessages);
 
   return (
-    <div className="flex h-full flex-col" ref={containerRef}>
+    <div className="absolute inset-0 flex flex-col" ref={containerRef}>
       <style>
         {`
           @keyframes shimmer {
@@ -91,9 +91,9 @@ export const Messages = ({
           }
         `}
       </style>
-      <div className="h-full overflow-y-auto" ref={scrollContainerRef} onScroll={handleScroll}>
+      <div className="flex-1 overflow-y-auto" ref={scrollContainerRef} onScroll={handleScroll}>
         <AdminSessionHeader hasActiveAdminSession={hasActiveAdminSession} />
-        <div className="flex h-full flex-col gap-6 p-3">
+        <div className="flex flex-col gap-6 p-3">
           {groupedMessages.map((messageGroup, groupIndex) => {
             const isLastGroup = groupIndex === groupedMessages.length - 1;
 

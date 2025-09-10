@@ -115,82 +115,99 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   }, [isExpanded, isSideDrawerOpen, closeSidebar]);
 
   return (
-    <div
-      className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md"
-      style={{ height: isMobile ? '100%' : `min(calc(100vh - 32px), 730px)` }}
-      ref={containerRefCallback}
-    >
-      <FeatureHeader
-        title={hasActiveAdminSession && adminSessionInfo ? `${adminSessionInfo.name}` : `${askaiConfig?.agent_name}`}
-        subtitle={isAdminTyping ? `${adminSessionInfo?.name || 'Admin'} is typing...` : undefined}
-        welcomeMessage={messages?.length === 0 && !isAdminTyping ? askaiConfig?.welcome_message.message : undefined}
-        icon={
-          hasActiveAdminSession && adminSessionInfo?.profilePicture ? (
-            <ImageWithFallback
-              src={adminSessionInfo.profilePicture}
-              alt={adminSessionInfo.name}
-              size={48}
-              showOnlineIndicator={true}
-              onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
-            />
-          ) : isAvatarLoaded && selectedAvatar ? (
-            <selectedAvatar.Component size={48} />
-          ) : (
-            <KatyIcon className="h-12 w-12" />
-          )
-        }
-        onClose={onClose}
-        onExpand={onExpand}
-        isExpanded={isExpanded}
-        ctas={shouldBookMeetingCTAButtonShow && Boolean(sessionData) ? (askaiConfig?.ctas ?? []) : []}
-        sendUserMessage={sendUserMessage}
-        coverImage={config?.cover_image || undefined}
+    <div className="flex gap-2 items-center h-full w-full flex-1">
+      <SidebarArtifactDrawer
+        targetRef={targetRef}
+        isOpen={isSideDrawerOpen}
+        artifact={sideBarArtifact}
+        currentVideo={currentVideo}
+        videoError={videoError}
+        videoRef={videoRef}
+        onPlayPauseToggle={toggleVideoPlayPause}
+        onClose={closeSidebar}
+        onVideoError={handleVideoError}
       />
-      <div className="h-full w-full flex-1  p-2 pt-0">
-        <div className="flex h-full w-full flex-col rounded-[16px] border bg-background">
-          <div className="relative h-full flex-1">
-            {!sessionData && !hasActiveAdminSession ? (
-              <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
-                <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
-                <p className="text-xs text-muted-foreground">Initialising...</p>
-              </div>
-            ) : null}
-
-            <SidebarArtifactDrawer
-              targetRef={targetRef}
-              isOpen={isSideDrawerOpen}
-              artifact={sideBarArtifact}
-              currentVideo={currentVideo}
-              videoError={videoError}
-              videoRef={videoRef}
-              onPlayPauseToggle={toggleVideoPlayPause}
-              onClose={closeSidebar}
-              onVideoError={handleVideoError}
-            />
-            <Messages
-              sendUserMessage={sendUserMessage}
-              selectedAvatar={selectedAvatar}
-              suggestedQuestions={suggestedQuestions}
-              isStreaming={isStreaming}
-              isLoading={isLoading}
-              isAdminTyping={isAdminTyping}
-              getRenderableMessages={getRenderableMessages}
-              isDiscoveryQuestionShown={isDiscoveryQuestionShown}
-              clearSuggestedQuestionsIfDiscoveryShown={clearSuggestedQuestionsIfDiscoveryShown}
-              adminSessionInfo={adminSessionInfo}
-              hasActiveAdminSession={hasActiveAdminSession}
-              isExpanded={isExpanded}
-              onExpand={onExpand}
-            />
-          </div>
-          <AskAiInput
+      <div
+        className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md overflow-hidden"
+        style={{ height: isMobile ? '100%' : `min(calc(100vh - 32px), 730px)` }}
+        ref={containerRefCallback}
+      >
+        {/* Header with flex-shrink-0 to prevent shrinking */}
+        <div className="flex-shrink-0">
+          <FeatureHeader
+            title={
+              hasActiveAdminSession && adminSessionInfo ? `${adminSessionInfo.name}` : `${askaiConfig?.agent_name}`
+            }
+            subtitle={isAdminTyping ? `${adminSessionInfo?.name || 'Admin'} is typing...` : undefined}
+            welcomeMessage={messages?.length === 0 && !isAdminTyping ? askaiConfig?.welcome_message.message : undefined}
+            icon={
+              hasActiveAdminSession && adminSessionInfo?.profilePicture ? (
+                <ImageWithFallback
+                  src={adminSessionInfo.profilePicture}
+                  alt={adminSessionInfo.name}
+                  size={48}
+                  showOnlineIndicator={true}
+                  onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
+                />
+              ) : isAvatarLoaded && selectedAvatar ? (
+                <selectedAvatar.Component size={48} />
+              ) : (
+                <KatyIcon className="h-12 w-12" />
+              )
+            }
+            onClose={onClose}
+            onExpand={onExpand}
+            isExpanded={isExpanded}
+            ctas={shouldBookMeetingCTAButtonShow && Boolean(sessionData) ? (askaiConfig?.ctas ?? []) : []}
             sendUserMessage={sendUserMessage}
-            hasActiveAdminSession={hasActiveAdminSession}
-            disabled={!sessionData || (isLoading && !hasActiveAdminSession)}
+            coverImage={config?.cover_image || undefined}
           />
         </div>
+
+        {/* Main content area with proper flex layout */}
+        <div className="flex-1 flex flex-col min-h-0 p-2 pt-0">
+          <div className="flex-1 flex flex-col min-h-0 rounded-[16px] border bg-background">
+            {/* Messages container that can scroll */}
+            <div className="flex-1 relative min-h-0">
+              {!sessionData && !hasActiveAdminSession ? (
+                <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
+                  <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
+                  <p className="text-xs text-muted-foreground">Initialising...</p>
+                </div>
+              ) : null}
+              <Messages
+                sendUserMessage={sendUserMessage}
+                selectedAvatar={selectedAvatar}
+                suggestedQuestions={suggestedQuestions}
+                isStreaming={isStreaming}
+                isLoading={isLoading}
+                isAdminTyping={isAdminTyping}
+                getRenderableMessages={getRenderableMessages}
+                isDiscoveryQuestionShown={isDiscoveryQuestionShown}
+                clearSuggestedQuestionsIfDiscoveryShown={clearSuggestedQuestionsIfDiscoveryShown}
+                adminSessionInfo={adminSessionInfo}
+                hasActiveAdminSession={hasActiveAdminSession}
+                isExpanded={isExpanded}
+                onExpand={onExpand}
+              />
+            </div>
+
+            {/* Input area with flex-shrink-0 to maintain fixed height */}
+            <div className="flex-shrink-0">
+              <AskAiInput
+                sendUserMessage={sendUserMessage}
+                hasActiveAdminSession={hasActiveAdminSession}
+                disabled={!sessionData || (isLoading && !hasActiveAdminSession)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer with flex-shrink-0 */}
+        <div className="flex-shrink-0">
+          <PoweredByBreakout />
+        </div>
       </div>
-      <PoweredByBreakout />
     </div>
   );
 };

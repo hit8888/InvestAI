@@ -36,6 +36,8 @@ const PhoneInputContainer = ({
 
   return (
     <PhoneInput
+      focusInputOnCountrySelection
+      limitMaxLength
       autoComplete="tel"
       defaultCountry={defaultCountry ?? 'US'}
       className={cn([
