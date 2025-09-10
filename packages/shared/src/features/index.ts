@@ -22,7 +22,7 @@ export interface FeatureContentProps {
   onClose?: () => void;
   onExpand?: () => void;
   isExpanded?: boolean;
-  setActiveFeature?: (feature: CommandBarModuleType) => void;
+  setActiveFeature?: (feature: CommandBarModuleType | null) => void;
 }
 
 // Types

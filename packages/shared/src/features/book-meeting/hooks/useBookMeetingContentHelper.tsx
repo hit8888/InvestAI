@@ -12,7 +12,7 @@ type UseBookMeetingContentHelperProps = {
 const CLOSE_DELAY = 5000;
 
 const useBookMeetingContentHelper = ({ onClose }: UseBookMeetingContentHelperProps) => {
-  const { getRenderableMessages, sessionData, addMessage } = useCommandBarStore();
+  const { getRenderableMessages, sessionData, addMessage, config } = useCommandBarStore();
   const messages = getRenderableMessages();
 
   const shouldBookMeetingContentClose = useMemo(() => !checkIfSubmissionEventsPresent(messages, true), [messages]);
@@ -42,6 +42,7 @@ const useBookMeetingContentHelper = ({ onClose }: UseBookMeetingContentHelperPro
     messages: filteredMessages,
     sessionData,
     addMessage,
+    moduleId: config.command_bar?.modules.find((m) => m.module_type === 'BOOK_MEETING')?.id ?? 2, // BOOK_MEETING Module ID
     artifactEventTypes: [MessageEventType.BOOK_MEETING, MessageEventType.FORM_ARTIFACT],
     checkFormFilled: true,
     queryEnabled: !hasFilteredMessages,

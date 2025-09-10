@@ -14,7 +14,7 @@ const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarMod
 
 interface FeatureContentContainerProps {
   activeFeature: CommandBarModuleType | null;
-  setActiveFeature: (feature: CommandBarModuleType) => void;
+  setActiveFeature: (feature: CommandBarModuleType | null) => void;
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;

@@ -13,7 +13,7 @@ import FilterDurationIcon from '@breakout/design-system/components/icons/filter-
 import FilterUsageCountIcon from '@breakout/design-system/components/icons/filter-usage-count-icon';
 import FilterUserMessagesCountIcon from '@breakout/design-system/components/icons/filter-message-count-icon';
 import SummaryConversationIcon from '@breakout/design-system/components/icons/summary-conv-icon';
-import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
+// import SummaryBantAnalysisIcon from '@breakout/design-system/components/icons/summary-bant-icon';
 import SummarySessionDurationIcon from '@breakout/design-system/components/icons/summary-sessionduration-icon';
 import SummaryEntryPointIcon from '@breakout/design-system/components/icons/summary-entrypoint-icon';
 import SummaryProductOfInterestIcon from '@breakout/design-system/components/icons/summary-product-icon';
@@ -464,37 +464,37 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listIcon: SummaryIntentScoreIcon,
     listValue: 0,
   },
-  {
-    listKey: 'bantAnalysis',
-    listLabel: 'BANT Analysis:',
-    listIcon: SummaryBantAnalysisIcon,
-    listValue: [
-      {
-        itemKey: 'budget',
-        itemLabel: 'Budget:',
-        itemIcon: '💰',
-        itemValue: '',
-      },
-      {
-        itemKey: 'authority',
-        itemLabel: 'Authority:',
-        itemIcon: '👨‍💼',
-        itemValue: '',
-      },
-      {
-        itemKey: 'need',
-        itemLabel: 'Need:',
-        itemIcon: '🤲',
-        itemValue: '',
-      },
-      {
-        itemKey: 'timeline',
-        itemLabel: 'Timeline:',
-        itemIcon: '⏱️',
-        itemValue: '',
-      },
-    ],
-  },
+  // {
+  //   listKey: 'bantAnalysis',
+  //   listLabel: 'BANT Analysis:',
+  //   listIcon: SummaryBantAnalysisIcon,
+  //   listValue: [
+  //     {
+  //       itemKey: 'budget',
+  //       itemLabel: 'Budget:',
+  //       itemIcon: '💰',
+  //       itemValue: '',
+  //     },
+  //     {
+  //       itemKey: 'authority',
+  //       itemLabel: 'Authority:',
+  //       itemIcon: '👨‍💼',
+  //       itemValue: '',
+  //     },
+  //     {
+  //       itemKey: 'need',
+  //       itemLabel: 'Need:',
+  //       itemIcon: '🤲',
+  //       itemValue: '',
+  //     },
+  //     {
+  //       itemKey: 'timeline',
+  //       itemLabel: 'Timeline:',
+  //       itemIcon: '⏱️',
+  //       itemValue: '',
+  //     },
+  //   ],
+  // },
   {
     listKey: 'productOfInterest',
     listLabel: 'Product of Interest:',

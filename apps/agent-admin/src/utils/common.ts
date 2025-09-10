@@ -882,7 +882,10 @@ export function generateConversationSummaryContent(
       case 'ipAddress':
         return {
           ...item,
-          listValue: sessionData.ip_address || '-',
+          listValue:
+            sessionData.ip_address === '-'
+              ? sessionData.company_details?.ip_address?.[0] || '-'
+              : sessionData.ip_address,
         };
       case 'sessionDuration':
         return {

@@ -19,6 +19,7 @@ interface UseFormArtifactMessageProps {
    */
   checkFormFilled?: boolean;
   queryEnabled: boolean;
+  moduleId: number;
 }
 
 /**
@@ -37,6 +38,7 @@ export const useFormArtifactMessage = ({
   artifactEventTypes = [MessageEventType.BOOK_MEETING, MessageEventType.FORM_ARTIFACT],
   checkFormFilled = true,
   queryEnabled,
+  moduleId,
 }: UseFormArtifactMessageProps) => {
   // Filter for artifact event messages
   const artifactEventMessages = messages.filter((message) => artifactEventTypes.includes(message.event_type));
@@ -73,6 +75,7 @@ export const useFormArtifactMessage = ({
       bookMeetingFormData,
       sessionData?.session_id,
       formFilledMessage?.response_id,
+      moduleId,
     );
 
     addMessage(formArtifactMessage);

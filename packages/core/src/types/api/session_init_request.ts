@@ -45,4 +45,5 @@ export type InitializationPayload = {
   browsed_urls?: BrowsedUrl[];
   query_params?: Record<string, string>;
   command_bar?: boolean;
+  command_bar_module_id?: number;
 };

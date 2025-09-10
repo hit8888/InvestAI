@@ -5,13 +5,11 @@ import { PhoneCall } from 'lucide-react';
 import { WaveLoader } from '../../components/WaveLoader';
 import { useWsClient } from '../../hooks/useWsClient';
 import { FeatureContentProps } from '../';
-import useSessionDataQuery from '../../network/http/queries/useSessionDataQuery';
 import BookMeetingFlowContainer from './components/BookMeetingFlowContainer';
 import useBookMeetingContentHelper from './hooks/useBookMeetingContentHelper';
 
 const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const { sendUserMessage } = useWsClient();
-  useSessionDataQuery({}, { enabled: true });
 
   const handleSendUserMessage = useCallback(
     (data: SendUserMessageParams) => {

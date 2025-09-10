@@ -23,23 +23,32 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
+import { useFeature } from '@meaku/shared/containers/FeatureProvider';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
-  const [activeFeature, setActiveFeature] = useState<CommandBarModuleType | null>(null);
+  const {
+    activeFeature,
+    setActiveModule,
+    // activeFeatureModuleId
+  } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
+  const askAiModule = modules.filter((m) => m.module_type === ASK_AI)[0];
+
   const totalAnimationDelay = useEntryAnimationTiming(modules);
 
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
-    {},
+    {
+      // command_bar_module_id: activeFeatureModuleId,
+    },
     { enabled: !!activeFeature || !!config.session_id || !!settings.message },
   );
 
@@ -50,23 +59,24 @@ function App() {
   // Initialize user left tracking
   useUserLeftTracking(sendUserMessage);
 
-  const handleSetActiveButton = (button: CommandBarModuleType | null) => {
-    if (!button) {
-      setActiveFeature(null);
+  const handleSetActiveButton = (module: CommandBarModuleType | null) => {
+    const moduleData = modules.find((m) => m.module_type === module);
+    if (!module) {
+      setActiveModule(null);
       return;
     }
 
-    const moduleSupported = modules.find((m) => m.module_type === button);
+    const moduleSupported = modules.find((m) => m.module_type === module);
 
     if (moduleSupported) {
-      setActiveFeature(button);
+      setActiveModule(moduleData!);
     } else {
-      setActiveFeature(ASK_AI);
+      setActiveModule(askAiModule);
     }
   };
 
   const handleClose = () => {
-    setActiveFeature(null);
+    setActiveModule(null);
     setIsExpanded(false);
     trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.CLOSE_COMMAND_BAR, {
       action_type: activeFeature,
@@ -146,7 +156,7 @@ function App() {
   useEffect(() => {
     if (settings.message) {
       sendUserMessage(settings.message);
-      setActiveFeature(ASK_AI);
+      setActiveModule(askAiModule);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.message]);
@@ -166,20 +176,20 @@ function App() {
       <div key="root-content" className="flex items-end gap-4">
         {dynamicConfigQuery?.isFetched && nudgeConfig && (
           <Nudge
-            activeFeature={activeFeature}
+            activeFeature={activeFeature!}
             setActiveFeature={handleSetActiveButton}
             animationDelay={totalAnimationDelay}
           />
         )}
         <FeatureContentContainer
           key={activeFeature}
-          activeFeature={activeFeature}
+          activeFeature={activeFeature!}
           setActiveFeature={handleSetActiveButton}
           isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
-        <CommandBarActions activeFeature={activeFeature} setActiveFeature={handleSetActiveButton} />
+        <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
       </div>
     </motion.div>
   );

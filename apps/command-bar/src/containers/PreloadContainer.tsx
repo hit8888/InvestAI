@@ -12,6 +12,7 @@ import useStyleConfig from '../hooks/useStyleConfig';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
 import { ConfigurationApiResponse, ENV } from '@meaku/core/index';
 import { useVectorTracking } from '../hooks/useVectorTracking';
+import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -108,7 +109,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   useStyleConfig({ styleConfig: config?.style_config });
 
   if (staticConfigQuery.isSuccess || config.prospect_id) {
-    return children;
+    return <FeatureProvider>{children}</FeatureProvider>;
   }
 
   return null;

@@ -201,6 +201,7 @@ export const convertBookMeetingFormDataToFormArtifactMessage = (
   formArtifactData: FormConfigResponse,
   sessionId: string,
   responseId: string | undefined,
+  moduleId: number,
 ) => {
   return {
     session_id: sessionId,
@@ -232,6 +233,6 @@ export const convertBookMeetingFormDataToFormArtifactMessage = (
       },
     },
     documents: [],
-    command_bar_module_id: null,
+    command_bar_module_id: moduleId,
   };
 };

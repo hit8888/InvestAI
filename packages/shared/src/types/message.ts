@@ -201,6 +201,7 @@ export const MessageSchema = z
     timestamp: z.string(),
     is_admin: z.boolean().optional(),
     device_type: DeviceTypeSchema.optional().nullable(),
+    command_bar_module_id: z.number().optional(),
   })
   .and(
     z.discriminatedUnion('event_type', [

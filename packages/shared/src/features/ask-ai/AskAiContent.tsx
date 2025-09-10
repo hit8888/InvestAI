@@ -74,6 +74,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     messages: messages ?? [],
     sessionData,
     addMessage,
+    moduleId: config.command_bar?.modules.find((m) => m.module_type === 'ASK_AI')?.id ?? 1, // ASK_AI Module ID
     artifactEventTypes: [MessageEventType.FORM_ARTIFACT],
     checkFormFilled: true,
     queryEnabled: !shouldBookMeetingCTAButtonShow,

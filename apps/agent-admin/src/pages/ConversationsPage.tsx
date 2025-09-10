@@ -1,20 +1,12 @@
-import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import withPageViewWrapper from '../pages/PageViewWrapper';
-import CustomPageHeader from '../components/CustomPageHeader';
 import ConversationsTableContainer from '../components/ConversationsTableContainer';
-import { COMMON_SMALL_ICON_PROPS } from '../utils/constants';
-import ConversationTabs from '../components/ConversationTabs';
+import ConversationsWrapper from './ConversationsWrapper';
 
 const ConversationsPage = () => {
   return (
-    <>
-      <CustomPageHeader
-        headerTitle="Conversations"
-        headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
-      />
-      <ConversationTabs />
+    <ConversationsWrapper>
       <ConversationsTableContainer />
-    </>
+    </ConversationsWrapper>
   );
 };
 
