@@ -102,8 +102,8 @@ const ActiveConversationCard = ({
 
       {/* Webpage screenshot */}
       {screenshotUrl && (
-        <div className="mt-3 h-40 w-full rounded border border-gray-200">
-          <img src={screenshotUrl} alt="Webpage Screenshot" className="h-full w-full rounded" />
+        <div className="mt-3 h-48 w-full rounded border border-gray-200 2xl:h-72">
+          <img src={screenshotUrl} alt="Webpage Screenshot" className="h-full w-full rounded object-cover" />
         </div>
       )}
 

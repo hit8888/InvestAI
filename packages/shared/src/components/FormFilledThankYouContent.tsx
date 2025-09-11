@@ -33,7 +33,7 @@ const FormFilledThankYouContent = ({ formFields, formValues }: FormFilledThankYo
   const hasFormFilledValues = formFilledLabelAndValues.length > 0;
 
   return (
-    <div className="w-full flex flex-col gap-5 pt-4">
+    <div className="w-full flex flex-col gap-5">
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
           <Icons.Check className="stroke-4 size-5 text-background" />

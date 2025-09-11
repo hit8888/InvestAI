@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, Typography, useForm } from '@meaku/saral';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
@@ -44,11 +44,10 @@ const FormArtifact = ({
   const [submitted, setSubmitted] = useState(isArtifactFormFilled);
   const { trackEvent } = useCommandBarAnalytics();
   const [emailError, setEmailError] = useState('');
+  const [showShimmer, setShowShimmer] = useState(!isArtifactFormFilled || !submitted);
 
-  const formFields = artifact?.form_fields ?? [];
-
-  const requiredFormFields = formFields.filter((field) => field.is_required) ?? [];
-
+  const formFields = artifact?.form_fields || [];
+  const requiredFormFields = formFields.filter((field) => field.is_required);
   const formSchema = createFormSchema(formFields);
 
   const form = useForm({
@@ -57,6 +56,23 @@ const FormArtifact = ({
     defaultValues: artifact?.default_data ?? filledData ?? {},
     mode: 'onTouched',
   });
+
+  // Watch all form fields
+  const formValues = sanitizeObject(form.watch());
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (showShimmer) {
+        setShowShimmer(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  if (showShimmer && !isFilled && !submitted) {
+    return <FormArtifactShimmer />;
+  }
 
   // Convert string values of integer fields to actual numbers before forming the payload
   const getFormFilledEventData = (values: Record<string, unknown>) => {
@@ -116,9 +132,6 @@ const FormArtifact = ({
     }
   }
 
-  // Watch all form fields
-  const formValues = sanitizeObject(form.watch());
-
   // check if all required fields are filled
   const areAllFieldsFilled = requiredFormFields.every((field) => {
     const value = formValues[field.field_name];
@@ -161,6 +174,16 @@ const FormArtifact = ({
           </Button>
         </form>
       </Form>
+    </div>
+  );
+};
+
+const FormArtifactShimmer = () => {
+  return (
+    <div className="w-full flex flex-col gap-4">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div key={index} className="w-full h-10 bg-gray-200 rounded-md animate-pulse" />
+      ))}
     </div>
   );
 };

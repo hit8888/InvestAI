@@ -29,11 +29,7 @@ const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
-  const {
-    activeFeature,
-    setActiveModule,
-    // activeFeatureModuleId
-  } = useFeature();
+  const { activeFeature, setActiveModule, activeFeatureModuleId } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
@@ -47,7 +43,7 @@ function App() {
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
     {
-      // command_bar_module_id: activeFeatureModuleId,
+      command_bar_module_id: activeFeatureModuleId,
     },
     { enabled: !!activeFeature || !!config.session_id || !!settings.message },
   );

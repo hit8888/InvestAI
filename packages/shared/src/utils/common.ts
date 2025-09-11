@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { CtaEventDataContent, ArtifactFormType, FormFilledEventType } from './types';
-import { ArtifactContent, CalendarArtifactContent, FormArtifactContent } from './artifact';
+import { ArtifactContent, CalendarArtifactContent, FormArtifactContent, QualificationResponsesType } from './artifact';
 import { Message, MessageEventType, ArtifactMessageContent } from '../types/message';
 import { FormConfigResponse } from '../types/responses';
 
@@ -235,4 +235,32 @@ export const convertBookMeetingFormDataToFormArtifactMessage = (
     documents: [],
     command_bar_module_id: moduleId,
   };
+};
+
+/**
+ * Safely transforms QualificationResponsesType array to the format expected by QualificationFormArtifact
+ * Filters out items that don't have a valid id to prevent runtime errors
+ */
+export const transformQualificationFilledData = (
+  filledData: QualificationResponsesType[] | unknown,
+): Array<{ id: string; answer: string }> => {
+  if (!Array.isArray(filledData)) {
+    return [];
+  }
+
+  return filledData
+    .filter(
+      (item): item is QualificationResponsesType & { id: string } =>
+        typeof item === 'object' &&
+        item !== null &&
+        'id' in item &&
+        typeof item.id === 'string' &&
+        item.id.length > 0 &&
+        'answer' in item &&
+        typeof item.answer === 'string',
+    )
+    .map((item) => ({
+      id: item.id,
+      answer: item.answer,
+    }));
 };

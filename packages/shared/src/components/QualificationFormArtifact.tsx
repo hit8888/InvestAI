@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
-import { FormArtifactContent, QualificationQuestionType } from '../../../utils/artifact';
-import { SendUserMessageParams, MessageEventType } from '../../../types/message';
+import { FormArtifactContent, QualificationQuestionType } from '../utils/artifact';
+import { SendUserMessageParams, MessageEventType } from '../types/message';
 import { QualificationQuestions } from './QualificationQuestions';
 
 interface QualificationFormArtifactProps {

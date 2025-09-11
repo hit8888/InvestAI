@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Icons } from '@meaku/saral';
-import { QualificationQuestionType } from '../../../utils/artifact';
-import { useShadowRoot } from '../../../containers/ShadowRootProvider';
+import { QualificationQuestionType } from '../utils/artifact';
+import { useShadowRoot } from '../containers/ShadowRootProvider';
 
 interface QualificationQuestionsProps {
   qualificationQuestions: QualificationQuestionType[];

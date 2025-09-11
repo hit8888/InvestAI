@@ -9,7 +9,7 @@ import { TextArtifact } from './TextArtifact';
 import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
 import FormArtifact from '../../../components/FormArtifact';
-import { QualificationFormArtifact } from './QualificationFormArtifact';
+import { QualificationFormArtifact } from '../../../components/QualificationFormArtifact';
 import { CalendarArtifact } from '../../../components/calendar';
 import { DiscoveryQuestion } from './DiscoveryQuestion';
 import CtaEventMessage from '../../book-meeting/components/CtaEventMessage';
@@ -172,7 +172,7 @@ export const Message = ({
       isCtaEvent,
     'py-0 pr-4 pl-10': isDiscoveryQuestion || isFormArtifact,
     'py-0 px-4 justify-center': isQualificationFormArtifact,
-    'p-0': isCalendarArtifact || isCtaEvent || (isFormArtifact && isFormFilled),
+    'p-0 mt-4': isCalendarArtifact || isCtaEvent || (isFormArtifact && isFormFilled),
   });
 
   if (

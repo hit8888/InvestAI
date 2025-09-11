@@ -73,7 +73,7 @@ export const useCommonCalendarArtifact = ({
     if (!isLoading) return null;
 
     return (
-      <div className="h-full w-full z-10 flex items-center justify-center rounded-2xl bg-card">
+      <div className="inset-0 absolute z-10 flex items-center justify-center rounded-2xl bg-card">
         <div className="flex flex-col items-center gap-2">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-primary"></div>
           <span className="text-sm text-gray-600">Loading calendar...</span>

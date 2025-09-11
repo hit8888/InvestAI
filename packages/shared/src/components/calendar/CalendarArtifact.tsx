@@ -57,9 +57,7 @@ export const CalendarArtifact = ({
   }
 
   return (
-    <div
-      className={cn('h-[500px] w-full rounded-md p-2 border-none bg-card mt-4', isBreakoutCalendar && 'mt-0 bg-none')}
-    >
+    <div className={cn('h-[500px] w-full rounded-md p-2 border-none bg-card', isBreakoutCalendar && 'bg-none')}>
       {getCalendarLoadingIndicator()}
       {getCalendarContentBasedOnType()}
     </div>

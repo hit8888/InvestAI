@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CalendarSubmitEventData } from './types';
-import { CalendarTypeEnum, ViewType } from './enum';
-import { Message, SendUserMessageParams } from '../types/message';
+import { CalendarTypeEnum } from './enum';
+import { Message } from '../types/message';
 
 export const ArtifactEnumSchema = z.enum([
   'SLIDE',
@@ -154,18 +154,6 @@ export type MediaArtifactContent =
   | CalendarArtifactContent;
 
 export type ArtifactContent = MediaArtifactContent | FormArtifactContent | SuggestionArtifactContent;
-
-export type QualificationFlowArtifactProps = {
-  artifact: {
-    artifact_id: string;
-    content: FormArtifactContent;
-    metadata: FormArtifactMetadataType | QualificationQuestionMetadataType;
-    ctaEvent?: Message;
-    response_id?: string;
-  };
-  handleSendUserMessage: (params: SendUserMessageParams) => void;
-  viewType?: ViewType;
-};
 
 export type ArtifactContentWithMetadataProps =
   | ({

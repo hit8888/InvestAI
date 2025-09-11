@@ -131,7 +131,7 @@ const ConversationsTableContainer = () => {
         <TableFiltersWithHeaderLabel
           isLoading={isLoading}
           payloadData={debouncedPayloadData}
-          disabledState={haveNoRecords}
+          disabledState={haveNoRecords && !filterState.searchTableContent}
           key={CONVERSATIONS_PAGE}
           page={CONVERSATIONS_PAGE}
           onFiltersContainerHeightChange={setFilterContainerHeight}

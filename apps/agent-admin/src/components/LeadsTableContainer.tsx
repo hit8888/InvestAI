@@ -137,7 +137,7 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
         <TableFiltersWithHeaderLabel
           isLoading={isLoading}
           payloadData={debouncedPayloadData}
-          disabledState={haveNoRecords}
+          disabledState={haveNoRecords && !filterState.searchTableContent}
           key={pageType}
           page={pageType}
           onFiltersContainerHeightChange={setFilterContainerHeight}
