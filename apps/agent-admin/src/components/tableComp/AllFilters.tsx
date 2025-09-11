@@ -29,6 +29,7 @@ const {
   Duration,
   Status,
   FileType,
+  AssignedUserEmail,
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
@@ -73,6 +74,7 @@ const AllFiltersContainer = ({ page, isLeadsAndConversationsPage }: AllFiltersCo
       case Company:
       case ProductInterest:
       case ProductOfInterest:
+      case AssignedUserEmail:
       case Sources:
       case FileType:
       case Status:

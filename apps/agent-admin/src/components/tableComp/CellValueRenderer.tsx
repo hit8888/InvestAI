@@ -30,6 +30,7 @@ export type CellValueRendererProps = {
 
 const cellValueMap: cellValueMapType = {
   email: EmailCellValue,
+  assigned_user_email: EmailCellValue,
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,

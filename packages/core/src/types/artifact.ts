@@ -50,7 +50,7 @@ export const VideoArtifactSchema = z.object({
 });
 
 export const SlideImageArtifactSchema = z.object({
-  id: z.number(),
+  id: z.number().optional(),
   image_url: z.string(),
   description: z.string(),
   title: z.string(),

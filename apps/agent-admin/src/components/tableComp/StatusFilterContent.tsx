@@ -7,14 +7,14 @@ import { useDataSourceFilterContent } from '../../hooks/useDataSourceFilterConte
 const StatusFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const { Status } = FilterType;
 
-  const { filters, setFilter, resultantOptions, isLoading, isError, data } = useDataSourceFilterContent({
+  const { filters, setFilter, resultantOptions, isLoading, isError } = useDataSourceFilterContent({
     page,
     field: 'status',
   });
 
   if (isLoading) return <FilterOptionsShimmer />;
-  if (isError) return <div className="p-4">No Status data</div>;
-  if (!data) return null;
+  if (isError || !resultantOptions.length)
+    return <p className="p-4 text-center text-sm text-gray-500"> No Status data</p>;
 
   return (
     <React.Fragment key={Status}>

@@ -53,6 +53,7 @@ export enum FilterType {
   Sources = 'sources',
   FileType = 'fileType',
   UsageCount = 'usageCount',
+  AssignedUserEmail = 'assignedUserEmail',
   Duration = 'duration',
   SearchTableContent = 'searchTableContent',
   AllFilters = 'allFilters',
@@ -95,6 +96,7 @@ export interface FilterValues {
   userMessagesCount: userMessagesCountFilterValues;
   presetFilters: FilterItem[];
   testConversationsIncluded: boolean;
+  assignedUserEmail: string[];
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
@@ -123,6 +125,7 @@ export const InitialFilterValues: FilterValues = {
   },
   presetFilters: [],
   testConversationsIncluded: false,
+  assignedUserEmail: [],
 };
 
 export type FilterValueTypes =

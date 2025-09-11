@@ -3,32 +3,30 @@ import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/fi
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import { useFilterContent } from '../../hooks/useFilterContent';
 
-const ProductOfInterestFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
-  const { ProductOfInterest, ProductInterest } = FilterType;
-
-  const isProductOfInterest = filterState === ProductOfInterest;
+const AssignedUserEmailFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
+  const { AssignedUserEmail } = FilterType;
 
   const { filters, setFilter, resultantOptions, isLoading, isError } = useFilterContent({
     page,
-    field: isProductOfInterest ? 'product_of_interest' : 'product_interest',
+    field: 'assigned_user_email',
     enableSearch: false,
   });
 
   if (isLoading)
     return <FilterOptionsShimmer checkboxOrientation="left" isSearchInputShimmer={false} isSelectAllShimmer={false} />;
   if (isError || !resultantOptions.length)
-    return <p className="p-4 text-center text-sm text-gray-500"> No Product data</p>;
+    return <p className="p-4 text-center text-sm text-gray-500"> No Email data</p>;
 
   return (
     <CommonCheckboxesFilterContent
       filterState={filterState}
-      keyValue={isProductOfInterest ? ProductOfInterest : ProductInterest}
+      keyValue={AssignedUserEmail}
       checkboxOptions={resultantOptions ?? []}
-      selectedOptions={isProductOfInterest ? filters.productOfInterest : filters.productInterest}
-      onSelectionChange={(value) => setFilter(page, isProductOfInterest ? ProductOfInterest : ProductInterest, value)}
+      selectedOptions={filters.assignedUserEmail}
+      onSelectionChange={(value) => setFilter(page, AssignedUserEmail, value)}
       handleClosePopover={handleClosePopover}
     />
   );
 };
 
-export default ProductOfInterestFilterContent;
+export default AssignedUserEmailFilterContent;

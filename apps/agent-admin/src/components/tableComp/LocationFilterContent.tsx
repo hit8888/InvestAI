@@ -19,7 +19,6 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
     resultantOptions,
     isLoading,
     isError,
-    data,
   } = useFilterContent({
     page,
     field: 'country',
@@ -27,8 +26,8 @@ const LocationFilterContent = ({ page, filterState, handleClosePopover }: Common
   });
 
   if (isLoading) return <FilterOptionsShimmer checkboxOrientation="right" isFlagShimmer={true} />;
-  if (isError) return <div>No Location data</div>;
-  if (!data) return null;
+  if (isError || !resultantOptions.length)
+    return <p className="p-4 text-center text-sm text-gray-500"> No Location data</p>;
 
   return (
     <React.Fragment key={Location}>

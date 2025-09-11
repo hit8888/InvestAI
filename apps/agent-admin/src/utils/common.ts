@@ -77,6 +77,7 @@ const {
   Status,
   SearchTableContent,
   FileType,
+  AssignedUserEmail,
 } = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
@@ -311,6 +312,11 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'Company',
         width: '434px',
       };
+    case AssignedUserEmail:
+      return {
+        label: 'Assigned User Email',
+        width: '334px',
+      };
     case Sources:
       return {
         label: 'Sources',
@@ -488,6 +494,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     // duration,
     status,
     fileType,
+    assignedUserEmail,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -555,6 +562,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     filterApplied.push({
       field: 'product_of_interest',
       value: productOfInterest,
+      operator: 'in',
+    });
+  }
+
+  if (assignedUserEmail.length > 0) {
+    filterApplied.push({
+      field: 'assigned_user_email',
+      value: assignedUserEmail,
       operator: 'in',
     });
   }
@@ -662,6 +677,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     searchTableContent,
     usageCount,
     fileType,
+    assignedUserEmail,
   } = filters;
 
   if (dateRange) {
@@ -756,6 +772,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: ProductOfInterest,
       label: 'Product',
       value: productOfInterest,
+    });
+  }
+
+  if (assignedUserEmail.length > 0) {
+    appliedFilters.push({
+      key: AssignedUserEmail,
+      label: 'Assigned Email',
+      value: assignedUserEmail,
     });
   }
 

@@ -7,15 +7,15 @@ import { useDataSourceFilterContent } from '../../hooks/useDataSourceFilterConte
 const FileTypeFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const { FileType } = FilterType;
 
-  const { filters, setFilter, resultantOptions, isLoading, isError, data } = useDataSourceFilterContent({
+  const { filters, setFilter, resultantOptions, isLoading, isError } = useDataSourceFilterContent({
     page,
     field: 'fileType',
     filterPayload: 'data_source_type',
   });
 
   if (isLoading) return <FilterOptionsShimmer />;
-  if (isError) return <div className="p-4">No File Type data</div>;
-  if (!data) return null;
+  if (isError || !resultantOptions.length)
+    return <p className="p-4 text-center text-sm text-gray-500"> No File Type data</p>;
 
   return (
     <React.Fragment key={FileType}>

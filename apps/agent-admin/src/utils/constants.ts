@@ -1,6 +1,7 @@
 import { AuthResponse } from '@meaku/core/types/admin/auth';
 import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@meaku/core/types/admin/filters';
 import FilterProductOfInterestIcon from '@breakout/design-system/components/icons/filter-productofinterest-icon';
+import FilterAssignedUserEmailIcon from '@breakout/design-system/components/icons/filter-assigneduseremail-icon';
 import FilterLocationIcon from '@breakout/design-system/components/icons/filter-location-icon';
 import FilterMeetingBookedIcon from '@breakout/design-system/components/icons/filter-meetingbooked-icon';
 import FilterIntentScoreIcon from '@breakout/design-system/components/icons/filter-intentscore-icon';
@@ -62,6 +63,7 @@ const {
   Status,
   FileType,
   ProductInterest,
+  AssignedUserEmail,
 } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, Last90Days, CustomRange } = PresetDateLabel;
 
@@ -127,7 +129,15 @@ export const ADMIN_DASHBOARD_COMPANY_NAME = 'Breakout Admin';
 export const LOGOUT_BUTTON_TITLE = 'Logout';
 export const EXPORT_DOWNLOAD_LABEL = 'Download';
 
-export const MULTI_VALUE_FILTER_TYPES = [Location, ProductOfInterest, ProductInterest, Company, Status, Sources];
+export const MULTI_VALUE_FILTER_TYPES = [
+  Location,
+  ProductOfInterest,
+  ProductInterest,
+  Company,
+  Status,
+  Sources,
+  AssignedUserEmail,
+];
 
 export enum COPIED_FIELD_TEXTS {
   EMAIL = 'Email Copied',
@@ -181,6 +191,14 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
     filterApplied: false,
     filterKey: ProductOfInterest,
     filterType: ProductOfInterest,
+  },
+  {
+    filterIcon: FilterAssignedUserEmailIcon,
+    filterLabel: 'Assigned User Email',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: AssignedUserEmail,
+    filterType: AssignedUserEmail,
   },
   {
     filterIcon: FilterProductOfInterestIcon,
@@ -298,8 +316,14 @@ export const INSIGHTS_DATE_RANGE_PRESET_OPTIONS = [
   { value: '0', label: CustomRange },
 ];
 
-const LEADS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, IntentScore, UserMessagesCount, ProductOfInterest];
-const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked];
+const LEADS_TABLE_EXCLUDE_FILTERS = [
+  MeetingBooked,
+  IntentScore,
+  UserMessagesCount,
+  ProductOfInterest,
+  AssignedUserEmail,
+];
+const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, ProductInterest];
 const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
 const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType];
 const DOCUMENTS_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, Sources];
@@ -380,7 +404,7 @@ export enum SidebarNavItemsEnum {
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
 
-export const DEFAULT_ROUTE = 'active-conversations';
+export const DEFAULT_ROUTE = 'conversations';
 
 // TODO: Hardcoded values for now, will be removed once we have a proper way to get the column list for link clicks page
 // - Need to add another entity type for this in the server backend
@@ -771,6 +795,7 @@ export const INITIAL_SORT_VALUES: SortValues = {
   companySort: null,
   product_interestSort: null,
   product_of_interestSort: null,
+  assigned_user_emailSort: null,
   ip_addressSort: null,
   lead_typeSort: null,
 };
@@ -789,6 +814,7 @@ export const FIELD_TO_SORT_KEY_MAP: Record<string, keyof SortValues> = {
   company: 'companySort',
   product_interest: 'product_interestSort',
   product_of_interest: 'product_of_interestSort',
+  assigned_user_email: 'assigned_user_emailSort',
   ip_address: 'ip_addressSort',
   lead_type: 'lead_typeSort',
 };
@@ -806,6 +832,7 @@ export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
   companySort: 'company',
   product_interestSort: 'product_interest',
   product_of_interestSort: 'product_of_interest',
+  assigned_user_emailSort: 'assigned_user_email',
   ip_addressSort: 'ip_address',
   lead_typeSort: 'lead_type',
 };

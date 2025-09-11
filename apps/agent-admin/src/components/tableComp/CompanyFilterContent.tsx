@@ -19,7 +19,6 @@ const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonF
     resultantOptions,
     isLoading,
     isError,
-    data,
   } = useFilterContent({
     page,
     field: 'company',
@@ -27,8 +26,8 @@ const CompanyFilterContent = ({ page, filterState, handleClosePopover }: CommonF
   });
 
   if (isLoading) return <FilterOptionsShimmer checkboxOrientation="right" />;
-  if (isError) return <div>No Company data</div>;
-  if (!data) return null;
+  if (isError || !resultantOptions.length)
+    return <p className="p-4 text-center text-sm text-gray-500"> No Company data</p>;
 
   return (
     <React.Fragment key={Company}>

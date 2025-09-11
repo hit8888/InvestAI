@@ -13,6 +13,7 @@ export type SortCategory =
   | 'company'
   | 'product_interest'
   | 'product_of_interest'
+  | 'assigned_user_email'
   | 'ip_address'
   | 'lead_type'
   | 'updated_on'
@@ -39,6 +40,7 @@ export type SortValues = {
   countrySort: SortOrder;
   companySort: SortOrder;
   product_interestSort: SortOrder;
+  assigned_user_emailSort: SortOrder;
   ip_addressSort: SortOrder;
   lead_typeSort: SortOrder;
   product_of_interestSort: SortOrder;
