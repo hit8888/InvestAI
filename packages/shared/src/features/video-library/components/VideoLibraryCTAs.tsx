@@ -8,6 +8,7 @@ interface VideoLibraryCTAsProps {
     logo_url?: string | null;
   };
   showBookMeeting?: boolean;
+  isLoading?: boolean;
 }
 
 export const VideoLibraryCTAs = ({
@@ -15,14 +16,26 @@ export const VideoLibraryCTAs = ({
   onAskAIClick,
   orbConfig,
   showBookMeeting = true,
+  isLoading = false,
 }: VideoLibraryCTAsProps) => {
+  // Show shimmer when loading
+  if (isLoading) {
+    return (
+      <div className="flex gap-3 px-1 flex-shrink-0">
+        {showBookMeeting && <div className="w-full h-9 bg-gray-200 rounded-[12px] animate-pulse"></div>}
+        <div className="w-full h-9 bg-gray-200 rounded-[12px] animate-pulse"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex gap-3 px-1 flex-shrink-0">
       {showBookMeeting && (
         <Button
           variant="default"
           size="sm"
-          className="w-full flex !font-normal items-center justify-center gap-2"
+          hasWipers={true}
+          className="w-full flex !font-normal items-center justify-center gap-2 rounded-[12px]"
           onClick={onBookMeetingClick}
         >
           <Icons.Calendar className="h-4 w-4" />
@@ -32,7 +45,8 @@ export const VideoLibraryCTAs = ({
       <Button
         variant="outline"
         size="sm"
-        className="w-full !font-normal text-muted-foreground flex items-center justify-center gap-2"
+        hasWipers={true}
+        className="w-full hover:!bg-background !font-normal text-muted-foreground flex items-center justify-center gap-2 rounded-[12px]"
         onClick={onAskAIClick}
       >
         Have Questions?

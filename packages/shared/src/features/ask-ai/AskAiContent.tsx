@@ -129,7 +129,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         onVideoError={handleVideoError}
       />
       <div
-        className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card shadow-elevation-md overflow-hidden"
+        className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card overflow-hidden"
         style={{ height: isMobile ? '100%' : `min(calc(100vh - 32px), 730px)` }}
         ref={containerRefCallback}
       >

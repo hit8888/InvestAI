@@ -158,7 +158,7 @@ function App() {
   }, [settings.message]);
 
   const containerClasses = cn(
-    'fixed z-[2147483646]',
+    'fixed z-command-bar',
     position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4',
   );
 
@@ -185,7 +185,9 @@ function App() {
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
-        <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
+        {dynamicConfigQuery?.isFetched && (
+          <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
+        )}
       </div>
     </motion.div>
   );

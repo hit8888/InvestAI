@@ -27,19 +27,37 @@ export const VideoCarousel = ({
 }: VideoCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Filter out the currently selected main video from the carousel
-  const filteredVideoIds = videoIds.filter((videoId) => videoId !== selectedVideoId);
+  // Include all videos in the carousel (don't filter out the main video)
+  const allVideoIds = videoIds;
 
   // Use the enhanced carousel hook with page-based navigation
   const { onNext, onPrev, goToPage, canGoNext, canGoPrev, totalPages, currentPage } = useCarousel({
-    totalItems: filteredVideoIds.length,
+    totalItems: allVideoIds.length,
     itemsPerView: videosPerRow,
     initialIndex: 0,
     pageBased: true, // Enable page-based navigation
   });
 
-  // Calculate translateX for page-based navigation
-  const translateX = -(currentPage * 100); // Move by 100% for each page
+  // Calculate intelligent scroll amount based on remaining content
+  const calculateTranslateX = () => {
+    if (currentPage === 0) return 0;
+
+    // Calculate how many videos are in the current page
+    const currentPageStartIndex = currentPage * videosPerRow;
+    const currentPageVideoCount = Math.min(videosPerRow, allVideoIds.length - currentPageStartIndex);
+
+    // If current page has full videos (4), scroll by full page
+    if (currentPageVideoCount === videosPerRow) {
+      return -(currentPage * 100);
+    }
+
+    // If current page has fewer videos, calculate partial scroll
+    // Scroll by the percentage of videos in the current page
+    const scrollPercentage = (currentPageVideoCount / videosPerRow) * 100;
+    return -(currentPage * 100) + (100 - scrollPercentage);
+  };
+
+  const translateX = calculateTranslateX();
 
   // Always show recommendations section, even if no videos available
 
@@ -52,7 +70,7 @@ export const VideoCarousel = ({
 
       <div className="relative overflow-hidden">
         {/* Carousel Container */}
-        {!isLoading && filteredVideoIds.length === 0 ? (
+        {!isLoading && allVideoIds.length === 0 ? (
           <>
             <div className="flex">
               {/* First placeholder - takes exactly same space as VideoThumbnail */}
@@ -82,11 +100,14 @@ export const VideoCarousel = ({
             }}
           >
             {/* Render videos in pages */}
-            {Array.from({ length: totalPages }, (_, pageIndex) => (
-              <div key={pageIndex} className="w-full flex-shrink-0 flex">
-                {filteredVideoIds
-                  .slice(pageIndex * videosPerRow, (pageIndex + 1) * videosPerRow)
-                  .map((videoId: string) => (
+            {Array.from({ length: totalPages }, (_, pageIndex) => {
+              const pageVideos = allVideoIds.slice(pageIndex * videosPerRow, (pageIndex + 1) * videosPerRow);
+              const isLastPage = pageIndex === totalPages - 1;
+              const hasIncompletePage = pageVideos.length < videosPerRow;
+
+              return (
+                <div key={pageIndex} className="w-full flex-shrink-0 flex">
+                  {pageVideos.map((videoId: string) => (
                     <VideoThumbnail
                       key={videoId}
                       videoId={videoId}
@@ -96,10 +117,14 @@ export const VideoCarousel = ({
                       onWatchNow={onWatchNow}
                       isGlobalLoading={isLoading}
                       widthClass={`w-1/${videosPerRow}`}
+                      isSelected={videoId === selectedVideoId}
                     />
                   ))}
-              </div>
-            ))}
+                  {/* Fill remaining space on incomplete last page to prevent white space */}
+                  {isLastPage && hasIncompletePage && <div className="flex-1"></div>}
+                </div>
+              );
+            })}
           </div>
         )}
 

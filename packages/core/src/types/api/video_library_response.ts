@@ -23,8 +23,15 @@ export interface VideoItem {
   asset: VideoAsset;
 }
 
+export interface VideoThumbnail {
+  thumbnail_asset_url: string;
+  thumbnail_type: string;
+  video_artifact_id: number;
+}
+
 export interface VideoLibraryResponse {
   session_id: string;
   prospect_id: string;
   videos: VideoItem[];
+  video_thumbnails: VideoThumbnail[];
 }

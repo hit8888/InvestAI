@@ -41,6 +41,12 @@ const useVideoLibraryQuery = (
         settings.parent_url,
       );
 
+      // Create a map of video artifact IDs to thumbnail URLs
+      const thumbnailMap = new Map<number, string>();
+      response.data.video_thumbnails?.forEach((thumbnail) => {
+        thumbnailMap.set(thumbnail.video_artifact_id, thumbnail.thumbnail_asset_url);
+      });
+
       // Transform the API response to match our Video interface
       const transformedVideos: Video[] =
         response.data.videos?.map((video) => ({
@@ -58,6 +64,7 @@ const useVideoLibraryQuery = (
             key: video.asset.key,
             public_url: video.asset.public_url,
           },
+          thumbnail_url: thumbnailMap.get(video.id),
         })) || [];
 
       return transformedVideos;

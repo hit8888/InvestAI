@@ -40,6 +40,14 @@ export default {
     'text-positive-dark',
     'bg-positive-light',
     'text-positive-light',
+    // Ensure z-index classes are generated
+    'z-tooltip',
+    'z-dropdown',
+    'z-select',
+    'z-popover',
+    'z-modal',
+    'z-command-bar',
+    'z-overlay-fallback',
   ],
   theme: {
     extend: {
@@ -121,6 +129,16 @@ export default {
         'quick-flash': 'quick-flash 3s ease-in-out infinite',
         'scale-in-right': 'scaleInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         'scale-out-right': 'scaleOutRight 0.2s ease-in forwards',
+      },
+      zIndex: {
+        // Web component portal z-index hierarchy
+        tooltip: '2147483647', // Topmost - tooltips should always be visible
+        dropdown: '2147483646', // Above modals so dropdowns inside modals appear on top
+        select: '2147483645', // Above modals so selects inside modals appear on top
+        popover: '2147483644', // Above modals so popovers inside modals appear on top
+        modal: '2147483643', // Above command bar but below interactive elements
+        'command-bar': '2147483642',
+        'overlay-fallback': '2147483641',
       },
       keyframes: {
         highBounce: {

@@ -81,15 +81,21 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
     const ActionComponent = ACTION_COMPONENTS[featureConfig.module_type as keyof typeof ACTION_COMPONENTS];
     if (!ActionComponent) return null;
 
+    // Skip initial tooltip for single module
+    const shouldShowInitialTooltip = modules.length > 1;
+    const initialTooltipConfig = shouldShowInitialTooltip
+      ? {
+          delay: tooltipDelay,
+          duration: ACTION_ANIMATION_CONSTANTS.TOOLTIP_DURATION,
+        }
+      : undefined;
+
     return (
       <ActionComponent
         key={featureConfig.id}
         isActive={isActive}
         onClick={handleClick}
-        initialTooltip={{
-          delay: tooltipDelay,
-          duration: ACTION_ANIMATION_CONSTANTS.TOOLTIP_DURATION,
-        }}
+        initialTooltip={initialTooltipConfig}
       />
     );
   };

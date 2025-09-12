@@ -4,9 +4,9 @@ import { ANIMATION_TIMINGS } from '../constants/animationTimings';
 
 export const useEntryAnimationTiming = (modules: CommandBarModuleConfigType[]) => {
   return useMemo(() => {
-    if (modules.length === 0) return 0;
+    if (modules.length <= 1) return 0;
 
-    // Entry animation timing breakdown:
+    // Entry animation timing breakdown (only for multiple modules):
     // 1. Container fade: 0.3s
     // 2. Button movement: base delay + stagger + movement duration
     // 3. Shimmer: base delay + stagger + shimmer duration

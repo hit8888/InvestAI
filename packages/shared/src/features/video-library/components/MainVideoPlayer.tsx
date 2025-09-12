@@ -1,7 +1,7 @@
 import { Video } from '../types';
 import { useRef, useState, useEffect } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
-import { useWatchedVideos } from '../hooks/useWatchedVideos';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface MainVideoPlayerProps {
   videoId: string | null;
@@ -13,6 +13,8 @@ interface MainVideoPlayerProps {
   allVideoIds?: string[];
   onVideoSelect?: (videoId: string) => void;
   onWatchNow?: (videoId: string) => void;
+  watchedVideos: string[];
+  addWatchedVideo: (videoId: string) => void;
 }
 
 export const MainVideoPlayer = ({
@@ -25,12 +27,13 @@ export const MainVideoPlayer = ({
   allVideoIds = [],
   onVideoSelect,
   onWatchNow,
+  watchedVideos,
+  addWatchedVideo,
 }: MainVideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [hasEnded, setHasEnded] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-  const { getWatchedVideos, addWatchedVideo } = useWatchedVideos();
 
   const video = videoId ? getVideoById(videoId) : null;
 
@@ -41,9 +44,8 @@ export const MainVideoPlayer = ({
   const getNextRecommendedVideo = (): Video | null => {
     if (!videoId || allVideoIds.length === 0) return null;
 
-    const watchedVideos = getWatchedVideos();
     // First, try to find an unplayed video
-    const unplayedVideoId = allVideoIds.find((id) => !watchedVideos.has(id) && id !== videoId);
+    const unplayedVideoId = allVideoIds.find((id) => !watchedVideos.includes(id) && id !== videoId);
     if (unplayedVideoId) {
       return getVideoById(unplayedVideoId) || null;
     }
@@ -82,10 +84,14 @@ export const MainVideoPlayer = ({
       // Small delay for smooth transition
       const timer = setTimeout(() => {
         setShowOverlay(true);
+        // Mark current video as watched when recommendation overlay appears
+        if (videoId) {
+          addWatchedVideo(videoId);
+        }
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [hasEnded, nextRecommendedVideo]);
+  }, [hasEnded, nextRecommendedVideo, videoId, addWatchedVideo]);
 
   const handlePlay = () => {
     setHasEnded(false);
@@ -99,11 +105,6 @@ export const MainVideoPlayer = ({
   const handleEnded = () => {
     setHasEnded(true);
     onPlayingStateChange?.(false);
-
-    // Mark current video as watched
-    if (videoId) {
-      addWatchedVideo(videoId);
-    }
   };
 
   const handleNextVideoClick = () => {
@@ -115,24 +116,49 @@ export const MainVideoPlayer = ({
   // Show shimmer when loading - match exact layout of actual video player
   if (isLoading) {
     return (
-      <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[400px]">
-        {/* Title shimmer */}
-        <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
-          <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
-        </div>
-        <div className="relative flex-1 min-h-0">
-          {/* Video container shimmer - takes full available height */}
-          <div className="relative w-full h-full bg-black rounded-md overflow-hidden">
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse"></div>
-            {/* Play icon placeholder */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-gray-600 rounded-full ml-1"></div>
+      <>
+        <div className="relative w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[440px]">
+          {/* Title shimmer */}
+          <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
+            <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
+          </div>
+          <div className="relative flex-1 bg-card">
+            {/* Video container shimmer - fill full height of 440px container */}
+            <div className="w-full h-full rounded-md overflow-hidden">
+              {/* Bottom shadow overlay - similar to video controls shadow */}
+              <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-black/90 to-transparent"></div>
+              {/* Video loading spinner - similar to browser video loader */}
+              <div className="absolute inset-0 -top-2 flex items-center justify-center">
+                <div className="relative">
+                  {/* Android-style arc with Framer Motion */}
+                  <svg className="w-20 h-20" viewBox="0 0 84 84">
+                    <motion.circle
+                      cx="42"
+                      cy="42"
+                      r="35"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray="0 251.2"
+                      initial={{ strokeDasharray: '0 251.2' }}
+                      animate={{
+                        strokeDasharray: ['0 251.2', '125.6 125.6', '0 251.2'],
+                        rotate: [0, 360, 720],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -141,7 +167,7 @@ export const MainVideoPlayer = ({
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[400px]">
+    <div className="relative w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[440px]">
       <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
         {video.title ? (
           <h3 className="text-sm font-semibold text-primary">{video.title}</h3>
@@ -149,23 +175,36 @@ export const MainVideoPlayer = ({
           <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
         )}
       </div>
-      <div className="relative flex-1 min-h-0">
-        {/* Video container that fills available height */}
-        <div className="relative w-full h-full bg-muted/20 rounded-md overflow-hidden">
-          <video
-            ref={videoRef}
-            key={videoId} // Force re-render when video changes
-            src={videoUrl}
-            controls
-            className="w-full h-full min-h-full object-cover"
-            preload="metadata"
-            title={video.title}
-            onPlay={handlePlay}
-            onPause={handlePause}
-            onEnded={handleEnded}
-          >
-            Your browser does not support the video tag.
-          </video>
+      <div className="relative">
+        {/* Video container with aspect ratio */}
+        <div className="relative w-full aspect-video bg-muted/20 rounded-md overflow-hidden">
+          <AnimatePresence mode="wait">
+            {videoUrl && (
+              <motion.div
+                key="video-content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: 'linear' }}
+                className="absolute inset-0"
+              >
+                <video
+                  ref={videoRef}
+                  key={videoId} // Force re-render when video changes
+                  src={videoUrl}
+                  controls
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                  title={video.title}
+                  onPlay={handlePlay}
+                  onPause={handlePause}
+                  onEnded={handleEnded}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Hidden preload thumbnail for next video - prevents flickering */}

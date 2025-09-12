@@ -2,67 +2,71 @@ import { Icons } from '@meaku/saral';
 
 export const VideoLibraryShimmer = () => {
   return (
-    <div className="h-full flex flex-col p-4">
+    <div className="h-full flex flex-col">
       {/* Main Video Shimmer */}
-      <div className="h-[450px] mb-4 z-50">
-        <div className="relative h-full w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[400px]">
+      <div className="flex-shrink-0 mb-4 z-50 h-auto">
+        <div className="relative w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[360px]">
           {/* Title shimmer */}
           <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
             <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
           </div>
           <div className="relative flex-1 min-h-0">
-            {/* Video container shimmer */}
-            <div className="relative w-full h-full bg-muted/20 rounded-md overflow-hidden">
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-200 via-gray-50 to-gray-100 animate-pulse"></div>
-              {/* Play icon placeholder */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center">
-                  <div className="w-6 h-6 bg-gray-400 rounded-full ml-1"></div>
-                </div>
-              </div>
+            {/* Video container shimmer - takes remaining height after title */}
+            <div className="relative w-full h-full bg-black rounded-md overflow-hidden">
+              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse"></div>{' '}
             </div>
           </div>
         </div>
       </div>
 
       {/* Video Carousel Shimmer */}
-      <div className="h-[200px] mb-4">
+      <div className="flex-shrink mb-4">
         <div>
-          <h4 className="text-sm font-medium text-primary my-5 flex gap-2 items-center">
+          <h4 className="text-sm font-medium text-primary my-1 flex gap-2 items-center">
             <Icons.Sparkles className="h-4 w-4" />
             <span>Video Recommendations for you</span>
           </h4>
-          <div className="flex gap-1">
-            {Array.from({ length: 4 }, (_, i) => (
-              <div key={i} className="w-1/4 p-1">
-                <div className="bg-card shadow-md rounded-[10px] overflow-hidden mb-2 relative flex flex-col h-40 gap-2 p-2">
-                  {/* Duration shimmer */}
-                  <div className="w-16 h-5 bg-gray-300 rounded animate-pulse"></div>
-                  {/* Video shimmer */}
-                  <div className="w-full h-[60px] bg-gray-300 rounded-[10px] animate-pulse"></div>
-                  {/* Title shimmer */}
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <div className="h-3 bg-gray-300 rounded animate-pulse w-full"></div>
-                      <div className="h-3 bg-gray-300 rounded animate-pulse w-3/4"></div>
+
+          <div className="relative">
+            {/* Scrollable container shimmer - matches VideoRecommendations layout */}
+            <div className="flex py-2 mt-8" style={{ gap: '20px' }}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <div key={i} className="flex flex-col items-center space-y-2 cursor-pointer min-w-[85px] flex-shrink-0">
+                  {/* Avatar Container Shimmer - matches VideoAvatar exactly */}
+                  <div className="relative flex justify-center">
+                    {/* Story-like border with primary color shimmer */}
+                    <div className="w-[70px] h-[70px] rounded-full bg-primary/20 animate-pulse p-0.5">
+                      <div className="w-full h-full rounded-full bg-white p-0.5 relative">
+                        <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse">
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-6 h-6 bg-gray-300 rounded animate-pulse"></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Video title label shimmer - matches VideoAvatar title layout */}
+                  <div className="text-center w-full">
+                    <div className="h-[2.5rem] flex items-center justify-center">
+                      <div className="space-y-1 w-full px-1">
+                        <div className="h-3 bg-gray-300 rounded animate-pulse w-full"></div>
+                        <div className="h-3 bg-gray-300 rounded animate-pulse w-3/4 mx-auto"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Just Watched label shimmer - randomly show for some items to match real behavior */}
+                  {i <= 2 && (
+                    <div className="text-center w-full mt-1">
+                      <div className="inline-flex items-center px-2 py-0.5 text-[10px] font-medium border rounded-full bg-gray-200 animate-pulse w-16 h-4"></div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
-          </div>
-          {/* Pagination dots shimmer */}
-          <div className="flex justify-center mt-1 gap-2">
-            <div className="size-1.5 rounded-full bg-gray-300 animate-pulse"></div>
-            <div className="size-1.5 rounded-full bg-gray-300 animate-pulse"></div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* CTAs Shimmer */}
-      <div className="flex gap-3 px-1 h-12 mt-6">
-        <div className="w-full h-8 bg-gray-300 rounded animate-pulse"></div>
-        <div className="w-full h-8 bg-gray-300 rounded animate-pulse"></div>
       </div>
     </div>
   );

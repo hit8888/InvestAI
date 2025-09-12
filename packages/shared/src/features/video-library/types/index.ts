@@ -13,4 +13,5 @@ export interface Video {
     key: string;
     public_url: string;
   };
+  thumbnail_url?: string;
 }

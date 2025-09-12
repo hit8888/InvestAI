@@ -1,6 +1,8 @@
 import { Icons, Typography } from '@meaku/saral';
 import { TextArtifact } from '../../../features/ask-ai/Messages/TextArtifact';
 import { ThumbsUp } from '@meaku/saral';
+import { ConfettiAnimation } from '../../../components/ConfettiAnimation';
+import { useState, useEffect } from 'react';
 
 interface SummarySuccessProps {
   content: string;
@@ -9,8 +11,27 @@ interface SummarySuccessProps {
 const savedMinutes = Math.floor(Math.random() * (20 - 15 + 1)) + 15; // Random number between 15-20
 
 export const SummarySuccess = ({ content }: SummarySuccessProps) => {
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    // Check if confetti has already been played for this summary session
+    const confettiKey = `confetti-played-${content.slice(0, 50)}`; // Use first 50 chars as unique key
+    const hasPlayedConfetti = sessionStorage.getItem(confettiKey);
+
+    if (!hasPlayedConfetti) {
+      // Only trigger confetti animation once per unique summary
+      setShowConfetti(true);
+      sessionStorage.setItem(confettiKey, 'true');
+    }
+  }, [content]);
+
+  const handleConfettiComplete = () => {
+    setShowConfetti(false);
+  };
+
   return (
     <>
+      <ConfettiAnimation isActive={showConfetti} onComplete={handleConfettiComplete} />
       <div className="flex flex-col gap-3 bg-backgroundSubtle rounded-xl p-2.5">
         <Typography variant="body-small" fontWeight="semibold" className="text-textAccent">
           You just saved

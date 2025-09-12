@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Icons } from '@meaku/saral';
 import { QualificationQuestionType } from '../utils/artifact';
-import { useShadowRoot } from '../containers/ShadowRootProvider';
+import { useSelectPortal } from '../hooks/usePortal';
 
 interface QualificationQuestionsProps {
   qualificationQuestions: QualificationQuestionType[];
@@ -16,7 +16,7 @@ export const QualificationQuestions = ({
   isFilled,
   filledData,
 }: QualificationQuestionsProps) => {
-  const { root: shadowRoot } = useShadowRoot();
+  const { portalContainer, isReady } = useSelectPortal();
 
   const [qualificationAnswers, setQualificationAnswers] = useState<Record<string, string>>(() => {
     const initialAnswers: Record<string, string> = {};
@@ -94,7 +94,7 @@ export const QualificationQuestions = ({
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select an answer" />
                 </SelectTrigger>
-                <SelectContent portalContainer={shadowRoot}>
+                <SelectContent portalContainer={isReady ? portalContainer : undefined}>
                   {question.response_options.map((option, optionIndex) => (
                     <SelectItem key={option.value || `option-${optionIndex}`} value={option.value ?? ''}>
                       {option.value}

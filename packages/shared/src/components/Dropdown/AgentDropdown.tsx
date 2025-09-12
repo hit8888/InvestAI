@@ -16,7 +16,7 @@ import {
 } from '@meaku/saral';
 import DropdownOption from './DropdownOption';
 import DropdownMenuSearch from './DropdownMenuSearch';
-import { useShadowRoot } from '../../containers/ShadowRootProvider';
+import { useDropdownPortal } from '../../hooks/usePortal';
 
 interface DropdownProps {
   className?: string;
@@ -65,7 +65,7 @@ const AgentDropdown = ({
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
-  const { root: shadowRoot } = useShadowRoot();
+  const { portalContainer, isReady } = useDropdownPortal();
 
   useEffect(() => {
     if (defaultValue && !selectedOption) {
@@ -163,7 +163,7 @@ const AgentDropdown = ({
         side={menuContentSide}
         className="dropdown-menu-content hide-scrollbar z-20 max-h-96 overflow-auto
         rounded-lg bg-white p-0 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-        portalContainer={shadowRoot}
+        portalContainer={isReady ? portalContainer : undefined}
       >
         <div className="flex flex-col">
           {dropdownMenuHeader && <DropdownMenuHeader title={dropdownMenuHeader} />}

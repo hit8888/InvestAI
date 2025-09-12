@@ -13,6 +13,7 @@ interface VideoThumbnailProps {
   variant?: 'carousel' | 'recommendation';
   onLater?: () => void;
   widthClass?: string;
+  isSelected?: boolean;
 }
 
 export const VideoThumbnail = ({
@@ -25,6 +26,7 @@ export const VideoThumbnail = ({
   variant = 'carousel',
   onLater,
   widthClass = 'w-1/2',
+  isSelected = false,
 }: VideoThumbnailProps) => {
   const { isVideoWatched } = useWatchedVideos();
   const isWatched = isVideoWatched(videoId);
@@ -149,18 +151,36 @@ export const VideoThumbnail = ({
       className={`group relative flex-shrink-0 ${widthClass} p-1 ${!isPlaceholder ? 'cursor-pointer' : ''}`}
       onClick={() => !isPlaceholder && onClick(videoId)}
     >
-      <div className="bg-card shadow-md rounded-[10px] overflow-hidden mb-2 relative flex flex-col h-40 gap-2 p-2">
-        {/* Duration - Top */}
-        {shouldShowShimmer || duration === null ? (
-          <div className="w-16 h-5 bg-gray-200/50 rounded animate-pulse border"></div>
-        ) : duration ? (
-          <div className="w-fit bg-background text-[11px] px-1.5 py-0.5 rounded border">
-            {formatDuration(duration)} min
+      <div
+        className={`rounded-[10px] mb-2 relative flex flex-col h-40 gap-2 p-2 transition-all duration-200 ${
+          isSelected ? 'scale-[1.02] bg-blue-50/50' : 'border border-border bg-card hover:scale-[1.01]'
+        }`}
+      >
+        {/* Custom gradient border for selected video */}
+        {isSelected && (
+          <div
+            className="absolute inset-0 rounded-[10px] pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(45deg, rgba(59, 130, 246, 0.2) 0%,rgba(59, 130, 246, 0.4) 50%, rgba(59, 130, 246, 0.8) 100%)',
+              padding: '3px',
+            }}
+          >
+            <div className="w-full h-full bg-card rounded-[6px]"></div>
           </div>
-        ) : null}
+        )}
+        <div className="flex justify-between items-center relative z-10">
+          {shouldShowShimmer || duration === null ? (
+            <div className="w-16 h-5 bg-gray-200/50 rounded animate-pulse border"></div>
+          ) : duration ? (
+            <div className="w-fit bg-background text-[11px] px-1.5 py-0.5 rounded border">
+              {formatDuration(duration)} min
+            </div>
+          ) : null}
+        </div>
 
         {/* Video Preview - Middle */}
-        <div className="w-full h-[60px] relative group">
+        <div className="w-full h-[60px] relative group z-10">
           {shouldShowShimmer ? (
             /* Shimmer effect for loading state */
             <div className="w-full h-full bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-[10px]">
@@ -172,7 +192,7 @@ export const VideoThumbnail = ({
             <>
               <video
                 src={getVideoUrl(video)}
-                className="w-full h-full object-cover transition-transform rounded-[10px] bg-background"
+                className="w-full h-full border object-cover transition-transform rounded-[10px] bg-background"
                 preload="metadata"
                 muted
                 controls={false}
@@ -194,7 +214,7 @@ export const VideoThumbnail = ({
         </div>
 
         {/* Title - Bottom */}
-        <div className="flex-1 flex flex-col justify-between">
+        <div className="flex-1 flex flex-col justify-between relative z-10">
           {shouldShowShimmer ? (
             <div className="space-y-2">
               <div className="h-3 bg-gray-300 rounded animate-pulse w-full"></div>

@@ -1,11 +1,8 @@
 import { motion } from 'framer-motion';
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 
-import { querySelector } from '@meaku/shared/utils/dom-utils';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { ENV } from '@meaku/shared/constants/env';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import { COMPONENT_TRANSITIONS } from '../constants/animationTimings';
 
 export interface FeatureContentWrapperProps {
   children: React.ReactNode;
@@ -33,14 +30,13 @@ const getModuleStyles = (
     case 'ASK_AI':
       return {
         ...baseStyles,
-        height: position.maxHeight, // Force full height for Ask AI
+        // No forced height - let it size based on content
       };
 
     case 'VIDEO_LIBRARY':
       return {
         ...baseStyles,
-        // Set optimal height for content to render without scrolling
-        height: Math.min(position.maxHeight, 800),
+        // No forced height - let it size based on content like ASK_AI
       };
     default:
       return {
@@ -59,14 +55,14 @@ const getInnerModuleStyles = (activeFeature: CommandBarModuleType, position: { m
     case 'ASK_AI':
       return {
         ...baseStyles,
-        height: position.maxHeight, // Force full height for Ask AI
+        // No forced height - let it size based on content
       };
     case 'VIDEO_LIBRARY':
       return {
         ...baseStyles,
-        // Set optimal height for content to render without scrolling
-        maxHeight: Math.min(position.maxHeight, 800),
-        // No overflow hidden - let content scroll when needed
+        // Allow content to scroll when it exceeds available height
+        overflowY: 'auto' as const,
+        overflowX: 'hidden' as const,
       };
     default:
       return baseStyles;
@@ -76,89 +72,22 @@ const getInnerModuleStyles = (activeFeature: CommandBarModuleType, position: { m
 const getOptimalPosition = (activeFeature: CommandBarModuleType) => {
   const minTopGap = 16;
   const minBottomGap = 16;
-  const maxModuleHeight =
-    activeFeature === 'ASK_AI'
-      ? Math.min(window.innerHeight - minTopGap - minBottomGap, 730)
-      : window.innerHeight - minTopGap - minBottomGap;
+  const availableHeight = window.innerHeight - minTopGap - minBottomGap;
 
-  // Special case for VIDEO_LIBRARY - align with action button when possible
+  const maxModuleHeight = activeFeature === 'ASK_AI' ? Math.min(availableHeight, 730) : availableHeight;
+
+  // All modules align to the bottom with 16px gap
   if (activeFeature === 'VIDEO_LIBRARY') {
-    const buttonElement = querySelector(
-      `[data-action-id="action-${activeFeature}"]`,
-      ENV.VITE_WC_TAG_NAME,
-    ) as HTMLButtonElement;
-
-    if (buttonElement) {
-      const rect = buttonElement.getBoundingClientRect();
-      const idealBottom = window.innerHeight - rect.bottom;
-
-      // Use the fixed 800px height for video library instead of maxModuleHeight
-      const videoLibraryHeight = Math.min(maxModuleHeight, 800);
-
-      // Check if we can align with button and stay within bounds
-      const moduleTopIfAligned = rect.bottom - videoLibraryHeight;
-      if (moduleTopIfAligned >= minTopGap && idealBottom >= minBottomGap) {
-        // We can align with button and stay within bounds
-        return {
-          bottom: idealBottom,
-          maxHeight: videoLibraryHeight,
-          transform: 'translateY(0)',
-        };
-      }
-    }
-
-    // Fallback to bottom alignment if button alignment isn't possible
     return {
       bottom: minBottomGap,
-      maxHeight: Math.min(maxModuleHeight, 800),
+      maxHeight: availableHeight, // Always fit within viewport
       transform: 'translateY(0)',
     };
   }
 
-  const buttonElement = querySelector(
-    `[data-action-id="action-${activeFeature}"]`,
-    ENV.VITE_WC_TAG_NAME,
-  ) as HTMLButtonElement;
-
-  if (!buttonElement) {
-    // If no button found, center the module in the available space
-    return {
-      bottom: minBottomGap,
-      maxHeight: maxModuleHeight,
-      transform: 'translateY(0)',
-    };
-  }
-
-  const rect = buttonElement.getBoundingClientRect();
-
-  // Calculate ideal position (aligned with button)
-  const idealBottom = window.innerHeight - rect.bottom;
-
-  // For other modules, prioritize alignment when possible
-  // Priority 1: Check if we can align with button and stay within bounds
-  const moduleTopIfAligned = rect.bottom - maxModuleHeight;
-  if (moduleTopIfAligned >= minTopGap && idealBottom >= minBottomGap) {
-    // We can align with button and stay within bounds
-    // But let's double-check with actual maxHeight to ensure we don't go out of bounds
-    const actualModuleTop = rect.bottom - maxModuleHeight;
-    if (actualModuleTop >= minTopGap) {
-      return {
-        bottom: idealBottom,
-        maxHeight: maxModuleHeight,
-        transform: 'translateY(0)',
-      };
-    }
-  }
-
-  // Priority 2: If alignment would violate bounds, position within safe bounds
-  const maxBottom = window.innerHeight - minBottomGap;
-  const minBottom = minTopGap;
-
-  // Use the ideal position if it fits, otherwise use the closest valid position
-  const finalBottom = Math.max(minBottom, Math.min(maxBottom, idealBottom));
-
+  // All other modules also align to the bottom
   return {
-    bottom: finalBottom,
+    bottom: minBottomGap,
     maxHeight: maxModuleHeight,
     transform: 'translateY(0)',
   };
@@ -182,23 +111,42 @@ const defaultStyles = {
 
 const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureContentWrapperProps) => {
   const isMobile = useIsMobile();
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
-  // Listen for window resize events
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+  // Optimized transition with requestAnimationFrame priority
+  const optimizedTransition = useCallback(() => {
+    return {
+      duration: 0.3,
+      ease: 'easeOut',
+      // Use requestAnimationFrame for smoother animation
+      type: 'tween' as const,
+      // Prioritize animation over other tasks
+      willChange: 'transform, opacity',
     };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Defer heavy content loading until after animation starts
+  const [shouldRenderContent, setShouldRenderContent] = React.useState(false);
+
+  React.useEffect(() => {
+    if (activeFeature) {
+      // Start animation immediately
+      setShouldRenderContent(false);
+
+      // Defer content rendering to next frame to prioritize animation
+      animationFrameRef.current = requestAnimationFrame(() => {
+        setShouldRenderContent(true);
+      });
+    } else {
+      setShouldRenderContent(false);
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [activeFeature]);
 
   if (!activeFeature) return null;
 
@@ -207,32 +155,41 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
     ? { bottom: 16, maxHeight: maxHeight, transform: 'translateY(0)' }
     : getOptimalPosition(activeFeature);
 
-  // Force recalculation when window dimensions change
-  const positionKey = `${windowDimensions.width}-${windowDimensions.height}-${activeFeature}`;
+  // Use a consistent key to prevent unmounting/remounting when switching modules
+  const containerKey = 'feature-module-container';
 
   return (
     <motion.div
-      key={positionKey}
-      layout
-      initial={{ opacity: 0, y: 50, bottom: position.bottom }}
+      key={containerKey}
+      initial={{ opacity: 0, x: 8 }}
       animate={{
         opacity: 1,
-        y: 0,
-        bottom: position.bottom,
+        x: 0,
       }}
-      exit={{ opacity: 0, y: 50 }}
-      transition={COMPONENT_TRANSITIONS.FEATURE_CONTENT}
-      style={isMobile ? mobileStyles : { ...defaultStyles, ...getModuleStyles(activeFeature, position) }}
+      exit={{ opacity: 0, x: 8 }}
+      transition={optimizedTransition()}
+      style={{
+        ...(isMobile ? mobileStyles : { ...defaultStyles, ...getModuleStyles(activeFeature, position) }),
+        transformOrigin: 'right',
+        bottom: position.bottom, // Explicitly set bottom position to ensure 16px gap
+        // Optimize for animations
+        willChange: 'transform, opacity',
+        // Use GPU acceleration
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
+      }}
     >
-      <motion.div
-        className="h-full"
-        style={getInnerModuleStyles(activeFeature, position)}
-        initial={{ width: isMobile ? '100%' : 450 }}
-        animate={{ width: isMobile ? '100%' : isExpanded ? 750 : 450 }}
-        transition={COMPONENT_TRANSITIONS.FEATURE_CONTENT_WIDTH}
+      <div
+        className="h-full rounded-[20px] shadow-elevation-md"
+        style={{
+          ...getInnerModuleStyles(activeFeature, position),
+          width: isMobile ? '100%' : activeFeature === 'VIDEO_LIBRARY' ? 750 : isExpanded ? 750 : 450,
+          // Optimize content rendering
+          contain: 'layout style paint',
+        }}
       >
-        {children}
-      </motion.div>
+        {shouldRenderContent ? children : <div className="h-full w-full" />}
+      </div>
     </motion.div>
   );
 };

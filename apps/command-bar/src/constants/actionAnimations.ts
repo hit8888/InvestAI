@@ -40,7 +40,7 @@ export const ANIMATION_STYLES = {
   shimmer: {
     width: ACTION_ANIMATION_CONSTANTS.SHIMMER_WIDTH,
     backgroundImage:
-      'linear-gradient(135deg, transparent 0%, transparent 46%, hsl(var(--primary) / 0.4) 46%, hsl(var(--primary) / 0.4) 48%, transparent 48%, transparent 54%, hsl(var(--primary) / 0.4) 54%, hsl(var(--primary) / 0.4) 56%, transparent 56%, transparent 100%)',
+      'linear-gradient(135deg, transparent 0%, transparent 46%, hsl(var(--primary) / 0.2) 46%, hsl(var(--primary) / 0.2) 48%, transparent 48%, transparent 54%, hsl(var(--primary) / 0.2) 54%, hsl(var(--primary) / 0.2) 56%, transparent 56%, transparent 100%)',
     backgroundSize: '100% 100%',
     backgroundRepeat: 'no-repeat',
   },

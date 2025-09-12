@@ -4,8 +4,8 @@ import { VideoLibraryIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
 import useVideoLibraryQuery from '../../network/http/queries/useVideoLibraryQuery';
 import { MainVideoPlayer } from './components/MainVideoPlayer';
-import { VideoCarousel } from './components/VideoCarousel';
-import { VideoLibraryShimmer } from './components/VideoLibraryShimmer';
+// import { VideoCarousel } from './components/VideoCarousel';
+import { VideoRecommendations } from './components/VideoRecommendations';
 import { VideoLibraryCTAs } from './components/VideoLibraryCTAs';
 import { VideoLibraryEmptyState } from './components/VideoLibraryEmptyState';
 import { VideoLibraryErrorState } from './components/VideoLibraryErrorState';
@@ -14,6 +14,7 @@ import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { trackError } from '../../utils/error';
+import { useWatchedVideos } from './hooks/useWatchedVideos';
 
 const { ASK_AI, BOOK_MEETING } = CommandBarModuleTypeSchema.enum;
 
@@ -22,6 +23,7 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   const { orb_config: orbConfig } = config.style_config;
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.VIDEO_LIBRARY);
   const bookMeetingFeatureConfig = useFeatureConfig(BOOK_MEETING);
+  const { watchedVideos, addWatchedVideo, isVideoWatched } = useWatchedVideos();
   const [isMainVideoPlaying, setIsMainVideoPlaying] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
   const [wasPlayingBeforeChange, setWasPlayingBeforeChange] = useState(false);
@@ -35,8 +37,18 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     prospectId: config.prospect_id || '',
   };
 
+  // Check if config is ready for the query
+  const isConfigReady = Boolean(config.agent_id && featureConfig?.id && config.session_id && config.prospect_id);
+
   // Use React Query hook
-  const { data: videos = [], isLoading, error, refetch } = useVideoLibraryQuery(videoConfig);
+  const {
+    data: videos = [],
+    isLoading,
+    error,
+    refetch,
+  } = useVideoLibraryQuery(videoConfig, {
+    enabled: isConfigReady,
+  });
 
   // Set first video as selected when videos load
   useEffect(() => {
@@ -92,68 +104,82 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     handleVideoSelect(videoId);
   };
 
-  // Get carousel video IDs (exclude currently selected video)
-  const carouselVideoIds = videos.filter((video) => video.id !== selectedVideoId).map((video) => video.id);
+  // Get all video IDs for carousel (include all videos)
+  const allVideoIds = videos.map((video) => video.id);
 
   const renderContent = () => {
-    if (isLoading) {
-      return <VideoLibraryShimmer />;
-    }
-
     if (error) {
       return <VideoLibraryErrorState onRetry={refetch} error={error} />;
     }
 
-    if (videos.length === 0) {
+    if (videos.length === 0 && isConfigReady && !isLoading) {
       return <VideoLibraryEmptyState />;
     }
 
     return (
-      <div className="h-full flex flex-col p-4">
-        {/* Main Video */}
-        <div className="flex-shrink-0 max-h-[400px] min-h-[300px] mb-4 z-50">
-          <MainVideoPlayer
-            videoId={selectedVideoId}
-            getVideoById={getVideoById}
-            getVideoUrl={getVideoUrl}
-            onPlayingStateChange={setIsMainVideoPlaying}
-            isLoading={isLoading}
-            wasPlaying={wasPlayingBeforeChange}
-            allVideoIds={carouselVideoIds}
-            onVideoSelect={handleVideoSelect}
-            onWatchNow={handleWatchNow}
-          />
-        </div>
+      <div className="h-full flex flex-col">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+          {/* Main Video */}
+          <div className="flex-shrink-0 mb-4 z-50 h-auto">
+            <MainVideoPlayer
+              videoId={selectedVideoId}
+              getVideoById={getVideoById}
+              getVideoUrl={getVideoUrl}
+              onPlayingStateChange={setIsMainVideoPlaying}
+              isLoading={!isConfigReady || isLoading}
+              wasPlaying={wasPlayingBeforeChange}
+              allVideoIds={allVideoIds}
+              onVideoSelect={handleVideoSelect}
+              onWatchNow={handleWatchNow}
+              watchedVideos={watchedVideos}
+              addWatchedVideo={addWatchedVideo}
+            />
+          </div>
 
-        {/* Video Recommendations Carousel */}
-        <div className="flex-shrink-0 mb-4">
-          <VideoCarousel
-            videoIds={carouselVideoIds}
-            selectedVideoId={selectedVideoId}
-            getVideoById={getVideoById}
-            getVideoUrl={getVideoUrl}
-            onVideoSelect={handleVideoSelect}
-            onWatchNow={handleWatchNow}
-            isLoading={isLoading}
-            videosPerRow={4}
-          />
+          {/* Video Recommendations Carousel */}
+          <div className="flex-shrink mb-4">
+            <VideoRecommendations
+              videoIds={allVideoIds}
+              selectedVideoId={selectedVideoId}
+              getVideoById={getVideoById}
+              getVideoUrl={getVideoUrl}
+              onVideoSelect={handleVideoSelect}
+              isLoading={!isConfigReady || isLoading}
+              isVideoWatched={isVideoWatched}
+            />
+          </div>
         </div>
-
-        {/* CTAs */}
-        <VideoLibraryCTAs
-          onBookMeetingClick={handleBookMeetingClick}
-          onAskAIClick={handleAskAIClick}
-          orbConfig={orbConfig}
-          showBookMeeting={!!bookMeetingFeatureConfig}
-        />
       </div>
     );
   };
 
   return (
-    <div className="flex w-full h-full flex-col space-y-1 rounded-[20px] border border-border-dark bg-card pb-3 shadow-elevation-md">
-      <FeatureHeader title="Video Library" icon={<VideoLibraryIcon className="size-5" />} onClose={onClose} ctas={[]} />
-      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">{renderContent()}</div>
+    <div className="flex w-full h-full flex-col rounded-[20px] border border-border-dark bg-background">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-20 bg-background">
+        <FeatureHeader
+          title="Video Library"
+          icon={<VideoLibraryIcon className="size-5" />}
+          onClose={onClose}
+          ctas={[]}
+        />
+      </div>
+
+      {/* Scrollable Content Container */}
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+        <div className="p-4">{renderContent()}</div>
+      </div>
+
+      {/* Sticky CTAs at bottom - outside scrollable area */}
+      <div className="sticky bottom-0 p-4 pt-4 border-t border-border-dark/20 bg-background z-10">
+        <VideoLibraryCTAs
+          onBookMeetingClick={handleBookMeetingClick}
+          onAskAIClick={handleAskAIClick}
+          orbConfig={orbConfig}
+          showBookMeeting={!!bookMeetingFeatureConfig}
+          isLoading={!isConfigReady || isLoading}
+        />
+      </div>
     </div>
   );
 };

@@ -53,7 +53,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
   };
 
   return (
-    <div className="flex w-full min-h-64 flex-col rounded-[20px] border border-border-dark bg-background pb-3 shadow-elevation-md max-h-[480px]">
+    <div className="flex w-full min-h-[300px] flex-col rounded-[20px] border border-border-dark bg-background pb-3 max-h-[480px]">
       <FeatureHeader
         title="Summary"
         icon={<Icons.ClipboardPen className="size-5" />}

@@ -1,34 +1,38 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 
 export const useWatchedVideos = () => {
-  const getWatchedVideos = useCallback((): Set<string> => {
+  const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
+
+  // Load watched videos from localStorage on mount
+  useEffect(() => {
     const storageData = getLocalStorageData();
-    const watchedVideos = storageData?.watchedVideos || [];
-    return new Set(watchedVideos);
+    const storedWatchedVideos = storageData?.watchedVideos || [];
+    setWatchedVideos(storedWatchedVideos);
   }, []);
 
   const addWatchedVideo = useCallback(
     (videoId: string) => {
-      const currentWatchedVideos = getWatchedVideos();
-      if (!currentWatchedVideos.has(videoId)) {
-        const updatedWatchedVideos = Array.from(currentWatchedVideos);
-        updatedWatchedVideos.push(videoId);
+      if (!watchedVideos.includes(videoId)) {
+        const updatedWatchedVideos = [...watchedVideos, videoId];
+        setWatchedVideos(updatedWatchedVideos);
+
+        // Also update localStorage
         setLocalStorageData({ watchedVideos: updatedWatchedVideos });
       }
     },
-    [getWatchedVideos],
+    [watchedVideos],
   );
 
   const isVideoWatched = useCallback(
     (videoId: string): boolean => {
-      return getWatchedVideos().has(videoId);
+      return watchedVideos.includes(videoId);
     },
-    [getWatchedVideos],
+    [watchedVideos],
   );
 
   return {
-    getWatchedVideos,
+    watchedVideos,
     addWatchedVideo,
     isVideoWatched,
   };

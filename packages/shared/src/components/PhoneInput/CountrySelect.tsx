@@ -18,7 +18,7 @@ import {
   PopoverTrigger,
   ScrollArea,
 } from '@meaku/saral';
-import { useShadowRoot } from '../../containers/ShadowRootProvider';
+import { usePopoverPortal } from '../../hooks/usePortal';
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined };
 
@@ -37,7 +37,7 @@ export const CountrySelect = ({
 }: CountrySelectProps) => {
   const [searchValue, setSearchValue] = useState('');
   const [open, setOpen] = useState(false);
-  const { root: shadowRoot } = useShadowRoot();
+  const { portalContainer, isReady } = usePopoverPortal();
 
   const selectedCountryCode = useMemo(() => {
     return RPNInput.getCountryCallingCode(countryList.find(({ value }) => value === selectedCountry)?.value ?? 'US');
@@ -45,23 +45,30 @@ export const CountrySelect = ({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button
-          className="flex h-10 gap-2 rounded-e-none rounded-s-lg border-none bg-card hover:bg-card px-3"
+          type="button"
+          className="h-10 rounded-e-none rounded-s-lg border-none bg-card hover:bg-card px-3 flex items-center gap-2"
           disabled={disabled}
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />
-          <span className="text-sm w-10 text-[#9CA3AF] font-medium">{`+${selectedCountryCode}`}</span>
+          <span className="text-sm text-[#9CA3AF] font-medium">{`+${selectedCountryCode}`}</span>
           <ChevronDownIcon
             className={cn('-mr-2 size-4 opacity-50 text-[#9CA3AF]', disabled ? 'hidden' : 'opacity-100')}
           />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        portalContainer={shadowRoot}
-        className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4"
+        portalContainer={isReady ? portalContainer : undefined}
+        className="border-primary-300 relative left-8 w-[300px] rounded-lg border bg-white py-4 z-50"
+        style={{ pointerEvents: 'auto' }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <Command shouldFilter={true} filter={(value: string) => filterCountries(countryList)(value, searchValue)}>
+        <Command
+          shouldFilter={true}
+          filter={(value: string) => filterCountries(countryList)(value, searchValue)}
+          onClick={(e) => e.stopPropagation()}
+        >
           <CommandInput
             className="pl-2 py-1 focus:ring-2 focus:ring-gray-200"
             containerClassName="shadow-sm border-none px-1"

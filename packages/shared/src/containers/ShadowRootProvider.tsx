@@ -6,7 +6,7 @@ interface ShadowRootContextType {
   root: ShadowRoot | null;
 }
 
-const ShadowRootContext = createContext<ShadowRootContextType | null>(null);
+export const ShadowRootContext = createContext<ShadowRootContextType | null>(null);
 
 interface ShadowRootProviderProps {
   hostId: string | null;

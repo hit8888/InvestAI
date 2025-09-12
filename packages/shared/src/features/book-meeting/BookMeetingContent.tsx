@@ -40,7 +40,7 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
   };
 
   return (
-    <div className="h-full min-h-[200px] w-full flex flex-col rounded-[20px] border border-border-dark shadow-elevation-md !bg-white">
+    <div className="h-full min-h-[300px] w-full flex flex-col rounded-[20px] border border-border-dark !bg-white">
       <FeatureHeader
         title="Book a Call"
         welcomeMessage={''}

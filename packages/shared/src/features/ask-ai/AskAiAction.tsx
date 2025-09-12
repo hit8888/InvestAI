@@ -11,10 +11,10 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialT
   const { config } = useCommandBarStore();
   const { orb_config: orbConfig } = config.style_config;
 
-  const btnContent = !orbConfig?.show_orb ? (
+  const btnContent = orbConfig?.logo_url ? (
     <div className="relative group h-14 w-14">
       {/* Disc glow effect behind the button */}
-      <div className="absolute inset-0 rounded-full bg-primary/20 scale-0 group-hover:scale-110 transition-transform duration-300 ease-out -z-10" />
+      <div className="absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 scale-0 group-hover:scale-110 transition-transform duration-300 ease-out -z-10" />
       <Button
         data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
         size="icon"
@@ -27,21 +27,18 @@ const AskAiAction: React.FC<FeatureActionProps> = ({ isActive, onClick, initialT
   ) : (
     <div className="relative group h-14 w-14">
       {/* Disc glow effect behind the orb */}
-      <div className="absolute inset-0 rounded-full bg-primary/20 scale-0 group-hover:scale-110 transition-transform duration-300 ease-out -z-10" />
+      <div className="absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 scale-0 group-hover:scale-110 transition-transform duration-300 ease-out -z-10" />
       <Button
         data-action-id={`action-${CommandBarModuleTypeSchema.enum.ASK_AI}`}
         size="icon"
         onClick={() => onClick?.(featureConfig)}
-        className="rounded-full cursor-pointer relative z-10"
-        asChild
+        className="rounded-full cursor-pointer relative z-10 h-14 w-14 overflow-hidden bg-primary text-primary-foreground hover:bg-primary/90 p-0 border-0"
       >
-        <div className="orb-container relative h-14 w-14 overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/50 via-white/10 to-transparent blur-md" />
-          <div className="relative inset-0 z-10 flex flex-col items-center justify-center">
-            <ShiningRectangle width={25} height={13} />
-            <div className="relative -top-1">
-              <ThreeStarInsideOrbIcon width={29} height={26} />
-            </div>
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/50 via-white/10 to-transparent blur-md" />
+        <div className="relative inset-0 z-10 flex flex-col items-center justify-center">
+          <ShiningRectangle width={25} height={13} />
+          <div className="relative -top-1">
+            <ThreeStarInsideOrbIcon width={29} height={26} />
           </div>
         </div>
       </Button>
