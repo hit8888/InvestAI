@@ -86,7 +86,7 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
             showOrbFromConfig={true}
             lastMessageResponseId={lastMessageResponseId}
             invertTextColor={false}
-            enableScrollToBottom={false}
+            enableScrollToBottom={true}
             isTyping={isUserTyping}
           />
         ) : (

@@ -8,9 +8,9 @@ import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/inde
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { Link } from 'react-router-dom';
-import { extractLinkedInUsername } from '@meaku/core/utils/index';
+import { ensureProtocol, extractLinkedInUsername } from '@meaku/core/utils/index';
 
-const { LOCATION, EMAIL, LINKED_IN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
+const { LOCATION, EMAIL, LINKED_IN, DOMAIN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 
 type IProps = {
   itemLabel: string;
@@ -24,7 +24,7 @@ type IProps = {
 
 const SingleProspectAndCompanyItemDataDisplay = ({
   itemLabel,
-  itemIcon,
+  itemIcon: ItemIcon,
   itemValue,
   showBottomBorder = true,
   isKeyValueColumnwise = false,
@@ -78,6 +78,18 @@ const SingleProspectAndCompanyItemDataDisplay = ({
         </Link>
       );
       break;
+    case DOMAIN:
+      content = (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue_sec-1000"
+          href={ensureProtocol(itemValue as string)}
+        >
+          {itemValue as string}
+        </a>
+      );
+      break;
     default:
       break;
   }
@@ -91,7 +103,7 @@ const SingleProspectAndCompanyItemDataDisplay = ({
       })}
     >
       <div className={cn('flex items-center justify-start gap-2', itemLabelWidth || 'w-[40%]')}>
-        <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{itemIcon}</div>
+        <div className="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-1">{ItemIcon}</div>
         <span className="w-full text-sm font-medium text-gray-500">{itemLabel}</span>
       </div>
       <div

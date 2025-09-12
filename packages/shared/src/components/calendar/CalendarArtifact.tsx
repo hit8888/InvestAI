@@ -34,10 +34,15 @@ export const CalendarArtifact = ({
   const { getCalendarContentBasedOnType, getCalendarLoadingIndicator, isIframeOrHubSpotCalendar, isBreakoutCalendar } =
     useCommonCalendarArtifact({
       content,
-      metadata,
       handleSendUserMessage,
       artifactResponseId,
     });
+
+  useEffect(() => {
+    if (isBreakoutCalendar) {
+      onExpand?.();
+    }
+  }, []);
 
   useEffect(() => {
     if (isBreakoutCalendar) {

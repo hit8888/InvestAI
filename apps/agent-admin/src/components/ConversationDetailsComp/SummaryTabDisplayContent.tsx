@@ -19,7 +19,9 @@ const SummaryTabDisplayContent = ({ isLoading }: IProps) => {
       </p>
     );
 
-  const pageSummaryTabContentList = generateConversationSummaryContent(chatHistory, conversation);
+  const pageSummaryTabContentList = generateConversationSummaryContent(chatHistory, conversation).filter(
+    (item) => item.listValue !== '-',
+  );
   return (
     <div className="flex w-full flex-col items-start justify-center gap-4 py-4 pr-4">
       {pageSummaryTabContentList.map((item) => (

@@ -70,12 +70,14 @@ export const TransformedProspectAndCompanyDetailsSchema = z.object({
   }),
   company: z.object({
     name: z.string(),
-    logoUrl: z.string().optional(), // Optional or empty string as placeholder
+    logoUrl: z.string().optional(),
     location: z.string(),
-    revenue: z.string(), // Optional or empty string as placeholder
-    employees: z.string(), // Optional or empty string as placeholder
-    domain: z.string(), // Optional or empty string as placeholder
-    foundationDate: z.string(), // Optional or empty string as placeholder
+    revenue: z.string(),
+    employees: z.string(),
+    industry: z.string(),
+    domain: z.string(),
+    linkedInUrl: z.string(),
+    foundationDate: z.string(),
     enrichmentSource: EnrichmentSourceEnum.or(z.string()),
   }),
 });

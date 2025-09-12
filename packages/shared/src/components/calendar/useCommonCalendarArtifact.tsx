@@ -11,14 +11,12 @@ import { CalendarTypeEnum } from '../../utils/enum';
 
 type CommonCalendarArtifactProps = {
   content: CalendarArtifactContent;
-  metadata?: Record<string, unknown>;
   handleSendUserMessage: (data: SendUserMessageParams) => void;
   artifactResponseId?: string;
 };
 
 export const useCommonCalendarArtifact = ({
   content,
-  metadata,
   handleSendUserMessage,
   artifactResponseId,
 }: CommonCalendarArtifactProps) => {
@@ -57,7 +55,7 @@ export const useCommonCalendarArtifact = ({
       case CalendarTypeEnum.HUBSPOT:
         return <HubSpotCalendar {...commonProps} />;
       case CalendarTypeEnum.BREAKOUT:
-        return <BreakoutCalendar metadata={metadata} {...commonProps} />;
+        return <BreakoutCalendar {...commonProps} />;
       default:
         return null;
     }

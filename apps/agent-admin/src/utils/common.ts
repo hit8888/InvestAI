@@ -174,7 +174,8 @@ export const getProspectAndCompanyDetailsData = (
     prospect_details: prospectDetails,
     company_details: companyDetails,
   } = conversation || {};
-  const linkedInUrl = ensureProtocol(prospectDetails?.enriched_info?.linkedin_url || '');
+  const prospectLinkedInUrl = ensureProtocol(prospectDetails?.enriched_info?.linkedin_url || '');
+  const companyLinkedInUrl = ensureProtocol(companyDetails?.linkedin_url || '');
 
   const transformedData: TransformedProspectAndCompanyDetailsContent = {
     prospect: {
@@ -185,7 +186,7 @@ export const getProspectAndCompanyDetailsData = (
         country: prospectDetails?.country || (country as string) || '-',
       },
       enrichmentSource: prospectDetails?.enrichment_source || '',
-      linkedInUrl,
+      linkedInUrl: prospectLinkedInUrl,
     },
     company: {
       name: companyDetails?.company_name || company || '-',
@@ -193,7 +194,9 @@ export const getProspectAndCompanyDetailsData = (
       location: companyDetails?.company_country || (country as string) || '-',
       revenue: companyDetails?.company_revenue || '-',
       employees: companyDetails?.employee_count || '-',
-      domain: companyDetails?.industry_domain || '-',
+      industry: companyDetails?.industry_domain || '-',
+      domain: companyDetails?.website_url || '-',
+      linkedInUrl: companyLinkedInUrl,
       foundationDate: '-',
       enrichmentSource: companyDetails?.enrichment_source || '',
     },

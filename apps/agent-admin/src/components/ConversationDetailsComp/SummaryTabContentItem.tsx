@@ -30,8 +30,8 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       const { itemLabel, itemValue } = listValue as ParentUrlItem;
 
       return (
-        <Link to={itemValue} className="truncate text-base font-normal text-blue_sec-1000" target="_blank">
-          {itemLabel}
+        <Link to={itemValue} className="max-w-sm truncate text-base font-normal text-blue_sec-1000" target="_blank">
+          {itemLabel || itemValue}
         </Link>
       );
     }

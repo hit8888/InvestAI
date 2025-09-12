@@ -12,17 +12,16 @@ interface Props {
   calendarContent: CalendarArtifactContent;
   handleSendUserMessage?: CalendarMessageHandler;
   onLoad?: () => void;
-  metadata?: Record<string, unknown>;
 }
 
-const BreakoutCalendar = ({ calendarContent, handleSendUserMessage, onLoad, metadata }: Props) => {
+const BreakoutCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Props) => {
   const handleBookingSuccessful = (data: CalComEventData) => {
     handleSendUserMessage?.(data);
   };
 
   useDelayedCallback(onLoad);
 
-  if (!metadata?.event_type || !metadata?.cal_com_username) {
+  if (!calendarContent?.event_type || !calendarContent?.cal_com_username) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <Typography variant="body">No event type or cal com username found</Typography>
@@ -38,8 +37,8 @@ const BreakoutCalendar = ({ calendarContent, handleSendUserMessage, onLoad, meta
             name: calendarContent.prefill_data?.user_name ?? '',
             email: calendarContent.prefill_data?.user_email ?? '',
           }}
-          eventSlug={metadata.event_type as string}
-          username={metadata.cal_com_username as string}
+          eventSlug={calendarContent.event_type as string}
+          username={calendarContent.cal_com_username as string}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onCreateBookingSuccess={(data: any) => {
             handleBookingSuccessful(data.data);

@@ -143,6 +143,8 @@ export const CalendarArtifactSchema = z.object({
   calendar_url: z.string(),
   calendar_type: z.nativeEnum(CalendarTypeEnum),
   prefill_data: z.record(z.string(), z.any()).optional(),
+  event_type: z.string().optional(),
+  cal_com_username: z.string().optional(),
 });
 
 export type CalendarArtifactContent = z.infer<typeof CalendarArtifactSchema>;
