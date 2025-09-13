@@ -9,7 +9,6 @@ export interface SidebarArtifactContextType {
     title: string;
   } | null;
   isSideDrawerOpen: boolean;
-  _calculatedWidth: number;
   currentVideo: {
     url: string;
     isPlaying: boolean;
@@ -30,6 +29,7 @@ export interface SidebarArtifactContextType {
     shouldPlay?: boolean,
   ) => Promise<void>;
   closeSidebar: () => void;
+  handleCloseComplete: () => void;
   setCurrentVideo: React.Dispatch<React.SetStateAction<{ url: string; isPlaying: boolean } | null>>;
   toggleVideoPlayPause: () => void;
   handleVideoError: (error: string) => void;

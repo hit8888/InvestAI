@@ -19,6 +19,9 @@ export const Z_INDEX_LAYERS = {
   // Command bar and main web component containers (below overlays but above host page)
   COMMAND_BAR: 2147483642,
 
+  // Behind content layer (for elements that should render behind main content)
+  BEHIND_CONTENT: 2147483640,
+
   // Fallback for other overlays
   OVERLAY_FALLBACK: 2147483641,
 } as const;
@@ -108,3 +111,4 @@ export const useModalPortal = () => usePortal('MODALS');
 export const useDropdownPortal = () => usePortal('DROPDOWNS');
 export const usePopoverPortal = () => usePortal('POPOVERS');
 export const useSelectPortal = () => usePortal('SELECTS');
+export const useBehindContentPortal = () => usePortal('BEHIND_CONTENT');

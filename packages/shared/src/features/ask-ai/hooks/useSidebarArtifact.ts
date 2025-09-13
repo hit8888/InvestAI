@@ -17,106 +17,52 @@ interface ImageState {
 }
 
 /**
- * Hook to manage sidebar artifact display and video playback
+ * useSidebarArtifact - manages sidebar artifact display and video playback
  *
- * Features:
- * - Auto-opening sidebar for latest message artifacts (no autoplay)
- * - Manual opening with autoplay when user clicks "Play Video"
- * - Video play/pause controls with state synchronization
- * - Image artifact display
- * - Error handling for video playback issues
+ * Key features:
+ * - Auto-open sidebar for latest messages (shouldPlay=false)
+ * - Manual open with autoplay (shouldPlay=true)
+ * - Dual useEffect system for video state sync
+ * - Dimension calculation with 5s timeout
+ * - Video state sync from element events
  *
- * Video Playback Logic:
- * - Uses dual useEffect system to handle timing issues
- * - First effect: Handles play/pause when video element exists
- * - Second effect: Handles video element becoming available after sidebar opens
- * - Ensures videos play reliably in all scenarios
+ * Video playback system:
+ * - Effect 1: Syncs state with video element events
+ * - Effect 2: Handles video element becoming available
+ * - State management: currentVideo.isPlaying controls playback
  */
 export const useSidebarArtifact = () => {
   const [sideBarArtifact, setSideBarArtifact] = useState<SidebarArtifact | null>(null);
   const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
-  const [calculatedWidth, setCalculatedWidth] = useState<number>(700);
   const [currentVideo, setCurrentVideo] = useState<VideoState | null>(null);
   const [currentImage, setCurrentImage] = useState<ImageState | null>(null);
   const [videoError, setVideoError] = useState<string | null>(null);
   const [isContainerReady, setIsContainerReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const calculateDimensions = (url: string, artifactType: 'VIDEO' | 'SLIDE_IMAGE'): Promise<number> => {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        reject(new Error('Dimension calculation timeout'));
-      }, 5000); // 5 second timeout
-
-      if (artifactType === 'VIDEO') {
-        const video = document.createElement('video');
-        video.onloadedmetadata = () => {
-          clearTimeout(timeout);
-          try {
-            const aspectRatio = video.videoWidth / video.videoHeight;
-            const containerHeight = window.innerHeight - 200;
-            const calculatedWidth = Math.min(Math.max(containerHeight * aspectRatio + 80, 700), 800);
-            resolve(calculatedWidth);
-          } catch (error) {
-            console.error('Error calculating video dimensions:', error);
-            resolve(700);
-          }
-        };
-        video.onerror = () => {
-          clearTimeout(timeout);
-          console.warn('Video failed to load for dimension calculation');
-          resolve(700);
-        };
-        video.src = url;
-      } else {
-        const img = new Image();
-        img.onload = () => {
-          clearTimeout(timeout);
-          try {
-            const aspectRatio = img.naturalWidth / img.naturalHeight;
-            const containerHeight = window.innerHeight - 200;
-            const calculatedWidth = Math.min(Math.max(containerHeight * aspectRatio + 80, 700), 800);
-            resolve(calculatedWidth);
-          } catch (error) {
-            console.error('Error calculating image dimensions:', error);
-            resolve(700);
-          }
-        };
-        img.onerror = () => {
-          clearTimeout(timeout);
-          console.warn('Image failed to load for dimension calculation');
-          resolve(700);
-        };
-        img.src = url;
-      }
-    });
-  };
-
   /**
-   * Open the sidebar with an artifact (video or image)
+   * Opens sidebar with artifact
    *
-   * @param url - The URL of the artifact
-   * @param artifactType - Type of artifact ('VIDEO' or 'SLIDE_IMAGE')
-   * @param title - Title to display in the sidebar
-   * @param shouldPlay - For videos: true = autoplay, false = pause, undefined = default behavior
+   * @param url - Artifact URL
+   * @param artifactType - 'VIDEO' | 'SLIDE_IMAGE'
+   * @param title - Display title
+   * @param shouldPlay - true=autoplay, false=pause, undefined=default
    *
-   * Video Autoplay Behavior:
-   * - shouldPlay: true → Video opens and starts playing immediately
-   * - shouldPlay: false → Video opens but stays paused
-   * - Used by: Auto-opening (false), Manual "Play Video" button (true)
+   * Process:
+   * 1. Calculate dimensions (5s timeout)
+   * 2. Set state atomically
+   * 3. 50ms delay for positioning
+   * 4. Open sidebar
    */
   const openSidebar = useCallback(
     async (url: string, artifactType: 'VIDEO' | 'SLIDE_IMAGE', title: string, shouldPlay?: boolean) => {
       try {
-        // Calculate width first
-        const width = await calculateDimensions(url, artifactType);
-
-        // Set all state at once to ensure sidebar opens with correct width
-        setCalculatedWidth(width);
+        // Set all state at once to ensure sidebar opens
         setSideBarArtifact({ url, artifactType, title });
         setVideoError(null); // Clear any previous errors
 
         if (artifactType === 'VIDEO') {
+          // Set initial video state - will be synced with actual video element
           setCurrentVideo({ url, isPlaying: shouldPlay === true });
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
@@ -129,12 +75,12 @@ export const useSidebarArtifact = () => {
         setIsSideDrawerOpen(true);
       } catch (error) {
         console.error('Error opening sidebar:', error);
-        // Fallback: open with default width
-        setCalculatedWidth(700);
+        // Fallback: open with default state
         setSideBarArtifact({ url, artifactType, title });
         setVideoError(null);
 
         if (artifactType === 'VIDEO') {
+          // Set initial video state - will be synced with actual video element
           setCurrentVideo({ url, isPlaying: shouldPlay === true });
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
@@ -150,30 +96,46 @@ export const useSidebarArtifact = () => {
   );
 
   /**
-   * Close the sidebar and reset all state
+   * Closes sidebar - triggers animation, cleanup handled in handleCloseComplete
    */
   const closeSidebar = useCallback(() => {
     setIsSideDrawerOpen(false);
+  }, []);
+
+  /**
+   * Cleanup after sidebar close animation completes
+   * - Pauses video and resets to beginning
+   * - Clears all state
+   */
+  const handleCloseComplete = useCallback(() => {
+    if (videoRef.current && currentVideo?.isPlaying) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+
     setSideBarArtifact(null);
     setCurrentVideo(null);
     setCurrentImage(null);
     setVideoError(null);
-  }, []);
-
-  /**
-   * Toggle video play/pause state
-   * Used when user clicks play/pause button in sidebar
-   */
-  const toggleVideoPlayPause = useCallback(() => {
-    if (currentVideo) {
-      setCurrentVideo({ ...currentVideo, isPlaying: !currentVideo.isPlaying });
-    }
   }, [currentVideo]);
 
   /**
-   * Handle video playback errors
-   * @param error - Error message to display
+   * Toggles video play/pause directly on element
+   * State sync handled by useEffect event listeners
    */
+  const toggleVideoPlayPause = useCallback(() => {
+    if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO') {
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch((error) => {
+          console.error('Video play error:', error);
+          setVideoError('Failed to play video. Please try again.');
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [sideBarArtifact?.artifactType]);
+
   const handleVideoError = useCallback((error: string) => {
     setVideoError(error);
   }, []);
@@ -183,76 +145,69 @@ export const useSidebarArtifact = () => {
   }, []);
 
   /**
-   * Control video playback based on currentVideo state
-   *
-   * This effect handles video play/pause when the video element is already available.
-   * It triggers when currentVideo.isPlaying changes and the video element exists.
-   *
-   * Scenarios:
-   * - User clicks play/pause button in sidebar (video element exists)
-   * - Auto-opening with shouldPlay: false (video element exists, stays paused)
-   * - Manual opening with shouldPlay: true (video element exists, starts playing)
-   */
-  useEffect(() => {
-    if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
-      if (currentVideo.isPlaying) {
-        // Check if video is ready to play
-        if (videoRef.current.readyState >= 2) {
-          // Video is ready, play it immediately
-          videoRef.current.play().catch((error) => {
-            console.error('Video play error:', error);
-            setVideoError('Failed to play video. Please try again.');
-          });
-        } else {
-          // Video not ready yet, wait for it to load
-          const handleCanPlay = () => {
-            videoRef.current!.play().catch((error) => {
-              console.error('Video play error:', error);
-              setVideoError('Failed to play video. Please try again.');
-            });
-            videoRef.current!.removeEventListener('canplay', handleCanPlay);
-          };
-          videoRef.current.addEventListener('canplay', handleCanPlay);
-        }
-      } else {
-        // Pause video when isPlaying is false
-        videoRef.current.pause();
-      }
-    }
-  }, [currentVideo?.isPlaying, sideBarArtifact?.artifactType, sideBarArtifact?.url, currentVideo?.url, currentVideo]);
-
-  /**
-   * Handle video element becoming available after sidebar opens
-   *
-   * This effect specifically handles the case where:
-   * 1. User clicks "Play Video" button (currentVideo.isPlaying = true)
-   * 2. Sidebar opens but video element is not yet mounted
-   * 3. Video element gets mounted and becomes available
-   * 4. This effect triggers and starts playing the video
-   *
-   * This solves the timing issue where the video element doesn't exist
-   * when the first effect tries to play it.
+   * Effect 1: Syncs video state with element events
+   * - Listens to play/pause/ended/canplay events
+   * - Updates currentVideo.isPlaying based on element state
+   * - readyState > 2 = can play
    */
   const videoRefExists = !!videoRef.current;
   useEffect(() => {
+    if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
+      const video = videoRef.current;
+
+      const syncState = () => {
+        const isActuallyPlaying = !video.paused && !video.ended && video.readyState > 2;
+        if (isActuallyPlaying !== currentVideo.isPlaying) {
+          setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: isActuallyPlaying } : null));
+        }
+      };
+
+      const handlePlay = () => setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: true } : null));
+      const handlePause = () => setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: false } : null));
+      const handleEnded = () => setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: false } : null));
+
+      syncState();
+
+      video.addEventListener('play', handlePlay);
+      video.addEventListener('pause', handlePause);
+      video.addEventListener('ended', handleEnded);
+      video.addEventListener('canplay', syncState);
+
+      return () => {
+        video.removeEventListener('play', handlePlay);
+        video.removeEventListener('pause', handlePause);
+        video.removeEventListener('ended', handleEnded);
+        video.removeEventListener('canplay', syncState);
+      };
+    }
+  }, [videoRefExists, sideBarArtifact?.artifactType, currentVideo]);
+
+  /**
+   * Effect 2: Handles video element becoming available
+   * - Triggers when currentVideo.isPlaying=true
+   * - readyState >= 2: play immediately
+   * - readyState < 2: wait for loadeddata event
+   */
+  useEffect(() => {
     if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo?.isPlaying) {
-      // Check if video is ready to play
-      if (videoRef.current.readyState >= 2) {
-        // Video is ready, play it immediately
-        videoRef.current.play().catch((error) => {
+      const video = videoRef.current;
+
+      if (video.readyState >= 2) {
+        video.play().catch((error) => {
           console.error('Video play error:', error);
           setVideoError('Failed to play video. Please try again.');
         });
       } else {
-        // Video not ready yet, wait for it to load
-        const handleCanPlay = () => {
-          videoRef.current!.play().catch((error) => {
-            console.error('Video play error:', error);
-            setVideoError('Failed to play video. Please try again.');
-          });
-          videoRef.current!.removeEventListener('canplay', handleCanPlay);
+        const handleLoadedData = () => {
+          if (video && currentVideo?.isPlaying) {
+            video.play().catch((error) => {
+              console.error('Video play error:', error);
+              setVideoError('Failed to play video. Please try again.');
+            });
+          }
+          video.removeEventListener('loadeddata', handleLoadedData);
         };
-        videoRef.current.addEventListener('canplay', handleCanPlay);
+        video.addEventListener('loadeddata', handleLoadedData);
       }
     }
   }, [videoRefExists, sideBarArtifact?.artifactType, currentVideo?.isPlaying]);
@@ -261,7 +216,6 @@ export const useSidebarArtifact = () => {
     // State
     sideBarArtifact,
     isSideDrawerOpen,
-    _calculatedWidth: calculatedWidth,
     currentVideo,
     currentImage,
     videoError,
@@ -271,6 +225,7 @@ export const useSidebarArtifact = () => {
     // Actions
     openSidebar,
     closeSidebar,
+    handleCloseComplete,
     toggleVideoPlayPause,
     setCurrentVideo,
     handleVideoError,

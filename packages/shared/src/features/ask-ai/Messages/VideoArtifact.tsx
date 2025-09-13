@@ -1,8 +1,9 @@
-import { Button, Icons } from '@meaku/saral';
+import { Button, cn, Icons } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useEffect, useRef } from 'react';
 import { Typography } from '@meaku/saral';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface VideoArtifactProps {
   title: string;
@@ -11,10 +12,28 @@ interface VideoArtifactProps {
   isExpanded?: boolean;
 }
 
+/**
+ * Strips leading @ symbols from URLs
+ * @param url - URL with potential @ prefixes
+ * @returns Clean URL string
+ */
 const cleanUrl = (url: string): string => {
   return url.replace(/^@+/, '');
 };
 
+/**
+ * VideoArtifact component with dual rendering modes
+ *
+ * Rendering modes:
+ * - isExpanded=true: Inline video with controls (no sidebar)
+ * - isExpanded=false: Play button that opens sidebar
+ *
+ * Auto-open behavior:
+ * - Only for isLatestMessage=true
+ * - Requires isContainerReady=true
+ * - Disabled when isExpanded=true or isMobile=true
+ * - Opens sidebar without autoplay (shouldPlay=false)
+ */
 export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: VideoArtifactProps) => {
   const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady, sideBarArtifact } =
     useSidebarArtifactContext();
@@ -22,44 +41,34 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
   const isMobile = useIsMobile();
   const cleanedUrl = cleanUrl(url);
 
-  // Check if this specific video is currently open and playing
+  // Check if this video is currently playing in sidebar
   const isThisVideoPlaying =
     currentVideo?.url === cleanedUrl && currentVideo?.isPlaying && sideBarArtifact?.artifactType === 'VIDEO';
 
-  // Auto-open sidebar when component mounts, but only if it's the latest message and container is ready
-  // Disable auto-opening when Ask AI is in expanded mode
+  // Auto-open sidebar for latest message (no autoplay)
   useEffect(() => {
     if (cleanedUrl && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded && !isMobile) {
       hasAutoOpened.current = true;
-      openSidebar(cleanedUrl, 'VIDEO', title, false);
+      openSidebar(cleanedUrl, 'VIDEO', title, false); // shouldPlay=false
     }
   }, [cleanedUrl, title, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
 
+  // Button click handler - disabled in expanded mode
   const handleButtonClick = () => {
-    // Disable sidebar functionality when Ask AI is in expanded mode
-    if (isExpanded) {
-      return;
-    }
+    if (isExpanded) return;
 
     if (currentVideo?.url === cleanedUrl) {
-      // If this video is currently open, toggle play/pause
+      // Video already open - toggle play/pause
       toggleVideoPlayPause();
-      openSidebar(cleanedUrl, 'VIDEO', title, !currentVideo?.isPlaying);
     } else {
-      // If this video is not open, open sidebar and start playing
-      openSidebar(cleanedUrl, 'VIDEO', title, true);
+      // Open sidebar with autoplay
+      openSidebar(cleanedUrl, 'VIDEO', title, true); // shouldPlay=true
     }
   };
 
-  const buttonClasses = isThisVideoPlaying
-    ? 'h-7 rounded-2 gap-1 pr-3 !bg-primary/15 !border !text-foreground'
-    : 'h-7 rounded-full gap-1 pr-3 pl-0 py-4';
+  if (!cleanedUrl) return null;
 
-  if (!cleanedUrl) {
-    return null;
-  }
-
-  // When expanded, render video inline without sidebar functionality
+  // Expanded mode: inline video with controls
   if (isExpanded) {
     return (
       <div className="w-full">
@@ -77,22 +86,50 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
     );
   }
 
-  // Normal sidebar mode - render play button
+  // Sidebar mode: animated play/pause button
   return (
     <div className="w-full">
-      <Button
-        className={`${buttonClasses} transition-all duration-300 min-w-[120px] min-h-[28px]`}
-        onClick={handleButtonClick}
-      >
-        {isThisVideoPlaying ? (
-          <Icons.Pause className="size-4 fill-primary stroke-0" />
-        ) : (
-          <div className="rounded-full bg-background p-1">
-            <Icons.Play className="size-2.5 fill-foreground" />
-          </div>
-        )}
-        {isThisVideoPlaying ? 'Video Playing' : 'Play Video'}
-      </Button>
+      <motion.div initial={false} layout>
+        <Button
+          className={cn(
+            'min-w-[120px] h-8 transition-colors duration-200 px-3',
+            isThisVideoPlaying
+              ? 'rounded-2 !bg-primary/15 !border !text-foreground'
+              : 'rounded-full bg-primary text-white',
+          )}
+          onClick={handleButtonClick}
+        >
+          <AnimatePresence mode="wait">
+            {isThisVideoPlaying ? (
+              <motion.div
+                key="pause"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.1 }}
+              >
+                <Icons.Pause className="size-4 fill-primary stroke-0" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="play"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.1 }}
+                className="flex items-center justify-center"
+              >
+                <div className="rounded-full bg-background p-1">
+                  <Icons.Play className="size-2.5 fill-foreground" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+            {isThisVideoPlaying ? 'Video Playing' : 'Play Video'}
+          </motion.span>
+        </Button>
+      </motion.div>
     </div>
   );
 };

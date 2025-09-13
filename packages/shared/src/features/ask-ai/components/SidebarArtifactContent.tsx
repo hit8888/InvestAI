@@ -1,5 +1,6 @@
 import { Icons, Typography } from '@meaku/saral';
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useState, useCallback } from 'react';
+import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 
 interface SidebarArtifactContentProps {
   artifact: {
@@ -7,41 +8,51 @@ interface SidebarArtifactContentProps {
     artifactType: 'VIDEO' | 'SLIDE_IMAGE';
     title: string;
   };
-  currentVideo: {
-    url: string;
-    isPlaying: boolean;
-  } | null;
   videoError: string | null;
   videoRef: RefObject<HTMLVideoElement | null>;
-  onPlayPauseToggle: () => void;
   onClose: () => void;
   onVideoError?: (error: string) => void;
 }
 
+/**
+ * SidebarArtifactContent - renders video/image artifacts in sidebar
+ *
+ * Animation timing:
+ * - Content visibility: 150ms delay after sidebar opens
+ * - Staggered animations: header (0ms), content (200ms delay)
+ *
+ * Video handling:
+ * - Calculates display height from aspect ratio
+ * - Stores height for next video load
+ * - Shows loading state with background color
+ */
 export const SidebarArtifactContent = ({
   artifact,
-  currentVideo,
   videoError,
   videoRef,
-  onPlayPauseToggle,
   onClose,
   onVideoError,
 }: SidebarArtifactContentProps) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
   const [hasVideoLoadError, setHasVideoLoadError] = useState(false);
+  const [videoHeight, setVideoHeight] = useState<number | null>(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [videoAspectRatio, setVideoAspectRatio] = useState<number | null>(null);
+  const { screenWidth, screenHeight } = useScreenSize();
 
-  // Stagger the content animation after the sidebar opens
+  // Stagger content animation after sidebar opens
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsContentVisible(true);
-    }, 150); // Delay content animation to start after sidebar starts opening
+    }, 150); // 150ms delay
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Reset video error state when artifact changes
+  // Reset video state on URL change
   useEffect(() => {
     setHasVideoLoadError(false);
+    setIsVideoLoading(true);
   }, [artifact.url]);
 
   const handleVideoLoadError = () => {
@@ -51,29 +62,29 @@ export const SidebarArtifactContent = ({
     }
   };
 
-  const handleVideoPlay = () => {
-    // Sync state when user clicks play in native controls
-    if (!currentVideo?.isPlaying) {
-      onPlayPauseToggle();
-    }
+  const handleVideoLoadStart = () => {
+    setHasVideoLoadError(false);
+    setIsVideoLoading(true);
   };
 
-  const handleVideoPause = () => {
-    // Sync state when user clicks pause in native controls
-    if (currentVideo?.isPlaying) {
-      onPlayPauseToggle();
-    }
-  };
-
-  const handleVideoEnded = () => {
-    // Sync state when video ends
-    if (currentVideo?.isPlaying) {
-      onPlayPauseToggle();
-    }
-  };
-
-  // Determine if we should show an error
   const shouldShowError = videoError || hasVideoLoadError;
+
+  /**
+   * Recalculates video height on window resize
+   * Uses stored aspect ratio to maintain proportions
+   */
+  const recalculateVideoHeight = useCallback(() => {
+    if (!videoRef.current || !videoAspectRatio || artifact.artifactType !== 'VIDEO') return;
+
+    const containerWidth = videoRef.current.parentElement?.clientWidth || videoRef.current.clientWidth;
+    const newHeight = containerWidth / videoAspectRatio;
+    setVideoHeight(newHeight);
+  }, [videoRef, videoAspectRatio, artifact.artifactType]);
+
+  // Recalculate video height on window resize (debounced via useScreenSize)
+  useEffect(() => {
+    recalculateVideoHeight();
+  }, [screenWidth, screenHeight, recalculateVideoHeight]);
 
   return (
     <div className="flex flex-col w-full min-h-0 h-full">
@@ -114,17 +125,37 @@ export const SidebarArtifactContent = ({
               <div className="flex flex-col border rounded-xl overflow-hidden w-full">
                 <div className="w-full overflow-hidden">
                   <video
-                    key={artifact.url}
                     ref={videoRef}
                     src={artifact.url}
                     controls
+                    preload="metadata"
                     className="w-full h-auto max-w-full object-contain"
-                    onPlay={handleVideoPlay}
-                    onPause={handleVideoPause}
-                    onEnded={handleVideoEnded}
+                    style={{
+                      minHeight: isVideoLoading
+                        ? videoHeight
+                          ? `${videoHeight}px`
+                          : `${Math.min(window.innerHeight * 0.8, 600)}px`
+                        : 'auto', // Use stored height or 80% of viewport (max 600px)
+                      backgroundColor: isVideoLoading ? '#f3f4f6' : 'transparent', // Light background while loading
+                    }}
+                    // Video play/pause/ended events are handled in useSidebarArtifact hook
                     onError={handleVideoLoadError}
-                    onLoadStart={() => {
-                      setHasVideoLoadError(false);
+                    onLoadStart={handleVideoLoadStart}
+                    onLoadedMetadata={(e) => {
+                      // Calculate and store aspect ratio for resize handling
+                      const video = e.target as HTMLVideoElement;
+                      const height = video.videoHeight;
+                      const width = video.videoWidth;
+                      const aspectRatio = width / height;
+
+                      // Store aspect ratio for resize calculations
+                      setVideoAspectRatio(aspectRatio);
+
+                      // Calculate initial display height
+                      const containerWidth = video.parentElement?.clientWidth || video.clientWidth;
+                      const displayHeight = containerWidth / aspectRatio;
+                      setVideoHeight(displayHeight);
+                      setIsVideoLoading(false);
                     }}
                   />
                 </div>

@@ -15,6 +15,7 @@ import useFeatureConfig from '../../hooks/useFeatureConfig';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { trackError } from '../../utils/error';
 import { useWatchedVideos } from './hooks/useWatchedVideos';
+import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 
 const { ASK_AI, BOOK_MEETING } = CommandBarModuleTypeSchema.enum;
 
@@ -27,6 +28,7 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   const [isMainVideoPlaying, setIsMainVideoPlaying] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
   const [wasPlayingBeforeChange, setWasPlayingBeforeChange] = useState(false);
+  const { screenWidth, screenHeight } = useScreenSize();
 
   // Create video config for React Query
   const videoConfig = {
@@ -49,13 +51,6 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   } = useVideoLibraryQuery(videoConfig, {
     enabled: isConfigReady,
   });
-
-  // Set first video as selected when videos load
-  useEffect(() => {
-    if (videos.length > 0 && !selectedVideoId) {
-      setSelectedVideoId(videos[0].id);
-    }
-  }, [videos, selectedVideoId]);
 
   // Track errors when they occur
   useEffect(() => {
@@ -117,7 +112,7 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     }
 
     return (
-      <div className="h-full flex flex-col">
+      <div className="h-full flex flex-col" key={`video-library-${screenWidth}-${screenHeight}`}>
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           {/* Main Video */}
           <div className="flex-shrink-0 mb-4 z-50 h-auto">

@@ -16,9 +16,11 @@ const TABLET_SCREEN_WIDTH_THRESHOLD = 1024; // Taking the breakpoint from Tailwi
 export const useScreenSize = () => {
   const [screenSize, setScreenSize] = useState<ScreenSize>('desktop');
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [screenHeight, setScreenHeight] = useState<number>(window.innerHeight);
 
-  const updateScreenSize = useCallback((width: number) => {
+  const updateScreenSize = useCallback((width: number, height: number) => {
     setScreenWidth(width);
+    setScreenHeight(height);
     if (width < MOBILE_SCREEN_WIDTH_THRESHOLD) {
       setScreenSize('mobile');
     } else if (width >= MOBILE_SCREEN_WIDTH_THRESHOLD && width < TABLET_SCREEN_WIDTH_THRESHOLD) {
@@ -35,12 +37,12 @@ export const useScreenSize = () => {
       // Debounce the resize handler
       clearTimeout(timeoutId);
       timeoutId = window.setTimeout(() => {
-        updateScreenSize(window.innerWidth);
+        updateScreenSize(window.innerWidth, window.innerHeight);
       }, 100);
     };
 
     // Initial check
-    updateScreenSize(window.innerWidth);
+    updateScreenSize(window.innerWidth, window.innerHeight);
 
     window.addEventListener('resize', handleResize);
     return () => {
@@ -52,6 +54,7 @@ export const useScreenSize = () => {
   return {
     screenSize,
     screenWidth,
+    screenHeight,
     isMobile: screenSize === 'mobile',
     isTablet: screenSize === 'tablet',
     isDesktop: screenSize === 'desktop',
