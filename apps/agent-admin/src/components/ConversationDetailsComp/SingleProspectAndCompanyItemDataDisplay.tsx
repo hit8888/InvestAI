@@ -15,7 +15,7 @@ const { LOCATION, EMAIL, LINKED_IN, DOMAIN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS
 type IProps = {
   itemLabel: string;
   itemIcon: JSX.Element;
-  itemValue: string | LocationWithCityCountry;
+  itemValue: string | LocationWithCityCountry | undefined;
   showBottomBorder?: boolean;
   isKeyValueColumnwise?: boolean;
   itemLabelWidth?: string;
@@ -34,6 +34,12 @@ const SingleProspectAndCompanyItemDataDisplay = ({
   const { textRef, isTextTruncated } = useTextTruncation({
     text: itemValue as string,
   });
+
+  // Handle undefined itemValue
+  if (itemValue === undefined) {
+    return null;
+  }
+
   let content = (
     <div className="max-w-full">
       <TooltipWrapperDark
