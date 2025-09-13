@@ -27,7 +27,7 @@ const ConversationsBreadCrumb = ({ isLoading, isDirectAccess }: IProps) => {
     return currentTab;
   }, [location.pathname]);
 
-  const breadCrumbItems = useMemo(() => [fromTab?.label || 'All Conversations', 'Prospect'], [fromTab]);
+  const breadCrumbItems = useMemo(() => [fromTab?.label || 'All Visitors', 'Prospect'], [fromTab]);
 
   const handleNavigateBack = useCallback(() => {
     if (isDirectAccess && fromTab) {

@@ -44,17 +44,15 @@ const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
       {
         label: 'Revenue:',
         value: company_revenue,
-        renderValue: (value: unknown) => {
-          const revenue = Number(value);
-          return value != null && !isNaN(revenue) ? <span>{NumberUtil.formatCurrency(revenue)}</span> : null;
+        renderValue: (value?: number | string) => {
+          return <span>{NumberUtil.formatCurrency(value)}</span>;
         },
       },
       {
         label: 'Company Size:',
         value: employee_count,
-        renderValue: (value: unknown) => {
-          const count = Number(value);
-          return value != null && !isNaN(count) ? <span>{NumberUtil.formatNumber(count)}</span> : null;
+        renderValue: (value?: number | string) => {
+          return <span>{NumberUtil.formatNumber(value)}</span>;
         },
       },
       {

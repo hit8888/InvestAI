@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getFilterOptionsData } from '@meaku/core/adminHttp/api';
+import { getFilterOptionsData, getProspectsFilterOptionsData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
@@ -29,10 +29,9 @@ const useFilterOptionsDataQuery = ({ payload, page, queryOptions }: IProps): Use
     queryKey: getFilterOptionsDataKey(payload, tenantName ?? '', page),
     queryFn: async (): Promise<FilterOptionsResponse> => {
       if (!tenantName) throw new Error('Tenant name is undefined');
-      const response: AxiosResponse<FilterOptionsResponse> = await getFilterOptionsData(
-        payload,
-        PageTypeToTableName[page],
-      );
+
+      const fetcher = page === 'prospects' ? getProspectsFilterOptionsData : getFilterOptionsData;
+      const response: AxiosResponse<FilterOptionsResponse> = await fetcher(payload, PageTypeToTableName[page]);
       return response.data;
     },
     ...queryOptions,

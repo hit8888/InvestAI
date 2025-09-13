@@ -7,7 +7,7 @@ const ConversationsWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <CustomPageHeader
-        headerTitle="Conversations"
+        headerTitle="Visitors"
         headerIcon={<PanelConversationActiveIcon {...COMMON_SMALL_ICON_PROPS} />}
       />
       <ConversationTabs />

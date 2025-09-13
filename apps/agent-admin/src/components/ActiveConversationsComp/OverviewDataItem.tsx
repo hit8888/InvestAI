@@ -1,8 +1,8 @@
 export type OverviewDataItemProps = {
   label: string;
   icon?: React.ReactNode;
-  value: unknown;
-  renderValue?: (value: unknown) => React.ReactNode;
+  value?: string | number;
+  renderValue?: (value?: number | string) => React.ReactNode;
 };
 
 const OverviewDataItem = ({ label, icon, value, renderValue }: OverviewDataItemProps) => {

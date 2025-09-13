@@ -1,7 +1,7 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import { cn } from '@breakout/design-system/lib/cn';
 
-const TableViewShimmer = ({ rowCount = 5, columnCount = 4 }) => {
+const TableViewShimmer = ({ rowCount = 10, columnCount = 6 }) => {
   const columns = Array(columnCount).fill(0);
   const rows = Array(rowCount).fill(0);
 

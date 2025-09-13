@@ -5,6 +5,7 @@ import {
   LEADS_PAGE,
   LINK_CLICKS_PAGE,
   SLIDES_PAGE,
+  VISITORS_PAGE,
   VIDEOS_PAGE,
   WEBPAGES_PAGE,
 } from '@meaku/core/utils/index';
@@ -23,6 +24,7 @@ export interface PaginationStateAndActions {
   videos: PaginationValues;
   slides: PaginationValues;
   'link-clicks': PaginationValues;
+  prospects: PaginationValues;
   setPaginationValue: (page: PaginationPageType, key: keyof PaginationValues, value: number) => void;
   resetPaginationValue: (page: PaginationPageType) => void;
 }
@@ -42,6 +44,7 @@ const pageTypes: PaginationPageType[] = [
   DOCUMENTS_PAGE,
   VIDEOS_PAGE,
   SLIDES_PAGE,
+  VISITORS_PAGE,
 ];
 
 const initialPaginationState = pageTypes.reduce(

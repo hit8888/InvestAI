@@ -1,11 +1,16 @@
 import React, { createContext, useContext } from 'react';
 import { useAuth } from './AuthProvider';
 import useEntityMetadataQuery from '../queries/query/useEntityMetadataQuery';
-import { transformEntityDataToColumnHeaderLabelMapping, transformEntityDataToColumnList } from '../utils/common';
+import {
+  transformEntityDataRelatedEntities,
+  transformEntityDataToColumnHeaderLabelMapping,
+  transformEntityDataToColumnList,
+} from '../utils/common';
 
 interface EntityMetadataContextType {
   entityMetadataHeaderMapping: Record<string, Record<string, string> | string>;
   entityMetadataColumnList: string[];
+  entityMetadataRelatedEntities: Record<string, string[]>;
   isLoading: boolean;
   error: Error | null;
 }
@@ -34,12 +39,14 @@ export const EntityMetadataProvider: React.FC<EntityMetadataProviderProps> = ({ 
     ? transformEntityDataToColumnHeaderLabelMapping(entityMetadata)
     : {};
   const entityMetadataColumnList = entityMetadata ? transformEntityDataToColumnList(entityMetadata) : [];
+  const entityMetadataRelatedEntities = entityMetadata ? transformEntityDataRelatedEntities(entityMetadata) : {};
 
   return (
     <EntityMetadataContext.Provider
       value={{
         entityMetadataHeaderMapping,
         entityMetadataColumnList,
+        entityMetadataRelatedEntities,
         isLoading,
         error: error as Error | null,
       }}

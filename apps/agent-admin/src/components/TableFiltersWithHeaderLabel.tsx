@@ -6,14 +6,17 @@ import { useFiltersContainerHeight } from '../hooks/useFiltersContainerHeight';
 import { useEffect } from 'react';
 import ExportDownload from './tableComp/ExportDownload';
 import SearchTableContentInput from './SearchTableContentInput';
-import { CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
 import { TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING } from '../utils/constants';
+import { cn } from '@breakout/design-system/lib/cn';
 
 type IProps = PageTypeProps & {
   disabledState?: boolean;
   isLoading: boolean;
   payloadData: ConversationsPayload | LeadsPayload | DataSourcePayload;
   onFiltersContainerHeightChange?: (height: number) => void;
+  allowExportDownload?: boolean;
+  className?: string;
+  showFilterBar?: boolean;
 };
 
 const TableFiltersWithHeaderLabel = ({
@@ -22,6 +25,9 @@ const TableFiltersWithHeaderLabel = ({
   payloadData,
   isLoading,
   onFiltersContainerHeightChange,
+  allowExportDownload = true,
+  showFilterBar = true,
+  className,
 }: IProps) => {
   const { filtersRef, height } = useFiltersContainerHeight();
 
@@ -37,21 +43,20 @@ const TableFiltersWithHeaderLabel = ({
   }
 
   if (disabledState) return null;
-  const isLeadsAndConversationsPage = page === LEADS_PAGE || page === CONVERSATIONS_PAGE || page === LINK_CLICKS_PAGE;
   return (
     <div
       ref={filtersRef}
-      className="sticky z-10 flex w-full items-start justify-between self-stretch bg-white py-4"
+      className={cn('sticky z-10 flex w-full items-start justify-between self-stretch bg-white py-4', className)}
       style={{
         top: `${TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING}px`,
       }}
     >
       <FlexContainer>
-        <AllFiltersContainer page={page} isLeadsAndConversationsPage={isLeadsAndConversationsPage} />
+        <AllFiltersContainer page={page} showSearchBar={false} showFilterBar={showFilterBar} />
       </FlexContainer>
       <FlexContainer>
         <SearchTableContentInput page={page} />
-        {isLeadsAndConversationsPage && <ExportDownload page={page} payloadData={payloadData} />}
+        {allowExportDownload && <ExportDownload page={page} payloadData={payloadData} />}
       </FlexContainer>
     </div>
   );

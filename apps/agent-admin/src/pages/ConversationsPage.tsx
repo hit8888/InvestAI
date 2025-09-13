@@ -1,11 +1,11 @@
 import withPageViewWrapper from '../pages/PageViewWrapper';
-import ConversationsTableContainer from '../components/ConversationsTableContainer';
 import ConversationsWrapper from './ConversationsWrapper';
+import VisitorsTable from './VisitorsPage/VisitorsTable';
 
 const ConversationsPage = () => {
   return (
     <ConversationsWrapper>
-      <ConversationsTableContainer />
+      <VisitorsTable />
     </ConversationsWrapper>
   );
 };

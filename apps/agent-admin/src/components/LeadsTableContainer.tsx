@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useLeadsTableQuery from '../queries/query/useLeadsTableQuery';
-import TableViewContent from './TableViewContent';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
@@ -36,11 +35,18 @@ import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import usePageRouteState from '../hooks/usePageRouteState.tsx';
+import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
+import CommonTable from '@breakout/design-system/components/Table/CommonTable';
+import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
+import { useSidebar } from '../context/SidebarContext.tsx';
+import { SortValues } from '@meaku/core/types/admin/sort';
 
 const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE }) => {
   const { isLinkClicksPage } = usePageRouteState();
   const { entityMetadataHeaderMapping, entityMetadataColumnList } = useEntityMetadata();
-
+  const { isSidebarOpen } = useSidebar();
+  const { setSortValue } = useSortFilterStore();
+  const sortValue = useSortFilterStore((state) => state[pageType] as SortValues);
   // TODO: Remove this once we have a proper way to get the column list for link clicks page
   // Link Clicks page contains different ordering and displaying of columns
   // - Need to add another entity type for this in the server backend
@@ -126,6 +132,45 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
     });
   };
 
+  const renderTableContent = () => {
+    if (isLoading) {
+      return <TableViewShimmer />;
+    }
+
+    if (!totalRecords && filterState.searchTableContent) {
+      return (
+        <div className="flex w-full items-center justify-center gap-2 p-10 text-2xl font-medium text-gray-500">
+          <span>No results found for </span>
+          <span className="text-primary">"{filterState.searchTableContent}"</span>
+          <span>- Try adjusting your search terms</span>
+        </div>
+      );
+    }
+
+    if (!totalRecords) {
+      return (
+        <NoDataFound
+          className="min-h-[60vh]"
+          title="Waiting for activity"
+          description="No leads generated from website visitor conversations yet, Time to get more leads."
+        />
+      );
+    }
+
+    return (
+      <CommonTable
+        pageType={pageType}
+        tabularData={leadsData}
+        columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
+        filterContainerHeight={filterContainerHeight}
+        onRowItemClick={handleRowItemClick}
+        isSidebarOpen={isSidebarOpen}
+        setSortValue={setSortValue}
+        sortValue={sortValue}
+      />
+    );
+  };
+
   // Handle error states
   if (isError || tableError) {
     return <ErrorState />;
@@ -142,16 +187,7 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
           page={pageType}
           onFiltersContainerHeightChange={setFilterContainerHeight}
         />
-        <TableViewContent
-          pageType={pageType}
-          key={`${pageType}-table-container`}
-          isLoading={isLoading}
-          totalRecords={totalRecords}
-          tableData={leadsData}
-          columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
-          filterContainerHeight={filterContainerHeight}
-          onRowItemClick={handleRowItemClick}
-        />
+        {renderTableContent()}
       </div>
       <TablePagination
         isLoading={isLoading}

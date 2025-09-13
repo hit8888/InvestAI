@@ -49,7 +49,7 @@ const DataSourceTableHeader = ({
       className="sticky z-20 flex w-full flex-1 content-end items-end justify-between self-stretch bg-white py-4"
       style={{ top: `${TOP_HEADER_CONTAINER_HEIGHT_WITH_PADDING}px` }}
     >
-      <AllFiltersContainer page={page} isLeadsAndConversationsPage={false} />
+      <AllFiltersContainer page={page} />
       <div className="flex items-center justify-end gap-4">
         <EditBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />
         <ReembedBulkRowItemsButton selectedType={selectedType as SourcesCardTypes} />

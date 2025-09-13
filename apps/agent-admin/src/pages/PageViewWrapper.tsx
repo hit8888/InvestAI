@@ -1,8 +1,13 @@
+import { cn } from '@breakout/design-system/lib/cn';
+
 // Define the HOC
-const withPageViewWrapper = <P extends object>(WrappedComponent: React.ComponentType<P>): React.FC<P> => {
+const withPageViewWrapper = <P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  className?: string,
+): React.FC<P> => {
   const ComponentWithWrapper: React.FC<P> = (props) => {
     return (
-      <div className="flex w-full flex-shrink-0 flex-col items-start gap-6 bg-white p-4">
+      <div className={cn('flex w-full flex-shrink-0 flex-col items-start gap-6 bg-white p-4', className)}>
         <WrappedComponent {...props} />
       </div>
     );

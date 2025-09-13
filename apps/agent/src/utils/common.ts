@@ -35,7 +35,9 @@ export const handleColorConfig = (styleConfig: Omit<StyleConfig, StyleConfigKeys
     });
 };
 
-export const capitalizeString = (string: string) => {
+export const capitalizeString = (string?: string | null) => {
+  if (!string) return '';
+
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 

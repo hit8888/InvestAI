@@ -14,10 +14,10 @@ import UserActivity from './UserActivity';
 import LandingPageCard from './LandingPageCard';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
-import { ActiveConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
+import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
 
 interface JoinConversationChatAreaProps {
-  conversationDetails?: ActiveConversationDetailsDataResponse;
+  conversationDetails?: SessionDetailsDataResponse;
   sessionId: string;
   isLoading?: boolean;
 }

@@ -1,7 +1,7 @@
-import { ConversationsTableDisplayContent, ConversationsTableViewContent } from '../types/admin/admin';
+import { ConversationDetailResponse, ConversationsTableDisplayContent } from '../types/admin/admin';
 
 export const convertServerConversationDataToClientConversationData = (
-  response: ConversationsTableViewContent,
+  response: ConversationDetailResponse,
 ): ConversationsTableDisplayContent => {
   return {
     company: response.company || '-',

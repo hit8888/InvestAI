@@ -1,17 +1,25 @@
 class NumberUtil {
-  static formatNumber(number: number, locale: string = 'en-US', options: Intl.NumberFormatOptions = {}): string {
+  static formatNumber(
+    number?: number | string,
+    locale: string = 'en-US',
+    options: Intl.NumberFormatOptions = {},
+  ): string {
     if (!this.isNumber(number)) {
-      return number.toString();
+      return number?.toString() ?? '';
     }
 
     return new Intl.NumberFormat(locale, {
       ...options,
-    }).format(number);
+    }).format(Number(number));
   }
 
-  static formatCurrency(number: number, locale: string = 'en-US', options: Intl.NumberFormatOptions = {}): string {
+  static formatCurrency(
+    number?: number | string,
+    locale: string = 'en-US',
+    options: Intl.NumberFormatOptions = {},
+  ): string {
     if (!this.isNumber(number)) {
-      return number.toString();
+      return number?.toString() ?? '';
     }
 
     return new Intl.NumberFormat(locale, {
@@ -20,11 +28,11 @@ class NumberUtil {
       currency: 'USD',
       ...options,
       style: 'currency',
-    }).format(number);
+    }).format(Number(number));
   }
 
   static isNumber(value: unknown): boolean {
-    return !isNaN(Number(value)) && typeof value === 'number';
+    return !isNaN(Number(value));
   }
 }
 export default NumberUtil;

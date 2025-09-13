@@ -9,54 +9,82 @@ import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import useReachoutEmail from '../../queries/mutation/useReachoutEmail';
-import { useConversationDetails } from '../../context/ConversationDetailsContext';
+import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
 
-const ReachoutEmail = () => {
+export const ReachoutEmailBody = ({
+  data,
+  bodyHtmlRef,
+}: {
+  data?: ReachoutEmailResponse;
+  bodyHtmlRef: React.RefObject<HTMLDivElement | null>;
+}) => {
+  if (!data) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex w-full items-center gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
+        <Typography variant="body-14" className="prose">
+          {data?.subject}
+        </Typography>
+        <CopyToClipboardButton textToCopy={data?.subject ?? ''} btnClassName="ml-auto" />
+      </div>
+      <div className="flex w-full items-start gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
+        <span ref={bodyHtmlRef} className="prose text-sm">
+          <GithubMarkdownRenderer markdown={data?.main_body ?? ''} />
+        </span>
+        <CopyToClipboardButton
+          textToCopy={data?.main_body ?? ''}
+          btnClassName="ml-auto"
+          getHtml={() => bodyHtmlRef.current?.innerHTML}
+        />
+      </div>
+    </div>
+  );
+};
+
+export const ReachoutEmailBodyLoader = () => {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-24 w-full" />
+    </div>
+  );
+};
+
+export const ReachoutEmailCta = ({
+  disabled = false,
+  onClick,
+  isLoading,
+  className,
+}: {
+  disabled?: boolean;
+  onClick: () => void;
+  isLoading: boolean;
+  className?: string;
+}) => {
+  return (
+    <Button variant="secondary" size="small" disabled={disabled} onClick={onClick} className={className}>
+      Generate Email
+      {isLoading ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <AiSparklesIcon className="h-4 w-4" />}
+    </Button>
+  );
+};
+
+const ReachoutEmail = ({ sessionId }: { sessionId?: string }) => {
   const { mutate, isPending, isSuccess, data } = useReachoutEmail({
     onError: () => {
       toast.error('Failed to generate reachout email.');
     },
   });
-  const { conversation } = useConversationDetails();
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
 
   const showContentContainer = isPending || isSuccess;
 
-  const renderLoader = () => {
-    return (
-      <>
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-24 w-full" />
-      </>
-    );
-  };
-
-  const renderSuccess = () => {
-    return (
-      <>
-        <div className="flex w-full items-center gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
-          <Typography variant="body-14" className="prose">
-            {data?.subject}
-          </Typography>
-          <CopyToClipboardButton textToCopy={data?.subject ?? ''} btnClassName="ml-auto" />
-        </div>
-        <div className="flex w-full items-start gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
-          <span ref={bodyHtmlRef} className="prose text-sm">
-            <GithubMarkdownRenderer markdown={data?.main_body ?? ''} />
-          </span>
-          <CopyToClipboardButton
-            textToCopy={data?.main_body ?? ''}
-            btnClassName="ml-auto"
-            getHtml={() => bodyHtmlRef.current?.innerHTML}
-          />
-        </div>
-      </>
-    );
-  };
-
   const handleGenerateReachoutEmail = () => {
-    if (conversation?.session_id) {
-      mutate({ session_id: conversation?.session_id });
+    if (sessionId) {
+      mutate({ session_id: sessionId });
     }
   };
 
@@ -66,19 +94,14 @@ const ReachoutEmail = () => {
         <Typography variant="label-14-medium" className="text-gray-500">
           {isSuccess ? 'Copy paste below email to reach out' : 'Quick Email Setup'}
         </Typography>
-        <Button
-          variant="secondary"
-          size="small"
-          disabled={isPending || isSuccess || !conversation?.session_id}
+        <ReachoutEmailCta
+          disabled={isPending || isSuccess || !sessionId}
           onClick={handleGenerateReachoutEmail}
-        >
-          Generate Email
-          {isPending ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <AiSparklesIcon className="h-4 w-4" />}
-        </Button>
+          isLoading={isPending}
+        />
       </div>
-      {showContentContainer && (
-        <div className="flex flex-col items-center gap-4">{isSuccess ? renderSuccess() : renderLoader()}</div>
-      )}
+      {showContentContainer &&
+        (isSuccess ? <ReachoutEmailBody data={data} bodyHtmlRef={bodyHtmlRef} /> : <ReachoutEmailBodyLoader />)}
     </div>
   );
 };

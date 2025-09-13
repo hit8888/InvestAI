@@ -16,7 +16,7 @@ type TabConfig = {
 export const CONVERSATION_TABS: TabConfig[] = [
   {
     path: `/${AppRoutesEnum.CONVERSATIONS}`,
-    label: 'All Conversations',
+    label: 'All Visitors',
     icon: AllConversationsIcon,
   },
   {

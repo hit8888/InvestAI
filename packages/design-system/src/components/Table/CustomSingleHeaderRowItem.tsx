@@ -1,5 +1,9 @@
 import { flexRender, Header, HeaderGroup } from '@tanstack/react-table';
-import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import {
+  ConversationsTableDisplayContent,
+  LeadsTableDisplayContent,
+  VisitorsTableDisplayContent,
+} from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
 import { LEADS_PAGE, LINK_CLICKS_PAGE, SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
@@ -9,10 +13,11 @@ import { SortValues } from '@meaku/core/types/admin/sort';
 import SortFilterButton from './SortFilterButton';
 
 type CustomSingleHeaderRowItemProps = {
-  headerGroup: HeaderGroup<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
+  headerGroup: HeaderGroup<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent>;
   pageType: PaginationPageType;
   setSortValue: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;
   sortValue: SortValues;
+  columnClassNames?: { [columnId: string]: string };
 };
 
 const CustomSingleHeaderRowItem = ({
@@ -20,6 +25,7 @@ const CustomSingleHeaderRowItem = ({
   pageType,
   setSortValue,
   sortValue,
+  columnClassNames,
 }: CustomSingleHeaderRowItemProps) => {
   const { getCommonPinningStyles } = useTablePinningStyles();
   const isLeadsOrLinkClicksPage = pageType === LEADS_PAGE || pageType === LINK_CLICKS_PAGE;
@@ -45,6 +51,7 @@ const CustomSingleHeaderRowItem = ({
                 'min-w-56': isColumnNumberOfUserMessages,
                 pinnedColumnShadow: isColumnPinnedLeftForName,
               },
+              columnClassNames?.[header.id],
             )}
             style={{
               ...getCommonPinningStyles(header.column),
@@ -74,7 +81,7 @@ const CustomSingleHeaderRowItem = ({
 };
 
 type HeaderCellContentProps = {
-  header: Header<ConversationsTableDisplayContent | LeadsTableDisplayContent, unknown>;
+  header: Header<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent, unknown>;
   sortValue: SortValues;
   setSortValue: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;
   pageType: PaginationPageType;

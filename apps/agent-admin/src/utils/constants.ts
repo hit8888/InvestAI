@@ -47,7 +47,7 @@ import CalendarIcon from '@breakout/design-system/components/icons/panel-calenda
 import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
-import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
+import { AgentResponseWordCountEnum, BuyerIntent, PlaygroundView } from '@meaku/core/types/common';
 
 const {
   DateRange,
@@ -71,6 +71,7 @@ const { Today, Yesterday, Last7Days, Last30Days, Last90Days, CustomRange } = Pre
 export const CONVERSATION_LABEL_UPPERCASE = 'CONVERSATION';
 export const LEAD_LABEL_UPPERCASE = 'LEAD';
 export const INSIGHT_LABEL = 'INSIGHT';
+export const VISITOR_LABEL_UPPERCASE = 'PROSPECT';
 
 export const TABLE_COLUMN_WIDTH_SIZE = 200;
 
@@ -102,6 +103,7 @@ export const DefaultAuthResponse: AuthResponse = {
 export const PAGINATION_PER_PAGE_OPTIONS_FOR_LEADS_TABLE = ['10', '25', '50', '75', '100'];
 export const PAGINATION_PER_PAGE_OPTIONS_FOR_CONVERSATIONS_TABLE = ['100', '200', '500'];
 export const PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE = ['50', '100', '200', '500'];
+export const PAGINATION_PER_PAGE_OPTIONS_FOR_VISITORS_TABLE = ['100', '200', '500'];
 
 // ICON Props
 
@@ -325,6 +327,14 @@ const LEADS_TABLE_EXCLUDE_FILTERS = [
   AssignedUserEmail,
 ];
 const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, ProductInterest];
+const VISITORS_TABLE_EXCLUDE_FILTERS = [
+  MeetingBooked,
+  ProductInterest,
+  ProductOfInterest,
+  AssignedUserEmail,
+  UserMessagesCount,
+  BuyerIntent,
+];
 const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
 const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType];
 const DOCUMENTS_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, Sources];
@@ -340,6 +350,10 @@ export const LINK_CLICKS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
 
 export const CONVERSATIONS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
   (item) => !CONVERSATIONS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
+);
+
+export const VISITORS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
+  (item) => !VISITORS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
 );
 
 // Not Showing Usage Count for now
@@ -385,11 +399,13 @@ export enum AppRoutesEnum {
   CALENDAR = 'calendar',
   ADD_CALENDAR = 'calendar/add-calendar',
   INTEGRATIONS = 'integrations',
+  VISITORS = 'prospects',
 }
 
 export enum SidebarNavItemsEnum {
-  CONVERSATIONS_LABEL = 'Conversations',
+  CONVERSATIONS_LABEL = 'Visitors',
   ACTIVE_CONVERSATIONS_LABEL = 'Live Visitors',
+  VISITORS_LABEL = 'Visitor List',
   AGENT_LABEL = 'Agent',
   AGENT_DATA_SOURCES_LABEL = 'Data Sources',
   AGENT_BRANDING_LABEL = 'Branding',
@@ -450,6 +466,7 @@ export interface SummaryTabContentList {
   listLabel: string;
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   listValue: string | number | BANTItem[] | ParentUrlItem;
+  sessionId?: string;
 }
 
 export interface BANTItem {
@@ -471,12 +488,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listIcon: SummaryConversationIcon,
     listValue: '',
   },
-  {
-    listKey: 'reachoutEmail',
-    listLabel: '',
-    listIcon: null,
-    listValue: '',
-  },
+  // {
+  //   listKey: 'reachoutEmail',
+  //   listLabel: '',
+  //   listIcon: null,
+  //   listValue: '',
+  // },
   {
     listKey: 'browsingHistorySummary',
     listLabel: "User's Browsing History Summary:",
@@ -728,6 +745,12 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
     icon: PanelConversationIcon,
     activeIcon: PanelConversationActiveIcon,
   },
+  // {
+  //   navUrl: `/${AppRoutesEnum.VISITORS}`,
+  //   navItem: SidebarNavItemsEnum.VISITORS_LABEL,
+  //   icon: PanelConversationIcon,
+  //   activeIcon: PanelConversationActiveIcon,
+  // },
   {
     navUrl: `/${AppRoutesEnum.AGENT}`,
     navItem: SidebarNavItemsEnum.AGENT_LABEL,

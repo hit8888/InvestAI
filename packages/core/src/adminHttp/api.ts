@@ -44,6 +44,7 @@ import {
   UpdateCustomDocumentRequest,
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
+  VisitorsPayload,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -75,17 +76,21 @@ export const getLeadsRowData = (payload: LeadsPayload) =>
 export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/query/`, payload);
 
-export const downloadLeadsRowData = (payload: LeadsPayload, downloadType: ExportFormatType) => {
-  return adminApiClient.post(`/tenant/api/leads/download/${downloadType}/`, payload, {
+export const getVisitorsRowData = (payload: VisitorsPayload) =>
+  adminApiClient.post(`tenant/api/prospects/query/`, payload);
+
+export const exportTableData = (
+  payload: LeadsPayload | ConversationsPayload | VisitorsPayload,
+  downloadType: ExportFormatType,
+  tableName: string,
+) => {
+  return adminApiClient.post(`/tenant/api/${tableName}/download/${downloadType}/`, payload, {
     responseType: 'blob',
   });
 };
 
-export const downloadConversationRowData = (payload: ConversationsPayload, downloadType: ExportFormatType) => {
-  return adminApiClient.post(`tenant/api/conversations/download/${downloadType}/`, payload, {
-    responseType: 'blob',
-  });
-};
+export const getProspectsFilterOptionsData = (payload: FilterOptionsPayload) =>
+  adminApiClient.post(`tenant/api/prospects/filterset/`, payload);
 
 export const getFilterOptionsData = (payload: FilterOptionsPayload, pageType: string) =>
   adminApiClient.post(`tenant/api/search/${pageType}/filterset/`, payload);
@@ -98,7 +103,7 @@ export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/a
 export const getConversationDetailsData = (sessionId: string) =>
   adminApiClient.get(`tenant/api/conversations/${sessionId}/?fetch_all=true`);
 
-export const getActiveConversationDetailsData = (sessionId: string) => {
+export const getSessionDetailsData = (sessionId: string) => {
   return adminApiClient.get(`tenant/api/session/${sessionId}/details/?chat_summary_required=true`);
 };
 
@@ -304,4 +309,8 @@ export const reachoutEmail = (payload: ReachoutEmailPayload) => {
 
 export const getWebpageScreenshots = (payload: { urls: string[] }) => {
   return adminApiClient.post(`/tenant/api/webpages/screenshots/`, payload);
+};
+
+export const getIcpDetails = (payload: { company_name: string }) => {
+  return adminApiClient.post(`/tenant/api/icp-enrichment/`, payload);
 };

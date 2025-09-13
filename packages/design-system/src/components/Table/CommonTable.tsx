@@ -10,11 +10,17 @@ import {
   LEADS_PINNED_COLUMNS,
   LINK_CLICKS_PAGE,
   PAGES_WITH_DRAWER_ENABLED,
+  WEBPAGES_PAGE,
+  DOCUMENTS_PAGE,
+  VIDEOS_PAGE,
+  SLIDES_PAGE,
+  VISITORS_PAGE,
 } from '@meaku/core/utils/index';
 import {
   CommonDataSourceResponse,
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
+  VisitorsTableDisplayContent,
   PaginationPageType,
 } from '@meaku/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +32,17 @@ import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
 import TableHeaderRowItemHavingCheckbox from './TableHeaderRowItemHavingCheckbox';
 import TableBodyRowItemHavingCheckbox from './TableBodyRowItemHavingCheckbox';
+
+const PAGE_TYPE_TO_PINNED_COLUMNS: Record<PaginationPageType, string[]> = {
+  [CONVERSATIONS_PAGE]: CONVERSATIONS_PINNED_COLUMNS,
+  [LEADS_PAGE]: LEADS_PINNED_COLUMNS,
+  [LINK_CLICKS_PAGE]: LEADS_PINNED_COLUMNS,
+  [VISITORS_PAGE]: [],
+  [WEBPAGES_PAGE]: [],
+  [DOCUMENTS_PAGE]: [],
+  [VIDEOS_PAGE]: [],
+  [SLIDES_PAGE]: [],
+};
 
 interface TableViewProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -43,8 +60,12 @@ interface TableViewProps {
   sortValue?: DataSourceSortValues | SortValues;
   pageType: PaginationPageType;
   toggleDataSourcesDrawer?: (value: boolean) => void;
-  onRowItemClick?: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
+  onRowItemClick?: (
+    row: ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent,
+  ) => void;
   showActionItems?: boolean;
+  renderRowItem?: (row: Row<any>) => React.ReactNode;
+  renderHeaderItem?: (headerGroup: HeaderGroup<any>) => React.ReactNode;
 }
 
 const CommonTable = ({
@@ -64,12 +85,14 @@ const CommonTable = ({
   toggleDataSourcesDrawer = () => {},
   onRowItemClick,
   showActionItems = true,
+  renderRowItem,
+  renderHeaderItem,
 }: TableViewProps) => {
   const navigate = useNavigate();
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
   const isConversationsPage = pageType === CONVERSATIONS_PAGE;
-  const isDataSourcesPage = ![CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE].includes(pageType);
+  const isDataSourcesPage = ![CONVERSATIONS_PAGE, LEADS_PAGE, LINK_CLICKS_PAGE, VISITORS_PAGE].includes(pageType);
   const allowedToOpenDrawer = PAGES_WITH_DRAWER_ENABLED.includes(pageType);
 
   const { widthStyle } = useTableWidth({ isDataSourcesPage, isSidebarOpen });
@@ -82,9 +105,17 @@ const CommonTable = ({
     setIsHeaderSticky(value);
   };
 
-  const handleRowItemClick = (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => {
+  const handleRowItemClick = (
+    row: ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent,
+  ) => {
     const detailsPageURL = 'session_id' in row ? row.session_id : null;
     onRowItemClick?.(row);
+
+    // For visitors page, we only call onRowItemClick without navigation
+    if (pageType === VISITORS_PAGE) {
+      return;
+    }
+
     if (detailsPageURL) {
       navigate(`${detailsPageURL}`, {
         state: { from: isConversationsPage ? 'conversations' : 'leads' },
@@ -122,6 +153,9 @@ const CommonTable = ({
   });
 
   const getTableHeaderRowItem = (headerGroup: HeaderGroup<any>) => {
+    if (renderHeaderItem) {
+      return renderHeaderItem(headerGroup);
+    }
     if (isDataSourcesPage) {
       return (
         <TableHeaderRowItemHavingCheckbox
@@ -150,6 +184,9 @@ const CommonTable = ({
   };
 
   const getTableBodyRowItem = (row: Row<any>) => {
+    if (renderRowItem) {
+      return renderRowItem(row);
+    }
     if (isDataSourcesPage) {
       return (
         <TableBodyRowItemHavingCheckbox
@@ -166,18 +203,12 @@ const CommonTable = ({
     return <CustomSingleBodyRowItem key={row.id} row={row} handleRowItemClick={handleRowItemClick} />;
   };
 
-  const tableInitialState = isDataSourcesPage
-    ? {}
-    : {
-        initialState: {
-          columnPinning: {
-            left: isConversationsPage ? CONVERSATIONS_PINNED_COLUMNS : LEADS_PINNED_COLUMNS,
-          },
-        },
-      };
-
   const table = useReactTable({
-    ...tableInitialState,
+    initialState: {
+      columnPinning: {
+        left: PAGE_TYPE_TO_PINNED_COLUMNS[pageType],
+      },
+    },
     data: tabularData,
     columns: columnHeaderData as ColumnDef<any, any>[],
     getCoreRowModel: getCoreRowModel(),

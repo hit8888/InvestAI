@@ -1,11 +1,12 @@
 import { toast } from 'react-hot-toast';
-import { downloadLeadsRowData, downloadConversationRowData } from '@meaku/core/adminHttp/api';
+import { exportTableData } from '@meaku/core/adminHttp/api';
 import { createFilename, triggerDownload } from './downloadUtils';
 import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@meaku/core/types/admin/api';
-import { LEADS_PAGE, LINK_CLICKS_PAGE } from '@meaku/core/utils/index';
+import { PageTypeToTableName } from '@meaku/core/utils/index';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
 interface DownloadProps {
-  page: string;
+  page: PaginationPageType;
   selectedOption: ExportFormatType | null;
   payloadData: ConversationsPayload | LeadsPayload;
 }
@@ -19,11 +20,14 @@ interface DownloadProps {
 export const downloadTableData = async ({ page, payloadData, selectedOption }: DownloadProps) => {
   const fileType = (selectedOption?.toLowerCase() as ExportFormatType) || ExportFormat.CSV;
 
+  const tableName = PageTypeToTableName[page];
+
+  if (!tableName) {
+    return;
+  }
+
   try {
-    const response =
-      page === LEADS_PAGE || page === LINK_CLICKS_PAGE
-        ? await downloadLeadsRowData(payloadData, fileType)
-        : await downloadConversationRowData(payloadData, fileType);
+    const response = await exportTableData(payloadData, fileType, tableName);
 
     if (response.status !== 200) {
       throw new Error('Download failed');

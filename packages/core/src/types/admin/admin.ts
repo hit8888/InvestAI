@@ -5,6 +5,7 @@ import {
   ConversationsTableViewSchema,
   LocationWithCityCountrySchema,
   TransformedProspectAndCompanyDetailsSchema,
+  VisitorsTableViewSchema,
 } from './admin-table';
 import {
   LeadResultSchema,
@@ -17,7 +18,7 @@ import {
   ConversationFunnelResponseSchema,
   ConversationsResponseResultSchema,
   ConversationsTableResponseSchema,
-  ActiveConversationDetailsResponseSchema,
+  SessionDetailsResponseSchema,
   DataSourceWebpagesResponseResultSchema,
   DataSourceWebpagesTableResponseSchema,
   DataSourceDocumentsResponseResultSchema,
@@ -28,7 +29,11 @@ import {
   DataSourceArtifactsTableResponseSchema,
   DataSourceArtifactsResponseResultSchema,
   EnrichmentSourceEnum,
+  VisitorsResponseResultSchema,
   WebpagesScreenshotsResponseSchema,
+  ConversationDetailResponseSchema,
+  IcpDetailsResponseSchema,
+  VisitorsTableResponseSchema,
 } from './api';
 import {
   CONVERSATIONS_PAGE,
@@ -37,6 +42,7 @@ import {
   LINK_CLICKS_PAGE,
   SLIDES_PAGE,
   VIDEOS_PAGE,
+  VISITORS_PAGE,
   WEBPAGES_PAGE,
 } from '../../utils';
 
@@ -47,11 +53,13 @@ export type WEBPAGES_PAGE_TYPE = typeof WEBPAGES_PAGE;
 export type DOCUMENTS_PAGE_TYPE = typeof DOCUMENTS_PAGE;
 export type VIDEOS_PAGE_TYPE = typeof VIDEOS_PAGE;
 export type SLIDES_PAGE_TYPE = typeof SLIDES_PAGE;
-export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE;
+export type VISITORS_PAGE_TYPE = typeof VISITORS_PAGE;
+export type MainPageType = CONVERSATIONS_PAGE_TYPE | LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE | VISITORS_PAGE_TYPE;
 
 export type PaginationPageType =
   | LEADS_PAGE_TYPE
   | LINK_CLICKS_PAGE_TYPE
+  | VISITORS_PAGE_TYPE
   | CONVERSATIONS_PAGE_TYPE
   | WEBPAGES_PAGE_TYPE
   | DOCUMENTS_PAGE_TYPE
@@ -65,6 +73,10 @@ export type TableDataResponse = z.infer<typeof TableDataSchema>;
 export type LeadsTableViewContent = z.infer<typeof LeadResultSchema>;
 export type LeadsTableDisplayContent = z.infer<typeof LeadsTableViewSchema>;
 
+export type VisitorsTableViewContent = z.infer<typeof VisitorsResponseResultSchema>;
+export type VisitorsTableDisplayContent = z.infer<typeof VisitorsTableViewSchema>;
+export type VisitorsTableResponse = z.infer<typeof VisitorsTableResponseSchema>;
+
 export type ConversationsTableViewContent = z.infer<typeof ConversationsResponseResultSchema>;
 export type ConversationsTableDisplayContent = z.infer<typeof ConversationsTableViewSchema>;
 export type TransformedProspectAndCompanyDetailsContent = z.infer<typeof TransformedProspectAndCompanyDetailsSchema>;
@@ -75,11 +87,12 @@ export type ConversationsTableResponse = z.infer<typeof ConversationsTableRespon
 
 export type ConversationsFunnelDataResponse = z.infer<typeof ConversationFunnelResponseSchema>;
 export type ConversationDetailsDataResponse = z.infer<typeof ConversationDetailsResponseSchema>;
+export type ConversationDetailResponse = z.infer<typeof ConversationDetailResponseSchema>;
 
 export type DataSourceOverviewDataResponse = z.infer<typeof DataSourceOverviewResponseResultSchema>;
 export type DataSourceOverviewData = z.infer<typeof DataSourceOverviewSchema>;
 export type DataSourceFeaturesData = z.infer<typeof DataSourceFeaturesSchema>;
-export type ActiveConversationDetailsDataResponse = z.infer<typeof ActiveConversationDetailsResponseSchema>;
+export type SessionDetailsDataResponse = z.infer<typeof SessionDetailsResponseSchema>;
 export type WebpagesScreenshotsDataResponse = z.infer<typeof WebpagesScreenshotsResponseSchema>;
 
 export type EnrichmentSource = z.infer<typeof EnrichmentSourceEnum>;
@@ -106,3 +119,5 @@ export type CommonDataSourceTableResponse =
   | DataSourceWebpagesTableResponse
   | DataSourceDocumentsTableResponse
   | DataSourceArtifactsTableResponse;
+
+export type IcpDetailsResponse = z.infer<typeof IcpDetailsResponseSchema>;

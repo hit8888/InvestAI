@@ -142,6 +142,7 @@ export interface AllFilterState {
   leads: FilterValues;
   'link-clicks': FilterValues;
   conversations: FilterValues;
+  prospects: FilterValues;
   webpages: FilterValues;
   documents: FilterValues;
   videos: FilterValues;

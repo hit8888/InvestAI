@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
-import useActiveConversationDetailsQuery from '../../queries/query/useActiveConversationDetailsQuery';
+import useSessionDetailsQuery from '../../queries/query/useSessionDetailsQuery';
 import JoinConversationChatArea from './JoinConversationChatArea';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
@@ -26,11 +26,12 @@ const JoinConversationDrawer = ({
   onClose,
 }: JoinConversationDrawerProps) => {
   const { session_id: sessionId } = conversation;
-  const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse } = useJoinConversationStore();
+  const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse, currentConversation } =
+    useJoinConversationStore();
   const { messages, setMessages } = useMessageStore();
 
-  const { data, isFetching, isError } = useActiveConversationDetailsQuery(
-    {},
+  const { data, isFetching, isError } = useSessionDetailsQuery(
+    { sessionId: currentConversation?.session_id },
     {
       refetchOnMount: 'always',
     },

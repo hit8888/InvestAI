@@ -6,6 +6,7 @@ import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   PaginationPageType,
+  VisitorsTableDisplayContent,
 } from '@meaku/core/types/admin/admin';
 import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@meaku/core/types/admin/sort';
 import { NON_SORTABLE_COLUMNS } from '@meaku/core/utils/index';
@@ -13,7 +14,7 @@ import { Header } from '@tanstack/react-table';
 
 type IProps = {
   header:
-    | Header<ConversationsTableDisplayContent | LeadsTableDisplayContent, unknown>
+    | Header<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent, unknown>
     | Header<CommonDataSourceResponse, unknown>;
   sortValue: SortValues | DataSourceSortValues;
   setSortValue: (page: PaginationPageType, category: SortCategory, value: string | SortOrder) => void;

@@ -7,6 +7,7 @@ export const useAllFilterStore = create<AllFilterState>((set) => ({
   leads: { ...InitialFilterValues },
   'link-clicks': { ...InitialFilterValues },
   conversations: { ...InitialFilterValues },
+  prospects: { ...InitialFilterValues },
   webpages: { ...InitialFilterValues },
   documents: { ...InitialFilterValues },
   videos: { ...InitialFilterValues },

@@ -119,16 +119,6 @@ export const TenantMetadataUpdateRequestSchema = z
   .partial();
 export type TenantMetadataUpdateRequest = z.infer<typeof TenantMetadataUpdateRequestSchema>;
 
-// LeadsPayload
-export const LeadsPayloadSchema = z.object({
-  filters: z.array(FilterSchema),
-  sort: z.array(SortSchema),
-  search: z.string().optional(),
-  page: z.number(),
-  page_size: z.number().optional(),
-});
-export type LeadsPayload = z.infer<typeof LeadsPayloadSchema>;
-
 export enum ExportFormat {
   XLSX = 'XLSX',
   CSV = 'CSV',
@@ -145,7 +135,9 @@ export const TablePayloadSchema = z.object({
   page: z.number(),
   page_size: z.number().optional(),
 });
+export type LeadsPayload = z.infer<typeof TablePayloadSchema>;
 export type ConversationsPayload = z.infer<typeof TablePayloadSchema>;
+export type VisitorsPayload = z.infer<typeof TablePayloadSchema>;
 export type DataSourcePayload = z.infer<typeof TablePayloadSchema>;
 
 export const AdditionalInfoSchema = z.object({
@@ -281,6 +273,79 @@ export const ConversationsResponseResultSchema = z.object({
   assigned_user_email: z.string().optional().nullable(),
 });
 
+export const ConversationDetailResponseSchema = z.object({
+  buyer_intent_score: z.number().nullable(),
+  buyer_intent: z.string().nullable(),
+  session_id: z.string().nullable(),
+  timestamp: z.string().nullable(), // ISO date-time string
+  summary: z.string().nullable(),
+  ip_address: z.string().nullable(),
+  budget: z.string().nullable(),
+  timeline: z.string().nullable(),
+  product_of_interest: z.string().nullable(),
+  company: z.string().nullable(),
+  name: z.string().nullable(),
+  need: z.string().nullable(),
+  email: z.string().nullable(),
+  role: z.string().nullable(),
+  country: z.string().nullable(),
+  user_message_count: z.number().nullable(),
+  is_test: z.boolean(),
+  prospect_details: ProspectDetailsSchema.optional().nullable(),
+  company_details: CompanyDetailsSchema.optional().nullable(),
+  agent_modal: z.string().optional().nullable(),
+  parent_url: z.string().optional().nullable(),
+  parent_url_title: z.string().optional().nullable(),
+  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+  device_type: z.string().optional().nullable(),
+  browsing_analysis_summary: z.string().optional().nullable(),
+  assigned_user_email: z.string().optional().nullable(),
+});
+
+export const VisitorsResponseResultSchema = z.object({
+  id: z.number().nullable().optional(),
+  name: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
+  phone: z.string().nullable().optional(),
+  role: z.string().nullable().optional(),
+  country: z.string().nullable().optional(),
+  company: z.string().nullable().optional(),
+  budget: z.string().nullable().optional(),
+  need: z.string().nullable().optional(),
+  timeline: z.string().nullable().optional(),
+  product_interest: z.string().nullable().optional(),
+  prospect_demographics: z.record(z.any()).optional(),
+  company_demographics: z
+    .object({
+      id: z.number().nullable().optional(),
+      keywords: z.string().nullable().optional(),
+      confidence: z.string().nullable().optional(),
+      ip_address: z.array(z.string()).optional(),
+      ip_country: z.string().nullable().optional(),
+      competitors: z.array(z.any()).optional(),
+      website_url: z.string().nullable().optional(),
+      company_name: z.string().nullable().optional(),
+      company_type: z.string().nullable().optional(),
+      linkedin_url: z.string().nullable().optional(),
+      brief_summary: z.string().nullable().optional(),
+      employee_count: z.string().nullable().optional(),
+      company_country: z.string().nullable().optional(),
+      company_revenue: z.string().nullable().optional(),
+      industry_domain: z.string().nullable().optional(),
+      enrichment_source: z.string().nullable().optional(),
+      enrichment_provider: z.string().nullable().optional(),
+      operating_countries: z.array(z.string()).optional(),
+    })
+    .optional()
+    .nullable(),
+  ip_address: z.string().nullable().optional(),
+  parent_url: z.string().nullable().optional(),
+  query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+  referrer: z.string().nullable().optional(),
+  session_id: z.string().nullable().optional(),
+  prospect_id: z.string().nullable().optional(),
+});
+
 export const PaginationDataSchema = z.object({
   current_page: z.number().nonnegative(), // Current page number, must be >= 0
   page_size: z.number().nonnegative(), // Items per page, must be >= 0
@@ -294,6 +359,10 @@ export const LeadsTableResponseSchema = PaginationDataSchema.extend({
 
 export const ConversationsTableResponseSchema = PaginationDataSchema.extend({
   results: z.array(ConversationsResponseResultSchema), // Array of conversation results
+});
+
+export const VisitorsTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(VisitorsResponseResultSchema), // Array of visitor results
 });
 
 // Schema for individual step
@@ -315,21 +384,62 @@ export const ConversationFunnelResponseSchema = z.object({
 // Schema for the Entire Conversation Details Schema
 export const ConversationDetailsResponseSchema = z.object({
   chat_history: z.array(WebSocketMessageSchema),
-  conversation: ConversationsResponseResultSchema.nullable(),
+  conversation: ConversationDetailResponseSchema.nullable(),
   feedback: z.array(FeedbackRequestPayloadSchema).optional(),
 });
 
-export const ActiveConversationDetailsResponseSchema = z.object({
+export const SessionDetailsResponseSchema = z.object({
   chat_history: z.array(WebSocketMessageSchema),
   chat_summary: z.string(),
-  prospect: z.object({
-    browsed_urls: z.array(BrowsedUrlSchema),
-    ip_address: z.string().nullable().optional(),
-    parent_url: z.string().nullable(),
-    query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
-  }),
   session: z.object({
-    start_time: z.string().nullable(),
+    session_id: z.string().nullable(),
+    start_time: z.string(),
+    end_time: z.null().nullable(),
+    is_live: z.boolean(),
+    agent_id: z.number().nullable(),
+    buyer_intent_score: z.number(),
+    is_test: z.boolean(),
+    test_type: z.null().nullable(),
+    experiment_tag: z.null().nullable(),
+    metadata: z.object({
+      loc: z.string(),
+      city: z.string(),
+      region: z.string(),
+      country: z.string(),
+      timezone: z.string(),
+      ip_address: z.string(),
+    }),
+  }),
+  prospect: z.object({
+    prospect_id: z.string().nullable(),
+    session_id: z.string().nullable(),
+    name: z.string().nullable(),
+    email: z.null().nullable(),
+    phone: z.null().nullable(),
+    role: z.string().nullable(),
+    country: z.string().nullable(),
+    budget: z.null().nullable(),
+    need: z.string().nullable(),
+    timeline: z.null().nullable(),
+    product_interest: z.string().nullable(),
+    prospect_demographics: z.object({
+      loc: z.string(),
+      city: z.string(),
+      region: z.string(),
+      country: z.string(),
+      timezone: z.string(),
+      last_name: z.string(),
+      first_name: z.string(),
+      ip_address: z.string(),
+    }),
+    company: z.string(),
+    company_demographics: z.object({}),
+    browsed_urls: z.array(BrowsedUrlSchema),
+    ip_address: z.string().nullable(),
+    parent_url: z.null().nullable(),
+    query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
+    referrer: z.null().nullable(),
+    browsing_analysis_summary: z.string().nullable(),
   }),
 });
 
@@ -399,6 +509,7 @@ export const EntityMetadataSchema = z.object({
   parent_column: z.string().nullable(),
   source: z.string(),
   table_order: z.number(),
+  related_entities: z.array(z.string()),
 });
 
 export type EntityMetadataSchemaType = z.infer<typeof EntityMetadataSchema>;
@@ -842,3 +953,33 @@ export const ReachoutEmailResponseSchema = z.object({
   session_id: z.string(),
 });
 export type ReachoutEmailResponse = z.infer<typeof ReachoutEmailResponseSchema>;
+
+export const IcpDetailsResponseSchema = z.object({
+  contacts: z.array(
+    z.object({
+      id: z.number(),
+      company_name: z.string(),
+      company_domain: z.string(),
+      company_industry: z.string().nullable(),
+      company_size: z.string().nullable(),
+      name: z.string(),
+      email: z.string(),
+      phone: z.string().nullable(),
+      title: z.string(),
+      seniority: z.string(),
+      departments: z.array(z.string()),
+      linkedin_url: z.string(),
+      email_status: z.string(),
+      enrichment_date: z.string(),
+      source: z.string(),
+      metadata: z.object({
+        has_raw_apollo_data: z.boolean(),
+        apollo_person_id: z.string(),
+        search_total_results: z.number(),
+        search_date: z.string(),
+        full_metadata_available: z.boolean(),
+      }),
+    }),
+  ),
+});
+export type IcpDetailsResponse = z.infer<typeof IcpDetailsResponseSchema>;

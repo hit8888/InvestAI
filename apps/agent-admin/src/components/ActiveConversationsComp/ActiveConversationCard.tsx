@@ -45,8 +45,6 @@ const ActiveConversationCard = ({
   const source = session?.query_params?.utm_source;
 
   const screenshotUrl = webpage_screenshot?.public_url;
-  const isValidCompanyRevenue = company_revenue && !isNaN(Number(company_revenue));
-  const isValidEmployeeCount = employee_count != null && !isNaN(employee_count);
 
   return (
     <div
@@ -135,15 +133,11 @@ const ActiveConversationCard = ({
       <div className="mt-3 flex gap-3">
         <div className="flex-1 rounded-lg bg-gray-50 p-2">
           <span className="block text-xs text-gray-500">Revenue:</span>
-          <span className="text-sm text-gray-900">
-            {isValidCompanyRevenue ? NumberUtil.formatCurrency(Number(company_revenue)) : '-'}
-          </span>
+          <span className="text-sm text-gray-900">{NumberUtil.formatCurrency(company_revenue)}</span>
         </div>
         <div className="flex-1 rounded-lg bg-gray-50 p-2">
           <span className="block text-xs text-gray-500">Employee count:</span>
-          <span className="text-sm text-gray-900">
-            {isValidEmployeeCount ? NumberUtil.formatNumber(employee_count) : '-'}
-          </span>
+          <span className="text-sm text-gray-900">{NumberUtil.formatNumber(employee_count)}</span>
         </div>
       </div>
 

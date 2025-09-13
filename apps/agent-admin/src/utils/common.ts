@@ -19,6 +19,7 @@ import {
   VIDEOS_TABLE_FILTERS_CONFIG,
   WEBPAGES_SORT_KEY_TO_FIELD_MAP,
   WEBPAGES_TABLE_FILTERS_CONFIG,
+  VISITORS_TABLE_FILTERS_CONFIG,
 } from './constants';
 import {
   ConversationsTableDisplayContent,
@@ -27,6 +28,8 @@ import {
   LeadsTableViewContent,
   LocationWithCityCountry,
   TransformedProspectAndCompanyDetailsContent,
+  VisitorsTableDisplayContent,
+  VisitorsTableViewContent,
 } from '@meaku/core/types/admin/admin';
 import {
   ConversationRightSideDetailsType,
@@ -45,6 +48,7 @@ import {
   SLIDES_PAGE,
   toDisplayText,
   VIDEOS_PAGE,
+  VISITORS_PAGE,
   WEBPAGES_PAGE,
 } from '@meaku/core/utils/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
@@ -58,6 +62,8 @@ import {
 } from '@meaku/core/types/admin/api';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
+import NumberUtil from '@meaku/core/utils/numberUtils';
+import { capitalizeString } from '../../../agent/src/utils/common';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';
 export const isProduction = ENV.VITE_APP_ENV === 'production';
@@ -165,6 +171,27 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
   };
 
   return mappedData;
+};
+
+export const getMappedDataFromResponseForVisitorsTableView = (
+  response: VisitorsTableViewContent,
+): VisitorsTableDisplayContent => {
+  return {
+    company: capitalizeString(response.company ?? response.company_demographics?.company_name ?? ''),
+    name: response.name ?? response.prospect_demographics?.name ?? '',
+    role: response.role ?? response.prospect_demographics?.role ?? '',
+    website_url: response.company_demographics?.website_url ?? '',
+    country: response.country ?? response.prospect_demographics?.country ?? '',
+    company_country: response.company_demographics?.company_country ?? '',
+    industry_domain: capitalizeString(response.company_demographics?.industry_domain) ?? '',
+    employee_count: NumberUtil.formatNumber(response.company_demographics?.employee_count ?? 0),
+    revenue: NumberUtil.formatCurrency(response.company_demographics?.company_revenue ?? ''),
+    email: response.email ?? response.prospect_demographics?.email ?? '',
+    session_id: response.session_id ?? '',
+    prospect_id: response.prospect_id ?? '',
+    product_interest: response.product_interest ?? '',
+    need: capitalizeString(response.need) ?? '',
+  };
 };
 
 export const getProspectAndCompanyDetailsData = (
@@ -379,17 +406,19 @@ export const applySortingforFields = (
 export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortValues, page: string) => {
   const isLeadsPage = page === LEADS_PAGE;
   const isLinkClicksPage = page === LINK_CLICKS_PAGE;
-  const isMainTabPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE || page === LINK_CLICKS_PAGE;
+  const isMainTabPage =
+    page === CONVERSATIONS_PAGE || page === LEADS_PAGE || page === LINK_CLICKS_PAGE || page === VISITORS_PAGE;
   const isWebpagesPage = page === WEBPAGES_PAGE;
   const isDocumentsPage = page === DOCUMENTS_PAGE;
   const isVideosPage = page === VIDEOS_PAGE;
   const isSlidesPage = page === SLIDES_PAGE;
+  const isVisitorsPage = page === VISITORS_PAGE;
   const sortApplied: SortItem[] = [];
   const { timestampSort } = sortState as SortValues;
 
   if (isMainTabPage && timestampSort) {
     sortApplied.push({
-      field: isLeadsPage || isLinkClicksPage ? 'created_on' : 'timestamp',
+      field: isLeadsPage || isLinkClicksPage || isVisitorsPage ? 'created_on' : 'timestamp',
       order: timestampSort ? timestampSort : 'desc',
     });
   }
@@ -410,7 +439,7 @@ export const getSortingAppliedValues = (sortState: SortValues | DataSourceSortVa
 
   if (isMainTabPage && sortApplied.length === 0) {
     sortApplied.push({
-      field: isLeadsPage ? 'created_on' : 'timestamp',
+      field: isLeadsPage || isLinkClicksPage || isVisitorsPage ? 'created_on' : 'timestamp',
       order: 'desc',
     });
   }
@@ -462,6 +491,8 @@ export const getFiltersConfig = (page: string) => {
   switch (page) {
     case CONVERSATIONS_PAGE:
       return CONVERSATIONS_TABLE_FILTERS_CONFIG;
+    case VISITORS_PAGE:
+      return VISITORS_TABLE_FILTERS_CONFIG;
     case LEADS_PAGE:
       return LEADS_TABLE_FILTERS_CONFIG;
     case LINK_CLICKS_PAGE:
@@ -486,6 +517,8 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   const isLinkClicksPage = page === LINK_CLICKS_PAGE;
   const isVideosPage = page === VIDEOS_PAGE;
   const isSlidesPage = page === SLIDES_PAGE;
+  const isVisitorsPage = page === VISITORS_PAGE;
+
   const {
     dateRange,
     intentScore,
@@ -596,6 +629,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   //     operator: 'eq',
   //   });
   // }
+
+  if (isVisitorsPage) {
+    filterApplied.push({
+      field: 'company',
+      value: null,
+      operator: 'is_not_null',
+    });
+  }
 
   if (isConversationsPage) {
     filterApplied.push({
@@ -948,7 +989,8 @@ export const getConversationRightSideDetailsItems = (
 ) => {
   const addedValueObject = detailDataItems.map((item) => ({
     ...item,
-    itemValue: dataObject[item.itemKey as keyof TransformedProspectAndCompanyDetailsContent['prospect' | 'company']],
+    itemValue:
+      dataObject[item.itemKey as keyof TransformedProspectAndCompanyDetailsContent['prospect' | 'company']] ?? '',
   }));
   return addedValueObject.filter((item) => {
     // For Location object, check if any of the values are not '-'
@@ -1014,6 +1056,21 @@ export const transformEntityDataToColumnList = (inputArray: EntityMetadataRespon
     .filter((item) => item.is_display)
     .sort((a, b) => a.table_order - b.table_order)
     .map((item) => item.key_name);
+
+  return result;
+};
+
+export const transformEntityDataRelatedEntities = (inputArray: EntityMetadataResponseType) => {
+  const result: Record<string, string[]> = inputArray
+    .filter((item) => item.is_display)
+    .reduce((acc, item) => {
+      return {
+        ...acc,
+        [item.key_name]: item.related_entities.map(
+          (relatedEntity) => inputArray.find((entity) => entity.id === Number(relatedEntity))?.key_name,
+        ),
+      };
+    }, {});
 
   return result;
 };

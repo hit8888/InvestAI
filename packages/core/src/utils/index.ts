@@ -10,6 +10,7 @@ export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, i
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
 export const LINK_CLICKS_PAGE = 'link-clicks';
+export const VISITORS_PAGE = 'prospects';
 export const WEBPAGES_PAGE = 'webpages';
 export const DOCUMENTS_PAGE = 'documents';
 export const VIDEOS_PAGE = 'videos';
@@ -27,6 +28,7 @@ export const PageTypeToTableName: Record<PaginationPageType, string> = {
   [CONVERSATIONS_PAGE]: 'conversations',
   [LEADS_PAGE]: 'leads',
   [LINK_CLICKS_PAGE]: 'leads',
+  [VISITORS_PAGE]: 'prospects',
   [WEBPAGES_PAGE]: 'webpages',
   [DOCUMENTS_PAGE]: 'documents',
   [VIDEOS_PAGE]: 'artifacts',
@@ -209,4 +211,23 @@ export const isUrl = (url: string): boolean => {
 export const sanitizeUrl = (url?: string): string => {
   if (!url) return '';
   return url.split('?')[0].split('#')[0].replace(/\/$/, '');
+};
+
+export const extractDomain = (url?: string): string => {
+  if (!url) return '';
+  try {
+    const fullUrl = url.includes('://') ? url : `https://${url}`;
+    const urlObj = new URL(fullUrl);
+    return urlObj.hostname;
+  } catch {
+    const cleanUrl = url.replace(/^https?:\/\//, '');
+    const withoutWww = cleanUrl.replace(/^www\./, '');
+    const domain = withoutWww.split(/[/?#]/)[0];
+    return domain;
+  }
+};
+
+export const getCompanyLogoSrc = (url: string): string => {
+  const domain = extractDomain(url);
+  return `https://cdn.brandfetch.io/${domain}/fallback/lettermark/w/400/h/400?c=1idxCHNxROyEqcB0wCy`;
 };

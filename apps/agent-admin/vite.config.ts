@@ -14,6 +14,10 @@ const __dirname = dirname(__filename);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    codeInspectorPlugin({
+      bundler: 'vite',
+      editor: 'cursor',
+    }),
     react(),
     sentryVitePlugin({
       org: 'breakout',
@@ -23,10 +27,6 @@ export default defineConfig({
         assets: './dist/**',
         filesToDeleteAfterUpload: ['./dist/**/*.map'],
       },
-    }),
-    codeInspectorPlugin({
-      bundler: 'vite',
-      editor: 'cursor',
     }),
   ],
 

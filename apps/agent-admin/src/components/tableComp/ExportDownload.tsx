@@ -7,8 +7,9 @@ import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { useState } from 'react';
 import { ConversationsPayload, LeadsPayload, ExportFormatType, ExportFormat } from '@meaku/core/types/admin/api';
 import { downloadTableData } from '../../utils/download/downloadService';
+import { PaginationPageType } from '@meaku/core/types/admin/admin';
 interface DownloadProps {
-  page: string;
+  page: PaginationPageType;
   payloadData: ConversationsPayload | LeadsPayload;
 }
 

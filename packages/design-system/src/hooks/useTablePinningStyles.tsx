@@ -1,10 +1,14 @@
 import { CSSProperties } from 'react';
 import { Column } from '@tanstack/react-table';
-import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import {
+  ConversationsTableDisplayContent,
+  LeadsTableDisplayContent,
+  VisitorsTableDisplayContent,
+} from '@meaku/core/types/admin/admin';
 
 export const useTablePinningStyles = () => {
   const getCommonPinningStyles = (
-    column: Column<ConversationsTableDisplayContent | LeadsTableDisplayContent>,
+    column: Column<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent>,
   ): CSSProperties => {
     const isPinned = column.getIsPinned();
     return {

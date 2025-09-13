@@ -33,10 +33,11 @@ const {
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
-  isLeadsAndConversationsPage: boolean;
+  showSearchBar?: boolean;
+  showFilterBar?: boolean;
 }
 
-const AllFiltersContainer = ({ page, isLeadsAndConversationsPage }: AllFiltersContainerProps) => {
+const AllFiltersContainer = ({ page, showSearchBar = true, showFilterBar = true }: AllFiltersContainerProps) => {
   const filters = useAllFilterStore();
   const [filterState, setFilterState] = useState(AllFilters);
   const [isOpen, setIsOpen] = useState(false);
@@ -113,18 +114,20 @@ const AllFiltersContainer = ({ page, isLeadsAndConversationsPage }: AllFiltersCo
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <div className="flex flex-wrap items-center justify-start gap-4">
-        {!isLeadsAndConversationsPage && <SearchTableContentInput page={page} />}
-        <PopoverTrigger className="popover-styling border-gray-200-styling flex items-center gap-2 self-stretch">
-          <span className="h-5 w-5">
-            <AllFiltersIcon className="h-6 w-6 text-system" />
-          </span>
-          <p className="text-sm font-medium text-gray-600">Filters</p>
-          {appliedFilters.length > 0 && (
-            <p className="flex h-5 w-5 items-center justify-center rounded-full bg-system p-0.5">
-              <span className="text-xs font-medium text-white">{appliedFilters.length}</span>
-            </p>
-          )}
-        </PopoverTrigger>
+        {showSearchBar && <SearchTableContentInput page={page} />}
+        {showFilterBar && (
+          <PopoverTrigger className="popover-styling border-gray-200-styling flex items-center gap-2 self-stretch">
+            <span className="h-5 w-5">
+              <AllFiltersIcon className="h-6 w-6 text-system" />
+            </span>
+            <p className="text-sm font-medium text-gray-600">Filters</p>
+            {appliedFilters.length > 0 && (
+              <p className="flex h-5 w-5 items-center justify-center rounded-full bg-system p-0.5">
+                <span className="text-xs font-medium text-white">{appliedFilters.length}</span>
+              </p>
+            )}
+          </PopoverTrigger>
+        )}
         {appliedFilters.map((filter) => (
           <SingleAppliedFilter
             key={filter.key}

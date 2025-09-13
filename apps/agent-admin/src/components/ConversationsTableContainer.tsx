@@ -5,7 +5,7 @@ import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
 
-import TableViewContent from './TableViewContent';
+import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import TableDataManager from '../managers/TableDataManager';
 import TablePagination from './tableComp/TablePagination';
 import TableFiltersWithHeaderLabel from './TableFiltersWithHeaderLabel.tsx';
@@ -32,8 +32,15 @@ import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
+import TableViewShimmer from './ShimmerComponent/TableViewShimmer.tsx';
+import { SortValues } from '@meaku/core/types/admin/sort';
+import { useSidebar } from '../context/SidebarContext.tsx';
 
 const ConversationsTableContainer = () => {
+  const { isSidebarOpen } = useSidebar();
+  const { setSortValue } = useSortFilterStore();
+  const sortValue = useSortFilterStore((state) => state[CONVERSATIONS_PAGE] as SortValues);
   const { entityMetadataHeaderMapping, entityMetadataColumnList } = useEntityMetadata();
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
@@ -120,6 +127,45 @@ const ConversationsTableContainer = () => {
     });
   };
 
+  const renderTableContent = () => {
+    if (isLoading) {
+      return <TableViewShimmer />;
+    }
+
+    if (!totalRecords && filterState.searchTableContent) {
+      return (
+        <div className="flex w-full items-center justify-center gap-2 p-10 text-2xl font-medium text-gray-500">
+          <span>No results found for </span>
+          <span className="text-primary">"{filterState.searchTableContent}"</span>
+          <span>- Try adjusting your search terms</span>
+        </div>
+      );
+    }
+
+    if (!totalRecords) {
+      return (
+        <NoDataFound
+          className="min-h-[60vh]"
+          title="No conversations yet"
+          description="No interactions or conversations from website visitors yet, Time to get more traffic."
+        />
+      );
+    }
+
+    return (
+      <CommonTable
+        pageType={CONVERSATIONS_PAGE}
+        tabularData={conversationsData}
+        columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
+        filterContainerHeight={filterContainerHeight}
+        onRowItemClick={handleRowItemClick}
+        isSidebarOpen={isSidebarOpen}
+        setSortValue={setSortValue}
+        sortValue={sortValue}
+      />
+    );
+  };
+
   // Handle error states
   if (isError || tableError) {
     return <ErrorState />;
@@ -136,17 +182,7 @@ const ConversationsTableContainer = () => {
           page={CONVERSATIONS_PAGE}
           onFiltersContainerHeightChange={setFilterContainerHeight}
         />
-        <TableViewContent
-          pageType={CONVERSATIONS_PAGE}
-          key={'conversations-table-container'}
-          isConversationTable={true}
-          isLoading={isLoading}
-          totalRecords={totalRecords}
-          tableData={conversationsData}
-          columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
-          filterContainerHeight={filterContainerHeight}
-          onRowItemClick={handleRowItemClick}
-        />
+        {renderTableContent()}
       </div>
       <TablePagination
         isLoading={isLoading}

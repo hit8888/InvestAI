@@ -1,4 +1,4 @@
-import { ConversationDetailsDataResponse, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
+import { ConversationDetailResponse, ConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
 // import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
 import { convertServerConversationDataToClientConversationData } from '@meaku/core/transformers/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
@@ -81,7 +81,7 @@ class ConversationDetailsDataResponseManager {
     }
     return {
       ...convertServerConversationDataToClientConversationData(
-        this.convDetailsData?.conversation as ConversationsTableViewContent,
+        this.convDetailsData?.conversation as ConversationDetailResponse,
       ),
     };
   }

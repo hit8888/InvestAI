@@ -79,6 +79,7 @@ export interface SortFilterState {
   leads: SortValues;
   'link-clicks': SortValues;
   conversations: SortValues;
+  prospects: SortValues;
   webpages: WebpagesSortValues;
   documents: DocumentsSortValues;
   videos: ArtifactsSortValues;

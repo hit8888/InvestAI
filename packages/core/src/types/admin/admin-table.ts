@@ -9,6 +9,7 @@ import {
   EnrichmentSourceEnum,
   LeadsTableResponseSchema,
   ProspectDetailsSchema,
+  VisitorsTableResponseSchema,
 } from './api';
 
 export const LocationWithCityCountrySchema = z.object({
@@ -60,6 +61,23 @@ export const ConversationsTableViewSchema = z.object({
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
   assigned_user_email: z.string().optional().nullable(),
+});
+
+export const VisitorsTableViewSchema = z.object({
+  company: z.string(),
+  name: z.string(),
+  role: z.string(),
+  website_url: z.string(),
+  country: z.string(),
+  company_country: z.string(),
+  industry_domain: z.string(),
+  employee_count: z.string(),
+  revenue: z.string(),
+  email: z.string(),
+  session_id: z.string().optional().nullable(),
+  prospect_id: z.string(),
+  need: z.string(),
+  product_interest: z.string(),
 });
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({
@@ -124,4 +142,5 @@ export type SourceNameValue = {
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
   .or(DataSourceWebpagesTableResponseSchema)
   .or(DataSourceDocumentsTableResponseSchema)
-  .or(DataSourceArtifactsTableResponseSchema);
+  .or(DataSourceArtifactsTableResponseSchema)
+  .or(VisitorsTableResponseSchema);

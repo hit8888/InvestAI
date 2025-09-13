@@ -1,13 +1,19 @@
 import { flexRender, Row } from '@tanstack/react-table';
-import { ConversationsTableDisplayContent, LeadsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import {
+  ConversationsTableDisplayContent,
+  LeadsTableDisplayContent,
+  VisitorsTableDisplayContent,
+} from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import AccessibleTableRow from '../accessibility/AccessibleTableRow';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
 import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
 
 type CustomSingleBodyRowItemProps = {
-  row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent>;
-  handleRowItemClick: (row: ConversationsTableDisplayContent | LeadsTableDisplayContent) => void;
+  row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent>;
+  handleRowItemClick: (
+    row: ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent,
+  ) => void;
 };
 
 const CustomSingleBodyRowItem = ({ row, handleRowItemClick }: CustomSingleBodyRowItemProps) => {
@@ -16,7 +22,9 @@ const CustomSingleBodyRowItem = ({ row, handleRowItemClick }: CustomSingleBodyRo
 
   const handleSingleRowItemClick = () => {
     if (detailsPageURL) {
-      handleRowItemClick(row.original as ConversationsTableDisplayContent | LeadsTableDisplayContent);
+      handleRowItemClick(
+        row.original as ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent,
+      );
     }
   };
   return (

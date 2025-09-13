@@ -20,9 +20,6 @@ interface TableContentProps {
   showActionItems: boolean;
 }
 
-const DEFAULT_LOADING_ROW_COUNT = 10;
-const DEFAULT_LOADING_COLUMNS_COUNT = 4;
-
 const DataSourceTableViewContent = memo(
   ({
     isLoading,
@@ -41,7 +38,7 @@ const DataSourceTableViewContent = memo(
     const { selectAll, deselectAll, getSelectedIds, isIdSelected, toggleSelectId } = useTableSelection();
 
     if (isLoading) {
-      return <TableViewShimmer columnCount={DEFAULT_LOADING_COLUMNS_COUNT} rowCount={DEFAULT_LOADING_ROW_COUNT} />;
+      return <TableViewShimmer columnCount={4} />;
     }
 
     if (!totalRecords) {
