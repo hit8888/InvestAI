@@ -188,6 +188,7 @@ export const LeadResultSchema = z.object({
   created_on: z.string(), // ISO date string
   updated_on: z.string(), // ISO date string
   lead_type: z.string().optional(),
+  number_of_commissioned_employees: z.number().optional(),
 });
 
 export const EnrichmentSourceEnum = z.enum(['ip_enrichment', 'user_provided', 'crm_extracted', 'utm_extracted']);

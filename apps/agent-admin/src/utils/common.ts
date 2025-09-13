@@ -119,6 +119,8 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     session_id: response.session_id ?? '',
     buyer_intent: additionalInfoData?.buyer_intent || '-',
     lead_type: getLeadTypeDisplayText(response.lead_type),
+    phone: response.phone || '-',
+    number_of_commissioned_employees: response.number_of_commissioned_employees,
   };
 
   return mappedData;
