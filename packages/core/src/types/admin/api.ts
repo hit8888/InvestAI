@@ -148,24 +148,47 @@ export const TablePayloadSchema = z.object({
 export type ConversationsPayload = z.infer<typeof TablePayloadSchema>;
 export type DataSourcePayload = z.infer<typeof TablePayloadSchema>;
 
-export const AdditionalInfoSchema = z
-  .object({
-    loc: z.string(),
-    city: z.string(),
-    region: z.string(),
-    role: z.string().optional().nullable(),
-    budget: z.string().optional().nullable(),
-    timeline: z.string().optional().nullable(),
-    product_interest: z.string().optional().nullable(),
-    summary: z.string().optional(),
-    timezone: z.string().optional(),
-    country: z.string().optional(),
-    last_name: z.string().optional(),
-    first_name: z.string().optional(),
-    ip_address: z.string().optional(),
-    buyer_intent: z.string().optional(),
-  })
-  .or(z.object({}));
+export const AdditionalInfoSchema = z.object({
+  id: z.number().optional(),
+  loc: z.string().optional(),
+  city: z.string().optional(),
+  region: z.string().optional(),
+  message: z.string().optional(),
+  keywords: z.string().optional(),
+  phone: z.string().optional(),
+  role: z.string().optional().nullable(),
+  budget: z.string().optional().nullable(),
+  timeline: z.string().optional().nullable(),
+  product_interest: z.string().optional().nullable(),
+  summary: z.string().optional(),
+  timezone: z.string().optional(),
+  country: z.string().optional(),
+  ip_country: z.string().optional(),
+  parent_url: z.string().optional().nullable(),
+  user_email: z.string().optional(),
+  agent_modal: z.string().optional(),
+  last_name: z.string().optional(),
+  first_name: z.string().optional(),
+  confidence: z.string().optional(),
+  ip_address: z.string().or(z.array(z.string())).optional(),
+  buyer_intent: z.string().optional(),
+  number_of_commissioned_employees: z.number().optional(),
+  competitors: z.array(z.string()).optional(),
+  device_type: z.string().optional(),
+  form_filled: z.boolean().optional(),
+  website_url: z.string().optional(),
+  company_name: z.string().optional(),
+  company_type: z.string().optional(),
+  linkedin_url: z.string().optional().nullable(),
+  brief_summary: z.string().optional().nullable(),
+  employee_count: z.string().optional(),
+  company_country: z.string().optional(),
+  company_revenue: z.string().optional(),
+  industry_domain: z.string().optional(),
+  enrichment_source: z.string().optional(),
+  enrichment_provider: z.string().optional(),
+  operating_countries: z.array(z.string()).optional(),
+});
 
 // Type for individual result item
 export const LeadResultSchema = z.object({
@@ -188,7 +211,6 @@ export const LeadResultSchema = z.object({
   created_on: z.string(), // ISO date string
   updated_on: z.string(), // ISO date string
   lead_type: z.string().optional(),
-  number_of_commissioned_employees: z.number().optional(),
 });
 
 export const EnrichmentSourceEnum = z.enum(['ip_enrichment', 'user_provided', 'crm_extracted', 'utm_extracted']);

@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
 import { useTableWidth } from '../../hooks/useTableWidth';
+import { useTableFocus } from '../../hooks/useTableFocus';
 import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
 import TableHeaderRowItemHavingCheckbox from './TableHeaderRowItemHavingCheckbox';
@@ -112,6 +113,14 @@ const CommonTable = ({
     onIntersectionChange: handleHeaderStickyLogic,
   });
 
+  // Auto-focus management for keyboard navigation
+  useTableFocus({
+    headerRef,
+    tableBodyRef,
+    isHeaderSticky,
+    isEnabled: true,
+  });
+
   const getTableHeaderRowItem = (headerGroup: HeaderGroup<any>) => {
     if (isDataSourcesPage) {
       return (
@@ -186,7 +195,7 @@ const CommonTable = ({
             top: `${filterContainerHeight}px`,
           }}
         >
-          <div ref={headerRef} className="hide-scrollbar overflow-x-auto">
+          <div ref={headerRef} className="hide-scrollbar overflow-x-auto focus:outline-none">
             <table
               style={{
                 width: isConversationsPage ? table.getTotalSize() : '100%',
@@ -198,7 +207,7 @@ const CommonTable = ({
           </div>
         </div>
       )}
-      <div ref={tableBodyRef} className="relative overflow-x-auto" style={widthStyle}>
+      <div ref={tableBodyRef} className="relative overflow-x-auto focus:outline-none" style={widthStyle}>
         <table
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',

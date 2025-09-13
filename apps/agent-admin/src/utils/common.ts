@@ -103,6 +103,8 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
           city?: string;
           country?: string;
           buyer_intent?: string;
+          number_of_commissioned_employees?: number;
+          phone?: string;
         })
       : null;
   const mappedData: LeadsTableDisplayContent = {
@@ -119,8 +121,8 @@ export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableV
     session_id: response.session_id ?? '',
     buyer_intent: additionalInfoData?.buyer_intent || '-',
     lead_type: getLeadTypeDisplayText(response.lead_type),
-    phone: response.phone || '-',
-    number_of_commissioned_employees: response.number_of_commissioned_employees,
+    phone: response.phone ?? additionalInfoData?.phone ?? '-',
+    number_of_commissioned_employees: additionalInfoData?.number_of_commissioned_employees,
   };
 
   return mappedData;
