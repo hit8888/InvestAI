@@ -26,8 +26,6 @@ const NudgeBody = ({
   onCtaClick,
   onDismiss,
 }: NudgeBodyProps) => {
-  if (!content) return null;
-
   return (
     <motion.div
       className="bg-background rounded-3xl shadow-elevation-md relative"

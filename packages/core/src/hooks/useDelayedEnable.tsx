@@ -12,15 +12,30 @@ const shouldEnableImmediately = (delayMs: number): boolean => {
   return !delayMs || delayMs <= 0;
 };
 
+interface UseDelayedEnableOptions {
+  /**
+   * Whether to start the delay computation. If false, the state remains disabled.
+   * @default true
+   */
+  shouldStart?: boolean;
+}
+
 /**
  * Hook to manage delayed enabling of a boolean state based on a delay in milliseconds
  * @param delayMs - Delay in milliseconds before enabling. If undefined or 0, enables immediately. If Infinity, never enables.
+ * @param options - Configuration options for the hook
  * @returns boolean indicating whether the state is enabled
  */
-const useDelayedEnable = (delayMs: number): boolean => {
-  const [isEnabled, setIsEnabled] = useState(() => shouldEnableImmediately(delayMs));
+const useDelayedEnable = (delayMs: number, options: UseDelayedEnableOptions = {}): boolean => {
+  const { shouldStart = true } = options;
+  const [isEnabled, setIsEnabled] = useState(() => shouldStart && shouldEnableImmediately(delayMs));
 
   useEffect(() => {
+    if (!shouldStart) {
+      setIsEnabled(false);
+      return;
+    }
+
     if (shouldEnableImmediately(delayMs)) {
       setIsEnabled(true);
       return;
@@ -36,7 +51,7 @@ const useDelayedEnable = (delayMs: number): boolean => {
     }, delayMs);
 
     return () => clearTimeout(timer);
-  }, [delayMs]);
+  }, [delayMs, shouldStart]);
 
   return isEnabled;
 };

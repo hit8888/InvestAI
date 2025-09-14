@@ -37,11 +37,14 @@ const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
 
         try {
           const value = hexToHSL(hexValue);
-          const boBcContainer = document.querySelector('#bo-bc-container') as HTMLElement;
+          const documentBody = document.body as HTMLElement;
           const shadowRootElement = shadowRoot?.host as HTMLElement;
 
-          shadowRootElement?.style.setProperty(`--${formattedKey}`, value);
-          boBcContainer?.style.setProperty(`--${formattedKey}`, value);
+          if (shadowRootElement) {
+            shadowRootElement.style.setProperty(`--${formattedKey}`, value);
+            return;
+          }
+          documentBody?.style.setProperty(`--${formattedKey}`, value);
         } catch (error) {
           console.error('Error setting style config', error);
         }

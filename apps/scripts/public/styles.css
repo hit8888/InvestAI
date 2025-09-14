@@ -25,17 +25,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
   font-family:
+    "Plus Jakarta Sans",
     system-ui,
     -apple-system,
     sans-serif;
+}
+
+body {
   line-height: 1.6;
   color: var(--color-text);
   background: var(--gradient-background);
-  padding: var(--spacing-base);
 }
 
 /* Layout */
@@ -59,6 +59,10 @@ body {
 .panel.disabled {
   opacity: 0.6;
   pointer-events: none;
+}
+
+code {
+  font-family: monospace;
 }
 
 /* Grid Layout */
@@ -219,6 +223,50 @@ body {
 }
 
 /* Responsive */
+/* Static Content */
+.static-content {
+  margin-top: var(--spacing-base);
+}
+
+.content-section {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  padding: var(--spacing-base);
+  border-radius: var(--radius-base);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  margin-bottom: var(--spacing-base);
+}
+
+.content-section:last-child {
+  margin-bottom: 0;
+}
+
+.content-section h2 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.content-section p {
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.content-section ul,
+.content-section ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-section li {
+  margin-bottom: 0.5rem;
+}
+
+.content-section li:last-child {
+  margin-bottom: 0;
+}
+
 @media (max-width: 768px) {
   .btn {
     width: 100%;
@@ -226,5 +274,9 @@ body {
 
   .button-container {
     flex-direction: column;
+  }
+
+  .content-section {
+    padding: calc(var(--spacing-base) * 0.75);
   }
 }

@@ -17,26 +17,28 @@ import useSound from '@meaku/core/hooks/useSound';
 import bannerSound from '../../assets/banner-sound.mp3';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { cn } from '@meaku/saral';
+import ScrollTriggeredNudge from './components/ScrollTriggeredNudge';
+import useScrollTriggeredNudge from './hooks/useScrollTriggeredNudge';
 
 interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
   onClose?: () => void;
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;
-  animationDelay?: number; // Delay in seconds before showing nudge
 }
 
 const DEFAULT_POLLING_FREQUENCY_MS = 30 * 1000;
 const DEFAULT_MAX_POLLING_COUNT = 0;
 const DEFAULT_DISPLAY_DURATION = 10 * 1000;
 
-const Nudge = ({ activeFeature, onClose, setActiveFeature, animationDelay = 0 }: NudgeProps) => {
+const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const isMobile = useIsMobile();
   const { config, settings } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(nudgeData ?? null);
-  const [isAnimationComplete, setIsAnimationComplete] = useState<boolean>(false);
+  const { isEnabled: isScrollTriggeredNudgeEnabled, toggleEnabled: toggleScrollTriggeredNudgeEnabled } =
+    useScrollTriggeredNudge();
 
   const {
     polling_enabled,
@@ -55,19 +57,8 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature, animationDelay = 0 }:
   const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
   const { play } = useSound(bannerSound, 0.2);
 
-  // Handle animation delay for nudge appearance
-  useEffect(() => {
-    if (animationDelay > 0) {
-      const timer = setTimeout(() => {
-        setIsAnimationComplete(true);
-      }, animationDelay * 1000); // Convert seconds to milliseconds
-
-      return () => clearTimeout(timer);
-    }
-  }, [animationDelay]);
-
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
-    displayDuration: nudgeToShow?.display_duration,
+    displayDuration: nudgeToShow ? display_duration : 0,
     onDismiss: useCallback(() => {
       setNudgeToShow(null);
       onClose?.();
@@ -85,7 +76,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature, animationDelay = 0 }:
       parent_url: settings.parent_url,
     },
     {
-      enabled: isNudgePollingEnabled && !isMouseOver,
+      enabled: isNudgePollingEnabled && !isMouseOver && !isScrollTriggeredNudgeEnabled,
       refetchInterval: (query) => {
         if (query.state.error) {
           return false;
@@ -144,11 +135,21 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature, animationDelay = 0 }:
     }
   }, [activeFeature, handleDismiss]);
 
+  if (isScrollTriggeredNudgeEnabled) {
+    return (
+      <ScrollTriggeredNudge
+        setActiveFeature={setActiveFeature}
+        sendUserMessage={sendUserMessage}
+        toggleEnabled={toggleScrollTriggeredNudgeEnabled}
+      />
+    );
+  }
+
   return (
     <AnimatePresence mode="wait">
-      {nudgeToShow && isAnimationComplete && (
+      {nudgeToShow && (
         <motion.div
-          key={nudgeToShow.id}
+          key={nudgeToShow.nudge_id}
           className={cn('w-80 relative', {
             'max-w-[calc(100vw-104px)]': isMobile, // 16px (left gap) + 56px (action width) + 16px (gap) + 16px (right gap)
           })}

@@ -24,6 +24,7 @@ import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
 import { useFeature } from '@meaku/shared/containers/FeatureProvider';
+import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -36,9 +37,9 @@ function App() {
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
-  const askAiModule = modules.filter((m) => m.module_type === ASK_AI)[0];
+  const [askAiModule] = modules.filter((m) => m.module_type === ASK_AI);
 
-  const totalAnimationDelay = useEntryAnimationTiming(modules);
+  const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000 || Infinity;
 
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
@@ -51,6 +52,10 @@ function App() {
   const updateProspectMutation = useUpdateProspectMutation();
 
   const { initialiseSocket, sendUserMessage } = useWsClient();
+
+  const nudgeEnabled = useDelayedEnable(totalAnimationDelay, {
+    shouldStart: dynamicConfigQuery?.isFetched && !!nudgeConfig,
+  });
 
   // Initialize user left tracking
   useUserLeftTracking(sendUserMessage);
@@ -170,13 +175,7 @@ function App() {
       transition={COMPONENT_TRANSITIONS.APP_CONTAINER}
     >
       <div key="root-content" className="flex items-end gap-4">
-        {dynamicConfigQuery?.isFetched && nudgeConfig && (
-          <Nudge
-            activeFeature={activeFeature!}
-            setActiveFeature={handleSetActiveButton}
-            animationDelay={totalAnimationDelay}
-          />
-        )}
+        {nudgeEnabled && <Nudge activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />}
         <FeatureContentContainer
           key={activeFeature}
           activeFeature={activeFeature!}
@@ -185,9 +184,7 @@ function App() {
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
-        {dynamicConfigQuery?.isFetched && (
-          <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
-        )}
+        <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
       </div>
     </motion.div>
   );

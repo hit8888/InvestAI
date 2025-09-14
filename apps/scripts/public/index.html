@@ -7,10 +7,17 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>Breakout Control Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Breakout Blocks Control Center</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body id="bo-bc-container">
+  <body>
+    <div id="bo-bc-container" style="height: 100vh"></div>
     <div class="container">
       <div class="panel">
         <div class="info-section">
@@ -175,6 +182,63 @@
           🎯<br />Configure your widget and click "Load Widget" to see it in
           action
         </div>
+      </div>
+
+      <!-- Static content for scrolling -->
+      <div class="static-content" id="static-content" style="display: none">
+        <section class="content-section">
+          <h2>Section One</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation.
+          </p>
+        </section>
+
+        <section class="content-section">
+          <h2>Section Two</h2>
+          <ul>
+            <li>Placeholder Item One</li>
+            <li>Placeholder Item Two</li>
+            <li>Placeholder Item Three</li>
+            <li>Placeholder Item Four</li>
+            <li>Placeholder Item Five</li>
+          </ul>
+        </section>
+
+        <section class="content-section">
+          <h2>Section Three</h2>
+          <p>Duis aute irure dolor in reprehenderit:</p>
+          <ol>
+            <li>Step One Description</li>
+            <li>Step Two Description</li>
+            <li>Step Three Description</li>
+            <li>Step Four Description</li>
+          </ol>
+        </section>
+
+        <section class="content-section">
+          <h2>Section Four</h2>
+          <p>
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum:
+          </p>
+          <ul>
+            <li>Important Point One</li>
+            <li>Important Point Two</li>
+            <li>Important Point Three</li>
+            <li>Important Point Four</li>
+          </ul>
+        </section>
+
+        <section class="content-section">
+          <h2>Section Five</h2>
+          <p>
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+            quae ab illo inventore veritatis.
+          </p>
+        </section>
       </div>
     </div>
     <script src="script.js"></script>
