@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { useSidebarArtifact } from '../hooks/useSidebarArtifact';
 import { ArtifactContextState, ArtifactContextActions } from '../types/artifact.types';
 

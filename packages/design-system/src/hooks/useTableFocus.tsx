@@ -10,8 +10,9 @@ interface UseTableFocusProps {
 /**
  * Custom hook to manage table focus behavior
  * - Auto-focuses the header on mount
- * - Refocuses header when clicking outside the table
+ * - Refocuses header when clicking outside the table (but not on focusable elements)
  * - Handles focus between sticky and normal header states
+ * - Preserves focus on interactive elements like buttons, inputs, checkboxes within the table
  */
 export const useTableFocus = ({ headerRef, tableBodyRef, isHeaderSticky, isEnabled = true }: UseTableFocusProps) => {
   // Get the currently active header element (sticky or normal)
@@ -62,7 +63,29 @@ export const useTableFocus = ({ headerRef, tableBodyRef, isHeaderSticky, isEnabl
         isOutsideTable = false;
       }
 
-      if (isOutsideTable) {
+      // Check if the clicked element is a focusable element (button, input, etc.)
+      // This prevents stealing focus from interactive elements inside the table
+      // We need to preserve focus for:
+      // - Form controls (input, textarea, select)
+      // - Interactive elements (button, links)
+      // - ARIA roles that indicate interactivity
+      // - Elements with explicit tabindex (except -1)
+      // - Elements with click handlers that might need focus
+      const focusableSelectors = [
+        'button',
+        'input',
+        'textarea',
+        'select',
+        'a[href]',
+        '[role="button"]',
+        '[role="checkbox"]',
+        '[role="radio"]',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(', ');
+
+      const isFocusableElement = target.matches(focusableSelectors) || target.closest(focusableSelectors);
+
+      if (isOutsideTable && !isFocusableElement) {
         // Small delay to ensure the click event is processed first
         setTimeout(() => {
           focusHeader();

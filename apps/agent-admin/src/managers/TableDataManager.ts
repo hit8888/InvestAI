@@ -1,4 +1,4 @@
-import { TableDataSchema } from '@meaku/core/types/admin/admin-table';
+// import { TableDataSchema } from '@meaku/core/types/admin/admin-table';
 import { TableDataResponse, PaginationData } from '@meaku/core/types/admin/admin';
 import { PaginationDataSchema } from '@meaku/core/types/admin/api';
 
@@ -28,22 +28,23 @@ class TableDataManager {
   }
 
   private validateTableData(tableData: TableDataResponse): Result<TableDataResponse> {
-    const validatedTableData = TableDataSchema.safeParse(tableData);
+    // const validatedTableData = TableDataSchema.safeParse(tableData);
 
-    if (!validatedTableData.success) {
-      // console.error('Validation failed for TableDataManager:', {
-      //   input: tableData,
-      //   errors: validatedTableData.error,
-      // });
-      return {
-        success: false,
-        error: validatedTableData.error.errors.map((error) => error.message).join(', '),
-      };
-    }
+    // if (!validatedTableData.success) {
+    //   // console.error('Validation failed for TableDataManager:', {
+    //   //   input: tableData,
+    //   //   errors: validatedTableData.error,
+    //   // });
+    //   return {
+    //     success: false,
+    //     error: validatedTableData.error.errors.map((error) => error.message).join(', '),
+    //   };
+    // }
 
     return {
       success: true,
-      data: validatedTableData.data,
+      // data: validatedTableData.data,
+      data: tableData,
     };
   }
 

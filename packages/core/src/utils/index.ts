@@ -39,7 +39,8 @@ export const PAGES_WITH_DRAWER_ENABLED = [DOCUMENTS_PAGE, VIDEOS_PAGE, SLIDES_PA
 
 export const CONVERSATIONS_PINNED_COLUMNS = ['timestamp', 'country'];
 export const LEADS_PINNED_COLUMNS = ['timeline', 'country'];
-export const SHADOW_PINNED_COLUMNS = ['name', 'country'];
+export const VISITORS_PINNED_COLUMNS = ['company', 'website_url'];
+export const SHADOW_PINNED_COLUMNS = ['name', 'country', 'website_url'];
 
 export const NON_SORTABLE_COLUMNS = ['duration'];
 

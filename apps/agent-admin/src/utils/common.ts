@@ -636,6 +636,12 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       value: null,
       operator: 'is_not_null',
     });
+
+    filterApplied.push({
+      field: 'session_id',
+      value: null,
+      operator: 'is_not_null',
+    });
   }
 
   if (isConversationsPage) {
@@ -1042,7 +1048,11 @@ export const transformEntityDataToColumnHeaderLabelMapping = (inputArray: Entity
       if (!result[parent_column]) {
         result[parent_column] = {};
       }
-      (result[parent_column] as Record<string, string>)[key_name] = display_name;
+      if (parent_column === key_name) {
+        result[parent_column] = display_name;
+      } else {
+        (result[parent_column] as Record<string, string>)[key_name] = display_name;
+      }
     } else {
       result[key_name] = display_name;
     }
@@ -1052,10 +1062,14 @@ export const transformEntityDataToColumnHeaderLabelMapping = (inputArray: Entity
 };
 
 export const transformEntityDataToColumnList = (inputArray: EntityMetadataResponseType) => {
-  const result: string[] = inputArray
-    .filter((item) => item.is_display)
-    .sort((a, b) => a.table_order - b.table_order)
-    .map((item) => item.key_name);
+  const result: string[] = Array.from(
+    new Set(
+      inputArray
+        .filter((item) => item.is_display)
+        .sort((a, b) => a.table_order - b.table_order)
+        .map((item) => item.key_name),
+    ),
+  );
 
   return result;
 };
