@@ -52,6 +52,16 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     enabled: isConfigReady,
   });
 
+  // Select first video when videos are loaded
+  useEffect(() => {
+    if (videos.length > 0 && !selectedVideoId) {
+      // Try to find first unwatched video
+      const firstUnwatchedVideo = videos.find((video) => !isVideoWatched(video.id));
+      // If all videos are watched, select the first video
+      setSelectedVideoId(firstUnwatchedVideo?.id || videos[0].id);
+    }
+  }, [videos, selectedVideoId, isVideoWatched]);
+
   // Track errors when they occur
   useEffect(() => {
     if (error) {

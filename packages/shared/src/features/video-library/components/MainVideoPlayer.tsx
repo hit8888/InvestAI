@@ -44,14 +44,18 @@ export const MainVideoPlayer = ({
   const getNextRecommendedVideo = (): Video | null => {
     if (!videoId || allVideoIds.length === 0) return null;
 
-    // First, try to find an unplayed video
-    const unplayedVideoId = allVideoIds.find((id) => !watchedVideos.includes(id) && id !== videoId);
-    if (unplayedVideoId) {
-      return getVideoById(unplayedVideoId) || null;
+    const currentIndex = allVideoIds.indexOf(videoId);
+
+    // Create a single search array that wraps around the list
+    const searchOrder = [...allVideoIds.slice(currentIndex + 1), ...allVideoIds.slice(0, currentIndex)];
+
+    // Try to find the next unwatched video
+    const nextUnwatchedId = searchOrder.find((id) => !watchedVideos.includes(id) && id !== videoId);
+    if (nextUnwatchedId) {
+      return getVideoById(nextUnwatchedId) || null;
     }
 
-    // If all videos are played, get the next video in sequence
-    const currentIndex = allVideoIds.indexOf(videoId);
+    // If all videos are watched, get the next video in sequence
     const nextIndex = (currentIndex + 1) % allVideoIds.length;
     const nextVideoId = allVideoIds[nextIndex];
 

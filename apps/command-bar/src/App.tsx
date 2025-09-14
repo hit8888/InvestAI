@@ -32,6 +32,7 @@ function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
   const { activeFeature, setActiveModule, activeFeatureModuleId } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [shouldStartAnimations, setShouldStartAnimations] = useState(false);
 
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
@@ -115,6 +116,9 @@ function App() {
         session_id: sessionId,
         prospect_id: prospectId,
       });
+
+      // Start animations after dynamic config is loaded
+      setShouldStartAnimations(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dynamicConfigQuery.data]);
@@ -184,7 +188,11 @@ function App() {
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
         />
-        <CommandBarActions activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />
+        <CommandBarActions
+          activeFeature={activeFeature!}
+          setActiveFeature={handleSetActiveButton}
+          shouldStartAnimations={shouldStartAnimations}
+        />
       </div>
     </motion.div>
   );

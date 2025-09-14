@@ -17,8 +17,8 @@ import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { ACTION_ANIMATION_CONSTANTS, ANIMATION_STYLES, TRANSITION_PRESETS } from '../constants/actionAnimations';
-import { ActionShimmerEffect } from './ActionShimmerEffect';
 import { getVisualIndex, getAnimationDelay, getTooltipDelay } from '../utils/actionUtils';
+import { ActionShimmerEffect } from './ActionShimmerEffect';
 
 // Layout constants for better maintainability
 const ACTION_BUTTON_SIZE = 56; // 14 * 4 = 56px (h-14 w-14 in Tailwind)
@@ -28,6 +28,7 @@ const ACTION_BUTTON_HEIGHT = ACTION_ANIMATION_CONSTANTS.ACTION_HEIGHT;
 interface CommandBarActionsProps {
   activeFeature: CommandBarModuleType | null;
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
+  shouldStartAnimations?: boolean;
 }
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
@@ -41,7 +42,11 @@ const ACTION_COMPONENTS = {
   [VIDEO_LIBRARY]: VideoLibraryAction,
 } as const;
 
-const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, setActiveFeature }) => {
+const CommandBarActions: React.FC<CommandBarActionsProps> = ({
+  activeFeature,
+  setActiveFeature,
+  shouldStartAnimations = false,
+}) => {
   const { config } = useCommandBarStore();
   const { trackEvent } = useCommandBarAnalytics();
   const isMobile = useIsMobile();
@@ -83,12 +88,13 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
 
     // Skip initial tooltip for single module
     const shouldShowInitialTooltip = modules.length > 1;
-    const initialTooltipConfig = shouldShowInitialTooltip
-      ? {
-          delay: tooltipDelay,
-          duration: ACTION_ANIMATION_CONSTANTS.TOOLTIP_DURATION,
-        }
-      : undefined;
+    const initialTooltipConfig =
+      shouldShowInitialTooltip && shouldStartAnimations
+        ? {
+            delay: tooltipDelay,
+            duration: ACTION_ANIMATION_CONSTANTS.TOOLTIP_DURATION,
+          }
+        : undefined;
 
     return (
       <ActionComponent
@@ -158,7 +164,6 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
       {/* Absolutely positioned visible action buttons */}
       <div className="absolute inset-0">
         {actionTimingData.map(({ featureConfig, index, visualIndex, animationDelay, tooltipDelay }) => {
-          const isAskAI = featureConfig.module_type === ASK_AI;
           const finalPosition = getActionPosition(index, featureConfig);
 
           return (
@@ -177,24 +182,28 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({ activeFeature, se
                 opacity: 0,
               }}
               animate={{
-                ...finalPosition,
+                ...(shouldStartAnimations ? finalPosition : { bottom: 0, right: 0 }),
                 opacity: 1,
               }}
               transition={{
-                opacity: TRANSITION_PRESETS.opacity,
+                opacity: {
+                  duration: 0.3,
+                  ease: 'easeOut',
+                },
                 bottom: {
-                  ...TRANSITION_PRESETS.movement,
-                  delay: animationDelay,
+                  duration: TRANSITION_PRESETS.movement.duration,
+                  delay: shouldStartAnimations ? animationDelay : 0,
+                  ease: 'easeOut',
                 },
                 right: {
-                  ...TRANSITION_PRESETS.movement,
-                  delay: animationDelay,
+                  duration: TRANSITION_PRESETS.movement.duration,
+                  delay: shouldStartAnimations ? animationDelay : 0,
+                  ease: 'easeOut',
                 },
               }}
             >
               {renderActionComponent(featureConfig, tooltipDelay)}
-
-              {!isAskAI && <ActionShimmerEffect visualIndex={visualIndex} />}
+              {shouldStartAnimations && <ActionShimmerEffect visualIndex={visualIndex} />}
             </motion.div>
           );
         })}
