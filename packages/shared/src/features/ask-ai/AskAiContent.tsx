@@ -202,6 +202,7 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
     isSideDrawerOpen,
     videoError,
     videoRef,
+    shouldAutoPlay,
     closeSidebar,
     handleCloseComplete,
     handleVideoError,
@@ -220,6 +221,7 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
         artifact={sideBarArtifact}
         videoError={videoError}
         videoRef={videoRef}
+        shouldAutoPlay={shouldAutoPlay}
         onClose={closeSidebar}
         onCloseComplete={handleCloseComplete}
         onVideoError={handleVideoError}

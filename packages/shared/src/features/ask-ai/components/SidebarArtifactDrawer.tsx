@@ -14,6 +14,7 @@ interface SidebarArtifactDrawerProps {
   } | null;
   videoError: string | null;
   videoRef: RefObject<HTMLVideoElement | null>;
+  shouldAutoPlay?: boolean;
   onClose: () => void;
   onCloseComplete?: () => void;
   onVideoError?: (error: string) => void;
@@ -25,6 +26,7 @@ export const SidebarArtifactDrawer = ({
   artifact,
   videoError,
   videoRef,
+  shouldAutoPlay,
   onClose,
   onCloseComplete,
   onVideoError,
@@ -47,6 +49,7 @@ export const SidebarArtifactDrawer = ({
           artifact={artifact}
           videoError={videoError}
           videoRef={videoRef}
+          shouldAutoPlay={shouldAutoPlay}
           onClose={onClose}
           onVideoError={onVideoError}
         />

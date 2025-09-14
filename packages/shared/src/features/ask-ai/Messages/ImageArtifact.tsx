@@ -1,14 +1,12 @@
-import { Button, Icons, Typography } from '@meaku/saral';
+import { Typography, Button, Icons } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useMemo } from 'react';
+import { BaseArtifact } from '../components/BaseArtifact';
+import { BaseArtifactProps } from '../types/artifact.types';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
-interface ImageArtifactProps {
-  title: string;
-  url: string;
+interface ImageArtifactProps extends BaseArtifactProps {
   alt?: string;
-  isLatestMessage?: boolean;
-  isExpanded?: boolean;
 }
 
 export const ImageArtifact = ({
@@ -18,8 +16,9 @@ export const ImageArtifact = ({
   isLatestMessage = false,
   isExpanded = false,
 }: ImageArtifactProps) => {
-  const { openSidebar, closeSidebar, currentImage, setCurrentVideo, isContainerReady, sideBarArtifact } =
+  const { openSidebar, closeSidebar, setCurrentVideo, isContainerReady, sideBarArtifact, imageOpenState } =
     useSidebarArtifactContext();
+
   const hasAutoOpened = useRef(false);
   const isMobile = useIsMobile();
 
@@ -69,78 +68,69 @@ export const ImageArtifact = ({
   };
 
   // Check if this specific image is currently expanded in the sidebar
-  const isThisImageExpanded =
-    currentImage?.url === url && currentImage?.isExpanded && sideBarArtifact?.artifactType === 'SLIDE_IMAGE';
+  const isThisImageExpanded = useMemo(() => {
+    if (imageOpenState?.url !== url || sideBarArtifact?.artifactType !== 'SLIDE_IMAGE') {
+      return false;
+    }
+    return imageOpenState.isOpen;
+  }, [imageOpenState?.url, imageOpenState?.isOpen, url, sideBarArtifact?.artifactType]);
 
   if (!url) {
     return null;
   }
 
-  // When expanded, render image inline without sidebar functionality
-  if (isExpanded) {
-    return (
-      <div className="w-full">
-        <div className="flex flex-col border rounded-xl overflow-hidden w-full">
-          <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3 flex-shrink-0">
-            <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
-              {title}
-            </Typography>
-          </div>
-          <div className="w-full overflow-hidden">
-            <img src={url} alt={alt || title} className="w-full h-auto max-w-full object-contain" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const expandedContent = <img src={url} alt={alt || title} className="w-full h-auto max-w-full object-contain" />;
+
+  const headerActions = (
+    <Button variant="outline" size="sm" onClick={handleButtonClick} className="h-6 w-6 p-0 rounded-full">
+      {isThisImageExpanded ? (
+        <Icons.Minimize2 className="size-3 duration-300" />
+      ) : (
+        <Icons.Maximize2 className="size-3 duration-300" />
+      )}
+    </Button>
+  );
 
   return (
-    <div className="w-full">
-      <div className="flex justify-end group flex-col border rounded-xl overflow-hidden relative">
-        <div className="p-3 bg-primary/10 flex items-center justify-between">
-          <Typography variant="body-small" fontWeight="medium" className="max-w-72">
-            {title}
-          </Typography>
-          <Button
-            variant={isThisImageExpanded ? 'secondary' : 'default'}
-            size="sm"
-            onClick={handleButtonClick}
-            className="h-6 w-6 p-0 rounded-full"
-          >
-            <Icons.Maximize2 className="size-3 duration-300" />
-          </Button>
-        </div>
-        <div className="relative" style={{ minWidth: '200px', minHeight: '150px' }}>
-          <img
-            src={url}
-            alt={alt || title}
-            className="w-full h-full object-cover border border-4 border-primary/10 rounded-xl rounded-t-none"
-          />
+    <BaseArtifact
+      title={title}
+      url={url}
+      isExpanded={isExpanded}
+      expandedContent={expandedContent}
+      headerActions={headerActions}
+    >
+      <div className="relative" style={{ minWidth: '200px', minHeight: '150px' }}>
+        <img
+          src={url}
+          alt={alt || title}
+          className="w-full h-full object-cover border border-4 border-primary/10 rounded-b-xl"
+        />
+        {!isExpanded && !isThisImageExpanded && (
           <div
             onClick={handleButtonClick}
-            className="absolute bottom-1 top-1 left-1 right-1 rounded-xl  bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer z-10"
+            className="absolute top-[4px] left-[4px] right-[4px] bottom-[4px] bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 rounded-b-lg"
           >
             <Icons.Expand className="size-6 duration-300" />
           </div>
-          {isThisImageExpanded && (
-            <div className="absolute bottom-1 top-1 left-1 right-1 rounded-xl bg-white/20 backdrop-blur-sm opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 flex-col">
-              <div className="flex flex-col gap-2 bg-background rounded-xl p-2 pr-3 border">
-                <Typography variant="body-small" fontWeight="medium" className="text-accent">
-                  Currently Viewing in
-                  <br />
-                  <Typography as="span" className="text-foreground" variant="body-small" fontWeight="medium">
-                    Expanded Mode
-                  </Typography>
+        )}
+        {isThisImageExpanded && !isExpanded && (
+          <div className="absolute top-[4px] left-[4px] right-[4px] bottom-[4px] bg-white/20 backdrop-blur-sm opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 flex-col rounded-b-lg">
+            <div className="flex flex-col gap-2 bg-background rounded-xl p-2 pr-3 border">
+              <Typography variant="body-small" fontWeight="medium" className="text-accent">
+                Currently Viewing in
+                <br />
+                <Typography as="span" className="text-foreground" variant="body-small" fontWeight="medium">
+                  Expanded Mode
                 </Typography>
-                <Button variant="default_active" size="sm" onClick={handleButtonClick} className="h-8 w-full">
-                  Return
-                </Button>
-              </div>
+              </Typography>
+              <Button variant="default_active" size="sm" onClick={handleButtonClick} className="h-8 w-full">
+                Return
+              </Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </div>
+    </BaseArtifact>
   );
 };
 

@@ -1,16 +1,10 @@
 import { Button, cn, Icons } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
-import { useEffect, useRef } from 'react';
-import { Typography } from '@meaku/saral';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface VideoArtifactProps {
-  title: string;
-  url: string;
-  isLatestMessage?: boolean;
-  isExpanded?: boolean;
-}
+import { BaseArtifact } from '../components/BaseArtifact';
+import { BaseArtifactProps } from '../types/artifact.types';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 
 /**
  * Strips leading @ symbols from URLs
@@ -34,59 +28,89 @@ const cleanUrl = (url: string): string => {
  * - Disabled when isExpanded=true or isMobile=true
  * - Opens sidebar without autoplay (shouldPlay=false)
  */
-export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: VideoArtifactProps) => {
-  const { currentVideo, openSidebar, toggleVideoPlayPause, isContainerReady, sideBarArtifact } =
-    useSidebarArtifactContext();
+export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded = false }: BaseArtifactProps) => {
+  const {
+    currentVideo,
+    openSidebar,
+    toggleVideoPlayPause,
+    isContainerReady,
+    sideBarArtifact,
+    isSideDrawerOpen,
+    videoPlayState,
+  } = useSidebarArtifactContext();
+
   const hasAutoOpened = useRef(false);
   const isMobile = useIsMobile();
   const cleanedUrl = cleanUrl(url);
 
-  // Check if this video is currently playing in sidebar
-  const isThisVideoPlaying =
-    currentVideo?.url === cleanedUrl && currentVideo?.isPlaying && sideBarArtifact?.artifactType === 'VIDEO';
-
   // Auto-open sidebar for latest message (no autoplay)
   useEffect(() => {
     if (cleanedUrl && !hasAutoOpened.current && isLatestMessage && isContainerReady && !isExpanded && !isMobile) {
-      hasAutoOpened.current = true;
-      openSidebar(cleanedUrl, 'VIDEO', title, false); // shouldPlay=false
+      // Don't auto-open if sidebar is already open with the same video
+      const isSameVideoOpen =
+        isSideDrawerOpen && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo?.url === cleanedUrl;
+
+      if (!isSameVideoOpen) {
+        hasAutoOpened.current = true;
+        openSidebar(cleanedUrl, 'VIDEO', title, false); // shouldPlay=false
+      }
     }
-  }, [cleanedUrl, title, isLatestMessage, isContainerReady, isExpanded, openSidebar, isMobile]);
+  }, [
+    cleanedUrl,
+    title,
+    isLatestMessage,
+    isContainerReady,
+    isExpanded,
+    openSidebar,
+    isMobile,
+    isSideDrawerOpen,
+    sideBarArtifact?.artifactType,
+    currentVideo?.url,
+  ]);
+
+  // Reset hasAutoOpened when sidebar closes to allow reopening
+  useEffect(() => {
+    if (!isSideDrawerOpen && hasAutoOpened.current) {
+      hasAutoOpened.current = false;
+    }
+  }, [isSideDrawerOpen]);
+
+  // Check if this video is currently playing in sidebar
+  const isThisVideoPlaying = useMemo(() => {
+    if (videoPlayState?.url !== cleanedUrl || sideBarArtifact?.artifactType !== 'VIDEO') {
+      return false;
+    }
+    return videoPlayState.isPlaying;
+  }, [videoPlayState?.url, videoPlayState?.isPlaying, cleanedUrl, sideBarArtifact?.artifactType]);
 
   // Button click handler - disabled in expanded mode
   const handleButtonClick = () => {
     if (isExpanded) return;
 
-    if (currentVideo?.url === cleanedUrl) {
-      // Video already open - toggle play/pause
+    // Check if this video is currently open AND the sidebar is actually open
+    const isSameVideo = currentVideo?.url === cleanedUrl;
+    const isSidebarOpen = isSideDrawerOpen;
+    const isVideoArtifact = sideBarArtifact?.artifactType === 'VIDEO';
+
+    if (isSameVideo && isSidebarOpen && isVideoArtifact) {
+      // Video already open in sidebar - toggle play/pause
       toggleVideoPlayPause();
     } else {
-      // Open sidebar with autoplay
+      // Open sidebar with autoplay (either new video or sidebar is closed)
       openSidebar(cleanedUrl, 'VIDEO', title, true); // shouldPlay=true
     }
   };
 
   if (!cleanedUrl) return null;
 
-  // Expanded mode: inline video with controls
+  const expandedContent = <video src={cleanedUrl} controls className="w-full h-auto max-w-full object-contain" />;
+
+  // When expanded, use BaseArtifact for consistent layout
   if (isExpanded) {
-    return (
-      <div className="w-full">
-        <div className="flex flex-col border rounded-xl overflow-hidden w-full">
-          <div className="flex items-center gap-2 w-full bg-primary/10 p-2 py-3 flex-shrink-0">
-            <Typography variant="body" fontWeight="medium" className="truncate flex-1 mr-2">
-              {title}
-            </Typography>
-          </div>
-          <div className="w-full overflow-hidden">
-            <video src={cleanedUrl} controls className="w-full h-auto max-w-full object-contain" />
-          </div>
-        </div>
-      </div>
-    );
+    return <BaseArtifact title={title} url={cleanedUrl} isExpanded={true} expandedContent={expandedContent} />;
   }
 
-  // Sidebar mode: animated play/pause button
+  // Regular mode: just the play button
   return (
     <div className="w-full">
       <motion.div initial={false} layout>
@@ -134,4 +158,4 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
   );
 };
 
-export type { VideoArtifactProps };
+export type { BaseArtifactProps as VideoArtifactProps };

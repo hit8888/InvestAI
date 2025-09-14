@@ -10,6 +10,7 @@ interface SidebarArtifactContentProps {
   };
   videoError: string | null;
   videoRef: RefObject<HTMLVideoElement | null>;
+  shouldAutoPlay?: boolean;
   onClose: () => void;
   onVideoError?: (error: string) => void;
 }
@@ -30,6 +31,7 @@ export const SidebarArtifactContent = ({
   artifact,
   videoError,
   videoRef,
+  shouldAutoPlay,
   onClose,
   onVideoError,
 }: SidebarArtifactContentProps) => {
@@ -129,6 +131,7 @@ export const SidebarArtifactContent = ({
                     src={artifact.url}
                     controls
                     preload="metadata"
+                    autoPlay={shouldAutoPlay}
                     className="w-full h-auto max-w-full object-contain"
                     style={{
                       minHeight: isVideoLoading

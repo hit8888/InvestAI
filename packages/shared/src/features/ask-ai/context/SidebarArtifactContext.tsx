@@ -1,40 +1,8 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useSidebarArtifact } from '../hooks/useSidebarArtifact';
+import { ArtifactContextState, ArtifactContextActions } from '../types/artifact.types';
 
-export interface SidebarArtifactContextType {
-  // State
-  sideBarArtifact: {
-    url: string;
-    artifactType: 'VIDEO' | 'SLIDE_IMAGE';
-    title: string;
-  } | null;
-  isSideDrawerOpen: boolean;
-  currentVideo: {
-    url: string;
-    isPlaying: boolean;
-  } | null;
-  currentImage: {
-    url: string;
-    isExpanded: boolean;
-  } | null;
-  videoError: string | null;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
-  isContainerReady: boolean;
-
-  // Actions
-  openSidebar: (
-    url: string,
-    artifactType: 'VIDEO' | 'SLIDE_IMAGE',
-    title: string,
-    shouldPlay?: boolean,
-  ) => Promise<void>;
-  closeSidebar: () => void;
-  handleCloseComplete: () => void;
-  setCurrentVideo: React.Dispatch<React.SetStateAction<{ url: string; isPlaying: boolean } | null>>;
-  toggleVideoPlayPause: () => void;
-  handleVideoError: (error: string) => void;
-  setContainerReady: (ready: boolean) => void;
-}
+export interface SidebarArtifactContextType extends ArtifactContextState, ArtifactContextActions {}
 
 const SidebarArtifactContext = createContext<SidebarArtifactContextType | undefined>(undefined);
 
