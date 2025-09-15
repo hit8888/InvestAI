@@ -27,6 +27,8 @@ interface MessagesProps {
   hasActiveAdminSession?: boolean;
   isExpanded?: boolean;
   onExpand?: () => void;
+  showLogo?: boolean;
+  logoUrl?: string | null;
 }
 
 export const Messages = ({
@@ -43,6 +45,8 @@ export const Messages = ({
   hasActiveAdminSession = false,
   isExpanded = false,
   onExpand,
+  showLogo,
+  logoUrl,
 }: MessagesProps) => {
   // Clear suggested questions if discovery questions are shown
   React.useEffect(() => {
@@ -123,6 +127,8 @@ export const Messages = ({
                 isExpanded={isExpanded}
                 shouldShowSessionIndicator={shouldShowIndicator}
                 onExpand={onExpand}
+                showLogo={showLogo}
+                logoUrl={logoUrl}
               />
             );
           })}

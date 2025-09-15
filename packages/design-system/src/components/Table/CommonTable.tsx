@@ -29,6 +29,7 @@ import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';
 import { useTableWidth } from '../../hooks/useTableWidth';
 import { useTableFocus } from '../../hooks/useTableFocus';
+import { useHorizontalScrollDetection } from '../../hooks/useHorizontalScrollDetection';
 import CustomSingleBodyRowItem from './CustomSingleBodyRowItem';
 import CustomSingleHeaderRowItem from './CustomSingleHeaderRowItem';
 import TableHeaderRowItemHavingCheckbox from './TableHeaderRowItemHavingCheckbox';
@@ -100,7 +101,18 @@ const CommonTable = ({
 
   const tableBodyRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const stickyTableRef = useRef<HTMLTableElement>(null);
+  const mainTableRef = useRef<HTMLTableElement>(null);
   const lastScrollPosition = useRef(0); // ref to store scroll position
+
+  // Detect if horizontal scrolling is needed
+  const needsHorizontalScroll = useHorizontalScrollDetection({
+    containerRef: tableBodyRef,
+    tableRef: mainTableRef,
+  });
+
+  // Determine the appropriate scrollbar class
+  const scrollbarClass = needsHorizontalScroll ? 'table-scrollbar' : 'hide-scrollbar';
 
   const handleHeaderStickyLogic = (value: boolean) => {
     setIsHeaderSticky(value);
@@ -227,8 +239,9 @@ const CommonTable = ({
             top: `${filterContainerHeight}px`,
           }}
         >
-          <div ref={headerRef} className="hide-scrollbar overflow-x-auto focus:outline-none">
+          <div ref={headerRef} className={`${scrollbarClass} focus:outline-none`}>
             <table
+              ref={stickyTableRef}
               style={{
                 width: isConversationsPage ? table.getTotalSize() : '100%',
                 position: 'relative',
@@ -239,8 +252,9 @@ const CommonTable = ({
           </div>
         </div>
       )}
-      <div ref={tableBodyRef} className="relative overflow-x-auto focus:outline-none" style={widthStyle}>
+      <div ref={tableBodyRef} className={`${scrollbarClass} relative focus:outline-none`} style={widthStyle}>
         <table
+          ref={mainTableRef}
           style={{
             width: isConversationsPage ? table.getTotalSize() : '100%',
             position: 'relative',

@@ -66,12 +66,12 @@ export const FeatureHeader = ({
       )}
       <div className="relative z-10 flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 -ml-1">
+          <div className="flex items-center gap-2">
             {icon}
             <div
               className={`transition-all duration-300 ease-in-out ${
                 welcomeMessage
-                  ? 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0'
+                  ? 'pointer-events-none max-h-0 scale-95 overflow-hidden hidden'
                   : 'pointer-events-auto max-h-8 scale-100 opacity-100'
               }`}
             >

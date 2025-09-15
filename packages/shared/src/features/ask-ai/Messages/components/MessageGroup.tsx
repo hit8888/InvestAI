@@ -5,7 +5,8 @@ import { WaveLoader } from '../../../../components/WaveLoader';
 import { SuggestedQuestions } from './SuggestedQuestions';
 import { TypingIndicator } from './TypingIndicator';
 import { getLastGroupMinHeight } from '../utils/heightUtils';
-import { AvatarComponentProps, KatyIcon } from '@meaku/saral';
+import { AvatarComponentProps } from '@meaku/saral';
+import { AvatarDisplay } from '../../../../components/AvatarDisplay';
 
 interface MessageGroupProps {
   messageGroup: MessageType[];
@@ -38,6 +39,8 @@ interface MessageGroupProps {
   isExpanded?: boolean;
   shouldShowSessionIndicator: boolean;
   onExpand?: () => void;
+  showLogo?: boolean;
+  logoUrl?: string | null;
 }
 
 export const MessageGroup: React.FC<MessageGroupProps> = ({
@@ -62,6 +65,8 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   isExpanded = false,
   shouldShowSessionIndicator,
   onExpand,
+  showLogo,
+  logoUrl,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
     return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
@@ -100,6 +105,8 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
             isExpanded={isExpanded}
             shouldShowSessionIndicator={shouldShowSessionIndicator}
             onExpand={onExpand}
+            showLogo={showLogo}
+            logoUrl={logoUrl}
           />
         );
       })}
@@ -111,7 +118,12 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
       {/* Show loader after the last message in the last group */}
       {isLastGroup && isLoading && !hasActiveAdminSession && (
         <div className="mr-auto flex gap-2 min-h-11 max-w-[80%] items-center justify-start rounded-xl">
-          {selectedAvatar ? <selectedAvatar.Component className="size-7" /> : <KatyIcon className="size-7" />}
+          <AvatarDisplay
+            adminSessionInfo={hasActiveAdminSession ? adminSessionInfo : undefined}
+            selectedAvatar={selectedAvatar}
+            showLogo={showLogo}
+            logoUrl={logoUrl}
+          />
           <WaveLoader />
         </div>
       )}

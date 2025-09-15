@@ -38,6 +38,7 @@
     --shadow-action-btn: 0 0 0.521px 0 rgba(0, 0, 0, 0.3), 0 1.042px 3.125px 0 rgba(0, 0, 0, 0.15);
     --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
     --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
+    --breakout: 243.2 68.18% 56.86%; /* #4E46DC */
   }
 
   .dark,

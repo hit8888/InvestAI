@@ -1,5 +1,5 @@
 import { getLocalStorageData } from '@meaku/core/utils/storage-utils';
-import { Typography, BreakoutGrayLogo, BreakoutGrayText } from '@meaku/saral';
+import { Typography, StarsGradientIcon } from '@meaku/saral';
 
 const PoweredByBreakout = () => {
   const sessionId = getLocalStorageData()?.sessionId;
@@ -13,18 +13,12 @@ const PoweredByBreakout = () => {
   };
 
   return (
-    <div className="flex items-center justify-center pb-2">
-      <a
-        className="group flex justify-center items-center gap-1 pb-0.5"
-        href={getBreakoutUrl()}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Typography variant="body-small" fontWeight="medium" className="group-hover:text-gray-500 text-foreground/40">
-          Powered by
+    <div className="flex items-center justify-center gap-1">
+      <StarsGradientIcon className="h-3 w-3 animate-pulse-medium" />
+      <a href={getBreakoutUrl()} target="_blank" rel="noopener noreferrer">
+        <Typography className="hover:text-gray-500 text-[10px] text-gray-400 hover:underline hover:decoration-solid hover:underline-offset-auto">
+          Powered by <span className="text-breakout">Breakout</span>
         </Typography>
-        <BreakoutGrayLogo className="inline group-hover:text-gray-700" />
-        <BreakoutGrayText className="inline group-hover:text-gray-700" />
       </a>
     </div>
   );

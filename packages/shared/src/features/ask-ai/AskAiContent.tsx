@@ -1,6 +1,7 @@
 import { useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { Icons, KatyIcon, ImageWithFallback } from '@meaku/saral';
+import { Icons } from '@meaku/saral';
+import { HeaderAvatar } from '../../components/AvatarDisplay';
 import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
 import { Messages } from './Messages';
@@ -32,6 +33,9 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     sessionData,
     addMessage,
   } = useCommandBarStore();
+
+  const orbLogoUrl = config.style_config.orb_config?.logo_url;
+  const showFavicon = !config.style_config.orb_config?.show_orb;
 
   const { isSideDrawerOpen, closeSidebar, setContainerReady } = useSidebarArtifactContext();
 
@@ -118,19 +122,16 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           subtitle={isAdminTyping ? `${adminSessionInfo?.name || 'Admin'} is typing...` : undefined}
           welcomeMessage={messages?.length === 0 && !isAdminTyping ? askaiConfig?.welcome_message.message : undefined}
           icon={
-            hasActiveAdminSession && adminSessionInfo?.profilePicture ? (
-              <ImageWithFallback
-                src={adminSessionInfo.profilePicture}
-                alt={adminSessionInfo.name}
-                size={48}
-                showOnlineIndicator={true}
-                onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
-              />
-            ) : isAvatarLoaded && selectedAvatar ? (
-              <selectedAvatar.Component size={48} />
-            ) : (
-              <KatyIcon className="h-12 w-12" />
-            )
+            <HeaderAvatar
+              adminSessionInfo={hasActiveAdminSession ? adminSessionInfo : undefined}
+              selectedAvatar={isAvatarLoaded ? selectedAvatar : undefined}
+              showLogo={showFavicon}
+              logoUrl={orbLogoUrl}
+              logoAlt="Orb Logo"
+              logoSize={32}
+              showOnlineIndicator={hasActiveAdminSession}
+              onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
+            />
           }
           onClose={onClose}
           onExpand={onExpand}
@@ -166,6 +167,8 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               hasActiveAdminSession={hasActiveAdminSession}
               isExpanded={isExpanded}
               onExpand={onExpand}
+              showLogo={showFavicon}
+              logoUrl={orbLogoUrl}
             />
           </div>
 
@@ -181,7 +184,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
       </div>
 
       {/* Footer with flex-shrink-0 */}
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 -mt-1 mb-1">
         <PoweredByBreakout />
       </div>
     </div>

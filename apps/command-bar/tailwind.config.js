@@ -60,6 +60,7 @@ export default {
         input: 'hsl(var(--input))',
         link: 'hsl(var(--link))',
         ring: 'hsl(var(--ring))',
+        breakout: 'hsl(var(--breakout))',
         background: 'hsl(var(--background))',
         backgroundLight: 'hsl(var(--background-light))',
         textAccent: 'hsl(var(--text-accent))',
@@ -127,6 +128,7 @@ export default {
         'text-state': 'text-animation 500ms linear infinite alternate-reverse',
         'high-bounce': 'highBounce 1s ease-in-out infinite',
         'quick-flash': 'quick-flash 3s ease-in-out infinite',
+        'pulse-medium': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'scale-in-right': 'scaleInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         'scale-out-right': 'scaleOutRight 0.2s ease-in forwards',
       },
@@ -191,6 +193,14 @@ export default {
             transform: 'scale(0) translateX(16px)',
             opacity: '0',
             transformOrigin: 'right center',
+          },
+        },
+        pulse: {
+          '0%, 100%': {
+            opacity: '1',
+          },
+          '50%': {
+            opacity: '0.5',
           },
         },
       },

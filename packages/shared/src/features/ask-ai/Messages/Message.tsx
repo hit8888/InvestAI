@@ -1,4 +1,5 @@
-import { cn, KatyIcon, typographyVariants, type AvatarComponentProps, ImageWithFallback } from '@meaku/saral';
+import { cn, typographyVariants, type AvatarComponentProps } from '@meaku/saral';
+import { MessageAvatar } from '../../../components/AvatarDisplay';
 import type {
   ArtifactEventData,
   Message as MessageType,
@@ -40,6 +41,8 @@ interface MessageProps {
   isExpanded?: boolean;
   shouldShowSessionIndicator?: boolean;
   onExpand?: () => void;
+  showLogo?: boolean;
+  logoUrl?: string | null;
 }
 
 export const Message = ({
@@ -55,6 +58,8 @@ export const Message = ({
   isExpanded = false,
   shouldShowSessionIndicator = false,
   onExpand,
+  showLogo,
+  logoUrl,
 }: MessageProps) => {
   const { eventType, eventData, isTextArtifact, isAdminResponse, isVideoArtifact, isImageArtifact, isCtaEvent } =
     useMessageProcessor(message);
@@ -192,29 +197,27 @@ export const Message = ({
 
   return (
     <div className={containerClassName} data-message-id={message.response_id}>
-      {(message.role === 'ai' || isAdminResponse) &&
-        !isFormArtifact &&
-        !isQualificationFormArtifact &&
-        !isCalendarArtifact &&
-        !isDiscoveryQuestion &&
-        !isVideoArtifact &&
-        !isImageArtifact &&
-        !isSuggestionsArtifact &&
-        !isCtaEvent &&
-        (isWithinAdminSession && adminSessionInfo?.profilePicture ? (
-          <div className="absolute left-0 top-2">
-            <ImageWithFallback
-              src={adminSessionInfo.profilePicture}
-              alt={adminSessionInfo.name}
-              size={28}
-              showOnlineIndicator={isJoinSessionEventPresent || shouldShowSessionIndicator}
-            />
-          </div>
-        ) : selectedAvatar ? (
-          <selectedAvatar.Component className="absolute left-0 top-2 size-7" />
-        ) : (
-          <KatyIcon className="absolute left-0 top-2 size-7" />
-        ))}
+      <MessageAvatar
+        shouldShow={
+          (message.role === 'ai' || isAdminResponse) &&
+          !isFormArtifact &&
+          !isQualificationFormArtifact &&
+          !isCalendarArtifact &&
+          !isDiscoveryQuestion &&
+          !isVideoArtifact &&
+          !isImageArtifact &&
+          !isSuggestionsArtifact &&
+          !isCtaEvent
+        }
+        adminSessionInfo={isWithinAdminSession ? adminSessionInfo : undefined}
+        selectedAvatar={selectedAvatar}
+        showOnlineIndicator={isJoinSessionEventPresent || shouldShowSessionIndicator}
+        showLogo={showLogo}
+        logoUrl={logoUrl}
+        logoSize={24}
+        wrapperClassName="absolute top-2 left-0"
+        useWrapper
+      />
       {(isTextArtifact || isAdminResponse) && (
         <div className="w-full">
           <TextArtifact content={textContent} />

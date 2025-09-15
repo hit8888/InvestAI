@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ImageWithFallback, KatyIcon, AvatarComponentProps } from '@meaku/saral';
+import { AvatarComponentProps } from '@meaku/saral';
+import { TypingAvatar } from '../../../../components/AvatarDisplay';
 
 interface TypingIndicatorProps {
   isLastGroup: boolean;
@@ -51,19 +52,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
       }`}
     >
       {/* Transparent avatar */}
-      {adminSessionInfo?.profilePicture ? (
-        <ImageWithFallback
-          src={adminSessionInfo.profilePicture}
-          alt={adminSessionInfo.name}
-          size={28}
-          showOnlineIndicator={true}
-          className="opacity-50"
-        />
-      ) : selectedAvatar ? (
-        <selectedAvatar.Component className="absolute left-0 top-2 size-7 opacity-50" />
-      ) : (
-        <KatyIcon className="absolute left-0 top-2 size-7 opacity-50" />
-      )}
+      <TypingAvatar adminSessionInfo={adminSessionInfo} selectedAvatar={selectedAvatar} showOnlineIndicator={true} />
 
       {/* Typing indicator content */}
       <div className="flex items-center gap-1 text-xs text-muted-foreground">

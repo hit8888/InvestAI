@@ -101,4 +101,71 @@
     background-repeat: no-repeat;
     animation: shimmerBackground 4s infinite linear;
   }
+
+  /* Custom table scrollbar styling */
+  .table-scrollbar {
+    /* Always show scrollbar */
+    overflow-x: scroll;
+    scrollbar-width: auto;
+    /* Firefox */
+    -ms-overflow-style: auto;
+    /* IE 10+ */
+
+    /* Flip the scrollbar to show at top */
+    transform: rotateX(180deg);
+  }
+
+  /* Flip the content back to normal orientation */
+  .table-scrollbar > table {
+    transform: rotateX(180deg);
+  }
+
+  /* Webkit scrollbar styling for better UX */
+  .table-scrollbar::-webkit-scrollbar {
+    height: 12px;
+    /* Height of horizontal scrollbar */
+    /* display: block; */
+  }
+
+  .table-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    /* Light gray background */
+    border-radius: 6px;
+  }
+
+  .table-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    /* Gray scrollbar thumb */
+    border-radius: 6px;
+    border: 2px solid #f1f5f9;
+    /* Creates padding effect */
+  }
+
+  .table-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    /* Darker gray on hover */
+  }
+
+  .table-scrollbar::-webkit-scrollbar-thumb:active {
+    background: #64748b;
+    /* Even darker gray when active */
+  }
+
+  /* Make scrollbar sticky at the bottom */
+  .table-scrollbar::-webkit-scrollbar-corner {
+    background: #f1f5f9;
+  }
+
+  /* Hide scrollbar class for when no horizontal scrolling is needed */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+  }
 }
