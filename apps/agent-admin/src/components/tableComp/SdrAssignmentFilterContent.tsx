@@ -12,7 +12,6 @@ const SdrAssignmentFilterContent = ({ page, filterState, handleClosePopover }: C
   const { filters, setFilter, resultantOptions, isLoading, isError, data } = useFilterContent({
     page,
     field: 'sdr_assignment',
-    enableSearch: false,
   });
 
   const tableManager = useTableStore((state) => state.tableManager);
@@ -47,7 +46,7 @@ const SdrAssignmentFilterContent = ({ page, filterState, handleClosePopover }: C
       keyValue={SdrAssignment}
       checkboxOptions={sdrAssignmentOptions ?? []}
       selectedOptions={filters.sdrAssignment}
-      onSelectionChange={(value) => setFilter(page, SdrAssignment, value as SdrAssignment[])}
+      onSelectionChange={(value) => setFilter(page, SdrAssignment, value)}
       handleClosePopover={handleClosePopover}
     />
   );

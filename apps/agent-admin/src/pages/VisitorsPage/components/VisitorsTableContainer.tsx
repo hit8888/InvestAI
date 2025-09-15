@@ -179,7 +179,7 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
   };
 
   const renderTableContent = () => {
-    if (isLoading) {
+    if (isLoading || !entityMetadataColumnList.length) {
       return <TableViewShimmer />;
     }
 
@@ -229,7 +229,7 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
         <TableFiltersWithHeaderLabel
           isLoading={isLoading}
           payloadData={debouncedPayloadData}
-          disabledState={haveNoRecords}
+          disabledState={haveNoRecords && !filterState.searchTableContent}
           key={VISITORS_PAGE}
           page={VISITORS_PAGE}
           onFiltersContainerHeightChange={setFilterContainerHeight}

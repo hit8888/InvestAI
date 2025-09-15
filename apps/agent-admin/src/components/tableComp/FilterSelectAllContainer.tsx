@@ -12,7 +12,7 @@ type IProps = {
   handleClearAll: () => void;
 };
 
-const { IntentScore, Location, ProductOfInterest, Company } = FilterType;
+const { IntentScore, Location, ProductOfInterest, Company, SdrAssignment } = FilterType;
 
 const SELECT_ALL_CHECKBOX_ITEM = {
   value: 'select-all',
@@ -21,7 +21,7 @@ const SELECT_ALL_CHECKBOX_ITEM = {
 
 const CHECKBOX_INITIAL_VALUE = ['select-all'];
 
-const FiltersWithSelectAllCheckbox = [IntentScore, ProductOfInterest];
+const FiltersWithSelectAllCheckbox = [IntentScore, ProductOfInterest, SdrAssignment];
 
 const FilterWithToggleSwitchButton = [Location, Company];
 

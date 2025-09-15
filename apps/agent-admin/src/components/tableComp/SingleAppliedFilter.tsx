@@ -57,7 +57,7 @@ const SingleAppliedFilter = ({
 
   const filterValue =
     filter.key === SdrAssignment
-      ? (filter.value as SdrAssignment[]).map((item) => item?.assigned_user?.username)
+      ? (filter.value as SdrAssignment[]).map((item) => item?.assigned_user?.full_name)
       : filter.value;
   return (
     <Popover open={isFilterAppliedClicked} onOpenChange={handlePopoverOpen}>

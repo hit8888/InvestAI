@@ -49,6 +49,15 @@ import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-rea
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
 
+// Use this Website to get the logo: https://brandfetch.com/
+export const ROUTING_TYPE_LOGO_MAP = {
+  BREAKOUT:
+    'https://cdn.brandfetch.io/idF2B6m6e_/w/150/h/150/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750437867259',
+  SALESFORCE: 'https://cdn.brandfetch.io/idVE84WdIN/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667559911541',
+  HUBSPOT: 'https://cdn.brandfetch.io/idRt0LuzRf/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1668515570889',
+  ATTIO: 'https://cdn.brandfetch.io/idZA7HYRWK/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1695805844509',
+};
+
 const {
   DateRange,
   IntentScore,

@@ -3,6 +3,7 @@ import { Pencil } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@breakout/design-system/components/Popover/index';
 import { useEffect, useState } from 'react';
 import { SdrAssignment } from '@meaku/core/types/admin/api';
+import SingleAssignRepCell from '../common/SingleAssignRepCell';
 
 type IProps = {
   listValue: SdrAssignment;
@@ -27,29 +28,6 @@ const AssignRepValue = ({ listValue, assignRepList }: IProps) => {
       {assignRepList.length > 0 ? (
         <AssignRepPopover assignRepList={assignRepList} handleCurrentRep={handleCurrentRep} />
       ) : null}
-    </div>
-  );
-};
-
-const SingleAssignRepCell = ({
-  listValue,
-  handleCurrentRep,
-}: {
-  listValue: SdrAssignment;
-  handleCurrentRep?: (value: SdrAssignment) => void;
-}) => {
-  const { assigned_user } = listValue;
-  const { full_name, profile_picture } = assigned_user || {};
-  const companyUrl = ''; // TODO: for future use
-  return (
-    <div className="flex w-full items-center justify-end gap-2" onClick={() => handleCurrentRep?.(listValue)}>
-      {profile_picture && <img src={profile_picture} alt="rep" className="h-6 w-6 rounded-full" />}
-      <div className="flex w-fit justify-between">
-        <p title={full_name || ''} className="max-w-32 truncate text-sm text-gray-900">
-          {full_name}
-        </p>
-        {companyUrl && <img src={companyUrl} alt="companyUrl" className="h-4 w-4" />}
-      </div>
     </div>
   );
 };
