@@ -466,7 +466,6 @@ export interface SummaryTabContentList {
   listLabel: string;
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   listValue: string | number | BANTItem[] | ParentUrlItem;
-  sessionId?: string;
 }
 
 export interface BANTItem {
@@ -745,12 +744,6 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
     icon: PanelConversationIcon,
     activeIcon: PanelConversationActiveIcon,
   },
-  // {
-  //   navUrl: `/${AppRoutesEnum.VISITORS}`,
-  //   navItem: SidebarNavItemsEnum.VISITORS_LABEL,
-  //   icon: PanelConversationIcon,
-  //   activeIcon: PanelConversationActiveIcon,
-  // },
   {
     navUrl: `/${AppRoutesEnum.AGENT}`,
     navItem: SidebarNavItemsEnum.AGENT_LABEL,
@@ -833,6 +826,7 @@ export const INITIAL_SORT_VALUES: SortValues = {
   assigned_user_emailSort: null,
   ip_addressSort: null,
   lead_typeSort: null,
+  updated_onSort: null,
 };
 
 export const FIELD_TO_SORT_KEY_MAP: Record<string, keyof SortValues> = {
@@ -852,6 +846,7 @@ export const FIELD_TO_SORT_KEY_MAP: Record<string, keyof SortValues> = {
   assigned_user_email: 'assigned_user_emailSort',
   ip_address: 'ip_addressSort',
   lead_type: 'lead_typeSort',
+  updated_on: 'updated_onSort',
 };
 
 export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
@@ -870,6 +865,7 @@ export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
   assigned_user_emailSort: 'assigned_user_email',
   ip_addressSort: 'ip_address',
   lead_typeSort: 'lead_type',
+  updated_onSort: 'updated_on',
 };
 
 export const WEBPAGES_SORT_KEY_TO_FIELD_MAP: Record<keyof WebpagesSortValues, string> = {

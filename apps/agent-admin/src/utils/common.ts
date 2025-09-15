@@ -191,6 +191,7 @@ export const getMappedDataFromResponseForVisitorsTableView = (
     prospect_id: response.prospect_id ?? '',
     product_interest: response.product_interest ?? '',
     need: capitalizeString(response.need) ?? '',
+    updated_on: response.updated_on ?? '',
   };
 };
 

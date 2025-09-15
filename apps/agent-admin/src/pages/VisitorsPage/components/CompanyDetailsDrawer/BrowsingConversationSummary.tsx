@@ -78,7 +78,7 @@ const BrowsingConversationSummary = ({ companyData, onSeeAllDetails }: BrowsingC
           )}
 
           <div className="flex items-center justify-between gap-2">
-            {companyData?.session_id && (
+            {companyData?.prospect?.session_id && (
               <Button
                 variant="tertiary"
                 size="small"
@@ -91,7 +91,7 @@ const BrowsingConversationSummary = ({ companyData, onSeeAllDetails }: BrowsingC
 
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-1 text-xs font-medium text-blue-600 transition-colors hover:text-blue-700"
+              className="ml-auto flex items-center gap-1 text-xs font-medium text-blue-600 transition-colors hover:text-blue-700"
             >
               Show {expanded ? 'Less' : 'More'}
               {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}

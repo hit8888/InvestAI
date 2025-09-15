@@ -10,7 +10,6 @@ export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent
   const logo = websiteUrl ? getCompanyLogoSrc(websiteUrl) : '';
 
   return {
-    id: visitorData.prospect_id,
     name: visitorData.company || '',
     website: visitorData.website_url || '',
     logo,
@@ -18,7 +17,8 @@ export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent
     revenue: visitorData.revenue || '',
     employees: visitorData.employee_count?.toString() || '',
     prospect: {
-      id: visitorData.name?.toString(),
+      prospect_id: visitorData.prospect_id,
+      session_id: visitorData.session_id || '',
       name: visitorData.name || '',
       title: visitorData.role || '',
       email: visitorData.email || '',
@@ -27,6 +27,5 @@ export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent
       location: visitorData.country || '',
     },
     email: visitorData.email || '',
-    session_id: visitorData.session_id || '',
   };
 };

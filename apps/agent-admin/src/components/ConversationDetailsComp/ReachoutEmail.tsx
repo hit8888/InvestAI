@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import toast from 'react-hot-toast';
 
 import Button from '@breakout/design-system/components/Button/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
@@ -8,7 +7,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
-import useReachoutEmail from '../../queries/mutation/useReachoutEmail';
+import useReachoutEmailQuery from '../../queries/query/useReachoutEmailQuery';
 import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
 
 export const ReachoutEmailBody = ({
@@ -23,12 +22,16 @@ export const ReachoutEmailBody = ({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 overflow-y-auto">
       <div className="flex w-full items-center gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
         <Typography variant="body-14" className="prose">
           {data?.subject}
         </Typography>
-        <CopyToClipboardButton textToCopy={data?.subject ?? ''} btnClassName="ml-auto" />
+        <CopyToClipboardButton
+          textToCopy={data?.subject ?? ''}
+          btnClassName="ml-auto"
+          copyIconClassname="text-gray-500"
+        />
       </div>
       <div className="flex w-full items-start gap-6 rounded-lg border border-gray-200 bg-gray-25 p-3">
         <span ref={bodyHtmlRef} className="prose text-sm">
@@ -38,6 +41,7 @@ export const ReachoutEmailBody = ({
           textToCopy={data?.main_body ?? ''}
           btnClassName="ml-auto"
           getHtml={() => bodyHtmlRef.current?.innerHTML}
+          copyIconClassname="text-gray-500"
         />
       </div>
     </div>
@@ -46,9 +50,9 @@ export const ReachoutEmailBody = ({
 
 export const ReachoutEmailBodyLoader = () => {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <Skeleton className="h-8 w-full" />
-      <Skeleton className="h-24 w-full" />
+    <div className="flex flex-1 flex-col items-center gap-4">
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-full w-full" />
     </div>
   );
 };
@@ -73,18 +77,16 @@ export const ReachoutEmailCta = ({
 };
 
 const ReachoutEmail = ({ sessionId }: { sessionId?: string }) => {
-  const { mutate, isPending, isSuccess, data } = useReachoutEmail({
-    onError: () => {
-      toast.error('Failed to generate reachout email.');
-    },
+  const { data, isLoading, refetch, isSuccess } = useReachoutEmailQuery({
+    session_id: sessionId,
   });
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
 
-  const showContentContainer = isPending || isSuccess;
+  const showContentContainer = isLoading || isSuccess;
 
   const handleGenerateReachoutEmail = () => {
     if (sessionId) {
-      mutate({ session_id: sessionId });
+      refetch();
     }
   };
 
@@ -95,13 +97,13 @@ const ReachoutEmail = ({ sessionId }: { sessionId?: string }) => {
           {isSuccess ? 'Copy paste below email to reach out' : 'Quick Email Setup'}
         </Typography>
         <ReachoutEmailCta
-          disabled={isPending || isSuccess || !sessionId}
+          disabled={showContentContainer || !sessionId}
           onClick={handleGenerateReachoutEmail}
-          isLoading={isPending}
+          isLoading={isLoading}
         />
       </div>
       {showContentContainer &&
-        (isSuccess ? <ReachoutEmailBody data={data} bodyHtmlRef={bodyHtmlRef} /> : <ReachoutEmailBodyLoader />)}
+        (isLoading ? <ReachoutEmailBodyLoader /> : <ReachoutEmailBody data={data} bodyHtmlRef={bodyHtmlRef} />)}
     </div>
   );
 };

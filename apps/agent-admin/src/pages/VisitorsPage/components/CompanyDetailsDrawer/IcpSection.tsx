@@ -1,50 +1,32 @@
 // import { useState } from 'react';
 import Button from '@breakout/design-system/components/Button/index';
 import ContactCard from './ContactCard';
-import useIcpDetailsQuery from '../../../../queries/query/useIcpDetails';
-import { CompanyData, Employee } from './types';
+import { Employee } from './types';
 import { Search } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import useReachoutEmail from '../../../../queries/mutation/useReachoutEmail';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 
 type IcpSectionProps = {
-  companyData: CompanyData;
+  prospect?: Employee;
+  icps: Employee[];
+  isLoading: boolean;
+  onFetchIcpList: () => void;
+  onGenerateEmail: (employee: Employee) => void;
+  selectedEmployee?: Employee | null;
 };
 
-const IcpSection = ({ companyData }: IcpSectionProps) => {
-  const { name, prospect } = companyData;
+const IcpSection = ({
+  prospect,
+  icps,
+  isLoading,
+  onFetchIcpList,
+  onGenerateEmail,
+  selectedEmployee,
+}: IcpSectionProps) => {
   // const [showAll, setShowAll] = useState(false);
 
-  const {
-    data: icpDetails,
-    isSuccess: isIcpDetailsSuccess,
-    isLoading: isIcpDetailsLoading,
-    refetch,
-  } = useIcpDetailsQuery({ companyName: name }, { enabled: false });
-  const icps: Employee[] =
-    icpDetails?.contacts?.map?.((icp) => ({
-      id: icp.id.toString(),
-      name: icp.name,
-      title: icp.title,
-      email: icp.email,
-      avatar: undefined,
-      linkedin: icp.linkedin_url,
-    })) || [];
-
-  const {
-    mutate,
-    isPending: isReachoutEmailPending,
-    data: reachoutEmailData,
-  } = useReachoutEmail({
-    onError: () => {
-      toast.error('Failed to generate reachout email.');
-    },
-  });
-
-  const handleGenerateEmail = () => {
-    mutate({ session_id: companyData?.session_id });
-  };
+  if (!prospect) {
+    return null;
+  }
 
   return (
     <div className="flex gap-2">
@@ -53,21 +35,25 @@ const IcpSection = ({ companyData }: IcpSectionProps) => {
 
       {/* Employee Cards */}
       <div className="flex flex-1 flex-col gap-2.5">
-        {/* Main employee card (large) */}
+        {/* Main employee card */}
         {prospect?.name && (
           <ContactCard
             employee={prospect}
-            variant="large"
-            onGenerateEmail={handleGenerateEmail}
-            emailData={reachoutEmailData}
-            emailDataLoading={isReachoutEmailPending}
-            showGenerateEmailButton={!!companyData?.session_id}
+            showGenerateEmailButton={!!prospect?.session_id}
+            onGenerateEmail={onGenerateEmail}
+            disableEmailButton={selectedEmployee?.prospect_id === prospect.prospect_id}
           />
         )}
 
-        {/* Other employee cards (small) */}
+        {/* Other employee cards */}
         {icps.map((employee) => (
-          <ContactCard key={employee.id} employee={employee} variant="small" />
+          <ContactCard
+            showGenerateEmailButton
+            key={employee.icp_id}
+            employee={employee}
+            onGenerateEmail={onGenerateEmail}
+            disableEmailButton={selectedEmployee?.icp_id === employee.icp_id}
+          />
         ))}
 
         {/* Show More button */}
@@ -79,15 +65,13 @@ const IcpSection = ({ companyData }: IcpSectionProps) => {
           </div>
         )} */}
 
-        {!isIcpDetailsSuccess && (
+        {icps.length === 0 && (
           <Button
             variant="secondary"
             size="small"
             className="w-fit self-center"
-            onClick={() => refetch()}
-            rightIcon={
-              isIcpDetailsLoading ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />
-            }
+            onClick={onFetchIcpList}
+            rightIcon={isLoading ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
           >
             Find More ICPs
           </Button>

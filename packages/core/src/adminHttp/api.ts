@@ -311,6 +311,10 @@ export const getWebpageScreenshots = (payload: { urls: string[] }) => {
   return adminApiClient.post(`/tenant/api/webpages/screenshots/`, payload);
 };
 
-export const getIcpDetails = (payload: { company_name: string }) => {
+export const getIcps = (payload: { company_name: string }) => {
   return adminApiClient.post(`/tenant/api/icp-enrichment/`, payload);
+};
+
+export const getIcpDetails = (payload: { icp_id: number }) => {
+  return adminApiClient.post(`/tenant/api/icp-email-enrichment/`, payload);
 };

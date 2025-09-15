@@ -4,16 +4,12 @@ import { IcpDetailsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
-const getIcpDetailsKey = (tenantName: string, sessionID: string): unknown[] => [
-  'session-details-data',
-  tenantName,
-  sessionID,
-];
+const getIcpDetailsKey = (tenantName: string, icpId: number): unknown[] => ['icp-details-data', tenantName, icpId];
 
 type IcpDetailsKey = ReturnType<typeof getIcpDetailsKey>;
 
 type IcpDetailsQueryPayload = {
-  companyName?: string | null;
+  icpId?: number | null;
 };
 
 type IcpDetailsQueryOptions = BreakoutQueryOptions<IcpDetailsResponse, IcpDetailsKey>;
@@ -23,15 +19,15 @@ const useIcpDetailsQuery = (
   options: IcpDetailsQueryOptions = {},
 ): UseQueryResult<IcpDetailsResponse> => {
   const tenantName = getTenantFromLocalStorage();
-  const companyName = payload.companyName;
+  const icpId = payload.icpId;
 
   const icpDetailsQuery = useQuery({
-    queryKey: getIcpDetailsKey(tenantName, companyName!),
+    queryKey: getIcpDetailsKey(tenantName, icpId!),
     queryFn: async () => {
-      const response = await getIcpDetails({ company_name: companyName! });
+      const response = await getIcpDetails({ icp_id: icpId! });
       return response.data;
     },
-    enabled: !!companyName,
+    enabled: !!icpId,
     ...options,
   });
 

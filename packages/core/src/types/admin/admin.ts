@@ -32,8 +32,10 @@ import {
   VisitorsResponseResultSchema,
   WebpagesScreenshotsResponseSchema,
   ConversationDetailResponseSchema,
-  IcpDetailsResponseSchema,
+  IcpsResponseSchema,
   VisitorsTableResponseSchema,
+  IcpsContactSchema,
+  IcpDetailsResponseSchema,
 } from './api';
 import {
   CONVERSATIONS_PAGE,
@@ -120,4 +122,6 @@ export type CommonDataSourceTableResponse =
   | DataSourceDocumentsTableResponse
   | DataSourceArtifactsTableResponse;
 
+export type IcpsResponse = z.infer<typeof IcpsResponseSchema>;
+export type IcpsContact = z.infer<typeof IcpsContactSchema>;
 export type IcpDetailsResponse = z.infer<typeof IcpDetailsResponseSchema>;

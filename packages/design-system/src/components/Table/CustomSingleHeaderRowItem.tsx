@@ -6,7 +6,7 @@ import {
 } from '@meaku/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { LEADS_PAGE, LINK_CLICKS_PAGE, SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
+import { LEADS_PAGE, LINK_CLICKS_PAGE, SHADOW_PINNED_COLUMNS, VISITORS_PAGE } from '@meaku/core/utils/index';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { SortCategory, SortOrder } from '@meaku/core/types/admin/sort';
 import { SortValues } from '@meaku/core/types/admin/sort';
@@ -29,6 +29,7 @@ const CustomSingleHeaderRowItem = ({
 }: CustomSingleHeaderRowItemProps) => {
   const { getCommonPinningStyles } = useTablePinningStyles();
   const isLeadsOrLinkClicksPage = pageType === LEADS_PAGE || pageType === LINK_CLICKS_PAGE;
+  const isVisitorsPage = pageType === VISITORS_PAGE;
   return (
     <tr key={headerGroup.id} className="relative flex w-full items-start">
       {headerGroup.headers.map((header) => {
@@ -36,7 +37,9 @@ const CustomSingleHeaderRowItem = ({
         const isShadowedColumn = SHADOW_PINNED_COLUMNS.includes(header.id);
         const isColumnNumberOfUserMessages = header.id === 'user_message_count';
         const isColumnProductOfInterest = header.id === 'product_of_interest';
-        const hideActionItems = isLeadsOrLinkClicksPage && header.id === 'buyer_intent';
+        const hideActionItems =
+          (isVisitorsPage && header.id !== 'updated_on' && header.id !== 'company') ||
+          (isLeadsOrLinkClicksPage && header.id === 'buyer_intent');
         const isPinned = header.column.getIsPinned() === 'left';
         const isColumnPinnedLeftForName = isPinned && isShadowedColumn;
         return (

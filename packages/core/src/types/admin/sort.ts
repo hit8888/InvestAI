@@ -24,7 +24,8 @@ export type SortCategory =
   | 'title'
   | 'source_url'
   | 'asset'
-  | 'data';
+  | 'data'
+  | 'updated_on';
 
 export type SortOrder = 'asc' | 'desc' | null;
 
@@ -44,6 +45,7 @@ export type SortValues = {
   ip_addressSort: SortOrder;
   lead_typeSort: SortOrder;
   product_of_interestSort: SortOrder;
+  updated_onSort: SortOrder;
 };
 
 export type CommonSortValues = {

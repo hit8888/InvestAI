@@ -78,6 +78,7 @@ export const VisitorsTableViewSchema = z.object({
   prospect_id: z.string(),
   need: z.string(),
   product_interest: z.string(),
+  updated_on: z.string(),
 });
 
 export const TransformedProspectAndCompanyDetailsSchema = z.object({

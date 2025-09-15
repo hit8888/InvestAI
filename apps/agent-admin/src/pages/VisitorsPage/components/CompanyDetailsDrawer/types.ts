@@ -1,8 +1,10 @@
 export type Employee = {
-  id: string;
+  icp_id?: number;
+  prospect_id?: string;
+  session_id?: string;
   name: string;
   title: string;
-  email: string;
+  email?: string;
   avatar?: string;
   linkedin?: string;
   timeSpent?: string;
@@ -11,7 +13,6 @@ export type Employee = {
 };
 
 export type CompanyData = {
-  id: string;
   name: string;
   website: string;
   logo?: string;
@@ -25,7 +26,6 @@ export type CompanyData = {
   browsingHistorySummary?: string;
   conversationSummary?: string;
   email: string;
-  session_id: string;
 };
 
 export type CompanyDetailsDrawerProps = {

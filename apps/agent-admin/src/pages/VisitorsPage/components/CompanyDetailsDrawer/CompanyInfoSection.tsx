@@ -2,12 +2,17 @@ import { findFlagUrlByCountryName } from 'country-flags-svg';
 import InfoChip from './InfoChip';
 import LogoImage from '@breakout/design-system/components/LogoImage';
 import { CompanyData } from './types';
+import { ensureProtocol } from '@meaku/core/utils/index';
 
 type CompanyInfoSectionProps = {
-  companyData: CompanyData;
+  companyData?: CompanyData;
 };
 
 const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
+  if (!companyData) {
+    return null;
+  }
+
   const showInfoChips = companyData.hqLocation || companyData.revenue || companyData.employees;
 
   return (
@@ -23,7 +28,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
         <div className="flex flex-col gap-1">
           <h2 className="text-base font-medium text-gray-900">{companyData.name}</h2>
           <a
-            href={companyData.website.startsWith('http') ? companyData.website : `https://${companyData.website}`}
+            href={ensureProtocol(companyData.website)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-blue_sec-1000"

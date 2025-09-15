@@ -39,13 +39,8 @@ const LoadingContent = () => {
         </div>
       </div>
 
-      {/* See All Details Button Shimmer */}
-      <div className="flex justify-end">
-        <Skeleton className="h-8 w-32" />
-      </div>
-
       {/* Browsing & Conversation Summary Shimmer */}
-      <div className="rounded-lg border border-gray-100 p-4">
+      <div className="mt-auto rounded-lg border border-gray-100 p-4">
         <Skeleton className="mb-4 h-5 w-40" />
         <div className="flex flex-col gap-2">
           <Skeleton className="h-4 w-full" />

@@ -1,6 +1,5 @@
 export { default } from './CompanyDetailsDrawer';
 export { default as CompanyDetailsDrawer } from './CompanyDetailsDrawer';
-export { default as CompanyDetailsContent } from './CompanyDetailsContent';
 export { default as CompanyInfoSection } from './CompanyInfoSection';
 export { default as EmployeesSection } from './IcpSection';
 export { default as ContactCard } from './ContactCard';

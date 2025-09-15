@@ -25,7 +25,7 @@ const SummaryTabDisplayContent = ({ isLoading }: IProps) => {
   return (
     <div className="flex w-full flex-col items-start justify-center gap-4 py-4 pr-4">
       {pageSummaryTabContentList.map((item) => (
-        <SummaryTabContentItem key={item.listKey} {...item} sessionId={conversation?.session_id} />
+        <SummaryTabContentItem key={item.listKey} {...item} />
       ))}
     </div>
   );

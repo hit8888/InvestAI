@@ -10,7 +10,6 @@ import ConversationsPageContainer from '../pages/ConversationsPageContainer';
 import PlaygroundPage from '../pages/PlaygroundPage';
 import ProtectedRoute from '../pages/ProtectedRoutes';
 import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
-// import VisitorsPageContainer from '../pages/VisitorsPage/VisitorsPageContainer';
 
 import { AppRoutesEnum } from '../utils/constants';
 import WorkflowPage from '../pages/WorkflowPage';
@@ -72,10 +71,6 @@ const routes = [
             path: 'conversations/:sessionID',
             element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
           },
-          // {
-          //   path: 'prospects',
-          //   element: <ProtectedRoute element={<VisitorsPageContainer />} />,
-          // },
           {
             path: 'active-conversations',
             element: <ProtectedRoute element={<ActiveConversationsPage />} />,

@@ -3,33 +3,23 @@ import { findFlagUrlByCountryName } from 'country-flags-svg';
 import InfoChip from './InfoChip';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Employee } from './types';
-import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
-import {
-  ReachoutEmailBody,
-  ReachoutEmailBodyLoader,
-  ReachoutEmailCta,
-} from '../../../../components/ConversationDetailsComp/ReachoutEmail';
-import { useRef } from 'react';
+import { ReachoutEmailCta } from '../../../../components/ConversationDetailsComp/ReachoutEmail';
+import EmployeeAvatar from './EmployeeAvatar';
 
 type ContactCardProps = {
   employee: Employee;
-  variant?: 'large' | 'small';
-  onGenerateEmail?: (employeeId: string) => void;
-  emailData?: ReachoutEmailResponse;
-  emailDataLoading?: boolean;
   showGenerateEmailButton?: boolean;
+  onGenerateEmail: (employee: Employee) => void;
+  disableEmailButton: boolean;
 };
 
 const ContactCard = ({
   employee,
-  variant = 'large',
-  onGenerateEmail,
-  emailData,
-  emailDataLoading,
   showGenerateEmailButton = false,
+  onGenerateEmail,
+  disableEmailButton,
 }: ContactCardProps) => {
-  const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
-  const isLarge = variant === 'large';
+  const isProspectView = !employee.icp_id;
   const showInfoChips = employee.email || employee.location || employee.linkedin;
 
   return (
@@ -37,63 +27,38 @@ const ContactCard = ({
       <div className="flex items-center gap-4">
         {/* Avatar */}
         <div className="h-8 w-8 overflow-hidden rounded-full">
-          {employee.avatar ? (
-            <img
-              src={employee.avatar}
-              alt={`${employee.name} avatar`}
-              className="h-full w-full rounded-full object-cover"
-            />
-          ) : (
-            <div className="border-white/24 flex h-full w-full items-center justify-center rounded-full border-2 bg-purple-100 text-purple-600">
-              <span className="text-sm font-semibold">
-                {employee.name
-                  .split(' ')
-                  .map((n) => n.charAt(0))
-                  .join('')}
-              </span>
-            </div>
-          )}
+          <EmployeeAvatar avatar={employee.avatar} name={employee.name} />
         </div>
 
         {/* Content */}
-        <div
-          className={cn('flex flex-1 flex-col gap-1', {
-            'flex-row justify-between': !isLarge && onGenerateEmail,
-          })}
-        >
+        <div className={cn('flex flex-1 flex-col gap-1')}>
           {/* Name and Title */}
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <h3 className={`font-medium text-gray-900 ${isLarge ? 'text-base' : 'text-sm'}`}>{employee.name}</h3>
-              {employee.title && (
-                <>
-                  <div className="h-4 w-0 border-l border-gray-300" />
-                  <span className="text-sm text-gray-500">{employee.title}</span>
-                </>
-              )}
-              {isLarge && showGenerateEmailButton && (
+              <div className="flex w-2/3 items-center gap-2">
+                <h3 className={cn('font-medium text-gray-900', isProspectView ? 'text-base' : 'text-sm')}>
+                  {employee.name}
+                </h3>
+                {employee.title && (
+                  <>
+                    <div className="h-4 w-0 border-l border-gray-300" />
+                    <span className="text-sm text-gray-500">{employee.title}</span>
+                  </>
+                )}
+              </div>
+              {showGenerateEmailButton && (
                 <ReachoutEmailCta
-                  disabled={!!emailData || emailDataLoading}
-                  onClick={() => onGenerateEmail?.(employee.id)}
-                  isLoading={emailDataLoading ?? false}
+                  disabled={disableEmailButton}
+                  onClick={() => onGenerateEmail(employee)}
+                  isLoading={false}
                   className="ml-auto"
                 />
               )}
             </div>
           </div>
 
-          {/* Generate Email Button */}
-          {!isLarge && showGenerateEmailButton && (
-            <ReachoutEmailCta
-              disabled={!!emailData || emailDataLoading}
-              onClick={() => onGenerateEmail?.(employee.id)}
-              isLoading={emailDataLoading ?? false}
-              className="ml-auto"
-            />
-          )}
-
           {/* Info Chips for large variant */}
-          {isLarge && showInfoChips && (
+          {isProspectView && showInfoChips && (
             <div className="flex flex-wrap gap-2">
               {employee.linkedin && (
                 <div className="flex items-center gap-1 rounded-2xl border border-blue-600 bg-blue-600 px-2 py-1">
@@ -115,11 +80,6 @@ const ContactCard = ({
           )}
         </div>
       </div>
-      {emailDataLoading ? (
-        <ReachoutEmailBodyLoader />
-      ) : (
-        <ReachoutEmailBody data={emailData} bodyHtmlRef={bodyHtmlRef} />
-      )}
     </div>
   );
 };

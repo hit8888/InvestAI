@@ -344,6 +344,7 @@ export const VisitorsResponseResultSchema = z.object({
   referrer: z.string().nullable().optional(),
   session_id: z.string().nullable().optional(),
   prospect_id: z.string().nullable().optional(),
+  updated_on: z.string().nullable().optional(),
 });
 
 export const PaginationDataSchema = z.object({
@@ -943,7 +944,10 @@ export const CalendarFormDataSchema = z.object({
 export type CalendarFormData = z.infer<typeof CalendarFormDataSchema>;
 
 export const ReachoutEmailPayloadSchema = z.object({
-  session_id: z.string(),
+  session_id: z.string().optional(),
+  prospect_id: z.string().optional(),
+  icp_id: z.number().optional(),
+  email_type: z.enum(['website_user', 'prospective_icp']).optional(),
 });
 export type ReachoutEmailPayload = z.infer<typeof ReachoutEmailPayloadSchema>;
 
@@ -954,32 +958,38 @@ export const ReachoutEmailResponseSchema = z.object({
 });
 export type ReachoutEmailResponse = z.infer<typeof ReachoutEmailResponseSchema>;
 
+export const IcpsContactSchema = z.object({
+  id: z.number(),
+  company_name: z.string(),
+  company_domain: z.string(),
+  company_industry: z.string().nullable(),
+  company_size: z.string().nullable(),
+  name: z.string(),
+  email: z.string(),
+  phone: z.string().nullable(),
+  title: z.string(),
+  seniority: z.string(),
+  departments: z.array(z.string()),
+  linkedin_url: z.string(),
+  email_status: z.string(),
+  enrichment_date: z.string(),
+  source: z.string(),
+  metadata: z.object({
+    has_raw_apollo_data: z.boolean(),
+    apollo_person_id: z.string(),
+    search_total_results: z.number(),
+    search_date: z.string(),
+    full_metadata_available: z.boolean(),
+  }),
+});
+export type IcpsContact = z.infer<typeof IcpsContactSchema>;
+
+export const IcpsResponseSchema = z.object({
+  contacts: z.array(IcpsContactSchema),
+});
+export type IcpsResponse = z.infer<typeof IcpsResponseSchema>;
+
 export const IcpDetailsResponseSchema = z.object({
-  contacts: z.array(
-    z.object({
-      id: z.number(),
-      company_name: z.string(),
-      company_domain: z.string(),
-      company_industry: z.string().nullable(),
-      company_size: z.string().nullable(),
-      name: z.string(),
-      email: z.string(),
-      phone: z.string().nullable(),
-      title: z.string(),
-      seniority: z.string(),
-      departments: z.array(z.string()),
-      linkedin_url: z.string(),
-      email_status: z.string(),
-      enrichment_date: z.string(),
-      source: z.string(),
-      metadata: z.object({
-        has_raw_apollo_data: z.boolean(),
-        apollo_person_id: z.string(),
-        search_total_results: z.number(),
-        search_date: z.string(),
-        full_metadata_available: z.boolean(),
-      }),
-    }),
-  ),
+  contact: IcpsContactSchema,
 });
 export type IcpDetailsResponse = z.infer<typeof IcpDetailsResponseSchema>;

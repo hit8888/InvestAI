@@ -7,15 +7,8 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { getStringWithBothCommaAND } from '../../utils/common';
 import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
-// import ReachoutEmail from './ReachoutEmail';
 
-const SummaryTabContentItem = ({
-  listKey,
-  listLabel,
-  listIcon: ItemIcon,
-  listValue,
-  // sessionId,
-}: SummaryTabContentList) => {
+const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
   const isParentUrl = listKey === 'parentUrl';
   const isSummaryItem = listKey === 'summary';
@@ -76,14 +69,6 @@ const SummaryTabContentItem = ({
       );
     }
   };
-
-  // if (listKey === 'reachoutEmail') {
-  //   return (
-  //     <div className="flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4">
-  //       <ReachoutEmail sessionId={sessionId ?? ''} />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div
