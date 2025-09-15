@@ -32,7 +32,7 @@ import CompanyFoundationDate from '@breakout/design-system/components/icons/comp
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import { ConversationRightSideDetailsType, NavLinkItem } from './admin-types';
-import { ExportFormat } from '@meaku/core/types/admin/api';
+import { ExportFormat, type SdrAssignment } from '@meaku/core/types/admin/api';
 import PanelConversationIcon from '@breakout/design-system/components/icons/panel-conversation-icon';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
@@ -45,7 +45,7 @@ import PanelIntegrationsIcon from '@breakout/design-system/components/icons/pane
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
 import CalendarIcon from '@breakout/design-system/components/icons/panel-calendar-icon';
 import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
-import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
+import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
 
@@ -458,7 +458,7 @@ export interface SummaryTabContentList {
   listKey: string;
   listLabel: string;
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
-  listValue: string | number | BANTItem[] | ParentUrlItem;
+  listValue: string | number | BANTItem[] | ParentUrlItem | SdrAssignment;
 }
 
 export interface BANTItem {
@@ -486,6 +486,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
   //   listIcon: null,
   //   listValue: '',
   // },
+  {
+    listKey: 'assignRep',
+    listLabel: 'Assign Rep:',
+    listIcon: User,
+    listValue: '',
+  },
   {
     listKey: 'browsingHistorySummary',
     listLabel: "User's Browsing History Summary:",

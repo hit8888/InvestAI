@@ -937,6 +937,11 @@ export function generateConversationSummaryContent(
           ...item,
           listValue: sessionData.browsing_analysis_summary || '-',
         };
+      case 'assignRep':
+        return {
+          ...item,
+          listValue: sessionData.sdr_assignment || '-',
+        };
       case 'intentScore':
         return {
           ...item,

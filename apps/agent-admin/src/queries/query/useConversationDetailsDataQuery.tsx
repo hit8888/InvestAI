@@ -59,11 +59,12 @@ const normalizeSessionToConversationData = (
     need: prospect?.need || null,
     timeline: prospect?.timeline || null,
     country: prospect?.country || prospect?.prospect_demographics?.country || null,
-    device_type: null, // Not available in session data
+    device_type: session?.device_type || null,
     agent_modal: null, // Not available in session data
     parent_url_title: null, // Not available in session data
-    browsing_analysis_summary: null, // Not available in session data
+    browsing_analysis_summary: prospect.browsing_analysis_summary || null,
     is_test: session?.is_test || false,
+    sdr_assignment: prospect.sdr_assignment || null,
   };
 
   return {

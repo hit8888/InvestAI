@@ -60,8 +60,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       {filterState === SdrAssignment ? (
         <SdrAssignmentFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
-      {filterState === UserMessagesCount ? <UserMessagesCountFilterContent page={page} /> : null}
-      {filterState === UsageCount ? <UserMessagesCountFilterContent page={page} /> : null}
+      {[UsageCount, UserMessagesCount].includes(filterState) ? <UserMessagesCountFilterContent page={page} /> : null}
     </React.Fragment>
   );
 };

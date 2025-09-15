@@ -3,7 +3,18 @@ import Button from '@breakout/design-system/components/Button/index';
 import RestartIcon from '@breakout/design-system/components/icons/restart-icon';
 import { ArrowLeftIcon } from 'lucide-react';
 
-const ErrorState = () => {
+type IProps = {
+  refetch?: () => void;
+};
+
+const ErrorState = ({ refetch }: IProps) => {
+  const handleTryAgain = () => {
+    if (refetch) {
+      refetch();
+    } else {
+      window.location.reload();
+    }
+  };
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-6 p-8">
       <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary/10 p-4">
@@ -15,7 +26,7 @@ const ErrorState = () => {
         refreshing the page or come back later.
       </p>
       <div className="flex gap-4">
-        <Button variant="primary" buttonStyle={'rightIcon'} onClick={() => window.location.reload()}>
+        <Button variant="primary" buttonStyle={'rightIcon'} onClick={handleTryAgain}>
           Try Again
           <RestartIcon className="h-4 w-4" />
         </Button>

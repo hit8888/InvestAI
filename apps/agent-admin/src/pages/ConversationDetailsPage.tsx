@@ -30,10 +30,14 @@ const ConversationDetailsPage = ({ isDirectAccess, isLeadsPage }: IProps) => {
 
   const queryOptions = useQueryOptions();
 
-  const { data, isLoading, isError } = useConversationDetailsDataQuery({
+  const { data, isLoading, isError, refetch } = useConversationDetailsDataQuery({
     sessionID: sessionID || '',
     queryOptions,
   });
+
+  const handleRefetch = () => {
+    refetch();
+  };
 
   const detailsManager = useMemo(() => {
     if (!data) return null;
@@ -67,7 +71,7 @@ const ConversationDetailsPage = ({ isDirectAccess, isLeadsPage }: IProps) => {
   }, [isLoading, detailsManager]);
 
   if (isError || (detailsManager && detailsManager.hasError())) {
-    return <ErrorState />;
+    return <ErrorState refetch={handleRefetch} />;
   }
 
   return (

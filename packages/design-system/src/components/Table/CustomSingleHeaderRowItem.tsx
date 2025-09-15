@@ -12,6 +12,8 @@ import { SortCategory, SortOrder } from '@meaku/core/types/admin/sort';
 import { SortValues } from '@meaku/core/types/admin/sort';
 import SortFilterButton from './SortFilterButton';
 
+const HIDE_ACTION_ITEMS_FOR_COLUMNS = ['updated_on', 'company', 'sdr_assignment'];
+
 type CustomSingleHeaderRowItemProps = {
   headerGroup: HeaderGroup<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent>;
   pageType: PaginationPageType;
@@ -38,7 +40,7 @@ const CustomSingleHeaderRowItem = ({
         const isColumnNumberOfUserMessages = header.id === 'user_message_count';
         const isColumnProductOfInterest = header.id === 'product_of_interest';
         const hideActionItems =
-          (isVisitorsPage && header.id !== 'updated_on' && header.id !== 'company') ||
+          (isVisitorsPage && !HIDE_ACTION_ITEMS_FOR_COLUMNS.includes(header.id)) ||
           (isLeadsOrLinkClicksPage && header.id === 'buyer_intent');
         const isPinned = header.column.getIsPinned() === 'left';
         const isColumnPinnedLeftForName = isPinned && isShadowedColumn;

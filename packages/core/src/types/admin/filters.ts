@@ -11,6 +11,8 @@ export interface TableAllFilterConfig {
   filterType: FilterType;
 }
 
+type CheckboxValue = string | SdrAssignment;
+
 export type PageTypeProps = {
   page: PaginationPageType;
 };
@@ -135,6 +137,7 @@ export type FilterValueTypes =
   | DateRangeProp
   | string
   | string[]
+  | CheckboxValue[]
   | number
   | userMessagesCountFilterValues
   | durationFilterValues

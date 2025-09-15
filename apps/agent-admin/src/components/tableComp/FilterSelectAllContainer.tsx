@@ -3,6 +3,7 @@ import { FilterType } from '@meaku/core/types/admin/filters';
 import CustomCheckboxItem from './CustomCheckboxItem';
 import { useEffect, useState } from 'react';
 import SelectAllToggleButton from './SelectAllToggleButton';
+import { CheckboxValue } from '../../utils/checkboxUtils';
 
 type IProps = {
   filterState: FilterType;
@@ -25,11 +26,11 @@ const FiltersWithSelectAllCheckbox = [IntentScore, ProductOfInterest];
 const FilterWithToggleSwitchButton = [Location, Company];
 
 const FilterSelectAllContainer = ({ filterState, areAllSelected, handleSelectAll, handleClearAll }: IProps) => {
-  const [selectedCheckbox, setSelectedCheckbox] = useState<string[]>([]);
+  const [selectedCheckbox, setSelectedCheckbox] = useState<CheckboxValue[]>([]);
   const isSelectAllCheckboxPresent = FiltersWithSelectAllCheckbox.includes(filterState);
   const isSelectAllTogglePresent = FilterWithToggleSwitchButton.includes(filterState);
 
-  const handleSingleCheckboxToggle = (value: string) => {
+  const handleSingleCheckboxToggle = (value: CheckboxValue) => {
     if (selectedCheckbox.includes(value)) {
       setSelectedCheckbox([]);
       handleClearAll();

@@ -7,16 +7,19 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { getStringWithBothCommaAND } from '../../utils/common';
 import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
+import AssignRepValue from './AssignRepValue';
+import { SdrAssignment } from '@meaku/core/types/admin/api';
 
 const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
   const isParentUrl = listKey === 'parentUrl';
+  const isAssignRep = listKey === 'assignRep';
   const isSummaryItem = listKey === 'summary';
   const isBantAnalysisItem = listKey === 'bantAnalysis';
   const isBrowsingHistorySummaryItem = listKey === 'browsingHistorySummary';
   const isLabelValueDash = listValue === '-';
 
-  const getSummaryListValueContent = (listValue: string | number | BANTItem[] | ParentUrlItem) => {
+  const getSummaryListValueContent = (listValue: string | number | BANTItem[] | ParentUrlItem | SdrAssignment) => {
     if (isIntentScore) {
       const isValueNumerical = !isNaN(Number(listValue)) && listValue !== '';
       return isValueNumerical ? (
@@ -33,6 +36,9 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
           {itemLabel || itemValue}
         </Link>
       );
+    }
+    if (isAssignRep) {
+      return <AssignRepValue listValue={listValue as SdrAssignment} assignRepList={[]} />; // TODO: Add Rep List here
     }
     if (isSummaryItem || isBrowsingHistorySummaryItem) {
       return <GithubMarkdownRenderer markdown={listValue as string} />;

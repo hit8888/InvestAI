@@ -31,5 +31,6 @@ export const convertServerConversationDataToClientConversationData = (
     query_params: response.query_params || {},
     device_type: response.device_type,
     browsing_analysis_summary: response.browsing_analysis_summary,
+    sdr_assignment: response.sdr_assignment,
   };
 };

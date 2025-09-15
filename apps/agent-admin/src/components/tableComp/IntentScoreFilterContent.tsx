@@ -3,6 +3,7 @@ import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS } from '../../utils/constants';
 import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
 import { useCallback } from 'react';
+import { CheckboxValue } from '../../utils/checkboxUtils';
 
 const IntentScoreFilterContent = ({ page, handleClosePopover, filterState }: CommonFilterContentProps) => {
   const filters = useAllFilterStore((state) => state[page]);
@@ -12,7 +13,7 @@ const IntentScoreFilterContent = ({ page, handleClosePopover, filterState }: Com
   const intentScore = filters.intentScore;
 
   const handleSelectionChange = useCallback(
-    (value: string[]) => {
+    (value: CheckboxValue[]) => {
       setFilter(page, IntentScore, value);
     },
     [page, IntentScore, setFilter],
