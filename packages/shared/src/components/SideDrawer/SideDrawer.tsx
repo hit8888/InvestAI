@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@meaku/saral';
-import { useBehindContentPortal } from '../../hooks/usePortal';
+import { useModalPortal, useBehindContentPortal } from '../../hooks/usePortal';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { SideDrawerProps } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSideDrawerPosition } from './hooks/useSideDrawerPosition';
@@ -51,7 +52,12 @@ export const SideDrawer = ({
   const [mounted, setMounted] = useState(false);
 
   // Custom hooks
-  const { renderInPortal, getZIndex } = useBehindContentPortal();
+  const isMobile = useIsMobile();
+  const modalPortal = useModalPortal();
+  const behindContentPortal = useBehindContentPortal();
+
+  // Use modal portal for mobile, behind content portal for web
+  const { renderInPortal, getZIndex } = isMobile ? modalPortal : behindContentPortal;
   const { position, calculatePosition } = useSideDrawerPosition({
     targetRef,
     side,

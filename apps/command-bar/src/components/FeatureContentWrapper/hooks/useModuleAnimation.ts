@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { ANIMATION_CONFIG } from '../constants';
 
 /**
@@ -13,6 +14,7 @@ import { ANIMATION_CONFIG } from '../constants';
  * @returns Animation configuration and content loading state
  */
 export const useModuleAnimation = (activeFeature: CommandBarModuleType | null) => {
+  const isMobile = useIsMobile();
   const animationFrameRef = useRef<number | undefined>(undefined);
   const [shouldRenderContent, setShouldRenderContent] = useState(false);
 
@@ -39,6 +41,6 @@ export const useModuleAnimation = (activeFeature: CommandBarModuleType | null) =
 
   return {
     shouldRenderContent,
-    animationConfig: ANIMATION_CONFIG,
+    animationConfig: isMobile ? ANIMATION_CONFIG.mobile : ANIMATION_CONFIG.desktop,
   };
 };

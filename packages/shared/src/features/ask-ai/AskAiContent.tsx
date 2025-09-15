@@ -212,7 +212,7 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
 
   return (
     <>
-      <div ref={targetRef}>
+      <div className="h-full w-full" ref={targetRef}>
         <AskAiContentInner onClose={onClose} onExpand={onExpand} isExpanded={isExpanded} />
       </div>
       <SidebarArtifactDrawer

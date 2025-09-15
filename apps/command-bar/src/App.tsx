@@ -180,6 +180,11 @@ function App() {
     >
       <div key="root-content" className="flex items-end gap-4">
         {nudgeEnabled && <Nudge activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />}
+        <CommandBarActions
+          activeFeature={activeFeature!}
+          setActiveFeature={handleSetActiveButton}
+          shouldStartAnimations={shouldStartAnimations}
+        />
         <FeatureContentContainer
           key={activeFeature}
           activeFeature={activeFeature!}
@@ -187,11 +192,6 @@ function App() {
           isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}
-        />
-        <CommandBarActions
-          activeFeature={activeFeature!}
-          setActiveFeature={handleSetActiveButton}
-          shouldStartAnimations={shouldStartAnimations}
         />
       </div>
     </motion.div>

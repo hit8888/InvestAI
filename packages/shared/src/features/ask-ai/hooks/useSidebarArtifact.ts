@@ -41,6 +41,7 @@ export const useSidebarArtifact = () => {
   const [videoPlayState, setVideoPlayState] = useState<{ url: string; isPlaying: boolean } | null>(null);
   const [imageOpenState, setImageOpenState] = useState<{ url: string; isOpen: boolean } | null>(null);
   const [shouldAutoPlay, setShouldAutoPlay] = useState<boolean>(false);
+  const [wasManuallyClosed, setWasManuallyClosed] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   /**
@@ -60,6 +61,11 @@ export const useSidebarArtifact = () => {
   const openSidebar = useCallback(
     async (url: string, artifactType: 'VIDEO' | 'SLIDE_IMAGE', title: string, shouldPlay?: boolean) => {
       try {
+        // Don't reopen if manually closed
+        if (wasManuallyClosed) {
+          return;
+        }
+
         // Set all state at once to ensure sidebar opens
         setSideBarArtifact({ url, artifactType, title });
         setVideoError(null); // Clear any previous errors
@@ -107,9 +113,8 @@ export const useSidebarArtifact = () => {
    * Closes sidebar - triggers animation, cleanup handled in handleCloseComplete
    */
   const closeSidebar = useCallback(() => {
-    // Immediately clear image open state when sidebar starts closing
-    setImageOpenState(null);
-    setVideoPlayState(null);
+    // Mark that this was a manual close
+    setWasManuallyClosed(true);
     setIsSideDrawerOpen(false);
   }, []);
 
@@ -262,6 +267,13 @@ export const useSidebarArtifact = () => {
       syncStateImmediately();
     }
   }, [sideBarArtifact?.artifactType, currentVideo]);
+
+  // Reset wasManuallyClosed when the artifact changes
+  useEffect(() => {
+    if (sideBarArtifact) {
+      setWasManuallyClosed(false);
+    }
+  }, [sideBarArtifact?.url, sideBarArtifact?.artifactType]);
 
   return {
     // State

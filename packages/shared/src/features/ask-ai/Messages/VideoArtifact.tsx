@@ -68,12 +68,15 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
     currentVideo?.url,
   ]);
 
-  // Reset hasAutoOpened when sidebar closes to allow reopening
+  // Only reset hasAutoOpened when the component unmounts or when isLatestMessage changes
   useEffect(() => {
-    if (!isSideDrawerOpen && hasAutoOpened.current) {
+    if (!isLatestMessage) {
       hasAutoOpened.current = false;
     }
-  }, [isSideDrawerOpen]);
+    return () => {
+      hasAutoOpened.current = false;
+    };
+  }, [isLatestMessage]);
 
   // Check if this video is currently playing in sidebar
   const isThisVideoPlaying = useMemo(() => {

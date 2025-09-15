@@ -20,11 +20,12 @@ export const LAYOUT_CONSTANTS = {
   ANIMATION_TYPE: 'tween' as const,
 
   // Mobile layout
-  MOBILE_RIGHT_OFFSET: '0px',
-  MOBILE_MARGIN_RIGHT: '0px',
-  MOBILE_TRANSFORM: 'translateY(50%)',
-  MOBILE_HEIGHT: '100dvh',
-  MOBILE_WIDTH: '100vw',
+  MOBILE_PADDING: '16px',
+  MOBILE_RIGHT_OFFSET: '16px',
+  MOBILE_LEFT_OFFSET: '16px',
+  MOBILE_TRANSFORM: 'translateY(0)',
+  MOBILE_HEIGHT: 'calc(100dvh - 32px)', // Accounting for top and bottom padding
+  MOBILE_WIDTH: 'calc(100vw - 32px)', // Accounting for left and right padding
 
   // Desktop layout
   DESKTOP_RIGHT_OFFSET: '64px',
@@ -76,14 +77,27 @@ export const MODULE_CONFIG = {
  * Animation configuration for Framer Motion
  */
 export const ANIMATION_CONFIG = {
-  initial: { opacity: 0, x: 8 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: 8 },
-  transition: {
-    duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
-    ease: LAYOUT_CONSTANTS.ANIMATION_EASE,
-    type: LAYOUT_CONSTANTS.ANIMATION_TYPE,
-    willChange: 'transform, opacity',
+  mobile: {
+    initial: { opacity: 0, y: 100 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 100 },
+    transition: {
+      duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
+      ease: LAYOUT_CONSTANTS.ANIMATION_EASE,
+      type: LAYOUT_CONSTANTS.ANIMATION_TYPE,
+      willChange: 'transform, opacity',
+    },
+  },
+  desktop: {
+    initial: { opacity: 0, x: 8 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 8 },
+    transition: {
+      duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
+      ease: LAYOUT_CONSTANTS.ANIMATION_EASE,
+      type: LAYOUT_CONSTANTS.ANIMATION_TYPE,
+      willChange: 'transform, opacity',
+    },
   },
 } as const;
 
@@ -93,8 +107,10 @@ export const ANIMATION_CONFIG = {
 export const BASE_STYLES = {
   mobile: {
     position: 'fixed' as const,
+    top: LAYOUT_CONSTANTS.MOBILE_PADDING,
     right: LAYOUT_CONSTANTS.MOBILE_RIGHT_OFFSET,
-    marginRight: LAYOUT_CONSTANTS.MOBILE_MARGIN_RIGHT,
+    bottom: LAYOUT_CONSTANTS.MOBILE_PADDING,
+    left: LAYOUT_CONSTANTS.MOBILE_LEFT_OFFSET,
     transform: LAYOUT_CONSTANTS.MOBILE_TRANSFORM,
     height: LAYOUT_CONSTANTS.MOBILE_HEIGHT,
     width: LAYOUT_CONSTANTS.MOBILE_WIDTH,

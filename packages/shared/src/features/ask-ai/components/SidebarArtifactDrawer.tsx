@@ -40,7 +40,7 @@ export const SidebarArtifactDrawer = ({
       targetRef={targetRef}
       side="left"
       className={cn({
-        '!w-full !h-full !left-0 !top-0': isMobile,
+        '!w-full !h-full !left-0 !top-0 !z-[100]': isMobile,
       })}
       onCloseComplete={onCloseComplete}
     >
