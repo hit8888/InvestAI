@@ -28,11 +28,6 @@ export interface VideoPlayState {
   isPlaying: boolean;
 }
 
-export interface ImageOpenState {
-  url: string;
-  isOpen: boolean;
-}
-
 export interface ArtifactContextState {
   sideBarArtifact: SidebarArtifactState | null;
   isSideDrawerOpen: boolean;
@@ -42,7 +37,6 @@ export interface ArtifactContextState {
   videoRef: React.RefObject<HTMLVideoElement | null>;
   isContainerReady: boolean;
   videoPlayState: VideoPlayState | null;
-  imageOpenState: ImageOpenState | null;
   shouldAutoPlay: boolean;
 }
 
