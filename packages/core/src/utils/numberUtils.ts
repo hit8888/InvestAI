@@ -1,3 +1,5 @@
+import numeral from 'numeral';
+
 class NumberUtil {
   static formatNumber(
     number?: number | string,
@@ -29,6 +31,14 @@ class NumberUtil {
       ...options,
       style: 'currency',
     }).format(Number(number));
+  }
+
+  static formatCurrencyWithDenominaton(number?: number | string): string {
+    if (!this.isNumber(number)) {
+      return number?.toString() ?? '';
+    }
+
+    return numeral(number).format('$0a').toUpperCase();
   }
 
   static isNumber(value: unknown): boolean {

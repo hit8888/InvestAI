@@ -186,7 +186,7 @@ export const getMappedDataFromResponseForVisitorsTableView = (
     company_country: response.company_demographics?.company_country ?? '',
     industry_domain: capitalizeString(response.company_demographics?.industry_domain) ?? '',
     employee_count: NumberUtil.formatNumber(response.company_demographics?.employee_count ?? 0),
-    revenue: NumberUtil.formatCurrency(response.company_demographics?.company_revenue ?? ''),
+    revenue: NumberUtil.formatCurrencyWithDenominaton(response.company_demographics?.company_revenue ?? ''),
     email: response.email ?? response.prospect_demographics?.email ?? '',
     session_id: response.session_id ?? '',
     prospect_id: response.prospect_id ?? '',

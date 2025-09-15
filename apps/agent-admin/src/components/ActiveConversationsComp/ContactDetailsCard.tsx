@@ -45,7 +45,7 @@ const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
         label: 'Revenue:',
         value: company_revenue,
         renderValue: (value?: number | string) => {
-          return <span>{NumberUtil.formatCurrency(value)}</span>;
+          return <span>{NumberUtil.formatCurrencyWithDenominaton(value)}</span>;
         },
       },
       {
