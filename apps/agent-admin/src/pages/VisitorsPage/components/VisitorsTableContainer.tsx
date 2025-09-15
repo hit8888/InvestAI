@@ -37,9 +37,10 @@ import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import { useSidebar } from '../../../context/SidebarContext.tsx';
 import { SortValues } from '@meaku/core/types/admin/sort';
-import { HeaderGroup, Row } from '@tanstack/react-table';
+import { Cell, HeaderGroup, Row } from '@tanstack/react-table';
 import TableBodyRowItemHavingLogo from '@breakout/design-system/components/Table/TableBodyRowItemHavingLogo';
 import CustomSingleHeaderRowItem from '@breakout/design-system/components/Table/CustomSingleHeaderRowItem';
+import AssignedRepCellValue from '../../../components/tableComp/tableCellComp/AssignedRepCellValue.tsx';
 
 type VisitorsTableContainerProps = {
   onCompanySelect?: (companyData: CompanyData) => void;
@@ -133,12 +134,21 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
     onCompanySelect?.(companyData);
   };
 
+  // Define custom cell renderers for specific columns
+  const customCellRenderers = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sdr_assignment: (cell: Cell<any, any>) => {
+      return <AssignedRepCellValue value={cell.getContext().getValue()} />;
+    },
+  };
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const renderRowItem = (row: Row<any>) => {
     const logoSrc = row.original.website_url ? getCompanyLogoSrc(row.original.website_url) : '';
 
     return (
       <TableBodyRowItemHavingLogo
+        customCellRenderers={customCellRenderers}
         logo={{ company: { src: logoSrc, placeholderText: row.original.company } }}
         row={row}
         handleRowItemClick={handleRowItemClick}

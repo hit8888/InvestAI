@@ -10,7 +10,7 @@ import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
 import SourcesFilterContent from './SourcesFilterContent';
 import StatusFilterContent from './StatusFilterContent';
 import FileTypeFilterContent from './FileTypeFilterContent';
-import AssignedUserEmailFilterContent from './AssignedUserEmailFilterContent';
+import SdrAssignmentFilterContent from './SdrAssignmentFilterContent';
 
 const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
   const {
@@ -26,7 +26,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
     Status,
     UsageCount,
     FileType,
-    AssignedUserEmail,
+    SdrAssignment,
   } = FilterType;
   return (
     <React.Fragment>
@@ -57,8 +57,8 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       {[ProductOfInterest, ProductInterest].includes(filterState) ? (
         <ProductOfInterestFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
-      {filterState === AssignedUserEmail ? (
-        <AssignedUserEmailFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      {filterState === SdrAssignment ? (
+        <SdrAssignmentFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
       ) : null}
       {filterState === UserMessagesCount ? <UserMessagesCountFilterContent page={page} /> : null}
       {filterState === UsageCount ? <UserMessagesCountFilterContent page={page} /> : null}

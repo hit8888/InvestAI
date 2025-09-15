@@ -1,5 +1,5 @@
 import { PaginationPageType } from './admin';
-import { FilterItem } from './api.ts';
+import { FilterItem, SdrAssignment } from './api.ts';
 
 export interface TableAllFilterConfig {
   filterIcon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -53,7 +53,6 @@ export enum FilterType {
   Sources = 'sources',
   FileType = 'fileType',
   UsageCount = 'usageCount',
-  AssignedUserEmail = 'assignedUserEmail',
   Duration = 'duration',
   SearchTableContent = 'searchTableContent',
   AllFilters = 'allFilters',
@@ -61,6 +60,8 @@ export enum FilterType {
   UserMessagesCount = 'userMessagesCount',
   Status = 'status',
   TestConversationIncluded = 'testConversationsIncluded',
+  SdrAssignment = 'sdrAssignment',
+  SessionIdIncluded = 'sessionIdIncluded',
 }
 
 export interface userMessagesCountFilterValues {
@@ -96,7 +97,8 @@ export interface FilterValues {
   userMessagesCount: userMessagesCountFilterValues;
   presetFilters: FilterItem[];
   testConversationsIncluded: boolean;
-  assignedUserEmail: string[];
+  sdrAssignment: SdrAssignment[];
+  sessionIdIncluded: boolean;
 }
 export const InitialFilterValues: FilterValues = {
   presetDate: PresetDateLabel.CustomRange,
@@ -125,7 +127,8 @@ export const InitialFilterValues: FilterValues = {
   },
   presetFilters: [],
   testConversationsIncluded: false,
-  assignedUserEmail: [],
+  sessionIdIncluded: false,
+  sdrAssignment: [],
 };
 
 export type FilterValueTypes =
@@ -135,6 +138,7 @@ export type FilterValueTypes =
   | number
   | userMessagesCountFilterValues
   | durationFilterValues
+  | SdrAssignment[]
   | boolean
   | undefined;
 

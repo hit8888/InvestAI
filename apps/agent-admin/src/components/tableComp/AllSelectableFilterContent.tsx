@@ -5,8 +5,9 @@ import { getDateAppliedValue, getFiltersConfig, getOrderedBuyerIntent } from '..
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
-import { CONVERSATIONS_PAGE, LEADS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE, LEADS_PAGE, VISITORS_PAGE } from '@meaku/core/utils/index';
 import TestConversationIncludedFilter from './TestConversationIncludedFilter';
+import SessionIdIncludedFilter from './SessionIdIncludedFilter';
 
 type AllSelectableFilterContentProps = PageTypeProps & {
   handleFilterState: (value: FilterType) => void;
@@ -33,10 +34,11 @@ const AllSelectableFilterContent = ({
     Sources,
     Status,
     FileType,
-    AssignedUserEmail,
+    SdrAssignment,
   } = FilterType;
 
   const isConversationsAndLeadsPage = page === CONVERSATIONS_PAGE || page === LEADS_PAGE;
+  const isVisitorsPage = page === VISITORS_PAGE;
 
   // All filters config
   const filterConfig = [...getFiltersConfig(page)];
@@ -63,7 +65,7 @@ const AllSelectableFilterContent = ({
       usageCount,
       status,
       fileType,
-      assignedUserEmail,
+      sdrAssignment,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -82,8 +84,8 @@ const AllSelectableFilterContent = ({
         return status.length > 0;
       case ProductOfInterest:
         return productOfInterest.length > 0;
-      case AssignedUserEmail:
-        return assignedUserEmail.length > 0;
+      case SdrAssignment:
+        return sdrAssignment.length > 0;
       case ProductInterest:
         return productInterest.length > 0;
       case Duration:
@@ -114,7 +116,7 @@ const AllSelectableFilterContent = ({
       sources,
       status,
       fileType,
-      assignedUserEmail,
+      sdrAssignment,
     } = filters[page];
     switch (filterKey) {
       case DateRange:
@@ -145,8 +147,8 @@ const AllSelectableFilterContent = ({
           : 'Any';
       case ProductOfInterest:
         return productOfInterest.length > 0 ? `${productOfInterest.length} selected` : 'Any';
-      case AssignedUserEmail:
-        return assignedUserEmail.length > 0 ? `${assignedUserEmail.length} selected` : 'Any';
+      case SdrAssignment:
+        return sdrAssignment.length > 0 ? `${sdrAssignment.length} selected` : 'Any';
       case ProductInterest:
         return productInterest.length > 0 ? `${productInterest.length} selected` : 'Any';
       case MeetingBooked:
@@ -157,11 +159,14 @@ const AllSelectableFilterContent = ({
   };
 
   const areFiltersApplied =
-    filterConfig.some((config) => isFilterApplied(config.filterKey)) || filters[page].testConversationsIncluded;
+    filterConfig.some((config) => isFilterApplied(config.filterKey)) ||
+    filters[page].testConversationsIncluded ||
+    filters[page].sessionIdIncluded;
 
   return (
     <React.Fragment key={FilterType.AllFilters}>
       {isConversationsAndLeadsPage ? <TestConversationIncludedFilter page={page} /> : null}
+      {isVisitorsPage ? <SessionIdIncludedFilter page={page} /> : null}
       {filterConfig.map((config) => (
         <SingleFilterState
           key={config.filterKey}

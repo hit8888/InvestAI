@@ -58,6 +58,7 @@ import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
   FilterItem,
+  type SdrAssignment,
   SortItem,
 } from '@meaku/core/types/admin/api';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
@@ -78,12 +79,13 @@ const {
   ProductInterest,
   UserMessagesCount,
   TestConversationIncluded,
+  SessionIdIncluded,
   UsageCount,
   Sources,
   Status,
   SearchTableContent,
   FileType,
-  AssignedUserEmail,
+  SdrAssignment,
 } = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
@@ -167,7 +169,6 @@ export const getMappedDataFromResponseForConversationsTableView = (response: Con
     session_id: response.session_id || '-',
     prospect_details: response?.prospect_details || {},
     company_details: response?.company_details || {},
-    assigned_user_email: response.assigned_user_email || '-',
   };
 
   return mappedData;
@@ -191,6 +192,7 @@ export const getMappedDataFromResponseForVisitorsTableView = (
     prospect_id: response.prospect_id ?? '',
     product_interest: response.product_interest ?? '',
     need: capitalizeString(response.need) ?? '',
+    sdr_assignment: response.sdr_assignment ?? null,
     updated_on: response.updated_on ?? '',
   };
 };
@@ -347,9 +349,9 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'Company',
         width: '434px',
       };
-    case AssignedUserEmail:
+    case SdrAssignment:
       return {
-        label: 'Assigned User Email',
+        label: 'Assigned Rep',
         width: '334px',
       };
     case Sources:
@@ -530,12 +532,13 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     userMessagesCount,
     company,
     testConversationsIncluded,
+    sessionIdIncluded,
     sources,
     // usageCount,
     // duration,
     status,
     fileType,
-    assignedUserEmail,
+    sdrAssignment,
   } = filterState;
 
   if (dateRange?.startDate || dateRange?.endDate) {
@@ -607,14 +610,6 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     });
   }
 
-  if (assignedUserEmail.length > 0) {
-    filterApplied.push({
-      field: 'assigned_user_email',
-      value: assignedUserEmail,
-      operator: 'in',
-    });
-  }
-
   if (productInterest.length > 0) {
     filterApplied.push({
       field: 'product_interest',
@@ -623,14 +618,6 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     });
   }
 
-  // if (meetingBooked) {
-  //   filterApplied.push({
-  //     field: 'meeting_status',
-  //     value: meetingBooked, // e.g., 'all' or 'yes' or 'no'
-  //     operator: 'eq',
-  //   });
-  // }
-
   if (isVisitorsPage) {
     filterApplied.push({
       field: 'company',
@@ -638,11 +625,30 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       operator: 'is_not_null',
     });
 
-    filterApplied.push({
-      field: 'session_id',
-      value: null,
-      operator: 'is_not_null',
-    });
+    if (!sessionIdIncluded) {
+      filterApplied.push({
+        field: 'session_id',
+        value: null,
+        operator: 'is_not_null',
+      });
+    }
+
+    if (sdrAssignment.length > 0) {
+      filterApplied.push({
+        field: 'sdr_assignment',
+        value: sdrAssignment.map((item) => item?.id).filter((id): id is number => id != null),
+        operator: 'in',
+      });
+    }
+
+    // TODO: Uncomment when nested filter is implemented
+    // if (meetingBooked) {
+    //   filterApplied.push({
+    //     field: 'meeting_form_submitted',
+    //     value: meetingBooked, // e.g., 'all' or 'yes' or 'no'
+    //     operator: 'eq',
+    //   });
+    // }
   }
 
   if (isConversationsPage) {
@@ -715,7 +721,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 };
 
 export const collectAppliedFilters = (filters: FilterValues) => {
-  const appliedFilters: { key: string; label: string; value: string | string[] | boolean }[] = [];
+  const appliedFilters: { key: string; label: string; value: string | string[] | boolean | SdrAssignment[] }[] = [];
 
   const {
     dateRange,
@@ -727,12 +733,13 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     userMessagesCount,
     company,
     testConversationsIncluded,
+    sessionIdIncluded,
     sources,
     status,
     searchTableContent,
     usageCount,
     fileType,
-    assignedUserEmail,
+    sdrAssignment,
   } = filters;
 
   if (dateRange) {
@@ -748,6 +755,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: TestConversationIncluded,
       label: 'Playground Conversations',
       value: `${testConversationsIncluded}`,
+    });
+  }
+
+  if (sessionIdIncluded) {
+    appliedFilters.push({
+      key: SessionIdIncluded,
+      label: 'Session ID Included',
+      value: `${sessionIdIncluded}`,
     });
   }
 
@@ -830,11 +845,11 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     });
   }
 
-  if (assignedUserEmail.length > 0) {
+  if (sdrAssignment.length > 0) {
     appliedFilters.push({
-      key: AssignedUserEmail,
-      label: 'Assigned Email',
-      value: assignedUserEmail,
+      key: SdrAssignment,
+      label: 'Assigned Rep',
+      value: sdrAssignment,
     });
   }
 

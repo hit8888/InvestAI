@@ -9,29 +9,46 @@ import { FilterType } from '@meaku/core/types/admin/filters';
 import DataSourceStatusChip from './tableCellComp/DataSourceStatusChip';
 import { DATA_SOURCE_STATUS } from '../../pages/DataSourcesPage/constants';
 import Typography from '@breakout/design-system/components/Typography/index';
+import type { SdrAssignment } from '@meaku/core/types/admin/api';
+import SingleAssignRepCell from '../common/SingleAssignRepCell';
+import {
+  handleCheckboxToggle as utilHandleCheckboxToggle,
+  mapOptionsToValues,
+  getOptionKey,
+  type CheckboxValue,
+  type CheckboxOption,
+} from '../../utils/checkboxUtils';
+
+const { Location, IntentScore, Status, SdrAssignment } = FilterType;
 
 type CommonCheckboxesFilterContent = {
   keyValue: string;
-  selectedOptions: string[];
-  onSelectionChange: (value: string[]) => void;
-  checkboxOptions: { value: string; label: string }[];
+  selectedOptions: CheckboxValue[];
+  onSelectionChange: (value: CheckboxValue[]) => void;
+  checkboxOptions: CheckboxOption[];
   handleClosePopover: () => void;
   filterState: FilterType;
   checkboxOrientation?: 'right' | 'left';
 };
 
-const renderFilterLabel = (label: string, keyValue: string) => {
+const renderFilterLabel = (label: string, keyValue: string, value?: CheckboxValue) => {
   switch (keyValue) {
-    case FilterType.Location:
+    case Location:
       return (
         <div className="text-base font-normal text-gray-900">
           <LocationCellValue value={label} showTruncatedText={false} />
         </div>
       );
-    case FilterType.IntentScore:
+    case IntentScore:
       return <BuyerIntentCellValue value={`${label.toLowerCase()} Intent`} />;
-    case FilterType.Status:
+    case Status:
       return <DataSourceStatusChip status={label as DATA_SOURCE_STATUS} />;
+    case SdrAssignment:
+      return value ? (
+        <SingleAssignRepCell listValue={value as SdrAssignment} />
+      ) : (
+        <Typography variant="body-16">{label}</Typography>
+      );
     default:
       return <Typography variant="body-16">{label}</Typography>;
   }
@@ -46,11 +63,10 @@ const CommonCheckboxesFilterContent = ({
   filterState,
   checkboxOrientation = 'left',
 }: CommonCheckboxesFilterContent) => {
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState<string[]>(selectedOptions);
-  const handleCheckboxToggle = (value: string) => {
-    const newSelection = selectedCheckboxes.includes(value)
-      ? selectedCheckboxes.filter((item) => item !== value)
-      : [...selectedCheckboxes, value];
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState<CheckboxValue[]>(selectedOptions);
+
+  const handleCheckboxToggle = (value: CheckboxValue) => {
+    const newSelection = utilHandleCheckboxToggle(value, selectedCheckboxes);
     setSelectedCheckboxes(newSelection);
     onSelectionChange(newSelection);
   };
@@ -62,8 +78,9 @@ const CommonCheckboxesFilterContent = ({
   };
 
   const handleSelectAll = () => {
-    setSelectedCheckboxes(checkboxOptions.map((option) => option.value));
-    onSelectionChange(checkboxOptions.map((option) => option.value));
+    const allValues = mapOptionsToValues(checkboxOptions);
+    setSelectedCheckboxes(allValues);
+    onSelectionChange(allValues);
   };
 
   const areAllSelected = selectedCheckboxes.length === checkboxOptions.length;
@@ -77,16 +94,20 @@ const CommonCheckboxesFilterContent = ({
         areAllSelected={areAllSelected}
       />
       <div className={cn('hide-scrollbar max-h-56 overflow-auto')}>
-        {checkboxOptions.map((option) => (
-          <CustomCheckboxItem
-            key={option.value}
-            option={option}
-            selectedCheckboxes={selectedCheckboxes}
-            handleCheckboxToggle={handleCheckboxToggle}
-            checkboxPosition={checkboxOrientation}
-            renderLabel={(label) => renderFilterLabel(label, keyValue)}
-          />
-        ))}
+        {checkboxOptions.map((option) => {
+          const key = getOptionKey(option);
+
+          return (
+            <CustomCheckboxItem
+              key={key}
+              option={option}
+              selectedCheckboxes={selectedCheckboxes}
+              handleCheckboxToggle={handleCheckboxToggle}
+              checkboxPosition={checkboxOrientation}
+              renderLabel={(label, value) => renderFilterLabel(label, keyValue, value)}
+            />
+          );
+        })}
       </div>
       <CustomFooterWithButtons
         isDisabled={checkboxOptions.length === 0}

@@ -1,16 +1,18 @@
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
-
-interface Option {
-  value: string;
-  label: string;
-}
+import {
+  isOptionChecked,
+  getToggleValue,
+  getOptionKey,
+  type CheckboxValue,
+  type CheckboxOption,
+} from '../../utils/checkboxUtils';
 
 interface CheckboxItemProps {
-  option: Option;
-  selectedCheckboxes: string[];
-  handleCheckboxToggle: (value: string) => void;
+  option: CheckboxOption;
+  selectedCheckboxes: CheckboxValue[];
+  handleCheckboxToggle: (value: CheckboxValue) => void;
   checkboxPosition?: 'left' | 'right';
-  renderLabel?: (label: string) => React.ReactNode;
+  renderLabel?: (label: string, value?: CheckboxValue) => React.ReactNode;
 }
 
 const CustomCheckboxItem = ({
@@ -20,22 +22,28 @@ const CustomCheckboxItem = ({
   checkboxPosition = 'left', // 'left' or 'right'
   renderLabel = (label) => <p className="text-base font-normal text-gray-900">{label}</p>,
 }: CheckboxItemProps) => {
-  const isChecked = selectedCheckboxes.includes(option.value);
+  const isChecked = isOptionChecked(option, selectedCheckboxes);
+  const valueForToggle = getToggleValue(option);
+  const key = getOptionKey(option);
 
   const getCheckboxContainer = () => {
     return (
       <div className="cursor-pointer">
-        <Checkbox haveBlackBackground={false} checked={isChecked} onChange={() => handleCheckboxToggle(option.value)} />
+        <Checkbox
+          haveBlackBackground={false}
+          checked={isChecked}
+          onChange={() => handleCheckboxToggle(valueForToggle)}
+        />
       </div>
     );
   };
 
   return (
     <div
-      key={option.value}
+      key={key}
       onClick={(e) => {
         e.stopPropagation();
-        handleCheckboxToggle(option.value);
+        handleCheckboxToggle(valueForToggle);
       }}
       className={`flex w-full flex-1 cursor-pointer items-center gap-4 self-stretch p-4 hover:bg-primary/5 ${
         checkboxPosition === 'right' ? 'justify-between' : ''
@@ -43,7 +51,7 @@ const CustomCheckboxItem = ({
     >
       {checkboxPosition === 'left' && getCheckboxContainer()}
 
-      {renderLabel(option.label)}
+      {renderLabel('label' in option ? option.label : '', valueForToggle)}
 
       {checkboxPosition === 'right' && getCheckboxContainer()}
     </div>

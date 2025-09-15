@@ -23,13 +23,14 @@ const {
   Company,
   UserMessagesCount,
   TestConversationIncluded,
+  SessionIdIncluded,
   UsageCount,
   Sources,
   SearchTableContent,
   Duration,
   Status,
   FileType,
-  AssignedUserEmail,
+  SdrAssignment,
 } = FilterType;
 
 interface AllFiltersContainerProps extends PageTypeProps {
@@ -75,7 +76,7 @@ const AllFiltersContainer = ({ page, showSearchBar = true, showFilterBar = true 
       case Company:
       case ProductInterest:
       case ProductOfInterest:
-      case AssignedUserEmail:
+      case SdrAssignment:
       case Sources:
       case FileType:
       case Status:
@@ -106,6 +107,7 @@ const AllFiltersContainer = ({ page, showSearchBar = true, showFilterBar = true 
         handleFilterRemove(key, '');
         break;
       case TestConversationIncluded:
+      case SessionIdIncluded:
         handleFilterRemove(key, false);
         break;
     }

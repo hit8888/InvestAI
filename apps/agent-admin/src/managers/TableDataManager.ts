@@ -63,9 +63,9 @@ class TableDataManager {
     return this.tableData.results;
   }
 
-  getSortedItemsByKey<
-    T extends 'company' | 'country' | 'product_of_interest' | 'product_interest' | 'assigned_user_email',
-  >(key: T) {
+  getSortedItemsByKey<T extends 'company' | 'country' | 'product_of_interest' | 'product_interest' | 'sdr_assignment'>(
+    key: T,
+  ) {
     if (!this.tableData) {
       return [];
     }

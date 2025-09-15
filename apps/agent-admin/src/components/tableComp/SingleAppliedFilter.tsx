@@ -8,9 +8,10 @@ import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 import { MULTI_VALUE_FILTER_TYPES } from '../../utils/constants';
 import Typography from '@breakout/design-system/components/Typography/index';
+import type { SdrAssignment } from '@meaku/core/types/admin/api';
 
 type SingleAppliedFilterProps = {
-  filter: { key: string; label: string; value: string | string[] | boolean };
+  filter: { key: string; label: string; value: string | string[] | boolean | SdrAssignment[] };
   handleRemove: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleAppliedFilterClicked: (filter: FilterType) => void;
   filterState: FilterType;
@@ -20,7 +21,8 @@ type SingleAppliedFilterProps = {
   page: PaginationPageType;
 };
 
-const { DateRange, TestConversationIncluded } = FilterType;
+const { DateRange, TestConversationIncluded, SessionIdIncluded, SdrAssignment } = FilterType;
+const FILTER_KEYS_WITH_NO_POPOVER = [TestConversationIncluded, SessionIdIncluded];
 
 const SingleAppliedFilter = ({
   filter,
@@ -33,10 +35,10 @@ const SingleAppliedFilter = ({
   page,
 }: SingleAppliedFilterProps) => {
   const [isFilterAppliedClicked, setIsFilterAppliedClicked] = useState(false);
-  const isTestConversationsIncludedFilterApplied = filter.key === TestConversationIncluded;
+  const isInvalidFilterKeys = FILTER_KEYS_WITH_NO_POPOVER.includes(filter.key as FilterType);
 
   const handleAppliedFilterClick = () => {
-    if (!isTestConversationsIncludedFilterApplied) {
+    if (!isInvalidFilterKeys) {
       handleAppliedFilterClicked(filter.key as FilterType);
       setIsFilterAppliedClicked(true);
     }
@@ -48,10 +50,15 @@ const SingleAppliedFilter = ({
   };
 
   const handlePopoverOpen = () => {
-    if (!isTestConversationsIncludedFilterApplied) {
+    if (!isInvalidFilterKeys) {
       setIsFilterAppliedClicked(!isFilterAppliedClicked);
     }
   };
+
+  const filterValue =
+    filter.key === SdrAssignment
+      ? (filter.value as SdrAssignment[]).map((item) => item?.assigned_user?.username)
+      : filter.value;
   return (
     <Popover open={isFilterAppliedClicked} onOpenChange={handlePopoverOpen}>
       <PopoverTrigger
@@ -61,10 +68,10 @@ const SingleAppliedFilter = ({
       >
         <span className="text-xs font-normal text-gray-400">{filter.label}:</span>
         {MULTI_VALUE_FILTER_TYPES.includes(filter.key as FilterType) ? (
-          <TooltipAddedAppliedFilter appliedFilterValues={filter.value as string[]} />
+          <TooltipAddedAppliedFilter appliedFilterValues={filterValue as string[]} />
         ) : (
           <Typography variant="label-14-medium" className="lowercase text-gray-600">
-            {filter.value}
+            {String(filter.value)}
           </Typography>
         )}
         <span

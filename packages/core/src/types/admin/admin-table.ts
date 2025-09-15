@@ -9,6 +9,7 @@ import {
   EnrichmentSourceEnum,
   LeadsTableResponseSchema,
   ProspectDetailsSchema,
+  SdrAssignmentUserSchema,
   VisitorsTableResponseSchema,
 } from './api';
 
@@ -60,7 +61,6 @@ export const ConversationsTableViewSchema = z.object({
   query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
-  assigned_user_email: z.string().optional().nullable(),
 });
 
 export const VisitorsTableViewSchema = z.object({
@@ -78,6 +78,7 @@ export const VisitorsTableViewSchema = z.object({
   prospect_id: z.string(),
   need: z.string(),
   product_interest: z.string(),
+  sdr_assignment: SdrAssignmentUserSchema.optional().nullable(),
   updated_on: z.string(),
 });
 

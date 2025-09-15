@@ -47,7 +47,7 @@ import CalendarIcon from '@breakout/design-system/components/icons/panel-calenda
 import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
-import { AgentResponseWordCountEnum, BuyerIntent, PlaygroundView } from '@meaku/core/types/common';
+import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
 
 const {
   DateRange,
@@ -64,7 +64,7 @@ const {
   Status,
   FileType,
   ProductInterest,
-  AssignedUserEmail,
+  SdrAssignment,
 } = FilterType;
 const { Today, Yesterday, Last7Days, Last30Days, Last90Days, CustomRange } = PresetDateLabel;
 
@@ -139,7 +139,7 @@ export const MULTI_VALUE_FILTER_TYPES = [
   Company,
   Status,
   Sources,
-  AssignedUserEmail,
+  SdrAssignment,
 ];
 
 export enum COPIED_FIELD_TEXTS {
@@ -197,11 +197,11 @@ export const TABLE_FILTERS_CONFIG: TableAllFilterConfig[] = [
   },
   {
     filterIcon: FilterAssignedUserEmailIcon,
-    filterLabel: 'Assigned User Email',
+    filterLabel: 'Assigned Rep',
     filterValue: '',
     filterApplied: false,
-    filterKey: AssignedUserEmail,
-    filterType: AssignedUserEmail,
+    filterKey: SdrAssignment,
+    filterType: SdrAssignment,
   },
   {
     filterIcon: FilterProductOfInterestIcon,
@@ -319,21 +319,14 @@ export const INSIGHTS_DATE_RANGE_PRESET_OPTIONS = [
   { value: '0', label: CustomRange },
 ];
 
-const LEADS_TABLE_EXCLUDE_FILTERS = [
-  MeetingBooked,
-  IntentScore,
-  UserMessagesCount,
-  ProductOfInterest,
-  AssignedUserEmail,
-];
-const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, ProductInterest];
+const LEADS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, IntentScore, UserMessagesCount, ProductOfInterest, SdrAssignment];
+const CONVERSATIONS_TABLE_EXCLUDE_FILTERS = [MeetingBooked, ProductInterest, SdrAssignment];
 const VISITORS_TABLE_EXCLUDE_FILTERS = [
-  MeetingBooked,
+  MeetingBooked, // TODO: remove this when nested filter is implemented
   ProductInterest,
   ProductOfInterest,
-  AssignedUserEmail,
   UserMessagesCount,
-  BuyerIntent,
+  IntentScore,
 ];
 const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
 const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType];
@@ -823,9 +816,9 @@ export const INITIAL_SORT_VALUES: SortValues = {
   companySort: null,
   product_interestSort: null,
   product_of_interestSort: null,
-  assigned_user_emailSort: null,
   ip_addressSort: null,
   lead_typeSort: null,
+  sdr_assignmentSort: null,
   updated_onSort: null,
 };
 
@@ -843,9 +836,9 @@ export const FIELD_TO_SORT_KEY_MAP: Record<string, keyof SortValues> = {
   company: 'companySort',
   product_interest: 'product_interestSort',
   product_of_interest: 'product_of_interestSort',
-  assigned_user_email: 'assigned_user_emailSort',
   ip_address: 'ip_addressSort',
   lead_type: 'lead_typeSort',
+  sdr_assignment: 'sdr_assignmentSort',
   updated_on: 'updated_onSort',
 };
 
@@ -862,9 +855,9 @@ export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
   companySort: 'company',
   product_interestSort: 'product_interest',
   product_of_interestSort: 'product_of_interest',
-  assigned_user_emailSort: 'assigned_user_email',
   ip_addressSort: 'ip_address',
   lead_typeSort: 'lead_type',
+  sdr_assignmentSort: 'sdr_assignment',
   updated_onSort: 'updated_on',
 };
 

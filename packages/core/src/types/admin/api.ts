@@ -270,7 +270,6 @@ export const ConversationsResponseResultSchema = z.object({
   query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
-  assigned_user_email: z.string().optional().nullable(),
 });
 
 export const ConversationDetailResponseSchema = z.object({
@@ -299,8 +298,36 @@ export const ConversationDetailResponseSchema = z.object({
   query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
-  assigned_user_email: z.string().optional().nullable(),
 });
+
+export const SdrAssignmentUserSchema = z.object({
+  id: z.number().nullable().optional(),
+  username: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
+  first_name: z.string().nullable().optional(),
+  last_name: z.string().nullable().optional(),
+  full_name: z.string().nullable().optional(),
+  is_active: z.boolean().nullable().optional(),
+  designation: z.string().nullable().optional(),
+  department: z.string().nullable().optional(),
+  profile_picture: z.string().nullable().optional(),
+});
+
+export type UserSdrAssignment = z.infer<typeof SdrAssignmentUserSchema>;
+
+export const SdrAssignmentSchema = z.object({
+  id: z.number().nullable().optional(),
+  assigned_user: SdrAssignmentUserSchema.optional().nullable(),
+  assignment_type: z.string().nullable().optional(),
+  assignment_timestamp: z.string().nullable().optional(),
+  assigned_by_user: SdrAssignmentUserSchema.optional().nullable(),
+  routing_rule: z.number().nullable().optional(),
+  routing_source: z.string().nullable().optional(),
+  created_on: z.string().nullable().optional(),
+  updated_on: z.string().nullable().optional(),
+});
+
+export type SdrAssignment = z.infer<typeof SdrAssignmentSchema>;
 
 export const VisitorsResponseResultSchema = z.object({
   id: z.number().nullable().optional(),
@@ -344,6 +371,7 @@ export const VisitorsResponseResultSchema = z.object({
   referrer: z.string().nullable().optional(),
   session_id: z.string().nullable().optional(),
   prospect_id: z.string().nullable().optional(),
+  sdr_assignment: SdrAssignmentSchema.nullable().optional(),
   updated_on: z.string().nullable().optional(),
 });
 

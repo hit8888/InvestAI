@@ -1,6 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import AccessibleTableRow from '../accessibility/AccessibleTableRow';
-import { flexRender, Row } from '@tanstack/react-table';
+import { Cell, flexRender, Row } from '@tanstack/react-table';
 import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
@@ -19,6 +19,13 @@ export type CustomSingleBodyRowItemWithLogoProps = {
   pageType?: string;
   relatedEntities?: Record<string, string[]>;
   columnClassNames?: { [columnId: string]: string };
+  /**
+   * Custom cell renderers for specific columns.
+   * Key should be the column ID, value should be a function that takes a cell and returns a React node.
+   * Example: { 'sdr_assignment': (cell) => <CustomComponent value={cell.getValue()} /> }
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  customCellRenderers?: { [columnId: string]: (cell: Cell<any, any>) => React.ReactNode };
 };
 
 const TableBodyRowItemHavingLogo = ({
@@ -27,6 +34,7 @@ const TableBodyRowItemHavingLogo = ({
   handleRowItemClick,
   relatedEntities,
   columnClassNames,
+  customCellRenderers,
 }: CustomSingleBodyRowItemWithLogoProps) => {
   const { getCommonPinningStyles } = useTablePinningStyles();
 
@@ -57,6 +65,7 @@ const TableBodyRowItemHavingLogo = ({
         const logoSrc = logo?.[cell.column.id]?.src;
         const logoPlaceholderText = logo?.[cell.column.id]?.placeholderText;
 
+        const customRenderer = customCellRenderers?.[cell.column.id];
         return (
           <td
             key={cell.id}
@@ -70,19 +79,23 @@ const TableBodyRowItemHavingLogo = ({
             )}
             style={{ ...getCommonPinningStyles(cell.column) }}
           >
-            <div className="flex w-full min-w-0 items-center gap-2">
-              {(logoSrc || logoPlaceholderText) && (
-                <div className="h-6 w-6 flex-shrink-0">
-                  <LogoImage src={logoSrc} placeholderText={logoPlaceholderText} />
+            {customRenderer ? (
+              customRenderer(cell)
+            ) : (
+              <div className="flex w-full min-w-0 items-center gap-2">
+                {(logoSrc || logoPlaceholderText) && (
+                  <div className="h-6 w-6 flex-shrink-0">
+                    <LogoImage src={logoSrc} placeholderText={logoPlaceholderText} />
+                  </div>
+                )}
+                <div className="flex min-w-0 flex-1 flex-col justify-center overflow-hidden text-sm font-normal">
+                  <div className="truncate [&>span]:!w-auto [&>span]:max-w-full [&>span]:truncate">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
+                  {relatedValuesLabel && <div className="truncate text-xs text-gray-500">{relatedValuesLabel}</div>}
                 </div>
-              )}
-              <div className="flex min-w-0 flex-1 flex-col justify-center overflow-hidden text-sm font-normal">
-                <div className="truncate [&>span]:!w-auto [&>span]:max-w-full [&>span]:truncate">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </div>
-                {relatedValuesLabel && <div className="truncate text-xs text-gray-500">{relatedValuesLabel}</div>}
               </div>
-            </div>
+            )}
           </td>
         );
       })}
