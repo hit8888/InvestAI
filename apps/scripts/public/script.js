@@ -8,6 +8,7 @@ const CONFIG = {
     EMBEDDED_WIDGET: "#embedded-widget",
     CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
     STATIC_CONTENT: "#static-content",
+    BRAND_COVER_CONTAINER: "#bo-bc-container",
   },
   REQUIRED_FIELDS: ["tenant_id", "agent_id"],
 };
@@ -25,11 +26,13 @@ class UIController {
   static showForm() {
     DOM.show(DOM.get(CONFIG.SELECTORS.CONFIG_PANEL));
     DOM.hide(DOM.get(CONFIG.SELECTORS.STATIC_CONTENT));
+    DOM.hide(DOM.get(CONFIG.SELECTORS.BRAND_COVER_CONTAINER));
   }
 
   static hideForm() {
     DOM.hide(DOM.get(CONFIG.SELECTORS.CONFIG_PANEL));
     DOM.show(DOM.get(CONFIG.SELECTORS.STATIC_CONTENT));
+    DOM.show(DOM.get(CONFIG.SELECTORS.BRAND_COVER_CONTAINER));
   }
 
   static removeExistingWidget() {

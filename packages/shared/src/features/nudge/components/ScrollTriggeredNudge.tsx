@@ -52,7 +52,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, toggleEnabled
           <Calendar className="size-4" />
           Book a Meeting
         </Button>
-        <Button variant="secondary" className="w-full" onClick={handleSeeItInAction}>
+        <Button variant="default_active" className="w-full" onClick={handleSeeItInAction}>
           <Sparkles className="size-4" />
           See it in action!
         </Button>

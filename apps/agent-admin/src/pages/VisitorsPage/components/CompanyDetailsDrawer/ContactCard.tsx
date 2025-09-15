@@ -80,7 +80,6 @@ const ContactCard = ({
                 />
               )}
             </div>
-            {!isLarge && employee.email && <span className="text-sm text-blue_sec-1000">{employee.email}</span>}
           </div>
 
           {/* Generate Email Button */}
