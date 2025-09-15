@@ -16,7 +16,7 @@ export const ImageArtifact = ({
   isLatestMessage = false,
   isExpanded = false,
 }: ImageArtifactProps) => {
-  const { openSidebar, closeSidebar, setCurrentVideo, isContainerReady, sideBarArtifact, imageOpenState } =
+  const { openSidebar, closeSidebar, setCurrentVideo, isContainerReady, sideBarArtifact, currentImage } =
     useSidebarArtifactContext();
 
   const hasAutoOpened = useRef(false);
@@ -69,11 +69,11 @@ export const ImageArtifact = ({
 
   // Check if this specific image is currently expanded in the sidebar
   const isThisImageExpanded = useMemo(() => {
-    if (imageOpenState?.url !== url || sideBarArtifact?.artifactType !== 'SLIDE_IMAGE') {
+    if (currentImage?.url !== url || sideBarArtifact?.artifactType !== 'SLIDE_IMAGE') {
       return false;
     }
-    return imageOpenState.isOpen;
-  }, [imageOpenState?.url, imageOpenState?.isOpen, url, sideBarArtifact?.artifactType]);
+    return currentImage.isExpanded;
+  }, [currentImage?.url, currentImage?.isExpanded, url, sideBarArtifact?.artifactType]);
 
   if (!url) {
     return null;

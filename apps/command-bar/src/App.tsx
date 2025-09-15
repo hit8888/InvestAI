@@ -40,7 +40,7 @@ function App() {
 
   const [askAiModule] = modules.filter((m) => m.module_type === ASK_AI);
 
-  const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000 || Infinity;
+  const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000;
 
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
@@ -54,7 +54,7 @@ function App() {
 
   const { initialiseSocket, sendUserMessage } = useWsClient();
 
-  const nudgeEnabled = useDelayedEnable(totalAnimationDelay, {
+  const nudgeEnabled = useDelayedEnable(totalAnimationDelay + 200, {
     shouldStart: dynamicConfigQuery?.isFetched && !!nudgeConfig,
   });
 

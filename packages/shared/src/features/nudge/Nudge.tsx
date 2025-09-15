@@ -37,8 +37,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(nudgeData ?? null);
-  const { isEnabled: isScrollTriggeredNudgeEnabled, toggleEnabled: toggleScrollTriggeredNudgeEnabled } =
-    useScrollTriggeredNudge();
+  const { isEnabled: isScrollTriggeredNudgeEnabled, disable: disableScrollTriggeredNudge } = useScrollTriggeredNudge();
 
   const {
     polling_enabled,
@@ -132,15 +131,16 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   useEffect(() => {
     if (activeFeature) {
       handleDismiss();
+      disableScrollTriggeredNudge();
     }
-  }, [activeFeature, handleDismiss]);
+  }, [activeFeature, handleDismiss, disableScrollTriggeredNudge]);
 
   if (isScrollTriggeredNudgeEnabled) {
     return (
       <ScrollTriggeredNudge
         setActiveFeature={setActiveFeature}
         sendUserMessage={sendUserMessage}
-        toggleEnabled={toggleScrollTriggeredNudgeEnabled}
+        onDisable={disableScrollTriggeredNudge}
       />
     );
   }

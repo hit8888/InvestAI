@@ -39,7 +39,6 @@ export const useSidebarArtifact = () => {
   const [videoError, setVideoError] = useState<string | null>(null);
   const [isContainerReady, setIsContainerReady] = useState(false);
   const [videoPlayState, setVideoPlayState] = useState<{ url: string; isPlaying: boolean } | null>(null);
-  const [imageOpenState, setImageOpenState] = useState<{ url: string; isOpen: boolean } | null>(null);
   const [shouldAutoPlay, setShouldAutoPlay] = useState<boolean>(false);
   const [wasManuallyClosed, setWasManuallyClosed] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -78,7 +77,6 @@ export const useSidebarArtifact = () => {
           setShouldAutoPlay(shouldPlay === true);
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
-          setImageOpenState({ url, isOpen: true });
         }
 
         // Small delay to ensure accurate positioning
@@ -97,7 +95,6 @@ export const useSidebarArtifact = () => {
           setCurrentVideo({ url, isPlaying: shouldPlay === true });
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
-          setImageOpenState({ url, isOpen: true });
         }
 
         // Small delay to ensure accurate positioning
@@ -115,8 +112,12 @@ export const useSidebarArtifact = () => {
   const closeSidebar = useCallback(() => {
     // Mark that this was a manual close
     setWasManuallyClosed(true);
+    // Clear image state immediately to remove overlay
+    if (sideBarArtifact?.artifactType === 'SLIDE_IMAGE') {
+      setCurrentImage(null);
+    }
     setIsSideDrawerOpen(false);
-  }, []);
+  }, [sideBarArtifact?.artifactType]);
 
   /**
    * Cleanup after sidebar close animation completes
@@ -134,7 +135,6 @@ export const useSidebarArtifact = () => {
     setCurrentImage(null);
     setVideoError(null);
     setVideoPlayState(null);
-    setImageOpenState(null);
     setShouldAutoPlay(false);
   }, [currentVideo]);
 
@@ -285,7 +285,6 @@ export const useSidebarArtifact = () => {
     videoRef,
     isContainerReady,
     videoPlayState,
-    imageOpenState,
     shouldAutoPlay,
 
     // Actions
