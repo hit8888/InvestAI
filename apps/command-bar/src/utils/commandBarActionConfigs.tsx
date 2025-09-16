@@ -1,0 +1,95 @@
+import { ActionConfig } from '@meaku/shared/features/base/BaseActionComponent';
+import { Button, Icons } from '@meaku/saral';
+import { VideoLibraryIcon } from '@meaku/saral';
+import CustomIconImageContainer from '@meaku/shared/features/ask-ai/components/CustomIconImageContainer';
+import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
+import { CommandBarModuleTypeSchema } from '@meaku/core/index';
+
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
+
+export const AskAIActionConfig: ActionConfig = {
+  moduleType: ASK_AI,
+  tooltip: {
+    content: 'Ask our AI assistant anything!',
+  },
+  customRenderer: ({ onClick, featureConfig, config }) => {
+    const { orb_config: orbConfig } = config.style_config;
+    const customIconUrl = featureConfig?.icon_asset?.public_url ?? undefined;
+
+    const renderContent = () => {
+      if (customIconUrl) {
+        return <CustomIconImageContainer sourceUrl={customIconUrl} imageAlt={featureConfig?.name ?? 'Ask AI'} />;
+      }
+      if (orbConfig?.logo_url) {
+        return <CustomIconImageContainer sourceUrl={orbConfig.logo_url} imageAlt={'Ask AI'} />;
+      }
+      return <FallbackOrb />;
+    };
+
+    return (
+      <Button className="rounded-full" size="icon" data-action-id={`action-ASK_AI`} onClick={onClick}>
+        {renderContent()}
+      </Button>
+    );
+  },
+};
+
+export const BookMeetingActionConfig: ActionConfig = {
+  moduleType: BOOK_MEETING,
+  icon: {
+    fallbackIcon: <Icons.Calendar className="size-5" />,
+    customIconClassName: 'h-full w-full',
+    customIconAlt: 'Book a Meeting',
+  },
+  tooltip: {
+    content: 'Book a call',
+  },
+};
+
+export const SummarizeActionConfig: ActionConfig = {
+  moduleType: SUMMARIZE,
+  icon: {
+    fallbackIcon: <Icons.FileText className="size-5" />,
+    customIconClassName: 'h-full w-full',
+    customIconAlt: 'Summarize',
+  },
+  tooltip: {
+    content: 'Get a quick summary of any page',
+  },
+};
+
+export const IframeActionConfig: ActionConfig = {
+  moduleType: IFRAME,
+  icon: {
+    fallbackIcon: <Icons.Play className="size-5" />,
+    customIconClassName: 'h-full w-full',
+    customIconAlt: 'Iframe',
+  },
+  tooltip: {
+    content: (featureConfig) => featureConfig?.module_configs?.tooltip_text ?? featureConfig?.name ?? 'Iframe',
+  },
+  shouldRender: (featureConfig) => {
+    return !!featureConfig?.module_configs?.url;
+  },
+};
+
+export const VideoLibraryActionConfig: ActionConfig = {
+  moduleType: VIDEO_LIBRARY,
+  icon: {
+    fallbackIcon: <VideoLibraryIcon className="size-5" />,
+    customIconClassName: 'h-full w-full',
+    customIconAlt: 'Video Library',
+  },
+  tooltip: {
+    content: 'Video Library',
+  },
+};
+
+// Configuration mapping for cleaner code
+export const ACTION_CONFIGS = {
+  [ASK_AI]: AskAIActionConfig,
+  [BOOK_MEETING]: BookMeetingActionConfig,
+  [SUMMARIZE]: SummarizeActionConfig,
+  [IFRAME]: IframeActionConfig,
+  [VIDEO_LIBRARY]: VideoLibraryActionConfig,
+} as const;

@@ -2,15 +2,15 @@ import { motion } from 'framer-motion';
 import { Button, Markdown } from '@meaku/saral';
 import NudgeAsset from './NudgeAsset';
 import NudgeTimeoutLoader from './NudgeTimeoutLoader';
-import { Cta, Asset } from '@meaku/core/types/api/configuration_response';
+import { Cta, NudgeAssetType } from '@meaku/core/types/api/configuration_response';
 import NudgeDismissButton from './NudgeDismissButton';
 
 interface NudgeBodyProps {
   content: string;
   displayDuration?: number;
   headerPresent: boolean;
-  topAssets: Asset[];
-  bottomAssets: Asset[];
+  topAssets: NudgeAssetType[];
+  bottomAssets: NudgeAssetType[];
   ctas?: Cta[];
   onCtaClick: (button: Cta) => void;
   onDismiss: () => void;

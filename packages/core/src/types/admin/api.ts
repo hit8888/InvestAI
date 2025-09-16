@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { AssetSchema } from '../common';
 import { WebSocketMessageSchema } from '../webSocketData';
 import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
 import { BrowsedUrlSchema, BuyerIntent } from '../common';
@@ -475,13 +476,7 @@ export const SessionDetailsResponseSchema = z.object({
   }),
 });
 
-export const DataSourceAssetItemSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.string(),
-  description: z.string().optional().nullable(),
-  key: z.string(),
-  public_url: z.string(),
+export const DataSourceAssetItemSchema = AssetSchema.extend({
   is_cancelled: z.boolean().default(false),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;

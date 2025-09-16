@@ -138,7 +138,6 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           isExpanded={isExpanded}
           ctas={shouldBookMeetingCTAButtonShow && Boolean(sessionData) ? (askaiConfig?.ctas ?? []) : []}
           sendUserMessage={sendUserMessage}
-          coverImage={config?.cover_image || undefined}
         />
       </div>
 

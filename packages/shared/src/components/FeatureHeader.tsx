@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { Icons, Button, buttonVariants, Typography } from '@meaku/saral';
+import { Icons, Button, buttonVariants, Typography, cn } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import useFeatureConfig from '../hooks/useFeatureConfig';
@@ -16,8 +16,29 @@ interface FeatureHeaderProps {
   isExpanded?: boolean;
   ctas?: { text: string; message?: string; url?: string }[];
   sendUserMessage?: (message: string, overrides?: Partial<Message>) => void;
-  coverImage?: string;
 }
+
+type HeaderButtonProps = {
+  onClick: () => void;
+  showBlurBackground?: boolean;
+  icon: ReactNode;
+};
+
+const HeaderButton = ({ onClick, showBlurBackground = true, icon }: HeaderButtonProps) => {
+  return (
+    <Button
+      size="icon"
+      variant="ghost"
+      onClick={onClick}
+      className={cn(
+        'size-[30px] rounded-[108px]',
+        showBlurBackground && 'bg-white/20 text-white backdrop-blur-[7.2px]',
+      )}
+    >
+      {icon}
+    </Button>
+  );
+};
 
 export const FeatureHeader = ({
   title,
@@ -30,25 +51,26 @@ export const FeatureHeader = ({
   ctas,
   isExpanded,
   sendUserMessage,
-  coverImage,
 }: FeatureHeaderProps) => {
   const isMobile = useIsMobile();
   const { activeFeature } = useFeature();
   const featureConfig = useFeatureConfig(activeFeature!) ?? undefined;
+  const banner = featureConfig?.banner?.public_url ?? undefined;
+  const specificForBanner = !!banner && !!welcomeMessage;
 
   const configTitle = featureConfig?.module_configs?.title ?? title;
 
   const getHeaderActions = () => (
-    <div className="flex items-center gap-2">
+    <div className={cn('flex items-center gap-2', specificForBanner && 'relative right-2 top-1')}>
       {onExpand && !isMobile && (
-        <Button size="icon" variant="ghost" onClick={onExpand} className="size-[30px] rounded-[108px]">
-          {isExpanded ? <Icons.Minimize2 className="size-3" /> : <Icons.Maximize2 className="size-3" />}
-        </Button>
+        <HeaderButton
+          onClick={onExpand}
+          showBlurBackground={specificForBanner}
+          icon={isExpanded ? <Icons.Minimize2 className="size-3" /> : <Icons.Maximize2 className="size-3" />}
+        />
       )}
       {onClose && (
-        <Button size="icon" variant="ghost" onClick={onClose} className="size-[30px] rounded-[108px]">
-          <Icons.X className="h-4 w-4" />
-        </Button>
+        <HeaderButton onClick={onClose} showBlurBackground={specificForBanner} icon={<Icons.X className="size-3" />} />
       )}
     </div>
   );
@@ -56,15 +78,15 @@ export const FeatureHeader = ({
   // Need to check if all buttons should be hidden based on different CTAs button
   return (
     <div className="flex flex-col p-3 gap-4 border-b border-gray-100">
-      {coverImage && welcomeMessage && (
+      {specificForBanner && (
         <div
-          className="inset-3 h-[100px] -mb-10 rounded-lg flex items-start justify-end"
+          className="inset-3 h-[100px] -mb-10 rounded-xl flex items-start justify-end"
           style={{
-            backgroundImage: `url('${coverImage}')`,
+            backgroundImage: `url('${banner}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            minHeight: coverImage ? '100px' : undefined,
+            minHeight: banner ? '100px' : undefined,
           }}
         >
           {getHeaderActions()}
@@ -73,7 +95,7 @@ export const FeatureHeader = ({
       <div className="relative z-10 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {icon}
+            <div className={cn('relative', specificForBanner && 'left-3')}>{icon}</div>
             <div
               className={`transition-all duration-300 ease-in-out ${
                 welcomeMessage
@@ -93,7 +115,7 @@ export const FeatureHeader = ({
               </div>
             </div>
           </div>
-          {!(coverImage && welcomeMessage) && getHeaderActions()}
+          {!(banner && welcomeMessage) && getHeaderActions()}
         </div>
         <div
           className={`transition-all duration-300 ease-in-out ${

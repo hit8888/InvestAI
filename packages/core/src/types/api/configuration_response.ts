@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EntryPointAlignmentSchema } from '../entryPoint';
+import { AssetSchema } from '../common';
 
 export const CTAConfigSchema = z
   .object({
@@ -72,6 +73,9 @@ export const CommandBarModuleConfigSchema = z.object({
   tooltip_text: z.string(),
   base_priority: z.number(),
   module_configs: z.record(z.string(), z.any()),
+  // Optional custom icon and banner assets
+  icon_asset: AssetSchema.nullable().optional(),
+  banner: AssetSchema.nullable().optional(),
 });
 
 export const NudgeConfigSchema = z.object({
@@ -188,9 +192,7 @@ export type Nudge = z.infer<typeof NudgeSchema>;
 
 export type Cta = z.infer<typeof NudgeCtaSchema>;
 
-export type Asset = z.infer<typeof NudgeAssetSchema>;
-
-export type AssetType = z.infer<typeof NudgeAssetTypeSchema>;
+export type NudgeAssetType = z.infer<typeof NudgeAssetSchema>;
 
 export type AssetAlignment = z.infer<typeof NudgeAssetAlignmentSchema>;
 

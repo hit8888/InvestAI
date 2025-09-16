@@ -1,11 +1,8 @@
 import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 
-// Action components
-export { default as AskAiAction } from './ask-ai/AskAiAction';
-export { default as BookMeetingAction } from './book-meeting/BookMeetingAction';
-export { default as SummarizeAction } from './summarize/SummarizeAction';
-export { default as IframeAction } from './iframe/IframeAction';
-export { default as VideoLibraryAction } from './video-library/VideoLibraryAction';
+// Base Action component
+export { default as BaseActionComponent } from './base/BaseActionComponent';
+export type { ActionConfig, BaseIconConfig, BaseTooltipConfig, BaseButtonConfig } from './base/BaseActionComponent';
 
 // Content components
 export { default as AskAiContent } from './ask-ai/AskAiContent';

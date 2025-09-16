@@ -1,9 +1,9 @@
 import React from 'react';
-import { Asset } from '@meaku/core/types/api/configuration_response';
+import { NudgeAssetType } from '@meaku/core/types/api/configuration_response';
 import { Icons } from '@meaku/saral';
 
 interface NudgeAssetProps {
-  asset: Asset;
+  asset: NudgeAssetType;
 }
 
 const NudgeAsset: React.FC<NudgeAssetProps> = ({ asset }) => {
@@ -23,7 +23,7 @@ const NudgeAsset: React.FC<NudgeAssetProps> = ({ asset }) => {
               muted
               autoPlay
               src={asset.asset_url}
-              poster={asset.asset_preview_url}
+              poster={asset.asset_preview_url || undefined}
               className="rounded-b-md opacity-0 transition-opacity duration-300"
               onCanPlay={(e) => {
                 e.currentTarget.style.opacity = '1';

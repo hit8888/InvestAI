@@ -83,6 +83,17 @@ export enum AgentResponseWordCountEnum {
   DETAILED = 'DETAILED',
 }
 
+// Shared asset schema used across configuration and admin APIs
+export const AssetSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  description: z.string().optional().nullable(),
+  key: z.string(),
+  public_url: z.string(),
+});
+export type Asset = z.infer<typeof AssetSchema>;
+
 export interface CommandBarSettings {
   tenant_id: string;
   agent_id: string;

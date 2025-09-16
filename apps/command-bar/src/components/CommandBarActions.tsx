@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  AskAiAction,
-  BookMeetingAction,
-  SummarizeAction,
-  IframeAction,
-  VideoLibraryAction,
-} from '@meaku/shared/features';
+import { BaseActionComponent } from '@meaku/shared/features';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
@@ -19,6 +13,7 @@ import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { ACTION_ANIMATION_CONSTANTS, ANIMATION_STYLES, TRANSITION_PRESETS } from '../constants/actionAnimations';
 import { getVisualIndex, getAnimationDelay, getTooltipDelay } from '../utils/actionUtils';
 import { ActionShimmerEffect } from './ActionShimmerEffect';
+import { ACTION_CONFIGS } from '../utils/commandBarActionConfigs';
 
 // Layout constants for better maintainability
 const ACTION_BUTTON_SIZE = 56; // 14 * 4 = 56px (h-14 w-14 in Tailwind)
@@ -31,16 +26,7 @@ interface CommandBarActionsProps {
   shouldStartAnimations?: boolean;
 }
 
-const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
-
-// Action component mapping for cleaner code
-const ACTION_COMPONENTS = {
-  [ASK_AI]: AskAiAction,
-  [BOOK_MEETING]: BookMeetingAction,
-  [SUMMARIZE]: SummarizeAction,
-  [IFRAME]: IframeAction,
-  [VIDEO_LIBRARY]: VideoLibraryAction,
-} as const;
+const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 const CommandBarActions: React.FC<CommandBarActionsProps> = ({
   activeFeature,
@@ -83,8 +69,8 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
   const renderActionComponent = (featureConfig: CommandBarModuleConfigType, tooltipDelay: number) => {
     const isActive = activeFeature === featureConfig.module_type;
 
-    const ActionComponent = ACTION_COMPONENTS[featureConfig.module_type as keyof typeof ACTION_COMPONENTS];
-    if (!ActionComponent) return null;
+    const actionConfig = ACTION_CONFIGS[featureConfig.module_type as keyof typeof ACTION_CONFIGS];
+    if (!actionConfig) return null;
 
     // Skip initial tooltip for single module
     const shouldShowInitialTooltip = modules.length > 1;
@@ -97,11 +83,12 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
         : undefined;
 
     return (
-      <ActionComponent
+      <BaseActionComponent
         key={featureConfig.id}
         isActive={isActive}
         onClick={handleClick}
         initialTooltip={initialTooltipConfig}
+        config={actionConfig}
       />
     );
   };
