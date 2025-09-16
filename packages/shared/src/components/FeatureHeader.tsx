@@ -2,6 +2,8 @@ import React, { type ReactNode } from 'react';
 import { Icons, Button, buttonVariants, Typography } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import useFeatureConfig from '../hooks/useFeatureConfig';
+import { useFeature } from '../containers/FeatureProvider';
 
 interface FeatureHeaderProps {
   title: string;
@@ -31,6 +33,10 @@ export const FeatureHeader = ({
   coverImage,
 }: FeatureHeaderProps) => {
   const isMobile = useIsMobile();
+  const { activeFeature } = useFeature();
+  const featureConfig = useFeatureConfig(activeFeature!) ?? undefined;
+
+  const configTitle = featureConfig?.module_configs?.title ?? title;
 
   const getHeaderActions = () => (
     <div className="flex items-center gap-2">
@@ -76,8 +82,8 @@ export const FeatureHeader = ({
               }`}
             >
               <div className="flex flex-col">
-                <Typography variant="heading" fontWeight="semibold" className={titleClassName}>
-                  {title}
+                <Typography variant="heading" fontWeight="medium" className={titleClassName}>
+                  {configTitle}
                 </Typography>
                 {subtitle && (
                   <Typography variant="body-small" fontWeight="normal" className="text-muted-foreground">
@@ -91,15 +97,15 @@ export const FeatureHeader = ({
         </div>
         <div
           className={`transition-all duration-300 ease-in-out ${
-            welcomeMessage && title
+            welcomeMessage && configTitle
               ? 'max-h-32 scale-100 overflow-visible opacity-100'
               : 'pointer-events-none max-h-0 scale-95 overflow-hidden opacity-0 -my-2'
           }`}
         >
-          {welcomeMessage && title && (
+          {welcomeMessage && configTitle && (
             <div className="flex flex-col gap-1.5">
-              <Typography variant="heading" fontWeight="semibold">
-                {title}
+              <Typography variant="heading" fontWeight="medium">
+                {configTitle}
               </Typography>
               <Typography variant="body" fontWeight="normal" className="text-muted-foreground">
                 {welcomeMessage}

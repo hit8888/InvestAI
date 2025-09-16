@@ -40,6 +40,7 @@ import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
 import { useSidebar } from '../context/SidebarContext.tsx';
 import { SortValues } from '@meaku/core/types/admin/sort';
+import NoDataFoundWithSearchTerm from '@breakout/design-system/components/layout/NoDataFoundWithSearchTerm';
 
 const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE }) => {
   const { isLinkClicksPage } = usePageRouteState();
@@ -138,13 +139,7 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
     }
 
     if (!totalRecords && filterState.searchTableContent) {
-      return (
-        <div className="flex w-full items-center justify-center gap-2 p-10 text-2xl font-medium text-gray-500">
-          <span>No results found for </span>
-          <span className="text-primary">"{filterState.searchTableContent}"</span>
-          <span>- Try adjusting your search terms</span>
-        </div>
-      );
+      return <NoDataFoundWithSearchTerm searchTerm={filterState.searchTableContent} />;
     }
 
     if (!totalRecords) {
@@ -178,7 +173,7 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-2 self-stretch">
-      <div className="flex flex-col items-start self-stretch bg-white">
+      <div className="flex flex-1 flex-col items-start self-stretch bg-white">
         <TableFiltersWithHeaderLabel
           isLoading={isLoading}
           payloadData={debouncedPayloadData}

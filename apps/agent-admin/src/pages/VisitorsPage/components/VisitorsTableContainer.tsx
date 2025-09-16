@@ -41,6 +41,7 @@ import { Cell, HeaderGroup, Row } from '@tanstack/react-table';
 import TableBodyRowItemHavingLogo from '@breakout/design-system/components/Table/TableBodyRowItemHavingLogo';
 import CustomSingleHeaderRowItem from '@breakout/design-system/components/Table/CustomSingleHeaderRowItem';
 import AssignedRepCellValue from '../../../components/tableComp/tableCellComp/AssignedRepCellValue.tsx';
+import NoDataFoundWithSearchTerm from '@breakout/design-system/components/layout/NoDataFoundWithSearchTerm';
 
 type VisitorsTableContainerProps = {
   onCompanySelect?: (companyData: CompanyData) => void;
@@ -184,13 +185,7 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
     }
 
     if (!totalRecords && filterState.searchTableContent) {
-      return (
-        <div className="flex w-full items-center justify-center gap-2 p-10 text-2xl font-medium text-gray-500">
-          <span>No results found for </span>
-          <span className="text-primary">"{filterState.searchTableContent}"</span>
-          <span>- Try adjusting your search terms</span>
-        </div>
-      );
+      return <NoDataFoundWithSearchTerm searchTerm={filterState.searchTableContent} />;
     }
 
     if (!totalRecords) {

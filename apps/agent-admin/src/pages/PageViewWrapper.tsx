@@ -7,7 +7,7 @@ const withPageViewWrapper = <P extends object>(
 ): React.FC<P> => {
   const ComponentWithWrapper: React.FC<P> = (props) => {
     return (
-      <div className={cn('flex w-full flex-shrink-0 flex-col items-start gap-6 bg-white p-4', className)}>
+      <div className={cn('flex h-full w-full flex-col items-start gap-6 bg-white p-4', className)}>
         <WrappedComponent {...props} />
       </div>
     );
