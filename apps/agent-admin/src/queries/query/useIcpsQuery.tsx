@@ -3,6 +3,7 @@ import { getIcps } from '@meaku/core/adminHttp/api';
 import { IcpsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import toast from 'react-hot-toast';
 
 const getIcpsKey = (tenantName: string, companyName: string): unknown[] => ['icps-data', tenantName, companyName];
 
@@ -21,8 +22,13 @@ const useIcpsQuery = (payload: IcpsQueryPayload = {}, options: IcpsQueryOptions 
   const icpsQuery = useQuery({
     queryKey: getIcpsKey(tenantName, companyName!),
     queryFn: async () => {
-      const response = await getIcps({ company_name: companyName! });
-      return response.data;
+      try {
+        const response = await getIcps({ company_name: companyName! });
+        return response.data;
+      } catch (error) {
+        toast.error('Error fetching ICPs');
+        throw error;
+      }
     },
     enabled: !!companyName,
     ...options,

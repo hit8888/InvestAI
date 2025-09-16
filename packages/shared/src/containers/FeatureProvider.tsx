@@ -1,30 +1,42 @@
-import { createContext, useContext, ReactNode, useState } from 'react';
+import { createContext, useContext, ReactNode, useState, useCallback, useMemo } from 'react';
 import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 
-const DEFAULT_ASK_AI_MODULE_ID = 1;
 interface FeatureContextType {
-  activeFeature: CommandBarModuleType | undefined;
-  activeModule: CommandBarModuleConfigType | null;
-  setActiveModule: React.Dispatch<React.SetStateAction<CommandBarModuleConfigType | null>>;
-  activeFeatureModuleId: number;
+  activeFeature: CommandBarModuleConfigType | null;
+  setActiveFeature: (module: CommandBarModuleType | null) => void;
 }
 
 const FeatureContext = createContext<FeatureContextType | null>(null);
 
 interface FeatureProviderProps {
   children: ReactNode;
+  features: CommandBarModuleConfigType[];
 }
 
-const FeatureProvider = ({ children }: FeatureProviderProps) => {
-  const [activeModule, setActiveModule] = useState<CommandBarModuleConfigType | null>(null);
+export const DEFAULT_ASK_AI_MODULE_ID = 1;
+
+const FeatureProvider = ({ features, children }: FeatureProviderProps) => {
+  const [activeFeatureType, setActiveFeatureType] = useState<CommandBarModuleType | null>(null);
+
+  const activeFeature = useMemo(
+    () => features?.find((m) => m.module_type === activeFeatureType) ?? null,
+    [features, activeFeatureType],
+  );
+
+  const handleSetActiveModule = useCallback((moduleType: CommandBarModuleType | null) => {
+    if (!moduleType) {
+      setActiveFeatureType(null);
+      return;
+    }
+
+    setActiveFeatureType(moduleType);
+  }, []);
 
   return (
     <FeatureContext.Provider
       value={{
-        activeFeature: activeModule?.module_type,
-        activeModule,
-        setActiveModule,
-        activeFeatureModuleId: activeModule?.id ?? DEFAULT_ASK_AI_MODULE_ID,
+        activeFeature,
+        setActiveFeature: handleSetActiveModule,
       }}
     >
       {children}

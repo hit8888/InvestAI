@@ -109,7 +109,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   useStyleConfig({ styleConfig: config?.style_config });
 
   if (staticConfigQuery.isSuccess || config.prospect_id) {
-    return <FeatureProvider>{children}</FeatureProvider>;
+    return <FeatureProvider features={config.command_bar?.modules ?? []}>{children}</FeatureProvider>;
   }
 
   return null;

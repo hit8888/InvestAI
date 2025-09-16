@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { cn } from '@meaku/saral';
 import CommandBarActions from './components/CommandBarActions';
 import FeatureContentContainer from './components/FeatureContentContainer';
-import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { useWsClient } from '@meaku/shared/hooks/useWsClient';
 import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { useCommandBarStore } from '@meaku/shared/stores';
@@ -23,14 +22,14 @@ import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
-import { useFeature } from '@meaku/shared/containers/FeatureProvider';
+import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
 function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
-  const { activeFeature, setActiveModule, activeFeatureModuleId } = useFeature();
+  const { activeFeature, setActiveFeature } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldStartAnimations, setShouldStartAnimations] = useState(false);
 
@@ -38,14 +37,12 @@ function App() {
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
-  const [askAiModule] = modules.filter((m) => m.module_type === ASK_AI);
-
   const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000;
 
   const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
     {
-      command_bar_module_id: activeFeatureModuleId,
+      command_bar_module_id: activeFeature?.id ?? DEFAULT_ASK_AI_MODULE_ID,
     },
     { enabled: !!activeFeature || !!config.session_id || !!settings.message },
   );
@@ -61,27 +58,13 @@ function App() {
   // Initialize user left tracking
   useUserLeftTracking(sendUserMessage);
 
-  const handleSetActiveButton = (module: CommandBarModuleType | null) => {
-    const moduleData = modules.find((m) => m.module_type === module);
-    if (!module) {
-      setActiveModule(null);
-      return;
-    }
-
-    const moduleSupported = modules.find((m) => m.module_type === module);
-
-    if (moduleSupported) {
-      setActiveModule(moduleData!);
-    } else {
-      setActiveModule(askAiModule);
-    }
-  };
+  const activeFeatureModuleType = activeFeature?.module_type ?? null;
 
   const handleClose = () => {
-    setActiveModule(null);
+    setActiveFeature(null);
     setIsExpanded(false);
     trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.CLOSE_COMMAND_BAR, {
-      action_type: activeFeature,
+      action_type: activeFeatureModuleType,
     });
   };
 
@@ -160,8 +143,10 @@ function App() {
 
   useEffect(() => {
     if (settings.message) {
-      sendUserMessage(settings.message);
-      setActiveModule(askAiModule);
+      setActiveFeature(ASK_AI);
+      sendUserMessage(settings.message, {
+        command_bar_module_id: DEFAULT_ASK_AI_MODULE_ID,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.message]);
@@ -179,16 +164,16 @@ function App() {
       transition={COMPONENT_TRANSITIONS.APP_CONTAINER}
     >
       <div key="root-content" className="flex items-end gap-4">
-        {nudgeEnabled && <Nudge activeFeature={activeFeature!} setActiveFeature={handleSetActiveButton} />}
+        {nudgeEnabled && <Nudge activeFeature={activeFeatureModuleType} setActiveFeature={setActiveFeature} />}
         <CommandBarActions
-          activeFeature={activeFeature!}
-          setActiveFeature={handleSetActiveButton}
+          activeFeature={activeFeatureModuleType}
+          setActiveFeature={setActiveFeature}
           shouldStartAnimations={shouldStartAnimations}
         />
         <FeatureContentContainer
-          key={activeFeature}
-          activeFeature={activeFeature!}
-          setActiveFeature={handleSetActiveButton}
+          key={activeFeatureModuleType}
+          activeFeature={activeFeatureModuleType}
+          setActiveFeature={setActiveFeature}
           isExpanded={isExpanded}
           onClose={handleClose}
           onExpand={() => setIsExpanded(!isExpanded)}

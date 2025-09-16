@@ -54,8 +54,8 @@ export const FeatureHeader = ({
 }: FeatureHeaderProps) => {
   const isMobile = useIsMobile();
   const { activeFeature } = useFeature();
-  const featureConfig = useFeatureConfig(activeFeature!) ?? undefined;
-  const banner = featureConfig?.banner?.public_url ?? undefined;
+  const featureConfig = useFeatureConfig(activeFeature?.module_type);
+  const banner = featureConfig?.banner?.public_url;
   const specificForBanner = !!banner && !!welcomeMessage;
 
   const configTitle = featureConfig?.module_configs?.title ?? title;

@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import LoadingContent from './LoadingContent';
@@ -31,19 +30,13 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
     data: icpList,
     isLoading: isIcpListLoading,
     refetch: fetchIcpList,
-    isError: isIcpListError,
   } = useIcpsQuery({ companyName: companyData?.name }, { enabled: false, retry: false });
   const {
     data: icpDetails,
     isLoading: isIcpDetailsLoading,
     refetch: fetchIcpDetails,
-    isError: isIcpDetailsError,
   } = useIcpDetailsQuery({ icpId: selectedEmployee?.icp_id }, { enabled: false, retry: false });
-  const {
-    data: emailData,
-    isLoading: emailDataLoading,
-    isError: isReachoutEmailError,
-  } = useReachoutEmailQuery(
+  const { data: emailData, isLoading: emailDataLoading } = useReachoutEmailQuery(
     {
       email_type: selectedEmployee?.icp_id ? 'prospective_icp' : 'website_user',
       prospect_id: companyData?.prospect?.prospect_id ?? undefined,
@@ -51,6 +44,7 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
     },
     {
       enabled: !!selectedEmployee,
+      retry: false,
     },
   );
 
@@ -80,25 +74,6 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
     setSelectedEmployee(null);
     onClose();
   };
-
-  useEffect(() => {
-    if (isReachoutEmailError) {
-      toast.error('Error generating email');
-      setSelectedEmployee(null);
-    }
-  }, [isReachoutEmailError]);
-
-  useEffect(() => {
-    if (isIcpListError) {
-      toast.error('Error fetching ICPs');
-    }
-  }, [isIcpListError]);
-
-  useEffect(() => {
-    if (isIcpDetailsError) {
-      toast.error('Error fetching email');
-    }
-  }, [isIcpDetailsError]);
 
   return (
     <Drawer open={open} onOpenChange={handleCloseDrawer} direction="right">

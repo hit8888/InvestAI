@@ -17,7 +17,7 @@ export const wsClient = new WebSocketClient(`${ENV.VITE_BASE_WS_URL}/ws/chat`, {
 
 export const useWsClient = () => {
   const { addMessage, updateSuggestedQuestions, isMessageRenderable } = useCommandBarStore();
-  const { activeFeatureModuleId } = useFeature();
+  const { activeFeature } = useFeature();
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
   const { playSoundForMessage } = useIncomingMessageSound();
 
@@ -62,8 +62,8 @@ export const useWsClient = () => {
 
   const sendUserMessage = (message: string, overrides?: Partial<Message>) => {
     const userMessage = getUserMessage(message, {
+      command_bar_module_id: activeFeature?.id,
       ...overrides,
-      command_bar_module_id: activeFeatureModuleId,
     });
 
     wsClient.send(JSON.stringify(userMessage));

@@ -525,7 +525,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         get().clearSuggestedQuestionsIfNotFromLastGroup();
       } else {
         // Combine existing and new messages, then apply grouping and ordering
-        const allMessages = [...state.messages, ...filteredMessages];
+        const allMessages = [...filteredMessages, ...state.messages];
         const allGroupedMessages = groupMessagesByResponseId(allMessages);
         const allOrderedMessages = allGroupedMessages.flat();
 

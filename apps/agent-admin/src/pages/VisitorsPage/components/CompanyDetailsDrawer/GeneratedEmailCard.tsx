@@ -21,7 +21,6 @@ type GeneratedEmailCardProps = {
 const GeneratedEmailCard = ({
   selectedEmployee,
   emailData,
-  emailDataLoading,
   bodyHtmlRef,
   isLoadingIcpDetails,
   fetchIcpDetails,
@@ -58,11 +57,7 @@ const GeneratedEmailCard = ({
           </span>
         )}
       </div>
-      {emailDataLoading ? (
-        <ReachoutEmailBodyLoader />
-      ) : (
-        <ReachoutEmailBody data={emailData} bodyHtmlRef={bodyHtmlRef} />
-      )}
+      {emailData ? <ReachoutEmailBody data={emailData} bodyHtmlRef={bodyHtmlRef} /> : <ReachoutEmailBodyLoader />}
     </>
   );
 };
