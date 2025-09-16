@@ -16,6 +16,7 @@ const isSummaryStreamMessage = (
 
 export const useSummary = () => {
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [clickedOnSummarize, setClickedOnSummarize] = useState(false);
   const { messages, settings } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
 
@@ -36,6 +37,7 @@ export const useSummary = () => {
 
   const handleSummarize = () => {
     setIsSummarizing(true);
+    setClickedOnSummarize(true);
     sendUserMessage('', {
       event_type: MessageEventType.SUMMARIZE,
       event_data: {
@@ -54,6 +56,7 @@ export const useSummary = () => {
   return {
     summaryContent,
     isSummarizing,
+    clickedOnSummarize,
     handleSummarize,
     hasError: ERROR_MESSAGES.some((errorMessage) => summaryContent?.toLowerCase().includes(errorMessage.toLowerCase())),
   };

@@ -1,4 +1,4 @@
-import { Icons } from '@meaku/saral';
+import { cn, Icons } from '@meaku/saral';
 import type { FeatureContentProps } from '..';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
@@ -20,7 +20,7 @@ const getSummaryState = (
     return <SummaryError onRetry={handleSummarize} isSummarizing={isSummarizing} />;
   }
 
-  return <SummarySuccess content={summaryContent} />;
+  return <SummarySuccess isSummarizing={isSummarizing} content={summaryContent} />;
 };
 
 /**
@@ -33,10 +33,10 @@ const renderSummaryContent = (
   handleSummarize: () => void,
   handleAskAIClick: () => void,
 ) => {
-  if (summaryContent) {
+  if (isSummarizing || summaryContent) {
     return (
       <div className="flex flex-1 min-h-0 flex-col gap-4">
-        {getSummaryState(summaryContent, hasError, isSummarizing, handleSummarize)}
+        {getSummaryState(summaryContent || '', hasError, isSummarizing, handleSummarize)}
         <SummaryFooter onAskAIClick={handleAskAIClick} />
       </div>
     );
@@ -46,14 +46,19 @@ const renderSummaryContent = (
 };
 
 const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: FeatureContentProps) => {
-  const { summaryContent, isSummarizing, handleSummarize, hasError } = useSummary();
+  const { summaryContent, isSummarizing, clickedOnSummarize, handleSummarize, hasError } = useSummary();
 
   const handleAskAIClick = () => {
     setActiveFeature?.(ASK_AI);
   };
 
   return (
-    <div className="flex w-full min-h-[300px] flex-col rounded-[20px] border border-border-dark bg-background pb-3 max-h-[480px]">
+    <div
+      className={cn(
+        'flex w-full min-h-[240px] flex-col rounded-[20px] border border-border-dark bg-background pb-3',
+        clickedOnSummarize && 'h-[600px]',
+      )}
+    >
       <FeatureHeader
         title="Summary"
         icon={<Icons.ClipboardPen className="size-5" />}

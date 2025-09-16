@@ -6,6 +6,7 @@ interface SummaryInitialProps {
 }
 
 export const SummaryInitial = ({ onSummarize, isSummarizing }: SummaryInitialProps) => {
+  if (isSummarizing) return null;
   return (
     <>
       <Typography variant="heading" fontWeight="semibold">
@@ -14,8 +15,8 @@ export const SummaryInitial = ({ onSummarize, isSummarizing }: SummaryInitialPro
       <Typography variant="body" fontWeight="normal" className="text-gray-600">
         Generate a summary of this page, so you can focus on the highlights.
       </Typography>
-      <Button variant="default" size="sm" hasWipers={true} onClick={onSummarize} disabled={isSummarizing}>
-        {isSummarizing ? 'Summarizing...' : 'Summarize'}
+      <Button variant="default" size="sm" hasWipers={true} onClick={onSummarize}>
+        Summarize
       </Button>
     </>
   );
