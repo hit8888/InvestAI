@@ -17,7 +17,7 @@ const SessionIdIncludedFilter = ({ page }: PageTypeProps) => {
       className="flex w-full cursor-pointer self-stretch bg-white p-4 
     hover:bg-primary/5 focus:border-2 focus:border-primary focus:bg-primary/5 focus:outline-none focus:ring-offset-0"
     >
-      <p className="flex-1 text-base font-normal text-gray-900">Session ID Included</p>
+      <p className="flex-1 text-base font-normal text-gray-900">Conversations</p>
       <div className="flex items-center gap-2 text-gray-500">
         <Switch
           checked={sessionIdIncluded}

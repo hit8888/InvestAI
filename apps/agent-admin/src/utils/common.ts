@@ -625,7 +625,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
       operator: 'is_not_null',
     });
 
-    if (!sessionIdIncluded) {
+    if (sessionIdIncluded) {
       filterApplied.push({
         field: 'session_id',
         value: null,
@@ -761,7 +761,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
   if (sessionIdIncluded) {
     appliedFilters.push({
       key: SessionIdIncluded,
-      label: 'Session ID Included',
+      label: 'Conversations',
       value: `${sessionIdIncluded}`,
     });
   }
