@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import LoadingContent from './LoadingContent';
@@ -30,13 +31,19 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
     data: icpList,
     isLoading: isIcpListLoading,
     refetch: fetchIcpList,
-  } = useIcpsQuery({ companyName: companyData?.name }, { enabled: false });
+    isError: isIcpListError,
+  } = useIcpsQuery({ companyName: companyData?.name }, { enabled: false, retry: false });
   const {
     data: icpDetails,
     isLoading: isIcpDetailsLoading,
     refetch: fetchIcpDetails,
-  } = useIcpDetailsQuery({ icpId: selectedEmployee?.icp_id }, { enabled: false });
-  const { data: emailData, isLoading: emailDataLoading } = useReachoutEmailQuery(
+    isError: isIcpDetailsError,
+  } = useIcpDetailsQuery({ icpId: selectedEmployee?.icp_id }, { enabled: false, retry: false });
+  const {
+    data: emailData,
+    isLoading: emailDataLoading,
+    isError: isReachoutEmailError,
+  } = useReachoutEmailQuery(
     {
       email_type: selectedEmployee?.icp_id ? 'prospective_icp' : 'website_user',
       prospect_id: companyData?.prospect?.prospect_id ?? undefined,
@@ -74,73 +81,94 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
     onClose();
   };
 
+  useEffect(() => {
+    if (isReachoutEmailError) {
+      toast.error('Error generating email');
+      setSelectedEmployee(null);
+    }
+  }, [isReachoutEmailError]);
+
+  useEffect(() => {
+    if (isIcpListError) {
+      toast.error('Error fetching ICPs');
+    }
+  }, [isIcpListError]);
+
+  useEffect(() => {
+    if (isIcpDetailsError) {
+      toast.error('Error fetching email');
+    }
+  }, [isIcpDetailsError]);
+
   return (
     <Drawer open={open} onOpenChange={handleCloseDrawer} direction="right">
       {open && (
         <DrawerContent
-          className="z-[1000] ml-[10%] flex h-screen flex-row justify-end gap-4 rounded-none border-none"
+          className="z-[1000] ml-[50%] flex h-screen flex-row justify-end gap-4 rounded-none border-none"
           data-vaul-no-drag
         >
-          <div
-            className={cn(
-              'mb-4 flex h-3/4 w-2/5 flex-col gap-3 self-end rounded-2xl bg-white p-4 transition-all duration-500',
-              { 'opacity-0': !selectedEmployee },
-            )}
-          >
-            <GeneratedEmailCard
-              selectedEmployee={
-                selectedEmployee
-                  ? {
-                      ...selectedEmployee,
-                      email: selectedEmployee?.icp_id ? icpDetails?.contact?.email : selectedEmployee?.email,
-                    }
-                  : null
-              }
-              isLoadingIcpDetails={isIcpDetailsLoading}
-              emailData={emailData}
-              emailDataLoading={emailDataLoading}
-              bodyHtmlRef={bodyHtmlRef}
-              fetchIcpDetails={fetchIcpDetails}
-            />
-          </div>
-          <div className="flex h-full w-3/5 flex-col bg-white">
-            {/* Header with close button */}
-            <div className="flex justify-end p-3">
-              <button
-                onClick={handleCloseDrawer}
-                className="flex h-6 w-6 items-center justify-center rounded hover:bg-gray-100"
-                aria-label="Close drawer"
-              >
-                <X className="h-4 w-4 text-gray-400" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="flex flex-1 flex-col gap-3 overflow-auto px-5 pb-5">
-              {isLoading ? (
-                <LoadingContent />
-              ) : (
-                <>
-                  {/* Company Info Section */}
-                  <CompanyInfoSection companyData={completedCompanyData} />
-
-                  {/* Employees Section */}
-                  <IcpSection
-                    prospect={completedCompanyData?.prospect}
-                    icps={icps}
-                    isLoading={isIcpListLoading}
-                    onFetchIcpList={fetchIcpList}
-                    onGenerateEmail={setSelectedEmployee}
-                    selectedEmployee={selectedEmployee}
-                  />
-
-                  {/* Browsing & Conversation Summary */}
-                  <BrowsingConversationSummary
-                    companyData={completedCompanyData}
-                    onSeeAllDetails={handleSeeAllDetails}
-                  />
-                </>
+          <div className="relative w-full">
+            <div
+              className={cn(
+                'absolute -left-[31vw] bottom-0 mb-4 flex h-3/4 w-[30vw] flex-col gap-3 self-end rounded-2xl bg-white p-4 transition-all duration-500',
+                { 'pointer-events-none opacity-0': !selectedEmployee },
               )}
+            >
+              <GeneratedEmailCard
+                selectedEmployee={
+                  selectedEmployee
+                    ? {
+                        ...selectedEmployee,
+                        email: selectedEmployee?.icp_id ? icpDetails?.contact?.email : selectedEmployee?.email,
+                      }
+                    : null
+                }
+                isLoadingIcpDetails={isIcpDetailsLoading}
+                emailData={emailData}
+                emailDataLoading={emailDataLoading}
+                bodyHtmlRef={bodyHtmlRef}
+                fetchIcpDetails={fetchIcpDetails}
+              />
+            </div>
+            <div className="flex h-full w-full flex-col bg-white">
+              {/* Header with close button */}
+              <div className="flex justify-end p-3">
+                <button
+                  onClick={handleCloseDrawer}
+                  className="flex h-6 w-6 items-center justify-center rounded hover:bg-gray-100"
+                  aria-label="Close drawer"
+                >
+                  <X className="h-4 w-4 text-gray-400" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex flex-1 flex-col gap-3 overflow-auto px-5 pb-5">
+                {isLoading ? (
+                  <LoadingContent />
+                ) : (
+                  <>
+                    {/* Company Info Section */}
+                    <CompanyInfoSection companyData={completedCompanyData} />
+
+                    {/* Employees Section */}
+                    <IcpSection
+                      prospect={completedCompanyData?.prospect}
+                      icps={icps}
+                      isLoading={isIcpListLoading}
+                      onFetchIcpList={fetchIcpList}
+                      onGenerateEmail={setSelectedEmployee}
+                      selectedEmployee={selectedEmployee}
+                    />
+
+                    {/* Browsing & Conversation Summary */}
+                    <BrowsingConversationSummary
+                      companyData={completedCompanyData}
+                      onSeeAllDetails={handleSeeAllDetails}
+                    />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </DrawerContent>
