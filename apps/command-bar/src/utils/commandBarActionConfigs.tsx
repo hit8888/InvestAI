@@ -38,7 +38,7 @@ export const BookMeetingActionConfig: ActionConfig = {
   moduleType: BOOK_MEETING,
   icon: {
     fallbackIcon: <LucideIcon name="calendar" className="size-5" />,
-    customIconClassName: 'h-full w-full',
+    customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Book a Meeting',
   },
   tooltip: {
@@ -50,7 +50,7 @@ export const SummarizeActionConfig: ActionConfig = {
   moduleType: SUMMARIZE,
   icon: {
     fallbackIcon: <LucideIcon name="file-text" className="size-5" />,
-    customIconClassName: 'h-full w-full',
+    customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Summarize',
   },
   tooltip: {
@@ -62,7 +62,7 @@ export const IframeActionConfig: ActionConfig = {
   moduleType: IFRAME,
   icon: {
     fallbackIcon: <LucideIcon name="play" className="size-5" />,
-    customIconClassName: 'h-full w-full',
+    customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Iframe',
   },
   tooltip: {
@@ -77,7 +77,7 @@ export const VideoLibraryActionConfig: ActionConfig = {
   moduleType: VIDEO_LIBRARY,
   icon: {
     fallbackIcon: <VideoLibraryIcon className="size-5" />,
-    customIconClassName: 'h-full w-full',
+    customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Video Library',
   },
   tooltip: {

@@ -10,6 +10,7 @@ import { Link2 as LinkIcon, Briefcase } from 'lucide-react';
 import { toSentenceCase } from '@meaku/core/utils/index';
 import NumberUtil from '@meaku/core/utils/numberUtils';
 import Typography from '@breakout/design-system/components/Typography/index';
+import AssignedRoleChip from './AssignedRoleChip';
 
 interface ActiveConversationCardProps {
   conversation: ActiveConversation;
@@ -30,7 +31,7 @@ const ActiveConversationCard = ({
     last_user_message,
     last_message_timestamp,
     buyer_intent,
-    prospect: { company, country, company_demographics, browsed_urls },
+    prospect: { company, country, company_demographics, browsed_urls, sdr_assignment },
     session,
     webpage_screenshot,
     hasUserLeft,
@@ -125,6 +126,7 @@ const ActiveConversationCard = ({
 
       {/* Intent, location, and account status */}
       <div className="mt-3 flex flex-wrap gap-3">
+        <AssignedRoleChip sdrAssignment={sdr_assignment} />
         <BuyerIntentChip buyerIntent={buyer_intent} />
         <ChipWithIcon name={country} iconUrl={countryFlagUrl} />
       </div>

@@ -2,7 +2,7 @@ import { cn, LucideIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '..';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import { SummarySuccess } from './components/SummarySuccess';
+import { SummaryContent } from './components/SummaryContent';
 import { SummaryError } from './components/SummaryError';
 import { SummaryInitial } from './components/SummaryInitial';
 import { SummaryFooter } from './components/SummaryFooter';
@@ -20,7 +20,7 @@ const getSummaryState = (
     return <SummaryError onRetry={handleSummarize} isSummarizing={isSummarizing} />;
   }
 
-  return <SummarySuccess isSummarizing={isSummarizing} content={summaryContent} />;
+  return <SummaryContent isSummarizing={isSummarizing} content={summaryContent} />;
 };
 
 /**

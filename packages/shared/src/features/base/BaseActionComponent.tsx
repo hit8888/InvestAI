@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@meaku/saral';
+import { Button, cn } from '@meaku/saral';
 import BlackTooltip from '../../components/BlackTooltip';
 import {
   CommandBarModuleTypeSchema,
@@ -100,7 +100,7 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = ({
       const iconClassName = actionConfig.icon.customIconClassName || 'h-full w-full';
       const iconAlt = actionConfig.icon.customIconAlt || featureConfig?.name || 'Icon';
 
-      return <img src={customIconUrl} alt={iconAlt} className={iconClassName} />;
+      return <img src={customIconUrl} alt={iconAlt} className={cn(iconClassName, isActive && 'rounded-2xl')} />;
     }
 
     return actionConfig.icon?.fallbackIcon;

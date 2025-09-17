@@ -8,7 +8,7 @@ import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
 import { ReadyState } from 'react-use-websocket';
 import { BrowsedUrl } from '@meaku/core/types/common';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem, SdrAssignment } from '@meaku/core/types/admin/api';
 import useWebpageScreenshotsActiveConversation from '../hooks/useWebpageScreenshotsActiveConversation';
 
 export interface ActiveConversation {
@@ -31,6 +31,7 @@ export interface ActiveConversation {
     };
     parent_url: string;
     browsed_urls: BrowsedUrl[];
+    sdr_assignment: SdrAssignment;
   };
   webpage_screenshot?: DataSourceItem | undefined;
   hasUserLeft?: boolean;
