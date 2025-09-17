@@ -9,7 +9,10 @@ export type Employee = {
   linkedin?: string;
   timeSpent?: string;
   visits?: number;
-  location?: string;
+  location?: {
+    city?: string;
+    country?: string;
+  };
 };
 
 export type CompanyData = {

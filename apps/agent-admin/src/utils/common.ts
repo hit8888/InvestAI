@@ -182,7 +182,10 @@ export const getMappedDataFromResponseForVisitorsTableView = (
     name: response.name ?? response.prospect_demographics?.name ?? '',
     role: response.role ?? response.prospect_demographics?.role ?? '',
     website_url: response.company_demographics?.website_url ?? '',
-    country: response.country ?? response.prospect_demographics?.country ?? '',
+    country: {
+      city: response.prospect_demographics?.city || '-',
+      country: response.prospect_demographics?.country || response.country || '-',
+    } as LocationWithCityCountry,
     company_country: response.company_demographics?.company_country ?? '',
     industry_domain: capitalizeString(response.company_demographics?.industry_domain) ?? '',
     employee_count: NumberUtil.formatNumber(response.company_demographics?.employee_count ?? 0),

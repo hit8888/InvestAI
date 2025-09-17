@@ -69,7 +69,7 @@ export const VisitorsTableViewSchema = z.object({
   name: z.string(),
   role: z.string(),
   website_url: z.string(),
-  country: z.string(),
+  country: LocationWithCityCountrySchema,
   company_country: z.string(),
   industry_domain: z.string(),
   employee_count: z.string(),

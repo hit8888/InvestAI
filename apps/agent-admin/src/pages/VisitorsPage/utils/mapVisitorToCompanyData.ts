@@ -24,7 +24,7 @@ export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent
       email: visitorData.email || '',
       timeSpent: '',
       visits: 0,
-      location: visitorData.country || '',
+      location: visitorData.country || {},
     },
     email: visitorData.email || '',
   };

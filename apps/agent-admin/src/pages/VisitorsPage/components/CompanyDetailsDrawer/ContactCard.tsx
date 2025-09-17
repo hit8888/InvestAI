@@ -21,6 +21,9 @@ const ContactCard = ({
 }: ContactCardProps) => {
   const isProspectView = !employee.icp_id;
   const showInfoChips = employee.email || employee.location || employee.linkedin;
+  const locationDisplayValue = [employee.location?.city, employee.location?.country]
+    .filter((part) => part && part !== '-')
+    .join(', ');
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-gray-50/50 p-3.5">
@@ -68,11 +71,11 @@ const ContactCard = ({
               )}
               {/* {employee.timeSpent && <InfoChip label="Time spend" value={employee.timeSpent} />} */}
               {/* {employee.visits && <InfoChip label="Visits" value={employee.visits.toString()} />} */}
-              {employee.location && (
+              {employee.location?.country && (
                 <InfoChip
                   label="Location"
-                  value={employee.location}
-                  iconUrl={findFlagUrlByCountryName(employee.location)}
+                  value={locationDisplayValue}
+                  iconUrl={findFlagUrlByCountryName(employee.location.country)}
                 />
               )}
               {employee.email && <InfoChip label="Email" value={employee.email} isLink />}
