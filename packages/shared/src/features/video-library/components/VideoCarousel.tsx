@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Icons } from '@meaku/saral';
+import { LucideIcon } from '@meaku/saral';
 import { useCarousel } from '../../../hooks/useCarousel';
 import { VideoThumbnail } from './VideoThumbnail';
 import { Video } from '../types';
@@ -64,7 +64,7 @@ export const VideoCarousel = ({
   return (
     <div>
       <h4 className="text-sm font-medium text-primary my-5 flex gap-2 items-center">
-        <Icons.Sparkles className="h-4 w-4" />
+        <LucideIcon name="sparkles" className="h-4 w-4" />
         <span>Video Recommendations for you</span>
       </h4>
 
@@ -78,7 +78,7 @@ export const VideoCarousel = ({
                 <div className="bg-muted/20 p-2 rounded-[10px] border-2 border-dashed border-muted mb-2 relative flex h-24">
                   <div className="w-full flex items-center justify-center">
                     <div className="text-center text-muted-foreground">
-                      <Icons.Video className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <LucideIcon name="video" className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">No recommendations available</p>
                     </div>
                   </div>
@@ -141,7 +141,7 @@ export const VideoCarousel = ({
                 }`}
                 aria-label="Previous video"
               >
-                <Icons.ChevronLeft className="h-4 w-4" />
+                <LucideIcon name="chevron-left" className="h-4 w-4" />
               </button>
             )}
             {canGoNext && (
@@ -154,7 +154,7 @@ export const VideoCarousel = ({
                 }`}
                 aria-label="Next video"
               >
-                <Icons.ChevronRight className="h-4 w-4" />
+                <LucideIcon name="chevron-right" className="h-4 w-4" />
               </button>
             )}
           </>

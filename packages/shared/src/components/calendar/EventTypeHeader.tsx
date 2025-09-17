@@ -1,5 +1,4 @@
-import { ArrowLeftIcon } from 'lucide-react';
-import { Button } from '@meaku/saral';
+import { Button, LucideIcon } from '@meaku/saral';
 
 interface EventTypeHeaderProps {
   onBack: () => void;
@@ -11,7 +10,7 @@ const EventTypeHeader = ({ onBack, title, description }: EventTypeHeaderProps) =
   return (
     <div className="flex items-center gap-4">
       <Button variant="outline" size="sm" onClick={onBack} className="rounded-lg gap-2">
-        <ArrowLeftIcon className="h-4 w-4" />
+        <LucideIcon name="arrow-left" className="h-4 w-4" />
         Back
       </Button>
       <div>

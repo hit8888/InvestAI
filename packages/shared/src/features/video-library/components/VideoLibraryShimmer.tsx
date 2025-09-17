@@ -1,4 +1,4 @@
-import { Icons } from '@meaku/saral';
+import { LucideIcon } from '@meaku/saral';
 
 export const VideoLibraryShimmer = () => {
   return (
@@ -23,7 +23,7 @@ export const VideoLibraryShimmer = () => {
       <div className="flex-shrink mb-4">
         <div>
           <h4 className="text-sm font-medium text-primary my-1 flex gap-2 items-center">
-            <Icons.Sparkles className="h-4 w-4" />
+            <LucideIcon name="sparkles" className="h-4 w-4" />
             <span>Video Recommendations for you</span>
           </h4>
 

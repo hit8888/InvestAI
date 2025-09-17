@@ -1,5 +1,5 @@
 import { ActionConfig } from '@meaku/shared/features/base/BaseActionComponent';
-import { Button, Icons } from '@meaku/saral';
+import { Button, LucideIcon } from '@meaku/saral';
 import { VideoLibraryIcon } from '@meaku/saral';
 import CustomIconImageContainer from '@meaku/shared/features/ask-ai/components/CustomIconImageContainer';
 import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
@@ -37,7 +37,7 @@ export const AskAIActionConfig: ActionConfig = {
 export const BookMeetingActionConfig: ActionConfig = {
   moduleType: BOOK_MEETING,
   icon: {
-    fallbackIcon: <Icons.Calendar className="size-5" />,
+    fallbackIcon: <LucideIcon name="calendar" className="size-5" />,
     customIconClassName: 'h-full w-full',
     customIconAlt: 'Book a Meeting',
   },
@@ -49,7 +49,7 @@ export const BookMeetingActionConfig: ActionConfig = {
 export const SummarizeActionConfig: ActionConfig = {
   moduleType: SUMMARIZE,
   icon: {
-    fallbackIcon: <Icons.FileText className="size-5" />,
+    fallbackIcon: <LucideIcon name="file-text" className="size-5" />,
     customIconClassName: 'h-full w-full',
     customIconAlt: 'Summarize',
   },
@@ -61,7 +61,7 @@ export const SummarizeActionConfig: ActionConfig = {
 export const IframeActionConfig: ActionConfig = {
   moduleType: IFRAME,
   icon: {
-    fallbackIcon: <Icons.Play className="size-5" />,
+    fallbackIcon: <LucideIcon name="play" className="size-5" />,
     customIconClassName: 'h-full w-full',
     customIconAlt: 'Iframe',
   },

@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { Icons, Button, buttonVariants, Typography, cn } from '@meaku/saral';
+import { LucideIcon, Button, buttonVariants, Typography, cn } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import useFeatureConfig from '../hooks/useFeatureConfig';
@@ -66,11 +66,21 @@ export const FeatureHeader = ({
         <HeaderButton
           onClick={onExpand}
           showBlurBackground={specificForBanner}
-          icon={isExpanded ? <Icons.Minimize2 className="size-3" /> : <Icons.Maximize2 className="size-3" />}
+          icon={
+            isExpanded ? (
+              <LucideIcon name="minimize-2" className="size-3" />
+            ) : (
+              <LucideIcon name="maximize-2" className="size-3" />
+            )
+          }
         />
       )}
       {onClose && (
-        <HeaderButton onClick={onClose} showBlurBackground={specificForBanner} icon={<Icons.X className="size-3" />} />
+        <HeaderButton
+          onClick={onClose}
+          showBlurBackground={specificForBanner}
+          icon={<LucideIcon name="x" className="size-3" />}
+        />
       )}
     </div>
   );

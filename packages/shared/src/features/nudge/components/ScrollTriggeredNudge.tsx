@@ -1,11 +1,9 @@
-import { Button, cn, Icons } from '@meaku/saral';
+import { Button, cn, LucideIcon } from '@meaku/saral';
 import { motion } from 'framer-motion';
 import { Message, MessageEventType } from '../../../types/message';
 import { CommandBarModuleType, CommandBarModuleTypeSchema } from '@meaku/core/types/index';
 import { useCommandBarStore } from '../../../stores/useCommandBarStore';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-
-const { Calendar, Sparkles } = Icons;
 
 interface ScrollTriggeredNudgeProps {
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;
@@ -61,7 +59,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, onDisable }: 
             'w-full': isMobile,
           })}
         >
-          <Calendar className="size-4" />
+          <LucideIcon name="calendar" className="size-4" />
           Book a Meeting
         </Button>
         <Button
@@ -71,7 +69,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, onDisable }: 
             'w-full': isMobile,
           })}
         >
-          <Sparkles className="size-4" />
+          <LucideIcon name="sparkles" className="size-4" />
           See it in action!
         </Button>
       </motion.div>

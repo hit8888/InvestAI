@@ -1,7 +1,5 @@
-import { Search } from 'lucide-react';
 import React from 'react';
-import { Input } from '@meaku/saral';
-import { X as CrossIcon } from 'lucide-react';
+import { Input, LucideIcon } from '@meaku/saral';
 
 type DropdownMenuSearchProps = {
   searchTerm: string;
@@ -16,7 +14,7 @@ const DropdownMenuSearch = React.memo(
 
     return (
       <div className="relative w-full border-b border-gray-200 p-4">
-        <Search className="absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+        <LucideIcon name="search" className="absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         <Input
           autoFocus
           placeholder={placeholder}
@@ -31,7 +29,7 @@ const DropdownMenuSearch = React.memo(
             className="absolute right-6 top-6 flex h-6 w-6 cursor-pointer items-center justify-center"
             onClick={clearSearchTerm}
           >
-            <CrossIcon className="text-system" width="16" height="16" />
+            <LucideIcon name="x" className="text-system" width="16" height="16" />
           </button>
         ) : null}
       </div>

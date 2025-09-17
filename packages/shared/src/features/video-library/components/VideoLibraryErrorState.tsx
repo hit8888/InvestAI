@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Icons } from '@meaku/saral';
+import { Button, LucideIcon } from '@meaku/saral';
 
 interface VideoLibraryErrorStateProps {
   onRetry?: () => void;
@@ -23,7 +23,7 @@ export const VideoLibraryErrorState = ({ onRetry, error }: VideoLibraryErrorStat
   return (
     <div className="flex items-center justify-center h-full">
       <div className="text-center text-muted-foreground">
-        <Icons.AlertCircle className="h-16 w-16 mx-auto mb-4 text-destructive-600" />
+        <LucideIcon name="alert-circle" className="h-16 w-16 mx-auto mb-4 text-destructive-600" />
         <p className="text-sm mb-2">Failed to load videos</p>
         {error && (
           <p className="text-xs text-gray-500 mb-4 max-w-xs">
@@ -32,7 +32,7 @@ export const VideoLibraryErrorState = ({ onRetry, error }: VideoLibraryErrorStat
         )}
         {onRetry && (
           <Button onClick={handleRetry} disabled={isRetrying} className="flex items-center gap-2 mx-auto">
-            {isRetrying && <Icons.Loader className="h-4 w-4 animate-spin" />}
+            {isRetrying && <LucideIcon name="loader" className="h-4 w-4 animate-spin" />}
             {isRetrying ? 'Retrying...' : 'Try Again'}
           </Button>
         )}

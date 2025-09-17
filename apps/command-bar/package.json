@@ -30,7 +30,6 @@
     "nanoid": "^5.0.7",
     "libphonenumber-js": "^1.11.18",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.528.0",
     "react": "^19.1.0",
     "react-calendly": "^4.3.1",
     "react-dom": "^19.1.0",
@@ -64,6 +63,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "code-inspector-plugin": "^1.2.6"
   }
 }

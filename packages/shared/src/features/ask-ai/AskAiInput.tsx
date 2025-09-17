@@ -1,4 +1,4 @@
-import { Button, Icons, Input } from '@meaku/saral';
+import { Button, LucideIcon, Input } from '@meaku/saral';
 import { useCallback, useState } from 'react';
 import { Message, MessageEventType } from '../../types/message';
 import { useDebouncedTyping } from '../../hooks/useDebouncedTyping';
@@ -63,7 +63,7 @@ export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }:
         size="xs"
         disabled={disabled || !isInputValuePresent}
       >
-        <Icons.SendHorizonal className="size-5" />
+        <LucideIcon name="send-horizontal" className="size-5" />
       </Button>
     </form>
   );

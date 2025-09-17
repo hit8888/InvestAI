@@ -1,6 +1,5 @@
 import React from 'react';
-import { DropdownMenuItem, cn } from '@meaku/saral';
-import { Circle, Check } from 'lucide-react';
+import { DropdownMenuItem, LucideIcon, cn } from '@meaku/saral';
 
 interface MenuOptionProps {
   menuOptionTitle: string;
@@ -42,10 +41,10 @@ const DropdownOption = React.memo(
         {showIcon &&
           (isSelectedOption ? (
             <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-900">
-              <Check className="text-white" width="12" height="12" />
+              <LucideIcon name="check" className="text-white" width="12" height="12" />
             </span>
           ) : (
-            <Circle className="text-gray-500" />
+            <LucideIcon name="circle" className="text-gray-500" />
           ))}
         <span className="truncate">{menuOptionTitle}</span>
       </DropdownMenuItem>

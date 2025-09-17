@@ -1,7 +1,5 @@
 import { CtaEventDataContent } from '../../../utils/types';
-import { Typography, Button } from '@meaku/saral';
-import { ArrowRight } from 'lucide-react';
-import { Icons } from '@meaku/saral';
+import { Typography, Button, LucideIcon } from '@meaku/saral';
 import { Message, SendUserMessageParams } from '../../../types/message';
 
 type IProps = {
@@ -43,7 +41,7 @@ const CtaEventMessage = (props: IProps) => {
       <div className="flex flex-col items-center justify-center gap-2 p-4">
         {showIcon && (
           <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
-            <Icons.Check className="stroke-4 size-5 text-background" />
+            <LucideIcon name="check" className="stroke-4 size-5 text-background" />
           </div>
         )}
         <Typography variant="heading-xl" className="text-center font-medium">
@@ -53,7 +51,7 @@ const CtaEventMessage = (props: IProps) => {
         {url && (
           <Button onClick={handleClick}>
             {label ?? DEFAULT_MESSAGES.LABEL}
-            <ArrowRight width="16" height="16" />
+            <LucideIcon name="arrow-right" width="16" height="16" />
           </Button>
         )}
       </div>

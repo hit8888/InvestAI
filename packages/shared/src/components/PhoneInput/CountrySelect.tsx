@@ -1,4 +1,3 @@
-import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { useMemo, useState } from 'react';
@@ -13,6 +12,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  LucideIcon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -53,7 +53,8 @@ export const CountrySelect = ({
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />
           <span className="text-sm text-[#9CA3AF] font-medium">{`+${selectedCountryCode}`}</span>
-          <ChevronDownIcon
+          <LucideIcon
+            name="chevron-down"
             className={cn('-mr-2 size-4 opacity-50 text-[#9CA3AF]', disabled ? 'hidden' : 'opacity-100')}
           />
         </Button>
@@ -122,7 +123,7 @@ const CountrySelectOption = ({ country, countryName, selectedCountry, onChange }
     >
       <FlagComponent country={country} countryName={countryName} />
       <span className="flex-1 text-sm">{countryName}</span>
-      <CheckIcon className={`ml-auto size-4 ${isSelectedCountry ? 'opacity-100' : 'opacity-0'}`} />
+      <LucideIcon name="check" className={`ml-auto size-4 ${isSelectedCountry ? 'opacity-100' : 'opacity-0'}`} />
       <span
         className={`text-sm ${isSelectedCountry ? 'text-black' : 'text-foreground/50'}`}
       >{`+${RPNInput.getCountryCallingCode(country)}`}</span>

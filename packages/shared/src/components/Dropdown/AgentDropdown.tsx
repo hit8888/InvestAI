@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
-import { ChevronDown } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   Typography,
+  LucideIcon,
   cn,
 } from '@meaku/saral';
 import DropdownOption from './DropdownOption';
@@ -154,7 +154,7 @@ const AgentDropdown = ({
             'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
           })}
         >
-          <ChevronDown className="text-gray-900" width={'24'} height={'24'} />
+          <LucideIcon name="chevron-down" className="text-gray-900" width={'24'} height={'24'} />
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent

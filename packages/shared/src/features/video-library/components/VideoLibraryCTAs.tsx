@@ -1,4 +1,4 @@
-import { Button, Icons, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
+import { Button, LucideIcon, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
 
 interface VideoLibraryCTAsProps {
   onBookMeetingClick: () => void;
@@ -38,7 +38,7 @@ export const VideoLibraryCTAs = ({
           className="w-full flex !font-normal items-center justify-center gap-2 rounded-[12px]"
           onClick={onBookMeetingClick}
         >
-          <Icons.Calendar className="h-4 w-4" />
+          <LucideIcon name="calendar" className="h-4 w-4" />
           Book a Demo
         </Button>
       )}

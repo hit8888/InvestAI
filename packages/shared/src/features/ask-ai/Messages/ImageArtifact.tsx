@@ -1,4 +1,4 @@
-import { Typography, Button, Icons } from '@meaku/saral';
+import { Typography, Button, LucideIcon } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { BaseArtifact } from '../components/BaseArtifact';
@@ -84,9 +84,9 @@ export const ImageArtifact = ({
   const headerActions = (
     <Button variant="outline" size="sm" onClick={handleButtonClick} className="h-6 w-6 p-0 rounded-full">
       {isThisImageExpanded ? (
-        <Icons.Minimize2 className="size-3 duration-300" />
+        <LucideIcon name="minimize-2" className="size-3 duration-300" />
       ) : (
-        <Icons.Maximize2 className="size-3 duration-300" />
+        <LucideIcon name="maximize-2" className="size-3 duration-300" />
       )}
     </Button>
   );
@@ -110,7 +110,7 @@ export const ImageArtifact = ({
             onClick={handleButtonClick}
             className="absolute top-[4px] left-[4px] right-[4px] bottom-[4px] bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer z-10 rounded-b-lg"
           >
-            <Icons.Expand className="size-6 duration-300" />
+            <LucideIcon name="expand" className="size-6 duration-300" />
           </div>
         )}
         {isThisImageExpanded && !isExpanded && (

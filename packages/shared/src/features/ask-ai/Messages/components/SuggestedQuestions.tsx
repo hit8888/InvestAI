@@ -1,5 +1,4 @@
-import { Typography } from '@meaku/saral';
-import { Sparkles } from 'lucide-react';
+import { Typography, LucideIcon } from '@meaku/saral';
 import { MessageEventType, type Message as MessageType } from '../../../../types/message';
 
 type SuggestedQuestionsProps = {
@@ -11,7 +10,7 @@ export const SuggestedQuestions = ({ suggestedQuestions, sendUserMessage }: Sugg
   return (
     <div className="w-full flex flex-col items-end gap-2 pl-8">
       <Typography variant="body-small" className="flex items-center gap-2 p-2.5 pl-0 text-primary">
-        <Sparkles className="size-4" />
+        <LucideIcon name="sparkles" className="size-4" />
         Try Asking
       </Typography>
       {suggestedQuestions.map((question) => (

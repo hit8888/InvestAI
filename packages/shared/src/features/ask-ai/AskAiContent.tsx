@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { Icons } from '@meaku/saral';
+import { LucideIcon } from '@meaku/saral';
 import { HeaderAvatar } from '../../components/AvatarDisplay';
 import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
@@ -148,7 +148,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           <div className="flex-1 relative min-h-0">
             {!sessionData && !hasActiveAdminSession ? (
               <div className="absolute bottom-0 flex w-full items-center justify-center gap-3">
-                <Icons.CircleDashed className="h-3 w-3 animate-spin text-primary" />
+                <LucideIcon name="circle-dashed" className="h-3 w-3 animate-spin text-primary" />
                 <p className="text-xs text-muted-foreground">Initialising...</p>
               </div>
             ) : null}

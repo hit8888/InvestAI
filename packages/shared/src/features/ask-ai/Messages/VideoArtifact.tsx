@@ -1,4 +1,4 @@
-import { Button, cn, Icons } from '@meaku/saral';
+import { Button, cn, LucideIcon } from '@meaku/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -135,7 +135,7 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ duration: 0.1 }}
               >
-                <Icons.Pause className="size-4 fill-primary stroke-0" />
+                <LucideIcon name="pause" className="size-4 fill-primary stroke-0" />
               </motion.div>
             ) : (
               <motion.div
@@ -147,7 +147,7 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
                 className="flex items-center justify-center"
               >
                 <div className="rounded-full bg-background p-1">
-                  <Icons.Play className="size-2.5 fill-foreground" />
+                  <LucideIcon name="play" className="size-2.5 fill-foreground" />
                 </div>
               </motion.div>
             )}

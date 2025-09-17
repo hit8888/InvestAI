@@ -1,4 +1,4 @@
-import { Icons, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@meaku/saral';
 import { TextArtifact } from '../../../features/ask-ai/Messages/TextArtifact';
 import { ThumbsUp } from '@meaku/saral';
 import { ConfettiAnimation } from '../../../components/ConfettiAnimation';
@@ -53,7 +53,7 @@ export const SummarySuccess = ({ content, isSummarizing }: SummarySuccessProps) 
             className="flex relative items-center gap-2 text-textAccent bg-white px-3 py-2 rounded-xl"
           >
             <ThumbsUp className="absolute right-[10%] bottom-7" />
-            <Icons.Check className="size-4 bg-positive-dark rounded-full p-1 text-white" />
+            <LucideIcon name="check" className="size-4 bg-positive-dark rounded-full p-1 text-white" />
             Summary Complete
           </Typography>
         </div>

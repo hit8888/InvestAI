@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger, Icons } from '.';
+import { Dialog, DialogContent, DialogTrigger, LucideIcon } from '.';
 import Typography from './typography';
 import { useRef, useEffect, useState } from 'react';
 
@@ -60,7 +60,7 @@ export const VideoArtifact = ({ title, url, showControls = false, onOverlayClick
             className="absolute bottom-0 left-0 top-9 flex w-full items-center justify-center bg-foreground/40 opacity-0 transition-all hover:opacity-100"
             onClick={onOverlayClick}
           >
-            <Icons.Play className="size-10 cursor-pointer fill-background text-background" />
+            <LucideIcon name="play" className="size-10 cursor-pointer fill-background text-background" />
           </div>
         </DialogTrigger>
         <DialogContent className="max-w-[80vw] gap-0 overflow-hidden p-0 pb-2">

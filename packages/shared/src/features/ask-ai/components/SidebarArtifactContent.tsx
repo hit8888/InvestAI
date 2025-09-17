@@ -1,4 +1,4 @@
-import { Icons, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@meaku/saral';
 import { RefObject, useEffect, useState, useCallback } from 'react';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 
@@ -100,7 +100,7 @@ export const SidebarArtifactContent = ({
         </Typography>
         <div className="flex items-center gap-2">
           <button onClick={onClose} className="p-2 hover:bg-muted rounded-full transition-colors duration-200">
-            <Icons.X className="h-4 w-4" />
+            <LucideIcon name="x" className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -113,7 +113,7 @@ export const SidebarArtifactContent = ({
           <>
             {shouldShowError ? (
               <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
-                <Icons.AlertCircle className="h-12 w-12 text-destructive" />
+                <LucideIcon name="alert-circle" className="h-12 w-12 text-destructive" />
                 <div className="flex flex-col gap-2">
                   <Typography variant="body" fontWeight="medium">
                     Video Error

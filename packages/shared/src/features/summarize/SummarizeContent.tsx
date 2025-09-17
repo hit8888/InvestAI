@@ -1,4 +1,4 @@
-import { cn, Icons } from '@meaku/saral';
+import { cn, LucideIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '..';
 import { FeatureHeader } from '../../components/FeatureHeader';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
@@ -61,7 +61,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
     >
       <FeatureHeader
         title="Summary"
-        icon={<Icons.ClipboardPen className="size-5" />}
+        icon={<LucideIcon name="clipboard-pen" className="size-5" />}
         onClose={onClose}
         onExpand={onExpand}
         isExpanded={isExpanded}

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 dotenv.config();
 
@@ -12,6 +13,10 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
   plugins: [
+    codeInspectorPlugin({
+      bundler: 'vite',
+      editor: 'cursor',
+    }),
     react(),
     ...(process.env.VITE_SENTRY_AUTH_TOKEN
       ? [

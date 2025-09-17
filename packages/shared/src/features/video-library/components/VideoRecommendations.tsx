@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Icons, TooltipProvider } from '@meaku/saral';
+import { LucideIcon, TooltipProvider } from '@meaku/saral';
 import { Video } from '../types';
 import { VideoAvatar } from './VideoAvatar';
 
@@ -73,7 +73,7 @@ export const VideoRecommendations = ({
     <TooltipProvider>
       <div>
         <h4 className="text-sm font-medium text-primary my-5 flex gap-2 items-center">
-          <Icons.Sparkles className="h-4 w-4" />
+          <LucideIcon name="sparkles" className="h-4 w-4" />
           <span>Video Recommendations for you</span>
         </h4>
 
@@ -112,7 +112,7 @@ export const VideoRecommendations = ({
           ) : !videoIds.length ? (
             <div className="flex justify-center py-8">
               <div className="text-center text-muted-foreground">
-                <Icons.Video className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <LucideIcon name="video" className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No recommendations available</p>
               </div>
             </div>
@@ -157,7 +157,7 @@ export const VideoRecommendations = ({
                   }}
                   aria-label="Next video"
                 >
-                  <Icons.ChevronRight className="h-4 w-4 text-gray-600" />
+                  <LucideIcon name="chevron-right" className="h-4 w-4 text-gray-600" />
                 </button>
               )}
 
@@ -173,7 +173,7 @@ export const VideoRecommendations = ({
                   }}
                   aria-label="Previous video"
                 >
-                  <Icons.ChevronLeft className="h-4 w-4 text-gray-600" />
+                  <LucideIcon name="chevron-left" className="h-4 w-4 text-gray-600" />
                 </button>
               )}
             </div>

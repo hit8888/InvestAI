@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger, Icons } from '.';
+import { Dialog, DialogContent, DialogTrigger, LucideIcon } from '.';
 import Typography from './typography';
 
 interface ImageArtifactProps {
@@ -26,7 +26,7 @@ export const ImageArtifact = ({ title, url, onOverlayClick }: ImageArtifactProps
             className="absolute bottom-0 left-0 top-9 flex w-full items-center justify-center bg-foreground/40 opacity-0 transition-all hover:opacity-100"
             onClick={onOverlayClick}
           >
-            <Icons.ZoomIn className="size-10 cursor-pointer  stroke-2 text-background" />
+            <LucideIcon name="zoom-in" className="size-10 cursor-pointer  stroke-2 text-background" />
           </div>
         </DialogTrigger>
         <DialogContent className="max-w-[80vw] gap-0 overflow-hidden p-0 pb-2">

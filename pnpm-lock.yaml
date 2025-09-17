@@ -437,9 +437,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      lucide-react:
-        specifier: ^0.528.0
-        version: 0.528.0(react@19.1.1)
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -507,6 +504,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.6)
+      code-inspector-plugin:
+        specifier: ^1.2.6
+        version: 1.2.6
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
@@ -1114,9 +1114,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      lucide-react:
-        specifier: ^0.528.0
-        version: 0.528.0(react@19.1.1)
       nanoid:
         specifier: ^5.0.7
         version: 5.0.9
@@ -6644,11 +6641,6 @@ packages:
 
   lucide-react@0.469.0:
     resolution: {integrity: sha512-28vvUnnKQ/dBwiCQtwJw7QauYnE7yd2Cyp4tTTJpvglX4EMpbflcdBgrgToX2j71B3YvugK/NH3BGUk+E/p/Fw==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
-  lucide-react@0.528.0:
-    resolution: {integrity: sha512-Qeapzej+iIKQwOevWKtsSHJKkZh16ohe0Lm5bwdsmlMC7M3T9vIP+2jLiYjcvBl8Lekcc1BTtR4eUATqs3aAjw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -15850,10 +15842,6 @@ snapshots:
   lucide-react@0.469.0(react@19.0.0):
     dependencies:
       react: 19.0.0
-
-  lucide-react@0.528.0(react@19.1.1):
-    dependencies:
-      react: 19.1.1
 
   lz-string@1.5.0: {}
 

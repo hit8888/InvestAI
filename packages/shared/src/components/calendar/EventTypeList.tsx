@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from '@meaku/saral';
-import { EditIcon, PlusIcon } from 'lucide-react';
+import { Button, LucideIcon } from '@meaku/saral';
 
 export interface EventType {
   id: number;
@@ -46,12 +45,12 @@ export const EventTypeList: React.FC<EventTypeListProps> = ({
       {eventTypes.length === 0 ? (
         <div className="text-center py-12">
           <div className="mx-auto w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-            <PlusIcon className="h-6 w-6 text-gray-400" />
+            <LucideIcon name="plus" className="h-6 w-6 text-gray-400" />
           </div>
           <h3 className="text-sm font-medium text-gray-900 mb-2">No event types yet</h3>
           <p className="text-sm text-gray-500 mb-4">Get started by creating your first event type</p>
           <Button variant="default" size="default" onClick={onCreateEventType} className="w-fit rounded-lg gap-2">
-            <PlusIcon className="h-4 w-4" />
+            <LucideIcon name="plus" className="h-4 w-4" />
             Create Event Type
           </Button>
         </div>
@@ -62,7 +61,7 @@ export const EventTypeList: React.FC<EventTypeListProps> = ({
           ))}
           <div className="w-full flex justify-end">
             <Button variant="default" size="default" onClick={onCreateEventType} className="w-fit rounded-lg gap-2">
-              <PlusIcon className="h-4 w-4" />
+              <LucideIcon name="plus" className="h-4 w-4" />
               Create Event Type
             </Button>
           </div>
@@ -95,7 +94,7 @@ const EventTypeCard: React.FC<EventTypeCardProps> = ({ eventType, onEdit }) => {
         </div>
         <div className="flex-shrink-0 ml-4">
           <Button variant="outline" size="sm" onClick={onEdit} className="rounded-lg gap-2">
-            <EditIcon className="h-4 w-4" />
+            <LucideIcon name="square-pen" className="h-4 w-4" />
             Edit
           </Button>
         </div>

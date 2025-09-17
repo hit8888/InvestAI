@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Icons, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@meaku/saral';
 import { FormFieldSchemaType } from '../utils/artifact';
 
 type FormFilledThankYouContentProps = {
@@ -36,7 +36,7 @@ const FormFilledThankYouContent = ({ formFields, formValues }: FormFilledThankYo
     <div className="w-full flex flex-col gap-5">
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="flex items-center justify-center rounded-full border-[16px] border-green-100 bg-green-500 p-2">
-          <Icons.Check className="stroke-4 size-5 text-background" />
+          <LucideIcon name="check" className="stroke-4 size-5 text-background" />
         </div>
         <Typography variant="heading-xl" className="text-center font-medium">
           Details Submitted

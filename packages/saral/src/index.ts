@@ -114,41 +114,8 @@ export type { SideDrawerProps } from './side-drawer';
 // Export custom icons
 export * from './custom-Icons';
 
-// Export all Lucide React icons as a namespace
-import * as LucideIcons from 'lucide-react';
-export const Icons = LucideIcons;
-
-// Also export individual icons for direct import
-export {
-  Wand,
-  PhoneCall,
-  Video,
-  Calendar,
-  FileText,
-  MessageCircle,
-  Phone,
-  Settings,
-  Plus,
-  X,
-  Search,
-  Menu,
-  Home,
-  User,
-  Heart,
-  Star,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Download,
-  Upload,
-  Trash2,
-  Edit,
-  Copy,
-  Check,
-  AlertCircle,
-  Info,
-} from 'lucide-react';
+// Export lucide icon component
+export { default as LucideIcon } from './lucide-icon';
 
 // Export utilities
 export { cn, cva } from './utils';

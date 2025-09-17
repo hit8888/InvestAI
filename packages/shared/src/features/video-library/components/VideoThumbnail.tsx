@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Icons, Typography, Button } from '@meaku/saral';
+import { LucideIcon, Typography, Button } from '@meaku/saral';
 import { Video } from '../types';
 import { useWatchedVideos } from '../hooks/useWatchedVideos';
 
@@ -72,7 +72,7 @@ export const VideoThumbnail = ({
             /* Shimmer effect for loading state */
             <div className="w-full h-full bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-[10px]">
               <div className="w-full h-full flex items-center justify-center">
-                <Icons.Video className="h-6 w-6 text-foreground/20 stroke-[1px]" />
+                <LucideIcon name="video" className="h-6 w-6 text-foreground/20 stroke-[1px]" />
               </div>
             </div>
           ) : video?.asset?.public_url ? (
@@ -89,14 +89,14 @@ export const VideoThumbnail = ({
               {/* Duration Pill */}
               {duration && (
                 <div className="absolute top-3 left-3 text-foreground bg-background px-1 py-0.5 rounded-md shadow-md border text-[10px] font-medium flex items-center gap-0.5">
-                  <Icons.Clock className="size-3" />
+                  <LucideIcon name="clock" className="size-3" />
                   {formatDuration(duration)} min
                 </div>
               )}
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-[10px]">
-              <Icons.Video className="h-6 w-6 text-muted-foreground/50" />
+              <LucideIcon name="video" className="h-6 w-6 text-muted-foreground/50" />
             </div>
           )}
         </div>
@@ -185,7 +185,7 @@ export const VideoThumbnail = ({
             /* Shimmer effect for loading state */
             <div className="w-full h-full bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-[10px]">
               <div className="w-full h-full flex items-center justify-center">
-                <Icons.Video className="h-6 w-6 text-foreground/20 stroke-[1px]" />
+                <LucideIcon name="video" className="h-6 w-6 text-foreground/20 stroke-[1px]" />
               </div>
             </div>
           ) : video?.asset?.public_url ? (
@@ -202,13 +202,13 @@ export const VideoThumbnail = ({
               {/* Play Button Overlay - Always visible with white background */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-6 h-6 bg-background shadow-md rounded-full flex items-center justify-center shadow-lg">
-                  <Icons.Play className="size-3 text-foreground fill-foreground" />
+                  <LucideIcon name="play" className="size-3 text-foreground fill-foreground" />
                 </div>
               </div>
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-[10px]">
-              <Icons.Video className="h-6 w-6 text-muted-foreground/50" />
+              <LucideIcon name="video" className="h-6 w-6 text-muted-foreground/50" />
             </div>
           )}
         </div>

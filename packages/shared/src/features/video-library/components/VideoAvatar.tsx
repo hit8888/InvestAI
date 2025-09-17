@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Icons } from '@meaku/saral';
+import { LucideIcon } from '@meaku/saral';
 import { Video } from '../types';
 import BlackTooltip from '../../../components/BlackTooltip';
 
@@ -63,7 +63,7 @@ export const VideoAvatar = ({
             <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
               {isPlaceholder ? (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-full">
-                  <Icons.Video className="h-6 w-6 text-foreground/20" />
+                  <LucideIcon name="video" className="h-6 w-6 text-foreground/20" />
                 </div>
               ) : video?.thumbnail_url ? (
                 <img
@@ -94,13 +94,13 @@ export const VideoAvatar = ({
                   {/* Fallback icon while video loads */}
                   {!videoFrameLoaded && (
                     <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-full">
-                      <Icons.Video className="h-6 w-6 text-foreground/20" />
+                      <LucideIcon name="video" className="h-6 w-6 text-foreground/20" />
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-pulse rounded-full">
-                  <Icons.Video className="h-6 w-6 text-foreground/20" />
+                  <LucideIcon name="video" className="h-6 w-6 text-foreground/20" />
                 </div>
               )}
             </div>

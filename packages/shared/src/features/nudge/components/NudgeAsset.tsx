@@ -1,6 +1,6 @@
 import React from 'react';
 import { NudgeAssetType } from '@meaku/core/types/api/configuration_response';
-import { Icons } from '@meaku/saral';
+import { LucideIcon } from '@meaku/saral';
 
 interface NudgeAssetProps {
   asset: NudgeAssetType;
@@ -16,7 +16,7 @@ const NudgeAsset: React.FC<NudgeAssetProps> = ({ asset }) => {
           <span className="text-card-foreground text-sm font-semibold px-3 py-2">{asset.display_text}</span>
           <div className="relative">
             <div className="absolute inset-0 flex items-center justify-center">
-              <Icons.Loader className="w-4 h-4 text-gray-500 animate-spin" />
+              <LucideIcon name="loader" className="w-4 h-4 text-gray-500 animate-spin" />
             </div>
             <video
               loop

@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Typography, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, Icons } from '@meaku/saral';
+import {
+  Typography,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Button,
+  LucideIcon,
+} from '@meaku/saral';
 import { QualificationQuestionType } from '../utils/artifact';
 import { useSelectPortal } from '../hooks/usePortal';
 
@@ -81,7 +90,7 @@ export const QualificationQuestions = ({
             </Typography>
             {isQuestionFilled ? (
               <div className="inline-flex w-auto items-center gap-2 rounded-2xl bg-card p-3 px-4">
-                <Icons.CheckCheck className="size-4 text-green-500" />
+                <LucideIcon name="check-check" className="size-4 text-green-500" />
                 <Typography variant="body-small" className="text-foreground">
                   {answer}
                 </Typography>
@@ -110,7 +119,7 @@ export const QualificationQuestions = ({
         <div className="flex w-full justify-end">
           <Button onClick={handleSubmit} disabled={!areAllQuestionsAnswered} size="sm" className="w-full gap-2">
             Submit
-            <Icons.ArrowRight className="size-4" />
+            <LucideIcon name="arrow-right" className="size-4" />
           </Button>
         </div>
       )}
