@@ -128,7 +128,7 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
           size={actionConfig.button?.size || 'icon'}
           variant={buttonVariant}
           onClick={handleClick}
-          hasWipers={!isActive}
+          hasWipers={!!customIconUrl && !isActive}
           className={buttonClassName}
         >
           {iconContent}
