@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Button, cn } from '@meaku/saral';
 import BlackTooltip from '../../components/BlackTooltip';
 import {
@@ -47,113 +47,141 @@ interface BaseActionComponentProps extends FeatureActionProps {
   config: ActionConfig;
 }
 
-const BaseActionComponent: React.FC<BaseActionComponentProps> = ({
-  isActive = false,
-  onClick,
-  initialTooltip,
-  config: actionConfig,
-}) => {
-  const featureConfig: CommandBarModuleConfigType | undefined = useFeatureConfig(
-    CommandBarModuleTypeSchema.enum[actionConfig.moduleType],
-  );
-  const { config } = useCommandBarStore();
+const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
+  ({ isActive = false, onClick, initialTooltip, config: actionConfig }) => {
+    const featureConfig: CommandBarModuleConfigType | undefined = useFeatureConfig(
+      CommandBarModuleTypeSchema.enum[actionConfig.moduleType],
+    );
+    const { config } = useCommandBarStore();
 
-  if (!featureConfig) {
-    return null;
-  }
+    // Get custom icon URL
+    const customIconUrl = featureConfig?.icon_asset?.public_url ?? undefined;
 
-  // Check if component should render
-  if (actionConfig.shouldRender && !actionConfig.shouldRender(featureConfig)) {
-    return null;
-  }
+    // Resolve tooltip content
+    const tooltipContent = useMemo((): string => {
+      if (!actionConfig.tooltip) return '';
 
-  // Get custom icon URL
-  const customIconUrl = featureConfig?.icon_asset?.public_url ?? undefined;
-
-  // Resolve tooltip content
-  const getTooltipContent = (): string => {
-    if (!actionConfig.tooltip) return '';
-
-    if (typeof actionConfig.tooltip.content === 'function') {
-      return actionConfig.tooltip.content(featureConfig);
-    }
-    return actionConfig.tooltip.content;
-  };
-
-  // Resolve button className
-  const getButtonClassName = (): string => {
-    const baseClassName = isActive ? 'rounded-2xl' : 'rounded-full';
-
-    if (actionConfig.button?.className) {
-      if (typeof actionConfig.button.className === 'function') {
-        return `${baseClassName} ${actionConfig.button.className(isActive)}`;
+      if (typeof actionConfig.tooltip.content === 'function') {
+        return featureConfig ? actionConfig.tooltip.content(featureConfig) : '';
       }
-      return `${baseClassName} ${actionConfig.button.className}`;
-    }
+      return actionConfig.tooltip.content;
+    }, [actionConfig.tooltip, featureConfig]);
 
-    return baseClassName;
-  };
+    // Resolve button className
+    const buttonClassName = useMemo((): string => {
+      const baseClassName = isActive ? 'rounded-2xl' : 'rounded-full';
 
-  // Render icon content
-  const renderIconContent = () => {
-    if (customIconUrl && actionConfig.icon) {
-      const iconClassName = actionConfig.icon.customIconClassName || 'h-full w-full';
-      const iconAlt = actionConfig.icon.customIconAlt || featureConfig?.name || 'Icon';
-
-      return <img src={customIconUrl} alt={iconAlt} className={cn(iconClassName, isActive && 'rounded-2xl')} />;
-    }
-
-    return actionConfig.icon?.fallbackIcon;
-  };
-
-  // Create button element
-  const button = (
-    <Button
-      data-action-id={`action-${CommandBarModuleTypeSchema.enum[actionConfig.moduleType]}`}
-      size={actionConfig.button?.size || 'icon'}
-      variant={
-        isActive
-          ? actionConfig.button?.variant === 'outline'
-            ? 'default_active'
-            : actionConfig.button?.variant || 'default_active'
-          : actionConfig.button?.variant || 'outline'
+      if (actionConfig.button?.className) {
+        if (typeof actionConfig.button.className === 'function') {
+          return `${baseClassName} ${actionConfig.button.className(isActive)}`;
+        }
+        return `${baseClassName} ${actionConfig.button.className}`;
       }
-      onClick={() => onClick?.(featureConfig)}
-      className={getButtonClassName()}
-    >
-      {renderIconContent()}
-    </Button>
-  );
 
-  // Use custom renderer if provided
-  if (actionConfig.customRenderer) {
-    const customContent = actionConfig.customRenderer({
-      onClick: () => onClick?.(featureConfig),
-      featureConfig,
-      config,
-    }) as React.ReactElement;
+      return baseClassName;
+    }, [isActive, actionConfig.button?.className]);
 
-    if (isActive) {
-      return customContent;
+    // Resolve button variant
+    const buttonVariant = useMemo(() => {
+      if (isActive) {
+        return actionConfig.button?.variant === 'outline'
+          ? 'default_active'
+          : actionConfig.button?.variant || 'default_active';
+      }
+
+      return actionConfig.button?.variant || 'outline';
+    }, [isActive, actionConfig.button?.variant]);
+
+    // Render icon content
+    const iconContent = useMemo(() => {
+      if (customIconUrl && actionConfig.icon && !isActive) {
+        const iconClassName = actionConfig.icon.customIconClassName || 'h-full w-full';
+        const iconAlt = actionConfig.icon.customIconAlt || featureConfig?.name || 'Icon';
+
+        return (
+          <img
+            src={customIconUrl}
+            alt={iconAlt}
+            className={cn(iconClassName, isActive && 'rounded-2xl')}
+            // Add loading optimization
+            loading="lazy"
+            // Prevent dragging for better UX
+            draggable={false}
+            // Add key to force re-render only when necessary
+            key={`${customIconUrl}-${isActive}`}
+          />
+        );
+      }
+
+      return actionConfig.icon?.fallbackIcon;
+    }, [customIconUrl, actionConfig.icon, featureConfig?.name, isActive]);
+
+    const handleClick = useCallback(() => {
+      onClick?.(featureConfig);
+    }, [onClick, featureConfig]);
+
+    // Create button element
+    const button = useMemo(
+      () => (
+        <Button
+          data-action-id={`action-${CommandBarModuleTypeSchema.enum[actionConfig.moduleType]}`}
+          size={actionConfig.button?.size || 'icon'}
+          variant={buttonVariant}
+          onClick={handleClick}
+          hasWipers={!isActive}
+          className={buttonClassName}
+        >
+          {iconContent}
+        </Button>
+      ),
+      [actionConfig.moduleType, actionConfig.button?.size, buttonVariant, handleClick, buttonClassName, iconContent],
+    );
+
+    const customRendererContent = useMemo(() => {
+      if (!actionConfig.customRenderer || !featureConfig) return null;
+
+      return actionConfig.customRenderer({
+        onClick: handleClick,
+        featureConfig,
+        config,
+      }) as React.ReactElement;
+    }, [actionConfig.customRenderer, handleClick, featureConfig, config]);
+
+    if (!featureConfig) {
+      return null;
     }
+
+    // Check if component should render
+    if (actionConfig.shouldRender && !actionConfig.shouldRender(featureConfig)) {
+      return null;
+    }
+
+    if (customRendererContent) {
+      if (isActive) {
+        return customRendererContent;
+      }
+      return (
+        <BlackTooltip content={tooltipContent} initialTooltip={initialTooltip} side={actionConfig.tooltip?.side}>
+          {customRendererContent}
+        </BlackTooltip>
+      );
+    }
+
+    // Return button without tooltip if active or no tooltip config
+    if (isActive || !actionConfig.tooltip) {
+      return button;
+    }
+
+    // Wrap with tooltip
     return (
-      <BlackTooltip content={getTooltipContent()} initialTooltip={initialTooltip} side={actionConfig.tooltip?.side}>
-        {customContent}
+      <BlackTooltip content={tooltipContent} initialTooltip={initialTooltip} side={actionConfig.tooltip.side}>
+        {button}
       </BlackTooltip>
     );
-  }
+  },
+);
 
-  // Return button without tooltip if active or no tooltip config
-  if (isActive || !actionConfig.tooltip) {
-    return button;
-  }
-
-  // Wrap with tooltip
-  return (
-    <BlackTooltip content={getTooltipContent()} initialTooltip={initialTooltip} side={actionConfig.tooltip.side}>
-      {button}
-    </BlackTooltip>
-  );
-};
+// Add display name for debugging
+BaseActionComponent.displayName = 'BaseActionComponent';
 
 export default BaseActionComponent;
