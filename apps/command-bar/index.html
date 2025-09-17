@@ -15,19 +15,227 @@
     <style>
       .breakout-embed-container {
         width: 600px;
+        padding: 20px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      .static-content {
+        width: 100%;
+        padding: 40px;
+        background: #fafafa;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .static-content h1 {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-align: center;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 15px;
+      }
+
+      .static-content h2 {
+        color: #34495e;
+        font-size: 1.5rem;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        padding-left: 15px;
+        border-left: 4px solid #3498db;
+        background: linear-gradient(90deg, #ecf0f1, transparent);
+        padding: 10px 15px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .static-content p {
+        margin-bottom: 20px;
+        text-align: justify;
+        padding: 0 10px;
+      }
+
+      .content-block {
+        margin: 30px 0;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .content-block:hover {
+        transform: translateY(-2px);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #e74c3c;
+      }
+
+      .stats-container {
+        display: flex;
+        justify-content: space-around;
+        margin: 40px 0;
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin: 10px;
+        min-width: 120px;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        display: block;
+      }
+
+      .code-block {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        margin: 20px 0;
+        overflow-x: auto;
       }
     </style>
   </head>
-  <body id="bo-bc-container">
+  <body>
     <!-- React App Root -->
     <div id="root"></div>
+
+    <div id="bo-bc-container" style="height: 100vh"></div>
+    <div class="static-content">
+      <h1>Welcome to Breakout Blocks</h1>
+      <p>This is a placeholder page to demonstrate the scrollable content area.</p>
+
+      <h2>Section 1: Overview</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat.
+      </p>
+
+      <h2>Section 2: Features</h2>
+      <p>
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+        sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+
+      <h2>Section 3: Getting Started</h2>
+      <p>
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+        aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+      </p>
+
+      <h2>Section 4: Configuration</h2>
+      <p>
+        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
+        eos qui ratione voluptatem sequi nesciunt.
+      </p>
+
+      <h2>Section 5: Advanced Usage</h2>
+      <p>
+        Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non
+        numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+      </p>
+
+      <h2>Section 6: Troubleshooting</h2>
+      <p>
+        Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+        commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+        consequatur.
+      </p>
+
+      <h2>Section 7: API Reference</h2>
+      <p>
+        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque
+        corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.
+      </p>
+
+      <h2>Section 8: Examples</h2>
+      <p>
+        Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem
+        rerum facilis est et expedita distinctio.
+      </p>
+
+      <h2>Section 9: Best Practices</h2>
+      <p>
+        Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat
+        facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
+      </p>
+
+      <h2>Section 10: Conclusion</h2>
+      <p>
+        Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates
+        repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus.
+      </p>
+
+      <div
+        style="
+          height: 200px;
+          background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 20px 0;
+        "
+      >
+        <p style="font-size: 18px; color: #666">Additional Content Block</p>
+      </div>
+
+      <div
+        style="
+          height: 150px;
+          background: linear-gradient(135deg, #e8f4f8, #d1e7dd);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 20px 0;
+        "
+      >
+        <p style="font-size: 16px; color: #555">Another Content Section</p>
+      </div>
+
+      <div
+        style="
+          height: 100px;
+          background: linear-gradient(90deg, #fff3cd, #ffeaa7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 20px 0;
+        "
+      >
+        <p style="font-size: 14px; color: #856404">Final Content Block</p>
+      </div>
+    </div>
+
+    <!-- Web Components -->
 
     <div class="breakout-embed-container">
       <breakout-book-meeting id="breakout-book-meeting" agent-id="2" tenant-id="hubspot"></breakout-book-meeting>
       <breakout-video-library id="breakout-video-library" agent-id="2" tenant-id="hubspot"></breakout-video-library>
     </div>
 
-    <!-- Web Component -->
     <breakout-command-bar id="breakout-command-bar" agent-id="2" tenant-id="hubspot"></breakout-command-bar>
 
     <!-- Scripts -->

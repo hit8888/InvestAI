@@ -38,6 +38,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, onDisable }: 
       layout="position"
       initial={{ opacity: 0, x: 20, y: 16, scale: 0.98 }}
       animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8, y: -10 }}
       transition={{
         duration: 1.0,
         ease: [0.175, 0.885, 0.32, 1.275],

@@ -36,7 +36,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
-  const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(nudgeData ?? null);
+  const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(null);
   const { isEnabled: isScrollTriggeredNudgeEnabled, disable: disableScrollTriggeredNudge } = useScrollTriggeredNudge();
 
   const {
@@ -122,11 +122,17 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   );
 
   useEffect(() => {
-    if (activeFeature) return;
+    if (activeFeature || isScrollTriggeredNudgeEnabled) return;
 
     handleNudgeLoad(nudgeData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleNudgeLoad, nudgeData]);
+
+  useEffect(() => {
+    if (isScrollTriggeredNudgeEnabled) {
+      setNudgeToShow(null);
+    }
+  }, [isScrollTriggeredNudgeEnabled]);
 
   useEffect(() => {
     if (activeFeature) {
@@ -137,11 +143,13 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   if (isScrollTriggeredNudgeEnabled) {
     return (
-      <ScrollTriggeredNudge
-        setActiveFeature={setActiveFeature}
-        sendUserMessage={sendUserMessage}
-        onDisable={disableScrollTriggeredNudge}
-      />
+      <AnimatePresence mode="wait">
+        <ScrollTriggeredNudge
+          setActiveFeature={setActiveFeature}
+          sendUserMessage={sendUserMessage}
+          onDisable={disableScrollTriggeredNudge}
+        />
+      </AnimatePresence>
     );
   }
 
