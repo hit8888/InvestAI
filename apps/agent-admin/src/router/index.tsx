@@ -23,6 +23,7 @@ import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
 import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
 import ActiveConversationsPage from '../pages/ActiveConversationsPage/ActiveConversationsPage.tsx';
 import CalendarPage from '../pages/CalendarPage/index.tsx';
+import AdminProfilePage from '../pages/AdminProfilePage/index.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
@@ -155,6 +156,10 @@ const routes = [
               {
                 path: 'calendar/add-calendar',
                 element: <ProtectedRoute element={<CalendarPage />} />,
+              },
+              {
+                path: 'profile',
+                element: <ProtectedRoute element={<AdminProfilePage />} />,
               },
             ],
           },

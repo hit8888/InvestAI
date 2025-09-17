@@ -1,15 +1,15 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import ImageUploadPattern from '@breakout/design-system/components/Patterns/ImageUploadPattern';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import AgentConfigUploadIcon from '@breakout/design-system/components/icons/agent-config-upload-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
-import toast from 'react-hot-toast';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { trackError } from '@meaku/core/utils/error';
 import ReactCropperModal from './ReactCropperModal';
+import { useImageCropModal } from '../../hooks/useImageCropModal';
 
 interface AssetResponse {
   id: string;
@@ -83,20 +83,8 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   const agentId = getTenantActiveAgentId();
   const [imagePreview, setImagePreview] = useState<string | null>(initialImage ?? null);
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showCropModal, setShowCropModal] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !file.type.startsWith('image/')) return;
-
-    // Set the selected file and show crop modal
-    setSelectedFile(file);
-    setShowCropModal(true);
-  };
-
-  const handleCropComplete = async (croppedImageBlob: Blob) => {
+  const handleCropCompleteInternal = async (croppedImageBlob: Blob) => {
     try {
       setIsUploading(true);
 
@@ -113,9 +101,8 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       onImageUpdate?.(assetData.public_url, assetData);
     } catch (error) {
       console.error('Error uploading image:', error);
-      toast.custom(<ErrorToastMessage title={`Image unable to upload, error has been reported.`} />, {
-        position: 'bottom-center',
-        duration: 5000,
+      ErrorToastMessage({
+        title: `Image unable to upload, error has been reported.`,
       });
       trackError(error, {
         action: 'AgentImageUpload Api call',
@@ -131,16 +118,19 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
     }
   };
 
-  const handleCloseCropModal = () => {
-    setShowCropModal(false);
-    setSelectedFile(null);
-  };
-
-  const triggerFileInput = () => {
-    if (!isUploading && !showCropModal) {
-      fileInputRef.current?.click();
-    }
-  };
+  const {
+    selectedFile,
+    showCropModal,
+    isProcessing,
+    fileInputRef,
+    triggerFileInput,
+    handleImageUpload,
+    handleCropComplete,
+    handleCloseCropModal,
+  } = useImageCropModal({
+    onCropComplete: handleCropCompleteInternal,
+    disabled: isUploading,
+  });
 
   const getTooltipContentElement = () => {
     return (
@@ -149,6 +139,9 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       </Typography>
     );
   };
+
+  const isDisabled = isUploading || showCropModal || isProcessing;
+
   return (
     <div
       className={cn(
@@ -156,7 +149,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         {
           'px-2 py-1': !!imagePreview?.length,
           'border-dashed': !imagePreview?.length,
-          'cursor-not-allowed opacity-50': isUploading || showCropModal,
+          'cursor-not-allowed opacity-50': isDisabled,
         },
       )}
       style={{ width, height }}
@@ -179,15 +172,19 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
           if (fileInputRef.current) fileInputRef.current.value = '';
         }}
         onChange={handleImageUpload}
-        disabled={isUploading || showCropModal}
+        disabled={isDisabled}
       />
 
       {imagePreview ? (
-        <ImagePreviewComponent imagePreview={imagePreview} isSquareLogo={isSquareLogo} isUploading={isUploading} />
+        <ImagePreviewComponent
+          imagePreview={imagePreview}
+          isSquareLogo={isSquareLogo}
+          isUploading={isUploading || isProcessing}
+        />
       ) : (
         <TooltipWrapperDark
           showTooltip={!imagePreview}
-          trigger={<UploadPlaceholderComponent isUploading={isUploading} isSquareLogo={isSquareLogo} />}
+          trigger={<UploadPlaceholderComponent isUploading={isUploading || isProcessing} isSquareLogo={isSquareLogo} />}
           content={getTooltipContentElement()}
           tooltipAlign="center"
           showArrow={false}

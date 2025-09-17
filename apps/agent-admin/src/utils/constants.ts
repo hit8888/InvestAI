@@ -40,6 +40,8 @@ import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent
 import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
 import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
 import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-insights-icon';
+import PanelProfileIcon from '@breakout/design-system/components/icons/panel-profile-icon';
+import PanelProfileActiveIcon from '@breakout/design-system/components/icons/panel-profile-active-icon';
 import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/panel-insights-active-icon';
 import PanelIntegrationsIcon from '@breakout/design-system/components/icons/panel-integrations-icon';
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
@@ -401,6 +403,7 @@ export enum AppRoutesEnum {
   CALENDAR = 'calendar',
   ADD_CALENDAR = 'calendar/add-calendar',
   INTEGRATIONS = 'integrations',
+  PROFILE = 'profile',
   VISITORS = 'prospects',
 }
 
@@ -419,6 +422,7 @@ export enum SidebarNavItemsEnum {
   TRAINING_PLAYGROUND_LABEL = 'Playground',
   INSIGHT_LABEL = 'Insights',
   INTEGRATIONS_LABEL = 'Integrations',
+  PROFILE_LABEL = 'Profile',
 }
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
@@ -797,6 +801,7 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
 ];
 
 export const SETTINGS_LINK_ITEMS: NavLinkItem[] = [
+  // All Workspace Settings - write in order
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.INTEGRATIONS}`,
     navItem: SidebarNavItemsEnum.INTEGRATIONS_LABEL,
@@ -810,6 +815,14 @@ export const SETTINGS_LINK_ITEMS: NavLinkItem[] = [
     icon: CalendarIcon,
     activeIcon: CalendarActiveIcon,
     group: NavigationGroup.WORKSPACE_SETTINGS,
+  },
+  // All Account Settings - write below in order
+  {
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.PROFILE}`,
+    navItem: SidebarNavItemsEnum.PROFILE_LABEL,
+    icon: PanelProfileIcon,
+    activeIcon: PanelProfileActiveIcon,
+    group: NavigationGroup.ACCOUNT_SETTINGS,
   },
 ];
 

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import toast from 'react-hot-toast';
 import { DATA_SOURCES_ACCEPTED_FILE_TYPES, FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE } from '../constants';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 
@@ -28,9 +27,9 @@ const FileUploadHandler = ({ selectedType, onFileSelect, children }: FileUploadH
         FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE[
           selectedType as keyof typeof FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE
         ];
-      toast.custom(<ErrorToastMessage title={errorMessage} />, {
-        position: 'bottom-center',
-        duration: 5000,
+
+      ErrorToastMessage({
+        title: errorMessage,
       });
     },
   });

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useDataSourcesStore } from '../stores/useDataSourcesStore';
 import { SourcesCardTypes } from '../pages/DataSourcesPage/constants';
 import { addWebpagesSitemapLinks, bulkAddArtifacts, bulkAddDocuments } from '@meaku/core/adminHttp/api';
-import toast from 'react-hot-toast';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { useQueryClient } from '@tanstack/react-query';
+import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 interface UseDataSourceAddReturn {
   isAdding: boolean;
   addDataSources: (mainUrl?: string) => Promise<void>;
@@ -31,7 +31,9 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
             cancelled_urls: dataSources.filter((source) => source.is_cancelled).map((source) => source.public_url),
           });
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
-          toast.success('Successfully added webpage sources');
+          SuccessToastMessage({
+            title: 'Successfully added webpage sources',
+          });
           break;
 
         case SourcesCardTypes.DOCUMENTS:
@@ -41,7 +43,9 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
             })),
           );
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
-          toast.success('Successfully added document sources');
+          SuccessToastMessage({
+            title: 'Successfully added document sources',
+          });
           break;
 
         case SourcesCardTypes.VIDEOS:
@@ -54,7 +58,9 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
             })),
           );
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
-          toast.success('Successfully added document sources');
+          SuccessToastMessage({
+            title: 'Successfully added artifact sources',
+          });
           break;
         }
 
@@ -67,15 +73,23 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
       // Handle specific error cases
       if (error instanceof Error) {
         if (error.message.includes('required')) {
-          toast.custom(<ErrorToastMessage title="Required fields are missing. Please check your input." />);
+          ErrorToastMessage({
+            title: 'Required fields are missing. Please check your input.',
+          });
         } else if (error.message.includes('already exists')) {
-          toast.custom(<ErrorToastMessage title="Some sources already exist in the system." />);
+          ErrorToastMessage({
+            title: 'Some sources already exist in the system.',
+          });
         } else {
-          toast.custom(<ErrorToastMessage title="Failed to add sources. Please try again." />);
+          ErrorToastMessage({
+            title: 'Failed to add sources. Please try again.',
+          });
         }
       } else {
         // Generic error handling
-        toast.custom(<ErrorToastMessage title="An unexpected error occurred. Please try again." />);
+        ErrorToastMessage({
+          title: 'An unexpected error occurred. Please try again.',
+        });
       }
     } finally {
       setIsAdding(false);

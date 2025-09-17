@@ -37,6 +37,19 @@ export const VerifyOtpPayloadSchema = z.object({
 });
 export type VerifyOtpPayload = z.infer<typeof VerifyOtpPayloadSchema>;
 
+// ChangePasswordPayload
+export const ChangePasswordPayloadSchema = z.object({
+  new_password: z.string(),
+  confirm_password: z.string(),
+});
+export type ChangePasswordPayload = z.infer<typeof ChangePasswordPayloadSchema>;
+
+// ChangePasswordResponse
+export const ChangePasswordResponseSchema = z.object({
+  message: z.string(),
+});
+export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema>;
+
 // Operator
 export const OperatorSchema = z.enum([
   'eq',
@@ -983,6 +996,54 @@ export const ReachoutEmailResponseSchema = z.object({
   session_id: z.string(),
 });
 export type ReachoutEmailResponse = z.infer<typeof ReachoutEmailResponseSchema>;
+
+// UserProfile
+export const UserProfileResponseSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  email: z.string().email(),
+  first_name: z.string(),
+  last_name: z.string(),
+  full_name: z.string(),
+  is_active: z.boolean(),
+  designation: z.string().optional(),
+  department: z.string().optional(),
+  profile_picture: z.string().url().optional(),
+});
+export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>;
+
+// UpdateUserProfilePayload
+export const UpdateUserProfilePayloadSchema = z.object({
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  designation: z.string().optional(),
+  department: z.string().optional(),
+  profile_picture: z.string().url().or(z.literal('')).optional(),
+});
+export type UpdateUserProfilePayload = z.infer<typeof UpdateUserProfilePayloadSchema>;
+
+// UserProfileUpdateResponse (same as UserProfileResponse)
+export type UserProfileUpdateResponse = UserProfileResponse;
+
+// UserProfileValidationError
+export const UserProfileValidationErrorSchema = z.object({
+  error: z.literal('Validation error'),
+  details: z.record(z.array(z.string())),
+});
+export type UserProfileValidationError = z.infer<typeof UserProfileValidationErrorSchema>;
+
+// UserProfileNotFoundError
+export const UserProfileNotFoundErrorSchema = z.object({
+  error: z.literal('User not found in current organization'),
+});
+export type UserProfileNotFoundError = z.infer<typeof UserProfileNotFoundErrorSchema>;
+
+// UserProfileServerError
+export const UserProfileServerErrorSchema = z.object({
+  error: z.literal('Server error'),
+  details: z.string(),
+});
+export type UserProfileServerError = z.infer<typeof UserProfileServerErrorSchema>;
 
 export const IcpsContactSchema = z.object({
   id: z.number(),

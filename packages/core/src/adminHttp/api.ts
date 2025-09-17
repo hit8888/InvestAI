@@ -8,6 +8,8 @@ import {
   BulkProcessDocumentsRequest,
   BulkReprocessArtifactsRequest,
   CalendarFormData,
+  ChangePasswordPayload,
+  ChangePasswordResponse,
   ConversationsPayload,
   CreateAndUpdateCustomDocumentResponse,
   CreateCustomDocumentRequest,
@@ -42,6 +44,9 @@ import {
   TopQuestionsByUserResponse,
   UpdateArtifactRequest,
   UpdateCustomDocumentRequest,
+  UpdateUserProfilePayload,
+  UserProfileResponse,
+  UserProfileUpdateResponse,
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
   VisitorsPayload,
@@ -64,9 +69,17 @@ export const generateOtp = (payload: GenerateOtpPayload) => adminApiClient.post(
 
 export const verifyOtp = (payload: VerifyOtpPayload) => adminApiClient.post(`/core/api/verify-code/`, payload);
 
+export const changePassword = (payload: ChangePasswordPayload) =>
+  adminApiClient.post<ChangePasswordResponse>(`/core/api/password/change/`, payload);
+
 export const regenerateTokens = (payload: GenerateTokens) => adminApiClient.post(`/core/api/token/refresh/`, payload);
 
 export const getUserDataFromMeAPI = () => adminApiClient.get(`/core/api/me/`);
+
+export const getUserProfile = () => adminApiClient.get<UserProfileResponse>(`/tenant/api/users/profile/`);
+
+export const updateUserProfile = (payload: UpdateUserProfilePayload) =>
+  adminApiClient.patch<UserProfileUpdateResponse>(`/tenant/api/users/profile/`, payload);
 
 export const getAllAgents = () => adminApiClient.get(`/tenant/api/agent/`);
 
