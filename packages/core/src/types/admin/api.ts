@@ -525,6 +525,7 @@ export const SessionDetailsResponseSchema = z.object({
 
 export const DataSourceAssetItemSchema = AssetSchema.extend({
   is_cancelled: z.boolean().default(false),
+  access_type: z.string().nullable(),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
 
@@ -643,6 +644,7 @@ export const DataSourceDocumentsResponseResultSchema = z.object({
   asset: DataSourceAssetItemSchema.nullable(),
   data_source_id: z.number(),
   data_source_type: z.string(),
+  access_type: z.string().optional(),
   created_on: z.string(),
   updated_on: z.string(),
   status: z.string(),
@@ -744,6 +746,7 @@ export const CreateAndUpdateCustomDocumentResponseSchema = z.object({
   status: z.string(),
   data_source_id: z.number(),
   data_source_type: z.string(),
+  access_type: z.string(),
   asset: z.null(),
   created_on: z.string(),
   updated_on: z.string(),

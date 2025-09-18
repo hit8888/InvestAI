@@ -46,6 +46,7 @@ const TableBodyRowItemHavingCheckbox = ({
         const isUrlColumn = cell.column.id === 'url';
         const isStatusColumn = cell.column.id === 'status';
         const isSourceNameColumn = cell.column.id === 'source_name';
+        const isVisibilityColumn = cell.column.id === 'access_type';
         const isDataSourceTypeColumn = cell.column.id === 'data_source_type';
         const isDescriptionColumn = cell.column.id === 'description';
         const isDurationColumn = cell.column.id === 'duration';
@@ -57,7 +58,7 @@ const TableBodyRowItemHavingCheckbox = ({
               {
                 'border-l': isFirstColumn,
                 'min-w-[400px]': isSourceNameColumn || isDescriptionColumn || isUrlColumn,
-                'min-w-32': isLastColumn || isStatusColumn || isDurationColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isDurationColumn || isVisibilityColumn,
                 'min-w-48': isDataSourceTypeColumn,
               },
             )}

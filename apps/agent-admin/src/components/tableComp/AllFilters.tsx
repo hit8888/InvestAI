@@ -30,6 +30,7 @@ const {
   Duration,
   Status,
   FileType,
+  DocumentAccessType,
   SdrAssignment,
 } = FilterType;
 
@@ -79,6 +80,7 @@ const AllFiltersContainer = ({ page, showSearchBar = true, showFilterBar = true 
       case SdrAssignment:
       case Sources:
       case FileType:
+      case DocumentAccessType:
       case Status:
         handleFilterRemove(key, []);
         break;

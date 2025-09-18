@@ -6,7 +6,7 @@ import SortFilterButton from './SortFilterButton';
 
 const HeaderTitle = ({ header }: HeaderTitleProps) => {
   return (
-    <span className={cn(`w-full flex-1 text-left text-xs font-medium text-gray-500`)}>
+    <span className={cn(`w-full flex-1 text-center text-xs font-medium text-gray-500`)}>
       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
     </span>
   );
@@ -43,8 +43,8 @@ const HeaderCellContent = ({
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex items-center justify-center gap-4">
-        {isFirstColumn && showActionItems && (
+      {isFirstColumn && showActionItems && (
+        <div className="flex items-center justify-center gap-4">
           <Checkbox
             checked={isAllSelected}
             indeterminate={isIndeterminate}
@@ -52,11 +52,14 @@ const HeaderCellContent = ({
             onCheckedChange={handleCheckboxChange}
             haveBlackBackground={false}
           />
-        )}
-        <HeaderTitle header={header} />
-      </div>
+          <HeaderTitle header={header} />
+        </div>
+      )}
       {showActionItems && (
-        <SortFilterButton header={header} sortValue={sortValue} setSortValue={setSortValue} pageType={pageType} />
+        <>
+          {!isFirstColumn && <HeaderTitle header={header} />}
+          <SortFilterButton header={header} sortValue={sortValue} setSortValue={setSortValue} pageType={pageType} />
+        </>
       )}
     </div>
   );

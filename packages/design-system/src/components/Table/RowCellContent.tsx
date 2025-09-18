@@ -3,14 +3,27 @@ import { Cell, flexRender } from '@tanstack/react-table';
 import { memo } from 'react';
 import { Checkbox } from '../Checkbox';
 import { RowCellContentProps } from './tableTypes';
+import { cn } from '../../lib/cn';
 
-const CellContent = memo(({ cell }: { cell: Cell<CommonDataSourceResponse, unknown> }) => {
-  return (
-    <div className="flex h-full w-full items-center text-left text-sm text-gray-900">
-      {cell.getIsPlaceholder() ? null : flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </div>
-  );
-});
+const CellContent = memo(
+  ({
+    cell,
+    showItemAtCenter = true,
+  }: {
+    cell: Cell<CommonDataSourceResponse, unknown>;
+    showItemAtCenter?: boolean;
+  }) => {
+    return (
+      <div
+        className={cn('flex h-full w-full items-center justify-start text-center text-sm text-gray-900', {
+          'justify-center': showItemAtCenter,
+        })}
+      >
+        {cell.getIsPlaceholder() ? null : flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </div>
+    );
+  },
+);
 
 CellContent.displayName = 'CellContent';
 
@@ -26,7 +39,7 @@ const RowCellContent = memo(
             onClick={(e) => e.stopPropagation()}
             haveBlackBackground={false}
           />
-          <CellContent cell={cell} />
+          <CellContent showItemAtCenter={false} cell={cell} />
         </div>
       );
     }

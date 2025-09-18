@@ -11,6 +11,7 @@ import SourcesFilterContent from './SourcesFilterContent';
 import StatusFilterContent from './StatusFilterContent';
 import FileTypeFilterContent from './FileTypeFilterContent';
 import SdrAssignmentFilterContent from './SdrAssignmentFilterContent';
+import DocumentAccessTypeFilterContent from './DocumentAccessTypeFilterContent';
 
 const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterContentProps) => {
   const {
@@ -26,6 +27,7 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
     Status,
     UsageCount,
     FileType,
+    DocumentAccessType,
     SdrAssignment,
   } = FilterType;
   return (
@@ -50,6 +52,13 @@ const FilterContent = ({ filterState, handleClosePopover, page }: CommonFilterCo
       ) : null}
       {filterState === FileType ? (
         <FileTypeFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />
+      ) : null}
+      {filterState === DocumentAccessType ? (
+        <DocumentAccessTypeFilterContent
+          filterState={filterState}
+          page={page}
+          handleClosePopover={handleClosePopover}
+        />
       ) : null}
       {filterState === Status ? (
         <StatusFilterContent filterState={filterState} page={page} handleClosePopover={handleClosePopover} />

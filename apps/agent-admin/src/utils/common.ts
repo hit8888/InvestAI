@@ -85,6 +85,7 @@ const {
   Status,
   SearchTableContent,
   FileType,
+  DocumentAccessType,
   SdrAssignment,
 } = FilterType;
 
@@ -357,6 +358,11 @@ export const getFilterHeaderLabel = (filterState: string) => {
         label: 'File type',
         width: '334px',
       };
+    case DocumentAccessType:
+      return {
+        label: 'Document access type',
+        width: '334px',
+      };
     case Status:
       return {
         label: 'Status',
@@ -531,6 +537,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     // duration,
     status,
     fileType,
+    documentAccessType,
     sdrAssignment,
   } = filterState;
 
@@ -692,6 +699,14 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
     });
   }
 
+  if (documentAccessType.length > 0) {
+    filterApplied.push({
+      field: 'access_type',
+      value: documentAccessType,
+      operator: 'in',
+    });
+  }
+
   // Default filter for videos page
   if (isVideosPage) {
     filterApplied.push({
@@ -733,6 +748,7 @@ export const collectAppliedFilters = (filters: FilterValues) => {
     usageCount,
     fileType,
     sdrAssignment,
+    documentAccessType,
   } = filters;
 
   if (dateRange) {
@@ -812,6 +828,14 @@ export const collectAppliedFilters = (filters: FilterValues) => {
       key: FileType,
       label: 'File type',
       value: fileType,
+    });
+  }
+
+  if (documentAccessType.length > 0) {
+    appliedFilters.push({
+      key: DocumentAccessType,
+      label: 'Document access type',
+      value: documentAccessType,
     });
   }
 

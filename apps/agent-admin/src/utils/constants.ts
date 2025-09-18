@@ -10,6 +10,7 @@ import FilterDateIcon from '@breakout/design-system/components/icons/filter-date
 import FilterCompanyIcon from '@breakout/design-system/components/icons/filter-company-icon';
 import FilterSourcesIcon from '@breakout/design-system/components/icons/filter-sources-icon';
 import FilterFileTypeIcon from '@breakout/design-system/components/icons/filter-filetype-icon';
+import FilterDocumentAccessTypeIcon from '@breakout/design-system/components/icons/filter-document-access-type-icon';
 import FilterDurationIcon from '@breakout/design-system/components/icons/filter-duration-icon';
 import FilterUsageCountIcon from '@breakout/design-system/components/icons/filter-usage-count-icon';
 import FilterUserMessagesCountIcon from '@breakout/design-system/components/icons/filter-message-count-icon';
@@ -74,6 +75,7 @@ const {
   Sources,
   Status,
   FileType,
+  DocumentAccessType,
   ProductInterest,
   SdrAssignment,
 } = FilterType;
@@ -289,6 +291,14 @@ const DATA_SOURCES_TABLE_FILTERS_CONFIG = [
     filterKey: FileType,
     filterType: FileType,
   },
+  {
+    filterIcon: FilterDocumentAccessTypeIcon,
+    filterLabel: 'Document Access Type',
+    filterValue: '',
+    filterApplied: false,
+    filterKey: DocumentAccessType,
+    filterType: DocumentAccessType,
+  },
 ];
 
 export enum FilterByMeetingBooked {
@@ -340,9 +350,9 @@ const VISITORS_TABLE_EXCLUDE_FILTERS = [
   IntentScore,
 ];
 const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
-const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType];
+const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType, DocumentAccessType];
 const DOCUMENTS_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, Sources];
-const VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS = [Duration, Sources, UsageCount, FileType];
+const VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS = [Duration, Sources, UsageCount, FileType, DocumentAccessType];
 
 export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
   (item) => !LEADS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),
@@ -900,6 +910,7 @@ export const DOCUMENTS_SORT_KEY_TO_FIELD_MAP: Record<keyof DocumentsSortValues, 
   updated_onSort: 'updated_on',
   statusSort: 'status',
   source_nameSort: 'source_name',
+  access_typeSort: 'access_type',
   data_source_typeSort: 'data_source_type',
   descriptionSort: 'description',
 };
@@ -967,5 +978,16 @@ export const CREATE_CALENDAR_TAB_ITEMS = [
     itemDescription:
       'Create and manage your event types - enables a user to create events that others can use to book them',
     itemValue: CREATE_CALENDAR_TAB_ITEMS_VALUES.EVENT_TYPES,
+  },
+];
+
+export const DOCUMENT_ACCESS_TYPE_OPTIONS = [
+  {
+    value: 'INTERNAL',
+    label: 'Internal',
+  },
+  {
+    value: 'EXTERNAL',
+    label: 'External',
   },
 ];

@@ -18,6 +18,7 @@ import AssetCellValue from './tableCellComp/AssetCellValue';
 import { DataSourceItem } from '@meaku/core/types/admin/api';
 import DescriptionCellValue from './tableCellComp/DescriptionCellValue';
 import DurationCellValue from './tableCellComp/DurationCellValue';
+import AccessTypeCellValue from './tableCellComp/AccessTypeCellValue';
 
 type cellValueMapType = {
   [key: string]: React.FC<{ value: string }>;
@@ -30,6 +31,7 @@ export type CellValueRendererProps = {
 
 const cellValueMap: cellValueMapType = {
   email: EmailCellValue,
+  access_type: AccessTypeCellValue,
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,

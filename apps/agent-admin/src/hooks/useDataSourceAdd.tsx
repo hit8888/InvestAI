@@ -40,6 +40,7 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
           await bulkAddDocuments(
             dataSources.map((source) => ({
               asset: source.id,
+              access_type: source.access_type ?? 'INTERNAL',
             })),
           );
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });

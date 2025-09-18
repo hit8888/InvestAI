@@ -20,6 +20,7 @@ interface DropdownProps {
   menuItemClassName?: string;
   menuGroupClassname?: string;
   dropdownOpenClassName?: string;
+  dropdownIconClassName?: string;
   options: string[] | { value: string; label: string }[];
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
@@ -42,6 +43,7 @@ const AgentDropdown = ({
   menuItemClassName,
   menuGroupClassname,
   dropdownOpenClassName,
+  dropdownIconClassName,
   options,
   placeholderLabel,
   onCallback,
@@ -167,19 +169,19 @@ const AgentDropdown = ({
           </span>
         ) : null}
         <span
-          className={cn('h-5 w-5 flex-shrink-0', {
+          className={cn('h-5 w-5 text-center', {
             'rotate-0': !isDropdownOpen,
-            'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
+            'translate-x-1 rotate-180': isDropdownOpen,
           })}
         >
-          <DropdownIcon className="text-gray-900" width={'24'} height={'24'} />
+          <DropdownIcon className={cn('pb-1 text-gray-900', dropdownIconClassName)} width={'24'} height={'24'} />
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         asChild
         align={menuContentAlign}
         side={menuContentSide}
-        className="dropdown-menu-content hide-scrollbar z-20 max-h-96 overflow-auto 
+        className="dropdown-menu-content hide-scrollbar z-50 max-h-96 min-w-[6rem] overflow-auto 
         rounded-lg bg-white p-0 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div className="flex flex-col">
@@ -193,7 +195,7 @@ const AgentDropdown = ({
               placeholder={searchPlaceholder}
             />
           )}
-          <DropdownMenuGroup className={cn(['max-h-[300px] overflow-y-auto', menuGroupClassname])}>
+          <DropdownMenuGroup className={cn(['max-h-[300px] w-full overflow-y-auto', menuGroupClassname])}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <DropdownOption

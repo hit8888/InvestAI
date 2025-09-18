@@ -34,6 +34,7 @@ const AllSelectableFilterContent = ({
     Sources,
     Status,
     FileType,
+    DocumentAccessType,
     SdrAssignment,
   } = FilterType;
 
@@ -65,6 +66,7 @@ const AllSelectableFilterContent = ({
       usageCount,
       status,
       fileType,
+      documentAccessType,
       sdrAssignment,
     } = filters[page];
     switch (filterKey) {
@@ -80,6 +82,8 @@ const AllSelectableFilterContent = ({
         return sources.length > 0;
       case FileType:
         return fileType.length > 0;
+      case DocumentAccessType:
+        return documentAccessType.length > 0;
       case Status:
         return status.length > 0;
       case ProductOfInterest:
@@ -116,6 +120,7 @@ const AllSelectableFilterContent = ({
       sources,
       status,
       fileType,
+      documentAccessType,
       sdrAssignment,
     } = filters[page];
     switch (filterKey) {
@@ -131,6 +136,8 @@ const AllSelectableFilterContent = ({
         return sources.length > 0 ? `${sources.length} selected` : 'Any';
       case FileType:
         return fileType.length > 0 ? `${fileType.length} selected` : 'Any';
+      case DocumentAccessType:
+        return documentAccessType.length > 0 ? `${documentAccessType.length} selected` : 'Any';
       case Status:
         return status.length > 0 ? `${status.length} selected` : 'Any';
       case UserMessagesCount:

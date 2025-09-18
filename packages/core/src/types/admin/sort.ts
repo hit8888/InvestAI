@@ -19,6 +19,7 @@ export type SortCategory =
   | 'updated_on'
   | 'status'
   | 'data_source_type'
+  | 'access_type'
   | 'url'
   | 'name'
   | 'title'
@@ -62,6 +63,7 @@ export type DocumentsSortValues = CommonSortValues & {
   source_nameSort: SortOrder;
   data_source_typeSort: SortOrder;
   descriptionSort: SortOrder;
+  access_typeSort: SortOrder;
 };
 
 export type ArtifactsSortValues = CommonSortValues & {

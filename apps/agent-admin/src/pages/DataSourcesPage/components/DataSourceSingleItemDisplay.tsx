@@ -1,11 +1,11 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import SingleSlideUploadDisplayItem from './SingleSlideUploadDisplayItem';
 import SingleVideoUploadDisplayItem from './SingleVideoUploadDisplayItem';
-import DocumentsSourcesIcon from '@breakout/design-system/components/icons/sources-documents-icon';
 import WebpagesSourcesIcon from '@breakout/design-system/components/icons/sources-webpages-icon';
 import { DataSourceItem } from '@meaku/core/types/admin/api';
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
+import SingleDocumentUploadDisplayItem from './SingleDocumentUploadDisplayItem';
 
 type DataSourceItemDisplayProps = {
   item: DataSourceItem | File;
@@ -48,21 +48,6 @@ const SingleWebpageUploadDisplayItem = ({ item }: Pick<DataSourceItemDisplayProp
         showTooltip={isTextTruncated}
         content={<p>{public_url}</p>}
       />
-    </div>
-  );
-};
-
-const SingleDocumentUploadDisplayItem = ({ item }: Pick<DataSourceItemDisplayProps, 'item'>) => {
-  const dataSourceItem = item as DataSourceItem;
-  const { name } = dataSourceItem;
-  return (
-    <div className="flex w-full items-center gap-2 rounded-lg border border-gray-200 bg-white p-2">
-      <div className="flex items-center rounded bg-bluegray-200 p-1">
-        <DocumentsSourcesIcon width="16" height="16" className="text-bluegray-700" />
-      </div>
-      <Typography variant="body-14" className="max-w-lg truncate text-system">
-        {name}
-      </Typography>
     </div>
   );
 };
