@@ -26,7 +26,7 @@ const SingleAssignRepCell = ({ listValue, handleCurrentRep, sdrNameClassName }: 
   if (!assigned_user) return null;
   const { full_name, profile_picture } = assigned_user;
   return (
-    <div className="flex w-full cursor-pointer items-center gap-2" onClick={() => handleCurrentRep?.(listValue)}>
+    <div className="flex w-full items-center gap-2" onClick={() => handleCurrentRep?.(listValue)}>
       {profile_picture && profile_picture.length > 0 && (
         <img src={profile_picture} alt="rep" className="h-6 w-6 rounded-full" />
       )}

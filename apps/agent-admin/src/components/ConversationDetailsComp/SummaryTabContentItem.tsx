@@ -10,11 +10,22 @@ import GithubMarkdownRenderer from '@breakout/design-system/components/layout/Gi
 import AssignRepValue from './AssignRepValue';
 import { SdrAssignment } from '@meaku/core/types/admin/api';
 
-const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listValue }: SummaryTabContentList) => {
+interface SummaryTabContentItemProps extends SummaryTabContentList {
+  prospectId: string | null | undefined;
+}
+
+const SummaryTabContentItem = ({
+  listKey,
+  listLabel,
+  listIcon: ItemIcon,
+  listValue,
+  prospectId,
+}: SummaryTabContentItemProps) => {
   const isIntentScore = listKey === 'intentScore';
   const isParentUrl = listKey === 'parentUrl';
   const isAssignRep = listKey === 'assignRep';
   const isSummaryItem = listKey === 'summary';
+  const isLengthOfConversation = listKey === 'lengthOfConversation';
   const isBantAnalysisItem = listKey === 'bantAnalysis';
   const isBrowsingHistorySummaryItem = listKey === 'browsingHistorySummary';
   const isLabelValueDash = listValue === '-';
@@ -38,7 +49,7 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       );
     }
     if (isAssignRep) {
-      return <AssignRepValue listValue={listValue as SdrAssignment} assignRepList={[]} />; // TODO: Add Rep List here
+      return <AssignRepValue listValue={listValue as SdrAssignment} prospectId={prospectId} />;
     }
     if (isSummaryItem || isBrowsingHistorySummaryItem) {
       return <GithubMarkdownRenderer markdown={listValue as string} />;
@@ -81,7 +92,8 @@ const SummaryTabContentItem = ({ listKey, listLabel, listIcon: ItemIcon, listVal
       className={cn(
         'flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
         {
-          'w-full flex-row items-center justify-between': isLabelValueDash,
+          'w-full flex-row items-center justify-between':
+            isLabelValueDash || isAssignRep || isIntentScore || isLengthOfConversation,
           'flex-col justify-center':
             (isSummaryItem || isBantAnalysisItem || isBrowsingHistorySummaryItem) && !isLabelValueDash,
         },

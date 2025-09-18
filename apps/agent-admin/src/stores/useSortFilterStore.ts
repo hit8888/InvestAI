@@ -24,6 +24,7 @@ const documentsInitialSortValues = {
   source_nameSort: null,
   data_source_typeSort: null,
   descriptionSort: null,
+  access_typeSort: null,
 };
 
 export const useSortFilterStore = create<SortFilterState>((set) => ({

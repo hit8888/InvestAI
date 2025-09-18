@@ -32,5 +32,6 @@ export const convertServerConversationDataToClientConversationData = (
     device_type: response.device_type,
     browsing_analysis_summary: response.browsing_analysis_summary,
     sdr_assignment: response.sdr_assignment,
+    prospect_id: response.prospect_id,
   };
 };

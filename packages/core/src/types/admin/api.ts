@@ -347,6 +347,7 @@ export const ConversationsResponseResultSchema = z.object({
   query_params: z.record(z.string(), z.string().nullable().optional()).optional().nullable(),
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
+  prospect_id: z.string().optional().nullable(),
 });
 
 export const ConversationDetailResponseSchema = z.object({
@@ -376,6 +377,7 @@ export const ConversationDetailResponseSchema = z.object({
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
   sdr_assignment: SdrAssignmentSchema.optional().nullable(),
+  prospect_id: z.string().optional().nullable(),
 });
 
 export const VisitorsResponseResultSchema = z.object({
@@ -525,7 +527,7 @@ export const SessionDetailsResponseSchema = z.object({
 
 export const DataSourceAssetItemSchema = AssetSchema.extend({
   is_cancelled: z.boolean().default(false),
-  access_type: z.string().nullable(),
+  access_type: z.string().optional().nullable(),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
 
@@ -1117,3 +1119,45 @@ export const IcpDetailsResponseSchema = z.object({
   contact: IcpsContactSchema,
 });
 export type IcpDetailsResponse = z.infer<typeof IcpDetailsResponseSchema>;
+
+// User schema for users list API
+export const UserSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  email: z.string(),
+  first_name: z.string(),
+  last_name: z.string(),
+  full_name: z.string(),
+  is_active: z.boolean().optional(),
+  designation: z.string().optional().nullable(),
+  profile_picture: z.string().optional().nullable(),
+});
+
+export type User = z.infer<typeof UserSchema>;
+// Users list response
+export const UsersListResponseSchema = PaginationDataSchema.extend({
+  results: z.array(UserSchema),
+});
+
+export type UsersListResponse = z.infer<typeof UsersListResponseSchema>;
+
+// Assign SDR request payload
+export const AssignSdrRequestSchema = z.object({
+  prospect_id: z.string(),
+  assigned_user_id: z.number(),
+});
+
+export type AssignSdrRequest = z.infer<typeof AssignSdrRequestSchema>;
+
+// Assign SDR response
+export const AssignSdrResponseSchema = z.object({
+  id: z.number(),
+  prospect_id: z.string(),
+  assigned_user: UserSchema,
+  assigned_by_user: UserSchema,
+  assignment_timestamp: z.string(),
+  assignment_type: z.string(),
+  is_active: z.boolean(),
+});
+
+export type AssignSdrResponse = z.infer<typeof AssignSdrResponseSchema>;

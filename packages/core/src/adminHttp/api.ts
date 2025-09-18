@@ -1,6 +1,8 @@
 import {
   AddWebpagesSitemapLinksRequest,
   AddWebpagesSitemapLinksResponse,
+  AssignSdrRequest,
+  AssignSdrResponse,
   BulkAddArtifactsRequest,
   BulkAddArtifactsResponse,
   BulkAddDocumentsRequest,
@@ -47,6 +49,7 @@ import {
   UpdateUserProfilePayload,
   UserProfileResponse,
   UserProfileUpdateResponse,
+  UsersListResponse,
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
   VisitorsPayload,
@@ -331,3 +334,10 @@ export const getIcps = (payload: { company_name: string }) => {
 export const getIcpDetails = (payload: { icp_id: number }) => {
   return adminApiClient.post(`/tenant/api/icp-email-enrichment/`, payload);
 };
+
+// Get Assigned Rep users list API
+export const getUsersList = () => adminApiClient.get<UsersListResponse>(`/tenant/api/users/`);
+
+// Assign SDR manually API
+export const assignSdrManually = (payload: AssignSdrRequest) =>
+  adminApiClient.post<AssignSdrResponse>(`/tenant/api/prospects/assign_sdr_manually/`, payload);

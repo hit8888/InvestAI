@@ -65,6 +65,7 @@ const normalizeSessionToConversationData = (
     browsing_analysis_summary: prospect.browsing_analysis_summary || null,
     is_test: session?.is_test || false,
     sdr_assignment: prospect.sdr_assignment || null,
+    prospect_id: prospect.prospect_id || null,
   };
 
   return {

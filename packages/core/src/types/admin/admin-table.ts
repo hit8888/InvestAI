@@ -62,6 +62,7 @@ export const ConversationsTableViewSchema = z.object({
   device_type: z.string().optional().nullable(),
   browsing_analysis_summary: z.string().optional().nullable(),
   sdr_assignment: SdrAssignmentUserSchema.optional().nullable(),
+  prospect_id: z.string().optional().nullable(),
 });
 
 export const VisitorsTableViewSchema = z.object({
