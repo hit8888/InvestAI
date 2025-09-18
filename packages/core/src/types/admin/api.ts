@@ -50,6 +50,40 @@ export const ChangePasswordResponseSchema = z.object({
 });
 export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema>;
 
+// Organization Details
+export const OrganizationDetailsResponseSchema = z.object({
+  id: z.number().optional(),
+  name: z.string().optional(),
+  role: z.string().optional(),
+  'tenant-name': z.string().optional(),
+  logo: z.string().optional(),
+  agentId: z.number().optional(),
+  active_conversations_enabled: z.boolean().optional(),
+});
+export type OrganizationDetailsResponse = z.infer<typeof OrganizationDetailsResponseSchema>;
+
+// UserInfoResponse
+export const UserInfoResponseSchema = z.object({
+  id: z.number(),
+  username: z.string(),
+  email: z.string().email(),
+  first_name: z.string(),
+  last_name: z.string(),
+  profile_picture: z.string(),
+  is_active: z.boolean(),
+  is_staff: z.boolean(),
+  date_joined: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: 'Invalid date format. Expected ISO 8601 format.',
+  }),
+  last_login: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: 'Invalid date format. Expected ISO 8601 format.',
+  }),
+  designation: z.string().nullable(),
+  department: z.string().nullable(),
+  organizations: z.array(OrganizationDetailsResponseSchema),
+});
+export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>;
+
 // Operator
 export const OperatorSchema = z.enum([
   'eq',

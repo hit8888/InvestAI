@@ -2,7 +2,7 @@ import { AgentType } from '@meaku/core/types/admin/agent-configs';
 import { getAllAgents } from '@meaku/core/adminHttp/api';
 import { setTenantIdentifier } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
-import { OrganizationDetails } from '@meaku/core/types/admin/auth';
+import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 import { ENV } from '@meaku/core/types/env';
 
 export const getAllAgentsForTenant = async () => {
@@ -23,7 +23,7 @@ export const getAgentIdFromTenant = async (): Promise<number | null> => {
   return null;
 };
 
-export const setupTenantAndAgent = async (tenantData: OrganizationDetails) => {
+export const setupTenantAndAgent = async (tenantData: OrganizationDetailsResponse) => {
   setTenantIdentifier(tenantData);
   const agentId = await getAgentIdFromTenant();
   if (agentId) {

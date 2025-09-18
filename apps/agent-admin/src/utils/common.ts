@@ -94,16 +94,6 @@ export const getDashboardBasicPathURL = (tenantName: string) => {
   return `/${tenantName}`.replace(/\/+$/, '');
 };
 
-export const getUserNameFromLocalStorage = () => {
-  const { username, first_name, last_name } = JSON.parse(localStorage.getItem('userInfo') ?? '{}');
-
-  if (first_name || last_name) {
-    return [first_name, last_name].join(' ');
-  }
-
-  return username;
-};
-
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
   const additionalInfoData =
     response.additional_info && Object.keys(response.additional_info).length > 0

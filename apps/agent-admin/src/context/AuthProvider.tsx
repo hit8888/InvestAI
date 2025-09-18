@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { setAuthInstance } from '@meaku/core/contexts/AuthInstance';
-import { AuthResponse } from '@meaku/core/types/admin/auth';
+import { UserInfoResponse } from '@meaku/core/types/admin/api';
 import { DEFAULT_ROUTE, DefaultAuthResponse } from '../utils/constants';
 import { setupTenantAndAgent } from '../utils/apiCalls';
 import { getDashboardBasicPathURL } from '../utils/common';
@@ -9,12 +9,12 @@ interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  saveTokens: (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => void;
+  saveTokens: (newAccessToken: string, newRefreshToken: string, userData?: UserInfoResponse) => void;
   clearStateValuesAndLocalStorage: () => void;
   login: () => void;
   logout: () => void;
-  userInfo?: AuthResponse;
-  handleLoginAndRedirection: (userData: AuthResponse, callback: (path: string) => void) => Promise<void>;
+  userInfo?: UserInfoResponse;
+  handleLoginAndRedirection: (userData: UserInfoResponse, callback: (path: string) => void) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   // Save tokens and update state
-  const saveTokens = (newAccessToken: string, newRefreshToken: string, userData?: AuthResponse) => {
+  const saveTokens = (newAccessToken: string, newRefreshToken: string, userData?: UserInfoResponse) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     if (userData) {
@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Store tokens in local storage
     localStorage.setItem('accessToken', newAccessToken);
     localStorage.setItem('refreshToken', newRefreshToken);
-    localStorage.setItem('userInfo', JSON.stringify(userData));
     localStorage.setItem('userEmail', userData?.email ?? '');
   };
 
@@ -69,7 +68,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
-    localStorage.removeItem('userInfo');
     localStorage.removeItem('admin_tenant_identifier');
   };
 
@@ -86,7 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     clearStateValuesAndLocalStorage();
   };
 
-  const handleLoginAndRedirection = async (userData: AuthResponse, callback: (path: string) => void) => {
+  const handleLoginAndRedirection = async (userData: UserInfoResponse, callback: (path: string) => void) => {
     login();
 
     const org = userData?.organizations;

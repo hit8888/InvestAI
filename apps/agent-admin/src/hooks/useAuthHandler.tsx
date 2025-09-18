@@ -2,54 +2,56 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usePageRouteState from './usePageRouteState';
 import { useAuth } from '../context/AuthProvider';
-import { AppRoutesEnum, DEFAULT_ROUTE } from '../utils/constants';
+import { DEFAULT_ROUTE } from '../utils/constants';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { useLoginWithEmailPasswordMutationState } from '../queries/mutation/useLoginWithEmailPassword';
+import useUserInfoQuery from '../queries/query/useUserInfoQuery';
 
 const useAuthHandler = () => {
-  const { login, saveTokens } = useAuth();
+  const storedAccessToken = localStorage.getItem('accessToken');
+  const storedRefreshToken = localStorage.getItem('refreshToken');
+
+  const { login, saveTokens, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { isLoginPage, pathURL, isOAuthCallbackPage } = usePageRouteState();
-  const { LOGIN } = AppRoutesEnum;
+  const { isLoginPage, pathURL } = usePageRouteState();
+  const comingFromLogin = useLoginWithEmailPasswordMutationState();
+  const userInfoQuery = useUserInfoQuery({
+    // If user is authenticated and coming from login, we don't need to fetch user info again
+    enabled: !!storedAccessToken && !comingFromLogin,
+  });
 
   useEffect(() => {
-    if (isOAuthCallbackPage) {
+    if (!userInfoQuery.isSuccess || !(storedAccessToken && storedRefreshToken)) {
       return;
     }
 
-    // Check for tokens in local storage on page load
-    const storedAccessToken = localStorage.getItem('accessToken');
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    const storedUserInfo = localStorage.getItem('userInfo')
-      ? JSON.parse(localStorage.getItem('userInfo') as string)
-      : null;
+    saveTokens(storedAccessToken, storedRefreshToken, userInfoQuery.data);
+    login(); // Set isAuthenticated to true
 
-    if (storedAccessToken && storedRefreshToken) {
-      saveTokens(storedAccessToken, storedRefreshToken, storedUserInfo);
-      login(); // Set isAuthenticated to true
-
-      const tenantName = getTenantIdentifier()?.['tenant-name'] ?? '';
-      const defaultRoute = getDashboardBasicPathURL(`${tenantName}/${DEFAULT_ROUTE}`);
-      if (isLoginPage) {
-        if (tenantName) {
-          navigate(defaultRoute);
-        } else {
-          navigate('/');
-        }
+    const tenantName = getTenantIdentifier()?.['tenant-name'] ?? '';
+    const defaultRoute = getDashboardBasicPathURL(`${tenantName}/${DEFAULT_ROUTE}`);
+    if (isLoginPage) {
+      if (tenantName) {
+        navigate(defaultRoute);
       } else {
-        const basicPathURL = getDashboardBasicPathURL(tenantName);
-        const isBaseOrgPath = pathURL === basicPathURL || pathURL === `${basicPathURL}/`;
-
-        if (isBaseOrgPath) {
-          navigate(defaultRoute);
-        } else {
-          navigate(pathURL);
-        }
+        navigate('/');
       }
     } else {
-      navigate(LOGIN); // Redirect to login if tokens are not present
+      const basicPathURL = getDashboardBasicPathURL(tenantName);
+      const isBaseOrgPath = pathURL === basicPathURL || pathURL === `${basicPathURL}/`;
+
+      if (isBaseOrgPath) {
+        navigate(defaultRoute);
+      } else {
+        navigate(pathURL);
+      }
     }
-  }, [navigate]);
+  }, [userInfoQuery.isSuccess]);
+
+  return {
+    initialized: storedAccessToken ? isAuthenticated : true,
+  };
 };
 
 export default useAuthHandler;

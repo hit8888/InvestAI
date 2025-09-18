@@ -1,4 +1,4 @@
-import { AuthResponse } from '@meaku/core/types/admin/auth';
+import { UserInfoResponse } from '@meaku/core/types/admin/api';
 import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@meaku/core/types/admin/filters';
 import FilterProductOfInterestIcon from '@breakout/design-system/components/icons/filter-productofinterest-icon';
 import FilterAssignedUserEmailIcon from '@breakout/design-system/components/icons/filter-assigneduseremail-icon';
@@ -94,7 +94,7 @@ export const CONVERSATION_DETAILS_NAVIGATION_HEADER_HEIGHT = 81;
 export const STICKY_TOP_VALUE_CONVERSATION_DETAILS_PAGE =
   CONVERSATION_DETAILS_BREADCRUMB_HEIGHT + CONVERSATION_DETAILS_NAVIGATION_HEADER_HEIGHT;
 
-export const DefaultAuthResponse: AuthResponse = {
+export const DefaultAuthResponse: UserInfoResponse = {
   id: 0,
   username: '',
   email: '',

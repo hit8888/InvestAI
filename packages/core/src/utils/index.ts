@@ -1,7 +1,7 @@
 import { SPECIAL_CHARS_REGEX } from '../constants/regex';
 import { SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
-import { OrganizationDetails } from '../types/admin/auth';
+import { OrganizationDetailsResponse } from '../types/admin/api';
 import DateUtil from './dateUtils';
 import isEqual from 'lodash/isEqual';
 
@@ -64,7 +64,7 @@ export const RGB_PRIMARY_COLOR = 'rgb(var(--primary))';
 export const RGB_WHITE_SHADE_COLOR = 'rgba(255, 255, 255, 0.32)';
 export const BREAKOUT_COLOR = '#4E46DC';
 
-export const setTenantIdentifier = (tenantObj: OrganizationDetails) => {
+export const setTenantIdentifier = (tenantObj: OrganizationDetailsResponse) => {
   localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));
 };
 

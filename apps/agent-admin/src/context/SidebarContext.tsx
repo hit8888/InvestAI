@@ -5,7 +5,7 @@ import { NavigationGroup, SIDE_NAV_VIEW_TO_ITEMS, SidebarNavItemsEnum, SideNavVi
 import usePageRouteState from '../hooks/usePageRouteState';
 import { getDashboardBasicPathURL } from '../utils/common';
 import { useAuth } from './AuthProvider';
-import { OrganizationDetails } from '@meaku/core/types/admin/auth';
+import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 
 const EXPANDED_TABS_KEY = 'expanded_tabs';
 const SIDEBAR_OPEN_KEY = 'sidebar_open';
@@ -27,10 +27,10 @@ type ExpandedTabsState = {
   [key: string]: boolean;
 };
 
-const hasFeatureFlag = (organization: OrganizationDetails | undefined, featureFlag: string | undefined) => {
+const hasFeatureFlag = (organization: OrganizationDetailsResponse | undefined, featureFlag: string | undefined) => {
   if (!featureFlag) return true;
 
-  return organization?.[featureFlag as keyof OrganizationDetails] === true;
+  return organization?.[featureFlag as keyof OrganizationDetailsResponse] === true;
 };
 
 const getInitialExpandedState = (): ExpandedTabsState => {

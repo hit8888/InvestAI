@@ -11,14 +11,13 @@ import { useSidebar } from '../../context/SidebarContext';
 import Button from '@breakout/design-system/components/Button/index';
 import { ArrowLeftIcon } from 'lucide-react';
 import Typography from '@breakout/design-system/components/Typography/index';
+import { Link } from 'react-router-dom';
 
 const HeaderCTA = () => {
   const { isSidebarOpen: isOpen, toggleSidebar, sideNavView, navigateToMainView } = useSidebar();
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;
   const isUserSuperAdmin = Boolean((orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin'));
-  const Container = isUserSuperAdmin ? 'a' : 'div';
-  const containerProps = isUserSuperAdmin ? { href: '/' } : {};
   const TENANT_NAME = getTenantIdentifier()?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
   const TENANT_LOGO_URL = getTenantIdentifier()?.['logo'] ?? '';
   const isTenantLogoUrlPresent = TENANT_LOGO_URL.length > 0;
@@ -42,36 +41,35 @@ const HeaderCTA = () => {
   };
 
   const renderTenantLogo = () => {
+    const logoContent = isTenantLogoUrlPresent ? (
+      <div
+        className={cn('flex h-12 items-center', {
+          'justify-center': isOpen,
+        })}
+      >
+        <img className="h-full w-full object-contain" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
+      </div>
+    ) : (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className={cn('text-left font-bold capitalize text-gray-900 transition-all duration-300', {
+          'w-full text-2xl': isOpen,
+          'w-16 truncate text-xs': !isOpen,
+        })}
+      >
+        {TENANT_NAME}
+      </motion.div>
+    );
+
     return (
       <div
         className={cn('flex w-full items-center gap-2', {
           'justify-start': isTenantLogoUrlPresent,
         })}
       >
-        {isTenantLogoUrlPresent && (
-          <Container
-            {...containerProps}
-            className={cn('flex h-12 items-center', {
-              'justify-center': isOpen,
-            })}
-          >
-            <img className="h-full w-full object-contain" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
-          </Container>
-        )}
-        {!isTenantLogoUrlPresent ? (
-          <motion.a
-            href="/"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={cn('text-left font-bold capitalize text-gray-900 transition-all duration-300', {
-              'w-full text-2xl': isOpen,
-              'w-16 truncate text-xs': !isOpen,
-            })}
-          >
-            {TENANT_NAME}
-          </motion.a>
-        ) : null}
+        {isUserSuperAdmin ? <Link to="/">{logoContent}</Link> : <div>{logoContent}</div>}
       </div>
     );
   };

@@ -1,7 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ENV } from '@meaku/core/types/env';
 import { authInstance } from '../contexts/AuthInstance';
-import { getUserDataFromMeAPI, regenerateTokens } from './api';
+import { regenerateTokens } from './api';
 import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -98,13 +98,9 @@ adminApiClient.interceptors.response.use(
 
           localStorage.setItem('accessToken', access);
 
-          // Get updated user data
-          const userResponse = await getUserDataFromMeAPI();
-          const { data: userInfo } = userResponse;
-
           // Update tokens and user data using auth context
           if (authInstance) {
-            authInstance.saveTokens(access, refreshToken, userInfo);
+            authInstance.saveTokens(access, refreshToken);
           }
 
           // Update authorization header
