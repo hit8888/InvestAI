@@ -14,14 +14,18 @@ export const SuggestedQuestions = ({ suggestedQuestions, sendUserMessage }: Sugg
         Try Asking
       </Typography>
       {suggestedQuestions.map((question) => (
-        <button
-          type="button"
-          key={question}
-          onClick={() => sendUserMessage?.(question, { event_type: MessageEventType.SUGGESTED_QUESTION_CLICKED })}
-          className="rounded-full bg-card px-4 py-2 text-sm text-start text-foreground hover:bg-muted"
-        >
-          {question}
-        </button>
+        <div className="w-full flex justify-end mb-2 last:mb-0">
+          <div className="w-fit">
+            <button
+              type="button"
+              key={question}
+              onClick={() => sendUserMessage?.(question, { event_type: MessageEventType.SUGGESTED_QUESTION_CLICKED })}
+              className="rounded-full bg-card px-4 py-2 text-sm text-end text-foreground hover:bg-muted whitespace-normal break-words w-fit"
+            >
+              {question}
+            </button>
+          </div>
+        </div>
       ))}
     </div>
   );

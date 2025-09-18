@@ -1,3 +1,10 @@
+/* Anti-aliasing for all text elements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 /* Default Width for radix-ui dropdown component */
 .dropdown-menu-content {
   width: var(--radix-dropdown-menu-trigger-width);

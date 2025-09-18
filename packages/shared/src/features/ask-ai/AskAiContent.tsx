@@ -43,13 +43,11 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     () => ({
       agent_name: config?.agent_name ?? '',
       welcome_message: config?.body?.welcome_message ?? '',
-      ctas: [
-        {
-          text: config.body.cta_config?.text ?? 'Contact Sales',
-          message: config.body.cta_config?.message ?? 'I want to book a demo for the product.',
-          url: config.body.cta_config?.url ?? '',
-        },
-      ],
+      ctas: (config.body.ctas_list ?? []).map((cta) => ({
+        text: cta?.text ?? '',
+        message: cta?.message ?? '',
+        url: cta?.url ?? '',
+      })),
       welcomeQuestions: config?.body?.welcome_message?.suggested_questions ?? [],
     }),
     [config],
@@ -62,6 +60,8 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   const { selectedAvatar, isAvatarLoaded } = useAvatarSelection(avatarKey);
 
   const shouldBookMeetingCTAButtonShow = checkIfSubmissionEventsPresent(messages ?? []);
+
+  // Get renderable messages to determine UI state
 
   // Add form artifact message for consistent UI when form filled exists but no artifact message
   useFormArtifactMessage({
@@ -128,7 +128,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               showLogo={showFavicon}
               logoUrl={orbLogoUrl}
               logoAlt="Orb Logo"
-              logoSize={32}
+              logoSize={messages?.length === 0 ? 52 : 36}
               showOnlineIndicator={hasActiveAdminSession}
               onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
             />

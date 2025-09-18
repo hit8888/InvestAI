@@ -1,6 +1,12 @@
 import { Message } from '../types/message';
 
 /**
+ * Special event types that should stay with the previous message group
+ * These events don't represent new conversation responses but rather system events
+ */
+const SPECIAL_EVENTS = ['USER_LEFT', 'USER_INACTIVE', 'HEARTBEAT', 'HEARTBEAT_ACK'];
+
+/**
  * Groups messages by response_id into a 2D array
  * Each child array contains all messages belonging to one response_id
  * The parent array contains all such grouped arrays
@@ -9,7 +15,15 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
   const groupedMessages: { [key: string]: Message[] } = {};
 
   messages.forEach((message) => {
-    const responseId = message.response_id;
+    // Special events that should stay with the previous group
+    const isSpecialEvent = SPECIAL_EVENTS.includes(message.event_type);
+
+    // For special events, use the previous message's response_id if available
+    const responseId =
+      isSpecialEvent && Object.keys(groupedMessages).length > 0
+        ? Object.keys(groupedMessages)[Object.keys(groupedMessages).length - 1]
+        : message.response_id;
+
     if (!groupedMessages[responseId]) {
       groupedMessages[responseId] = [];
     }

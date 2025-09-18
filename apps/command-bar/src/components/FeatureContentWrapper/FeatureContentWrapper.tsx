@@ -4,6 +4,7 @@ import React from 'react';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
+import { LAYOUT_CONSTANTS } from './constants';
 
 import {
   useModulePositioning,
@@ -29,6 +30,14 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
   const innerModuleStyles = useInnerModuleStyles(activeFeature, position, isExpanded, isMobile);
   const { shouldRenderContent, animationConfig } = useModuleAnimation(activeFeature);
 
+  // Create animation target state
+  const width = !isMobile ? (isExpanded ? LAYOUT_CONSTANTS.EXPANDED_WIDTH : LAYOUT_CONSTANTS.DEFAULT_WIDTH) : undefined;
+  const animateTarget = {
+    ...animationConfig.animate,
+    width,
+    right: LAYOUT_CONSTANTS.DESKTOP_RIGHT_OFFSET,
+  };
+
   if (!activeFeature || !position || !moduleStyles || !innerModuleStyles) return null;
 
   // Use a key that includes screen dimensions to force re-calculation on resize
@@ -38,7 +47,7 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
     <motion.div
       key={containerKey}
       initial={animationConfig.initial}
-      animate={animationConfig.animate}
+      animate={animateTarget}
       exit={animationConfig.exit}
       transition={animationConfig.transition}
       style={{

@@ -120,19 +120,21 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
       onClick?.(featureConfig);
     }, [onClick, featureConfig]);
 
-    // Create button element
+    // Create button element with extended hover area
     const button = useMemo(
       () => (
-        <Button
-          data-action-id={`action-${CommandBarModuleTypeSchema.enum[actionConfig.moduleType]}`}
-          size={actionConfig.button?.size || 'icon'}
-          variant={buttonVariant}
-          onClick={handleClick}
-          hasWipers={!!customIconUrl && !isActive}
-          className={buttonClassName}
-        >
-          {iconContent}
-        </Button>
+        <div className="p-2 -m-2 group">
+          <Button
+            data-action-id={`action-${CommandBarModuleTypeSchema.enum[actionConfig.moduleType]}`}
+            size={actionConfig.button?.size || 'icon'}
+            variant={buttonVariant}
+            onClick={handleClick}
+            hasWipers={!!customIconUrl && !isActive}
+            className={`${buttonClassName} group-hover:bg-backgroundLight group-hover:text-actionBtnIcon`}
+          >
+            {iconContent}
+          </Button>
+        </div>
       ),
       [actionConfig.moduleType, actionConfig.button?.size, buttonVariant, handleClick, buttonClassName, iconContent],
     );
@@ -162,7 +164,9 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
       }
       return (
         <BlackTooltip content={tooltipContent} initialTooltip={initialTooltip} side={actionConfig.tooltip?.side}>
-          {customRendererContent}
+          <div className="p-2 -m-2 group hover:[&>button]:bg-backgroundLight hover:[&>button]:text-actionBtnIcon">
+            {customRendererContent}
+          </div>
         </BlackTooltip>
       );
     }

@@ -31,8 +31,8 @@ const HeaderButton = ({ onClick, showBlurBackground = true, icon }: HeaderButton
       variant="ghost"
       onClick={onClick}
       className={cn(
-        'size-[30px] rounded-[108px]',
-        showBlurBackground && 'bg-white/20 text-white backdrop-blur-[7.2px]',
+        'size-9 rounded-[108px]',
+        showBlurBackground && 'bg-white/20 text-white backdrop-blur-[7.2px] hover:bg-white/25 hover:border-0',
       )}
     >
       {icon}
@@ -56,21 +56,21 @@ export const FeatureHeader = ({
   const { activeFeature } = useFeature();
   const featureConfig = useFeatureConfig(activeFeature?.module_type);
   const banner = featureConfig?.banner?.public_url;
-  const specificForBanner = !!banner && !!welcomeMessage;
+  const hasBanner = !!banner && !!welcomeMessage;
 
   const configTitle = featureConfig?.module_configs?.title ?? title;
 
-  const getHeaderActions = () => (
-    <div className={cn('flex items-center gap-2', specificForBanner && 'relative right-2 top-1')}>
+  const getHeaderActions = (wrapperClasses: string) => (
+    <div className={`flex items-center gap-2 absolute ${wrapperClasses}`}>
       {onExpand && !isMobile && (
         <HeaderButton
           onClick={onExpand}
-          showBlurBackground={specificForBanner}
+          showBlurBackground={hasBanner}
           icon={
             isExpanded ? (
-              <LucideIcon name="minimize-2" className="size-3" />
+              <LucideIcon name="minimize-2" className="size-4" />
             ) : (
-              <LucideIcon name="maximize-2" className="size-3" />
+              <LucideIcon name="maximize-2" className="size-4" />
             )
           }
         />
@@ -78,8 +78,8 @@ export const FeatureHeader = ({
       {onClose && (
         <HeaderButton
           onClick={onClose}
-          showBlurBackground={specificForBanner}
-          icon={<LucideIcon name="x" className="size-3" />}
+          showBlurBackground={hasBanner}
+          icon={<LucideIcon name="x" className="size-4" />}
         />
       )}
     </div>
@@ -88,9 +88,9 @@ export const FeatureHeader = ({
   // Need to check if all buttons should be hidden based on different CTAs button
   return (
     <div className="flex flex-col p-3 gap-4 border-b border-gray-100">
-      {specificForBanner && (
+      {hasBanner && (
         <div
-          className="inset-3 h-[100px] -mb-10 rounded-xl flex items-start justify-end"
+          className="h-[100px] rounded-xl -mb-10 flex items-center justify-end"
           style={{
             backgroundImage: `url('${banner}')`,
             backgroundSize: 'cover',
@@ -99,15 +99,15 @@ export const FeatureHeader = ({
             minHeight: banner ? '100px' : undefined,
           }}
         >
-          {getHeaderActions()}
+          {getHeaderActions('right-4 top-4')}
         </div>
       )}
       <div className="relative z-10 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={cn('relative', specificForBanner && 'left-3')}>{icon}</div>
+            <div className={`relative ${welcomeMessage ? 'left-3' : 'left-0'}`}>{icon}</div>
             <div
-              className={`transition-all duration-300 ease-in-out ${
+              className={`transition-all font-medium duration-300 ease-in-out ${
                 welcomeMessage
                   ? 'pointer-events-none max-h-0 scale-95 overflow-hidden hidden'
                   : 'pointer-events-auto max-h-8 scale-100 opacity-100'
@@ -125,7 +125,7 @@ export const FeatureHeader = ({
               </div>
             </div>
           </div>
-          {!(banner && welcomeMessage) && getHeaderActions()}
+          {!(banner && welcomeMessage) && getHeaderActions('right-0 top-0')}
         </div>
         <div
           className={`transition-all duration-300 ease-in-out ${

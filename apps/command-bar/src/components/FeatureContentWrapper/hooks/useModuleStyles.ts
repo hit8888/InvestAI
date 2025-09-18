@@ -70,7 +70,7 @@ export const useInnerModuleStyles = (
     const moduleConfig = MODULE_CONFIG[activeFeature];
     const baseStyles: InnerModuleStyles = {
       maxHeight: position.maxHeight,
-      width: isMobile ? '100%' : isExpanded ? moduleConfig.expandedWidth : moduleConfig.width,
+      width: '100%', // Let Framer Motion control the width
     };
 
     // Apply module-specific inner styles

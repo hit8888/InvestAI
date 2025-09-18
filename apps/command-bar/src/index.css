@@ -77,6 +77,13 @@
   :host {
     @apply bg-background font-sans text-foreground;
   }
+
+  /* Anti-aliasing for all text elements */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 }
 
 /* Add overflow auto to booker container */

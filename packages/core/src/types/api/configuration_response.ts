@@ -7,6 +7,7 @@ export const CTAConfigSchema = z
     text: z.string().nullish(),
     url: z.string().nullish(),
     message: z.string().nullish(),
+    event_type: z.string().nullish(),
   })
   .nullish();
 
@@ -108,6 +109,7 @@ export const ConfigurationBodySchema = z.object({
   disclaimer_message: z.string().optional(),
   show_cta: z.boolean().optional(),
   cta_config: CTAConfigSchema,
+  ctas_list: z.array(CTAConfigSchema).optional(),
 });
 
 export const BannerConfigSchema = z.object({

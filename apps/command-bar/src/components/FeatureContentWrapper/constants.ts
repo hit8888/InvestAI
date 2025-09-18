@@ -74,6 +74,11 @@ export const MODULE_CONFIG = {
 >;
 
 /**
+ * Natural easing curve for smooth animations
+ */
+const NATURAL_EASING = [0.4, 0, 0.2, 1] as const;
+
+/**
  * Animation configuration for Framer Motion
  */
 export const ANIMATION_CONFIG = {
@@ -89,14 +94,22 @@ export const ANIMATION_CONFIG = {
     },
   },
   desktop: {
-    initial: { opacity: 0, x: 8 },
+    initial: { opacity: 0, x: 8, width: LAYOUT_CONSTANTS.DEFAULT_WIDTH },
     animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: 8 },
+    exit: { opacity: 0, x: 8, width: LAYOUT_CONSTANTS.DEFAULT_WIDTH },
     transition: {
       duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
-      ease: LAYOUT_CONSTANTS.ANIMATION_EASE,
+      ease: NATURAL_EASING, // Use the same natural easing for all properties
       type: LAYOUT_CONSTANTS.ANIMATION_TYPE,
-      willChange: 'transform, opacity',
+      width: {
+        duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
+        ease: NATURAL_EASING,
+      },
+      right: {
+        duration: LAYOUT_CONSTANTS.ANIMATION_DURATION,
+        ease: NATURAL_EASING,
+      },
+      willChange: 'transform, opacity, width, right',
     },
   },
 } as const;

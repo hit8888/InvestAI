@@ -422,7 +422,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
     setConfig: (config) => {
       set({ config });
 
-      // Only set default suggested questions if there's no chat history
+      // Only set default suggested questions if there's no chat history at all
       const state = get();
       if (config?.body?.welcome_message?.suggested_questions && state.messages.length === 0) {
         set({ suggestedQuestions: config.body.welcome_message.suggested_questions });
@@ -503,14 +503,14 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
       });
 
       if (state.messages.length === 0) {
-        // Find the latest SUGGESTIONS_ARTIFACT message and extract suggested questions
-        const latestSuggestionsMessage = filteredMessages
-          .filter((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT')
-          .pop();
+        // Find SUGGESTIONS_ARTIFACT message from the last group only
+        const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
+        const lastGroupSuggestionsMessage = lastGroup.find((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT');
+        const isLastGroupContainsCalendarArtifact = lastGroup.some((msg) => msg.event_type === 'CALENDAR_ARTIFACT');
 
         let latestSuggestedQuestions: string[] = [];
-        if (latestSuggestionsMessage) {
-          const eventData = latestSuggestionsMessage.event_data as ArtifactEventData;
+        if (lastGroupSuggestionsMessage && !isLastGroupContainsCalendarArtifact) {
+          const eventData = lastGroupSuggestionsMessage.event_data as ArtifactEventData;
           const artifactData = eventData.artifact_data as SuggestionsArtifactData;
           latestSuggestedQuestions = artifactData?.content?.suggested_questions || [];
         }
@@ -720,8 +720,13 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         return;
       }
 
+      // Filter out summarize events that shouldn't affect suggested questions logic
+      const filteredMessages = state.messages.filter(
+        (msg) => msg.event_type !== 'SUMMARIZE' && msg.event_type !== 'SUMMARY_STREAM',
+      );
+
       // Group messages by response_id to check if suggested questions are in the last group
-      const groupedMessages = groupMessagesByResponseId(state.messages);
+      const groupedMessages = groupMessagesByResponseId(filteredMessages);
       const lastGroup = groupedMessages[groupedMessages.length - 1] || [];
       const hasSuggestionsInLastGroup = lastGroup.some((msg) => msg.event_type === 'SUGGESTIONS_ARTIFACT');
 

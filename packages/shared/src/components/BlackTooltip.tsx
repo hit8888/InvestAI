@@ -34,6 +34,7 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
   const [isInitialTooltipActive, setIsInitialTooltipActive] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, transform: '' });
   const [isPositioned, setIsPositioned] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -156,6 +157,9 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
         clearTimeout(hoverTimerRef.current);
       }
 
+      // Immediately set hover state
+      setIsHovered(true);
+
       // Set a delay before showing the tooltip
       hoverTimerRef.current = setTimeout(() => {
         // Reset positioning state for hover tooltips
@@ -172,6 +176,8 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
       if (hoverTimerRef.current) {
         clearTimeout(hoverTimerRef.current);
       }
+
+      setIsHovered(false);
       setIsVisible(false);
       setIsPositioned(false); // Reset positioning state
     }
@@ -259,11 +265,11 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
   return (
     <div
       ref={triggerRef}
-      className="relative inline-block"
+      className="relative inline-block before:absolute before:content-[''] before:-inset-[16px] before:z-[-1]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div>{children}</div>
+      <div data-hovered={isHovered}>{children}</div>
 
       {/* Tooltip - inline or portal */}
       {usePortal ? renderInPortal(tooltipContent) : tooltipContent}

@@ -164,7 +164,7 @@ export const Message = ({
       true,
     'mr-auto max-w-full pl-10': message.role === 'ai' || isAdminResponse,
     hidden: isTextArtifact && !textContent?.length,
-    'ml-auto max-w-[70%] bg-card  pl-3': message.role === 'user',
+    'ml-auto bg-card pl-3 w-fit max-w-[80%]': message.role === 'user',
     [typographyVariants({ variant: 'body', fontWeight: 'normal' })]: true,
     '!max-w-full w-full':
       isVideoArtifact ||
@@ -219,7 +219,11 @@ export const Message = ({
         useWrapper
       />
       {(isTextArtifact || isAdminResponse) && (
-        <div className="w-full">
+        <div
+          className={cn('w-full whitespace-normal break-words', {
+            'text-start': message.role === 'user',
+          })}
+        >
           <TextArtifact content={textContent} />
         </div>
       )}
