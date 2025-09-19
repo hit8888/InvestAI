@@ -53,6 +53,7 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
       icp_id: icp.id,
       name: icp.name,
       title: icp.title,
+      avatar: icp.profile_picture_url,
     })) || [];
   const completedCompanyData = companyData
     ? {

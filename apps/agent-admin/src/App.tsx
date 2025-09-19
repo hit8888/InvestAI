@@ -14,6 +14,7 @@ function App() {
       <Toaster
         toastOptions={{
           duration: 2000,
+          className: '!max-w-full',
         }}
       />
     </main>

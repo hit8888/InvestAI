@@ -1097,6 +1097,7 @@ export const IcpsContactSchema = z.object({
   seniority: z.string(),
   departments: z.array(z.string()),
   linkedin_url: z.string(),
+  profile_picture_url: z.string(),
   email_status: z.string(),
   enrichment_date: z.string(),
   source: z.string(),

@@ -31,7 +31,7 @@ const GeneratedEmailCard = ({
       </div>
       <div className="flex items-center gap-2 py-2">
         <span className="text-sm font-light text-gray-500">for:</span>
-        <div className="h-8 w-8 overflow-hidden rounded-full">
+        <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
           <EmployeeAvatar avatar={selectedEmployee?.avatar ?? ''} name={selectedEmployee?.name ?? ''} />
         </div>
         <div className="flex flex-col gap-1">

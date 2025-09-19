@@ -4,6 +4,7 @@ import { IcpDetailsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 const getIcpDetailsKey = (tenantName: string, icpId: number): unknown[] => ['icp-details-data', tenantName, icpId];
 
@@ -29,7 +30,11 @@ const useIcpDetailsQuery = (
         const response = await getIcpDetails({ icp_id: icpId! });
         return response.data;
       } catch (error) {
-        toast.error('Error fetching ICP details');
+        let errorMessage = '';
+        if (error instanceof AxiosError) {
+          errorMessage = error.response?.data?.error ?? 'Error fetching ICP details';
+        }
+        toast.error(errorMessage);
         throw error;
       }
     },
