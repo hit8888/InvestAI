@@ -3,6 +3,7 @@ import InfoChip from './InfoChip';
 import LogoImage from '@breakout/design-system/components/LogoImage';
 import { CompanyData } from './types';
 import { ensureProtocol } from '@meaku/core/utils/index';
+import NumberUtil from '@meaku/core/utils/numberUtils';
 
 type CompanyInfoSectionProps = {
   companyData?: CompanyData;
@@ -47,8 +48,8 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
             iconUrl={findFlagUrlByCountryName(companyData.hqLocation)}
           />
           {/* <InfoChip label="Relevance" value={companyData.relevance} /> */}
-          <InfoChip label="Revenue" value={companyData.revenue} />
-          <InfoChip label="Employees" value={companyData.employees} />
+          <InfoChip label="Revenue" value={NumberUtil.formatCurrencyWithDenominaton(companyData.revenue)} />
+          <InfoChip label="Employees" value={NumberUtil.formatNumber(companyData.employees)} />
           {/* <InfoChip label="Visits" value={companyData.visits.toString()} /> */}
           {/* <InfoChip label="ATS" value={companyData.ats} /> */}
         </div>

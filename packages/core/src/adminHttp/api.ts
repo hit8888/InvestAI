@@ -119,8 +119,12 @@ export const getConversationFunnelData = () => adminApiClient.get(`/tenant/api/a
 export const getConversationDetailsData = (sessionId: string) =>
   adminApiClient.get(`tenant/api/conversations/${sessionId}/?fetch_all=true`);
 
-export const getSessionDetailsData = (sessionId: string) => {
+export const getSessionDetailsBySessionId = (sessionId: string) => {
   return adminApiClient.get(`tenant/api/session/${sessionId}/details/?chat_summary_required=true`);
+};
+
+export const getSessionDetailsByProspectId = (prospectId: string) => {
+  return adminApiClient.get(`tenant/api/prospect/${prospectId}/details/?chat_summary_required=true`);
 };
 
 export const getFilterPreferences = async (tableName: string) => {

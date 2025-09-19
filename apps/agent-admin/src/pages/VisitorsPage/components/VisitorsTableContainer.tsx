@@ -21,8 +21,6 @@ import { getCompanyLogoSrc } from '@meaku/core/utils/index';
 import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
 import { VisitorsPayload } from '@meaku/core/types/admin/api';
 import { VisitorsTableDisplayContent, VisitorsTableViewContent } from '@meaku/core/types/admin/admin';
-import type { CompanyData } from './CompanyDetailsDrawer/types.ts';
-import { mapVisitorToCompanyData } from '../utils/mapVisitorToCompanyData';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../../../stores/useAllFilterStore.ts';
 import { VISITORS_PAGE } from '@meaku/core/utils/index';
@@ -44,7 +42,7 @@ import AssignedRepCellValue from '../../../components/tableComp/tableCellComp/As
 import NoDataFoundWithSearchTerm from '@breakout/design-system/components/layout/NoDataFoundWithSearchTerm';
 
 type VisitorsTableContainerProps = {
-  onCompanySelect?: (companyData: CompanyData) => void;
+  onCompanySelect?: (prospectId: string) => void;
 };
 
 const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps) => {
@@ -129,10 +127,8 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
   const haveNoRecords = totalRecords === 0;
 
   const handleRowItemClick = (rowData: unknown) => {
-    const visitorDetails = (rowData ?? {}) as VisitorsTableDisplayContent;
-
-    const companyData = mapVisitorToCompanyData(visitorDetails);
-    onCompanySelect?.(companyData);
+    const rowItem = (rowData ?? {}) as VisitorsTableDisplayContent;
+    onCompanySelect?.(rowItem.prospect_id);
   };
 
   // Define custom cell renderers for specific columns
@@ -247,4 +243,3 @@ const VisitorsTableContainer = ({ onCompanySelect }: VisitorsTableContainerProps
 };
 
 export default VisitorsTableContainer;
-export type { VisitorsTableContainerProps };

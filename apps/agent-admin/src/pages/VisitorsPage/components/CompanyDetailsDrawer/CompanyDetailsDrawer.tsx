@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import LoadingContent from './LoadingContent';
-import type { CompanyData, Employee } from './types';
+import type { Employee } from './types';
 import useSessionDetailsQuery from '../../../../queries/query/useSessionDetailsQuery';
 import { BrowsingConversationSummary, CompanyInfoSection } from '.';
 import IcpSection from './IcpSection';
@@ -13,19 +13,25 @@ import useReachoutEmailQuery from '../../../../queries/query/useReachoutEmailQue
 import GeneratedEmailCard from './GeneratedEmailCard';
 import useIcpDetailsQuery from '../../../../queries/query/useIcpDetailsQuery';
 import { cn } from '@breakout/design-system/lib/cn';
+import { mapSessionDetailToCompanyData } from '../../utils/mapVisitorToCompanyData';
 
 type CompanyDetailsDrawerProps = {
   open: boolean;
   onClose: () => void;
-  companyData?: CompanyData;
+  prospectId: string;
 };
 
-const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDrawerProps) => {
+const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawerProps) => {
   const navigate = useNavigate();
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
 
-  const { data, isLoading } = useSessionDetailsQuery({ sessionId: companyData?.prospect?.session_id });
+  const { data, isLoading } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId });
+
+  const companyData = useMemo(() => {
+    return data ? mapSessionDetailToCompanyData(data) : null;
+  }, [data]);
+
   const {
     data: icpList,
     isLoading: isIcpListLoading,

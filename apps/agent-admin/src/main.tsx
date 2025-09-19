@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
           <App />
         </ConversationDetailsProvider>
       </AuthProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     </QueryClientProvider>
   </StrictMode>,
 );

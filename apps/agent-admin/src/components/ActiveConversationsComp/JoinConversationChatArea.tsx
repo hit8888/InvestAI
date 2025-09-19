@@ -27,8 +27,9 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
   const { messages, isUserTyping } = useMessageStore();
   const {
     prospect: { browsed_urls: browsedUrls = [], parent_url: parentUrl, query_params: queryParams } = {},
-    session: { start_time: startTime } = {},
+    session,
   } = conversationDetails ?? {};
+  const { start_time: startTime } = session || {};
   const { currentConversation } = useJoinConversationStore();
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);
   useSetArtifactOnNewMessage();
@@ -109,7 +110,7 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
             </div>
             <div className="flex h-full w-2/5 flex-col gap-4 overflow-y-auto py-2">
               <ContactDetailsCard conversation={currentConversation} />
-              <SummaryCard chatSummary={conversationDetails?.chat_summary} />
+              <SummaryCard chatSummary={conversationDetails?.chat_summary ?? ''} />
               <AccountSignalsCard conversation={currentConversation} />
             </div>
           </div>

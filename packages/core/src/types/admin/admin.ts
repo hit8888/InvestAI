@@ -36,6 +36,7 @@ import {
   VisitorsTableResponseSchema,
   IcpsContactSchema,
   IcpDetailsResponseSchema,
+  ProspectDetailsResponseSchema,
 } from './api';
 import {
   CONVERSATIONS_PAGE,
@@ -95,6 +96,7 @@ export type DataSourceOverviewDataResponse = z.infer<typeof DataSourceOverviewRe
 export type DataSourceOverviewData = z.infer<typeof DataSourceOverviewSchema>;
 export type DataSourceFeaturesData = z.infer<typeof DataSourceFeaturesSchema>;
 export type SessionDetailsDataResponse = z.infer<typeof SessionDetailsResponseSchema>;
+export type ProspectDetailsResponse = z.infer<typeof ProspectDetailsResponseSchema>;
 export type WebpagesScreenshotsDataResponse = z.infer<typeof WebpagesScreenshotsResponseSchema>;
 
 export type EnrichmentSource = z.infer<typeof EnrichmentSourceEnum>;

@@ -34,7 +34,7 @@ const usePageRouteState = () => {
   const isAgentPage = location.pathname.match(/\/agent\/?$/) !== null;
   const isTrainingPage = location.pathname.match(/\/training\/?$/) !== null;
 
-  const pathURL = location.pathname;
+  const pathURL = location.pathname + location.search;
 
   return {
     isDashboardPage,

@@ -1,19 +1,21 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getSessionDetailsData } from '@meaku/core/adminHttp/api';
+import { getSessionDetailsByProspectId, getSessionDetailsBySessionId } from '@meaku/core/adminHttp/api';
 import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
-const getSessionDetailsDataKey = (tenantName: string, sessionID: string): unknown[] => [
+const getSessionDetailsDataKey = (tenantName: string, sessionID?: string, prospectId?: string): unknown[] => [
   'session-details-data',
   tenantName,
   sessionID,
+  prospectId,
 ];
 
 type SessionDetailsDataKey = ReturnType<typeof getSessionDetailsDataKey>;
 
 type SessionDetailsDataQueryPayload = {
   sessionId?: string;
+  prospectId?: string;
 };
 
 type SessionDetailsDataQueryOptions = BreakoutQueryOptions<SessionDetailsDataResponse, SessionDetailsDataKey>;
@@ -24,14 +26,22 @@ const useSessionDetailsQuery = (
 ): UseQueryResult<SessionDetailsDataResponse> => {
   const tenantName = getTenantFromLocalStorage();
   const sessionId = payload.sessionId;
+  const prospectId = payload.prospectId;
 
   const sessionDetailsDataQuery = useQuery({
-    queryKey: getSessionDetailsDataKey(tenantName, sessionId!),
+    queryKey: getSessionDetailsDataKey(tenantName, sessionId, prospectId),
     queryFn: async () => {
-      const response = await getSessionDetailsData(sessionId!);
-      return response.data;
+      if (prospectId) {
+        const response = await getSessionDetailsByProspectId(prospectId);
+        return response.data;
+      } else if (sessionId) {
+        const response = await getSessionDetailsBySessionId(sessionId);
+        return response.data;
+      }
+
+      throw new Error('Either prospectId or sessionId is required');
     },
-    enabled: !!sessionId,
+    enabled: !!sessionId || !!prospectId,
     ...options,
   });
 

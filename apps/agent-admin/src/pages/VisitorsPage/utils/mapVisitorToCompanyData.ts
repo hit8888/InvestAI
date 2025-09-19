@@ -1,11 +1,11 @@
-import type { VisitorsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import type { SessionDetailsDataResponse, VisitorsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import type { CompanyData } from '../components/CompanyDetailsDrawer/types';
 import { getCompanyLogoSrc } from '@meaku/core/utils/index';
 
 /**
  * Maps visitor table data to company data format for the CompanyDetailsDrawer
  */
-export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent): CompanyData => {
+export const mapVisitorTableDisplayContentToCompanyData = (visitorData: VisitorsTableDisplayContent): CompanyData => {
   const websiteUrl = visitorData.website_url;
   const logo = websiteUrl ? getCompanyLogoSrc(websiteUrl) : '';
 
@@ -27,5 +27,36 @@ export const mapVisitorToCompanyData = (visitorData: VisitorsTableDisplayContent
       location: visitorData.country || {},
     },
     email: visitorData.email || '',
+  };
+};
+
+export const mapSessionDetailToCompanyData = (sessionData: SessionDetailsDataResponse): CompanyData => {
+  const prospect = sessionData.prospect;
+  const websiteUrl = prospect.company_demographics?.website_url;
+  const logo = websiteUrl ? getCompanyLogoSrc(websiteUrl) : '';
+
+  return {
+    name: prospect.company || '',
+    website: websiteUrl || '',
+    logo,
+    hqLocation: prospect.company_demographics?.company_country || '',
+    revenue: prospect.company_demographics?.company_revenue || '',
+    employees: prospect.company_demographics?.employee_count || '',
+    prospect: {
+      prospect_id: prospect.prospect_id || '',
+      session_id: prospect.session_id || '',
+      name: prospect.name || '',
+      title: prospect.role || '',
+      email: prospect.email || '',
+      timeSpent: '',
+      visits: 0,
+      location: {
+        city: prospect.prospect_demographics?.city,
+        country: prospect.prospect_demographics?.country,
+      },
+    },
+    email: prospect.email || '',
+    browsingHistorySummary: prospect.browsing_analysis_summary || '',
+    conversationSummary: sessionData.chat_summary || '',
   };
 };

@@ -1,26 +1,36 @@
-import { useState } from 'react';
 import VisitorsTableContainer from './components/VisitorsTableContainer';
 import CompanyDetailsDrawer from './components/CompanyDetailsDrawer';
-import type { CompanyData } from './components/CompanyDetailsDrawer/types';
+import { useSearchParams } from 'react-router-dom';
 
 const VisitorsTable = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedCompanyData, setSelectedCompanyData] = useState<CompanyData | undefined>(undefined);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleCompanySelect = (companyData: CompanyData) => {
-    setSelectedCompanyData(companyData);
-    setDrawerOpen(true);
+  const handleCompanySelect = (prospectId: string) => {
+    if (!prospectId) {
+      return;
+    }
+
+    setSearchParams((prev) => {
+      prev.set('rowId', prospectId);
+      return prev;
+    });
   };
 
   const handleDrawerClose = () => {
-    setDrawerOpen(false);
-    setSelectedCompanyData(undefined);
+    setSearchParams((prev) => {
+      prev.delete('rowId');
+      return prev;
+    });
   };
 
   return (
     <>
       <VisitorsTableContainer onCompanySelect={handleCompanySelect} />
-      <CompanyDetailsDrawer open={drawerOpen} onClose={handleDrawerClose} companyData={selectedCompanyData} />
+      <CompanyDetailsDrawer
+        open={!!searchParams.get('rowId')}
+        onClose={handleDrawerClose}
+        prospectId={searchParams.get('rowId') ?? ''}
+      />
     </>
   );
 };
