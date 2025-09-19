@@ -13,6 +13,7 @@ interface IChatFormFieldProps {
   isArtifactFormFilled: boolean;
   fieldClassName?: string;
   artifactMetadata: FormArtifactMetadataType;
+  onBlur?: () => void;
 }
 
 // Helper function to generate label with asterisk for required fields
@@ -21,7 +22,7 @@ const getLabelWithRequiredIndicator = (label: string, isRequired: boolean): stri
 };
 
 const ChatFormField = (props: IChatFormFieldProps) => {
-  const { form, form_field, isArtifactFormFilled, fieldClassName } = props;
+  const { form, form_field, isArtifactFormFilled, fieldClassName, onBlur } = props;
   const fieldErrorMessage = form.formState.errors[form_field.field_name];
 
   const isIntField = form_field.data_type === 'int';
@@ -55,6 +56,11 @@ const ChatFormField = (props: IChatFormFieldProps) => {
     return 'on';
   };
 
+  const handleBlur = (field: ControllerRenderProps<FieldValues, string>) => {
+    field?.onBlur();
+    onBlur?.();
+  };
+
   const getFieldBasedOnDataType = (field: ControllerRenderProps<FieldValues, string>) => {
     switch (form_field.data_type) {
       case 'phone':
@@ -62,12 +68,13 @@ const ChatFormField = (props: IChatFormFieldProps) => {
           <PhoneInputContainer
             isArtifactFormFilled={isArtifactFormFilled}
             phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
-            field={field}
             defaultCountry={props.artifactMetadata?.country_code as CountryCode}
             className={cn(
               fieldErrorMessage &&
                 'border border-destructive-600 [&>button]:bg-destructive-100 [&>input]:bg-destructive-25 [&_svg]:text-gray-900',
             )}
+            {...field}
+            onBlur={() => handleBlur(field)}
           />
         );
       case 'picklist':
@@ -80,6 +87,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             fontToShown="text-sm"
             showTooltipContent
             {...field}
+            onBlur={() => handleBlur(field)}
           />
         );
       case 'int':
@@ -101,6 +109,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             type="number"
             onKeyDown={handleKeyDown}
             min="0"
+            onBlur={() => handleBlur(field)}
             onChange={(e) => {
               const value = e.target.value;
               if (value === '') {
@@ -130,6 +139,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             type={getInputType(form_field.data_type)}
             onKeyDown={handleKeyDown}
+            onBlur={() => handleBlur(field)}
           />
         );
     }

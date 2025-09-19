@@ -1,27 +1,28 @@
 import { useState } from 'react';
 import { cn } from '@meaku/saral';
 import { CountryCode } from 'libphonenumber-js';
-import PhoneInput from 'react-phone-number-input';
-import { ControllerRenderProps, FieldValues } from 'react-hook-form';
+import PhoneInput, { DefaultInputComponentProps, Props } from 'react-phone-number-input';
+
 import { CountrySelect } from './CountrySelect';
 
 import 'react-phone-number-input/style.css';
 import './styles.css';
 
-type PhoneInputProps = {
-  field: ControllerRenderProps<FieldValues, string>;
+type PhoneInputProps = Props<DefaultInputComponentProps> & {
   phoneLabel: string;
   isArtifactFormFilled: boolean;
   defaultCountry?: CountryCode;
   className?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 const PhoneInputContainer = ({
-  field,
   phoneLabel,
   isArtifactFormFilled,
   defaultCountry = 'US',
   className,
+  onBlur,
+  ...props
 }: PhoneInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -29,8 +30,8 @@ const PhoneInputContainer = ({
     setIsFocused(true);
   };
 
-  const handleBlur = () => {
-    field.onBlur();
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    onBlur?.(e);
     setIsFocused(false);
   };
 
@@ -51,7 +52,7 @@ const PhoneInputContainer = ({
       placeholder={phoneLabel}
       countrySelectComponent={CountrySelect}
       onFocus={handleFocus}
-      {...field}
+      {...props}
       onBlur={handleBlur}
     />
   );

@@ -26,6 +26,7 @@ interface DropdownProps {
   options: string[];
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
+  onBlur?: () => void;
   fontToShown?: string;
   showTooltipContent?: boolean;
   menuContentAlign?: 'start' | 'center' | 'end';
@@ -47,6 +48,7 @@ const AgentDropdown = ({
   options,
   placeholderLabel,
   onCallback,
+  onBlur,
   fontToShown,
   showTooltipContent = false,
   defaultValue,
@@ -111,6 +113,7 @@ const AgentDropdown = ({
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={toggleDropdown}>
       <DropdownMenuTrigger
+        onBlur={onBlur}
         className={cn(
           `text-customPrimaryText hover:bg-gray-25 inline-flex h-16 w-full
           max-w-[800px] cursor-pointer items-center justify-between

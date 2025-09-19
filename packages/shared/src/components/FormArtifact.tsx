@@ -161,6 +161,11 @@ const FormArtifact = ({
                 form={form}
                 form_field={field}
                 artifactMetadata={artifactFormMetadata}
+                onBlur={() => {
+                  trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.FORM_FIELD_INTERACTED, {
+                    field_name: field.field_name,
+                  });
+                }}
               />
             ))}
             {emailError && (
