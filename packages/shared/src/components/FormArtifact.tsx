@@ -18,6 +18,7 @@ type FormFilledEventDataType = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form_data: Record<string, any>;
   qualification: boolean | undefined;
+  form_id: string | undefined;
 };
 
 interface IFormProps {
@@ -100,6 +101,7 @@ const FormArtifact = ({
       artifact_id: artifactId ?? '',
       form_data: sanitizedValues,
       qualification: artifact.qualification,
+      form_id: artifactMetadata.filled_data?.form_id || null,
     };
   };
 

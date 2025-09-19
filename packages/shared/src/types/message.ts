@@ -312,7 +312,9 @@ export const MessageSchema = z
       z.object({
         content: z.string(),
         event_type: z.literal('BOOK_MEETING'),
-        event_data: z.object({}),
+        event_data: z.object({
+          form_id: z.string().optional(),
+        }),
       }), //In case of message without url
       z.object({
         content: z.string(),

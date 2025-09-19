@@ -14,7 +14,7 @@ interface FeatureHeaderProps {
   onClose?: () => void;
   onExpand?: () => void;
   isExpanded?: boolean;
-  ctas?: { text: string; message?: string; url?: string }[];
+  ctas?: { text: string; message?: string; url?: string; form_id?: string }[];
   sendUserMessage?: (message: string, overrides?: Partial<Message>) => void;
 }
 
@@ -177,6 +177,9 @@ export const FeatureHeader = ({
                           if (cta.message && sendUserMessage) {
                             sendUserMessage(cta.message, {
                               event_type: MessageEventType.BOOK_MEETING,
+                              event_data: {
+                                form_id: cta.form_id,
+                              },
                             });
                           }
                         }}

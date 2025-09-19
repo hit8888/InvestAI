@@ -6,6 +6,7 @@ export const CTAConfigSchema = z
   .object({
     text: z.string().nullish(),
     url: z.string().nullish(),
+    form_reference: z.string().nullish(),
     message: z.string().nullish(),
     event_type: z.string().nullish(),
   })

@@ -48,6 +48,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         text: cta?.text ?? '',
         message: cta?.message ?? '',
         url: cta?.url ?? '',
+        form_id: cta?.form_id ?? '',
       })),
       welcomeQuestions: config?.body?.welcome_message?.suggested_questions ?? [],
       show_powered_by_breakout: config?.show_powered_by_breakout ?? true,
