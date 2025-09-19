@@ -3,7 +3,7 @@ import { findFlagUrlByCountryName } from 'country-flags-svg';
 import InfoChip from './InfoChip';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Employee } from './types';
-import { ReachoutEmailCta } from '../../../../components/ConversationDetailsComp/ReachoutEmail';
+import { ReachoutEmailCta } from '../../../../components/common/ReachoutEmail';
 import EmployeeAvatar from './EmployeeAvatar';
 
 type ContactCardProps = {

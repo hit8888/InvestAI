@@ -39,7 +39,7 @@ const CompanyDetailsDrawer = ({ open, onClose, companyData }: CompanyDetailsDraw
   const { data: emailData, isLoading: emailDataLoading } = useReachoutEmailQuery(
     {
       email_type: selectedEmployee?.icp_id ? 'prospective_icp' : 'website_user',
-      prospect_id: companyData?.prospect?.prospect_id ?? undefined,
+      session_id: companyData?.prospect?.session_id ?? undefined,
       icp_id: selectedEmployee?.icp_id ?? undefined,
     },
     {

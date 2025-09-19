@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import Button from '@breakout/design-system/components/Button/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
@@ -7,7 +5,6 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
-import useReachoutEmailQuery from '../../queries/query/useReachoutEmailQuery';
 import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
 
 export const ReachoutEmailBody = ({
@@ -52,7 +49,7 @@ export const ReachoutEmailBodyLoader = () => {
   return (
     <div className="flex flex-1 flex-col items-center gap-4">
       <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-full w-full" />
+      <Skeleton className="h-full min-h-24 w-full" />
     </div>
   );
 };
@@ -75,37 +72,3 @@ export const ReachoutEmailCta = ({
     </Button>
   );
 };
-
-const ReachoutEmail = ({ sessionId }: { sessionId?: string }) => {
-  const { data, isLoading, refetch, isSuccess } = useReachoutEmailQuery({
-    session_id: sessionId,
-  });
-  const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
-
-  const showContentContainer = isLoading || isSuccess;
-
-  const handleGenerateReachoutEmail = () => {
-    if (sessionId) {
-      refetch();
-    }
-  };
-
-  return (
-    <div className="flex w-full flex-col gap-4">
-      <div className="flex w-full items-center justify-between gap-2">
-        <Typography variant="label-14-medium" className="text-gray-500">
-          {isSuccess ? 'Copy paste below email to reach out' : 'Quick Email Setup'}
-        </Typography>
-        <ReachoutEmailCta
-          disabled={showContentContainer || !sessionId}
-          onClick={handleGenerateReachoutEmail}
-          isLoading={isLoading}
-        />
-      </div>
-      {showContentContainer &&
-        (isLoading ? <ReachoutEmailBodyLoader /> : <ReachoutEmailBody data={data} bodyHtmlRef={bodyHtmlRef} />)}
-    </div>
-  );
-};
-
-export default ReachoutEmail;

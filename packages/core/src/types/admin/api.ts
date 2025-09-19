@@ -1025,7 +1025,7 @@ export const ReachoutEmailPayloadSchema = z.object({
   session_id: z.string().optional(),
   prospect_id: z.string().optional(),
   icp_id: z.number().optional(),
-  email_type: z.enum(['website_user', 'prospective_icp']).optional(),
+  email_type: z.enum(['website_user', 'prospective_icp']),
 });
 export type ReachoutEmailPayload = z.infer<typeof ReachoutEmailPayloadSchema>;
 

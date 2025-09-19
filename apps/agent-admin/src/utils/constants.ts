@@ -51,6 +51,7 @@ import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-c
 import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
+import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 
 // Use this Website to get the logo: https://brandfetch.com/
 export const ROUTING_TYPE_LOGO_MAP = {
@@ -482,6 +483,7 @@ export interface SummaryTabContentList {
   listLabel: string;
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   listValue: string | number | BANTItem[] | ParentUrlItem | SdrAssignment;
+  conversation?: ConversationsTableDisplayContent;
 }
 
 export interface BANTItem {
@@ -503,12 +505,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listIcon: SummaryConversationIcon,
     listValue: '',
   },
-  // {
-  //   listKey: 'reachoutEmail',
-  //   listLabel: '',
-  //   listIcon: null,
-  //   listValue: '',
-  // },
+  {
+    listKey: 'reachoutEmail',
+    listLabel: '',
+    listIcon: null,
+    listValue: '',
+  },
   {
     listKey: 'assignRep',
     listLabel: 'Assign Rep:',

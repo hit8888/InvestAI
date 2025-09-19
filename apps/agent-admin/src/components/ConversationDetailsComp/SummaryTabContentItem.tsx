@@ -9,18 +9,15 @@ import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValu
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import AssignRepValue from './AssignRepValue';
 import { SdrAssignment } from '@meaku/core/types/admin/api';
-
-interface SummaryTabContentItemProps extends SummaryTabContentList {
-  prospectId: string | null | undefined;
-}
+import GenerateReachoutEmailItem from './GenerateReachoutEmailItem';
 
 const SummaryTabContentItem = ({
   listKey,
   listLabel,
   listIcon: ItemIcon,
   listValue,
-  prospectId,
-}: SummaryTabContentItemProps) => {
+  conversation,
+}: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
   const isParentUrl = listKey === 'parentUrl';
   const isAssignRep = listKey === 'assignRep';
@@ -49,7 +46,7 @@ const SummaryTabContentItem = ({
       );
     }
     if (isAssignRep) {
-      return <AssignRepValue listValue={listValue as SdrAssignment} prospectId={prospectId} />;
+      return <AssignRepValue listValue={listValue as SdrAssignment} prospectId={conversation?.prospect_id} />;
     }
     if (isSummaryItem || isBrowsingHistorySummaryItem) {
       return <GithubMarkdownRenderer markdown={listValue as string} />;
@@ -86,6 +83,10 @@ const SummaryTabContentItem = ({
       );
     }
   };
+
+  if (listKey === 'reachoutEmail') {
+    return <GenerateReachoutEmailItem sessionId={conversation?.session_id} />;
+  }
 
   return (
     <div

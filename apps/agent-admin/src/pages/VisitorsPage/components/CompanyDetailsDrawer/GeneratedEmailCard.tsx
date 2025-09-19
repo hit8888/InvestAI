@@ -1,9 +1,6 @@
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { cn } from '@breakout/design-system/lib/cn';
-import {
-  ReachoutEmailBody,
-  ReachoutEmailBodyLoader,
-} from '../../../../components/ConversationDetailsComp/ReachoutEmail';
+import { ReachoutEmailBody, ReachoutEmailBodyLoader } from '../../../../components/common/ReachoutEmail';
 import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
 import { Employee } from './types';
 import EmployeeAvatar from './EmployeeAvatar';
