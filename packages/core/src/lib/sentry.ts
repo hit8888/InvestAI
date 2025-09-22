@@ -19,35 +19,42 @@ export function initSentry(config: BrowserOptions) {
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
 
-    // Enhanced URL filtering
+    // Filter out development, extensions, and third-party script URLs
     denyUrls: [
       // Local development
       'localhost',
       '127.0.0.1',
       /^file:\/\//i,
-
       // Browser extensions
       /^chrome-extension:\/\//i,
       /^moz-extension:\/\//i,
       /^safari-extension:\/\//i,
-
+      // Third-party tracking scripts
+      /facebook\.net/i,
+      /google-analytics/i,
+      /googletagmanager/i,
+      /gtag/i,
+      /fbevents/i,
       // Common bot/crawler patterns
       /googlebot/i,
       /bingbot/i,
       /slurp/i,
-
       // Ad blockers and privacy tools
       /ublock/i,
       /adblock/i,
       /privacy/i,
     ],
 
-    // Filter out noisy errors
+    // Filter out common noisy error messages (regardless of source)
     ignoreErrors: [
       'ResizeObserver loop limit exceeded',
       'Non-Error promise rejection captured',
       'AbortError',
       'WebKitBlobResource error',
+      'Script error.',
+      'Network request failed',
+      'Load failed',
+      'SecurityError',
     ],
     ...config,
   });
