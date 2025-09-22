@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
-import { initSentry } from '@meaku/core/lib/sentry';
 import { ENV } from '@meaku/shared/constants/env';
+import { COMMON_DENY_URLS, COMMON_IGNORE_ERRORS } from '@meaku/core/lib/sentry';
 
 const dsn = ENV.VITE_SENTRY_DSN;
 
@@ -8,7 +8,7 @@ if (dsn) {
   const WEBSOCKET_URL = `${ENV.VITE_BASE_WS_URL}/ws/chat`;
   const targetBaseUrls = [ENV.VITE_BASE_API_URL, ENV.VITE_BASE_WS_URL];
 
-  initSentry({
+  Sentry.init({
     dsn,
     // Override: Disable default integrations that capture global errors
     defaultIntegrations: false,
@@ -17,6 +17,12 @@ if (dsn) {
     replaysOnErrorSampleRate: 1.0,
     tracePropagationTargets: [ENV.VITE_BASE_API_URL, WEBSOCKET_URL],
     tracesSampleRate: 1.0,
+
+    // Reused from initSentry: Filter out development, extensions, and third-party script URLs
+    denyUrls: [...COMMON_DENY_URLS],
+
+    // Reused from initSentry: Filter out common noisy error messages
+    ignoreErrors: [...COMMON_IGNORE_ERRORS],
 
     // Override: Only capture network breadcrumbs for our API calls
     beforeBreadcrumb(breadcrumb) {
