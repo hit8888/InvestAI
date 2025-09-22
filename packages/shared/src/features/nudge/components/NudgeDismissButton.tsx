@@ -7,7 +7,10 @@ interface NudgeDismissButtonProps {
 const NudgeDismissButton = ({ onClick }: NudgeDismissButtonProps) => {
   return (
     <div
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center cursor-pointer bg-base-foreground rounded-full"
       aria-label="Close"
     >

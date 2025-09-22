@@ -73,7 +73,10 @@ const NudgeBody = ({
                 key={button.action}
                 variant={index === 0 ? 'default' : 'outline'}
                 className="w-full"
-                onClick={() => onCtaClick(button)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCtaClick(button);
+                }}
               >
                 {button.text}
               </Button>

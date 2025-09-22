@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/react';
 import { ENV } from '../constants/env.ts';
-// import { isProduction } from './common';
-const isProduction = ENV.VITE_APP_ENV === 'production';
+import { isProduction } from '../constants/common';
 
 type ErrorContext = {
   component: string;
@@ -40,7 +39,7 @@ export const trackError = (error: unknown, context: ErrorContext) => {
       });
     }
 
-    scope.setExtra('environment', process.env.NODE_ENV);
+    scope.setExtra('environment', ENV.VITE_APP_ENV);
     scope.setExtra('timestamp', new Date().toISOString());
 
     Sentry.captureException(sentryError);

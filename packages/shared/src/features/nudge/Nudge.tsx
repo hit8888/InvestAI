@@ -94,7 +94,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const topAssets = assets?.filter((asset) => asset.alignment === 'TOP') || [];
   const bottomAssets = assets?.filter((asset) => asset.alignment === 'BOTTOM') || [];
 
-  const handleClick = useCallback(
+  const handleCtaClick = useCallback(
     (button: Cta) => {
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_CLICK);
       setNudgeToShow(null);
@@ -109,6 +109,12 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
     },
     [setActiveFeature, nudgeToShow, sendUserMessage, trackEvent],
   );
+
+  const handleNudgeClick = useCallback(() => {
+    if (ctas && ctas.length === 1) {
+      handleCtaClick(ctas[0]);
+    }
+  }, [ctas, handleCtaClick]);
 
   const handleNudgeLoad = useCallback(
     (nudge?: NudgeType | null) => {
@@ -160,6 +166,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
           key={nudgeToShow.nudge_id}
           className={cn('w-80 relative', {
             'max-w-[calc(100vw-104px)]': isMobile, // 16px (left gap) + 56px (action width) + 16px (gap) + 16px (right gap)
+            'cursor-pointer': ctas?.length === 1,
           })}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -167,6 +174,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           onMouseEnter={() => setIsMouseOver(true)}
           onMouseLeave={() => setIsMouseOver(false)}
+          onClick={handleNudgeClick}
         >
           <div className="flex flex-col justify-center gap-4">
             <NudgeHeader content={header_text} displayDuration={display_duration} onDismiss={handleDismiss} />
@@ -179,7 +187,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
                 topAssets={topAssets}
                 bottomAssets={bottomAssets}
                 ctas={ctas}
-                onCtaClick={handleClick}
+                onCtaClick={handleCtaClick}
                 onDismiss={handleDismiss}
               />
             )}

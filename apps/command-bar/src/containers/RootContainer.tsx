@@ -8,6 +8,7 @@ import PreloadContainer from './PreloadContainer';
 import CommandBarAnalyticsProvider from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
 import DeviceManagerProvider from '@meaku/core/contexts/DeviceManagerProvider';
+import { ENV } from '@meaku/core/types/env';
 
 interface RootContainerProps {
   settings?: SettingsContainerProps;
@@ -18,17 +19,13 @@ interface RootContainerProps {
 const RootContainer = ({ settings: propSettings, hostId, children }: RootContainerProps) => {
   return (
     <Sentry.ErrorBoundary
-      fallback={<></>} // Widget disappears gracefully on error
+      fallback={<></>}
       beforeCapture={(scope) => {
-        // Add widget-specific context
         scope.setTag('widget', 'CommandBarWidget');
+        scope.setExtra('environment', ENV.VITE_APP_ENV);
         if (hostId) {
           scope.setTag('hostId', hostId);
         }
-        scope.setContext('errorBoundary', {
-          hostId,
-          component: 'RootContainer',
-        });
       }}
     >
       <DeviceManagerProvider>
