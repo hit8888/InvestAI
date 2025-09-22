@@ -31,7 +31,7 @@ const DragDropClickUploadFiles = () => {
 
   return (
     <FileUploadHandler selectedType={selectedType} onFileSelect={handleFileSelect}>
-      <div className="relative z-10 flex flex-col items-center gap-1">
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-1">
         <SourcesDragDropUploadIcon width="32" height="32" className="text-primary" />
         <div className="flex flex-col items-center gap-1 self-stretch">
           <Typography variant={'label-14-medium'} align={'center'} textColor={'primary'}>

@@ -16,7 +16,7 @@ const SingleAssignRepCell = ({ listValue, handleCurrentRep, sdrNameClassName }: 
       <div className="flex items-center gap-1">
         <NoDataFoundIcon />
         <Typography variant="caption-12-normal" textColor="gray400">
-          No data
+          Unassigned
         </Typography>
       </div>
     );

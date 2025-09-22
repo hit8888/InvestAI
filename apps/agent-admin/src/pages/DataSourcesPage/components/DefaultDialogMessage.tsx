@@ -18,7 +18,9 @@ const DefaultDialogMessage = () => {
         return <DragDropClickUploadFiles />;
     }
   };
-  return <div className="flex flex-col items-center justify-center gap-2 py-8">{getDefaultMessageContent()}</div>;
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2">{getDefaultMessageContent()}</div>
+  );
 };
 
 const WebpagesDefaultMessage = () => {
