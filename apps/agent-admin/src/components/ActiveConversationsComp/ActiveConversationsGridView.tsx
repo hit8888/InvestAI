@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import ActiveConversationCategoryColumn from './ActiveConversationCategoryColumn';
-import { BuyerIntent } from '@meaku/core/types/common';
 
 interface GridViewProps {
   conversations: ActiveConversation[];
@@ -10,35 +9,32 @@ interface GridViewProps {
   pinnedSessionIds: string[];
 }
 
+const COLUMNS_COUNT = 3;
+
 const ActiveConversationsGridView = ({
   conversations,
   onCardClick,
   onTogglePinned,
   pinnedSessionIds,
 }: GridViewProps) => {
-  const categorizedConversations = useMemo(() => {
-    return [
-      {
-        intentLabel: BuyerIntent.LOW,
-        conversationsData: conversations?.filter((c) => c.buyer_intent === BuyerIntent.LOW) ?? [],
-      },
-      {
-        intentLabel: BuyerIntent.MEDIUM,
-        conversationsData: conversations?.filter((c) => c.buyer_intent === BuyerIntent.MEDIUM) ?? [],
-      },
-      {
-        intentLabel: BuyerIntent.HIGH,
-        conversationsData: conversations?.filter((c) => c.buyer_intent === BuyerIntent.HIGH) ?? [],
-      },
-    ];
+  const distributedConversations = useMemo(() => {
+    const columns: ActiveConversation[][] = Array.from({ length: COLUMNS_COUNT }, () => []);
+
+    conversations?.forEach((conversation, index) => {
+      columns[index % COLUMNS_COUNT].push(conversation);
+    });
+
+    return columns.map((conversationsData, index) => ({
+      columnIndex: index,
+      conversationsData,
+    }));
   }, [conversations]);
 
   return (
     <div className="grid h-full min-h-[80vh] grid-cols-3 gap-4">
-      {categorizedConversations.map(({ intentLabel, conversationsData }) => (
+      {distributedConversations.map(({ columnIndex, conversationsData }) => (
         <ActiveConversationCategoryColumn
-          key={intentLabel}
-          intent={intentLabel}
+          key={columnIndex}
           conversations={conversationsData}
           onCardClick={onCardClick}
           onTogglePinned={onTogglePinned}
