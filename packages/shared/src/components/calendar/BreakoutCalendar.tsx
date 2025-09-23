@@ -4,7 +4,9 @@ import { Booker } from '@calcom/atoms';
 import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
 import { BreakoutCalcomCalendar } from './BreakoutCalcomCalendar';
 import { Typography } from '@meaku/saral';
-import { ENV } from '../../constants/env';
+
+const calOauthClientId = import.meta.env.VITE_CAL_OAUTH_CLIENT_ID;
+const calApiUrl = import.meta.env.VITE_CAL_API_URL;
 
 interface Props {
   calendarContent: CalendarArtifactContent;
@@ -29,7 +31,7 @@ const BreakoutCalendar = ({ calendarContent, handleSendUserMessage, onLoad }: Pr
 
   return (
     <div className="w-full h-full overflow-auto">
-      <BreakoutCalcomCalendar calApiUrl={ENV.VITE_CAL_API_URL} calOauthClientId={ENV.VITE_CAL_OAUTH_CLIENT_ID}>
+      <BreakoutCalcomCalendar calApiUrl={calApiUrl} calOauthClientId={calOauthClientId}>
         <Booker
           defaultFormValues={{
             name: calendarContent.prefill_data?.user_name ?? '',

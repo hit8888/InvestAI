@@ -36,7 +36,7 @@ const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawe
     data: icpList,
     isLoading: isIcpListLoading,
     refetch: fetchIcpList,
-  } = useIcpsQuery({ companyName: companyData?.name }, { enabled: false, retry: false });
+  } = useIcpsQuery({ companyName: companyData?.name, domain: companyData?.website }, { enabled: false, retry: false });
   const {
     data: icpDetails,
     isLoading: isIcpDetailsLoading,

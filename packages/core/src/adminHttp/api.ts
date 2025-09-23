@@ -331,7 +331,7 @@ export const getWebpageScreenshots = (payload: { urls: string[] }) => {
   return adminApiClient.post(`/tenant/api/webpages/screenshots/`, payload);
 };
 
-export const getIcps = (payload: { company_name: string }) => {
+export const getIcps = (payload: { company_name?: string | null; domain?: string | null }) => {
   return adminApiClient.post(`/tenant/api/icp-enrichment/`, payload);
 };
 

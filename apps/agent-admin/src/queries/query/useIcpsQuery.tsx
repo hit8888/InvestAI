@@ -6,12 +6,18 @@ import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';
 
-const getIcpsKey = (tenantName: string, companyName: string): unknown[] => ['icps-data', tenantName, companyName];
+const getIcpsKey = (tenantName: string, companyName?: string | null, domain?: string | null): unknown[] => [
+  'icps-data',
+  tenantName,
+  companyName,
+  domain,
+];
 
 type IcpsKey = ReturnType<typeof getIcpsKey>;
 
 type IcpsQueryPayload = {
   companyName?: string | null;
+  domain?: string | null;
 };
 
 type IcpsQueryOptions = BreakoutQueryOptions<IcpsResponse, IcpsKey>;
@@ -19,12 +25,17 @@ type IcpsQueryOptions = BreakoutQueryOptions<IcpsResponse, IcpsKey>;
 const useIcpsQuery = (payload: IcpsQueryPayload = {}, options: IcpsQueryOptions = {}): UseQueryResult<IcpsResponse> => {
   const tenantName = getTenantFromLocalStorage();
   const companyName = payload.companyName;
+  const domain = payload.domain;
 
   const icpsQuery = useQuery({
-    queryKey: getIcpsKey(tenantName, companyName!),
+    queryKey: getIcpsKey(tenantName, companyName, domain),
     queryFn: async () => {
       try {
-        const response = await getIcps({ company_name: companyName! });
+        if (!companyName && !domain) {
+          throw new Error('Company name or domain is required');
+        }
+
+        const response = await getIcps({ company_name: companyName, domain: domain });
         return response.data;
       } catch (error) {
         let errorMessage = '';

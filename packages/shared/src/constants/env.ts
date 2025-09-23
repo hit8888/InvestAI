@@ -8,8 +8,6 @@ const envSchema = z.object({
   VITE_WC_TAG_NAME: z.string(),
   VITE_BOOK_MEETING_WC_TAG_NAME: z.string(),
   VITE_VECTOR_PIXEL_ID: z.string(),
-  VITE_CAL_OAUTH_CLIENT_ID: z.string(),
-  VITE_CAL_API_URL: z.string(),
 });
 
 export const ENV = envSchema.parse(import.meta.env);
