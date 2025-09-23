@@ -158,12 +158,13 @@ function App() {
 
   return (
     <motion.div
+      id="root-content"
       className={containerClasses}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={COMPONENT_TRANSITIONS.APP_CONTAINER}
     >
-      <div key="root-content" className="flex items-end gap-4">
+      <div className="flex items-end gap-4">
         {nudgeEnabled && <Nudge activeFeature={activeFeatureModuleType} setActiveFeature={setActiveFeature} />}
         <CommandBarActions
           activeFeature={activeFeatureModuleType}

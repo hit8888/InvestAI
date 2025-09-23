@@ -41,7 +41,7 @@ export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }:
       <Input
         placeholder="Type your message..."
         name="message"
-        className="h-[56px] rounded-xl border py-2 pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0"
+        className="h-[56px] rounded-xl border py-2 pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 max-lg:text-base"
         disabled={disabled}
         autoComplete="off"
         aria-autocomplete="none"

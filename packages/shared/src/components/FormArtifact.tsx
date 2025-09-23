@@ -54,7 +54,7 @@ const FormArtifact = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(formSchema as any) as any,
     defaultValues: artifact?.default_data ?? filledData ?? {},
-    mode: 'onTouched',
+    mode: 'onBlur',
   });
 
   // Watch all form fields

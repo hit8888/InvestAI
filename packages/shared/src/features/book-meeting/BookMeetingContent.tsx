@@ -8,6 +8,7 @@ import { FeatureContentProps } from '../';
 import BookMeetingFlowContainer from './components/BookMeetingFlowContainer';
 import useBookMeetingContentHelper from './hooks/useBookMeetingContentHelper';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
+import MessageErrorBoundary from '../../components/MessageErrorBoundary';
 
 const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const { sendUserMessage } = useWsClient();
@@ -55,12 +56,14 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
         isExpanded={isExpanded}
       />
       <div className="flex-1 flex flex-col items-center justify-center">
-        <FormArtifactMessage
-          showMessage={!!(formArtifactMessage && headerTitle && subHeaderTitle)}
-          headerTitle={headerTitle}
-          subHeaderTitle={subHeaderTitle}
-        />
-        {getContent()}
+        <MessageErrorBoundary message={formArtifactMessage}>
+          <FormArtifactMessage
+            showMessage={!!(formArtifactMessage && headerTitle && subHeaderTitle)}
+            headerTitle={headerTitle}
+            subHeaderTitle={subHeaderTitle}
+          />
+          {getContent()}
+        </MessageErrorBoundary>
       </div>
     </div>
   );

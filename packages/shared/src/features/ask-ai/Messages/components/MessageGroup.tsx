@@ -7,6 +7,7 @@ import { TypingIndicator } from './TypingIndicator';
 import { getLastGroupMinHeight } from '../utils/heightUtils';
 import { AvatarComponentProps } from '@meaku/saral';
 import { AvatarDisplay } from '../../../../components/AvatarDisplay';
+import MessageErrorBoundary from '../../../../components/MessageErrorBoundary';
 
 interface MessageGroupProps {
   messageGroup: MessageType[];
@@ -91,23 +92,24 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
         const isLatestMessage = isLastGroup && isLastMessageInGroup;
 
         return (
-          <Message
-            key={`${message.response_id}-${messageIndex}`}
-            message={message}
-            sendUserMessage={sendUserMessage}
-            getFilledData={getFilledData}
-            getQualificationFilledData={getQualificationFilledData}
-            filledCalendarUrls={filledCalendarUrls}
-            selectedAvatar={selectedAvatar}
-            adminSessionInfo={adminSessionInfo}
-            isWithinAdminSession={messagesWithinAdminSessions.has(message.response_id || '')}
-            isLatestMessage={isLatestMessage}
-            isExpanded={isExpanded}
-            shouldShowSessionIndicator={shouldShowSessionIndicator}
-            onExpand={onExpand}
-            showLogo={showLogo}
-            logoUrl={logoUrl}
-          />
+          <MessageErrorBoundary key={`${message.response_id}-${messageIndex}`} message={message}>
+            <Message
+              message={message}
+              sendUserMessage={sendUserMessage}
+              getFilledData={getFilledData}
+              getQualificationFilledData={getQualificationFilledData}
+              filledCalendarUrls={filledCalendarUrls}
+              selectedAvatar={selectedAvatar}
+              adminSessionInfo={adminSessionInfo}
+              isWithinAdminSession={messagesWithinAdminSessions.has(message.response_id || '')}
+              isLatestMessage={isLatestMessage}
+              isExpanded={isExpanded}
+              shouldShowSessionIndicator={shouldShowSessionIndicator}
+              onExpand={onExpand}
+              showLogo={showLogo}
+              logoUrl={logoUrl}
+            />
+          </MessageErrorBoundary>
         );
       })}
 
