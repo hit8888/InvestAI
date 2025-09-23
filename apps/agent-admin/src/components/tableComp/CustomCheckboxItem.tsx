@@ -32,18 +32,30 @@ const CustomCheckboxItem = ({
         <Checkbox
           haveBlackBackground={false}
           checked={isChecked}
-          onChange={() => handleCheckboxToggle(valueForToggle)}
+          // Prevent the checkbox from handling its own events
+          // We want the parent div to handle all interactions
+          onCheckedChange={() => {}}
         />
       </div>
     );
   };
 
+  const handleInteraction = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleCheckboxToggle(valueForToggle);
+  };
+
   return (
     <div
       key={key}
-      onClick={(e) => {
-        e.stopPropagation();
-        handleCheckboxToggle(valueForToggle);
+      // Handle both click (physical press) and touch events (tap to click)
+      onClick={handleInteraction}
+      onTouchEnd={handleInteraction}
+      // Handle mouse down for immediate feedback
+      onMouseDown={(e) => {
+        // Only prevent default for mouse down, don't trigger the toggle here
+        e.preventDefault();
       }}
       className={`flex w-full flex-1 cursor-pointer items-center gap-4 self-stretch p-4 hover:bg-primary/5 ${
         checkboxPosition === 'right' ? 'justify-between' : ''
