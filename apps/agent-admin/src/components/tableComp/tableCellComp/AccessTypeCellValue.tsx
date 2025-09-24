@@ -4,8 +4,9 @@ import { useMemo } from 'react';
 import { useUpdateDocumentAccessType } from '../../../queries/mutation/useDocumentMutation';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
+import { AccessTypeValue } from '@meaku/core/types/admin/admin-table';
 
-const AccessTypeCellValue = ({ value }: { value: { access_type: string; id: string } }) => {
+const AccessTypeCellValue = ({ value }: { value: AccessTypeValue }) => {
   const { id, access_type } = value;
   const { mutateAsync: updateAccessType, isPending } = useUpdateDocumentAccessType();
 

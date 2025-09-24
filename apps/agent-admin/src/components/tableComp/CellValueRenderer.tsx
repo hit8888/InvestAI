@@ -31,7 +31,6 @@ export type CellValueRendererProps = {
 
 const cellValueMap: cellValueMapType = {
   email: EmailCellValue,
-  access_type: AccessTypeCellValue,
   role: ConversationPreviewCellValue,
   company: CompanyCellValue,
   product_of_interest: ProductOfInterestCellValue,
@@ -71,6 +70,10 @@ const specialCellMap: Record<string, SpecialCellConfig> = {
     component: SessionIDCellValue,
     type: 'string',
     props: { isTooltipWithClipboard: true },
+  },
+  access_type: {
+    component: AccessTypeCellValue,
+    type: 'AccessTypeValue',
   },
   asset: {
     component: AssetCellValue,

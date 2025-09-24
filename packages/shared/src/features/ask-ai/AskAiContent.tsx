@@ -62,8 +62,6 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
 
   const shouldBookMeetingCTAButtonShow = checkIfSubmissionEventsPresent(messages ?? []);
 
-  // Get renderable messages to determine UI state
-
   // Add form artifact message for consistent UI when form filled exists but no artifact message
   useFormArtifactMessage({
     messages: messages ?? [],

@@ -25,6 +25,13 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
 
   const { isFormDataLoading, filteredMessages, hasFilteredMessages } = useBookMeetingContentHelper({ onClose });
   const formArtifactMessage = filteredMessages.find((message) => message.event_type === MessageEventType.FORM_ARTIFACT);
+  const formFilledMessage = formArtifactMessage
+    ? filteredMessages.find(
+        (message) =>
+          message.event_type === MessageEventType.FORM_FILLED &&
+          message.response_id === formArtifactMessage.response_id,
+      )
+    : undefined;
 
   const getContent = () => {
     // Show loading while fetching form data
@@ -58,7 +65,7 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
       <div className="flex-1 flex flex-col items-center justify-center">
         <MessageErrorBoundary message={formArtifactMessage}>
           <FormArtifactMessage
-            showMessage={!!(formArtifactMessage && headerTitle && subHeaderTitle)}
+            showMessage={!!(formArtifactMessage && !formFilledMessage && (headerTitle || subHeaderTitle))}
             headerTitle={headerTitle}
             subHeaderTitle={subHeaderTitle}
           />

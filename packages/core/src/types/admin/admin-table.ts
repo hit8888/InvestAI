@@ -143,6 +143,11 @@ export type SourceNameValue = {
   url: string;
 };
 
+export type AccessTypeValue = {
+  access_type: string;
+  id: string;
+};
+
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)
   .or(DataSourceWebpagesTableResponseSchema)
   .or(DataSourceDocumentsTableResponseSchema)

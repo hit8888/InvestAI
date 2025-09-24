@@ -181,7 +181,7 @@ export const checkIfSubmissionEventsPresent = (messages: Message[], hideContent:
   // If form is filled and no qualification form exists, check for calendar flow
   if (isFormFilledEventMessageExist && !isQualificationFormArtifact) {
     // If calendar artifact exists after form filled, check if calendar is submitted
-    if (isCalendarArtifactExist) {
+    if (isCalendarArtifactExist && hideContent) {
       // Hide CTA if calendar is submitted
       return !isCalendarSubmitEventMessageExist;
     }

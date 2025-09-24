@@ -43,7 +43,7 @@ const useBookMeetingContentHelper = ({ onClose }: UseBookMeetingContentHelperPro
     sessionData,
     addMessage,
     moduleId: config.command_bar?.modules.find((m) => m.module_type === 'BOOK_MEETING')?.id ?? 2, // BOOK_MEETING Module ID
-    artifactEventTypes: [MessageEventType.BOOK_MEETING, MessageEventType.FORM_ARTIFACT],
+    artifactEventTypes: [MessageEventType.BOOK_MEETING, MessageEventType.FORM_ARTIFACT, MessageEventType.FORM_FILLED],
     checkFormFilled: true,
     queryEnabled: !hasFilteredMessages,
   });
