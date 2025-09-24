@@ -123,6 +123,7 @@ export const BannerConfigSchema = z.object({
 export const OrbConfigSchema = z.object({
   show_orb: z.boolean().optional().nullable(),
   logo_url: z.string().optional().nullable(),
+  show_online_indicator: z.boolean().optional().nullable(),
 });
 
 export const TrackingConfigSchema = z.object({

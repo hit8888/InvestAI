@@ -27,7 +27,7 @@ export interface AvatarDisplayProps {
 
   // Online indicator
   showOnlineIndicator?: boolean;
-  onlineIndicatorClassName?: string;
+  onlineIndicatorProps?: OnlineIndicatorProps;
 
   // Display conditions
   shouldShow?: boolean;
@@ -43,8 +43,36 @@ export interface AvatarDisplayProps {
 
   // Container wrapper
   wrapperClassName?: string;
-  useWrapper?: boolean;
 }
+
+export type OnlineIndicatorProps = {
+  position?: 'bottom-right' | 'top-right';
+  size?: number;
+  borderWidth?: number;
+  offset?: number;
+};
+
+export const OnlineIndicator: React.FC<OnlineIndicatorProps> = ({
+  position = 'bottom-right',
+  size = 10,
+  borderWidth = 1,
+  offset = 2,
+}) => {
+  return (
+    <div
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        borderWidth: `${borderWidth}px`,
+        right: `-${offset}px`,
+        ...(position === 'bottom-right' ? { bottom: `-${offset}px` } : { top: `-${offset}px` }),
+      }}
+      className={cn(
+        'absolute animate-[quick-flash_3s_ease-in-out_infinite] rounded-full border border-white bg-green-500 z-10',
+      )}
+    />
+  );
+};
 
 export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
   adminSessionInfo,
@@ -56,7 +84,7 @@ export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
   size = 28,
   className,
   showOnlineIndicator = false,
-  onlineIndicatorClassName,
+  onlineIndicatorProps = {},
   shouldShow = true,
   opacity = 1,
   isAbsolute = false,
@@ -64,7 +92,6 @@ export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
   customPositionClass,
   avatarProps = {},
   wrapperClassName,
-  useWrapper = false,
 }) => {
   if (!shouldShow) {
     return null;
@@ -99,8 +126,6 @@ export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
           src={adminSessionInfo.profilePicture}
           alt={adminSessionInfo.name}
           size={size}
-          showOnlineIndicator={showOnlineIndicator}
-          onlineIndicatorClassName={onlineIndicatorClassName}
           className={cn(className)}
         />
       );
@@ -126,12 +151,12 @@ export const AvatarDisplay: React.FC<AvatarDisplayProps> = ({
 
   const avatar = renderAvatar();
 
-  // Wrap in container if needed
-  if (useWrapper) {
-    return <div className={cn(wrapperClassName)}>{avatar}</div>;
-  }
-
-  return avatar;
+  return (
+    <div className={cn('relative', wrapperClassName)}>
+      {avatar}
+      {showOnlineIndicator && <OnlineIndicator {...onlineIndicatorProps} />}
+    </div>
+  );
 };
 
 // Convenience components for specific use cases

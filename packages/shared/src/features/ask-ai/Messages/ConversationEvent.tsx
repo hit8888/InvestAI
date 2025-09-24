@@ -1,6 +1,7 @@
 import { Typography, ImageWithFallback } from '@meaku/saral';
 import { Message } from '../../../types/message';
 import { isJoinSessionEvent, isLeaveSessionEvent } from '../../../utils/message-utils';
+import { OnlineIndicator } from '../../../components/AvatarDisplay';
 
 interface ConversationEventProps {
   message: Message;
@@ -62,13 +63,9 @@ export const ConversationEvent = ({ message, shouldShowSessionIndicator = false 
         <div className="flex-1 h-[1px] bg-muted w-full" />
         <div className="flex items-center gap-1 bg-card p-1 px-2 rounded-2xl">
           {profilePicture && (
-            <div className="size-[18px] rounded-full overflow-hidden flex-shrink-0">
-              <ImageWithFallback
-                src={profilePicture}
-                alt={`${userName}'s profile`}
-                size={18}
-                showOnlineIndicator={isJoinEvent && shouldShowSessionIndicator}
-              />
+            <div className="relative size-[18px] rounded-full flex-shrink-0">
+              <ImageWithFallback src={profilePicture} alt={`${userName}'s profile`} size={18} />
+              {isJoinEvent && shouldShowSessionIndicator && <OnlineIndicator />}
             </div>
           )}
           <Typography variant="body-small" className="text-muted-foreground">

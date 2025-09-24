@@ -4,6 +4,7 @@ import { VideoLibraryIcon } from '@meaku/saral';
 import CustomIconImageContainer from '@meaku/shared/features/ask-ai/components/CustomIconImageContainer';
 import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
 import { CommandBarModuleTypeSchema } from '@meaku/core/index';
+import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
@@ -27,8 +28,11 @@ export const AskAIActionConfig: ActionConfig = {
     };
 
     return (
-      <Button className="rounded-full" size="icon" data-action-id={`action-ASK_AI`} onClick={onClick}>
+      <Button className="relative rounded-full" size="icon" data-action-id={`action-ASK_AI`} onClick={onClick}>
         {renderContent()}
+        {orbConfig?.show_online_indicator && (
+          <OnlineIndicator position="bottom-right" size={16} borderWidth={2} offset={3} />
+        )}
       </Button>
     );
   },

@@ -211,12 +211,11 @@ export const Message = ({
         }
         adminSessionInfo={isWithinAdminSession ? adminSessionInfo : undefined}
         selectedAvatar={selectedAvatar}
-        showOnlineIndicator={isJoinSessionEventPresent || shouldShowSessionIndicator}
+        showOnlineIndicator={isAdminResponse && (isJoinSessionEventPresent || shouldShowSessionIndicator)}
         showLogo={showLogo}
         logoUrl={logoUrl}
         logoSize={24}
         wrapperClassName="absolute top-2 left-0"
-        useWrapper
       />
       {(isTextArtifact || isAdminResponse) && (
         <div

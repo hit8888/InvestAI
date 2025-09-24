@@ -35,6 +35,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
   } = useCommandBarStore();
 
   const orbLogoUrl = config.style_config.orb_config?.logo_url;
+  const showOnlineIndicator = config.style_config.orb_config?.show_online_indicator ?? false;
   const showFavicon = !config.style_config.orb_config?.show_orb;
 
   const { isSideDrawerOpen, closeSidebar, setContainerReady } = useSidebarArtifactContext();
@@ -129,8 +130,8 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               logoUrl={orbLogoUrl}
               logoAlt="Orb Logo"
               logoSize={messages?.length === 0 ? 52 : 36}
-              showOnlineIndicator={hasActiveAdminSession}
-              onlineIndicatorClassName="absolute -bottom-1 -right-1 h-4 w-4 border-2"
+              showOnlineIndicator={hasActiveAdminSession || showOnlineIndicator}
+              onlineIndicatorProps={{ size: 16, borderWidth: 2, offset: 4 }}
             />
           }
           onClose={onClose}
