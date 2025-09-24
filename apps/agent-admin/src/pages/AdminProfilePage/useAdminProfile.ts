@@ -8,6 +8,8 @@ import useUserProfileQuery from '../../queries/query/useUserProfileQuery';
 import useUpdateUserProfileMutation from '../../queries/mutation/useUpdateUserProfileMutation';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
+import { checkFileSize } from '../../utils/common';
+import { FIVE_MB } from '../../utils/constants';
 
 // Form schema for validation
 const profileFormSchema = z.object({
@@ -141,6 +143,14 @@ export const useAdminProfile = () => {
       const croppedFile = new File([file], 'profile-picture.png', {
         type: 'image/png',
       });
+
+      const { status, error } = checkFileSize(croppedFile, FIVE_MB);
+      if (!status) {
+        ErrorToastMessage({
+          title: error || '',
+        });
+        return;
+      }
 
       const response = await uploadAssetsFile(croppedFile);
       const assetData = response.data as { public_url: string };

@@ -1,4 +1,4 @@
-import { createCustomDocument, updateCustomDocument } from '@meaku/core/adminHttp/api';
+import { createCustomDocument, updateCustomDocument, updateDocumentAccessType } from '@meaku/core/adminHttp/api';
 import { UpdateCustomDocumentRequest } from '@meaku/core/types/admin/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -19,6 +19,18 @@ export const useUpdateCustomDocument = () => {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: UpdateCustomDocumentRequest }) =>
       updateCustomDocument(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
+    },
+  });
+};
+
+export const useUpdateDocumentAccessType = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ documentId, accessType }: { documentId: string; accessType: 'INTERNAL' | 'EXTERNAL' }) =>
+      updateDocumentAccessType(documentId, { access_type: accessType }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['data-source-table'] });
     },

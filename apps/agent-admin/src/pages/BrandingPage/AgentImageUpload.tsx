@@ -10,6 +10,8 @@ import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/i
 import { trackError } from '@meaku/core/utils/error';
 import ReactCropperModal from '../../components/AgentManagement/ReactCropperModal';
 import { useImageCropModal } from '../../hooks/useImageCropModal';
+import { checkFileSize } from '../../utils/common';
+import { FIVE_MB } from '../../utils/constants';
 
 interface AssetResponse {
   id: string;
@@ -92,6 +94,14 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       const croppedFile = new File([croppedImageBlob], 'cropped-image.png', {
         type: 'image/png',
       });
+
+      const { status, error } = checkFileSize(croppedFile, FIVE_MB);
+      if (!status) {
+        ErrorToastMessage({
+          title: error || '',
+        });
+        return;
+      }
 
       const response = await uploadAssetsFile(croppedFile);
       const assetData = response.data as AssetResponse;

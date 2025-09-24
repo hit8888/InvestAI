@@ -5,6 +5,9 @@ import FileUploadHandler from './FileUploadHandler';
 import SourcesDragDropUploadIcon from '@breakout/design-system/components/icons/sources-dragdrop-upload-icon';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { useFileUpload } from '../../../hooks/useFileUpload';
+import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
+import { checkFileSize } from '../../../utils/common';
+import { FIVE_MB } from '../../../utils/constants';
 
 const { WEBPAGES } = SourcesCardTypes;
 
@@ -14,8 +17,23 @@ const DragDropClickUploadFiles = () => {
   const message =
     DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT[selectedType as keyof typeof DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT];
 
+  const fileSizeValidation = (files: File[]) => {
+    // File size check
+    for (const file of files) {
+      const { status, error } = checkFileSize(file, FIVE_MB);
+      if (!status) {
+        ErrorToastMessage({
+          title: error || '',
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleFileSelect = async (files: File[]) => {
-    if (!selectedType) return;
+    const isFileSizeValid = fileSizeValidation(files);
+    if (!selectedType || !isFileSizeValid) return;
     toggleIsUploadingValue(true);
     await uploadFiles(files);
     toggleIsUploadingValue(false);

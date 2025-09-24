@@ -83,6 +83,13 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
           labelled_by_name: row.labelled_by_name || '',
         }),
       }),
+      ...(key === 'access_type' && {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        accessorFn: (row: any) => ({
+          access_type: row.access_type || '',
+          id: row.id,
+        }),
+      }),
       ...(key === 'duration' && {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         accessorFn: (row: any) => row.asset?.public_url || '',

@@ -3,6 +3,7 @@ import { DropdownMenuItem } from '@breakout/design-system/components/shadcn-ui/d
 import { cn } from '@breakout/design-system/lib/cn';
 import MenuOptionNotSelectedIcon from '../icons/menuoption-not-selected-icon';
 import MenuOptionSelectedIcon from '../icons/menuoption-selected-icon';
+import TooltipWrapper from './TooltipWrapper';
 
 interface MenuOptionProps {
   menuOptionTitle: string;
@@ -11,6 +12,8 @@ interface MenuOptionProps {
   showIcon?: boolean;
   applyFontFamily?: boolean;
   menuItemClassName?: string;
+  showTooltipContent?: boolean;
+  tooltipContent?: string;
 }
 
 const DropdownOption = React.memo(
@@ -21,6 +24,8 @@ const DropdownOption = React.memo(
     showIcon = true,
     applyFontFamily = false,
     menuItemClassName,
+    showTooltipContent = false,
+    tooltipContent,
   }: MenuOptionProps) => {
     return (
       <DropdownMenuItem
@@ -52,7 +57,13 @@ const DropdownOption = React.memo(
             </>
           )}
         </>
-        <span className="truncate">{menuOptionTitle}</span>
+        <TooltipWrapper
+          renderTrigger={<span className="truncate">{menuOptionTitle}</span>}
+          tooltipContent={tooltipContent || menuOptionTitle}
+          showTooltipContent={showTooltipContent}
+          tooltipSide="left"
+          tooltipSideOffset={50}
+        />
       </DropdownMenuItem>
     );
   },

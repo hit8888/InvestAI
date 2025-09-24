@@ -20,6 +20,7 @@ import {
   WEBPAGES_SORT_KEY_TO_FIELD_MAP,
   WEBPAGES_TABLE_FILTERS_CONFIG,
   VISITORS_TABLE_FILTERS_CONFIG,
+  ONE_MB_IN_BYTES,
 } from './constants';
 import {
   ConversationsTableDisplayContent,
@@ -1291,5 +1292,31 @@ export const normalizeSessionToConversationData = (
     conversation,
     chat_history: chat_history || [],
     feedback: [], // Initialize with empty array since it's optional
+  };
+};
+
+export const checkFileSize = (file: File, maxFileSizeInBytes: number) => {
+  if (maxFileSizeInBytes && file.size > maxFileSizeInBytes) {
+    if (maxFileSizeInBytes >= ONE_MB_IN_BYTES) {
+      // Display in MB if >= 1MB
+      const maxSizeInMB = (maxFileSizeInBytes / ONE_MB_IN_BYTES).toFixed(2);
+      const fileSizeInMB = (file.size / ONE_MB_IN_BYTES).toFixed(2);
+      return {
+        status: false,
+        error: `File size (${fileSizeInMB}MB) exceeds the maximum allowed size of ${maxSizeInMB}MB`,
+      };
+    } else {
+      // Display in KB if < 1MB
+      const maxSizeInKB = (maxFileSizeInBytes / 1024).toFixed(2);
+      const fileSizeInKB = (file.size / 1024).toFixed(2);
+      return {
+        status: false,
+        error: `File size (${fileSizeInKB}KB) exceeds the maximum allowed size of ${maxSizeInKB}KB`,
+      };
+    }
+  }
+  return {
+    status: true,
+    error: null,
   };
 };

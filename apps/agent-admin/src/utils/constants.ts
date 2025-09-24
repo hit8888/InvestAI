@@ -62,6 +62,9 @@ export const ROUTING_TYPE_LOGO_MAP = {
   ATTIO: 'https://cdn.brandfetch.io/idZA7HYRWK/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1695805844509',
 };
 
+export const ONE_MB_IN_BYTES = 1024 * 1024;
+export const FIVE_MB = 5 * ONE_MB_IN_BYTES;
+
 const {
   DateRange,
   IntentScore,
@@ -990,9 +993,11 @@ export const DOCUMENT_ACCESS_TYPE_OPTIONS = [
   {
     value: 'INTERNAL',
     label: 'Internal',
+    tooltip: 'Internal use. Hidden from visitors.',
   },
   {
     value: 'EXTERNAL',
     label: 'External',
+    tooltip: 'Sharable content. Shown to visitors.',
   },
 ];

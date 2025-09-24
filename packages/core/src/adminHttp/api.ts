@@ -202,6 +202,9 @@ export const createCustomDocument = (payload: CreateCustomDocumentRequest) =>
 export const updateCustomDocument = (id: number, payload: UpdateCustomDocumentRequest) =>
   adminApiClient.put<CreateAndUpdateCustomDocumentResponse>(`/tenant/api/documents/${id}/`, payload);
 
+export const updateDocumentAccessType = (documentId: string, payload: { access_type: 'INTERNAL' | 'EXTERNAL' }) =>
+  adminApiClient.patch(`/tenant/api/documents/${documentId}/`, payload);
+
 export const fetchSitemapforWebpage = (payload: FetchSitemapRequest) =>
   adminApiClient.post<FetchSitemapResponse>(`tenant/api/sitemap/`, payload);
 

@@ -10,9 +10,12 @@ import {
   DropdownMenuTrigger,
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
 import DropdownOption from './DropdownOption';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../Tooltip';
 import DropdownMenuSearch from './DropdownMenuSearch';
 import Typography from '../Typography';
+import TooltipWrapper from './TooltipWrapper';
+
+type OptionType = string | { value: string; label: string; tooltip?: string };
+type OptionsType = OptionType[];
 
 // Define the type for the options
 interface DropdownProps {
@@ -21,14 +24,14 @@ interface DropdownProps {
   menuGroupClassname?: string;
   dropdownOpenClassName?: string;
   dropdownIconClassName?: string;
-  options: string[] | { value: string; label: string }[];
+  options: OptionsType;
   placeholderLabel: string;
   onCallback?: (selectedOption: string | null) => void;
   fontToShown?: string;
   showTooltipContent?: boolean;
   menuContentAlign?: 'start' | 'center' | 'end';
   menuContentSide?: 'top' | 'right' | 'bottom' | 'left';
-  defaultValue?: string | { value: string; label: string };
+  defaultValue?: OptionType;
   showIcon?: boolean;
   isSearchable?: boolean;
   dropdownMenuHeader?: string;
@@ -75,7 +78,7 @@ const AgentDropdown = ({
 
   // Handle option toggle (select/deselect)
   const handleOptionClick = useCallback(
-    (option: string | { value: string; label: string }) => {
+    (option: OptionType) => {
       // Get the value to compare (consistent for both string and object options)
       const optionValue = typeof option === 'string' ? option : option.value;
       const isSameOption = selectedOption === optionValue;
@@ -143,20 +146,15 @@ const AgentDropdown = ({
         )}
       >
         {!selectedOption && placeholderLabel ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className={cn('overflow-hidden truncate whitespace-nowrap text-gray-400', fontToShown)}>
-                  {placeholderLabel}
-                </span>
-              </TooltipTrigger>
-              {showTooltipContent && (
-                <TooltipContent className="bg-white">
-                  <p className="text-black">{placeholderLabel}</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          </TooltipProvider>
+          <TooltipWrapper
+            renderTrigger={
+              <span className={cn('overflow-hidden truncate whitespace-nowrap text-gray-400', fontToShown)}>
+                {placeholderLabel}
+              </span>
+            }
+            tooltipContent={placeholderLabel}
+            showTooltipContent={showTooltipContent}
+          />
         ) : null}
         {selectedOption ? (
           <span
@@ -201,9 +199,11 @@ const AgentDropdown = ({
                 <DropdownOption
                   key={typeof option === 'string' ? option : option.value}
                   showIcon={showIcon}
+                  showTooltipContent={showTooltipContent}
                   menuOptionTitle={typeof option === 'string' ? option : option.label}
                   applyFontFamily={applyFontFamily}
                   menuItemClassName={menuItemClassName}
+                  tooltipContent={typeof option === 'string' ? option : option.tooltip}
                   onMenuOptionClicked={() => handleOptionClick(option)}
                   isSelectedOption={selectedOption === (typeof option === 'string' ? option : option.value)}
                 />
