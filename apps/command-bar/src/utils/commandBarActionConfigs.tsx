@@ -13,22 +13,34 @@ export const AskAIActionConfig: ActionConfig = {
   tooltip: {
     content: 'Ask our AI assistant anything!',
   },
-  customRenderer: ({ onClick, featureConfig, config }) => {
+  customRenderer: ({ onClick, featureConfig, config, buttonSize }) => {
     const { orb_config: orbConfig } = config.style_config;
     const customIconUrl = featureConfig?.icon_asset?.public_url ?? undefined;
 
     const renderContent = () => {
       if (customIconUrl) {
-        return <CustomIconImageContainer sourceUrl={customIconUrl} imageAlt={featureConfig?.name ?? 'Ask AI'} />;
+        return (
+          <CustomIconImageContainer
+            sourceUrl={customIconUrl}
+            imageAlt={featureConfig?.name ?? 'Ask AI'}
+            size={buttonSize}
+          />
+        );
       }
       if (orbConfig?.logo_url) {
-        return <CustomIconImageContainer sourceUrl={orbConfig.logo_url} imageAlt={'Ask AI'} />;
+        return <CustomIconImageContainer sourceUrl={orbConfig.logo_url} imageAlt={'Ask AI'} size={buttonSize} />;
       }
-      return <FallbackOrb />;
+      return <FallbackOrb size={buttonSize} />;
     };
 
     return (
-      <Button className="relative rounded-full" size="icon" data-action-id={`action-ASK_AI`} onClick={onClick}>
+      <Button
+        className="rounded-full"
+        size="icon"
+        data-action-id={`action-ASK_AI`}
+        onClick={onClick}
+        style={buttonSize ? { width: `${buttonSize}px`, height: `${buttonSize}px` } : undefined}
+      >
         {renderContent()}
         {orbConfig?.show_online_indicator && (
           <OnlineIndicator position="bottom-right" size={16} borderWidth={2} offset={3} />

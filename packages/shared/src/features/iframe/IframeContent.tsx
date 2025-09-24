@@ -62,7 +62,7 @@ export const IframeContent = ({ onClose }: FeatureContentProps) => {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={!email.trim()}>
+            <Button hasWipers type="submit" className="w-full" disabled={!email.trim()}>
               {isPending ? 'Submitting...' : 'Submit'}
             </Button>
           </form>

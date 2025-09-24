@@ -39,16 +39,19 @@ export interface ActionConfig {
     onClick: () => void;
     featureConfig: CommandBarModuleConfigType;
     config: ConfigurationApiResponse;
+    buttonSize?: number;
     children?: React.ReactNode;
   }) => React.ReactNode;
 }
 
 interface BaseActionComponentProps extends FeatureActionProps {
   config: ActionConfig;
+  buttonSize?: number;
+  transitionDuration?: string;
 }
 
 const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
-  ({ isActive = false, onClick, initialTooltip, config: actionConfig }) => {
+  ({ isActive = false, onClick, initialTooltip, config: actionConfig, buttonSize, transitionDuration }) => {
     const featureConfig: CommandBarModuleConfigType | undefined = useFeatureConfig(
       CommandBarModuleTypeSchema.enum[actionConfig.moduleType],
     );
@@ -79,9 +82,9 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
       }
 
       return baseClassName;
-    }, [isActive, actionConfig.button?.className]);
+    }, [isActive, actionConfig.button?.className, actionConfig.button]);
 
-    // Resolve button variant
+    // Resolve button variant (keep existing behavior)
     const buttonVariant = useMemo(() => {
       if (isActive) {
         return actionConfig.button?.variant === 'outline'
@@ -130,13 +133,33 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
             variant={buttonVariant}
             onClick={handleClick}
             hasWipers={!!customIconUrl && !isActive}
-            className={`${buttonClassName} group-hover:bg-backgroundLight group-hover:text-actionBtnIcon`}
+            className={`${buttonClassName} group-hover:bg-backgroundLight group-hover:text-actionBtnIcon transition-all`}
+            style={
+              buttonSize
+                ? {
+                    width: `${buttonSize}px`,
+                    height: `${buttonSize}px`,
+                    transition: transitionDuration || 'all 0.3s ease-out',
+                  }
+                : undefined
+            }
           >
             {iconContent}
           </Button>
         </div>
       ),
-      [actionConfig.moduleType, actionConfig.button?.size, buttonVariant, handleClick, buttonClassName, iconContent],
+      [
+        actionConfig.moduleType,
+        actionConfig.button?.size,
+        buttonVariant,
+        handleClick,
+        buttonClassName,
+        iconContent,
+        buttonSize,
+        transitionDuration,
+        customIconUrl,
+        isActive,
+      ],
     );
 
     const customRendererContent = useMemo(() => {
@@ -146,8 +169,9 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
         onClick: handleClick,
         featureConfig,
         config,
+        buttonSize,
       }) as React.ReactElement;
-    }, [actionConfig.customRenderer, handleClick, featureConfig, config]);
+    }, [handleClick, featureConfig, config, buttonSize, actionConfig]);
 
     if (!featureConfig) {
       return null;
@@ -159,13 +183,19 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
     }
 
     if (customRendererContent) {
+      const wrappedContent = buttonSize ? (
+        <div style={{ width: `${buttonSize}px`, height: `${buttonSize}px` }}>{customRendererContent}</div>
+      ) : (
+        customRendererContent
+      );
+
       if (isActive) {
-        return customRendererContent;
+        return wrappedContent;
       }
       return (
         <BlackTooltip content={tooltipContent} initialTooltip={initialTooltip} side={actionConfig.tooltip?.side}>
           <div className="p-2 -m-2 group hover:[&>button]:bg-backgroundLight hover:[&>button]:text-actionBtnIcon">
-            {customRendererContent}
+            {wrappedContent}
           </div>
         </BlackTooltip>
       );

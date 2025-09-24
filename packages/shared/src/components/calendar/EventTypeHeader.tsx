@@ -9,7 +9,7 @@ interface EventTypeHeaderProps {
 const EventTypeHeader = ({ onBack, title, description }: EventTypeHeaderProps) => {
   return (
     <div className="flex items-center gap-4">
-      <Button variant="outline" size="sm" onClick={onBack} className="rounded-lg gap-2">
+      <Button hasWipers variant="outline" size="sm" onClick={onBack} className="rounded-lg gap-2">
         <LucideIcon name="arrow-left" className="h-4 w-4" />
         Back
       </Button>

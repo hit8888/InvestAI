@@ -125,23 +125,12 @@ export const VideoAvatar = ({
       {/* Video title label */}
       <div className="text-center w-full">
         <div className="h-[2.5rem] flex items-center justify-center">
-          {!isPlaceholder && video?.title && isTitleTruncated ? (
-            <BlackTooltip content={video.title} side="top" usePortal={true}>
-              <p
-                ref={titleRef}
-                className={`text-xs font-medium leading-tight line-clamp-2  ${isSelected ? 'text-primary' : 'text-foreground'}`}
-              >
-                {video.title}
-              </p>
-            </BlackTooltip>
-          ) : (
-            <p
-              ref={titleRef}
-              className={`text-xs font-medium leading-tight line-clamp-2 ${isSelected ? 'text-primary' : 'text-foreground'}`}
-            >
-              {isPlaceholder ? 'Loading...' : video?.title || 'Untitled'}
-            </p>
-          )}
+          <p
+            ref={titleRef}
+            className={`text-xs font-medium leading-tight line-clamp-2 ${isSelected ? 'text-primary' : 'text-foreground'}`}
+          >
+            {isPlaceholder ? 'Loading...' : video?.title || 'Untitled'}
+          </p>
         </div>
       </div>
 
@@ -155,6 +144,15 @@ export const VideoAvatar = ({
       )}
     </div>
   );
+
+  // Wrap with tooltip if title is truncated
+  if (!isPlaceholder && video?.title && isTitleTruncated) {
+    return (
+      <BlackTooltip content={video.title} side="top" usePortal={true}>
+        {avatarContent}
+      </BlackTooltip>
+    );
+  }
 
   return avatarContent;
 };

@@ -103,7 +103,7 @@ export const FeatureHeader = ({
         </div>
       )}
       <div className="relative z-10 flex flex-col gap-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between min-h-10">
           <div className="flex items-center gap-2">
             <div className={`relative ${welcomeMessage ? 'left-3' : 'left-0'}`}>{icon}</div>
             <div
@@ -172,6 +172,7 @@ export const FeatureHeader = ({
                         size="xs"
                         key={cta.message ?? cta.text}
                         className="w-auto"
+                        hasWipers
                         onClick={() => {
                           if (cta.message && sendUserMessage) {
                             sendUserMessage(cta.message, {

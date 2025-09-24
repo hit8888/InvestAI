@@ -59,6 +59,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, onDisable }: 
           className={cn({
             'w-full': isMobile,
           })}
+          hasWipers
         >
           <LucideIcon name="calendar" className="size-4" />
           Book a Meeting
@@ -69,6 +70,7 @@ const ScrollTriggeredNudge = ({ setActiveFeature, sendUserMessage, onDisable }: 
           className={cn({
             'w-full': isMobile,
           })}
+          hasWipers
         >
           <LucideIcon name="sparkles" className="size-4" />
           See it in action!

@@ -18,7 +18,7 @@ export const SummaryError = ({ onRetry, isSummarizing }: SummaryErrorProps) => {
         </span>
         Oops! Couldn't generate summary
       </Typography>
-      <Button variant="default" size="sm" onClick={onRetry} disabled={isSummarizing} className="mt-auto">
+      <Button hasWipers variant="default" size="sm" onClick={onRetry} disabled={isSummarizing} className="mt-auto">
         <LucideIcon name="refresh-ccw" className="size-4 mr-2" />
         Try Again
       </Button>

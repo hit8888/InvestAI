@@ -123,7 +123,7 @@ export const ImageArtifact = ({
                   Expanded Mode
                 </Typography>
               </Typography>
-              <Button variant="default_active" size="sm" onClick={handleButtonClick} className="h-8 w-full">
+              <Button hasWipers variant="default_active" size="sm" onClick={handleButtonClick} className="h-8 w-full">
                 Return
               </Button>
             </div>

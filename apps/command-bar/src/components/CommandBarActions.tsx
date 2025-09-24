@@ -24,6 +24,7 @@ interface CommandBarActionsProps {
   activeFeature: CommandBarModuleType | null;
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
   shouldStartAnimations?: boolean;
+  skipInitialTooltips?: boolean;
 }
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
@@ -32,6 +33,7 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
   activeFeature,
   setActiveFeature,
   shouldStartAnimations = false,
+  skipInitialTooltips = false,
 }) => {
   const { config } = useCommandBarStore();
   const { trackEvent } = useCommandBarAnalytics();
@@ -72,8 +74,8 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
     const actionConfig = ACTION_CONFIGS[featureConfig.module_type as keyof typeof ACTION_CONFIGS];
     if (!actionConfig) return null;
 
-    // Skip initial tooltip for single module
-    const shouldShowInitialTooltip = modules.length > 1;
+    // Skip initial tooltip for single module or when switching from bottom bar
+    const shouldShowInitialTooltip = modules.length > 1 && !skipInitialTooltips;
     const initialTooltipConfig =
       shouldShowInitialTooltip && shouldStartAnimations
         ? {

@@ -31,7 +31,7 @@ export const VideoLibraryErrorState = ({ onRetry, error }: VideoLibraryErrorStat
           </p>
         )}
         {onRetry && (
-          <Button onClick={handleRetry} disabled={isRetrying} className="flex items-center gap-2 mx-auto">
+          <Button hasWipers onClick={handleRetry} disabled={isRetrying} className="flex items-center gap-2 mx-auto">
             {isRetrying && <LucideIcon name="loader" className="h-4 w-4 animate-spin" />}
             {isRetrying ? 'Retrying...' : 'Try Again'}
           </Button>

@@ -49,7 +49,13 @@ export const EventTypeList: React.FC<EventTypeListProps> = ({
           </div>
           <h3 className="text-sm font-medium text-gray-900 mb-2">No event types yet</h3>
           <p className="text-sm text-gray-500 mb-4">Get started by creating your first event type</p>
-          <Button variant="default" size="default" onClick={onCreateEventType} className="w-fit rounded-lg gap-2">
+          <Button
+            hasWipers
+            variant="default"
+            size="default"
+            onClick={onCreateEventType}
+            className="w-fit rounded-lg gap-2"
+          >
             <LucideIcon name="plus" className="h-4 w-4" />
             Create Event Type
           </Button>
@@ -60,7 +66,13 @@ export const EventTypeList: React.FC<EventTypeListProps> = ({
             <EventTypeCard key={eventType.id} eventType={eventType} onEdit={() => onEditEventType(eventType)} />
           ))}
           <div className="w-full flex justify-end">
-            <Button variant="default" size="default" onClick={onCreateEventType} className="w-fit rounded-lg gap-2">
+            <Button
+              hasWipers
+              variant="default"
+              size="default"
+              onClick={onCreateEventType}
+              className="w-fit rounded-lg gap-2"
+            >
               <LucideIcon name="plus" className="h-4 w-4" />
               Create Event Type
             </Button>

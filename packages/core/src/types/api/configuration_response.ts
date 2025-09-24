@@ -25,7 +25,13 @@ export const CommandBarModuleTypeSchema = z.enum([
   'IFRAME',
 ]);
 
-export const CommandBarPositionSchema = z.enum(['center_right', 'center_left', 'bottom_right', 'bottom_left']);
+export const CommandBarPositionSchema = z.enum([
+  'center_right',
+  'center_left',
+  'bottom_right',
+  'bottom_left',
+  'bottom_center',
+]);
 
 export const NudgeAssetAlignmentSchema = z.enum(['TOP', 'BOTTOM']);
 

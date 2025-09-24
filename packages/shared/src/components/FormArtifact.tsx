@@ -68,7 +68,7 @@ const FormArtifact = ({
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [showShimmer]);
 
   if (showShimmer && !isFilled && !submitted) {
     return <FormArtifactShimmer />;
@@ -174,7 +174,7 @@ const FormArtifact = ({
               </Typography>
             )}
           </div>
-          <Button type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
+          <Button hasWipers type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
             Submit
           </Button>
         </form>

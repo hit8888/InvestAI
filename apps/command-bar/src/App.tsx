@@ -1,14 +1,9 @@
 import './index.css';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
-import { cn } from '@meaku/saral';
-import CommandBarActions from './components/CommandBarActions';
-import FeatureContentContainer from './components/FeatureContentContainer';
 import { useWsClient } from '@meaku/shared/hooks/useWsClient';
 import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { useCommandBarStore } from '@meaku/shared/stores';
-import { Nudge } from '@meaku/shared/features';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
@@ -20,11 +15,12 @@ import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
-import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
 import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import { useVectorTracking } from './hooks/useVectorTracking';
 import { isProduction } from '@meaku/shared/constants/common';
+import { CommandBarRenderer } from './components/BottomBar/CommandBarRenderer';
+import { useBottomBarTransition, useCommandBarLayout } from './components/BottomBar/hooks';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -36,10 +32,31 @@ function App() {
   const { setConfig, initMessages, settings, config, updateSettings, setSessionData, completeConfigLoaded } =
     useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
-  const { position = 'bottom_right' } = ui ?? {};
+
+  const { initialiseSocket, sendUserMessage } = useWsClient();
+
+  // Use layout hook for positioning logic
+  const layout = useCommandBarLayout({
+    position: ui?.position ?? 'bottom_right',
+    settings,
+    ui: ui ?? {},
+  });
+
+  // Use transition hook for bottom bar state management
+  const { state: transitionState, actions: transitionActions } = useBottomBarTransition(
+    setActiveFeature,
+    sendUserMessage,
+  );
 
   const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000;
+  const bottomBarEntryDelay = 700; // Bottom bar entry animation: 0.2s delay + 0.5s duration
+  const nudgeDelay = layout.isBottomCenter ? bottomBarEntryDelay : totalAnimationDelay + 200;
 
+  const nudgeEnabled = useDelayedEnable(nudgeDelay, {
+    shouldStart: completeConfigLoaded && !!nudgeConfig,
+  });
+
+  // Use the query's enabled state to determine if API call has been initiated
   const { data: sessionData } = useSessionDataQuery(
     {
       command_bar_module_id: activeFeature?.id ?? DEFAULT_ASK_AI_MODULE_ID,
@@ -48,12 +65,6 @@ function App() {
   );
 
   const updateProspectMutation = useUpdateProspectMutation();
-
-  const { initialiseSocket, sendUserMessage } = useWsClient();
-
-  const nudgeEnabled = useDelayedEnable(totalAnimationDelay + 200, {
-    shouldStart: completeConfigLoaded && !!nudgeConfig,
-  });
 
   // Initialize user left tracking
   useUserLeftTracking(sendUserMessage);
@@ -138,36 +149,18 @@ function App() {
     enabled: isProduction && !settings.is_admin && !settings.is_test,
   });
 
-  const containerClasses = cn(
-    'fixed z-command-bar',
-    position === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4',
-  );
-
   return (
-    <motion.div
-      id="root-content"
-      className={containerClasses}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={COMPONENT_TRANSITIONS.APP_CONTAINER}
-    >
-      <div className="flex items-end gap-4">
-        {nudgeEnabled && <Nudge activeFeature={activeFeatureModuleType} setActiveFeature={setActiveFeature} />}
-        <CommandBarActions
-          activeFeature={activeFeatureModuleType}
-          setActiveFeature={setActiveFeature}
-          shouldStartAnimations={completeConfigLoaded}
-        />
-        <FeatureContentContainer
-          key={activeFeatureModuleType}
-          activeFeature={activeFeatureModuleType}
-          setActiveFeature={setActiveFeature}
-          isExpanded={isExpanded}
-          onClose={handleClose}
-          onExpand={() => setIsExpanded(!isExpanded)}
-        />
-      </div>
-    </motion.div>
+    <CommandBarRenderer
+      layout={layout}
+      transitionState={transitionState}
+      transitionActions={transitionActions}
+      activeFeatureModuleType={activeFeatureModuleType}
+      setActiveFeature={setActiveFeature}
+      nudgeEnabled={nudgeEnabled}
+      isExpanded={isExpanded}
+      onClose={handleClose}
+      onExpand={() => setIsExpanded(!isExpanded)}
+    />
   );
 }
 

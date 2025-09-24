@@ -49,7 +49,7 @@ const CtaEventMessage = (props: IProps) => {
         </Typography>
         <Typography variant="body-small">{message ?? DEFAULT_MESSAGES.MESSAGE}</Typography>
         {url && (
-          <Button onClick={handleClick}>
+          <Button hasWipers onClick={handleClick}>
             {label ?? DEFAULT_MESSAGES.LABEL}
             <LucideIcon name="arrow-right" width="16" height="16" />
           </Button>

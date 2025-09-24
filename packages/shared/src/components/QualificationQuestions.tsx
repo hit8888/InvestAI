@@ -117,7 +117,13 @@ export const QualificationQuestions = ({
       })}
       {!isFilled && (
         <div className="flex w-full justify-end">
-          <Button onClick={handleSubmit} disabled={!areAllQuestionsAnswered} size="sm" className="w-full gap-2">
+          <Button
+            hasWipers
+            onClick={handleSubmit}
+            disabled={!areAllQuestionsAnswered}
+            size="sm"
+            className="w-full gap-2"
+          >
             Submit
             <LucideIcon name="arrow-right" className="size-4" />
           </Button>

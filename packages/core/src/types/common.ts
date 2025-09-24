@@ -108,4 +108,5 @@ export interface CommandBarSettings {
   is_test?: boolean;
   is_admin?: boolean;
   query_params?: Record<string, string>;
+  position?: string;
 }

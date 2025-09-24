@@ -124,6 +124,7 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
               ? 'rounded-2 !bg-primary/15 !border !text-foreground'
               : 'rounded-full bg-primary text-white',
           )}
+          hasWipers
           onClick={handleButtonClick}
         >
           <AnimatePresence mode="wait">

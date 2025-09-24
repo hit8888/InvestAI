@@ -73,6 +73,7 @@ const NudgeBody = ({
                 key={button.action}
                 variant={index === 0 ? 'default' : 'outline'}
                 className="w-full"
+                hasWipers
                 onClick={(e) => {
                   e.stopPropagation();
                   onCtaClick(button);

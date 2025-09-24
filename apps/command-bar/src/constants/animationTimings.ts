@@ -29,16 +29,23 @@ export const ANIMATION_TIMINGS = {
     ACTION_SHIMMER: 0.6,
 
     // Tooltip animations
-    TOOLTIP_DURATION: 1000, // in milliseconds
+    TOOLTIP_DURATION: 5000, // in milliseconds
   },
 
   // Delays (in seconds)
   DELAYS: {
     BASE_TOOLTIP: 1.4,
-    BASE_ANIMATION: 0.7,
+    BASE_ANIMATION: 0.2, // Start actions at 200ms
     STAGGER_INTERVAL: 0.1,
     SHIMMER_STAGGER: 0.15,
     CONTAINER_DELAY: 0.2,
+    // Bottom bar transition delays
+    BOTTOM_BAR_UNMOUNT: 0.5, // 500ms delay for bottom bar unmounting
+    MODULE_ACTIVATION: 1.0, // 1000ms delay for module activation
+    BOTTOM_BAR_EXIT_ANIMATION: 0.8, // 800ms delay for bottom bar exit animation
+    // Rotating question delays
+    QUESTION_TRANSITION: 0.15, // 150ms delay for question transition
+    QUESTION_ROTATION_INTERVAL: 3.0, // 3 seconds between question rotations
   },
 
   // Easing functions

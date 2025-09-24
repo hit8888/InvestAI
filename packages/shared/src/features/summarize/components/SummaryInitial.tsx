@@ -15,7 +15,7 @@ export const SummaryInitial = ({ onSummarize, isSummarizing }: SummaryInitialPro
       <Typography variant="body" fontWeight="normal" className="text-gray-600">
         Generate a summary of this page, so you can focus on the highlights.
       </Typography>
-      <Button variant="default" size="sm" hasWipers={true} onClick={onSummarize}>
+      <Button hasWipers variant="default" size="sm" onClick={onSummarize}>
         Summarize
       </Button>
     </>
