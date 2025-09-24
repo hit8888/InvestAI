@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, Download, FileText, Loader } from 'lucide-react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import BrandingSectionContainer from './BrandingSectionContainer';
-import CardTitleAndDescription from './CardTitleAndDescription';
+import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import {
   DataSourceResult,
   isInfiniteDataSources,

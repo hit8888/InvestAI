@@ -1,7 +1,7 @@
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 import { FONT_STYLE_SUBTITLE } from '../../utils/constants';
 import BrandingSectionContainer from './BrandingSectionContainer';
-import CardTitleAndDescription from './CardTitleAndDescription';
+import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
 import AgentDropdown from '@breakout/design-system/components/Dropdown/AgentDropdown';
 import { useState } from 'react';

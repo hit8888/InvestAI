@@ -80,7 +80,7 @@ const FormArtifactMessage = ({ headerTitle, subHeaderTitle, showMessage }: FormA
     return null;
   }
   return (
-    <div className="flex flex-col p-4 gap-4 items-start justify-start">
+    <div className="w-full flex flex-col p-4 gap-4 items-start justify-start">
       <Typography variant="heading" fontWeight="semibold">
         {headerTitle}
       </Typography>

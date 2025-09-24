@@ -1,6 +1,6 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
-import CardTitleAndDescription from './CardTitleAndDescription';
+import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import { ORB_DESCRIPTION } from '../../utils/constants';
 import { Switch } from '@breakout/design-system/components/layout/switch';
 import { useState } from 'react';

@@ -713,6 +713,9 @@ export const SIDEBAR_TEXTUAL_CONTENT_ANIMATION_PROPS = {
 };
 
 // Agent Configs Constants Variables
+export const AGENT_INTRO_MESSAGE_TITLE = 'Agent Intro Message';
+export const AGENT_INTRO_MESSAGE_SUBTITLE =
+  'Customise your Agent’s introductory message in the chat. You can enter your own intro, or select from the list of intros provided.';
 export const FULL_LOGO_TITLE = 'Full Logo';
 export const SQUARE_LOGO_TITLE = 'Favicon';
 export const NAME_TITLE = 'Name:';

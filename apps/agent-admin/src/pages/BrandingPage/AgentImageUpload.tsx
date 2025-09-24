@@ -8,7 +8,7 @@ import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { trackError } from '@meaku/core/utils/error';
-import ReactCropperModal from './ReactCropperModal';
+import ReactCropperModal from '../../components/AgentManagement/ReactCropperModal';
 import { useImageCropModal } from '../../hooks/useImageCropModal';
 
 interface AssetResponse {

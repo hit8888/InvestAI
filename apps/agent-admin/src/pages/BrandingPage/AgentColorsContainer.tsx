@@ -1,5 +1,5 @@
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
-import CardTitleAndDescription from './CardTitleAndDescription';
+import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import AgentColorDisplayInput from './AgentColorDisplayInput';
 
 import {

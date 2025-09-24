@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
-import CardTitleAndDescription from './CardTitleAndDescription';
+import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import AgentImageUpload from './AgentImageUpload';
 import Input from '@breakout/design-system/components/layout/input';
 import {

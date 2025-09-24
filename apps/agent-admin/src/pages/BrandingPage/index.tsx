@@ -1,11 +1,12 @@
 import useAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
-import AgentLogoAndNameContainer from '../../components/AgentManagement/AgentLogoAndNameContainer';
-import AgentColorsContainer from '../../components/AgentManagement/AgentColorsContainer';
-import AgentOrbContainer from '../../components/AgentManagement/AgentOrbContainer';
+import LLMsTxtContainer from './LLMsTxtContainer';
+import AgentOrbContainer from './AgentOrbContainer';
+import AgentColorsContainer from './AgentColorsContainer';
+import AgentFontStyleContainer from './AgentFontStyleContainer.tsx';
+import AgentLogoAndNameContainer from './AgentLogoAndNameContainer';
+// import AgentIntroMessageContainer from './AgentIntroMessageContainer.tsx';
 import PageContainer from '../../components/AgentManagement/PageContainer.tsx';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
-import AgentFontStyleContainer from '../../components/AgentManagement/AgentFontStyleContainer.tsx';
-import LLMsTxtContainer from '../../components/AgentManagement/LLMsTxtContainer';
 
 const BrandingPage = () => {
   const agentId = getTenantActiveAgentId();
@@ -27,6 +28,7 @@ const BrandingPage = () => {
   };
   return (
     <PageContainer isLoading={isLoading} heading={'Branding'} error={hasError}>
+      {/* <AgentIntroMessageContainer {...commonProps} /> */}
       <AgentLogoAndNameContainer {...commonProps} />
       <AgentColorsContainer {...commonProps} />
       <AgentOrbContainer {...commonProps} />
