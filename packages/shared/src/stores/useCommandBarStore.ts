@@ -41,6 +41,7 @@ interface CommandBarState {
   isLoading: boolean;
   isConfigLoading: boolean;
   isStreaming: boolean;
+  completeConfigLoaded: boolean;
 
   // Admin typing state
   isAdminTyping: boolean;
@@ -63,6 +64,7 @@ interface CommandBarState {
   setSettings: (settings: CommandBarSettings) => void;
   updateSettings: (settings: Partial<CommandBarSettings>) => void;
   setSessionData: (sessionData: InitSessionResponse) => void;
+  setCompleteConfigLoaded: (completeConfigLoaded: boolean) => void;
 
   // Utility methods
   getLastMessage: () => Message | undefined;
@@ -151,6 +153,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
     isStreaming: false,
     isAdminTyping: false,
     pendingArtifacts: [],
+    completeConfigLoaded: false,
 
     // Message methods
     addMessage: (message) => {
@@ -427,6 +430,10 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
       if (config?.body?.welcome_message?.suggested_questions && state.messages.length === 0) {
         set({ suggestedQuestions: config.body.welcome_message.suggested_questions });
       }
+    },
+
+    setCompleteConfigLoaded: (completeConfigLoaded) => {
+      set({ completeConfigLoaded });
     },
 
     setMessages: (messages) => {

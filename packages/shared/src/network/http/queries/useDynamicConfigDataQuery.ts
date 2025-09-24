@@ -4,45 +4,44 @@ import type { ConfigurationApiResponse } from '@meaku/core/types/api/configurati
 import type { ConfigPayload } from '@meaku/core/types/api/agent_config_request';
 import type { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { sanitizeUrl } from '@meaku/core/utils/index';
-import { useCommandBarStore } from '../../../stores';
-import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import { BrowsedUrl } from '@meaku/core/types/common';
 
 export const dynamicConfigDataKey = (parent_url: string): unknown[] => ['dynamic-config', parent_url];
 
 type DynamicConfigDataKey = ReturnType<typeof dynamicConfigDataKey>;
 
 type DynamicConfigDataQueryPayload = Partial<ConfigPayload> & {
-  agentId?: string;
+  agent_id: string;
+  prospect_id?: string;
+  parent_url?: string;
+  session_id?: string;
+  browsed_urls?: BrowsedUrl[];
+  nudge_disabled?: boolean;
 };
 
 const useDynamicConfigDataQuery = (
   payload: DynamicConfigDataQueryPayload,
   options: BreakoutQueryOptions<ConfigurationApiResponse, DynamicConfigDataKey> = {},
 ): UseQueryResult<ConfigurationApiResponse> => {
-  const { settings, config } = useCommandBarStore();
-  const { dynamic_config_start_delay_ms = 5000 } = config.command_bar ?? {};
-
-  const dynamicConfigEnabled = useDelayedEnable(config.prospect_id ? 0 : dynamic_config_start_delay_ms);
+  const { parent_url, session_id, prospect_id, browsed_urls, agent_id, nudge_disabled } = payload;
 
   const query = useQuery({
-    queryKey: dynamicConfigDataKey(settings.parent_url ?? ''),
+    queryKey: dynamicConfigDataKey(parent_url ?? ''),
     queryFn: async () => {
-      const response = await getConfig(settings.agent_id, {
-        parent_url: settings.parent_url,
-        session_id: config.session_id,
-        prospect_id: config.prospect_id,
-        nudge_disabled: false,
-        browsed_urls: settings.browsed_urls ?? [
+      const response = await getConfig(agent_id, {
+        parent_url: parent_url,
+        session_id: session_id,
+        prospect_id: prospect_id,
+        nudge_disabled: nudge_disabled,
+        browsed_urls: browsed_urls ?? [
           {
-            url: sanitizeUrl(settings.parent_url),
+            url: sanitizeUrl(parent_url),
             timestamp: Date.now(),
           },
         ],
-        ...payload,
       });
       return response.data;
     },
-    enabled: dynamicConfigEnabled,
     ...options,
   });
 

@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useCallback, useEffect } from 'react';
+import { type FC, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { nanoid } from 'nanoid';
 
 import type { CommandBarSettings } from '@meaku/core/types/common';
@@ -10,9 +10,10 @@ import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalytics
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useStyleConfig from '../hooks/useStyleConfig';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
-import { ConfigurationApiResponse, ENV } from '@meaku/core/index';
-import { useVectorTracking } from '../hooks/useVectorTracking';
+import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
 import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
+import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
+import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -20,8 +21,13 @@ interface PreloadContainerProps {
 }
 
 const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initialSettings }) => {
-  const { config, setConfig, setSettings } = useCommandBarStore();
+  const { config, setConfig, setSettings, setCompleteConfigLoaded } = useCommandBarStore();
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
+  const { dynamic_config_start_delay_ms = 5000 } = config.command_bar ?? {};
+
+  const storageValues = useMemo(() => getLocalStorageData(), []);
+
+  const dynamicConfigEnabled = useDelayedEnable(storageValues?.prospectId ? 0 : dynamic_config_start_delay_ms);
 
   useEffect(() => {
     if (initialSettings.tenant_id && initialSettings.agent_id) {
@@ -35,14 +41,40 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       agentId: initialSettings.agent_id,
     },
     {
-      enabled: !getLocalStorageData()?.prospectId,
+      enabled: !storageValues?.prospectId,
+    },
+  );
+
+  const dynamicConfigQuery = useDynamicConfigDataQuery(
+    {
+      agent_id: initialSettings.agent_id,
+      parent_url: initialSettings.parent_url,
+      session_id: storageValues?.sessionId,
+      prospect_id: storageValues?.prospectId,
+      nudge_disabled: false,
+      browsed_urls: initialSettings.browsed_urls ?? [
+        {
+          url: sanitizeUrl(initialSettings.parent_url),
+          timestamp: Date.now(),
+        },
+      ],
+    },
+    {
+      enabled: dynamicConfigEnabled,
     },
   );
 
   const initialiseCommandBar = useCallback(
     (initialConfig: ConfigurationApiResponse = {} as ConfigurationApiResponse) => {
-      const { prospectId, sessionId, distinctId, tenantName: storageTenantName } = getLocalStorageData() ?? {};
+      const {
+        distinctId,
+        prospectId: storageProspectId,
+        sessionId: storageSessionId,
+        tenantName: storageTenantName,
+      } = storageValues ?? {};
       const tenantName = initialConfig.org_name ?? storageTenantName;
+      const sessionId = initialConfig.session_id ?? storageSessionId;
+      const prospectId = initialConfig.prospect_id ?? storageProspectId;
 
       setConfig({
         ...initialConfig,
@@ -55,37 +87,40 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
         prospect_id: prospectId,
         distinct_id: distinctId,
       });
-      setLocalStorageData({ tenantName });
-      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.PAGE_LOAD);
+      setLocalStorageData({ prospectId, sessionId, tenantName });
     },
-    [setConfig, trackEvent, updateCommonProperties],
+    [setConfig, storageValues, updateCommonProperties],
   );
 
   useEffect(() => {
-    const { prospectId } = getLocalStorageData() ?? {};
+    const { prospectId } = storageValues ?? {};
 
     if (!prospectId) {
       setLocalStorageData({
         distinctId: nanoid(),
       });
     }
-  }, []);
-
-  // Initialise command bar if prospect id already exists
-  useEffect(() => {
-    const { prospectId } = getLocalStorageData() ?? {};
-
-    if (prospectId && !config.prospect_id) {
-      initialiseCommandBar();
-    }
-  }, [config.prospect_id, initialiseCommandBar]);
+  }, [storageValues]);
 
   // Initialise command bar after static config is available (prospect id does not exist)
   useEffect(() => {
     if (staticConfigQuery.data) {
       initialiseCommandBar(staticConfigQuery.data);
+      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.PAGE_LOAD);
     }
-  }, [staticConfigQuery.data, initialiseCommandBar]);
+  }, [initialiseCommandBar, staticConfigQuery.data, trackEvent]);
+
+  // Initialise command bar after dynamic config is available (prospect id already exists)
+  useEffect(() => {
+    if (dynamicConfigQuery.data) {
+      initialiseCommandBar(dynamicConfigQuery.data);
+      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.COMMAND_BAR_LOAD, {
+        session_id: dynamicConfigQuery.data.session_id,
+        prospect_id: dynamicConfigQuery.data.prospect_id,
+      });
+      setCompleteConfigLoaded(true);
+    }
+  }, [dynamicConfigQuery.data, initialiseCommandBar, setCompleteConfigLoaded, trackEvent]);
 
   useEffect(() => {
     if (initialSettings) {
@@ -93,22 +128,13 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
     }
   }, [initialSettings, setSettings]);
 
-  // Initialize Vector tracking when prospect_id and tenant_id are available
-  // Only enable vector tracking when it's not admin/test
-  // AND the prospect_id was NOT initially present in localStorage (first-time visitor)
-  const enableVectorTracking =
-    ENV.VITE_APP_ENV === 'production' && !initialSettings.is_admin && !initialSettings.is_test;
-  useVectorTracking({
-    tenantId: initialSettings.tenant_id,
-    prospectId: config.prospect_id,
-    enabled: enableVectorTracking,
-  });
-
   useBrandCoverImage(initialSettings.tenant_id, initialSettings.bc);
 
   useStyleConfig({ styleConfig: config?.style_config });
 
-  if (staticConfigQuery.isSuccess || config.prospect_id) {
+  const shouldLoadApp = config?.is_enabled && !!config.command_bar?.modules.length;
+
+  if (shouldLoadApp) {
     return <FeatureProvider features={config.command_bar?.modules ?? []}>{children}</FeatureProvider>;
   }
 

@@ -10,7 +10,6 @@ import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { useCommandBarStore } from '@meaku/shared/stores';
 import { Nudge } from '@meaku/shared/features';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
-import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
 import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics/index';
@@ -24,6 +23,8 @@ import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { COMPONENT_TRANSITIONS } from './constants/animationTimings';
 import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import { useVectorTracking } from './hooks/useVectorTracking';
+import { isProduction } from '@meaku/shared/constants/common';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -31,15 +32,14 @@ function App() {
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
   const { activeFeature, setActiveFeature } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [shouldStartAnimations, setShouldStartAnimations] = useState(false);
 
-  const { setConfig, initMessages, settings, config, updateSettings, setSessionData } = useCommandBarStore();
+  const { setConfig, initMessages, settings, config, updateSettings, setSessionData, completeConfigLoaded } =
+    useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
   const { position = 'bottom_right' } = ui ?? {};
 
   const totalAnimationDelay = useEntryAnimationTiming(modules) * 1000;
 
-  const dynamicConfigQuery = useDynamicConfigDataQuery({ nudge_disabled: !!activeFeature });
   const { data: sessionData } = useSessionDataQuery(
     {
       command_bar_module_id: activeFeature?.id ?? DEFAULT_ASK_AI_MODULE_ID,
@@ -52,7 +52,7 @@ function App() {
   const { initialiseSocket, sendUserMessage } = useWsClient();
 
   const nudgeEnabled = useDelayedEnable(totalAnimationDelay + 200, {
-    shouldStart: dynamicConfigQuery?.isFetched && !!nudgeConfig,
+    shouldStart: completeConfigLoaded && !!nudgeConfig,
   });
 
   // Initialize user left tracking
@@ -88,25 +88,6 @@ function App() {
   }, [sessionData]);
 
   useEffect(() => {
-    if (dynamicConfigQuery.data) {
-      const prospectId = dynamicConfigQuery.data.prospect_id ?? config.prospect_id;
-      const sessionId = dynamicConfigQuery.data.session_id ?? config.session_id;
-      const tenantName = dynamicConfigQuery.data.org_name;
-
-      setLocalStorageData({ prospectId, sessionId, tenantName });
-      setConfig(dynamicConfigQuery.data);
-      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.COMMAND_BAR_LOAD, {
-        session_id: sessionId,
-        prospect_id: prospectId,
-      });
-
-      // Start animations after dynamic config is loaded
-      setShouldStartAnimations(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dynamicConfigQuery.data]);
-
-  useEffect(() => {
     updateCommonProperties({
       prospect_id: config.prospect_id,
       session_id: config.session_id,
@@ -135,12 +116,6 @@ function App() {
     };
   }, [config.tracking_config, config.prospect_id, updateProspectMutation]);
 
-  useHistory((currentUrl) => {
-    if (sanitizeUrl(settings.parent_url) !== sanitizeUrl(currentUrl)) {
-      updateSettings({ parent_url: currentUrl });
-    }
-  });
-
   useEffect(() => {
     if (settings.message) {
       setActiveFeature(ASK_AI);
@@ -150,6 +125,18 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.message]);
+
+  useHistory((currentUrl) => {
+    if (sanitizeUrl(settings.parent_url) !== sanitizeUrl(currentUrl)) {
+      updateSettings({ parent_url: currentUrl });
+    }
+  });
+
+  useVectorTracking({
+    tenantId: settings.tenant_id,
+    prospectId: config.prospect_id,
+    enabled: isProduction && !settings.is_admin && !settings.is_test,
+  });
 
   const containerClasses = cn(
     'fixed z-command-bar',
@@ -169,7 +156,7 @@ function App() {
         <CommandBarActions
           activeFeature={activeFeatureModuleType}
           setActiveFeature={setActiveFeature}
-          shouldStartAnimations={shouldStartAnimations}
+          shouldStartAnimations={completeConfigLoaded}
         />
         <FeatureContentContainer
           key={activeFeatureModuleType}
