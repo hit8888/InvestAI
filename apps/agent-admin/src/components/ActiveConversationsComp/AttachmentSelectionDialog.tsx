@@ -32,7 +32,13 @@ const AttachmentSelectionDialog = ({ selectedOption, onSendMessage, onClose }: A
       page_size: 10,
       search: '',
       sort: [],
-      filters: [],
+      filters: [
+        {
+          field: 'access_type',
+          operator: 'in',
+          value: ['EXTERNAL'],
+        },
+      ],
     },
     queryOptions: {
       enabled: selectedOption === 'document',
