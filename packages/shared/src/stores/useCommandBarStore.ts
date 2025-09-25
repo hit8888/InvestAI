@@ -42,6 +42,8 @@ interface CommandBarState {
   isConfigLoading: boolean;
   isStreaming: boolean;
   completeConfigLoaded: boolean;
+  isDynamicConfigLoading: boolean;
+  isDynamicConfigStarted: boolean;
 
   // Admin typing state
   isAdminTyping: boolean;
@@ -65,6 +67,8 @@ interface CommandBarState {
   updateSettings: (settings: Partial<CommandBarSettings>) => void;
   setSessionData: (sessionData: InitSessionResponse) => void;
   setCompleteConfigLoaded: (completeConfigLoaded: boolean) => void;
+  setDynamicConfigLoading: (isDynamicConfigLoading: boolean) => void;
+  setDynamicConfigStarted: (isDynamicConfigStarted: boolean) => void;
 
   // Utility methods
   getLastMessage: () => Message | undefined;
@@ -154,6 +158,8 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
     isAdminTyping: false,
     pendingArtifacts: [],
     completeConfigLoaded: false,
+    isDynamicConfigLoading: false,
+    isDynamicConfigStarted: false,
 
     // Message methods
     addMessage: (message) => {
@@ -434,6 +440,14 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
 
     setCompleteConfigLoaded: (completeConfigLoaded) => {
       set({ completeConfigLoaded });
+    },
+
+    setDynamicConfigLoading: (isDynamicConfigLoading) => {
+      set({ isDynamicConfigLoading });
+    },
+
+    setDynamicConfigStarted: (isDynamicConfigStarted) => {
+      set({ isDynamicConfigStarted });
     },
 
     setMessages: (messages) => {

@@ -29,8 +29,17 @@ function App() {
   const { activeFeature, setActiveFeature } = useFeature();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { setConfig, initMessages, settings, config, updateSettings, setSessionData, completeConfigLoaded } =
-    useCommandBarStore();
+  const {
+    setConfig,
+    initMessages,
+    settings,
+    config,
+    updateSettings,
+    setSessionData,
+    completeConfigLoaded,
+    isDynamicConfigLoading,
+    isDynamicConfigStarted,
+  } = useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
 
   const { initialiseSocket, sendUserMessage } = useWsClient();
@@ -160,6 +169,8 @@ function App() {
       isExpanded={isExpanded}
       onClose={handleClose}
       onExpand={() => setIsExpanded(!isExpanded)}
+      isDynamicConfigLoading={isDynamicConfigLoading}
+      isDynamicConfigStarted={isDynamicConfigStarted}
     />
   );
 }

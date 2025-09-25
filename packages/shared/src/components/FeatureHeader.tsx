@@ -87,7 +87,7 @@ export const FeatureHeader = ({
 
   // Need to check if all buttons should be hidden based on different CTAs button
   return (
-    <div className="flex flex-col p-3 gap-4 border-b border-gray-100">
+    <div className="flex flex-col p-3 gap-4">
       {hasBanner && (
         <div
           className="h-[100px] rounded-xl -mb-10 flex items-center justify-end"

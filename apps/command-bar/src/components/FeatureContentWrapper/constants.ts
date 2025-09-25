@@ -2,6 +2,24 @@ import { CommandBarModuleType } from '@meaku/core/types/api/configuration_respon
 
 /**
  * Layout constants for FeatureContentWrapper positioning and sizing
+ *
+ * POSITION CONTROL VIA CSS VARIABLES:
+ * ===================================
+ *
+ * The positioning system uses CSS variables for centralized control:
+ * - --breakout-command-bar-bottom: Controls vertical positioning
+ * - --breakout-command-bar-right: Controls horizontal positioning
+ *
+ * These variables are used throughout the command bar system to maintain
+ * consistent positioning and allow easy customization by clients.
+ *
+ * Key positioning relationships:
+ * - Command bar actions: right: var(--breakout-command-bar-right, 16px)
+ * - Modules: right: calc(var(--breakout-command-bar-right, 16px) + 48px)
+ * - Bottom bar exit: x: calc(50vw - var(--breakout-command-bar-right, 16px))
+ *
+ * This ensures the gap between command bar and modules is maintained
+ * when the right offset changes, and all animations respect the same positioning.
  */
 export const LAYOUT_CONSTANTS = {
   // Gap constants
@@ -21,14 +39,14 @@ export const LAYOUT_CONSTANTS = {
 
   // Mobile layout
   MOBILE_PADDING: '16px',
-  MOBILE_RIGHT_OFFSET: '16px',
+  MOBILE_RIGHT_OFFSET: 'var(--breakout-command-bar-right)',
   MOBILE_LEFT_OFFSET: '16px',
   MOBILE_TRANSFORM: 'translateY(0)',
   MOBILE_HEIGHT: 'calc(100dvh - 32px)', // Accounting for top and bottom padding
   MOBILE_WIDTH: 'calc(100vw - 32px)', // Accounting for left and right padding
 
   // Desktop layout
-  DESKTOP_RIGHT_OFFSET: '64px',
+  DESKTOP_RIGHT_OFFSET: 'calc(var(--breakout-command-bar-right) + 48px)', // Command bar right + 48px gap
   DESKTOP_MARGIN_RIGHT: '16px',
   DESKTOP_TRANSFORM: 'translateY(50%)',
 } as const;

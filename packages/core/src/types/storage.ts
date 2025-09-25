@@ -1,3 +1,5 @@
+export type LayoutType = 'bottom_center' | 'bottom_right';
+
 export interface TenantStorageData {
   sessionId?: string;
   prospectId?: string;
@@ -7,6 +9,11 @@ export interface TenantStorageData {
   prospect_info_collected?: boolean;
   tenantName?: string;
   watchedVideos?: string[];
+  layoutPreference?: {
+    layout: LayoutType;
+    timestamp: number;
+    expiresAt: number;
+  };
 }
 
 export interface StorageData {

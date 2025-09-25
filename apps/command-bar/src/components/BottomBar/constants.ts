@@ -75,12 +75,26 @@ export const BUTTON_SIZING = {
     // Additional padding for icon spacing and visual balance
     ICON_PADDING: 16,
     // Fixed width for send icon state
-    SEND_ICON_WIDTH: 26,
+    SEND_ICON_WIDTH: 30,
     // Minimum width for question buttons
     MIN_QUESTION_WIDTH: 80,
     // Fixed height for all button states
-    HEIGHT: 26,
+    HEIGHT: 30,
   },
+
+  // Action button size constants
+  ACTION_BUTTON: {
+    // Default button size
+    DEFAULT_SIZE: 42,
+    // Large button size for animations
+    LARGE_SIZE: 56,
+  },
+} as const;
+
+// Input field constants
+export const INPUT_FIELD = {
+  // Default placeholder text for input field
+  DEFAULT_PLACEHOLDER: 'See why top companies choose us? 🏅',
 } as const;
 
 // Animation constants for CommandBarRenderer

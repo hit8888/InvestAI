@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { LAYOUT_CONSTANTS, MODULE_CONFIG } from '../constants';
+import { getBottomGap } from '../utils';
 
 export interface ModulePosition {
   bottom: number;
@@ -29,13 +30,17 @@ export const useModulePositioning = (
   return useMemo(() => {
     if (!activeFeature) return null;
 
-    const { MIN_TOP_GAP, MIN_BOTTOM_GAP } = LAYOUT_CONSTANTS;
-    const availableHeight = screenHeight - MIN_TOP_GAP - MIN_BOTTOM_GAP;
+    const { MIN_TOP_GAP } = LAYOUT_CONSTANTS;
+
+    // Use shared utility to get bottom gap from CSS variable or fallback
+    const bottomGap = getBottomGap();
+
+    const availableHeight = screenHeight - MIN_TOP_GAP - bottomGap;
 
     // Mobile positioning - simplified bottom alignment
     if (isMobile) {
       return {
-        bottom: MIN_BOTTOM_GAP,
+        bottom: bottomGap,
         maxHeight: availableHeight,
         transform: 'translateY(0)',
       };
@@ -46,7 +51,7 @@ export const useModulePositioning = (
 
     if (activeFeature === 'VIDEO_LIBRARY') {
       return {
-        bottom: MIN_BOTTOM_GAP,
+        bottom: bottomGap,
         maxHeight: availableHeight, // Always fit within viewport
         transform: 'translateY(0)',
       };
@@ -56,7 +61,7 @@ export const useModulePositioning = (
     const maxModuleHeight = Math.min(availableHeight, moduleConfig.maxHeight as number);
 
     return {
-      bottom: MIN_BOTTOM_GAP,
+      bottom: bottomGap,
       maxHeight: maxModuleHeight,
       transform: 'translateY(0)',
     };
@@ -70,5 +75,10 @@ export const useModulePositioning = (
  * @returns Maximum available height considering gaps
  */
 export const getMaxAvailableHeight = (screenHeight: number): number => {
-  return screenHeight - LAYOUT_CONSTANTS.MIN_TOP_GAP - LAYOUT_CONSTANTS.MIN_BOTTOM_GAP;
+  const { MIN_TOP_GAP } = LAYOUT_CONSTANTS;
+
+  // Use shared utility to get bottom gap from CSS variable or fallback
+  const bottomGap = getBottomGap();
+
+  return screenHeight - MIN_TOP_GAP - bottomGap;
 };

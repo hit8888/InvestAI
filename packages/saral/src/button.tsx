@@ -11,7 +11,10 @@ const buttonVariants = cva(
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         default_active: 'bg-black text-white',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'shadow-action-btn text-foreground bg-background hover:bg-backgroundLight hover:text-actionBtnIcon',
+        outline: 'text-foreground bg-background hover:bg-backgroundLight border shadow-md',
+        outline_primary: 'text-primary bg-background border-primary hover:bg-background hover:text-primary',
+        outline_action:
+          'text-foreground bg-background hover:bg-backgroundLight border shadow-action-btn hover:text-actionBtnIcon',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
           'bg-muted text-muted-foreground hover:bg-muted/90 hover:muted-foreground/90 hover:shadow-md hover:border transition-all',
@@ -75,7 +78,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
       // Auto-select based on variant (default behavior)
       const filledVariants = ['default', 'default_active', 'destructive', 'secondary'];
-      const outlineVariants = ['outline', 'ghost'];
+      const outlineVariants = ['outline', 'ghost', 'outline_primary', 'outline_action'];
 
       if (filledVariants.includes(variant || 'default')) {
         return 'bg-background/25'; // Use background color for filled buttons

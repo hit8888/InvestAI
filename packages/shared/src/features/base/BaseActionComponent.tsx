@@ -92,7 +92,10 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
           : actionConfig.button?.variant || 'default_active';
       }
 
-      return actionConfig.button?.variant || 'outline';
+      // Use outline_action variant for action buttons to avoid !important modifiers
+      return actionConfig.button?.variant === 'outline'
+        ? 'outline_action'
+        : actionConfig.button?.variant || 'outline_action';
     }, [isActive, actionConfig.button?.variant]);
 
     // Render icon content

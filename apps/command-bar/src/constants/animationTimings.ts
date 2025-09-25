@@ -27,6 +27,15 @@ export const ANIMATION_TIMINGS = {
     ACTION_OPACITY: 0.5,
     ACTION_MOVEMENT: 0.6,
     ACTION_SHIMMER: 0.6,
+    ACTION_SIZE_FAST: 0.3, // Fast size transition for instant switch
+    ACTION_OPACITY_SLOW: 0.8, // Slow opacity transition for smooth exit
+
+    // Bottom bar animation durations
+    BOTTOM_BAR_WIDTH: 0.6, // 600ms for width transition
+    BOTTOM_BAR_HEIGHT_NORMAL: 0.4, // 400ms for normal height transition
+    BOTTOM_BAR_HEIGHT_CORNER: 0.8, // 800ms for corner animation height
+    BOTTOM_BAR_BORDER_RADIUS: 0.5, // 500ms for border radius transition
+    BOTTOM_BAR_X_CORNER: 0.8, // 800ms for x-axis corner animation
 
     // Tooltip animations
     TOOLTIP_DURATION: 5000, // in milliseconds
@@ -46,6 +55,10 @@ export const ANIMATION_TIMINGS = {
     // Rotating question delays
     QUESTION_TRANSITION: 0.15, // 150ms delay for question transition
     QUESTION_ROTATION_INTERVAL: 3.0, // 3 seconds between question rotations
+    // Bottom bar animation delays
+    BOTTOM_BAR_WIDTH_EXPANSION: 0.2, // 200ms delay for Phase 2 expansion
+    BOTTOM_BAR_HEIGHT_DELAY: 0.1, // 100ms delay for height animation
+    MIN_PHASE_1_DURATION: 1000, // 1 second minimum after dynamic config completes (in milliseconds)
   },
 
   // Easing functions
@@ -53,6 +66,7 @@ export const ANIMATION_TIMINGS = {
     EASE_OUT: 'easeOut',
     EASE_IN_OUT: 'easeInOut',
     LINEAR: 'linear',
+    CUBIC_BEZIER_EXIT: 'cubic-bezier(0.4, 0, 0.2, 1)',
   },
 
   // Spring configurations
@@ -60,12 +74,15 @@ export const ANIMATION_TIMINGS = {
     STIFFNESS: {
       NORMAL: 200,
       HIGH: 300,
+      BOTTOM_BAR_Y: 400, // Specific stiffness for bottom bar y animation
     },
     DAMPING: {
       NORMAL: 12,
       HIGH: 30,
+      BOTTOM_BAR_Y: 8, // Specific damping for bottom bar y animation
     },
     MASS: 0.8,
+    BOTTOM_BAR_Y_MASS: 0.4, // Specific mass for bottom bar y animation
   },
 } as const;
 
@@ -114,6 +131,14 @@ export const TRANSITION_PRESETS = {
     type: 'spring' as const,
     stiffness: ANIMATION_TIMINGS.SPRING.STIFFNESS.HIGH,
     damping: ANIMATION_TIMINGS.SPRING.DAMPING.HIGH,
+  },
+
+  // Bottom bar specific spring configuration
+  SPRING_BOTTOM_BAR_Y: {
+    type: 'spring' as const,
+    stiffness: ANIMATION_TIMINGS.SPRING.STIFFNESS.BOTTOM_BAR_Y,
+    damping: ANIMATION_TIMINGS.SPRING.DAMPING.BOTTOM_BAR_Y,
+    mass: ANIMATION_TIMINGS.SPRING.BOTTOM_BAR_Y_MASS,
   },
 } as const;
 

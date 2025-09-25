@@ -5,10 +5,9 @@ import { CommandBarModuleType, CommandBarModuleConfigType } from '@meaku/core/ty
 // Components
 import { BottomBarInputField } from './BottomBarInputField';
 import { BottomBarActionButton } from './BottomBarActionButton';
-import BottomBarShimmer from './BottomBarShimmer';
 
 // Constants
-import { BOTTOM_BAR_ANIMATIONS } from './constants';
+import { BOTTOM_BAR_ANIMATIONS, BUTTON_SIZING } from './constants';
 import { TRANSITION_PRESETS } from '../../constants/animationTimings';
 
 interface BottomBarContentProps {
@@ -22,7 +21,6 @@ interface BottomBarContentProps {
   suggestedQuestions: string[];
   onModuleClick: (config: CommandBarModuleConfigType) => void;
   onInputSubmit: (inputValue: string, questionText: string) => void;
-  primaryPlaceholder: string | string[];
 }
 
 const BottomBarContent: React.FC<BottomBarContentProps> = ({
@@ -36,7 +34,6 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
   suggestedQuestions,
   onModuleClick,
   onInputSubmit,
-  primaryPlaceholder,
 }) => {
   // Local state for input
   const [inputValue, setInputValue] = useState('');
@@ -47,10 +44,10 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
       initial: { opacity: 0 },
       animate: {
         opacity: 1,
-        bottom: isAnimatingToCorner ? 0 : 4,
-        left: isAnimatingToCorner ? 0 : 4,
-        right: isAnimatingToCorner ? 0 : 4,
-        top: isAnimatingToCorner ? 0 : 4,
+        bottom: isAnimatingToCorner ? 0 : 2,
+        left: isAnimatingToCorner ? 0 : 2,
+        right: isAnimatingToCorner ? 0 : 2,
+        top: isAnimatingToCorner ? 0 : 2,
         padding: isAnimatingToCorner ? '0px' : '8px',
       },
     }),
@@ -72,25 +69,54 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
       {...contentAnimation}
       transition={contentTransition}
     >
-      {/* Ask AI module - always visible */}
+      {/* Ask AI module - visible in both phases */}
       <AnimatePresence>
         {askAiModule && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0 }}
             animate={{
               opacity: isModulesReady ? 1 : 0,
-              width: isAnimatingToCorner ? '56px' : `${actionButtonSize}px`,
-              height: isAnimatingToCorner ? '56px' : `${actionButtonSize}px`,
+              scale: isAnimatingToCorner ? 1 : isDynamicConfigLoading ? 1.1 : 1,
             }}
+            exit={{ opacity: 0, scale: 0 }}
             transition={{
-              duration: isAnimatingToCorner ? 0.8 : 0.3,
-              ease: isAnimatingToCorner ? [0.4, 0, 0.2, 1] : 'easeOut',
+              width: {
+                duration: 0.3,
+                ease: 'easeOut',
+              },
+              height: {
+                duration: 0.3,
+                ease: 'easeOut',
+              },
+              opacity: {
+                duration: isAnimatingToCorner ? 0.8 : 0.4,
+                ease: isAnimatingToCorner ? [0.4, 0, 0.2, 1] : [0.25, 0.46, 0.45, 0.94],
+              },
+              scale: {
+                duration: isAnimatingToCorner ? 0.8 : 0.4,
+                ease: isAnimatingToCorner ? [0.4, 0, 0.2, 1] : [0.25, 0.46, 0.45, 0.94],
+              },
+            }}
+            className="transition-all duration-300 ease-out"
+            style={{
+              width:
+                isAnimatingToCorner || isDynamicConfigLoading
+                  ? `${BUTTON_SIZING.ACTION_BUTTON.LARGE_SIZE}px`
+                  : `${BUTTON_SIZING.ACTION_BUTTON.DEFAULT_SIZE}px`,
+              height:
+                isAnimatingToCorner || isDynamicConfigLoading
+                  ? `${BUTTON_SIZING.ACTION_BUTTON.LARGE_SIZE}px`
+                  : `${BUTTON_SIZING.ACTION_BUTTON.DEFAULT_SIZE}px`,
             }}
           >
             <BottomBarActionButton
               featureConfig={askAiModule}
               isActive={activeFeature === askAiModule.module_type}
-              buttonSize={isAnimatingToCorner ? 56 : actionButtonSize}
+              buttonSize={
+                isAnimatingToCorner || isDynamicConfigLoading
+                  ? BUTTON_SIZING.ACTION_BUTTON.LARGE_SIZE
+                  : BUTTON_SIZING.ACTION_BUTTON.DEFAULT_SIZE
+              }
               isAnimating={isAnimatingToCorner}
               onClick={onModuleClick}
             />
@@ -98,85 +124,74 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Input field - gets clipped when bar shrinks */}
-      <motion.div
-        className="flex-1"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: isModulesReady && !isAnimatingToCorner ? 1 : 0,
-          width: isAnimatingToCorner ? '0px' : 'auto',
-        }}
-        transition={{ duration: isAnimatingToCorner ? 0.8 : 0.3 }}
-      >
-        <BottomBarInputField
-          value={inputValue}
-          onChange={setInputValue}
-          onSubmit={(questionText) => onInputSubmit(inputValue, questionText || '')}
-          suggestedQuestions={suggestedQuestions}
-          actionButtonSize={actionButtonSize}
-          primaryPlaceholder={primaryPlaceholder}
-        />
-      </motion.div>
+      {/* Input field - only show in Phase 2 (dynamic config complete AND modules ready) */}
+      {isModulesReady && !isDynamicConfigLoading && (
+        <motion.div
+          className="flex-1"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: !isAnimatingToCorner ? 1 : 0,
+            width: isAnimatingToCorner ? '0px' : 'auto',
+          }}
+          transition={{
+            duration: isAnimatingToCorner ? 0.8 : 0.3,
+            delay: 0.1, // Start after width expansion begins
+          }}
+        >
+          <BottomBarInputField
+            value={inputValue}
+            onChange={setInputValue}
+            onSubmit={(questionText) => onInputSubmit(inputValue, questionText || '')}
+            suggestedQuestions={suggestedQuestions}
+            actionButtonSize={actionButtonSize}
+          />
+        </motion.div>
+      )}
 
-      {/* Other modules - get clipped when bar shrinks */}
-      <motion.div className="flex items-center" style={{ gap: `${BOTTOM_BAR_ANIMATIONS.LAYOUT.ACTION_BUTTON_GAP}px` }}>
-        {/* Synchronized fade transition between shimmer and modules */}
-        <AnimatePresence mode="wait">
-          {isDynamicConfigLoading ? (
+      {/* Other modules - only show in Phase 2 (dynamic config complete AND modules ready) */}
+      {isModulesReady && !isDynamicConfigLoading && (
+        <motion.div
+          className="flex items-center"
+          style={{ gap: `${BOTTOM_BAR_ANIMATIONS.LAYOUT.ACTION_BUTTON_GAP}px` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: !isAnimatingToCorner ? 1 : 0 }}
+          transition={{
+            duration: 0.3,
+            delay: 0.1, // Start after width expansion begins
+            ease: 'easeOut',
+          }}
+        >
+          {otherModules.map((featureConfig, index) => (
             <motion.div
-              key="shimmer"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              key={featureConfig.id}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{
+                opacity: !isAnimatingToCorner ? 1 : 0,
+                scale: !isAnimatingToCorner ? 1 : 1,
+              }}
+              exit={{ opacity: 0, scale: 0 }}
               transition={{
-                duration: 0.2, // Faster shimmer exit
-                ease: 'easeOut',
+                duration: isAnimatingToCorner ? 0.8 : 0.3,
+                delay: isAnimatingToCorner ? 0 : index * 0.05,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="transition-all duration-300 ease-out"
+              style={{
+                width: isAnimatingToCorner ? '56px' : 'auto',
+                height: isAnimatingToCorner ? '56px' : 'auto',
               }}
             >
-              <BottomBarShimmer actionButtonSize={actionButtonSize} />
+              <BottomBarActionButton
+                featureConfig={featureConfig}
+                isActive={activeFeature === featureConfig.module_type}
+                buttonSize={isAnimatingToCorner ? 56 : 42}
+                isAnimating={isAnimatingToCorner}
+                onClick={onModuleClick}
+              />
             </motion.div>
-          ) : (
-            <motion.div
-              key="modules"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isModulesReady && !isAnimatingToCorner ? 1 : 0 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                delay: 0.1, // Start modules slightly before shimmer fully exits
-                ease: 'easeOut',
-              }}
-              className="flex items-center"
-              style={{ gap: `${BOTTOM_BAR_ANIMATIONS.LAYOUT.ACTION_BUTTON_GAP}px` }}
-            >
-              {otherModules.map((featureConfig, index) => (
-                <motion.div
-                  key={featureConfig.id}
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: isModulesReady && !isAnimatingToCorner ? 1 : 0,
-                    width: isAnimatingToCorner ? '0px' : 'auto',
-                    height: isAnimatingToCorner ? '0px' : 'auto',
-                  }}
-                  transition={{
-                    duration: isAnimatingToCorner ? 0.8 : 0.3,
-                    delay: isAnimatingToCorner ? 0 : index * 0.05, // Reduced stagger for smoother appearance
-                    ease: 'easeOut',
-                  }}
-                >
-                  <BottomBarActionButton
-                    featureConfig={featureConfig}
-                    isActive={activeFeature === featureConfig.module_type}
-                    buttonSize={actionButtonSize}
-                    isAnimating={isAnimatingToCorner}
-                    onClick={onModuleClick}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+          ))}
+        </motion.div>
+      )}
     </motion.div>
   );
 };

@@ -18,6 +18,8 @@ interface BottomCenterRendererProps {
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;
+  isDynamicConfigLoading?: boolean;
+  isDynamicConfigStarted?: boolean;
 }
 
 export const BottomCenterRenderer = ({
@@ -29,6 +31,8 @@ export const BottomCenterRenderer = ({
   isExpanded,
   onClose,
   onExpand,
+  isDynamicConfigLoading = false,
+  isDynamicConfigStarted = false,
 }: BottomCenterRendererProps) => {
   const { hasInteracted, shouldUnmountBottomBar, shouldShowDefaultBar, isDefaultBarReady, skipInitialTooltips } =
     transitionState;
@@ -43,16 +47,21 @@ export const BottomCenterRenderer = ({
           activeFeature={activeFeatureModuleType}
           setActiveFeature={setActiveFeature}
           actionButtonSize={42}
-          isDynamicConfigLoading={false} // This should be passed from parent
+          isDynamicConfigLoading={isDynamicConfigLoading}
+          isDynamicConfigStarted={isDynamicConfigStarted}
           onSwitchToDefault={handleSwitchToDefault}
         />
       )}
 
       {/* Default bar - positioned behind bottom bar, completely hidden until bottom bar exits */}
-      <div key="root-content" className="fixed bottom-4 right-4 z-command-bar flex items-end gap-4">
+      <div
+        key="root-content"
+        className="command-bar-positioned fixed bottom-[var(--breakout-command-bar-bottom)] right-[var(--breakout-command-bar-right)] z-command-bar flex items-end gap-4"
+      >
         {/* Nudges always appear on the right bottom */}
         {nudgeEnabled && (
           <motion.div
+            key="nudge-center"
             {...COMMAND_BAR_ANIMATIONS.NUDGE}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,

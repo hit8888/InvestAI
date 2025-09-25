@@ -14,6 +14,8 @@ interface CommandBarRendererProps {
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;
+  isDynamicConfigLoading?: boolean;
+  isDynamicConfigStarted?: boolean;
 }
 
 export const CommandBarRenderer = ({
@@ -26,6 +28,8 @@ export const CommandBarRenderer = ({
   isExpanded,
   onClose,
   onExpand,
+  isDynamicConfigLoading = false,
+  isDynamicConfigStarted = false,
 }: CommandBarRendererProps) => {
   const { isBottomCenter, containerClasses } = layout;
 
@@ -38,6 +42,8 @@ export const CommandBarRenderer = ({
     isExpanded,
     onClose,
     onExpand,
+    isDynamicConfigLoading,
+    isDynamicConfigStarted,
   };
 
   if (isBottomCenter) {

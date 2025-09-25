@@ -43,6 +43,7 @@ export const BottomRightRenderer = ({
         {/* Nudges always appear on the right bottom */}
         {nudgeEnabled && (
           <motion.div
+            key="nudge-right"
             {...COMMAND_BAR_ANIMATIONS.NUDGE}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,

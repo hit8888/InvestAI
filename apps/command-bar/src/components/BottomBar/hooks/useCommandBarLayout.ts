@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import { cn } from '@meaku/saral';
+import { LAYOUT_PREFERENCE_CONFIG } from '@meaku/core/constants/layout-preference';
+import { useLayoutPreference } from '../../../hooks/useLayoutPreference';
 
 export interface CommandBarLayoutConfig {
   position: string;
@@ -15,15 +17,36 @@ export interface CommandBarLayoutResult {
 }
 
 export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarLayoutResult => {
-  const { position = 'bottom_right', settings } = config;
-  const finalPosition = settings.position || position;
+  const { position = LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT, settings } = config;
+  const configPosition = settings.position || position;
+  const prevConfigPosition = useRef<string | null>(null);
+
+  const { clearPreference, determineFinalLayout } = useLayoutPreference();
+
+  // Clear layout preference only when config position actually changes
+  useEffect(() => {
+    if (prevConfigPosition.current !== null && prevConfigPosition.current !== configPosition) {
+      clearPreference();
+    }
+    prevConfigPosition.current = configPosition;
+  }, [configPosition, clearPreference]);
+
+  // Use layout preference logic to determine final position
+  const finalPosition = determineFinalLayout(configPosition);
 
   const containerClasses = useMemo(() => {
-    return cn('fixed z-command-bar', finalPosition === 'bottom_left' ? 'left-4 bottom-4' : 'right-4 bottom-4');
+    return cn(
+      'fixed z-command-bar command-bar-positioned',
+      finalPosition === LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT
+        ? 'left-1/2 transform -translate-x-1/2'
+        : 'right-[var(--breakout-command-bar-right)]',
+      // Use CSS variable for bottom positioning - allows client customization
+      'bottom-[var(--breakout-command-bar-bottom)]',
+    );
   }, [finalPosition]);
 
-  const isBottomCenter = finalPosition === 'bottom_center';
-  const isBottomRight = finalPosition === 'bottom_right';
+  const isBottomCenter = finalPosition === LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT;
+  const isBottomRight = finalPosition === LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT;
 
   return {
     finalPosition,

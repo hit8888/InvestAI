@@ -10,6 +10,7 @@ export interface BottomCenterBarProps {
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
   actionButtonSize?: number;
   isDynamicConfigLoading?: boolean;
+  isDynamicConfigStarted?: boolean;
   onSwitchToDefault?: (
     moduleType: CommandBarModuleType,
     eventData?: { message?: string; eventType?: keyof typeof MessageEventType },

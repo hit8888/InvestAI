@@ -39,35 +39,69 @@
     --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
     --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
     --breakout: 243.2 68.18% 56.86%; /* #4E46DC */
+
+    /* 
+     * Command Bar Position Control Variables
+     * =====================================
+     * 
+     * These CSS variables provide centralized control over the command bar positioning
+     * throughout the application. They affect multiple components and animations.
+     * 
+     * Usage:
+     * - Override these variables in your application's CSS to customize positioning
+     * - All components automatically respect these values
+     * - Default values are defined below (16px)
+     * 
+     * Components affected:
+     * 1. Command bar actions (bottom-right position)
+     * 2. Bottom center bar (exit animation target)
+     * 3. Feature modules (desktop positioning)
+     * 4. Bottom bar container (initial positioning)
+     * 5. Module positioning calculations
+     * 
+     * Example customization:
+     * :root {
+     *   --breakout-command-bar-bottom: 20px;
+     *   --breakout-command-bar-right: 30px;
+     * }
+     */
+
+    /* Default command bar positioning values */
+    --breakout-command-bar-bottom: 16px;
+    --breakout-command-bar-right: 16px;
   }
 
   .dark,
   :host([data-theme='dark']) {
-    --background: 222.2 84% 4.9%;
-    --background-subtle: 0 0% 95.29%; /* #F3F3F3 */
-    --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --background: 222.2 84% 4.9%; /* deep navy black */
+    --background-light: 223 40% 12%; /* subtle elevated surface */
+    --background-subtle: 223 25% 8%; /* faint layer above background */
+    --foreground: 210 40% 98%; /* near-white text */
+    --card: 223 40% 25%; /* card surface */
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 223 40% 10%;
     --popover-foreground: 210 40% 98%;
-    --primary: 252 87% 59%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --primary-subtle: 252 20% 15%; /* #2A2830 */
+    --primary: 252 87% 59%; /* keep purple as-is */
+    --primary-foreground: 222.2 47.4% 11.2%; /* readable on purple */
+    --primary-subtle: 252 20% 15%; /* dark tinted surface */
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 210 10% 92%; /* #E5E8EB */
-    --muted-foreground: 214 8% 17% / 0.7;
-    --accent: 217.2 32.6% 17.5%;
+    --muted: 223 15% 20%; /* softer dark neutral */
+    --muted-foreground: 210 20% 70% / 0.7; /* desaturated gray text */
+    --accent: 223 25% 18%; /* darker accent background */
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 40%; /* darker red */
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --link: 211.18 95.33% 58.04%; /* #2E90FA */
-    --ring: 212.7 26.8% 83.9%;
-    --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
-    --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
+    --border: 223 20% 20%; /* subtle border */
+    --input: 223 20% 20%; /* matches border */
+    --link: 211.18 95.33% 58.04%; /* keep same bright blue */
+    --ring: 223 40% 40%; /* visible ring */
+    --positive-dark: 140.32 93.94% 25.88%;
+    --positive-light: 140.52 80.31% 37.84%;
+
+    /* Default command bar positioning values */
+    --breakout-command-bar-bottom: 16px;
+    --breakout-command-bar-right: 16px;
   }
 
   * {
@@ -83,6 +117,42 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Command bar positioning transitions */
+  .command-bar-positioned {
+    transition:
+      bottom 0.3s ease-out,
+      right 0.3s ease-out,
+      transform 0.3s ease-out;
+  }
+
+  /* Module container positioning classes */
+  .module-container-desktop {
+    position: fixed;
+    right: calc(var(--breakout-command-bar-right) + 48px);
+    bottom: var(--breakout-command-bar-bottom);
+    margin-right: 16px;
+    transform: translateY(50%);
+    transition:
+      bottom 0.3s ease-out,
+      right 0.3s ease-out,
+      transform 0.3s ease-out;
+  }
+
+  .module-container-mobile {
+    position: fixed;
+    top: 16px;
+    right: var(--breakout-command-bar-right);
+    bottom: var(--breakout-command-bar-bottom);
+    left: 16px;
+    transform: translateY(0);
+    height: calc(100dvh - 32px);
+    width: calc(100vw - 32px);
+    transition:
+      bottom 0.3s ease-out,
+      right 0.3s ease-out,
+      transform 0.3s ease-out;
   }
 }
 

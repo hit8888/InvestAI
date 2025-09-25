@@ -41,7 +41,8 @@ export const BottomBarActionButton: React.FC<BottomBarActionButtonProps> = ({
 
   const transitionDuration = useMemo(() => {
     if (isAnimating) {
-      return `all ${ANIMATION_TIMINGS.DURATION.SLOWEST}s cubic-bezier(0.4, 0, 0.2, 1)`;
+      // Fast size transition for instant switch, slow opacity/scale for smooth exit
+      return `width ${ANIMATION_TIMINGS.DURATIONS.ACTION_SIZE_FAST}s ease-out, height ${ANIMATION_TIMINGS.DURATIONS.ACTION_SIZE_FAST}s ease-out, opacity ${ANIMATION_TIMINGS.DURATIONS.ACTION_OPACITY_SLOW}s ${ANIMATION_TIMINGS.EASING.CUBIC_BEZIER_EXIT}, transform ${ANIMATION_TIMINGS.DURATIONS.ACTION_OPACITY_SLOW}s ${ANIMATION_TIMINGS.EASING.CUBIC_BEZIER_EXIT}`;
     }
     return `all ${ANIMATION_TIMINGS.DURATION.NORMAL}s ease-out`;
   }, [isAnimating]);

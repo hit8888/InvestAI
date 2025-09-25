@@ -6,13 +6,7 @@ import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import { LAYOUT_CONSTANTS } from './constants';
 
-import {
-  useModulePositioning,
-  useModuleStyles,
-  useInnerModuleStyles,
-  useModuleAnimation,
-  getBaseLayoutStyles,
-} from './hooks';
+import { useModulePositioning, useModuleStyles, useInnerModuleStyles, useModuleAnimation } from './hooks';
 
 export interface FeatureContentWrapperProps {
   children: React.ReactNode;
@@ -50,9 +44,11 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
       animate={animateTarget}
       exit={animationConfig.exit}
       transition={animationConfig.transition}
+      className={`${isMobile ? 'module-container-mobile' : 'module-container-desktop'}`}
       style={{
-        ...getBaseLayoutStyles(isMobile),
-        ...moduleStyles,
+        // Only include non-positioning styles from moduleStyles (maxHeight, etc.)
+        // Positioning (bottom, right, transform) is handled by CSS classes
+        maxHeight: moduleStyles?.maxHeight,
         transformOrigin: 'right',
         // Optimize for animations
         willChange: 'transform, opacity',

@@ -62,7 +62,7 @@ export const RotatingQuestionButton = ({
   return (
     <Button
       onClick={() => onQuestionClick(shouldShowSendIcon ? undefined : questions[currentIndex])}
-      variant="default"
+      variant={shouldShowSendIcon ? 'default' : 'outline_primary'}
       className={`justify-start rounded-[108px] ${shouldShowSendIcon ? 'px-1.5' : ''}`}
       style={buttonStyles}
       hasWipers={!shouldShowSendIcon}
@@ -84,7 +84,7 @@ export const RotatingQuestionButton = ({
               transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
               className="flex items-center justify-center"
             >
-              <LucideIcon name="send-horizontal" className="size-4" />
+              <LucideIcon name="send-horizontal" className="ml-0.5 size-4" />
             </motion.div>
           ) : (
             isVisible && (

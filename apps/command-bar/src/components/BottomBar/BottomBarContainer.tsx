@@ -22,6 +22,7 @@ interface BottomBarContainerProps {
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
   actionButtonSize?: number;
   isDynamicConfigLoading?: boolean;
+  isDynamicConfigStarted?: boolean;
   onSwitchToDefault?: (
     moduleType: CommandBarModuleType,
     eventData?: { message?: string; eventType?: keyof typeof MessageEventType },
@@ -33,10 +34,10 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   setActiveFeature,
   actionButtonSize = 56,
   isDynamicConfigLoading = false,
+  isDynamicConfigStarted = false,
   onSwitchToDefault,
 }) => {
   const { config, isConfigLoading } = useCommandBarStore();
-  const primaryPlaceholder = config.body?.bottom_bar_config?.primary_placeholder;
   const suggestedQuestions = config.body?.welcome_message?.suggested_questions ?? [];
 
   const { trackEvent } = useCommandBarAnalytics();
@@ -53,12 +54,15 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
       setActiveFeature,
       onSwitchToDefault || (() => {}),
       trackEvent,
+      isDynamicConfigLoading,
+      isDynamicConfigStarted,
     );
 
   const { containerAnimation, containerTransition } = useBottomBarAnimation(
     isModulesReady,
     isMobile,
     isAnimatingToCorner,
+    isDynamicConfigLoading,
   );
 
   return (
@@ -67,9 +71,10 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
       layout={false}
       transition={containerTransition}
       className={cn(
-        'fixed bottom-4 right-1/2 z-command-bar transform',
+        'command-bar-positioned fixed bottom-[var(--breakout-command-bar-bottom)] right-1/2 z-command-bar transform',
         'bg-white/95 shadow-lg backdrop-blur-sm',
         'flex items-center overflow-hidden',
+        'w-fit',
       )}
       style={{
         padding: isAnimatingToCorner ? '0px' : isModulesReady ? `${BOTTOM_BAR_ANIMATIONS.LAYOUT.BAR_PADDING}px` : 0,
@@ -77,20 +82,21 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
       }}
     >
       <motion.div
-        className={`absolute left-0 top-0 -z-10 h-full w-full rounded-[40px] transition-all ${
+        className={`absolute left-0 top-0 -z-10 h-full w-full rounded-[40px] ${
           isModulesReady
             ? 'bg-gradient-to-b from-primary via-transparent to-transparent'
-            : 'bg-gradient-to-b from-gray-100 via-transparent to-transparent'
+            : 'bg-gradient-to-b from-gray-300 via-transparent to-transparent'
         }`}
         animate={{
-          rotate: !isModulesReady ? 360 : 0,
+          rotate: !isModulesReady || (isDynamicConfigStarted && isDynamicConfigLoading) ? [0, 360] : 0,
         }}
         transition={
-          !isModulesReady
+          !isModulesReady || (isDynamicConfigStarted && isDynamicConfigLoading)
             ? {
-                duration: 0.6,
+                duration: 0.8,
                 repeat: Infinity,
                 ease: 'linear',
+                repeatType: 'loop',
               }
             : {
                 duration: 0,
@@ -109,7 +115,6 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
         suggestedQuestions={suggestedQuestions}
         onModuleClick={handleModuleClick}
         onInputSubmit={handleInputSubmit}
-        primaryPlaceholder={primaryPlaceholder ?? 'See why top companies choose us? 🏅'}
       />
     </motion.div>
   );

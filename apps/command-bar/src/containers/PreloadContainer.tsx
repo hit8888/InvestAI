@@ -21,7 +21,8 @@ interface PreloadContainerProps {
 }
 
 const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initialSettings }) => {
-  const { config, setConfig, setSettings, setCompleteConfigLoaded } = useCommandBarStore();
+  const { config, setConfig, setSettings, setCompleteConfigLoaded, setDynamicConfigLoading, setDynamicConfigStarted } =
+    useCommandBarStore();
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
   const { dynamic_config_start_delay_ms = 5000 } = config.command_bar ?? {};
 
@@ -109,6 +110,18 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.PAGE_LOAD);
     }
   }, [initialiseCommandBar, staticConfigQuery.data, trackEvent]);
+
+  // Track when dynamic config query starts
+  useEffect(() => {
+    if (dynamicConfigEnabled && dynamicConfigQuery.isLoading) {
+      setDynamicConfigStarted(true);
+    }
+  }, [dynamicConfigEnabled, dynamicConfigQuery.isLoading, setDynamicConfigStarted]);
+
+  // Track dynamic config loading state
+  useEffect(() => {
+    setDynamicConfigLoading(dynamicConfigQuery.isLoading);
+  }, [dynamicConfigQuery.isLoading, setDynamicConfigLoading]);
 
   // Initialise command bar after dynamic config is available (prospect id already exists)
   useEffect(() => {
