@@ -1,6 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import * as Sentry from '@sentry/react';
 
 import { defaultQueryClient } from '@meaku/core/queries/defaultQueryClient';
 import SettingsContainer, { SettingsContainerProps } from './SettingsContainer';
@@ -8,7 +7,7 @@ import PreloadContainer from './PreloadContainer';
 import CommandBarAnalyticsProvider from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
 import DeviceManagerProvider from '@meaku/core/contexts/DeviceManagerProvider';
-import { ENV } from '@meaku/core/types/env';
+import SentryErrorBoundary from './SentryErrorBoundary';
 
 interface RootContainerProps {
   settings?: SettingsContainerProps;
@@ -18,16 +17,7 @@ interface RootContainerProps {
 
 const RootContainer = ({ settings: propSettings, hostId, children }: RootContainerProps) => {
   return (
-    <Sentry.ErrorBoundary
-      fallback={<></>}
-      beforeCapture={(scope) => {
-        scope.setTag('widget', 'CommandBarWidget');
-        scope.setExtra('environment', ENV.VITE_APP_ENV);
-        if (hostId) {
-          scope.setTag('hostId', hostId);
-        }
-      }}
-    >
+    <SentryErrorBoundary hostId={hostId} tenantId={propSettings?.tenantId}>
       <DeviceManagerProvider>
         <ShadowRootProvider hostId={hostId}>
           <QueryClientProvider client={defaultQueryClient}>
@@ -50,7 +40,7 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
           </QueryClientProvider>
         </ShadowRootProvider>
       </DeviceManagerProvider>
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   );
 };
 

@@ -13,17 +13,21 @@ if (isProduction && dsn) {
     dsn,
     // Override: Disable default integrations that capture global errors
     defaultIntegrations: false,
-    integrations: [Sentry.replayIntegration()],
+    integrations: [
+      Sentry.httpContextIntegration(),
+      Sentry.linkedErrorsIntegration(),
+      Sentry.functionToStringIntegration(),
+      Sentry.breadcrumbsIntegration(),
+      Sentry.inboundFiltersIntegration({
+        denyUrls: COMMON_DENY_URLS,
+        ignoreErrors: COMMON_IGNORE_ERRORS,
+      }),
+      Sentry.replayIntegration(),
+    ],
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 1.0,
     tracePropagationTargets: [ENV.VITE_BASE_API_URL, WEBSOCKET_URL],
     tracesSampleRate: 1.0,
-
-    // Reused from initSentry: Filter out development, extensions, and third-party script URLs
-    denyUrls: [...COMMON_DENY_URLS],
-
-    // Reused from initSentry: Filter out common noisy error messages
-    ignoreErrors: [...COMMON_IGNORE_ERRORS],
 
     // Override: Only capture network breadcrumbs for our API calls
     beforeBreadcrumb(breadcrumb) {
