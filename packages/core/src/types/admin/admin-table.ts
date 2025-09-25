@@ -146,6 +146,7 @@ export type SourceNameValue = {
 export type AccessTypeValue = {
   access_type: string;
   id: string;
+  file_type: string;
 };
 
 export const TableDataSchema = LeadsTableResponseSchema.or(ConversationsTableResponseSchema)

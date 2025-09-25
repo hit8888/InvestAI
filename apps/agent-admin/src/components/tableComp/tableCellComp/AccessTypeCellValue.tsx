@@ -5,9 +5,10 @@ import { useUpdateDocumentAccessType } from '../../../queries/mutation/useDocume
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { AccessTypeValue } from '@meaku/core/types/admin/admin-table';
+import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
 
 const AccessTypeCellValue = ({ value }: { value: AccessTypeValue }) => {
-  const { id, access_type } = value;
+  const { id, access_type, file_type } = value;
   const { mutateAsync: updateAccessType, isPending } = useUpdateDocumentAccessType();
 
   const handleCallback = async (value: string | null) => {
@@ -22,6 +23,7 @@ const AccessTypeCellValue = ({ value }: { value: AccessTypeValue }) => {
       });
       SuccessToastMessage({
         title: 'Document access type updated successfully',
+        position: 'top-center',
       });
     } catch {
       ErrorToastMessage({
@@ -40,9 +42,12 @@ const AccessTypeCellValue = ({ value }: { value: AccessTypeValue }) => {
     return DOCUMENT_ACCESS_TYPE_OPTIONS.find((option) => option.value === access_type.toUpperCase()) || undefined;
   }, [access_type]);
 
+  const isFileTypeCustomDocument = file_type === DATA_SOURCE_TYPE_ENUM.CUSTOM_DOCUMENT;
+
   return (
     <div onClick={handleContainerClick} onMouseDown={handleContainerClick}>
       <AgentDropdown
+        disableTrigger={isFileTypeCustomDocument}
         options={DOCUMENT_ACCESS_TYPE_OPTIONS}
         placeholderLabel="Select Access Type"
         showTooltipContent

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { RotatingQuestionButton } from './RotatingQuestionButton';
+import { useTypewriter } from '@meaku/core/hooks/useTypewriter';
 
 interface BottomBarInputFieldProps {
   value: string;
@@ -7,6 +8,7 @@ interface BottomBarInputFieldProps {
   onSubmit: (questionText?: string) => void;
   suggestedQuestions: string[];
   actionButtonSize: number;
+  primaryPlaceholder: string | string[];
 }
 
 /**
@@ -19,6 +21,7 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
   onSubmit,
   suggestedQuestions,
   actionButtonSize,
+  primaryPlaceholder,
 }) => {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -38,7 +41,7 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
     >
       <input
         type="text"
-        placeholder="See why top companies choose us? 🏅"
+        placeholder={useTypewriter(primaryPlaceholder)}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}

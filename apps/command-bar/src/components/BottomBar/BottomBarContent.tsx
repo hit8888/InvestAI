@@ -22,6 +22,7 @@ interface BottomBarContentProps {
   suggestedQuestions: string[];
   onModuleClick: (config: CommandBarModuleConfigType) => void;
   onInputSubmit: (inputValue: string, questionText: string) => void;
+  primaryPlaceholder: string | string[];
 }
 
 const BottomBarContent: React.FC<BottomBarContentProps> = ({
@@ -35,6 +36,7 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
   suggestedQuestions,
   onModuleClick,
   onInputSubmit,
+  primaryPlaceholder,
 }) => {
   // Local state for input
   const [inputValue, setInputValue] = useState('');
@@ -112,6 +114,7 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
           onSubmit={(questionText) => onInputSubmit(inputValue, questionText || '')}
           suggestedQuestions={suggestedQuestions}
           actionButtonSize={actionButtonSize}
+          primaryPlaceholder={primaryPlaceholder}
         />
       </motion.div>
 

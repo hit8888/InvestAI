@@ -10,7 +10,7 @@ import SourceFileIcon from '@breakout/design-system/components/icons/source-file
 import SourceVideoIcon from '@breakout/design-system/components/icons/source-video-icon';
 import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
 import DateUtil from '@meaku/core/utils/dateUtils';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem, DataSourcesAccessorFnType } from '@meaku/core/types/admin/api';
 
 export type CommonEditDrawerSectionProps = {
   id: number;
@@ -76,27 +76,24 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
       accessorKey: key,
       header: columnHeaderLabelMapping[key as keyof typeof columnHeaderLabelMapping],
       ...(key === 'data' && {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        accessorFn: (row: any) => ({
+        accessorFn: (row: DataSourcesAccessorFnType) => ({
           description: row.data || '',
           title: row.title || '',
           labelled_by_name: row.labelled_by_name || '',
         }),
       }),
       ...(key === 'access_type' && {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        accessorFn: (row: any) => ({
+        accessorFn: (row: DataSourcesAccessorFnType) => ({
           access_type: row.access_type || '',
           id: row.id,
+          file_type: row.data_source_type || '',
         }),
       }),
       ...(key === 'duration' && {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        accessorFn: (row: any) => row.asset?.public_url || '',
+        accessorFn: (row: DataSourcesAccessorFnType) => row.asset?.public_url || '',
       }),
       ...(key === 'name' && {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        accessorFn: (row: any) => ({
+        accessorFn: (row: DataSourcesAccessorFnType) => ({
           name: row?.asset?.name || row?.title || '',
           url: row?.asset?.public_url || '',
         }),

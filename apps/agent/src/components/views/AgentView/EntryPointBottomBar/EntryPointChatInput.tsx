@@ -1,6 +1,6 @@
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useTypewriter } from '@breakout/design-system/hooks/useTypewriter';
+import { useTypewriter } from '@meaku/core/hooks/useTypewriter';
 import { useMessageStore } from '../../../../stores/useMessageStore';
 
 interface EntryPointChatInputProps {

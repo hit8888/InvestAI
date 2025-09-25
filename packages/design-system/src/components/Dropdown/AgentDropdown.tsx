@@ -38,6 +38,7 @@ interface DropdownProps {
   applyFontFamily?: boolean;
   allowDeselect?: boolean;
   searchPlaceholder?: string;
+  disableTrigger?: boolean;
 }
 
 // Also Add check for is_required key
@@ -61,6 +62,7 @@ const AgentDropdown = ({
   applyFontFamily = false,
   allowDeselect = true,
   searchPlaceholder,
+  disableTrigger = false,
 }: DropdownProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -132,11 +134,13 @@ const AgentDropdown = ({
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={toggleDropdown}>
       <DropdownMenuTrigger
+        disabled={disableTrigger}
         className={cn(
           `inline-flex h-16 w-full max-w-[800px] cursor-pointer 
           items-center justify-between gap-2 rounded-xl 
           border border-gray-300 bg-white p-6 text-xl 
-          text-customPrimaryText shadow-sm hover:bg-gray-25 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0`,
+          text-customPrimaryText shadow-sm hover:bg-gray-25 focus:outline-none focus-visible:outline-none
+          focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50`,
           {
             'ring-4 ring-primary/20': isDropdownOpen,
             [dropdownOpenClassName || '']: isDropdownOpen,

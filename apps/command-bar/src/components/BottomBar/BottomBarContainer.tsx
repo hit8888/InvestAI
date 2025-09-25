@@ -36,6 +36,9 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   onSwitchToDefault,
 }) => {
   const { config, isConfigLoading } = useCommandBarStore();
+  const primaryPlaceholder = config.body?.bottom_bar_config?.primary_placeholder;
+  const suggestedQuestions = config.body?.welcome_message?.suggested_questions ?? [];
+
   const { trackEvent } = useCommandBarAnalytics();
   const isMobile = useIsMobile();
   const { modules = [] } = config.command_bar ?? {};
@@ -57,9 +60,6 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
     isMobile,
     isAnimatingToCorner,
   );
-
-  // Get suggested questions from config
-  const suggestedQuestions = config?.body?.welcome_message?.suggested_questions || [];
 
   return (
     <motion.div
@@ -109,6 +109,7 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
         suggestedQuestions={suggestedQuestions}
         onModuleClick={handleModuleClick}
         onInputSubmit={handleInputSubmit}
+        primaryPlaceholder={primaryPlaceholder ?? 'See why top companies choose us? 🏅'}
       />
     </motion.div>
   );

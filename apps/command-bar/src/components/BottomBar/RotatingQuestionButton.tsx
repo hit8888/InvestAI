@@ -56,16 +56,7 @@ export const RotatingQuestionButton = ({
       minWidth: shouldShowSendIcon ? `${SEND_ICON_WIDTH}px` : `${MIN_QUESTION_WIDTH}px`,
       height: `${HEIGHT}px`,
     }),
-    [
-      shouldShowSendIcon,
-      longestQuestion.length,
-      SEND_ICON_WIDTH,
-      BASE_PADDING,
-      CHAR_WIDTH,
-      ICON_PADDING,
-      MIN_QUESTION_WIDTH,
-      HEIGHT,
-    ],
+    [shouldShowSendIcon, longestQuestion.length],
   );
 
   return (

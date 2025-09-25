@@ -14,9 +14,9 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     const title = value?.title || '';
     const showLabel = title.length > 0 && value?.labelled_by_name;
     return (
-      <div className="flex w-full items-center gap-2">
+      <div className="flex w-full items-start gap-2">
         {title.length > 0 && (
-          <Typography variant="label-14-semibold" className="flex-1 break-all">
+          <Typography variant="label-14-semibold" className="flex-1 break-words text-start">
             {title}
           </Typography>
         )}
@@ -42,7 +42,7 @@ const DescriptionCellValue = ({ value }: { value: DescriptionValue }) => {
     <div className="flex w-full flex-col items-start gap-2">
       {renderTitleAndLabel()}
       {value.description && (
-        <div className="w-full text-sm text-gray-900">
+        <div className="w-full text-start text-sm text-gray-900">
           <GithubMarkdownRenderer
             markdown={
               showTrimmed
