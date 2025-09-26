@@ -37,7 +37,6 @@ const baseAgentConfigSchema = z.object({
   }),
   configs: z.object({
     'agent_personalization:style': z.object({
-      intro_message: z.string().optional(),
       primary: z.string(),
       secondary: z.string(),
       orb_config: OrbConfigSchema.optional(),

@@ -82,6 +82,10 @@ export const handleConfigUpdate = async (
       metadata: {
         ...agentConfigs.metadata,
         logo: updateField.metadata?.logo ?? agentConfigs.metadata.logo,
+        welcome_message: {
+          ...agentConfigs.metadata.welcome_message,
+          message: updateField.metadata?.welcome_message?.message ?? agentConfigs.metadata.welcome_message.message,
+        },
       },
       configs: {
         'agent_personalization:style': {

@@ -105,7 +105,7 @@ export const FeatureHeader = ({
       <div className="relative z-10 flex flex-col gap-3">
         <div className="flex items-center justify-between min-h-10">
           <div className="flex items-center gap-2">
-            <div className={`relative ${welcomeMessage ? 'left-3' : 'left-0'}`}>{icon}</div>
+            <div className={`relative ${hasBanner ? 'left-3' : 'left-0'}`}>{icon}</div>
             <div
               className={`transition-all font-medium duration-300 ease-in-out ${
                 welcomeMessage
@@ -139,7 +139,7 @@ export const FeatureHeader = ({
               <Typography variant="heading" fontWeight="medium">
                 {configTitle}
               </Typography>
-              <Typography variant="body" fontWeight="normal" className="text-muted-foreground">
+              <Typography variant="body" fontWeight="normal" className="text-muted-foreground line-clamp-3">
                 {welcomeMessage}
               </Typography>
             </div>

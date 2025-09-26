@@ -4,7 +4,7 @@ import AgentOrbContainer from './AgentOrbContainer';
 import AgentColorsContainer from './AgentColorsContainer';
 import AgentFontStyleContainer from './AgentFontStyleContainer.tsx';
 import AgentLogoAndNameContainer from './AgentLogoAndNameContainer';
-// import AgentIntroMessageContainer from './AgentIntroMessageContainer.tsx';
+import AgentIntroMessageContainer from './AgentIntroMessageContainer.tsx';
 import PageContainer from '../../components/AgentManagement/PageContainer.tsx';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 
@@ -28,7 +28,7 @@ const BrandingPage = () => {
   };
   return (
     <PageContainer isLoading={isLoading} heading={'Branding'} error={hasError}>
-      {/* <AgentIntroMessageContainer {...commonProps} /> */}
+      <AgentIntroMessageContainer {...commonProps} />
       <AgentLogoAndNameContainer {...commonProps} />
       <AgentColorsContainer {...commonProps} />
       <AgentOrbContainer {...commonProps} />

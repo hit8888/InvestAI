@@ -35,7 +35,7 @@ export const AskAIActionConfig: ActionConfig = {
 
     return (
       <Button
-        className="rounded-full"
+        className="relative rounded-full"
         size="icon"
         data-action-id={`action-ASK_AI`}
         onClick={onClick}
