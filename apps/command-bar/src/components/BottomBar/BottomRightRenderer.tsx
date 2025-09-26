@@ -50,12 +50,12 @@ export const BottomRightRenderer = ({
             initial={{
               opacity: 0,
               scale: 0.95,
-              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
             }}
             animate={{
               opacity: 1,
               scale: 1,
-              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
             }}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,

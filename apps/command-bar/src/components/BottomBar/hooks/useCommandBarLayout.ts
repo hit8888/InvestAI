@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef } from 'react';
 import { cn } from '@meaku/saral';
 import { LAYOUT_PREFERENCE_CONFIG } from '@meaku/core/constants/layout-preference';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useLayoutPreference } from '../../../hooks/useLayoutPreference';
 
 export interface CommandBarLayoutConfig {
@@ -20,6 +21,7 @@ export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarL
   const { position = LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT, settings } = config;
   const configPosition = settings.position || position;
   const prevConfigPosition = useRef<string | null>(null);
+  const isMobile = useIsMobile();
 
   const { clearPreference, determineFinalLayout } = useLayoutPreference();
 
@@ -31,8 +33,10 @@ export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarL
     prevConfigPosition.current = configPosition;
   }, [configPosition, clearPreference]);
 
-  // Use layout preference logic to determine final position
-  const finalPosition = determineFinalLayout(configPosition);
+  // On mobile, always use bottom_right layout regardless of backend configuration
+  // Bottom bar takes too much screen real estate on mobile devices
+  // See COMMAND_BAR_ANIMATIONS.LAYOUT.MOBILE_FORCE_BOTTOM_RIGHT for configuration
+  const finalPosition = isMobile ? LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT : determineFinalLayout(configPosition);
 
   const containerClasses = useMemo(() => {
     return cn(

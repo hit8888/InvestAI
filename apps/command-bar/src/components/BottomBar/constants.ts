@@ -100,11 +100,20 @@ export const INPUT_FIELD = {
 // Animation constants for CommandBarRenderer
 export const COMMAND_BAR_ANIMATIONS = {
   NUDGE: {
+    Y_OFFSET: -98,
+    // Breakpoint below which nudge needs to move up to avoid overlap with bottom bar
+    OVERLAP_BREAKPOINT: 1618,
     initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
     transition: {
       duration: 0.4,
     },
+  },
+  // Layout behavior constants
+  LAYOUT: {
+    // On mobile devices, always use bottom_right layout regardless of backend configuration
+    // Bottom bar takes too much screen real estate on mobile devices
+    MOBILE_FORCE_BOTTOM_RIGHT: true,
   },
   DEFAULT_BAR_ENTRY: {
     width: {

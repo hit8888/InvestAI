@@ -36,6 +36,8 @@ export const useBottomBarState = (
 
   // Single phase: Wait for dynamic API to complete before starting animation
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
     // Only proceed when:
     // 1. Static API is loaded AND
     // 2. Dynamic config has started AND
@@ -44,11 +46,17 @@ export const useBottomBarState = (
       // Start the bounce animation immediately
       setIsModulesReady(true);
 
-      // Start width expansion after 1 second delay
-      setTimeout(() => {
+      // Start width expansion after a delay
+      timeoutId = setTimeout(() => {
         setIsWidthExpanded(true);
-      }, 1000);
+      }, ANIMATION_TIMINGS.DELAYS.MIN_PHASE_1_DURATION);
     }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [isConfigLoading, modules.length, isDynamicConfigLoading, isDynamicConfigStarted]);
 
   // Filter available modules based on device type

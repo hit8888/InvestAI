@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { cn } from '@meaku/saral';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import { BottomCenterBar } from './';
 import CommandBarActions from '../CommandBarActions';
 import FeatureContentContainer from '../FeatureContentContainer';
@@ -37,11 +38,15 @@ export const BottomCenterRenderer = ({
   const { hasInteracted, shouldUnmountBottomBar, shouldShowDefaultBar, isDefaultBarReady, skipInitialTooltips } =
     transitionState;
 
+  // Get screen width for responsive nudge positioning
+  const { screenWidth } = useScreenSize();
+
   // Check if bottom bar is currently rendered
   const isBottomBarRendered = !shouldUnmountBottomBar && isDynamicConfigStarted && !isDynamicConfigLoading;
 
-  // Simple boolean-based positioning: move nudge up when bottom bar is rendered
-  const shouldMoveNudgeUp = isBottomBarRendered;
+  // Move nudge up only when bottom bar is rendered AND device width is below breakpoint
+  // Above the breakpoint, there's enough space to avoid overlap without offset
+  const shouldMoveNudgeUp = isBottomBarRendered && screenWidth < COMMAND_BAR_ANIMATIONS.NUDGE.OVERLAP_BREAKPOINT;
 
   const { handleSwitchToDefault, handleDefaultBarAnimationComplete } = transitionActions;
 
@@ -71,12 +76,12 @@ export const BottomCenterRenderer = ({
             initial={{
               opacity: 0,
               scale: 0.95,
-              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
             }}
             animate={{
               opacity: 1,
               scale: 1,
-              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
             }}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,
