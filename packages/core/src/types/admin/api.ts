@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Asset, AssetSchema } from '../common';
+import { AssetSchema } from '../common';
 import { WebSocketMessageSchema } from '../webSocketData';
 import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
 import { BrowsedUrlSchema, BuyerIntent } from '../common';
@@ -273,6 +273,12 @@ export const ProspectDetailsSchema = z.object({
   enriched_info: z.record(z.string(), z.string().optional().nullable()).optional().nullable(),
 });
 
+export const AtsInformationSchema = z.object({
+  ats_used: z.string().optional().nullable(),
+  ats_website_link: z.string().optional().nullable(),
+  num_open_jobs: z.number().optional().nullable(),
+});
+
 export const CompanyDetailsSchema = z.object({
   id: z.number().nullable().optional(),
   keywords: z.string().nullable().optional(),
@@ -292,6 +298,7 @@ export const CompanyDetailsSchema = z.object({
   enrichment_source: EnrichmentSourceEnum.optional().nullable(),
   enrichment_provider: z.string().nullable().optional(),
   operating_countries: z.array(z.string()).optional(),
+  ats_information: AtsInformationSchema.optional().nullable(),
 });
 
 export const SdrAssignmentUserSchema = z.object({
@@ -507,17 +514,6 @@ export const DataSourceAssetItemSchema = AssetSchema.extend({
   access_type: z.string().optional().nullable(),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
-
-export type DataSourcesAccessorFnType = {
-  access_type: string;
-  id: string;
-  file_type: string;
-  data: string;
-  title: string;
-  labelled_by_name: string;
-  data_source_type: string;
-  asset: Asset;
-};
 
 export const WebpagesScreenshotsResponseSchema = z.object({
   available_screenshot_webpages: z.array(

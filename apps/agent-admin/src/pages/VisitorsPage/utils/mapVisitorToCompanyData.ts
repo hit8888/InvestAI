@@ -42,6 +42,9 @@ export const mapSessionDetailToCompanyData = (sessionData: SessionDetailsDataRes
     hqLocation: prospect.company_demographics?.company_country || '',
     revenue: prospect.company_demographics?.company_revenue || '',
     employees: prospect.company_demographics?.employee_count || '',
+    atsUsed: prospect.company_demographics?.ats_information?.ats_used || '',
+    atsWebsiteUrl: prospect.company_demographics?.ats_information?.ats_website_link || '',
+    numOpenJobs: prospect.company_demographics?.ats_information?.num_open_jobs || 0,
     prospect: {
       prospect_id: prospect.prospect_id || '',
       session_id: prospect.session_id || '',

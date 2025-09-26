@@ -24,7 +24,9 @@ export type CompanyData = {
   revenue: string;
   employees: string;
   visits?: number;
-  ats?: string;
+  atsUsed?: string;
+  atsWebsiteUrl?: string;
+  numOpenJobs?: number;
   prospect: Employee;
   browsingHistorySummary?: string;
   conversationSummary?: string;

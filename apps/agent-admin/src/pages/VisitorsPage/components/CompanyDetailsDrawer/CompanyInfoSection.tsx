@@ -14,7 +14,13 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
     return null;
   }
 
-  const showInfoChips = companyData.hqLocation || companyData.revenue || companyData.employees;
+  const showInfoChips =
+    companyData.hqLocation ||
+    companyData.revenue ||
+    companyData.employees ||
+    companyData.atsUsed ||
+    companyData.atsWebsiteUrl ||
+    companyData.numOpenJobs;
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4">
@@ -50,6 +56,13 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
           {/* <InfoChip label="Relevance" value={companyData.relevance} /> */}
           <InfoChip label="Revenue" value={NumberUtil.formatCurrencyWithDenominaton(companyData.revenue)} />
           <InfoChip label="Employees" value={NumberUtil.formatNumber(companyData.employees)} />
+          {companyData.atsUsed && <InfoChip label="ATS" value={companyData.atsUsed} />}
+          {companyData.atsWebsiteUrl && (
+            <InfoChip label="ATS Website" value={companyData.atsWebsiteUrl} isLink={true} />
+          )}
+          {companyData.numOpenJobs !== undefined && companyData.numOpenJobs !== null && (
+            <InfoChip label="Num Open Jobs" value={NumberUtil.formatNumber(companyData.numOpenJobs)} />
+          )}
           {/* <InfoChip label="Visits" value={companyData.visits.toString()} /> */}
           {/* <InfoChip label="ATS" value={companyData.ats} /> */}
         </div>
