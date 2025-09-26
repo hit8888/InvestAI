@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AssetSchema } from '../common';
+import { Asset, AssetSchema } from '../common';
 import { WebSocketMessageSchema } from '../webSocketData';
 import { FeedbackRequestPayloadSchema } from '../api/feedback_request';
 import { BrowsedUrlSchema, BuyerIntent } from '../common';
@@ -514,6 +514,17 @@ export const DataSourceAssetItemSchema = AssetSchema.extend({
   access_type: z.string().optional().nullable(),
 });
 export type DataSourceItem = z.infer<typeof DataSourceAssetItemSchema>;
+
+export type DataSourcesAccessorFnType = {
+  access_type: string;
+  id: string;
+  file_type: string;
+  data: string;
+  title: string;
+  labelled_by_name: string;
+  data_source_type: string;
+  asset: Asset;
+};
 
 export const WebpagesScreenshotsResponseSchema = z.object({
   available_screenshot_webpages: z.array(
