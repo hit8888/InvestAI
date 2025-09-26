@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { RotatingQuestionButton } from './RotatingQuestionButton';
 import { INPUT_FIELD } from './constants';
+import { LucideIcon } from '@meaku/saral';
 
 interface BottomBarInputFieldProps {
   value: string;
@@ -37,13 +38,14 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
       }}
       className="flex w-full items-center gap-2 overflow-hidden rounded-[40px] bg-card pr-2"
     >
+      <LucideIcon name="sparkles" className="ml-3 size-4" />
       <input
         type="text"
         placeholder={INPUT_FIELD.DEFAULT_PLACEHOLDER}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="h-full flex-1 rounded-[40px] bg-transparent px-3 text-xs text-foreground focus:border-transparent focus:outline-none focus:ring-0"
+        className="h-full flex-1 rounded-[40px] bg-transparent text-xs text-foreground focus:border-transparent focus:outline-none focus:ring-0"
       />
       <RotatingQuestionButton
         questions={suggestedQuestions}

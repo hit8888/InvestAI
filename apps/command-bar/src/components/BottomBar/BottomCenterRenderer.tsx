@@ -37,12 +37,18 @@ export const BottomCenterRenderer = ({
   const { hasInteracted, shouldUnmountBottomBar, shouldShowDefaultBar, isDefaultBarReady, skipInitialTooltips } =
     transitionState;
 
+  // Check if bottom bar is currently rendered
+  const isBottomBarRendered = !shouldUnmountBottomBar && isDynamicConfigStarted && !isDynamicConfigLoading;
+
+  // Simple boolean-based positioning: move nudge up when bottom bar is rendered
+  const shouldMoveNudgeUp = isBottomBarRendered;
+
   const { handleSwitchToDefault, handleDefaultBarAnimationComplete } = transitionActions;
 
   return (
     <>
-      {/* Bottom center bar - only shown if not unmounted yet */}
-      {!shouldUnmountBottomBar && (
+      {/* Bottom center bar - only shown if not unmounted yet AND dynamic API is ready */}
+      {!shouldUnmountBottomBar && isDynamicConfigStarted && !isDynamicConfigLoading && (
         <BottomCenterBar
           activeFeature={activeFeatureModuleType}
           setActiveFeature={setActiveFeature}
@@ -58,11 +64,20 @@ export const BottomCenterRenderer = ({
         key="root-content"
         className="command-bar-positioned fixed bottom-[var(--breakout-command-bar-bottom)] right-[var(--breakout-command-bar-right)] z-command-bar flex items-end gap-4"
       >
-        {/* Nudges always appear on the right bottom */}
+        {/* Nudges positioned based on bottom bar render state */}
         {nudgeEnabled && (
           <motion.div
             key="nudge-center"
-            {...COMMAND_BAR_ANIMATIONS.NUDGE}
+            initial={{
+              opacity: 0,
+              scale: 0.95,
+              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+            }}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,
               ...COMMAND_BAR_ANIMATIONS.NUDGE.transition,

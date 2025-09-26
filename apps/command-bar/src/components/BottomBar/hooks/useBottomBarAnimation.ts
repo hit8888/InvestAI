@@ -11,11 +11,11 @@ export const useBottomBarAnimation = (
   isMobile: boolean,
   isAnimatingToCorner: boolean,
   isDynamicConfigLoading: boolean = false,
+  isWidthExpanded: boolean = false,
 ) => {
   const containerAnimation = useMemo(() => {
-    // Phase 1: Static API ready, show circular button with rotating border
-    // Phase 2: Dynamic API ready AND modules loaded, expand to show all content
-    const isExpanded = !isDynamicConfigLoading && isModulesReady; // Enable Phase 2 when both conditions are met
+    // Single phase: Direct entry to expanded state when dynamic API is ready
+    const isExpanded = isWidthExpanded; // Use width expansion state
 
     const width = isAnimatingToCorner
       ? '56px'
@@ -39,7 +39,7 @@ export const useBottomBarAnimation = (
           ? `${BOTTOM_BAR_ANIMATIONS.LAYOUT.FINAL_HEIGHT}px`
           : BOTTOM_BAR_ANIMATIONS.LAYOUT.BAR_SIZE,
         borderRadius: '40px',
-        y: isAnimatingToCorner ? '0px' : '0px', // Phase 1: bounce to 0px, Phase 2: no y movement
+        y: '0px', // Always bounce to center
         x: '50%', // Always stay at center
         transform: isAnimatingToCorner
           ? 'translateX(calc(50vw - var(--breakout-command-bar-right)))'
@@ -48,7 +48,7 @@ export const useBottomBarAnimation = (
       transition: {
         width: {
           duration: ANIMATION_TIMINGS.DURATIONS.BOTTOM_BAR_WIDTH,
-          delay: isExpanded ? ANIMATION_TIMINGS.DELAYS.BOTTOM_BAR_WIDTH_EXPANSION : 0,
+          delay: 0, // No delay needed since we control it with state
           ease: ANIMATION_TIMINGS.EASING.EASE_OUT,
         },
         height: {
@@ -78,7 +78,7 @@ export const useBottomBarAnimation = (
         },
       },
     };
-  }, [isModulesReady, isAnimatingToCorner, isMobile, isDynamicConfigLoading]);
+  }, [isModulesReady, isAnimatingToCorner, isMobile, isDynamicConfigLoading, isWidthExpanded]);
 
   const containerTransition = useMemo(() => {
     if (isAnimatingToCorner) {

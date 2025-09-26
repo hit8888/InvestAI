@@ -45,24 +45,32 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   const { modules = [] } = config.command_bar ?? {};
 
   // Consolidated state management
-  const { isModulesReady, askAiModule, otherModules, isAnimatingToCorner, handleModuleClick, handleInputSubmit } =
-    useBottomBarState(
-      modules,
-      isConfigLoading,
-      isMobile,
-      activeFeature,
-      setActiveFeature,
-      onSwitchToDefault || (() => {}),
-      trackEvent,
-      isDynamicConfigLoading,
-      isDynamicConfigStarted,
-    );
+  const {
+    isModulesReady,
+    isWidthExpanded,
+    askAiModule,
+    otherModules,
+    isAnimatingToCorner,
+    handleModuleClick,
+    handleInputSubmit,
+  } = useBottomBarState(
+    modules,
+    isConfigLoading,
+    isMobile,
+    activeFeature,
+    setActiveFeature,
+    onSwitchToDefault || (() => {}),
+    trackEvent,
+    isDynamicConfigLoading,
+    isDynamicConfigStarted,
+  );
 
   const { containerAnimation, containerTransition } = useBottomBarAnimation(
     isModulesReady,
     isMobile,
     isAnimatingToCorner,
     isDynamicConfigLoading,
+    isWidthExpanded,
   );
 
   return (
@@ -88,10 +96,10 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
             : 'bg-gradient-to-b from-gray-300 via-transparent to-transparent'
         }`}
         animate={{
-          rotate: !isModulesReady || (isDynamicConfigStarted && isDynamicConfigLoading) ? [0, 360] : 0,
+          rotate: isModulesReady && !isWidthExpanded ? [0, 360] : 0,
         }}
         transition={
-          !isModulesReady || (isDynamicConfigStarted && isDynamicConfigLoading)
+          isModulesReady && !isWidthExpanded
             ? {
                 duration: 0.8,
                 repeat: Infinity,

@@ -31,6 +31,9 @@ export const BottomRightRenderer = ({
   onExpand,
 }: BottomRightRendererProps) => {
   const { isDefaultBarReady, skipInitialTooltips } = transitionState;
+
+  // For right renderer, we don't have bottom bar, so nudge stays in normal position
+  const shouldMoveNudgeUp = false;
   const { handleDefaultBarAnimationComplete } = transitionActions;
 
   return (
@@ -40,11 +43,20 @@ export const BottomRightRenderer = ({
       onAnimationComplete={handleDefaultBarAnimationComplete}
     >
       <div key="root-content" className="flex items-end gap-4">
-        {/* Nudges always appear on the right bottom */}
+        {/* Nudges positioned based on bottom bar render state */}
         {nudgeEnabled && (
           <motion.div
             key="nudge-right"
-            {...COMMAND_BAR_ANIMATIONS.NUDGE}
+            initial={{
+              opacity: 0,
+              scale: 0.95,
+              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: shouldMoveNudgeUp ? -98 : 0, // Simple boolean positioning
+            }}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,
               ...COMMAND_BAR_ANIMATIONS.NUDGE.transition,
