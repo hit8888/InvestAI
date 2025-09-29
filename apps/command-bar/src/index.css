@@ -40,25 +40,25 @@
     --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
     --breakout: 243.2 68.18% 56.86%; /* #4E46DC */
 
-    /* 
+    /*
      * Command Bar Position Control Variables
      * =====================================
-     * 
+     *
      * These CSS variables provide centralized control over the command bar positioning
      * throughout the application. They affect multiple components and animations.
-     * 
+     *
      * Usage:
      * - Override these variables in your application's CSS to customize positioning
      * - All components automatically respect these values
      * - Default values are defined below (16px)
-     * 
+     *
      * Components affected:
      * 1. Command bar actions (bottom-right position)
      * 2. Bottom center bar (exit animation target)
      * 3. Feature modules (desktop positioning)
      * 4. Bottom bar container (initial positioning)
      * 5. Module positioning calculations
-     * 
+     *
      * Example customization:
      * :root {
      *   --breakout-command-bar-bottom: 20px;
@@ -110,6 +110,12 @@
 
   :host {
     @apply bg-background font-sans text-foreground;
+  }
+
+  /* Prevent scroll propagation to underlying webpage */
+  :host *,
+  #root * {
+    overscroll-behavior: contain;
   }
 
   /* Anti-aliasing for all text elements */

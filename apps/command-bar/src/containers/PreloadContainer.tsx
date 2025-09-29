@@ -2,14 +2,14 @@ import { type FC, type ReactNode, useCallback, useEffect, useMemo } from 'react'
 import { nanoid } from 'nanoid';
 
 import type { CommandBarSettings } from '@meaku/core/types/common';
-import { getLocalStorageData, setLocalStorageData, setActiveTenantData } from '@meaku/core/utils/storage-utils';
-import { setTenantHeader } from '@meaku/core/http/client';
+import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import useStaticConfigDataQuery from '@meaku/shared/network/http/queries/useStaticConfigDataQuery';
 import { useCommandBarStore } from '@meaku/shared/stores';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import useStyleConfig from '../hooks/useStyleConfig';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
+import { useActiveTenantInit } from '../hooks/useActiveTenantInit';
 import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
 import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
@@ -21,6 +21,12 @@ interface PreloadContainerProps {
 }
 
 const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initialSettings }) => {
+  // Initialize active tenant context before any other operations
+  useActiveTenantInit({
+    tenantId: initialSettings.tenant_id,
+    agentId: initialSettings.agent_id,
+  });
+
   const { config, setConfig, setSettings, setCompleteConfigLoaded, setDynamicConfigLoading, setDynamicConfigStarted } =
     useCommandBarStore();
   const { trackEvent, updateCommonProperties } = useCommandBarAnalytics();
@@ -29,13 +35,6 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   const storageValues = useMemo(() => getLocalStorageData(), []);
 
   const dynamicConfigEnabled = useDelayedEnable(storageValues?.prospectId ? 0 : dynamic_config_start_delay_ms);
-
-  useEffect(() => {
-    if (initialSettings.tenant_id && initialSettings.agent_id) {
-      setTenantHeader(initialSettings.tenant_id);
-      setActiveTenantData(initialSettings.tenant_id, initialSettings.agent_id);
-    }
-  }, [initialSettings.tenant_id, initialSettings.agent_id]);
 
   const staticConfigQuery = useStaticConfigDataQuery(
     {

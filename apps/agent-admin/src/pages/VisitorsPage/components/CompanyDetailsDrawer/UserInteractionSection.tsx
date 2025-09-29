@@ -15,7 +15,7 @@ const UserInteractionSection = ({ conversationSummary, onViewConversationDetails
       </Typography>
       <div className="w-full rounded-2xl border border-gray-200 bg-gray-25 p-4">
         <div className="flex flex-col gap-4 rounded-2xl">
-          <div className="flex flex-col gap-2 overflow-hidden bg-white">
+          <div className="flex flex-col gap-2 overflow-hidden">
             <p className={`line-clamp-3 text-sm text-gray-700`}>
               {conversationSummary || 'No conversation summary available for this session'}
             </p>
