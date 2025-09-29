@@ -28,9 +28,9 @@ const SingleAssignRepCell = ({ listValue, handleCurrentRep, sdrNameClassName }: 
   return (
     <div className="flex w-full items-center gap-2" onClick={() => handleCurrentRep?.(listValue)}>
       {profile_picture && profile_picture.length > 0 && (
-        <img src={profile_picture} alt="rep" className="h-6 w-6 rounded-full" />
+        <img src={profile_picture} alt="rep" className="h-5 w-5 rounded-full" />
       )}
-      <div className="flex w-full items-center justify-between gap-4">
+      <div className="flex w-full items-center gap-2">
         <p title={full_name || ''} className={cn('max-w-32 truncate text-sm text-gray-900', sdrNameClassName)}>
           {full_name}
         </p>

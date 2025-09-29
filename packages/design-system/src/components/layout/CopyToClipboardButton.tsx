@@ -13,6 +13,7 @@ type IProps = {
   btnClassName?: string;
   btnVariant?: ButtonVariantTypes;
   getHtml?: () => string | null | undefined;
+  children?: React.ReactNode;
 };
 
 const CopyToClipboardButton = ({
@@ -23,6 +24,7 @@ const CopyToClipboardButton = ({
   btnClassName,
   btnVariant = 'system_tertiary',
   getHtml,
+  children,
 }: IProps) => {
   const defaultHtmlCopy = React.useCallback(async () => {
     const html = getHtml?.();
@@ -60,8 +62,9 @@ const CopyToClipboardButton = ({
       variant={btnVariant}
       className={cn('rounded-md bg-primary-foreground/70 p-0', btnClassName)}
     >
+      {children}
       {isCopied ? (
-        <CheckIcon className="h-5 w-5 text-positive-1000" />
+        <CheckIcon className={cn('h-5 w-5 text-positive-1000', copyIconClassname)} />
       ) : (
         <ClipboardCopyIcon className={cn('h-5 w-5 text-primary ', copyIconClassname)} />
       )}

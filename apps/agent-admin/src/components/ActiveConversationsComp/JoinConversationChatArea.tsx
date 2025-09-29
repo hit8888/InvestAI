@@ -10,7 +10,7 @@ import { useSetArtifactOnNewMessage } from '../../hooks/useSetArtifactOnNewMessa
 import SummaryCard from './SummaryCard';
 import AccountSignalsCard from './AccountSignalsCard';
 import ContactDetailsCard from './ContactDetailsCard';
-import UserActivity from './UserActivity';
+import UserActivity from '../common/UserActivity';
 import LandingPageCard from './LandingPageCard';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';

@@ -72,7 +72,7 @@ const AssignRepValue = ({ listValue, prospectId }: IProps) => {
     });
   };
   return (
-    <div className="flex items-center justify-end gap-4">
+    <div className="flex items-center justify-end gap-2">
       <SingleAssignRepCell listValue={currentRep} />
       <AssignRepPopover handleCurrentRep={handleCurrentRep} isLoading={assignSdrMutation.isPending} />
     </div>

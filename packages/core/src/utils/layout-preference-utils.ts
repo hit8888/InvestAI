@@ -40,10 +40,7 @@ export const setLayoutPreference = (layout: LayoutType): void => {
     expiresAt: Date.now() + LAYOUT_PREFERENCE_CONFIG.EXPIRATION_MS,
   };
 
-  safeLayoutOperation(
-    () => setLocalStorageData({ layoutPreference: preference }),
-    'Error setting layout preference:',
-  );
+  safeLayoutOperation(() => setLocalStorageData({ layoutPreference: preference }), 'Error setting layout preference:');
 };
 
 /**
@@ -72,10 +69,7 @@ export const getLayoutPreference = (): LayoutType | null => {
  * Clear the layout preference
  */
 export const clearLayoutPreference = (): void => {
-  safeLayoutOperation(
-    () => setLocalStorageData({ layoutPreference: undefined }),
-    'Error clearing layout preference:',
-  );
+  safeLayoutOperation(() => setLocalStorageData({ layoutPreference: undefined }), 'Error clearing layout preference:');
 };
 
 /**
@@ -93,8 +87,8 @@ export const determineLayout = (configLayout: string): LayoutType => {
   }
 
   // Fall back to config
-  return configLayout === LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT 
-    ? LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT 
+  return configLayout === LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT
+    ? LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT
     : LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT;
 };
 
@@ -102,12 +96,14 @@ export const determineLayout = (configLayout: string): LayoutType => {
  * Check if layout preference is active (not expired)
  */
 export const isLayoutPreferenceActive = (): boolean => {
-  return safeLayoutOperation(() => {
-    const data = getLocalStorageData();
-    const preference = data?.layoutPreference;
+  return (
+    safeLayoutOperation(() => {
+      const data = getLocalStorageData();
+      const preference = data?.layoutPreference;
 
-    if (!preference) return false;
+      if (!preference) return false;
 
-    return Date.now() <= preference.expiresAt;
-  }, 'Error checking layout preference status:') ?? false;
+      return Date.now() <= preference.expiresAt;
+    }, 'Error checking layout preference status:') ?? false
+  );
 };

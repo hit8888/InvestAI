@@ -162,7 +162,7 @@ const ArtifactPreview = ({
   ) : (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{showArtifactPreviewButtonDisplay()}</DialogTrigger>
-      <DialogContent className="bg-white sm:min-w-[70vw]">
+      <DialogContent className="z-[1001] bg-white sm:min-w-[70vw]">
         {title && <DialogTitle className="text-lg font-semibold text-primary">{title}</DialogTitle>}
         {isDialogOpen ? <div className="h-full w-full rounded-lg">{getDialogContent()}</div> : null}
       </DialogContent>

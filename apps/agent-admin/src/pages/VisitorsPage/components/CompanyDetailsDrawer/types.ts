@@ -1,3 +1,6 @@
+import { BrowsedUrl } from '@meaku/core/types/common';
+import { SdrAssignment } from '@meaku/core/types/admin/api';
+
 export type Employee = {
   icp_id?: number;
   prospect_id?: string;
@@ -13,6 +16,10 @@ export type Employee = {
     city?: string;
     country?: string;
   };
+  intent?: string;
+  ipAddress?: string;
+  browsing_history?: BrowsedUrl[];
+  sdr_assignment?: SdrAssignment;
 };
 
 export type CompanyData = {
@@ -26,7 +33,7 @@ export type CompanyData = {
   visits?: number;
   atsUsed?: string;
   atsWebsiteUrl?: string;
-  numOpenJobs?: number;
+  numOpenJobs?: number | null;
   prospect: Employee;
   browsingHistorySummary?: string;
   conversationSummary?: string;

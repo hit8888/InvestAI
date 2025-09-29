@@ -3,8 +3,6 @@ import { getIcps } from '@meaku/core/adminHttp/api';
 import { IcpsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
 import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
-import toast from 'react-hot-toast';
-import { AxiosError } from 'axios';
 
 const getIcpsKey = (tenantName: string, companyName?: string | null, domain?: string | null): unknown[] => [
   'icps-data',
@@ -30,21 +28,12 @@ const useIcpsQuery = (payload: IcpsQueryPayload = {}, options: IcpsQueryOptions 
   const icpsQuery = useQuery({
     queryKey: getIcpsKey(tenantName, companyName, domain),
     queryFn: async () => {
-      try {
-        if (!companyName && !domain) {
-          throw new Error('Company name or domain is required');
-        }
-
-        const response = await getIcps({ company_name: companyName, domain: domain });
-        return response.data;
-      } catch (error) {
-        let errorMessage = '';
-        if (error instanceof AxiosError) {
-          errorMessage = error.response?.data?.error ?? 'Error fetching ICPs';
-        }
-        toast.error(errorMessage);
-        throw error;
+      if (!companyName && !domain) {
+        throw new Error('Company name or domain is required');
       }
+
+      const response = await getIcps({ company_name: companyName, domain: domain });
+      return response.data;
     },
     enabled: !!companyName,
     ...options,

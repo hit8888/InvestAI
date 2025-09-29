@@ -53,8 +53,8 @@ const AssignRepPopover = ({ handleCurrentRep, isLoading = false }: AssignRepPopo
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="text-popover-foreground relative z-50 flex h-48 w-48 flex-1 flex-col overflow-auto rounded-lg border bg-primary-foreground/60 py-2 shadow-md outline-none backdrop-blur-lg"
-        align="start"
+        className="text-popover-foreground relative z-[1001] flex h-48 w-48 flex-1 flex-col overflow-auto rounded-lg border bg-primary-foreground/60 py-2 shadow-md outline-none backdrop-blur-lg"
+        align="end"
         side="bottom"
         sideOffset={10}
         alignOffset={10}

@@ -1,19 +1,25 @@
 import { useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
 import LoadingContent from './LoadingContent';
 import type { Employee } from './types';
 import useSessionDetailsQuery from '../../../../queries/query/useSessionDetailsQuery';
-import { BrowsingConversationSummary, CompanyInfoSection } from '.';
-import IcpSection from './IcpSection';
+import UserInteractionSection from './UserInteractionSection';
+import CompanyDetailsSection from './CompanyDetailsSection';
+import UserDetailsSection from './UserDetailsSection';
 import useIcpsQuery from '../../../../queries/query/useIcpsQuery';
 import useReachoutEmailQuery from '../../../../queries/query/useReachoutEmailQuery';
-import GeneratedEmailCard from './GeneratedEmailCard';
+import GeneratedEmailContent from './GeneratedEmailContent';
 import useIcpDetailsQuery from '../../../../queries/query/useIcpDetailsQuery';
-import { cn } from '@breakout/design-system/lib/cn';
 import { mapSessionDetailToCompanyData } from '../../utils/mapVisitorToCompanyData';
+import RelevantProfilesSection from './RelevantProfilesSection';
+import LeftSideContentContainer from './LeftSideContentContainer';
+import RelevantProfilesContent from './RelevantProfilesContent';
+import BrowsingHistoryContent from './BrowsingHistoryContent';
+import ConversationDetailsContent from './ConversationDetailsContent';
+import { normalizeSessionToConversationData } from '../../../../utils/common';
+import ConversationDetailsDataResponseManager from '../../../../managers/ConversationDetailsDataManager';
 
 type CompanyDetailsDrawerProps = {
   open: boolean;
@@ -21,28 +27,44 @@ type CompanyDetailsDrawerProps = {
   prospectId: string;
 };
 
+type LeftSideContentMode = 'generated-email' | 'conversation-details' | 'relevant-profiles' | 'browsing-history' | null;
+
+const LeftSideContentModeLabels = {
+  'generated-email': 'Generated Email',
+  'conversation-details': 'Conversation Details',
+  'relevant-profiles': 'Relevant Profiles',
+  'browsing-history': 'Browsing History',
+};
+
 const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawerProps) => {
-  const navigate = useNavigate();
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
 
-  const { data, isLoading } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId });
+  const { data: sessionData, isLoading } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId });
 
   const companyData = useMemo(() => {
-    return data ? mapSessionDetailToCompanyData(data) : null;
-  }, [data]);
+    return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;
+  }, [sessionData]);
+  const browsingHistory = companyData?.prospect?.browsing_history || [];
 
   const {
     data: icpList,
     isLoading: isIcpListLoading,
     refetch: fetchIcpList,
+    isError: isIcpListError,
+    isSuccess: isIcpListSuccess,
   } = useIcpsQuery({ companyName: companyData?.name, domain: companyData?.website }, { enabled: false, retry: false });
   const {
     data: icpDetails,
     isLoading: isIcpDetailsLoading,
     refetch: fetchIcpDetails,
   } = useIcpDetailsQuery({ icpId: selectedEmployee?.icp_id }, { enabled: false, retry: false });
-  const { data: emailData, isLoading: emailDataLoading } = useReachoutEmailQuery(
+  const {
+    data: reachoutEmailData,
+    isLoading: isReachoutEmailLoading,
+    isSuccess: isReachoutEmailSuccess,
+  } = useReachoutEmailQuery(
     {
       email_type: selectedEmployee?.icp_id ? 'prospective_icp' : 'website_user',
       session_id: companyData?.prospect?.session_id || undefined,
@@ -55,65 +77,134 @@ const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawe
     },
   );
 
-  const icps: Employee[] =
-    icpList?.contacts?.map?.((icp) => ({
-      icp_id: icp.id,
-      name: icp.name,
-      title: icp.title,
-      avatar: icp.profile_picture_url,
-    })) || [];
-  const completedCompanyData = companyData
-    ? {
-        ...companyData,
-        conversationSummary: data?.chat_summary ?? '',
-        browsingHistorySummary: data?.prospect?.browsing_analysis_summary ?? '',
-      }
-    : undefined;
+  const icps: Employee[] = useMemo(
+    () =>
+      icpList?.contacts?.map?.((icp) => ({
+        icp_id: icp.id,
+        name: icp.name,
+        title: icp.title,
+        avatar: icp.profile_picture_url,
+        linkedin: icp.linkedin_url,
+        email: icp.id === icpDetails?.contact?.id ? icpDetails?.contact?.email : '',
+      })) || [],
+    [icpList, icpDetails],
+  );
 
-  const handleSeeAllDetails = () => {
-    if (companyData?.prospect?.session_id) {
-      navigate(`${companyData.prospect.session_id}`, {
-        state: { from: 'prospects' },
-      });
+  const showLeftSideContent = useMemo(() => {
+    if (leftSideContentMode === 'generated-email') {
+      return isReachoutEmailSuccess;
+    } else if (leftSideContentMode === 'relevant-profiles') {
+      return isIcpListSuccess;
+    } else if (leftSideContentMode === 'browsing-history') {
+      return true;
+    } else if (leftSideContentMode === 'conversation-details') {
+      return true;
     }
+    return false;
+  }, [isIcpListSuccess, isReachoutEmailSuccess, leftSideContentMode]);
+
+  const formattedConversationData = useMemo(() => {
+    if (!sessionData) {
+      return null;
+    }
+
+    return new ConversationDetailsDataResponseManager(
+      normalizeSessionToConversationData(sessionData),
+    ).getFormattedConversationData();
+  }, [sessionData]);
+
+  const handleViewConversationDetails = () => {
+    setLeftSideContentMode('conversation-details');
   };
 
   const handleCloseDrawer = () => {
     setSelectedEmployee(null);
+    setLeftSideContentMode(null);
     onClose();
+  };
+
+  const handleCloseLeftSideContent = () => {
+    setLeftSideContentMode(null);
+    setSelectedEmployee(null);
+  };
+
+  const handleFetchIcpList = () => {
+    setLeftSideContentMode('relevant-profiles');
+    fetchIcpList();
+  };
+
+  const handleProspectGenerateEmail = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setLeftSideContentMode('generated-email');
+  };
+
+  const handleIcpGenerateEmail = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setLeftSideContentMode('relevant-profiles');
+  };
+
+  const handleIcpShowEmail = () => {
+    setLeftSideContentMode('relevant-profiles');
+    fetchIcpDetails();
+  };
+
+  const handleViewBrowsingHistory = () => {
+    setLeftSideContentMode('browsing-history');
+  };
+
+  const handleIcpCancelEmail = () => {
+    setLeftSideContentMode('relevant-profiles');
+    setSelectedEmployee(null);
   };
 
   return (
     <Drawer open={open} onOpenChange={handleCloseDrawer} direction="right">
       {open && (
         <DrawerContent
-          className="z-[1000] ml-[50%] flex h-screen flex-row justify-end gap-4 rounded-none border-none"
+          className="z-[1001] ml-auto flex h-screen w-1/2 flex-row justify-end gap-4 rounded-none border-none"
           data-vaul-no-drag
         >
           <div className="relative w-full">
-            <div
-              className={cn(
-                'absolute -left-[31vw] bottom-0 mb-4 flex h-3/4 w-[30vw] flex-col gap-3 self-end rounded-2xl bg-white p-4 transition-all duration-500',
-                { 'pointer-events-none opacity-0': !selectedEmployee },
-              )}
+            <LeftSideContentContainer
+              visible={showLeftSideContent}
+              headerTitle={leftSideContentMode ? LeftSideContentModeLabels[leftSideContentMode] : ''}
+              onClose={handleCloseLeftSideContent}
             >
-              <GeneratedEmailCard
-                selectedEmployee={
-                  selectedEmployee
-                    ? {
-                        ...selectedEmployee,
-                        email: selectedEmployee?.icp_id ? icpDetails?.contact?.email : selectedEmployee?.email,
-                      }
-                    : null
-                }
-                isLoadingIcpDetails={isIcpDetailsLoading}
-                emailData={emailData}
-                emailDataLoading={emailDataLoading}
-                bodyHtmlRef={bodyHtmlRef}
-                fetchIcpDetails={fetchIcpDetails}
-              />
-            </div>
-            <div className="flex h-full w-full flex-col bg-white">
+              {leftSideContentMode === 'generated-email' && (
+                <GeneratedEmailContent
+                  selectedEmployee={selectedEmployee}
+                  isLoadingIcpDetails={isIcpDetailsLoading}
+                  emailData={reachoutEmailData}
+                  emailDataLoading={isReachoutEmailLoading}
+                  bodyHtmlRef={bodyHtmlRef}
+                  fetchIcpDetails={fetchIcpDetails}
+                />
+              )}
+
+              {leftSideContentMode === 'relevant-profiles' && (
+                <RelevantProfilesContent
+                  icps={icps}
+                  onGenerateEmail={handleIcpGenerateEmail}
+                  selectedEmployee={selectedEmployee}
+                  emailData={reachoutEmailData}
+                  bodyHtmlRef={bodyHtmlRef}
+                  generatingEmail={isReachoutEmailLoading}
+                  onShowEmail={handleIcpShowEmail}
+                  loadingEmail={isIcpDetailsLoading}
+                  onCancelEmail={handleIcpCancelEmail}
+                />
+              )}
+
+              {leftSideContentMode === 'browsing-history' && <BrowsingHistoryContent browsedUrls={browsingHistory} />}
+
+              {leftSideContentMode === 'conversation-details' && (
+                <ConversationDetailsContent
+                  chatHistory={sessionData?.chat_history ?? []}
+                  conversation={formattedConversationData}
+                />
+              )}
+            </LeftSideContentContainer>
+            <div className="flex h-full w-full select-text flex-col rounded-bl-2xl rounded-tl-2xl bg-white">
               {/* Header with close button */}
               <div className="flex justify-end p-3">
                 <button
@@ -126,29 +217,43 @@ const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawe
               </div>
 
               {/* Content */}
-              <div className="flex flex-1 flex-col gap-3 overflow-auto px-5 pb-5">
+              <div className="flex flex-1 flex-col gap-10 overflow-auto px-5 pb-5">
                 {isLoading ? (
                   <LoadingContent />
                 ) : (
                   <>
                     {/* Company Info Section */}
-                    <CompanyInfoSection companyData={completedCompanyData} />
+                    <CompanyDetailsSection companyData={companyData} />
 
                     {/* Employees Section */}
-                    <IcpSection
-                      prospect={completedCompanyData?.prospect}
-                      icps={icps}
-                      isLoading={isIcpListLoading}
-                      onFetchIcpList={fetchIcpList}
-                      onGenerateEmail={setSelectedEmployee}
-                      selectedEmployee={selectedEmployee}
+                    <UserDetailsSection
+                      prospect={companyData?.prospect}
+                      onGenerateEmail={handleProspectGenerateEmail}
+                      onViewBrowsingHistory={handleViewBrowsingHistory}
+                      showViewBrowsingHistory={browsingHistory.length > 0}
+                      isGeneratingEmail={
+                        isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
+                      }
+                    />
+
+                    {/* Relevant Profiles Section */}
+                    <RelevantProfilesSection
+                      companyName={companyData?.name}
+                      onSearchProfiles={handleFetchIcpList}
+                      disableSearchProfiles={
+                        isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError
+                      }
+                      showError={isIcpListError}
+                      isLoadingProfiles={isIcpListLoading}
                     />
 
                     {/* Browsing & Conversation Summary */}
-                    <BrowsingConversationSummary
-                      companyData={completedCompanyData}
-                      onSeeAllDetails={handleSeeAllDetails}
-                    />
+                    {companyData?.prospect?.session_id && (
+                      <UserInteractionSection
+                        conversationSummary={companyData?.conversationSummary}
+                        onViewConversationDetails={handleViewConversationDetails}
+                      />
+                    )}
                   </>
                 )}
               </div>

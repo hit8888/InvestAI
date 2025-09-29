@@ -10,6 +10,7 @@ import GithubMarkdownRenderer from '@breakout/design-system/components/layout/Gi
 import AssignRepValue from './AssignRepValue';
 import { SdrAssignment } from '@meaku/core/types/admin/api';
 import GenerateReachoutEmailItem from './GenerateReachoutEmailItem';
+import ConversationLogItem from './ConversationLogItem';
 
 const SummaryTabContentItem = ({
   listKey,
@@ -17,6 +18,7 @@ const SummaryTabContentItem = ({
   listIcon: ItemIcon,
   listValue,
   conversation,
+  chatHistory,
 }: SummaryTabContentList) => {
   const isIntentScore = listKey === 'intentScore';
   const isParentUrl = listKey === 'parentUrl';
@@ -26,6 +28,7 @@ const SummaryTabContentItem = ({
   const isBantAnalysisItem = listKey === 'bantAnalysis';
   const isBrowsingHistorySummaryItem = listKey === 'browsingHistorySummary';
   const isLabelValueDash = listValue === '-';
+  const isConversationLog = listKey === 'conversationLog';
 
   const getSummaryListValueContent = (listValue: string | number | BANTItem[] | ParentUrlItem | SdrAssignment) => {
     if (isIntentScore) {
@@ -83,6 +86,10 @@ const SummaryTabContentItem = ({
       );
     }
   };
+
+  if (isConversationLog) {
+    return <ConversationLogItem chatHistory={chatHistory} conversation={conversation} />;
+  }
 
   if (listKey === 'reachoutEmail') {
     return <GenerateReachoutEmailItem sessionId={conversation?.session_id} />;

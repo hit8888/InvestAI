@@ -1,7 +1,7 @@
 import { Eye } from 'lucide-react';
 
 import Typography from '@breakout/design-system/components/Typography/index';
-import OverviewDataItem from './OverviewDataItem';
+import OverviewDataItem from '../ActiveConversationsComp/OverviewDataItem';
 import DateUtil from '@meaku/core/utils/dateUtils';
 import ArrowUpIcon from '@breakout/design-system/components/icons/arrow-up-icon';
 import { cn } from '@breakout/design-system/lib/cn';

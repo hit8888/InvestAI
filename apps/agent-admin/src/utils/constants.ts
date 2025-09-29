@@ -52,6 +52,7 @@ import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-rea
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
 import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
 // Use this Website to get the logo: https://brandfetch.com/
 export const ROUTING_TYPE_LOGO_MAP = {
@@ -487,6 +488,7 @@ export interface SummaryTabContentList {
   listIcon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
   listValue: string | number | BANTItem[] | ParentUrlItem | SdrAssignment;
   conversation?: ConversationsTableDisplayContent;
+  chatHistory?: WebSocketMessage[];
 }
 
 export interface BANTItem {
@@ -524,6 +526,12 @@ export const CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST: SummaryTabConten
     listKey: 'browsingHistorySummary',
     listLabel: "User's Browsing History Summary:",
     listIcon: History,
+    listValue: '',
+  },
+  {
+    listKey: 'conversationLog',
+    listLabel: 'Conversation log:',
+    listIcon: null,
     listValue: '',
   },
   {

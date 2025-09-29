@@ -1238,8 +1238,16 @@ export const processDistributionData = <T extends DistributionItem>(
 };
 
 export const normalizeSessionToConversationData = (
-  sessionData: SessionDetailsDataResponse,
+  sessionData?: SessionDetailsDataResponse,
 ): ConversationDetailsDataResponse => {
+  if (!sessionData) {
+    return {
+      conversation: null,
+      chat_history: [],
+      feedback: [],
+    };
+  }
+
   // Transform SessionDetailsDataResponse to match ConversationDetailsDataResponse structure
   const { chat_history, chat_summary, prospect, session } = sessionData;
 
