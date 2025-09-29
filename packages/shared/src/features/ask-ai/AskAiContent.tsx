@@ -108,6 +108,34 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     }
   }, [isExpanded, isSideDrawerOpen, closeSidebar]);
 
+  // Close sidebar when latest message group has no artifacts
+  useEffect(() => {
+    if (messages && messages.length > 0 && isSideDrawerOpen) {
+      // Get the latest message group by finding the last message with a different session_id
+      // or the last few messages if they're all from the same session
+      const latestMessage = messages[messages.length - 1];
+      const latestSessionId = latestMessage.session_id;
+
+      // Efficiently check for artifacts in the latest session by iterating backwards
+      let hasArtifactsInLatestSession = false;
+      for (let i = messages.length - 1; i >= 0; i--) {
+        const msg = messages[i];
+        if (msg.session_id !== latestSessionId) {
+          // We've reached the start of the previous session group
+          break;
+        }
+        if (msg.event_type === 'VIDEO_ARTIFACT' || msg.event_type === 'SLIDE_IMAGE_ARTIFACT') {
+          hasArtifactsInLatestSession = true;
+          break; // Found an artifact, no need to check further
+        }
+      }
+
+      if (!hasArtifactsInLatestSession) {
+        closeSidebar();
+      }
+    }
+  }, [messages, isSideDrawerOpen, closeSidebar]);
+
   return (
     <div
       className="flex w-full flex-col rounded-[20px] relative border border-border-dark bg-card overflow-hidden"
