@@ -82,7 +82,7 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
       }
 
       return baseClassName;
-    }, [isActive, actionConfig.button?.className, actionConfig.button]);
+    }, [isActive, actionConfig.button]);
 
     // Resolve button variant (keep existing behavior)
     const buttonVariant = useMemo(() => {
@@ -136,16 +136,17 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
             variant={buttonVariant}
             onClick={handleClick}
             hasWipers={!!customIconUrl && !isActive}
-            className={`${buttonClassName} group-hover:bg-backgroundLight group-hover:text-actionBtnIcon transition-all`}
-            style={
-              buttonSize
+            className={`${buttonClassName} ${!isActive ? 'group-hover:scale-110 group-hover:bg-foreground group-hover:text-background' : ''} transition-all shadow-none`}
+            style={{
+              ...(buttonSize
                 ? {
                     width: `${buttonSize}px`,
                     height: `${buttonSize}px`,
                     transition: transitionDuration || 'all 0.3s ease-out',
                   }
-                : undefined
-            }
+                : {}),
+              boxShadow: 'var(--shadow-elevation-md, 0 0 24px 0 rgba(0, 0, 0, 0.24))',
+            }}
           >
             {iconContent}
           </Button>

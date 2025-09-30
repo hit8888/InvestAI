@@ -1,6 +1,5 @@
 import { ActionConfig } from '@meaku/shared/features/base/BaseActionComponent';
-import { Button, LucideIcon } from '@meaku/saral';
-import { VideoLibraryIcon } from '@meaku/saral';
+import { Button, LucideIcon, VideoLibraryIcon } from '@meaku/saral';
 import CustomIconImageContainer from '@meaku/shared/features/ask-ai/components/CustomIconImageContainer';
 import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
 import { CommandBarModuleTypeSchema } from '@meaku/core/index';
@@ -53,7 +52,7 @@ export const AskAIActionConfig: ActionConfig = {
 export const BookMeetingActionConfig: ActionConfig = {
   moduleType: BOOK_MEETING,
   icon: {
-    fallbackIcon: <LucideIcon name="calendar" className="size-5" />,
+    fallbackIcon: <LucideIcon name="calendar-days" className="size-5 stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Book a Meeting',
   },
@@ -65,7 +64,7 @@ export const BookMeetingActionConfig: ActionConfig = {
 export const SummarizeActionConfig: ActionConfig = {
   moduleType: SUMMARIZE,
   icon: {
-    fallbackIcon: <LucideIcon name="file-text" className="size-5" />,
+    fallbackIcon: <LucideIcon name="file-text" className="size-5 stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Summarize',
   },
@@ -77,7 +76,7 @@ export const SummarizeActionConfig: ActionConfig = {
 export const IframeActionConfig: ActionConfig = {
   moduleType: IFRAME,
   icon: {
-    fallbackIcon: <LucideIcon name="play" className="size-5" />,
+    fallbackIcon: <LucideIcon name="play" className="ml-1 size-5 stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Iframe',
   },
@@ -92,7 +91,7 @@ export const IframeActionConfig: ActionConfig = {
 export const VideoLibraryActionConfig: ActionConfig = {
   moduleType: VIDEO_LIBRARY,
   icon: {
-    fallbackIcon: <VideoLibraryIcon className="size-5" />,
+    fallbackIcon: <VideoLibraryIcon className="size-5 stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Video Library',
   },
