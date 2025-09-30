@@ -206,7 +206,7 @@ const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawe
             </LeftSideContentContainer>
             <div className="flex h-full w-full select-text flex-col rounded-bl-2xl rounded-tl-2xl bg-white">
               {/* Header with close button */}
-              <div className="flex justify-end p-3">
+              <div className="flex justify-end px-3 pt-3">
                 <button
                   onClick={handleCloseDrawer}
                   className="flex h-6 w-6 items-center justify-center rounded hover:bg-gray-100"

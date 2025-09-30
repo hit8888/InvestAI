@@ -76,6 +76,9 @@ export const handleConfigUpdate = async (
 ) => {
   const agentConfigsValues = agentConfigs.configs['agent_personalization:style'];
   const updateFieldValues = updateField.configs?.['agent_personalization:style'];
+
+  const orbLogoUrl = updateFieldValues?.orb_config?.logo_url ?? agentConfigsValues?.orb_config?.logo_url ?? null;
+
   try {
     const payload: AgentConfigPayload = {
       name: updateField.name ?? agentConfigs.name,
@@ -93,11 +96,10 @@ export const handleConfigUpdate = async (
           primary: updateFieldValues?.primary ?? agentConfigsValues.primary,
           secondary: updateFieldValues?.secondary ?? agentConfigsValues.secondary,
           orb_config: {
-            logo_url: updateFieldValues?.orb_config?.logo_url ?? agentConfigsValues?.orb_config?.logo_url ?? null,
-            show_orb:
-              updateFieldValues?.orb_config?.show_orb ??
-              agentConfigsValues?.orb_config?.show_orb ??
-              !!(agentConfigsValues?.orb_config?.logo_url ?? null), // logo_url shouldn't be null when show_orb is false
+            logo_url: orbLogoUrl,
+            show_orb: orbLogoUrl
+              ? (updateFieldValues?.orb_config?.show_orb ?? agentConfigsValues?.orb_config?.show_orb ?? false)
+              : true, // logo_url shouldn't be null when show_orb is false and vice versa
           },
           font_config: {
             font_family:

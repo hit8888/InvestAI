@@ -28,6 +28,7 @@ import {
   FetchSitemapResponse,
   FilterOptionsPayload,
   FrequentDocumentsResponse,
+  UserInfoResponse,
   ReachoutEmailPayload,
   GenerateOtpPayload,
   GenerateTokens,
@@ -77,7 +78,7 @@ export const changePassword = (payload: ChangePasswordPayload) =>
 
 export const regenerateTokens = (payload: GenerateTokens) => adminApiClient.post(`/core/api/token/refresh/`, payload);
 
-export const getUserDataFromMeAPI = () => adminApiClient.get(`/core/api/me/`);
+export const getUserDataFromMeAPI = () => adminApiClient.get<UserInfoResponse>(`/core/api/me/`);
 
 export const getUserProfile = () => adminApiClient.get<UserProfileResponse>(`/tenant/api/users/profile/`);
 

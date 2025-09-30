@@ -1,6 +1,5 @@
 import { Employee } from './types';
 import Typography from '@breakout/design-system/components/Typography/index';
-import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import EmployeeAvatar from './EmployeeAvatar';
 import { ReachoutEmailCta } from '../../../../components/common/ReachoutEmail';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
@@ -27,13 +26,12 @@ const UserDetailsSection = ({
     return null;
   }
 
-  const locationDisplayValue = [prospect.location?.city, prospect.location?.country]
-    .filter((part) => part && part !== '-')
-    .join(', ');
+  const locationDisplayValue =
+    [prospect.location?.city, prospect.location?.country].filter((part) => part && part !== '-').join(', ') || '-';
 
   return (
     <div className="relative flex">
-      <div className="absolute -top-[43px] left-[7px]">
+      <div className="absolute -top-[45px] left-[4px]">
         <svg width="17" height="55" viewBox="0 0 17 55" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M1 0H17H1ZM17 54.5H9C4.30558 54.5 0.5 50.6944 0.5 46H1.5C1.5 50.1421 4.85786 53.5 9 53.5H17V54.5ZM9 54.5C4.30558 54.5 0.5 50.6944 0.5 46V0H1.5V46C1.5 50.1421 4.85786 53.5 9 53.5V54.5ZM17 0V54V0Z"
@@ -44,12 +42,11 @@ const UserDetailsSection = ({
 
       <div className="ml-6 w-full">
         <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-          <AiSparklesIcon width="18px" height="18px" className="mr-1 inline" />
           User Details
         </Typography>
 
         <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-gray-25 p-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-end gap-4">
             {(prospect.avatar || prospect.name) && (
               <div className="border-white/24 h-[42px] w-[42px] overflow-hidden rounded-full border-2">
                 <EmployeeAvatar avatar={prospect.avatar} name={prospect.name} />
@@ -94,14 +91,23 @@ const UserDetailsSection = ({
               </div>
             </div>
 
-            {prospect.intent && (
-              <div className="rounded-2xl bg-pink-100 px-2 py-1">
+            {!!prospect.buyer_intent_score && (
+              <div
+                className={cn('rounded-2xl bg-pink-100 px-2 py-1', {
+                  'bg-positive-100': prospect.buyer_intent_score > 0,
+                })}
+              >
                 <div className="flex items-center gap-1">
                   <Typography variant="caption-12-normal" className="text-gray-500">
-                    Intent:
+                    Intent Score:
                   </Typography>
-                  <Typography variant="caption-12-normal" className="text-pink-1000">
-                    {prospect.intent}
+                  <Typography
+                    variant="caption-12-normal"
+                    className={cn('text-pink-1000', {
+                      'text-positive-1000': prospect.buyer_intent_score > 0,
+                    })}
+                  >
+                    {prospect.buyer_intent_score}
                   </Typography>
                 </div>
               </div>
@@ -114,26 +120,24 @@ const UserDetailsSection = ({
             <div className="flex justify-between gap-4">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3">
-                  {locationDisplayValue && (
-                    <div className="flex items-center gap-2">
-                      <Typography variant="caption-12-normal" className="text-gray-500">
-                        Location:
-                      </Typography>
-                      <Typography variant="caption-12-normal" className="capitalize text-gray-900">
-                        {locationDisplayValue}
-                        &nbsp;
-                        {prospect.location?.country && (
-                          <img
-                            src={findFlagUrlByCountryName(prospect.location.country)}
-                            width={16}
-                            height={16}
-                            alt="flag-icon"
-                            className="inline overflow-hidden"
-                          />
-                        )}
-                      </Typography>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2">
+                    <Typography variant="caption-12-normal" className="text-gray-500">
+                      Location:
+                    </Typography>
+                    <Typography variant="caption-12-normal" className="capitalize text-gray-900">
+                      {locationDisplayValue}
+                      &nbsp;
+                      {prospect.location?.country && (
+                        <img
+                          src={findFlagUrlByCountryName(prospect.location.country)}
+                          width={16}
+                          height={16}
+                          alt="flag-icon"
+                          className="inline overflow-hidden"
+                        />
+                      )}
+                    </Typography>
+                  </div>
                 </div>
               </div>
 

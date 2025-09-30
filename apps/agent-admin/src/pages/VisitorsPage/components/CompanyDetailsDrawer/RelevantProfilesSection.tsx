@@ -21,7 +21,6 @@ const RelevantProfilesSection = ({
   return (
     <div>
       <div className="mb-2 flex items-center gap-1">
-        <AiSparklesIcon width="18" height="18" />
         <Typography variant="caption-12-medium">Relevant Profiles</Typography>
       </div>
 

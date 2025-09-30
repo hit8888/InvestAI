@@ -16,6 +16,13 @@ const useUserInfoQuery = (options: UserInfoQueryOptions = {}): UseQueryResult<Us
     queryKey: getUserInfoKey(),
     queryFn: async () => {
       const response = await getUserDataFromMeAPI();
+      const organizations = response?.data?.organizations ?? [];
+
+      if (organizations.length > 0) {
+        organizations.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0);
+      }
+
+      response.data.organizations = organizations;
       return response.data;
     },
     ...options,

@@ -11,10 +11,8 @@ const Dashboard = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const organizationsList = userInfo?.organizations;
-  const organizationsOptions = organizationsList
-    ?.map((item) => item?.name)
-    .filter((name): name is string => !!name)
-    .sort() || [''];
+  const organizationsOptions =
+    organizationsList?.map((item) => item?.name).filter((name): name is string => !!name) || [];
 
   const handleSelectOrganization = async (option: string | null) => {
     const orgItem = organizationsList?.find((item) => item?.name === option);

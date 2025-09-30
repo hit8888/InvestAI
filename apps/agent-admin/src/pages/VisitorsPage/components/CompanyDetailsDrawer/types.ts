@@ -1,5 +1,6 @@
 import { BrowsedUrl } from '@meaku/core/types/common';
 import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { EnrichmentSource } from '@meaku/core/types/admin/admin';
 
 export type Employee = {
   icp_id?: number;
@@ -16,7 +17,7 @@ export type Employee = {
     city?: string;
     country?: string;
   };
-  intent?: string;
+  buyer_intent_score?: number | null;
   ipAddress?: string;
   browsing_history?: BrowsedUrl[];
   sdr_assignment?: SdrAssignment;
@@ -38,6 +39,7 @@ export type CompanyData = {
   browsingHistorySummary?: string;
   conversationSummary?: string;
   email: string;
+  enrichmentSource?: EnrichmentSource | null;
 };
 
 export type CompanyDetailsDrawerProps = {

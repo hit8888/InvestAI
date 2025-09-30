@@ -18,12 +18,11 @@ const GeneratedEmailCard = ({ selectedEmployee, emailData, bodyHtmlRef }: Genera
     <>
       <div className="flex items-center gap-2 py-2">
         <span className="text-sm font-light text-gray-500">for:</span>
-        {selectedEmployee?.name ||
-          (selectedEmployee?.avatar && (
-            <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
-              <EmployeeAvatar avatar={selectedEmployee?.avatar ?? ''} name={selectedEmployee?.name ?? ''} />
-            </div>
-          ))}
+        {(selectedEmployee?.name || selectedEmployee?.avatar) && (
+          <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
+            <EmployeeAvatar avatar={selectedEmployee?.avatar ?? ''} name={selectedEmployee?.name ?? ''} />
+          </div>
+        )}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <h3 className={cn('text-sm font-light text-gray-900')}>

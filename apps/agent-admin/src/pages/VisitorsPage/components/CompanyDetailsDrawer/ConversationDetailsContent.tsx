@@ -8,7 +8,7 @@ type ConversationDetailsContentProps = {
   conversation?: ConversationsTableDisplayContent | null;
 };
 
-const IGNORE_LIST_KEYS = ['reachoutEmail', 'assignRep'];
+const IGNORE_LIST_KEYS = ['reachoutEmail', 'assignRep', 'intentScore'];
 
 const ConversationDetailsContent = ({ chatHistory, conversation }: ConversationDetailsContentProps) => {
   if (!conversation) {

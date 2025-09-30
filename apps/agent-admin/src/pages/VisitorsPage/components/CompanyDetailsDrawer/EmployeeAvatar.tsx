@@ -3,7 +3,7 @@ const EmployeeAvatar = ({ avatar, name }: { avatar?: string; name: string }) => 
     <img src={avatar} alt={`${name} avatar`} className="h-full w-full rounded-full object-cover" />
   ) : (
     <div className="border-white/24 flex h-full w-full items-center justify-center rounded-full border-2 bg-purple-100 text-purple-600">
-      <span className="text-sm font-semibold">
+      <span className="text-sm font-semibold uppercase">
         {name
           .split(' ')
           .map((n) => n.charAt(0))
