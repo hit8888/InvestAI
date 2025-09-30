@@ -113,8 +113,8 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
             loading="lazy"
             // Prevent dragging for better UX
             draggable={false}
-            // Add key to force re-render only when necessary
-            key={`${customIconUrl}-${isActive}`}
+            // Use stable key to prevent flicker when switching between bars
+            key={customIconUrl}
           />
         );
       }

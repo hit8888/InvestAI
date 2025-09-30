@@ -3,7 +3,8 @@ import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/ty
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { MessageEventType } from '@meaku/shared/types/message';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { ANIMATION_TIMINGS } from '../../../constants/animationTimings';
+import { LayoutType } from '@meaku/core/types/storage';
+import { useTriggerExitAndSwitch } from './useTriggerExitAndSwitch';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -19,7 +20,10 @@ export const useBottomBarEvents = (
   ) => void,
   startExitAnimation: () => void,
   trackEvent: (event: string, data: Record<string, unknown>) => void,
+  setPreference?: (layout: LayoutType) => void,
 ) => {
+  // Create the centralized trigger function
+  const triggerExitAndSwitch = useTriggerExitAndSwitch(startExitAnimation, onSwitchToDefault, setPreference);
   const handleModuleClick = useCallback(
     async (featureConfig: CommandBarModuleConfigType) => {
       if (!featureConfig) return;
@@ -35,21 +39,14 @@ export const useBottomBarEvents = (
         return;
       }
 
-      // Start exit animation
-      startExitAnimation();
-
-      // Wait for movement and shrink to complete, then switch to default bar
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          onSwitchToDefault(module_type);
-        });
-      }, ANIMATION_TIMINGS.DELAYS.BOTTOM_BAR_EXIT_ANIMATION * 1000);
+      // Use centralized trigger function
+      triggerExitAndSwitch(module_type);
 
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.ACTION_CLICK, {
         action_type: module_type,
       });
     },
-    [activeFeature, setActiveFeature, onSwitchToDefault, startExitAnimation, trackEvent],
+    [activeFeature, setActiveFeature, triggerExitAndSwitch, trackEvent],
   );
 
   const handleInputSubmit = useCallback(
@@ -57,30 +54,23 @@ export const useBottomBarEvents = (
       // Get the message to send - either user input or suggested question
       const messageToSend = inputValue.trim() || questionText || '';
 
-      // Start exit animation
-      startExitAnimation();
+      // Determine if this is a suggested question click or user input
+      const isSuggestedQuestion = questionText && !inputValue.trim();
 
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          // Determine if this is a suggested question click or user input
-          const isSuggestedQuestion = questionText && !inputValue.trim();
+      // Construct the complete event data
+      const eventData = messageToSend
+        ? {
+            message: messageToSend,
+            eventType: isSuggestedQuestion
+              ? MessageEventType.SUGGESTED_QUESTION_CLICKED
+              : MessageEventType.TEXT_REQUEST,
+          }
+        : undefined;
 
-          // Construct the complete event data
-          const eventData = messageToSend
-            ? {
-                message: messageToSend,
-                eventType: isSuggestedQuestion
-                  ? MessageEventType.SUGGESTED_QUESTION_CLICKED
-                  : MessageEventType.TEXT_REQUEST,
-              }
-            : undefined;
-
-          // Pass complete event to centralized handler
-          onSwitchToDefault(ASK_AI, eventData);
-        });
-      }, ANIMATION_TIMINGS.DELAYS.BOTTOM_BAR_EXIT_ANIMATION * 1000);
+      // Use centralized trigger function
+      triggerExitAndSwitch(ASK_AI, eventData);
     },
-    [onSwitchToDefault, startExitAnimation],
+    [triggerExitAndSwitch],
   );
 
   return {

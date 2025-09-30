@@ -2,9 +2,9 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { MessageEventType } from '@meaku/shared/types/message';
-import { LAYOUT_PREFERENCE_CONFIG } from '@meaku/core/constants/layout-preference';
 import { ANIMATION_TIMINGS } from '../../../constants/animationTimings';
 import { useLayoutPreference } from '../../../hooks/useLayoutPreference';
+import { useTriggerExitAndSwitch } from './useTriggerExitAndSwitch';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -34,6 +34,14 @@ export const useBottomBarState = (
   // Layout preference hook
   const { setPreference } = useLayoutPreference();
 
+  // Animation control
+  const startExitAnimationCallback = useCallback(() => {
+    setIsAnimatingToCorner(true);
+  }, []);
+
+  // Create the centralized trigger function
+  const triggerExitAndSwitch = useTriggerExitAndSwitch(startExitAnimationCallback, onSwitchToDefault, setPreference);
+
   // Single phase: Wait for dynamic API to complete before starting animation
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -59,6 +67,14 @@ export const useBottomBarState = (
     };
   }, [isConfigLoading, modules.length, isDynamicConfigLoading, isDynamicConfigStarted]);
 
+  // Trigger exit animation when activeFeature becomes non-null (external actions like nudges)
+  useEffect(() => {
+    if (activeFeature !== null) {
+      // Use centralized trigger function
+      triggerExitAndSwitch(activeFeature);
+    }
+  }, [activeFeature, triggerExitAndSwitch]);
+
   // Filter available modules based on device type
   const availableModules = useMemo(() => {
     // Show all modules when ready (single phase)
@@ -73,11 +89,6 @@ export const useBottomBarState = (
     }),
     [availableModules],
   );
-
-  // Animation control
-  const startExitAnimationCallback = useCallback(() => {
-    setIsAnimatingToCorner(true);
-  }, []);
 
   // Event handlers
   const handleModuleClick = useCallback(
@@ -95,48 +106,31 @@ export const useBottomBarState = (
         return;
       }
 
-      // Start exit animation
-      startExitAnimationCallback();
-
-      // Store user preference for bottom_right layout (1 hour expiration)
-      setPreference(LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT);
-
-      // Wait for animation to complete, then switch to default bar
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          onSwitchToDefault(module_type);
-        });
-      }, ANIMATION_TIMINGS.DELAYS.BOTTOM_BAR_EXIT_ANIMATION * 1000);
+      // Use centralized trigger function
+      triggerExitAndSwitch(module_type);
 
       trackEvent('COMMAND_BAR_ACTION_CLICK', {
         action_type: module_type,
       });
     },
-    [activeFeature, setActiveFeature, startExitAnimationCallback, onSwitchToDefault, trackEvent],
+    [activeFeature, setActiveFeature, triggerExitAndSwitch, trackEvent],
   );
 
   const handleInputSubmit = useCallback(
     (inputValue: string, questionText: string) => {
       if (!inputValue.trim() && !questionText.trim()) return;
 
-      // Start exit animation
-      startExitAnimationCallback();
+      // Construct event data
+      const message = inputValue.trim() || questionText;
+      const eventData = {
+        message,
+        eventType: 'TEXT_REQUEST' as const,
+      };
 
-      // Store user preference for bottom_right layout (1 hour expiration)
-      setPreference(LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT);
-
-      // Wait for animation to complete, then switch to default bar
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          const message = inputValue.trim() || questionText;
-          onSwitchToDefault(ASK_AI, {
-            message,
-            eventType: 'TEXT_REQUEST',
-          });
-        });
-      }, ANIMATION_TIMINGS.DELAYS.BOTTOM_BAR_EXIT_ANIMATION * 1000);
+      // Use centralized trigger function
+      triggerExitAndSwitch(ASK_AI, eventData);
     },
-    [startExitAnimationCallback, onSwitchToDefault],
+    [triggerExitAndSwitch],
   );
 
   return {
