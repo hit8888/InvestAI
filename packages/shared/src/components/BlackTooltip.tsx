@@ -241,7 +241,7 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
           animate={tooltipConfig.animation.animate}
           exit={tooltipConfig.animation.exit}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className={`${usePortal ? 'fixed' : tooltipConfig.container} px-3 py-2 bg-gray-900 text-white text-sm rounded-md shadow-lg max-w-xl xs:max-w-xs whitespace-nowrap`}
+          className={`${usePortal ? 'fixed' : tooltipConfig.container} px-3 py-2 bg-gray-900 text-white text-sm rounded-md shadow-lg xs:max-w-xs`}
           style={
             usePortal
               ? {
