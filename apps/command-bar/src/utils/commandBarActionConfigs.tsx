@@ -5,7 +5,7 @@ import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
 import { CommandBarModuleTypeSchema } from '@meaku/core/index';
 import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
 
-const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
 export const AskAIActionConfig: ActionConfig = {
   moduleType: ASK_AI,
@@ -100,6 +100,18 @@ export const VideoLibraryActionConfig: ActionConfig = {
   },
 };
 
+export const DemoLibraryActionConfig: ActionConfig = {
+  moduleType: DEMO_LIBRARY,
+  icon: {
+    fallbackIcon: <LucideIcon name="swatch-book" className="size-5 stroke-[2px]" />,
+    customIconClassName: 'h-full w-full rounded-full',
+    customIconAlt: 'Demo Library',
+  },
+  tooltip: {
+    content: 'Demo Library',
+  },
+};
+
 // Configuration mapping for cleaner code
 export const ACTION_CONFIGS = {
   [ASK_AI]: AskAIActionConfig,
@@ -107,4 +119,5 @@ export const ACTION_CONFIGS = {
   [SUMMARIZE]: SummarizeActionConfig,
   [IFRAME]: IframeActionConfig,
   [VIDEO_LIBRARY]: VideoLibraryActionConfig,
+  [DEMO_LIBRARY]: DemoLibraryActionConfig,
 } as const;

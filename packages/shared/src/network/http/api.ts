@@ -6,6 +6,7 @@ import { InitializationPayload } from '@meaku/core/types/api/session_init_reques
 import { UpdateProspectPayload } from '@meaku/core/types/api/update_prospect_request';
 import { FormConfigResponse, InitSessionResponse } from '../../types/responses';
 import { VideoLibraryResponse } from '@meaku/core/types/api/video_library_response';
+import { DemoLibraryResponse } from '@meaku/core/types/api/demo_library_response';
 
 export const getNudge = (agentId: string, payload: ConfigPayload) =>
   apiClient.post(`/tenant/chat/v2/agent/${agentId}/config/`, { ...payload });
@@ -41,6 +42,19 @@ export const getVideoLibrary = (
   parentUrl?: string,
 ) =>
   apiClient.post<VideoLibraryResponse>(`/tenant/chat/api/agent/${agentId}/command-bar/${moduleId}/videos/`, {
+    session_id: sessionId,
+    prospect_id: prospectId,
+    url: parentUrl,
+  });
+
+export const getDemoLibrary = (
+  agentId: string,
+  moduleId: string,
+  sessionId: string,
+  prospectId: string,
+  parentUrl?: string,
+) =>
+  apiClient.post<DemoLibraryResponse>(`/tenant/chat/api/agent/${agentId}/command-bar/${moduleId}/demos/`, {
     session_id: sessionId,
     prospect_id: prospectId,
     url: parentUrl,

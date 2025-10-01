@@ -25,7 +25,6 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.VIDEO_LIBRARY);
   const bookMeetingFeatureConfig = useFeatureConfig(BOOK_MEETING);
   const { watchedVideos, addWatchedVideo, isVideoWatched } = useWatchedVideos();
-  const [isMainVideoPlaying, setIsMainVideoPlaying] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
   const [wasPlayingBeforeChange, setWasPlayingBeforeChange] = useState(false);
   const { screenWidth, screenHeight } = useScreenSize();
@@ -52,13 +51,15 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     enabled: isConfigReady,
   });
 
-  // Select first video when videos are loaded
+  // Select first video when videos are loaded and autoplay it
   useEffect(() => {
     if (videos.length > 0 && !selectedVideoId) {
       // Try to find first unwatched video
       const firstUnwatchedVideo = videos.find((video) => !isVideoWatched(video.id));
       // If all videos are watched, select the first video
       setSelectedVideoId(firstUnwatchedVideo?.id || videos[0].id);
+      // Set wasPlaying to true so the first video autoplays
+      setWasPlayingBeforeChange(true);
     }
   }, [videos, selectedVideoId, isVideoWatched]);
 
@@ -99,14 +100,15 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     setActiveFeature?.(BOOK_MEETING);
   };
 
-  const handleVideoSelect = (newVideoId: string) => {
-    const wasPlaying = isMainVideoPlaying;
-    setWasPlayingBeforeChange(wasPlaying);
+  const handleVideoSelect = (newVideoId: string, forceAutoplay: boolean = true) => {
+    // Always autoplay when user manually selects a video (from recommendations or next video card)
+    setWasPlayingBeforeChange(forceAutoplay);
     setSelectedVideoId(newVideoId);
   };
 
   const handleWatchNow = (videoId: string) => {
-    handleVideoSelect(videoId);
+    // Always autoplay when clicking "Watch Now" button
+    handleVideoSelect(videoId, true);
   };
 
   // Get all video IDs for carousel (include all videos)
@@ -130,7 +132,6 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
               videoId={selectedVideoId}
               getVideoById={getVideoById}
               getVideoUrl={getVideoUrl}
-              onPlayingStateChange={setIsMainVideoPlaying}
               isLoading={!isConfigReady || isLoading}
               wasPlaying={wasPlayingBeforeChange}
               allVideoIds={allVideoIds}

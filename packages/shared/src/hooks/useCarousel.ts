@@ -5,6 +5,7 @@ interface UseCarouselProps {
   itemsPerView?: number;
   initialIndex?: number;
   pageBased?: boolean; // New prop for page-based navigation
+  itemsPerPage?: number; // Actual number of items displayed for item-based navigation
 }
 
 interface UseCarouselReturn {
@@ -24,6 +25,7 @@ export const useCarousel = ({
   itemsPerView = 1,
   initialIndex = 0,
   pageBased = false,
+  itemsPerPage,
 }: UseCarouselProps): UseCarouselReturn => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
@@ -31,7 +33,9 @@ export const useCarousel = ({
   const currentPage = Math.floor(currentIndex / itemsPerView);
 
   // Navigation logic depends on whether it's page-based or item-based
-  const canGoNext = pageBased ? currentPage < totalPages - 1 : currentIndex < totalItems - itemsPerView;
+  const canGoNext = pageBased
+    ? currentPage < totalPages - 1
+    : currentIndex < totalItems - (itemsPerPage || itemsPerView);
   const canGoPrev = pageBased ? currentPage > 0 : currentIndex > 0;
 
   const onNext = useCallback(() => {

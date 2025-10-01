@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useLayoutEffect, useRef } from 'react';
 import { LucideIcon } from '@meaku/saral';
 import { Video } from '../types';
 import BlackTooltip from '../../../components/BlackTooltip';
@@ -28,8 +28,8 @@ export const VideoAvatar = ({
   // Handle loading placeholder IDs
   const isPlaceholder = videoId.startsWith('loading-');
 
-  // Check if title is truncated
-  useEffect(() => {
+  // Check if title is truncated using useLayoutEffect for synchronous DOM measurements
+  useLayoutEffect(() => {
     if (titleRef.current && video?.title) {
       const element = titleRef.current;
       setIsTitleTruncated(element.scrollHeight > element.clientHeight);

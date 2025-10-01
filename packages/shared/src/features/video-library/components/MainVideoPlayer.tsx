@@ -181,7 +181,7 @@ export const MainVideoPlayer = ({
       </div>
       <div className="relative">
         {/* Video container with aspect ratio */}
-        <div className="relative w-full aspect-video bg-muted/20 rounded-md overflow-hidden">
+        <div className="relative w-full aspect-video bg-muted/20 overflow-hidden">
           <AnimatePresence mode="wait">
             {videoUrl && (
               <motion.div

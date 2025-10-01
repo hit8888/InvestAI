@@ -64,19 +64,26 @@ const defaultModuleConfig = {
 } as const;
 
 /**
+ * Wide module configuration for modules that need full width and auto height
+ * Shared by VIDEO_LIBRARY and DEMO_LIBRARY
+ */
+const wideModuleConfig = {
+  maxHeight: 'auto', // Will be calculated based on available space
+  width: LAYOUT_CONSTANTS.VIDEO_LIBRARY_WIDTH,
+  expandedWidth: LAYOUT_CONSTANTS.VIDEO_LIBRARY_WIDTH,
+  innerStyles: {
+    overflowY: 'auto' as const,
+    overflowX: 'hidden' as const,
+  },
+} as const;
+
+/**
  * Module-specific configuration for styling and behavior
  */
 export const MODULE_CONFIG = {
   ASK_AI: defaultModuleConfig,
-  VIDEO_LIBRARY: {
-    maxHeight: 'auto', // Will be calculated based on available space
-    width: LAYOUT_CONSTANTS.VIDEO_LIBRARY_WIDTH,
-    expandedWidth: LAYOUT_CONSTANTS.VIDEO_LIBRARY_WIDTH,
-    innerStyles: {
-      overflowY: 'auto' as const,
-      overflowX: 'hidden' as const,
-    },
-  },
+  VIDEO_LIBRARY: wideModuleConfig,
+  DEMO_LIBRARY: wideModuleConfig,
   LIVE_CHAT: defaultModuleConfig,
   SUMMARIZE: defaultModuleConfig,
   BOOK_MEETING: defaultModuleConfig,

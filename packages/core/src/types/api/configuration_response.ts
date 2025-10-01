@@ -22,6 +22,7 @@ export const CommandBarModuleTypeSchema = z.enum([
   'SUMMARIZE',
   'BOOK_MEETING',
   'VIDEO_LIBRARY',
+  'DEMO_LIBRARY',
   'IFRAME',
 ]);
 

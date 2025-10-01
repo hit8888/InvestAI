@@ -4,13 +4,14 @@ import {
   SummarizeContent,
   IframeContent,
   VideoLibraryContent,
+  DemoLibraryContent,
 } from '@meaku/shared/features';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureContentWrapper } from './FeatureContentWrapper';
 import { useCommandBarStore } from '@meaku/shared/stores';
 
-const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
 interface FeatureContentContainerProps {
   activeFeature: CommandBarModuleType | null;
@@ -27,6 +28,7 @@ const CONTENT_COMPONENTS = {
   [SUMMARIZE]: SummarizeContent,
   [IFRAME]: IframeContent,
   [VIDEO_LIBRARY]: VideoLibraryContent,
+  [DEMO_LIBRARY]: DemoLibraryContent,
 } as const;
 
 const FeatureContentContainer = ({
@@ -57,8 +59,8 @@ const FeatureContentContainer = ({
     return <ContentComponent {...commonProps} />;
   }
 
-  // Special case for VIDEO_LIBRARY (always expanded)
-  const wrapperIsExpanded = activeFeature === VIDEO_LIBRARY ? true : isExpanded;
+  // Special case for VIDEO_LIBRARY and DEMO_LIBRARY (always expanded)
+  const wrapperIsExpanded = activeFeature === VIDEO_LIBRARY || activeFeature === DEMO_LIBRARY ? true : isExpanded;
 
   return (
     <FeatureContentWrapper activeFeature={activeFeature} isExpanded={wrapperIsExpanded}>

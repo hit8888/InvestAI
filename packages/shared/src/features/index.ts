@@ -10,6 +10,7 @@ export { default as BookMeetingContent } from './book-meeting/BookMeetingContent
 export { default as SummarizeContent } from './summarize/SummarizeContent';
 export { default as IframeContent } from './iframe/IframeContent';
 export { default as VideoLibraryContent } from './video-library/VideoLibraryContent';
+export { default as DemoLibraryContent } from './demo-library/DemoLibraryContent';
 
 // Nudge component
 export { default as Nudge } from './nudge/Nudge';

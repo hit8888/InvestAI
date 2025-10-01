@@ -26,12 +26,15 @@ export {
   Edit,
   Copy,
   Check,
+  CheckCircle,
   AlertCircle,
   Info,
   ZoomIn,
   Gamepad2,
   ClipboardPen,
   XCircle,
+  SwatchBook,
+  Play,
 } from 'lucide-react';
 
 // Re-export the IconProps type from lucide-react

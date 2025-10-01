@@ -155,7 +155,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               showLogo={showFavicon}
               logoUrl={orbLogoUrl}
               logoAlt="Orb Logo"
-              logoSize={messages?.length === 0 ? 52 : 36}
+              logoSize={messages?.length === 0 ? 48 : 36}
               showOnlineIndicator={hasActiveAdminSession || showOnlineIndicator}
               onlineIndicatorProps={{ size: 16, borderWidth: 2, offset: 4 }}
             />
