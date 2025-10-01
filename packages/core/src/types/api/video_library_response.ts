@@ -26,7 +26,7 @@ export interface VideoItem {
 export interface VideoThumbnail {
   thumbnail_asset_url: string;
   thumbnail_type: string;
-  video_artifact_id: number;
+  entity_artifact_id: number;
 }
 
 export interface VideoLibraryResponse {
