@@ -65,6 +65,7 @@ export const ROUTING_TYPE_LOGO_MAP = {
 
 export const ONE_MB_IN_BYTES = 1024 * 1024;
 export const FIVE_MB = 5 * ONE_MB_IN_BYTES;
+export const TWO_MB = 2 * ONE_MB_IN_BYTES;
 
 const {
   DateRange,

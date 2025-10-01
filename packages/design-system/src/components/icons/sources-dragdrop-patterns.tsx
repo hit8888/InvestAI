@@ -6,12 +6,13 @@ type Props = React.SVGProps<SVGSVGElement>;
 const SourcesDragDropPattern = ({ className = '', ...props }: Props) => {
   return (
     <svg
-      className={cn('absolute z-0 fill-current', className)}
+      className={cn('absolute inset-0 z-0 fill-current', className)}
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
       height="100%"
       viewBox="0 0 911 199"
       fill="none"
+      preserveAspectRatio="none"
       {...props}
     >
       <path

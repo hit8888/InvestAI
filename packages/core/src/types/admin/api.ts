@@ -524,6 +524,7 @@ export type DataSourcesAccessorFnType = {
   labelled_by_name: string;
   data_source_type: string;
   asset: Asset;
+  thumbnail: ThumbnailAssetData;
 };
 
 export const WebpagesScreenshotsResponseSchema = z.object({
@@ -649,6 +650,13 @@ export const DataSourceDocumentsResponseResultSchema = z.object({
 
 export type DataSourceDocumentsResponseResult = z.infer<typeof DataSourceDocumentsResponseResultSchema>;
 
+export const ThumbnailAssetDataSchema = z.object({
+  asset_url: z.string(),
+  id: z.string(),
+});
+
+export type ThumbnailAssetData = z.infer<typeof ThumbnailAssetDataSchema>;
+
 export const DataSourceArtifactsResponseResultSchema = z.object({
   id: z.number(),
   title: z.string().nullable(),
@@ -662,6 +670,7 @@ export const DataSourceArtifactsResponseResultSchema = z.object({
   labelled_by_name: z.string().nullable(),
   created_on: z.string(),
   updated_on: z.string(),
+  thumbnail: ThumbnailAssetDataSchema.optional().nullable(),
 });
 
 export const DataSourceWebpagesTableResponseSchema = PaginationDataSchema.extend({
@@ -798,6 +807,22 @@ export const DeleteArtifactsResponseSchema = z.object({
   total_failed: z.number(),
 });
 export type DeleteArtifactsResponse = z.infer<typeof DeleteArtifactsResponseSchema>;
+
+export const CreateThumbnailRequestSchema = z.object({
+  artifact_id: z.number().optional(),
+  file: z.instanceof(File),
+  thumbnail_type: z.string().optional(),
+});
+export type CreateThumbnailRequest = z.infer<typeof CreateThumbnailRequestSchema>;
+
+// Base interface for any payload containing a file
+export interface BaseFilePayload {
+  file: File;
+  [key: string]: number | string | boolean | null | undefined | File;
+}
+
+// Generic asset upload payload that can be either a FormData or an object with file + metadata
+export type AssetUploadPayload = BaseFilePayload | FormData;
 
 export const ReprocessWebpagesRequestSchema = z.object({
   webpage_ids: z.array(z.number()),

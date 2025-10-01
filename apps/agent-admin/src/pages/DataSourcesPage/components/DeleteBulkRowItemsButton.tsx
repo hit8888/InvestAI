@@ -4,11 +4,10 @@ import { SourcesCardTypes } from '../constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { deleteArtifacts, deleteDocuments, deleteWebpages } from '@meaku/core/adminHttp/api';
 import { toast } from 'react-hot-toast';
-import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
-import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import { DeleteArtifactsResponse, DeleteDocumentsResponse, DeleteWebpagesResponse } from '@meaku/core/types/admin/api';
+import DeleteDialogWrapper from '@breakout/design-system/components/layout/DeleteDialogWrapper';
 
 const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {
   const { selectedIds, deselectAll } = useDataSourceTableStore();
@@ -101,39 +100,13 @@ const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardT
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>{getTriggerButton()}</DialogTrigger>
-      <DialogContent className="data-sources-dialog-shadow flex max-w-md flex-col items-center justify-center gap-14 rounded-2xl border border-gray-200 bg-white p-4">
-        <div className="flex flex-col items-center justify-center gap-1 self-stretch">
-          <Typography variant={'title-24'} textColor={'textPrimary'} align={'center'}>
-            Delete selected pages?
-          </Typography>
-          <Typography variant={'body-16'} textColor={'textSecondary'} align={'center'}>
-            You're about to permanently remove the selected pages from your data source. This action cannot be undone.
-          </Typography>
-        </div>
-        <div className="flex w-full items-center gap-6">
-          <Button
-            onClick={() => setIsDialogOpen(false)}
-            variant="system_secondary"
-            disabled={isDeleting}
-            className="w-full"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleBulkDelete}
-            variant="destructive"
-            buttonStyle={'rightIcon'}
-            disabled={isDeleting}
-            className="w-full"
-          >
-            Yes, Delete
-            <DeleteIcon width="16" height="16" className="text-white" />
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <DeleteDialogWrapper
+      isDialogOpen={isDialogOpen}
+      setIsDialogOpen={setIsDialogOpen}
+      getTriggerButton={getTriggerButton}
+      handleDelete={handleBulkDelete}
+      isDeleting={isDeleting}
+    />
   );
 };
 

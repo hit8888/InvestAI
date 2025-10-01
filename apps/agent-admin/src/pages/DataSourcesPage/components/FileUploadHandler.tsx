@@ -1,15 +1,14 @@
 import { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { DATA_SOURCES_ACCEPTED_FILE_TYPES, FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE } from '../constants';
+import { Accept, useDropzone } from 'react-dropzone';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
-
 interface FileUploadHandlerProps {
-  selectedType: string;
+  acceptedFiles: Accept | undefined;
+  errorMessage: string;
   onFileSelect: (files: File[]) => void;
   children: React.ReactNode;
 }
 
-const FileUploadHandler = ({ selectedType, onFileSelect, children }: FileUploadHandlerProps) => {
+const FileUploadHandler = ({ acceptedFiles, errorMessage, onFileSelect, children }: FileUploadHandlerProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
@@ -21,13 +20,8 @@ const FileUploadHandler = ({ selectedType, onFileSelect, children }: FileUploadH
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: DATA_SOURCES_ACCEPTED_FILE_TYPES[selectedType as keyof typeof DATA_SOURCES_ACCEPTED_FILE_TYPES],
+    accept: acceptedFiles,
     onDropRejected: () => {
-      const errorMessage =
-        FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE[
-          selectedType as keyof typeof FILE_TYPES_NOT_ACCEPTED_ERROR_TOAST_MESSAGE
-        ];
-
       ErrorToastMessage({
         title: errorMessage,
       });

@@ -11,6 +11,7 @@ import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore
 import { toast } from 'react-hot-toast';
 import { PlusIcon, Loader2Icon } from 'lucide-react';
 import { useDataSourceForm } from '../../../hooks/useDataSourceForm';
+import VideoThumbnailSection from './VideoThumbnailSection';
 
 type DisplayAndEditDataSourceDetailsProps = {
   selectedDataSources: CommonDataSourceResponse[];
@@ -29,7 +30,7 @@ const DisplayAndEditDataSourceDetails = ({
 }: DisplayAndEditDataSourceDetailsProps) => {
   const { itemIndex } = paginationState;
   const currentDataSource = selectedDataSources[itemIndex];
-  const { title, data, relevant_queries, asset, id } = currentDataSource as DataSourceArtifactsResponse;
+  const { title, data, relevant_queries, asset, id, thumbnail } = currentDataSource as DataSourceArtifactsResponse;
   const { type } = asset as DataSourceItem;
 
   const { watchedValues, setValue, hasFormContentChanged, handleAddQuestion, isDirty } = useDataSourceForm({
@@ -86,7 +87,8 @@ const DisplayAndEditDataSourceDetails = ({
       <TitleSectionEditDrawer key={`title-${id}`} {...commonProps} />
       <DescriptionSectionEditDrawer key={`data-${id}`} {...commonProps} />
       <RelevantQueriesSectionDrawer key={`queries-${id}`} {...commonProps} />
-      <div className="sticky -bottom-4 flex w-full justify-end bg-white">
+      <VideoThumbnailSection title={title} artifactId={id} key={`thumbnail-${thumbnail?.id}`} thumbnail={thumbnail} />
+      <div className="sticky -bottom-4 z-10 flex w-full justify-end bg-white">
         <div className="flex w-full justify-between py-3">
           <Button
             variant="secondary"

@@ -89,6 +89,9 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
           file_type: row.data_source_type || '',
         }),
       }),
+      ...(key === 'asset' && {
+        accessorFn: (row: DataSourcesAccessorFnType) => row.thumbnail || row.asset || '',
+      }),
       ...(key === 'duration' && {
         accessorFn: (row: DataSourcesAccessorFnType) => row.asset?.public_url || '',
       }),

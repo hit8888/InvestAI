@@ -1,12 +1,22 @@
-import { DataSourceItem as DataSourceItemType } from '@meaku/core/types/admin/api';
+import { DataSourceItem as DataSourceItemType, ThumbnailAssetData } from '@meaku/core/types/admin/api';
 import VideoThumbnailPauseIcon from '@breakout/design-system/components/icons/video-thumbnail-pause-icon';
 import SlidesThumbnailIcon from '@breakout/design-system/components/icons/slides-thumbnail-icon';
 
 type IProps = {
-  value?: DataSourceItemType;
+  value?: DataSourceItemType | ThumbnailAssetData;
 };
 
 const AssetCellValue = ({ value }: IProps) => {
+  // Thumbnail asset data
+  if (value && 'asset_url' in value) {
+    return (
+      <div key={value.id} className="relative h-full max-h-48 w-full max-w-60 rounded ring-2 ring-gray-100">
+        <VideoThumbnailPauseIcon className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2" />
+        <img src={value.asset_url} alt="Thumbnail" className="h-full w-full rounded object-cover" />
+      </div>
+    );
+  }
+
   if (!value || !value.public_url || !value.name || !value.type || !value.key) {
     return <div>No asset data</div>;
   }

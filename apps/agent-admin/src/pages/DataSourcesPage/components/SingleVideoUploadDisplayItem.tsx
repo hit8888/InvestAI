@@ -3,50 +3,18 @@ import VideoThumbnailPauseIcon from '@breakout/design-system/components/icons/vi
 import Typography from '@breakout/design-system/components/Typography/index';
 import { DataSourceItem } from '@meaku/core/types/admin/api';
 import { useVideoDuration } from '../../../hooks/useVideoDuration';
-import { useEffect, useState } from 'react';
 import { getSingleSourceItemTypeAndName, getSingleSourceItemVideoUrl } from '../utils';
+import useFileSize from '../../../hooks/useFileSize';
 
 type IProps = {
   item: DataSourceItem | File;
-};
-
-const useFileSize = (item: DataSourceItem | File) => {
-  const [fileSize, setFileSize] = useState<number>(0);
-  const isFile = item instanceof File;
-
-  const fetchFileSize = async (url: string) => {
-    try {
-      const response = await fetch(url, { method: 'HEAD' });
-      const contentLength = response.headers.get('content-length');
-      if (contentLength) {
-        const sizeInMB = Math.floor(parseInt(contentLength) / (1024 * 1024));
-        setFileSize(sizeInMB);
-      }
-    } catch (error) {
-      console.error('Error fetching file size:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (!isFile && (item as DataSourceItem).public_url) {
-      fetchFileSize((item as DataSourceItem).public_url);
-    }
-  }, [item, isFile]);
-
-  const getFileSize = () => {
-    if (isFile) {
-      return Math.floor(item.size / (1024 * 1024));
-    }
-    return fileSize;
-  };
-
-  return { getFileSize };
 };
 
 const SingleVideoUploadDisplayItem = ({ item }: IProps) => {
   const { videoRef, videoDuration, formatDuration, handleVideoLoadedMetadata } = useVideoDuration();
   const isFile = item instanceof File;
   const { getFileSize } = useFileSize(item);
+  const { size, unit } = getFileSize();
   const { type, name } = getSingleSourceItemTypeAndName(item);
   const videoUrl = getSingleSourceItemVideoUrl(item);
 
@@ -75,7 +43,7 @@ const SingleVideoUploadDisplayItem = ({ item }: IProps) => {
             {type.split('/')[1]}
           </Typography>
           <Typography variant="caption-12-normal" className="text-gray-500">
-            • {getFileSize()} MB
+            • {size} {unit}
           </Typography>
         </div>
       </div>

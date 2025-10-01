@@ -54,11 +54,53 @@ import {
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
   VisitorsPayload,
+  CreateThumbnailRequest,
+  AssetUploadPayload,
+  BaseFilePayload,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
 import adminApiClient from './client';
 import { FeedbackRequestPayload } from '../types/api/feedback_request';
+
+// Generic asset upload function that handles two use cases:
+// 1. FormData-only uploads (for simple file uploads)
+// 2. Payload with file + metadata (for uploads with additional data)
+export const assetUpload = (url: string, payload: AssetUploadPayload, onProgress?: (progress: number) => void) => {
+  let requestData: FormData;
+
+  if (payload instanceof FormData) {
+    // Use case 1: Direct FormData upload
+    requestData = payload;
+  } else {
+    // Use case 2: Payload with file and metadata
+    requestData = new FormData();
+    requestData.append('file', payload.file);
+
+    // Append other fields from payload (excluding file)
+    Object.keys(payload).forEach((key) => {
+      if (key !== 'file' && payload[key as keyof BaseFilePayload] !== undefined) {
+        const value = payload[key as keyof BaseFilePayload];
+        // Handle different value types appropriately
+        if (value !== null && value !== undefined) {
+          requestData.append(key, String(value));
+        }
+      }
+    });
+  }
+
+  return adminApiClient.post(url, requestData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total && onProgress) {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onProgress(progress);
+      }
+    },
+  });
+};
 
 export const getFonts = (payload: { family?: string; subset?: string; capability?: string; sort?: string }) =>
   adminApiClient.get(`/core/api/fonts/`, { params: payload });
@@ -161,17 +203,7 @@ export const uploadAssetsFile = (file: File, onProgress?: (progress: number) => 
   const formData = new FormData();
   formData.append('file', file);
 
-  return adminApiClient.post('/tenant/api/assets/upload/', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    onUploadProgress: (progressEvent) => {
-      if (progressEvent.total && onProgress) {
-        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        onProgress(progress);
-      }
-    },
-  });
+  return assetUpload('/tenant/api/assets/upload/', formData, onProgress);
 };
 
 export const getDataSourceOverviewData = () => adminApiClient.get(`tenant/api/datasources/overview/`);
@@ -223,6 +255,12 @@ export const deleteArtifacts = (payload: DeleteArtifactsRequest) =>
 
 export const deleteDocuments = (payload: DeleteDocumentsRequest) =>
   adminApiClient.delete<DeleteDocumentsResponse>(`tenant/api/documents/bulk/`, { data: payload });
+
+export const deleteThumbnail = (thumbnailId: string) => adminApiClient.delete(`tenant/api/thumbnails/${thumbnailId}/`);
+
+export const createThumbnail = (payload: CreateThumbnailRequest, onProgress?: (progress: number) => void) => {
+  return assetUpload('/tenant/api/thumbnails/', payload, onProgress);
+};
 
 export const reprocessWebpages = (payload: ReprocessWebpagesRequest) =>
   adminApiClient.post<ReprocessWebpagesResponse>(`tenant/api/webpages/reprocess/`, payload);
