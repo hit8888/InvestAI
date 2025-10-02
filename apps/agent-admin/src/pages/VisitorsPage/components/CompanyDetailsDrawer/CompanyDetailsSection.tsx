@@ -1,7 +1,7 @@
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import LogoImage from '@breakout/design-system/components/LogoImage';
 import { CompanyData } from './types';
-import { ensureProtocol, extractDomain } from '@meaku/core/utils/index';
+import { ensureProtocol } from '@meaku/core/utils/index';
 import NumberUtil from '@meaku/core/utils/numberUtils';
 import Typography from '@breakout/design-system/components/Typography/index';
 import InfoChip from './InfoChip';
@@ -18,8 +18,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
   }
 
   const fromEnrichment = companyData?.enrichmentSource === 'ip_enrichment';
-  const showInfoChips =
-    !!companyData.relevance || !!companyData.atsUsed || !!companyData.atsWebsiteUrl || !!companyData.numOpenJobs;
+  const showInfoChips = !!companyData.relevance || !!companyData.atsUsed || !!companyData.numOpenJobs;
 
   return (
     <div>
@@ -117,9 +116,6 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
               <div className="flex flex-wrap justify-end gap-2">
                 {!!companyData.relevance && <InfoChip label="Relevance" value={companyData.relevance} />}
                 {!!companyData.atsUsed && <InfoChip label="ATS" value={companyData.atsUsed} />}
-                {!!companyData.atsWebsiteUrl && (
-                  <InfoChip label="ATS Website" value={extractDomain(companyData.atsWebsiteUrl)} isLink={true} />
-                )}
                 {!!companyData.numOpenJobs && (
                   <InfoChip label="Num Open Jobs" value={NumberUtil.formatNumber(companyData.numOpenJobs)} />
                 )}
