@@ -1,5 +1,5 @@
 import { Video } from '../types';
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -7,108 +7,32 @@ interface MainVideoPlayerProps {
   videoId: string | null;
   getVideoById: (id: string) => Video | undefined;
   getVideoUrl: (video: Video) => string;
-  onPlayingStateChange?: (isPlaying: boolean) => void;
   isLoading?: boolean;
-  wasPlaying?: boolean;
-  allVideoIds?: string[];
+  onVideoEnd: () => void;
   onVideoSelect?: (videoId: string) => void;
-  onWatchNow?: (videoId: string) => void;
-  watchedVideos: string[];
-  addWatchedVideo: (videoId: string) => void;
+  showRecommendation: boolean;
+  allVideoIds?: string[];
+  getNextRecommendedVideo: () => Video | null;
 }
 
 export const MainVideoPlayer = ({
   videoId,
   getVideoById,
   getVideoUrl,
-  onPlayingStateChange,
   isLoading = false,
-  wasPlaying = false,
-  allVideoIds = [],
+  onVideoEnd,
   onVideoSelect,
-  onWatchNow,
-  watchedVideos,
-  addWatchedVideo,
+  showRecommendation,
+  getNextRecommendedVideo,
 }: MainVideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const [hasEnded, setHasEnded] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-
   const video = videoId ? getVideoById(videoId) : null;
-
-  // Use direct video URL for progressive buffering (no full caching)
   const videoUrl = video ? getVideoUrl(video) : null;
-
-  // Find next recommended video
-  const getNextRecommendedVideo = (): Video | null => {
-    if (!videoId || allVideoIds.length === 0) return null;
-
-    const currentIndex = allVideoIds.indexOf(videoId);
-
-    // Create a single search array that wraps around the list
-    const searchOrder = [...allVideoIds.slice(currentIndex + 1), ...allVideoIds.slice(0, currentIndex)];
-
-    // Try to find the next unwatched video
-    const nextUnwatchedId = searchOrder.find((id) => !watchedVideos.includes(id) && id !== videoId);
-    if (nextUnwatchedId) {
-      return getVideoById(nextUnwatchedId) || null;
-    }
-
-    // If all videos are watched, get the next video in sequence
-    const nextIndex = (currentIndex + 1) % allVideoIds.length;
-    const nextVideoId = allVideoIds[nextIndex];
-
-    return getVideoById(nextVideoId) || null;
-  };
-
   const nextRecommendedVideo = getNextRecommendedVideo();
-  // Reset ended state when video changes
-  useEffect(() => {
-    setHasEnded(false);
-    setShowOverlay(false);
-    onPlayingStateChange?.(false);
-  }, [videoId, onPlayingStateChange]);
 
-  // Auto-play new video if the previous one was playing
-  useEffect(() => {
-    if (videoRef.current && videoUrl && wasPlaying) {
-      const playPromise = videoRef.current.play();
-      if (playPromise) {
-        playPromise.catch((error) => {
-          console.error('Auto-play failed:', error);
-        });
-      }
-    }
-  }, [videoUrl, wasPlaying]);
-
-  // Trigger fade-in animation when video ends
-  useEffect(() => {
-    if (hasEnded && nextRecommendedVideo) {
-      // Small delay for smooth transition
-      const timer = setTimeout(() => {
-        setShowOverlay(true);
-        // Mark current video as watched when recommendation overlay appears
-        if (videoId) {
-          addWatchedVideo(videoId);
-        }
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [hasEnded, nextRecommendedVideo, videoId, addWatchedVideo]);
-
-  const handlePlay = () => {
-    setHasEnded(false);
-    onPlayingStateChange?.(true);
-  };
-
-  const handlePause = () => {
-    onPlayingStateChange?.(false);
-  };
-
-  const handleEnded = () => {
-    setHasEnded(true);
-    onPlayingStateChange?.(false);
+  const handleVideoEnded = () => {
+    onVideoEnd();
   };
 
   const handleNextVideoClick = () => {
@@ -171,7 +95,7 @@ export const MainVideoPlayer = ({
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-lg border border-primary/10 flex flex-col min-h-[440px]">
+    <div className="relative w-full rounded-lg border border-primary/10 flex flex-col min-h-[440px]">
       <div className="bg-primary/10 p-2 px-3 flex-shrink-0">
         {video.title ? (
           <h3 className="text-sm font-semibold text-primary">{video.title}</h3>
@@ -193,16 +117,15 @@ export const MainVideoPlayer = ({
                 className="absolute inset-0"
               >
                 <video
+                  key={videoId}
                   ref={videoRef}
-                  key={videoId} // Force re-render when video changes
                   src={videoUrl}
                   controls
+                  autoPlay
                   className="w-full h-full object-cover"
                   preload="metadata"
                   title={video.title}
-                  onPlay={handlePlay}
-                  onPause={handlePause}
-                  onEnded={handleEnded}
+                  onEnded={handleVideoEnded}
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -212,7 +135,7 @@ export const MainVideoPlayer = ({
         </div>
 
         {/* Hidden preload thumbnail for next video - prevents flickering */}
-        {nextRecommendedVideo && !hasEnded && (
+        {nextRecommendedVideo && !showRecommendation && (
           <div className="absolute opacity-0 pointer-events-none -z-10">
             <VideoThumbnail
               videoId={nextRecommendedVideo.id}
@@ -225,29 +148,19 @@ export const MainVideoPlayer = ({
         )}
 
         {/* Next Video Recommendation Overlay - Using VideoThumbnail Component */}
-        {hasEnded && nextRecommendedVideo && (
-          <div
-            className={`absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs transition-all duration-500 ${
-              showOverlay ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <div
-              className={`flex flex-col items-start justify-center gap-2 transform transition-all duration-500 ${
-                showOverlay ? 'translate-y-0 scale-100' : 'translate-y-4 scale-95'
-              }`}
-            >
+        {showRecommendation && nextRecommendedVideo && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs transition-all duration-500 opacity-100">
+            <div className="flex flex-col items-start justify-center gap-2 transform transition-all duration-500 translate-y-0 scale-100">
               <p className="text-xs text-white align-left w-full">Liked What you saw? Here's what is next.</p>
               <VideoThumbnail
                 videoId={nextRecommendedVideo.id}
                 getVideoById={getVideoById}
                 getVideoUrl={getVideoUrl}
                 onClick={handleNextVideoClick}
-                onWatchNow={onWatchNow}
                 isGlobalLoading={false}
                 variant="recommendation"
                 onLater={() => {
-                  setShowOverlay(false);
-                  setHasEnded(false);
+                  // This will be handled by parent component
                 }}
               />
             </div>

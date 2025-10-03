@@ -15,7 +15,6 @@ import useFeatureConfig from '../../hooks/useFeatureConfig';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { trackError } from '../../utils/error';
 import { useWatchedVideos } from './hooks/useWatchedVideos';
-import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 
 const { ASK_AI, BOOK_MEETING } = CommandBarModuleTypeSchema.enum;
 
@@ -24,10 +23,9 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
   const { orb_config: orbConfig } = config.style_config;
   const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.VIDEO_LIBRARY);
   const bookMeetingFeatureConfig = useFeatureConfig(BOOK_MEETING);
-  const { watchedVideos, addWatchedVideo, isVideoWatched } = useWatchedVideos();
-  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
-  const [wasPlayingBeforeChange, setWasPlayingBeforeChange] = useState(false);
-  const { screenWidth, screenHeight } = useScreenSize();
+  const { addWatchedVideo, isVideoWatched } = useWatchedVideos();
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [showRecommendation, setShowRecommendation] = useState(false);
 
   // Create video config for React Query
   const videoConfig = {
@@ -51,17 +49,16 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     enabled: isConfigReady,
   });
 
-  // Select first video when videos are loaded and autoplay it
+  // Select first unwatched video when videos are loaded
   useEffect(() => {
-    if (videos.length > 0 && !selectedVideoId) {
+    if (videos.length > 0 && !currentVideoId) {
       // Try to find first unwatched video
       const firstUnwatchedVideo = videos.find((video) => !isVideoWatched(video.id));
       // If all videos are watched, select the first video
-      setSelectedVideoId(firstUnwatchedVideo?.id || videos[0].id);
-      // Set wasPlaying to true so the first video autoplays
-      setWasPlayingBeforeChange(true);
+      const videoToSelect = firstUnwatchedVideo?.id || videos[0].id;
+      setCurrentVideoId(videoToSelect);
     }
-  }, [videos, selectedVideoId, isVideoWatched]);
+  }, [videos, currentVideoId, isVideoWatched]);
 
   // Track errors when they occur
   useEffect(() => {
@@ -100,15 +97,21 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     setActiveFeature?.(BOOK_MEETING);
   };
 
-  const handleVideoSelect = (newVideoId: string, forceAutoplay: boolean = true) => {
-    // Always autoplay when user manually selects a video (from recommendations or next video card)
-    setWasPlayingBeforeChange(forceAutoplay);
-    setSelectedVideoId(newVideoId);
+  const handleVideoSelect = (newVideoId: string) => {
+    setCurrentVideoId(newVideoId);
+    setShowRecommendation(false);
+    // Mark current video as watched when user selects a new one
+    if (currentVideoId) {
+      addWatchedVideo(currentVideoId);
+    }
   };
 
-  const handleWatchNow = (videoId: string) => {
-    // Always autoplay when clicking "Watch Now" button
-    handleVideoSelect(videoId, true);
+  const handleVideoEnd = () => {
+    // Mark current video as watched when it ends
+    if (currentVideoId) {
+      addWatchedVideo(currentVideoId);
+    }
+    setShowRecommendation(true);
   };
 
   // Get all video IDs for carousel (include all videos)
@@ -124,21 +127,31 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     }
 
     return (
-      <div className="h-full flex flex-col" key={`video-library-${screenWidth}-${screenHeight}`}>
+      <div className="h-full flex flex-col">
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           {/* Main Video */}
           <div className="flex-shrink-0 mb-4 z-50 h-auto">
             <MainVideoPlayer
-              videoId={selectedVideoId}
+              videoId={currentVideoId}
               getVideoById={getVideoById}
               getVideoUrl={getVideoUrl}
               isLoading={!isConfigReady || isLoading}
-              wasPlaying={wasPlayingBeforeChange}
-              allVideoIds={allVideoIds}
+              onVideoEnd={handleVideoEnd}
               onVideoSelect={handleVideoSelect}
-              onWatchNow={handleWatchNow}
-              watchedVideos={watchedVideos}
-              addWatchedVideo={addWatchedVideo}
+              showRecommendation={showRecommendation}
+              allVideoIds={allVideoIds}
+              getNextRecommendedVideo={() => {
+                if (!currentVideoId || allVideoIds.length === 0) return null;
+                const currentIndex = allVideoIds.indexOf(currentVideoId);
+                const searchOrder = [...allVideoIds.slice(currentIndex + 1), ...allVideoIds.slice(0, currentIndex)];
+                const nextUnwatchedId = searchOrder.find((id) => !isVideoWatched(id) && id !== currentVideoId);
+                if (nextUnwatchedId) {
+                  return getVideoById(nextUnwatchedId) || null;
+                }
+                const nextIndex = (currentIndex + 1) % allVideoIds.length;
+                const nextVideoId = allVideoIds[nextIndex];
+                return getVideoById(nextVideoId) || null;
+              }}
             />
           </div>
 
@@ -146,7 +159,7 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
           <div className="flex-shrink mb-4">
             <VideoRecommendations
               videoIds={allVideoIds}
-              selectedVideoId={selectedVideoId}
+              selectedVideoId={currentVideoId}
               getVideoById={getVideoById}
               getVideoUrl={getVideoUrl}
               onVideoSelect={handleVideoSelect}

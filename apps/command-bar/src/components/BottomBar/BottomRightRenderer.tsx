@@ -74,7 +74,6 @@ export const BottomRightRenderer = ({
         />
         {activeFeatureModuleType && (
           <FeatureContentContainer
-            key={activeFeatureModuleType}
             activeFeature={activeFeatureModuleType}
             setActiveFeature={setActiveFeature}
             isExpanded={isExpanded}

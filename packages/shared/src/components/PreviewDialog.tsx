@@ -16,7 +16,10 @@ const PreviewDialog = ({ title, trigger, children, className, ...props }: Previe
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       {renderInPortal(
         <DialogContent
-          className={cn('flex h-[85vh] max-h-[85vh] max-w-[80vw] flex-col gap-0 overflow-hidden p-0', className)}
+          className={cn(
+            'flex h-[90vh] max-h-[calc(100vh-32px)] max-w-[80vw] w-[-webkit-fill-available] flex-col gap-0 overflow-hidden p-0',
+            className,
+          )}
         >
           {title && (
             <Typography className="flex-none bg-primary/10 p-3 px-4" variant="body-semibold">

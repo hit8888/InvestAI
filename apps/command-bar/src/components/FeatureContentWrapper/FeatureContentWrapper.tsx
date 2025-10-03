@@ -3,7 +3,6 @@ import React from 'react';
 
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import { LAYOUT_CONSTANTS } from './constants';
 
 import { useModulePositioning, useModuleStyles, useInnerModuleStyles, useModuleAnimation } from './hooks';
@@ -16,7 +15,9 @@ export interface FeatureContentWrapperProps {
 
 const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureContentWrapperProps) => {
   const isMobile = useIsMobile();
-  const { screenWidth, screenHeight } = useScreenSize();
+  // Use a stable screen height that doesn't change during fullscreen
+  // This prevents component remounting when video goes fullscreen
+  const screenHeight = window.innerHeight;
 
   // Use custom hooks for positioning, styling, and animation
   const position = useModulePositioning(activeFeature, screenHeight, isMobile);
@@ -34,8 +35,9 @@ const FeatureContentWrapper = ({ children, activeFeature, isExpanded }: FeatureC
 
   if (!activeFeature || !position || !moduleStyles || !innerModuleStyles) return null;
 
-  // Use a key that includes screen dimensions to force re-calculation on resize
-  const containerKey = `feature-module-container-${screenWidth}-${screenHeight}`;
+  // Use a stable key that doesn't change on fullscreen resize
+  // Only change key when the actual breakpoint changes, not on fullscreen
+  const containerKey = `feature-module-container-${isMobile ? 'mobile' : 'desktop'}`;
 
   return (
     <motion.div

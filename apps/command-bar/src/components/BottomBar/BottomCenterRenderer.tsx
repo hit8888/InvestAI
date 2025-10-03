@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { cn } from '@meaku/saral';
 import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import { BottomCenterBar } from './';
 import CommandBarActions from '../CommandBarActions';
 import FeatureContentContainer from '../FeatureContentContainer';
@@ -38,15 +37,13 @@ export const BottomCenterRenderer = ({
   const { hasInteracted, shouldUnmountBottomBar, shouldShowDefaultBar, isDefaultBarReady, skipInitialTooltips } =
     transitionState;
 
-  // Get screen width for responsive nudge positioning
-  const { screenWidth } = useScreenSize();
-
   // Check if bottom bar is currently rendered
   const isBottomBarRendered = !shouldUnmountBottomBar && isDynamicConfigStarted && !isDynamicConfigLoading;
 
   // Move nudge up only when bottom bar is rendered AND device width is below breakpoint
   // Above the breakpoint, there's enough space to avoid overlap without offset
-  const shouldMoveNudgeUp = isBottomBarRendered && screenWidth < COMMAND_BAR_ANIMATIONS.NUDGE.OVERLAP_BREAKPOINT;
+  // Use a stable check that doesn't trigger re-renders on fullscreen
+  const shouldMoveNudgeUp = isBottomBarRendered && window.innerWidth < COMMAND_BAR_ANIMATIONS.NUDGE.OVERLAP_BREAKPOINT;
 
   const { handleSwitchToDefault, handleDefaultBarAnimationComplete } = transitionActions;
 
@@ -125,7 +122,6 @@ export const BottomCenterRenderer = ({
         </motion.div>
         {activeFeatureModuleType && (
           <FeatureContentContainer
-            key={activeFeatureModuleType}
             activeFeature={activeFeatureModuleType}
             setActiveFeature={setActiveFeature}
             isExpanded={isExpanded}
