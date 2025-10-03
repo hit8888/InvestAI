@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { Cta, Nudge as NudgeType } from '@meaku/core/types/api/configuration_response';
 import useNudgePollingQuery from '../../network/http/queries/useNudgeQuery';
-import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import type { CommandBarModuleType, NudgeAssetType } from '@meaku/core/types/api/configuration_response';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import { useMouseDismissible } from './hooks/useMouseDismissible';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
@@ -91,8 +91,17 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   );
 
   // Group assets by alignment
-  const topAssets = assets?.filter((asset) => asset.alignment === 'TOP') || [];
-  const bottomAssets = assets?.filter((asset) => asset.alignment === 'BOTTOM') || [];
+  const { topAssets, bottomAssets } = (Array.isArray(assets) ? assets : []).reduce(
+    (acc: { topAssets: NudgeAssetType[]; bottomAssets: NudgeAssetType[] }, asset) => {
+      if (asset.alignment === 'TOP') {
+        acc.topAssets.push(asset);
+      } else if (asset.alignment === 'BOTTOM') {
+        acc.bottomAssets.push(asset);
+      }
+      return acc;
+    },
+    { topAssets: [], bottomAssets: [] },
+  );
 
   const handleCtaClick = useCallback(
     (button: Cta) => {
