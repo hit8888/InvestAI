@@ -6,9 +6,11 @@ interface PreviewDialogProps extends DialogProps {
   title?: string;
   trigger?: React.ReactNode;
   className?: string;
+  width?: string;
+  maxWidth?: string;
 }
 
-const PreviewDialog = ({ title, trigger, children, className, ...props }: PreviewDialogProps) => {
+const PreviewDialog = ({ title, trigger, children, className, width, maxWidth, ...props }: PreviewDialogProps) => {
   const { renderInPortal } = useModalPortal();
 
   return (
@@ -17,9 +19,14 @@ const PreviewDialog = ({ title, trigger, children, className, ...props }: Previe
       {renderInPortal(
         <DialogContent
           className={cn(
-            'flex h-[90vh] max-h-[calc(100vh-32px)] max-w-[80vw] w-[-webkit-fill-available] flex-col gap-0 overflow-hidden p-0',
+            'flex h-[90vh] max-h-[calc(100vh-32px)] flex-col gap-0 overflow-hidden p-0',
+            !width && 'max-w-[80vw] w-[-webkit-fill-available]',
             className,
           )}
+          style={{
+            ...(width && { width }),
+            ...(maxWidth && { maxWidth }),
+          }}
         >
           {title && (
             <Typography className="flex-none bg-primary/10 p-3 px-4" variant="body-semibold">

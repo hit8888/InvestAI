@@ -1,7 +1,8 @@
 import { Video } from '../types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LucideIcon } from '@meaku/saral';
 
 interface MainVideoPlayerProps {
   videoId: string | null;
@@ -12,6 +13,8 @@ interface MainVideoPlayerProps {
   onVideoSelect?: (videoId: string) => void;
   showRecommendation: boolean;
   allVideoIds?: string[];
+  onWatchNow?: (videoId: string) => void;
+  onLater?: () => void;
   getNextRecommendedVideo: () => Video | null;
 }
 
@@ -23,9 +26,13 @@ export const MainVideoPlayer = ({
   onVideoEnd,
   onVideoSelect,
   showRecommendation,
+  onWatchNow,
+  onLater,
   getNextRecommendedVideo,
 }: MainVideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const video = videoId ? getVideoById(videoId) : null;
   const videoUrl = video ? getVideoUrl(video) : null;
@@ -39,6 +46,24 @@ export const MainVideoPlayer = ({
     if (nextRecommendedVideo && onVideoSelect) {
       onVideoSelect(nextRecommendedVideo.id);
     }
+  };
+
+  const handlePlayPauseToggle = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  };
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
   };
 
   // Show shimmer when loading - match exact layout of actual video player
@@ -126,6 +151,8 @@ export const MainVideoPlayer = ({
                   preload="metadata"
                   title={video.title}
                   onEnded={handleVideoEnded}
+                  onPlay={handlePlay}
+                  onPause={handlePause}
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -133,6 +160,31 @@ export const MainVideoPlayer = ({
             )}
           </AnimatePresence>
         </div>
+
+        {/* Hover Overlay with Play/Pause Button */}
+        {!showRecommendation && (
+          <div
+            className="absolute inset-0 bottom-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={handlePlayPauseToggle}
+          >
+            <motion.div
+              className="w-20 h-20 bg-foreground/70 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{
+                scale: isHovered ? 1 : 0.8,
+                opacity: isHovered ? 1 : 0,
+              }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <LucideIcon
+                name={isPlaying ? 'pause' : 'play'}
+                className={`w-8 h-8 text-gray-100 fill-gray-100 ${isPlaying ? '' : 'ml-0.5'}`}
+              />
+            </motion.div>
+          </div>
+        )}
 
         {/* Hidden preload thumbnail for next video - prevents flickering */}
         {nextRecommendedVideo && !showRecommendation && (
@@ -159,9 +211,8 @@ export const MainVideoPlayer = ({
                 onClick={handleNextVideoClick}
                 isGlobalLoading={false}
                 variant="recommendation"
-                onLater={() => {
-                  // This will be handled by parent component
-                }}
+                onWatchNow={onWatchNow}
+                onLater={onLater}
               />
             </div>
           </div>

@@ -112,12 +112,11 @@ export const MainDemoPlayer = ({
         <div
           className={`bg-white rounded-2xl items-center flex flex-col p-4 max-w-[270px] mx-4 shadow-lg transition-all duration-300 transform`}
         >
-          <p className="text-base w-full text-left mb-1 font-medium text-foreground">Play Interactive Demo</p>
           <p className="text-sm w-full text-left mb-4 text-muted-foreground">
-            This is an interactive demo. Experience how it works in an interactive preview.
+            Experience how it works in an interactive preview.
           </p>
           <Button hasWipers onClick={handlePlayFullscreen} variant="default" className="px-10">
-            View Demo
+            Start Tour
           </Button>
         </div>
       </div>

@@ -27,6 +27,7 @@ const buttonVariants = cva(
         lg: 'h-11 rounded-md px-8',
         icon: 'h-14 w-14',
       },
+
       hasWipers: {
         true: 'relative overflow-hidden group',
         false: '',
@@ -94,7 +95,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // to ensure the wiper animation works correctly while maintaining Slot functionality
 
       if (hasWipers) {
-        // Wrapper approach: Create a wrapper div that can contain wipers
+        // Wrapper approach: Create a wrapper div that can contain wipers/waves
         // while still using Slot for the actual child component
         return (
           <div className={cn(buttonVariants({ variant, size, hasWipers, className }))}>
@@ -124,7 +125,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         );
       }
 
-      // Standard asChild implementation without wipers
+      // Standard asChild implementation without wipers/waves
       const Comp = Slot;
       return (
         <Comp className={cn(buttonVariants({ variant, size, hasWipers, className }))} ref={ref} {...props}>

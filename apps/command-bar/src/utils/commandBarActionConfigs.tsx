@@ -76,7 +76,7 @@ export const SummarizeActionConfig: ActionConfig = {
 export const IframeActionConfig: ActionConfig = {
   moduleType: IFRAME,
   icon: {
-    fallbackIcon: <LucideIcon name="play" className="ml-1 size-5 stroke-[2px]" />,
+    fallbackIcon: <LucideIcon name="percent" className="ml-1 size-5 stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Iframe',
   },

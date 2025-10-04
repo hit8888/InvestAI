@@ -29,8 +29,12 @@ export const IframeContent = ({ onClose }: FeatureContentProps) => {
   }
 
   const { name, module_configs: moduleConfig } = featureConfig;
-  const { gated, url } = moduleConfig;
+  const { gated, url, width } = moduleConfig;
   const showEmailForm = gated && !isSuccess && !getLocalStorageData()?.prospect_info_collected;
+
+  // Calculate dialog width based on module config or use default
+  const dialogWidth = width ? `${width}px` : '50vw';
+  const maxDialogWidth = width ? `${width}px` : '90vw';
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +49,7 @@ export const IframeContent = ({ onClose }: FeatureContentProps) => {
   };
 
   return (
-    <PreviewDialog open title={name} onOpenChange={onClose}>
+    <PreviewDialog open title={name} onOpenChange={onClose} width={dialogWidth} maxWidth={maxDialogWidth}>
       {showEmailForm ? (
         <div className="flex h-full flex-col items-center justify-center p-6">
           <form onSubmit={handleEmailSubmit} className="w-80 space-y-4">

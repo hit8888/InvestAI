@@ -65,7 +65,7 @@ export const VideoThumbnail = ({
 
   if (variant === 'recommendation') {
     return (
-      <div className="bg-background shadow-lg rounded-lg flex border shadow-lg p-1.5 w-[550px] h-40">
+      <div className="bg-background shadow-lg rounded-lg flex border shadow-lg p-2 w-[550px] h-40">
         {/* Left Half - Video Preview */}
         <div className="w-1/2 relative">
           {shouldShowShimmer ? (
@@ -79,7 +79,7 @@ export const VideoThumbnail = ({
             <>
               <video
                 src={getVideoUrl(video)}
-                className="w-full h-full object-cover transition-transform rounded-[10px] bg-background"
+                className="w-full h-full object-cover transition-transform rounded-lg border bg-card shadow-sm"
                 preload="metadata"
                 muted
                 controls={false}
@@ -110,7 +110,7 @@ export const VideoThumbnail = ({
                 <div className="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
               </>
             ) : video ? (
-              <Typography variant="body-small" fontWeight="medium">
+              <Typography variant="heading" fontWeight="medium">
                 {video?.title || ''}
               </Typography>
             ) : null}
@@ -120,6 +120,7 @@ export const VideoThumbnail = ({
           {!shouldShowShimmer && !isPlaceholder && (
             <div className="flex gap-1 mt-2 gap-4 w-full flex">
               <Button
+                hasWipers
                 variant="outline"
                 size="sm"
                 className="text-xs flex-1"
@@ -131,6 +132,7 @@ export const VideoThumbnail = ({
                 Later
               </Button>
               <Button
+                hasWipers
                 size="sm"
                 className="text-xs flex-1"
                 onClick={() => !isPlaceholder && onWatchNow?.(videoId)}

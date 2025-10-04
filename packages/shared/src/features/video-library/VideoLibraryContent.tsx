@@ -114,6 +114,10 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     setShowRecommendation(true);
   };
 
+  const handleLater = () => {
+    setShowRecommendation(false);
+  };
+
   // Get all video IDs for carousel (include all videos)
   const allVideoIds = videos.map((video) => video.id);
 
@@ -140,6 +144,8 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
               onVideoSelect={handleVideoSelect}
               showRecommendation={showRecommendation}
               allVideoIds={allVideoIds}
+              onWatchNow={handleVideoSelect}
+              onLater={handleLater}
               getNextRecommendedVideo={() => {
                 if (!currentVideoId || allVideoIds.length === 0) return null;
                 const currentIndex = allVideoIds.indexOf(currentVideoId);
