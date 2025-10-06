@@ -49,7 +49,7 @@ export const useModulePositioning = (
     // Desktop positioning - module-specific logic
     const moduleConfig = MODULE_CONFIG[activeFeature];
 
-    if (activeFeature === 'VIDEO_LIBRARY' || activeFeature === 'DEMO_LIBRARY') {
+    if (activeFeature === 'VIDEO_LIBRARY' || activeFeature === 'DEMO_LIBRARY' || activeFeature === 'IFRAME') {
       return {
         bottom: bottomGap,
         maxHeight: availableHeight, // Always fit within viewport

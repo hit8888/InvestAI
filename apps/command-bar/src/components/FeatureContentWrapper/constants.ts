@@ -78,6 +78,22 @@ const wideModuleConfig = {
 } as const;
 
 /**
+ * Iframe module configuration with specific width and height requirements
+ */
+const iframeModuleConfig = {
+  maxHeight: 'auto', // Will be calculated based on available space
+  width: 500, // Minimum 500px width
+  expandedWidth: 500, // Same width for expanded state
+  innerStyles: {
+    minWidth: '500px',
+    minHeight: '684px',
+    overflowY: 'auto' as const,
+    overflowX: 'hidden' as const,
+    marginLeft: '-50px',
+  },
+} as const;
+
+/**
  * Module-specific configuration for styling and behavior
  */
 export const MODULE_CONFIG = {
@@ -87,7 +103,7 @@ export const MODULE_CONFIG = {
   LIVE_CHAT: defaultModuleConfig,
   SUMMARIZE: defaultModuleConfig,
   BOOK_MEETING: defaultModuleConfig,
-  IFRAME: defaultModuleConfig,
+  IFRAME: iframeModuleConfig,
 } as const satisfies Record<
   CommandBarModuleType,
   {

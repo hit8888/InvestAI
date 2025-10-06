@@ -54,11 +54,6 @@ const FeatureContentContainer = ({
     setActiveFeature,
   };
 
-  // Special cases that don't use FeatureContentWrapper
-  if (activeFeature === IFRAME) {
-    return <ContentComponent {...commonProps} />;
-  }
-
   // Special case for VIDEO_LIBRARY and DEMO_LIBRARY (always expanded)
   const wrapperIsExpanded = activeFeature === VIDEO_LIBRARY || activeFeature === DEMO_LIBRARY ? true : isExpanded;
 

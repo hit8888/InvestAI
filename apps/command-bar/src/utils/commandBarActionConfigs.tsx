@@ -76,7 +76,7 @@ export const SummarizeActionConfig: ActionConfig = {
 export const IframeActionConfig: ActionConfig = {
   moduleType: IFRAME,
   icon: {
-    fallbackIcon: <LucideIcon name="percent" className="ml-1 size-5 stroke-[2px]" />,
+    fallbackIcon: <LucideIcon name="percent" className=" size-6 fill-background stroke-[2px]" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Iframe',
   },
@@ -91,7 +91,7 @@ export const IframeActionConfig: ActionConfig = {
 export const VideoLibraryActionConfig: ActionConfig = {
   moduleType: VIDEO_LIBRARY,
   icon: {
-    fallbackIcon: <VideoLibraryIcon className="size-5 stroke-[2px]" />,
+    fallbackIcon: <VideoLibraryIcon className="fill-!foreground size-5 stroke-[2px] hover:!fill-background" />,
     customIconClassName: 'h-full w-full rounded-full',
     customIconAlt: 'Video Library',
   },
