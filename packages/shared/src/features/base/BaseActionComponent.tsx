@@ -111,7 +111,6 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
             className={cn(iconClassName, isActive && 'rounded-2xl')}
             // Add loading optimization
             loading="lazy"
-            style={{ minWidth: 66 }}
             // Prevent dragging for better UX
             draggable={false}
             // Use stable key to prevent flicker when switching between bars
