@@ -110,12 +110,12 @@ export const MainDemoPlayer = ({
         className={`absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs transition-all duration-300`}
       >
         <div
-          className={`bg-white rounded-2xl items-center flex flex-col p-4 max-w-[270px] mx-4 shadow-lg transition-all duration-300 transform`}
+          className={`bg-white rounded-2xl items-center flex flex-col p-4 max-w-[200px] mx-4 shadow-lg transition-all duration-300 transform`}
         >
           <p className="text-sm w-full text-left mb-4 text-muted-foreground">
             Experience how it works in an interactive preview.
           </p>
-          <Button hasWipers onClick={handlePlayFullscreen} variant="default" className="px-10">
+          <Button hasWipers onClick={handlePlayFullscreen} variant="default" className="px-10 rounded-lg">
             Start Tour
           </Button>
         </div>

@@ -136,7 +136,12 @@ const BaseActionComponent: React.FC<BaseActionComponentProps> = React.memo(
             variant={buttonVariant}
             onClick={handleClick}
             hasWipers={!!customIconUrl && !isActive}
-            className={`${buttonClassName} ${!isActive ? 'group-hover:scale-110 group-hover:bg-foreground group-hover:text-background' : ''} transition-all shadow-none`}
+            className={cn(
+              buttonClassName,
+              'transition-all shadow-none',
+              !isActive && 'group-hover:scale-110 group-hover:bg-foreground group-hover:text-background',
+              actionConfig.moduleType === 'IFRAME' && isActive && '[&_svg]:fill-background',
+            )}
             style={{
               ...(buttonSize
                 ? {
