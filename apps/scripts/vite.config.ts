@@ -50,7 +50,6 @@ export default defineConfig(({ mode }) => {
         name: entryPoint,
       },
       target: "es2020",
-      sourcemap: true,
       minify: true,
       outDir: "dist",
     },

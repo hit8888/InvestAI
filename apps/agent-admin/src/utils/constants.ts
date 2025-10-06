@@ -38,8 +38,8 @@ import PanelConversationIcon from '@breakout/design-system/components/icons/pane
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
 import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent-icon';
-import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
-import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
+// import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
+// import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
 import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-insights-icon';
 import PanelProfileIcon from '@breakout/design-system/components/icons/panel-profile-icon';
 import PanelProfileActiveIcon from '@breakout/design-system/components/icons/panel-profile-active-icon';
@@ -807,18 +807,19 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
       },
     ],
   },
-  {
-    navUrl: `/${AppRoutesEnum.TRAINING}`,
-    navItem: SidebarNavItemsEnum.TRAINING_LABEL,
-    icon: PanelTrainingIcon,
-    activeIcon: PanelTrainingActiveIcon,
-    children: [
-      {
-        navUrl: `/${AppRoutesEnum.TRAINING_PLAYGROUND}`,
-        navItem: SidebarNavItemsEnum.TRAINING_PLAYGROUND_LABEL,
-      },
-    ],
-  },
+  // TODO: Will be added back in the future when new training module is released
+  // {
+  //   navUrl: `/${AppRoutesEnum.TRAINING}`,
+  //   navItem: SidebarNavItemsEnum.TRAINING_LABEL,
+  //   icon: PanelTrainingIcon,
+  //   activeIcon: PanelTrainingActiveIcon,
+  //   children: [
+  //     {
+  //       navUrl: `/${AppRoutesEnum.TRAINING_PLAYGROUND}`,
+  //       navItem: SidebarNavItemsEnum.TRAINING_PLAYGROUND_LABEL,
+  //     },
+  //   ],
+  // },
   {
     navUrl: `/${AppRoutesEnum.INSIGHTS}`,
     navItem: SidebarNavItemsEnum.INSIGHT_LABEL,
