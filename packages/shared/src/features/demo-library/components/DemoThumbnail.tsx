@@ -86,7 +86,7 @@ export const DemoThumbnail = ({
 
       {/* Demo title overlay */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-        <h3 className="text-white font-semibold text-sm line-clamp-2">{demo.title}</h3>
+        <h3 className="text-white font-semibold text-sm line-clamp-1">{demo.title}</h3>
       </div>
     </div>
   );

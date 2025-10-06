@@ -69,8 +69,7 @@ export const VideoAvatar = ({
                 <img
                   src={video.thumbnail_url}
                   alt={video.title || 'Video thumbnail'}
-                  className="w-full h-full object-cover"
-                  style={{ objectFit: 'cover' }}
+                  className="w-[70px] h-[70px] object-cover -mt-[3px]"
                 />
               ) : video?.asset?.public_url ? (
                 <div className="relative w-full h-full">

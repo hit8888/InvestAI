@@ -74,7 +74,7 @@ const DemoAvatarComponent = ({ demo, isSelected = false, onSelect }: DemoAvatarP
   const avatarContent = (
     <div className={`group relative cursor-pointer`} onClick={onSelect}>
       <div
-        className={`rounded-[10px] mb-2 relative flex flex-col h-32 gap-2 p-2 transition-all duration-200 ${
+        className={`rounded-[10px] mb-2 relative flex flex-col gap-2 p-2 min-h-[106px] transition-all duration-200 ${
           isSelected ? 'bg-blue-50/50' : 'bg-card'
         }`}
       >
@@ -117,7 +117,7 @@ const DemoAvatarComponent = ({ demo, isSelected = false, onSelect }: DemoAvatarP
 
         {/* Title - Bottom */}
         <div className="flex-1 flex flex-col justify-between relative z-10">
-          <Typography ref={titleRef} variant="body-small" fontWeight="normal" className="line-clamp-2 cursor-default">
+          <Typography ref={titleRef} variant="body-small" fontWeight="normal" className="line-clamp-1 cursor-default">
             {demo.title || ''}
           </Typography>
         </div>

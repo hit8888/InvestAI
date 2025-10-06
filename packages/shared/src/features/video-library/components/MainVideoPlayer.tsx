@@ -147,7 +147,7 @@ export const MainVideoPlayer = ({
                   src={videoUrl}
                   controls
                   autoPlay
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-b-lg"
                   preload="metadata"
                   title={video.title}
                   onEnded={handleVideoEnded}
@@ -201,7 +201,7 @@ export const MainVideoPlayer = ({
 
         {/* Next Video Recommendation Overlay - Using VideoThumbnail Component */}
         {showRecommendation && nextRecommendedVideo && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs transition-all duration-500 opacity-100">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-xs transition-all duration-500 opacity-100 rounded-b-lg">
             <div className="flex flex-col items-start justify-center gap-2 transform transition-all duration-500 translate-y-0 scale-100">
               <p className="text-xs text-white align-left w-full">Liked What you saw? Here's what is next.</p>
               <VideoThumbnail
