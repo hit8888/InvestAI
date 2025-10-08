@@ -109,4 +109,7 @@ export interface CommandBarSettings {
   is_admin?: boolean;
   query_params?: Record<string, string>;
   position?: string;
+  root_zindex?: string;
+  root_bottom_offset?: string;
+  root_right_offset?: string;
 }

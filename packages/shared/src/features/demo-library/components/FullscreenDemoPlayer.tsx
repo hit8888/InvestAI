@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, LucideIcon } from '@meaku/saral';
-import { useModalPortal, Z_INDEX_LAYERS } from '../../../hooks/usePortal';
+import { useModalPortal } from '../../../hooks/usePortal';
 
 interface FullscreenDemoPlayerProps {
   demoUrl: string;
@@ -11,7 +11,7 @@ interface FullscreenDemoPlayerProps {
 export const FullscreenDemoPlayer = ({ demoUrl, demoTitle, onClose }: FullscreenDemoPlayerProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const { renderInPortal } = useModalPortal();
+  const { renderInPortal, getZIndexClass } = useModalPortal();
 
   // Handle escape key to close overlay
   useEffect(() => {
@@ -48,9 +48,8 @@ export const FullscreenDemoPlayer = ({ demoUrl, demoTitle, onClose }: Fullscreen
 
   const modalContent = (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
+      className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center ${getZIndexClass()}`}
       style={{
-        zIndex: Z_INDEX_LAYERS.MODALS, // Use centralized z-index constant for modals
         pointerEvents: 'auto', // Override the portal's pointer-events: none
         // Force it to be above everything
         position: 'fixed',

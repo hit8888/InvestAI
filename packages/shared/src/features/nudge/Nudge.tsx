@@ -141,7 +141,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
     handleNudgeLoad(nudgeData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleNudgeLoad, nudgeData]);
+  }, [nudgeData]);
 
   useEffect(() => {
     if (isScrollTriggeredNudgeEnabled) {

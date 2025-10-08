@@ -6,6 +6,22 @@
 @layer base {
   :root,
   :host {
+    /* Common Variables */
+
+    /* Positioning Variables */
+    --breakout-command-bar-bottom: 16px;
+    --breakout-command-bar-right: 16px;
+
+    /* Z-index hierarchy relative to command-bar */
+    --z-root: 2147483642;
+    --z-behind-content: calc(var(--z-root) - 1);
+    --z-modal: calc(var(--z-root) + 1);
+    --z-popover: calc(var(--z-root) + 2);
+    --z-select: calc(var(--z-root) + 3);
+    --z-dropdown: calc(var(--z-root) + 4);
+    --z-tooltip: calc(var(--z-root) + 5);
+
+    /* Light Theme Variables */
     --background: 0 0% 100%; /* #FFFFFF */
     --background-light: 248.57 46.67% 94.12%; /* #EBE9F7 */
     --background-subtle: 0 0% 95.29%; /* #F3F3F3 */
@@ -39,41 +55,9 @@
     --positive-dark: 140.32 93.94% 25.88%; /* #04802E */
     --positive-light: 140.52 80.31% 37.84%; /* #13AE48 */
     --breakout: 243.2 68.18% 56.86%; /* #4E46DC */
-
-    /*
-     * Command Bar Position Control Variables
-     * =====================================
-     *
-     * These CSS variables provide centralized control over the command bar positioning
-     * throughout the application. They affect multiple components and animations.
-     *
-     * Usage:
-     * - Override these variables in your application's CSS to customize positioning
-     * - All components automatically respect these values
-     * - Default values are defined below (16px)
-     *
-     * Components affected:
-     * 1. Command bar actions (bottom-right position)
-     * 2. Bottom center bar (exit animation target)
-     * 3. Feature modules (desktop positioning)
-     * 4. Bottom bar container (initial positioning)
-     * 5. Module positioning calculations
-     *
-     * Example customization:
-     * :root {
-     *   --breakout-command-bar-bottom: 20px;
-     *   --breakout-command-bar-right: 30px;
-     * }
-     */
-
-    /* Default command bar positioning values */
-    --breakout-command-bar-bottom: 16px;
-    --breakout-command-bar-right: 16px;
-
-    /* Nudge container positioning - adjusted when bottom bar is present */
-    --breakout-nudge-container-bottom: 16px;
   }
 
+  /* Dark Theme Variables */
   .dark,
   :host([data-theme='dark']) {
     --background: 222.2 84% 4.9%; /* deep navy black */
@@ -101,13 +85,7 @@
     --ring: 223 40% 40%; /* visible ring */
     --positive-dark: 140.32 93.94% 25.88%;
     --positive-light: 140.52 80.31% 37.84%;
-
-    /* Default command bar positioning values */
-    --breakout-command-bar-bottom: 16px;
-    --breakout-command-bar-right: 16px;
-
-    /* Nudge container positioning - adjusted when bottom bar is present */
-    --breakout-nudge-container-bottom: 16px;
+    --breakout: 243.2 68.18% 56.86%; /* #4E46DC */
   }
 
   * {

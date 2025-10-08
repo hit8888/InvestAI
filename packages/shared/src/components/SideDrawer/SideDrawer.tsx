@@ -57,7 +57,7 @@ export const SideDrawer = ({
   const behindContentPortal = useBehindContentPortal();
 
   // Use modal portal for mobile, behind content portal for web
-  const { renderInPortal, getZIndex } = isMobile ? modalPortal : behindContentPortal;
+  const { renderInPortal, getZIndexClass } = isMobile ? modalPortal : behindContentPortal;
   const { position, calculatePosition } = useSideDrawerPosition({
     targetRef,
     side,
@@ -114,9 +114,9 @@ export const SideDrawer = ({
           className={cn(
             'border-border-dark fixed top-0 rounded-[20px] border bg-white shadow-lg overflow-hidden',
             className,
+            getZIndexClass(),
           )}
           style={{
-            zIndex: getZIndex(),
             pointerEvents: 'auto',
             contain: 'paint layout',
             isolation: 'isolate',

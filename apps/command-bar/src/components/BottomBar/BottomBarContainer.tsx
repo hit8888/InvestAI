@@ -79,7 +79,7 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
       layout={false}
       transition={containerTransition}
       className={cn(
-        'command-bar-positioned fixed bottom-[var(--breakout-command-bar-bottom)] right-1/2 z-command-bar transform',
+        'command-bar-positioned fixed bottom-root-bottom-offset right-1/2 z-root transform',
         'bg-white/95 shadow-lg backdrop-blur-sm',
         'flex items-center overflow-hidden',
         'w-fit',

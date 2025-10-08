@@ -13,12 +13,12 @@ interface AnalyticsEvent {
   };
 }
 
+const commonProperties = { environment: ENV.VITE_APP_ENV };
+
 const useAnalytics = () => {
   const eventQueueRef = useRef<AnalyticsEvent[]>([]);
   const distinct_id = localStorage.getItem('distinct_id');
   const { sessionData } = useLocalStorageSession();
-
-  const commonProperties = { environment: ENV.VITE_APP_ENV };
 
   const sendBatchEvents = useCallback(
     debounce(async () => {
@@ -37,24 +37,27 @@ const useAnalytics = () => {
     [],
   );
 
-  const trackEvent = (eventName: string, properties: Record<string, unknown> = {}, is_test: boolean = false) => {
-    if (!isProduction || is_test) return;
-    try {
-      eventQueueRef.current.push({
-        event_name: eventName,
-        properties: {
-          ...commonProperties,
-          timestamp: Date.now(),
-          distinct_id,
-          utmParams: sessionData.utmParams,
-          ...properties,
-        },
-      });
-      sendBatchEvents();
-    } catch (error) {
-      console.error('Error queueing analytics event:', error);
-    }
-  };
+  const trackEvent = useCallback(
+    (eventName: string, properties: Record<string, unknown> = {}, is_test: boolean = false) => {
+      if (!isProduction || is_test) return;
+      try {
+        eventQueueRef.current.push({
+          event_name: eventName,
+          properties: {
+            ...commonProperties,
+            timestamp: Date.now(),
+            distinct_id,
+            utmParams: sessionData.utmParams,
+            ...properties,
+          },
+        });
+        sendBatchEvents();
+      } catch (error) {
+        console.error('Error queueing analytics event:', error);
+      }
+    },
+    [distinct_id, sessionData, sendBatchEvents],
+  );
 
   return { trackEvent };
 };

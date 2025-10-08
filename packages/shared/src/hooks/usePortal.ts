@@ -3,32 +3,6 @@ import { createPortal } from 'react-dom';
 import { useShadowRoot } from '../containers/ShadowRootProvider';
 
 /**
- * Z-Index hierarchy for web components
- * Ensures proper layering across shadow DOM boundaries
- */
-export const Z_INDEX_LAYERS = {
-  // Interactive overlays (highest - should be above everything)
-  TOOLTIPS: 2147483647, // Topmost - tooltips should always be visible
-  DROPDOWNS: 2147483646, // Above modals so dropdowns inside modals appear on top
-  SELECTS: 2147483645, // Above modals so selects inside modals appear on top
-  POPOVERS: 2147483644, // Above modals so popovers inside modals appear on top
-
-  // Modals (above command bar but below interactive elements)
-  MODALS: 2147483643,
-
-  // Command bar and main web component containers (below overlays but above host page)
-  COMMAND_BAR: 2147483642,
-
-  // Behind content layer (for elements that should render behind main content)
-  BEHIND_CONTENT: 2147483640,
-
-  // Fallback for other overlays
-  OVERLAY_FALLBACK: 2147483641,
-} as const;
-
-export type PortalType = keyof typeof Z_INDEX_LAYERS;
-
-/**
  * Utility classes for z-index values
  * Use these instead of hardcoding z-index values
  */
@@ -38,15 +12,14 @@ export const Z_INDEX_CLASSES = {
   DROPDOWNS: 'z-dropdown',
   POPOVERS: 'z-popover',
   SELECTS: 'z-select',
-  COMMAND_BAR: 'z-command-bar',
-  OVERLAY_FALLBACK: 'z-overlay-fallback',
+  BEHIND_CONTENT: 'z-behind-content',
 } as const;
 
 /**
  * Hook for rendering React components in portals
  * Works within Shadow DOM boundaries for web components
  */
-export function usePortal(type: PortalType = 'OVERLAY_FALLBACK') {
+export function usePortal(type: keyof typeof Z_INDEX_CLASSES) {
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
   const shadowRootContext = useShadowRoot();
 
@@ -69,9 +42,9 @@ export function usePortal(type: PortalType = 'OVERLAY_FALLBACK') {
           left: 0;
           width: 100%;
           height: 100%;
-          z-index: ${Z_INDEX_LAYERS[type]};
           pointer-events: none;
         `;
+        container.classList.add(Z_INDEX_CLASSES[type]);
         rootContainer.appendChild(container);
       }
 
@@ -91,14 +64,14 @@ export function usePortal(type: PortalType = 'OVERLAY_FALLBACK') {
     return createPortal(children, portalContainer);
   };
 
-  const getZIndex = () => {
-    return Z_INDEX_LAYERS[type];
+  const getZIndexClass = () => {
+    return Z_INDEX_CLASSES[type];
   };
 
   return {
     portalContainer,
     renderInPortal,
-    getZIndex,
+    getZIndexClass,
     isReady: !!portalContainer,
   };
 }

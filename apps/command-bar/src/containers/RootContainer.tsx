@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { defaultQueryClient } from '@meaku/core/queries/defaultQueryClient';
 import SettingsContainer, { SettingsContainerProps } from './SettingsContainer';
+import StylingContainer from './StylingContainer';
 import PreloadContainer from './PreloadContainer';
 import CommandBarAnalyticsProvider from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
@@ -31,7 +32,9 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
                       page_url: settings.parent_url,
                     }}
                   >
-                    <PreloadContainer settings={settings}>{children}</PreloadContainer>
+                    <PreloadContainer settings={settings}>
+                      <StylingContainer>{children}</StylingContainer>
+                    </PreloadContainer>
                   </CommandBarAnalyticsProvider>
                 ) : null
               }

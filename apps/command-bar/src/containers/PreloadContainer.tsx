@@ -7,8 +7,6 @@ import useStaticConfigDataQuery from '@meaku/shared/network/http/queries/useStat
 import { useCommandBarStore } from '@meaku/shared/stores';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useStyleConfig from '../hooks/useStyleConfig';
-import useBrandCoverImage from '../hooks/useBrandCoverImage';
 import { useActiveTenantInit } from '../hooks/useActiveTenantInit';
 import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
 import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
@@ -139,10 +137,6 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       setSettings(initialSettings);
     }
   }, [initialSettings, setSettings]);
-
-  useBrandCoverImage(initialSettings.tenant_id, initialSettings.bc);
-
-  useStyleConfig({ styleConfig: config?.style_config });
 
   const shouldLoadApp = config?.is_enabled && !!config.command_bar?.modules.length;
 

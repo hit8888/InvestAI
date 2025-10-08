@@ -64,11 +64,13 @@ export const BottomCenterRenderer = ({
       {/* Default bar - positioned behind bottom bar, completely hidden until bottom bar exits */}
       <div
         key="root-content"
-        className="command-bar-positioned fixed right-[var(--breakout-command-bar-right)] z-command-bar flex items-end gap-4"
+        className={cn(
+          'command-bar-positioned fixed bottom-root-bottom-offset right-root-right-offset z-root flex items-end gap-4',
+        )}
         style={{
           bottom: shouldMoveNudgeUp
-            ? `calc(var(--breakout-nudge-container-bottom) + ${Math.abs(COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET)}px)`
-            : 'var(--breakout-command-bar-bottom)',
+            ? `calc(var(--breakout-command-bar-bottom) + ${Math.abs(COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET)}px)`
+            : undefined,
         }}
       >
         {/* Nudges positioned based on bottom bar render state */}

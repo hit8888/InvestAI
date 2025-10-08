@@ -19,23 +19,28 @@ export type SettingsContainerProps = {
   children: (settings: CommandBarSettings) => ReactElement | null;
 } & Partial<WebComponentAttributes>;
 
-const SettingsContainer: FC<SettingsContainerProps> = ({
-  children,
-  tenantId: propTenantId,
-  agentId: propAgentId,
-  visible: propVisible,
-  message: propMessage,
-  startTime: propStartTime,
-  endTime: propEndTime,
-  sessionId: propSessionId,
-  bc: propBc,
-  isAdmin: propIsAdmin,
-  isTest: propIsTest,
-  browsedUrls: propBrowsedUrls,
-  queryParams: propQueryParams,
-  parentUrl: propParentUrl,
-  position: propPosition,
-}) => {
+const SettingsContainer: FC<SettingsContainerProps> = (props) => {
+  const {
+    children,
+    tenantId: propTenantId,
+    agentId: propAgentId,
+    visible: propVisible,
+    message: propMessage,
+    startTime: propStartTime,
+    endTime: propEndTime,
+    sessionId: propSessionId,
+    bc: propBc,
+    isAdmin: propIsAdmin,
+    isTest: propIsTest,
+    browsedUrls: propBrowsedUrls,
+    queryParams: propQueryParams,
+    parentUrl: propParentUrl,
+    position: propPosition,
+    rootZindex: propRootZIndex,
+    rootBottomOffset: propRootBottomOffset,
+    rootRightOffset: propRootRightOffset,
+  } = props;
+
   const settings = useMemo((): CommandBarSettings => {
     const urlParams = getUrlParams();
 
@@ -54,6 +59,9 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
       is_admin: jsonSafeParse(urlParams.is_admin).data ?? propIsAdmin ?? false,
       query_params: jsonSafeParse(urlParams.query_params).data ?? propQueryParams,
       position: urlParams.position ?? propPosition,
+      root_zindex: urlParams.root_z_index ?? propRootZIndex,
+      root_bottom_offset: urlParams.root_bottom_offset ?? propRootBottomOffset,
+      root_right_offset: urlParams.root_right_offset ?? propRootRightOffset,
     };
   }, [
     propTenantId,
@@ -70,6 +78,9 @@ const SettingsContainer: FC<SettingsContainerProps> = ({
     propIsAdmin,
     propQueryParams,
     propPosition,
+    propRootZIndex,
+    propRootBottomOffset,
+    propRootRightOffset,
   ]);
 
   return children(settings);

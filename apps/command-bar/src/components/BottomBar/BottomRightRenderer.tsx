@@ -35,9 +35,6 @@ export const BottomRightRenderer = ({
   isDynamicConfigStarted = false,
 }: BottomRightRendererProps) => {
   const { isDefaultBarReady, skipInitialTooltips } = transitionState;
-
-  // For right renderer, we don't have bottom bar, so nudge stays in normal position
-  const shouldMoveNudgeUp = false;
   const { handleDefaultBarAnimationComplete } = transitionActions;
 
   return (
@@ -54,12 +51,12 @@ export const BottomRightRenderer = ({
             initial={{
               opacity: 0,
               scale: 0.95,
-              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
+              y: 0,
             }}
             animate={{
               opacity: 1,
               scale: 1,
-              y: shouldMoveNudgeUp ? COMMAND_BAR_ANIMATIONS.NUDGE.Y_OFFSET : 0,
+              y: 0,
             }}
             transition={{
               ...COMPONENT_TRANSITIONS.APP_CONTAINER,

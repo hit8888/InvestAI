@@ -40,12 +40,11 @@ export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarL
 
   const containerClasses = useMemo(() => {
     return cn(
-      'fixed z-command-bar command-bar-positioned',
+      'fixed z-root command-bar-positioned',
       finalPosition === LAYOUT_PREFERENCE_CONFIG.CENTER_LAYOUT
         ? 'left-1/2 transform -translate-x-1/2'
-        : 'right-[var(--breakout-command-bar-right)]',
-      // Use CSS variable for bottom positioning - allows client customization
-      'bottom-[var(--breakout-command-bar-bottom)]',
+        : 'right-root-right-offset',
+      'bottom-root-bottom-offset',
     );
   }, [finalPosition]);
 

@@ -48,7 +48,7 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
   const arrowRef = useRef<SVGSVGElement>(null);
 
   // Use the new portal system
-  const { renderInPortal, getZIndex } = useTooltipPortal();
+  const { renderInPortal, getZIndexClass } = useTooltipPortal();
 
   // Floating UI for dynamic positioning with scroll/resize handling
   const { refs, floatingStyles, placement, context } = useFloating({
@@ -159,12 +159,12 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
       {isVisible && (
         <div
           ref={refs.setFloating}
+          className={getZIndexClass()}
           style={{
             position: floatingStyles.position,
             top: floatingStyles.top,
             left: floatingStyles.left,
             transform: floatingStyles.transform, // Floating UI's positioning transform
-            zIndex: getZIndex(),
             pointerEvents: 'auto',
           }}
         >

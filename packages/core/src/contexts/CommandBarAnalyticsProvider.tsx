@@ -1,4 +1,4 @@
-import { useCallback, useRef, createContext, useContext, ReactNode } from 'react';
+import { useCallback, useRef, createContext, useContext, ReactNode, useMemo } from 'react';
 
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
 
@@ -45,10 +45,13 @@ const CommandBarAnalyticsProvider = ({ children, initialProperties, enabled }: C
     [trackBaseEvent, enabled],
   );
 
-  const contextValue = {
-    trackEvent,
-    updateCommonProperties,
-  };
+  const contextValue = useMemo(
+    () => ({
+      trackEvent,
+      updateCommonProperties,
+    }),
+    [trackEvent, updateCommonProperties],
+  );
 
   return <CommandBarAnalyticsContext.Provider value={contextValue}>{children}</CommandBarAnalyticsContext.Provider>;
 };
