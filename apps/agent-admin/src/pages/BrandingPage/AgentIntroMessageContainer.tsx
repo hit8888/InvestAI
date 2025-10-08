@@ -1,11 +1,11 @@
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 import BrandingSectionContainer from './BrandingSectionContainer';
 import { AGENT_INTRO_MESSAGE_TITLE, AGENT_INTRO_MESSAGE_SUBTITLE } from '../../utils/constants';
-import Input from '@breakout/design-system/components/layout/input';
 import Button from '@breakout/design-system/components/Button/index';
 import { useState, useRef } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
+import TextArea from '@breakout/design-system/components/TextArea/index';
 
 type AgentIntroMessageContainerProps = {
   agentId: number;
@@ -15,7 +15,7 @@ type AgentIntroMessageContainerProps = {
 
 const AgentIntroMessageContainer = ({ agentId, agentConfigs, onUpdate }: AgentIntroMessageContainerProps) => {
   const [introMessage, setIntroMessage] = useState(agentConfigs?.metadata?.welcome_message?.message ?? '');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSave = () => {
     if (introMessage === agentConfigs?.metadata?.welcome_message?.message) {
@@ -38,7 +38,7 @@ const AgentIntroMessageContainer = ({ agentId, agentConfigs, onUpdate }: AgentIn
     );
   };
 
-  const handleIntroMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIntroMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIntroMessage(e.target.value);
   };
 
@@ -72,10 +72,10 @@ const AgentIntroMessageContainer = ({ agentId, agentConfigs, onUpdate }: AgentIn
     <BrandingSectionContainer title={AGENT_INTRO_MESSAGE_TITLE} subTitle={AGENT_INTRO_MESSAGE_SUBTITLE}>
       <div className="flex w-full flex-col items-center gap-4 self-stretch">
         <div className="relative w-full">
-          <Input
+          <TextArea
             ref={inputRef}
             className={cn(
-              'focus flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 pr-12 text-left font-normal focus:border-gray-300 focus:ring-4 focus:ring-gray-200',
+              'w-full rounded-lg border border-gray-300 px-3 py-2 pr-12 text-left font-normal focus:border-gray-300 focus:ring-4 focus:ring-gray-200',
               introMessage.length === 0 && 'text-gray-400',
             )}
             placeholder="Hey hooman 👋🏻 I'm your friendly chatbot, caffeine-free but full of energy!"
