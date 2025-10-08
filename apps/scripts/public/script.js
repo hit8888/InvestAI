@@ -8,7 +8,7 @@ const CONFIG = {
     EMBEDDED_WIDGET: "#embedded-widget",
     CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
     STATIC_CONTENT: "#static-content",
-    BRAND_COVER_CONTAINER: "#bo-bc-container",
+    BRAND_COVER_CONTAINER: "#breakout-bc-container",
   },
   REQUIRED_FIELDS: ["tenant_id", "agent_id"],
 };

@@ -5,7 +5,7 @@ import App from './App';
 import RootContainer from './containers/RootContainer';
 import './utils/sentry.ts';
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('breakout-root')!).render(
   <StrictMode>
     <RootContainer hostId={null}>
       <App />

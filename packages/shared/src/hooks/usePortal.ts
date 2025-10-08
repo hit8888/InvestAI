@@ -21,12 +21,11 @@ export const Z_INDEX_CLASSES = {
  */
 export function usePortal(type: keyof typeof Z_INDEX_CLASSES) {
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
-  const shadowRootContext = useShadowRoot();
+  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
 
   useEffect(() => {
     try {
-      // Determine the root container (Shadow DOM or document.body)
-      const rootContainer = shadowRootContext?.root || document.body;
+      const rootContainer = shadowRoot || fallbackRoot;
       const containerId = `wc-portal-${type.toLowerCase()}`;
 
       // Try to get existing container from the appropriate root
@@ -51,10 +50,8 @@ export function usePortal(type: keyof typeof Z_INDEX_CLASSES) {
       setPortalContainer(container);
     } catch (error) {
       console.warn(`Failed to get portal container for type "${type}":`, error);
-      // Fallback to document.body
-      setPortalContainer(document.body);
     }
-  }, [type, shadowRootContext?.root]);
+  }, [type, shadowRoot, fallbackRoot]);
 
   const renderInPortal = (children: React.ReactNode) => {
     if (!portalContainer) {

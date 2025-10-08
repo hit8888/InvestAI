@@ -1,8 +1,8 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
-import { getShadowRoot } from '../utils/dom-utils';
 
 interface ShadowRootContextType {
   hostId: string | null;
+  fallbackRoot: HTMLElement;
   root: ShadowRoot | null;
 }
 
@@ -10,16 +10,23 @@ export const ShadowRootContext = createContext<ShadowRootContextType | null>(nul
 
 interface ShadowRootProviderProps {
   hostId: string | null;
+  fallbackRootId?: string;
   children: ReactNode;
 }
 
-const ShadowRootProvider = ({ hostId, children }: ShadowRootProviderProps) => {
+function getShadowRoot(webComponentTag: string): ShadowRoot | null {
+  const host = document.querySelector(webComponentTag);
+  return host?.shadowRoot || null;
+}
+
+const ShadowRootProvider = ({ hostId, fallbackRootId, children }: ShadowRootProviderProps) => {
   const contextValue = useMemo(
     () => ({
       hostId,
+      fallbackRoot: (fallbackRootId && document.getElementById(fallbackRootId)) || document.body,
       root: hostId ? getShadowRoot(hostId) : null,
     }),
-    [hostId],
+    [hostId, fallbackRootId],
   );
 
   return <ShadowRootContext.Provider value={contextValue}>{children}</ShadowRootContext.Provider>;

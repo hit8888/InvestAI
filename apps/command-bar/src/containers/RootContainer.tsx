@@ -20,7 +20,7 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
   return (
     <SentryErrorBoundary hostId={hostId} tenantId={propSettings?.tenantId}>
       <DeviceManagerProvider>
-        <ShadowRootProvider hostId={hostId}>
+        <ShadowRootProvider hostId={hostId} fallbackRootId="breakout-root">
           <QueryClientProvider client={defaultQueryClient}>
             <SettingsContainer {...propSettings}>
               {(settings) =>

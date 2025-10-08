@@ -9,7 +9,7 @@ interface UseStyleConfigProps {
 }
 
 const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
-  const { root: shadowRoot } = useShadowRoot();
+  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
 
   useEffect(() => {
     if (!styleConfig) return;
@@ -37,19 +37,18 @@ const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
 
         try {
           const value = hexToHSL(hexValue);
-          const documentBody = document.body as HTMLElement;
           const shadowRootElement = shadowRoot?.host as HTMLElement;
 
           if (shadowRootElement) {
             shadowRootElement.style.setProperty(`--${formattedKey}`, value);
             return;
           }
-          documentBody?.style.setProperty(`--${formattedKey}`, value);
+          fallbackRoot?.style.setProperty(`--${formattedKey}`, value);
         } catch (error) {
           console.error('Error setting style config', error);
         }
       });
-  }, [styleConfig, shadowRoot]);
+  }, [styleConfig, shadowRoot, fallbackRoot]);
 };
 
 export default useStyleConfig;

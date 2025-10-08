@@ -1,17 +1,17 @@
-import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
 import { useEffect } from 'react';
-import { BREAKOUT_ROOT_ID } from '../constants/common';
+
+import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
 
 type UseOutsideClickProps = {
   onOutsideClick: () => void;
 };
 
 const useOutsideClick = ({ onOutsideClick }: UseOutsideClickProps) => {
-  const { root } = useShadowRoot();
+  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const breakoutRoot = root?.getElementById(BREAKOUT_ROOT_ID) || document.getElementById(BREAKOUT_ROOT_ID);
+      const breakoutRoot = shadowRoot || fallbackRoot;
 
       const eventPath = event.composedPath();
       const actualTarget = eventPath[0] as Node;
@@ -27,7 +27,7 @@ const useOutsideClick = ({ onOutsideClick }: UseOutsideClickProps) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onOutsideClick, root]);
+  }, [onOutsideClick, shadowRoot, fallbackRoot]);
 };
 
 export default useOutsideClick;

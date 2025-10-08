@@ -11,9 +11,9 @@ export type StylingContainerProps = {
 
 const StylingContainer: FC<StylingContainerProps> = ({ children }) => {
   const { settings, config } = useCommandBarStore();
-  const { root: shadowRoot } = useShadowRoot();
+  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
 
-  const root = (shadowRoot?.host as HTMLElement) || document.body;
+  const root = (shadowRoot?.host as HTMLElement) || fallbackRoot;
 
   useBrandCoverImage(settings.tenant_id, settings.bc);
 

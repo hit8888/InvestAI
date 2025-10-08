@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 const useBrandCoverImage = (tenantId: string, showCoverImage?: boolean) => {
   useEffect(() => {
-    const boBcContainer = document.querySelector('#bo-bc-container') as HTMLElement;
+    const boBcContainer = document.getElementById('breakout-bc-container');
 
     if (!boBcContainer || !showCoverImage) return;
 
