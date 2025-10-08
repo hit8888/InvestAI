@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { analyzer } from 'vite-bundle-analyzer';
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? process.env.VITE_COMMAND_BAR_BASE_URL : '/',
+  base: process.env.VITE_COMMAND_BAR_BASE_URL,
   plugins: [
     react(),
     ...(process.env.VITE_SENTRY_AUTH_TOKEN
@@ -27,6 +28,10 @@ export default defineConfig({
           }),
         ]
       : []),
+    analyzer({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+    }),
   ],
 
   resolve: {

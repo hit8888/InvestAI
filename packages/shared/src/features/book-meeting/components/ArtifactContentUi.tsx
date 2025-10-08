@@ -5,7 +5,7 @@ import {
   AdditionalCalendarArtifactContent,
   CalendarArtifactContent,
 } from '../../../utils/artifact';
-import { CalendarArtifact } from '../../../components/calendar';
+import { CalendarArtifact } from '../../../components/calendar/CalendarArtifact';
 import { SendUserMessageParams } from '../../../types/message';
 import FormArtifact from '../../../components/FormArtifact';
 import { QualificationFormArtifact } from '../../../components/QualificationFormArtifact';

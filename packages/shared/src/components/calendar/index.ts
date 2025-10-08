@@ -10,5 +10,4 @@ export { EventTypeList } from './EventTypeList';
 export { EventTypeSettingsView } from './EventTypeSettingsView';
 export { CreateEventTypeView } from './CreateEventTypeView';
 export { GoogleConnect } from './GoogleConnect';
-export { CalendarArtifact } from './CalendarArtifact';
 export { useCommonCalendarArtifact } from './useCommonCalendarArtifact';

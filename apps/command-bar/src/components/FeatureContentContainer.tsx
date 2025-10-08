@@ -1,15 +1,16 @@
-import {
-  AskAiContent,
-  BookMeetingContent,
-  SummarizeContent,
-  IframeContent,
-  VideoLibraryContent,
-  DemoLibraryContent,
-} from '@meaku/shared/features';
+import { lazy } from 'react';
 import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureContentWrapper } from './FeatureContentWrapper';
 import { useCommandBarStore } from '@meaku/shared/stores';
+import { withSuspenseWrapper } from '@meaku/core/containers/SuspenseWrapper';
+
+const AskAiContent = lazy(() => import('@meaku/shared/features/ask-ai/AskAiContent'));
+const BookMeetingContent = lazy(() => import('@meaku/shared/features/book-meeting/BookMeetingContent'));
+const SummarizeContent = lazy(() => import('@meaku/shared/features/summarize/SummarizeContent'));
+const IframeContent = lazy(() => import('@meaku/shared/features/iframe/IframeContent'));
+const VideoLibraryContent = lazy(() => import('@meaku/shared/features/video-library/VideoLibraryContent'));
+const DemoLibraryContent = lazy(() => import('@meaku/shared/features/demo-library/DemoLibraryContent'));
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 
@@ -23,12 +24,12 @@ interface FeatureContentContainerProps {
 
 // Component mapping for cleaner code
 const CONTENT_COMPONENTS = {
-  [ASK_AI]: AskAiContent,
-  [BOOK_MEETING]: BookMeetingContent,
-  [SUMMARIZE]: SummarizeContent,
-  [IFRAME]: IframeContent,
-  [VIDEO_LIBRARY]: VideoLibraryContent,
-  [DEMO_LIBRARY]: DemoLibraryContent,
+  [ASK_AI]: withSuspenseWrapper(AskAiContent),
+  [BOOK_MEETING]: withSuspenseWrapper(BookMeetingContent),
+  [SUMMARIZE]: withSuspenseWrapper(SummarizeContent),
+  [IFRAME]: withSuspenseWrapper(IframeContent),
+  [VIDEO_LIBRARY]: withSuspenseWrapper(VideoLibraryContent),
+  [DEMO_LIBRARY]: withSuspenseWrapper(DemoLibraryContent),
 } as const;
 
 const FeatureContentContainer = ({

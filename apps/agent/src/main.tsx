@@ -7,7 +7,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import './lib/sentry.ts';
+// import './lib/sentry.ts'; Agent is deprecated, so we don't need to use Sentry
 import './styles/custom.css';
 
 createRoot(document.getElementById('root')!).render(

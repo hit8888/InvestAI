@@ -11,7 +11,7 @@ import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
 import FormArtifact from '../../../components/FormArtifact';
 import { QualificationFormArtifact } from '../../../components/QualificationFormArtifact';
-import { CalendarArtifact } from '../../../components/calendar';
+import { CalendarArtifact } from '../../../components/calendar/CalendarArtifact';
 import { DiscoveryQuestion } from './DiscoveryQuestion';
 import CtaEventMessage from '../../book-meeting/components/CtaEventMessage';
 import { ConversationEvent } from './ConversationEvent';

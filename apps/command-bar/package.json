@@ -16,27 +16,28 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@calcom/atoms": "1.2.0",
     "@calcom/embed-react": "^1.5.2",
     "@hookform/resolvers": "^3.9.1",
     "@r2wc/react-to-web-component": "^2.0.4",
     "@sentry/react": "^8.30.0",
+    "@tanstack/react-query": "^5.56.2",
+    "axios": "^1.12.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dompurify": "^3.2.5",
-    "@tanstack/react-query": "^5.56.2",
-    "axios": "^1.12.0",
     "framer-motion": "^11.16.4",
-    "md5": "^2.3.0",
-    "nanoid": "^5.0.7",
     "libphonenumber-js": "^1.11.18",
     "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "nanoid": "^5.0.7",
     "react": "^19.1.0",
     "react-calendly": "^4.3.1",
     "react-dom": "^19.1.0",
-    "zod": "^3.24.2",
-    "zustand": "5.0.0-rc.2",
     "react-hook-form": "^7.53.2",
-    "react-phone-number-input": "^3.4.11"
+    "react-phone-number-input": "^3.4.11",
+    "zod": "^3.24.2",
+    "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
@@ -45,13 +46,14 @@
     "@meaku/shared": "workspace:*",
     "@sentry/vite-plugin": "^2.22.4",
     "@tanstack/react-query-devtools": "5.0.0-alpha.91",
-    "@types/md5": "^2.3.5",
     "@types/lodash": "^4.17.9",
+    "@types/md5": "^2.3.5",
     "@types/node": "^22.5.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.20",
+    "code-inspector-plugin": "^1.2.6",
     "dotenv": "^16.4.5",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -64,6 +66,6 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
-    "code-inspector-plugin": "^1.2.6"
+    "vite-bundle-analyzer": "^1.2.3"
   }
 }
