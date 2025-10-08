@@ -54,6 +54,8 @@ import {
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
   VisitorsPayload,
+  IcpConfigPayload,
+  IcpConfigResponse,
   CreateThumbnailRequest,
   AssetUploadPayload,
   BaseFilePayload,
@@ -387,3 +389,9 @@ export const getUsersList = () => adminApiClient.get<UsersListResponse>(`/tenant
 // Assign SDR manually API
 export const assignSdrManually = (payload: AssignSdrRequest) =>
   adminApiClient.post<AssignSdrResponse>(`/tenant/api/prospects/assign_sdr_manually/`, payload);
+
+export const getIcpConfig = (agentId: number) =>
+  adminApiClient.get<IcpConfigResponse>(`/tenant/api/agent/${agentId}/icp-config/`);
+
+export const updateIcpConfig = (agentId: number, payload: Partial<IcpConfigPayload>) =>
+  adminApiClient.patch(`/tenant/api/agent/${agentId}/icp-config/`, payload);

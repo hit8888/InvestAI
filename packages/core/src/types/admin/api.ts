@@ -1182,3 +1182,44 @@ export const AssignSdrResponseSchema = z.object({
 });
 
 export type AssignSdrResponse = z.infer<typeof AssignSdrResponseSchema>;
+
+export const IcpConfigPayloadSchema = z.object({
+  seniorities: z.array(z.string()),
+  departments: z.array(z.string()),
+  locations: z.array(z.string()),
+  max_contacts_per_company: z.number(),
+  person_titles: z.array(z.string()),
+});
+export type IcpConfigPayload = z.infer<typeof IcpConfigPayloadSchema>;
+
+export const IcpConfigResponseSchema = z.object({
+  agent_id: z.number(),
+  agent_name: z.string(),
+  icp_config: IcpConfigPayloadSchema.extend({
+    company_sizes: z.array(z.string()).optional(),
+    industries: z.array(z.string()).optional(),
+    company_keywords: z.array(z.string()).optional(),
+    technologies: z.array(z.string()).optional(),
+  }),
+  options: z.object({
+    seniorities: z.array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      }),
+    ),
+    departments: z.array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      }),
+    ),
+    person_titles: z.array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      }),
+    ),
+  }),
+});
+export type IcpConfigResponse = z.infer<typeof IcpConfigResponseSchema>;

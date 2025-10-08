@@ -5,9 +5,17 @@ import AgentResponseWordCount from './AgentResponseWordCount';
 import AgentProductDescription from './AgentProductDescription';
 import AgentSupportSystem from './AgentSupportSystem';
 import useTenantMetadataQuery from '../../queries/query/useTenantMetadataQuery';
+import AgentIdealCustomerPersona from './AgentIdealCustomerPersona';
 
 const PageContainerHeader = 'Controls';
-const { AGENT_PERSONALITY, INSTRUCTIONS, AGENT_RESPONSE_WORD_COUNT, PRODUCT_DESCRIPTION, SUPPORT } = ControlsTitleEnum;
+const {
+  AGENT_PERSONALITY,
+  INSTRUCTIONS,
+  AGENT_RESPONSE_WORD_COUNT,
+  PRODUCT_DESCRIPTION,
+  SUPPORT,
+  IDEAL_CUSTOMER_PERSONA,
+} = ControlsTitleEnum;
 
 const ControlsPage = () => {
   // We will get all these below values as its coming from defined constant variable
@@ -15,6 +23,7 @@ const ControlsPage = () => {
   const instructions = CommonControls.find((control) => control.title === INSTRUCTIONS)!;
   const agentResponseWordCount = CommonControls.find((control) => control.title === AGENT_RESPONSE_WORD_COUNT)!;
   const agentProductDescription = CommonControls.find((control) => control.title === PRODUCT_DESCRIPTION)!;
+  const agentIdealCustomerPersona = CommonControls.find((control) => control.title === IDEAL_CUSTOMER_PERSONA)!;
   const agentSupportSystem = CommonControls.find((control) => control.title === SUPPORT)!;
 
   const {
@@ -46,6 +55,7 @@ const ControlsPage = () => {
         {...commonProps}
         {...agentProductDescription}
       />
+      <AgentIdealCustomerPersona key={IDEAL_CUSTOMER_PERSONA} {...commonProps} {...agentIdealCustomerPersona} />
       <AgentSupportSystem key={SUPPORT} support={supportData} {...commonProps} {...agentSupportSystem} />
     </PageContainer>
   );

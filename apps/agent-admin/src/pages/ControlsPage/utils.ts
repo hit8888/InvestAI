@@ -18,10 +18,18 @@ export const ControlsTitleEnum = {
   INSTRUCTIONS: 'Instructions',
   AGENT_RESPONSE_WORD_COUNT: 'Agent Response Word Count',
   PRODUCT_DESCRIPTION: 'Product Description',
+  IDEAL_CUSTOMER_PERSONA: 'Ideal Customer Persona',
   SUPPORT: 'Support',
 };
 
-const { AGENT_PERSONALITY, INSTRUCTIONS, AGENT_RESPONSE_WORD_COUNT, PRODUCT_DESCRIPTION, SUPPORT } = ControlsTitleEnum;
+const {
+  AGENT_PERSONALITY,
+  INSTRUCTIONS,
+  AGENT_RESPONSE_WORD_COUNT,
+  PRODUCT_DESCRIPTION,
+  SUPPORT,
+  IDEAL_CUSTOMER_PERSONA,
+} = ControlsTitleEnum;
 
 export const CommonControls: CommonControlsProps[] = [
   {
@@ -55,6 +63,14 @@ export const CommonControls: CommonControlsProps[] = [
     textareaPlaceholder: '',
     exampleDescription: '',
     description: `Add a list of your products along with short descriptions. This helps the agent understand what each product does and tailor the conversation accordingly.`,
+    infoTitle: '',
+  },
+  {
+    title: IDEAL_CUSTOMER_PERSONA,
+    promptType: '',
+    textareaPlaceholder: '',
+    exampleDescription: '',
+    description: `ICP is the profile of customers you would like to target, helping SDRs target and engage high-quality leads.`,
     infoTitle: '',
   },
   {
@@ -250,3 +266,88 @@ export const productFormSchema = z.object({
 });
 
 export type ProductFormData = z.infer<typeof productFormSchema>;
+
+// ICP (Ideal Customer Persona) constants and types
+export type ICPFormData = {
+  seniorities: string[];
+  departments: string[];
+  person_titles: string[];
+  locations: string[];
+  max_contacts_per_company: number | '';
+};
+
+export const ICP_INITIAL_DATA: ICPFormData = {
+  seniorities: [],
+  departments: [],
+  person_titles: [],
+  locations: [],
+  max_contacts_per_company: '',
+};
+
+export interface ICPFieldConfig {
+  renderValueType?: 'string' | 'badge';
+  maxSelectedCount?: number;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  fieldType: 'select' | 'number';
+  label: string;
+  name: keyof ICPFormData;
+  placeholder: string;
+}
+
+export const ICP_FORM_FIELDS: ICPFieldConfig[] = [
+  {
+    renderValueType: 'badge',
+    // maxSelectedCount: 3,
+    searchable: false,
+    fieldType: 'select',
+    label: 'Role',
+    name: 'seniorities',
+    placeholder: 'Select role of your target customer',
+  },
+  {
+    renderValueType: 'badge',
+    // maxSelectedCount: 3,
+    searchable: false,
+    fieldType: 'select',
+    label: 'Job Functions',
+    name: 'departments',
+    placeholder: 'Select departments of your target customer',
+  },
+  {
+    renderValueType: 'badge',
+    // maxSelectedCount: 3,
+    searchable: true,
+    searchPlaceholder: 'Search Titles',
+    fieldType: 'select',
+    label: 'Titles',
+    name: 'person_titles',
+    placeholder: 'Select titles of your target customer',
+  },
+  {
+    renderValueType: 'badge',
+    // maxSelectedCount: 5,
+    searchable: true,
+    searchPlaceholder: 'Search Locations',
+    fieldType: 'select',
+    label: 'Locations',
+    name: 'locations',
+    placeholder: 'Select locations of your target customer',
+  },
+  {
+    // maxSelectedCount: 10,
+    fieldType: 'number',
+    label: 'Contacts per Company',
+    name: 'max_contacts_per_company',
+    placeholder: 'Enter max number of contacts per company',
+  },
+];
+
+// Zod schema for ICP validation
+export const icpFormSchema = z.object({
+  seniorities: z.array(z.string()).min(0, 'At least one seniority is required'),
+  departments: z.array(z.string()).min(0, 'At least one department is required'),
+  person_titles: z.array(z.string()).min(0, 'At least one person title is required'),
+  locations: z.array(z.string()).min(0, 'At least one location is required'),
+  max_contacts_per_company: z.union([z.number().int().min(1, 'Must be at least 1'), z.literal('')]),
+});
