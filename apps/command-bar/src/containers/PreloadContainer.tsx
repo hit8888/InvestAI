@@ -106,7 +106,8 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       initialiseCommandBar(staticConfigQuery.data);
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.PAGE_LOAD);
     }
-  }, [initialiseCommandBar, staticConfigQuery.data, trackEvent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticConfigQuery.data]);
 
   // Track when dynamic config query starts
   useEffect(() => {
@@ -130,7 +131,8 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
       });
       setCompleteConfigLoaded(true);
     }
-  }, [dynamicConfigQuery.data, initialiseCommandBar, setCompleteConfigLoaded, trackEvent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dynamicConfigQuery.data]);
 
   useEffect(() => {
     if (initialSettings) {
