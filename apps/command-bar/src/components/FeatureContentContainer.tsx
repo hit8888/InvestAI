@@ -3,6 +3,7 @@ import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_r
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { FeatureContentWrapper } from './FeatureContentWrapper';
 import { useCommandBarStore } from '@meaku/shared/stores';
+import useOutsideClick from '../hooks/useOutsideClick';
 import { withSuspenseWrapper } from '@meaku/core/containers/SuspenseWrapper';
 
 const AskAiContent = lazy(() => import('@meaku/shared/features/ask-ai/AskAiContent'));
@@ -42,6 +43,8 @@ const FeatureContentContainer = ({
   const { config } = useCommandBarStore();
   const { modules = [] } = config.command_bar ?? {};
   const module = modules.find((m) => m.module_type === activeFeature);
+
+  useOutsideClick({ onOutsideClick: onClose });
 
   if (!module || !activeFeature) return null;
 

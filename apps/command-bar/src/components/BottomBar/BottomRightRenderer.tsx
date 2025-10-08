@@ -6,6 +6,7 @@ import { Nudge } from '@meaku/shared/features';
 import { COMPONENT_TRANSITIONS } from '../../constants/animationTimings';
 import { BottomBarTransitionState, BottomBarTransitionActions } from './hooks/useBottomBarTransition';
 import { COMMAND_BAR_ANIMATIONS } from './constants';
+import { BREAKOUT_ROOT_ID } from '../../constants/common';
 
 interface BottomRightRendererProps {
   containerClasses: string;
@@ -39,6 +40,7 @@ export const BottomRightRenderer = ({
 
   return (
     <motion.div
+      id={BREAKOUT_ROOT_ID}
       className={containerClasses}
       {...COMMAND_BAR_ANIMATIONS.CONTAINER}
       onAnimationComplete={handleDefaultBarAnimationComplete}

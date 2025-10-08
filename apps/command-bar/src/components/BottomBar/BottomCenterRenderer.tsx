@@ -8,6 +8,7 @@ import { Nudge } from '@meaku/shared/features';
 import { COMPONENT_TRANSITIONS } from '../../constants/animationTimings';
 import { BottomBarTransitionState, BottomBarTransitionActions } from './hooks/useBottomBarTransition';
 import { COMMAND_BAR_ANIMATIONS } from './constants';
+import { BREAKOUT_ROOT_ID } from '../../constants/common';
 
 interface BottomCenterRendererProps {
   transitionState: BottomBarTransitionState;
@@ -63,7 +64,7 @@ export const BottomCenterRenderer = ({
 
       {/* Default bar - positioned behind bottom bar, completely hidden until bottom bar exits */}
       <div
-        key="root-content"
+        id={BREAKOUT_ROOT_ID}
         className={cn(
           'command-bar-positioned fixed bottom-root-bottom-offset right-root-right-offset z-root flex items-end gap-4',
         )}
