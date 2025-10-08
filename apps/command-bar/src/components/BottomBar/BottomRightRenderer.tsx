@@ -17,6 +17,8 @@ interface BottomRightRendererProps {
   isExpanded: boolean;
   onClose: () => void;
   onExpand: () => void;
+  isDynamicConfigLoading?: boolean;
+  isDynamicConfigStarted?: boolean;
 }
 
 export const BottomRightRenderer = ({
@@ -29,6 +31,8 @@ export const BottomRightRenderer = ({
   isExpanded,
   onClose,
   onExpand,
+  isDynamicConfigLoading = false,
+  isDynamicConfigStarted = false,
 }: BottomRightRendererProps) => {
   const { isDefaultBarReady, skipInitialTooltips } = transitionState;
 
@@ -69,7 +73,7 @@ export const BottomRightRenderer = ({
         <CommandBarActions
           activeFeature={activeFeatureModuleType}
           setActiveFeature={setActiveFeature}
-          shouldStartAnimations={isDefaultBarReady}
+          shouldStartAnimations={isDefaultBarReady && isDynamicConfigStarted && !isDynamicConfigLoading}
           skipInitialTooltips={skipInitialTooltips}
         />
         {activeFeatureModuleType && (

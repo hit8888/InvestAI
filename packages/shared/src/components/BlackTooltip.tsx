@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTooltipPortal } from '../hooks/usePortal';
+import {
+  useFloating,
+  offset as floatingOffset,
+  flip,
+  shift,
+  arrow as floatingArrow,
+  autoUpdate,
+  type Placement,
+  FloatingArrow,
+} from '@floating-ui/react';
 
 // Global tracking for initial tooltips - persists across component lifecycles
 const globalInitialTooltipShown = new Set<string>();
@@ -27,21 +37,27 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
   initialTooltip,
   side = 'left',
   usePortal = true,
-  offset = 8,
+  offset = 12,
   hoverDelay = 200,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isInitialTooltipActive, setIsInitialTooltipActive] = useState(false);
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, transform: '' });
-  const [isPositioned, setIsPositioned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<SVGSVGElement>(null);
 
   // Use the new portal system
   const { renderInPortal, getZIndex } = useTooltipPortal();
+
+  // Floating UI for dynamic positioning with scroll/resize handling
+  const { refs, floatingStyles, placement, context } = useFloating({
+    placement: side as Placement,
+    open: isVisible,
+    strategy: usePortal ? 'fixed' : 'absolute', // Use fixed for portals, absolute for inline
+    middleware: [floatingOffset(offset), flip(), shift({ padding: 5 }), floatingArrow({ element: arrowRef })],
+    whileElementsMounted: autoUpdate, // Auto-reposition on scroll/resize - fixes mobile issue
+  });
 
   // Handle initial tooltip sequence - only show once ever across all component lifecycles
   useEffect(() => {
@@ -88,68 +104,6 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
     };
   }, [initialTooltip, content]);
 
-  // Recalculate position after tooltip is rendered and measured
-  useEffect(() => {
-    if (isVisible && tooltipRef.current && !isPositioned) {
-      const tooltipRect = tooltipRef.current.getBoundingClientRect();
-      const tooltipHeight = tooltipRect.height;
-      const tooltipWidth = tooltipRect.width;
-
-      if (triggerRef.current) {
-        const rect = triggerRef.current.getBoundingClientRect();
-
-        let newPosition;
-        switch (side) {
-          case 'top':
-            newPosition = {
-              top: rect.top - tooltipHeight - offset,
-              left: rect.left + rect.width / 2,
-              transform: 'translateX(-50%)',
-            };
-            break;
-          case 'bottom':
-            newPosition = {
-              top: rect.bottom + offset,
-              left: rect.left + rect.width / 2,
-              transform: 'translateX(-50%)',
-            };
-            break;
-          case 'left':
-            newPosition = {
-              top: rect.top + rect.height / 2,
-              left: rect.left - tooltipWidth - offset,
-              transform: 'translateY(-50%)',
-            };
-            break;
-          case 'right':
-            newPosition = {
-              top: rect.top + rect.height / 2,
-              left: rect.right + offset,
-              transform: 'translateY(-50%)',
-            };
-            break;
-          default:
-            newPosition = {
-              top: rect.top - tooltipHeight - offset,
-              left: rect.left + rect.width / 2,
-              transform: 'translateX(-50%)',
-            };
-        }
-
-        setTooltipPosition(newPosition);
-        setIsPositioned(true);
-      }
-    }
-  }, [isVisible, side, isPositioned, offset, content]);
-
-  // Force repositioning when tooltip becomes visible (for hover tooltips)
-  useEffect(() => {
-    if (isVisible && !isInitialTooltipActive) {
-      // For hover tooltips, always recalculate position
-      setIsPositioned(false);
-    }
-  }, [isVisible, isInitialTooltipActive]);
-
   const handleMouseEnter = () => {
     if (!isInitialTooltipActive) {
       // Clear any existing hover timer
@@ -162,10 +116,7 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
 
       // Set a delay before showing the tooltip
       hoverTimerRef.current = setTimeout(() => {
-        // Reset positioning state for hover tooltips
-        setIsPositioned(false);
         setIsVisible(true);
-        // Position will be calculated in the useEffect when tooltip becomes visible
       }, hoverDelay);
     }
   };
@@ -179,92 +130,63 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
 
       setIsHovered(false);
       setIsVisible(false);
-      setIsPositioned(false); // Reset positioning state
     }
   };
 
-  // Get positioning classes and animations based on side
-  const getTooltipConfig = () => {
-    switch (side) {
+  // Get directional animation based on placement (original smooth values)
+  const getDirectionalAnimation = () => {
+    const baseSide = placement.split('-')[0];
+    switch (baseSide) {
       case 'top':
-        return {
-          container: 'absolute bottom-full left-1/2 -translate-x-1/2 mb-2',
-          arrow: 'absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-4 border-transparent border-t-gray-900',
-          animation: {
-            initial: { opacity: 0, y: 2, x: '-50%' },
-            animate: { opacity: 1, y: -2, x: '-50%' },
-            exit: { opacity: 0, y: 2, x: '-50%' },
-          },
-        };
+        return { initial: { y: 2 }, animate: { y: -2 }, exit: { y: 2 } };
       case 'bottom':
-        return {
-          container: 'absolute top-full left-1/2 -translate-x-1/2 mt-2',
-          arrow: 'absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 border-4 border-transparent border-b-gray-900',
-          animation: {
-            initial: { opacity: 0, y: -2, x: '-50%' },
-            animate: { opacity: 1, y: 2, x: '-50%' },
-            exit: { opacity: 0, y: -2, x: '-50%' },
-          },
-        };
+        return { initial: { y: -2 }, animate: { y: 2 }, exit: { y: -2 } };
       case 'left':
-        return {
-          container: 'absolute right-full top-1/2 -translate-y-1/2 mr-2',
-          arrow: 'absolute left-full top-1/2 -translate-y-1/2 w-0 h-0 border-4 border-transparent border-l-gray-900',
-          animation: {
-            initial: { opacity: 0, x: 2, y: '-50%' },
-            animate: { opacity: 1, x: -2, y: '-50%' },
-            exit: { opacity: 0, x: 2, y: '-50%' },
-          },
-        };
+        return { initial: { x: 2 }, animate: { x: -2 }, exit: { x: 2 } };
       case 'right':
+        return { initial: { x: -2 }, animate: { x: 2 }, exit: { x: -2 } };
       default:
-        return {
-          container: 'absolute left-full top-1/2 -translate-y-1/2 ml-2',
-          arrow: 'absolute right-full top-1/2 -translate-y-1/2 w-0 h-0 border-4 border-transparent border-r-gray-900',
-          animation: {
-            initial: { opacity: 0, x: -2, y: '-50%' },
-            animate: { opacity: 1, x: 2, y: '-50%' },
-            exit: { opacity: 0, x: -2, y: '-50%' },
-          },
-        };
+        return { initial: { y: 2 }, animate: { y: -2 }, exit: { y: 2 } };
     }
   };
 
-  const tooltipConfig = getTooltipConfig();
+  const dirAnimation = getDirectionalAnimation();
 
+  // Tooltip content with fade + directional slide animation (original smooth timing)
+  // Use wrapper pattern: outer div for positioning, inner div for animation
   const tooltipContent = (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
-          ref={tooltipRef}
-          initial={tooltipConfig.animation.initial}
-          animate={tooltipConfig.animation.animate}
-          exit={tooltipConfig.animation.exit}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className={`${usePortal ? 'fixed' : tooltipConfig.container} px-3 py-2 bg-gray-900 text-white text-sm rounded-md shadow-lg xs:max-w-xs`}
-          style={
-            usePortal
-              ? {
-                  top: tooltipPosition.top,
-                  left: tooltipPosition.left,
-                  transform: tooltipPosition.transform,
-                  zIndex: getZIndex(),
-                  pointerEvents: 'auto',
-                }
-              : {}
-          }
+        <div
+          ref={refs.setFloating}
+          style={{
+            position: floatingStyles.position,
+            top: floatingStyles.top,
+            left: floatingStyles.left,
+            transform: floatingStyles.transform, // Floating UI's positioning transform
+            zIndex: getZIndex(),
+            pointerEvents: 'auto',
+          }}
         >
-          {content}
-          {/* Arrow */}
-          <div className={tooltipConfig.arrow} />
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, ...dirAnimation.initial }}
+            animate={{ opacity: 1, ...dirAnimation.animate }}
+            exit={{ opacity: 0, ...dirAnimation.exit }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="px-3 py-2 bg-gray-900 text-white text-sm rounded-md shadow-lg xs:max-w-xs"
+          >
+            {content}
+            {/* Use Floating UI's arrow component */}
+            <FloatingArrow ref={arrowRef} context={context} fill="#111827" />
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
 
   return (
     <div
-      ref={triggerRef}
+      ref={refs.setReference}
       className="relative inline-block before:absolute before:content-[''] before:-inset-[16px] before:z-[-1]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
