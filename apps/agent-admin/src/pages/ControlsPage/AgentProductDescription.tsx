@@ -38,7 +38,7 @@ const AgentProductDescription = ({
 
   // React Hook Form setup with Zod resolver
   const form = useForm<ProductFormData>({
-    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
+    // @ts-ignore - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       products: PRODUCT_DESCRIPTION_INITIAL_DATA,

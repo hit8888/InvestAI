@@ -53,7 +53,7 @@ const CalendarForm = ({
 }: CalendarFormProps) => {
   // Initialize form with react-hook-form
   const form = useForm<CalendarFormValues>({
-    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
+    // @ts-ignore - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(calendarFormSchema),
     defaultValues: {
       name: initialData?.name ?? '',

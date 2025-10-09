@@ -28,7 +28,7 @@ const useResetPasswordHelper = () => {
   const [showResetPasswordDialog, setShowResetPasswordDialog] = useState(false);
 
   const form = useForm<PasswordFormData>({
-    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
+    // @ts-ignore - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(passwordSchema),
     defaultValues: {
       newPassword: '',
