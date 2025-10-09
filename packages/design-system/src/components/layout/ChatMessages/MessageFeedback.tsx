@@ -62,7 +62,7 @@ const MessageFeedback = ({
   const [showRemarksRequired, setShowRemarksRequired] = useState(false);
 
   const form = useForm<FeedbackRequestPayload>({
-    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
+    // @ts-ignore - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(getFeedbackRequestPayloadSchema(isFeedbackThumbDown)),
     defaultValues: {
       category: '',
