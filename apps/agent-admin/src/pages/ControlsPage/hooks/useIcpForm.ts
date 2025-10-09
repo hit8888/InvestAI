@@ -16,6 +16,7 @@ export const useIcpForm = (
     reset,
     setValue,
   } = useForm<ICPFormData>({
+    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(icpFormSchema),
     defaultValues: ICP_INITIAL_DATA,
     mode: 'onChange',

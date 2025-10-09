@@ -29,6 +29,7 @@ export const useAdminProfile = () => {
 
   // React Hook Form setup
   const form = useForm<ProfileFormData>({
+    // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       firstName: '',

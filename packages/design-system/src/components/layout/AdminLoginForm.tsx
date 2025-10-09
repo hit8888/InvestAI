@@ -50,6 +50,7 @@ const AdminLoginForm = forwardRef<AdminLoginFormRef, AdminLoginFormProps>(
 
     // Replace individual state with form
     const form = useForm<LoginFormValues>({
+      // @ts-expect-error - Type instantiation is excessively deep with zodResolver and complex schemas
       resolver: zodResolver(dynamicSchema),
       defaultValues: {
         email: '',
