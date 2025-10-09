@@ -18,8 +18,9 @@ export const ControlsTitleEnum = {
   INSTRUCTIONS: 'Instructions',
   AGENT_RESPONSE_WORD_COUNT: 'Agent Response Word Count',
   PRODUCT_DESCRIPTION: 'Product Description',
-  IDEAL_CUSTOMER_PERSONA: 'Ideal Customer Persona',
   SUPPORT: 'Support',
+  IDEAL_CUSTOMER_PERSONA: 'Ideal Customer Persona',
+  IDEAL_COMPANY_PERSONA: 'Ideal Company Persona',
 };
 
 const {
@@ -29,6 +30,7 @@ const {
   PRODUCT_DESCRIPTION,
   SUPPORT,
   IDEAL_CUSTOMER_PERSONA,
+  IDEAL_COMPANY_PERSONA,
 } = ControlsTitleEnum;
 
 export const CommonControls: CommonControlsProps[] = [
@@ -64,6 +66,23 @@ export const CommonControls: CommonControlsProps[] = [
     exampleDescription: '',
     description: `Add a list of your products along with short descriptions. This helps the agent understand what each product does and tailor the conversation accordingly.`,
     infoTitle: '',
+  },
+  {
+    title: IDEAL_CUSTOMER_PERSONA,
+    promptType: '',
+    textareaPlaceholder: '',
+    exampleDescription: '',
+    description: `ICP is the profile of customers you would like to target, helping SDRs target and engage high-quality leads.`,
+    infoTitle: '',
+  },
+  {
+    title: IDEAL_COMPANY_PERSONA,
+    promptType: '',
+    textareaPlaceholder: 'Describe the ideal company persona you want to target...',
+    exampleDescription:
+      'Industry to target are healthcare and biotech. ATS used are Greenhouse. Number of open jobs are 25',
+    description: `Set the ideal company personas that you would like to target.`,
+    infoTitle: 'Instruction for Ideal Company Persona:',
   },
   {
     title: IDEAL_CUSTOMER_PERSONA,

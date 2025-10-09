@@ -4,6 +4,7 @@ import SinglePromptTextarea from './SinglePromptTextarea';
 import AgentResponseWordCount from './AgentResponseWordCount';
 import AgentProductDescription from './AgentProductDescription';
 import AgentSupportSystem from './AgentSupportSystem';
+import CompanyICPConfig from './CompanyICPConfig';
 import useTenantMetadataQuery from '../../queries/query/useTenantMetadataQuery';
 import AgentIdealCustomerPersona from './AgentIdealCustomerPersona';
 
@@ -14,6 +15,7 @@ const {
   AGENT_RESPONSE_WORD_COUNT,
   PRODUCT_DESCRIPTION,
   SUPPORT,
+  IDEAL_COMPANY_PERSONA,
   IDEAL_CUSTOMER_PERSONA,
 } = ControlsTitleEnum;
 
@@ -25,6 +27,7 @@ const ControlsPage = () => {
   const agentProductDescription = CommonControls.find((control) => control.title === PRODUCT_DESCRIPTION)!;
   const agentIdealCustomerPersona = CommonControls.find((control) => control.title === IDEAL_CUSTOMER_PERSONA)!;
   const agentSupportSystem = CommonControls.find((control) => control.title === SUPPORT)!;
+  const idealCompanyPersona = CommonControls.find((control) => control.title === IDEAL_COMPANY_PERSONA)!;
 
   const {
     data: tenantMetadata,
@@ -56,6 +59,7 @@ const ControlsPage = () => {
         {...agentProductDescription}
       />
       <AgentIdealCustomerPersona key={IDEAL_CUSTOMER_PERSONA} {...commonProps} {...agentIdealCustomerPersona} />
+      <CompanyICPConfig key={IDEAL_COMPANY_PERSONA} {...idealCompanyPersona} />
       <AgentSupportSystem key={SUPPORT} support={supportData} {...commonProps} {...agentSupportSystem} />
     </PageContainer>
   );
