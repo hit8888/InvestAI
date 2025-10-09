@@ -10,7 +10,7 @@ const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } =
 export const AskAIActionConfig: ActionConfig = {
   moduleType: ASK_AI,
   tooltip: {
-    content: 'Ask our AI assistant anything!',
+    content: (featureConfig) => featureConfig?.tooltip_text ?? 'Ask our AI assistant anything!',
   },
   customRenderer: ({ onClick, featureConfig, config, buttonSize }) => {
     const { orb_config: orbConfig } = config.style_config;
@@ -57,7 +57,7 @@ export const BookMeetingActionConfig: ActionConfig = {
     customIconAlt: 'Book a Meeting',
   },
   tooltip: {
-    content: 'Book a call',
+    content: (featureConfig) => featureConfig?.tooltip_text ?? 'Book a call',
   },
 };
 
@@ -69,7 +69,7 @@ export const SummarizeActionConfig: ActionConfig = {
     customIconAlt: 'Summarize',
   },
   tooltip: {
-    content: 'Get a quick summary of any page',
+    content: (featureConfig) => featureConfig?.tooltip_text ?? 'Get a quick summary of any page',
   },
 };
 
@@ -98,7 +98,7 @@ export const VideoLibraryActionConfig: ActionConfig = {
     customIconAlt: 'Video Library',
   },
   tooltip: {
-    content: 'Video Library',
+    content: (featureConfig) => featureConfig?.tooltip_text ?? 'Video library',
   },
 };
 
@@ -110,7 +110,7 @@ export const DemoLibraryActionConfig: ActionConfig = {
     customIconAlt: 'Demo Library',
   },
   tooltip: {
-    content: 'Demo Library',
+    content: (featureConfig) => featureConfig?.tooltip_text ?? 'Product tours',
   },
 };
 
