@@ -715,8 +715,8 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
   if (isVideosPage) {
     filterApplied.push({
       field: 'data_source_type',
-      value: 'VIDEO',
-      operator: 'eq',
+      value: ['VIDEO', 'YOUTUBE', 'VIMEO', 'WISTIA'],
+      operator: 'in',
     });
   }
 
@@ -1327,4 +1327,10 @@ export const checkFileSize = (file: File, maxFileSizeInBytes: number) => {
     status: true,
     error: null,
   };
+};
+
+export const formatDurationToMinuteSeconds = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };

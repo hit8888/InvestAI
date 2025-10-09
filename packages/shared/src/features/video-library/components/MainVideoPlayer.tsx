@@ -1,8 +1,9 @@
 import { Video } from '../types';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon } from '@meaku/saral';
+import ReactPlayer from 'react-player';
 
 interface MainVideoPlayerProps {
   videoId: string | null;
@@ -30,13 +31,18 @@ export const MainVideoPlayer = ({
   onLater,
   getNextRecommendedVideo,
 }: MainVideoPlayerProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<ReactPlayer>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
   const video = videoId ? getVideoById(videoId) : null;
   const videoUrl = video ? getVideoUrl(video) : null;
   const nextRecommendedVideo = getNextRecommendedVideo();
+
+  // Reset playing state when video changes to ensure autoplay
+  useEffect(() => {
+    setIsPlaying(true);
+  }, [videoId]);
 
   const handleVideoEnded = () => {
     onVideoEnd();
@@ -48,14 +54,9 @@ export const MainVideoPlayer = ({
     }
   };
 
-  const handlePlayPauseToggle = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-    }
+  const handlePlayPauseToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsPlaying((prev) => !prev);
   };
 
   const handlePlay = () => {
@@ -128,7 +129,7 @@ export const MainVideoPlayer = ({
           <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
         )}
       </div>
-      <div className="relative">
+      <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         {/* Video container with aspect ratio */}
         <div className="relative w-full aspect-video bg-muted/20 overflow-hidden">
           <AnimatePresence mode="wait">
@@ -141,21 +142,32 @@ export const MainVideoPlayer = ({
                 transition={{ duration: 0.2, ease: 'linear' }}
                 className="absolute inset-0"
               >
-                <video
+                <ReactPlayer
                   key={videoId}
                   ref={videoRef}
-                  src={videoUrl}
+                  url={videoUrl}
+                  playing={isPlaying}
                   controls
-                  autoPlay
-                  className="w-full h-full object-cover rounded-b-lg"
-                  preload="metadata"
-                  title={video.title}
+                  width="100%"
+                  height="100%"
+                  playsinline
                   onEnded={handleVideoEnded}
                   onPlay={handlePlay}
                   onPause={handlePause}
-                >
-                  Your browser does not support the video tag.
-                </video>
+                  config={{
+                    file: {
+                      attributes: {
+                        controlsList: 'nodownload',
+                        playsInline: true,
+                        style: {
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        },
+                      },
+                    },
+                  }}
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -163,26 +175,29 @@ export const MainVideoPlayer = ({
 
         {/* Hover Overlay with Play/Pause Button */}
         {!showRecommendation && (
-          <div
-            className="absolute inset-0 bottom-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={handlePlayPauseToggle}
-          >
-            <motion.div
-              className="w-20 h-20 bg-foreground/70 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{
-                scale: isHovered ? 1 : 0.8,
-                opacity: isHovered ? 1 : 0,
-              }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-            >
-              <LucideIcon
-                name={isPlaying ? 'pause' : 'play'}
-                className={`w-8 h-8 text-gray-100 fill-gray-100 ${isPlaying ? '' : 'ml-0.5'}`}
-              />
-            </motion.div>
+          <div className="absolute inset-0 bottom-20 flex items-center justify-center pointer-events-none z-20">
+            <AnimatePresence>
+              {isHovered && (
+                <motion.button
+                  type="button"
+                  className="w-20 h-20 bg-foreground/70 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50 pointer-events-auto"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                  }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  onClick={handlePlayPauseToggle}
+                  aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                >
+                  <LucideIcon
+                    name={isPlaying ? 'pause' : 'play'}
+                    className={`w-8 h-8 text-gray-100 fill-gray-100 ${isPlaying ? '' : 'ml-0.5'}`}
+                  />
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         )}
 

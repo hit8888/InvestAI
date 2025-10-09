@@ -51,11 +51,11 @@ export const useDataSourceAdd = (selectedType: string | null, mainUrl?: string):
 
         case SourcesCardTypes.VIDEOS:
         case SourcesCardTypes.SLIDES: {
-          const dataSourceType = selectedType === SourcesCardTypes.VIDEOS ? 'VIDEO' : 'SLIDE';
+          const isTypeVideo = selectedType === SourcesCardTypes.VIDEOS;
           await bulkAddArtifacts(
             dataSources.map((source) => ({
               asset: source.id,
-              data_source_type: dataSourceType,
+              data_source_type: isTypeVideo ? source.type : 'SLIDE',
             })),
           );
           queryClient.invalidateQueries({ queryKey: ['data-source-table'] });

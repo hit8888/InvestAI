@@ -123,7 +123,8 @@ type AssetDisplaySectionProps = {
 const AssetDisplaySection = ({ asset }: AssetDisplaySectionProps) => {
   const { public_url, type, name } = asset as DataSourceItem;
 
-  if (type === 'VIDEO') {
+  // EXTERNAL represents video providers like youtube, vimeo, wistia etc.
+  if (type === 'VIDEO' || type === 'EXTERNAL') {
     return (
       <CustomVideoPlayer
         allowPictureInPicture={false}

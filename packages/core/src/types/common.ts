@@ -83,6 +83,9 @@ export enum AgentResponseWordCountEnum {
   DETAILED = 'DETAILED',
 }
 
+export const RecordSchema = z.record(z.string(), z.string());
+export type StringRecord = z.infer<typeof RecordSchema>;
+
 // Shared asset schema used across configuration and admin APIs
 export const AssetSchema = z.object({
   id: z.string(),
@@ -91,6 +94,7 @@ export const AssetSchema = z.object({
   description: z.string().optional().nullable(),
   key: z.string(),
   public_url: z.string(),
+  metadata: RecordSchema.optional().nullable(),
 });
 export type Asset = z.infer<typeof AssetSchema>;
 

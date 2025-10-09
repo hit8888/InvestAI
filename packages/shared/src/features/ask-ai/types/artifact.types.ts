@@ -1,3 +1,5 @@
+import ReactPlayer from 'react-player';
+
 export type ArtifactType = 'VIDEO' | 'SLIDE_IMAGE';
 
 export interface BaseArtifactProps {
@@ -34,7 +36,7 @@ export interface ArtifactContextState {
   currentVideo: VideoState | null;
   currentImage: ImageState | null;
   videoError: string | null;
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  videoRef: React.RefObject<ReactPlayer | null>;
   isContainerReady: boolean;
   videoPlayState: VideoPlayState | null;
   shouldAutoPlay: boolean;

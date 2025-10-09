@@ -1,6 +1,7 @@
 import { LucideIcon, Typography } from '@meaku/saral';
 import { RefObject, useEffect, useState, useCallback } from 'react';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
+import ReactPlayer from 'react-player';
 
 interface SidebarArtifactContentProps {
   artifact: {
@@ -9,8 +10,9 @@ interface SidebarArtifactContentProps {
     title: string;
   };
   videoError: string | null;
-  videoRef: RefObject<HTMLVideoElement | null>;
   shouldAutoPlay?: boolean;
+  videoRef: RefObject<ReactPlayer | null>;
+  isPlaying?: boolean;
   onClose: () => void;
   onVideoError?: (error: string) => void;
 }
@@ -32,6 +34,7 @@ export const SidebarArtifactContent = ({
   videoError,
   videoRef,
   shouldAutoPlay,
+  isPlaying = false,
   onClose,
   onVideoError,
 }: SidebarArtifactContentProps) => {
@@ -78,7 +81,12 @@ export const SidebarArtifactContent = ({
   const recalculateVideoHeight = useCallback(() => {
     if (!videoRef.current || !videoAspectRatio || artifact.artifactType !== 'VIDEO') return;
 
-    const containerWidth = videoRef.current.parentElement?.clientWidth || videoRef.current.clientWidth;
+    // Get the wrapper element of ReactPlayer
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const wrapper = (videoRef.current as any).wrapper;
+    if (!wrapper) return;
+
+    const containerWidth = wrapper.parentElement?.clientWidth || wrapper.clientWidth;
     const newHeight = containerWidth / videoAspectRatio;
     setVideoHeight(newHeight);
   }, [videoRef, videoAspectRatio, artifact.artifactType]);
@@ -126,13 +134,14 @@ export const SidebarArtifactContent = ({
             ) : (
               <div className="flex flex-col border rounded-xl overflow-hidden w-full">
                 <div className="w-full overflow-hidden">
-                  <video
+                  <ReactPlayer
                     ref={videoRef}
-                    src={artifact.url}
+                    url={artifact.url}
                     controls
-                    preload="metadata"
-                    autoPlay={shouldAutoPlay}
-                    className="w-full h-auto max-w-full object-contain"
+                    playing={isPlaying || shouldAutoPlay}
+                    width="100%"
+                    height="auto"
+                    className="w-full h-auto max-w-full"
                     style={{
                       minHeight: isVideoLoading
                         ? videoHeight
@@ -141,24 +150,39 @@ export const SidebarArtifactContent = ({
                         : 'auto', // Use stored height or 80% of viewport (max 600px)
                       backgroundColor: isVideoLoading ? '#f3f4f6' : 'transparent', // Light background while loading
                     }}
-                    // Video play/pause/ended events are handled in useSidebarArtifact hook
+                    config={{
+                      file: {
+                        attributes: {
+                          style: { objectFit: 'contain' },
+                          preload: 'metadata',
+                        },
+                      },
+                    }}
                     onError={handleVideoLoadError}
-                    onLoadStart={handleVideoLoadStart}
-                    onLoadedMetadata={(e) => {
+                    onStart={handleVideoLoadStart}
+                    onReady={() => {
                       // Calculate and store aspect ratio for resize handling
-                      const video = e.target as HTMLVideoElement;
-                      const height = video.videoHeight;
-                      const width = video.videoWidth;
-                      const aspectRatio = width / height;
+                      if (!videoRef.current) return;
 
-                      // Store aspect ratio for resize calculations
-                      setVideoAspectRatio(aspectRatio);
+                      const player = videoRef.current.getInternalPlayer();
+                      if (player && player.videoHeight && player.videoWidth) {
+                        const height = player.videoHeight;
+                        const width = player.videoWidth;
+                        const aspectRatio = width / height;
 
-                      // Calculate initial display height
-                      const containerWidth = video.parentElement?.clientWidth || video.clientWidth;
-                      const displayHeight = containerWidth / aspectRatio;
-                      setVideoHeight(displayHeight);
-                      setIsVideoLoading(false);
+                        // Store aspect ratio for resize calculations
+                        setVideoAspectRatio(aspectRatio);
+
+                        // Calculate initial display height
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        const wrapper = (videoRef.current as any).wrapper;
+                        if (wrapper) {
+                          const containerWidth = wrapper.parentElement?.clientWidth || wrapper.clientWidth;
+                          const displayHeight = containerWidth / aspectRatio;
+                          setVideoHeight(displayHeight);
+                        }
+                        setIsVideoLoading(false);
+                      }
                     }}
                   />
                 </div>

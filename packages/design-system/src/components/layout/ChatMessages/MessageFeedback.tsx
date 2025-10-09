@@ -61,7 +61,10 @@ const MessageFeedback = ({
   const [categories, setCategories] = useState<string[]>([]);
   const [showRemarksRequired, setShowRemarksRequired] = useState(false);
 
+  // Suppress TS2589 error for zodResolver - type instantiation is excessively deep for complex schemas
+  // @ts-expect-error adding
   const form = useForm<FeedbackRequestPayload>({
+    // @ts-expect-error adding
     resolver: zodResolver(getFeedbackRequestPayloadSchema(isFeedbackThumbDown)),
     defaultValues: {
       category: '',

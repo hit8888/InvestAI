@@ -3,6 +3,7 @@ import { SideDrawer } from '../../../components/SideDrawer';
 import { SidebarArtifactContent } from './SidebarArtifactContent';
 import { RefObject } from 'react';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import ReactPlayer from 'react-player';
 
 interface SidebarArtifactDrawerProps {
   targetRef: RefObject<HTMLDivElement | null>;
@@ -13,8 +14,9 @@ interface SidebarArtifactDrawerProps {
     title: string;
   } | null;
   videoError: string | null;
-  videoRef: RefObject<HTMLVideoElement | null>;
   shouldAutoPlay?: boolean;
+  videoRef: RefObject<ReactPlayer | null>;
+  isPlaying?: boolean;
   onClose: () => void;
   onCloseComplete?: () => void;
   onVideoError?: (error: string) => void;
@@ -27,6 +29,7 @@ export const SidebarArtifactDrawer = ({
   videoError,
   videoRef,
   shouldAutoPlay,
+  isPlaying,
   onClose,
   onCloseComplete,
   onVideoError,
@@ -50,6 +53,7 @@ export const SidebarArtifactDrawer = ({
           videoError={videoError}
           videoRef={videoRef}
           shouldAutoPlay={shouldAutoPlay}
+          isPlaying={isPlaying}
           onClose={onClose}
           onVideoError={onVideoError}
         />

@@ -24,7 +24,6 @@ const TableHeaderRowItemHavingCheckbox = ({
         const isVisibilityColumn = header.column.id === 'access_type';
         const isDataSourceTypeColumn = header.column.id === 'data_source_type';
         const isDescriptionColumn = header.column.id === 'description';
-        const isDurationColumn = header.column.id === 'duration';
 
         return (
           <th
@@ -35,9 +34,10 @@ const TableHeaderRowItemHavingCheckbox = ({
               {
                 'rounded-tl-lg': isFirstColumn,
                 'rounded-tr-lg': isLastColumn,
-                'min-w-[400px]': isSourceNameColumn || isDescriptionColumn || isUrlColumn,
-                'min-w-32': isLastColumn || isStatusColumn || isDurationColumn || isVisibilityColumn,
+                'min-w-[400px]': isSourceNameColumn || isUrlColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isVisibilityColumn,
                 'min-w-48': isDataSourceTypeColumn,
+                'min-w-[550px]': isDescriptionColumn,
               },
             )}
           >

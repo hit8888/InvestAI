@@ -28,7 +28,7 @@ const DataSourcesNavigation = () => {
   const breadCrumbItems = [];
 
   // Always add "Data Sources"
-  breadCrumbItems.push('Data Sources');
+  breadCrumbItems.push('Agent - Data Sources');
 
   // Add selectedType if it exists
   if (selectedType) {

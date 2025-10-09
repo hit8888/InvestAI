@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import ReactPlayer from 'react-player';
 
 interface SidebarArtifact {
   url: string;
@@ -41,7 +42,7 @@ export const useSidebarArtifact = () => {
   const [videoPlayState, setVideoPlayState] = useState<{ url: string; isPlaying: boolean } | null>(null);
   const [shouldAutoPlay, setShouldAutoPlay] = useState<boolean>(false);
   const [wasManuallyClosed, setWasManuallyClosed] = useState<boolean>(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<ReactPlayer>(null);
 
   /**
    * Opens sidebar with artifact
@@ -126,8 +127,11 @@ export const useSidebarArtifact = () => {
    */
   const handleCloseComplete = useCallback(() => {
     if (videoRef.current && currentVideo?.isPlaying) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+      const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
+      if (internalPlayer && typeof internalPlayer.pause === 'function') {
+        internalPlayer.pause();
+        internalPlayer.currentTime = 0;
+      }
     }
 
     setSideBarArtifact(null);
@@ -144,13 +148,16 @@ export const useSidebarArtifact = () => {
    */
   const toggleVideoPlayPause = useCallback(() => {
     if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO') {
-      if (videoRef.current.paused) {
-        videoRef.current.play().catch((error) => {
-          console.error('Video play error:', error);
-          setVideoError('Failed to play video. Please try again.');
-        });
-      } else {
-        videoRef.current.pause();
+      const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
+      if (internalPlayer && typeof internalPlayer.play === 'function') {
+        if (internalPlayer.paused) {
+          internalPlayer.play().catch((error) => {
+            console.error('Video play error:', error);
+            setVideoError('Failed to play video. Please try again.');
+          });
+        } else {
+          internalPlayer.pause();
+        }
       }
     }
   }, [sideBarArtifact?.artifactType]);
@@ -177,7 +184,12 @@ export const useSidebarArtifact = () => {
           return false;
         }
 
-        const video = videoRef.current;
+        const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
+        if (!internalPlayer || typeof internalPlayer.addEventListener !== 'function') {
+          return false;
+        }
+
+        const video = internalPlayer;
 
         const syncState = () => {
           const isActuallyPlaying = !video.paused && !video.ended && video.readyState > 2;
@@ -252,7 +264,12 @@ export const useSidebarArtifact = () => {
    */
   useEffect(() => {
     if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
-      const video = videoRef.current;
+      const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
+      if (!internalPlayer || typeof internalPlayer.addEventListener !== 'function') {
+        return;
+      }
+
+      const video = internalPlayer;
 
       // Sync state immediately when video element becomes available
       const syncStateImmediately = () => {

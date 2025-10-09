@@ -90,7 +90,7 @@ export const getDataSourcesFormattedColumnsList = (pageType: string) => {
         }),
       }),
       ...(key === 'asset' && {
-        accessorFn: (row: DataSourcesAccessorFnType) => row.thumbnail || row.asset || '',
+        accessorFn: (row: DataSourcesAccessorFnType) => ({ ...row.asset, metadata: { ...row.thumbnail } }),
       }),
       ...(key === 'duration' && {
         accessorFn: (row: DataSourcesAccessorFnType) => row.asset?.public_url || '',

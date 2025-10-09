@@ -11,7 +11,7 @@ import { trackError } from '@meaku/core/utils/error';
 import ReactCropperModal from '../../components/AgentManagement/ReactCropperModal';
 import { useImageCropModal } from '../../hooks/useImageCropModal';
 import { checkFileSize } from '../../utils/common';
-import { FIVE_MB } from '../../utils/constants';
+import { THREE_HUNDRED_MB } from '../../utils/constants';
 
 interface AssetResponse {
   id: string;
@@ -95,7 +95,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         type: 'image/png',
       });
 
-      const { status, error } = checkFileSize(croppedFile, FIVE_MB);
+      const { status, error } = checkFileSize(croppedFile, THREE_HUNDRED_MB);
       if (!status) {
         ErrorToastMessage({
           title: error || '',

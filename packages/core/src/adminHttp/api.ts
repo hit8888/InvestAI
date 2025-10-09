@@ -59,6 +59,8 @@ import {
   CreateThumbnailRequest,
   AssetUploadPayload,
   BaseFilePayload,
+  VideoValidationRequest,
+  VideoValidationResponse,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -206,6 +208,16 @@ export const uploadAssetsFile = (file: File, onProgress?: (progress: number) => 
   formData.append('file', file);
 
   return assetUpload('/tenant/api/assets/upload/', formData, onProgress);
+};
+
+export const uploadAssetsFromUrl = (url: string) => {
+  const formData = new FormData();
+  formData.append('url', url);
+  return adminApiClient.post('/tenant/api/assets/upload/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
 
 export const getDataSourceOverviewData = () => adminApiClient.get(`tenant/api/datasources/overview/`);
@@ -395,3 +407,7 @@ export const getIcpConfig = (agentId: number) =>
 
 export const updateIcpConfig = (agentId: number, payload: Partial<IcpConfigPayload>) =>
   adminApiClient.patch(`/tenant/api/agent/${agentId}/icp-config/`, payload);
+
+// Video validation API
+export const validateVideoUrls = (payload: VideoValidationRequest) =>
+  adminApiClient.post<VideoValidationResponse>(`tenant/api/videos/validate/`, payload);

@@ -7,7 +7,8 @@ import { useFileUpload } from '../../../hooks/useFileUpload';
 import { Accept } from 'react-dropzone';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { checkFileSize } from '../../../utils/common';
-import { FIVE_MB } from '../../../utils/constants';
+import { THREE_HUNDRED_MB } from '../../../utils/constants';
+import { cn } from '@breakout/design-system/lib/cn';
 
 type DragDropClickUploadFilesProps = {
   showIcon?: boolean;
@@ -20,6 +21,7 @@ type DragDropClickUploadFilesProps = {
   onUploadSuccess?: (file: File) => void | Promise<void>;
   fileSizeLimit?: number;
   uploadProgress?: number;
+  showContentAtCenter?: boolean;
 };
 
 const DragDropClickUploadFiles = ({
@@ -33,6 +35,7 @@ const DragDropClickUploadFiles = ({
   fileSizeLimit,
   onUploadSuccess,
   uploadProgress,
+  showContentAtCenter = true,
 }: DragDropClickUploadFilesProps) => {
   const { isUploading, toggleIsUploadingValue } = useDataSources();
   const { uploadProgress: localUploadProgress, uploadFiles } = useFileUpload();
@@ -40,7 +43,7 @@ const DragDropClickUploadFiles = ({
   const fileSizeValidation = (files: File[]) => {
     // File size check
     for (const file of files) {
-      const { status, error } = checkFileSize(file, fileSizeLimit || FIVE_MB);
+      const { status, error } = checkFileSize(file, fileSizeLimit || THREE_HUNDRED_MB);
       if (!status) {
         ErrorToastMessage({
           title: error || '',
@@ -75,13 +78,21 @@ const DragDropClickUploadFiles = ({
 
   return (
     <FileUploadHandler onFileSelect={handleFileSelect} acceptedFiles={acceptedFiles} errorMessage={errorMessage}>
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-1">
+      <div
+        className={cn('relative z-10 flex h-full w-full items-start justify-start gap-4 p-6', {
+          'flex-col items-center justify-center gap-1': showContentAtCenter,
+        })}
+      >
         {showIcon && <SourcesDragDropUploadIcon width="32" height="32" className="text-primary" />}
-        <div className="flex flex-col items-center gap-1 self-stretch">
-          <Typography variant={'label-14-medium'} align={'center'} textColor={'primary'}>
+        <div
+          className={cn('flex flex-col items-start gap-1 self-stretch', {
+            'items-center': showContentAtCenter,
+          })}
+        >
+          <Typography variant={'label-14-medium'} align={'center'}>
             {uploadTitle || 'Drag and drop files here, or click to browse'}
           </Typography>
-          <Typography variant={'caption-10-normal'} align={'center'} className="text-primary/60">
+          <Typography variant="caption-12-normal" align={'center'} textColor={'gray500'}>
             {defaultMessage}
           </Typography>
         </div>

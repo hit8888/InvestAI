@@ -6,7 +6,7 @@ interface FileSizeResult {
   unit: 'KB' | 'MB';
 }
 
-const useFileSize = (item: DataSourceItem | File) => {
+const useFileSize = (item: DataSourceItem | File, disableFetch?: boolean) => {
   const [fileSizeInBytes, setFileSizeInBytes] = useState<number>(0);
   const isFile = item instanceof File;
 
@@ -23,10 +23,10 @@ const useFileSize = (item: DataSourceItem | File) => {
   };
 
   useEffect(() => {
-    if (!(item instanceof File) && item.public_url) {
+    if (!(item instanceof File) && item.public_url && !disableFetch) {
       fetchFileSize(item.public_url);
     }
-  }, [item]);
+  }, [item, disableFetch]);
 
   const getFileSize = (): FileSizeResult => {
     const sizeInBytes = isFile ? item.size : fileSizeInBytes;

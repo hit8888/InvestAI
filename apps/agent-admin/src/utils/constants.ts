@@ -64,7 +64,7 @@ export const ROUTING_TYPE_LOGO_MAP = {
 };
 
 export const ONE_MB_IN_BYTES = 1024 * 1024;
-export const FIVE_MB = 5 * ONE_MB_IN_BYTES;
+export const THREE_HUNDRED_MB = 300 * ONE_MB_IN_BYTES;
 export const TWO_MB = 2 * ONE_MB_IN_BYTES;
 
 const {
@@ -358,7 +358,7 @@ const VISITORS_TABLE_EXCLUDE_FILTERS = [
 const DATA_SOURCES_TABLE_EXCLUDE_FILTERS = [Duration, UsageCount];
 const WEBPAGES_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, FileType, DocumentAccessType];
 const DOCUMENTS_TABLE_EXCLUDE_FILTERS = [...DATA_SOURCES_TABLE_EXCLUDE_FILTERS, Sources];
-const VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS = [Duration, Sources, UsageCount, FileType, DocumentAccessType];
+const VIDEO_SLIDES_TABLE_EXCLUDE_FILTERS = [Duration, Sources, UsageCount, DocumentAccessType];
 
 export const LEADS_TABLE_FILTERS_CONFIG = TABLE_FILTERS_CONFIG.filter(
   (item) => !LEADS_TABLE_EXCLUDE_FILTERS.includes(item.filterType),

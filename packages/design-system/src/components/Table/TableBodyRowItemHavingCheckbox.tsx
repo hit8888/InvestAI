@@ -49,7 +49,6 @@ const TableBodyRowItemHavingCheckbox = ({
         const isVisibilityColumn = cell.column.id === 'access_type';
         const isDataSourceTypeColumn = cell.column.id === 'data_source_type';
         const isDescriptionColumn = cell.column.id === 'description';
-        const isDurationColumn = cell.column.id === 'duration';
         return (
           <td
             key={cell.id}
@@ -57,9 +56,10 @@ const TableBodyRowItemHavingCheckbox = ({
               `border-gray/20 flex min-h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2`,
               {
                 'border-l': isFirstColumn,
-                'min-w-[400px]': isSourceNameColumn || isDescriptionColumn || isUrlColumn,
-                'min-w-32': isLastColumn || isStatusColumn || isDurationColumn || isVisibilityColumn,
+                'min-w-[400px]': isSourceNameColumn || isUrlColumn,
+                'min-w-32': isLastColumn || isStatusColumn || isVisibilityColumn,
                 'min-w-48': isDataSourceTypeColumn,
+                'min-w-[550px]': isDescriptionColumn,
               },
             )}
           >

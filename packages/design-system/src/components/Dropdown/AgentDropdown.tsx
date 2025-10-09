@@ -183,7 +183,7 @@ const AgentDropdown = ({
         asChild
         align={menuContentAlign}
         side={menuContentSide}
-        className="dropdown-menu-content hide-scrollbar z-50 max-h-96 min-w-[6rem] overflow-auto 
+        className="dropdown-menu-content hide-scrollbar z-[2147483647] max-h-96 min-w-[6rem] overflow-auto 
         rounded-lg bg-white p-0 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div className="flex flex-col">

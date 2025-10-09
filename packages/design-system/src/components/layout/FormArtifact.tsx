@@ -56,7 +56,10 @@ const FormArtifact = ({
   const formSchemaType = getFormSchemaTypeDefinition(formSchema);
   type FormSchemaType = typeof formSchemaType;
 
+  // Suppress TS2589 error for zodResolver - type instantiation is excessively deep for complex schemas
+  // @ts-expect-error adding
   const form = useForm<FormSchemaType>({
+    // @ts-expect-error adding
     resolver: zodResolver(formSchema),
     defaultValues: artifactFormMetadata?.filled_data ?? {},
     mode: 'onTouched',

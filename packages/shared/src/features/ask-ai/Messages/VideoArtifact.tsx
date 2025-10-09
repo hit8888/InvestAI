@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BaseArtifact } from '../components/BaseArtifact';
 import { BaseArtifactProps } from '../types/artifact.types';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import ReactPlayer from 'react-player';
 
 /**
  * Strips leading @ symbols from URLs
@@ -106,7 +107,7 @@ export const VideoArtifact = ({ title, url, isLatestMessage = false, isExpanded 
 
   if (!cleanedUrl) return null;
 
-  const expandedContent = <video src={cleanedUrl} controls className="w-full h-auto max-w-full object-contain" />;
+  const expandedContent = <ReactPlayer src={cleanedUrl} controls className="w-full h-auto max-w-full object-contain" />;
 
   // When expanded, use BaseArtifact for consistent layout
   if (isExpanded) {

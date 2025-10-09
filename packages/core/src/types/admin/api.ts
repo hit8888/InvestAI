@@ -1223,3 +1223,24 @@ export const IcpConfigResponseSchema = z.object({
   }),
 });
 export type IcpConfigResponse = z.infer<typeof IcpConfigResponseSchema>;
+
+// Video Validation
+export const VideoTypeEnum = z.enum(['YOUTUBE', 'VIMEO', 'WISTIA', 'OTHER', 'VIDEO']);
+export type VideoType = z.infer<typeof VideoTypeEnum>;
+
+export const ValidatedVideoSchema = z.object({
+  video_type: VideoTypeEnum,
+  url: z.string(),
+  duration: z.string(),
+  title: z.string(),
+});
+export type ValidatedVideo = z.infer<typeof ValidatedVideoSchema>;
+
+export const VideoValidationRequestSchema = z.array(z.string());
+export type VideoValidationRequest = z.infer<typeof VideoValidationRequestSchema>;
+
+export const VideoValidationResponseSchema = z.object({
+  success: z.array(ValidatedVideoSchema),
+  errors: z.record(z.string(), z.string()),
+});
+export type VideoValidationResponse = z.infer<typeof VideoValidationResponseSchema>;

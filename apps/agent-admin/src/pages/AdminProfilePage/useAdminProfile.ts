@@ -9,7 +9,7 @@ import useUpdateUserProfileMutation from '../../queries/mutation/useUpdateUserPr
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { checkFileSize } from '../../utils/common';
-import { FIVE_MB } from '../../utils/constants';
+import { THREE_HUNDRED_MB } from '../../utils/constants';
 
 // Form schema for validation
 const profileFormSchema = z.object({
@@ -144,7 +144,7 @@ export const useAdminProfile = () => {
         type: 'image/png',
       });
 
-      const { status, error } = checkFileSize(croppedFile, FIVE_MB);
+      const { status, error } = checkFileSize(croppedFile, THREE_HUNDRED_MB);
       if (!status) {
         ErrorToastMessage({
           title: error || '',

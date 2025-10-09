@@ -231,6 +231,7 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
     isSideDrawerOpen,
     videoError,
     videoRef,
+    currentVideo,
     shouldAutoPlay,
     closeSidebar,
     handleCloseComplete,
@@ -251,6 +252,7 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
         videoError={videoError}
         videoRef={videoRef}
         shouldAutoPlay={shouldAutoPlay}
+        isPlaying={currentVideo?.isPlaying}
         onClose={closeSidebar}
         onCloseComplete={handleCloseComplete}
         onVideoError={handleVideoError}

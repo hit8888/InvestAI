@@ -78,6 +78,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
-    "lottie-react": "^2.4.1"
+    "lottie-react": "^2.4.1",
+    "react-player": "^2.16.0"
   }
 }

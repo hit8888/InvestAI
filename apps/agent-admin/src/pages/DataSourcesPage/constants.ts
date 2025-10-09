@@ -127,12 +127,18 @@ export const DATA_SOURCES_DOCUMENTS_COLUMN_HEADER_LABEL_MAPPING = {
   source_url: 'Source URL',
 };
 
-export const DATA_SOURCES_VIDEOS_COLUMN_LISTS = ['asset', 'data', 'duration', 'status', 'updated_on'];
+export const DATA_SOURCES_VIDEOS_COLUMN_LISTS = [
+  'asset',
+  'data',
+  // 'duration',
+  'status',
+  'updated_on',
+];
 
 export const DATA_SOURCES_VIDEOS_COLUMN_HEADER_LABEL_MAPPING = {
   asset: 'Videos',
   data: 'Description',
-  duration: 'Duration',
+  // duration: 'Duration',
   status: 'Status',
   updated_on: 'Last Updated',
 };

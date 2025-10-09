@@ -4,7 +4,7 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "build": "npm run build:with-deps",
+    "build": "NODE_OPTIONS='--max-old-space-size=3072' npm run build:with-deps",
     "build:with-deps": "rm -rf dist && npm run build:deps && npm run copy:deps && npm run build:chat-widget && npm run build:command-bar",
     "build:deps": "cp .env ../command-bar/.env 2>/dev/null || echo 'No .env file to copy' && cd ../.. && pnpm turbo run build --filter=command-bar",
     "copy:deps": "mkdir -p dist/breakout-command-bar && cp -r ../command-bar/dist/* ./dist/breakout-command-bar/",

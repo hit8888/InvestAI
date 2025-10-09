@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LucideIcon, Typography, Button } from '@meaku/saral';
 import { Video } from '../types';
 import { useWatchedVideos } from '../hooks/useWatchedVideos';
+import ReactPlayer from 'react-player';
 
 interface VideoThumbnailProps {
   videoId: string;
@@ -15,6 +16,13 @@ interface VideoThumbnailProps {
   widthClass?: string;
   isSelected?: boolean;
 }
+
+// Helper function to format duration
+const formatDuration = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 export const VideoThumbnail = ({
   videoId,
@@ -45,18 +53,10 @@ export const VideoThumbnail = ({
     return null;
   }
 
-  // Helper function to format duration
-  const formatDuration = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
   // Handle video metadata loaded to get duration
-  const handleLoadedMetadata = (event: React.SyntheticEvent<HTMLVideoElement>) => {
-    const videoElement = event.currentTarget;
-    if (videoElement.duration && !isNaN(videoElement.duration)) {
-      setDuration(videoElement.duration);
+  const handleDuration = (durationInSeconds: number) => {
+    if (durationInSeconds && !isNaN(durationInSeconds)) {
+      setDuration(durationInSeconds);
     }
   };
 
@@ -77,14 +77,26 @@ export const VideoThumbnail = ({
             </div>
           ) : video?.asset?.public_url ? (
             <>
-              <video
-                src={getVideoUrl(video)}
+              <div
+                className="absolute inset-0 z-50 h-full w-full cursor-default bg-transparent"
+                style={{ pointerEvents: 'auto' }}
+              />
+              <ReactPlayer
+                url={getVideoUrl(video)}
                 className="w-full h-full object-cover transition-transform rounded-lg border bg-card shadow-sm"
-                preload="metadata"
                 muted
                 controls={false}
-                onLoadedMetadata={handleLoadedMetadata}
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                onDuration={handleDuration}
+                width="100%"
+                height="100%"
+                config={{
+                  file: {
+                    attributes: {
+                      style: { objectFit: 'cover' },
+                      preload: 'metadata',
+                    },
+                  },
+                }}
               />
               {/* Duration Pill */}
               {duration && (
@@ -192,14 +204,22 @@ export const VideoThumbnail = ({
             </div>
           ) : video?.asset?.public_url ? (
             <>
-              <video
-                src={getVideoUrl(video)}
+              <ReactPlayer
+                url={getVideoUrl(video)}
                 className="w-full h-full border object-cover transition-transform rounded-[10px] bg-background"
-                preload="metadata"
                 muted
                 controls={false}
-                onLoadedMetadata={handleLoadedMetadata}
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                onDuration={handleDuration}
+                width="100%"
+                height="100%"
+                config={{
+                  file: {
+                    attributes: {
+                      style: { objectFit: 'cover' },
+                      preload: 'metadata',
+                    },
+                  },
+                }}
               />
               {/* Play Button Overlay - Always visible with white background */}
               <div className="absolute inset-0 flex items-center justify-center">

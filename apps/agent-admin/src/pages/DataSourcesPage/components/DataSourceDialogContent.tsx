@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Button from '@breakout/design-system/components/Button/index';
-import Input from '@breakout/design-system/components/layout/input';
 import SourcesFetchIcon from '@breakout/design-system/components/icons/sources-fetch-icon';
-import SourcesUrlLinkIcon from '@breakout/design-system/components/icons/sources-url-link-icon';
 import FilledTickDoneIcon from '@breakout/design-system/components/icons/filled-done-tick-icon';
 import SourcesDragDropPattern from '@breakout/design-system/components/icons/sources-dragdrop-patterns';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
@@ -11,10 +9,12 @@ import LoadingDialogMessage from './LoadingDialogMessage';
 import DefaultDialogMessage from './DefaultDialogMessage';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useDataSources } from '../../../context/DataSourcesContext';
-import { SourcesCardTypes } from '../constants';
+import { DIALOG_LOADING_MESSAGE_MAPPED_OBJECT, SourcesCardTypes } from '../constants';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import { useDataSourceAdd } from '../../../hooks/useDataSourceAdd';
 import { useSitemapFetch } from '../../../hooks/useSitemapFetch';
+import DataSourceURLLinkInput from './DataSourceURLLinkInput';
+import VideoLinkProvider from './VideoLinkProvider';
 
 type DataSourceDialogContentProps = {
   onClose: () => void;
@@ -71,12 +71,16 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
 
   const isFetchButtonDisabled = !urlLink.length || isFetching || (isFetched && !!dataSources.length);
   const isWebpageDialog = selectedType === SourcesCardTypes.WEBPAGES;
+  const isVideoDialog = selectedType === SourcesCardTypes.VIDEOS;
   const showDefaultMessage = !isFetching && !dataSources.length;
-  const showLoadingMessage = isFetching && !dataSources.length;
+  const showLoadingMessageForSitemapFetch = isFetching && !dataSources.length && isWebpageDialog;
   const showFetchedData = !isFetching && dataSources.length;
 
   const isAddButtonDisabled = !dataSources.length;
   const showPattern = !isWebpageDialog && !isUploading && !dataSources.length;
+  const showVideoLinkProvider = showDefaultMessage && !isUploading && isVideoDialog;
+
+  const loadingMessageForSitemapFetch = DIALOG_LOADING_MESSAGE_MAPPED_OBJECT['webpages'];
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -85,13 +89,18 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
         className={cn('flex min-h-52 w-full items-center justify-center rounded-2xl', {
           'border border-gray-200 bg-gray-25': isUploading || isWebpageDialog || dataSources.length,
           'relative border-2 border-dashed border-primary/60 bg-white': showPattern,
+          'min-h-8': showVideoLinkProvider,
         })}
       >
         {showPattern && <SourcesDragDropPattern />}
         {showDefaultMessage ? <DefaultDialogMessage /> : null}
-        {showLoadingMessage ? <LoadingDialogMessage progress={fetchProgress} /> : null}
+
+        {showLoadingMessageForSitemapFetch ? (
+          <LoadingDialogMessage message={loadingMessageForSitemapFetch} progress={fetchProgress} />
+        ) : null}
         {showFetchedData ? <CommonAddNewSourcesData data={dataSources} onDeleteAll={resetFetch} /> : null}
       </div>
+      {showVideoLinkProvider ? <VideoLinkProvider /> : null}
       <div className="flex w-full flex-1 items-end justify-end">
         <DataSourceDialogAddButton
           urlLink={urlLink}
@@ -101,24 +110,6 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
           resetFetch={resetFetch}
         />
       </div>
-    </div>
-  );
-};
-
-type DataSourceURLLinkInputProps = {
-  inputValue: string;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
-const DataSourceURLLinkInput = ({ inputValue, onInputChange }: DataSourceURLLinkInputProps) => {
-  return (
-    <div className="flex w-full items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3">
-      <SourcesUrlLinkIcon width="16" height="16" className="text-blue_sec-1000" />
-      <Input
-        className="h-4 w-full flex-1 rounded-none border-none p-0 text-blue_sec-1000 outline-none focus:ring-0"
-        value={inputValue}
-        onChange={onInputChange}
-      />
     </div>
   );
 };

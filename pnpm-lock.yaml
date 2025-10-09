@@ -988,6 +988,9 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.3(@types/react@19.0.8)(react@19.2.0)
+      react-player:
+        specifier: ^2.16.0
+        version: 2.16.0(react@19.2.0)
       remark-gfm:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1052,6 +1055,9 @@ importers:
       react-hot-toast:
         specifier: ^2.4.1
         version: 2.5.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react-player:
+        specifier: ^2.16.0
+        version: 2.16.0(react@19.2.0)
     devDependencies:
       '@calcom/embed-react':
         specifier: ^1.5.2

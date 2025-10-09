@@ -1,5 +1,6 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import { useVideoDuration } from '../../hooks/useVideoDuration';
+import { formatDurationToMinuteSeconds } from '../../utils/common';
 
 interface VideoDurationHandlerProps {
   videoUrl: string;
@@ -20,7 +21,7 @@ const VideoDurationHandler = ({
   renderVideo,
   renderDuration,
 }: VideoDurationHandlerProps) => {
-  const { videoRef, videoDuration, formatDuration, handleVideoLoadedMetadata } = useVideoDuration();
+  const { videoRef, videoDuration, handleVideoLoadedMetadata } = useVideoDuration();
 
   const defaultVideo = (
     <video
@@ -33,14 +34,14 @@ const VideoDurationHandler = ({
 
   const defaultDuration = (
     <Typography className={typographyClassName} align="center" variant={typographyVariant}>
-      {formatDuration(videoDuration || 0)}
+      {formatDurationToMinuteSeconds(videoDuration || 0)}
     </Typography>
   );
 
   return (
     <>
       {showVideo && (renderVideo ? renderVideo({ videoRef }) : defaultVideo)}
-      {renderDuration ? renderDuration(formatDuration(videoDuration || 0)) : defaultDuration}
+      {renderDuration ? renderDuration(formatDurationToMinuteSeconds(videoDuration || 0)) : defaultDuration}
     </>
   );
 };
