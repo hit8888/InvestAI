@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { LucideIcon, Typography, Button } from '@meaku/saral';
+import { LucideIcon, Typography, Button, VideoPlayer } from '@meaku/saral';
 import { Video } from '../types';
 import { useWatchedVideos } from '../hooks/useWatchedVideos';
-import ReactPlayer from 'react-player';
 
 interface VideoThumbnailProps {
   videoId: string;
@@ -81,7 +80,7 @@ export const VideoThumbnail = ({
                 className="absolute inset-0 z-50 h-full w-full cursor-default bg-transparent"
                 style={{ pointerEvents: 'auto' }}
               />
-              <ReactPlayer
+              <VideoPlayer
                 url={getVideoUrl(video)}
                 className="w-full h-full object-cover transition-transform rounded-lg border bg-card shadow-sm"
                 muted
@@ -89,6 +88,7 @@ export const VideoThumbnail = ({
                 onDuration={handleDuration}
                 width="100%"
                 height="100%"
+                preload="metadata"
                 config={{
                   file: {
                     attributes: {
@@ -204,7 +204,7 @@ export const VideoThumbnail = ({
             </div>
           ) : video?.asset?.public_url ? (
             <>
-              <ReactPlayer
+              <VideoPlayer
                 url={getVideoUrl(video)}
                 className="w-full h-full border object-cover transition-transform rounded-[10px] bg-background"
                 muted
@@ -212,6 +212,7 @@ export const VideoThumbnail = ({
                 onDuration={handleDuration}
                 width="100%"
                 height="100%"
+                preload="metadata"
                 config={{
                   file: {
                     attributes: {

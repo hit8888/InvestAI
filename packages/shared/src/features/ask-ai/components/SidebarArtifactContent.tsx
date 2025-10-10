@@ -1,4 +1,4 @@
-import { LucideIcon, Typography } from '@meaku/saral';
+import { LucideIcon, Typography, VideoPlayer } from '@meaku/saral';
 import { RefObject, useEffect, useState, useCallback } from 'react';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import ReactPlayer from 'react-player';
@@ -113,7 +113,7 @@ export const SidebarArtifactContent = ({
         </div>
       </div>
       <div
-        className={`flex-1 flex items-center justify-center overflow-hidden w-full p-4 pt-0 min-h-0 transition-all duration-700 ease-out delay-200 ${
+        className={`flex-1 flex items-center justify-center overflow-hidden w-full p-4 min-h-0 transition-all duration-700 ease-out delay-200 ${
           isContentVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
@@ -133,14 +133,15 @@ export const SidebarArtifactContent = ({
               </div>
             ) : (
               <div className="flex flex-col border rounded-xl overflow-hidden w-full">
-                <div className="w-full overflow-hidden">
-                  <ReactPlayer
+                <div className="w-full h-full overflow-hidden">
+                  <VideoPlayer
+                    forceReactPlayer
                     ref={videoRef}
                     url={artifact.url}
                     controls
                     playing={isPlaying || shouldAutoPlay}
                     width="100%"
-                    height="auto"
+                    height="100%"
                     className="w-full h-auto max-w-full"
                     style={{
                       minHeight: isVideoLoading
@@ -153,7 +154,6 @@ export const SidebarArtifactContent = ({
                     config={{
                       file: {
                         attributes: {
-                          style: { objectFit: 'contain' },
                           preload: 'metadata',
                         },
                       },

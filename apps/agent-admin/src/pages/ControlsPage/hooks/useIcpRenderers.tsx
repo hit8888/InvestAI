@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { countries as CountriesData, findFlagUrlByCountryName } from 'country-flags-svg';
-import MultiSelectDropdown from '@breakout/design-system/components/Dropdown/MultiSelectDropdown';
+import MultiSelectDropdown, { OptionType } from '@breakout/design-system/components/Dropdown/MultiSelectDropdown';
 import Input from '@breakout/design-system/components/layout/input';
 import { ICPFormData, ICPFieldConfig, ICP_FORM_FIELDS } from '../utils';
 import { IcpConfigResponse } from '@meaku/core/types/admin/api';
@@ -65,10 +65,59 @@ export const useIcpRenderers = ({ control, errors, options }: UseIcpRenderersPro
     [options],
   );
 
+  // Custom filter logic for different fields
+  const getCustomFilter = useMemo(() => {
+    // Pre-compute country map for performance
+    const countriesByName = new Map(CountriesData.map((c) => [c.name.toLowerCase(), c]));
+
+    return (fieldName: string) => {
+      switch (fieldName) {
+        case 'locations':
+          // Advanced filtering for locations: search by name, ISO2, ISO3, demonym
+          return (option: OptionType, searchValue: string) => {
+            if (!searchValue.trim()) return true;
+
+            const search = searchValue.toLowerCase().trim();
+            const country = countriesByName.get(option.value);
+
+            if (!country) {
+              // Fallback to basic filtering for custom options
+              return option.label.toLowerCase().includes(search) || option.value.toLowerCase().includes(search);
+            }
+
+            // Match against multiple fields for better UX
+            return (
+              country.name.toLowerCase().includes(search) ||
+              country.iso2.toLowerCase().includes(search) ||
+              country.iso3.toLowerCase().includes(search) ||
+              (country.demonym && country.demonym.toLowerCase().includes(search))
+            );
+          };
+
+        case 'departments':
+        case 'person_titles':
+        case 'seniorities':
+          // Enhanced filtering for other fields - can be extended later
+          return (option: OptionType, searchValue: string) => {
+            if (!searchValue.trim()) return true;
+            const search = searchValue.toLowerCase().trim();
+
+            // Search in both label and value
+            return option.label.toLowerCase().includes(search) || option.value.toLowerCase().includes(search);
+          };
+
+        default:
+          // Return undefined to use default filtering
+          return undefined;
+      }
+    };
+  }, []);
+
   // Memoized dropdown field renderer
   const renderDropdownField = useCallback(
     (field: ICPFieldConfig) => {
       const fieldOptions = getFieldOptions(field.name);
+      const customFilter = getCustomFilter(field.name);
 
       return (
         <div key={field.name} className="flex w-full flex-col gap-2">
@@ -95,6 +144,7 @@ export const useIcpRenderers = ({ control, errors, options }: UseIcpRenderersPro
                 maxSelections={field.maxSelectedCount ?? Infinity}
                 emptyMessage={`No ${field.label} available`}
                 searchPlaceholder={field.searchPlaceholder}
+                customFilter={customFilter}
               />
             )}
           />
@@ -102,7 +152,7 @@ export const useIcpRenderers = ({ control, errors, options }: UseIcpRenderersPro
         </div>
       );
     },
-    [control, errors, getFieldOptions, renderOptionItem],
+    [control, errors, getFieldOptions, getCustomFilter, renderOptionItem],
   );
 
   // Memoized number field change handler

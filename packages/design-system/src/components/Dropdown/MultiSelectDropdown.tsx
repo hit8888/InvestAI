@@ -66,7 +66,7 @@ const useDynamicBadgeWidth = (selectedValues: string[]): UseDynamicBadgeWidthRes
   const measureMoreBadgeWidth = useCallback((count: number) => {
     const tempElement = document.createElement('div');
     tempElement.className =
-      'flex items-center gap-1 rounded-full bg-blue-50 py-0.5 px-2 text-sm font-normal text-blue-700 whitespace-nowrap absolute -left-[9999px] top-0';
+      'flex items-center gap-1 rounded-full bg-gray-100 py-0.5 pl-2 pr-1 text-sm font-normal text-gray-900 whitespace-nowrap absolute -left-[9999px] top-0';
     tempElement.innerHTML = `
       <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M5 12h14"></path>
@@ -242,6 +242,7 @@ interface MultiSelectDropdownProps {
   allowCustomOptions?: boolean;
   customOptionLabel?: string;
   onCustomOptionAdd?: (customOptions: OptionType[]) => void;
+  customFilter?: (option: OptionType, searchValue: string) => boolean;
 }
 
 const MultiSelectDropdown = ({
@@ -262,6 +263,7 @@ const MultiSelectDropdown = ({
   allowCustomOptions = false,
   customOptionLabel = 'Add "{searchValue}"',
   onCustomOptionAdd,
+  customFilter,
 }: MultiSelectDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -355,11 +357,16 @@ const MultiSelectDropdown = ({
 
   const filteredOptions = useMemo(() => {
     const filtered = searchable
-      ? allOptions.filter(
-          (option) =>
+      ? allOptions.filter((option) => {
+          // Use custom filter if provided, otherwise use default filtering
+          if (customFilter) {
+            return customFilter(option, searchValue);
+          }
+          return (
             option.label.toLowerCase().includes(searchValue.toLowerCase()) ||
-            option.value.toLowerCase().includes(searchValue.toLowerCase()),
-        )
+            option.value.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        })
       : allOptions;
 
     return filtered.sort((a, b) => {
@@ -373,7 +380,7 @@ const MultiSelectDropdown = ({
       // Within each group (selected/unselected), maintain original order
       return 0;
     });
-  }, [allOptions, searchValue, selectedValues, searchable]);
+  }, [allOptions, searchValue, selectedValues, searchable, customFilter]);
 
   // Check if we should show the "Add custom option" button
   const shouldShowCustomOption = useMemo(() => {
@@ -397,14 +404,7 @@ const MultiSelectDropdown = ({
     if (renderValueType === 'string') {
       return selectedValues.join(', ');
     }
-    return (
-      <DynamicBadgeRenderer
-        selectedValues={selectedValues}
-        allOptions={allOptions}
-        onRemove={handleRemove}
-        className="flex-wrap"
-      />
-    );
+    return <DynamicBadgeRenderer selectedValues={selectedValues} allOptions={allOptions} onRemove={handleRemove} />;
   };
 
   const getTriggeredButton = () => {

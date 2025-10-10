@@ -1,8 +1,7 @@
 import { useState, useLayoutEffect, useRef } from 'react';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon, VideoPlayer } from '@meaku/saral';
 import { Video } from '../types';
 import BlackTooltip from '../../../components/BlackTooltip';
-import ReactPlayer from 'react-player';
 
 interface VideoAvatarProps {
   videoId: string;
@@ -75,8 +74,8 @@ export const VideoAvatar = ({
               ) : video?.asset?.public_url ? (
                 <div className="relative w-full h-full">
                   {/* Hidden video element to capture first frame */}
-                  <ReactPlayer
-                    src={getVideoUrl(video)}
+                  <VideoPlayer
+                    url={getVideoUrl(video)}
                     className="w-full h-full object-cover"
                     preload="metadata"
                     muted

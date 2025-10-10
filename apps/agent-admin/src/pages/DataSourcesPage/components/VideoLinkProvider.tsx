@@ -10,6 +10,34 @@ import DataSourceURLLinkInput from './DataSourceURLLinkInput';
 import { VideoValidationResponse } from '@meaku/core/types/admin/api';
 import { uploadAssetsFromUrl } from '@meaku/core/adminHttp/api';
 
+const getVideoProvider = (url: string): string => {
+  try {
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname.toLowerCase();
+
+    if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+      return 'YouTube';
+    } else if (hostname.includes('vimeo.com')) {
+      return 'Vimeo';
+    } else if (hostname.includes('wistia.com') || hostname.includes('wistia.net')) {
+      return 'Wistia';
+    } else {
+      return 'video platform';
+    }
+  } catch {
+    return 'video platform';
+  }
+};
+
+const validateUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const VideoLinkProvider = () => {
   const [videoLink, setVideoLink] = useState('');
   const [isValidating, setIsValidating] = useState(false);
@@ -43,19 +71,22 @@ const VideoLinkProvider = () => {
     setError('');
   };
 
-  const validateUrl = (url: string): boolean => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
   const handleValidationSuccess = async (data: VideoValidationResponse) => {
     const { success, errors } = data;
     const successCount = success.length;
     const errorCount = Object.keys(errors).length;
+
+    // Handle validation errors
+    if (errorCount > 0) {
+      setIsValidating(false);
+      // Get the first error message from the errors object
+      const failedUrl = Object.keys(errors)[0];
+      const provider = getVideoProvider(failedUrl);
+      setError(
+        `We were unable to fetch the video details from ${provider}. Please paste a different link or upload manually.`,
+      );
+      return;
+    }
 
     // Upload validated videos and get asset structure
     if (successCount > 0) {
@@ -98,13 +129,6 @@ const VideoLinkProvider = () => {
           title: 'Failed to upload videos. Please try again.',
         });
       }
-    }
-
-    // Display error details if any
-    if (errorCount > 0) {
-      ErrorToastMessage({
-        title: `${errorCount} video${errorCount > 1 ? 's' : ''} failed validation.`,
-      });
     }
 
     lastValidatedUrlRef.current = '';

@@ -1,8 +1,8 @@
 import { Video } from '../types';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon, VideoPlayer } from '@meaku/saral';
 import ReactPlayer from 'react-player';
 
 interface MainVideoPlayerProps {
@@ -35,37 +35,60 @@ export const MainVideoPlayer = ({
   const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
-  const video = videoId ? getVideoById(videoId) : null;
-  const videoUrl = video ? getVideoUrl(video) : null;
-  const nextRecommendedVideo = getNextRecommendedVideo();
+  // Memoize computed values to prevent unnecessary recalculations
+  const video = useMemo(() => (videoId ? getVideoById(videoId) : null), [videoId, getVideoById]);
+  const videoUrl = useMemo(() => (video ? getVideoUrl(video) : null), [video, getVideoUrl]);
+  const nextRecommendedVideo = useMemo(() => getNextRecommendedVideo(), [getNextRecommendedVideo]);
 
   // Reset playing state when video changes to ensure autoplay
   useEffect(() => {
     setIsPlaying(true);
   }, [videoId]);
 
-  const handleVideoEnded = () => {
+  // Memoize all handlers to prevent unnecessary re-renders
+  const handleVideoEnded = useCallback(() => {
     onVideoEnd();
-  };
+  }, [onVideoEnd]);
 
-  const handleNextVideoClick = () => {
+  const handleNextVideoClick = useCallback(() => {
     if (nextRecommendedVideo && onVideoSelect) {
       onVideoSelect(nextRecommendedVideo.id);
     }
-  };
+  }, [nextRecommendedVideo, onVideoSelect]);
 
   const handlePlayPauseToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsPlaying((prev) => !prev);
   };
 
-  const handlePlay = () => {
+  const handlePlay = useCallback(() => {
     setIsPlaying(true);
-  };
+  }, []);
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     setIsPlaying(false);
-  };
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+
+  // Memoize config object to prevent unnecessary re-renders of VideoPlayer
+  const videoConfig = useMemo(
+    () => ({
+      file: {
+        attributes: {
+          controlsList: 'nodownload',
+          playsInline: true,
+        },
+      },
+    }),
+    [],
+  );
 
   // Show shimmer when loading - match exact layout of actual video player
   if (isLoading) {
@@ -129,7 +152,7 @@ export const MainVideoPlayer = ({
           <div className="h-4 bg-primary/10 rounded animate-pulse w-1/2"></div>
         )}
       </div>
-      <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {/* Video container with aspect ratio */}
         <div className="relative w-full aspect-video bg-muted/20 overflow-hidden">
           <AnimatePresence mode="wait">
@@ -142,7 +165,8 @@ export const MainVideoPlayer = ({
                 transition={{ duration: 0.2, ease: 'linear' }}
                 className="absolute inset-0"
               >
-                <ReactPlayer
+                <VideoPlayer
+                  forceReactPlayer
                   key={videoId}
                   ref={videoRef}
                   url={videoUrl}
@@ -154,19 +178,7 @@ export const MainVideoPlayer = ({
                   onEnded={handleVideoEnded}
                   onPlay={handlePlay}
                   onPause={handlePause}
-                  config={{
-                    file: {
-                      attributes: {
-                        controlsList: 'nodownload',
-                        playsInline: true,
-                        style: {
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        },
-                      },
-                    },
-                  }}
+                  config={videoConfig}
                 />
               </motion.div>
             )}

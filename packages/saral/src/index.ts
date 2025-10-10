@@ -148,3 +148,6 @@ export {
   Avatar18,
   Avatar19,
 } from './avatars';
+
+export { default as VideoPlayer } from './video-player';
+export type { VideoPlayerProps } from './video-player';
