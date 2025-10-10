@@ -44,11 +44,18 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
   const settings = useMemo((): CommandBarSettings => {
     const urlParams = getUrlParams();
 
+    let parsedPropMessage: string | undefined;
+    if (propMessage) {
+      const parseResult = jsonSafeParse(propMessage);
+      // Message can be either a string or a json object with a content property
+      parsedPropMessage = parseResult.error ? propMessage : parseResult.data.content;
+    }
+
     return {
       tenant_id: urlParams.tenant_id ?? propTenantId,
       agent_id: urlParams.agent_id ?? propAgentId,
       visible: jsonSafeParse(urlParams.visible).data ?? propVisible,
-      message: urlParams.message ?? propMessage,
+      message: urlParams.message ?? parsedPropMessage,
       start_time: urlParams.start_time ?? propStartTime,
       end_time: urlParams.end_time ?? propEndTime,
       parent_url: urlParams.parent_url ?? propParentUrl ?? window.location.href,

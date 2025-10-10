@@ -142,6 +142,7 @@ function App() {
       sendUserMessage(settings.message, {
         command_bar_module_id: DEFAULT_ASK_AI_MODULE_ID,
       });
+      updateSettings({ message: '' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.message]);

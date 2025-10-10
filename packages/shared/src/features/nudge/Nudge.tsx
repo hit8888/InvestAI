@@ -129,7 +129,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
     (nudge?: NudgeType | null) => {
       if (!nudge) return;
 
-      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_LOAD);
+      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_LOAD, {
+        nudge_id: nudge.nudge_id,
+      });
       setNudgeToShow(nudge);
       play();
     },
