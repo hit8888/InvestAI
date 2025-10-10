@@ -10,7 +10,7 @@ import { useSetArtifactOnNewMessage } from '../../hooks/useSetArtifactOnNewMessa
 import SummaryCard from './SummaryCard';
 import AccountSignalsCard from './AccountSignalsCard';
 import ContactDetailsCard from './ContactDetailsCard';
-import UserActivity from '../common/UserActivity';
+import BrowsedUrlsPreview from '../common/BrowsedUrlsPreview';
 import LandingPageCard from './LandingPageCard';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
@@ -97,8 +97,8 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
         <div className="flex h-full w-full flex-col gap-2">
           <div className="flex min-h-0 flex-grow gap-4 rounded-2xl bg-gray-900/5 p-4">
             <div className="relative h-full w-3/5">
-              <div className="h-full overflow-y-auto p-2 pb-24">
-                <UserActivity browsedUrls={[...browsedUrls].reverse()} />
+              <div className="h-full overflow-y-auto p-2 pb-28">
+                <BrowsedUrlsPreview isRealTime browsedUrls={[...browsedUrls].reverse()} />
               </div>
               <div className="sticky bottom-0 mx-2">
                 <LandingPageCard

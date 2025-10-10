@@ -1,12 +1,8 @@
 import { BrowsedUrl } from '@meaku/core/types/common';
-import UserActivity from '../../../../components/common/UserActivity';
+import BrowsedUrlsPreview from '../../../../components/common/BrowsedUrlsPreview';
 
 const BrowsingHistoryContent = ({ browsedUrls }: { browsedUrls: BrowsedUrl[] }) => {
-  return (
-    <div className="overflow-y-auto p-2">
-      <UserActivity browsedUrls={[...(browsedUrls ?? [])].reverse()} />
-    </div>
-  );
+  return <BrowsedUrlsPreview browsedUrls={[...(browsedUrls ?? [])].reverse()} />;
 };
 
 export default BrowsingHistoryContent;
