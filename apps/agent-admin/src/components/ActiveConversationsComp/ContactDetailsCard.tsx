@@ -4,6 +4,7 @@ import OverviewDataItem, { OverviewDataItemProps } from './OverviewDataItem';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import NumberUtil from '@meaku/core/utils/numberUtils';
+import { ensureProtocol } from '@meaku/core/utils/index';
 
 interface ContactDetailsCardProps {
   conversation: ActiveConversation;
@@ -57,7 +58,7 @@ const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
       },
       {
         label: 'Domain:',
-        value: website_url,
+        value: ensureProtocol(website_url),
         renderValue: (value: unknown) => {
           const url = value as string;
           return (

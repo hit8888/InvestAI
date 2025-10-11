@@ -44,7 +44,7 @@ const EmptyActivityState = ({ className, message }: EmptyActivityStateProps) => 
 
 const BrowsedUrlScreenShot = ({ screenshotUrl }: BrowsedUrlScreenShotProps) => {
   if (screenshotUrl) {
-    return <img src={screenshotUrl} alt="Webpage Screenshot" className="h-full max-h-60 w-full rounded object-cover" />;
+    return <img src={screenshotUrl} alt="Webpage Screenshot" className="h-full w-full rounded" />;
   }
 
   return <EmptyActivityState className="aspect-video pt-3" message={'Website preview not available'} />;
