@@ -7,7 +7,16 @@ import { LoadingState, ErrorState, IcpForm } from './components';
 
 const AgentIdealCustomerPersona = React.memo(({ title, description }: CommonControlsProps) => {
   // Custom hooks for data management, form handling, and rendering
-  const { agentId, transformedFormData, options, isLoadingConfig, configError, saveIcpConfig, isSaving } = useIcpData();
+  const {
+    agentId,
+    transformedFormData,
+    options,
+    isLoadingConfig,
+    configError,
+    saveIcpConfig,
+    isSaving,
+    refetchIcpConfig,
+  } = useIcpData();
 
   const { control, handleSubmit, errors, canSave } = useIcpForm(transformedFormData, saveIcpConfig);
 
@@ -24,7 +33,14 @@ const AgentIdealCustomerPersona = React.memo(({ title, description }: CommonCont
 
   // Show error state if config fetch failed
   if (configError) {
-    return <ErrorState title={title} description={description} />;
+    return (
+      <ErrorState
+        errorMessage="Error loading ICP configuration. Please try again"
+        title={title}
+        description={description}
+        refetch={refetchIcpConfig}
+      />
+    );
   }
 
   return (

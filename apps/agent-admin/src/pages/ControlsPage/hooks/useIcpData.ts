@@ -13,6 +13,7 @@ export const useIcpData = () => {
     data: icpConfigResponse,
     isLoading: isLoadingConfig,
     error: configError,
+    refetch: refetchIcpConfig,
   } = useIcpConfigQuery({
     agentId: agentId!,
     enabled: !!agentId,
@@ -78,5 +79,6 @@ export const useIcpData = () => {
     configError,
     saveIcpConfig,
     isSaving: updateIcpConfigMutation.isPending,
+    refetchIcpConfig,
   };
 };

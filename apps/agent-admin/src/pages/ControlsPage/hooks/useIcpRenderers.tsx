@@ -70,27 +70,46 @@ export const useIcpRenderers = ({ control, errors, options }: UseIcpRenderersPro
     // Pre-compute country map for performance
     const countriesByName = new Map(CountriesData.map((c) => [c.name.toLowerCase(), c]));
 
+    const basicFilter = (option: OptionType, searchValue: string): boolean => {
+      if (!searchValue.trim()) return true;
+      const search = searchValue.toLowerCase().trim();
+      // Search in both label and value
+      return option.label.toLowerCase().includes(search) || option.value.toLowerCase().includes(search);
+    };
+
     return (fieldName: string) => {
       switch (fieldName) {
         case 'locations':
-          // Advanced filtering for locations: search by name, ISO2, ISO3, demonym
+          // Advanced filtering for locations: search by name, ISO2, ISO3, demonym, and alt spellings
           return (option: OptionType, searchValue: string) => {
-            if (!searchValue.trim()) return true;
-
-            const search = searchValue.toLowerCase().trim();
             const country = countriesByName.get(option.value);
 
             if (!country) {
               // Fallback to basic filtering for custom options
-              return option.label.toLowerCase().includes(search) || option.value.toLowerCase().includes(search);
+              return basicFilter(option, searchValue);
             }
+
+            if (!searchValue.trim()) return true;
+            const search = searchValue.toLowerCase().trim();
+
+            const countryNameLower = country.name.toLowerCase();
+
+            // Split country name into words and check if any word starts with search term
+            const nameWords = countryNameLower.split(/\s+/);
+            const startsWithSearch = nameWords.some((word) => word.startsWith(search));
+
+            // Check alternative spellings (e.g., "UK" for United Kingdom)
+            const altSpellings = (country as { altSpellings?: string[] }).altSpellings;
+            const altSpellingsMatch = altSpellings?.some((alt: string) => alt.toLowerCase().includes(search)) ?? false;
 
             // Match against multiple fields for better UX
             return (
-              country.name.toLowerCase().includes(search) ||
+              countryNameLower.includes(search) ||
+              startsWithSearch ||
               country.iso2.toLowerCase().includes(search) ||
               country.iso3.toLowerCase().includes(search) ||
-              (country.demonym && country.demonym.toLowerCase().includes(search))
+              (country.demonym && country.demonym.toLowerCase().includes(search)) ||
+              altSpellingsMatch
             );
           };
 
@@ -98,13 +117,7 @@ export const useIcpRenderers = ({ control, errors, options }: UseIcpRenderersPro
         case 'person_titles':
         case 'seniorities':
           // Enhanced filtering for other fields - can be extended later
-          return (option: OptionType, searchValue: string) => {
-            if (!searchValue.trim()) return true;
-            const search = searchValue.toLowerCase().trim();
-
-            // Search in both label and value
-            return option.label.toLowerCase().includes(search) || option.value.toLowerCase().includes(search);
-          };
+          return basicFilter;
 
         default:
           // Return undefined to use default filtering

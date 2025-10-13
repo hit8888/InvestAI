@@ -4,8 +4,8 @@ import Card from '../../components/AgentManagement/Card';
 import ResizeTextarea from '@breakout/design-system/components/TextArea/ResizeTextarea';
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
-import LoadingState from './LoadingState';
-import ErrorState from '@breakout/design-system/components/layout/ErrorState';
+import LoadingState from './components/LoadingState';
+import ErrorState from './components/ErrorState';
 import { trackError } from '@meaku/core/utils/error';
 import { getTenantIdentifier } from '@meaku/core/utils/index';
 import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
@@ -30,7 +30,7 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
   const [originalValue, setOriginalValue] = useState('');
 
   // Query to fetch the company ICP config
-  const { data: companyIcpData, isLoading, error } = useCompanyICPConfig(agentId);
+  const { data: companyIcpData, isLoading, error, refetch: refetchCompanyICPConfig } = useCompanyICPConfig(agentId);
 
   // Mutation to update the company ICP config
   const updateMutation = useUpdateCompanyICPConfig(agentId);
@@ -91,7 +91,14 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
   }
 
   if (error) {
-    return <ErrorState />;
+    return (
+      <ErrorState
+        errorMessage="Error loading Company ICP configuration. Please try again"
+        title={title}
+        description={description}
+        refetch={refetchCompanyICPConfig}
+      />
+    );
   }
 
   const hasConfig = configValue.trim().length > 0;
