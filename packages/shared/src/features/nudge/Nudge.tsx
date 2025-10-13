@@ -105,7 +105,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   const handleCtaClick = useCallback(
     (button: Cta) => {
-      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_CLICK);
+      trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_CLICK, {
+        nudge_id: nudgeToShow?.nudge_id,
+      });
       setNudgeToShow(null);
 
       if (nudgeToShow?.associated_module) {
