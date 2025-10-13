@@ -4,6 +4,7 @@ import toast, { ToastOptions } from 'react-hot-toast';
 import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
 import NewLeadsToastIcon from '../components/ActiveConversationsComp/NewLeadsToastIcon';
+import { useNotification } from './useNotification';
 
 const TOAST_DURATION = 5000;
 
@@ -23,6 +24,7 @@ const getToastTitle = (companyName: string | undefined) => {
 const showNewConversationToast = (
   conversation: ActiveConversation,
   handleJoinButtonInToast: (conversation: ActiveConversation) => void,
+  notificationHook: ReturnType<typeof useNotification>,
 ) => {
   // Check global tracker first to prevent duplicates
   if (globalToastTracker.shownToasts.has(conversation.session_id)) {
@@ -68,7 +70,7 @@ const showNewConversationToast = (
     </div>
   );
 
-  // Mark as shown in global tracker before creating toast
+  // Mark as shown in global tracker before creating notification/toast
   globalToastTracker.shownToasts.add(conversation.session_id);
   globalToastTracker.activeToastIds.add(conversation.session_id);
 
@@ -77,11 +79,27 @@ const showNewConversationToast = (
     globalToastTracker.activeToastIds.delete(conversation.session_id);
   }, TOAST_DURATION);
 
-  toast.custom((t: ToastOptions) => getToastContent(t.id), {
-    id: `new-convo-${conversation.session_id}`,
-    position: 'top-center',
-    duration: TOAST_DURATION,
-  });
+  const notificationOptions = {
+    title: 'New Potential Lead!',
+    body: title,
+    icon: '/logo.svg',
+    tag: `new-convo-${conversation.session_id}`,
+    requireInteraction: false,
+    silent: false,
+    onClick: () => {
+      handleJoinButtonInToast(conversation);
+    },
+  };
+
+  const notification = notificationHook.showNotification(notificationOptions);
+
+  if (!notification) {
+    toast.custom((t: ToastOptions) => getToastContent(t.id), {
+      id: `new-convo-${conversation.session_id}`,
+      position: 'top-center',
+      duration: TOAST_DURATION,
+    });
+  }
 };
 
 const useNewConversationToast = (
@@ -90,6 +108,8 @@ const useNewConversationToast = (
 ) => {
   // Track previous conversations to detect new ones
   const previousConversationsRef = useRef<Set<string>>(new Set());
+
+  const notificationHook = useNotification();
 
   // Effect to detect new conversations and show toast only once per conversation
   useEffect(() => {
@@ -111,8 +131,8 @@ const useNewConversationToast = (
       if (!globalToastTracker.shownToasts.has(sessionId)) {
         const conversation = currentTabConversations.find((conv) => conv.session_id === sessionId);
         if (conversation) {
-          // Show toast for the new conversation (global tracking handled inside showNewConversationToast)
-          showNewConversationToast(conversation, handleJoinButtonInToast);
+          // Show notification/toast for the new conversation (global tracking handled inside showNewConversationToast)
+          showNewConversationToast(conversation, handleJoinButtonInToast, notificationHook);
         }
       }
     });
