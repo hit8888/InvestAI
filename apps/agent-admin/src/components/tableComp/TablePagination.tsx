@@ -48,7 +48,7 @@ const TablePagination: React.FC<PaginationProps> = ({
     return <TablePaginationShimmer />;
   }
 
-  if (totalItems === 0) {
+  if (totalItems === 0 || totalPages === 1) {
     return null;
   }
 

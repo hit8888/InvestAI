@@ -52,7 +52,7 @@ const SingleVideoUploadDisplayItem = ({ item }: IProps) => {
         <VideosSourcesIcon width="16" height="16" className="text-gray-500" />
       )}
       <div className="flex flex-1 flex-col">
-        <Typography variant="body-14" className="max-w-lg truncate text-system">
+        <Typography variant="body-14" className="max-w-md truncate text-system">
           {name}
         </Typography>
         <div className="flex items-start gap-2">

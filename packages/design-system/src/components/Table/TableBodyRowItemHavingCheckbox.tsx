@@ -56,10 +56,9 @@ const TableBodyRowItemHavingCheckbox = ({
               `border-gray/20 flex min-h-14 min-w-72 flex-1 flex-col items-start justify-center self-stretch border-b border-r p-2`,
               {
                 'border-l': isFirstColumn,
-                'min-w-[400px]': isSourceNameColumn || isUrlColumn,
+                'min-w-[400px] xl:min-w-[450px]': isSourceNameColumn || isUrlColumn || isDescriptionColumn,
                 'min-w-32': isLastColumn || isStatusColumn || isVisibilityColumn,
                 'min-w-48': isDataSourceTypeColumn,
-                'min-w-[550px]': isDescriptionColumn,
               },
             )}
           >
