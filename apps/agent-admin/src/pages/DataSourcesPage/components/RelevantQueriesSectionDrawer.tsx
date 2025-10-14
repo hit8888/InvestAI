@@ -5,7 +5,7 @@ import { DisplayAndEditDataSourceDetailsSectionsProps } from '../types';
 import { cn } from '@breakout/design-system/lib/cn';
 
 const getTypeText = (type: string) => {
-  if (type === 'VIDEO') return 'video';
+  if (type === 'VIDEO' || type === 'EXTERNAL') return 'video';
   if (type === 'DOCUMENT') return 'text';
   if (type === 'SLIDE') return 'slide';
   return '';

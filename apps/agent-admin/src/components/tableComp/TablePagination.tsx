@@ -48,43 +48,49 @@ const TablePagination: React.FC<PaginationProps> = ({
     return <TablePaginationShimmer />;
   }
 
-  if (totalItems === 0 || totalPages === 1) {
+  if (totalItems === 0) {
     return null;
   }
 
+  const showPaginationControls = totalPages > 1;
+
   return (
     <div className="sticky bottom-0 z-10 flex items-center justify-end gap-4 self-stretch bg-white p-4">
-      <div className="flex items-start gap-2">
-        {/* Items per page dropdown */}
-        <CustomFilterDropdown
-          options={paginationPerPageOptions}
-          filterLabel={`${itemsPerPage}`}
-          staticValue="per page"
-          onCallback={handlePerPageOperation}
-        />
+      {showPaginationControls && (
+        <div className="flex items-start gap-2">
+          {/* Items per page dropdown */}
+          <CustomFilterDropdown
+            options={paginationPerPageOptions}
+            filterLabel={`${itemsPerPage}`}
+            staticValue="per page"
+            onCallback={handlePerPageOperation}
+          />
 
-        {/* Page range and total items */}
-        <div className="flex items-center gap-2 rounded-lg p-2">
-          <p className="text-sm font-semibold text-gray-500">
-            {(currentPage - 1) * Number(itemsPerPage) + 1}-{Math.min(currentPage * Number(itemsPerPage), totalItems)}
-            <span className="font-normal">{` of ${totalItems}`}</span>
-          </p>
+          {/* Page range and total items */}
+          <div className="flex items-center gap-2 rounded-lg p-2">
+            <p className="text-sm font-semibold text-gray-500">
+              {(currentPage - 1) * Number(itemsPerPage) + 1}-{Math.min(currentPage * Number(itemsPerPage), totalItems)}
+              <span className="font-normal">{` of ${totalItems}`}</span>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Navigation buttons */}
-      <div className="flex items-center gap-2">
-        <PaginationArrowButton
-          isDisabled={isFirstPage}
-          onButtonClick={() => handlePageChange(currentPage - 1)}
-          PaginationArrow={PaginationPreviousArrow}
-        />
-        <PaginationArrowButton
-          isDisabled={isLastPage}
-          onButtonClick={() => handlePageChange(currentPage + 1)}
-          PaginationArrow={PaginationNextArrow}
-        />
-      </div>
+      {showPaginationControls && (
+        <div className="flex items-center gap-2">
+          <PaginationArrowButton
+            isDisabled={isFirstPage}
+            onButtonClick={() => handlePageChange(currentPage - 1)}
+            PaginationArrow={PaginationPreviousArrow}
+          />
+          <PaginationArrowButton
+            isDisabled={isLastPage}
+            onButtonClick={() => handlePageChange(currentPage + 1)}
+            PaginationArrow={PaginationNextArrow}
+          />
+        </div>
+      )}
     </div>
   );
 };
