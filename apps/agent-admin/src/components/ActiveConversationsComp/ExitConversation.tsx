@@ -1,25 +1,20 @@
-import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import Button from '@breakout/design-system/components/Button/index';
 import { LogOut } from 'lucide-react';
 import ExitConversationConfirmDialog from './ExitConversationConfirmDialog';
 import { useState } from 'react';
-import { ActiveConversation } from '../../context/ActiveConversationsContext';
 
 interface ExitConversationProps {
-  conversation: ActiveConversation;
+  sessionStatus: AdminConversationJoinStatus;
   onExitConversation: () => void;
 }
 
-const ExitConversation = ({ conversation, onExitConversation }: ExitConversationProps) => {
-  const { sessionsStatus } = useJoinConversationStore();
+const ExitConversation = ({ sessionStatus, onExitConversation }: ExitConversationProps) => {
   const [openExitConvConfirm, setOpenExitConvConfirm] = useState(false);
 
   const handleInitExitConversation = () => {
     setOpenExitConvConfirm(true);
   };
-
-  const sessionStatus = sessionsStatus[conversation.session_id];
 
   return (
     <>

@@ -173,7 +173,7 @@ const AttachmentSelectionDialog = ({ selectedOption, onSendMessage, onClose }: A
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="z-[100001] flex flex-col bg-white p-4">
+      <DialogContent className="flex flex-col bg-white p-4">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <Typography variant="title-18" textColor="textPrimary">

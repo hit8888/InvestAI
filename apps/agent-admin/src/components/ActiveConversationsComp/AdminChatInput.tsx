@@ -6,7 +6,7 @@ import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles
 import { useMessageStore } from '../../hooks/useMessageStore';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { LogOut, LoaderCircle, ArrowLeft, Plus } from 'lucide-react';
+import { LoaderCircle, ArrowLeft, Plus } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
 import { AdminConversationJoinStatus } from '@meaku/core/types/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
@@ -24,21 +24,11 @@ type ChatInputContainerProps = {
   onTypingChange?: (isTyping: boolean) => void;
 };
 
-type ExitButtonProps = {
-  onExit: () => void;
-};
-
 type JoinButtonsProps = {
   status: AdminConversationJoinStatus;
   onJoin: () => void;
   onClose?: () => void;
 };
-
-export const ExitButton = ({ onExit }: ExitButtonProps) => (
-  <Button onClick={onExit} variant="destructive_secondary" size="small" rightIcon={<LogOut size={16} />}>
-    Exit Convo
-  </Button>
-);
 
 export const JoinButtons = ({ status, onJoin, onClose }: JoinButtonsProps) => {
   const isPending = status === AdminConversationJoinStatus.PENDING;

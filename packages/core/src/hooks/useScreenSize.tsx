@@ -1,6 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
-
-type ScreenSize = 'mobile' | 'tablet' | 'desktop';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 //Standard breakpoints for mobile, tablet and desktop
 // Bootstrap 5:                    Material UI (MUI):      Tailwind CSS (default):
@@ -13,10 +11,28 @@ type ScreenSize = 'mobile' | 'tablet' | 'desktop';
 const MOBILE_SCREEN_WIDTH_THRESHOLD = 576; // Taking the breakpoint from Bootstrap 5 as it matches with our usecase
 const TABLET_SCREEN_WIDTH_THRESHOLD = 1024; // Taking the breakpoint from Tailwind CSS as it matches with our usecase
 
+export type ScreenSize = {
+  screenSize: 'mobile' | 'tablet' | 'desktop';
+  screenWidth: number;
+  screenHeight: number;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+};
+
+export const INITIAL_SCREEN_PROPERTIES: ScreenSize = {
+  screenSize: 'desktop',
+  screenWidth: window.innerWidth,
+  screenHeight: window.innerHeight,
+  isMobile: false,
+  isTablet: false,
+  isDesktop: true,
+};
+
 export const useScreenSize = () => {
-  const [screenSize, setScreenSize] = useState<ScreenSize>('desktop');
-  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  const [screenHeight, setScreenHeight] = useState<number>(window.innerHeight);
+  const [screenSize, setScreenSize] = useState<ScreenSize['screenSize']>(INITIAL_SCREEN_PROPERTIES.screenSize);
+  const [screenWidth, setScreenWidth] = useState<ScreenSize['screenWidth']>(INITIAL_SCREEN_PROPERTIES.screenWidth);
+  const [screenHeight, setScreenHeight] = useState<ScreenSize['screenHeight']>(INITIAL_SCREEN_PROPERTIES.screenHeight);
 
   const updateScreenSize = useCallback((width: number, height: number) => {
     setScreenWidth(width);
@@ -51,12 +67,15 @@ export const useScreenSize = () => {
     };
   }, [updateScreenSize]);
 
-  return {
-    screenSize,
-    screenWidth,
-    screenHeight,
-    isMobile: screenSize === 'mobile',
-    isTablet: screenSize === 'tablet',
-    isDesktop: screenSize === 'desktop',
-  };
+  return useMemo(
+    () => ({
+      screenSize,
+      screenWidth,
+      screenHeight,
+      isMobile: screenSize === 'mobile',
+      isTablet: screenSize === 'tablet',
+      isDesktop: screenSize === 'desktop',
+    }),
+    [screenSize, screenWidth, screenHeight],
+  );
 };

@@ -1,5 +1,6 @@
-import { Dialog, DialogContent, DialogOverlay } from '@breakout/design-system/components/layout/dialog';
+import { Dialog, DialogContent } from '@breakout/design-system/components/layout/dialog';
 import Button from '@breakout/design-system/components/Button/index';
+import Typography from '@breakout/design-system/components/Typography/index';
 
 type ExitConversationConfirmDialogProps = {
   isOpen: boolean;
@@ -12,14 +13,15 @@ const ExitConversationConfirmDialog = ({ isOpen, onSubmit, onClose }: ExitConver
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogOverlay className="pointer-events-none top-[3.8rem] z-[1000] mx-2 mb-2 rounded-2xl" />
-      <DialogContent className="z-[1000] rounded-2xl border border-gray-300 bg-white p-4">
+      <DialogContent className="rounded-2xl border border-gray-300 bg-white p-4">
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-1">
-            <p className="text-center text-2xl font-semibold text-gray-900">Leave Conversation?</p>
-            <p className="text-base text-gray-500">
+            <Typography variant="title-18" textColor="textPrimary" align="center">
+              Leave Conversation?
+            </Typography>
+            <Typography variant="body-14" textColor="gray500" align="center">
               You’re about to leave. The user will stay in the chat with the AI assistant. Proceed?
-            </p>
+            </Typography>
           </div>
         </div>
         <div className="mt-6 flex w-full justify-between gap-4">
@@ -30,7 +32,7 @@ const ExitConversationConfirmDialog = ({ isOpen, onSubmit, onClose }: ExitConver
             Cancel
           </Button>
           <Button
-            className="w-full flex-1 bg-destructive-1000 ring ring-2 ring-gray-200 hover:bg-destructive-1000"
+            className="w-full flex-1 bg-destructive-1000 ring-2 ring-gray-200 hover:bg-destructive-1000"
             onClick={onSubmit}
           >
             Leave Conversation

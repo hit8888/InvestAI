@@ -79,20 +79,25 @@ const showNewConversationToast = (
     globalToastTracker.activeToastIds.delete(conversation.session_id);
   }, TOAST_DURATION);
 
-  const notificationOptions = {
-    title: 'New Potential Lead!',
-    body: title,
-    icon: '/logo.svg',
-    tag: `new-convo-${conversation.session_id}`,
-    requireInteraction: false,
-    silent: false,
-    onClick: () => {
-      handleJoinButtonInToast(conversation);
-    },
-  };
+  // Only show browser notification when tab is not focused
+  let notification = null;
+  if (document.hidden) {
+    const notificationOptions = {
+      title: 'New Potential Lead!',
+      body: title,
+      icon: '/logo.svg',
+      tag: `new-convo-${conversation.session_id}`,
+      requireInteraction: false,
+      silent: false,
+      onClick: () => {
+        handleJoinButtonInToast(conversation);
+      },
+    };
 
-  const notification = notificationHook.showNotification(notificationOptions);
+    notification = notificationHook.showNotification(notificationOptions);
+  }
 
+  // Show toast notification as fallback if browser notification failed or tab is focused
   if (!notification) {
     toast.custom((t: ToastOptions) => getToastContent(t.id), {
       id: `new-convo-${conversation.session_id}`,
@@ -149,7 +154,7 @@ const useNewConversationToast = (
         globalToastTracker.activeToastIds.delete(sessionId);
       }
     });
-  }, [currentTabConversations, showNewConversationToast]);
+  }, [currentTabConversations, handleJoinButtonInToast, notificationHook]);
 };
 
 export default useNewConversationToast;

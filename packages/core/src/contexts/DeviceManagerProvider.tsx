@@ -1,31 +1,24 @@
 import React, { createContext, useContext } from 'react';
-import { isMobileDevice } from '../utils';
-import { useScreenSize } from '../hooks/useScreenSize';
+import { INITIAL_SCREEN_PROPERTIES, ScreenSize, useScreenSize } from '../hooks/useScreenSize';
 
-const DeviceManagerContext = createContext<{ isMobile: boolean }>({ isMobile: false });
+type DeviceManagerContext = ScreenSize;
+
+const DeviceManagerContext = createContext<DeviceManagerContext>(INITIAL_SCREEN_PROPERTIES);
 
 const DeviceManagerProvider = ({ children }: { children: React.ReactNode }) => {
-  const isMobileDeviceDetected = isMobileDevice();
-  const { isMobile: isMobileFromScreenSize, isTablet: isTabletFromScreenSize } = useScreenSize();
-  const isInsideIframe = window.self !== window.top;
+  const screenSize = useScreenSize();
 
-  // Combine device detection and screen size detection
-  // isMobile will be true if either:
-  // 1. The device is actually a mobile device, OR
-  // 2. The screen size indicates mobile or tablet view
-  // 3. The app is inside an iframe
-  const isMobile = isInsideIframe
-    ? isMobileDeviceDetected
-    : isMobileDeviceDetected || isMobileFromScreenSize || isTabletFromScreenSize;
-
-  const contextValue = React.useMemo(() => ({ isMobile }), [isMobile]);
-
-  return <DeviceManagerContext.Provider value={contextValue}>{children}</DeviceManagerContext.Provider>;
+  return <DeviceManagerContext.Provider value={screenSize}>{children}</DeviceManagerContext.Provider>;
 };
 
 export const useIsMobile = () => {
-  const { isMobile } = useContext(DeviceManagerContext);
+  const { isMobile } = useContext<DeviceManagerContext>(DeviceManagerContext);
   return isMobile;
+};
+
+export const useDevice = () => {
+  const deviceContext = useContext<DeviceManagerContext>(DeviceManagerContext);
+  return deviceContext;
 };
 
 export default DeviceManagerProvider;

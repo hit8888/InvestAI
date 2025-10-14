@@ -15,40 +15,30 @@ export interface NotificationOptions {
 export interface UseNotificationReturn {
   permission: NotificationPermission;
   isSupported: boolean;
-  requestPermission: () => Promise<NotificationPermission>;
   showNotification: (options: NotificationOptions) => Notification | null;
   isPermissionGranted: boolean;
 }
 
+const isSupported = 'Notification' in window;
+
+export const requestNotificationPermission = async (): Promise<NotificationPermission> => {
+  if (!isSupported) {
+    console.error('This browser does not support notifications');
+    return 'denied';
+  }
+
+  try {
+    return await Notification.requestPermission();
+  } catch (error) {
+    console.error('Error requesting notification permission:', error);
+    return 'denied';
+  }
+};
+
 export const useNotification = (): UseNotificationReturn => {
-  const [permission, setPermission] = useState<NotificationPermission>('default');
-  const [isSupported, setIsSupported] = useState(false);
-
-  useEffect(() => {
-    // Check if notifications are supported
-    const supported = 'Notification' in window;
-    setIsSupported(supported);
-
-    if (supported) {
-      setPermission(Notification.permission);
-    }
-  }, []);
-
-  const requestPermission = useCallback(async (): Promise<NotificationPermission> => {
-    if (!isSupported) {
-      console.error('This browser does not support notifications');
-      return 'denied';
-    }
-
-    try {
-      const newPermission = await Notification.requestPermission();
-      setPermission(newPermission);
-      return newPermission;
-    } catch (error) {
-      console.error('Error requesting notification permission:', error);
-      return 'denied';
-    }
-  }, [isSupported]);
+  const [permission, setPermission] = useState<NotificationPermission>(() =>
+    isSupported ? Notification.permission : 'denied',
+  );
 
   const showNotification = useCallback(
     (options: NotificationOptions): Notification | null => {
@@ -72,7 +62,6 @@ export const useNotification = (): UseNotificationReturn => {
           silent: options.silent,
         });
 
-        // Set up event handlers
         if (options.onClick) {
           notification.onclick = () => {
             options.onClick?.();
@@ -91,17 +80,25 @@ export const useNotification = (): UseNotificationReturn => {
         return null;
       }
     },
-    [isSupported, permission],
+    [permission],
   );
+
+  useEffect(() => {
+    if (isSupported && permission === 'default') {
+      requestNotificationPermission().then(setPermission);
+    }
+
+    // only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return useMemo(
     () => ({
       permission,
       isSupported,
-      requestPermission,
       showNotification,
       isPermissionGranted: permission === 'granted',
     }),
-    [permission, isSupported, requestPermission, showNotification],
+    [permission, showNotification],
   );
 };

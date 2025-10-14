@@ -1,8 +1,9 @@
 import { TriangleAlert } from 'lucide-react';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
-import AdminChatInput, { ExitButton, JoinButtons } from './AdminChatInput';
+import AdminChatInput, { JoinButtons } from './AdminChatInput';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
+import ExitConversation from './ExitConversation';
 
 type JoinConversationBottomBarProps = {
   sessionStatus: AdminConversationJoinStatus;
@@ -26,7 +27,7 @@ const JoinConversationBottomBar = ({
       case AdminConversationJoinStatus.JOINED:
         return (
           <AdminChatInput onSendMessage={onSendMessage} onAIResponseGenerationRequest={onAIResponseGenerationRequest}>
-            <ExitButton onExit={onExit} />
+            <ExitConversation sessionStatus={sessionStatus} onExitConversation={onExit} />
           </AdminChatInput>
         );
       case AdminConversationJoinStatus.DENIED:
