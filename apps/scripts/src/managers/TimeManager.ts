@@ -1,3 +1,5 @@
+export const DEFAULT_ALLOWED_DAYS = "MTWTFSS";
+
 export function TimeManager() {
   const validateTimeFormat = (time: string | null): boolean => {
     if (!time) return true;
@@ -5,40 +7,75 @@ export function TimeManager() {
     return timeRegex.test(time);
   };
 
+  const parseDayString = (dayString: string): string[] => {
+    const days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    return days.filter((_, index) => dayString[index] !== "_");
+  };
+
+  const validateDayString = (dayString: string): boolean => {
+    if (!dayString || typeof dayString !== "string") return false;
+    return dayString.length === 7; // Must be exactly 7 characters
+  };
+
   /**
    * @function isWithinTimeRange
-   * @description Checks if the current time is within a specified time range for a given timezone, considering weekdays only.
-   * This function is designed to determine whether an operation (like showing a chat agent) should be active based on business hours.
+   * @description Checks if the current time is within a specified time range for a given timezone and allowed days.
+   * This function is designed to determine whether an operation (like showing a chat agent) should be active based on business hours and specific days.
    *
    * @param {string | null} startTime - The start time of the operational window in "HH:mm" (24-hour) format. If null, it defaults to "00:00".
    * @param {string | null} endTime - The end time of the operational window in "HH:mm" (24-hour) format. If null, it defaults to "24:00".
    * @param {string} [timezone="UTC"] - The IANA timezone identifier (e.g., "America/New_York"). It defaults to "UTC" if not provided or if the provided timezone is invalid.
+   * @param {string} [allowedDays] - String representing allowed days of the week:
+   *  - Must be exactly 7 characters long
+   *  - Each position maps to Mon,Tue,Wed,Thu,Fri,Sat,Sun
+   *  - Use any character except '_' to enable that day
+   *  Examples:
+   *  - "MTWTFSS" = All days (Default)
+   *  - "xxxxx__" = First 5 days (Mon-Fri)
+   *  - "_____xx" = Weekends only
+   *  - "x_x_x__" = Mon,Wed,Fri only
+   *  If not provided, defaults to all days for backward compatibility.
    *
    * @returns {boolean} - Returns `true` if:
-   *  - The current time is within the specified `startTime` and `endTime` on a weekday.
-   *  - The current day is a Saturday or Sunday (agent is always shown on weekends).
-   *  - `startTime` or `endTime` are not provided (no time restriction).
-   *  - The provided time format is invalid.
-   *  - An error occurs during execution.
-   *  Returns `false` if the current time is outside the specified range on a weekday.
+   *  - The current day is in the `allowedDays` array AND the current time is within the specified `startTime` and `endTime`.
+   *  - `startTime` or `endTime` are not provided (no time restriction) AND the current day is allowed.
+   *  - The provided time format is invalid (fallback behavior).
+   *  - An error occurs during execution (fallback behavior).
+   *  Returns `false` if:
+   *  - The current day is not in the `allowedDays` array.
+   *  - The current time is outside the specified range on an allowed day.
    *
    * @logic
    * 1. **Timezone Validation**: It first validates the provided `timezone`. If invalid, it logs a warning and falls back to "UTC".
    * 2. **Time Format Validation**: It validates that `startTime` and `endTime` strings are in the "HH:mm" format. If not, it logs a warning and returns `true`.
    * 3. **Date and Day Calculation**: It gets the current date, time, and day of the week based on the specified timezone.
-   * 4. **Weekend Check**: It checks if the current day is Saturday or Sunday. If so, it immediately returns `true`, effectively disabling time-based restrictions on weekends.
+   * 4. **Day Check**: It checks if the current day is in the `allowedDays` array. If not, it returns `false`.
    * 5. **Time Range Check**:
-   *    - For weekdays, it proceeds to check the time.
+   *    - For allowed days, it proceeds to check the time.
    *    - It handles cases where `startTime` or `endTime` are null by setting default values ("00:00" and "24:00" respectively).
    *    - It converts the current time, start time, and end time to minutes since midnight for easy comparison.
    *    - It correctly handles time ranges that span across midnight (e.g., 22:00 to 06:00).
    * 6. **Error Handling**: The entire logic is wrapped in a `try...catch` block. In case of any unexpected errors, it logs the error and returns `true` as a fallback.
    */
-  const isWithinTimeRange = (
-    startTime: string | null,
-    endTime: string | null,
-    timezone: string = "UTC",
-  ): boolean => {
+  const isWithinTimeRange = ({
+    startTime,
+    endTime,
+    timezone = "UTC",
+    allowedDays = DEFAULT_ALLOWED_DAYS,
+  }: {
+    startTime: string | null;
+    endTime: string | null;
+    timezone?: string;
+    allowedDays?: string;
+  }): boolean => {
     try {
       // Validate timezone
       if (!Intl.DateTimeFormat().resolvedOptions().timeZone) {
@@ -52,6 +89,14 @@ export function TimeManager() {
           "Invalid time format provided. Expected format: HH:mm (24-hour)",
         );
         return true; // Fallback to showing the agent if time format is invalid
+      }
+
+      // Validate allowed days format if provided
+      if (allowedDays && !validateDayString(allowedDays)) {
+        console.warn(
+          "Invalid day format provided. Must be exactly 7 characters. Use any character except '_' to enable a day. Position 1-7 maps to Mon-Sun. Example: 'xxxxx__' for weekdays. Falling back to all days.",
+        );
+        allowedDays = DEFAULT_ALLOWED_DAYS; // Fall back to all days (default behavior)
       }
 
       // Get current date in the specified timezone
@@ -76,12 +121,15 @@ export function TimeManager() {
         weekday: "long",
       });
 
-      // If it's Saturday or Sunday, always show the agent
-      if (currentDay === "Saturday" || currentDay === "Sunday") {
-        return true;
+      // Parse the day string to get array of allowed days
+      const effectiveAllowedDays = parseDayString(allowedDays);
+
+      // Check if current day is in the allowed days list
+      if (!effectiveAllowedDays.includes(currentDay)) {
+        return false; // Don't show agent on non-allowed days
       }
 
-      // For weekdays, check the time range
+      // For allowed days, check the time range
       if (!startTime && !endTime) return true; // If times not set, always show
 
       // Use default values if only one time is specified
@@ -150,6 +198,8 @@ export function TimeManager() {
   // Return public API
   return {
     validateTimeFormat,
+    parseDayString,
+    validateDayString,
     isWithinTimeRange,
   };
 }

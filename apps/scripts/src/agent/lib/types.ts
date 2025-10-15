@@ -54,17 +54,10 @@ export type EntryPointAlignmentType =
 
 export interface Config {
   tenantId: string | null;
-  agentId: string;
-  hideBottomBar: boolean;
-  showBottomBar: boolean;
-  height: string;
-  allowExternalButtons: boolean;
-  containerId: string | null;
-  feedbackEnabled: boolean;
-  userEmail: string;
-  initialMessage: string;
+  agentId: string | null;
   startTime: string | null;
   endTime: string | null;
+  allowedDays: string | null;
 }
 
 export interface Constants {

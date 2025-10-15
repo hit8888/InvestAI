@@ -1,6 +1,7 @@
 import { ConfigManager, TimeManager, WebComponentManager } from "../managers";
 import { env } from "../env";
 import { BreakoutFormManager } from "../managers/BreakoutFormManager";
+import { DEFAULT_ALLOWED_DAYS } from "../managers/TimeManager";
 
 (function () {
   const scriptAttributes = (() => {
@@ -55,13 +56,19 @@ import { BreakoutFormManager } from "../managers/BreakoutFormManager";
   const App = {
     async init(): Promise<void> {
       const config = configManager.getConfig();
-      const { tenantId, agentId, startTime, endTime } = config;
+      const { tenantId, agentId, startTime, endTime, allowedDays } = config;
 
       if (!tenantId || !agentId) {
         return;
       }
 
-      if (!timeManager.isWithinTimeRange(startTime, endTime)) {
+      if (
+        !timeManager.isWithinTimeRange({
+          startTime,
+          endTime,
+          allowedDays: allowedDays ?? DEFAULT_ALLOWED_DAYS,
+        })
+      ) {
         return;
       }
 
