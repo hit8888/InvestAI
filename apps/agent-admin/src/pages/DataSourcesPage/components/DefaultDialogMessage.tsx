@@ -23,8 +23,6 @@ const DefaultDialogMessage = () => {
   const loadingDialogMessage =
     DIALOG_LOADING_MESSAGE_MAPPED_OBJECT[selectedType as keyof typeof DIALOG_LOADING_MESSAGE_MAPPED_OBJECT];
 
-  const isVideoDialog = selectedType === VIDEOS;
-
   const getDefaultMessageContent = () => {
     switch (selectedType) {
       case WEBPAGES:
@@ -38,7 +36,7 @@ const DefaultDialogMessage = () => {
             acceptedFiles={acceptedFiles}
             errorMessage={errorMessage}
             defaultMessage={defaultMessage}
-            showContentAtCenter={!isVideoDialog}
+            showContentAtCenter={false}
           />
         );
     }

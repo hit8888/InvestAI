@@ -86,10 +86,9 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
     <div className="flex w-full flex-col gap-6">
       {getUrlLinkInputAndFetchButton()}
       <div
-        className={cn('flex min-h-52 w-full items-center justify-center rounded-2xl', {
+        className={cn('flex min-h-8 w-full items-center justify-center rounded-2xl', {
           'border border-gray-200 bg-gray-25': isUploading || isWebpageDialog || dataSources.length,
           'relative border-2 border-dashed border-primary/60 bg-white': showPattern,
-          'min-h-8': showVideoLinkProvider,
         })}
       >
         {showPattern && <SourcesDragDropPattern />}
@@ -101,34 +100,28 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
         {showFetchedData ? <CommonAddNewSourcesData data={dataSources} onDeleteAll={resetFetch} /> : null}
       </div>
       {showVideoLinkProvider ? <VideoLinkProvider /> : null}
-      <div className="flex w-full flex-1 items-end justify-end">
-        <DataSourceDialogAddButton
-          urlLink={urlLink}
-          selectedType={selectedType}
-          isAddButtonDisabled={isAddButtonDisabled}
-          onClose={onClose}
-          resetFetch={resetFetch}
-        />
-      </div>
+      {!isAddButtonDisabled && (
+        <div className="flex w-full flex-1 items-end justify-end">
+          <DataSourceDialogAddButton
+            urlLink={urlLink}
+            selectedType={selectedType}
+            onClose={onClose}
+            resetFetch={resetFetch}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 type DataSourceAddButtonProps = {
   selectedType: string | null;
-  isAddButtonDisabled: boolean;
   urlLink?: string;
   onClose: () => void;
   resetFetch: () => void;
 };
 
-const DataSourceDialogAddButton = ({
-  selectedType,
-  isAddButtonDisabled,
-  urlLink,
-  onClose,
-  resetFetch,
-}: DataSourceAddButtonProps) => {
+const DataSourceDialogAddButton = ({ selectedType, urlLink, onClose, resetFetch }: DataSourceAddButtonProps) => {
   const { isAdding, addDataSources } = useDataSourceAdd(selectedType, urlLink);
 
   const handleAddButtonClick = async () => {
@@ -138,12 +131,7 @@ const DataSourceDialogAddButton = ({
   };
 
   return (
-    <Button
-      onClick={handleAddButtonClick}
-      disabled={isAddButtonDisabled || isAdding}
-      variant={'system'}
-      buttonStyle={'rightIcon'}
-    >
+    <Button onClick={handleAddButtonClick} disabled={isAdding} variant={'system'} buttonStyle={'rightIcon'}>
       {isAdding ? 'Embedding...' : 'Embed'}
       {isAdding && <SpinLoader width={4} height={4} />}
     </Button>

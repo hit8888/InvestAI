@@ -1,5 +1,5 @@
 import Typography from '@breakout/design-system/components/Typography/index';
-import React from 'react';
+import React, { useMemo } from 'react';
 import TableShimmer from '../../components/common/TableShimmer';
 import { cn } from '@breakout/design-system/lib/cn';
 import Button from '@breakout/design-system/components/Button/index';
@@ -8,7 +8,7 @@ import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import ResizeTextarea from '@breakout/design-system/components/TextArea/ResizeTextarea';
 import Input from '@breakout/design-system/components/layout/input';
 import { ProductFormData } from './utils';
-import { useFieldArray, Control, FieldErrors, Controller } from 'react-hook-form';
+import { useFieldArray, Control, FieldErrors, Controller, useWatch } from 'react-hook-form';
 
 interface ProductDescriptionTableProps {
   columns?: string[];
@@ -32,9 +32,15 @@ const ProductDescriptionTable = ({
     name: 'products',
   });
 
+  // Watch all form values to track changes in real-time
+  const watchedItems = useWatch({
+    control,
+    name: 'products',
+  });
+
   const handleAddRow = () => {
     const hasEmptyRow = fields.some((_, index) => {
-      const currentValue = control._getWatch(`products.${index}`);
+      const currentValue = watchedItems?.[index];
       return currentValue?.name === '' && currentValue?.description === '';
     });
 
@@ -49,7 +55,7 @@ const ProductDescriptionTable = ({
   const handleDeleteRow = (index: number) => {
     // If there's only one row and it's empty, don't delete it
     if (fields.length === 1) {
-      const currentValue = control._getWatch(`products.${index}`);
+      const currentValue = watchedItems?.[index];
       if (currentValue?.name === '' && currentValue?.description === '') {
         return;
       }
@@ -64,12 +70,16 @@ const ProductDescriptionTable = ({
     }
   };
 
-  const isAddBtnDisabled =
-    fields.length === 0 ||
-    fields.some((_, index) => {
-      const currentValue = control._getWatch(`products.${index}`);
+  // Memoize button states to avoid unnecessary recalculations
+  const isAddBtnDisabled = useMemo(() => {
+    if (fields.length === 0) return false; // Allow adding first row
+
+    // Disable if any row is empty
+    return fields.some((_, index) => {
+      const currentValue = watchedItems?.[index];
       return currentValue?.name === '' && currentValue?.description === '';
     });
+  }, [fields, watchedItems]);
 
   return (
     <form className="flex w-full flex-col gap-4" onSubmit={onSubmit}>

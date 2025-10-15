@@ -7,11 +7,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@breakout/de
 import { useState } from 'react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import DataSourceDialogContent from './DataSourceDialogContent';
+import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
+import { cn } from '@breakout/design-system/lib/cn';
 
 const { WEBPAGES, DOCUMENTS, VIDEOS, SLIDES } = SourcesCardTypes;
 
 const CommonUploadDataSourcesButton = () => {
   const { selectedType } = useDataSources();
+  const { dataSources: allDataSources } = useDataSourcesStore();
   const [openDialog, setOpenDialog] = useState(false);
 
   const sourceLabel = (() => {
@@ -33,6 +36,8 @@ const CommonUploadDataSourcesButton = () => {
     setOpenDialog(false);
   };
 
+  const isDataSourcesPresent = allDataSources.length > 0;
+
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
@@ -41,11 +46,19 @@ const CommonUploadDataSourcesButton = () => {
           <AddMorePlusIcon width="16" height="16" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="data-sources-dialog-shadow w-full max-w-3xl rounded-2xl border border-gray-200 bg-white p-4">
+      <DialogContent
+        className={cn(
+          'data-sources-dialog-shadow w-full rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300 ease-in-out',
+          {
+            'max-w-3xl': isDataSourcesPresent,
+            'max-w-xl': !isDataSourcesPresent,
+          },
+        )}
+      >
         <DialogHeader className="flex w-full items-start gap-1 space-y-0 text-start">
-          <Typography variant={'title-24'} className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
+          <Typography variant="title-18" className="text-customPrimaryText">{`Add New ${sourceLabel}`}</Typography>
           {selectedType ? (
-            <Typography variant={'body-16'} className="text-customSecondaryText">
+            <Typography variant={'body-14'} className="text-customSecondaryText">
               {
                 SOURCES_DIALOG_DESCRIPTION_MAPPED_OBJECT[
                   selectedType as keyof typeof SOURCES_DIALOG_DESCRIPTION_MAPPED_OBJECT

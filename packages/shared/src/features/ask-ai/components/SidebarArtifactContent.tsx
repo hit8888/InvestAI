@@ -132,60 +132,58 @@ export const SidebarArtifactContent = ({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col border rounded-xl overflow-hidden w-full">
-                <div className="w-full h-full overflow-hidden">
-                  <VideoPlayer
-                    forceReactPlayer
-                    ref={videoRef}
-                    url={artifact.url}
-                    controls
-                    playing={isPlaying || shouldAutoPlay}
-                    width="100%"
-                    height="100%"
-                    className="w-full h-auto max-w-full"
-                    style={{
-                      minHeight: isVideoLoading
-                        ? videoHeight
-                          ? `${videoHeight}px`
-                          : `${Math.min(window.innerHeight * 0.8, 600)}px`
-                        : 'auto', // Use stored height or 80% of viewport (max 600px)
-                      backgroundColor: isVideoLoading ? '#f3f4f6' : 'transparent', // Light background while loading
-                    }}
-                    config={{
-                      file: {
-                        attributes: {
-                          preload: 'metadata',
-                        },
+              <div className="flex flex-col border rounded-xl overflow-hidden w-full h-[80%]">
+                <VideoPlayer
+                  ref={videoRef}
+                  url={artifact.url}
+                  controls
+                  playing={isPlaying || shouldAutoPlay}
+                  width="100%"
+                  height="100%"
+                  minHeight={
+                    isVideoLoading
+                      ? videoHeight
+                        ? `${videoHeight}px`
+                        : `${Math.min(window.innerHeight * 0.8, 600)}px`
+                      : undefined
+                  }
+                  style={{
+                    backgroundColor: isVideoLoading ? '#f3f4f6' : 'transparent', // Light background while loading
+                  }}
+                  config={{
+                    file: {
+                      attributes: {
+                        preload: 'metadata',
                       },
-                    }}
-                    onError={handleVideoLoadError}
-                    onStart={handleVideoLoadStart}
-                    onReady={() => {
-                      // Calculate and store aspect ratio for resize handling
-                      if (!videoRef.current) return;
+                    },
+                  }}
+                  onError={handleVideoLoadError}
+                  onStart={handleVideoLoadStart}
+                  onReady={() => {
+                    // Calculate and store aspect ratio for resize handling
+                    if (!videoRef.current) return;
 
-                      const player = videoRef.current.getInternalPlayer();
-                      if (player && player.videoHeight && player.videoWidth) {
-                        const height = player.videoHeight;
-                        const width = player.videoWidth;
-                        const aspectRatio = width / height;
+                    const player = videoRef.current.getInternalPlayer();
+                    if (player && player.videoHeight && player.videoWidth) {
+                      const height = player.videoHeight;
+                      const width = player.videoWidth;
+                      const aspectRatio = width / height;
 
-                        // Store aspect ratio for resize calculations
-                        setVideoAspectRatio(aspectRatio);
+                      // Store aspect ratio for resize calculations
+                      setVideoAspectRatio(aspectRatio);
 
-                        // Calculate initial display height
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        const wrapper = (videoRef.current as any).wrapper;
-                        if (wrapper) {
-                          const containerWidth = wrapper.parentElement?.clientWidth || wrapper.clientWidth;
-                          const displayHeight = containerWidth / aspectRatio;
-                          setVideoHeight(displayHeight);
-                        }
-                        setIsVideoLoading(false);
+                      // Calculate initial display height
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      const wrapper = (videoRef.current as any).wrapper;
+                      if (wrapper) {
+                        const containerWidth = wrapper.parentElement?.clientWidth || wrapper.clientWidth;
+                        const displayHeight = containerWidth / aspectRatio;
+                        setVideoHeight(displayHeight);
                       }
-                    }}
-                  />
-                </div>
+                      setIsVideoLoading(false);
+                    }
+                  }}
+                />
               </div>
             )}
           </>

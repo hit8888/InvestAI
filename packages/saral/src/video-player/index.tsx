@@ -39,6 +39,7 @@ export interface VideoPlayerProps {
   controls?: boolean;
   width?: string | number;
   height?: string | number;
+  minHeight?: string | number;
   className?: string;
   style?: CSSProperties;
 
@@ -89,6 +90,7 @@ const VideoPlayer = forwardRef<ReactPlayer, VideoPlayerProps>(
       controls = false,
       width = '100%',
       height = '100%',
+      minHeight,
       className = '',
       style,
       playsinline = true,
@@ -198,7 +200,7 @@ const VideoPlayer = forwardRef<ReactPlayer, VideoPlayerProps>(
             style: {
               width: '100%',
               height: '100%',
-              objectFit: 'contain',
+              objectFit: 'fill',
             },
           },
         },
@@ -223,8 +225,7 @@ const VideoPlayer = forwardRef<ReactPlayer, VideoPlayerProps>(
     if (useNativeVideo) {
       return (
         <video
-          className={cn('h-full w-full object-cover', className)}
-          style={style}
+          className={cn('h-full w-full object-fill', className)}
           loop={loop}
           muted={muted}
           autoPlay={finalPlaying}
@@ -274,7 +275,7 @@ const VideoPlayer = forwardRef<ReactPlayer, VideoPlayerProps>(
                   opacity: isReady ? 1 : 0,
                   transition: 'opacity 400ms ease-in-out',
                 }
-              : undefined
+              : { minHeight }
           }
           config={mergedConfig}
         />
