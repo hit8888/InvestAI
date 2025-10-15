@@ -6,6 +6,9 @@ export type { ButtonProps } from './button';
 export { Input } from './input';
 export type { InputProps } from './input';
 
+// Export textarea component
+export { TextArea } from './text-area';
+
 // Export popover components
 export { Popover, PopoverTrigger, PopoverContent } from './popover';
 

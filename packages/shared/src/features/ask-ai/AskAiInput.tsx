@@ -1,5 +1,5 @@
-import { Button, LucideIcon, Input } from '@meaku/saral';
-import { useCallback, useState } from 'react';
+import { Button, LucideIcon, TextArea } from '@meaku/saral';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Message, MessageEventType } from '../../types/message';
 import { useDebouncedTyping } from '../../hooks/useDebouncedTyping';
 
@@ -11,6 +11,7 @@ interface AskAiInputProps {
 
 export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }: AskAiInputProps) => {
   const [message, setMessage] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const sendTypingEvent = useCallback(
     (isTyping: boolean) => {
@@ -35,26 +36,32 @@ export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }:
     stopTyping();
   };
 
+  useEffect(() => {
+    if (!disabled) {
+      textareaRef.current?.focus();
+    }
+  }, [disabled]);
+
   const isInputValuePresent = message.trim() !== '';
   return (
     <form onSubmit={handleSubmit} className="relative flex items-center gap-2 p-3">
-      <Input
+      <TextArea
+        ref={textareaRef}
         placeholder="Type your message..."
         name="message"
-        className="h-[56px] text-foreground rounded-xl border py-2 pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 max-lg:text-base"
+        className="text-foreground rounded-xl border pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 max-lg:text-base"
         disabled={disabled}
         autoComplete="off"
         aria-autocomplete="none"
         value={message}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setMessage(e.target.value);
           debouncedTypingDetection();
         }}
-        onKeyDown={(e) => {
+        onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            handleSubmit(e as any);
+            handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
           }
         }}
       />
