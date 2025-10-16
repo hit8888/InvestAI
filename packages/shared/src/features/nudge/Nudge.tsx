@@ -13,7 +13,7 @@ import { useWsClient } from '../../hooks/useWsClient';
 import NudgeHeader from './components/NudgeHeader';
 import NudgeBody from './components/NudgeBody';
 import useShowNudgeBody from './hooks/useShowNudgeBody';
-import useSound from '@meaku/core/hooks/useSound';
+import useCommandBarSound from '../../hooks/useCommandBarSound';
 import bannerSound from '../../assets/banner-sound.mp3';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { cn } from '@meaku/saral';
@@ -54,7 +54,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const header_text = isMobile ? '' : raw_header_text;
 
   const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
-  const { play } = useSound(bannerSound, 0.2);
+  const { play } = useCommandBarSound({ soundPath: bannerSound, baseVolume: 0.2, enabled: nudgeConfig?.sound_enabled });
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
     displayDuration: nudgeToShow ? display_duration : 0,

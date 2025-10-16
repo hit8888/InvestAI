@@ -91,6 +91,7 @@ export const NudgeConfigSchema = z.object({
   polling_start_delay_ms: z.number(),
   polling_frequency_ms: z.number(),
   max_polling_count: z.number(),
+  sound_enabled: z.boolean(),
 });
 
 export const CommandBarConfigSchema = z.object({
@@ -102,6 +103,7 @@ export const CommandBarConfigSchema = z.object({
   modules: z.array(CommandBarModuleConfigSchema),
   nudge: NudgeConfigSchema,
   nudge_data: NudgeSchema.nullable(),
+  sound_enabled: z.boolean(),
 });
 
 export const ConfigurationBodySchema = z.object({

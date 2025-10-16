@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import useSound from '@meaku/core/hooks/useSound';
+import useCommandBarSound from './useCommandBarSound';
 import messageSound from '../assets/message.wav';
 import { Message } from '../types/message';
 
@@ -8,7 +8,7 @@ const MESSAGE_SOUND_EXCLUDE_LIST = ['ADMIN_TYPING'];
 const SOUND_VOLUME = 0.35;
 
 export const useIncomingMessageSound = () => {
-  const { play } = useSound(messageSound, SOUND_VOLUME);
+  const { play } = useCommandBarSound({ soundPath: messageSound, baseVolume: SOUND_VOLUME });
   const lastResponseIdRef = useRef<string | null>(null);
 
   const playSoundForMessage = (message: Message) => {
