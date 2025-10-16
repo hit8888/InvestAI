@@ -71,10 +71,12 @@ export const useSidebarArtifact = () => {
         setVideoError(null); // Clear any previous errors
 
         if (artifactType === 'VIDEO') {
-          // Set initial video state - start with false, will be synced with actual video element
-          // Don't assume video is playing until it actually starts
-          setCurrentVideo({ url, isPlaying: false });
-          setVideoPlayState({ url, isPlaying: false });
+          // Set initial state to match shouldPlay for immediate button state accuracy
+          // For iframe players (YouTube, Vimeo), this prevents state oscillation
+          // For native videos, DOM events will quickly sync the actual state
+          const initialPlayingState = shouldPlay === true;
+          setCurrentVideo({ url, isPlaying: initialPlayingState });
+          setVideoPlayState({ url, isPlaying: initialPlayingState });
           setShouldAutoPlay(shouldPlay === true);
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
@@ -92,8 +94,8 @@ export const useSidebarArtifact = () => {
         setVideoError(null);
 
         if (artifactType === 'VIDEO') {
-          // Set initial video state - will be synced with actual video element
-          setCurrentVideo({ url, isPlaying: shouldPlay === true });
+          const initialPlayingState = shouldPlay === true;
+          setCurrentVideo({ url, isPlaying: initialPlayingState });
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
         }
@@ -122,13 +124,15 @@ export const useSidebarArtifact = () => {
 
   /**
    * Cleanup after sidebar close animation completes
-   * - Pauses video and resets to beginning
-   * - Clears all state
+   * - Pauses video and resets to beginning (native videos only)
+   * - Clears all state (all video types)
    */
   const handleCloseComplete = useCallback(() => {
     if (videoRef.current && currentVideo?.isPlaying) {
       const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
-      if (internalPlayer && typeof internalPlayer.pause === 'function') {
+      // Only try to pause/reset native video elements directly
+      // Iframe players will be cleaned up when the component unmounts
+      if (internalPlayer && typeof internalPlayer.pause === 'function' && 'currentTime' in internalPlayer) {
         internalPlayer.pause();
         internalPlayer.currentTime = 0;
       }
@@ -143,13 +147,18 @@ export const useSidebarArtifact = () => {
   }, [currentVideo]);
 
   /**
-   * Toggles video play/pause directly on element
-   * State sync handled by useEffect event listeners
+   * Toggles video play/pause
+   * - For native videos: directly controls element (fast, native)
+   * - For iframe videos (YouTube, Vimeo, etc.): toggles state (ReactPlayer handles it)
+   * State sync handled by useEffect event listeners (native) or ReactPlayer callbacks (iframe)
    */
   const toggleVideoPlayPause = useCallback(() => {
-    if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO') {
+    if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
       const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
-      if (internalPlayer && typeof internalPlayer.play === 'function') {
+
+      // Try native video element control first (for direct video files)
+      if (internalPlayer && 'paused' in internalPlayer) {
+        // Native HTML5 video element - use direct control
         if (internalPlayer.paused) {
           internalPlayer.play().catch((error) => {
             console.error('Video play error:', error);
@@ -158,9 +167,16 @@ export const useSidebarArtifact = () => {
         } else {
           internalPlayer.pause();
         }
+      } else {
+        // Iframe-based player (YouTube, Vimeo, etc.) - toggle via state
+        // ReactPlayer will respond to the `playing` prop change
+        const newPlayingState = !currentVideo.isPlaying;
+        setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: newPlayingState } : null));
+        setVideoPlayState((prev) => (prev ? { ...prev, isPlaying: newPlayingState } : null));
+        setShouldAutoPlay(newPlayingState);
       }
     }
-  }, [sideBarArtifact?.artifactType]);
+  }, [sideBarArtifact?.artifactType, currentVideo]);
 
   const handleVideoError = useCallback((error: string) => {
     setVideoError(error);
@@ -171,10 +187,39 @@ export const useSidebarArtifact = () => {
   }, []);
 
   /**
-   * Effect 1: Syncs video state with element events
+   * Callback for ReactPlayer's onPlay event
+   * This handles iframe players (YouTube, Vimeo, etc.) that don't emit native DOM events
+   * Native videos are already handled by DOM event listeners in useEffect
+   */
+  const handleReactPlayerPlay = useCallback(() => {
+    setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: true } : null));
+    setVideoPlayState((prev) => (prev ? { ...prev, isPlaying: true } : null));
+  }, []);
+
+  /**
+   * Callback for ReactPlayer's onPause event
+   * This handles iframe players (YouTube, Vimeo, etc.) that don't emit native DOM events
+   */
+  const handleReactPlayerPause = useCallback(() => {
+    setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: false } : null));
+    setVideoPlayState((prev) => (prev ? { ...prev, isPlaying: false } : null));
+  }, []);
+
+  /**
+   * Callback for ReactPlayer's onEnded event
+   * This handles iframe players (YouTube, Vimeo, etc.) that don't emit native DOM events
+   */
+  const handleReactPlayerEnded = useCallback(() => {
+    setCurrentVideo((prev) => (prev ? { ...prev, isPlaying: false } : null));
+    setVideoPlayState((prev) => (prev ? { ...prev, isPlaying: false } : null));
+  }, []);
+
+  /**
+   * Effect 1: Syncs video state with element events (NATIVE VIDEOS ONLY)
    * - Listens to play/pause/ended/canplay events
    * - Updates currentVideo.isPlaying based on element state
    * - readyState > 2 = can play
+   * - IMPORTANT: Only for native HTML5 video elements, not iframe players
    */
   useEffect(() => {
     if (sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
@@ -185,7 +230,15 @@ export const useSidebarArtifact = () => {
         }
 
         const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
-        if (!internalPlayer || typeof internalPlayer.addEventListener !== 'function') {
+
+        // Only set up listeners for native HTML5 video elements
+        // Iframe players (YouTube, Vimeo, etc.) use ReactPlayer callbacks instead
+        if (
+          !internalPlayer ||
+          typeof internalPlayer.addEventListener !== 'function' ||
+          !('paused' in internalPlayer) ||
+          !('readyState' in internalPlayer)
+        ) {
           return false;
         }
 
@@ -258,14 +311,23 @@ export const useSidebarArtifact = () => {
   }, [sideBarArtifact?.artifactType, currentVideo, shouldAutoPlay]);
 
   /**
-   * Effect 2: Syncs state when video element becomes available
+   * Effect 2: Syncs state when native video element becomes available
    * - Triggers when currentVideo changes
    * - Syncs the actual video state with our state
+   * - IMPORTANT: Only for native HTML5 video elements, not iframe players
    */
   useEffect(() => {
     if (videoRef.current && sideBarArtifact?.artifactType === 'VIDEO' && currentVideo) {
       const internalPlayer = videoRef.current.getInternalPlayer() as HTMLVideoElement;
-      if (!internalPlayer || typeof internalPlayer.addEventListener !== 'function') {
+
+      // Only sync for native HTML5 video elements
+      // Iframe players (YouTube, Vimeo, etc.) use ReactPlayer callbacks instead
+      if (
+        !internalPlayer ||
+        typeof internalPlayer.addEventListener !== 'function' ||
+        !('paused' in internalPlayer) ||
+        !('readyState' in internalPlayer)
+      ) {
         return;
       }
 
@@ -312,5 +374,10 @@ export const useSidebarArtifact = () => {
     setCurrentVideo,
     handleVideoError,
     setContainerReady,
+
+    // ReactPlayer callbacks for iframe videos (YouTube, Vimeo, etc.)
+    handleReactPlayerPlay,
+    handleReactPlayerPause,
+    handleReactPlayerEnded,
   };
 };

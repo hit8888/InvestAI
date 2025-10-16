@@ -1,5 +1,5 @@
-import { LucideIcon, Typography, VideoPlayer } from '@meaku/saral';
-import { RefObject, useEffect, useState, useCallback } from 'react';
+import { LucideIcon, Typography, VideoPlayer, cn, isDirectVideoFile } from '@meaku/saral';
+import { RefObject, useEffect, useState, useCallback, useMemo } from 'react';
 import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
 import ReactPlayer from 'react-player';
 
@@ -15,6 +15,9 @@ interface SidebarArtifactContentProps {
   isPlaying?: boolean;
   onClose: () => void;
   onVideoError?: (error: string) => void;
+  onReactPlayerPlay?: () => void;
+  onReactPlayerPause?: () => void;
+  onReactPlayerEnded?: () => void;
 }
 
 /**
@@ -37,6 +40,9 @@ export const SidebarArtifactContent = ({
   isPlaying = false,
   onClose,
   onVideoError,
+  onReactPlayerPlay,
+  onReactPlayerPause,
+  onReactPlayerEnded,
 }: SidebarArtifactContentProps) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
   const [hasVideoLoadError, setHasVideoLoadError] = useState(false);
@@ -96,6 +102,10 @@ export const SidebarArtifactContent = ({
     recalculateVideoHeight();
   }, [screenWidth, screenHeight, recalculateVideoHeight]);
 
+  const isNativeVideo = useMemo(() => {
+    return (artifact.artifactType === 'VIDEO' || !artifact.artifactType) && isDirectVideoFile(artifact.url);
+  }, [artifact.artifactType, artifact.url]);
+
   return (
     <div className="flex flex-col w-full min-h-0 h-full">
       <div
@@ -132,8 +142,14 @@ export const SidebarArtifactContent = ({
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col border rounded-xl overflow-hidden w-full h-[80%]">
+              <div
+                className={cn('flex flex-col rounded-xl border overflow-hidden w-full h-full', {
+                  'h-[90%]': isNativeVideo,
+                })}
+              >
                 <VideoPlayer
+                  key={artifact.url}
+                  forceReactPlayer
                   ref={videoRef}
                   url={artifact.url}
                   controls
@@ -159,6 +175,18 @@ export const SidebarArtifactContent = ({
                   }}
                   onError={handleVideoLoadError}
                   onStart={handleVideoLoadStart}
+                  onPlay={() => {
+                    // Sync state for iframe players (YouTube, Vimeo, etc.)
+                    onReactPlayerPlay?.();
+                  }}
+                  onPause={() => {
+                    // Sync state for iframe players (YouTube, Vimeo, etc.)
+                    onReactPlayerPause?.();
+                  }}
+                  onEnded={() => {
+                    // Sync state when video ends (all player types)
+                    onReactPlayerEnded?.();
+                  }}
                   onReady={() => {
                     // Calculate and store aspect ratio for resize handling
                     if (!videoRef.current) return;

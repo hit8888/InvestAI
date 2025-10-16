@@ -236,6 +236,9 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
     closeSidebar,
     handleCloseComplete,
     handleVideoError,
+    handleReactPlayerPlay,
+    handleReactPlayerPause,
+    handleReactPlayerEnded,
   } = useSidebarArtifactContext();
 
   const targetRef = useRef<HTMLDivElement>(null);
@@ -256,6 +259,9 @@ const AskAiContentWithSidebar = ({ onClose, onExpand, isExpanded }: FeatureConte
         onClose={closeSidebar}
         onCloseComplete={handleCloseComplete}
         onVideoError={handleVideoError}
+        onReactPlayerPlay={handleReactPlayerPlay}
+        onReactPlayerPause={handleReactPlayerPause}
+        onReactPlayerEnded={handleReactPlayerEnded}
       />
     </>
   );

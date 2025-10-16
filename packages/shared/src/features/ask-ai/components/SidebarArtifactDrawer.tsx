@@ -20,6 +20,9 @@ interface SidebarArtifactDrawerProps {
   onClose: () => void;
   onCloseComplete?: () => void;
   onVideoError?: (error: string) => void;
+  onReactPlayerPlay?: () => void;
+  onReactPlayerPause?: () => void;
+  onReactPlayerEnded?: () => void;
 }
 
 export const SidebarArtifactDrawer = ({
@@ -33,6 +36,9 @@ export const SidebarArtifactDrawer = ({
   onClose,
   onCloseComplete,
   onVideoError,
+  onReactPlayerPlay,
+  onReactPlayerPause,
+  onReactPlayerEnded,
 }: SidebarArtifactDrawerProps) => {
   const isMobile = useIsMobile();
 
@@ -56,6 +62,9 @@ export const SidebarArtifactDrawer = ({
           isPlaying={isPlaying}
           onClose={onClose}
           onVideoError={onVideoError}
+          onReactPlayerPlay={onReactPlayerPlay}
+          onReactPlayerPause={onReactPlayerPause}
+          onReactPlayerEnded={onReactPlayerEnded}
         />
       </div>
     </SideDrawer>

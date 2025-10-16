@@ -50,4 +50,7 @@ export interface ArtifactContextActions {
   toggleVideoPlayPause: () => void;
   handleVideoError: (error: string) => void;
   setContainerReady: (ready: boolean) => void;
+  handleReactPlayerPlay: () => void;
+  handleReactPlayerPause: () => void;
+  handleReactPlayerEnded: () => void;
 }

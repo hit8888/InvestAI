@@ -4,7 +4,7 @@ import type { Config } from 'react-player';
 import { cn } from '../utils';
 
 // Detect if URL is a direct video file or external platform
-const isDirectVideoFile = (url: string): boolean => {
+export const isDirectVideoFile = (url: string): boolean => {
   const directVideoExtensions = /\.(mp4|webm|ogg|mov|avi|mkv)(\?.*)?$/i;
   const externalPlatforms = /(youtube\.com|youtu\.be|vimeo\.com|wistia\.com|wistia\.net)/i;
 

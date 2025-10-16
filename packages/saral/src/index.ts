@@ -101,6 +101,8 @@ export { typographyVariants } from './typography';
 // Export video artifact component
 export { VideoArtifact } from './video-artifact';
 export type { VideoArtifactProps } from './video-artifact';
+// Export is direct video file component
+export { isDirectVideoFile } from './video-player';
 
 // Export image artifact component
 export { ImageArtifact } from './image-artifact';

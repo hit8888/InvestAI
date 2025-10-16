@@ -4,6 +4,7 @@ import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon, VideoPlayer } from '@meaku/saral';
 import ReactPlayer from 'react-player';
+import { useSidebarArtifact } from '../../ask-ai/hooks/useSidebarArtifact';
 
 interface MainVideoPlayerProps {
   videoId: string | null;
@@ -31,6 +32,7 @@ export const MainVideoPlayer = ({
   onLater,
   getNextRecommendedVideo,
 }: MainVideoPlayerProps) => {
+  const { shouldAutoPlay } = useSidebarArtifact();
   const videoRef = useRef<ReactPlayer>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
@@ -170,7 +172,7 @@ export const MainVideoPlayer = ({
                   key={videoId}
                   ref={videoRef}
                   url={videoUrl}
-                  playing={isPlaying}
+                  playing={isPlaying || shouldAutoPlay}
                   controls
                   width="100%"
                   height="100%"
