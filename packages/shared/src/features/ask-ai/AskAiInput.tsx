@@ -2,6 +2,8 @@ import { Button, LucideIcon, TextArea } from '@meaku/saral';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Message, MessageEventType } from '../../types/message';
 import { useDebouncedTyping } from '../../hooks/useDebouncedTyping';
+import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { cn } from '@meaku/saral';
 
 interface AskAiInputProps {
   disabled: boolean;
@@ -12,6 +14,7 @@ interface AskAiInputProps {
 export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }: AskAiInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isMobile = useIsMobile();
 
   const sendTypingEvent = useCallback(
     (isTyping: boolean) => {
@@ -49,7 +52,10 @@ export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }:
         ref={textareaRef}
         placeholder="Type your message..."
         name="message"
-        className="text-foreground rounded-xl border pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 max-lg:text-base"
+        className={cn(
+          'text-foreground rounded-xl border pr-14 pl-4 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0',
+          { 'text-base': isMobile },
+        )}
         disabled={disabled}
         autoComplete="off"
         aria-autocomplete="none"
@@ -66,7 +72,7 @@ export const AskAiInput = ({ disabled, sendUserMessage, hasActiveAdminSession }:
         }}
       />
       <Button
-        className="absolute size-10 right-5 px-2 rounded-lg"
+        className="absolute size-10 right-6 px-2 rounded-lg"
         size="xs"
         disabled={disabled || !isInputValuePresent}
       >

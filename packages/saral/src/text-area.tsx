@@ -17,7 +17,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HT
       }
 
       if (textarea.scrollHeight > textarea.clientHeight) {
-        textarea.style.height = 'auto';
         const contentHeight = textarea.scrollHeight;
         textarea.style.height = `${Math.min(contentHeight, Number(maxHeight))}px`;
       }
