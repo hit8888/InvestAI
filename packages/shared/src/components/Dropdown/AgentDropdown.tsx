@@ -157,7 +157,7 @@ const AgentDropdown = ({
             'translate-x-1 translate-y-1 rotate-180': isDropdownOpen,
           })}
         >
-          <LucideIcon name="chevron-down" className="text-gray-900" width={'24'} height={'24'} />
+          <LucideIcon name="chevron-down" className="text-gray-900" strokeWidth="1" width="20" height="20" />
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent

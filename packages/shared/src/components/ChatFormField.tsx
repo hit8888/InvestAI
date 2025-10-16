@@ -70,8 +70,11 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             phoneLabel={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
             defaultCountry={props.artifactMetadata?.country_code as CountryCode}
             className={cn(
+              'text-customPrimaryText rounded-lg placeholder:text-gray-400 focus:ring-0 border-0',
+              !fieldErrorMessage &&
+                'bg-gray-100 [&_.PhoneInputInput]:bg-gray-100 [&_button]:bg-gray-100 [&_button]:rounded-l-lg',
               fieldErrorMessage &&
-                'border border-destructive-600 [&>button]:bg-destructive-100 [&>input]:bg-destructive-25 [&_svg]:text-gray-900',
+                'bg-destructive-25 [&_.PhoneInputInput]:bg-destructive-25 [&_button]:bg-destructive-25 [&_button]:rounded-l-lg [&_svg]:text-gray-900',
             )}
             {...field}
             onBlur={() => handleBlur(field)}
@@ -81,10 +84,12 @@ const ChatFormField = (props: IChatFormFieldProps) => {
         return (
           <AgentDropdown
             onCallback={field.onChange}
-            className="h-10 rounded-lg p-4 text-base"
+            className={cn('h-10 rounded-lg p-4 text-base text-sm border-0 px-2', {
+              'bg-gray-100': !fieldErrorMessage,
+              'bg-destructive-25': fieldErrorMessage,
+            })}
             options={form_field.options ?? []}
             placeholderLabel={form_field.label}
-            fontToShown="text-sm"
             showTooltipContent
             {...field}
             onBlur={() => handleBlur(field)}
