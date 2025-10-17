@@ -34,7 +34,7 @@ export const MainVideoPlayer = ({
 }: MainVideoPlayerProps) => {
   const { shouldAutoPlay } = useSidebarArtifact();
   const videoRef = useRef<ReactPlayer>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   // Memoize computed values to prevent unnecessary recalculations
@@ -42,9 +42,14 @@ export const MainVideoPlayer = ({
   const videoUrl = useMemo(() => (video ? getVideoUrl(video) : null), [video, getVideoUrl]);
   const nextRecommendedVideo = useMemo(() => getNextRecommendedVideo(), [getNextRecommendedVideo]);
 
-  // Reset playing state when video changes to ensure autoplay
   useEffect(() => {
-    setIsPlaying(true);
+    let timer: NodeJS.Timeout;
+
+    if (videoId) {
+      setIsPlaying(false);
+      timer = setTimeout(() => setIsPlaying(true), 100);
+    }
+    return () => clearTimeout(timer);
   }, [videoId]);
 
   // Memoize all handlers to prevent unnecessary re-renders
@@ -168,6 +173,7 @@ export const MainVideoPlayer = ({
                 className="absolute inset-0"
               >
                 <VideoPlayer
+                  volume={0.2}
                   forceReactPlayer
                   key={videoId}
                   ref={videoRef}
