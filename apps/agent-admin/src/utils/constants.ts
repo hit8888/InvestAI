@@ -935,7 +935,7 @@ export const WEBPAGES_SORT_KEY_TO_FIELD_MAP: Record<keyof WebpagesSortValues, st
 export const DOCUMENTS_SORT_KEY_TO_FIELD_MAP: Record<keyof DocumentsSortValues, string> = {
   updated_onSort: 'updated_on',
   statusSort: 'status',
-  source_nameSort: 'source_name',
+  source_nameSort: 'asset__name',
   access_typeSort: 'access_type',
   data_source_typeSort: 'data_source_type',
   descriptionSort: 'description',
@@ -945,7 +945,7 @@ export const ARTIFACTS_SORT_KEY_TO_FIELD_MAP: Record<keyof ArtifactsSortValues, 
   updated_onSort: 'updated_on',
   statusSort: 'status',
   assetSort: 'asset',
-  descriptionSort: 'description',
+  descriptionSort: 'data',
 };
 
 export const PLAYGROUND_VIEW_TAB_ITEMS = [
