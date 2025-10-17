@@ -111,6 +111,7 @@ export const CtaEventDataSchema = z.object({
   label: z.string().optional(),
   message: z.string().optional(),
   title: z.string().optional(),
+  auto_redirect: z.boolean().optional(),
 });
 
 export const QualificationQuestionMetadata = z.object({

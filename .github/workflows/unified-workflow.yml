@@ -81,6 +81,13 @@ jobs:
       # Unit Tests
       - name: Run Core Package Tests
         working-directory: packages/core
+        env:
+          VITE_BASE_API_URL: ${{ github.ref == 'refs/heads/release' && secrets.PROD_BASE_API_URL || secrets.STAGING_BASE_API_URL }}
+          VITE_SENTRY_DSN: ${{ github.ref == 'refs/heads/release' && secrets.PROD_SENTRY_DSN || secrets.STAGING_SENTRY_DSN }}
+          VITE_SENTRY_AUTH_TOKEN: ${{ github.ref == 'refs/heads/release' && secrets.PROD_SENTRY_AUTH_TOKEN || secrets.STAGING_SENTRY_AUTH_TOKEN }}
+          VITE_LOGROCKET_APP_ID: ${{ github.ref == 'refs/heads/release' && secrets.PROD_LOGROCKET_APP_ID || secrets.STAGING_LOGROCKET_APP_ID }}
+          VITE_APP_ENV: ${{ github.ref == 'refs/heads/release' && 'production' || 'staging' }}
+          VITE_GOOGLE_SSO_CLIENT_ID: ${{ github.ref == 'refs/heads/release' && secrets.PROD_GOOGLE_SSO_CLIENT_ID || secrets.STAGING_GOOGLE_SSO_CLIENT_ID }}
         run: pnpm test
 
       - name: Run Agent App Tests

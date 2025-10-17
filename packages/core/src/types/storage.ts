@@ -14,6 +14,7 @@ export interface TenantStorageData {
     timestamp: number;
     expiresAt: number;
   };
+  [key: `primary_goal_redirected_${string}`]: boolean;
 }
 
 export interface StorageData {
