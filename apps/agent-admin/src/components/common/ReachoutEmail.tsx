@@ -66,7 +66,13 @@ export const ReachoutEmailCta = ({
   className?: string;
 }) => {
   return (
-    <Button variant="primary" size="small" disabled={disabled} onClick={onClick} className={className}>
+    <Button
+      variant="primary"
+      size="small"
+      disabled={disabled}
+      onClick={onClick}
+      className={`!border-black !bg-black hover:!bg-black/80 ${className}`}
+    >
       Generate Email
       {isLoading ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <AiSparklesWhiteIcon className="h-4 w-4" />}
     </Button>

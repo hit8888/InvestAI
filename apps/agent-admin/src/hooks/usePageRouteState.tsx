@@ -34,6 +34,15 @@ const usePageRouteState = () => {
   const isAgentPage = location.pathname.match(/\/agent\/?$/) !== null;
   const isTrainingPage = location.pathname.match(/\/training\/?$/) !== null;
 
+  // Detect V2 table pages that handle their own scrolling
+  // Use exact matches or trailing slash matches to avoid matching detail pages
+  const isTableV2Page =
+    location.pathname.match(/\/conversations\/?$/) !== null || // ConversationsV2 (exact match)
+    location.pathname.match(/\/conversations\/leads\/?$/) !== null || // LeadsV2 (exact match)
+    location.pathname.match(/\/companies\/?$/) !== null || // CompaniesV2 (exact match)
+    location.pathname.match(/\/visitors\/?$/) !== null || // VisitorsV2 (exact match)
+    location.pathname.match(/\/icp\/?$/) !== null; // IcpV2 (exact match)
+
   const pathURL = location.pathname + location.search;
 
   return {
@@ -52,6 +61,7 @@ const usePageRouteState = () => {
     isTrainingPage,
     isTrainingPlaygroundPage,
     isInsightsPage,
+    isTableV2Page,
     pathURL,
   };
 };

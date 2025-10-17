@@ -65,7 +65,7 @@ const MultipleTabSelectContainer = ({ currentTab, handleTabClick, isLoading }: I
   ];
 
   return (
-    <div className="flex flex-1 flex-col items-start self-stretch border-b border-primary/10">
+    <div className="flex max-w-[70%] flex-1 flex-col items-start self-stretch">
       <div
         className={cn([
           'sticky z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4',

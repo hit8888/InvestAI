@@ -28,19 +28,6 @@ class TableDataManager {
   }
 
   private validateTableData(tableData: TableDataResponse): Result<TableDataResponse> {
-    // const validatedTableData = TableDataSchema.safeParse(tableData);
-
-    // if (!validatedTableData.success) {
-    //   // console.error('Validation failed for TableDataManager:', {
-    //   //   input: tableData,
-    //   //   errors: validatedTableData.error,
-    //   // });
-    //   return {
-    //     success: false,
-    //     error: validatedTableData.error.errors.map((error) => error.message).join(', '),
-    //   };
-    // }
-
     return {
       success: true,
       // data: validatedTableData.data,

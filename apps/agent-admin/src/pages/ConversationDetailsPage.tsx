@@ -76,7 +76,7 @@ const ConversationDetailsPage = ({ isDirectAccess, isLeadsPage }: IProps) => {
 
   return (
     <div className="flex w-full flex-1 flex-col items-start self-stretch">
-      <div className="sticky top-0 z-10 w-full bg-white pt-2">
+      <div className="sticky top-0 z-10 w-full bg-white pt-5">
         <ConversationsBreadCrumb isLoading={isLoading} isDirectAccess={isDirectAccess} />
       </div>
       <ConversationDetailsNavigatedHeader

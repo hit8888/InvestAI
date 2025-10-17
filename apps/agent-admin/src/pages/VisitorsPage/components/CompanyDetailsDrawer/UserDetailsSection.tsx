@@ -178,8 +178,8 @@ const UserDetailsSection = ({
               />
 
               {showViewBrowsingHistory && (
-                <button className="cursor-pointer text-primary underline" onClick={onViewBrowsingHistory}>
-                  <Typography variant="caption-12-medium" textColor="primary">
+                <button className="cursor-pointer text-primaryV2 underline" onClick={onViewBrowsingHistory}>
+                  <Typography variant="caption-12-medium" className="text-primary">
                     ← View Browsing History
                   </Typography>
                 </button>

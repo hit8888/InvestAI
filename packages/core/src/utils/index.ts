@@ -1,4 +1,5 @@
 import { SPECIAL_CHARS_REGEX } from '../constants/regex';
+import apiClient from '../http/client';
 import { SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
 import { OrganizationDetailsResponse } from '../types/admin/api';
@@ -228,7 +229,23 @@ export const extractDomain = (url?: string): string => {
   }
 };
 
+const getDomainFromEmail = (email: string | undefined) => {
+  if (!email) return undefined;
+  return email.split('@')[1];
+};
+
 export const getCompanyLogoSrc = (url: string): string => {
-  const domain = extractDomain(url);
+  const domain = extractDomain(url) ?? getDomainFromEmail(url);
   return `https://cdn.brandfetch.io/${domain}/fallback/lettermark/w/400/h/400?c=1idxCHNxROyEqcB0wCy`;
+};
+
+export const getCompanyLogoSrcByName = async (name: string): Promise<string> => {
+  try {
+    const res = await apiClient.get(`https://api.brandfetch.io/v2/search/${name}?c=1idxCHNxROyEqcB0wCy`);
+    const icon = res.data[0].icon;
+    return icon;
+  } catch (error) {
+    console.error('Error getting company logo src by name', error);
+    return '';
+  }
 };

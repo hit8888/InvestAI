@@ -25,6 +25,9 @@ type CompanyDetailsDrawerProps = {
   open: boolean;
   onClose: () => void;
   prospectId: string;
+  hideBrowsingHistory?: boolean;
+  hideRelevantProfiles?: boolean;
+  hideChatSummary?: boolean;
 };
 
 type LeftSideContentMode = 'generated-email' | 'conversation-details' | 'relevant-profiles' | 'browsing-history' | null;
@@ -36,7 +39,14 @@ const LeftSideContentModeLabels = {
   'browsing-history': 'Browsing History',
 };
 
-const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawerProps) => {
+const CompanyDetailsDrawer = ({
+  open,
+  onClose,
+  prospectId,
+  hideBrowsingHistory = false,
+  hideRelevantProfiles = false,
+  hideChatSummary = false,
+}: CompanyDetailsDrawerProps) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
@@ -230,25 +240,27 @@ const CompanyDetailsDrawer = ({ open, onClose, prospectId }: CompanyDetailsDrawe
                       prospect={companyData?.prospect}
                       onGenerateEmail={handleProspectGenerateEmail}
                       onViewBrowsingHistory={handleViewBrowsingHistory}
-                      showViewBrowsingHistory={browsingHistory.length > 0}
+                      showViewBrowsingHistory={!hideBrowsingHistory && browsingHistory.length > 0}
                       isGeneratingEmail={
                         isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
                       }
                     />
 
                     {/* Relevant Profiles Section */}
-                    <RelevantProfilesSection
-                      companyName={companyData?.name}
-                      onSearchProfiles={handleFetchIcpList}
-                      disableSearchProfiles={
-                        isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError
-                      }
-                      showError={isIcpListError}
-                      isLoadingProfiles={isIcpListLoading}
-                    />
+                    {!hideRelevantProfiles && (
+                      <RelevantProfilesSection
+                        companyName={companyData?.name}
+                        onSearchProfiles={handleFetchIcpList}
+                        disableSearchProfiles={
+                          isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError
+                        }
+                        showError={isIcpListError}
+                        isLoadingProfiles={isIcpListLoading}
+                      />
+                    )}
 
                     {/* Browsing & Conversation Summary */}
-                    {companyData?.prospect?.session_id && (
+                    {!hideChatSummary && companyData?.prospect?.session_id && (
                       <UserInteractionSection
                         conversationSummary={companyData?.conversationSummary}
                         onViewConversationDetails={handleViewConversationDetails}

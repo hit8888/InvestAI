@@ -75,7 +75,7 @@ const DataSourcesPage = () => {
   const isDocumentsPage = selectedType === DOCUMENTS_PAGE;
 
   return (
-    <div className="flex w-full flex-1 px-14 pt-4">
+    <div className="flex w-full flex-1 p-6">
       <div className="flex flex-1 flex-col items-start gap-4 self-stretch">
         <div className="sticky top-0 z-10 flex w-full items-center gap-6 bg-white pb-1 pt-4">
           <DataSourcesNavigation />

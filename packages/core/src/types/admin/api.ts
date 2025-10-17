@@ -186,6 +186,7 @@ export const TablePayloadSchema = z.object({
 export type LeadsPayload = z.infer<typeof TablePayloadSchema>;
 export type ConversationsPayload = z.infer<typeof TablePayloadSchema>;
 export type VisitorsPayload = z.infer<typeof TablePayloadSchema>;
+export type CompaniesPayload = z.infer<typeof TablePayloadSchema>;
 export type DataSourcePayload = z.infer<typeof TablePayloadSchema>;
 
 export const AdditionalInfoSchema = z.object({
@@ -431,6 +432,10 @@ export const ConversationsTableResponseSchema = PaginationDataSchema.extend({
 
 export const VisitorsTableResponseSchema = PaginationDataSchema.extend({
   results: z.array(VisitorsResponseResultSchema), // Array of visitor results
+});
+
+export const CompaniesTableResponseSchema = PaginationDataSchema.extend({
+  results: z.array(z.record(z.unknown())), // Array of company results - using generic record for now
 });
 
 // Schema for individual step

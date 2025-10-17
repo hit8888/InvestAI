@@ -54,13 +54,18 @@ import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/co
 import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 
-// Use this Website to get the logo: https://brandfetch.com/
-export const ROUTING_TYPE_LOGO_MAP = {
+// Import local SVG logos
+import salesforceLogo from '../assets/salesforce-icon.svg';
+import hubspotLogo from '../assets/hubspot-icon.svg';
+import attioLogo from '../assets/attio-icon.svg';
+
+// Centralized logo mapping using local SVG assets
+export const ROUTING_TYPE_LOGO_MAP: Record<string, string> = {
   BREAKOUT:
-    'https://cdn.brandfetch.io/idF2B6m6e_/w/150/h/150/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750437867259',
-  SALESFORCE: 'https://cdn.brandfetch.io/idVE84WdIN/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667559911541',
-  HUBSPOT: 'https://cdn.brandfetch.io/idRt0LuzRf/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1668515570889',
-  ATTIO: 'https://cdn.brandfetch.io/idZA7HYRWK/theme/dark/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1695805844509',
+    'https://cdn.brandfetch.io/idF2B6m6e_/w/150/h/150/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750437867259', // Keep Brandfetch for now - no local SVG available
+  SALESFORCE: salesforceLogo,
+  HUBSPOT: hubspotLogo,
+  ATTIO: attioLogo,
 };
 
 export const ONE_MB_IN_BYTES = 1024 * 1024;
@@ -421,6 +426,9 @@ export enum AppRoutesEnum {
   INTEGRATIONS = 'integrations',
   PROFILE = 'profile',
   VISITORS = 'prospects',
+  ICP = 'icp',
+  COMPANIES = 'companies',
+  VISITORS_V2 = 'visitors',
 }
 
 export enum SidebarNavItemsEnum {

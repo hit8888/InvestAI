@@ -98,7 +98,7 @@ const SummaryTabContentItem = ({
   return (
     <div
       className={cn(
-        'flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
+        'flex w-full max-w-full items-start justify-between gap-4 self-stretch overflow-auto rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
         {
           'w-full flex-row items-center justify-between':
             isLabelValueDash || isAssignRep || isIntentScore || isLengthOfConversation,

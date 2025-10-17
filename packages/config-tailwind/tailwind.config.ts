@@ -195,6 +195,21 @@ const config: Omit<Config, "content"> = {
           foreground: "rgb(var(--primary-foreground))",
           textColor: "rgb(var(--primary-text))",
         },
+        // V2 Design System - Uses gray-900 as primary
+        primaryV2: {
+          DEFAULT: "#101828", // gray-900
+          50: "#F9FAFB", // gray-50
+          100: "#F2F4F7", // gray-100
+          200: "#EAECF0", // gray-200
+          300: "#D0D5DD", // gray-300
+          400: "#98A2B3", // gray-400
+          500: "#667085", // gray-500
+          600: "#475467", // gray-600
+          700: "#344054", // gray-700
+          800: "#1D2939", // gray-800
+          900: "#101828", // gray-900 (main color)
+          foreground: "#FFFFFF", // white text on dark background
+        },
         secondary: {
           DEFAULT: "rgb(var(--secondary))",
           foreground: "rgb(var(--secondary-foreground))",

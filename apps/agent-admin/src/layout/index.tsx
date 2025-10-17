@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/SidebarComponent/Sidebar';
+import SidebarV2 from '../components/SidebarV2/SidebarV2';
 import usePageRouteState from '../hooks/usePageRouteState';
 import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
 import { SidebarProvider } from '../context/SidebarContext';
 
 const Root = () => {
-  const { isDashboardPage, isLoginPage, isOAuthCallbackPage } = usePageRouteState();
+  const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page } = usePageRouteState();
   const { initialized } = useAuthHandler();
 
   const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isOAuthCallbackPage;
@@ -29,12 +29,16 @@ const Root = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex w-full">
-        {notShowingSidebarCondition ? <Sidebar /> : null}
+      <div className="flex w-full gap-4 p-4">
+        {notShowingSidebarCondition ? <SidebarV2 /> : null}
         <div
           className={cn({
             'w-full': isLoginPage,
-            'flex-1': !isLoginPage,
+            // Table pages: overflow-hidden (tables handle their own scrolling)
+            // Non-table pages: overflow-y-auto (enable vertical scrolling)
+            'max-h-[calc(100vh-32px)] flex-1 rounded-xl border': !isLoginPage,
+            'overflow-hidden': !isLoginPage && isTableV2Page,
+            'overflow-y-auto': !isLoginPage && !isTableV2Page,
           })}
         >
           <Outlet />

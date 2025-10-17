@@ -32,7 +32,7 @@ const ConversationDetailsMultipleTabContainer = ({ isLoading, isLeadsPage }: IPr
   };
 
   return (
-    <div className="flex w-full flex-1 items-start self-stretch">
+    <div className="flex w-full max-w-full flex-1 items-start self-stretch">
       <MultipleTabSelectContainer currentTab={currentTab} handleTabClick={handleTabClick} isLoading={isLoading} />
       {isLoading ? (
         <ProspectAndCompanyDetailsDisplayContainerShimmer />

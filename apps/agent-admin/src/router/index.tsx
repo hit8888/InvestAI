@@ -6,7 +6,11 @@ import Root from '../layout';
 import Dashboard from '../pages/Dashboard';
 import LoginPage from '../pages/LoginPage/LoginPage.tsx';
 import LeadsPageContainer from '../pages/LeadsPageContainer';
-import ConversationsPageContainer from '../pages/ConversationsPageContainer';
+import ConversationsV2PageContainer from '../pages/ConversationsV2/ConversationsV2PageContainer';
+import LeadsV2PageContainer from '../pages/LeadsV2/LeadsV2PageContainer';
+import CompaniesV2PageContainer from '../pages/CompaniesV2/CompaniesV2PageContainer';
+import VisitorsV2PageContainer from '../pages/VisitorsV2/VisitorsV2PageContainer';
+import IcpV2PageContainer from '../pages/IcpV2/IcpV2PageContainer';
 import PlaygroundPage from '../pages/PlaygroundPage';
 import ProtectedRoute from '../pages/ProtectedRoutes';
 import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
@@ -50,11 +54,11 @@ const routes = [
         children: [
           {
             path: 'conversations',
-            element: <ProtectedRoute element={<ConversationsPageContainer />} />,
+            element: <ProtectedRoute element={<ConversationsV2PageContainer />} />,
           },
           {
             path: 'conversations/leads',
-            element: <ProtectedRoute element={<LeadsPageContainer />} />,
+            element: <ProtectedRoute element={<LeadsV2PageContainer />} />,
           },
           {
             path: 'conversations/link-clicks',
@@ -141,6 +145,18 @@ const routes = [
           {
             path: 'insights',
             element: <ProtectedRoute element={<InsightsPageContainer />} />,
+          },
+          {
+            path: 'companies',
+            element: <ProtectedRoute element={<CompaniesV2PageContainer />} />,
+          },
+          {
+            path: 'visitors',
+            element: <ProtectedRoute element={<VisitorsV2PageContainer />} />,
+          },
+          {
+            path: 'icp',
+            element: <ProtectedRoute element={<IcpV2PageContainer />} />,
           },
           {
             path: 'settings',

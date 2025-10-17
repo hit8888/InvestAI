@@ -34,6 +34,7 @@ import {
   ConversationDetailResponseSchema,
   IcpsResponseSchema,
   VisitorsTableResponseSchema,
+  CompaniesTableResponseSchema,
   IcpsContactSchema,
   IcpDetailsResponseSchema,
   ProspectDetailsResponseSchema,
@@ -87,6 +88,7 @@ export type TransformedProspectAndCompanyDetailsContent = z.infer<typeof Transfo
 export type PaginationData = z.infer<typeof PaginationDataSchema>;
 export type LeadsTableResponse = z.infer<typeof LeadsTableResponseSchema>;
 export type ConversationsTableResponse = z.infer<typeof ConversationsTableResponseSchema>;
+export type CompaniesTableResponse = z.infer<typeof CompaniesTableResponseSchema>;
 
 export type ConversationsFunnelDataResponse = z.infer<typeof ConversationFunnelResponseSchema>;
 export type ConversationDetailsDataResponse = z.infer<typeof ConversationDetailsResponseSchema>;

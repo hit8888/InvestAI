@@ -17,11 +17,18 @@ const SinglePresetDateValue = ({
     <button
       type="button"
       onClick={() => onDateChange(DateUtil.getDateRangeForPresetValue(parseInt(presetValue)), presetLabel)}
-      className={cn('flex items-center self-stretch rounded-l-[4px] px-3 py-2 hover:bg-primary/20', {
-        'border-r-2 border-primary bg-primary/10 ': currentPreset === presetLabel,
+      className={cn('flex items-center self-stretch rounded-l-[4px] px-3 py-2 hover:bg-gray-50', {
+        'border-r-2 border-black bg-white': currentPreset === presetLabel,
       })}
     >
-      <p className="flex-1 text-left text-xs font-normal text-gray-400">{presetLabel}</p>
+      <p
+        className={cn('text-accent flex-1 text-left text-xs font-normal', {
+          'text-gray-800': currentPreset === presetLabel,
+          'text-gray-400': currentPreset !== presetLabel,
+        })}
+      >
+        {presetLabel}
+      </p>
     </button>
   );
 };

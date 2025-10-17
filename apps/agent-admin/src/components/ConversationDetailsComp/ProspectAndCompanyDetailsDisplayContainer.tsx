@@ -20,7 +20,7 @@ const ProspectAndCompanyDetailsDisplayContainer = ({
 
   if (isProspectItemsEmpty && isCompanyItemsEmpty) return;
   return (
-    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-primary/10">
+    <div className="relative w-[30%] justify-stretch self-stretch border-l border-primary/10">
       <div
         className="hide-scrollbar sticky flex max-h-screen w-full flex-col items-start overflow-auto"
         style={{

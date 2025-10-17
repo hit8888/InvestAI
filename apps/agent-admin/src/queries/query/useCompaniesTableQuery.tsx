@@ -1,0 +1,39 @@
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
+import { getCompaniesRowData } from '@meaku/core/adminHttp/api';
+import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { CompaniesPayload, CompaniesTableResponseSchema } from '@meaku/core/types/admin/api';
+import { z } from 'zod';
+
+type CompaniesTableResponse = z.infer<typeof CompaniesTableResponseSchema>;
+
+const getCompaniesTableKey = (payload: CompaniesPayload, tenantName: string): readonly unknown[] => [
+  'companies-table',
+  payload,
+  tenantName,
+];
+
+type CompaniesTableDataKey = ReturnType<typeof getCompaniesTableKey>;
+
+interface IProps {
+  payload: CompaniesPayload;
+  queryOptions: BreakoutQueryOptions<CompaniesTableResponse, CompaniesTableDataKey>;
+}
+
+const useCompaniesTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<CompaniesTableResponse> => {
+  const tenantName = getTenantFromLocalStorage();
+  const companiesQuery = useQuery({
+    queryKey: getCompaniesTableKey(payload, tenantName ?? ''),
+    queryFn: async (): Promise<CompaniesTableResponse> => {
+      if (!tenantName) throw new Error('Tenant name is undefined');
+      const response: AxiosResponse<CompaniesTableResponse> = await getCompaniesRowData(payload);
+      return response.data;
+    },
+    ...queryOptions,
+  });
+
+  return companiesQuery;
+};
+
+export default useCompaniesTableQuery;

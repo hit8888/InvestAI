@@ -37,6 +37,7 @@ import {
   InsightsSummaryResponse,
   IntegrationsResponse,
   LeadsPayload,
+  CompaniesPayload,
   LoginWithEmailPasswordPayload,
   LoginWithGoogleSsoPayload,
   ReprocessWebpagesRequest,
@@ -136,6 +137,9 @@ export const getAllAgents = () => adminApiClient.get(`/tenant/api/agent/`);
 export const getLeadsRowData = (payload: LeadsPayload) =>
   adminApiClient.post(`/tenant/api/search/leads/query/`, payload);
 
+export const getCompaniesRowData = (payload: CompaniesPayload) =>
+  adminApiClient.post(`/tenant/api/search/companies/query/`, payload);
+
 export const getConversationRowData = (payload: ConversationsPayload) =>
   adminApiClient.post(`tenant/api/search/conversations/query/`, payload);
 
@@ -143,7 +147,7 @@ export const getVisitorsRowData = (payload: VisitorsPayload) =>
   adminApiClient.post(`tenant/api/prospects/query/`, payload);
 
 export const exportTableData = (
-  payload: LeadsPayload | ConversationsPayload | VisitorsPayload,
+  payload: LeadsPayload | ConversationsPayload | VisitorsPayload | CompaniesPayload,
   downloadType: ExportFormatType,
   tableName: string,
 ) => {

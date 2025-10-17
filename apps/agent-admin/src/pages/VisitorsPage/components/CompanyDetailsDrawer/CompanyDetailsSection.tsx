@@ -49,7 +49,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
           </div>
           <div className="flex items-center justify-end gap-2">
             {fromEnrichment && (
-              <div className="rounded-2xl bg-primary/10 px-2 py-1">
+              <div className="rounded-2xl bg-primaryV2/10 px-2 py-1">
                 <div className="flex items-center gap-1">
                   <AiSparklesIcon className="h-4 w-4" />
                   <Typography variant="caption-12-normal">Enrichment</Typography>

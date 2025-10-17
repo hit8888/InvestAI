@@ -12,7 +12,7 @@ const ChoosePresetsDateValue = ({
   options?: typeof DATE_RANGE_PRESET_OPTIONS;
 }) => {
   return (
-    <div className="flex w-32 flex-col items-start gap-0.5">
+    <div className="flex min-w-32 flex-col items-start gap-0.5">
       {options.map((option) => (
         <SinglePresetDateValue
           key={option.label}
