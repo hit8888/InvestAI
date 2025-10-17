@@ -18,8 +18,14 @@ export interface RelatedMetadata {
 }
 
 /**
- * Get value from nested object using dot notation path
- * e.g., "company_demographics.website_url" -> row.company_demographics.website_url
+ * Get value from nested object using dot notation path with fallback support
+ * Supports multiple fallback keys separated by ':'
+ *
+ * Examples:
+ * - "email" -> row.email
+ * - "company.name" -> row.company.name (nested)
+ * - "email:details.website_url" -> tries row.email first, then row.details.website_url
+ * - "name:company.name:details.company_name" -> tries multiple fallbacks in order
  */
 export const getValueFromDataLookup = (
   row: Record<string, unknown>,
@@ -27,18 +33,37 @@ export const getValueFromDataLookup = (
 ): unknown => {
   if (!dataLookup) return null;
 
-  const path = dataLookup.split('.');
-  let value: unknown = row;
+  // Split by ':' to get fallback keys
+  const fallbackKeys = dataLookup.split(':');
 
-  for (const key of path) {
-    if (value && typeof value === 'object') {
-      value = (value as Record<string, unknown>)[key];
-    } else {
-      return null;
+  // Try each fallback key in order
+  for (const lookupKey of fallbackKeys) {
+    const trimmedKey = lookupKey.trim();
+    if (!trimmedKey) continue;
+
+    // Split by '.' for nested path access
+    const path = trimmedKey.split('.');
+    let value: unknown = row;
+
+    // Traverse the path
+    let pathValid = true;
+    for (const key of path) {
+      if (value && typeof value === 'object') {
+        value = (value as Record<string, unknown>)[key];
+      } else {
+        pathValid = false;
+        break;
+      }
+    }
+
+    // If we found a valid non-null/non-undefined value, return it
+    if (pathValid && value !== null && value !== undefined) {
+      return value;
     }
   }
 
-  return value;
+  // No valid value found in any fallback
+  return null;
 };
 
 /**

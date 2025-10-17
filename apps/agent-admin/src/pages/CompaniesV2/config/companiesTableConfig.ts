@@ -36,6 +36,7 @@ export const companiesTableConfig: TablePageConfig<CompanyRow> = {
     tableData: '/tenant/api/tenant-companies/',
     entityMetadata: '/tenant/api/entity/?entity_type=COMPANIES',
     filterOptions: '/tenant/api/tenant-companies/filterset/',
+    exportData: '/tenant/api/tenant-companies/download/',
   },
 
   pagination: {
@@ -50,6 +51,13 @@ export const companiesTableConfig: TablePageConfig<CompanyRow> = {
 
   defaultFilters: {
     // No default filters - show all companies
+  },
+
+  // Export/Download configuration
+  export: {
+    enabled: true,
+    formats: ['csv', 'xlsx'],
+    defaultFormat: 'csv',
   },
 
   drawer: {

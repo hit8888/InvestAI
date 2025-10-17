@@ -4,12 +4,14 @@ import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { FilterConfig, FilterValues } from '../types';
 import type { QuickFilterConfig } from '../types/filter.types';
+import type { ExportFormatType } from '@meaku/core/types/admin/api';
 import { SearchFilter } from './filters/SearchFilter';
 import { FilterChipsList } from './filters/FilterChipsList';
 import { MultiSelectFilter } from './filters/MultiSelectFilter';
 import { DateRangeFilter } from './filters/DateRangeFilter';
 import { ToggleFilter } from './filters/ToggleFilter';
 import { GenericTableColumnManager } from './GenericTableColumnManager';
+import { GenericTableExportDownload } from './GenericTableExportDownload';
 
 interface GenericTableFiltersProps {
   filters: FilterValues;
@@ -23,6 +25,13 @@ interface GenericTableFiltersProps {
   onSearchChange: (value: string) => void;
   onResetFilters: () => void;
   isLoadingConfig?: boolean;
+  // Export configuration
+  exportConfig?: {
+    enabled: boolean;
+    formats?: ('csv' | 'xlsx')[];
+    defaultFormat?: 'csv' | 'xlsx';
+    onExport: (format: ExportFormatType) => Promise<boolean>;
+  };
 }
 
 /**
@@ -41,6 +50,7 @@ export const GenericTableFilters = ({
   onSearchChange,
   onResetFilters,
   isLoadingConfig = false,
+  exportConfig,
 }: GenericTableFiltersProps) => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
@@ -378,10 +388,18 @@ export const GenericTableFilters = ({
           )}
         </div>
 
-        {/* Right side: Search + Column manager */}
+        {/* Right side: Search + Export + Column manager */}
         <div className="flex items-center gap-3">
           {/* Search filter - inline with Filters button */}
           <SearchFilter value={search} onChange={onSearchChange} placeholder="Search..." />
+          {/* Export/Download button */}
+          {exportConfig?.enabled && (
+            <GenericTableExportDownload
+              formats={exportConfig.formats}
+              defaultFormat={exportConfig.defaultFormat}
+              onExport={exportConfig.onExport}
+            />
+          )}
           {/* Column manager */}
           <GenericTableColumnManager />
         </div>

@@ -1,6 +1,8 @@
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import type { TablePageConfig } from '../types';
 import type { UseGenericTableStateReturn } from '../hooks/useGenericTableState';
+import type { ExportFormatType } from '@meaku/core/types/admin/api';
 import { GenericTableHeader } from './GenericTableHeader';
 import { GenericTableFilters } from './GenericTableFilters';
 import { GenericTable } from './GenericTable';
@@ -10,6 +12,8 @@ import { TableEmptyState } from './states/TableEmptyState';
 import { TableErrorState } from './states/TableErrorState';
 import { TableLoadingOverlay } from './states/TableLoadingOverlay';
 import { ColumnManagementProvider } from '../context/ColumnManagementContext';
+import adminApiClient from '@meaku/core/adminHttp/client';
+import { createFilename, triggerDownload } from '../../../utils/download/downloadUtils';
 
 interface GenericTableContainerProps<TRow = unknown> {
   config: TablePageConfig<TRow>;
@@ -79,6 +83,48 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
     }
   };
 
+  // Handle export/download
+  const handleExport = async (format: ExportFormatType): Promise<boolean> => {
+    if (!config.api.exportData) {
+      toast.error('Export endpoint not configured');
+      return false;
+    }
+
+    try {
+      // Use the same request payload that's used for table data
+      // This ensures export respects all filters, toggles, defaults, etc.
+      const payload = tableState.requestPayload;
+
+      // Make API request
+      const response = await adminApiClient.post(`${config.api.exportData}${format.toLowerCase()}/`, payload, {
+        responseType: 'blob',
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Export failed');
+      }
+
+      // Create blob and trigger download
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+      const url = window.URL.createObjectURL(blob);
+      const filename = createFilename(config.pageKey, format.toLowerCase());
+
+      triggerDownload(url, filename);
+
+      // Cleanup - delay revoke to avoid race condition with download
+      // The download process is asynchronous, so we wait to ensure it has started
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+      toast.success('Downloaded successfully');
+      return true;
+    } catch (error) {
+      toast.error('Failed to download file');
+      console.error('Export error:', error);
+      return false;
+    }
+  };
+
   // Error state
   if (isError && error) {
     const ErrorComponent = config.errorState || TableErrorState;
@@ -115,6 +161,16 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
             onSearchChange={urlState.setSearch}
             onResetFilters={urlState.resetFilters}
             isLoadingConfig={tableState.isLoadingFilterConfig}
+            exportConfig={
+              config.export?.enabled
+                ? {
+                    enabled: true,
+                    formats: config.export.formats,
+                    defaultFormat: config.export.defaultFormat,
+                    onExport: handleExport,
+                  }
+                : undefined
+            }
           />
           <div className="flex-1 overflow-hidden">
             <LoadingComponent />
@@ -153,6 +209,16 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
           onSearchChange={urlState.setSearch}
           onResetFilters={urlState.resetFilters}
           isLoadingConfig={tableState.isLoadingFilterConfig}
+          exportConfig={
+            config.export?.enabled
+              ? {
+                  enabled: true,
+                  formats: config.export.formats,
+                  defaultFormat: config.export.defaultFormat,
+                  onExport: handleExport,
+                }
+              : undefined
+          }
         />
 
         {/* Table content */}

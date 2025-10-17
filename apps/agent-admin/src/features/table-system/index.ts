@@ -72,6 +72,9 @@ export { DateRangeFilter } from './components/filters/DateRangeFilter';
 export { DynamicFilter } from './components/filters/DynamicFilter';
 export { FilterChipsList } from './components/filters/FilterChipsList';
 
+// Export/Download component
+export { GenericTableExportDownload } from './components/GenericTableExportDownload';
+
 // State components
 export { TableLoadingSkeleton } from './components/states/TableLoadingSkeleton';
 export { TableEmptyState } from './components/states/TableEmptyState';

@@ -31,6 +31,8 @@ export interface TablePageConfig<TRow = unknown> {
     filterConfig?: string;
     /** Endpoint to fetch filter options (filterset) */
     filterOptions?: string;
+    /** Base endpoint for export/download functionality */
+    exportData?: string;
   };
 
   /** Pagination configuration */
@@ -53,6 +55,16 @@ export interface TablePageConfig<TRow = unknown> {
 
   /** Quick filter buttons (shown next to Filters button) */
   quickFilters?: QuickFilterConfig[];
+
+  /** Export/Download configuration */
+  export?: {
+    /** Enable export functionality */
+    enabled: boolean;
+    /** Available export formats */
+    formats?: ('csv' | 'xlsx')[];
+    /** Default export format */
+    defaultFormat?: 'csv' | 'xlsx';
+  };
 
   /** Custom row click handler (overrides drawer behavior) */
   onRowClick?: (row: TRow) => void;

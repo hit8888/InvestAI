@@ -30,6 +30,7 @@ export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
     entityMetadata: '/tenant/api/entity/?entity_type=PROSPECT',
     filterConfig: '/tenant/api/prospects/filter-config',
     filterOptions: '/tenant/api/prospects/filterset/',
+    exportData: '/tenant/api/prospects/download/',
   },
 
   pagination: {
@@ -45,6 +46,13 @@ export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
   defaultFilters: {
     company: null, // Will be sent with operator 'is_not_null' - only show visitors with company
     // Note: No session_id filter - shows ALL visitors (with or without conversations)
+  },
+
+  // Export/Download configuration
+  export: {
+    enabled: true,
+    formats: ['csv', 'xlsx'],
+    defaultFormat: 'csv',
   },
 
   drawer: {

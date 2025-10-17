@@ -30,6 +30,7 @@ export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
     entityMetadata: '/tenant/api/entity/?entity_type=PROSPECT',
     filterConfig: '/tenant/api/prospects/filter-config',
     filterOptions: '/tenant/api/prospects/filterset/',
+    exportData: '/tenant/api/prospects/download/',
   },
 
   pagination: {
@@ -70,6 +71,13 @@ export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
       filterOperator: 'is_not_null',
     },
   ],
+
+  // Export/Download configuration
+  export: {
+    enabled: true,
+    formats: ['csv', 'xlsx'],
+    defaultFormat: 'csv',
+  },
 
   drawer: {
     enabled: true,

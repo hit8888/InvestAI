@@ -31,6 +31,7 @@ export const leadsTableConfig: TablePageConfig<LeadRow> = {
     tableData: '/tenant/api/search/leads/query/',
     entityMetadata: '/tenant/api/entity/?entity_type=LEAD',
     filterOptions: '/tenant/api/search/leads/filterset/',
+    exportData: '/tenant/api/search/leads/download/',
   },
 
   pagination: {
@@ -61,6 +62,13 @@ export const leadsTableConfig: TablePageConfig<LeadRow> = {
       invertsDefaultFilterValue: true, // When ON, inverts is_valid from true to false
     },
   ],
+
+  // Export/Download configuration
+  export: {
+    enabled: true,
+    formats: ['csv', 'xlsx'],
+    defaultFormat: 'csv',
+  },
 
   drawer: {
     enabled: true,
