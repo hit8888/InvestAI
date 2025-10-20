@@ -27,7 +27,7 @@ export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
 
   api: {
     tableData: '/tenant/api/prospects/query/',
-    entityMetadata: '/tenant/api/entity/?entity_type=PROSPECT',
+    entityMetadata: '/tenant/api/entity/?entity_type=VISITOR',
     filterConfig: '/tenant/api/prospects/filter-config',
     filterOptions: '/tenant/api/prospects/filterset/',
     exportData: '/tenant/api/prospects/download/',

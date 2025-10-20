@@ -140,7 +140,7 @@ const SidebarV2 = () => {
 
     const navButton = (
       <button
-        key={item.navUrl}
+        key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
         onClick={() => !isDisabled && handleNavigation(item.navUrl)}
         disabled={isDisabled}
         className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all', {
@@ -161,7 +161,9 @@ const SidebarV2 = () => {
     // Wrap disabled items with tooltip
     if (isDisabled) {
       return (
-        <TooltipProvider key={item.navUrl}>
+        <TooltipProvider
+          key={'sidebar-v2-nav-item-tooltip-' + item.navItem.toLowerCase().replace(' ', '-') + '-' + item.navUrl}
+        >
           <Tooltip>
             <TooltipTrigger asChild>{navButton}</TooltipTrigger>
             <TooltipPortal>
