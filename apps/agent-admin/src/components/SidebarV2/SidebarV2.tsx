@@ -139,10 +139,14 @@ const SidebarV2 = () => {
     const Icon = isActive ? item.activeIcon || item.icon : item.icon;
 
     const navButton = (
-      <button
+      <Link
+        to={tenantName ? `/${tenantName}${item.navUrl}` : item.navUrl}
         key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
-        onClick={() => !isDisabled && handleNavigation(item.navUrl)}
-        disabled={isDisabled}
+        onClick={(e) => {
+          if (isDisabled) {
+            e.preventDefault();
+          }
+        }}
         className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all', {
           'bg-gray-900 text-white hover:bg-gray-900 [&_svg]:text-gray-700': isActive,
           'text-gray-500 hover:bg-gray-100': !isActive && !isDisabled,
@@ -155,7 +159,7 @@ const SidebarV2 = () => {
           </div>
         )}
         <span className="truncate">{item.navItem}</span>
-      </button>
+      </Link>
     );
 
     // Wrap disabled items with tooltip

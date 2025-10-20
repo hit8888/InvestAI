@@ -114,7 +114,7 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: `#`, // V1: Same as V1
+    navUrl: '#', // Disabled - coming soon
     navItem: 'Playground',
     icon: PanelInsightsIcon,
     activeIcon: PanelInsightsIcon,
