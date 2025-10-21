@@ -16,6 +16,7 @@ export const extractManualFilterDefaults = (filters?: FilterConfig[]): Record<st
 /**
  * Generate filter configuration from entity metadata
  */
+
 export const generateFilterConfig = (
   entityMetadata: EntityMetadataResponse | undefined,
   manualFilters: FilterConfig[] = [],
@@ -39,8 +40,15 @@ export const generateFilterConfig = (
             displayType = 'country_flag';
           }
 
+          // Use data_lookup as filter key (extract primary lookup if it has fallbacks with ':')
+          // Example: "email:details.website_url" -> use "email"
+          // Replace dots with double underscores for nested lookups (e.g., "company.name" -> "company__name")
+          const filterKey = col.data_lookup
+            ? col.data_lookup.split(':')[0].trim().replace(/\./g, '__')
+            : col.column_name;
+
           const config = {
-            id: col.column_name,
+            id: filterKey,
             label: col.filter_label!,
             type: (col.cell_type === 'DATETIME' ? 'date-range' : 'multi-select') as FilterConfig['type'],
             icon: col.filter_label_icon || undefined,

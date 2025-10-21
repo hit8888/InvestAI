@@ -7,7 +7,6 @@ import { GenericTableHeader } from './GenericTableHeader';
 import { GenericTableFilters } from './GenericTableFilters';
 import { GenericTable } from './GenericTable';
 import { GenericTablePagination } from './GenericTablePagination';
-import { TableLoadingSkeleton } from './states/TableLoadingSkeleton';
 import { TableEmptyState } from './states/TableEmptyState';
 import { TableErrorState } from './states/TableErrorState';
 import { TableLoadingOverlay } from './states/TableLoadingOverlay';
@@ -135,51 +134,6 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
     );
   }
 
-  // Initial loading state (no data yet)
-  if (isLoading && !data) {
-    const LoadingComponent = config.loadingState || TableLoadingSkeleton;
-    return (
-      <ColumnManagementProvider
-        columns={columns}
-        visibleColumns={visibleColumns}
-        setColumnVisibility={setColumnVisibility}
-        setColumnOrder={setColumnOrder}
-        toggleColumnVisibility={tableState.toggleColumnVisibility}
-        resetColumnVisibility={tableState.resetColumnVisibility}
-      >
-        <div className="flex h-full w-full max-w-full flex-col">
-          <GenericTableHeader title={config.pageTitle} />
-          <GenericTableFilters
-            filters={urlState.filters}
-            filterConfig={filterConfig}
-            quickFilters={config.quickFilters}
-            search={urlState.search}
-            tableData={[]}
-            defaultFilters={allDefaultFilters}
-            filterOptionsEndpoint={config.api.filterOptions}
-            onFilterChange={urlState.setFilter}
-            onSearchChange={urlState.setSearch}
-            onResetFilters={urlState.resetFilters}
-            isLoadingConfig={tableState.isLoadingFilterConfig}
-            exportConfig={
-              config.export?.enabled
-                ? {
-                    enabled: true,
-                    formats: config.export.formats,
-                    defaultFormat: config.export.defaultFormat,
-                    onExport: handleExport,
-                  }
-                : undefined
-            }
-          />
-          <div className="flex-1 overflow-hidden">
-            <LoadingComponent />
-          </div>
-        </div>
-      </ColumnManagementProvider>
-    );
-  }
-
   const tableData = data?.results ?? [];
   const isEmpty = tableData.length === 0;
 
@@ -223,8 +177,8 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
 
         {/* Table content */}
         <div className="relative min-h-0 min-w-0 max-w-full">
-          {isEmpty ? (
-            // Empty state
+          {isEmpty && !isLoading ? (
+            // Empty state - only show when not loading and has no data
             <div className="flex h-full items-center justify-center">
               {config.emptyState ? (
                 <config.emptyState />
@@ -236,8 +190,8 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
               )}
             </div>
           ) : (
-            // Table with data
-            <div className="relative mb-6">
+            // Table (with data or loading shimmer)
+            <div className="relative mb-4">
               <GenericTable
                 data={tableData}
                 columns={columns}
@@ -263,7 +217,7 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
         {!isEmpty && (
           <GenericTablePagination
             currentPage={data?.current_page ?? 1}
-            pageSize={data?.page_size ?? config.pagination.defaultPageSize}
+            pageSize={urlState.pageSize}
             totalPages={data?.total_pages ?? 1}
             totalRecords={data?.total_records ?? 0}
             pageSizeOptions={config.pagination.pageSizeOptions}

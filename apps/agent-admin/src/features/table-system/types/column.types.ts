@@ -82,6 +82,7 @@ export interface TableColumnDefinition<TRow = unknown> {
     description?: string;
     isRowKey: boolean;
     isDisplay: boolean;
+    keyName: string; // Original key_name for metadata lookup
   };
   // Note: TRow generic is used by consumers of this interface for type safety
   _row?: TRow; // Phantom type parameter to satisfy TypeScript

@@ -107,8 +107,8 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: '#', // V2 feature - coming soon, blank for now
-    navItem: 'AI Blocks',
+    navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`, // Controls entry point
+    navItem: 'Controls',
     icon: PanelAiBlocksIcon,
     activeIcon: PanelAiBlocksActiveIcon,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,

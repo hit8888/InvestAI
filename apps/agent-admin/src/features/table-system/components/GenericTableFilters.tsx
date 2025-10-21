@@ -125,7 +125,7 @@ export const GenericTableFilters = ({
   }
 
   return (
-    <div className="mb-6">
+    <div className="mb-4">
       {/* Filters toolbar */}
       <div className="flex items-center justify-between gap-4">
         {/* Left side: Filters button + Quick filters + Filter chips */}
@@ -353,10 +353,10 @@ export const GenericTableFilters = ({
                     onFilterChange(quickFilter.filterField, quickFilter.filterValue);
                   }
                 }}
-                className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'border-gray-800 bg-gray-800 text-white hover:bg-gray-700'
-                    : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'border bg-gray-800 text-white hover:bg-gray-700'
+                    : 'border-dashed-wide-dark bg-gray-50 text-gray-600 hover:text-gray-800'
                 }`}
               >
                 {quickFilter.label}

@@ -1,10 +1,5 @@
 import { ExternalLink } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@breakout/design-system/components/Tooltip/index';
+import { TruncatedText } from './TruncatedText';
 
 interface LinkCellProps {
   value: unknown;
@@ -38,39 +33,36 @@ export const LinkCell = ({ value, tooltip }: LinkCellProps) => {
 
   if (!isValidUrl) {
     return (
-      <span className="block truncate text-sm text-gray-900" title={url}>
-        {url}
-      </span>
+      <TruncatedText
+        text={url}
+        maxWidth="200px"
+        customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
+        tooltipSide="top"
+        tooltipDelay={200}
+      />
     );
   }
 
+  // Create the link content with TruncatedText for the URL part
   const linkContent = (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="group inline-flex max-w-full items-center gap-1 text-sm text-blue-600 hover:text-blue-800 hover:underline"
-      title={tooltip || href}
       onClick={(e) => e.stopPropagation()} // Prevent row click when clicking link
     >
-      <span className="truncate">{href}</span>
+      <div className="min-w-0 flex-1">
+        <TruncatedText
+          text={href}
+          maxWidth="200px"
+          className="text-blue-600 hover:text-blue-800"
+          customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
+        />
+      </div>
       <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
     </a>
   );
-
-  // If explicit tooltip is provided and not empty, use Tooltip component
-  if (tooltip && tooltip.trim()) {
-    return (
-      <TooltipProvider>
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-          <TooltipContent side="top" className="bg-gray-900 text-white">
-            {tooltip}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
 
   return linkContent;
 };

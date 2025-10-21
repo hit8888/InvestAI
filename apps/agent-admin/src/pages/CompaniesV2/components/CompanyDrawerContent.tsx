@@ -29,6 +29,7 @@ interface CompanyRow {
  * Simple implementation showing row ID and sample text
  */
 export const CompanyDrawerContent = ({ data, onClose }: DrawerContentProps<CompanyRow>) => {
+  // Note: isTableLoading is available but not used since this drawer doesn't fetch additional data
   const handleCloseDrawer = () => {
     onClose();
   };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ScrollArea } from '@breakout/design-system/components/shadcn-ui/scroll-area';
@@ -63,17 +63,11 @@ const SidebarV2 = () => {
     return SideNavView.MAIN;
   });
 
-  // Track which accordion sections are open (multi-mode - multiple can be open)
-  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({
-    [SidebarV2AccordionGroup.BREAKOUT_BLOCKS]: true,
-    [SidebarV2AccordionGroup.VISITOR_REVEAL]: true,
-  });
+  // Track which accordion section is open (single-mode - only one can be open)
+  const [openAccordion, setOpenAccordion] = useState<string>(SidebarV2AccordionGroup.BREAKOUT_BLOCKS);
 
   const toggleAccordion = (title: string) => {
-    setOpenAccordions((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
+    setOpenAccordion((prev) => (prev === title ? '' : title));
   };
 
   const navigateToSettingsView = () => {
@@ -150,7 +144,7 @@ const SidebarV2 = () => {
         className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all', {
           'bg-gray-900 text-white hover:bg-gray-900 [&_svg]:text-gray-700': isActive,
           'text-gray-500 hover:bg-gray-100': !isActive && !isDisabled,
-          'cursor-not-allowed text-gray-400 opacity-50': isDisabled,
+          'cursor-not-allowed text-gray-600 opacity-50': isDisabled,
         })}
       >
         {Icon && (
@@ -211,7 +205,7 @@ const SidebarV2 = () => {
 
       {/* Main Navigation */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <ScrollArea className="flex-1 p-4" type="always">
+        <ScrollArea className="sidebar-scrollbar flex-1 p-4" type="hover">
           {sideNavView === SideNavView.MAIN ? (
             // MAIN VIEW - Accordion Sections + Insights
             <div className="space-y-2">
@@ -224,16 +218,16 @@ const SidebarV2 = () => {
                       className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
                     >
                       <span>{section.title}</span>
-                      {openAccordions[section.title] ? (
+                      {openAccordion === section.title ? (
                         <ChevronDown className="h-4 w-4 text-gray-500" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-gray-500" />
+                        <ChevronUp className="h-4 w-4 text-gray-500" />
                       )}
                     </button>
 
                     {/* Accordion Content with Animation */}
                     <AnimatePresence initial={false}>
-                      {openAccordions[section.title] && (
+                      {openAccordion === section.title && (
                         <motion.div key={section.title} className="overflow-hidden" {...accordionAnimation}>
                           <div className="space-y-1 pl-2">{section.items.map((item) => renderNavItem(item))}</div>
                         </motion.div>

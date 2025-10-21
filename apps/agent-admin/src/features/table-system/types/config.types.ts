@@ -7,6 +7,7 @@ export interface DrawerContentProps<TRow = unknown> {
   data: TRow;
   onClose: () => void;
   refreshTable: () => void;
+  isTableLoading?: boolean; // Optional - indicates if the table is still loading initial data
 }
 
 /**

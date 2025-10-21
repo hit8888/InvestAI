@@ -48,15 +48,18 @@ const LeftSideContentModeLabels = {
  * Drawer content for conversation details
  * V2 version without nested Drawer wrapper (to avoid conflicts with GenericRowDrawer)
  */
-export const ConversationDrawerContent = ({ data, onClose }: DrawerContentProps<ProspectRow>) => {
+export const ConversationDrawerContent = ({ data, onClose, isTableLoading }: DrawerContentProps<ProspectRow>) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
 
-  const { data: sessionData, isLoading } = useSessionDetailsQuery(
+  const { data: sessionData, isLoading: isSessionLoading } = useSessionDetailsQuery(
     { prospectId: data.prospect_id },
     { enabled: !!data.prospect_id },
   );
+
+  // Show loading if either table is loading or session data is loading
+  const isLoading = isTableLoading || isSessionLoading;
 
   const companyData = useMemo(() => {
     return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;

@@ -11,3 +11,4 @@ export { CategoryLMHCell } from './CategoryLMHCell';
 export { LinkCell } from './LinkCell';
 export { LocationWithFlagCell } from './LocationWithFlagCell';
 export { SdrAssignmentCell } from './SdrAssignmentCell';
+export { TruncatedText } from './TruncatedText';

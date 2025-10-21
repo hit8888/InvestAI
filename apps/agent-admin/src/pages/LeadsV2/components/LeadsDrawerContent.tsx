@@ -40,15 +40,18 @@ const LeftSideContentModeLabels = {
  * Simplified version that only shows company/user details and email generation
  * Hides: browsing history, relevant profiles, and AI chat summary
  */
-export const LeadsDrawerContent = ({ data, onClose }: DrawerContentProps<LeadRow>) => {
+export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerContentProps<LeadRow>) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
 
-  const { data: sessionData, isLoading } = useSessionDetailsQuery(
+  const { data: sessionData, isLoading: isSessionLoading } = useSessionDetailsQuery(
     { prospectId: data.prospect_id },
     { enabled: !!data.prospect_id },
   );
+
+  // Show loading if either table is loading or session data is loading
+  const isLoading = isTableLoading || isSessionLoading;
 
   const companyData = useMemo(() => {
     return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;

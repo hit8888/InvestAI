@@ -36,8 +36,9 @@ export const GenericTablePage = <TRow extends Record<string, unknown>>({ config 
       <GenericRowDrawer
         config={config}
         getRowById={tableState.getRowById}
-        isLoadingData={tableState.isLoading}
+        isTableLoading={tableState.isLoading}
         refetch={tableState.refetch}
+        rowKeyColumn={tableState.rowKeyColumn}
       />
     </div>
   );

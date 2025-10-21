@@ -1,5 +1,6 @@
 import { Building2 } from 'lucide-react';
 import { useState } from 'react';
+import { TruncatedText } from './TruncatedText';
 
 interface CompanyCellProps {
   /** Company name to display */
@@ -34,19 +35,19 @@ export const CompanyCell = ({ name, logoUrl, email, tooltip }: CompanyCellProps)
   const shouldShowEmail = !!email;
 
   return (
-    <div className={`flex gap-3 ${shouldShowEmail ? 'items-start' : 'items-center'}`}>
+    <div className="flex min-h-11 items-center gap-3">
       {/* Logo or Icon */}
       <div className="flex-shrink-0">
         {logoUrl && !logoError ? (
           <img
             src={logoUrl}
             alt={name}
-            className="h-8 w-8 rounded object-contain"
+            className="h-6 w-6 rounded object-contain"
             onError={() => setLogoError(true)}
             title={tooltip}
           />
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-gray-100" title={tooltip}>
+          <div className="flex h-6 w-6 items-center justify-center rounded bg-gray-100" title={tooltip}>
             <Building2 className="h-4 w-4 text-gray-500" />
           </div>
         )}
@@ -54,10 +55,8 @@ export const CompanyCell = ({ name, logoUrl, email, tooltip }: CompanyCellProps)
 
       {/* Company Info */}
       <div className="min-w-0 flex-1">
-        {/* Company Name */}
-        <div className="truncate text-sm font-normal text-gray-900" title={name}>
-          {name}
-        </div>
+        {/* Company Name - Limited to 200px with conditional tooltip */}
+        <TruncatedText text={name} maxWidth="200px" tooltipSide="top" tooltipDelay={200} />
 
         {/* Company Email (optional) */}
         {shouldShowEmail && (

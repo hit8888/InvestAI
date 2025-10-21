@@ -1,18 +1,18 @@
-import { formatDistanceToNow } from 'date-fns';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
+import DateUtil from '@meaku/core/utils/dateUtils';
 
 interface TimeCellProps {
   value: unknown;
 }
 
 /**
- * TimeCell - Relative time with absolute time tooltip on hover
- * Used for: Last Interacted column
+ * TimeCell - Human-readable time format matching V1 tables
+ * Used for: DATETIME columns - shows "Today", "Yesterday", time, or date
  */
 export const TimeCell = ({ value }: TimeCellProps) => {
   if (value === null || value === undefined || value === '') {
@@ -20,26 +20,18 @@ export const TimeCell = ({ value }: TimeCellProps) => {
   }
 
   try {
-    const date = new Date(value as string | number | Date);
-
-    if (isNaN(date.getTime())) {
-      return <span className="text-gray-400">Invalid date</span>;
-    }
-
-    const relativeTime = formatDistanceToNow(date, { addSuffix: true });
-    const absoluteTime = new Intl.DateTimeFormat('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(date);
+    const { getDateInHumanReadableFormat, formatDateTime } = DateUtil;
+    const displayValue = getDateInHumanReadableFormat(value as string);
+    const tooltipValue = formatDateTime(value as string);
 
     return (
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
-            <span className="block cursor-default truncate text-sm text-gray-900">{relativeTime}</span>
+            <span className="block cursor-default truncate text-sm text-gray-900">{displayValue}</span>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
-            {absoluteTime}
+            {tooltipValue}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

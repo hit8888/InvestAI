@@ -1,9 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@breakout/design-system/components/Tooltip/index';
+import { TruncatedText } from './TruncatedText';
 
 interface TextCellProps {
   value: unknown;
@@ -21,26 +16,14 @@ export const TextCell = ({ value, tooltip }: TextCellProps) => {
 
   const text = String(value);
 
-  // If explicit tooltip is provided and not empty, use Tooltip component
-  if (tooltip && tooltip.trim()) {
-    return (
-      <TooltipProvider>
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger asChild>
-            <span className="block cursor-default truncate text-sm text-gray-900">{text}</span>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="bg-gray-900 text-white">
-            {tooltip}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
-
-  // Otherwise, use native title for truncation tooltip
+  // Use TruncatedText with custom tooltip if provided, or default behavior
   return (
-    <span className="block truncate text-sm text-gray-900" title={text}>
-      {text}
-    </span>
+    <TruncatedText
+      text={text}
+      maxWidth="200px"
+      customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
+      tooltipSide="top"
+      tooltipDelay={200}
+    />
   );
 };

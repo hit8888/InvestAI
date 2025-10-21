@@ -9,16 +9,18 @@ export const transformEntityMetadataToColumns = <TRow = unknown,>(
   metadataColumns: EntityMetadataColumn[],
 ): TableColumnDefinition<TRow>[] => {
   // Filter columns based on renderability rules:
-  // - is_meta: true => NOT renderable (skip)
+  // - is_metadata: true => NOT renderable (skip) - should not show in column management
+  // - is_meta: true => NOT renderable (skip) - legacy support
   // - data_lookup: null => NOT renderable (skip)
-  // Only include columns that have valid data_lookup AND are not meta columns
+  // Only include columns that have valid data_lookup AND are not metadata columns
   const renderableColumns = metadataColumns
     .filter((col) => {
-      const isMeta = col.is_meta ?? false;
+      const isMetadata = col.is_metadata ?? false;
+      const isMeta = col.is_meta ?? false; // Legacy support
       const hasDataLookup = col.data_lookup != null && col.data_lookup !== '';
 
-      // Must have data_lookup AND not be a meta column
-      return hasDataLookup && !isMeta;
+      // Must have data_lookup AND not be a metadata column (either is_metadata or is_meta)
+      return hasDataLookup && !isMetadata && !isMeta;
     })
     .sort((a, b) => a.table_order - b.table_order);
 
@@ -27,8 +29,14 @@ export const transformEntityMetadataToColumns = <TRow = unknown,>(
     const accessorKey =
       col.parent_column && col.parent_column !== '-' ? `${col.parent_column}.${col.key_name}` : col.key_name;
 
+    // Use data_lookup as column ID for sorting (extract primary lookup if it has fallbacks with ':')
+    // Example: "email:details.website_url" -> use "email"
+    // Replace dots with double underscores for nested lookups (e.g., "company.name" -> "company__name")
+    // Falls back to key_name if data_lookup is not available
+    const columnId = col.data_lookup ? col.data_lookup.split(':')[0].trim().replace(/\./g, '__') : col.key_name;
+
     return {
-      id: col.key_name,
+      id: columnId,
       accessorKey,
       header: col.display_name,
       sortable: col.is_sortable ?? true, // Default to true for V1 compatibility
@@ -39,6 +47,8 @@ export const transformEntityMetadataToColumns = <TRow = unknown,>(
         description: col.description,
         isRowKey: col.is_row_key ?? false,
         isDisplay: col.is_display,
+        // Store key_name for metadata lookup
+        keyName: col.key_name,
       },
     };
   });
@@ -106,7 +116,8 @@ export const createTanStackColumns = <TRow = unknown,>(
           const cellType = col.meta.cellType;
 
           // Find the original metadata column for this cell
-          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.id);
+          // Use keyName from meta since col.id now uses data_lookup
+          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.meta.keyName);
           if (!originalColumn) {
             console.warn(`[columnHelpers] Could not find metadata for column: ${col.id}`);
             return <span className="text-gray-400">-</span>;
@@ -136,7 +147,8 @@ export const createTanStackColumns = <TRow = unknown,>(
           const cellType = col.meta.cellType;
 
           // Find the original metadata column for this cell
-          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.id);
+          // Use keyName from meta since col.id now uses data_lookup
+          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.meta.keyName);
           if (!originalColumn) {
             console.warn(`[columnHelpers] Could not find metadata for column: ${col.id}`);
             return <span className="text-gray-400">-</span>;
@@ -158,10 +170,22 @@ export const createTanStackColumns = <TRow = unknown,>(
 
 /**
  * Get the row key column from metadata
+ * Returns the data_lookup path (which is how we access the data in the row object)
+ * Falls back to key_name if data_lookup is not available, then to 'id'
  */
 export const getRowKeyColumn = (metadataColumns: EntityMetadataColumn[]): string => {
   const rowKeyCol = metadataColumns.find((col) => col.is_row_key);
-  return rowKeyCol?.key_name ?? 'id'; // Fallback to 'id'
+
+  if (!rowKeyCol) return 'id'; // No row key column found, fallback to 'id'
+
+  // Use data_lookup if available (this is the actual path in the row data)
+  // Extract primary lookup if it has fallbacks with ':' (e.g., "email:details.website_url" -> "email")
+  if (rowKeyCol.data_lookup) {
+    return rowKeyCol.data_lookup.split(':')[0].trim();
+  }
+
+  // Fallback to key_name if no data_lookup
+  return rowKeyCol.key_name ?? 'id';
 };
 
 /**
@@ -173,10 +197,10 @@ export const getPrimaryColumns = (columns: TableColumnDefinition[]): string[] =>
 
 /**
  * Get default visible columns
- * Only PRIMARY columns (is_display: true AND is_meta: false)
+ * Only PRIMARY columns (is_display: true AND is_metadata: false)
  */
 export const getDefaultVisibleColumns = (columns: TableColumnDefinition[]): string[] => {
-  // Primary columns are already filtered (transformEntityMetadataToColumns filters is_meta: false)
+  // Primary columns are already filtered (transformEntityMetadataToColumns filters is_metadata: false)
   // So we just need to filter by isDisplay
   return columns.filter((col) => col.meta.isDisplay === true).map((col) => col.id);
 };

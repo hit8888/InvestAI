@@ -4,6 +4,7 @@ import { setTenantIdentifier } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 import { ENV } from '@meaku/core/types/env';
+import { defaultQueryClient } from '@meaku/core/queries/defaultQueryClient';
 
 export const getAllAgentsForTenant = async () => {
   try {
@@ -28,6 +29,10 @@ export const setupTenantAndAgent = async (tenantData: OrganizationDetailsRespons
   const agentId = await getAgentIdFromTenant();
   if (agentId) {
     setTenantIdentifier({ ...tenantData, agentId }); // Adding agentId to tenantIdentifier
+
+    // Invalidate all React Query caches when tenant changes to ensure fresh data
+    // Clear all cached queries to prevent stale data from previous tenant
+    defaultQueryClient.clear();
   } else {
     toast.error('No agents found for tenant');
   }

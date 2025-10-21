@@ -13,6 +13,8 @@ interface UseTableUrlStateProps {
   defaultSort?: { field: string; order: SortOrder };
   defaultFilters?: Record<string, unknown>;
   debounceMs?: number;
+  /** URL parameters to preserve (e.g., drawer rowId) - these won't be managed by table state */
+  preservedUrlParams?: string[];
 }
 
 /**
@@ -55,6 +57,7 @@ export const useTableUrlState = ({
   defaultSort,
   defaultFilters = {},
   debounceMs = 300,
+  preservedUrlParams = [],
 }: UseTableUrlStateProps): UseTableUrlStateReturn => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isReady, setIsReady] = useState(false);
@@ -114,24 +117,39 @@ export const useTableUrlState = ({
           // Start with new params from table state
           const newParams = new URLSearchParams(params);
 
-          // Build list of ALL filter-related keys (including date range variants)
-          const filterKeys = new Set<string>();
-          Object.keys(state.filters).forEach((key) => {
-            filterKeys.add(key);
-            // Also track date range variants (e.g., updated_onFrom, updated_onTo)
-            filterKeys.add(`${key}From`);
-            filterKeys.add(`${key}To`);
+          // UI-only params that should never be treated as filters (drawer params, etc.)
+          const uiOnlyParams = [
+            'rowId',
+            'leadId',
+            'prospectId',
+            'conversationId',
+            'visitorId',
+            'companyId',
+            ...preservedUrlParams,
+          ];
+
+          // Build list of ALL filter-related keys from previous URL that we need to track for cleanup
+          const previousFilterKeys = new Set<string>();
+          prev.forEach((_, key) => {
+            // Skip system params and UI-only params (like drawer rowId)
+            if (['page', 'pageSize', 'sortBy', 'sortOrder', 'search'].includes(key) || uiOnlyParams.includes(key)) {
+              return;
+            }
+            // Track all non-system params as potentially managed filter keys
+            previousFilterKeys.add(key);
           });
 
-          // Also check previous URL params for filter keys that might have been removed
-          prev.forEach((_, key) => {
-            // If it ends with From/To, it's a date range part - track the base key too
-            if (key.endsWith('From') || key.endsWith('To')) {
-              const baseKey = key.replace(/(From|To)$/, '');
-              filterKeys.add(baseKey);
-              filterKeys.add(key);
-            }
+          // Build list of current filter-related keys (including date range variants)
+          const currentFilterKeys = new Set<string>();
+          Object.keys(state.filters).forEach((key) => {
+            currentFilterKeys.add(key);
+            // Also track date range variants (e.g., updated_onFrom, updated_onTo)
+            currentFilterKeys.add(`${key}From`);
+            currentFilterKeys.add(`${key}To`);
           });
+
+          // Combined set of all filter keys that we manage (current + previous for cleanup)
+          const filterKeys = new Set([...currentFilterKeys, ...previousFilterKeys]);
 
           // Preserve any params that aren't managed by table state
           const managedKeys = new Set(['page', 'pageSize', 'sortBy', 'sortOrder', 'search', ...filterKeys]);
@@ -153,6 +171,7 @@ export const useTableUrlState = ({
       defaultPagination.defaultPageSize,
       defaultSort,
       setSearchParams,
+      preservedUrlParams,
     ]),
     debounceMs,
   );

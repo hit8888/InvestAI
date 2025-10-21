@@ -89,6 +89,14 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
 
   const rows = table.getRowModel().rows;
 
+  // Determine number of columns for shimmer (use actual column count or default to 6)
+  const shimmerColumnCount = Math.max(filteredColumns.length, 6);
+
+  // Shimmer component for loading state
+  const ShimmerCell = ({ className = '' }: { className?: string }) => (
+    <div className={`h-5 animate-pulse rounded bg-gradient-to-r from-gray-200 to-gray-300 ${className}`} />
+  );
+
   // Render sort icon
   const renderSortIcon = (columnId: string, isSortable: boolean) => {
     if (!isSortable) return null;
@@ -100,9 +108,9 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
     }
 
     return sortOrder === 'asc' ? (
-      <ChevronUp className="ml-1 inline h-4 w-4 text-blue-600" />
+      <ChevronUp className="ml-1 inline h-4 w-4 stroke-[2.5] text-gray-800" />
     ) : (
-      <ChevronDown className="ml-1 inline h-4 w-4 text-blue-600" />
+      <ChevronDown className="ml-1 inline h-4 w-4 stroke-[2.5] text-gray-800" />
     );
   };
 
@@ -111,93 +119,142 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
   const tableKey = useMemo(() => `table-reset-${resetVersion}`, [resetVersion]);
 
   return (
-    <div className="flex h-[calc(100vh-270px)] w-full max-w-full flex-col overflow-hidden rounded-md border border-b">
+    <div className="flex h-[calc(100vh-232px)] w-full max-w-full flex-col overflow-hidden rounded-md border border-b">
       <ScrollArea className="-top-[1px] flex-1">
         <table key={tableKey} className="w-max min-w-full" style={{ borderCollapse: 'collapse' }}>
           <thead className="sticky -top-[1px] z-20 bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                <AnimatePresence mode="popLayout">
-                  {headerGroup.headers.map((header) => {
-                    const isSortable = header.column.getCanSort();
-                    const columnDef = filteredColumns.find((col) => col.id === header.column.id);
-                    const hasTooltip = columnDef?.tooltipText && columnDef.tooltipText.trim();
+            {isLoading ? (
+              // Loading shimmer header
+              <tr>
+                {Array.from({ length: shimmerColumnCount }).map((_, colIndex) => {
+                  // Vary the width of shimmer cells to look more realistic
+                  const widths = ['w-16', 'w-24', 'w-20', 'w-28', 'w-18', 'w-22'];
+                  const shimmerWidth = widths[colIndex % widths.length];
 
-                    return (
-                      <motion.th
-                        key={header.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        className="whitespace-nowrap border border-gray-200 px-4 py-3 text-left text-xs font-[500] tracking-wide text-gray-500"
-                      >
-                        {header.isPlaceholder ? null : (
-                          <div
-                            className={
-                              isSortable
-                                ? 'flex cursor-pointer select-none items-center justify-between hover:text-gray-700'
-                                : 'flex items-center justify-between'
-                            }
-                            onClick={isSortable ? header.column.getToggleSortingHandler() : undefined}
-                          >
-                            <div className="flex items-center gap-1.5">
-                              <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
-                              {hasTooltip && (
-                                <TooltipProvider>
-                                  <Tooltip delayDuration={200}>
-                                    <TooltipTrigger
-                                      asChild
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                      }}
-                                    >
-                                      <Info className="h-3.5 w-3.5 cursor-help text-gray-400 hover:text-gray-600" />
-                                    </TooltipTrigger>
-                                    <TooltipContent side="top" className="max-w-xs bg-gray-900 text-white">
-                                      {columnDef.tooltipText}
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              )}
-                            </div>
-                            {isSortable && renderSortIcon(header.column.id, isSortable)}
-                          </div>
-                        )}
-                      </motion.th>
-                    );
-                  })}
-                </AnimatePresence>
+                  return (
+                    <th
+                      key={`shimmer-header-${colIndex}`}
+                      className="min-h-[40px] whitespace-nowrap border border-gray-200 px-4 py-3 text-left text-xs font-[500] tracking-wide text-gray-500"
+                    >
+                      <div className="flex h-full items-center justify-start">
+                        <ShimmerCell className={shimmerWidth} />
+                      </div>
+                    </th>
+                  );
+                })}
               </tr>
-            ))}
+            ) : (
+              // Actual headers
+              table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  <AnimatePresence mode="popLayout">
+                    {headerGroup.headers.map((header) => {
+                      const isSortable = header.column.getCanSort();
+                      const columnDef = filteredColumns.find((col) => col.id === header.column.id);
+                      const hasTooltip = columnDef?.tooltipText && columnDef.tooltipText.trim();
+
+                      return (
+                        <motion.th
+                          key={header.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.2, ease: 'easeInOut' }}
+                          className="whitespace-nowrap border border-gray-200 px-4 py-3 text-left text-xs font-[500] tracking-wide text-gray-500"
+                        >
+                          {header.isPlaceholder ? null : (
+                            <div
+                              className={
+                                isSortable
+                                  ? 'flex cursor-pointer select-none items-center justify-between hover:text-gray-700'
+                                  : 'flex items-center justify-between'
+                              }
+                              onClick={isSortable ? header.column.getToggleSortingHandler() : undefined}
+                            >
+                              <div className="flex items-center gap-1.5">
+                                <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
+                                {hasTooltip && (
+                                  <TooltipProvider>
+                                    <Tooltip delayDuration={200}>
+                                      <TooltipTrigger
+                                        asChild
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                        }}
+                                      >
+                                        <Info className="h-3.5 w-3.5 cursor-help text-gray-400 hover:text-gray-600" />
+                                      </TooltipTrigger>
+                                      <TooltipContent side="top" className="max-w-xs bg-gray-900 text-white">
+                                        {columnDef.tooltipText}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                )}
+                              </div>
+                              {isSortable && renderSortIcon(header.column.id, isSortable)}
+                            </div>
+                          )}
+                        </motion.th>
+                      );
+                    })}
+                  </AnimatePresence>
+                </tr>
+              ))
+            )}
           </thead>
           <tbody className="bg-white">
-            {rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={() => onRowClick?.(row.original)}
-                className="group cursor-pointer transition-colors last:border-transparent hover:bg-gray-50"
-              >
-                <AnimatePresence mode="popLayout">
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <motion.td
-                        key={cell.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        className="border border-gray-200 px-4 py-3 text-sm text-gray-900"
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </motion.td>
-                    );
-                  })}
-                </AnimatePresence>
-              </tr>
-            ))}
+            {isLoading
+              ? // Loading shimmer rows - 20 rows
+                Array.from({ length: 20 }).map((_, rowIndex) => (
+                  <tr
+                    key={`shimmer-row-${rowIndex}`}
+                    className="group transition-colors last:border-transparent hover:bg-gray-50"
+                  >
+                    {Array.from({ length: shimmerColumnCount }).map((_, colIndex) => {
+                      // Vary the width of shimmer cells to look more realistic
+                      const widths = ['w-full', 'w-3/4', 'w-5/6', 'w-full', 'w-2/3', 'w-4/5'];
+                      const shimmerWidth = widths[colIndex % widths.length];
+
+                      return (
+                        <td
+                          key={`shimmer-cell-${rowIndex}-${colIndex}`}
+                          className="min-h-[40px] border border-gray-200 px-3"
+                        >
+                          <div className="flex min-h-10 items-center  justify-start">
+                            <ShimmerCell className={shimmerWidth} />
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              : // Actual data rows
+                rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    onClick={() => onRowClick?.(row.original)}
+                    className="group cursor-pointer transition-colors last:border-transparent hover:bg-gray-50"
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <motion.td
+                            key={cell.id}
+                            layout
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2, ease: 'easeInOut' }}
+                            className="border border-gray-200 px-3 text-sm text-gray-900"
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </motion.td>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </tr>
+                ))}
           </tbody>
         </table>
 
