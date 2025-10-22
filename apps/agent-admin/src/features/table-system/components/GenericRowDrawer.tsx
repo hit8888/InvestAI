@@ -113,6 +113,7 @@ export const GenericRowDrawer = <TRow extends Record<string, unknown>>({
             onClose={handleClose}
             refreshTable={refetch}
             isTableLoading={isTableLoading}
+            {...(config.drawer.props || {})}
           />
         ) : (
           <RowNotFoundContent onClose={handleClose} rowId={rowId!} />

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import type { DrawerContentProps } from '../../../features/table-system';
 import useSessionDetailsQuery from '../../../queries/query/useSessionDetailsQuery';
@@ -48,8 +48,14 @@ const LeftSideContentModeLabels = {
  * Drawer content for conversation details
  * V2 version without nested Drawer wrapper (to avoid conflicts with GenericRowDrawer)
  */
-export const ConversationDrawerContent = ({ data, onClose, isTableLoading }: DrawerContentProps<ProspectRow>) => {
+export const ConversationDrawerContent = ({
+  data,
+  onClose,
+  isTableLoading,
+  autoOpenConversationDetails = false,
+}: DrawerContentProps<ProspectRow>) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
+  const hasAutoOpenedRef = useRef(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
 
@@ -65,6 +71,14 @@ export const ConversationDrawerContent = ({ data, onClose, isTableLoading }: Dra
     return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;
   }, [sessionData]);
   const browsingHistory = companyData?.prospect?.browsing_history || [];
+
+  // Auto-open conversation details when session data is loaded (if enabled via prop)
+  useEffect(() => {
+    if (autoOpenConversationDetails && companyData?.prospect?.session_id && !hasAutoOpenedRef.current) {
+      setLeftSideContentMode('conversation-details');
+      hasAutoOpenedRef.current = true;
+    }
+  }, [autoOpenConversationDetails, companyData?.prospect?.session_id]);
 
   const {
     data: icpList,
@@ -144,6 +158,10 @@ export const ConversationDrawerContent = ({ data, onClose, isTableLoading }: Dra
   const handleCloseLeftSideContent = () => {
     setLeftSideContentMode(null);
     setSelectedEmployee(null);
+    // Note: Don't reset hasAutoOpenedRef here. If we reset it to false, the useEffect would
+    // immediately re-trigger (since autoOpenConversationDetails and session_id are still present),
+    // causing the conversation details to auto-open again right after the user closes it.
+    // We only want auto-open to happen once when the drawer first loads with data.
   };
 
   const handleFetchIcpList = () => {

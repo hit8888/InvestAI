@@ -84,5 +84,8 @@ export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
     width: '50vw',
     component: ConversationDrawerContent,
     urlParam: 'rowId',
+    props: {
+      autoOpenConversationDetails: true,
+    },
   },
 };
