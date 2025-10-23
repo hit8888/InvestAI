@@ -4,42 +4,50 @@ import { getCompanyLogoSrc } from '@meaku/core/utils/index';
 import { getHighestIntentScore } from '../../../utils/common';
 
 export const mapSessionDetailToCompanyData = (sessionData: SessionDetailsDataResponse): CompanyData => {
-  const prospect = sessionData.prospect;
-  const session = sessionData.session;
-  const websiteUrl = prospect.company_demographics?.website_url;
-  const logo = websiteUrl ? getCompanyLogoSrc(websiteUrl) : '';
+  // Top level details
+  const prospectDetails = sessionData.prospect;
+  const sessionDetails = sessionData.session;
+  const chatHistory = sessionData.chat_history;
+  const chatSummary = sessionData.chat_summary;
+
+  // Prospect level details
+  const companyDemographics = prospectDetails.company_demographics;
+  const prospectDemographics = prospectDetails.prospect_demographics;
+  const coreCompany = prospectDetails.core_company;
+
+  const website = coreCompany?.domain || companyDemographics?.website_url || '';
 
   return {
-    name: prospect.company || '',
-    website: websiteUrl || '',
-    logo,
-    hqLocation: prospect.company_demographics?.company_country || '',
-    revenue: prospect.company_demographics?.company_revenue || '',
-    employees: prospect.company_demographics?.employee_count || '',
-    atsUsed: prospect.company_demographics?.ats_information?.ats_used || '',
-    atsWebsiteUrl: prospect.company_demographics?.ats_information?.ats_website_link || '',
-    numOpenJobs: prospect.company_demographics?.ats_information?.num_open_jobs || null,
+    name: coreCompany?.name || prospectDetails.company || '',
+    website,
+    logo: getCompanyLogoSrc(website) || '',
+    hqLocation: coreCompany?.country || companyDemographics?.company_country || '',
+    revenue: coreCompany?.annual_revenue?.toString() || companyDemographics?.company_revenue || '',
+    employees: coreCompany?.employee_count?.toString() || companyDemographics?.employee_count || '',
+    atsUsed: companyDemographics?.ats_information?.ats_used || '',
+    atsWebsiteUrl: companyDemographics?.ats_information?.ats_website_link || '',
+    numOpenJobs: companyDemographics?.ats_information?.num_open_jobs || null,
     prospect: {
-      prospect_id: prospect.prospect_id || '',
-      session_id: prospect.session_id || '',
-      name: prospect.name || '',
-      title: prospect.role || '',
-      email: prospect.email || '',
+      prospect_id: prospectDetails.prospect_id || '',
+      session_id: prospectDetails.session_id || '',
+      name: prospectDetails.name || '',
+      title: prospectDetails.role || '',
+      email: prospectDetails.email || '',
       timeSpent: '',
       visits: 0,
       location: {
-        city: prospect.prospect_demographics?.city,
-        country: prospect.prospect_demographics?.country,
+        city: prospectDemographics?.city,
+        country: prospectDemographics?.country,
       },
-      sdr_assignment: prospect.sdr_assignment || undefined,
-      ipAddress: prospect.ip_address || prospect.prospect_demographics?.ip_address || '',
-      browsing_history: prospect.browsed_urls || [],
+      sdr_assignment: prospectDetails.sdr_assignment || undefined,
+      ipAddress: prospectDetails.ip_address || prospectDemographics?.ip_address || '',
+      browsing_history: prospectDetails.browsed_urls || [],
       buyer_intent_score:
-        session?.buyer_intent_score ?? getHighestIntentScore(sessionData.chat_history).buyer_intent_score ?? null,
+        sessionDetails?.buyer_intent_score ?? getHighestIntentScore(chatHistory).buyer_intent_score ?? null,
     },
-    email: prospect.email || '',
-    browsingHistorySummary: prospect.browsing_analysis_summary || '',
-    conversationSummary: sessionData.chat_summary || '',
-    enrichmentSource: prospect.prospect_demographics?.enrichment_source,
+    email: prospectDetails.email || '',
+    browsingHistorySummary: prospectDetails.browsing_analysis_summary || '',
+    conversationSummary: chatSummary || '',
+    enrichmentSource: prospectDemographics?.enrichment_source,
   };
 };

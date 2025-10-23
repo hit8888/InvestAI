@@ -302,6 +302,18 @@ export const CompanyDetailsSchema = z.object({
   ats_information: AtsInformationSchema.optional().nullable(),
 });
 
+export const CoreCompanySchema = z.object({
+  id: z.number().nullable().optional(),
+  name: z.string().nullable().optional(),
+  domain: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  country: z.string().nullable().optional(),
+  employee_count: z.number().nullable().optional(),
+  annual_revenue: z.number().nullable().optional(),
+  linkedin_url: z.string().nullable().optional(),
+});
+
 export const SdrAssignmentUserSchema = z.object({
   id: z.number().nullable().optional(),
   username: z.string().nullable().optional(),
@@ -483,6 +495,7 @@ export const ProspectDetailsResponseSchema = z.object({
   referrer: z.null().nullable(),
   browsing_analysis_summary: z.string().nullable(),
   sdr_assignment: SdrAssignmentSchema.nullable().optional(),
+  core_company: CoreCompanySchema.nullable().optional(),
 });
 
 export const SessionDetailsResponseSchema = z.object({
