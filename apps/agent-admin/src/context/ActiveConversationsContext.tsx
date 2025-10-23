@@ -10,6 +10,7 @@ import { ReadyState } from 'react-use-websocket';
 import { BrowsedUrl } from '@meaku/core/types/common';
 import { DataSourceItem, SdrAssignment } from '@meaku/core/types/admin/api';
 import useWebpageScreenshotsActiveConversation from '../hooks/useWebpageScreenshotsActiveConversation';
+import { CoreCompanyResponse } from '@meaku/core/types/admin/admin';
 
 export interface ActiveConversation {
   agent_id: number;
@@ -24,6 +25,7 @@ export interface ActiveConversation {
     country: string;
     company?: string;
     company_demographics: {
+      company_name: string;
       company_revenue: string;
       employee_count: number;
       company_logo_url: string;
@@ -32,6 +34,7 @@ export interface ActiveConversation {
     parent_url: string;
     browsed_urls: BrowsedUrl[];
     sdr_assignment: SdrAssignment;
+    core_company?: CoreCompanyResponse;
   };
   webpage_screenshot?: DataSourceItem | undefined;
   hasUserLeft?: boolean;

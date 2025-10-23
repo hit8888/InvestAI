@@ -12,8 +12,12 @@ interface ContactDetailsCardProps {
 
 const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
   const dataItems: OverviewDataItemProps[] = useMemo(() => {
-    const { name, email, country, company, company_demographics } = conversation.prospect;
-    const { company_revenue, employee_count, website_url } = company_demographics;
+    const { name, email, country, company, core_company, company_demographics } = conversation.prospect;
+
+    const companyName = core_company?.name || company_demographics?.company_name || company || '';
+    const companyRevenue = core_company?.annual_revenue || company_demographics?.company_revenue || '';
+    const companyEmployeeCount = core_company?.employee_count || company_demographics?.employee_count || '';
+    const companyWebsiteUrl = core_company?.domain || company_demographics?.website_url || '';
 
     return [
       {
@@ -40,25 +44,25 @@ const ContactDetailsCard = ({ conversation }: ContactDetailsCardProps) => {
       },
       {
         label: 'Company:',
-        value: company,
+        value: companyName,
       },
       {
         label: 'Revenue:',
-        value: company_revenue,
+        value: companyRevenue,
         renderValue: (value?: number | string) => {
           return <span>{NumberUtil.formatCurrencyWithDenominaton(value)}</span>;
         },
       },
       {
         label: 'Company Size:',
-        value: employee_count,
+        value: companyEmployeeCount,
         renderValue: (value?: number | string) => {
           return <span>{NumberUtil.formatNumber(value)}</span>;
         },
       },
       {
         label: 'Domain:',
-        value: ensureProtocol(website_url),
+        value: ensureProtocol(companyWebsiteUrl),
         renderValue: (value: unknown) => {
           const url = value as string;
           return (
