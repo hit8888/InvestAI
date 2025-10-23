@@ -116,4 +116,5 @@ export interface CommandBarSettings {
   root_zindex?: string;
   root_bottom_offset?: string;
   root_right_offset?: string;
+  feedback_enabled?: boolean;
 }

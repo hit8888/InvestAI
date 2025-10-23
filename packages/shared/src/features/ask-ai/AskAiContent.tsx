@@ -195,6 +195,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
               onExpand={onExpand}
               showLogo={showFavicon}
               logoUrl={orbLogoUrl}
+              feedbackEnabled={settings.feedback_enabled}
             />
           </div>
 

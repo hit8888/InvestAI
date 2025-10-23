@@ -6,10 +6,12 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { SidebarProvider } from '../context/SidebarContext';
 
 const Root = () => {
-  const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page } = usePageRouteState();
+  const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page, isTrainingPlaygroundPreviewPage } =
+    usePageRouteState();
   const { initialized } = useAuthHandler();
 
-  const notShowingSidebarCondition = !isLoginPage && !isDashboardPage && !isOAuthCallbackPage;
+  const notShowingSidebarCondition =
+    !isLoginPage && !isDashboardPage && !isOAuthCallbackPage && !isTrainingPlaygroundPreviewPage;
 
   if (!initialized) {
     return (
@@ -29,7 +31,11 @@ const Root = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex w-full gap-4 p-4">
+      <div
+        className={cn('flex w-full gap-4 p-4', {
+          'p-0': isTrainingPlaygroundPreviewPage,
+        })}
+      >
         {notShowingSidebarCondition ? <SidebarV2 /> : null}
         <div
           className={cn({
@@ -39,6 +45,7 @@ const Root = () => {
             'max-h-[calc(100vh-32px)] flex-1 rounded-xl border': !isLoginPage,
             'overflow-hidden': !isLoginPage && isTableV2Page,
             'overflow-y-auto': !isLoginPage && !isTableV2Page,
+            'max-h-full border-0': isTrainingPlaygroundPreviewPage,
           })}
         >
           <Outlet />

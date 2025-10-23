@@ -17,13 +17,14 @@ type DynamicConfigDataQueryPayload = Partial<ConfigPayload> & {
   session_id?: string;
   browsed_urls?: BrowsedUrl[];
   nudge_disabled?: boolean;
+  query_params?: Record<string, string>;
 };
 
 const useDynamicConfigDataQuery = (
   payload: DynamicConfigDataQueryPayload,
   options: BreakoutQueryOptions<ConfigurationApiResponse, DynamicConfigDataKey> = {},
 ): UseQueryResult<ConfigurationApiResponse> => {
-  const { parent_url, session_id, prospect_id, browsed_urls, agent_id, nudge_disabled } = payload;
+  const { parent_url, session_id, prospect_id, browsed_urls, agent_id, nudge_disabled, query_params } = payload;
 
   const query = useQuery({
     queryKey: dynamicConfigDataKey(parent_url ?? ''),
@@ -39,6 +40,7 @@ const useDynamicConfigDataQuery = (
             timestamp: Date.now(),
           },
         ],
+        query_params: query_params,
       });
       return response.data;
     },

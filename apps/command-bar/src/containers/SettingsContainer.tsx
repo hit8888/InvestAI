@@ -39,6 +39,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     rootZindex: propRootZIndex,
     rootBottomOffset: propRootBottomOffset,
     rootRightOffset: propRootRightOffset,
+    feedbackEnabled: propFeedbackEnabled,
   } = props;
 
   const settings = useMemo((): CommandBarSettings => {
@@ -69,6 +70,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
       root_zindex: urlParams.root_z_index ?? propRootZIndex,
       root_bottom_offset: urlParams.root_bottom_offset ?? propRootBottomOffset,
       root_right_offset: urlParams.root_right_offset ?? propRootRightOffset,
+      feedback_enabled: jsonSafeParse(urlParams.feedback_enabled).data ?? propFeedbackEnabled ?? false,
     };
   }, [
     propTenantId,
@@ -88,6 +90,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     propRootZIndex,
     propRootBottomOffset,
     propRootRightOffset,
+    propFeedbackEnabled,
   ]);
 
   return children(settings);

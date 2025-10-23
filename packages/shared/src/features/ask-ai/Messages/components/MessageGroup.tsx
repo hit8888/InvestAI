@@ -8,6 +8,7 @@ import { getLastGroupMinHeight } from '../utils/heightUtils';
 import { AvatarComponentProps } from '@meaku/saral';
 import { AvatarDisplay } from '../../../../components/AvatarDisplay';
 import MessageErrorBoundary from '../../../../components/MessageErrorBoundary';
+import { MessageFeedback } from '../MessageFeedback';
 
 interface MessageGroupProps {
   messageGroup: MessageType[];
@@ -42,6 +43,7 @@ interface MessageGroupProps {
   onExpand?: () => void;
   showLogo?: boolean;
   logoUrl?: string | null;
+  feedbackEnabled?: boolean;
 }
 
 export const MessageGroup: React.FC<MessageGroupProps> = ({
@@ -68,6 +70,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   onExpand,
   showLogo,
   logoUrl,
+  feedbackEnabled,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
     return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
@@ -109,6 +112,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
               showLogo={showLogo}
               logoUrl={logoUrl}
             />
+            {message.role === 'ai' && feedbackEnabled && <MessageFeedback message={message} />}
           </MessageErrorBoundary>
         );
       })}

@@ -42,7 +42,6 @@ export default defineConfig({
     },
   },
 
-  publicDir: false,
   build: {
     outDir: 'dist/wc',
     sourcemap: process.env.NODE_ENV !== 'production',

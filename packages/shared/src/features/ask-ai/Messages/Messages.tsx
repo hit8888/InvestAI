@@ -29,6 +29,7 @@ interface MessagesProps {
   onExpand?: () => void;
   showLogo?: boolean;
   logoUrl?: string | null;
+  feedbackEnabled?: boolean;
 }
 
 export const Messages = ({
@@ -47,6 +48,7 @@ export const Messages = ({
   onExpand,
   showLogo,
   logoUrl,
+  feedbackEnabled,
 }: MessagesProps) => {
   // Clear suggested questions if discovery questions are shown
   React.useEffect(() => {
@@ -129,6 +131,7 @@ export const Messages = ({
                 onExpand={onExpand}
                 showLogo={showLogo}
                 logoUrl={logoUrl}
+                feedbackEnabled={feedbackEnabled}
               />
             );
           })}

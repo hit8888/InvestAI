@@ -32,6 +32,7 @@ export function createWc(WrappedComponent: ComponentType, hostId: string) {
         rootZindex: 'string',
         rootBottomOffset: 'string',
         rootRightOffset: 'string',
+        feedbackEnabled: 'boolean',
       },
       shadow: 'open',
     },

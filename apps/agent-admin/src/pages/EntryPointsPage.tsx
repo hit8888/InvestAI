@@ -23,7 +23,23 @@ const EntryPointsPage = () => {
   const subHeading =
     'Set up conversation starters that guide users toward meaningful interactions. Customize each element by clicking on any editable field.';
 
-  const embedCode = `<script src="https://script.getbreakout.ai/command_bar_widget.js" tenant-id="${tenantName}" agent-id="${agentId}" async ></script>`;
+  const defaultScriptCode = `<script
+  async
+  src="https://script.getbreakout.ai/command_bar_widget.js"
+  tenant-id="${tenantName}"
+  agent-id="${agentId}">
+</script>`;
+
+  const gtmCompatibleScriptCode = `<script>
+(function() {
+  const script = document.createElement('script');
+  script.setAttribute('src', 'https://script.getbreakout.ai/command_bar_widget.js');
+  script.setAttribute('tenant-id', '${tenantName}');
+  script.setAttribute('agent-id', '${agentId}');
+  script.setAttribute('async', 'true');
+  document.head.appendChild(script);
+})();
+</script>`;
 
   // State for form values
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
@@ -198,7 +214,14 @@ const EntryPointsPage = () => {
               }
               isMandatoryField={false}
             />
-            <CodeBlock code={embedCode} language={'html'} />
+            <CodeBlock code={defaultScriptCode} language={'html'} />
+          </CardItem>
+          <CardItem className={'flex-col'}>
+            <Typography variant={'caption-12-normal'} className="text-gray-500">
+              For tag management systems (Google Tag Manager, etc.) and similar tools: If custom attributes don't work
+              in your setup, use this JavaScript code instead:
+            </Typography>
+            <CodeBlock code={gtmCompatibleScriptCode} language={'html'} />
           </CardItem>
         </Card>
       </Section>

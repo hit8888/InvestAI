@@ -29,9 +29,11 @@ class UIController {
     DOM.hide(DOM.get(CONFIG.SELECTORS.BRAND_COVER_CONTAINER));
   }
 
-  static hideForm() {
+  static hideForm(config) {
     DOM.hide(DOM.get(CONFIG.SELECTORS.CONFIG_PANEL));
-    DOM.show(DOM.get(CONFIG.SELECTORS.STATIC_CONTENT));
+    if (config.simulate_scroll) {
+      DOM.show(DOM.get(CONFIG.SELECTORS.STATIC_CONTENT));
+    }
     DOM.show(DOM.get(CONFIG.SELECTORS.BRAND_COVER_CONTAINER));
   }
 
@@ -120,7 +122,7 @@ function loadWidgetFromQueryParams() {
   if (FormController.isValid(config)) {
     UIController.removeExistingWidget();
     const script = WidgetController.create(config);
-    UIController.hideForm();
+    UIController.hideForm(config);
     WidgetController.load(script);
     return true;
   }

@@ -56,6 +56,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
           timestamp: Date.now(),
         },
       ],
+      query_params: initialSettings.query_params,
     },
     {
       enabled: dynamicConfigEnabled,

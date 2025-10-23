@@ -14,6 +14,7 @@ const usePageRouteState = () => {
     AGENT_ENTRYPOINTS,
     AGENT_CONTROLS,
     TRAINING_PLAYGROUND,
+    TRAINING_PLAYGROUND_PREVIEW,
     INSIGHTS,
   } = AppRoutesEnum;
 
@@ -29,6 +30,7 @@ const usePageRouteState = () => {
   const isAgentEntrypointsPage = location.pathname.includes(AGENT_ENTRYPOINTS);
   const isAgentControlsPage = location.pathname.includes(AGENT_CONTROLS);
   const isTrainingPlaygroundPage = location.pathname.includes(TRAINING_PLAYGROUND);
+  const isTrainingPlaygroundPreviewPage = location.pathname.includes(TRAINING_PLAYGROUND_PREVIEW);
   const isInsightsPage = location.pathname.includes(INSIGHTS);
 
   const isAgentPage = location.pathname.match(/\/agent\/?$/) !== null;
@@ -60,6 +62,7 @@ const usePageRouteState = () => {
     isAgentControlsPage,
     isTrainingPage,
     isTrainingPlaygroundPage,
+    isTrainingPlaygroundPreviewPage,
     isInsightsPage,
     isTableV2Page,
     pathURL,

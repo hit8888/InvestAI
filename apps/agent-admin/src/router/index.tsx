@@ -11,7 +11,8 @@ import LeadsV2PageContainer from '../pages/LeadsV2/LeadsV2PageContainer';
 import CompaniesV2PageContainer from '../pages/CompaniesV2/CompaniesV2PageContainer';
 import VisitorsV2PageContainer from '../pages/VisitorsV2/VisitorsV2PageContainer';
 import IcpV2PageContainer from '../pages/IcpV2/IcpV2PageContainer';
-import PlaygroundPage from '../pages/PlaygroundPage';
+import PlaygroundPage from '../pages/PlaygroundPage/PlaygroundPage.tsx';
+import PlaygroundPreviewPage from '../pages/PlaygroundPreviewPage.tsx';
 import ProtectedRoute from '../pages/ProtectedRoutes';
 import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageContainer';
 
@@ -139,6 +140,10 @@ const routes = [
               {
                 path: 'playground',
                 element: <ProtectedRoute element={<PlaygroundPage />} />,
+              },
+              {
+                path: 'playground/preview',
+                element: <ProtectedRoute element={<PlaygroundPreviewPage />} />,
               },
             ],
           },

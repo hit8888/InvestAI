@@ -27,40 +27,19 @@ const CodeBlock = ({ code, language = 'html', showLineNumbers = true, title, max
     }
   };
 
-  // Simple syntax highlighting function
-  const highlightCode = (code: string, language: string) => {
-    // Split code into lines for line numbers
-
-    if (language === 'html') {
-      const lines = code.split(' ');
-      return lines.map((line, i) => {
-        const startsWithAngleBracket = line.trim().startsWith('&lt;') || line.trim().startsWith('&gt;');
-        const formattedLine = startsWithAngleBracket ? line : ` ${line}`;
-
-        return (
-          <div key={i} className="flex  whitespace-pre">
-            {showLineNumbers && (
-              <span className="mr-4 inline-block w-8 flex-shrink-0 select-none text-right text-gray-400">{i + 1}</span>
-            )}
-            <span dangerouslySetInnerHTML={{ __html: formattedLine }} />
-          </div>
-        );
-      });
-    }
-
+  // Function to render code with line numbers
+  const renderCodeWithLineNumbers = (code: string) => {
     const lines = code.split('\n');
 
-    // For other languages, at least show line numbers
-    return lines.map((line, i) => (
-      <div key={i} className="flex">
-        {showLineNumbers && <span className="mr-4 inline-block w-8 select-none text-right text-gray-400">{i + 1}</span>}
-        <span>{line}</span>
+    return lines.map((line, index) => (
+      <div key={index} className="flex">
+        {showLineNumbers && (
+          <span className="mr-4 inline-block w-8 flex-shrink-0 select-none text-right text-gray-400">{index + 1}</span>
+        )}
+        <span className="flex-1">{line}</span>
       </div>
     ));
   };
-
-  // Prepare code for display
-  const preparedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   return (
     <div className="mb-4 w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-200">
@@ -85,7 +64,9 @@ const CodeBlock = ({ code, language = 'html', showLineNumbers = true, title, max
 
       {/* Code content */}
       <div className="overflow-auto p-4 font-mono text-sm" style={{ maxHeight }}>
-        <pre className="text-green-600">{highlightCode(preparedCode, language)}</pre>
+        <pre className="text-green-600">
+          <code>{renderCodeWithLineNumbers(code)}</code>
+        </pre>
       </div>
     </div>
   );

@@ -6,4 +6,5 @@ export type ConfigPayload = {
   prospect_id?: string;
   nudge_disabled?: boolean;
   browsed_urls?: BrowsedUrl[];
+  query_params?: Record<string, string>;
 };
