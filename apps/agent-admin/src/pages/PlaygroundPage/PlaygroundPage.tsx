@@ -32,6 +32,11 @@ const DEFAULT_FORM_VALUES: SettingsFormData = {
   addWebsiteBackground: false,
 };
 
+const DEFAULT_PARAMS = {
+  bo_is_admin: 'true',
+  bo_is_test: 'true',
+};
+
 const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
 
 const AGENT_PLAYGROUND_BASE_URL = import.meta.env.VITE_AGENT_PLAYGROUND_BASE_URL;
@@ -42,7 +47,9 @@ const PlaygroundPage = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const defaultPreviewUrl =
-    orgAgentId && tenantName ? `${AGENT_PLAYGROUND_BASE_URL}?bo_tenant_id=${tenantName}&bo_agent_id=${orgAgentId}` : '';
+    orgAgentId && tenantName
+      ? `${AGENT_PLAYGROUND_BASE_URL}?bo_tenant_id=${tenantName}&bo_agent_id=${orgAgentId}&${new URLSearchParams(DEFAULT_PARAMS).toString()}`
+      : '';
 
   const form = useForm<SettingsFormData>({
     defaultValues: DEFAULT_FORM_VALUES,
@@ -71,11 +78,10 @@ const PlaygroundPage = () => {
       bo_bc: formValues.addWebsiteBackground ? 'true' : 'false',
       bo_company: formValues.visitorCompany,
       bo_location: formValues.userLocation,
-      bo_is_admin: 'true',
-      bo_is_test: 'true',
       bo_agent_id: orgAgentId?.toString() ?? '',
       bo_tenant_id: tenantName ?? '',
       bo_feedback_enabled: formValues.provideFeedback ? 'true' : 'false',
+      ...DEFAULT_PARAMS,
     };
 
     const filteredParams = Object.entries(params).filter(([_, value]) => !!value);

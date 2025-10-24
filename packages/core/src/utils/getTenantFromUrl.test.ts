@@ -30,9 +30,17 @@ describe('getTenantFromUrl', () => {
     expect(getTenantFromUrl()).toBe('tenant123');
   });
 
-  it('returns empty string when org is not in URL', () => {
+  it('returns first segment as tenant when org is not in URL and first segment is not a known route', () => {
     Object.defineProperty(window, 'location', {
       value: { pathname: '/dashboard/settings' },
+      writable: true,
+    });
+    expect(getTenantFromUrl()).toBe('dashboard');
+  });
+
+  it('returns empty string when first segment is a known route', () => {
+    Object.defineProperty(window, 'location', {
+      value: { pathname: '/login' },
       writable: true,
     });
     expect(getTenantFromUrl()).toBe('');
