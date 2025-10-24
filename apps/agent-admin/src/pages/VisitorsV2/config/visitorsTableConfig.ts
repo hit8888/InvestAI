@@ -24,6 +24,7 @@ interface VisitorRow extends Record<string, unknown> {
 export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
   pageKey: 'visitors',
   pageTitle: 'Visitors',
+  rowKeyField: 'prospect_id', // Use prospect_id as the unique identifier for visitors
 
   api: {
     tableData: '/tenant/api/prospects/query/',

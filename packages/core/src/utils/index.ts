@@ -7,6 +7,7 @@ import DateUtil from './dateUtils';
 import isEqual from 'lodash/isEqual';
 
 export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
+export { getTenantFromUrl, getTenantIdentifierFromUrl } from './getTenantFromUrl';
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';

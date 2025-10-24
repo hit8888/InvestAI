@@ -2,7 +2,7 @@ import {
   ConversationsTableDisplayContent,
   TransformedProspectAndCompanyDetailsContent,
 } from '@meaku/core/types/admin/admin';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo, useCallback } from 'react';
 import { getProspectAndCompanyDetailsData } from '../utils/common';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
@@ -24,32 +24,45 @@ export const ConversationDetailsProvider: React.FC<{ children: ReactNode }> = ({
   const [chatHistory, setChatHistory] = useState<WebSocketMessage[]>([]);
   const [feedbackData, setFeedback] = useState<FeedbackRequestPayload[]>([]);
 
-  const handleSetConversationDetails = (details: ConversationsTableDisplayContent | null) => {
+  const handleSetConversationDetails = useCallback((details: ConversationsTableDisplayContent | null) => {
     setConversation(details);
-  };
+  }, []);
 
-  const handleSetChatHistoryDetails = (history: WebSocketMessage[]) => {
+  const handleSetChatHistoryDetails = useCallback((history: WebSocketMessage[]) => {
     setChatHistory(history);
-  };
-  const handleSetFeedbackDetails = (feedback: FeedbackRequestPayload[]) => {
+  }, []);
+
+  const handleSetFeedbackDetails = useCallback((feedback: FeedbackRequestPayload[]) => {
     setFeedback(feedback);
-  };
-  const prospectAndCompanyDetails = conversation ? getProspectAndCompanyDetailsData(conversation) : null;
-  return (
-    <ConversationDetailsContext
-      value={{
-        conversation,
-        chatHistory,
-        feedbackData,
-        prospectAndCompanyDetails,
-        handleSetConversationDetails,
-        handleSetChatHistoryDetails,
-        handleSetFeedbackDetails,
-      }}
-    >
-      {children}
-    </ConversationDetailsContext>
+  }, []);
+
+  const prospectAndCompanyDetails = useMemo(
+    () => (conversation ? getProspectAndCompanyDetailsData(conversation) : null),
+    [conversation],
   );
+
+  const contextValue = useMemo(
+    () => ({
+      conversation,
+      chatHistory,
+      feedbackData,
+      prospectAndCompanyDetails,
+      handleSetConversationDetails,
+      handleSetChatHistoryDetails,
+      handleSetFeedbackDetails,
+    }),
+    [
+      conversation,
+      chatHistory,
+      feedbackData,
+      prospectAndCompanyDetails,
+      handleSetConversationDetails,
+      handleSetChatHistoryDetails,
+      handleSetFeedbackDetails,
+    ],
+  );
+
+  return <ConversationDetailsContext value={contextValue}>{children}</ConversationDetailsContext>;
 };
 
 export const useConversationDetails = () => {

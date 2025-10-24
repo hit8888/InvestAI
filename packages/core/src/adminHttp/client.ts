@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ENV } from '@meaku/core/types/env';
 import { authInstance } from '../contexts/AuthInstance';
 import { regenerateTokens } from './api';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage, getTenantFromUrl } from '@meaku/core/utils/index';
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -47,7 +47,8 @@ const processQueue = (error: any, token: string | null = null) => {
 // Add request interceptor to conditionally set "x-tenant-name" & "Authorization" header before each request
 adminApiClient.interceptors.request.use(
   (config) => {
-    const tenantName = getTenantFromLocalStorage();
+    // PRIORITY: Get tenant from URL first (source of truth), fallback to localStorage
+    const tenantName = getTenantFromUrl() || getTenantFromLocalStorage();
     if (tenantName) {
       config.headers['x-tenant-name'] = tenantName;
     }

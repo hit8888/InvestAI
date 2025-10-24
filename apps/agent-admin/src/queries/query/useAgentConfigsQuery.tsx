@@ -18,7 +18,7 @@ const useBrandingAgentConfigsQuery = ({ agentId, enabled = true }: IProps): UseQ
       return response.data;
     },
     enabled,
-    refetchOnMount: 'always',
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes - branding configs don't change often
   });
 
   return agentConfigsQuery;

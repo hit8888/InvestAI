@@ -27,7 +27,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-center justify-start">
       <div className="flex w-96 flex-col justify-center gap-6 pt-24">
         <div className="w-full text-center text-4xl font-semibold text-primary">Dashboard</div>
         <CustomFilterDropdown

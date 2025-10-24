@@ -1,9 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { setAuthInstance } from '@meaku/core/contexts/AuthInstance';
 import { UserInfoResponse } from '@meaku/core/types/admin/api';
 import { DEFAULT_ROUTE, DefaultAuthResponse } from '../utils/constants';
 import { setupTenantAndAgent } from '../utils/apiCalls';
 import { getDashboardBasicPathURL } from '../utils/common';
+import { getTenantIdentifier } from '@meaku/core/utils/index';
 
 interface AuthContextType {
   accessToken: string | null;
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   // Save tokens and update state
-  const saveTokens = (newAccessToken: string, newRefreshToken: string, userData?: UserInfoResponse) => {
+  const saveTokens = useCallback((newAccessToken: string, newRefreshToken: string, userData?: UserInfoResponse) => {
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     if (userData) {
@@ -55,66 +56,75 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem('accessToken', newAccessToken);
     localStorage.setItem('refreshToken', newRefreshToken);
     localStorage.setItem('userEmail', userData?.email ?? '');
-  };
+  }, []);
 
-  const clearStateValues = () => {
+  const clearStateValues = useCallback(() => {
     setUserInfo(DefaultAuthResponse);
     setAccessToken(null);
     setRefreshToken(null);
     setIsAuthenticated(false);
-  };
+  }, []);
 
-  const clearAuthValuesFromLocalStorage = () => {
+  const clearAuthValuesFromLocalStorage = useCallback(() => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('admin_tenant_identifier');
-  };
+  }, []);
 
   // Clear tokens
-  const clearStateValuesAndLocalStorage = () => {
+  const clearStateValuesAndLocalStorage = useCallback(() => {
     clearStateValues();
     clearAuthValuesFromLocalStorage();
-  };
+  }, [clearStateValues, clearAuthValuesFromLocalStorage]);
 
   // Function to set authentication status
-  const login = () => setIsAuthenticated(true);
-  const logout = () => {
+  const login = useCallback(() => setIsAuthenticated(true), []);
+  const logout = useCallback(() => {
     setIsAuthenticated(false);
     clearStateValuesAndLocalStorage();
-  };
+  }, [clearStateValuesAndLocalStorage]);
 
-  const handleLoginAndRedirection = async (userData: UserInfoResponse, callback: (path: string) => void) => {
-    login();
+  const handleLoginAndRedirection = useCallback(
+    async (userData: UserInfoResponse, callback: (path: string) => void) => {
+      login();
 
-    const org = userData?.organizations;
-    // Check for saved redirect URL
-    const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '""');
+      const org = userData?.organizations;
+      // Check for saved redirect URL
+      const savedRedirectPath = JSON.parse(localStorage.getItem('redirectAfterLogin') ?? '""');
 
-    if (savedRedirectPath && savedRedirectPath !== '/') {
-      // Clear the saved path
-      callback(savedRedirectPath);
-      localStorage.removeItem('redirectAfterLogin');
-      return;
-    }
+      if (savedRedirectPath && savedRedirectPath !== '/') {
+        // Clear the saved path
+        callback(savedRedirectPath);
+        localStorage.removeItem('redirectAfterLogin');
+        return;
+      }
 
-    // Check organization count
-    const orgCount = org?.length ?? 0;
+      // Check organization count
+      const orgCount = org?.length ?? 0;
 
-    if (orgCount > 1) {
-      // multiple orgs - redirect to '/'
-      callback('/');
-    } else if (orgCount === 1) {
-      // single org - redirect to organization dashboard
-      const singleOrg = org[0];
-      await setupTenantAndAgent(singleOrg);
-      const basicPathURL = getDashboardBasicPathURL(singleOrg['tenant-name'] ?? '');
-      callback(`${basicPathURL}/${DEFAULT_ROUTE}`);
-    } else {
-      // Default fallback
-      callback('/');
-    }
-  };
+      if (orgCount > 1) {
+        // Multiple orgs - auto-select using hybrid approach
+        // Try last used tenant from localStorage, fallback to first org
+        const lastTenant = getTenantIdentifier();
+        const targetOrg = org.find((o) => o['tenant-name'] === lastTenant?.['tenant-name']) || org[0];
+
+        await setupTenantAndAgent(targetOrg);
+        const basicPathURL = getDashboardBasicPathURL(targetOrg['tenant-name'] ?? '');
+        callback(`${basicPathURL}/${DEFAULT_ROUTE}`);
+      } else if (orgCount === 1) {
+        // single org - redirect to organization dashboard
+        const singleOrg = org[0];
+        await setupTenantAndAgent(singleOrg);
+        const basicPathURL = getDashboardBasicPathURL(singleOrg['tenant-name'] ?? '');
+        callback(`${basicPathURL}/${DEFAULT_ROUTE}`);
+      } else {
+        // Default fallback
+        callback('/');
+      }
+    },
+    [login],
+  );
 
   // Register auth instance
   useEffect(() => {
@@ -122,23 +132,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => setAuthInstance(null);
   }, [saveTokens, logout, clearAuthValuesFromLocalStorage]);
 
-  return (
-    <AuthContext
-      value={{
-        accessToken,
-        refreshToken,
-        saveTokens,
-        clearStateValuesAndLocalStorage,
-        isAuthenticated,
-        login,
-        logout,
-        userInfo,
-        handleLoginAndRedirection,
-      }}
-    >
-      {children}
-    </AuthContext>
+  const contextValue = useMemo(
+    () => ({
+      accessToken,
+      refreshToken,
+      saveTokens,
+      clearStateValuesAndLocalStorage,
+      isAuthenticated,
+      login,
+      logout,
+      userInfo,
+      handleLoginAndRedirection,
+    }),
+    [
+      accessToken,
+      refreshToken,
+      saveTokens,
+      clearStateValuesAndLocalStorage,
+      isAuthenticated,
+      login,
+      logout,
+      userInfo,
+      handleLoginAndRedirection,
+    ],
   );
+
+  return <AuthContext value={contextValue}>{children}</AuthContext>;
 };
 
 // Custom Hook to use Auth Context

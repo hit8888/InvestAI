@@ -26,6 +26,7 @@ interface LeadRow extends Record<string, unknown> {
 export const leadsTableConfig: TablePageConfig<LeadRow> = {
   pageKey: 'leads',
   pageTitle: 'Leads',
+  rowKeyField: 'prospect_id', // Use prospect_id as the unique identifier for leads
 
   api: {
     tableData: '/tenant/api/search/leads/query/',

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ScrollArea } from '@breakout/design-system/components/shadcn-ui/scroll-area';
@@ -10,19 +10,26 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TooltipPortal,
+  TooltipArrow,
 } from '@breakout/design-system/components/Tooltip/index';
 import { useAuth } from '../../context/AuthProvider';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import SidebarHeader from './SidebarHeader';
+import { getTenantIdentifierFromUrl } from '@meaku/core/utils/index';
+import useBrandingAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
 import { ADMIN_DASHBOARD_COMPANY_NAME, SideNavView } from '../../utils/constants';
 import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
+import SidebarToggleIcon from '@breakout/design-system/components/icons/sidebar-toggle-icon';
 import {
   SIDEBAR_V2_ACCORDION_SECTIONS,
   SIDEBAR_V2_SETTINGS_ITEMS,
   INSIGHTS_ITEM,
   SidebarV2LinkItem,
   SidebarV2AccordionGroup,
+  SidebarV2AccordionSection,
   SidebarV2SettingsGroup,
 } from '../../utils/sidebarV2Constants';
+
+const SIDEBAR_COLLAPSED_KEY = 'sidebar_v2_collapsed';
 
 /**
  * Animation configuration for accordion expand/collapse
@@ -46,13 +53,32 @@ const SidebarV2 = () => {
   const location = useLocation();
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;
-  const tenantIdentifier = getTenantIdentifier();
+  // Use URL as primary source of truth for tenant
+  const tenantIdentifier = getTenantIdentifierFromUrl();
   const tenantName = tenantIdentifier?.['tenant-name'];
   const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
   const isUserSuperAdmin = Boolean((orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin'));
-  const TENANT_NAME = tenantIdentifier?.['name'] ?? ADMIN_DASHBOARD_COMPANY_NAME;
-  const TENANT_LOGO_URL = tenantIdentifier?.['logo'] ?? '';
-  const isTenantLogoUrlPresent = TENANT_LOGO_URL.length > 0;
+  const TENANT_NAME = tenantIdentifier?.['name'] ?? organization?.name ?? ADMIN_DASHBOARD_COMPANY_NAME;
+
+  // Fetch agent configs to get full logo and favicon
+  const agentId = tenantIdentifier?.['agentId'];
+  const { data: agentConfigs } = useBrandingAgentConfigsQuery({
+    agentId: agentId ?? 0,
+    enabled: Boolean(agentId),
+  });
+
+  // Full logo from agent metadata, fallback to org logo
+  const FULL_LOGO_URL = agentConfigs?.metadata?.logo || tenantIdentifier?.['logo'] || '';
+  const isTenantLogoUrlPresent = FULL_LOGO_URL.length > 0;
+
+  // Favicon from agent orb config
+  const FAVICON_URL = agentConfigs?.configs?.['agent_personalization:style']?.orb_config?.logo_url || '';
+
+  // Track collapsed/expanded state
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+    return stored ? JSON.parse(stored) : false;
+  });
 
   // Track which view we're in (MAIN or SETTINGS)
   const [sideNavView, setSideNavView] = useState<SideNavView>(() => {
@@ -65,6 +91,15 @@ const SidebarV2 = () => {
 
   // Track which accordion section is open (single-mode - only one can be open)
   const [openAccordion, setOpenAccordion] = useState<string>(SidebarV2AccordionGroup.BREAKOUT_BLOCKS);
+
+  // Persist collapsed state to localStorage
+  useEffect(() => {
+    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
+
+  const toggleSidebar = () => {
+    setIsCollapsed((prev) => !prev);
+  };
 
   const toggleAccordion = (title: string) => {
     setOpenAccordion((prev) => (prev === title ? '' : title));
@@ -132,7 +167,7 @@ const SidebarV2 = () => {
     const isActive = !isDisabled && isLinkActive(item.navUrl);
     const Icon = isActive ? item.activeIcon || item.icon : item.icon;
 
-    const navButton = (
+    const navContent = (
       <Link
         to={tenantName ? `/${tenantName}${item.navUrl}` : item.navUrl}
         key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
@@ -141,32 +176,74 @@ const SidebarV2 = () => {
             e.preventDefault();
           }
         }}
-        className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all', {
-          'bg-gray-900 text-white hover:bg-gray-900 [&_svg]:text-gray-700': isActive,
-          'text-gray-500 hover:bg-gray-100': !isActive && !isDisabled,
-          'cursor-not-allowed text-gray-600 opacity-50': isDisabled,
-        })}
+        className={cn(
+          'flex w-full items-center overflow-hidden rounded-lg text-sm font-normal transition-all duration-300',
+          {
+            // Expanded mode - active items
+            'gap-3 bg-gray-900 px-3 py-2.5 text-white hover:bg-gray-900': isActive && !isCollapsed,
+            // Expanded mode - non-active items
+            'gap-3 px-3 py-2.5 text-gray-500 hover:bg-gray-100': !isActive && !isDisabled && !isCollapsed,
+            // Collapsed mode - active items (no bg, no hover, centered, compact padding)
+            'justify-center px-2 py-2.5 text-gray-900': isActive && isCollapsed,
+            // Collapsed mode - non-active items (no bg, no hover, centered, compact padding)
+            'justify-center px-2 py-2.5 text-gray-500': !isActive && !isDisabled && isCollapsed,
+            // Disabled items
+            'cursor-not-allowed text-gray-600 opacity-50': isDisabled,
+          },
+        )}
       >
         {Icon && (
-          <div className="flex items-center rounded bg-white p-1">
-            <Icon className="h-4 w-4 flex-shrink-0" />
+          <div
+            className={cn('flex items-center rounded p-1 transition-colors duration-300', {
+              // Expanded mode - all items have white container
+              'bg-white': !isCollapsed,
+              // Collapsed mode - active items have dark container
+              'bg-gray-800': isActive && isCollapsed,
+              // Collapsed mode - non-active items have no container (no bg class)
+            })}
+          >
+            <Icon
+              className={cn('h-4 w-4 flex-shrink-0 transition-colors duration-300', {
+                // Expanded mode - active items have dark icon
+                'text-gray-900': isActive && !isCollapsed,
+                // Collapsed mode - active items have white icon
+                'text-white': isActive && isCollapsed,
+              })}
+            />
           </div>
         )}
-        <span className="truncate">{item.navItem}</span>
+        <span
+          className={cn(
+            'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+            {
+              'max-w-0 opacity-0': isCollapsed,
+              'max-w-[200px] opacity-100': !isCollapsed,
+            },
+          )}
+          style={{
+            transitionDelay: isCollapsed ? '0ms' : '150ms',
+          }}
+        >
+          {item.navItem}
+        </span>
       </Link>
     );
 
-    // Wrap disabled items with tooltip
-    if (isDisabled) {
+    // Wrap with tooltip when collapsed or disabled
+    if (isCollapsed || isDisabled) {
       return (
         <TooltipProvider
           key={'sidebar-v2-nav-item-tooltip-' + item.navItem.toLowerCase().replace(' ', '-') + '-' + item.navUrl}
         >
-          <Tooltip>
-            <TooltipTrigger asChild>{navButton}</TooltipTrigger>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>{navContent}</TooltipTrigger>
             <TooltipPortal>
-              <TooltipContent className="bg-gray-900 text-white">
-                <p>Coming Soon</p>
+              <TooltipContent
+                side={isCollapsed ? 'right' : 'top'}
+                className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+              >
+                <p>{isDisabled ? `${item.navItem} (Coming Soon)` : item.navItem}</p>
+                <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
               </TooltipContent>
             </TooltipPortal>
           </Tooltip>
@@ -174,65 +251,170 @@ const SidebarV2 = () => {
       );
     }
 
-    return navButton;
+    return navContent;
   };
 
-  const renderTenantHeader = () => {
-    const logoContent = isTenantLogoUrlPresent ? (
-      <div className="flex h-12 max-w-[140px] items-center justify-start">
-        <img className="h-full w-full object-contain object-left" src={TENANT_LOGO_URL} alt={`${TENANT_NAME} logo`} />
+  // Render section header with badge (shown when collapsed)
+  const renderSectionHeader = (section: SidebarV2AccordionSection) => {
+    // Use badge from section config, fallback to first two letters of title if not provided
+    const badgeText = section.badge || section.title.substring(0, 2).toUpperCase();
+
+    const badge = (
+      <div className="flex h-6 w-6 items-center justify-center rounded bg-gray-100 text-xs font-semibold text-gray-700">
+        {badgeText}
       </div>
-    ) : (
-      <div className="w-full text-left text-2xl font-bold capitalize text-gray-900">{TENANT_NAME}</div>
     );
 
     return (
-      <div className="flex w-full items-center justify-start gap-2">
-        {isUserSuperAdmin ? <Link to="/">{logoContent}</Link> : <div>{logoContent}</div>}
-      </div>
+      <TooltipProvider key={'sidebar-v2-section-header-' + section.title}>
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <div
+              className={cn(
+                'flex w-full items-center justify-center px-2 py-2.5 transition-[max-height,opacity,padding] duration-300 ease-in-out',
+                {
+                  'max-h-12 opacity-100': isCollapsed,
+                  'pointer-events-none max-h-0 py-0 opacity-0': !isCollapsed,
+                },
+              )}
+            >
+              <div className="flex items-center rounded p-1">{badge}</div>
+            </div>
+          </TooltipTrigger>
+          <TooltipPortal>
+            <TooltipContent
+              side="right"
+              className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+            >
+              <p>{section.title}</p>
+              <TooltipArrow className="fill-gray-900" width={12} height={6} />
+            </TooltipContent>
+          </TooltipPortal>
+        </Tooltip>
+      </TooltipProvider>
     );
   };
 
   return (
-    <div className="flex h-[calc(100vh-32px)] w-[270px] flex-col overflow-hidden rounded-xl border bg-[#FCFCFD]">
+    <div
+      className={cn(
+        'relative flex h-[calc(100vh-32px)] flex-shrink-0 flex-col overflow-visible rounded-xl border bg-[#FCFCFD] transition-[width] duration-300 ease-in-out',
+        {
+          'w-[72px]': isCollapsed,
+          'w-[270px]': !isCollapsed,
+        },
+      )}
+      style={{
+        contain: 'layout size',
+        willChange: 'width',
+      }}
+    >
       {/* Header - Company Logo & Name */}
-      <div className="flex flex-col items-start justify-center gap-4 self-stretch px-4 py-4">
-        <div className="flex w-full items-center justify-between px-2">{renderTenantHeader()}</div>
+      <div
+        className={cn('relative flex flex-col items-start justify-center self-stretch overflow-visible py-4', {
+          'px-2': isCollapsed,
+          'px-4': !isCollapsed,
+        })}
+      >
+        <div
+          className={cn('flex h-12 w-full items-center px-2', {
+            'justify-center': isCollapsed,
+            'justify-start': !isCollapsed,
+          })}
+        >
+          <SidebarHeader
+            isCollapsed={isCollapsed}
+            tenantName={TENANT_NAME}
+            tenantLogoUrl={FULL_LOGO_URL}
+            faviconUrl={FAVICON_URL}
+            isTenantLogoUrlPresent={isTenantLogoUrlPresent}
+            isUserSuperAdmin={isUserSuperAdmin}
+            organizations={orgList}
+            onExpandSidebar={() => setIsCollapsed(false)}
+          />
+        </div>
+
+        {/* Toggle Button - Positioned at top right, half overflowing */}
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleSidebar}
+                className="group absolute -right-3 top-1/2 z-50 flex size-6 -translate-y-1/2 items-center overflow-visible rounded-lg border border-gray-300 bg-white transition-all"
+                aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                <div className="flex w-12 items-center justify-center">
+                  <SidebarToggleIcon className="h-6 w-6 !text-gray-500 opacity-100 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
+                  {!isCollapsed ? (
+                    <ChevronLeft className="-ml-3.5 -mt-0.5 h-3.5 w-3.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+                  ) : (
+                    <ChevronRight className="-ml-3.5 -mt-0.5 h-3.5 w-3.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+                  )}
+                </div>
+              </button>
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent
+                side="right"
+                className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+              >
+                <p>{isCollapsed ? 'Expand Navigation' : 'Collapse Navigation'}</p>
+                <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
+              </TooltipContent>
+            </TooltipPortal>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {/* Divider below logo */}
-      <div className="mx-4 mb-4 border-t border-gray-200" />
+      <div className={cn('mb-4 border-t border-gray-200', { 'mx-4': !isCollapsed, 'mx-2': isCollapsed })} />
 
       {/* Main Navigation */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <ScrollArea className="sidebar-scrollbar flex-1 p-4" type="hover">
+        <ScrollArea
+          className={cn('sidebar-scrollbar flex-1', { 'p-2': isCollapsed, 'p-4': !isCollapsed })}
+          type="hover"
+        >
           {sideNavView === SideNavView.MAIN ? (
             // MAIN VIEW - Accordion Sections + Insights
-            <div className="space-y-2">
+            <div className={cn('space-y-2', { 'max-w-[54px]': isCollapsed })}>
               {SIDEBAR_V2_ACCORDION_SECTIONS.map((section) => (
                 <React.Fragment key={section.title}>
+                  {/* Section Header Badge (visible when collapsed) */}
+                  {renderSectionHeader(section)}
+
                   <div className="space-y-1">
-                    {/* Accordion Header */}
+                    {/* Accordion Header (hidden when collapsed) */}
                     <button
-                      onClick={() => toggleAccordion(section.title)}
-                      className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-sm font-normal text-gray-700 hover:bg-gray-50"
+                      onClick={() => !isCollapsed && toggleAccordion(section.title)}
+                      className={cn(
+                        'flex w-full items-center justify-between rounded-lg px-2 text-sm font-normal text-gray-700 transition-[max-height,opacity,padding] duration-300 ease-in-out',
+                        {
+                          'pointer-events-none max-h-0 py-0 opacity-0': isCollapsed,
+                          'max-h-12 py-2 opacity-100 hover:bg-gray-50': !isCollapsed,
+                        },
+                      )}
                     >
                       <span>{section.title}</span>
                       {openAccordion === section.title ? (
-                        <ChevronDown className="h-4 w-4 text-gray-500" />
-                      ) : (
                         <ChevronUp className="h-4 w-4 text-gray-500" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-gray-500" />
                       )}
                     </button>
 
-                    {/* Accordion Content with Animation */}
-                    <AnimatePresence initial={false}>
-                      {openAccordion === section.title && (
-                        <motion.div key={section.title} className="overflow-hidden" {...accordionAnimation}>
-                          <div className="space-y-1 pl-2">{section.items.map((item) => renderNavItem(item))}</div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {/* Accordion Content - Always visible when collapsed, animated when expanded */}
+                    {isCollapsed ? (
+                      <div className="space-y-1">{section.items.map((item) => renderNavItem(item))}</div>
+                    ) : (
+                      <AnimatePresence initial={false}>
+                        {openAccordion === section.title && (
+                          <motion.div key={section.title} className="overflow-hidden" {...accordionAnimation}>
+                            <div className="space-y-1 pl-2">{section.items.map((item) => renderNavItem(item))}</div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    )}
                   </div>
                   <hr />
                 </React.Fragment>
@@ -243,32 +425,110 @@ const SidebarV2 = () => {
             </div>
           ) : (
             // SETTINGS VIEW - Settings Items with Back Button
-            <div className="space-y-2">
-              <button
-                onClick={navigateToMainView}
-                className="mb-4 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span>Back to Dashboard</span>
-              </button>
+            <div className={cn('space-y-2', { 'max-w-[54px]': isCollapsed })}>
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={navigateToMainView}
+                      className={cn(
+                        'mb-4 flex w-full items-center overflow-hidden rounded-lg px-2 py-2.5 text-sm font-semibold text-gray-900',
+                        {
+                          'justify-center px-2 py-2.5': isCollapsed,
+                          'gap-3 hover:bg-gray-50': !isCollapsed,
+                        },
+                      )}
+                    >
+                      <div className="flex items-center rounded bg-white p-1 transition-colors duration-300">
+                        <ArrowLeft className="h-4 w-4 flex-shrink-0" />
+                      </div>
+                      <span
+                        className={cn(
+                          'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+                          {
+                            'max-w-0 opacity-0': isCollapsed,
+                            'max-w-[200px] opacity-100': !isCollapsed,
+                          },
+                        )}
+                        style={{
+                          transitionDelay: isCollapsed ? '0ms' : '150ms',
+                        }}
+                      >
+                        Back to Dashboard
+                      </span>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipPortal>
+                    {isCollapsed && (
+                      <TooltipContent
+                        side="right"
+                        className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+                      >
+                        <p>Back to Dashboard</p>
+                        <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
+                      </TooltipContent>
+                    )}
+                  </TooltipPortal>
+                </Tooltip>
+              </TooltipProvider>
 
               <div className="space-y-1">{SIDEBAR_V2_SETTINGS_ITEMS.map((item) => renderNavItem(item))}</div>
             </div>
           )}
         </ScrollArea>
 
-        {/* Settings - Sticky at Bottom */}
+        {/* Bottom Actions - Settings Button */}
         {sideNavView === SideNavView.MAIN && (
-          <div className="p-4">
-            <button
-              onClick={navigateToSettingsView}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal text-gray-500 transition-all hover:bg-gray-100"
-            >
-              <div className="flex items-center rounded bg-white p-1">
-                <PanelSettingsIcon className="h-4 w-4 flex-shrink-0" />
-              </div>
-              <span className="truncate">Settings</span>
-            </button>
+          <div className={cn({ 'p-2': isCollapsed, 'p-4': !isCollapsed })}>
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={navigateToSettingsView}
+                    className={cn(
+                      'flex w-full items-center overflow-hidden rounded-lg text-sm font-normal text-gray-500 transition-all duration-300',
+                      {
+                        'gap-3 px-3 py-2.5 hover:bg-gray-100': !isCollapsed,
+                        'justify-center px-2 py-2.5': isCollapsed,
+                      },
+                    )}
+                  >
+                    <div
+                      className={cn('flex items-center rounded p-1 transition-colors duration-300', {
+                        'bg-white': !isCollapsed,
+                      })}
+                    >
+                      <PanelSettingsIcon className="h-4 w-4 flex-shrink-0 transition-colors duration-300" />
+                    </div>
+                    <span
+                      className={cn(
+                        'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+                        {
+                          'max-w-0 opacity-0': isCollapsed,
+                          'max-w-[200px] opacity-100': !isCollapsed,
+                        },
+                      )}
+                      style={{
+                        transitionDelay: isCollapsed ? '0ms' : '150ms',
+                      }}
+                    >
+                      Settings
+                    </span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipPortal>
+                  {isCollapsed && (
+                    <TooltipContent
+                      side="right"
+                      className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+                    >
+                      <p>Settings</p>
+                      <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
+                    </TooltipContent>
+                  )}
+                </TooltipPortal>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         )}
       </div>

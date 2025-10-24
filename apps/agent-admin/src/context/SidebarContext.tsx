@@ -66,7 +66,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [location.state]);
 
   const { tenantName } = useParams();
-  const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
+  const organization = useMemo(() => orgList?.find((org) => org['tenant-name'] === tenantName), [orgList, tenantName]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(getInitialSidebarState);
   const [sideNavView, setSideNavView] = useState<SideNavView>(() => {
     if (pathURL.includes('settings')) {
@@ -118,17 +118,20 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     [organization, tenantName],
   );
 
-  const { groupedItems, ungroupedItems } = useMemo(() => getSideNavItems(sideNavView), [sideNavView, getSideNavItems]);
+  const { groupedItems, ungroupedItems } = useMemo(
+    () => getSideNavItems(sideNavView),
+    [sideNavView, organization, tenantName],
+  );
 
-  const toggleSidebar = () => {
+  const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((prevState) => {
       const newState = !prevState;
       localStorage.setItem(SIDEBAR_OPEN_KEY, JSON.stringify(newState));
       return newState;
     });
-  };
+  }, []);
 
-  const handleTabExpansion = (tabKey: string) => {
+  const handleTabExpansion = useCallback((tabKey: string) => {
     setExpandedTabs((prev) => {
       const newState = {
         ...prev,
@@ -137,9 +140,9 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       localStorage.setItem(EXPANDED_TABS_KEY, JSON.stringify(newState));
       return newState;
     });
-  };
+  }, []);
 
-  const navigateToMainView = () => {
+  const navigateToMainView = useCallback(() => {
     const defaultRoute = getSideNavItems(SideNavView.MAIN).ungroupedItems[0].navUrl;
     setSideNavView(SideNavView.MAIN);
     if (comingFromSettings) {
@@ -148,9 +151,10 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       // direct landing on integration page
       navigate(defaultRoute);
     }
-  };
+  }, [getSideNavItems, comingFromSettings, navigate]);
 
-  const navigateToSettingsView = () => {
+  const navigateToSettingsView = useCallback(() => {
+    console.log('navigateToSettingsView called!');
     const defaultRoute = getSideNavItems(SideNavView.SETTINGS).groupedItems.get(NavigationGroup.WORKSPACE_SETTINGS)?.[0]
       .navUrl;
 
@@ -160,7 +164,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
         from: 'settings',
       },
     });
-  };
+  }, [getSideNavItems, navigate]);
 
   useEffect(() => {
     setExpandedTabs((prev) => {
@@ -209,26 +213,32 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     handleParentRouteRedirect();
-  }, [isAgentPage, isTrainingPage, tenantName, ungroupedItems, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAgentPage, isTrainingPage, tenantName]);
 
-  return (
-    <SidebarContext
-      value={{
-        isSidebarOpen,
-        toggleSidebar,
-        sideNavView,
-        setSideNavView,
-        groupedItems,
-        ungroupedItems,
-        expandedTabs,
-        handleTabExpansion,
-        navigateToMainView,
-        navigateToSettingsView,
-      }}
-    >
-      {children}
-    </SidebarContext>
+  const contextValue = useMemo(
+    () => ({
+      isSidebarOpen,
+      toggleSidebar,
+      sideNavView,
+      setSideNavView,
+      groupedItems,
+      ungroupedItems,
+      expandedTabs,
+      handleTabExpansion,
+      navigateToMainView,
+      navigateToSettingsView,
+    }),
+    [
+      isSidebarOpen,
+      sideNavView,
+      expandedTabs,
+      // Note: groupedItems/ungroupedItems change references but are memoized based on organization/tenantName
+      // Note: All functions are stable via useCallback
+    ],
   );
+
+  return <SidebarContext value={contextValue}>{children}</SidebarContext>;
 };
 
 export const useSidebar = (): SidebarContextProps => {

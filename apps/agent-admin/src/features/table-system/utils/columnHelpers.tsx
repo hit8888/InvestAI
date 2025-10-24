@@ -171,12 +171,15 @@ export const createTanStackColumns = <TRow = unknown,>(
 /**
  * Get the row key column from metadata
  * Returns the data_lookup path (which is how we access the data in the row object)
- * Falls back to key_name if data_lookup is not available, then to 'id'
+ * Priority: backend metadata (is_row_key) > configFallback > 'id'
  */
-export const getRowKeyColumn = (metadataColumns: EntityMetadataColumn[]): string => {
+export const getRowKeyColumn = (metadataColumns: EntityMetadataColumn[], configFallback?: string): string => {
   const rowKeyCol = metadataColumns.find((col) => col.is_row_key);
 
-  if (!rowKeyCol) return 'id'; // No row key column found, fallback to 'id'
+  if (!rowKeyCol) {
+    // No row key column found in metadata, use config fallback or default to 'id'
+    return configFallback || 'id';
+  }
 
   // Use data_lookup if available (this is the actual path in the row data)
   // Extract primary lookup if it has fallbacks with ':' (e.g., "email:details.website_url" -> "email")
@@ -185,7 +188,7 @@ export const getRowKeyColumn = (metadataColumns: EntityMetadataColumn[]): string
   }
 
   // Fallback to key_name if no data_lookup
-  return rowKeyCol.key_name ?? 'id';
+  return rowKeyCol.key_name ?? configFallback ?? 'id';
 };
 
 /**

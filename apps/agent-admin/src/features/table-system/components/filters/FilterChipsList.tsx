@@ -184,7 +184,7 @@ export const FilterChipsList = ({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-4">
       {chips.map((chip) => (
         <div key={chip.key} className="flex items-center gap-2 rounded-md border py-1 pl-3 pr-1 text-sm text-gray-800">
           <span className="font-medium">{chip.filterLabel}:</span>

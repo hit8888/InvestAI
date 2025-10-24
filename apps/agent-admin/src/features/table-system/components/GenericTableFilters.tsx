@@ -129,15 +129,15 @@ export const GenericTableFilters = ({
       {/* Filters toolbar */}
       <div className="flex items-center justify-between gap-4">
         {/* Left side: Filters button + Quick filters + Filter chips */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* Filters popover button */}
           <div className="relative" ref={filtersPopoverRef}>
             <button
               onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-              className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-gray-700 transition-colors ${
+              className={`flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-normal text-gray-500 transition-colors ${
                 isFiltersOpen
                   ? 'border-gray-500 bg-white hover:bg-gray-50'
-                  : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                  : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
               }`}
             >
               <Filter className="h-4 w-4" />
@@ -335,6 +335,9 @@ export const GenericTableFilters = ({
             )}
           </div>
 
+          {/* Separator between filters button and quick filters */}
+          {quickFilters.length > 0 && <div className="h-8 w-px bg-gray-300" />}
+
           {/* Quick filter buttons */}
           {quickFilters.map((quickFilter) => {
             // Check if filter is active - must check key existence for null values
@@ -353,7 +356,7 @@ export const GenericTableFilters = ({
                     onFilterChange(quickFilter.filterField, quickFilter.filterValue);
                   }
                 }}
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                   isActive
                     ? 'border bg-gray-800 text-white hover:bg-gray-700'
                     : 'border-dashed-wide-dark bg-gray-50 text-gray-600 hover:text-gray-800'

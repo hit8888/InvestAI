@@ -42,11 +42,14 @@ const Root = () => {
             'w-full': isLoginPage,
             // Table pages: overflow-hidden (tables handle their own scrolling)
             // Non-table pages: overflow-y-auto (enable vertical scrolling)
-            'max-h-[calc(100vh-32px)] flex-1 rounded-xl border': !isLoginPage,
+            'max-h-[calc(100vh-32px)] min-w-0 flex-1 rounded-xl border': !isLoginPage,
             'overflow-hidden': !isLoginPage && isTableV2Page,
             'overflow-y-auto': !isLoginPage && !isTableV2Page,
             'max-h-full border-0': isTrainingPlaygroundPreviewPage,
           })}
+          style={{
+            contain: 'layout style',
+          }}
         >
           <Outlet />
         </div>

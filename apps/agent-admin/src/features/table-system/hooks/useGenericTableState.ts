@@ -118,9 +118,9 @@ export const useGenericTableState = <TRow = unknown>(
 
   // Get row key column
   const rowKeyColumn = useMemo(() => {
-    if (!entityMetadata?.columns) return 'id';
-    return getRowKeyColumn(entityMetadata.columns);
-  }, [entityMetadata]);
+    if (!entityMetadata?.columns) return config.rowKeyField || 'id';
+    return getRowKeyColumn(entityMetadata.columns, config.rowKeyField);
+  }, [entityMetadata, config.rowKeyField]);
 
   // Column visibility preferences
   const defaultVisibleColumns = useMemo(() => {

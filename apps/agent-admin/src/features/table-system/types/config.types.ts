@@ -23,6 +23,13 @@ export interface TablePageConfig<TRow = unknown> {
   /** Display title for the page */
   pageTitle: string;
 
+  /**
+   * Field name to use as the unique row identifier
+   * Priority: backend entity metadata (is_row_key) > this config value > 'id'
+   * Examples: 'prospect_id', 'id', 'session_id'
+   */
+  rowKeyField?: string;
+
   /** API endpoints configuration */
   api: {
     /** Endpoint to fetch table data (POST with filters/sort/pagination) */

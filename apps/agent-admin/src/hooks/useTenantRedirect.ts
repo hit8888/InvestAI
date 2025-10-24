@@ -30,17 +30,13 @@ export const useTenantRedirect = () => {
       const matchingOrg = organizations.find((org) => org['tenant-name'] === tenantNameParam);
 
       if (matchingOrg) {
-        // If tenant exists and is different from current, update it
+        // URL is source of truth - only update localStorage in background if different
+        // Don't navigate or call setupTenantAndAgent here to avoid race conditions
         if (tenantNameFromStorage !== tenantNameParam) {
-          setupTenantAndAgent(matchingOrg)
-            .then(() => {
-              const newPath = `/${tenantNameParam}${location.pathname.replace(`/${tenantNameParam}`, '')}${location.search}`;
-              navigate(newPath, { replace: true });
-            })
-            .catch(() => {
-              toast.error('Failed to switch organization');
-              navigate('/', { replace: true });
-            });
+          // Silently sync localStorage to URL (background operation, non-blocking)
+          setupTenantAndAgent(matchingOrg).catch((error) => {
+            console.warn('Background tenant sync failed:', error);
+          });
         }
       } else {
         // If tenant doesn't exist in user's organizations, redirect to dashboard
@@ -55,5 +51,5 @@ export const useTenantRedirect = () => {
       const newPath = `/${tenantNameFromStorage}${location.pathname}${location.search}`;
       navigate(newPath, { replace: true });
     }
-  }, [tenantNameParam, navigate, location, userInfo]);
+  }, [tenantNameParam, navigate, location.pathname, location.search, userInfo, isAuthenticated]);
 };

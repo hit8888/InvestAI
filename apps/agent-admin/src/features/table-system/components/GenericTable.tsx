@@ -65,7 +65,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
 
   // Create table instance
   const table = useReactTable({
-    data,
+    data: data || [], // Ensure data is always an array
     columns: tableColumns,
     state: {
       sorting: sortingState,

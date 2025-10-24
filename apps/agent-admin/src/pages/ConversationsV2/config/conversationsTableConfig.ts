@@ -24,6 +24,7 @@ interface ProspectRow extends Record<string, unknown> {
 export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
   pageKey: 'all-chats',
   pageTitle: 'All Chats',
+  rowKeyField: 'prospect_id', // Use prospect_id as the unique identifier for conversations
 
   api: {
     tableData: '/tenant/api/prospects/query/',

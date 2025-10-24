@@ -18,6 +18,7 @@ import GeneratedEmailContent from '../../VisitorsPage/components/CompanyDetailsD
 import RelevantProfilesContent from '../../VisitorsPage/components/CompanyDetailsDrawer/RelevantProfilesContent';
 import BrowsingHistoryContent from '../../VisitorsPage/components/CompanyDetailsDrawer/BrowsingHistoryContent';
 import ConversationDetailsContent from '../../VisitorsPage/components/CompanyDetailsDrawer/ConversationDetailsContent';
+import ErrorContent from '../../VisitorsPage/components/CompanyDetailsDrawer/ErrorContent';
 import type { Employee } from '../../VisitorsPage/components/CompanyDetailsDrawer/types';
 
 interface VisitorRow {
@@ -52,10 +53,16 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
 
-  const { data: sessionData, isLoading: isSessionLoading } = useSessionDetailsQuery(
-    { prospectId: data.prospect_id },
-    { enabled: !!data.prospect_id },
-  );
+  // Get prospect_id from data. The table system should populate the correct field based on:
+  // Priority: backend entity metadata (is_row_key) > config.rowKeyField ('prospect_id') > 'id'
+  // Fallback to id for safety in case of misconfiguration
+  const prospectId = data.prospect_id || String(data.id);
+
+  const {
+    data: sessionData,
+    isLoading: isSessionLoading,
+    isError: isSessionError,
+  } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId, retry: false });
 
   // Show loading if either table is loading or session data is loading
   const isLoading = isTableLoading || isSessionLoading;
@@ -173,6 +180,11 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
     setLeftSideContentMode('relevant-profiles');
     setSelectedEmployee(null);
   };
+
+  // Show error state if session API fails
+  if (isSessionError && !isLoading) {
+    return <ErrorContent onClose={handleCloseDrawer} prospectId={prospectId} />;
+  }
 
   return (
     <div className="relative w-full">

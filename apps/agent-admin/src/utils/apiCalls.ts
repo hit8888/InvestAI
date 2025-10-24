@@ -24,6 +24,22 @@ export const getAgentIdFromTenant = async (): Promise<number | null> => {
   return null;
 };
 
+const TENANT_SWITCH_TIMESTAMP_KEY = 'tenant_switch_timestamp';
+const TENANT_SWITCH_FLAG_KEY = 'tenant_switch_in_progress';
+
+export const markTenantSwitchStart = () => {
+  localStorage.setItem(TENANT_SWITCH_FLAG_KEY, 'true');
+  localStorage.setItem(TENANT_SWITCH_TIMESTAMP_KEY, Date.now().toString());
+};
+
+export const markTenantSwitchComplete = () => {
+  localStorage.removeItem(TENANT_SWITCH_FLAG_KEY);
+};
+
+export const isTenantSwitchInProgress = (): boolean => {
+  return localStorage.getItem(TENANT_SWITCH_FLAG_KEY) === 'true';
+};
+
 export const setupTenantAndAgent = async (tenantData: OrganizationDetailsResponse) => {
   setTenantIdentifier(tenantData);
   const agentId = await getAgentIdFromTenant();
@@ -36,6 +52,14 @@ export const setupTenantAndAgent = async (tenantData: OrganizationDetailsRespons
   } else {
     toast.error('No agents found for tenant');
   }
+};
+
+export const wasRecentTenantSwitch = (withinMs: number = 500): boolean => {
+  const timestamp = localStorage.getItem(TENANT_SWITCH_TIMESTAMP_KEY);
+  if (!timestamp) return false;
+
+  const elapsed = Date.now() - parseInt(timestamp, 10);
+  return elapsed < withinMs;
 };
 
 export const getWebsocketBaseUrl = () => {
