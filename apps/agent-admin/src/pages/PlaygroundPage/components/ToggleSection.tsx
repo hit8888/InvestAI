@@ -24,7 +24,7 @@ const ToggleSection: React.FC<ToggleSectionProps> = ({ field, label, tooltip }) 
             content={tooltip}
             trigger={<Info className="h-4 w-4 text-primary" />}
             tooltipSide="top"
-            tooltipAlign="center"
+            tooltipAlign="start"
           />
         </div>
         <FormItem>

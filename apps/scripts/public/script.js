@@ -4,9 +4,7 @@ const CONFIG = {
   QUERY_PREFIX: "bo_",
   SELECTORS: {
     FORM: "#widget_form",
-    WIDGET_PREVIEW: "#widget-preview-panel",
-    EMBEDDED_WIDGET: "#embedded-widget",
-    CONFIG_PANEL: ".container > .panel:not(#widget-preview-panel)",
+    CONFIG_PANEL: ".container > .panel",
     STATIC_CONTENT: "#static-content",
     BRAND_COVER_CONTAINER: "#breakout-bc-container",
   },
@@ -140,7 +138,15 @@ function resetStorage() {
 }
 
 // Initialize
-document.addEventListener("DOMContentLoaded", () => {
+function initialize() {
   const loaded = loadWidgetFromQueryParams();
   if (!loaded) UIController.showForm();
-});
+}
+
+// Check if DOM is already loaded
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initialize);
+} else {
+  // DOM is already loaded, run immediately
+  initialize();
+}

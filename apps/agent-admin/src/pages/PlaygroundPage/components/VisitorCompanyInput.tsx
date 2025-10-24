@@ -21,7 +21,7 @@ const VisitorCompanyInput: React.FC<VisitorCompanyInputProps> = ({ field }) => {
           content="Enter the company name of the user whose experience you want to simulate"
           trigger={<Info className="h-4 w-4 text-primary" />}
           tooltipSide="top"
-          tooltipAlign="center"
+          tooltipAlign="start"
         />
       </div>
       <FormItem>
