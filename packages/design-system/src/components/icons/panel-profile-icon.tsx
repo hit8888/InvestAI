@@ -4,10 +4,10 @@ import React from 'react';
 type Props = React.SVGProps<SVGSVGElement>;
 
 const PanelProfileIcon = ({
-  className = 'text-primary',
+  className = '',
   width = 16,
   height = 16,
-  color = '#4E46DC',
+  color = '',
   viewBox = '0 0 16 16',
   ...props
 }: Props) => {

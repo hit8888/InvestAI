@@ -1,4 +1,5 @@
-import { Button, Typography } from '@meaku/saral';
+import { Button, Markdown, Typography } from '@meaku/saral';
+import useFeatureConfig from '../../../hooks/useFeatureConfig';
 
 interface SummaryInitialProps {
   onSummarize: () => void;
@@ -6,8 +7,16 @@ interface SummaryInitialProps {
 }
 
 export const SummaryInitial = ({ onSummarize, isSummarizing }: SummaryInitialProps) => {
+  const featureConfig = useFeatureConfig('SUMMARIZE');
+  const description = featureConfig?.description ?? '';
+
   if (isSummarizing) return null;
-  return (
+
+  return description.length > 0 ? (
+    <div className="w-full flex flex-col items-start justify-start p-4">
+      <Markdown markdown={description} />
+    </div>
+  ) : (
     <>
       <Typography variant="heading" fontWeight="semibold">
         Sum up in seconds

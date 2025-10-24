@@ -1,4 +1,8 @@
 import { AppRoutesEnum } from './constants';
+import PanelAiBlocksIcon from '@breakout/design-system/components/icons/panel-ai-blocks-icon';
+import PanelAiBlocksActiveIcon from '@breakout/design-system/components/icons/panel-ai-blocks-active-icon';
+import PanelPlaygroundV2Icon from '@breakout/design-system/components/icons/panel-playground-v2-icon';
+import PanelPlaygroundV2ActiveIcon from '@breakout/design-system/components/icons/panel-playground-v2-active-icon';
 import {
   CalendarIcon,
   MessageSquareText,
@@ -10,7 +14,6 @@ import {
   Users,
   ToyBrick,
   CircleUser,
-  Gamepad2,
   Brain,
   MessagesSquare,
 } from 'lucide-react';
@@ -121,10 +124,17 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
+    navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
+    navItem: 'AI Blocks',
+    icon: PanelAiBlocksIcon,
+    activeIcon: PanelAiBlocksActiveIcon,
+    accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
+  },
+  {
     navUrl: `/${AppRoutesEnum.TRAINING_PLAYGROUND}`, // Disabled - coming soon
     navItem: 'Playground',
-    icon: Gamepad2,
-    activeIcon: Gamepad2,
+    icon: PanelPlaygroundV2Icon,
+    activeIcon: PanelPlaygroundV2ActiveIcon,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
 ];

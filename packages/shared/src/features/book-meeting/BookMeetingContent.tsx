@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { MessageEventType, SendUserMessageParams } from '../../types/message';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { BookMeetingIcon, Typography } from '@meaku/saral';
+import { BookMeetingIcon } from '@meaku/saral';
 import { WaveLoader } from '../../components/WaveLoader';
 import { useWsClient } from '../../hooks/useWsClient';
 import { FeatureContentProps } from '../';
@@ -9,12 +9,12 @@ import BookMeetingFlowContainer from './components/BookMeetingFlowContainer';
 import useBookMeetingContentHelper from './hooks/useBookMeetingContentHelper';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 import MessageErrorBoundary from '../../components/MessageErrorBoundary';
+import { Markdown } from '@meaku/saral';
 
 const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const { sendUserMessage } = useWsClient();
   const featureConfig = useFeatureConfig('BOOK_MEETING');
-  const headerTitle = featureConfig?.module_configs?.header ?? '';
-  const subHeaderTitle = featureConfig?.module_configs?.sub_header ?? '';
+  const description = featureConfig?.description ?? '';
 
   const handleSendUserMessage = useCallback(
     (data: SendUserMessageParams) => {
@@ -65,9 +65,8 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
       <div className="flex-1 flex flex-col items-center justify-center">
         <MessageErrorBoundary message={formArtifactMessage}>
           <FormArtifactMessage
-            showMessage={!!(formArtifactMessage && !formFilledMessage && (headerTitle || subHeaderTitle))}
-            headerTitle={headerTitle}
-            subHeaderTitle={subHeaderTitle}
+            showMessage={!!(formArtifactMessage && !formFilledMessage && description)}
+            description={description}
           />
           {getContent()}
         </MessageErrorBoundary>
@@ -77,23 +76,17 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
 };
 
 interface FormArtifactMessageProps {
-  headerTitle: string;
-  subHeaderTitle: string;
+  description: string;
   showMessage: boolean;
 }
 
-const FormArtifactMessage = ({ headerTitle, subHeaderTitle, showMessage }: FormArtifactMessageProps) => {
+const FormArtifactMessage = ({ description, showMessage }: FormArtifactMessageProps) => {
   if (!showMessage) {
     return null;
   }
   return (
-    <div className="w-full flex flex-col p-4 gap-4 items-start justify-start">
-      <Typography variant="heading" fontWeight="semibold">
-        {headerTitle}
-      </Typography>
-      <Typography variant="body" className="text-gray-400">
-        {subHeaderTitle}
-      </Typography>
+    <div className="w-full flex flex-col items-start justify-start p-4">
+      <Markdown markdown={description} />
     </div>
   );
 };

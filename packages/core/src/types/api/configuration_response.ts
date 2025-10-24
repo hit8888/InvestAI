@@ -79,6 +79,7 @@ export const CommandBarModuleConfigSchema = z.object({
   icon: z.string(),
   module_type: CommandBarModuleTypeSchema,
   tooltip_text: z.string(),
+  description: z.string(),
   base_priority: z.number(),
   module_configs: z.record(z.string(), z.any()),
   // Optional custom icon and banner assets

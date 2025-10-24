@@ -28,6 +28,8 @@ const BannerConfigSchema = z.object({
   subheader: z.string().optional().nullish(),
 });
 
+const commandBarPositionSchema = z.enum(['bottom_center', 'bottom_right']);
+
 // Base schema with common fields
 const baseAgentConfigSchema = z.object({
   name: z.string(),
@@ -50,6 +52,19 @@ const baseAgentConfigSchema = z.object({
       entry_point_alignment: z.string(),
       entry_point_alignment_mobile: z.string().optional(),
     }),
+    'command_bar:command_bar': z
+      .object({
+        position: commandBarPositionSchema.optional(),
+        agent_sound_enabled: z.boolean().optional(),
+        max_modules_to_show: z.number().optional(),
+        dynamic_config_start_delay_ms: z.number().optional(),
+        nudge_sound_enabled: z.boolean().optional(),
+        nudge_polling_enabled: z.boolean().optional(),
+        nudge_polling_start_delay_ms: z.number().optional(),
+        nudge_polling_frequency_ms: z.number().optional(),
+        nudge_max_polling_count: z.number().optional(),
+      })
+      .optional(),
     'response_generation:prompt': z
       .object({
         response_size_type: z.enum(['STANDARD', 'DETAILED', 'BRIEF']),

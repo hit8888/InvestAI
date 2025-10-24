@@ -2,9 +2,10 @@ import SourcesUrlLinkIcon from '@breakout/design-system/components/icons/sources
 import Input from '@breakout/design-system/components/layout/input';
 import { cn } from '@breakout/design-system/lib/cn';
 
-type DataSourceURLLinkInputProps = {
+type URLLinkInputProps = {
   inputValue: string;
   classname?: string;
+  placeholder?: string;
   error?: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onInputBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -12,7 +13,7 @@ type DataSourceURLLinkInputProps = {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-const DataSourceURLLinkInput = ({
+const URLLinkInput = ({
   inputValue,
   onInputChange,
   onInputBlur,
@@ -20,7 +21,8 @@ const DataSourceURLLinkInput = ({
   onKeyDown,
   classname,
   error,
-}: DataSourceURLLinkInputProps) => {
+  placeholder = 'Enter video URL and press Enter',
+}: URLLinkInputProps) => {
   return (
     <div className="relative w-full">
       <SourcesUrlLinkIcon width="16" height="16" className="absolute left-4 top-3.5 text-gray-400" />
@@ -37,7 +39,7 @@ const DataSourceURLLinkInput = ({
         onBlur={onInputBlur}
         onFocus={onInputFocus}
         onKeyDown={onKeyDown}
-        placeholder="Enter video URL and press Enter"
+        placeholder={placeholder}
         aria-invalid={!!error}
         aria-describedby={error ? 'url-error' : undefined}
       />
@@ -50,4 +52,4 @@ const DataSourceURLLinkInput = ({
   );
 };
 
-export default DataSourceURLLinkInput;
+export default URLLinkInput;

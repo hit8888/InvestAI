@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Typography from '@breakout/design-system/components/Typography/index';
-import ImageUploadPattern from '@breakout/design-system/components/Patterns/ImageUploadPattern';
+import SourcesDragDropPattern from '@breakout/design-system/components/icons/sources-dragdrop-patterns';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import AgentConfigUploadIcon from '@breakout/design-system/components/icons/agent-config-upload-icon';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -30,7 +30,7 @@ interface ImagePreviewProps {
 
 const ImagePreviewComponent: React.FC<ImagePreviewProps> = ({ imagePreview, isSquareLogo, isUploading }) => (
   <>
-    <img src={imagePreview} alt="Uploaded logo" className="h-full w-full rounded-lg object-contain" />
+    <img src={imagePreview} alt="Uploaded logo" className="h-full w-full rounded-lg object-cover" />
     <div className="absolute inset-0 flex items-center justify-center gap-2 rounded-md bg-system/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
       {!isSquareLogo && !isUploading && (
         <Typography variant="label-16-medium" className="text-white">
@@ -49,8 +49,8 @@ interface UploadPlaceholderProps {
 
 const UploadPlaceholderComponent: React.FC<UploadPlaceholderProps> = ({ isUploading, isSquareLogo }) => (
   <>
-    <ImageUploadPattern />
-    <div className="relative z-10 flex flex-col items-center">
+    <SourcesDragDropPattern className="left-0 top-0 z-10 rounded-lg object-center" />
+    <div className="absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center">
       {isUploading ? (
         <Typography variant={'caption-10-medium'} className="animate-pulse text-primary/60">
           {isSquareLogo ? '...' : 'Uploading...'}
@@ -73,6 +73,7 @@ interface AgentImageUploadProps {
   isSquareLogo?: boolean;
   initialImage?: string | null;
   onImageUpdate?: (image: string, assetData?: AssetResponse) => void;
+  tooltipText?: string;
 }
 
 const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
@@ -81,18 +82,30 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   isSquareLogo,
   initialImage,
   onImageUpdate,
+  tooltipText,
 }) => {
   const agentId = getTenantActiveAgentId();
   const [imagePreview, setImagePreview] = useState<string | null>(initialImage ?? null);
   const [isUploading, setIsUploading] = useState(false);
 
+  useEffect(() => {
+    if (initialImage && initialImage.length > 0) {
+      setImagePreview(initialImage ?? null);
+    }
+  }, [initialImage]);
+
   const handleCropCompleteInternal = async (croppedImageBlob: Blob) => {
     try {
       setIsUploading(true);
 
-      // Convert blob to file
-      const croppedFile = new File([croppedImageBlob], 'cropped-image.png', {
-        type: 'image/png',
+      // Get the original file extension and type
+      const originalFileName = selectedFile?.name || 'cropped-image.png';
+      const fileExtension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+      const fileType = selectedFile?.type || 'image/png';
+
+      // Convert blob to file with original extension and type
+      const croppedFile = new File([croppedImageBlob], `cropped-image${fileExtension}`, {
+        type: fileType,
       });
 
       const { status, error } = checkFileSize(croppedFile, THREE_HUNDRED_MB);
@@ -145,7 +158,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   const getTooltipContentElement = () => {
     return (
       <Typography variant={'caption-12-medium'} textColor={'white'}>
-        Please upload the {isSquareLogo ? 'Favicon' : 'Full Logo'}
+        {tooltipText || `Please upload the ${isSquareLogo ? 'Favicon' : 'Full Logo'}`}
       </Typography>
     );
   };
@@ -157,7 +170,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       className={cn(
         'group relative flex aspect-square cursor-pointer items-center justify-center self-stretch rounded-lg border border-primary/60',
         {
-          'px-2 py-1': !!imagePreview?.length,
+          'px-1 py-1': !!imagePreview?.length,
           'border-dashed': !imagePreview?.length,
           'cursor-not-allowed opacity-50': isDisabled,
         },
@@ -176,7 +189,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
       <input
         type="file"
         ref={fileInputRef}
-        className="hidden"
+        className="hidden h-full w-full"
         accept="image/*"
         onClick={() => {
           if (fileInputRef.current) fileInputRef.current.value = '';
@@ -197,8 +210,9 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
           trigger={<UploadPlaceholderComponent isUploading={isUploading || isProcessing} isSquareLogo={isSquareLogo} />}
           content={getTooltipContentElement()}
           tooltipAlign="center"
+          tooltipSideOffsetValue={32}
           showArrow={false}
-          alwaysVisible={true}
+          alwaysVisible={false}
         />
       )}
 
@@ -210,6 +224,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         onCropComplete={handleCropComplete}
         outputWidth={isSquareLogo ? 60 : 240}
         outputHeight={isSquareLogo ? 60 : 60}
+        outputMimeType={selectedFile?.type || 'image/png'}
       />
     </div>
   );

@@ -48,6 +48,8 @@ import PanelIntegrationsIcon from '@breakout/design-system/components/icons/pane
 import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
 import CalendarIcon from '@breakout/design-system/components/icons/panel-calendar-icon';
 import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
+import PanelAIBlocksIcon from '@breakout/design-system/components/icons/panel-ai-blocks-icon';
+import PanelAIBlocksActiveIcon from '@breakout/design-system/components/icons/panel-ai-blocks-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
@@ -430,6 +432,7 @@ export enum AppRoutesEnum {
   ICP = 'icp',
   COMPANIES = 'companies',
   VISITORS_V2 = 'visitors',
+  AI_BLOCKS = 'ai-blocks',
 }
 
 export enum SidebarNavItemsEnum {
@@ -446,6 +449,7 @@ export enum SidebarNavItemsEnum {
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
   INSIGHT_LABEL = 'Insights',
+  AI_BLOCKS_LABEL = 'AI Blocks',
   INTEGRATIONS_LABEL = 'Integrations',
   PROFILE_LABEL = 'Profile',
 }
@@ -791,6 +795,12 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
     navItem: SidebarNavItemsEnum.CONVERSATIONS_LABEL,
     icon: PanelConversationIcon,
     activeIcon: PanelConversationActiveIcon,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
+    navItem: SidebarNavItemsEnum.AI_BLOCKS_LABEL,
+    icon: PanelAIBlocksIcon,
+    activeIcon: PanelAIBlocksActiveIcon,
   },
   {
     navUrl: `/${AppRoutesEnum.AGENT}`,

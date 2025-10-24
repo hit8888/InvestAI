@@ -400,13 +400,6 @@ const MultiSelectDropdown = ({
     return !existsInOptions;
   }, [allowCustomOptions, searchable, searchValue, filteredOptions.length, allOptions]);
 
-  const renderSelectedValues = () => {
-    if (renderValueType === 'string') {
-      return selectedValues.join(', ');
-    }
-    return <DynamicBadgeRenderer selectedValues={selectedValues} allOptions={allOptions} onRemove={handleRemove} />;
-  };
-
   const getTriggeredButton = () => {
     return (
       <button
@@ -422,9 +415,11 @@ const MultiSelectDropdown = ({
           {selectedValues.length === 0 ? (
             <span className="text-sm capitalize text-gray-400">{placeholderLabel}</span>
           ) : renderValueType === 'string' ? (
-            <span className="truncate text-sm capitalize">{renderSelectedValues()}</span>
+            <span className="truncate text-sm capitalize">{selectedValues.join(', ')}</span>
           ) : (
-            <div className="text-sm">{renderSelectedValues()}</div>
+            <div className="text-sm">
+              <DynamicBadgeRenderer selectedValues={selectedValues} allOptions={allOptions} onRemove={handleRemove} />
+            </div>
           )}
         </div>
         <ChevronDown className={cn('h-4 w-4 flex-shrink-0', isOpen && 'rotate-180')} />

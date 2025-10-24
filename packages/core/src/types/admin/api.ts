@@ -1242,6 +1242,68 @@ export const IcpConfigResponseSchema = z.object({
 });
 export type IcpConfigResponse = z.infer<typeof IcpConfigResponseSchema>;
 
+// AI Blocks
+export const BlockTypeEnum = z.enum([
+  'ASK_AI',
+  'BOOK_MEETING',
+  'SUMMARIZE',
+  'VIDEO_LIBRARY',
+  'TALK_TO_HUMAN',
+  'IFRAME',
+  'DEMO_LIBRARY',
+]);
+export type BlockType = z.infer<typeof BlockTypeEnum>;
+
+export const VisibilityConditionSchema = z.object({
+  operator: z.string(),
+  value: z.string(),
+});
+export type VisibilityCondition = z.infer<typeof VisibilityConditionSchema>;
+
+export const BlockSchema = z.object({
+  id: z.number(),
+  agent_id: z.number(),
+  type: BlockTypeEnum,
+  name: z.string(),
+  description: z.string().optional(),
+  tooltip: z.string().optional(),
+  is_active: z.boolean(),
+  priority: z.number(),
+  always_available: z.boolean(),
+  module_specific_config: z.record(z.any()).optional(),
+  icon_asset: AssetSchema.nullable().optional(),
+  banner: AssetSchema.nullable().optional(),
+  visibility_conditions: z.array(VisibilityConditionSchema).nullable(),
+  created_on: z.string().optional(),
+  updated_on: z.string().optional(),
+  deleted_at: z.string().nullable().optional(),
+});
+export type Block = z.infer<typeof BlockSchema>;
+
+export const BlocksResponseSchema = z.array(BlockSchema);
+export type BlocksResponse = z.infer<typeof BlocksResponseSchema>;
+
+export const UpdateBlockPayloadSchema = z
+  .object({
+    name: z.string().optional(),
+    description: z.string().optional(),
+    tooltip: z.string().optional(),
+    is_active: z.boolean().optional(),
+    priority: z.number().optional(),
+    always_available: z.boolean().optional(),
+    module_specific_config: z.record(z.any()).optional(),
+    icon_asset_id: z.string().nullable().optional(),
+    banner_id: z.string().nullable().optional(),
+    visibility_conditions: z.array(VisibilityConditionSchema).optional(),
+  })
+  .partial();
+export type UpdateBlockPayload = z.infer<typeof UpdateBlockPayloadSchema>;
+
+export const BlockErrorResponseSchema = z.object({
+  error: z.string(),
+});
+export type BlockErrorResponse = z.infer<typeof BlockErrorResponseSchema>;
+
 // Video Validation
 export const VideoTypeEnum = z.enum(['YOUTUBE', 'VIMEO', 'WISTIA', 'OTHER', 'VIDEO']);
 export type VideoType = z.infer<typeof VideoTypeEnum>;

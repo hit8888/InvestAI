@@ -82,6 +82,7 @@ const UploadPictureButton = ({ onUpload, isUploading }: UploadPictureButtonProps
         onCropComplete={handleCropComplete}
         outputWidth={84}
         outputHeight={84}
+        outputMimeType={selectedFile?.type || 'image/png'}
       />
       <Button
         variant="primary"

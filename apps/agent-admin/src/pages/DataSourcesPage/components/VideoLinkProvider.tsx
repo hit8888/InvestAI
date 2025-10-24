@@ -6,7 +6,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import React, { useRef, useState } from 'react';
 import { useVideoValidationMutation } from '../../../queries/mutation/useVideoValidationMutation';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
-import DataSourceURLLinkInput from './DataSourceURLLinkInput';
+import URLLinkInput from '@breakout/design-system/components/layout/URLLinkInput';
 import { VideoValidationResponse } from '@meaku/core/types/admin/api';
 import { uploadAssetsFromUrl } from '@meaku/core/adminHttp/api';
 
@@ -178,7 +178,7 @@ const VideoLinkProvider = () => {
       <div className="flex w-full flex-col gap-2">
         <Typography variant="caption-12-medium">Paste a video link</Typography>
         <div className="relative">
-          <DataSourceURLLinkInput
+          <URLLinkInput
             classname="w-full"
             onInputBlur={handleVideoLinkBlur}
             onInputFocus={handleInputFocus}

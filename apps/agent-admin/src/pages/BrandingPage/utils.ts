@@ -112,6 +112,13 @@ export const handleConfigUpdate = async (
               DEFAULT_FONT_CONFIG.font_url,
           },
         },
+        'command_bar:command_bar': {
+          ...(agentConfigs.configs['command_bar:command_bar'] ?? {}),
+          position:
+            (updateField.configs?.['command_bar:command_bar']?.position ??
+              agentConfigs.configs['command_bar:command_bar']?.position) ||
+            'bottom_right',
+        },
       },
     };
 

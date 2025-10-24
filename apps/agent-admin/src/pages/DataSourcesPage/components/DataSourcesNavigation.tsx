@@ -1,7 +1,7 @@
 import { useDataSources } from '../../../context/DataSourcesContext';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbList } from '@breakout/design-system/components/shadcn-ui/breadcrumb';
-import { BreadcrumbItemComponent } from '../../../components/ConversationDetailsComp/BreadcrumbItemComponent';
+import { BreadcrumbItemComponent } from '../../../components/common/BreadcrumbItemComponent';
 
 const DataSourcesNavigation = () => {
   const { selectedType, toggleDataSourceSelectedType } = useDataSources();

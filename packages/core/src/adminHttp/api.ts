@@ -62,6 +62,9 @@ import {
   BaseFilePayload,
   VideoValidationRequest,
   VideoValidationResponse,
+  BlocksResponse,
+  Block,
+  UpdateBlockPayload,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -411,6 +414,16 @@ export const getIcpConfig = (agentId: number) =>
 
 export const updateIcpConfig = (agentId: number, payload: Partial<IcpConfigPayload>) =>
   adminApiClient.patch(`/tenant/api/agent/${agentId}/icp-config/`, payload);
+
+// AI Blocks API
+export const getBlocks = (agentId: number) =>
+  adminApiClient.get<BlocksResponse>(`/tenant/api/agent/${agentId}/blocks/`);
+
+export const getBlock = (agentId: number, blockId: number) =>
+  adminApiClient.get<Block>(`/tenant/api/agent/${agentId}/blocks/${blockId}/`);
+
+export const updateBlock = (agentId: number, blockId: number, payload: UpdateBlockPayload) =>
+  adminApiClient.patch<Block>(`/tenant/api/agent/${agentId}/blocks/${blockId}/`, payload);
 
 // Video validation API
 export const validateVideoUrls = (payload: VideoValidationRequest) =>

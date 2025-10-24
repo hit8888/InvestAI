@@ -35,6 +35,7 @@ const usePageRouteState = () => {
 
   const isAgentPage = location.pathname.match(/\/agent\/?$/) !== null;
   const isTrainingPage = location.pathname.match(/\/training\/?$/) !== null;
+  const isAIBlocksPage = location.pathname.match(/\/ai-blocks\/?$/) !== null;
 
   // Detect V2 table pages that handle their own scrolling
   // Use exact matches or trailing slash matches to avoid matching detail pages
@@ -65,6 +66,7 @@ const usePageRouteState = () => {
     isTrainingPlaygroundPreviewPage,
     isInsightsPage,
     isTableV2Page,
+    isAIBlocksPage,
     pathURL,
   };
 };

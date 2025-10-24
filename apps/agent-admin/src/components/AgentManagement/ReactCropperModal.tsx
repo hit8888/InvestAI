@@ -12,6 +12,7 @@ interface ReactCropperModalProps {
   outputWidth?: number;
   outputHeight?: number;
   onCropComplete: (croppedImageBlob: Blob) => void;
+  outputMimeType?: string;
 }
 
 const ReactCropperModal: React.FC<ReactCropperModalProps> = ({
@@ -21,6 +22,7 @@ const ReactCropperModal: React.FC<ReactCropperModalProps> = ({
   onCropComplete,
   outputWidth = 240,
   outputHeight = 60,
+  outputMimeType = 'image/png',
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -80,7 +82,7 @@ const ReactCropperModal: React.FC<ReactCropperModalProps> = ({
             onClose();
           }
         },
-        'image/png',
+        outputMimeType,
         1.0,
       );
     } catch (error) {

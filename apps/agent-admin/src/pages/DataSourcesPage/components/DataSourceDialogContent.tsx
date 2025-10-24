@@ -13,7 +13,7 @@ import { DIALOG_LOADING_MESSAGE_MAPPED_OBJECT, SourcesCardTypes } from '../const
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import { useDataSourceAdd } from '../../../hooks/useDataSourceAdd';
 import { useSitemapFetch } from '../../../hooks/useSitemapFetch';
-import DataSourceURLLinkInput from './DataSourceURLLinkInput';
+import URLLinkInput from '@breakout/design-system/components/layout/URLLinkInput';
 import VideoLinkProvider from './VideoLinkProvider';
 
 type DataSourceDialogContentProps = {
@@ -54,7 +54,7 @@ const DataSourceDialogContent = ({ onClose }: DataSourceDialogContentProps) => {
 
     return (
       <form onSubmit={handleFormSubmit} className="flex w-full items-center gap-6 self-stretch">
-        <DataSourceURLLinkInput inputValue={urlLink} onInputChange={handleUrlLinkInputValue} />
+        <URLLinkInput inputValue={urlLink} onInputChange={handleUrlLinkInputValue} />
         <Button type="submit" disabled={isFetchButtonDisabled} variant={'system'} buttonStyle={'rightIcon'}>
           {isFetched && !!dataSources.length ? 'Done' : isFetching ? 'Fetching...' : 'Fetch'}
           {isFetched ? (

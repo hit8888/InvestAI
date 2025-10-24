@@ -22,6 +22,7 @@ import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
 import ControlsPage from '../pages/ControlsPage/index.tsx';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
+import AIBlocksPageContainer from '../pages/AIBlocksPage/index.tsx';
 import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
 import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
@@ -29,6 +30,8 @@ import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
 import ActiveConversationsPage from '../pages/ActiveConversationsPage/ActiveConversationsPage.tsx';
 import CalendarPage from '../pages/CalendarPage/index.tsx';
 import AdminProfilePage from '../pages/AdminProfilePage/index.tsx';
+import AIBlocksPage from '../pages/AIBlocksPage/AIBlocksPage.tsx';
+import DynamicBlockPage from '../pages/AIBlocksPage/DynamicBlockPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
@@ -162,6 +165,20 @@ const routes = [
           {
             path: 'icp',
             element: <ProtectedRoute element={<IcpV2PageContainer />} />,
+          },
+          {
+            path: 'ai-blocks',
+            element: <ProtectedRoute element={<AIBlocksPageContainer />} />,
+            children: [
+              {
+                index: true,
+                element: <ProtectedRoute element={<AIBlocksPage />} />,
+              },
+              {
+                path: ':blockId',
+                element: <ProtectedRoute element={<DynamicBlockPage />} />,
+              },
+            ],
           },
           {
             path: 'settings',

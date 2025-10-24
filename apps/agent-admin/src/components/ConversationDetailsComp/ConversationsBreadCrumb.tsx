@@ -5,7 +5,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList } from '@breakout/design-sys
 import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadcrumb-left-arrow';
 import Separator from '@breakout/design-system/components/layout/separator';
 import ConversationsBreadCrumbShimmer from '../ShimmerComponent/ConversationsBreadCrumbShimmer';
-import { BreadcrumbItemComponent } from './BreadcrumbItemComponent';
+import { BreadcrumbItemComponent } from '../../components/common/BreadcrumbItemComponent';
 import useLocationPath from '@meaku/core/hooks/useLocationPath';
 import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 import { CONVERSATION_TABS, isTabActive } from '../ConversationTabs';

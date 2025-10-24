@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { VideoLibraryIcon } from '@meaku/saral';
+import { Markdown, VideoLibraryIcon } from '@meaku/saral';
 import type { FeatureContentProps } from '../';
 import useVideoLibraryQuery from '../../network/http/queries/useVideoLibraryQuery';
 import { MainVideoPlayer } from './components/MainVideoPlayer';
@@ -178,6 +178,8 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
     );
   };
 
+  const description = featureConfig?.description ?? '';
+
   return (
     <div className="flex w-full h-full flex-col rounded-[20px] border border-border-dark bg-background">
       {/* Sticky Header */}
@@ -189,6 +191,12 @@ const VideoLibraryContent = ({ onClose, setActiveFeature }: FeatureContentProps)
           ctas={[]}
         />
       </div>
+
+      {description.length > 0 && (
+        <div className="w-full flex flex-col items-start justify-start px-4 text-gray-500">
+          <Markdown markdown={description} />
+        </div>
+      )}
 
       {/* Scrollable Content Container */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">

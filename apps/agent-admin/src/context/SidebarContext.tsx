@@ -55,6 +55,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     pathURL,
     isAgentPage,
     isTrainingPage,
+    // isAIBlocksPage,
   } = usePageRouteState();
   const { userInfo } = useAuth();
   const orgList = userInfo?.organizations;

@@ -1,4 +1,16 @@
 // getTenantFromUrl.test.ts
+import { vi } from 'vitest';
+
+// Mock the env module to prevent validation errors
+vi.mock('../types/env', () => ({
+  ENV: {
+    VITE_BASE_API_URL: 'http://localhost:3000',
+    VITE_LOGROCKET_APP_ID: 'test-app-id',
+    VITE_APP_ENV: 'test',
+    VITE_GOOGLE_SSO_CLIENT_ID: 'test-client-id',
+  },
+}));
+
 import { getTenantFromUrl } from './getTenantFromUrl';
 
 describe('getTenantFromUrl', () => {

@@ -1,4 +1,3 @@
-import useAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
 import LLMsTxtContainer from './LLMsTxtContainer';
 import AgentOrbContainer from './AgentOrbContainer';
 import AgentColorsContainer from './AgentColorsContainer';
@@ -6,26 +5,10 @@ import AgentFontStyleContainer from './AgentFontStyleContainer.tsx';
 import AgentLogoAndNameContainer from './AgentLogoAndNameContainer';
 import AgentIntroMessageContainer from './AgentIntroMessageContainer.tsx';
 import PageContainer from '../../components/AgentManagement/PageContainer.tsx';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
+import useBrandingPageAgentConfigsQuery from '../../hooks/useBrandingPageAgentConfigsQuery.tsx';
 
 const BrandingPage = () => {
-  const agentId = getTenantActiveAgentId();
-  const {
-    data: agentConfigs,
-    isLoading,
-    refetch,
-    isError,
-  } = useAgentConfigsQuery({
-    agentId: agentId,
-  });
-
-  const hasError = isError || !agentConfigs || !agentConfigs.configs || Object.keys(agentConfigs.configs).length === 0;
-
-  const commonProps = {
-    agentId: Number(agentId),
-    agentConfigs: agentConfigs!,
-    onUpdate: refetch,
-  };
+  const { isLoading, hasError, commonProps } = useBrandingPageAgentConfigsQuery();
   return (
     <PageContainer isLoading={isLoading} heading={'Branding'} error={hasError}>
       <AgentIntroMessageContainer {...commonProps} />
