@@ -414,7 +414,7 @@ export enum AppRoutesEnum {
   LINK_CLICKS = 'conversations/link-clicks',
   ACTIVE_CONVERSATIONS = 'active-conversations',
   AGENT = 'agent',
-  AGENT_DATA_SOURCES = 'agent/data-sources',
+  AGENT_KNOWLEDGE_BASE = 'agent/knowledge-base',
   AGENT_WORKFLOW = 'agent/workflow',
   AGENT_BRANDING = 'agent/branding',
   AGENT_ENTRYPOINTS = 'agent/entrypoints',
@@ -440,7 +440,7 @@ export enum SidebarNavItemsEnum {
   ACTIVE_CONVERSATIONS_LABEL = 'Live Visitors',
   VISITORS_LABEL = 'Visitor List',
   AGENT_LABEL = 'Agent',
-  AGENT_DATA_SOURCES_LABEL = 'Data Sources',
+  AGENT_KNOWLEDGE_BASE_LABEL = 'Knowledge Base',
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
   AGENT_ENTRYPOINTS_LABEL = 'Entry Points',
@@ -809,8 +809,8 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
     activeIcon: PanelAgentActiveIcon,
     children: [
       {
-        navUrl: `/${AppRoutesEnum.AGENT_DATA_SOURCES}`,
-        navItem: SidebarNavItemsEnum.AGENT_DATA_SOURCES_LABEL,
+        navUrl: `/${AppRoutesEnum.AGENT_KNOWLEDGE_BASE}`,
+        navItem: SidebarNavItemsEnum.AGENT_KNOWLEDGE_BASE_LABEL,
       },
       {
         navUrl: `/${AppRoutesEnum.AGENT_BRANDING}`,

@@ -1,4 +1,3 @@
-import Card from '../../components/AgentManagement/Card';
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import Button from '@breakout/design-system/components/Button/index';
 import { Check, EditIcon } from 'lucide-react';
@@ -10,7 +9,7 @@ type IProps = {
 };
 const FilledSupportData = ({ supportData, handleEdit }: IProps) => {
   return (
-    <Card background={'GRAY25'} border={'GRAY200'}>
+    <>
       {SUPPORT_CONFIG.filter((item) => supportData[item.id]).map((item, index) => (
         <InfoCard
           icon={Check}
@@ -20,11 +19,11 @@ const FilledSupportData = ({ supportData, handleEdit }: IProps) => {
         />
       ))}
       <div className="flex w-full justify-end">
-        <Button variant="primary" buttonStyle="rightIcon" rightIcon={<EditIcon />} onClick={handleEdit}>
+        <Button variant="system_secondary" buttonStyle="rightIcon" rightIcon={<EditIcon />} onClick={handleEdit}>
           Edit
         </Button>
       </div>
-    </Card>
+    </>
   );
 };
 

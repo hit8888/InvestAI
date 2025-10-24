@@ -10,6 +10,9 @@ import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 import { handleConfigUpdate } from '../../../pages/BrandingPage/utils';
 import TextArea from '@breakout/design-system/components/TextArea/index';
 import { Asset } from '@meaku/core/types/common';
+import { CommonControls, ControlsTitleEnum } from '../../ControlsPage/utils';
+import SinglePromptTextarea from '../../ControlsPage/SinglePromptTextarea';
+const { AGENT_PERSONALITY } = ControlsTitleEnum;
 
 export interface AskAiSpecificData {
   avatar: string;
@@ -42,6 +45,7 @@ const AskAISpecificSection = ({
   data,
   handleDataChange,
 }: AskAISpecificSectionProps) => {
+  const agentPersonality = CommonControls.find((control) => control.title === AGENT_PERSONALITY)!;
   const handleOnBlurForIntroduction = (e: React.FocusEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     const introduction = e.target.value;
@@ -155,8 +159,6 @@ const AskAISpecificSection = ({
         </div>
       </div>
 
-      <SeparatorLine />
-
       {/* Block Introduction */}
       <div className="flex w-full flex-col gap-3">
         <CardTitleAndDescription title="Introduction" />
@@ -172,6 +174,9 @@ const AskAISpecificSection = ({
           />
         </div>
       </div>
+      <SeparatorLine />
+
+      <SinglePromptTextarea key={AGENT_PERSONALITY} {...agentPersonality} />
     </BrandingSectionContainer>
   );
 };

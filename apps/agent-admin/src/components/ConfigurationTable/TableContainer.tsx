@@ -250,7 +250,7 @@ const TableContainer = ({
         <Button
           type="button"
           disabled={isLoading || isAddBtnDisabled || isBtnDisabled}
-          variant="secondary"
+          variant="system_secondary"
           buttonStyle="rightIcon"
           rightIcon={<PlusIcon className="h-4 w-4" />}
           onClick={handleAddRow}
@@ -261,7 +261,7 @@ const TableContainer = ({
           <Button
             type="submit"
             disabled={isSaveButtonDisabled}
-            variant="primary"
+            variant="system_secondary"
             buttonStyle="rightIcon"
             rightIcon={<SaveIcon className="h-4 w-4" />}
           >

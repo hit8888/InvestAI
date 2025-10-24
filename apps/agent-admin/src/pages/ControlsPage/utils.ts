@@ -14,9 +14,9 @@ export const CONTROLS_PAGE_HEADER_DESCRIPTION =
   'Set up your own rules to guide the assistant’s behavior. This field allows you to write specific instructions in plain English.';
 
 export const ControlsTitleEnum = {
-  AGENT_PERSONALITY: 'Agent Personality',
+  AGENT_PERSONALITY: 'Personality',
   INSTRUCTIONS: 'Instructions',
-  AGENT_RESPONSE_WORD_COUNT: 'Agent Response Word Count',
+  AGENT_RESPONSE_LENGTH: 'Response Length',
   PRODUCT_DESCRIPTION: 'Product Description',
   SUPPORT: 'Support',
   IDEAL_CUSTOMER_PERSONA: 'Ideal Customer Persona',
@@ -26,7 +26,7 @@ export const ControlsTitleEnum = {
 const {
   AGENT_PERSONALITY,
   INSTRUCTIONS,
-  AGENT_RESPONSE_WORD_COUNT,
+  AGENT_RESPONSE_LENGTH,
   PRODUCT_DESCRIPTION,
   SUPPORT,
   IDEAL_CUSTOMER_PERSONA,
@@ -39,7 +39,7 @@ export const CommonControls: CommonControlsProps[] = [
     promptType: 'trait',
     textareaPlaceholder: 'Describe how the assistant should interact with users…',
     exampleDescription: 'Act as a helpful and clear product expert who guides users with confidence and empathy.',
-    description: `Guide your AI assistant's behavior and personality to optimize its interactions.`,
+    description: `Define how you want your agent's personality to be. You want them to be casual or formal, fun or serious etc.`,
     infoTitle: 'Instruction for Agent Personality:',
   },
   {
@@ -52,11 +52,11 @@ export const CommonControls: CommonControlsProps[] = [
     infoTitle: 'General Instructions:',
   },
   {
-    title: AGENT_RESPONSE_WORD_COUNT,
+    title: AGENT_RESPONSE_LENGTH,
     promptType: '',
     textareaPlaceholder: '',
     exampleDescription: '',
-    description: `Select the style of agent responses. Brief, standard or detailed.`,
+    description: `Define the ideal length for the AI assistant's responses. Use this to control conciseness or provide more detailed answers.`,
     infoTitle: '',
   },
   {
@@ -97,7 +97,7 @@ export const CommonControls: CommonControlsProps[] = [
     promptType: '',
     textareaPlaceholder: '',
     exampleDescription: '',
-    description: `Set a default message to guide users when they have support-related questions. You can include an email address, a link to a help page, or both. This message will be shown when users ask for help or support.`,
+    description: `Define how you want the agent to handle support queries. It can redirect them to a help page, share an email address or a phone number.`,
     infoTitle: '',
   },
 ];

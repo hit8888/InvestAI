@@ -1,6 +1,4 @@
-import Typography from '@breakout/design-system/components/Typography/index';
 import { useDataSources } from '../../../context/DataSourcesContext';
-import DefaultInfoIcon from '@breakout/design-system/components/icons/sources-default-info-icon';
 import {
   DATA_SOURCES_ACCEPTED_FILE_TYPES,
   DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT,
@@ -26,7 +24,7 @@ const DefaultDialogMessage = () => {
   const getDefaultMessageContent = () => {
     switch (selectedType) {
       case WEBPAGES:
-        return <WebpagesDefaultMessage />;
+        return null;
       case DOCUMENTS:
       case VIDEOS:
       case SLIDES:
@@ -43,22 +41,6 @@ const DefaultDialogMessage = () => {
   };
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-2">{getDefaultMessageContent()}</div>
-  );
-};
-
-const WebpagesDefaultMessage = () => {
-  const { selectedType } = useDataSources();
-  const message =
-    DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT[selectedType as keyof typeof DIALOG_DEFAULT_MESSAGE_MAPPED_OBJECT];
-  return (
-    <div className="flex max-w-md flex-col items-center gap-2">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-200 p-2.5">
-        <DefaultInfoIcon className="text-gray-400" width="16" height="16" />
-      </div>
-      <Typography variant={'body-16'} align={'center'} textColor={'gray500'}>
-        {message}
-      </Typography>
-    </div>
   );
 };
 

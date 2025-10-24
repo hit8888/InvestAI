@@ -1,4 +1,4 @@
-export const KNOWLEDGE_SOURCES_TITLE = 'Knowledge Sources';
+export const KNOWLEDGE_SOURCES_TITLE = 'Sources';
 export const ARTIFACTS_SOURCES_TITLE = 'Artifacts';
 export const DEMO_ASSETS_SOURCES_TITLE = 'Demo Assets';
 

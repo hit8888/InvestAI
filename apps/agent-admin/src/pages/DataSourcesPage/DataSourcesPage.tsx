@@ -1,6 +1,5 @@
 import {
   ARTIFACTS_SOURCES_TITLE,
-  DEMO_ASSETS_SOURCES_TITLE,
   DOCUMENTS_TITLE,
   KNOWLEDGE_SOURCES_TITLE,
   SLIDES_TITLE,
@@ -24,6 +23,7 @@ import CreateCustomDocumentButton from './components/CreateCustomDocumentButton'
 import { useEffect } from 'react';
 import { DOCUMENTS_PAGE } from '../../../../../packages/core/src';
 import { useParams } from 'react-router-dom';
+import AgentControlsSection from './AgentControlsSection';
 
 const DataSourcesPage = () => {
   const { selectedType } = useDataSources();
@@ -56,18 +56,15 @@ const DataSourcesPage = () => {
   const artifactsSourcesData = {
     VIDEOS: dataSourcesData?.VIDEO,
     SLIDES: dataSourcesData?.SLIDE,
-  };
-
-  const demoAssetsData = {
     FEATURES: dataSourcesData?.FEATURES,
   };
 
   if (!selectedType) {
     return (
-      <PageContainer isLoading={isLoading} error={error} className="max-w-3xl gap-6" heading="Data Sources">
+      <PageContainer isLoading={isLoading} error={error} className="max-w-3xl gap-8" heading="Knowledge Base">
         <KnowledgeSourcesContent dataSourcesData={knowledgeSourcesData} />
         <ArtifactsContent dataSourcesData={artifactsSourcesData} />
-        <DemoAssetsContent dataSourcesData={demoAssetsData} />
+        <AgentControlsSection />
       </PageContainer>
     );
   }
@@ -118,6 +115,7 @@ type ArtifactsSourcesData = {
   dataSourcesData: {
     VIDEOS: DataSourceOverviewData | null | undefined;
     SLIDES: DataSourceOverviewData | null | undefined;
+    FEATURES: DataSourceFeaturesData[] | null | undefined;
   };
 };
 
@@ -134,31 +132,17 @@ const ArtifactsContent = ({ dataSourcesData }: ArtifactsSourcesData) => {
         title={SLIDES_TITLE}
         stats={generateDataSourceStats(dataSourcesData.SLIDES)}
       />
-    </SourceCard>
-  );
-};
-
-type DemoAssetsData = {
-  dataSourcesData: {
-    FEATURES: DataSourceFeaturesData[] | null | undefined;
-  };
-};
-
-const DemoAssetsContent = ({ dataSourcesData }: DemoAssetsData) => {
-  const { FEATURES } = dataSourcesData;
-
-  if (!FEATURES || FEATURES.length === 0) return null;
-  return (
-    <SourceCard cardTitle={DEMO_ASSETS_SOURCES_TITLE}>
-      {FEATURES.map((feature, index) => (
-        <DataSourceCard
-          key={`${feature.feature_name}-${index}`}
-          hasEdit
-          type={SourcesCardTypes.FEATURES}
-          title={feature.feature_name}
-          stats={generateFeatureAssetStats(feature)}
-        />
-      ))}
+      {!dataSourcesData.FEATURES || dataSourcesData.FEATURES.length === 0
+        ? null
+        : dataSourcesData.FEATURES.map((feature, index) => (
+            <DataSourceCard
+              key={`${feature.feature_name}-${index}`}
+              hasEdit
+              type={SourcesCardTypes.FEATURES}
+              title={feature.feature_name}
+              stats={generateFeatureAssetStats(feature)}
+            />
+          ))}
     </SourceCard>
   );
 };

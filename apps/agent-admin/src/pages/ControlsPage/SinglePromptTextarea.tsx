@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CommonControlsProps, getFilterAppliedValues, getSortedPrompts } from './utils.ts';
-import Card from '../../components/AgentManagement/Card.tsx';
 import { Prompt, usePrompts } from '../../queries/query/usePrompts.ts';
 import { useCreatePrompt } from '../../queries/mutation/usePromptMutations.ts';
 import { getTenantActiveAgentId } from '@meaku/core/utils/index';
@@ -64,21 +63,19 @@ const SinglePromptTextarea = ({
   return (
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <PromptHeader title={title} description={description} />
-      <Card background={'GRAY25'} border={'GRAY200'}>
-        <PromptArea
-          title={title}
-          promptType={promptType}
-          agentId={agentId}
-          textareaPlaceholder={textareaPlaceholder}
-          localPrompts={localPrompts}
-          setLocalPrompts={setLocalPrompts}
-          originalPromptsRef={originalPromptsRef}
-          createPromptMutation={createPromptMutation}
-          error={error}
-          infoTitle={infoTitle}
-          exampleDescription={exampleDescription}
-        />
-      </Card>
+      <PromptArea
+        title={title}
+        promptType={promptType}
+        agentId={agentId}
+        textareaPlaceholder={textareaPlaceholder}
+        localPrompts={localPrompts}
+        setLocalPrompts={setLocalPrompts}
+        originalPromptsRef={originalPromptsRef}
+        createPromptMutation={createPromptMutation}
+        error={error}
+        infoTitle={infoTitle}
+        exampleDescription={exampleDescription}
+      />
     </div>
   );
 };

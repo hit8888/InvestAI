@@ -53,7 +53,7 @@ const SupportForm = ({
           <div className="flex w-full justify-end">
             <Button
               type="submit"
-              variant="primary"
+              variant="system_secondary"
               buttonStyle="rightIcon"
               rightIcon={<SaveIcon />}
               disabled={isSubmitBtnDisabled}

@@ -8,7 +8,7 @@ const usePageRouteState = () => {
     LINK_CLICKS,
     LOGIN,
     CONVERSATIONS,
-    AGENT_DATA_SOURCES,
+    AGENT_KNOWLEDGE_BASE,
     AGENT_WORKFLOW,
     AGENT_BRANDING,
     AGENT_ENTRYPOINTS,
@@ -24,7 +24,7 @@ const usePageRouteState = () => {
   const isLeadsPage = location.pathname.includes(ACTIVE_LEADS);
   const isLinkClicksPage = location.pathname.includes(LINK_CLICKS);
   const isConversationsPage = location.pathname.includes(CONVERSATIONS);
-  const isAgentDataSourcesPage = location.pathname.includes(AGENT_DATA_SOURCES);
+  const isAgentKnowledgeBasePage = location.pathname.includes(AGENT_KNOWLEDGE_BASE);
   const isAgentWorkflowPage = location.pathname.includes(AGENT_WORKFLOW);
   const isAgentBrandingPage = location.pathname.includes(AGENT_BRANDING);
   const isAgentEntrypointsPage = location.pathname.includes(AGENT_ENTRYPOINTS);
@@ -56,7 +56,7 @@ const usePageRouteState = () => {
     isConversationsPage,
     isLinkClicksPage,
     isAgentPage,
-    isAgentDataSourcesPage,
+    isAgentKnowledgeBasePage,
     isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,

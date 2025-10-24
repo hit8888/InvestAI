@@ -20,7 +20,6 @@ import { AppRoutesEnum } from '../utils/constants';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
 import EntryPointsPage from '../pages/EntryPointsPage';
-import ControlsPage from '../pages/ControlsPage/index.tsx';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import AIBlocksPageContainer from '../pages/AIBlocksPage/index.tsx';
 import RedirectGuard from './RedirectGaurd.tsx';
@@ -100,23 +99,23 @@ const routes = [
             path: 'agent',
             children: [
               {
-                path: 'data-sources',
+                path: 'knowledge-base',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/webpages/:webPageID?',
+                path: 'knowledge-base/webpages/:webPageID?',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/documents/:documentID?',
+                path: 'knowledge-base/documents/:documentID?',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/videos',
+                path: 'knowledge-base/videos',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
-                path: 'data-sources/slides',
+                path: 'knowledge-base/slides',
                 element: <ProtectedRoute element={<DataSourcesContainer />} />,
               },
               {
@@ -130,10 +129,6 @@ const routes = [
               {
                 path: 'entrypoints',
                 element: <ProtectedRoute element={<EntryPointsPage />} />,
-              },
-              {
-                path: 'controls',
-                element: <ProtectedRoute element={<ControlsPage />} />,
               },
             ],
           },

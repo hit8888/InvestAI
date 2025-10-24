@@ -6,6 +6,9 @@ import AskAIBlockPreview from './AskAIBlockPreview';
 // import AskAICallToActionsSection from './components/AskAICallToActionsSection.tsx';
 import useBrandingPageAgentConfigsQuery from '../../hooks/useBrandingPageAgentConfigsQuery.tsx';
 import { useEffect, useState } from 'react';
+// import MessageSoundSettingsSection from './components/MessageSoundSettingsSection.tsx';
+import ResponseLengthAndInstructionsSettingsSection from './components/ResponseLengthAndInstructionsSettingsSection.tsx';
+import AgentSupportSection from './components/AgentSupportSection.tsx';
 
 interface AskAiBlockPageProps {
   block: Block;
@@ -117,6 +120,7 @@ const AskAiBlockPage = ({ block }: AskAiBlockPageProps) => {
             agentId={agentId}
             onUpdate={onUpdate}
           />
+          {/* <MessageSoundSettingsSection /> */}
           {/* <AskAICallToActionsSection
             key="ask-ai-call-to-actions-section"
             initialData={moduleConfig?.ctas}
@@ -139,7 +143,10 @@ const AskAiBlockPage = ({ block }: AskAiBlockPageProps) => {
       }
       previewContainerClassname="min-h-[200px] w-96 min-w-[40%] pb-0"
       outerClassname="min-h-screen"
-    />
+    >
+      <ResponseLengthAndInstructionsSettingsSection />
+      <AgentSupportSection />
+    </BlockPageLayout>
   );
 };
 

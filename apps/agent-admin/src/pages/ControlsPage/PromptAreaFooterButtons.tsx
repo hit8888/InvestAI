@@ -9,7 +9,7 @@ type ButtonUI = {
   disabled: boolean;
   rightIcon: React.ReactNode;
   label: string;
-  variant?: 'primary' | 'secondary' | 'tertiary';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'system_secondary';
 };
 
 type PromptAreaFooterButtonsProps = {
@@ -43,7 +43,7 @@ const PromptAreaFooterButtons = ({
     }
   };
 
-  const getButtonUI = ({ key, onClick, disabled, rightIcon, label, variant = 'secondary' }: ButtonUI) => {
+  const getButtonUI = ({ key, onClick, disabled, rightIcon, label, variant = 'system_secondary' }: ButtonUI) => {
     return (
       <Button
         key={key}
@@ -62,7 +62,7 @@ const PromptAreaFooterButtons = ({
   return (
     <div
       className={cn('flex w-full justify-end', {
-        'justify-between border-t border-gray-200 pt-4': clickedOnEdit,
+        'justify-between pt-4': clickedOnEdit,
       })}
     >
       {clickedOnEdit && (
@@ -83,7 +83,7 @@ const PromptAreaFooterButtons = ({
           disabled: isMutationPending,
           rightIcon: clickedOnEdit ? <SaveIcon /> : <EditIcon />,
           label: clickedOnEdit ? 'Save' : 'Edit',
-          variant: 'primary',
+          variant: 'system_secondary',
         })}
       {!arePromptsExisting &&
         !clickedOnEdit &&
@@ -91,7 +91,7 @@ const PromptAreaFooterButtons = ({
           key: 'add-prompt',
           onClick: handleAddPrompt,
           disabled: isMutationPending,
-          variant: 'primary',
+          variant: 'system_secondary',
           rightIcon: <PlusIcon />,
           label: 'Add',
         })}

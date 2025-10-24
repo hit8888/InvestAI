@@ -1,14 +1,12 @@
-import PageContainer from '../../components/AgentManagement/PageContainer';
-import { CONTROLS_PAGE_HEADER_DESCRIPTION, CommonControls, ControlsTitleEnum } from './utils';
-import AgentProductDescription from './AgentProductDescription';
-import CompanyICPConfig from './CompanyICPConfig';
+import AgentProductDescription from '../ControlsPage/AgentProductDescription';
+import CompanyICPConfig from '../ControlsPage/CompanyICPConfig';
 import useTenantMetadataQuery from '../../queries/query/useTenantMetadataQuery';
-import AgentIdealCustomerPersona from './AgentIdealCustomerPersona';
+import AgentIdealCustomerPersona from '../ControlsPage/AgentIdealCustomerPersona';
+import { CommonControls, ControlsTitleEnum } from '../ControlsPage/utils';
 
-const PageContainerHeader = 'Controls';
 const { PRODUCT_DESCRIPTION, IDEAL_COMPANY_PERSONA, IDEAL_CUSTOMER_PERSONA } = ControlsTitleEnum;
 
-const ControlsPage = () => {
+const AgentControlsSection = () => {
   // We will get all these below values as its coming from defined constant variable
   const agentProductDescription = CommonControls.find((control) => control.title === PRODUCT_DESCRIPTION)!;
   const agentIdealCustomerPersona = CommonControls.find((control) => control.title === IDEAL_CUSTOMER_PERSONA)!;
@@ -27,7 +25,7 @@ const ControlsPage = () => {
   };
 
   return (
-    <PageContainer heading={PageContainerHeader} subHeading={CONTROLS_PAGE_HEADER_DESCRIPTION}>
+    <>
       <AgentProductDescription
         key={PRODUCT_DESCRIPTION}
         productDescriptions={products_and_description ?? []}
@@ -36,8 +34,8 @@ const ControlsPage = () => {
       />
       <AgentIdealCustomerPersona key={IDEAL_CUSTOMER_PERSONA} {...commonProps} {...agentIdealCustomerPersona} />
       <CompanyICPConfig key={IDEAL_COMPANY_PERSONA} {...idealCompanyPersona} />
-    </PageContainer>
+    </>
   );
 };
 
-export default ControlsPage;
+export default AgentControlsSection;

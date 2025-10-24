@@ -47,7 +47,7 @@ const SidebarContext = createContext<SidebarContextProps | undefined>(undefined)
 
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
-    isAgentDataSourcesPage,
+    isAgentKnowledgeBasePage,
     isAgentBrandingPage,
     isAgentEntrypointsPage,
     isAgentControlsPage,
@@ -80,7 +80,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { AGENT_LABEL, TRAINING_LABEL } = SidebarNavItemsEnum;
 
   const isAgentTabActive =
-    isAgentBrandingPage || isAgentEntrypointsPage || isAgentControlsPage || isAgentDataSourcesPage;
+    isAgentBrandingPage || isAgentEntrypointsPage || isAgentControlsPage || isAgentKnowledgeBasePage;
 
   const isTrainingTabActive = isTrainingPlaygroundPage;
 

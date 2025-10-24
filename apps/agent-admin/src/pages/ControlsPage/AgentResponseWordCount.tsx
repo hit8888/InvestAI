@@ -1,4 +1,3 @@
-import Card from '../../components/AgentManagement/Card';
 import { CommonControlsProps } from './utils';
 import PromptHeader from './PromptHeader';
 import InfoCard from '../../components/AgentManagement/InfoCard';
@@ -106,17 +105,18 @@ const AgentResponseWordCount = ({ title, description }: CommonControlsProps) => 
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-4 self-stretch">
+    <div className="flex w-full flex-col items-start gap-4">
       <PromptHeader title={title} description={description} />
-      <Card background={'GRAY25'} border={'GRAY200'}>
-        <CustomTabs
-          handleTabChange={handleTabChange}
-          tabItems={AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS}
-          selectedTab={selectedTab}
-          renderTabInfo={renderTabInfo}
-          tabDisabled={isUpdatingConfig}
-        />
-      </Card>
+      <CustomTabs
+        handleTabChange={handleTabChange}
+        tabItems={AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS}
+        selectedTab={selectedTab}
+        renderTabInfo={renderTabInfo}
+        tabDisabled={isUpdatingConfig}
+        classes={{
+          trigger: 'min-w-[100px]',
+        }}
+      />
     </div>
   );
 };

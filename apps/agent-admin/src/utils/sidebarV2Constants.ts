@@ -8,9 +8,7 @@ import {
   MessageSquareText,
   IdCard,
   Database,
-  Award,
   Milestone,
-  LayoutTemplate,
   Users,
   ToyBrick,
   CircleUser,
@@ -96,17 +94,10 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: `/${AppRoutesEnum.AGENT_DATA_SOURCES}`, // V1: Same as V1
+    navUrl: `/${AppRoutesEnum.AGENT_KNOWLEDGE_BASE}`, // V1: Same as V1
     navItem: 'Data Sources',
     icon: Database,
     activeIcon: Database,
-    accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.AGENT_BRANDING}`, // V1: Agent > Branding
-    navItem: 'Branding',
-    icon: Award,
-    activeIcon: Award,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
@@ -114,13 +105,6 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     navItem: 'Entry Points',
     icon: Milestone,
     activeIcon: Milestone,
-    accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`, // Controls entry point
-    navItem: 'Controls',
-    icon: LayoutTemplate,
-    activeIcon: LayoutTemplate,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
@@ -206,23 +190,5 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
     icon: CircleUser,
     activeIcon: CircleUser,
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
-  },
-];
-
-/**
- * Additional navigation items configuration
- */
-export const SIDEBAR_V2_ADDITIONAL_ITEMS: SidebarV2LinkItem[] = [
-  {
-    navUrl: `/${AppRoutesEnum.AGENT_BRANDING}`,
-    navItem: 'Branding',
-    icon: Award,
-    activeIcon: Award,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
-    navItem: 'Controls',
-    icon: LayoutTemplate,
-    activeIcon: LayoutTemplate,
   },
 ];

@@ -37,7 +37,7 @@ const CustomTabs = ({
   classes = {},
 }: CustomTabsProps) => {
   return (
-    <Tabs value={selectedTab} className="flex flex-col items-start gap-4" onValueChange={handleTabChange}>
+    <Tabs value={selectedTab} className="flex w-full flex-col items-start gap-4" onValueChange={handleTabChange}>
       {renderTabInfo && renderTabInfo()}
       <TabsList className="w-full p-0">
         <div
