@@ -61,6 +61,7 @@ const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentPro
         onClose={onClose}
         onExpand={onExpand}
         isExpanded={isExpanded}
+        titleClassName="pr-20"
       />
       <div className="flex-1 flex flex-col items-center justify-center">
         <MessageErrorBoundary message={formArtifactMessage}>
