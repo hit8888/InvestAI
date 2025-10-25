@@ -10,6 +10,8 @@ import { MessageEventType, SendUserMessageParams } from '../types/message';
 import { handleEmailDomainCheck } from '../helpers/checkEmailDomain';
 import ChatFormField from './ChatFormField';
 import { createFormSchema } from '../features/book-meeting/utils';
+import useFeatureConfig from '../hooks/useFeatureConfig';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/index';
 
 type FormFilledEventDataType = {
   artifact_id: string;
@@ -49,6 +51,10 @@ const FormArtifact = ({
   const formFields = artifact?.form_fields || [];
   const requiredFormFields = formFields.filter((field) => field.is_required);
   const formSchema = createFormSchema(formFields);
+
+  const featureConfig = useFeatureConfig(CommandBarModuleTypeSchema.enum.BOOK_MEETING);
+  const { module_configs: moduleConfigs } = featureConfig ?? {};
+  const formSubmitButtonTitle = moduleConfigs?.form_submit_button_title ?? 'Submit';
 
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -175,7 +181,7 @@ const FormArtifact = ({
             )}
           </div>
           <Button hasWipers type="submit" disabled={isSubmitBtnDisabled} data-testid="submit-form-btn">
-            Submit
+            {formSubmitButtonTitle}
           </Button>
         </form>
       </Form>
