@@ -50,6 +50,7 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
         url: cta?.url ?? '',
       })),
       welcomeQuestions: config?.body?.welcome_message?.suggested_questions ?? [],
+      show_powered_by_breakout: config?.show_powered_by_breakout ?? true,
     }),
     [config],
   );
@@ -211,9 +212,11 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
       </div>
 
       {/* Footer with flex-shrink-0 */}
-      <div className="flex-shrink-0 -mt-1 mb-1">
-        <PoweredByBreakout />
-      </div>
+      {askaiConfig?.show_powered_by_breakout && (
+        <div className="flex-shrink-0 -mt-1 mb-1">
+          <PoweredByBreakout />
+        </div>
+      )}
     </div>
   );
 };

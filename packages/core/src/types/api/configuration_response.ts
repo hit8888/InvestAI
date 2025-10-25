@@ -149,6 +149,7 @@ export const ConfigurationSchema = z.object({
   is_enabled: z.boolean(),
   logo: z.string().nullable(),
   cover_image: z.string().nullable().optional(),
+  show_powered_by_breakout: z.boolean().optional(),
   header: z.object({
     title: z.string().nullable(),
     sub_title: z.string().nullable(),
