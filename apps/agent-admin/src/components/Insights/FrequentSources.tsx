@@ -30,7 +30,7 @@ const FrequentSources = ({ start_date, end_date, timezone }: FrequentSourcesProp
 
   const handleSourceRowClick = (rowData: unknown) => {
     const document = rowData as Document;
-    const redirectPath = `/agent/data-sources/${DOCUMENT_TYPE_TO_PATH_MAP[document.data_source_type]}`;
+    const redirectPath = `/agent/knowledge-base/${DOCUMENT_TYPE_TO_PATH_MAP[document.data_source_type]}`;
 
     if (document.data_source_type === 'WEB_PAGE') {
       if (document.web_page_id) {

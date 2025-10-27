@@ -146,9 +146,9 @@ const ThumbnailAsset = ({ id, assetUrl, videoUrl, videoType, metadataDuration }:
 
   return (
     <div className="flex h-full w-full flex-col gap-2">
-      <div key={id} className="relative h-full max-h-48 w-full max-w-60 rounded ring-2 ring-gray-100">
+      <div key={id} className="relative h-full max-h-48 min-h-48 w-full max-w-64 rounded ring-2 ring-gray-100">
         <VideoThumbnailOverlay />
-        <img src={assetUrl} alt="Thumbnail" className="h-full w-full rounded object-cover" />
+        <img src={assetUrl} alt="Thumbnail" className="h-full w-full rounded bg-gray-100 object-contain" />
       </div>
       <AssetInfoRow
         icon={videoType === 'EXTERNAL' ? Link : Video}

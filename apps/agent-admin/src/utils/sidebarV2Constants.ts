@@ -7,7 +7,7 @@ import {
   CalendarIcon,
   MessageSquareText,
   IdCard,
-  Database,
+  GraduationCap,
   Milestone,
   Users,
   ToyBrick,
@@ -95,9 +95,9 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
   },
   {
     navUrl: `/${AppRoutesEnum.AGENT_KNOWLEDGE_BASE}`, // V1: Same as V1
-    navItem: 'Data Sources',
-    icon: Database,
-    activeIcon: Database,
+    navItem: 'Knowledge Base',
+    icon: GraduationCap,
+    activeIcon: GraduationCap,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {

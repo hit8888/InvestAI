@@ -1,8 +1,8 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import { ARTIFACTS_SOURCES_TITLE, DEMO_ASSETS_SOURCES_TITLE, KNOWLEDGE_SOURCES_TITLE } from '../constants';
-import KnowledgeSourcesIcon from '@breakout/design-system/components/icons/sources-knowledge-icon';
 import ArtifactsSourcesIcon from '@breakout/design-system/components/icons/sources-artifacts-icon';
 import DemoAssetsSourcesIcon from '@breakout/design-system/components/icons/sources-demo-assets-icon';
+import { Database } from 'lucide-react';
 
 type SourcesCardHeaderProps = {
   cardTitle: string;
@@ -12,7 +12,7 @@ const SourcesCardHeader = ({ cardTitle }: SourcesCardHeaderProps) => {
   const Icon = (() => {
     switch (cardTitle) {
       case KNOWLEDGE_SOURCES_TITLE:
-        return KnowledgeSourcesIcon;
+        return Database;
       case ARTIFACTS_SOURCES_TITLE:
         return ArtifactsSourcesIcon;
       case DEMO_ASSETS_SOURCES_TITLE:

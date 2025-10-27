@@ -13,7 +13,7 @@ const DataSourcesNavigation = () => {
 
   const handleDataSourcesClick = () => {
     toggleDataSourceSelectedType(null);
-    const basePath = pathname.split('/data-sources')[0] + '/data-sources';
+    const basePath = pathname.split('/knowledge-base')[0] + '/knowledge-base';
     navigate(basePath);
   };
 
@@ -28,7 +28,7 @@ const DataSourcesNavigation = () => {
   const breadCrumbItems = [];
 
   // Always add "Data Sources"
-  breadCrumbItems.push('Agent - Data Sources');
+  breadCrumbItems.push('Knowledge Base');
 
   // Add selectedType if it exists
   if (selectedType) {
