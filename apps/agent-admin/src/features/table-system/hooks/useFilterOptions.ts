@@ -81,7 +81,7 @@ export const useFilterOptions = ({
     const filters: FilterItem[] = [];
 
     // List of UI-only filter keys that are not real table columns
-    const UI_ONLY_FILTERS = ['company_revealed'];
+    const UI_ONLY_FILTERS = ['company_revealed', 'test_conversations'];
 
     // First, add default filters (like V1)
     Object.entries(defaultFilters)

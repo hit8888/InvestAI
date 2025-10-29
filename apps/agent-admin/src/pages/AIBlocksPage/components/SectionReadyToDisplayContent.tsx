@@ -3,7 +3,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import ChipWithLabelAndCount from '@breakout/design-system/components/layout/ChipWithLabelAndCount';
 import { Settings, ArrowRight } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 interface SectionReadyToDisplayContentProps {
   header: string;
@@ -24,7 +24,9 @@ const SectionReadyToDisplayContent = ({
   videoCount,
   pathToKnowledgeBase,
 }: SectionReadyToDisplayContentProps) => {
+  const { tenantName } = useParams();
   const isVideoPresent = videoCount > 0;
+  const fullPath = tenantName ? `/${tenantName}/${pathToKnowledgeBase}` : `/${pathToKnowledgeBase}`;
 
   return (
     <Card background="GRAY25" border="GRAY200">
@@ -50,7 +52,7 @@ const SectionReadyToDisplayContent = ({
             </div>
           )}
         </div>
-        <Link to={pathToKnowledgeBase} target="_blank">
+        <Link to={fullPath} target="_blank">
           <Button
             variant={isVideoPresent ? 'system_secondary' : 'system'}
             rightIcon={<ArrowRight className="h-4 w-4" />}

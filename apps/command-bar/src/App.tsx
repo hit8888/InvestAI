@@ -1,8 +1,8 @@
 import './index.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import { useWsClient } from '@meaku/shared/hooks/useWsClient';
-import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { setLocalStorageData, getLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { useCommandBarStore } from '@meaku/shared/stores';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
@@ -159,6 +159,11 @@ function App() {
     enabled: isProduction && !settings.is_admin && !settings.is_test,
   });
 
+  // Only show initial tooltips for first-time visitors
+  // Check localStorage for prospect_id (same logic as PreloadContainer for static vs dynamic API)
+  const storageValues = useMemo(() => getLocalStorageData(), []);
+  const isFirstTimeVisitor = !storageValues?.prospectId;
+
   return (
     <CommandBarRenderer
       layout={layout}
@@ -172,6 +177,7 @@ function App() {
       onExpand={() => setIsExpanded(!isExpanded)}
       isDynamicConfigLoading={isDynamicConfigLoading}
       isDynamicConfigStarted={isDynamicConfigStarted}
+      isFirstTimeVisitor={isFirstTimeVisitor}
     />
   );
 }

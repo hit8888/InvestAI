@@ -22,6 +22,7 @@ import SidebarToggleIcon from '@breakout/design-system/components/icons/sidebar-
 import {
   SIDEBAR_V2_ACCORDION_SECTIONS,
   SIDEBAR_V2_SETTINGS_ITEMS,
+  SIDEBAR_V2_SIGN_OUT_ITEM,
   INSIGHTS_ITEM,
   SidebarV2LinkItem,
   SidebarV2AccordionGroup,
@@ -51,7 +52,7 @@ const accordionAnimation = {
 const SidebarV2 = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userInfo } = useAuth();
+  const { userInfo, logout } = useAuth();
   const orgList = userInfo?.organizations;
   // Use URL as primary source of truth for tenant
   const tenantIdentifier = getTenantIdentifierFromUrl();
@@ -163,19 +164,69 @@ const SidebarV2 = () => {
       return null;
     }
 
-    const isDisabled = item.navUrl === '#';
-    const isActive = !isDisabled && isLinkActive(item.navUrl);
+    const isDisabled = item.navUrl === '#' && !item.isActionItem;
+    const isActive = !isDisabled && !item.isActionItem && isLinkActive(item.navUrl);
     const Icon = isActive ? item.activeIcon || item.icon : item.icon;
 
-    const navContent = (
+    const handleItemClick = (e: React.MouseEvent) => {
+      if (isDisabled) {
+        e.preventDefault();
+        return;
+      }
+
+      if (item.isActionItem && item.navUrl === '#logout') {
+        e.preventDefault();
+        logout();
+        return;
+      }
+    };
+
+    const navContent = item.isActionItem ? (
+      <button
+        key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
+        onClick={handleItemClick}
+        className={cn(
+          'flex w-full items-center overflow-hidden rounded-lg text-sm font-normal transition-all duration-300',
+          {
+            // Expanded mode - action items (sign out)
+            'gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50': !isCollapsed,
+            // Collapsed mode - action items (sign out)
+            'justify-center px-2 py-2.5 text-red-600': isCollapsed,
+            // Disabled items
+            'cursor-not-allowed text-gray-600 opacity-50': isDisabled,
+          },
+        )}
+      >
+        {Icon && (
+          <div
+            className={cn('flex items-center rounded p-1 transition-colors duration-300', {
+              // Expanded mode - action items have white container
+              'bg-white': !isCollapsed,
+            })}
+          >
+            <Icon className="h-4 w-4 flex-shrink-0 transition-colors duration-300" />
+          </div>
+        )}
+        <span
+          className={cn(
+            'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+            {
+              'max-w-0 opacity-0': isCollapsed,
+              'max-w-[200px] opacity-100': !isCollapsed,
+            },
+          )}
+          style={{
+            transitionDelay: isCollapsed ? '0ms' : '150ms',
+          }}
+        >
+          {item.navItem}
+        </span>
+      </button>
+    ) : (
       <Link
         to={tenantName ? `/${tenantName}${item.navUrl}` : item.navUrl}
         key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
-        onClick={(e) => {
-          if (isDisabled) {
-            e.preventDefault();
-          }
-        }}
+        onClick={handleItemClick}
         className={cn(
           'flex w-full items-center overflow-hidden rounded-lg text-sm font-normal transition-all duration-300',
           {
@@ -372,7 +423,10 @@ const SidebarV2 = () => {
       {/* Main Navigation */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <ScrollArea
-          className={cn('sidebar-scrollbar flex-1', { 'p-2': isCollapsed, 'p-4': !isCollapsed })}
+          className={cn('sidebar-scrollbar h-full flex-1 [&>div>div]:h-full', {
+            'p-2': isCollapsed,
+            'p-4': !isCollapsed,
+          })}
           type="hover"
         >
           {sideNavView === SideNavView.MAIN ? (
@@ -425,54 +479,59 @@ const SidebarV2 = () => {
             </div>
           ) : (
             // SETTINGS VIEW - Settings Items with Back Button
-            <div className={cn('space-y-2', { 'max-w-[54px]': isCollapsed })}>
-              <TooltipProvider>
-                <Tooltip delayDuration={0}>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={navigateToMainView}
-                      className={cn(
-                        'mb-4 flex w-full items-center overflow-hidden rounded-lg px-2 py-2.5 text-sm font-semibold text-gray-900',
-                        {
-                          'justify-center px-2 py-2.5': isCollapsed,
-                          'gap-3 hover:bg-gray-50': !isCollapsed,
-                        },
-                      )}
-                    >
-                      <div className="flex items-center rounded bg-white p-1 transition-colors duration-300">
-                        <ArrowLeft className="h-4 w-4 flex-shrink-0" />
-                      </div>
-                      <span
+            <div className={cn('flex h-full flex-1 flex-col', { 'max-w-[54px]': isCollapsed })}>
+              <div className="space-y-2">
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={navigateToMainView}
                         className={cn(
-                          'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+                          'mb-0 flex w-full items-center overflow-hidden rounded-lg px-2 py-2.5 text-sm font-semibold text-gray-900 transition-colors duration-200 hover:bg-gray-100',
                           {
-                            'max-w-0 opacity-0': isCollapsed,
-                            'max-w-[200px] opacity-100': !isCollapsed,
+                            'justify-center px-2 py-2.5': isCollapsed,
+                            'gap-3': !isCollapsed,
                           },
                         )}
-                        style={{
-                          transitionDelay: isCollapsed ? '0ms' : '150ms',
-                        }}
                       >
-                        Back to Dashboard
-                      </span>
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipPortal>
-                    {isCollapsed && (
-                      <TooltipContent
-                        side="right"
-                        className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
-                      >
-                        <p>Back to Dashboard</p>
-                        <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
-                      </TooltipContent>
-                    )}
-                  </TooltipPortal>
-                </Tooltip>
-              </TooltipProvider>
+                        <div className="flex items-center rounded bg-white p-1 transition-colors duration-300">
+                          <ArrowLeft className="h-4 w-4 flex-shrink-0" />
+                        </div>
+                        <span
+                          className={cn(
+                            'inline-block overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out',
+                            {
+                              'max-w-0 opacity-0': isCollapsed,
+                              'max-w-[200px] opacity-100': !isCollapsed,
+                            },
+                          )}
+                          style={{
+                            transitionDelay: isCollapsed ? '0ms' : '150ms',
+                          }}
+                        >
+                          Back to Dashboard
+                        </span>
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipPortal>
+                      {isCollapsed && (
+                        <TooltipContent
+                          side="right"
+                          className="border-none bg-gray-900 text-white duration-150 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+                        >
+                          <p>Back to Dashboard</p>
+                          <TooltipArrow className="fill-gray-900 !transition-none" width={12} height={6} />
+                        </TooltipContent>
+                      )}
+                    </TooltipPortal>
+                  </Tooltip>
+                </TooltipProvider>
 
-              <div className="space-y-1">{SIDEBAR_V2_SETTINGS_ITEMS.map((item) => renderNavItem(item))}</div>
+                <div className="space-y-1">{SIDEBAR_V2_SETTINGS_ITEMS.map((item) => renderNavItem(item))}</div>
+              </div>
+
+              {/* Sign Out Button - Positioned at bottom */}
+              <div className="mt-auto pt-4">{renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM)}</div>
             </div>
           )}
         </ScrollArea>

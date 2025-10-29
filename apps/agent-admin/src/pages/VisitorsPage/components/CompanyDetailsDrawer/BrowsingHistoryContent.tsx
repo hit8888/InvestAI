@@ -1,7 +1,11 @@
 import { BrowsedUrl } from '@meaku/core/types/common';
 import BrowsedUrlsPreview from '../../../../components/common/BrowsedUrlsPreview';
 
-const BrowsingHistoryContent = ({ browsedUrls }: { browsedUrls: BrowsedUrl[] }) => {
+interface BrowsingHistoryContentProps {
+  browsedUrls: BrowsedUrl[];
+}
+
+const BrowsingHistoryContent = ({ browsedUrls }: BrowsingHistoryContentProps) => {
   return <BrowsedUrlsPreview browsedUrls={[...(browsedUrls ?? [])].reverse()} />;
 };
 

@@ -5,10 +5,12 @@ import CustomVideoPlayer from '@breakout/design-system/components/layout/CustomV
 import Typography from '@breakout/design-system/components/Typography/index';
 import { useVideoDuration } from '../../../hooks/useVideoDuration';
 import { useVideoUrlDuration } from '../../../hooks/useVideoUrlDuration';
+import { useImageLoader } from '../../../hooks/useImageLoader';
 import HiddenExternalVideoPlayer from '../../HiddenExternalVideoPlayer';
 import { Link2 as Link, Video, LucideIcon } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { formatDurationToMinuteSeconds } from '../../../utils/common';
+import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 
 type IProps = {
   value?: DataSourceItemType;
@@ -50,7 +52,7 @@ interface VideoAssetWrapperProps {
 
 const VideoAssetWrapper = ({ keyProp, children, infoRow }: VideoAssetWrapperProps) => (
   <div key={keyProp} className="flex w-full flex-col gap-2">
-    <div className="relative flex h-full max-h-48 w-full max-w-60 flex-col rounded ring-2 ring-gray-100">
+    <div className="relative flex aspect-video w-full max-w-60 flex-col items-center justify-center rounded bg-gray-100 ring-2 ring-gray-100">
       <VideoThumbnailOverlay />
       {children}
     </div>
@@ -79,7 +81,7 @@ const VideoAsset = ({ keyProp, publicUrl, name, videoRef, onLoadedMetadata, dura
       preload="metadata"
       src={publicUrl}
       aria-label={name}
-      className="h-full w-full rounded object-fill"
+      className="max-h-full max-w-full rounded object-contain"
     />
   </VideoAssetWrapper>
 );
@@ -100,7 +102,7 @@ const ExternalVideoAsset = ({ keyProp, publicUrl, duration, onLoadedMetadata }: 
     <CustomVideoPlayer
       showControls={false}
       onLoadedMetadata={onLoadedMetadata}
-      className="rounded object-fill"
+      className="rounded object-contain"
       videoURL={publicUrl}
       allowPictureInPicture={false}
       allowDownload={false}
@@ -115,14 +117,40 @@ interface ImageAssetProps {
   name: string;
 }
 
-const ImageAsset = ({ keyProp, publicUrl, name }: ImageAssetProps) => (
-  <div key={keyProp} className="relative h-full max-h-48 w-full max-w-60">
-    <div className="absolute left-1 top-1 flex items-center justify-center rounded bg-system/60 p-1">
-      <SlidesThumbnailIcon width={'12'} height={'12'} />
+const ImageAsset = ({ keyProp, publicUrl, name }: ImageAssetProps) => {
+  const { isLoading, hasError, imgProps } = useImageLoader();
+
+  return (
+    <div
+      key={keyProp}
+      className="relative flex aspect-video w-full max-w-60 items-center justify-center rounded bg-gray-100"
+    >
+      {isLoading && !hasError && (
+        <div className="absolute inset-0 rounded">
+          <Skeleton className="h-full w-full rounded" />
+        </div>
+      )}
+      <div className="absolute left-1 top-1 z-10 flex items-center justify-center rounded bg-system/60 p-1">
+        <SlidesThumbnailIcon width={'12'} height={'12'} />
+      </div>
+      {!hasError && (
+        <img
+          src={publicUrl}
+          alt={name}
+          className={`max-h-full max-w-full rounded object-contain transition-opacity duration-200 ${
+            !isLoading ? 'opacity-100' : 'opacity-0'
+          }`}
+          {...imgProps}
+        />
+      )}
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center rounded bg-gray-100">
+          <SlidesThumbnailIcon className="h-8 w-8 text-gray-400" />
+        </div>
+      )}
     </div>
-    <img src={publicUrl} alt={name} className="h-full w-full rounded object-fill" />
-  </div>
-);
+  );
+};
 
 // Component for thumbnail asset data
 interface ThumbnailAssetProps {
@@ -134,6 +162,8 @@ interface ThumbnailAssetProps {
 }
 
 const ThumbnailAsset = ({ id, assetUrl, videoUrl, videoType, metadataDuration }: ThumbnailAssetProps) => {
+  const { isLoading, hasError, imgProps } = useImageLoader();
+
   const { duration, setDuration } = useVideoUrlDuration({
     videoUrl,
     videoType,
@@ -146,9 +176,33 @@ const ThumbnailAsset = ({ id, assetUrl, videoUrl, videoType, metadataDuration }:
 
   return (
     <div className="flex h-full w-full flex-col gap-2">
-      <div key={id} className="relative h-full max-h-48 min-h-48 w-full max-w-64 rounded ring-2 ring-gray-100">
-        <VideoThumbnailOverlay />
-        <img src={assetUrl} alt="Thumbnail" className="h-full w-full rounded bg-gray-100 object-contain" />
+      <div
+        key={id}
+        className="relative flex aspect-video w-full max-w-60 items-center justify-center rounded bg-gray-100 ring-2 ring-gray-100"
+      >
+        {isLoading && !hasError && (
+          <div className="absolute inset-0 rounded">
+            <Skeleton className="h-full w-full rounded" />
+          </div>
+        )}
+        {!hasError && (
+          <>
+            <VideoThumbnailOverlay />
+            <img
+              src={assetUrl}
+              alt="Thumbnail"
+              className={`max-h-full max-w-full rounded object-contain transition-opacity duration-200 ${
+                !isLoading ? 'opacity-100' : 'opacity-0'
+              }`}
+              {...imgProps}
+            />
+          </>
+        )}
+        {hasError && (
+          <div className="absolute inset-0 flex items-center justify-center rounded bg-gray-100">
+            <Video className="h-8 w-8 text-gray-400" />
+          </div>
+        )}
       </div>
       <AssetInfoRow
         icon={videoType === 'EXTERNAL' ? Link : Video}

@@ -149,7 +149,7 @@ export const MultiSelectFilter = ({
       <div className="flex-1 overflow-hidden px-1">
         {isLoading ? (
           <div className="space-y-1 p-2">
-            {[...Array(4)].map((_, index) => (
+            {[...Array(8)].map((_, index) => (
               <div key={index} className="flex items-center gap-3 rounded-md px-1 py-2">
                 <div className="h-4 w-4 animate-pulse rounded bg-gray-100" />
                 <div className="h-4 flex-1 animate-pulse rounded bg-gray-100" />

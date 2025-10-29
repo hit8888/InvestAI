@@ -8,7 +8,6 @@ export interface DrawerContentProps<TRow = unknown> {
   onClose: () => void;
   refreshTable: () => void;
   isTableLoading?: boolean; // Optional - indicates if the table is still loading initial data
-  autoOpenConversationDetails?: boolean; // Optional - auto-open conversation details panel on load
 }
 
 /**
@@ -88,6 +87,7 @@ export interface TablePageConfig<TRow = unknown> {
     component: React.ComponentType<DrawerContentProps<TRow>>;
     urlParam: string; // URL parameter name for row ID
     props?: Partial<Omit<DrawerContentProps<TRow>, 'data' | 'onClose' | 'refreshTable' | 'isTableLoading'>>; // Additional props to pass to drawer component
+    additionalUrlParams?: Record<string, string | number>; // Additional URL parameters to set when opening drawer
   };
 
   /** Custom empty state component */

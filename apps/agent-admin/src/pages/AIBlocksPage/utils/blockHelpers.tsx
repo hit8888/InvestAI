@@ -109,7 +109,7 @@ export const BLOCK_ICONS: Record<BlockType, { icon: React.ReactNode }> = {
 
 export const SECTION_READY_TO_DISPLAY_CONTENT = {
   VIDEO_LIBRARY: {
-    pathToKnowledgeBase: '/agent/knowledge-base/videos',
+    pathToKnowledgeBase: 'agent/knowledge-base/videos',
     header: 'Videos ready to display',
     subHeader:
       'These videos will be shown to visitors in the Video Library block. To manage or edit your videos, go to the Knowledge Base.',
@@ -119,7 +119,7 @@ export const SECTION_READY_TO_DISPLAY_CONTENT = {
       'To activate the Video Library block, you need to upload at least one video to your Knowledge Base.',
   },
   DEMO_LIBRARY: {
-    pathToKnowledgeBase: '/agent/knowledge-base',
+    pathToKnowledgeBase: 'agent/knowledge-base',
     header: 'Demos experiences ready to display',
     subHeader:
       'These interactive demos will be shown in the Demo Widget block. To manage or edit your demos, go to the Knowledge Base.',

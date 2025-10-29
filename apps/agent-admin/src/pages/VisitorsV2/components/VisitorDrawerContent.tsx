@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import type { DrawerContentProps } from '../../../features/table-system';
+import { usePanelState, PANEL_MODE_LABELS } from '../../../hooks/usePanelState';
 import useSessionDetailsQuery from '../../../queries/query/useSessionDetailsQuery';
 import useIcpsQuery from '../../../queries/query/useIcpsQuery';
 import useReachoutEmailQuery from '../../../queries/query/useReachoutEmailQuery';
@@ -8,11 +9,7 @@ import useIcpDetailsQuery from '../../../queries/query/useIcpDetailsQuery';
 import { mapSessionDetailToCompanyData } from '../../VisitorsPage/utils/mapVisitorToCompanyData';
 import { normalizeSessionToConversationData } from '../../../utils/common';
 import ConversationDetailsDataResponseManager from '../../../managers/ConversationDetailsDataManager';
-import LoadingContent from '../../VisitorsPage/components/CompanyDetailsDrawer/LoadingContent';
-import CompanyDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/CompanyDetailsSection';
-import UserDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserDetailsSection';
-import RelevantProfilesSection from '../../VisitorsPage/components/CompanyDetailsDrawer/RelevantProfilesSection';
-import UserInteractionSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserInteractionSection';
+import DrawerSections from '../../ConversationsV2/components/DrawerSections';
 import LeftSideContentContainer from '../../VisitorsPage/components/CompanyDetailsDrawer/LeftSideContentContainer';
 import GeneratedEmailContent from '../../VisitorsPage/components/CompanyDetailsDrawer/GeneratedEmailContent';
 import RelevantProfilesContent from '../../VisitorsPage/components/CompanyDetailsDrawer/RelevantProfilesContent';
@@ -35,23 +32,21 @@ interface VisitorRow {
   [key: string]: unknown;
 }
 
-type LeftSideContentMode = 'generated-email' | 'conversation-details' | 'relevant-profiles' | 'browsing-history' | null;
-
-const LeftSideContentModeLabels = {
-  'generated-email': 'Generated Email',
-  'conversation-details': 'Conversation Details',
-  'relevant-profiles': 'Relevant Profiles',
-  'browsing-history': 'Browsing History',
-};
-
 /**
  * Drawer content for visitor details
  * V2 version without nested Drawer wrapper (to avoid conflicts with GenericRowDrawer)
  */
-export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerContentProps<VisitorRow>) => {
+export const VisitorDrawerContent = ({ data, onClose }: DrawerContentProps<VisitorRow>) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-  const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
+
+  // Use URL-based state management for panels
+  const {
+    currentMode: leftSideContentMode,
+    setPanelMode: setLeftSideContentMode,
+    clearPanelMode,
+    hasActivePanel,
+  } = usePanelState();
 
   // Get prospect_id from data. The table system should populate the correct field based on:
   // Priority: backend entity metadata (is_row_key) > config.rowKeyField ('prospect_id') > 'id'
@@ -64,8 +59,8 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
     isError: isSessionError,
   } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId, retry: false });
 
-  // Show loading if either table is loading or session data is loading
-  const isLoading = isTableLoading || isSessionLoading;
+  // Show loading only for session data (drawer's own loading state)
+  const isLoading = isSessionLoading;
 
   const companyData = useMemo(() => {
     return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;
@@ -115,17 +110,21 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
   );
 
   const showLeftSideContent = useMemo(() => {
+    if (!hasActivePanel) return false;
+
     if (leftSideContentMode === 'generated-email') {
       return isReachoutEmailSuccess;
     } else if (leftSideContentMode === 'relevant-profiles') {
       return isIcpListSuccess;
     } else if (leftSideContentMode === 'browsing-history') {
-      return true;
+      // Show if data is loaded OR still loading (to show loader)
+      return !!sessionData || isSessionLoading;
     } else if (leftSideContentMode === 'conversation-details') {
-      return true;
+      // Show if data is loaded OR still loading (to show loader)
+      return !!sessionData || isSessionLoading;
     }
     return false;
-  }, [isIcpListSuccess, isReachoutEmailSuccess, leftSideContentMode]);
+  }, [hasActivePanel, isIcpListSuccess, isReachoutEmailSuccess, leftSideContentMode, sessionData, isSessionLoading]);
 
   const formattedConversationData = useMemo(() => {
     if (!sessionData) {
@@ -143,12 +142,12 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
 
   const handleCloseDrawer = () => {
     setSelectedEmployee(null);
-    setLeftSideContentMode(null);
+    clearPanelMode(); // Clear panel from URL
     onClose();
   };
 
   const handleCloseLeftSideContent = () => {
-    setLeftSideContentMode(null);
+    clearPanelMode(); // Clear panel from URL
     setSelectedEmployee(null);
   };
 
@@ -190,7 +189,7 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
     <div className="relative w-full">
       <LeftSideContentContainer
         visible={showLeftSideContent}
-        headerTitle={leftSideContentMode ? LeftSideContentModeLabels[leftSideContentMode] : ''}
+        headerTitle={leftSideContentMode ? PANEL_MODE_LABELS[leftSideContentMode] : ''}
         onClose={handleCloseLeftSideContent}
       >
         {leftSideContentMode === 'generated-email' && (
@@ -224,6 +223,7 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
           <ConversationDetailsContent
             chatHistory={sessionData?.chat_history ?? []}
             conversation={formattedConversationData}
+            isLoading={isSessionLoading}
           />
         )}
       </LeftSideContentContainer>
@@ -241,44 +241,20 @@ export const VisitorDrawerContent = ({ data, onClose, isTableLoading }: DrawerCo
 
         {/* Content */}
         <div className="flex flex-1 flex-col gap-10 overflow-auto px-5 pb-5">
-          {isLoading ? (
-            <LoadingContent />
-          ) : (
-            <>
-              {/* Company Info Section */}
-              <CompanyDetailsSection companyData={companyData} />
-
-              {/* Employees Section */}
-              <UserDetailsSection
-                prospect={companyData?.prospect}
-                onGenerateEmail={handleProspectGenerateEmail}
-                onViewBrowsingHistory={handleViewBrowsingHistory}
-                showViewBrowsingHistory={browsingHistory.length > 0}
-                isGeneratingEmail={
-                  isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
-                }
-              />
-
-              {/* Relevant Profiles Section */}
-              <RelevantProfilesSection
-                companyName={companyData?.name}
-                onSearchProfiles={handleFetchIcpList}
-                disableSearchProfiles={
-                  isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError
-                }
-                showError={isIcpListError}
-                isLoadingProfiles={isIcpListLoading}
-              />
-
-              {/* Browsing & Conversation Summary */}
-              {companyData?.prospect?.session_id && (
-                <UserInteractionSection
-                  conversationSummary={companyData?.conversationSummary}
-                  onViewConversationDetails={handleViewConversationDetails}
-                />
-              )}
-            </>
-          )}
+          <DrawerSections
+            isLoading={isLoading}
+            companyData={companyData}
+            browsingHistory={browsingHistory}
+            selectedEmployee={selectedEmployee}
+            isReachoutEmailLoading={isReachoutEmailLoading}
+            onGenerateEmail={handleProspectGenerateEmail}
+            onViewBrowsingHistory={handleViewBrowsingHistory}
+            onFetchIcpList={handleFetchIcpList}
+            onViewConversationDetails={handleViewConversationDetails}
+            isIcpListLoading={isIcpListLoading}
+            leftSideContentMode={leftSideContentMode}
+            isIcpListError={isIcpListError}
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { LucideIcon, Button, buttonVariants, Typography, cn } from '@meaku/saral';
-import { Message, MessageEventType } from '../types/message';
+import { Message } from '../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import useFeatureConfig from '../hooks/useFeatureConfig';
 import { useFeature } from '../containers/FeatureProvider';
@@ -176,7 +176,6 @@ export const FeatureHeader = ({
                         onClick={() => {
                           if (cta.message && sendUserMessage) {
                             sendUserMessage(cta.message, {
-                              event_type: MessageEventType.BOOK_MEETING,
                               event_data: {
                                 form_id: cta.form_id,
                               },

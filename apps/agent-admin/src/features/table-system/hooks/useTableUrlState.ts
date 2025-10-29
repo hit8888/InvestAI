@@ -66,7 +66,7 @@ export const useTableUrlState = ({
   const initialState = useMemo(
     () => {
       // Exclude common drawer/UI-only params from being treated as filters
-      const uiOnlyParams = ['rowId', 'leadId', 'prospectId', 'conversationId', 'visitorId', 'companyId'];
+      const uiOnlyParams = ['rowId', 'leadId', 'prospectId', 'conversationId', 'visitorId', 'companyId', 'panel'];
       const parsed = parseUrlParams(
         searchParams,
         {
@@ -125,6 +125,7 @@ export const useTableUrlState = ({
             'conversationId',
             'visitorId',
             'companyId',
+            'panel',
             ...preservedUrlParams,
           ];
 

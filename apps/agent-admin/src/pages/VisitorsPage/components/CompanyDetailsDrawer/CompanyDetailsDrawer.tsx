@@ -2,18 +2,14 @@ import { useMemo, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 
 import { Drawer, DrawerContent } from '@breakout/design-system/components/Drawer/index';
-import LoadingContent from './LoadingContent';
 import type { Employee } from './types';
 import useSessionDetailsQuery from '../../../../queries/query/useSessionDetailsQuery';
-import UserInteractionSection from './UserInteractionSection';
-import CompanyDetailsSection from './CompanyDetailsSection';
-import UserDetailsSection from './UserDetailsSection';
 import useIcpsQuery from '../../../../queries/query/useIcpsQuery';
 import useReachoutEmailQuery from '../../../../queries/query/useReachoutEmailQuery';
 import GeneratedEmailContent from './GeneratedEmailContent';
 import useIcpDetailsQuery from '../../../../queries/query/useIcpDetailsQuery';
 import { mapSessionDetailToCompanyData } from '../../utils/mapVisitorToCompanyData';
-import RelevantProfilesSection from './RelevantProfilesSection';
+import CompanyDetailsSections from './CompanyDetailsSections';
 import LeftSideContentContainer from './LeftSideContentContainer';
 import RelevantProfilesContent from './RelevantProfilesContent';
 import BrowsingHistoryContent from './BrowsingHistoryContent';
@@ -228,46 +224,23 @@ const CompanyDetailsDrawer = ({
 
               {/* Content */}
               <div className="flex flex-1 flex-col gap-10 overflow-auto px-5 pb-5">
-                {isLoading ? (
-                  <LoadingContent />
-                ) : (
-                  <>
-                    {/* Company Info Section */}
-                    <CompanyDetailsSection companyData={companyData} />
-
-                    {/* Employees Section */}
-                    <UserDetailsSection
-                      prospect={companyData?.prospect}
-                      onGenerateEmail={handleProspectGenerateEmail}
-                      onViewBrowsingHistory={handleViewBrowsingHistory}
-                      showViewBrowsingHistory={!hideBrowsingHistory && browsingHistory.length > 0}
-                      isGeneratingEmail={
-                        isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
-                      }
-                    />
-
-                    {/* Relevant Profiles Section */}
-                    {!hideRelevantProfiles && (
-                      <RelevantProfilesSection
-                        companyName={companyData?.name}
-                        onSearchProfiles={handleFetchIcpList}
-                        disableSearchProfiles={
-                          isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError
-                        }
-                        showError={isIcpListError}
-                        isLoadingProfiles={isIcpListLoading}
-                      />
-                    )}
-
-                    {/* Browsing & Conversation Summary */}
-                    {!hideChatSummary && companyData?.prospect?.session_id && (
-                      <UserInteractionSection
-                        conversationSummary={companyData?.conversationSummary}
-                        onViewConversationDetails={handleViewConversationDetails}
-                      />
-                    )}
-                  </>
-                )}
+                <CompanyDetailsSections
+                  isLoading={isLoading}
+                  companyData={companyData}
+                  browsingHistory={browsingHistory}
+                  selectedEmployee={selectedEmployee}
+                  isReachoutEmailLoading={isReachoutEmailLoading}
+                  onGenerateEmail={handleProspectGenerateEmail}
+                  onViewBrowsingHistory={handleViewBrowsingHistory}
+                  onFetchIcpList={handleFetchIcpList}
+                  onViewConversationDetails={handleViewConversationDetails}
+                  isIcpListLoading={isIcpListLoading}
+                  leftSideContentMode={leftSideContentMode}
+                  isIcpListError={isIcpListError}
+                  hideBrowsingHistory={hideBrowsingHistory}
+                  hideRelevantProfiles={hideRelevantProfiles}
+                  hideChatSummary={hideChatSummary}
+                />
               </div>
             </div>
           </div>

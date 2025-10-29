@@ -1,13 +1,12 @@
 import { useMemo, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import type { DrawerContentProps } from '../../../features/table-system';
-import LoadingContent from '../../VisitorsPage/components/CompanyDetailsDrawer/LoadingContent';
+import { usePanelState, PANEL_MODE_LABELS } from '../../../hooks/usePanelState';
 import type { Employee } from '../../VisitorsPage/components/CompanyDetailsDrawer/types';
 import useSessionDetailsQuery from '../../../queries/query/useSessionDetailsQuery';
-import UserDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserDetailsSection';
-import CompanyDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/CompanyDetailsSection';
 import useReachoutEmailQuery from '../../../queries/query/useReachoutEmailQuery';
 import { mapSessionDetailToCompanyData } from '../../VisitorsPage/utils/mapVisitorToCompanyData';
+import LeadsDrawerSections from './LeadsDrawerSections';
 import LeftSideContentContainer from '../../VisitorsPage/components/CompanyDetailsDrawer/LeftSideContentContainer';
 import GeneratedEmailContent from '../../VisitorsPage/components/CompanyDetailsDrawer/GeneratedEmailContent';
 import ErrorContent from '../../VisitorsPage/components/CompanyDetailsDrawer/ErrorContent';
@@ -30,21 +29,22 @@ interface LeadRow {
   [key: string]: unknown;
 }
 
-type LeftSideContentMode = 'generated-email' | null;
-
-const LeftSideContentModeLabels = {
-  'generated-email': 'Generated Email',
-};
-
 /**
  * Drawer content for lead details
  * Simplified version that only shows company/user details and email generation
  * Hides: browsing history, relevant profiles, and AI chat summary
  */
-export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerContentProps<LeadRow>) => {
+export const LeadsDrawerContent = ({ data, onClose }: DrawerContentProps<LeadRow>) => {
   const bodyHtmlRef = useRef<HTMLDivElement | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-  const [leftSideContentMode, setLeftSideContentMode] = useState<LeftSideContentMode>(null);
+
+  // Use URL-based state management for panels
+  const {
+    currentMode: leftSideContentMode,
+    setPanelMode: setLeftSideContentMode,
+    clearPanelMode,
+    hasActivePanel,
+  } = usePanelState();
 
   // Get prospect_id from data. The table system should populate the correct field based on:
   // Priority: backend entity metadata (is_row_key) > config.rowKeyField ('prospect_id') > 'id'
@@ -57,8 +57,8 @@ export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerCont
     isError: isSessionError,
   } = useSessionDetailsQuery({ prospectId }, { enabled: !!prospectId, retry: false });
 
-  // Show loading if either table is loading or session data is loading
-  const isLoading = isTableLoading || isSessionLoading;
+  // Show loading only for session data (drawer's own loading state)
+  const isLoading = isSessionLoading;
 
   const companyData = useMemo(() => {
     return sessionData ? mapSessionDetailToCompanyData(sessionData) : null;
@@ -83,12 +83,12 @@ export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerCont
 
   const handleCloseDrawer = () => {
     setSelectedEmployee(null);
-    setLeftSideContentMode(null);
+    clearPanelMode(); // Clear panel from URL
     onClose();
   };
 
   const handleCloseSideContent = () => {
-    setLeftSideContentMode(null);
+    clearPanelMode(); // Clear panel from URL
     setSelectedEmployee(null);
   };
 
@@ -101,9 +101,9 @@ export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerCont
     <div className="relative w-full">
       {/* Left side content (email generation) */}
       <LeftSideContentContainer
-        visible={!!leftSideContentMode}
+        visible={hasActivePanel}
         onClose={handleCloseSideContent}
-        headerTitle={leftSideContentMode ? LeftSideContentModeLabels[leftSideContentMode] : ''}
+        headerTitle={leftSideContentMode ? PANEL_MODE_LABELS[leftSideContentMode] : ''}
       >
         {leftSideContentMode === 'generated-email' && (
           <GeneratedEmailContent
@@ -132,25 +132,13 @@ export const LeadsDrawerContent = ({ data, onClose, isTableLoading }: DrawerCont
 
         {/* Content */}
         <div className="flex flex-1 flex-col gap-10 overflow-auto px-5 pb-5">
-          {isLoading ? (
-            <LoadingContent />
-          ) : (
-            <>
-              {/* Company Info Section */}
-              <CompanyDetailsSection companyData={companyData} />
-
-              {/* User Details Section */}
-              <UserDetailsSection
-                prospect={companyData?.prospect}
-                onGenerateEmail={handleProspectGenerateEmail}
-                onViewBrowsingHistory={() => {}}
-                showViewBrowsingHistory={false}
-                isGeneratingEmail={
-                  isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
-                }
-              />
-            </>
-          )}
+          <LeadsDrawerSections
+            isLoading={isLoading}
+            companyData={companyData}
+            selectedEmployee={selectedEmployee}
+            isReachoutEmailLoading={isReachoutEmailLoading}
+            onGenerateEmail={handleProspectGenerateEmail}
+          />
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ interface BottomCenterRendererProps {
   onExpand: () => void;
   isDynamicConfigLoading?: boolean;
   isDynamicConfigStarted?: boolean;
+  isFirstTimeVisitor?: boolean;
 }
 
 export const BottomCenterRenderer = ({
@@ -33,6 +34,7 @@ export const BottomCenterRenderer = ({
   onExpand,
   isDynamicConfigLoading = false,
   isDynamicConfigStarted = false,
+  isFirstTimeVisitor = false,
 }: BottomCenterRendererProps) => {
   const { hasInteracted, shouldUnmountBottomBar, shouldShowDefaultBar, isDefaultBarReady, skipInitialTooltips } =
     transitionState;
@@ -119,6 +121,7 @@ export const BottomCenterRenderer = ({
             setActiveFeature={setActiveFeature}
             shouldStartAnimations={hasInteracted && isDefaultBarReady}
             skipInitialTooltips={skipInitialTooltips}
+            isFirstTimeVisitor={isFirstTimeVisitor}
           />
         </motion.div>
         {activeFeatureModuleType && (

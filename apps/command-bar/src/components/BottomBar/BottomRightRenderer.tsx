@@ -19,6 +19,7 @@ interface BottomRightRendererProps {
   onExpand: () => void;
   isDynamicConfigLoading?: boolean;
   isDynamicConfigStarted?: boolean;
+  isFirstTimeVisitor?: boolean;
 }
 
 export const BottomRightRenderer = ({
@@ -33,6 +34,7 @@ export const BottomRightRenderer = ({
   onExpand,
   isDynamicConfigLoading = false,
   isDynamicConfigStarted = false,
+  isFirstTimeVisitor = false,
 }: BottomRightRendererProps) => {
   const { isDefaultBarReady, skipInitialTooltips } = transitionState;
   const { handleDefaultBarAnimationComplete } = transitionActions;
@@ -72,6 +74,7 @@ export const BottomRightRenderer = ({
           setActiveFeature={setActiveFeature}
           shouldStartAnimations={isDefaultBarReady && isDynamicConfigStarted && !isDynamicConfigLoading}
           skipInitialTooltips={skipInitialTooltips}
+          isFirstTimeVisitor={isFirstTimeVisitor}
         />
         {activeFeatureModuleType && (
           <FeatureContentContainer

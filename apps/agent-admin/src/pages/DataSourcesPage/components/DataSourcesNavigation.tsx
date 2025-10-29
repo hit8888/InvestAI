@@ -27,8 +27,8 @@ const DataSourcesNavigation = () => {
   // Create breadcrumb items array
   const breadCrumbItems = [];
 
-  // Always add "Data Sources"
-  breadCrumbItems.push('Knowledge Base');
+  // Always add "Knowledge Base"
+  breadCrumbItems.push('Agent - Knowledge Base');
 
   // Add selectedType if it exists
   if (selectedType) {
@@ -43,7 +43,7 @@ const DataSourcesNavigation = () => {
   // Handle navigation based on breadcrumb item index
   const handleNavigate = (index: number) => {
     if (index === 0) {
-      // Navigate to Data Sources
+      // Navigate to Knowledge Base
       handleDataSourcesClick();
     } else if (index === 1 && selectedType) {
       // Navigate to selectedType view

@@ -1,8 +1,4 @@
 import { AppRoutesEnum } from './constants';
-import PanelAiBlocksIcon from '@breakout/design-system/components/icons/panel-ai-blocks-icon';
-import PanelAiBlocksActiveIcon from '@breakout/design-system/components/icons/panel-ai-blocks-active-icon';
-import PanelPlaygroundV2Icon from '@breakout/design-system/components/icons/panel-playground-v2-icon';
-import PanelPlaygroundV2ActiveIcon from '@breakout/design-system/components/icons/panel-playground-v2-active-icon';
 import {
   CalendarIcon,
   MessageSquareText,
@@ -10,10 +6,13 @@ import {
   GraduationCap,
   Milestone,
   Users,
+  Blocks,
   ToyBrick,
   CircleUser,
   Brain,
+  Dices,
   MessagesSquare,
+  LogOut,
 } from 'lucide-react';
 
 /**
@@ -39,6 +38,7 @@ export interface SidebarV2LinkItem {
   accordionGroup?: SidebarV2AccordionGroup;
   settingsGroup?: SidebarV2SettingsGroup;
   requiredFeatureFlag?: string;
+  isActionItem?: boolean; // For logout and other action items
 }
 
 export interface SidebarV2AccordionSection {
@@ -110,15 +110,15 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
   {
     navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
     navItem: 'AI Blocks',
-    icon: PanelAiBlocksIcon,
-    activeIcon: PanelAiBlocksActiveIcon,
+    icon: Blocks,
+    activeIcon: Blocks,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
     navUrl: `/${AppRoutesEnum.TRAINING_PLAYGROUND}`, // Disabled - coming soon
     navItem: 'Playground',
-    icon: PanelPlaygroundV2Icon,
-    activeIcon: PanelPlaygroundV2ActiveIcon,
+    icon: Dices,
+    activeIcon: Dices,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
 ];
@@ -191,4 +191,13 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
     activeIcon: CircleUser,
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
   },
-];
+]; /**
+ * Sign out item - displayed at the bottom of settings view
+ */
+export const SIDEBAR_V2_SIGN_OUT_ITEM: SidebarV2LinkItem = {
+  navUrl: '#logout',
+  navItem: 'Sign Out',
+  icon: LogOut,
+  activeIcon: LogOut,
+  isActionItem: true,
+};

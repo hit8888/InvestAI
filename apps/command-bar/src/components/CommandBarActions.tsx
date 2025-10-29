@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BaseActionComponent } from '@meaku/shared/features';
+import { clearAllInitialTooltips } from '@meaku/shared/components/BlackTooltip';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
@@ -25,6 +26,7 @@ interface CommandBarActionsProps {
   setActiveFeature: (buttonType: CommandBarModuleType | null) => void;
   shouldStartAnimations?: boolean;
   skipInitialTooltips?: boolean;
+  isFirstTimeVisitor?: boolean;
 }
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
@@ -34,6 +36,7 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
   setActiveFeature,
   shouldStartAnimations = false,
   skipInitialTooltips = false,
+  isFirstTimeVisitor = false,
 }) => {
   const { config } = useCommandBarStore();
   const { trackEvent } = useCommandBarAnalytics();
@@ -48,6 +51,13 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
       });
     }
   }, [modules.length]);
+
+  // Clear initial tooltips immediately when any module is opened
+  useEffect(() => {
+    if (activeFeature) {
+      clearAllInitialTooltips();
+    }
+  }, [activeFeature]);
 
   // Ensure Ask AI button is always bottom most
   const orderedActions = [...modules]
@@ -74,8 +84,8 @@ const CommandBarActions: React.FC<CommandBarActionsProps> = ({
     const actionConfig = ACTION_CONFIGS[featureConfig.module_type as keyof typeof ACTION_CONFIGS];
     if (!actionConfig) return null;
 
-    // Skip initial tooltip for single module or when switching from bottom bar
-    const shouldShowInitialTooltip = modules.length > 1 && !skipInitialTooltips;
+    // Skip initial tooltip for single module, when switching from bottom bar, or for returning visitors
+    const shouldShowInitialTooltip = modules.length > 1 && !skipInitialTooltips && isFirstTimeVisitor;
     const initialTooltipConfig =
       shouldShowInitialTooltip && shouldStartAnimations
         ? {

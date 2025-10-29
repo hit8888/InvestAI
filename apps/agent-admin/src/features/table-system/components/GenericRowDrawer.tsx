@@ -67,6 +67,8 @@ export const GenericRowDrawer = <TRow extends Record<string, unknown>>({
     setSearchParams(
       (prev) => {
         prev.delete(config.drawer.urlParam);
+        // Also clear the panel parameter if it exists
+        prev.delete('panel');
         return prev;
       },
       { replace: true },

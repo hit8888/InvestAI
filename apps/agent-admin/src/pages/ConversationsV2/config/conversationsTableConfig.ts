@@ -21,7 +21,7 @@ interface ProspectRow extends Record<string, unknown> {
  * Shows only prospects WITH conversations (session_id is_not_null)
  * Uses drawer for conversation details (same as Visitors)
  */
-export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
+export const conversationsTableConfig = (userId?: number): TablePageConfig<ProspectRow> => ({
   pageKey: 'all-chats',
   pageTitle: 'All Chats',
   rowKeyField: 'prospect_id', // Use prospect_id as the unique identifier for conversations
@@ -64,12 +64,12 @@ export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
   // Quick filter buttons (shown next to Filters button)
   quickFilters: [
     {
-      id: 'rep_joined',
-      label: 'Rep Joined',
+      id: 'assigned-to-me',
+      label: 'Assigned to me',
       icon: 'UserCheck',
-      filterField: 'sdr_assignment',
-      filterValue: null,
-      filterOperator: 'is_not_null',
+      filterField: 'sdr_assignment__id',
+      filterValue: userId,
+      filterOperator: 'eq',
     },
   ],
 
@@ -85,8 +85,9 @@ export const conversationsTableConfig: TablePageConfig<ProspectRow> = {
     width: '50vw',
     component: ConversationDrawerContent,
     urlParam: 'rowId',
-    props: {
-      autoOpenConversationDetails: true,
+    // Additional URL parameters to set when opening drawer
+    additionalUrlParams: {
+      panel: 'conversation-details',
     },
   },
-};
+});

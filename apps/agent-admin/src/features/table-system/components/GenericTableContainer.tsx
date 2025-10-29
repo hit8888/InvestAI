@@ -75,6 +75,14 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
       setSearchParams(
         (prev) => {
           prev.set(config.drawer.urlParam, String(rowId));
+
+          // Set additional URL parameters if specified in config
+          if (config.drawer.additionalUrlParams) {
+            Object.entries(config.drawer.additionalUrlParams).forEach(([key, value]) => {
+              prev.set(key, String(value));
+            });
+          }
+
           return prev;
         },
         { replace: false },

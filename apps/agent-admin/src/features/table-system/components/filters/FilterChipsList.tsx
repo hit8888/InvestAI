@@ -99,6 +99,11 @@ export const FilterChipsList = ({
       return;
     }
 
+    // Skip "Assigned to me" filter chip (sdr_assignment__id) - it's self-explanatory
+    if (key === 'sdr_assignment__id') {
+      return;
+    }
+
     const config = filterConfig.find((f) => f.id === key);
     const filterLabel = config?.label || key;
 

@@ -15,6 +15,22 @@ import {
 // Global tracking for initial tooltips - persists across component lifecycles
 const globalInitialTooltipShown = new Set<string>();
 const globalTooltipTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const globalHideCallbacks = new Set<() => void>();
+
+// Export function to clear all initial tooltip timers
+// This is useful when we want to immediately hide all initial tooltips (e.g., when a module is opened)
+export const clearAllInitialTooltips = () => {
+  // Clear all pending timers
+  globalTooltipTimers.forEach((timer) => {
+    clearTimeout(timer);
+  });
+  globalTooltipTimers.clear();
+
+  // Trigger all hide callbacks to immediately hide visible tooltips
+  globalHideCallbacks.forEach((callback) => {
+    callback();
+  });
+};
 
 type InitialTooltipConfig = {
   delay: number;
@@ -64,6 +80,19 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
     // Create a unique key based on content to track this specific tooltip
     const tooltipKey = content;
 
+    // Create hide callback for this instance
+    const hideCallback = () => {
+      if (isInitialTooltipActive) {
+        setIsVisible(false);
+        setIsInitialTooltipActive(false);
+      }
+    };
+
+    // Register callback if this tooltip has initial tooltip config
+    if (initialTooltip) {
+      globalHideCallbacks.add(hideCallback);
+    }
+
     if (initialTooltip && !globalInitialTooltipShown.has(tooltipKey)) {
       // Mark as started immediately to prevent multiple instances
       globalInitialTooltipShown.add(tooltipKey);
@@ -100,9 +129,11 @@ const BlackTooltip: React.FC<BlackTooltipProps> = ({
         clearTimeout(hoverTimerRef.current);
         hoverTimerRef.current = null;
       }
+      // Remove hide callback on unmount
+      globalHideCallbacks.delete(hideCallback);
       // Note: Global timers persist across component unmounts
     };
-  }, [initialTooltip, content]);
+  }, [initialTooltip, content, isInitialTooltipActive]);
 
   const handleMouseEnter = () => {
     if (!isInitialTooltipActive) {
