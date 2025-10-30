@@ -12,6 +12,7 @@ export const ArtifactEnumSchema = z.enum([
   'FORM',
   'CALENDAR',
   'QUALIFICATION_FORM',
+  'DEMO',
 ]);
 
 export const SlideItemSchema = z.object({
@@ -150,11 +151,22 @@ export const CalendarArtifactSchema = z.object({
 
 export type CalendarArtifactContent = z.infer<typeof CalendarArtifactSchema>;
 
+export const DemoArtifactSchema = z.object({
+  id: z.number(),
+  demo_url: z.string(),
+  title: z.string(),
+  description: z.string(),
+  thumbnail_url: z.string().optional(),
+});
+
+export type DemoArtifactContent = z.infer<typeof DemoArtifactSchema>;
+
 export type MediaArtifactContent =
   | SlideImageArtifactContent
   | SlideArtifactContent
   | VideoArtifactContent
-  | CalendarArtifactContent;
+  | CalendarArtifactContent
+  | DemoArtifactContent;
 
 export type ArtifactContent = MediaArtifactContent | FormArtifactContent | SuggestionArtifactContent;
 

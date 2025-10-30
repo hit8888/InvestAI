@@ -1,6 +1,6 @@
 import ReactPlayer from 'react-player';
 
-export type ArtifactType = 'VIDEO' | 'SLIDE_IMAGE';
+export type ArtifactType = 'VIDEO' | 'SLIDE_IMAGE' | 'DEMO';
 
 export interface BaseArtifactProps {
   title: string;

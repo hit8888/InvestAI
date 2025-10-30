@@ -2,6 +2,7 @@ import {
   ArtifactEnumSchema,
   CalendarArtifactSchema,
   CtaEventDataSchema,
+  DemoArtifactSchema,
   FormArtifactMetadata,
   FormArtifactSchema,
   QualificationQuestionAnswerSchema,
@@ -44,6 +45,7 @@ export const MessageEventType = {
   FORM_ARTIFACT: 'FORM_ARTIFACT',
   QUALIFICATION_FORM_ARTIFACT: 'QUALIFICATION_FORM_ARTIFACT',
   CALENDAR_ARTIFACT: 'CALENDAR_ARTIFACT',
+  DEMO_ARTIFACT: 'DEMO_ARTIFACT',
   QUALIFICATION_FORM_FILLED: 'QUALIFICATION_FORM_FILLED',
   CALENDAR_SUBMIT: 'CALENDAR_SUBMIT',
   FORM_FILLED: 'FORM_FILLED',
@@ -75,6 +77,7 @@ export type EventTypeType =
   | 'FORM_ARTIFACT'
   | 'QUALIFICATION_FORM_ARTIFACT'
   | 'CALENDAR_ARTIFACT'
+  | 'DEMO_ARTIFACT'
   | 'FORM_FILLED'
   | 'QUALIFICATION_FORM_FILLED'
   | 'CALENDAR_SUBMIT'
@@ -125,6 +128,7 @@ export const ArtifactMessageContentSchema = z.object({
         SuggestionArtifactSchema,
         FormArtifactSchema,
         CalendarArtifactSchema,
+        DemoArtifactSchema,
       ])
       .nullable(),
     metadata: FormArtifactMetadata,
@@ -183,9 +187,29 @@ export interface SlideImageArtifactData {
   error_code: string | null;
 }
 
+export interface DemoArtifactData {
+  artifact_id: string;
+  content: {
+    id: number;
+    demo_url: string;
+    title: string;
+    description: string;
+    thumbnail_url?: string;
+  };
+  artifact_type: string;
+  metadata: Record<string, unknown>;
+  error: string | null;
+  error_code: string | null;
+}
+
 export interface ArtifactEventData {
   artifact_type: string;
-  artifact_data: SuggestionsArtifactData | VideoArtifactData | SlideImageArtifactData | Record<string, unknown>;
+  artifact_data:
+    | SuggestionsArtifactData
+    | VideoArtifactData
+    | SlideImageArtifactData
+    | DemoArtifactData
+    | Record<string, unknown>;
 }
 
 export const ActorSchema = z.enum(['SALES', 'DEMO', 'ARTIFACT', 'ANALYTICS', 'DISCOVERY_QUESTIONS', 'EVENT']);
@@ -294,6 +318,10 @@ export const MessageSchema = z
       }),
       z.object({
         event_type: z.literal('CALENDAR_ARTIFACT'),
+        event_data: ArtifactMessageContentSchema,
+      }),
+      z.object({
+        event_type: z.literal('DEMO_ARTIFACT'),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({

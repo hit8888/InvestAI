@@ -31,6 +31,7 @@ export enum ArtifactEnum {
   SUGGESTIONS = 'SUGGESTIONS',
   FORM = 'FORM',
   CALENDAR = 'CALENDAR',
+  DEMO = 'DEMO',
 }
 
 export enum ArtifactPreviewEnum {

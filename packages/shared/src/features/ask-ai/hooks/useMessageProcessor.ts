@@ -32,6 +32,7 @@ export const useMessageProcessor = (message: MessageType) => {
       isVideoArtifact: eventType === 'VIDEO_ARTIFACT',
       isImageArtifact: eventType === 'SLIDE_IMAGE_ARTIFACT',
       isCtaEvent: eventType === 'CTA_EVENT',
+      isDemoArtifact: eventType === 'DEMO_ARTIFACT',
     };
   }, [message]);
 };

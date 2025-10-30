@@ -1,14 +1,16 @@
 import { cn, typographyVariants, type AvatarComponentProps } from '@meaku/saral';
 import { MessageAvatar } from '../../../components/AvatarDisplay';
 import type {
-  ArtifactEventData,
   Message as MessageType,
   VideoArtifactData,
   SlideImageArtifactData,
+  DemoArtifactData,
+  ArtifactMessageContent,
 } from '../../../types/message';
 import { TextArtifact } from './TextArtifact';
 import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
+import { DemoArtifact } from './DemoArtifact';
 import FormArtifact from '../../../components/FormArtifact';
 import { QualificationFormArtifact } from '../../../components/QualificationFormArtifact';
 import { CalendarArtifact } from '../../../components/calendar/CalendarArtifact';
@@ -61,8 +63,16 @@ export const Message = ({
   showLogo,
   logoUrl,
 }: MessageProps) => {
-  const { eventType, eventData, isTextArtifact, isAdminResponse, isVideoArtifact, isImageArtifact, isCtaEvent } =
-    useMessageProcessor(message);
+  const {
+    eventType,
+    eventData,
+    isTextArtifact,
+    isAdminResponse,
+    isVideoArtifact,
+    isImageArtifact,
+    isCtaEvent,
+    isDemoArtifact,
+  } = useMessageProcessor(message);
   // Note: ADMIN_TYPING events are now handled globally in the store and shown in the header
   // const isTypingEvent = eventType === 'ADMIN_TYPING';
 
@@ -84,11 +94,11 @@ export const Message = ({
   }
 
   const videoArtifactData = isVideoArtifact
-    ? ((eventData as unknown as ArtifactEventData).artifact_data as VideoArtifactData)
+    ? ((eventData as ArtifactMessageContent).artifact_data as VideoArtifactData)
     : null;
 
   const imageArtifactData = isImageArtifact
-    ? ((eventData as unknown as ArtifactEventData).artifact_data as SlideImageArtifactData)
+    ? ((eventData as ArtifactMessageContent).artifact_data as SlideImageArtifactData)
     : null;
 
   const isFormArtifact = eventType === 'FORM_ARTIFACT';
@@ -98,7 +108,7 @@ export const Message = ({
   const isQualificationFormArtifact = eventType === 'QUALIFICATION_FORM_ARTIFACT';
   // Extract form artifact data
   const formArtifactData = isFormArtifact
-    ? ((eventData as unknown as ArtifactEventData).artifact_data as {
+    ? ((eventData as ArtifactMessageContent).artifact_data as {
         artifact_id: string;
         content: FormArtifactContent;
         metadata: FormArtifactMetadataType;
@@ -107,7 +117,7 @@ export const Message = ({
 
   // Extract qualification form artifact data
   const qualificationFormArtifactData = isQualificationFormArtifact
-    ? ((message.event_data as ArtifactEventData).artifact_data as {
+    ? ((message.event_data as ArtifactMessageContent).artifact_data as {
         artifact_id: string;
         content: FormArtifactContent;
         metadata: FormArtifactMetadataType;
@@ -116,7 +126,7 @@ export const Message = ({
 
   // Extract calendar artifact data
   const calendarArtifactData = isCalendarArtifact
-    ? ((eventData as unknown as ArtifactEventData).artifact_data as {
+    ? ((eventData as ArtifactMessageContent).artifact_data as {
         artifact_id: string;
         content: CalendarArtifactContent;
         metadata: Record<string, unknown>;
@@ -131,6 +141,11 @@ export const Message = ({
   const isCalendarSubmitted = calendarArtifactData
     ? filledCalendarUrls.includes(calendarArtifactData.content.calendar_url)
     : false;
+
+  // Extract demo artifact data
+  const demoArtifactData = isDemoArtifact
+    ? ((eventData as ArtifactMessageContent).artifact_data as DemoArtifactData)
+    : null;
 
   // Extract discovery question data
   const discoveryQuestionData = isDiscoveryQuestion
@@ -174,7 +189,8 @@ export const Message = ({
       isCalendarArtifact ||
       isDiscoveryQuestion ||
       isSuggestionsArtifact ||
-      isCtaEvent,
+      isCtaEvent ||
+      isDemoArtifact,
     'py-0 pr-4 pl-10': isDiscoveryQuestion || isFormArtifact,
     'py-0 px-4 justify-center': isQualificationFormArtifact,
     'p-0 mt-4': isCalendarArtifact || isCtaEvent || (isFormArtifact && isFormFilled),
@@ -190,7 +206,8 @@ export const Message = ({
     !isCalendarArtifact &&
     !isDiscoveryQuestion &&
     !isCtaEvent &&
-    !isConversationEvent
+    !isConversationEvent &&
+    !isDemoArtifact
   ) {
     return null;
   }
@@ -206,6 +223,7 @@ export const Message = ({
           !isDiscoveryQuestion &&
           !isVideoArtifact &&
           !isImageArtifact &&
+          !isDemoArtifact &&
           !isSuggestionsArtifact &&
           !isCtaEvent
         }
@@ -276,6 +294,7 @@ export const Message = ({
           onExpand={onExpand!}
         />
       )}
+      {isDemoArtifact && demoArtifactData && <DemoArtifact data={demoArtifactData} />}
 
       {isDiscoveryQuestion && discoveryQuestionData && sendUserMessage && (
         <DiscoveryQuestion

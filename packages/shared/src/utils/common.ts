@@ -6,7 +6,15 @@ import { FormConfigResponse } from '../types/responses';
 
 const { FORM_FILLED, QUALIFICATION_FORM_FILLED, CALENDAR_SUBMIT, PRIMARY_GOAL_CTA_CLICKED } = MessageEventType;
 
-export const BASE_ARTIFACT_TYPES = ['SLIDE', 'SLIDE_IMAGE', 'VIDEO', 'FORM', 'CALENDAR', 'QUALIFICATION_FORM'] as const;
+export const BASE_ARTIFACT_TYPES = [
+  'SLIDE',
+  'SLIDE_IMAGE',
+  'VIDEO',
+  'FORM',
+  'CALENDAR',
+  'QUALIFICATION_FORM',
+  'DEMO',
+] as const;
 export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];
 
