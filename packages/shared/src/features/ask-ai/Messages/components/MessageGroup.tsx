@@ -112,7 +112,9 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
               showLogo={showLogo}
               logoUrl={logoUrl}
             />
-            {message.role === 'ai' && feedbackEnabled && <MessageFeedback message={message} />}
+            {message.role === 'ai' &&
+              (message.event_type === 'TEXT_RESPONSE' || message.event_type === 'STREAM_RESPONSE') &&
+              feedbackEnabled && <MessageFeedback message={message} />}
           </MessageErrorBoundary>
         );
       })}

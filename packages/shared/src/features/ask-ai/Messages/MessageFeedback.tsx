@@ -103,25 +103,43 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
           align="start"
           sideOffset={8}
         >
-          <TextArea
-            required
-            placeholder="Tell us what you liked about the response or how it could be improved."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            className="min-h-16 resize-none mb-4"
-          />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <TextArea
+              required
+              placeholder="Tell us what you liked about the response or how it could be improved."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  if (comment.trim()) {
+                    handleSubmit();
+                  }
+                }
+              }}
+              className="resize-none mb-4"
+              style={{
+                height: '72',
+              }}
+            />
 
-          <div className="flex justify-end">
-            <Button
-              disabled={!comment.trim()}
-              size="sm"
-              onClick={handleSubmit}
-              className="text-white border-2 border-white/24 px-3 py-2 h-8 rounded-lg flex items-center gap-2"
-            >
-              <span className="text-sm font-semibold">Send</span>
-              <LucideIcon name="send" className="h-3.5 w-3.5 text-white" />
-            </Button>
-          </div>
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={!comment.trim()}
+                size="sm"
+                className="text-white border-2 border-white/24 px-3 py-2 h-8 rounded-lg flex items-center gap-2"
+              >
+                <span className="text-sm font-semibold">Send</span>
+                <LucideIcon name="send" className="h-3.5 w-3.5 text-white" />
+              </Button>
+            </div>
+          </form>
         </PopoverContent>
       </Popover>
     );
