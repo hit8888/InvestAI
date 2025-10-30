@@ -20,9 +20,15 @@ interface JoinConversationChatAreaProps {
   conversationDetails?: SessionDetailsDataResponse;
   sessionId: string;
   isLoading?: boolean;
+  hasUserLeft?: boolean;
 }
 
-const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }: JoinConversationChatAreaProps) => {
+const JoinConversationChatArea = ({
+  conversationDetails,
+  sessionId,
+  isLoading,
+  hasUserLeft,
+}: JoinConversationChatAreaProps) => {
   const logoURL = getTenantIdentifier()?.['logo'];
   const { messages, isUserTyping } = useMessageStore();
   const {
@@ -98,7 +104,7 @@ const JoinConversationChatArea = ({ conversationDetails, sessionId, isLoading }:
           <div className="flex min-h-0 flex-grow gap-4 rounded-2xl bg-gray-900/5 p-4">
             <div className="relative h-full w-3/5">
               <div className="h-full overflow-y-auto p-2 pb-28">
-                <BrowsedUrlsPreview isRealTime browsedUrls={[...browsedUrls].reverse()} />
+                <BrowsedUrlsPreview isRealTime={!hasUserLeft} browsedUrls={[...browsedUrls].reverse()} />
               </div>
               <div className="sticky bottom-0 mx-2">
                 <LandingPageCard

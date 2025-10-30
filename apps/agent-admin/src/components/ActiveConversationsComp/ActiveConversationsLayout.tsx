@@ -244,12 +244,12 @@ const ActiveConversationsLayout = () => {
     updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
   };
 
-  const handleAIResponseGenerationRequest = (sessionId: string) => {
+  const handleAIResponseGenerationRequest = (sessionId: string, lastUserMessage: string) => {
     setIsGeneratingAIResponse(true);
     const sendMessage = sendMessageFnMap[sessionId];
     sendMessage({
       message: createResponseSuggestionsEvent('', {
-        query: currentConversation?.last_user_message,
+        query: lastUserMessage ?? currentConversation?.last_user_message,
       }),
       message_type: 'EVENT',
     });

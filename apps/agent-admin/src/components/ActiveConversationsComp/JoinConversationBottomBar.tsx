@@ -12,6 +12,7 @@ type JoinConversationBottomBarProps = {
   onAIResponseGenerationRequest: () => void;
   onExit: () => void;
   onClose: () => void;
+  disableJoinButton?: boolean;
 };
 
 const JoinConversationBottomBar = ({
@@ -21,6 +22,7 @@ const JoinConversationBottomBar = ({
   onAIResponseGenerationRequest,
   onExit,
   onClose,
+  disableJoinButton = false,
 }: JoinConversationBottomBarProps) => {
   const renderContent = (sessionStatus: AdminConversationJoinStatus) => {
     switch (sessionStatus) {
@@ -35,7 +37,12 @@ const JoinConversationBottomBar = ({
       default:
         return (
           <div className="flex w-full items-center justify-center rounded-b-3xl border-t border-gray-200 bg-gray-25 p-2.5">
-            <JoinButtons status={sessionStatus} onJoin={onJoinButtonClick} onClose={onClose} />
+            <JoinButtons
+              status={sessionStatus}
+              onJoin={onJoinButtonClick}
+              onClose={onClose}
+              disableJoinButton={disableJoinButton}
+            />
           </div>
         );
     }

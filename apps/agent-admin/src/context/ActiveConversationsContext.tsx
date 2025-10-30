@@ -3,7 +3,7 @@ import useActiveConversationsWebSocket, { LastMessage } from '../hooks/useActive
 import useActiveConversationsQuery from '../queries/query/useActiveConversationsQuery';
 import { BuyerIntent } from '@meaku/core/types/common';
 import useSound from '@meaku/core/hooks/useSound';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
 import { ReadyState } from 'react-use-websocket';
@@ -66,7 +66,6 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
   const { setCurrentConversation } = useJoinConversationStore();
-  const navigate = useNavigate();
 
   const baseVolume = 0.35;
   const { play } = useSound(popupsound, baseVolume);
@@ -111,10 +110,42 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
 
       if (currentConversation) {
         setCurrentConversation(currentConversation);
-      } else {
-        navigate('/active-conversations');
-        setCurrentConversation(null);
+      } else if (sessionID) {
+        // Create a minimal ActiveConversation object for standalone sessions
+        // JoinConversationDrawer will fetch the full session details via useSessionDetailsQuery
+        const minimalConversation: ActiveConversation = {
+          agent_id: 0,
+          session_id: sessionID,
+          last_user_message: '',
+          last_message_timestamp: new Date().toISOString(),
+          buyer_intent: BuyerIntent.LOW,
+          is_self_assigned: false,
+          prospect: {
+            name: '',
+            email: '',
+            country: '',
+            company_demographics: {
+              company_name: '',
+              company_revenue: '',
+              employee_count: 0,
+              company_logo_url: '',
+              website_url: '',
+            },
+            parent_url: '',
+            browsed_urls: [],
+            sdr_assignment: {} as SdrAssignment,
+          },
+          session: {
+            query_params: {
+              utm_source: '',
+            },
+          },
+        };
+        setCurrentConversation(minimalConversation);
       }
+    } else if (!sessionID) {
+      // Clear currentConversation when navigating away from session page
+      setCurrentConversation(null);
     }
   }, [conversations, sessionID, setCurrentConversation]);
 

@@ -1,6 +1,6 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import TextArea from '@breakout/design-system/components/TextArea/index';
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { useMessageStore } from '../../hooks/useMessageStore';
@@ -28,9 +28,10 @@ type JoinButtonsProps = {
   status: AdminConversationJoinStatus;
   onJoin: () => void;
   onClose?: () => void;
+  disableJoinButton?: boolean;
 };
 
-export const JoinButtons = ({ status, onJoin, onClose }: JoinButtonsProps) => {
+export const JoinButtons = ({ status, onJoin, onClose, disableJoinButton = false }: JoinButtonsProps) => {
   const isPending = status === AdminConversationJoinStatus.PENDING;
 
   return (
@@ -47,7 +48,7 @@ export const JoinButtons = ({ status, onJoin, onClose }: JoinButtonsProps) => {
       <Button
         onClick={onJoin}
         variant="primary"
-        disabled={isPending}
+        disabled={isPending || disableJoinButton}
         buttonStyle="rightIcon"
         className="font-normal"
         rightIcon={isPending ? <LoaderCircle size={16} className="animate-spin" /> : <Plus size={16} />}
@@ -65,6 +66,7 @@ const AdminChatInput = ({
   children,
   onTypingChange,
 }: ChatInputContainerProps) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = useState('');
   const [selectedAttachmentOption, setSelectedAttachmentOption] = useState<ActiveConversationAttachmentOption>(
     ActiveConversationAttachmentOption.NONE,
@@ -157,6 +159,12 @@ const AdminChatInput = ({
 
   const tooltipText = isGeneratingAIResponse ? 'Drafting AI response...' : 'Let AI draft a reply';
 
+  useEffect(() => {
+    if (!disabled && !isGeneratingAIResponse) {
+      textAreaRef.current?.focus();
+    }
+  }, [disabled, isGeneratingAIResponse]);
+
   return (
     <div className="flex w-full items-center gap-4 p-2 pt-0">
       <div className={cn('flex flex-grow items-center gap-3 rounded-xl border border-gray-300 bg-white p-3')}>
@@ -178,6 +186,7 @@ const AdminChatInput = ({
         )}
         <form onSubmit={onSubmit} className="flex w-full items-center gap-3">
           <TextArea
+            ref={textAreaRef}
             autoFocus={!disabled}
             initialHeight={36}
             disabled={disabled}

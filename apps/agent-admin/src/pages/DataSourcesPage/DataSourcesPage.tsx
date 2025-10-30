@@ -56,7 +56,7 @@ const DataSourcesPage = () => {
   const artifactsSourcesData = {
     VIDEOS: dataSourcesData?.VIDEO,
     SLIDES: dataSourcesData?.SLIDE,
-    FEATURES: dataSourcesData?.FEATURES,
+    FEATURES: [], // Old demo features are not supported anymore
   };
 
   if (!selectedType) {

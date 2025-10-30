@@ -8,13 +8,18 @@ import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
-import { checkIsAdminJoinedMessage, checkIsAdminLeftMessage } from '@meaku/core/utils/messageUtils';
+import {
+  checkIsAdminJoinedMessage,
+  checkIsAdminLeftMessage,
+  checkIsUserLeftMessage,
+} from '@meaku/core/utils/messageUtils';
+import { MessageRole } from '@meaku/shared/types/message';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
   onSendMessage?: SendAdminMessageWithSessionIdFn;
   onExitConversation: () => void;
-  onAIResponseGenerationRequest: (sessionId: string) => void;
+  onAIResponseGenerationRequest: (sessionId: string, lastUserMessage: string) => void;
   onClose: () => void;
 };
 
@@ -29,6 +34,8 @@ const JoinConversationDrawer = ({
   const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse, currentConversation } =
     useJoinConversationStore();
   const { messages, setMessages } = useMessageStore();
+  const lastUserMessage = messages.filter((message) => message.role === MessageRole.USER).at(-1);
+  const hasUserLeft = lastUserMessage && checkIsUserLeftMessage(lastUserMessage);
 
   const { data, isFetching, isError } = useSessionDetailsQuery(
     { sessionId: currentConversation?.session_id },
@@ -82,7 +89,7 @@ const JoinConversationDrawer = ({
   };
 
   const handleAIResponseGenerationRequest = () => {
-    onAIResponseGenerationRequest(sessionId);
+    onAIResponseGenerationRequest(sessionId, lastUserMessage?.message?.content ?? '');
   };
 
   const sessionStatus = sessionsStatus[sessionId];
@@ -102,18 +109,22 @@ const JoinConversationDrawer = ({
           onPointerDownOutside={(e) => e.preventDefault()}
         >
           <div className="flex h-full w-full grow flex-col gap-2 overflow-hidden">
-            <JoinConversationChatArea conversationDetails={data} sessionId={sessionId} isLoading={isFetching} />
+            <JoinConversationChatArea
+              conversationDetails={data}
+              sessionId={sessionId}
+              isLoading={isFetching}
+              hasUserLeft={hasUserLeft}
+            />
 
-            {messages.length === 0 ? null : (
-              <JoinConversationBottomBar
-                sessionStatus={sessionStatus}
-                onSendMessage={handleSendMessage}
-                onJoinButtonClick={handleJoinButtonClick}
-                onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
-                onExit={onExitConversation}
-                onClose={onClose}
-              />
-            )}
+            <JoinConversationBottomBar
+              sessionStatus={sessionStatus}
+              onSendMessage={handleSendMessage}
+              onJoinButtonClick={handleJoinButtonClick}
+              onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
+              onExit={onExitConversation}
+              onClose={onClose}
+              disableJoinButton={hasUserLeft}
+            />
           </div>
         </PopoverContent>
       </Popover>
