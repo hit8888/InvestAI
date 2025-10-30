@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useCallback, useMemo } from 'react';
 import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { useCommandBarStore } from '../stores';
 
 interface FeatureContextType {
   activeFeature: CommandBarModuleConfigType | null;
@@ -10,17 +11,18 @@ const FeatureContext = createContext<FeatureContextType | null>(null);
 
 interface FeatureProviderProps {
   children: ReactNode;
-  features: CommandBarModuleConfigType[];
 }
 
 export const DEFAULT_ASK_AI_MODULE_ID = 1;
 
-const FeatureProvider = ({ features, children }: FeatureProviderProps) => {
+const FeatureProvider = ({ children }: FeatureProviderProps) => {
+  const { config } = useCommandBarStore();
+
   const [activeFeatureType, setActiveFeatureType] = useState<CommandBarModuleType | null>(null);
 
   const activeFeature = useMemo(
-    () => features?.find((m) => m.module_type === activeFeatureType) ?? null,
-    [features, activeFeatureType],
+    () => config.command_bar?.modules?.find((m) => m.module_type === activeFeatureType) ?? null,
+    [config.command_bar?.modules, activeFeatureType],
   );
 
   const handleSetActiveModule = useCallback((moduleType: CommandBarModuleType | null) => {

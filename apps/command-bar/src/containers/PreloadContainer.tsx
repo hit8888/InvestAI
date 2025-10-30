@@ -9,9 +9,10 @@ import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalytics
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useActiveTenantInit } from '../hooks/useActiveTenantInit';
 import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
-import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import useTracking from '../hooks/useTracking';
+import { isProduction } from '@meaku/shared/constants/common';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -141,10 +142,14 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
     }
   }, [initialSettings, setSettings]);
 
+  useTracking({
+    enabled: isProduction && !initialSettings.is_admin && !initialSettings.is_test && dynamicConfigQuery.isFetched,
+  });
+
   const shouldLoadApp = config?.is_enabled && !!config.command_bar?.modules.length;
 
   if (shouldLoadApp) {
-    return <FeatureProvider features={config.command_bar?.modules ?? []}>{children}</FeatureProvider>;
+    return children;
   }
 
   return null;

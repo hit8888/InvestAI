@@ -7,9 +7,7 @@ import { useCommandBarStore } from '@meaku/shared/stores';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
-import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics/index';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useUpdateProspectMutation';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
@@ -73,8 +71,6 @@ function App() {
     { enabled: !!activeFeature || !!config.session_id || !!settings.message },
   );
 
-  const updateProspectMutation = useUpdateProspectMutation();
-
   // Initialize user left tracking
   useUserLeftTracking(sendUserMessage);
 
@@ -114,27 +110,6 @@ function App() {
       page_url: settings.parent_url,
     });
   }, [config.prospect_id, config.session_id, settings.parent_url, updateCommonProperties]);
-
-  useEffect(() => {
-    if (!config.tracking_config) {
-      return;
-    }
-
-    const cleanup = initProspectAnalytics(config.tracking_config, (requestData) => {
-      if (!config.prospect_id) {
-        return;
-      }
-
-      updateProspectMutation.mutate({
-        prospectId: config.prospect_id,
-        payload: requestData,
-      });
-    });
-
-    return () => {
-      cleanup();
-    };
-  }, [config.tracking_config, config.prospect_id, updateProspectMutation]);
 
   useEffect(() => {
     if (settings.message) {

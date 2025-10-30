@@ -9,6 +9,7 @@ import CommandBarAnalyticsProvider from '@meaku/core/contexts/CommandBarAnalytic
 import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
 import DeviceManagerProvider from '@meaku/core/contexts/DeviceManagerProvider';
 import SentryErrorBoundary from './SentryErrorBoundary';
+import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
 
 interface RootContainerProps {
   settings?: SettingsContainerProps;
@@ -33,7 +34,9 @@ const RootContainer = ({ settings: propSettings, hostId, children }: RootContain
                     }}
                   >
                     <PreloadContainer settings={settings}>
-                      <StylingContainer>{children}</StylingContainer>
+                      <FeatureProvider>
+                        <StylingContainer>{children}</StylingContainer>
+                      </FeatureProvider>
                     </PreloadContainer>
                   </CommandBarAnalyticsProvider>
                 ) : null
