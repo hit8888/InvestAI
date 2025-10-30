@@ -5,7 +5,7 @@ import { connectIntegration, connectIntegrationCallback, disconnectIntegration }
 import { getIntegrationNameFromType } from '../../utils/common';
 
 type IntegrationConnectResult = {
-  login_url: string;
+  login_url: string | null;
 };
 
 type IntegrationConnectVariables = {

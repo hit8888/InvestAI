@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import PageContainer from '../../components/AgentManagement/PageContainer';
 import { useIntegrationsQuery } from '../../queries/query/useIntegrationQueries';
 import IntegrationCard from './components/IntegrationCard';
 import IntegrationForm from '@breakout/design-system/components/layout/IntegrationForm';
 import type { Integration } from '@meaku/core/types/admin/api';
+import { getIntegrationNameFromType } from '../../utils/common';
 import {
   useIntegrationConnect,
   useIntegrationConnectCallback,
@@ -13,6 +16,7 @@ import {
 import { useOAuthPopup } from '@meaku/core/hooks/useOAuthPopUp';
 
 const IntegrationsPage = () => {
+  const queryClient = useQueryClient();
   const [integrationFormToShow, setIntegrationFormToShow] = useState<Integration | null>(null);
   const { data, isLoading, error } = useIntegrationsQuery();
   const { mutateAsync: connectIntegration, isPending: connectPending } = useIntegrationConnect();
@@ -33,7 +37,14 @@ const IntegrationsPage = () => {
       formData,
       integrationType,
     });
-    openPopup(response.login_url, { oAuthType: integrationType });
+    if (response?.login_url) {
+      openPopup(response.login_url, { oAuthType: integrationType });
+    } else {
+      toast.success(`${getIntegrationNameFromType(integrationType)} connected successfully.`, {
+        position: 'bottom-center',
+      });
+      queryClient.invalidateQueries({ queryKey: ['integrations'] });
+    }
   };
 
   const handleToggleIntegrationStatus = (integrationToToggle: Integration) => {
