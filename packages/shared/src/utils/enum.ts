@@ -32,6 +32,7 @@ export enum ArtifactEnum {
   FORM = 'FORM',
   CALENDAR = 'CALENDAR',
   DEMO = 'DEMO',
+  PDF = 'PDF',
 }
 
 export enum ArtifactPreviewEnum {
@@ -39,6 +40,7 @@ export enum ArtifactPreviewEnum {
   SLIDE_IMAGE = 'SLIDE_IMAGE',
   VIDEO = 'VIDEO',
   DEMO = 'DEMO',
+  PDF = 'PDF',
 }
 
 export enum CalendarTypeEnum {

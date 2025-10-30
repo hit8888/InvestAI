@@ -179,6 +179,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           'QUALIFICATION_FORM_ARTIFACT',
           'CALENDAR_ARTIFACT',
           'DEMO_ARTIFACT',
+          'PDF_ARTIFACT',
           'VIDEO_ARTIFACT',
           'SLIDE_ARTIFACT',
           'SLIDE_IMAGE_ARTIFACT',
@@ -655,6 +656,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         'QUALIFICATION_FORM_FILLED',
         'CALENDAR_SUBMIT',
         'CTA_EVENT',
+        'PDF_ARTIFACT',
         'PRIMARY_GOAL_CTA_CLICKED',
         'NUDGE_CTA_CLICKED',
       ];
@@ -677,7 +679,6 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
     // Get messages that should be rendered (filter out artifacts during streaming)
     getRenderableMessages: () => {
       const state = get();
-
       // Clear suggested questions if they're not from the last group
       state.clearSuggestedQuestionsIfNotFromLastGroup();
 
@@ -717,6 +718,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
           'SLIDE_ARTIFACT',
           'SLIDE_IMAGE_ARTIFACT',
           'DEMO_ARTIFACT',
+          'PDF_ARTIFACT',
           'GENERATING_ARTIFACT',
           'DISCOVERY_QUESTIONS',
           'QUALIFICATION_FORM_ARTIFACT',

@@ -101,10 +101,11 @@ export const groupMessagesByResponseId = (messages: Message[]): Message[][] => {
               'SLIDE_IMAGE_ARTIFACT',
               'SUGGESTIONS_ARTIFACT',
               'GENERATING_ARTIFACT',
+              'PDF_ARTIFACT',
             ].includes(message.event_type)
           ) {
             // Video and image artifacts should appear immediately after text content
-            if (message.event_type === 'VIDEO_ARTIFACT' || message.event_type === 'SLIDE_IMAGE_ARTIFACT') {
+            if (message.event_type === 'VIDEO_ARTIFACT' || message.event_type === 'SLIDE_IMAGE_ARTIFACT' || message.event_type === 'PDF_ARTIFACT') {
               return 1.5; // Between first stream (1) and other artifacts (2)
             }
             return 2; // Other artifacts = 2

@@ -33,7 +33,6 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
     sessionData,
     addMessage,
   } = useCommandBarStore();
-
   const orbLogoUrl = config.style_config.orb_config?.logo_url;
   const showOnlineIndicator = config.style_config.orb_config?.show_online_indicator ?? false;
   const showFavicon = !config.style_config.orb_config?.show_orb;
@@ -126,7 +125,11 @@ const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProp
           // We've reached the start of the previous session group
           break;
         }
-        if (msg.event_type === 'VIDEO_ARTIFACT' || msg.event_type === 'SLIDE_IMAGE_ARTIFACT') {
+        if (
+          msg.event_type === 'VIDEO_ARTIFACT' ||
+          msg.event_type === 'SLIDE_IMAGE_ARTIFACT' ||
+          msg.event_type === 'PDF_ARTIFACT'
+        ) {
           hasArtifactsInLatestSession = true;
           break; // Found an artifact, no need to check further
         }

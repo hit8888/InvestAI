@@ -14,6 +14,7 @@ export const BASE_ARTIFACT_TYPES = [
   'CALENDAR',
   'QUALIFICATION_FORM',
   'DEMO',
+  'PDF',
 ] as const;
 export const SUPPORTED_ARTIFACT_TYPES = [...BASE_ARTIFACT_TYPES] as const;
 export type SupportedArtifactType = (typeof SUPPORTED_ARTIFACT_TYPES)[number];

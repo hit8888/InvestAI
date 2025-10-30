@@ -93,7 +93,6 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
       {messageGroup.map((message, messageIndex) => {
         const isLastMessageInGroup = messageIndex === messageGroup.length - 1;
         const isLatestMessage = isLastGroup && isLastMessageInGroup;
-
         return (
           <MessageErrorBoundary key={`${message.response_id}-${messageIndex}`} message={message}>
             <Message

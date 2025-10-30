@@ -5,12 +5,14 @@ import type {
   VideoArtifactData,
   SlideImageArtifactData,
   DemoArtifactData,
+  PDFArtifactData,
   ArtifactMessageContent,
 } from '../../../types/message';
 import { TextArtifact } from './TextArtifact';
 import { ImageArtifact } from './ImageArtifact';
 import { VideoArtifact } from './VideoArtifact';
 import { DemoArtifact } from './DemoArtifact';
+import { PDFArtifact } from './PDFArtifact';
 import FormArtifact from '../../../components/FormArtifact';
 import { QualificationFormArtifact } from '../../../components/QualificationFormArtifact';
 import { CalendarArtifact } from '../../../components/calendar/CalendarArtifact';
@@ -72,6 +74,7 @@ export const Message = ({
     isImageArtifact,
     isCtaEvent,
     isDemoArtifact,
+    isPDFArtifact,
   } = useMessageProcessor(message);
   // Note: ADMIN_TYPING events are now handled globally in the store and shown in the header
   // const isTypingEvent = eventType === 'ADMIN_TYPING';
@@ -146,6 +149,11 @@ export const Message = ({
   const demoArtifactData = isDemoArtifact
     ? ((eventData as ArtifactMessageContent).artifact_data as DemoArtifactData)
     : null;
+    
+  // Extract PDF artifact data
+  const pdfArtifactData = isPDFArtifact
+    ? ((eventData as ArtifactMessageContent).artifact_data as PDFArtifactData)
+    : null;
 
   // Extract discovery question data
   const discoveryQuestionData = isDiscoveryQuestion
@@ -190,7 +198,8 @@ export const Message = ({
       isDiscoveryQuestion ||
       isSuggestionsArtifact ||
       isCtaEvent ||
-      isDemoArtifact,
+      isDemoArtifact ||
+      isPDFArtifact,
     'py-0 pr-4 pl-10': isDiscoveryQuestion || isFormArtifact,
     'py-0 px-4 justify-center': isQualificationFormArtifact,
     'p-0 mt-4': isCalendarArtifact || isCtaEvent || (isFormArtifact && isFormFilled),
@@ -207,7 +216,8 @@ export const Message = ({
     !isDiscoveryQuestion &&
     !isCtaEvent &&
     !isConversationEvent &&
-    !isDemoArtifact
+    !isDemoArtifact &&
+    !isPDFArtifact
   ) {
     return null;
   }
@@ -220,12 +230,13 @@ export const Message = ({
           !isFormArtifact &&
           !isQualificationFormArtifact &&
           !isCalendarArtifact &&
-          !isDiscoveryQuestion &&
-          !isVideoArtifact &&
-          !isImageArtifact &&
-          !isDemoArtifact &&
-          !isSuggestionsArtifact &&
-          !isCtaEvent
+      !isDiscoveryQuestion &&
+      !isVideoArtifact &&
+      !isImageArtifact &&
+      !isDemoArtifact &&
+      !isPDFArtifact &&
+      !isSuggestionsArtifact &&
+      !isCtaEvent
         }
         adminSessionInfo={isWithinAdminSession ? adminSessionInfo : undefined}
         selectedAvatar={selectedAvatar}
@@ -295,6 +306,7 @@ export const Message = ({
         />
       )}
       {isDemoArtifact && demoArtifactData && <DemoArtifact data={demoArtifactData} />}
+      {isPDFArtifact && pdfArtifactData && <PDFArtifact data={pdfArtifactData} />}
 
       {isDiscoveryQuestion && discoveryQuestionData && sendUserMessage && (
         <DiscoveryQuestion

@@ -5,6 +5,7 @@ import {
   DemoArtifactSchema,
   FormArtifactMetadata,
   FormArtifactSchema,
+  PDFArtifactSchema,
   QualificationQuestionAnswerSchema,
   SlideArtifactSchema,
   SlideImageArtifactSchema,
@@ -51,6 +52,7 @@ export enum MessageEventType {
   QUALIFICATION_FORM_ARTIFACT = 'QUALIFICATION_FORM_ARTIFACT',
   CALENDAR_ARTIFACT = 'CALENDAR_ARTIFACT',
   DEMO_ARTIFACT = 'DEMO_ARTIFACT',
+  PDF_ARTIFACT = 'PDF_ARTIFACT',
   CALENDAR_SUBMIT = 'CALENDAR_SUBMIT',
   CTA_EVENT = 'CTA_EVENT',
   MESSAGE_ANALYTICS = 'MESSAGE_ANALYTICS',
@@ -105,6 +107,7 @@ export const ArtifactMessageContentSchema = z.object({
         FormArtifactSchema,
         CalendarArtifactSchema,
         DemoArtifactSchema,
+        PDFArtifactSchema,
       ])
       .nullable(),
     metadata: FormArtifactMetadata,
@@ -178,6 +181,20 @@ export interface DemoArtifactData {
   error_code: string | null;
 }
 
+export interface PDFArtifactData {
+  artifact_id: string;
+  content: {
+    id: number;
+    pdf_url: string;
+    title?: string;
+    description?: string;
+  };
+  artifact_type: string;
+  metadata: Record<string, unknown>;
+  error: string | null;
+  error_code: string | null;
+}
+
 export interface ArtifactEventData {
   artifact_type: string;
   artifact_data:
@@ -185,6 +202,7 @@ export interface ArtifactEventData {
     | VideoArtifactData
     | SlideImageArtifactData
     | DemoArtifactData
+    | PDFArtifactData
     | Record<string, unknown>;
 }
 
@@ -298,6 +316,10 @@ export const MessageSchema = z
       }),
       z.object({
         event_type: z.literal(MessageEventType.DEMO_ARTIFACT),
+        event_data: ArtifactMessageContentSchema,
+      }),
+      z.object({
+        event_type: z.literal(MessageEventType.PDF_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
