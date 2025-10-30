@@ -21,7 +21,7 @@ export interface ImageState {
 
 export interface SidebarArtifactState {
   url: string;
-  artifactType: ArtifactType;
+  artifactType: Exclude<ArtifactType, 'DEMO'>;
   title: string;
 }
 
@@ -43,7 +43,12 @@ export interface ArtifactContextState {
 }
 
 export interface ArtifactContextActions {
-  openSidebar: (url: string, artifactType: ArtifactType, title: string, shouldPlay?: boolean) => Promise<void>;
+  openSidebar: (
+    url: SidebarArtifactState['url'],
+    artifactType: SidebarArtifactState['artifactType'],
+    title: SidebarArtifactState['title'],
+    shouldPlay?: boolean,
+  ) => Promise<void>;
   closeSidebar: () => void;
   handleCloseComplete: () => void;
   setCurrentVideo: React.Dispatch<React.SetStateAction<VideoState | null>>;
