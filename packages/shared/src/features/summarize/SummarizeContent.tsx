@@ -7,6 +7,8 @@ import { SummaryError } from './components/SummaryError';
 import { SummaryInitial } from './components/SummaryInitial';
 import { SummaryFooter } from './components/SummaryFooter';
 import { useSummary } from './hooks/useSummary';
+import { useEffect } from 'react';
+import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -46,18 +48,28 @@ const renderSummaryContent = (
 };
 
 const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: FeatureContentProps) => {
-  const { summaryContent, isSummarizing, clickedOnSummarize, handleSummarize, hasError } = useSummary();
+  const { summaryContent, isSummarizing, handleSummarize, hasError } = useSummary();
 
   const handleAskAIClick = () => {
     setActiveFeature?.(ASK_AI);
   };
 
+  useEffect(() => {
+    if (isSummarizing || summaryContent) return;
+
+    const { auto_summarize } = getLocalStorageData() ?? {};
+
+    if (auto_summarize) {
+      setLocalStorageData({ auto_summarize: false });
+      handleSummarize();
+    }
+  }, []);
+
   return (
     <div
-      className={cn(
-        'flex w-full min-h-[240px] flex-col rounded-[20px] border border-border-dark bg-background pb-3',
-        clickedOnSummarize && 'h-[600px]',
-      )}
+      className={cn('flex w-full min-h-[240px] flex-col rounded-[20px] border border-border-dark bg-background pb-3', {
+        'h-[600px]': !!summaryContent || isSummarizing,
+      })}
     >
       <FeatureHeader
         title="Summary"
@@ -67,7 +79,7 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
         isExpanded={isExpanded}
         ctas={[]}
       />
-      <div className="flex flex-1 min-h-0 flex-col justify-center gap-4 px-4 pt-4">
+      <div className="flex flex-1 min-h-0 flex-col justify-center gap-4 p-4">
         {renderSummaryContent(summaryContent, hasError, isSummarizing, handleSummarize, handleAskAIClick)}
       </div>
     </div>

@@ -12,17 +12,17 @@ export const SummaryInitial = ({ onSummarize, isSummarizing }: SummaryInitialPro
 
   if (isSummarizing) return null;
 
-  return description.length > 0 ? (
-    <div className="w-full flex flex-col items-start justify-start p-4">
-      <Markdown markdown={description} />
-    </div>
-  ) : (
+  return (
     <>
       <Typography variant="heading" fontWeight="semibold">
         Sum up in seconds
       </Typography>
       <Typography variant="body" fontWeight="normal" className="text-gray-600">
-        Generate a summary of this page, so you can focus on the highlights.
+        {description.length > 0 ? (
+          <Markdown markdown={description} />
+        ) : (
+          'Generate a summary of this page, so you can focus on the highlights.'
+        )}
       </Typography>
       <Button hasWipers variant="default" size="sm" onClick={onSummarize}>
         Summarize

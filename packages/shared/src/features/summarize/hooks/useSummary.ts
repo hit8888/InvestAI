@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCommandBarStore } from '../../../stores';
 import { useWsClient } from '../../../hooks/useWsClient';
 import { MessageEventType, type Message, type StreamResponseEventData } from '../../../types/message';
+import { ensureProtocol } from '@meaku/core/utils/index';
 
 // TODO: Need proper error types for summary stream messages from the backend
 const ERROR_MESSAGES = [
@@ -42,7 +43,7 @@ export const useSummary = () => {
       event_type: MessageEventType.SUMMARIZE,
       event_data: {
         content: '',
-        url: settings.parent_url ?? '',
+        url: ensureProtocol(settings.parent_url ?? ''),
       },
     });
   };

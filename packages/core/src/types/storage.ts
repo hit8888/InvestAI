@@ -1,6 +1,7 @@
 export type LayoutType = 'bottom_center' | 'bottom_right';
 
 export interface TenantStorageData {
+  auto_summarize?: boolean;
   sessionId?: string;
   prospectId?: string;
   tenantId?: string;
