@@ -15,8 +15,6 @@ import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
-import { useVectorTracking } from './hooks/useVectorTracking';
-import { isProduction } from '@meaku/shared/constants/common';
 import { CommandBarRenderer } from './components/BottomBar/CommandBarRenderer';
 import { useBottomBarTransition, useCommandBarLayout } from './components/BottomBar/hooks';
 
@@ -126,12 +124,6 @@ function App() {
     if (sanitizeUrl(settings.parent_url) !== sanitizeUrl(currentUrl)) {
       updateSettings({ parent_url: currentUrl });
     }
-  });
-
-  useVectorTracking({
-    tenantId: settings.tenant_id,
-    prospectId: config.prospect_id,
-    enabled: isProduction && !settings.is_admin && !settings.is_test,
   });
 
   // Only show initial tooltips for first-time visitors

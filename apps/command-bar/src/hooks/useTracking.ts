@@ -3,23 +3,32 @@ import { useEffect } from 'react';
 import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useUpdateProspectMutation';
 import { useCommandBarStore } from '@meaku/shared/stores';
 import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics';
+import { isProduction } from '@meaku/shared/constants/common';
+import { useVectorTracking } from './useVectorTracking';
 
-const useTracking = ({ enabled = true }: { enabled?: boolean } = {}) => {
+const useTracking = () => {
   const updateProspectMutation = useUpdateProspectMutation();
-  const { config } = useCommandBarStore();
+  const {
+    config: { tracking_config, prospect_id },
+    settings: { tenant_id, is_admin, is_test },
+  } = useCommandBarStore();
+
+  const enabled = isProduction && !is_admin && !is_test && !!prospect_id;
+
+  useVectorTracking({
+    tenantId: tenant_id,
+    prospectId: prospect_id,
+    enabled,
+  });
 
   useEffect(() => {
-    if (!config.tracking_config || !enabled) {
+    if (!tracking_config || !enabled) {
       return;
     }
 
-    const cleanup = initProspectAnalytics(config.tracking_config, (requestData) => {
-      if (!config.prospect_id) {
-        return;
-      }
-
+    const cleanup = initProspectAnalytics(tracking_config, (requestData) => {
       updateProspectMutation.mutate({
-        prospectId: config.prospect_id,
+        prospectId: prospect_id,
         payload: requestData,
       });
     });
@@ -27,7 +36,7 @@ const useTracking = ({ enabled = true }: { enabled?: boolean } = {}) => {
     return () => {
       cleanup();
     };
-  }, [config.tracking_config, config.prospect_id, updateProspectMutation, enabled]);
+  }, [tracking_config, prospect_id, updateProspectMutation, enabled]);
 };
 
 export default useTracking;

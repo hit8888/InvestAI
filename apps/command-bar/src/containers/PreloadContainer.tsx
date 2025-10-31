@@ -12,7 +12,6 @@ import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import useTracking from '../hooks/useTracking';
-import { isProduction } from '@meaku/shared/constants/common';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -142,9 +141,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
     }
   }, [initialSettings, setSettings]);
 
-  useTracking({
-    enabled: isProduction && !initialSettings.is_admin && !initialSettings.is_test && dynamicConfigQuery.isFetched,
-  });
+  useTracking();
 
   const shouldLoadApp = config?.is_enabled && !!config.command_bar?.modules.length;
 

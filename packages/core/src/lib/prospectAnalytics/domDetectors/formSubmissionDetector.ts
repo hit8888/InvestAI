@@ -67,19 +67,19 @@ function attachFormListener(
   onSubmit: (requestData: UpdateProspectPayload) => void,
   listeners: Map<HTMLFormElement, (event: Event) => void>,
 ) {
-  // Create the submit handler
-  const submitHandler = (event: Event) => {
-    // form submission may not actually happen
-    // due to failing validations on form.
-    // we are skipping capturing of such data
-    if (event.defaultPrevented) {
-      return;
+  // Create submit handler with reference stored for cleanup
+  const submitHandler = (_event: Event) => {
+    // Only track valid form submissions. HTML5 validation prevents submission
+    // for invalid forms and shows validation messages, but the submit event
+    // still fires regardless. We use checkValidity() to filter invalid forms.
+    //
+    // Note: We don't check event.defaultPrevented because forms can still
+    // be submitted via AJAX/fetch after preventing the default browser behavior.
+    if (form.checkValidity()) {
+      processFormSubmission(form, onSubmit);
     }
-
-    processFormSubmission(form, onSubmit);
   };
 
-  // Store the listener reference for cleanup
   listeners.set(form, submitHandler);
 
   form.addEventListener('submit', submitHandler);
