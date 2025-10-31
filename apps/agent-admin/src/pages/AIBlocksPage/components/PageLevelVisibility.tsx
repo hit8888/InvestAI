@@ -161,7 +161,7 @@ const PageLevelVisibility = ({
     // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
     resolver: zodResolver(formSchema),
     defaultValues: {
-      items: data.length > 0 ? data : [{ visibility_rules: '', page_url: '' }],
+      items: data.length > 0 ? data : [{ visibility_rules: 'contains', page_url: '' }],
     },
     mode: 'onTouched',
   });
@@ -169,7 +169,7 @@ const PageLevelVisibility = ({
   // Update form when data prop changes
   useEffect(() => {
     form.reset({
-      items: data.length > 0 ? data : [{ visibility_rules: '', page_url: '' }],
+      items: data.length > 0 ? data : [{ visibility_rules: 'contains', page_url: '' }],
     });
   }, [data, form]);
 
@@ -251,6 +251,7 @@ const PageLevelVisibility = ({
         error={null}
         columns={columns}
         onSave={handleSave}
+        addDefaultRow={[{ visibility_rules: 'contains', page_url: '' }]}
         form={form as unknown as UseFormReturn<ConfigurationFormData>}
         formFieldName="items"
       />

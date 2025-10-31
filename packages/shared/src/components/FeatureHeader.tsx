@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { LucideIcon, Button, buttonVariants, Typography, cn } from '@meaku/saral';
 import { Message, MessageEventType } from '../types/message';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
@@ -153,7 +153,7 @@ export const FeatureHeader = ({
           }`}
         >
           {ctas && ctas.length > 0 && (
-            <div className="inline-flex gap-2">
+            <div className="flex gap-2 overflow-auto w-full hide-scrollbar">
               {ctas?.map((cta) =>
                 cta.url ? (
                   <a
@@ -166,28 +166,23 @@ export const FeatureHeader = ({
                     {cta.text}
                   </a>
                 ) : (
-                  <React.Fragment key={cta.text}>
-                    {
-                      <Button
-                        size="xs"
-                        key={cta.message ?? cta.text}
-                        className="w-auto"
-                        hasWipers
-                        onClick={() => {
-                          if (cta.message && sendUserMessage) {
-                            sendUserMessage(cta.message, {
-                              event_type: MessageEventType.BOOK_MEETING,
-                              event_data: {
-                                form_id: cta.form_id,
-                              },
-                            });
-                          }
-                        }}
-                      >
-                        {cta.text}
-                      </Button>
-                    }
-                  </React.Fragment>
+                  <Button
+                    size="xs"
+                    key={cta.message ?? cta.text}
+                    disabled={!cta.message || !sendUserMessage}
+                    onClick={() => {
+                      if (cta.message && sendUserMessage) {
+                        sendUserMessage(cta.message, {
+                          event_type: MessageEventType.BOOK_MEETING,
+                          event_data: {
+                            form_id: cta.form_id,
+                          },
+                        });
+                      }
+                    }}
+                  >
+                    {cta.text}
+                  </Button>
                 ),
               )}
             </div>

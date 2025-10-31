@@ -188,3 +188,23 @@
     flex-direction: column !important;
   }
 }
+
+/* Define the animation */
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1.5);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+
+/* Apply this class to your icon */
+.scale-pulse {
+  display: inline-block; /* Ensures transform works properly */
+  animation: pulse-scale 1.5s ease-in-out infinite;
+  transform-origin: center;
+}

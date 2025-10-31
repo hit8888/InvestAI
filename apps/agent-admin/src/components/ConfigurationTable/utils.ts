@@ -56,7 +56,10 @@ export type ConfigurationTableSetup<TData = ConfigurationData> = {
 };
 
 // Helper function to create initial empty row from column config
-export const createEmptyRow = (columns: ColumnConfig[]): ConfigurationData => {
+export const createEmptyRow = (columns: ColumnConfig[], addDefaultRow?: ConfigurationData[]): ConfigurationData => {
+  if (addDefaultRow) {
+    return addDefaultRow[0];
+  }
   const emptyRow: ConfigurationData = {};
   columns.forEach((col) => {
     emptyRow[col.key] = '';

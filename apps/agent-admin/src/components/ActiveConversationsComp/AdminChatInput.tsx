@@ -171,17 +171,29 @@ const AdminChatInput = ({
         {!disabled && (
           <TooltipWrapperDark
             trigger={
-              <div
-                className={cn('cursor-pointer', disabled && 'cursor-not-allowed')}
+              <button
+                type="button"
+                className={cn(
+                  'group flex cursor-pointer items-center justify-center rounded-lg border border-white bg-gray-50 px-2 py-1.5',
+                  disabled && 'cursor-not-allowed',
+                )}
                 onClick={handleAIResponseGenerationRequest}
               >
                 <AiSparklesIcon
-                  className={cn('h-6 w-5', isGeneratingAIResponse && 'animate-bounce', disabled && 'text-gray-400')}
+                  className={cn(
+                    'h-6 w-5 transition-all duration-300',
+                    'group-hover:scale-125',
+                    isGeneratingAIResponse && 'scale-pulse',
+                    disabled && 'text-gray-400',
+                  )}
                 />
-              </div>
+              </button>
             }
             content={tooltipText}
             showTooltip={!disabled}
+            tooltipSide="top"
+            tooltipAlign="start"
+            tooltipArrowClassName="left-0"
           />
         )}
         <form onSubmit={onSubmit} className="flex w-full items-center gap-3">

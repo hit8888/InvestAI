@@ -102,7 +102,7 @@ const BlockPageLayout = ({
   return (
     <div className={`flex w-full items-start gap-6 self-stretch ${className}`}>
       {/* Left Side - Configuration Sections */}
-      <div className="flex w-full max-w-xl flex-col gap-8 pb-4">
+      <div className="flex w-full max-w-[60%] flex-col gap-8 pb-4">
         {/* Block Visibility Section */}
         <BlockVisibilityContent
           initialData={blockVisibilityData}

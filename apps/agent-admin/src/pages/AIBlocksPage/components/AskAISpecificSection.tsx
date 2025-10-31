@@ -12,7 +12,8 @@ import TextArea from '@breakout/design-system/components/TextArea/index';
 import { Asset } from '@meaku/core/types/common';
 import { CommonControls, ControlsTitleEnum } from '../../ControlsPage/utils';
 import SinglePromptTextarea from '../../ControlsPage/SinglePromptTextarea';
-const { AGENT_PERSONALITY } = ControlsTitleEnum;
+import AgentResponseWordCount from '../../ControlsPage/AgentResponseWordCount';
+const { AGENT_PERSONALITY, AGENT_RESPONSE_LENGTH } = ControlsTitleEnum;
 
 export interface AskAiSpecificData {
   avatar: string;
@@ -46,6 +47,7 @@ const AskAISpecificSection = ({
   handleDataChange,
 }: AskAISpecificSectionProps) => {
   const agentPersonality = CommonControls.find((control) => control.title === AGENT_PERSONALITY)!;
+  const agentResponseWordCount = CommonControls.find((control) => control.title === AGENT_RESPONSE_LENGTH)!;
   const handleOnBlurForIntroduction = (e: React.FocusEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     const introduction = e.target.value;
@@ -174,6 +176,9 @@ const AskAISpecificSection = ({
           />
         </div>
       </div>
+      <SeparatorLine />
+
+      <AgentResponseWordCount showTabInfo={false} {...agentResponseWordCount} />
       <SeparatorLine />
 
       <SinglePromptTextarea key={AGENT_PERSONALITY} {...agentPersonality} />

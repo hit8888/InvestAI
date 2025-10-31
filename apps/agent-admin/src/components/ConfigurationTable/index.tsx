@@ -25,6 +25,7 @@ interface ConfigurationTableProps extends CommonControlsProps {
   isDisabled?: boolean;
   form: UseFormReturn<ConfigurationFormData>;
   formFieldName?: string;
+  addDefaultRow?: ConfigurationData[];
 }
 
 const ConfigurationTable = ({
@@ -38,6 +39,7 @@ const ConfigurationTable = ({
   isDisabled,
   form,
   formFieldName = 'items',
+  addDefaultRow,
 }: ConfigurationTableProps) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [savedData, setSavedData] = useState<ConfigurationData[]>([]);
@@ -71,7 +73,7 @@ const ConfigurationTable = ({
       setSavedData(filledRows);
     } else {
       // Reset with initial empty data if no valid rows are found
-      const emptyRow = createEmptyRow(columns);
+      const emptyRow = createEmptyRow(columns, addDefaultRow);
       reset({ [formFieldName]: [emptyRow] });
       setSavedData([]);
     }
@@ -96,7 +98,7 @@ const ConfigurationTable = ({
       setSavedData(newSavedData);
 
       // Reset form with new defaults to update form's defaultValues
-      const emptyRow = createEmptyRow(columns);
+      const emptyRow = createEmptyRow(columns, addDefaultRow);
       const newFormData = {
         [formFieldName]: newSavedData.length > 0 ? newSavedData : [emptyRow],
       };
@@ -146,6 +148,7 @@ const ConfigurationTable = ({
           formFieldName={formFieldName}
           isFormValid={isValid}
           savedData={savedData}
+          addDefaultRow={addDefaultRow}
         />
       )}
     </div>

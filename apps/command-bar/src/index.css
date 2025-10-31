@@ -164,3 +164,16 @@
 .calcom-atoms .\[grid-area\:meta\] {
   width: 100% !important;
 }
+
+/* For modern browsers */
+.hide-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Edge */
+}

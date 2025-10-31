@@ -14,6 +14,7 @@ import {
   CustomRendererProps,
   isRowEmpty,
   getFilledRows,
+  createEmptyRow,
 } from './utils';
 import { useFieldArray, Control, FieldErrors, Controller, useWatch } from 'react-hook-form';
 import { deepCompare } from '@meaku/core/utils/index';
@@ -35,6 +36,7 @@ interface ConfigurationTableContainerProps {
   formFieldName?: string;
   isFormValid?: boolean;
   savedData?: ConfigurationData[]; // Add savedData to compare with current form values
+  addDefaultRow?: ConfigurationData[];
 }
 
 const TableContainer = ({
@@ -47,6 +49,7 @@ const TableContainer = ({
   formFieldName = 'items',
   isFormValid = false,
   savedData = [],
+  addDefaultRow = [],
 }: ConfigurationTableContainerProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -59,19 +62,10 @@ const TableContainer = ({
     name: formFieldName,
   });
 
-  // Create empty row object from columns
-  const createEmptyRow = (): ConfigurationData => {
-    const emptyRow: ConfigurationData = {};
-    columns.forEach((col) => {
-      emptyRow[col.key] = '';
-    });
-    return emptyRow;
-  };
-
   const handleAddRow = () => {
     // If no fields exist, add the first row
     if (fields.length === 0) {
-      append(createEmptyRow());
+      append(createEmptyRow(columns, addDefaultRow));
       return;
     }
 
@@ -83,7 +77,7 @@ const TableContainer = ({
 
     // Only add new row if no empty rows exist
     if (!hasEmptyRow) {
-      append(createEmptyRow());
+      append(createEmptyRow(columns, addDefaultRow));
     }
   };
 
@@ -101,7 +95,7 @@ const TableContainer = ({
     } else {
       // Replace with empty row instead of removing if it's the last one
       remove(index);
-      append(createEmptyRow());
+      append(createEmptyRow(columns, addDefaultRow));
     }
   };
 

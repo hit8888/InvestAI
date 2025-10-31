@@ -14,7 +14,11 @@ import { AgentResponseWordCountEnum } from '@meaku/core/types/common';
 import { AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS } from '../../utils/constants';
 import LoadingState from './LoadingState';
 
-const AgentResponseWordCount = ({ title, description }: CommonControlsProps) => {
+type AgentResponseWordCountProps = CommonControlsProps & {
+  showTabInfo?: boolean;
+};
+
+const AgentResponseWordCount = ({ title, description, showTabInfo = true }: AgentResponseWordCountProps) => {
   const agentId = getTenantActiveAgentId();
   const {
     data: agentConfig,
@@ -93,6 +97,7 @@ const AgentResponseWordCount = ({ title, description }: CommonControlsProps) => 
   const selectedTabItem = AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS.find((item) => item.itemValue === selectedTab);
 
   const renderTabInfo = () => {
+    if (!showTabInfo) return null;
     return (
       selectedTabItem && (
         <InfoCard
