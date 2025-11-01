@@ -32,7 +32,7 @@ const EntryPointsPage = () => {
 
   const gtmCompatibleScriptCode = `<script>
 (function() {
-  const script = document.createElement('script');
+  var script = document.createElement('script');
   script.setAttribute('src', 'https://script.getbreakout.ai/command_bar_widget.js');
   script.setAttribute('tenant-id', '${tenantName}');
   script.setAttribute('agent-id', '${agentId}');
