@@ -1,7 +1,7 @@
 import type { FC, ReactElement } from 'react';
 import { useMemo } from 'react';
 import { CommandBarSettings } from '@meaku/core/types/common';
-import { jsonSafeParse } from '@meaku/core/utils/index';
+import { ensureProtocol, jsonSafeParse } from '@meaku/core/utils/index';
 import { getUrlParams } from '@meaku/core/utils/routing-utils';
 
 // Helper type to convert snake_case to camelCase
@@ -59,7 +59,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
       message: urlParams.message ?? parsedPropMessage,
       start_time: urlParams.start_time ?? propStartTime,
       end_time: urlParams.end_time ?? propEndTime,
-      parent_url: urlParams.parent_url ?? propParentUrl ?? window.location.href,
+      parent_url: ensureProtocol(urlParams.parent_url ?? propParentUrl ?? window.location.href),
       session_id: urlParams.session_id ?? propSessionId,
       browsed_urls: jsonSafeParse(urlParams.browsed_urls).data ?? propBrowsedUrls,
       bc: jsonSafeParse(urlParams.bc).data ?? propBc,

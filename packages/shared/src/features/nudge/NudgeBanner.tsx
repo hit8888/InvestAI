@@ -11,26 +11,30 @@ import { CommandBarModuleType } from '@meaku/core/types/api/configuration_respon
 import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 
 const CLOSE_BUTTON_SHOW_DELAY = 2000;
+const INACTIVITY_TIMEOUT_DELAY = 5000;
 
 type NudgeBannerProps = {
-  activeFeature: CommandBarModuleType | null;
   onClick: (module: CommandBarModuleType) => void;
 };
 
-const NudgeBanner = ({ activeFeature, onClick }: NudgeBannerProps) => {
+const NudgeBanner = ({ onClick }: NudgeBannerProps) => {
   const { config } = useCommandBarStore();
   const enabledModule = useMemo(
     () => config.command_bar?.modules.find((m) => m.module_configs.hover?.enabled),
     [config.command_bar?.modules],
   );
-  const { header, sub_header } = enabledModule?.module_configs?.hover ?? {};
+  const { header } = enabledModule?.module_configs?.hover ?? {};
   const [isDismissed, setIsDismissed] = useState(false);
 
   const { thresholdReachCount } = useScrollProgress(10);
-  const showCloseButton = useDelayedEnable(CLOSE_BUTTON_SHOW_DELAY);
+  const inactivityTimeoutReached = useDelayedEnable(INACTIVITY_TIMEOUT_DELAY);
 
   const isVisible =
-    !!enabledModule && !isDismissed && thresholdReachCount > 0 && activeFeature !== enabledModule?.module_type;
+    !!enabledModule && !isDismissed && (thresholdReachCount > 0 || inactivityTimeoutReached) && !config.session_id;
+
+  const showCloseButton = useDelayedEnable(CLOSE_BUTTON_SHOW_DELAY, {
+    shouldStart: isVisible,
+  });
 
   const handleClose = (e?: React.MouseEvent) => {
     if (e) {
@@ -54,55 +58,51 @@ const NudgeBanner = ({ activeFeature, onClick }: NudgeBannerProps) => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed top-36 right-0"
-          onClick={handleClick}
+          className="fixed top-36 right-4"
           initial={{ x: '100%', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: '100%', opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
         >
-          <motion.div
-            className="pointer-events-none h-14 w-56 absolute top-0 right-0 inset-0 z-behind-content rounded-[40px] opacity-75 blur-[40px]"
-            style={{
-              scale: 1.1,
-            }}
-            animate={{
-              background: [
-                'conic-gradient(from 0deg, #c4b5fd, #f9a8d4, #fed7aa, #c4b5fd)',
-                'conic-gradient(from 360deg, #c4b5fd, #f9a8d4, #fed7aa, #c4b5fd)',
-              ],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          />
-          <div className="cursor-pointer relative z-root flex justify-center items-center gap-2 bg-white rounded-tl-full rounded-bl-full p-2 border-primary/20 border-t border-l border-b">
-            <AnimatePresence>
-              {showCloseButton && (
-                <motion.div
-                  className="absolute -top-2 left-3 w-4 h-4 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-full cursor-pointer z-10"
-                  onClick={handleClose}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 500,
-                    damping: 30,
-                  }}
-                >
-                  <LucideIcon name="x" className="size-3 text-gray-400" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <Lottie animationData={aiShimmer} loop={true} className="size-10" />
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-semibold">{header}</span>
-              <span className="text-xs">{sub_header}</span>
+          <div className="relative flex items-center gap-2 h-10">
+            {/* AI Logo */}
+            <div className="w-10 h-10 flex-shrink-0 relative">
+              <Lottie
+                animationData={aiShimmer}
+                loop={true}
+                className="absolute inset-0 w-full h-full scale-150 origin-center"
+              />
             </div>
-            <LucideIcon name="chevron-down" className="size-5" />
+            {/* CTA Button with Gradient Border */}
+            <div className="rounded-[32px] p-[1px] flex-shrink-0 relative bg-[linear-gradient(133deg,rgba(255,148,148,1)_0%,rgba(240,238,124,1)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)]">
+              <AnimatePresence>
+                {showCloseButton && (
+                  <motion.div
+                    className="absolute -top-2 -right-0 w-4 h-4 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-full cursor-pointer z-10"
+                    onClick={handleClose}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  >
+                    <LucideIcon name="x" className="size-3 text-gray-400" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <button
+                onClick={handleClick}
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-[32px] text-white text-sm font-medium text-center"
+                style={{
+                  background: 'linear-gradient(90deg, hsl(var(--primary) / 0.85) 0%, hsl(var(--primary)) 100%)',
+                }}
+              >
+                <span className="text-sm font-medium leading-[1.71]">{header || 'Summarise This Page'}</span>
+              </button>
+            </div>
           </div>
         </motion.div>
       )}

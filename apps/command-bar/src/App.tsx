@@ -138,7 +138,7 @@ function App() {
 
   return (
     <>
-      <NudgeBanner activeFeature={activeFeatureModuleType} onClick={handleNudgeBannerClick} />
+      <NudgeBanner onClick={handleNudgeBannerClick} />
       <CommandBarRenderer
         layout={layout}
         transitionState={transitionState}
