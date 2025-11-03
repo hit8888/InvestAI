@@ -15,7 +15,7 @@ import { useBottomBarState } from './hooks/useBottomBarState';
 import BottomBarContent from './BottomBarContent';
 
 // Constants
-import { BOTTOM_BAR_ANIMATIONS } from './constants';
+import { BUTTON_SIZING } from './constants';
 
 interface BottomBarContainerProps {
   activeFeature: CommandBarModuleType | null;
@@ -32,7 +32,7 @@ interface BottomBarContainerProps {
 const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   activeFeature,
   setActiveFeature,
-  actionButtonSize = 56,
+  actionButtonSize = BUTTON_SIZING.BUTTON_SIZE,
   isDynamicConfigLoading = false,
   isDynamicConfigStarted = false,
   onSwitchToDefault,
@@ -44,10 +44,10 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   const isMobile = useIsMobile();
   const { modules = [] } = config.command_bar ?? {};
 
-  // Consolidated state management
+  // Consolidated state management - Two-phase system
   const {
-    isModulesReady,
-    isWidthExpanded,
+    isInputReady, // Phase 1
+    isModulesReady, // Phase 2
     askAiModule,
     otherModules,
     isAnimatingToCorner,
@@ -66,11 +66,9 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
   );
 
   const { containerAnimation, containerTransition } = useBottomBarAnimation(
-    isModulesReady,
+    isInputReady,
     isMobile,
     isAnimatingToCorner,
-    isDynamicConfigLoading,
-    isWidthExpanded,
   );
 
   return (
@@ -80,43 +78,15 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
       transition={containerTransition}
       className={cn(
         'command-bar-positioned fixed bottom-root-bottom-offset right-1/2 z-root transform',
-        'bg-white/95 shadow-lg backdrop-blur-sm',
-        'flex items-center overflow-hidden',
-        'w-fit',
+        'flex items-center gap-3',
       )}
-      style={{
-        padding: isAnimatingToCorner ? '0px' : isModulesReady ? `${BOTTOM_BAR_ANIMATIONS.LAYOUT.BAR_PADDING}px` : 0,
-        minWidth: isAnimatingToCorner ? '0px' : '66px',
-      }}
     >
-      <motion.div
-        className={`absolute left-0 top-0 -z-10 h-full w-full rounded-[40px] ${
-          isModulesReady
-            ? 'bg-gradient-to-b from-primary via-transparent to-transparent'
-            : 'bg-gradient-to-b from-gray-300 via-transparent to-transparent'
-        }`}
-        animate={{
-          rotate: isModulesReady && !isWidthExpanded ? [0, 360] : 0,
-        }}
-        transition={
-          isModulesReady && !isWidthExpanded
-            ? {
-                duration: 0.8,
-                repeat: Infinity,
-                ease: 'linear',
-                repeatType: 'loop',
-              }
-            : {
-                duration: 0,
-              }
-        }
-      />
-
       <BottomBarContent
         activeFeature={activeFeature}
         actionButtonSize={actionButtonSize}
         isDynamicConfigLoading={isDynamicConfigLoading}
         isAnimatingToCorner={isAnimatingToCorner}
+        isInputReady={isInputReady}
         isModulesReady={isModulesReady}
         askAiModule={askAiModule || null}
         otherModules={otherModules}

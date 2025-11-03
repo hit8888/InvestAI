@@ -64,8 +64,39 @@ export const ANIMATION_PRESETS = {
   },
 } as const;
 
+// ===== SCALING SYSTEM =====
+// Modify BASE_SIZE to scale entire bottom bar proportionally
+const BASE_SIZE = 56; // Base button size (matches sidebar: 56px)
+
+// Calculated scaled sizes (automatically adjust based on BASE_SIZE)
+const SCALED_SIZES = {
+  // Module button size
+  BUTTON_SIZE: BASE_SIZE,
+
+  // Input field height (same as button size for alignment)
+  INPUT_HEIGHT: BASE_SIZE,
+
+  // Circular icon size inside input (71.4% of button size)
+  ICON_SIZE: Math.round(BASE_SIZE * 0.714), // ~40px for 56px
+
+  // Input minimum width (7.14x button size)
+  INPUT_MIN_WIDTH: BASE_SIZE * 7.14, // ~400px for 56px
+
+  // Gap between elements (21.4% of button size)
+  ELEMENT_GAP: Math.round(BASE_SIZE * 0.214), // ~12px for 56px
+
+  // Icon padding inside circular container (14.3% of button size)
+  ICON_PADDING: Math.round(BASE_SIZE * 0.143), // ~8px for 56px
+} as const;
+
 // Button sizing constants for dynamic width calculations
 export const BUTTON_SIZING = {
+  // Base size for scaling
+  BASE_SIZE,
+
+  // Scaled sizes
+  ...SCALED_SIZES,
+
   // RotatingQuestionButton width calculation constants
   ROTATING_QUESTION: {
     // Base padding for button content (left + right padding)
@@ -82,7 +113,7 @@ export const BUTTON_SIZING = {
     HEIGHT: 30,
   },
 
-  // Action button size constants
+  // Action button size constants (deprecated - use BUTTON_SIZE instead)
   ACTION_BUTTON: {
     // Default button size
     DEFAULT_SIZE: 42,

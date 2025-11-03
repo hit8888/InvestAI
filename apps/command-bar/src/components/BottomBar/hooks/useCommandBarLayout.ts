@@ -21,7 +21,6 @@ export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarL
   const { position = LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT, settings } = config;
   const configPosition = settings.position || position;
   const prevConfigPosition = useRef<string | null>(null);
-  const { isDesktop } = useDevice();
 
   const { clearPreference, determineFinalLayout } = useLayoutPreference();
 
@@ -33,10 +32,11 @@ export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarL
     prevConfigPosition.current = configPosition;
   }, [configPosition, clearPreference]);
 
-  // On mobile, always use bottom_right layout regardless of backend configuration
-  // Bottom bar takes too much screen real estate on mobile devices
-  // See COMMAND_BAR_ANIMATIONS.LAYOUT.MOBILE_FORCE_BOTTOM_RIGHT for configuration
-  const finalPosition = isDesktop ? determineFinalLayout(configPosition) : LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT;
+  // UPDATED: Allow bottom_center on tablet and desktop (≥576px)
+  // Only force bottom_right on truly mobile devices (<576px)
+  // On small mobile screens, bottom bar takes too much screen real estate
+  const { isMobile } = useDevice();
+  const finalPosition = isMobile ? LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT : determineFinalLayout(configPosition);
 
   const containerClasses = useMemo(() => {
     return cn(

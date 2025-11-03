@@ -58,6 +58,7 @@ export const ANIMATION_TIMINGS = {
     // Bottom bar animation delays
     BOTTOM_BAR_WIDTH_EXPANSION: 0.2, // 200ms delay for Phase 2 expansion
     BOTTOM_BAR_HEIGHT_DELAY: 0.1, // 100ms delay for height animation
+    MODULE_POP_DELAY: 300, // 300ms delay for input to settle before modules pop out (in milliseconds)
     MIN_PHASE_1_DURATION: 1000, // 1 second minimum after dynamic config completes (in milliseconds)
   },
 

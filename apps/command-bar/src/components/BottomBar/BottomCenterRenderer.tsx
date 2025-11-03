@@ -7,7 +7,7 @@ import FeatureContentContainer from '../FeatureContentContainer';
 import { Nudge } from '@meaku/shared/features';
 import { COMPONENT_TRANSITIONS } from '../../constants/animationTimings';
 import { BottomBarTransitionState, BottomBarTransitionActions } from './hooks/useBottomBarTransition';
-import { COMMAND_BAR_ANIMATIONS } from './constants';
+import { COMMAND_BAR_ANIMATIONS, BUTTON_SIZING } from './constants';
 
 interface BottomCenterRendererProps {
   transitionState: BottomBarTransitionState;
@@ -56,7 +56,7 @@ export const BottomCenterRenderer = ({
         <BottomCenterBar
           activeFeature={activeFeatureModuleType}
           setActiveFeature={setActiveFeature}
-          actionButtonSize={42}
+          actionButtonSize={BUTTON_SIZING.BUTTON_SIZE}
           isDynamicConfigLoading={isDynamicConfigLoading}
           isDynamicConfigStarted={isDynamicConfigStarted}
           onSwitchToDefault={handleSwitchToDefault}

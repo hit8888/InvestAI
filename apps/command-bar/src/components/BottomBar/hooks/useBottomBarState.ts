@@ -26,10 +26,10 @@ export const useBottomBarState = (
   isDynamicConfigLoading: boolean = false,
   isDynamicConfigStarted: boolean = false,
 ) => {
-  // Module state
-  const [isModulesReady, setIsModulesReady] = useState(false);
+  // Module state - New two-phase system
+  const [isInputReady, setIsInputReady] = useState(false); // Phase 1: Input appears
+  const [isModulesReady, setIsModulesReady] = useState(false); // Phase 2: Modules pop out
   const [isAnimatingToCorner, setIsAnimatingToCorner] = useState(false);
-  const [isWidthExpanded, setIsWidthExpanded] = useState(false);
 
   // Layout preference hook
   const { setPreference } = useLayoutPreference();
@@ -42,22 +42,24 @@ export const useBottomBarState = (
   // Create the centralized trigger function
   const triggerExitAndSwitch = useTriggerExitAndSwitch(startExitAnimationCallback, onSwitchToDefault, setPreference);
 
-  // Single phase: Wait for dynamic API to complete before starting animation
+  // Phase 1: Static API ready - Show input only
+  useEffect(() => {
+    // When static API loads, show input immediately
+    if (!isConfigLoading && modules.length > 0) {
+      setIsInputReady(true);
+    }
+  }, [isConfigLoading, modules.length]);
+
+  // Phase 2: Dynamic API ready - Pop out modules with jelly effect
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
-    // Only proceed when:
-    // 1. Static API is loaded AND
-    // 2. Dynamic config has started AND
-    // 3. Dynamic config is not loading (completed)
-    if (!isConfigLoading && modules.length > 0 && isDynamicConfigStarted && !isDynamicConfigLoading) {
-      // Start the bounce animation immediately
-      setIsModulesReady(true);
-
-      // Start width expansion after a delay
+    // When dynamic config completes, trigger module pop-out animations
+    if (isInputReady && isDynamicConfigStarted && !isDynamicConfigLoading) {
+      // Small delay before modules start popping out (allows input to settle)
       timeoutId = setTimeout(() => {
-        setIsWidthExpanded(true);
-      }, ANIMATION_TIMINGS.DELAYS.MIN_PHASE_1_DURATION);
+        setIsModulesReady(true);
+      }, ANIMATION_TIMINGS.DELAYS.MODULE_POP_DELAY);
     }
 
     return () => {
@@ -65,7 +67,7 @@ export const useBottomBarState = (
         clearTimeout(timeoutId);
       }
     };
-  }, [isConfigLoading, modules.length, isDynamicConfigLoading, isDynamicConfigStarted]);
+  }, [isInputReady, isDynamicConfigLoading, isDynamicConfigStarted]);
 
   // Trigger exit animation when activeFeature becomes non-null (external actions like nudges)
   useEffect(() => {
@@ -134,9 +136,9 @@ export const useBottomBarState = (
   );
 
   return {
-    // Module state
-    isModulesReady,
-    isWidthExpanded,
+    // Module state - Two-phase system
+    isInputReady, // Phase 1: Input visible
+    isModulesReady, // Phase 2: Modules pop out
     askAiModule,
     otherModules,
 
