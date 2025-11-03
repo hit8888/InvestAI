@@ -101,7 +101,7 @@ export type Asset = z.infer<typeof AssetSchema>;
 export interface CommandBarSettings {
   tenant_id: string;
   agent_id: string;
-  visible?: boolean;
+  enabled?: boolean;
   message?: string;
   start_time?: string;
   end_time?: string;

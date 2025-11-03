@@ -35,6 +35,7 @@ const DEFAULT_FORM_VALUES: SettingsFormData = {
 const DEFAULT_PARAMS = {
   bo_is_admin: 'true',
   bo_is_test: 'true',
+  bo_enabled: 'true',
 };
 
 const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;

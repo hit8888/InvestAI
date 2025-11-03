@@ -143,7 +143,8 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
 
   useTracking();
 
-  const shouldLoadApp = config?.is_enabled && !!config.command_bar?.modules.length;
+  const enableCommandBar = initialSettings.enabled ?? config?.is_enabled;
+  const shouldLoadApp = enableCommandBar && !!config.command_bar?.modules.length;
 
   if (shouldLoadApp) {
     return children;

@@ -24,7 +24,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     children,
     tenantId: propTenantId,
     agentId: propAgentId,
-    visible: propVisible,
+    enabled: propEnabled,
     message: propMessage,
     startTime: propStartTime,
     endTime: propEndTime,
@@ -55,7 +55,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     return {
       tenant_id: urlParams.tenant_id ?? propTenantId,
       agent_id: urlParams.agent_id ?? propAgentId,
-      visible: jsonSafeParse(urlParams.visible).data ?? propVisible,
+      enabled: jsonSafeParse(urlParams.enabled).data ?? propEnabled,
       message: urlParams.message ?? parsedPropMessage,
       start_time: urlParams.start_time ?? propStartTime,
       end_time: urlParams.end_time ?? propEndTime,
@@ -75,7 +75,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
   }, [
     propTenantId,
     propAgentId,
-    propVisible,
+    propEnabled,
     propMessage,
     propStartTime,
     propEndTime,

@@ -17,7 +17,7 @@ export function createWc(WrappedComponent: ComponentType, hostId: string) {
       props: {
         agentId: 'string',
         tenantId: 'string',
-        visible: 'boolean',
+        enabled: 'boolean',
         message: 'string',
         startTime: 'string',
         endTime: 'string',
