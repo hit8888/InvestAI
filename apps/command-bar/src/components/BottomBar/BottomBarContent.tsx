@@ -94,8 +94,6 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
             actionButtonSize={actionButtonSize}
             askAiModule={askAiModule}
             onModuleClick={onModuleClick}
-            activeFeature={activeFeature}
-            isAnimatingToCorner={isAnimatingToCorner}
           />
         </motion.div>
 

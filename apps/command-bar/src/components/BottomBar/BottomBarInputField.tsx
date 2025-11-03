@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INPUT_FIELD, BUTTON_SIZING } from './constants';
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
 import { LucideIcon } from '@meaku/saral';
 import BlackTooltip from '@meaku/shared/components/BlackTooltip';
+import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
+import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
 
 interface BottomBarInputFieldProps {
   value: string;
@@ -13,8 +15,6 @@ interface BottomBarInputFieldProps {
   actionButtonSize: number; // Kept for backwards compatibility but not used (uses BUTTON_SIZING constants)
   askAiModule: CommandBarModuleConfigType | null;
   onModuleClick: (config: CommandBarModuleConfigType) => void;
-  activeFeature: CommandBarModuleType | null;
-  isAnimatingToCorner: boolean;
 }
 
 /**
@@ -51,7 +51,11 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
     }
   }, [askAiModule, onModuleClick]);
 
-  // Get custom icon URL (same logic as BaseActionComponent)
+  // Get config to access orb_config (matching logic from commandBarActionConfigs.tsx)
+  const { config } = useCommandBarStore();
+  const { orb_config: orbConfig } = config.style_config ?? {};
+
+  // Get custom icon URL (same logic as AskAIActionConfig)
   const customIconUrl = askAiModule?.icon_asset?.public_url ?? undefined;
 
   // Use scaled icon size from constants
@@ -60,43 +64,65 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
   const iconContent = useMemo(() => {
     if (!askAiModule) return null;
 
-    const iconElement = customIconUrl ? (
-      <div
-        className="flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10"
-        style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
-      >
-        <img
-          src={customIconUrl}
-          alt={askAiModule?.name || 'Ask AI'}
-          className="size-full object-cover"
-          loading="lazy"
-          draggable={false}
-        />
-      </div>
-    ) : askAiModule?.icon ? (
-      <div
-        className="flex shrink-0 items-center justify-center rounded-full bg-primary/10"
-        style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
-      >
-        <LucideIcon name={askAiModule.icon as never} className="size-5 stroke-[1.5px] text-primary" />
-      </div>
-    ) : null;
+    // Match the logic from AskAIActionConfig in commandBarActionConfigs.tsx:
+    // 1. First check: customIconUrl from featureConfig
+    // 2. Second check: orbConfig?.logo_url
+    // 3. Third: FallbackOrb
+    const renderIconElement = () => {
+      if (customIconUrl) {
+        return (
+          <div
+            className="mt-1.5 flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10"
+            style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+          >
+            <img
+              src={customIconUrl}
+              alt={askAiModule?.name || 'Ask AI'}
+              className="size-full object-cover"
+              loading="lazy"
+              draggable={false}
+            />
+          </div>
+        );
+      }
+      if (orbConfig?.logo_url) {
+        return (
+          <div
+            className="mt-1.5 flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10"
+            style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+          >
+            <img
+              src={orbConfig.logo_url}
+              alt="Ask AI"
+              className="size-full object-cover"
+              loading="lazy"
+              draggable={false}
+            />
+          </div>
+        );
+      }
+      return (
+        <div className="mb-1">
+          <FallbackOrb size={iconSize} />
+        </div>
+      );
+    };
 
-    if (!iconElement) return null;
+    const iconElement = renderIconElement();
 
     return (
       <BlackTooltip content={askAiModule.name} side="top">
         <button
           type="button"
           onClick={handleAskAiIconClick}
-          className="mt-1.5 flex shrink-0 cursor-pointer items-center justify-center transition-opacity hover:opacity-80"
+          className="flex shrink-0 cursor-pointer items-center justify-center transition-opacity hover:opacity-80"
           aria-label={`Open ${askAiModule.name}`}
         >
           {iconElement}
         </button>
       </BlackTooltip>
     );
-  }, [customIconUrl, askAiModule, iconSize, handleAskAiIconClick]);
+  }, [customIconUrl, orbConfig, askAiModule, iconSize, handleAskAiIconClick]);
 
   return (
     <div className="relative w-full">
@@ -137,7 +163,7 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
         }}
         className="relative flex w-full items-center gap-2 overflow-hidden rounded-[40px] bg-background pr-1.5 shadow-sm"
       >
-        {/* Ask AI icon on the left - 30px icon with 6px equidistant spacing */}
+        {/* Ask AI icon on the left */}
         {iconContent && <div className="ml-1.5">{iconContent}</div>}
 
         <input
