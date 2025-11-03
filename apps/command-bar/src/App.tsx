@@ -10,14 +10,13 @@ import { sanitizeUrl } from '@meaku/core/utils/index';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
-import { CommandBarModuleType, CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
 import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import { CommandBarRenderer } from './components/BottomBar/CommandBarRenderer';
 import { useBottomBarTransition, useCommandBarLayout } from './components/BottomBar/hooks';
-import NudgeBanner from '@meaku/shared/features/nudge/NudgeBanner';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 
@@ -74,10 +73,6 @@ function App() {
   useUserLeftTracking(sendUserMessage);
 
   const activeFeatureModuleType = activeFeature?.module_type ?? null;
-
-  const handleNudgeBannerClick = (module: CommandBarModuleType) => {
-    setActiveFeature(module);
-  };
 
   const handleClose = () => {
     setActiveFeature(null);
@@ -137,23 +132,20 @@ function App() {
   const isFirstTimeVisitor = !storageValues?.prospectId;
 
   return (
-    <>
-      <NudgeBanner onClick={handleNudgeBannerClick} />
-      <CommandBarRenderer
-        layout={layout}
-        transitionState={transitionState}
-        transitionActions={transitionActions}
-        activeFeatureModuleType={activeFeatureModuleType}
-        setActiveFeature={setActiveFeature}
-        nudgeEnabled={nudgeEnabled}
-        isExpanded={isExpanded}
-        onClose={handleClose}
-        onExpand={() => setIsExpanded(!isExpanded)}
-        isDynamicConfigLoading={isDynamicConfigLoading}
-        isDynamicConfigStarted={isDynamicConfigStarted}
-        isFirstTimeVisitor={isFirstTimeVisitor}
-      />
-    </>
+    <CommandBarRenderer
+      layout={layout}
+      transitionState={transitionState}
+      transitionActions={transitionActions}
+      activeFeatureModuleType={activeFeatureModuleType}
+      setActiveFeature={setActiveFeature}
+      nudgeEnabled={nudgeEnabled}
+      isExpanded={isExpanded}
+      onClose={handleClose}
+      onExpand={() => setIsExpanded(!isExpanded)}
+      isDynamicConfigLoading={isDynamicConfigLoading}
+      isDynamicConfigStarted={isDynamicConfigStarted}
+      isFirstTimeVisitor={isFirstTimeVisitor}
+    />
   );
 }
 

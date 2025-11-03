@@ -19,6 +19,8 @@ import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { cn } from '@meaku/saral';
 import ScrollTriggeredNudge from './components/ScrollTriggeredNudge';
 import useScrollTriggeredNudge from './hooks/useScrollTriggeredNudge';
+import NudgeActionCta from './NudgeActionCta';
+import useNudgeActionCta from './hooks/useNudgeActionCta';
 
 interface NudgeProps {
   activeFeature: CommandBarModuleType | null;
@@ -38,6 +40,7 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const { trackEvent } = useCommandBarAnalytics();
   const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(null);
   const { isEnabled: isScrollTriggeredNudgeEnabled, disable: disableScrollTriggeredNudge } = useScrollTriggeredNudge();
+  const { disable: disableNudgeActionCta, module: nudgeActionCtaModule } = useNudgeActionCta();
 
   const {
     polling_enabled,
@@ -159,6 +162,18 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
       disableScrollTriggeredNudge();
     }
   }, [activeFeature, handleDismiss, disableScrollTriggeredNudge]);
+
+  if (nudgeActionCtaModule && !nudgeToShow && !isScrollTriggeredNudgeEnabled) {
+    return (
+      <AnimatePresence mode="wait">
+        <NudgeActionCta
+          module={nudgeActionCtaModule}
+          setActiveFeature={setActiveFeature}
+          onDismiss={disableNudgeActionCta}
+        />
+      </AnimatePresence>
+    );
+  }
 
   if (isScrollTriggeredNudgeEnabled) {
     return (

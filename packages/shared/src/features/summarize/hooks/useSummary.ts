@@ -16,10 +16,7 @@ const isSummaryStreamMessage = (
   message.event_type === MessageEventType.SUMMARY_STREAM;
 
 export const useSummary = () => {
-  const [isSummarizing, setIsSummarizing] = useState(false);
-  const [clickedOnSummarize, setClickedOnSummarize] = useState(false);
   const { messages, settings } = useCommandBarStore();
-  const { sendUserMessage } = useWsClient();
 
   const summaryContent = useMemo(() => {
     const summarizeMessageResponseId = messages.find(
@@ -35,6 +32,16 @@ export const useSummary = () => {
 
     return summaryContent;
   }, [messages, settings.parent_url]);
+
+  const summaryRequestSent = useMemo(() => {
+    return messages.some(
+      (message) => message.event_type === MessageEventType.SUMMARIZE && message.event_data?.url === settings.parent_url,
+    );
+  }, [messages, settings.parent_url]);
+
+  const [isSummarizing, setIsSummarizing] = useState(summaryRequestSent && !summaryContent);
+  const [clickedOnSummarize, setClickedOnSummarize] = useState(false);
+  const { sendUserMessage } = useWsClient();
 
   const handleSummarize = () => {
     setIsSummarizing(true);

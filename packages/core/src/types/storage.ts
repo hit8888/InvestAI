@@ -1,7 +1,6 @@
 export type LayoutType = 'bottom_center' | 'bottom_right';
 
 export interface TenantStorageData {
-  auto_summarize?: boolean;
   sessionId?: string;
   prospectId?: string;
   tenantId?: string;
@@ -16,6 +15,7 @@ export interface TenantStorageData {
     expiresAt: number;
   };
   [key: `primary_goal_redirected_${string}`]: boolean;
+  [key: `nudge_action_cta_${string}`]: boolean;
 }
 
 export interface StorageData {

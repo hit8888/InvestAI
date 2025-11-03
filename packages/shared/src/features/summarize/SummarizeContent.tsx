@@ -10,7 +10,7 @@ import { useSummary } from './hooks/useSummary';
 import { useEffect } from 'react';
 import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 
-const { ASK_AI } = CommandBarModuleTypeSchema.enum;
+const { ASK_AI, SUMMARIZE } = CommandBarModuleTypeSchema.enum;
 
 const getSummaryState = (
   summaryContent: string,
@@ -57,10 +57,12 @@ const SummarizeContent = ({ onClose, onExpand, isExpanded, setActiveFeature }: F
   useEffect(() => {
     if (isSummarizing || summaryContent) return;
 
-    const { auto_summarize } = getLocalStorageData() ?? {};
+    const nudgeActionStorageKey = `nudge_action_cta_${SUMMARIZE}`;
+    const storageData = getLocalStorageData();
+    const nudgeActionCtaSummarize = storageData?.[nudgeActionStorageKey as keyof typeof storageData] ?? false;
 
-    if (auto_summarize) {
-      setLocalStorageData({ auto_summarize: false });
+    if (nudgeActionCtaSummarize) {
+      setLocalStorageData({ [nudgeActionStorageKey]: false });
       handleSummarize();
     }
   }, []);
