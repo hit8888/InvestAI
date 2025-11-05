@@ -84,7 +84,7 @@ const UtmParametersSection: React.FC<UtmParametersSectionProps> = ({ form }) => 
           onClick={addUtmParameter}
           className="gap-1 justify-self-center"
         >
-          Add more
+          {utmFields.length < 1 ? 'Add' : 'Add more'}
           <Plus className="h-4 w-4" />
         </Button>
       </div>

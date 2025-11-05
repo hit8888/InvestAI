@@ -107,6 +107,7 @@ export interface CommandBarSettings {
   end_time?: string;
   parent_url?: string;
   session_id?: string;
+  prospect_id?: string;
   browsed_urls?: BrowsedUrl[];
   bc?: boolean;
   is_test?: boolean;

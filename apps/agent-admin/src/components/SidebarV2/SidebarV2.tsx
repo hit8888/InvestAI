@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -13,6 +13,7 @@ import {
   TooltipArrow,
 } from '@breakout/design-system/components/Tooltip/index';
 import { useAuth } from '../../context/AuthProvider';
+import { useSidebar } from '../../context/SidebarContext';
 import SidebarHeader from './SidebarHeader';
 import { getTenantIdentifierFromUrl } from '@meaku/core/utils/index';
 import useBrandingAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
@@ -25,12 +26,8 @@ import {
   SIDEBAR_V2_SIGN_OUT_ITEM,
   INSIGHTS_ITEM,
   SidebarV2LinkItem,
-  SidebarV2AccordionGroup,
   SidebarV2AccordionSection,
-  SidebarV2SettingsGroup,
 } from '../../utils/sidebarV2Constants';
-
-const SIDEBAR_COLLAPSED_KEY = 'sidebar_v2_collapsed';
 
 /**
  * Animation configuration for accordion expand/collapse
@@ -50,7 +47,6 @@ const accordionAnimation = {
  * New sidebar with accordion-based navigation structure
  */
 const SidebarV2 = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { userInfo, logout } = useAuth();
   const orgList = userInfo?.organizations;
@@ -75,63 +71,17 @@ const SidebarV2 = () => {
   // Favicon from agent orb config
   const FAVICON_URL = agentConfigs?.configs?.['agent_personalization:style']?.orb_config?.logo_url || '';
 
-  // Track collapsed/expanded state
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
-    const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
-    return stored ? JSON.parse(stored) : false;
-  });
-
-  // Track which view we're in (MAIN or SETTINGS)
-  const [sideNavView, setSideNavView] = useState<SideNavView>(() => {
-    const pathURL = location.pathname;
-    if (pathURL.includes('settings')) {
-      return SideNavView.SETTINGS;
-    }
-    return SideNavView.MAIN;
-  });
-
-  // Track which accordion section is open (single-mode - only one can be open)
-  const [openAccordion, setOpenAccordion] = useState<string>(SidebarV2AccordionGroup.BREAKOUT_BLOCKS);
-
-  // Persist collapsed state to localStorage
-  useEffect(() => {
-    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, JSON.stringify(isCollapsed));
-  }, [isCollapsed]);
-
-  const toggleSidebar = () => {
-    setIsCollapsed((prev) => !prev);
-  };
-
-  const toggleAccordion = (title: string) => {
-    setOpenAccordion((prev) => (prev === title ? '' : title));
-  };
-
-  const navigateToSettingsView = () => {
-    const defaultRoute = SIDEBAR_V2_SETTINGS_ITEMS.find(
-      (item) => item.settingsGroup === SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
-    )?.navUrl;
-
-    setSideNavView(SideNavView.SETTINGS);
-    if (defaultRoute) {
-      const basePath = tenantName ? `/${tenantName}${defaultRoute}` : defaultRoute;
-      navigate(basePath, { state: { from: 'settings' } });
-    }
-  };
-
-  const navigateToMainView = () => {
-    const firstMainItem = SIDEBAR_V2_ACCORDION_SECTIONS[0]?.items[0];
-    setSideNavView(SideNavView.MAIN);
-    if (location.state?.from === 'settings') {
-      navigate(-1);
-    } else if (firstMainItem) {
-      handleNavigation(firstMainItem.navUrl);
-    }
-  };
-
-  const handleNavigation = (url: string) => {
-    const basePath = tenantName ? `/${tenantName}${url}` : url;
-    navigate(basePath);
-  };
+  // Get state and functions from context
+  const {
+    sideNavView,
+    isCollapsed,
+    setIsCollapsed,
+    toggleSidebar,
+    openAccordion,
+    toggleAccordion,
+    navigateToSettingsView,
+    navigateToMainView,
+  } = useSidebar();
 
   const isLinkActive = (url: string) => {
     const normalizedPath = tenantName ? location.pathname.replace(`/${tenantName}`, '') : location.pathname;

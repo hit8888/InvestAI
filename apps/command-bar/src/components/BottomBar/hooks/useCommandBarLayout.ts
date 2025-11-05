@@ -8,6 +8,7 @@ export interface CommandBarLayoutConfig {
   position: string;
   settings: { position?: string };
   ui: { position?: string };
+  isFirstTimeVisitor: boolean;
 }
 
 export interface CommandBarLayoutResult {
@@ -18,19 +19,19 @@ export interface CommandBarLayoutResult {
 }
 
 export const useCommandBarLayout = (config: CommandBarLayoutConfig): CommandBarLayoutResult => {
-  const { position = LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT, settings } = config;
+  const { position = LAYOUT_PREFERENCE_CONFIG.DEFAULT_LAYOUT, settings, isFirstTimeVisitor } = config;
   const configPosition = settings.position || position;
   const prevConfigPosition = useRef<string | null>(null);
 
   const { clearPreference, determineFinalLayout } = useLayoutPreference();
 
-  // Clear layout preference only when config position actually changes
+  // Clear layout preference only when config position actually changes or is first time visitor
   useEffect(() => {
-    if (prevConfigPosition.current !== null && prevConfigPosition.current !== configPosition) {
+    if (isFirstTimeVisitor || (prevConfigPosition.current !== null && prevConfigPosition.current !== configPosition)) {
       clearPreference();
     }
     prevConfigPosition.current = configPosition;
-  }, [configPosition, clearPreference]);
+  }, [configPosition, clearPreference, isFirstTimeVisitor]);
 
   // UPDATED: Allow bottom_center on tablet and desktop (≥576px)
   // Only force bottom_right on truly mobile devices (<576px)

@@ -1,15 +1,14 @@
 import './index.css';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useWsClient } from '@meaku/shared/hooks/useWsClient';
-import { setLocalStorageData, getLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { useCommandBarStore } from '@meaku/shared/stores';
 import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
 import { useHistory } from '@meaku/core/hooks/useHistory';
 import { sanitizeUrl } from '@meaku/core/utils/index';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
@@ -38,6 +37,8 @@ function App() {
   } = useCommandBarStore();
   const { modules = [], ui, nudge: nudgeConfig } = config.command_bar ?? {};
 
+  const isFirstTimeVisitor = !config.prospect_id;
+
   const { initialiseSocket, sendUserMessage } = useWsClient();
 
   // Use layout hook for positioning logic
@@ -45,6 +46,7 @@ function App() {
     position: ui?.position ?? 'bottom_right',
     settings,
     ui: ui ?? {},
+    isFirstTimeVisitor,
   });
 
   // Use transition hook for bottom bar state management
@@ -96,7 +98,6 @@ function App() {
       setSessionData(sessionData);
       initMessages(sessionData.chat_history);
       initialiseSocket(sessionId, settings.tenant_id);
-      removeParamFromUrl('session_id');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionData]);
@@ -125,11 +126,6 @@ function App() {
       updateSettings({ parent_url: currentUrl });
     }
   });
-
-  // Only show initial tooltips for first-time visitors
-  // Check localStorage for prospect_id (same logic as PreloadContainer for static vs dynamic API)
-  const storageValues = useMemo(() => getLocalStorageData(), []);
-  const isFirstTimeVisitor = !storageValues?.prospectId;
 
   return (
     <CommandBarRenderer

@@ -1,140 +1,137 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem } from '@breakout/design-system/components/layout/form';
+import { Form, FormField } from '@breakout/design-system/components/layout/form';
 import { SettingsFormData } from '../PlaygroundPage';
-import DeviceTypeSwitcher from './DeviceTypeSwitcher';
 import ToggleSection from './ToggleSection';
 import LandingPageUrlInput from './LandingPageUrlInput';
 import BrowsingHistorySection from './BrowsingHistorySection';
 import UtmParametersSection from './UtmParametersSection';
 import VisitorCompanyInput from './VisitorCompanyInput';
-import SettingsPanelHeader from './SettingsPanelHeader';
-import SettingsPanelControls from './SettingsPanelControls';
+import { Info } from 'lucide-react';
+import Typography from '@breakout/design-system/components/Typography/index';
+import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 
 interface SettingsPanelProps {
   form: UseFormReturn<SettingsFormData>;
-  onExternalPreview: () => void;
-  onPreviewAgent: () => void;
-  onRefresh: () => void;
-  isPreviewDisabled: boolean;
-  isRefreshDisabled: boolean;
+  isCollapsed: boolean;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({
-  form,
-  onExternalPreview,
-  onPreviewAgent,
-  onRefresh,
-  isPreviewDisabled,
-  isRefreshDisabled,
-}) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ form, isCollapsed }) => {
+  if (isCollapsed) {
+    return null;
+  }
 
   return (
-    <div
-      className={`z-50 flex w-[370px] shrink-0 flex-col border-r border-gray-100 shadow-lg ${isCollapsed ? 'absolute left-4 top-4 rounded-xl' : ''}`}
-    >
-      {/* Header */}
-      <SettingsPanelHeader
-        isCollapsed={isCollapsed}
-        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-        onExternalPreview={onExternalPreview}
-      />
+    <div className="flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-4 bg-gray-25 px-6 pb-6 pt-0">
+        <Form {...form}>
+          {/* Repeat User Toggle Section */}
+          <div className="mt-4 flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="repeatUser"
+              render={({ field }) => (
+                <ToggleSection
+                  field={field}
+                  label="Repeat User"
+                  tooltip="Simulate the experience for a visitor coming back to your site"
+                />
+              )}
+            />
+          </div>
 
-      {/* Scrollable Content */}
-      {!isCollapsed && (
-        <div className="flex-1 overflow-y-auto">
-          <div className="space-y-6 p-6">
-            <Form {...form}>
-              {/* Device Type Switcher */}
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="deviceType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <DeviceTypeSwitcher field={field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
+          {/* Provide Feedback Toggle Section */}
+          <div className="flex flex-col gap-4">
+            <div className="border-t border-gray-200"></div>
+            <FormField
+              control={form.control}
+              name="provideFeedback"
+              render={({ field }) => (
+                <ToggleSection
+                  field={field}
+                  label="Provide Feedback"
+                  tooltip="Turning this on will allow you to provide feedback to agent's responses"
+                />
+              )}
+            />
+          </div>
+
+          {/* Browsing Journey Section */}
+          <div className="flex flex-col gap-4">
+            <div className="border-t border-gray-200"></div>
+            <div className="flex flex-col">
+              <div className="mb-3 flex items-center gap-2">
+                <Typography variant="label-14-medium">Browsing Journey</Typography>
+                <TooltipWrapperDark
+                  showTooltip
+                  showArrow={false}
+                  content="Shows the user's recent journey before arriving on the current page"
+                  trigger={<Info className="h-4 w-4 text-gray-900" />}
+                  tooltipSide="top"
+                  tooltipAlign="start"
                 />
               </div>
 
-              {/* Divider */}
-              <div className="border-t border-gray-200"></div>
-
-              {/* Repeat User Toggle */}
-              <FormField
-                control={form.control}
-                name="repeatUser"
-                render={({ field }) => (
-                  <ToggleSection
-                    field={field}
-                    label="Repeat User"
-                    tooltip="Simulate the experience for a visitor coming back to your site"
-                  />
-                )}
-              />
-
-              {/* Divider */}
-              <div className="border-t border-gray-200"></div>
-
-              {/* Provide Feedback Toggle */}
-              <FormField
-                control={form.control}
-                name="provideFeedback"
-                render={({ field }) => (
-                  <ToggleSection
-                    field={field}
-                    label="Provide Feedback"
-                    tooltip="Turning this on will allow you to provide feedback to agent's responses"
-                  />
-                )}
-              />
-
-              {/* Divider */}
-              <div className="border-t border-gray-200"></div>
-
               {/* Landing Page URL */}
-              <FormField
-                control={form.control}
-                name="landingPageUrl"
-                render={({ field }) => <LandingPageUrlInput field={field} />}
-              />
+              <div className="flex flex-col gap-1">
+                <Typography variant="caption-12-medium" className="text-gray-500">
+                  Current Page URL
+                </Typography>
+                <FormField
+                  control={form.control}
+                  name="landingPageUrl"
+                  render={({ field }) => <LandingPageUrlInput field={field} />}
+                />
+              </div>
 
               {/* Browsing History */}
               <BrowsingHistorySection form={form} />
+            </div>
+          </div>
 
-              {/* Divider */}
-              <div className="border-t border-gray-200"></div>
+          {/* UTM Parameters Section */}
+          <div className="flex flex-col gap-4">
+            <div className="border-t border-gray-200"></div>
+            <UtmParametersSection form={form} />
+          </div>
 
-              {/* UTM Parameters */}
-              <UtmParametersSection form={form} />
-
-              {/* Divider */}
-              <div className="border-t border-gray-200"></div>
-
-              {/* Visitor Company */}
+          {/* Visitor Company Section */}
+          <div className="flex flex-col gap-4">
+            <div className="border-t border-gray-200"></div>
+            <div className="flex flex-col gap-3">
               <FormField
                 control={form.control}
                 name="visitorCompany"
                 render={({ field }) => <VisitorCompanyInput field={field} />}
               />
-            </Form>
+            </div>
           </div>
-        </div>
-      )}
 
-      {/* Bottom Controls */}
-      {!isCollapsed && (
-        <SettingsPanelControls
-          onRefresh={onRefresh}
-          onPreviewAgent={onPreviewAgent}
-          isPreviewDisabled={isPreviewDisabled}
-          isRefreshDisabled={isRefreshDisabled}
-        />
-      )}
+          {/* User Location Section */}
+          {/* <div className="flex flex-col gap-4">
+            <div className="border-t border-gray-200"></div>
+            <div className="flex flex-col gap-3">
+              <Typography variant="label-14-medium">User Location</Typography>
+              <FormField
+                control={form.control}
+                name="userLocation"
+                render={({ field }) => (
+                  <div className="relative">
+                    <input
+                      {...field}
+                      className="h-11 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-400 focus:outline-none focus:ring-0"
+                      placeholder="Enter user location"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 transform">
+                      <ChevronDown className="h-4 w-4 text-gray-500" />
+                    </div>
+                  </div>
+                )}
+              />
+            </div>
+          </div> */}
+        </Form>
+      </div>
     </div>
   );
 };

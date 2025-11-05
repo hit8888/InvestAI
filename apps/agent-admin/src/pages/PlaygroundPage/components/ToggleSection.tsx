@@ -22,7 +22,7 @@ const ToggleSection: React.FC<ToggleSectionProps> = ({ field, label, tooltip }) 
             showTooltip
             showArrow={false}
             content={tooltip}
-            trigger={<Info className="h-4 w-4 text-primary" />}
+            trigger={<Info className="h-4 w-4 text-gray-900" />}
             tooltipSide="top"
             tooltipAlign="start"
           />
@@ -32,7 +32,7 @@ const ToggleSection: React.FC<ToggleSectionProps> = ({ field, label, tooltip }) 
             <Switch
               checked={field.value}
               onCheckedChange={field.onChange}
-              className="data-[state=checked]:bg-primary"
+              className="data-[state=checked]:bg-gray-900"
             />
           </FormControl>
         </FormItem>

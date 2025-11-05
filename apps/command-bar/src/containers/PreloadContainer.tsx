@@ -12,6 +12,7 @@ import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
 import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
 import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
 import useTracking from '../hooks/useTracking';
+import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
 
 interface PreloadContainerProps {
   children: ReactNode;
@@ -32,14 +33,19 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
 
   const storageValues = useMemo(() => getLocalStorageData(), []);
 
-  const dynamicConfigEnabled = useDelayedEnable(storageValues?.prospectId ? 0 : dynamic_config_start_delay_ms);
+  // Use config values first, because session api might have already created and set these values
+  // If not available, use initialSettings values, and if not available, use storage values
+  const currentProspectId = config.prospect_id ?? initialSettings.prospect_id ?? storageValues?.prospectId;
+  const currentSessionId = config.session_id ?? initialSettings.session_id ?? storageValues?.sessionId;
+
+  const dynamicConfigEnabled = useDelayedEnable(currentProspectId ? 0 : dynamic_config_start_delay_ms);
 
   const staticConfigQuery = useStaticConfigDataQuery(
     {
       agentId: initialSettings.agent_id,
     },
     {
-      enabled: !storageValues?.prospectId,
+      enabled: !currentProspectId,
     },
   );
 
@@ -47,8 +53,8 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
     {
       agent_id: initialSettings.agent_id,
       parent_url: initialSettings.parent_url,
-      session_id: storageValues?.sessionId,
-      prospect_id: storageValues?.prospectId,
+      session_id: currentSessionId,
+      prospect_id: currentProspectId,
       nudge_disabled: false,
       browsed_urls: initialSettings.browsed_urls ?? [
         {
@@ -65,15 +71,9 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
 
   const initialiseCommandBar = useCallback(
     (initialConfig: ConfigurationApiResponse = {} as ConfigurationApiResponse) => {
-      const {
-        distinctId,
-        prospectId: storageProspectId,
-        sessionId: storageSessionId,
-        tenantName: storageTenantName,
-      } = storageValues ?? {};
-      const tenantName = initialConfig.org_name ?? storageTenantName;
-      const sessionId = initialConfig.session_id ?? storageSessionId;
-      const prospectId = initialConfig.prospect_id ?? storageProspectId;
+      const tenantName = initialConfig.org_name;
+      const sessionId = initialConfig.session_id;
+      const prospectId = initialConfig.prospect_id;
 
       setConfig({
         ...initialConfig,
@@ -84,22 +84,23 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
         tenant_name: tenantName,
         session_id: sessionId,
         prospect_id: prospectId,
-        distinct_id: distinctId,
       });
-      setLocalStorageData({ prospectId, sessionId, tenantName });
+      setLocalStorageData({ prospectId, sessionId });
     },
-    [setConfig, storageValues, updateCommonProperties],
+    [setConfig, updateCommonProperties],
   );
 
   useEffect(() => {
-    const { prospectId } = storageValues ?? {};
-
-    if (!prospectId) {
+    if (!currentProspectId) {
+      const distinctId = nanoid();
       setLocalStorageData({
-        distinctId: nanoid(),
+        distinctId,
+      });
+      updateCommonProperties({
+        distinct_id: distinctId,
       });
     }
-  }, [storageValues]);
+  }, [currentProspectId, updateCommonProperties]);
 
   // Initialise command bar after static config is available (prospect id does not exist)
   useEffect(() => {
@@ -130,6 +131,8 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
         session_id: dynamicConfigQuery.data.session_id,
         prospect_id: dynamicConfigQuery.data.prospect_id,
       });
+      removeParamFromUrl('session_id');
+      removeParamFromUrl('prospect_id');
       setCompleteConfigLoaded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

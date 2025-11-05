@@ -1,8 +1,9 @@
-import { getLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { Typography } from '@meaku/saral';
+import { useCommandBarStore } from '../stores';
 
 const PoweredByBreakout = () => {
-  const sessionId = getLocalStorageData()?.sessionId;
+  const { config } = useCommandBarStore();
+  const sessionId = config.session_id;
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   const getBreakoutUrl = () => {

@@ -1,18 +1,17 @@
 import React from 'react';
-import { ControllerRenderProps } from 'react-hook-form';
 import { Monitor, Smartphone } from 'lucide-react';
 import CustomTabs from '../../../components/CustomTabs';
-import { SettingsFormData } from '../PlaygroundPage';
 
 interface DeviceTypeSwitcherProps {
-  field: ControllerRenderProps<SettingsFormData, 'deviceType'>;
+  onDeviceTypeChange: (deviceType: 'desktop' | 'mobile') => void;
+  deviceType: 'desktop' | 'mobile';
 }
 
-const DeviceTypeSwitcher: React.FC<DeviceTypeSwitcherProps> = ({ field }) => {
+const DeviceTypeSwitcher: React.FC<DeviceTypeSwitcherProps> = ({ onDeviceTypeChange, deviceType }) => {
   return (
     <CustomTabs
-      selectedTab={field.value}
-      handleTabChange={field.onChange}
+      selectedTab={deviceType}
+      handleTabChange={(value) => onDeviceTypeChange(value as 'desktop' | 'mobile')}
       tabItems={[
         {
           itemKey: 'desktop',
