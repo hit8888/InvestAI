@@ -15,8 +15,8 @@ const SdrSettingsPage = () => {
   const tenantIdentifier = getTenantIdentifier();
   const existingMessage = userInfo?.default_hitl_join_message;
 
-  // Generate default message template if no message exists
-  const defaultMessageTemplate = useMemo(() => {
+  // Generate default placeholder message if no message exists
+  const placeholderMessage = useMemo(() => {
     const firstName = userInfo?.first_name;
     const currentTenantName = tenantIdentifier?.['tenant-name'];
     const currentOrganization = userInfo?.organizations?.find((org) => org['tenant-name'] === currentTenantName);
@@ -50,7 +50,7 @@ const SdrSettingsPage = () => {
     }
   }, [isEditing]);
 
-  // Reset message when canceling or when existing message changes
+  // Reset message when existing message changes
   useEffect(() => {
     if (!isEditing) {
       setMessage(existingMessage || '');
@@ -65,11 +65,13 @@ const SdrSettingsPage = () => {
     updateMessage({ data: { default_hitl_join_message: message } });
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
-  const isSaveDisabled = !isEditing || !message.trim() || isSaving;
+  // Disable save button if the message is empty or the same as the existing message
+  const isSaveDisabled =
+    isSaving || (isEditing && !message.trim()) || (isEditing && message.trim() === (existingMessage || '').trim());
 
   return (
     <PageContainer heading="Sales Rep Settings">
@@ -89,34 +91,19 @@ const SdrSettingsPage = () => {
                 className={cn(
                   'min-h-[56px] w-full resize-none rounded-none border-none p-0 text-sm leading-[20px] text-[#2D3454] placeholder:text-gray-400 focus:ring-0 disabled:cursor-default disabled:bg-transparent disabled:opacity-100',
                 )}
-                placeholder={existingMessage ? '' : defaultMessageTemplate}
+                placeholder={existingMessage ? '' : placeholderMessage}
               />
             </div>
 
-            <div className="flex w-full justify-end gap-2.5">
-              {isEditing ? (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  onClick={handleCancel}
-                  disabled={isSaving}
-                  className="px-3 py-2"
-                >
-                  Cancel
-                </Button>
-              ) : (
-                <Button variant="secondary" size="small" onClick={() => setIsEditing(true)} className="px-3 py-2">
-                  Edit
-                </Button>
-              )}
+            <div className="flex w-full justify-end">
               <Button
                 variant="primary"
                 size="small"
-                onClick={handleSave}
+                onClick={isEditing ? handleSave : handleEdit}
                 disabled={isSaveDisabled}
                 className="px-3 py-2"
               >
-                {isSaving ? 'Saving...' : 'Save'}
+                {isSaving ? 'Saving...' : isEditing ? 'Save' : 'Edit'}
               </Button>
             </div>
           </div>
