@@ -63,6 +63,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
         },
       ],
       query_params: initialSettings.query_params,
+      is_test: initialSettings.is_test,
     },
     {
       enabled: dynamicConfigEnabled,
