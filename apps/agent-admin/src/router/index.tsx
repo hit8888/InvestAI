@@ -19,7 +19,7 @@ import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageCo
 import { AppRoutesEnum } from '../utils/constants';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
-import EntryPointsPage from '../pages/EntryPointsPage';
+import EmbeddingScriptsPage from '../pages/EmbeddingScriptsPage';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import AIBlocksPageContainer from '../pages/AIBlocksPage/index.tsx';
 import RedirectGuard from './RedirectGaurd.tsx';
@@ -127,10 +127,6 @@ const routes = [
                 path: 'branding',
                 element: <ProtectedRoute element={<BrandingPage />} />,
               },
-              {
-                path: 'entrypoints',
-                element: <ProtectedRoute element={<EntryPointsPage />} />,
-              },
             ],
           },
           {
@@ -198,6 +194,10 @@ const routes = [
               {
                 path: 'sdr-settings',
                 element: <ProtectedRoute element={<SdrSettingsPage />} />,
+              },
+              {
+                path: 'embeddings',
+                element: <ProtectedRoute element={<EmbeddingScriptsPage />} />,
               },
             ],
           },

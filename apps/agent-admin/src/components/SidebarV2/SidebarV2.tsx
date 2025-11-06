@@ -27,7 +27,9 @@ import {
   INSIGHTS_ITEM,
   SidebarV2LinkItem,
   SidebarV2AccordionSection,
+  SidebarV2SettingsGroup,
 } from '../../utils/sidebarV2Constants';
+import Separator from '@breakout/design-system/components/layout/separator';
 
 /**
  * Animation configuration for accordion expand/collapse
@@ -296,6 +298,46 @@ const SidebarV2 = () => {
     );
   };
 
+  const renderSettingsGroupWithNavItems = () => {
+    // Group items by settingsGroup while preserving order
+    const groupedItems = new Map<SidebarV2SettingsGroup | 'ungrouped', SidebarV2LinkItem[]>();
+    const groupOrder: (SidebarV2SettingsGroup | 'ungrouped')[] = [];
+
+    SIDEBAR_V2_SETTINGS_ITEMS.forEach((item) => {
+      const group = item.settingsGroup || 'ungrouped';
+      if (!groupedItems.has(group)) {
+        groupedItems.set(group, []);
+        groupOrder.push(group);
+      }
+      groupedItems.get(group)!.push(item);
+    });
+
+    return groupOrder.map((group, index) => {
+      const items = groupedItems.get(group)!;
+      return (
+        <div key={group} className="space-y-1">
+          {/* Group Header - Only show when not collapsed */}
+          {group !== 'ungrouped' && (
+            <div
+              className={cn(
+                'px-2 text-xs font-medium tracking-wider text-gray-700 transition-[max-height,opacity,padding] duration-300 ease-in-out',
+                {
+                  'pointer-events-none max-h-0 py-0 opacity-0': isCollapsed,
+                  'max-h-6 py-1 opacity-100': !isCollapsed,
+                },
+              )}
+            >
+              {group}
+            </div>
+          )}
+          {/* Group Items */}
+          {items.map((item) => renderNavItem(item))}
+          {index < groupOrder.length - 1 && <Separator />}
+        </div>
+      );
+    });
+  };
+
   return (
     <div
       className={cn(
@@ -375,7 +417,7 @@ const SidebarV2 = () => {
         <ScrollArea
           className={cn('sidebar-scrollbar h-full flex-1 [&>div>div]:h-full', {
             'p-2': isCollapsed,
-            'p-4': !isCollapsed,
+            'p-4 pt-0': !isCollapsed,
           })}
           type="hover"
         >
@@ -477,7 +519,7 @@ const SidebarV2 = () => {
                   </Tooltip>
                 </TooltipProvider>
 
-                <div className="space-y-1">{SIDEBAR_V2_SETTINGS_ITEMS.map((item) => renderNavItem(item))}</div>
+                <div className="space-y-4">{renderSettingsGroupWithNavItems()}</div>
               </div>
 
               {/* Sign Out Button - Positioned at bottom */}

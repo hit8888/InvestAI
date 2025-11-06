@@ -6,6 +6,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import { cn } from '@breakout/design-system/lib/cn';
 import FallbackOrb from '@breakout/design-system/components/Orb/FallbackOrb';
 import { CTABlockPreview } from './utils/blockHelpers';
+import OnlineIndicator from './components/OnlineIndicator';
 
 type AskAIBlockPreviewProps = {
   avatar_asset_url: string;
@@ -110,7 +111,10 @@ const AskAIBlockPreviewHeader = ({
       ) : (
         <div className="flex w-full items-center justify-between">
           {avatar_asset_url ? (
-            <img src={avatar_asset_url} alt="Ask AI" className="h-14 w-14 rounded-full object-contain" />
+            <div className="relative">
+              <img src={avatar_asset_url} alt="Ask AI" className="h-14 w-14 rounded-full object-contain" />
+              <OnlineIndicator position="bottom-right" size={16} borderWidth={2} offset={3} />
+            </div>
           ) : (
             <FallbackOrb size={56} />
           )}
@@ -120,7 +124,6 @@ const AskAIBlockPreviewHeader = ({
       <div className={cn('flex w-full flex-col items-start gap-2 p-2', hasBanner && 'pb-0 pt-6')}>
         {name && name.length > 0 && (
           <Typography
-            style={{ fontFamily: 'Plus Jakarta Sans' }}
             variant="label-16-medium"
             className="max-w-full truncate font-semibold leading-[20px] text-[#272A2E]"
           >
@@ -128,11 +131,7 @@ const AskAIBlockPreviewHeader = ({
           </Typography>
         )}
         {introduction && introduction.length > 0 && (
-          <Typography
-            style={{ fontFamily: 'Plus Jakarta Sans' }}
-            variant="label-14-medium"
-            className="line-clamp-4 max-w-full leading-[22px] text-[#272A2E]/70"
-          >
+          <Typography variant="label-14-medium" className="line-clamp-4 max-w-full leading-[22px] text-[#272A2E]/70">
             {introduction}
           </Typography>
         )}

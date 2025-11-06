@@ -418,7 +418,6 @@ export enum AppRoutesEnum {
   AGENT_KNOWLEDGE_BASE = 'agent/knowledge-base',
   AGENT_WORKFLOW = 'agent/workflow',
   AGENT_BRANDING = 'agent/branding',
-  AGENT_ENTRYPOINTS = 'agent/entrypoints',
   AGENT_CONTROLS = 'agent/controls',
   TRAINING = 'training',
   TRAINING_PLAYGROUND = 'training/playground',
@@ -435,6 +434,7 @@ export enum AppRoutesEnum {
   VISITORS_V2 = 'visitors',
   AI_BLOCKS = 'ai-blocks',
   SDR_SETTINGS = 'sdr-settings',
+  EMBEDDING_SCRIPTS = 'embeddings',
 }
 
 export enum SidebarNavItemsEnum {
@@ -445,7 +445,6 @@ export enum SidebarNavItemsEnum {
   AGENT_KNOWLEDGE_BASE_LABEL = 'Knowledge Base',
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
-  AGENT_ENTRYPOINTS_LABEL = 'Entry Points',
   AGENT_CONTROLS_LABEL = 'Controls',
   AGENT_CALENDAR_LABEL = 'Calendar',
   TRAINING_LABEL = 'Training',
@@ -454,6 +453,8 @@ export enum SidebarNavItemsEnum {
   AI_BLOCKS_LABEL = 'AI Blocks',
   INTEGRATIONS_LABEL = 'Integrations',
   PROFILE_LABEL = 'Profile',
+  SDR_SETTINGS_LABEL = 'SDR Settings',
+  EMBEDDING_SCRIPTS_LABEL = 'Embedding',
 }
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];
@@ -817,10 +818,6 @@ export const MAIN_LINK_ITEMS: NavLinkItem[] = [
       {
         navUrl: `/${AppRoutesEnum.AGENT_BRANDING}`,
         navItem: SidebarNavItemsEnum.AGENT_BRANDING_LABEL,
-      },
-      {
-        navUrl: `/${AppRoutesEnum.AGENT_ENTRYPOINTS}`,
-        navItem: SidebarNavItemsEnum.AGENT_ENTRYPOINTS_LABEL,
       },
       {
         navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,

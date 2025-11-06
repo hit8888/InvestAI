@@ -1,10 +1,9 @@
-import { AppRoutesEnum } from './constants';
+import { AppRoutesEnum, SidebarNavItemsEnum } from './constants';
 import {
   CalendarIcon,
   MessageSquareText,
   IdCard,
   GraduationCap,
-  Milestone,
   Users,
   Blocks,
   ToyBrick,
@@ -14,6 +13,7 @@ import {
   MessagesSquare,
   LogOut,
   UserRoundCog,
+  Workflow,
 } from 'lucide-react';
 
 /**
@@ -102,13 +102,6 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: `/${AppRoutesEnum.AGENT_ENTRYPOINTS}`, // V1: Agent > Entry Points
-    navItem: 'Entry Points',
-    icon: Milestone,
-    activeIcon: Milestone,
-    accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
-  },
-  {
     navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
     navItem: 'AI Blocks',
     icon: Blocks,
@@ -172,29 +165,36 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
   // Workspace Settings
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.INTEGRATIONS}`,
-    navItem: 'Integrations',
+    navItem: SidebarNavItemsEnum.INTEGRATIONS_LABEL,
     icon: ToyBrick,
     activeIcon: ToyBrick,
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.CALENDAR}`,
-    navItem: 'Calendar',
+    navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
     icon: CalendarIcon,
     activeIcon: CalendarIcon,
+    settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.EMBEDDING_SCRIPTS}`,
+    navItem: SidebarNavItemsEnum.EMBEDDING_SCRIPTS_LABEL,
+    icon: Workflow,
+    activeIcon: Workflow,
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   // Account Settings
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.SDR_SETTINGS}`,
-    navItem: 'SDR Settings',
+    navItem: SidebarNavItemsEnum.SDR_SETTINGS_LABEL,
     icon: UserRoundCog,
     activeIcon: UserRoundCog,
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
   },
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.PROFILE}`,
-    navItem: 'Profile',
+    navItem: SidebarNavItemsEnum.PROFILE_LABEL,
     icon: CircleUser,
     activeIcon: CircleUser,
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,

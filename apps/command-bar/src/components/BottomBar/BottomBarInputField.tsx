@@ -6,6 +6,7 @@ import { LucideIcon } from '@meaku/saral';
 import BlackTooltip from '@meaku/shared/components/BlackTooltip';
 import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
 import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
+import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
 
 interface BottomBarInputFieldProps {
   value: string;
@@ -98,6 +99,9 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
               loading="lazy"
               draggable={false}
             />
+            {orbConfig?.show_online_indicator && (
+              <OnlineIndicator position="bottom-right" size={12} borderWidth={2} offset={3} />
+            )}
           </div>
         );
       }

@@ -88,6 +88,28 @@ const AskAISpecificSection = ({
     );
   };
 
+  const handleAvatarChange = (image: string) => {
+    handleDataChange({ ...data, avatar: image });
+    handleConfigUpdate(
+      agentId,
+      {
+        configs: {
+          ...agentConfigs.configs,
+          'agent_personalization:style': {
+            ...(agentConfigs.configs?.['agent_personalization:style'] ?? {}),
+            orb_config: {
+              ...(agentConfigs.configs?.['agent_personalization:style']?.orb_config ?? {}),
+              logo_url: image,
+            },
+          },
+        },
+      },
+      agentConfigs,
+      onUpdate,
+      'Avatar',
+    );
+  };
+
   const updateData = (updates: Partial<AskAiSpecificData>) => {
     const newData = { ...data, ...updates };
     handleDataChange(newData);
@@ -120,7 +142,7 @@ const AskAISpecificSection = ({
           height="60px"
           isSquareLogo={true}
           initialImage={data.avatar}
-          onImageUpdate={(image) => updateData({ avatar: image })}
+          onImageUpdate={handleAvatarChange}
           tooltipText="Please upload the Avatar"
         />
       </SectionLayout>

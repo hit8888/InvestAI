@@ -11,7 +11,6 @@ const usePageRouteState = () => {
     AGENT_KNOWLEDGE_BASE,
     AGENT_WORKFLOW,
     AGENT_BRANDING,
-    AGENT_ENTRYPOINTS,
     AGENT_CONTROLS,
     TRAINING_PLAYGROUND,
     TRAINING_PLAYGROUND_PREVIEW,
@@ -27,7 +26,6 @@ const usePageRouteState = () => {
   const isAgentKnowledgeBasePage = location.pathname.includes(AGENT_KNOWLEDGE_BASE);
   const isAgentWorkflowPage = location.pathname.includes(AGENT_WORKFLOW);
   const isAgentBrandingPage = location.pathname.includes(AGENT_BRANDING);
-  const isAgentEntrypointsPage = location.pathname.includes(AGENT_ENTRYPOINTS);
   const isAgentControlsPage = location.pathname.includes(AGENT_CONTROLS);
   const isTrainingPlaygroundPage = location.pathname.includes(TRAINING_PLAYGROUND);
   const isTrainingPlaygroundPreviewPage = location.pathname.includes(TRAINING_PLAYGROUND_PREVIEW);
@@ -59,7 +57,6 @@ const usePageRouteState = () => {
     isAgentKnowledgeBasePage,
     isAgentWorkflowPage,
     isAgentBrandingPage,
-    isAgentEntrypointsPage,
     isAgentControlsPage,
     isTrainingPage,
     isTrainingPlaygroundPage,
