@@ -149,7 +149,7 @@ export const Message = ({
   const demoArtifactData = isDemoArtifact
     ? ((eventData as ArtifactMessageContent).artifact_data as DemoArtifactData)
     : null;
-    
+
   // Extract PDF artifact data
   const pdfArtifactData = isPDFArtifact
     ? ((eventData as ArtifactMessageContent).artifact_data as PDFArtifactData)
@@ -230,13 +230,13 @@ export const Message = ({
           !isFormArtifact &&
           !isQualificationFormArtifact &&
           !isCalendarArtifact &&
-      !isDiscoveryQuestion &&
-      !isVideoArtifact &&
-      !isImageArtifact &&
-      !isDemoArtifact &&
-      !isPDFArtifact &&
-      !isSuggestionsArtifact &&
-      !isCtaEvent
+          !isDiscoveryQuestion &&
+          !isVideoArtifact &&
+          !isImageArtifact &&
+          !isDemoArtifact &&
+          !isPDFArtifact &&
+          !isSuggestionsArtifact &&
+          !isCtaEvent
         }
         adminSessionInfo={isWithinAdminSession ? adminSessionInfo : undefined}
         selectedAvatar={selectedAvatar}
@@ -306,7 +306,7 @@ export const Message = ({
         />
       )}
       {isDemoArtifact && demoArtifactData && <DemoArtifact data={demoArtifactData} />}
-      {isPDFArtifact && pdfArtifactData && <PDFArtifact data={pdfArtifactData} />}
+      {isPDFArtifact && pdfArtifactData && <PDFArtifact data={pdfArtifactData} enablePreview={false} />}
 
       {isDiscoveryQuestion && discoveryQuestionData && sendUserMessage && (
         <DiscoveryQuestion

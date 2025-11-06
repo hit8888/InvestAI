@@ -1,86 +1,147 @@
 import { useState } from 'react';
-import { Button } from '@meaku/saral';
+import {
+  PDFAttachmentIcon,
+  LucideIcon,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  cn,
+} from '@meaku/saral';
 import { PDFArtifactData } from '../../../types/message';
-
+import { usePopoverPortal, useTooltipPortal } from '../../../hooks/usePortal';
 interface PDFArtifactProps {
   data: PDFArtifactData;
+  enablePreview: boolean;
 }
 
-/**
- * PDFArtifact component that displays a PDF preview
- * Shows a PDF icon, title, file size, and description
- * Allows users to view or download the PDF
- */
-export const PDFArtifact = ({ data }: PDFArtifactProps) => {
+export const PDFArtifact = ({ data, enablePreview = false }: PDFArtifactProps) => {
   const { title = '', pdf_url } = data.content;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const { portalContainer, getZIndexClass } = usePopoverPortal();
+  const { portalContainer: tooltipPortalContainer } = useTooltipPortal();
 
   // Use default values if not provided or use dummy values for demonstration
   const displayTitle = title || 'HR-as-Change-Agent.pdf';
   const fileSize = (data.metadata?.fileSize as string) || '1.2 MB';
+  const thumbnailUrl =
+    (data.metadata?.thumbnail_url as string) ||
+    'https://www.scribbr.co.uk/wp-content/uploads/2022/08/ieee-example-paper-1.png';
 
-  const handleOpenPDF = () => {
-    // Open the PDF in a new tab
-    window.open(pdf_url, '_blank');
-    setIsLoading(true);
+  const handleDownload = () => {
+    if (pdf_url) {
+      const link = document.createElement('a');
+      link.href = pdf_url;
+      link.download = displayTitle;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setIsPopoverOpen(false);
+    }
+  };
 
-    // Reset loading state after a delay
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+  const handleOpenInNewTab = () => {
+    if (pdf_url) {
+      window.open(pdf_url, '_blank');
+      setIsPopoverOpen(false);
+    }
   };
 
   return (
-    <div className="w-full rounded-lg overflow-hidden border border-gray-200 bg-white shadow-sm">
-      <div className="p-4">
-        <div className="flex items-start gap-3">
-          {/* PDF Icon */}
-          <div className="flex-shrink-0">
-            <div className="w-10 h-12 bg-red-100 flex items-center justify-center rounded-sm">
-              <div className="text-red-600 text-xs font-semibold">PDF</div>
-            </div>
+    <div className="flex flex-col">
+      <div className="bg-gray-50 border border-[#d0d5dd] rounded-[8px] p-[12px] flex flex-col gap-[8px]">
+        {/* Header Row */}
+        <div className="flex items-start gap-[8px]">
+          {/* PDF Icon Container */}
+          <div className="bg-[#eaecf0] rounded-[8px] p-[4px] flex items-center justify-center shrink-0 size-[38px]">
+            <PDFAttachmentIcon width={22} height={22} />
           </div>
 
           {/* Document Info */}
-          <div className="flex-grow">
-            <h3 className="text-base font-medium text-gray-900 mb-1">{displayTitle}</h3>
-            <div className="text-sm text-gray-500 mb-1">
-              <span>{fileSize}</span>
-            </div>
+          <div className="flex-1 flex flex-col min-w-0">
+            <p className="text-[14px] font-medium text-[#101828] leading-[20px] truncate">{displayTitle}</p>
+            <p className="text-[12px] font-normal text-[#98a2b3] leading-[18px] truncate">{fileSize}</p>
           </div>
+
+          {/* Ellipsis Menu Icon with Popover */}
+          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+            <PopoverTrigger asChild>
+              <div className="shrink-0 size-[24px] flex items-center justify-center cursor-pointer">
+                <LucideIcon name="more-vertical" className="size-[24px] text-gray-600" />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent
+              className={cn('bg-white p-[8px] w-auto min-w-0 pointer-events-auto z-50', getZIndexClass())}
+              align="start"
+              side="top"
+              sideOffset={8}
+              portalContainer={portalContainer}
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
+              <TooltipProvider>
+                <div className="flex gap-[8px] items-center">
+                  {/* Download Button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={handleDownload}
+                        className="bg-[#eaecf0] rounded-[4px] p-[6px] size-[24px] flex items-center justify-center cursor-pointer hover:bg-[#101828] transition-colors group"
+                        aria-label="Download PDF"
+                      >
+                        <LucideIcon
+                          name="download"
+                          className="size-[12px] text-gray-900 group-hover:text-white transition-colors"
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={4}
+                      portalContainer={tooltipPortalContainer}
+                      className="bg-gray-900 text-white text-xs"
+                    >
+                      Download
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Open in New Tab Button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={handleOpenInNewTab}
+                        className="bg-[#eaecf0] rounded-[4px] p-[6px] size-[24px] flex items-center justify-center cursor-pointer hover:bg-[#101828] transition-colors group"
+                        aria-label="Open in new tab"
+                      >
+                        <LucideIcon
+                          name="external-link"
+                          className="size-[12px] text-gray-900 group-hover:text-white transition-colors"
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={4}
+                      portalContainer={tooltipPortalContainer}
+                      className="bg-gray-900 text-white text-xs"
+                    >
+                      Open in new tab
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
+            </PopoverContent>
+          </Popover>
         </div>
 
-        {/* PDF Preview with case studies content */}
-        <div className="mt-4 border border-gray-200 rounded bg-gray-50 p-4">
-          <div className="flex flex-col gap-2">
-            <div className="text-sm font-medium text-gray-800">Versa Networks – Customer Case Studies</div>
-            <div className="text-sm text-gray-600">
-              <ol className="list-decimal pl-5">
-                <li className="mb-2">
-                  <strong>Advanced Dermatology & Cosmetic Surgery (ADCS)</strong>
-                  <br />
-                  Uses Versa SASE to enable secure, high-performance connectivity for both on-premises and cloud
-                  applications across multiple offices, supporting a distributed healthcare network.
-                </li>
-                <li className="mb-2">
-                  <strong>SB Energy</strong>
-                  <br />
-                  Deploys Versa Unified SASE to secure their solar energy infrastructure, providing secure internet and
-                  cloud access while improving productivity across sites and plants.
-                </li>
-                <li>
-                  <strong>CommandLink</strong>
-                </li>
-              </ol>
-            </div>
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-200">
-              <div className="text-sm text-gray-700">{displayTitle}</div>
-              <Button onClick={handleOpenPDF} disabled={isLoading} variant="default" className="px-4 text-sm" hasWipers>
-                {isLoading ? 'Opening...' : 'View'}
-              </Button>
-            </div>
+        {/* Thumbnail Image */}
+        {enablePreview && thumbnailUrl && (
+          <div className="w-full h-[200px] overflow-hidden rounded-[8px]">
+            <img src={thumbnailUrl} alt={displayTitle} className="w-full h-auto object-cover" />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
