@@ -13,6 +13,7 @@ import {
   Dices,
   MessagesSquare,
   LogOut,
+  UserRoundCog,
 } from 'lucide-react';
 
 /**
@@ -184,6 +185,13 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   // Account Settings
+  {
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.SDR_SETTINGS}`,
+    navItem: 'SDR Settings',
+    icon: UserRoundCog,
+    activeIcon: UserRoundCog,
+    settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
+  },
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.PROFILE}`,
     navItem: 'Profile',

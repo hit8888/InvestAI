@@ -111,15 +111,7 @@ export const getMessageTimestamp = (timestamp?: string): string => {
     return ''; // Return an empty string or a default value if timestamp is missing
   }
 
-  const date = new Date(timestamp);
-
-  // Check if the date is valid
-  if (isNaN(date.getTime())) {
-    return ''; // Return an empty string or a default value if the date is invalid
-  }
-
-  // Convert to ISO string and format it
-  return DateUtil.getDateValueInISOString(timestamp);
+  return DateUtil.humanizeMessageTimestamp(timestamp);
 };
 
 export const getTransformedResponse = (response: ConversationDetailsDataResponse | SessionApiResponse) => {

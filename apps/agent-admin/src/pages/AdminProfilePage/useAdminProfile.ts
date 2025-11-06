@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { UpdateUserProfilePayload } from '@meaku/core/types/admin/api';
 import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
-import useUserProfileQuery from '../../queries/query/useUserProfileQuery';
+import { useAuth } from '../../context/AuthProvider';
 import useUpdateUserProfileMutation from '../../queries/mutation/useUpdateUserProfileMutation';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
@@ -24,8 +24,7 @@ export type ProfileFormData = z.infer<typeof profileFormSchema>;
 export const useAdminProfile = () => {
   const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState(false);
 
-  // Fetch user profile data
-  const { data: userProfile, isLoading } = useUserProfileQuery();
+  const { userInfo, updateUserInfo } = useAuth();
 
   // React Hook Form setup
   const form = useForm<ProfileFormData>({
@@ -52,15 +51,12 @@ export const useAdminProfile = () => {
         title: 'Profile updated successfully',
       });
 
-      // Update form with the new data and reset dirty state
-      const newFormData = {
-        firstName: data.first_name || '',
-        lastName: data.last_name || '',
-        designation: data.designation || '',
-        profilePicture: data.profile_picture || '',
-      };
-
-      reset(newFormData);
+      updateUserInfo({
+        first_name: data.first_name,
+        last_name: data.last_name,
+        designation: data.designation ?? null,
+        profile_picture: data.profile_picture ?? '',
+      });
     },
     onError: (error) => {
       let errorMessage = 'Failed to update profile. Please try again.';
@@ -86,17 +82,17 @@ export const useAdminProfile = () => {
 
   // Update form data when user profile is loaded
   useEffect(() => {
-    if (userProfile) {
+    if (userInfo) {
       const formData = {
-        firstName: userProfile.first_name || '',
-        lastName: userProfile.last_name || '',
-        designation: userProfile.designation || '',
-        profilePicture: userProfile.profile_picture || '',
+        firstName: userInfo.first_name || '',
+        lastName: userInfo.last_name || '',
+        designation: userInfo.designation || '',
+        profilePicture: userInfo.profile_picture || '',
       };
 
       reset(formData);
     }
-  }, [userProfile, reset]);
+  }, [userInfo, reset]);
 
   // Check if there are actual changes in text fields only
   const hasTextFieldChanges = () => {
@@ -186,7 +182,7 @@ export const useAdminProfile = () => {
     form,
 
     // Loading states
-    isLoading,
+    isLoading: false,
     isUploadingProfilePicture,
     isSaving: updateUserProfileMutation.isPending,
 

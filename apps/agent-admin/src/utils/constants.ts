@@ -122,6 +122,7 @@ export const DefaultAuthResponse: UserInfoResponse = {
   last_login: '',
   designation: '',
   department: '',
+  default_hitl_join_message: '',
   organizations: [], // Assuming an empty array as the default for organizations
 };
 
@@ -433,6 +434,7 @@ export enum AppRoutesEnum {
   COMPANIES = 'companies',
   VISITORS_V2 = 'visitors',
   AI_BLOCKS = 'ai-blocks',
+  SDR_SETTINGS = 'sdr-settings',
 }
 
 export enum SidebarNavItemsEnum {

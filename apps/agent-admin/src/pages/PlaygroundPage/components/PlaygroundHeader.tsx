@@ -12,6 +12,7 @@ interface PlaygroundHeaderProps {
   showDeviceSelector?: boolean;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  isRefreshDisabled?: boolean;
 }
 
 const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
@@ -21,6 +22,7 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
   showDeviceSelector = true,
   isCollapsed,
   onToggleCollapse,
+  isRefreshDisabled = false,
 }) => {
   return (
     <div
@@ -41,7 +43,10 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
           trigger={
             <button
               onClick={onRefresh}
-              className="flex h-8 cursor-pointer items-center gap-2 rounded-lg bg-gray-100 px-2 py-1"
+              disabled={isRefreshDisabled}
+              className={cn('flex h-8 items-center gap-2 rounded-lg bg-gray-100 px-2 py-1', {
+                'cursor-not-allowed opacity-50': isRefreshDisabled,
+              })}
             >
               <RotateCw className="h-4 w-4 text-gray-600" />
             </button>

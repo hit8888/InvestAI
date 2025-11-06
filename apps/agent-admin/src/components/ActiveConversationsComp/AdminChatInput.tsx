@@ -15,6 +15,7 @@ import AttachmentSelectionDialog from './AttachmentSelectionDialog';
 
 import { ActiveConversationAttachmentOption } from '../../utils/admin-types';
 import { useDebouncedTyping } from '@meaku/shared/hooks/useDebouncedTyping';
+import { useAuth } from '../../context/AuthProvider';
 
 type ChatInputContainerProps = {
   onSendMessage: SendAdminMessageFn;
@@ -66,8 +67,9 @@ const AdminChatInput = ({
   children,
   onTypingChange,
 }: ChatInputContainerProps) => {
+  const { userInfo } = useAuth();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(userInfo?.default_hitl_join_message || '');
   const [selectedAttachmentOption, setSelectedAttachmentOption] = useState<ActiveConversationAttachmentOption>(
     ActiveConversationAttachmentOption.NONE,
   );
@@ -160,8 +162,10 @@ const AdminChatInput = ({
   const tooltipText = isGeneratingAIResponse ? 'Drafting AI response...' : 'Let AI draft a reply';
 
   useEffect(() => {
-    if (!disabled && !isGeneratingAIResponse) {
+    if (!disabled && !isGeneratingAIResponse && textAreaRef.current) {
       textAreaRef.current?.focus();
+      const length = textAreaRef.current.value.length;
+      textAreaRef.current.setSelectionRange(length, length);
     }
   }, [disabled, isGeneratingAIResponse]);
 

@@ -15,6 +15,7 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   userInfo?: UserInfoResponse;
+  updateUserInfo: (userData: Partial<UserInfoResponse>) => void;
   handleLoginAndRedirection: (userData: UserInfoResponse, callback: (path: string) => void) => Promise<void>;
 }
 
@@ -31,6 +32,7 @@ const defaultContext: AuthContextType = {
   login: () => {},
   logout: () => {},
   userInfo: DefaultAuthResponse,
+  updateUserInfo: () => {},
   handleLoginAndRedirection: () => Promise.resolve(),
 };
 
@@ -84,6 +86,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(false);
     clearStateValuesAndLocalStorage();
   }, [clearStateValuesAndLocalStorage]);
+
+  // Function to update user info
+  const updateUserInfo = useCallback((userData: Partial<UserInfoResponse>) => {
+    setUserInfo((prev) => ({ ...prev, ...userData }));
+  }, []);
 
   const handleLoginAndRedirection = useCallback(
     async (userData: UserInfoResponse, callback: (path: string) => void) => {
@@ -142,6 +149,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       login,
       logout,
       userInfo,
+      updateUserInfo,
       handleLoginAndRedirection,
     }),
     [
@@ -153,6 +161,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       login,
       logout,
       userInfo,
+      updateUserInfo,
       handleLoginAndRedirection,
     ],
   );

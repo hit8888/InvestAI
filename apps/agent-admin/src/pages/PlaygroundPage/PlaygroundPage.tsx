@@ -122,7 +122,11 @@ const PlaygroundPage = () => {
 
   const handlePreviewAgent = (formValues: SettingsFormData, openInNewTab: boolean = false) => {
     const settingsParams = generateSettingsParams(formValues);
-    const newUrl = `${AGENT_PLAYGROUND_BASE_URL}?${new URLSearchParams(settingsParams).toString()}`;
+
+    // Append NEW_SESSION_PARAMS on first preview to start a new session
+    const finalParams = !previewUrl ? { ...settingsParams, ...NEW_SESSION_PARAMS } : settingsParams;
+
+    const newUrl = `${AGENT_PLAYGROUND_BASE_URL}?${new URLSearchParams(finalParams).toString()}`;
 
     if (openInNewTab) {
       const previewPageUrl = `/${tenantName}/${AppRoutesEnum.TRAINING_PLAYGROUND_PREVIEW}?previewUrl=${encodeURIComponent(newUrl)}`;
@@ -195,6 +199,7 @@ const PlaygroundPage = () => {
           onRefresh={handleRefresh}
           isCollapsed={isSettingsPanelCollapsed}
           onToggleCollapse={() => setIsSettingsPanelCollapsed((prev) => !prev)}
+          isRefreshDisabled={!previewUrl}
         />
         {!isSettingsPanelCollapsed && (
           <>

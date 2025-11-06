@@ -31,6 +31,7 @@ import CalendarPage from '../pages/CalendarPage/index.tsx';
 import AdminProfilePage from '../pages/AdminProfilePage/index.tsx';
 import AIBlocksPage from '../pages/AIBlocksPage/AIBlocksPage.tsx';
 import DynamicBlockPage from '../pages/AIBlocksPage/DynamicBlockPage.tsx';
+import SdrSettingsPage from '../pages/SdrSettingsPage/SdrSettingsPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
@@ -193,6 +194,10 @@ const routes = [
               {
                 path: 'profile',
                 element: <ProtectedRoute element={<AdminProfilePage />} />,
+              },
+              {
+                path: 'sdr-settings',
+                element: <ProtectedRoute element={<SdrSettingsPage />} />,
               },
             ],
           },

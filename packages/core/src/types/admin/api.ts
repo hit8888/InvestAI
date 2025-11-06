@@ -81,6 +81,7 @@ export const UserInfoResponseSchema = z.object({
   designation: z.string().nullable(),
   department: z.string().nullable(),
   organizations: z.array(OrganizationDetailsResponseSchema),
+  default_hitl_join_message: z.string().nullable(),
 });
 export type UserInfoResponse = z.infer<typeof UserInfoResponseSchema>;
 
@@ -1086,6 +1087,7 @@ export const UserProfileResponseSchema = z.object({
   designation: z.string().optional(),
   department: z.string().optional(),
   profile_picture: z.string().url().optional(),
+  default_hitl_join_message: z.string().optional(),
 });
 export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>;
 
@@ -1096,6 +1098,7 @@ export const UpdateUserProfilePayloadSchema = z.object({
   designation: z.string().optional(),
   department: z.string().optional(),
   profile_picture: z.string().url().or(z.literal('')).optional(),
+  default_hitl_join_message: z.string().optional(),
 });
 export type UpdateUserProfilePayload = z.infer<typeof UpdateUserProfilePayloadSchema>;
 

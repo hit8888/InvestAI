@@ -1,4 +1,4 @@
-import { format, differenceInHours, addDays } from 'date-fns';
+import { format, differenceInHours, addDays, isSameDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { DATE_FORMAT_OPTIONS, DATE_FORMATS, HUMAN_READABLE_DATE_LABELS } from '@meaku/core/constants/dateFormat';
 
@@ -214,6 +214,43 @@ class DateUtil {
     } catch (error) {
       console.error('Error formatting date:', dateString, error);
       return 'Invalid Date';
+    }
+  }
+
+  /**
+   * Humanize a message timestamp for chat display
+   * For same-day messages: shows time in format like "7:56am"
+   * For older messages: shows full date and time in format like "Jan 28, 2025 03:08 PM"
+   * @param timestamp Timestamp to format
+   * @param timezone User's timezone (optional, defaults to local timezone)
+   * @returns Humanized timestamp string
+   */
+  static humanizeMessageTimestamp(
+    timestamp: string,
+    timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+  ): string {
+    if (!timestamp) {
+      return '';
+    }
+
+    const date = new Date(timestamp);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+
+    // Convert to zoned time for timezone-aware comparison and formatting
+    const zonedDate = toZonedTime(date, timezone);
+    const todayInTimezone = toZonedTime(new Date(), timezone);
+
+    // Use date-fns isSameDay to check if the zoned date is today in the specified timezone
+    if (isSameDay(zonedDate, todayInTimezone)) {
+      // For same-day messages, show time in format like "7:56am"
+      return format(zonedDate, 'h:mma').toLowerCase();
+    } else {
+      // For older messages, show full date and time
+      return DateUtil.formatDateTime(timestamp, timezone);
     }
   }
 }
