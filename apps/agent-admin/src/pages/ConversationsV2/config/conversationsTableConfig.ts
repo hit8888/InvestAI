@@ -47,6 +47,7 @@ export const conversationsTableConfig = (userId?: number): TablePageConfig<Prosp
   defaultFilters: {
     company: null, // Will be sent with operator 'is_not_null' - controlled by "Company Revealed" toggle
     session_id: null, // Will be sent with operator 'is_not_null' - always applied (makes this "All Chats")
+    is_test: false,
   },
 
   // Manual filter configurations (toggle filters, etc.)

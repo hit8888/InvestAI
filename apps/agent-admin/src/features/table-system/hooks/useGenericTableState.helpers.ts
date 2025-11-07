@@ -183,11 +183,8 @@ export const addDefaultFilters = (
           value: null,
           operator: 'is_not_null',
         });
-      } else if (defaultValue === false) {
-        // False values → skip (explicitly disable the filter)
-        return;
       } else {
-        // Non-null, non-false values → eq operator (e.g., is_valid: true, lead_type: 'GOAL_ACHIEVED')
+        // Non-null values (including false) → eq operator (e.g., is_test: false, is_valid: true, lead_type: 'GOAL_ACHIEVED')
         filtersArray.push({
           field: key,
           value: defaultValue,
