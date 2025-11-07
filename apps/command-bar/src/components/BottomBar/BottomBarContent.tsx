@@ -19,6 +19,7 @@ interface BottomBarContentProps {
   askAiModule: CommandBarModuleConfigType | null;
   otherModules: CommandBarModuleConfigType[];
   suggestedQuestions: string[];
+  welcomeMessages: string[];
   onModuleClick: (config: CommandBarModuleConfigType) => void;
   onInputSubmit: (inputValue: string, questionText: string) => void;
 }
@@ -31,6 +32,7 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
   askAiModule,
   otherModules,
   suggestedQuestions,
+  welcomeMessages,
   onModuleClick,
   onInputSubmit,
 }) => {
@@ -91,6 +93,7 @@ const BottomBarContent: React.FC<BottomBarContentProps> = ({
             onChange={setInputValue}
             onSubmit={(questionText) => onInputSubmit(inputValue, questionText || '')}
             suggestedQuestions={suggestedQuestions}
+            welcomeMessages={welcomeMessages}
             actionButtonSize={actionButtonSize}
             askAiModule={askAiModule}
             onModuleClick={onModuleClick}

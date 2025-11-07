@@ -122,12 +122,6 @@ export const BUTTON_SIZING = {
   },
 } as const;
 
-// Input field constants
-export const INPUT_FIELD = {
-  // Default placeholder text for input field
-  DEFAULT_PLACEHOLDER: 'See why top companies choose us?',
-} as const;
-
 // Animation constants for CommandBarRenderer
 export const COMMAND_BAR_ANIMATIONS = {
   NUDGE: {

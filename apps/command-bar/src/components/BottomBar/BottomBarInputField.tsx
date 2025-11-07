@@ -1,18 +1,21 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { INPUT_FIELD, BUTTON_SIZING } from './constants';
+import { BUTTON_SIZING } from './constants';
 import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
 import { LucideIcon } from '@meaku/saral';
 import BlackTooltip from '@meaku/shared/components/BlackTooltip';
 import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
 import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
 import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
+import { RotatingText } from '@meaku/shared/components/RotatingText';
+import { ANIMATION_TIMINGS } from '../../constants/animationTimings';
 
 interface BottomBarInputFieldProps {
   value: string;
   onChange: (value: string) => void;
   onSubmit: (questionText?: string) => void;
   suggestedQuestions: string[];
+  welcomeMessages: string[];
   actionButtonSize: number; // Kept for backwards compatibility but not used (uses BUTTON_SIZING constants)
   askAiModule: CommandBarModuleConfigType | null;
   onModuleClick: (config: CommandBarModuleConfigType) => void;
@@ -27,10 +30,14 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
   onChange,
   onSubmit,
   suggestedQuestions,
+  welcomeMessages,
   askAiModule,
   onModuleClick,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const welcomeMessagesToShow = (welcomeMessages?.length > 0 ? welcomeMessages : suggestedQuestions) ?? [];
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -45,6 +52,10 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
     onChange(question);
     onSubmit(question);
   };
+
+  const handlePlaceholderClick = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleAskAiIconClick = useCallback(() => {
     if (askAiModule) {
@@ -170,16 +181,33 @@ export const BottomBarInputField: React.FC<BottomBarInputFieldProps> = ({
         {/* Ask AI icon on the left */}
         {iconContent && <div className="ml-1.5">{iconContent}</div>}
 
-        <input
-          type="text"
-          placeholder={INPUT_FIELD.DEFAULT_PLACEHOLDER}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          className="h-full flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-0"
-        />
+        <div className="relative h-full flex-1">
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="h-full w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-0"
+          />
+          {/* Rotating placeholder text - only visible when input is empty and not focused */}
+          {value.trim().length === 0 && !isFocused && welcomeMessagesToShow.length > 0 && (
+            <div className="pointer-events-none absolute left-0 top-0 flex h-full items-center">
+              <div className="pointer-events-auto cursor-text" onClick={handlePlaceholderClick}>
+                <RotatingText
+                  texts={welcomeMessagesToShow}
+                  rotationInterval={ANIMATION_TIMINGS.DELAYS.QUESTION_ROTATION_INTERVAL * 1000}
+                  transitionDelay={ANIMATION_TIMINGS.DELAYS.QUESTION_TRANSITION * 1000}
+                  pauseOnHover={true}
+                  className="text-sm text-muted-foreground"
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Send icon on the right - sized proportionally with equidistant spacing, only when input has text */}
         <AnimatePresence>

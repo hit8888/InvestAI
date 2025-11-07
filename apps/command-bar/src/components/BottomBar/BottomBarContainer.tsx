@@ -39,6 +39,8 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
 }) => {
   const { config, isConfigLoading } = useCommandBarStore();
   const suggestedQuestions = config.body?.welcome_message?.suggested_questions ?? [];
+  const primaryPlaceholder = config.body?.bottom_bar_config?.primary_placeholder ?? '';
+  const welcomeMessages = Array.isArray(primaryPlaceholder) ? primaryPlaceholder : [primaryPlaceholder].filter(Boolean);
 
   const { trackEvent } = useCommandBarAnalytics();
   const isMobile = useIsMobile();
@@ -91,6 +93,7 @@ const BottomBarContainer: React.FC<BottomBarContainerProps> = ({
         askAiModule={askAiModule || null}
         otherModules={otherModules}
         suggestedQuestions={suggestedQuestions}
+        welcomeMessages={welcomeMessages}
         onModuleClick={handleModuleClick}
         onInputSubmit={handleInputSubmit}
       />
