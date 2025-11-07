@@ -70,7 +70,7 @@ const NudgeBody = ({
           <div className="flex flex-col gap-2">
             {ctas.map((button, index) => (
               <Button
-                key={button.action}
+                key={button.text + index}
                 variant={index === 0 ? 'default' : 'outline'}
                 className="w-full"
                 hasWipers

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { EntryPointAlignmentSchema } from '../entryPoint';
 import { AssetSchema } from '../common';
+import { MessageEventType } from '../../../../shared/src/types/message';
 
 export const CTAConfigSchema = z
   .object({
@@ -41,7 +42,7 @@ export const NudgeAssetTypeSchema = z.enum(['VIDEO', 'IMAGE']);
 
 export const NudgeCtaSchema = z.object({
   text: z.string(),
-  action: z.string(),
+  event_type: z.nativeEnum(MessageEventType),
   metadata: z.object({
     event_data: z.object({
       content: z.string(),

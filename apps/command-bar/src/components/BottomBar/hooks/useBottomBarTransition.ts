@@ -11,7 +11,7 @@ export interface BottomBarTransitionState {
   pendingModule: CommandBarModuleType | null;
   pendingEventData: {
     message: string;
-    eventType: keyof typeof MessageEventType;
+    eventType: MessageEventType;
   } | null;
   skipInitialTooltips: boolean;
 }
@@ -37,7 +37,7 @@ export const useBottomBarTransition = (
   const [pendingModule, setPendingModule] = useState<CommandBarModuleType | null>(null);
   const [pendingEventData, setPendingEventData] = useState<{
     message: string;
-    eventType: keyof typeof MessageEventType;
+    eventType: MessageEventType;
   } | null>(null);
   const [skipInitialTooltips, setSkipInitialTooltips] = useState(false);
 
@@ -54,7 +54,7 @@ export const useBottomBarTransition = (
     if (eventData && eventData.message && eventData.eventType) {
       setPendingEventData({
         message: eventData.message,
-        eventType: eventData.eventType,
+        eventType: MessageEventType[eventData.eventType],
       });
     }
 
@@ -82,8 +82,8 @@ export const useBottomBarTransition = (
         // Send pending event data after module is activated
         if (pendingEventData) {
           sendUserMessage(pendingEventData.message, {
-            event_type: pendingEventData.eventType as 'TEXT_REQUEST' | 'SUGGESTED_QUESTION_CLICKED',
-          });
+            event_type: pendingEventData.eventType,
+          } as Partial<Message>);
           setPendingEventData(null);
         }
 

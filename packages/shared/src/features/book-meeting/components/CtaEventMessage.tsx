@@ -2,7 +2,7 @@ import Lottie from 'lottie-react';
 
 import { CtaEventDataContent } from '../../../utils/types';
 import { Typography, Button, LucideIcon } from '@meaku/saral';
-import { Message, SendUserMessageParams } from '../../../types/message';
+import { Message, MessageEventType, SendUserMessageParams } from '../../../types/message';
 import { useEffect, useCallback, useMemo } from 'react';
 import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import loadingDotsBlueAnimation from '../../../assets/loading-dots-blue.json';
@@ -40,7 +40,7 @@ const CtaEventMessage = (props: IProps) => {
       message: '',
       overrides: {
         event_data: { url },
-        event_type: 'PRIMARY_GOAL_CTA_CLICKED',
+        event_type: MessageEventType.PRIMARY_GOAL_CTA_CLICKED,
         response_id: event.response_id,
       },
     });

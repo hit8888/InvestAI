@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
+import type { ConfigurationApiResponse, Nudge } from '@meaku/core/types/api/configuration_response';
 import {
   ArtifactEventData,
   MessageEventType,
@@ -63,6 +63,7 @@ interface CommandBarState {
   setAdminTyping: (isTyping: boolean) => void;
   updateSuggestedQuestions: (questions: string[]) => void;
   setConfig: (config: ConfigurationApiResponse) => void;
+  setNudgeData: (nudge: Nudge | null) => void;
   setSettings: (settings: CommandBarSettings) => void;
   updateSettings: (settings: Partial<CommandBarSettings>) => void;
   setSessionData: (sessionData: InitSessionResponse) => void;
@@ -436,6 +437,21 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
       const state = get();
       if (config?.body?.welcome_message?.suggested_questions && state.messages.length === 0) {
         set({ suggestedQuestions: config.body.welcome_message.suggested_questions });
+      }
+    },
+
+    setNudgeData: (nudge) => {
+      const state = get();
+      if (state.config.command_bar) {
+        set({
+          config: {
+            ...state.config,
+            command_bar: {
+              ...state.config.command_bar,
+              nudge_data: nudge,
+            },
+          },
+        });
       }
     },
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Cta, Nudge as NudgeType } from '@meaku/core/types/api/configuration_response';
@@ -10,6 +10,7 @@ import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalytics
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import { useWsClient } from '../../hooks/useWsClient';
+import { type Message } from '../../types/message';
 import NudgeHeader from './components/NudgeHeader';
 import NudgeBody from './components/NudgeBody';
 import useShowNudgeBody from './hooks/useShowNudgeBody';
@@ -34,11 +35,10 @@ const DEFAULT_DISPLAY_DURATION = 10 * 1000;
 
 const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const isMobile = useIsMobile();
-  const { config, settings } = useCommandBarStore();
+  const { config, settings, setNudgeData } = useCommandBarStore();
   const { sendUserMessage } = useWsClient();
   const { nudge: nudgeConfig, nudge_data: nudgeData } = config.command_bar ?? {};
   const { trackEvent } = useCommandBarAnalytics();
-  const [nudgeToShow, setNudgeToShow] = useState<NudgeType | null>(null);
   const { isEnabled: isScrollTriggeredNudgeEnabled, disable: disableScrollTriggeredNudge } = useScrollTriggeredNudge();
   const { disable: disableNudgeActionCta, module: nudgeActionCtaModule } = useNudgeActionCta();
 
@@ -53,18 +53,18 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
     assets,
     display_duration = DEFAULT_DISPLAY_DURATION,
     header_text: raw_header_text = '',
-  } = nudgeToShow ?? {};
+  } = nudgeData ?? {};
   const header_text = isMobile ? '' : raw_header_text;
 
-  const showNudgeBody = useShowNudgeBody(!!nudgeToShow, !!header_text);
+  const showNudgeBody = useShowNudgeBody(!!nudgeData, !!header_text);
   const { play } = useCommandBarSound({ soundPath: bannerSound, baseVolume: 0.2, enabled: nudgeConfig?.sound_enabled });
 
   const { isMouseOver, setIsMouseOver, handleDismiss } = useMouseDismissible({
-    displayDuration: nudgeToShow ? display_duration : 0,
+    displayDuration: nudgeData ? display_duration : 0,
     onDismiss: useCallback(() => {
-      setNudgeToShow(null);
+      setNudgeData(null);
       onClose?.();
-    }, [onClose]),
+    }, [onClose, setNudgeData]),
   });
 
   const isNudgePollingEnabled = useDelayedEnable(polling_enabled ? polling_frequency_ms + display_duration : Infinity);
@@ -109,19 +109,21 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
   const handleCtaClick = useCallback(
     (button: Cta) => {
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_CLICK, {
-        nudge_id: nudgeToShow?.nudge_id,
+        nudge_id: nudgeData?.nudge_id,
       });
-      setNudgeToShow(null);
+      setNudgeData(null);
 
-      if (nudgeToShow?.associated_module) {
-        setActiveFeature?.(nudgeToShow.associated_module);
+      if (nudgeData?.associated_module) {
+        setActiveFeature?.(nudgeData.associated_module);
       }
 
-      if (button.metadata?.event_data?.content) {
-        sendUserMessage(button.metadata.event_data.content);
+      if (button.metadata?.event_data?.content && button.event_type) {
+        sendUserMessage(button.metadata.event_data.content, {
+          event_type: button.event_type,
+        } as Partial<Message>);
       }
     },
-    [setActiveFeature, nudgeToShow, sendUserMessage, trackEvent],
+    [setActiveFeature, nudgeData, sendUserMessage, trackEvent, setNudgeData],
   );
 
   const handleNudgeClick = useCallback(() => {
@@ -137,10 +139,10 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
       trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_LOAD, {
         nudge_id: nudge.nudge_id,
       });
-      setNudgeToShow(nudge);
+      setNudgeData(nudge);
       play();
     },
-    [trackEvent, play],
+    [trackEvent, setNudgeData, play],
   );
 
   useEffect(() => {
@@ -152,8 +154,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   useEffect(() => {
     if (isScrollTriggeredNudgeEnabled) {
-      setNudgeToShow(null);
+      setNudgeData(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScrollTriggeredNudgeEnabled]);
 
   useEffect(() => {
@@ -163,7 +166,13 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
     }
   }, [activeFeature, handleDismiss, disableScrollTriggeredNudge]);
 
-  if (nudgeActionCtaModule && !nudgeToShow && !isScrollTriggeredNudgeEnabled) {
+  useEffect(() => {
+    return () => {
+      setNudgeData(null);
+    };
+  }, [setNudgeData]);
+
+  if (nudgeActionCtaModule && !nudgeData && !isScrollTriggeredNudgeEnabled) {
     return (
       <AnimatePresence mode="wait">
         <NudgeActionCta
@@ -189,9 +198,9 @@ const Nudge = ({ activeFeature, onClose, setActiveFeature }: NudgeProps) => {
 
   return (
     <AnimatePresence mode="wait">
-      {nudgeToShow && (
+      {nudgeData && (
         <motion.div
-          key={nudgeToShow.nudge_id}
+          key={nudgeData.nudge_id}
           className={cn('w-80 relative', {
             'max-w-[calc(100vw-104px)]': isMobile, // 16px (left gap) + 56px (action width) + 16px (gap) + 16px (right gap)
             'cursor-pointer': ctas?.length === 1,

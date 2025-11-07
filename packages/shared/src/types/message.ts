@@ -33,70 +33,46 @@ export const MessageRole = {
   ADMIN: 'admin',
 } as const;
 
-export const MessageEventType = {
-  TEXT_REQUEST: 'TEXT_REQUEST',
-  TEXT_RESPONSE: 'TEXT_RESPONSE',
-  STREAM_RESPONSE: 'STREAM_RESPONSE',
-  SUGGESTED_QUESTION_CLICKED: 'SUGGESTED_QUESTION_CLICKED',
-  VIDEO_ARTIFACT: 'VIDEO_ARTIFACT',
-  SLIDE_ARTIFACT: 'SLIDE_ARTIFACT',
-  SLIDE_IMAGE_ARTIFACT: 'SLIDE_IMAGE_ARTIFACT',
-  SUGGESTIONS_ARTIFACT: 'SUGGESTIONS_ARTIFACT',
-  FORM_ARTIFACT: 'FORM_ARTIFACT',
-  QUALIFICATION_FORM_ARTIFACT: 'QUALIFICATION_FORM_ARTIFACT',
-  CALENDAR_ARTIFACT: 'CALENDAR_ARTIFACT',
-  DEMO_ARTIFACT: 'DEMO_ARTIFACT',
-  QUALIFICATION_FORM_FILLED: 'QUALIFICATION_FORM_FILLED',
-  CALENDAR_SUBMIT: 'CALENDAR_SUBMIT',
-  FORM_FILLED: 'FORM_FILLED',
-  BOOK_MEETING: 'BOOK_MEETING',
-  DISCOVERY_ANSWER: 'DISCOVERY_ANSWER',
-  DEMO_OPTIONS: 'DEMO_OPTIONS',
-  DISCOVERY_QUESTIONS: 'DISCOVERY_QUESTIONS',
-  JOIN_SESSION: 'JOIN_SESSION',
-  LEAVE_SESSION: 'LEAVE_SESSION',
-  GENERATING_ARTIFACT: 'GENERATING_ARTIFACT',
-  ADMIN_TYPING: 'ADMIN_TYPING',
-  USER_TYPING: 'USER_TYPING',
-  SUMMARIZE: 'SUMMARIZE',
-  SUMMARY_STREAM: 'SUMMARY_STREAM',
-  CTA_EVENT: 'CTA_EVENT',
-  USER_LEFT: 'USER_LEFT',
-  PRIMARY_GOAL_CTA_CLICKED: 'PRIMARY_GOAL_CTA_CLICKED',
-} as const;
-
-export type EventTypeType =
-  | 'TEXT_REQUEST'
-  | 'TEXT_RESPONSE'
-  | 'STREAM_RESPONSE'
-  | 'SUGGESTED_QUESTION_CLICKED'
-  | 'VIDEO_ARTIFACT'
-  | 'SLIDE_ARTIFACT'
-  | 'SLIDE_IMAGE_ARTIFACT'
-  | 'SUGGESTIONS_ARTIFACT'
-  | 'FORM_ARTIFACT'
-  | 'QUALIFICATION_FORM_ARTIFACT'
-  | 'CALENDAR_ARTIFACT'
-  | 'DEMO_ARTIFACT'
-  | 'FORM_FILLED'
-  | 'QUALIFICATION_FORM_FILLED'
-  | 'CALENDAR_SUBMIT'
-  | 'BOOK_MEETING'
-  | 'DISCOVERY_ANSWER'
-  | 'DEMO_OPTIONS'
-  | 'DISCOVERY_QUESTION'
-  | 'JOIN_SESSION'
-  | 'LEAVE_SESSION'
-  | 'GENERATING_ARTIFACT'
-  | 'TYPING'
-  | 'ADMIN_TYPING'
-  | 'USER_TYPING'
-  | 'SUMMARIZE'
-  | 'SUMMARY_STREAM'
-  | 'CTA_EVENT'
-  | 'USER_LEFT'
-  | 'PRIMARY_GOAL_CTA_CLICKED'
-  | string; // future-proofing
+export enum MessageEventType {
+  TEXT_REQUEST = 'TEXT_REQUEST',
+  TEXT_RESPONSE = 'TEXT_RESPONSE',
+  LOADING_TEXT = 'LOADING_TEXT',
+  STREAM_RESPONSE = 'STREAM_RESPONSE',
+  SUMMARY_STREAM = 'SUMMARY_STREAM',
+  SUMMARIZE = 'SUMMARIZE',
+  DISCOVERY_QUESTIONS = 'DISCOVERY_QUESTIONS',
+  DISCOVERY_ANSWER = 'DISCOVERY_ANSWER',
+  SUGGESTED_QUESTION_CLICKED = 'SUGGESTED_QUESTION_CLICKED',
+  VIDEO_ARTIFACT = 'VIDEO_ARTIFACT',
+  SLIDE_ARTIFACT = 'SLIDE_ARTIFACT',
+  SLIDE_IMAGE_ARTIFACT = 'SLIDE_IMAGE_ARTIFACT',
+  SUGGESTIONS_ARTIFACT = 'SUGGESTIONS_ARTIFACT',
+  FORM_ARTIFACT = 'FORM_ARTIFACT',
+  QUALIFICATION_FORM_ARTIFACT = 'QUALIFICATION_FORM_ARTIFACT',
+  CALENDAR_ARTIFACT = 'CALENDAR_ARTIFACT',
+  DEMO_ARTIFACT = 'DEMO_ARTIFACT',
+  CALENDAR_SUBMIT = 'CALENDAR_SUBMIT',
+  CTA_EVENT = 'CTA_EVENT',
+  MESSAGE_ANALYTICS = 'MESSAGE_ANALYTICS',
+  BOOK_MEETING = 'BOOK_MEETING',
+  PRIMARY_GOAL_CTA_CLICKED = 'PRIMARY_GOAL_CTA_CLICKED',
+  GENERATING_ARTIFACT = 'GENERATING_ARTIFACT',
+  FORM_FILLED = 'FORM_FILLED',
+  QUALIFICATION_FORM_FILLED = 'QUALIFICATION_FORM_FILLED',
+  ADMIN_TYPING = 'ADMIN_TYPING',
+  USER_TYPING = 'USER_TYPING',
+  DEMO_OPTIONS = 'DEMO_OPTIONS',
+  USER_INACTIVE = 'USER_INACTIVE',
+  HEARTBEAT = 'HEARTBEAT',
+  HEARTBEAT_ACK = 'HEARTBEAT_ACK',
+  USER_LEFT = 'USER_LEFT',
+  JOIN_SESSION = 'JOIN_SESSION',
+  ADMIN_RESPONSE = 'ADMIN_RESPONSE',
+  RESPONSE_SUGGESTIONS = 'RESPONSE_SUGGESTIONS',
+  LEAVE_SESSION = 'LEAVE_SESSION',
+  URL_TRACKING = 'URL_TRACKING',
+  NUDGE_CTA_CLICKED = 'NUDGE_CTA_CLICKED',
+}
 
 // Individual event data structures
 export interface StreamResponseEventData {
@@ -230,31 +206,31 @@ export const MessageSchema = z
   .and(
     z.discriminatedUnion('event_type', [
       z.object({
-        event_type: z.literal('TEXT_REQUEST'),
+        event_type: z.literal(MessageEventType.TEXT_REQUEST),
         event_data: BaseMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('TEXT_RESPONSE'),
+        event_type: z.literal(MessageEventType.TEXT_RESPONSE),
         event_data: BaseMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('LOADING_TEXT'),
+        event_type: z.literal(MessageEventType.LOADING_TEXT),
         event_data: BaseMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('STREAM_RESPONSE'),
+        event_type: z.literal(MessageEventType.STREAM_RESPONSE),
         event_data: StreamMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('SUMMARY_STREAM'),
+        event_type: z.literal(MessageEventType.SUMMARY_STREAM),
         event_data: StreamMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('SUMMARIZE'),
+        event_type: z.literal(MessageEventType.SUMMARIZE),
         event_data: SummarizeMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('DISCOVERY_QUESTIONS'),
+        event_type: z.literal(MessageEventType.DISCOVERY_QUESTIONS),
         event_data: z.object({
           content: z.string().optional(),
           answer_type: z.enum(['SINGLE_SELECT', 'MULTI_SELECT', 'TEXT']),
@@ -276,7 +252,7 @@ export const MessageSchema = z
         }),
       }),
       z.object({
-        event_type: z.literal('DISCOVERY_ANSWER'),
+        event_type: z.literal(MessageEventType.DISCOVERY_ANSWER),
         event_data: z.object({
           content: z.string(),
           question: z.string(),
@@ -289,124 +265,124 @@ export const MessageSchema = z
         }),
       }),
       z.object({
-        event_type: z.literal('SUGGESTED_QUESTION_CLICKED'),
+        event_type: z.literal(MessageEventType.SUGGESTED_QUESTION_CLICKED),
         event_data: BaseMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('VIDEO_ARTIFACT'),
+        event_type: z.literal(MessageEventType.VIDEO_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('SLIDE_ARTIFACT'),
+        event_type: z.literal(MessageEventType.SLIDE_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('SLIDE_IMAGE_ARTIFACT'),
+        event_type: z.literal(MessageEventType.SLIDE_IMAGE_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('SUGGESTIONS_ARTIFACT'),
+        event_type: z.literal(MessageEventType.SUGGESTIONS_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('FORM_ARTIFACT'),
+        event_type: z.literal(MessageEventType.FORM_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('QUALIFICATION_FORM_ARTIFACT'),
+        event_type: z.literal(MessageEventType.QUALIFICATION_FORM_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('CALENDAR_ARTIFACT'),
+        event_type: z.literal(MessageEventType.CALENDAR_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('DEMO_ARTIFACT'),
+        event_type: z.literal(MessageEventType.DEMO_ARTIFACT),
         event_data: ArtifactMessageContentSchema,
       }),
       z.object({
-        event_type: z.literal('CALENDAR_SUBMIT'),
+        event_type: z.literal(MessageEventType.CALENDAR_SUBMIT),
         event_data: CalendarSubmitEventDataSchema,
       }),
       z.object({
-        event_type: z.literal('CTA_EVENT'),
+        event_type: z.literal(MessageEventType.CTA_EVENT),
         event_data: CtaEventDataSchema,
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('MESSAGE_ANALYTICS'),
+        event_type: z.literal(MessageEventType.MESSAGE_ANALYTICS),
         event_data: MessageAnalyticsEventDataSchema.or(ErrorEventDataSchema),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('BOOK_MEETING'),
+        event_type: z.literal(MessageEventType.BOOK_MEETING),
         event_data: z.object({
           form_id: z.string().optional(),
         }),
       }), //In case of message without url
       z.object({
         content: z.string(),
-        event_type: z.literal('PRIMARY_GOAL_CTA_CLICKED'),
+        event_type: z.literal(MessageEventType.PRIMARY_GOAL_CTA_CLICKED),
         event_data: z.object({
           url: z.string().optional(),
         }),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('GENERATING_ARTIFACT'),
+        event_type: z.literal(MessageEventType.GENERATING_ARTIFACT),
         event_data: GeneratingArtifactEventDataSchema,
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('FORM_FILLED'),
+        event_type: z.literal(MessageEventType.FORM_FILLED),
         event_data: ArtifactFormSchema,
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('QUALIFICATION_FORM_FILLED'),
+        event_type: z.literal(MessageEventType.QUALIFICATION_FORM_FILLED),
         event_data: QualificationQuestionAnswerSchema,
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('ADMIN_TYPING'),
+        event_type: z.literal(MessageEventType.ADMIN_TYPING),
         event_data: z.object({}),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('USER_TYPING'),
+        event_type: z.literal(MessageEventType.USER_TYPING),
         event_data: z.object({}),
       }),
 
       z.object({
         content: z.string(),
-        event_type: z.literal('DEMO_OPTIONS'),
+        event_type: z.literal(MessageEventType.DEMO_OPTIONS),
         event_data: z.object({
           demo_available: z.boolean().optional(),
         }),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('USER_INACTIVE'),
+        event_type: z.literal(MessageEventType.USER_INACTIVE),
         event_data: z.object({}),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('HEARTBEAT'),
+        event_type: z.literal(MessageEventType.HEARTBEAT),
         event_data: z.object({}),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('HEARTBEAT_ACK'),
+        event_type: z.literal(MessageEventType.HEARTBEAT_ACK),
         event_data: z.object({}),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('USER_LEFT'),
+        event_type: z.literal(MessageEventType.USER_LEFT),
         event_data: z.object({}),
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('JOIN_SESSION'),
+        event_type: z.literal(MessageEventType.JOIN_SESSION),
         event_data: z.object({
           first_name: z.string(),
           last_name: z.string(),
@@ -417,7 +393,7 @@ export const MessageSchema = z
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('ADMIN_RESPONSE'),
+        event_type: z.literal(MessageEventType.ADMIN_RESPONSE),
         event_data: z.object({
           type: z.string().optional(),
           url: z.string().optional(),
@@ -426,7 +402,7 @@ export const MessageSchema = z
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('RESPONSE_SUGGESTIONS'),
+        event_type: z.literal(MessageEventType.RESPONSE_SUGGESTIONS),
         event_data: z.object({
           query: z.string().optional(),
           suggestions: z.array(z.string()).optional(),
@@ -434,7 +410,7 @@ export const MessageSchema = z
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('LEAVE_SESSION'),
+        event_type: z.literal(MessageEventType.LEAVE_SESSION),
         event_data: z
           .object({
             first_name: z.string(),
@@ -447,10 +423,15 @@ export const MessageSchema = z
       }),
       z.object({
         content: z.string(),
-        event_type: z.literal('URL_TRACKING'),
+        event_type: z.literal(MessageEventType.URL_TRACKING),
         event_data: z.object({
           recent_history: z.array(BrowsedUrlSchema),
         }),
+      }),
+      z.object({
+        content: z.string(),
+        event_type: z.literal(MessageEventType.NUDGE_CTA_CLICKED),
+        event_data: BaseMessageContentSchema,
       }),
     ]),
   );
