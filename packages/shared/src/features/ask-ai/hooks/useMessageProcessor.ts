@@ -24,6 +24,7 @@ export const useMessageProcessor = (message: MessageType) => {
         'STREAM_RESPONSE',
         'BOOK_MEETING',
         'SUGGESTED_QUESTION_CLICKED',
+        'NUDGE_CTA_CLICKED',
       ].includes(eventType),
       isAdminResponse:
         eventType === 'ADMIN_RESPONSE' ||

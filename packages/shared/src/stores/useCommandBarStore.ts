@@ -656,6 +656,7 @@ export const useCommandBarStore = create<CommandBarState>()((set, get) => {
         'CALENDAR_SUBMIT',
         'CTA_EVENT',
         'PRIMARY_GOAL_CTA_CLICKED',
+        'NUDGE_CTA_CLICKED',
       ];
 
       const ADMIN_SESSION_EVENTS = ['JOIN_SESSION', 'LEAVE_SESSION', 'ADMIN_RESPONSE', 'ADMIN_TYPING'];
