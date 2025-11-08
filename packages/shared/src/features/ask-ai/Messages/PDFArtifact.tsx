@@ -10,42 +10,43 @@ import {
   TooltipContent,
   TooltipProvider,
   cn,
+  Typography,
 } from '@meaku/saral';
-import { PDFArtifactData } from '../../../types/message';
 import { usePopoverPortal, useTooltipPortal } from '../../../hooks/usePortal';
+import { downloadFromUrl, convertBytesToMB, extractFilenameFromUrl } from '@meaku/core/utils/index';
+
 interface PDFArtifactProps {
-  data: PDFArtifactData;
-  enablePreview: boolean;
+  title?: string;
+  pdfUrl: string;
+  fileSizeInBytes?: number;
+  thumbnailImageUrl?: string;
+  enablePreview?: boolean;
 }
 
-export const PDFArtifact = ({ data, enablePreview = false }: PDFArtifactProps) => {
-  const { title = '', pdf_url } = data.content;
+export const PDFArtifact = ({
+  title,
+  pdfUrl,
+  fileSizeInBytes,
+  thumbnailImageUrl,
+  enablePreview = false,
+}: PDFArtifactProps) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const { portalContainer, getZIndexClass } = usePopoverPortal();
   const { portalContainer: tooltipPortalContainer } = useTooltipPortal();
 
-  // Use default values if not provided or use dummy values for demonstration
-  const displayTitle = title || 'HR-as-Change-Agent.pdf';
-  const fileSize = (data.metadata?.fileSize as string) || '1.2 MB';
-  const thumbnailUrl =
-    (data.metadata?.thumbnail_url as string) ||
-    'https://www.scribbr.co.uk/wp-content/uploads/2022/08/ieee-example-paper-1.png';
+  const displayTitle = title || extractFilenameFromUrl(pdfUrl);
+  const fileSize = fileSizeInBytes ? `${convertBytesToMB(fileSizeInBytes)} MB` : '';
 
   const handleDownload = () => {
-    if (pdf_url) {
-      const link = document.createElement('a');
-      link.href = pdf_url;
-      link.download = displayTitle;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setIsPopoverOpen(false);
+    if (pdfUrl) {
+      downloadFromUrl(pdfUrl, displayTitle);
     }
+    setIsPopoverOpen(false);
   };
 
   const handleOpenInNewTab = () => {
-    if (pdf_url) {
-      window.open(pdf_url, '_blank');
+    if (pdfUrl) {
+      window.open(pdfUrl, '_blank');
       setIsPopoverOpen(false);
     }
   };
@@ -62,8 +63,17 @@ export const PDFArtifact = ({ data, enablePreview = false }: PDFArtifactProps) =
 
           {/* Document Info */}
           <div className="flex-1 flex flex-col min-w-0">
-            <p className="text-[14px] font-medium text-[#101828] leading-[20px] truncate">{displayTitle}</p>
-            <p className="text-[12px] font-normal text-[#98a2b3] leading-[18px] truncate">{fileSize}</p>
+            <Typography
+              className="text-[14px] font-medium text-[#101828] leading-[20px] truncate max-w-[200px]"
+              title={displayTitle}
+            >
+              {displayTitle}
+            </Typography>
+            {fileSize && (
+              <Typography className="text-[12px] font-normal text-[#98a2b3] leading-[18px] truncate">
+                {fileSize}
+              </Typography>
+            )}
           </div>
 
           {/* Ellipsis Menu Icon with Popover */}
@@ -137,9 +147,9 @@ export const PDFArtifact = ({ data, enablePreview = false }: PDFArtifactProps) =
         </div>
 
         {/* Thumbnail Image */}
-        {enablePreview && thumbnailUrl && (
+        {enablePreview && thumbnailImageUrl && (
           <div className="w-full h-[200px] overflow-hidden rounded-[8px]">
-            <img src={thumbnailUrl} alt={displayTitle} className="w-full h-auto object-cover" />
+            <img src={thumbnailImageUrl} alt={displayTitle} className="w-full h-auto object-cover" />
           </div>
         )}
       </div>

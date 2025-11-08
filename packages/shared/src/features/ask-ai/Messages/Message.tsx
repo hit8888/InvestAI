@@ -306,7 +306,15 @@ export const Message = ({
         />
       )}
       {isDemoArtifact && demoArtifactData && <DemoArtifact data={demoArtifactData} />}
-      {isPDFArtifact && pdfArtifactData && <PDFArtifact data={pdfArtifactData} enablePreview={false} />}
+      {isPDFArtifact && pdfArtifactData && (
+        <PDFArtifact
+          title={pdfArtifactData.content.title}
+          pdfUrl={pdfArtifactData.content.pdf_url}
+          fileSizeInBytes={pdfArtifactData.metadata?.file_size_bytes as number | undefined}
+          thumbnailImageUrl={pdfArtifactData.metadata?.thumbnail_url as string | undefined}
+          enablePreview={true}
+        />
+      )}
 
       {isDiscoveryQuestion && discoveryQuestionData && sendUserMessage && (
         <DiscoveryQuestion

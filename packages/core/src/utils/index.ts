@@ -222,3 +222,39 @@ export const getCompanyLogoSrcByName = async (name: string): Promise<string> => 
     return '';
   }
 };
+
+export const downloadFromUrl = (url: string, filename: string, doneCallback?: () => void) => {
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+      doneCallback?.();
+    });
+};
+
+export const convertBytesToMB = (bytes: number): string => {
+  return (bytes / 1024 / 1024).toFixed(2);
+};
+
+export const extractFilenameFromUrl = (url: string): string => {
+  if (!url) return '';
+  try {
+    // Remove query parameters and fragments
+    const urlWithoutParams = url.split('?')[0].split('#')[0];
+    // Extract the last segment after the last '/'
+    const filename = urlWithoutParams.split('/').pop() || '';
+    return filename;
+  } catch {
+    // Fallback: try to extract filename from the string directly
+    const urlWithoutParams = url.split('?')[0].split('#')[0];
+    const filename = urlWithoutParams.split('/').pop() || '';
+    return filename;
+  }
+};
