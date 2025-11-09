@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 
 interface SidebarArtifact {
   url: string;
-  artifactType: 'VIDEO' | 'SLIDE_IMAGE';
+  artifactType: 'VIDEO' | 'SLIDE_IMAGE' | 'PDF';
   title: string;
 }
 
@@ -48,7 +48,7 @@ export const useSidebarArtifact = () => {
    * Opens sidebar with artifact
    *
    * @param url - Artifact URL
-   * @param artifactType - 'VIDEO' | 'SLIDE_IMAGE'
+   * @param artifactType - 'VIDEO' | 'SLIDE_IMAGE' | 'PDF'
    * @param title - Display title
    * @param shouldPlay - true=autoplay, false=pause, undefined=default
    *
@@ -59,7 +59,7 @@ export const useSidebarArtifact = () => {
    * 4. Open sidebar
    */
   const openSidebar = useCallback(
-    async (url: string, artifactType: 'VIDEO' | 'SLIDE_IMAGE', title: string, shouldPlay?: boolean) => {
+    async (url: string, artifactType: 'VIDEO' | 'SLIDE_IMAGE' | 'PDF', title: string, shouldPlay?: boolean) => {
       try {
         // Don't reopen if manually closed
         if (wasManuallyClosed) {
@@ -80,6 +80,9 @@ export const useSidebarArtifact = () => {
           setShouldAutoPlay(shouldPlay === true);
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
+        } else if (artifactType === 'PDF') {
+          // PDF artifacts don't need special state management
+          // They're displayed in an iframe
         }
 
         // Small delay to ensure accurate positioning
@@ -98,6 +101,9 @@ export const useSidebarArtifact = () => {
           setCurrentVideo({ url, isPlaying: initialPlayingState });
         } else if (artifactType === 'SLIDE_IMAGE') {
           setCurrentImage({ url, isExpanded: true });
+        } else if (artifactType === 'PDF') {
+          // PDF artifacts don't need special state management
+          // They're displayed in an iframe
         }
 
         // Small delay to ensure accurate positioning
@@ -119,6 +125,7 @@ export const useSidebarArtifact = () => {
     if (sideBarArtifact?.artifactType === 'SLIDE_IMAGE') {
       setCurrentImage(null);
     }
+    // PDF artifacts don't need special cleanup
     setIsSideDrawerOpen(false);
   }, [sideBarArtifact?.artifactType]);
 
