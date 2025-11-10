@@ -436,7 +436,7 @@ const MultiSelectDropdown = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >
-        <Command className="multi-select-dropdown-shadow relative z-50 w-full rounded-lg bg-white">
+        <Command defaultValue={'-'} className="multi-select-dropdown-shadow relative z-50 w-full rounded-lg bg-white">
           {label && (
             <div className={cn('flex items-center justify-between p-4', !searchable && 'border-b')}>
               {label && <span className="text-sm font-medium text-gray-700">{label}</span>}
@@ -457,7 +457,6 @@ const MultiSelectDropdown = ({
           {/* Search input */}
           {searchable && (
             <CommandInput
-              autoFocus
               className="border-gray-300 bg-gray-100 py-1 pl-2 focus:ring-2 focus:ring-gray-200"
               containerClassName="shadow-sm border-none px-4 pt-0 pb-4"
               showSearchIcon={false}
