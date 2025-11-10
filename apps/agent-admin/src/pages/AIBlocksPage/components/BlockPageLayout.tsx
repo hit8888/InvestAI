@@ -4,6 +4,8 @@ import BlockPreviewContainer from './BlockPreviewContainer';
 import PageLevelVisibility, { PageVisibilityItem } from './PageLevelVisibility';
 import { Block } from '@meaku/core/types/admin/api';
 
+const COMMAND_BAR_FONT_FAMILY = '"Plus Jakarta Sans", "ui-sans-serif", "system-ui", "sans-serif"';
+
 export interface BlockPageLayoutProps {
   /** Block type name (e.g., "Ask AI", "Book a Meeting") */
   blockType: string;
@@ -134,7 +136,7 @@ const BlockPageLayout = ({
 
       {/* Right Side - Preview Container */}
       <BlockPreviewContainer outerClassname={outerClassname} className={previewContainerClassname}>
-        {previewContent}
+        {previewContent ? <div style={{ fontFamily: COMMAND_BAR_FONT_FAMILY }}>{previewContent}</div> : null}
       </BlockPreviewContainer>
     </div>
   );

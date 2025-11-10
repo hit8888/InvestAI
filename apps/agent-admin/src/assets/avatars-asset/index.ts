@@ -1,0 +1,43 @@
+export { Avatar1 } from './avatar-1';
+export { Avatar2 } from './avatar-2';
+export { Avatar3 } from './avatar-3';
+export { Avatar4 } from './avatar-4';
+export { Avatar5 } from './avatar-5';
+export { Avatar6 } from './avatar-6';
+export { Avatar7 } from './avatar-7';
+export { Avatar8 } from './avatar-8';
+export { Avatar9 } from './avatar-9';
+export { Avatar10 } from './avatar-10';
+export { Avatar11 } from './avatar-11';
+export { Avatar12 } from './avatar-12';
+export { Avatar13 } from './avatar-13';
+export { Avatar14 } from './avatar-14';
+export { Avatar15 } from './avatar-15';
+export { Avatar16 } from './avatar-16';
+export { Avatar17 } from './avatar-17';
+export { Avatar18 } from './avatar-18';
+export { Avatar19 } from './avatar-19';
+export { Avatar20 } from './avatar-20';
+export { Avatar21 } from './avatar-21';
+export { Avatar22 } from './avatar-22';
+export { Avatar23 } from './avatar-23';
+export { Avatar24 } from './avatar-24';
+export { Avatar25 } from './avatar-25';
+export { Avatar26 } from './avatar-26';
+export { Avatar27 } from './avatar-27';
+export { Avatar28 } from './avatar-28';
+export { Avatar29 } from './avatar-29';
+export { Avatar30 } from './avatar-30';
+export { Avatar31 } from './avatar-31';
+export { Avatar32 } from './avatar-32';
+export { Avatar33 } from './avatar-33';
+export { Avatar34 } from './avatar-34';
+export { Avatar35 } from './avatar-35';
+export { Avatar36 } from './avatar-36';
+export { Avatar37 } from './avatar-37';
+export { Avatar38 } from './avatar-38';
+
+export interface AvatarProps {
+  size?: number;
+  className?: string;
+}

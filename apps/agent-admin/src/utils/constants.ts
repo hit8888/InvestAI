@@ -73,6 +73,9 @@ export const ROUTING_TYPE_LOGO_MAP: Record<string, string> = {
 export const ONE_MB_IN_BYTES = 1024 * 1024;
 export const THREE_HUNDRED_MB = 300 * ONE_MB_IN_BYTES;
 export const TWO_MB = 2 * ONE_MB_IN_BYTES;
+export const SQUARE_AVATAR_DIMENSION = 60;
+export const RECT_AVATAR_HEIGHT = 60;
+export const RECT_AVATAR_WIDTH = 240;
 
 const {
   DateRange,

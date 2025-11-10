@@ -5,6 +5,7 @@ import CardTitleAndDescription from '../../../components/AgentManagement/CardTit
 import SeparatorLine from './SeparatorLine';
 import Input from '@breakout/design-system/components/layout/input';
 import AgentImageUpload from '../../BrandingPage/AgentImageUpload';
+import AvatarSelectionPopover from '../../BrandingPage/AvatarSelectionPopover';
 import { CTABlockPreview, CTAData } from '../utils/blockHelpers';
 import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
 import { handleConfigUpdate } from '../../../pages/BrandingPage/utils';
@@ -137,7 +138,7 @@ const AskAISpecificSection = ({
           description="Recommended size: 60x60px (or a square aspect ratio)"
           isMandatoryField={false}
         />
-        <AgentImageUpload
+        <AvatarSelectionPopover
           width="60px"
           height="60px"
           isSquareLogo={true}
