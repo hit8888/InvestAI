@@ -55,6 +55,7 @@ export const FormFieldDataTypeEnumSchema = z.enum([
   'datetime',
   'phone',
   'picklist',
+  'google_place',
 ]);
 
 export const FormFieldSchema = z.object({

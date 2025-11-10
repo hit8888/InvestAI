@@ -6,6 +6,7 @@ import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import AgentDropdown from './Dropdown/AgentDropdown';
 import { FormArtifactMetadataType } from '../utils/artifact';
 import { CountryCode } from 'libphonenumber-js/core';
+import PlacesAutocomplete, { PlaceData } from './PlacesAutocomplete';
 
 interface IChatFormFieldProps {
   form: UseFormReturnType;
@@ -63,6 +64,23 @@ const ChatFormField = (props: IChatFormFieldProps) => {
 
   const getFieldBasedOnDataType = (field: ControllerRenderProps<FieldValues, string>) => {
     switch (form_field.data_type) {
+      case 'google_place':
+        return (
+          <PlacesAutocomplete
+            placeholder={getLabelWithRequiredIndicator(form_field.label, form_field.is_required)}
+            defaultValue={field.value ?? ''}
+            disabled={isArtifactFormFilled}
+            className={cn(
+              'text-customPrimaryText border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
+              fieldClassName,
+              fieldErrorMessage && 'border border-destructive-600 bg-destructive-25',
+            )}
+            onPlaceSelect={(place: PlaceData | null) => {
+              field.onChange(place?.description || '');
+            }}
+            onBlur={() => handleBlur(field)}
+          />
+        );
       case 'phone':
         return (
           <PhoneInputContainer

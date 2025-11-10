@@ -318,6 +318,9 @@ importers:
       recharts:
         specifier: ^2.15.3
         version: 2.15.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      use-places-autocomplete:
+        specifier: ^4.0.1
+        version: 4.0.1(react@19.2.0)
       zod:
         specifier: ^3.23.8
         version: 3.24.1
@@ -340,6 +343,9 @@ importers:
       '@meaku/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/config-tailwind
+      '@types/google.maps':
+        specifier: ^3.58.1
+        version: 3.58.1
       '@types/node':
         specifier: ^22.5.4
         version: 22.13.1
@@ -415,6 +421,9 @@ importers:
       '@calcom/embed-react':
         specifier: ^1.5.2
         version: 1.5.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@floating-ui/react':
+        specifier: ^0.27.16
+        version: 0.27.16(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@hookform/resolvers':
         specifier: ^3.9.1
         version: 3.10.0(react-hook-form@7.54.2(react@19.2.0))
@@ -448,6 +457,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      lottie-react:
+        specifier: ^2.4.1
+        version: 2.4.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -469,6 +481,12 @@ importers:
       react-phone-number-input:
         specifier: ^3.4.11
         version: 3.4.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react-player:
+        specifier: ^2.16.0
+        version: 2.16.0(react@19.2.0)
+      use-places-autocomplete:
+        specifier: ^4.0.1
+        version: 4.0.1(react@19.2.0)
       zod:
         specifier: ^3.24.2
         version: 3.25.76
@@ -494,6 +512,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: 5.0.0-alpha.91
         version: 5.0.0-alpha.91(@tanstack/react-query@5.66.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@types/google.maps':
+        specifier: ^3.58.1
+        version: 3.58.1
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.15
@@ -1079,6 +1100,9 @@ importers:
       react-player:
         specifier: ^2.16.0
         version: 2.16.0(react@19.2.0)
+      use-places-autocomplete:
+        specifier: ^4.0.1
+        version: 4.0.1(react@19.2.0)
     devDependencies:
       '@calcom/embed-react':
         specifier: ^1.5.2
@@ -1107,6 +1131,9 @@ importers:
       '@testing-library/react':
         specifier: ^16.2.0
         version: 16.2.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@types/google.maps':
+        specifier: ^3.58.1
+        version: 3.58.1
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.14
@@ -4290,6 +4317,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/google.maps@3.58.1':
+    resolution: {integrity: sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==}
+
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
@@ -6300,6 +6330,7 @@ packages:
 
   intersection-observer@0.12.2:
     resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
+    deprecated: The Intersection Observer polyfill is no longer needed and can safely be removed. Intersection Observer has been Baseline since 2019.
 
   is-alphabetical@2.0.1:
     resolution: {integrity: sha512-FWyyY60MeTNyeSRpkM2Iry0G9hpr7/9kD40mD/cGQEuilcZYS4okz8SN2Q6rLCJ8gbCt6fN+rC+6tMGS99LaxQ==}
@@ -8436,6 +8467,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  use-places-autocomplete@4.0.1:
+    resolution: {integrity: sha512-AybOR/qzXcdaMCGSFveycfL3kztwseAOdagbYoJD8c3amll+gEiPmUkSNhYNUEBqbR+JmJG6/oBTRgihNbE+1A==}
+    peerDependencies:
+      react: 19.2.0
 
   use-sidecar@1.1.3:
     resolution: {integrity: sha512-Fedw0aZvkhynoPYlA5WXrMCAMm+nSWdZt6lzJQ7Ok8S6Q+VsHmHpRWndVRJ8Be0ZbkfPc5LRYH+5XrzXcEeLRQ==}
@@ -12116,6 +12152,8 @@ snapshots:
   '@types/estree@1.0.7': {}
 
   '@types/estree@1.0.8': {}
+
+  '@types/google.maps@3.58.1': {}
 
   '@types/hast@3.0.4':
     dependencies:
@@ -17114,6 +17152,10 @@ snapshots:
       react: 19.2.0
     optionalDependencies:
       '@types/react': 19.0.8
+
+  use-places-autocomplete@4.0.1(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   use-sidecar@1.1.3(@types/react@19.0.8)(react@19.2.0):
     dependencies:

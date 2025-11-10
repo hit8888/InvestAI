@@ -17,11 +17,11 @@ const FormFilledThankYouContent = ({ formFields, formValues }: FormFilledThankYo
         if (!hasValue) return null;
 
         return (
-          <div key={field.field_name} className="flex w-full items-center gap-1">
-            <Typography variant="body" className="font-medium text-gray-500">
+          <div key={field.field_name} className="flex w-full items-start gap-1">
+            <Typography variant="body" className="flex-shrink-0 font-medium text-gray-500">
               {field.label}:
             </Typography>
-            <Typography variant="body" className="max-w-full truncate font-medium text-gray-900">
+            <Typography variant="body" className="flex-1 break-words font-medium text-gray-900">
               {fieldValue}
             </Typography>
           </div>

@@ -40,6 +40,7 @@
     "react-use-websocket": "^4.8.1",
     "react-window": "^2.2.0",
     "recharts": "^2.15.3",
+    "use-places-autocomplete": "^4.0.1",
     "zod": "^3.23.8",
     "zustand": "5.0.0-rc.2"
   },
@@ -49,6 +50,7 @@
     "@meaku/core": "workspace:*",
     "@meaku/shared": "workspace:*",
     "@meaku/tailwind-config": "workspace:*",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^22.5.4",
     "@types/numeral": "^2.0.5",
     "@types/react": "^19.0.2",

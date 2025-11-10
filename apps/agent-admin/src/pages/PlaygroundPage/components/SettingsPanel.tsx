@@ -107,6 +107,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ form, isCollapsed }) => {
             </div>
           </div>
 
+          {/* TODO: Will be added later */}
           {/* User Location Section */}
           {/* <div className="flex flex-col gap-4">
             <div className="border-t border-gray-200"></div>
@@ -116,16 +117,17 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ form, isCollapsed }) => {
                 control={form.control}
                 name="userLocation"
                 render={({ field }) => (
-                  <div className="relative">
-                    <input
-                      {...field}
-                      className="h-11 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-400 focus:outline-none focus:ring-0"
-                      placeholder="Enter user location"
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 transform">
-                      <ChevronDown className="h-4 w-4 text-gray-500" />
-                    </div>
-                  </div>
+                  <PlacesAutocomplete
+                    placeholder="Search for a location"
+                    defaultValue={field.value}
+                    onPlaceSelect={(place: PlaceData | null) => {
+                      field.onChange(place?.description || '');
+                    }}
+                    onBlur={field.onBlur}
+                    requestOptions={{
+                      types: ['(cities)'],
+                    }}
+                  />
                 )}
               />
             </div>
