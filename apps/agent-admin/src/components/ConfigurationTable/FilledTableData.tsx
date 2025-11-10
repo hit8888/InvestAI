@@ -27,7 +27,7 @@ const FilledTableData = ({ configurationData, handleEdit, columns, displayKeys }
         />
       ))}
       <div className="flex w-full justify-end">
-        <Button variant="primary" buttonStyle="rightIcon" rightIcon={<EditIcon />} onClick={handleEdit}>
+        <Button variant="system" buttonStyle="rightIcon" rightIcon={<EditIcon />} onClick={handleEdit}>
           Edit
         </Button>
       </div>

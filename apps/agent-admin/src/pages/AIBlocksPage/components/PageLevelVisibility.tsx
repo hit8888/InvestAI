@@ -19,7 +19,7 @@ export const pageVisibilitySchema = z
     const pageUrlTrimmed = data.page_url.trim();
 
     // Only validate if at least one field is not empty
-    if (visibilityRulesTrimmed.length > 0 || pageUrlTrimmed.length > 0) {
+    if (pageUrlTrimmed.length > 0) {
       if (visibilityRulesTrimmed.length === 0) {
         ctx.addIssue({
           path: ['visibility_rules'],

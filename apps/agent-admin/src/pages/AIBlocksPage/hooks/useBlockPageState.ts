@@ -123,7 +123,12 @@ export function useBlockPageState<TModuleConfig = Record<string, any>>({
   // Page-level visibility rules (stored in visibility_conditions)
   const [pageVisibilityRules, setPageVisibilityRules] = useState<PageVisibilityItem[]>(() => {
     if (!block.visibility_conditions || block.visibility_conditions.length === 0) {
-      return [];
+      return [
+        {
+          visibility_rules: 'contains',
+          page_url: '',
+        },
+      ];
     }
     return block.visibility_conditions.map((condition) => ({
       visibility_rules: condition.operator || '',
@@ -152,7 +157,12 @@ export function useBlockPageState<TModuleConfig = Record<string, any>>({
     }
 
     if (!block.visibility_conditions || block.visibility_conditions.length === 0) {
-      setPageVisibilityRules([]);
+      setPageVisibilityRules([
+        {
+          visibility_rules: 'contains',
+          page_url: '',
+        },
+      ]);
     } else {
       setPageVisibilityRules(
         block.visibility_conditions.map((condition) => ({

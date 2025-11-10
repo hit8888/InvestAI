@@ -72,7 +72,7 @@ export const isRowEmpty = (row: ConfigurationData | undefined, columns: ColumnCo
   if (!row) {
     return true;
   }
-  return columns.every((col) => {
+  return columns.some((col) => {
     const value = row[col.key];
     return value === '' || value === null || value === undefined;
   });

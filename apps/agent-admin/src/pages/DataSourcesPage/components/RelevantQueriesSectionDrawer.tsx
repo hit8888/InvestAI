@@ -7,7 +7,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 const getTypeText = (type: string) => {
   if (type === 'VIDEO' || type === 'EXTERNAL') return 'video';
   if (type === 'DOCUMENT') return 'text';
-  if (type === 'SLIDE') return 'slide';
+  if (type === 'SLIDE' || type === 'IMAGE') return 'slide';
   return '';
 };
 
@@ -33,6 +33,7 @@ const RelevantQueriesSectionDrawer = ({
     setValue('relevant_queries', newQueries);
   };
 
+  console.log({ type });
   const typeText = getTypeText(type || '');
 
   return (
