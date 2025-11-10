@@ -61,6 +61,7 @@ import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
   FilterItem,
+  OrganizationDetailsResponse,
   type SdrAssignment,
   SortItem,
 } from '@meaku/core/types/admin/api';
@@ -93,10 +94,6 @@ const {
 } = FilterType;
 
 const { convertDateToAppliedFilterValue, getDateDisplayForDateRange } = DateUtil;
-
-export const getDashboardBasicPathURL = (tenantName: string) => {
-  return `/${tenantName}`.replace(/\/+$/, '');
-};
 
 export const getMappedDataFromResponseForLeadsTableView = (response: LeadsTableViewContent) => {
   const additionalInfoData =
@@ -1333,4 +1330,16 @@ export const formatDurationToMinuteSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
+export const getValidTenantFromOrganizations = (
+  organizations: OrganizationDetailsResponse[],
+  tenantName: string | null,
+) => {
+  if (organizations.length === 1) {
+    return organizations[0];
+  } else if (organizations.length > 1) {
+    return organizations.find((o) => o['tenant-name'] === tenantName) || organizations[0];
+  }
+  return null;
 };

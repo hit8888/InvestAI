@@ -4,7 +4,7 @@ import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin'
 import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import Typography from '@breakout/design-system/components/Typography/index';
 
 type ConversationLogItemProps = {
@@ -13,7 +13,7 @@ type ConversationLogItemProps = {
 };
 
 const ConversationLogItem = ({ conversation, chatHistory }: ConversationLogItemProps) => {
-  const logoURL = getTenantIdentifier()?.['logo'];
+  const logoURL = useSessionStore((state) => state.activeTenant?.['logo']) ?? null;
 
   if (!chatHistory || !conversation) {
     return null;

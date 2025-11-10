@@ -2,9 +2,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
 import { MessageSquareText } from 'lucide-react';
 // import { Pin, User } from 'lucide-react';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { AppRoutesEnum } from '../../utils/constants';
 import SingleTabDisplay from '../ConversationDetailsComp/SingleTabDisplay';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type TabConfig = {
   path: string;
@@ -33,7 +33,7 @@ const tabs: TabConfig[] = [
 const ActiveConversationTabs = ({ hasPinnedConversations }: { hasPinnedConversations: boolean }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const handleTabClick = (path: string) => {
     const basePath = tenantName ? `/${tenantName}${path}` : path;

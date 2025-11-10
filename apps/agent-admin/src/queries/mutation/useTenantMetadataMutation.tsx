@@ -3,7 +3,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { updateTenantMetadata } from '@meaku/core/adminHttp/api';
 import { TenantMetadataResponse, TenantMetadataUpdateRequest } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {
   data: TenantMetadataUpdateRequest;
@@ -11,7 +11,7 @@ interface MutationVariables {
 
 const useTenantMetadataMutation = (): UseMutationResult<TenantMetadataResponse, AxiosError, MutationVariables> => {
   const queryClient = useQueryClient();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useMutation({
     mutationFn: async ({ data }: MutationVariables): Promise<TenantMetadataResponse> => {

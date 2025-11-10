@@ -1,4 +1,4 @@
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -29,7 +29,7 @@ const JoinConversationChatArea = ({
   isLoading,
   hasUserLeft,
 }: JoinConversationChatAreaProps) => {
-  const logoURL = getTenantIdentifier()?.['logo'];
+  const logoURL = useSessionStore((state) => state.activeTenant?.['logo']) ?? null;
   const { messages, isUserTyping } = useMessageStore();
   const {
     prospect: { browsed_urls: browsedUrls = [], parent_url: parentUrl, query_params: queryParams } = {},

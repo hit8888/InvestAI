@@ -4,7 +4,6 @@ import InfoCard from '../../components/AgentManagement/InfoCard';
 import { useEffect, useState } from 'react';
 import DefaultInfoIcon from '@breakout/design-system/components/icons/sources-default-info-icon';
 import useAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
-import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 import { useAgentConfigsMutation } from '../../queries/mutation/useAgentConfigsMutation';
 import { toast } from 'react-hot-toast';
@@ -13,13 +12,15 @@ import CustomTabs from '../../components/CustomTabs';
 import { AgentResponseWordCountEnum } from '@meaku/core/types/common';
 import { AGENT_RESPONSE_IDEAL_LENGTH_TAB_ITEMS } from '../../utils/constants';
 import LoadingState from './LoadingState';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type AgentResponseWordCountProps = CommonControlsProps & {
   showTabInfo?: boolean;
 };
 
 const AgentResponseWordCount = ({ title, description, showTabInfo = true }: AgentResponseWordCountProps) => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
+  const tenantIdentifier = useSessionStore((state) => state.activeTenant);
   const {
     data: agentConfig,
     isError,
@@ -57,7 +58,7 @@ const AgentResponseWordCount = ({ title, description, showTabInfo = true }: Agen
           component: 'updateConfig function',
           additionalData: {
             agentId,
-            tenantName: getTenantIdentifier()?.['tenant-name'],
+            tenantName: tenantIdentifier?.['tenant-name'],
             errorMessage: 'Unable to update AgentConfig',
             payload: payload,
           },

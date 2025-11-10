@@ -12,10 +12,9 @@ import {
   TooltipPortal,
   TooltipArrow,
 } from '@breakout/design-system/components/Tooltip/index';
-import { useAuth } from '../../context/AuthProvider';
+import { useSessionStore } from '../../stores/useSessionStore';
 import { useSidebar } from '../../context/SidebarContext';
 import SidebarHeader from './SidebarHeader';
-import { getTenantIdentifierFromUrl } from '@meaku/core/utils/index';
 import useBrandingAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
 import { ADMIN_DASHBOARD_COMPANY_NAME, SideNavView } from '../../utils/constants';
 import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
@@ -50,28 +49,24 @@ const accordionAnimation = {
  */
 const SidebarV2 = () => {
   const location = useLocation();
-  const { userInfo, logout } = useAuth();
-  const orgList = userInfo?.organizations;
-  // Use URL as primary source of truth for tenant
-  const tenantIdentifier = getTenantIdentifierFromUrl();
-  const tenantName = tenantIdentifier?.['tenant-name'];
-  const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
+  const orgList = useSessionStore((state) => state.userInfo?.organizations) || [];
+  const organization = useSessionStore((state) => state.activeTenant);
+  const tenantName = organization?.['tenant-name'];
+  const logout = useSessionStore((state) => state.logout);
+
   const isUserSuperAdmin = Boolean((orgList?.length ?? 0) > 1 && orgList?.every((org) => org?.role === 'admin'));
-  const TENANT_NAME = tenantIdentifier?.['name'] ?? organization?.name ?? ADMIN_DASHBOARD_COMPANY_NAME;
+  const TENANT_NAME = organization?.name ?? ADMIN_DASHBOARD_COMPANY_NAME;
 
   // Fetch agent configs to get full logo and favicon
-  const agentId = tenantIdentifier?.['agentId'];
+  const agentId = organization?.agentId;
   const { data: agentConfigs } = useBrandingAgentConfigsQuery({
     agentId: agentId ?? 0,
     enabled: Boolean(agentId),
   });
 
   // Full logo from agent metadata, fallback to org logo
-  const FULL_LOGO_URL = agentConfigs?.metadata?.logo || tenantIdentifier?.['logo'] || '';
+  const FULL_LOGO_URL = agentConfigs?.metadata?.logo || organization?.logo || '';
   const isTenantLogoUrlPresent = FULL_LOGO_URL.length > 0;
-
-  // Favicon from agent orb config
-  const FAVICON_URL = agentConfigs?.configs?.['agent_personalization:style']?.orb_config?.logo_url || '';
 
   // Get state and functions from context
   const {
@@ -369,7 +364,7 @@ const SidebarV2 = () => {
             isCollapsed={isCollapsed}
             tenantName={TENANT_NAME}
             tenantLogoUrl={FULL_LOGO_URL}
-            faviconUrl={FAVICON_URL}
+            faviconUrl={''}
             isTenantLogoUrlPresent={isTenantLogoUrlPresent}
             isUserSuperAdmin={isUserSuperAdmin}
             organizations={orgList}

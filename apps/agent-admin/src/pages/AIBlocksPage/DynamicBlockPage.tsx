@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import useBlockQuery from '../../queries/query/useBlockQuery';
+import { useSessionStore } from '../../stores/useSessionStore';
 import AskAiBlockPage from './AskAiBlockPage';
 import BookAMeetingBlockPage from './BookAMeetingBlockPage';
 import SummarizeBlockPage from './SummarizeBlockPage';
@@ -19,7 +19,7 @@ import AIBlocksNavigation from './AIBlocksNavigation';
  */
 const DynamicBlockPage = () => {
   const { blockId } = useParams<{ blockId: string }>();
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   const {
     data: block,

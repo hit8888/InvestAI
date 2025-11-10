@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getInsightsSummary } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { InsightsSummaryResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {
   start_date: string;
@@ -17,7 +17,7 @@ const useInsightsSummaryQuery = ({
   timezone,
   enabled = true,
 }: IProps): UseQueryResult<InsightsSummaryResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const hasAllRequiredParams = Boolean(start_date && end_date && timezone);
 

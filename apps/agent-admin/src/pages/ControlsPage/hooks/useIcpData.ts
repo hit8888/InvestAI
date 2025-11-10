@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import useIcpConfigQuery from '../../../queries/query/useIcpConfigQuery';
 import { useIcpConfigMutation } from '../../../queries/mutation/useIcpConfigMutation';
 import { IcpConfigPayload } from '@meaku/core/types/admin/api';
 import { ICPFormData } from '../utils';
+import { useSessionStore } from '../../../stores/useSessionStore';
 
 export const useIcpData = () => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   // API hooks
   const {

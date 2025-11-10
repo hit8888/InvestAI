@@ -1,10 +1,7 @@
 import { AgentType } from '@meaku/core/types/admin/agent-configs';
 import { getAllAgents } from '@meaku/core/adminHttp/api';
-import { setTenantIdentifier } from '@meaku/core/utils/index';
-import toast from 'react-hot-toast';
-import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 import { ENV } from '@meaku/core/types/env';
-import { defaultQueryClient } from '@meaku/core/queries/defaultQueryClient';
+import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 
 export const getAllAgentsForTenant = async () => {
   try {
@@ -24,47 +21,31 @@ export const getAgentIdFromTenant = async (): Promise<number | null> => {
   return null;
 };
 
-const TENANT_SWITCH_TIMESTAMP_KEY = 'tenant_switch_timestamp';
-const TENANT_SWITCH_FLAG_KEY = 'tenant_switch_in_progress';
-
-export const markTenantSwitchStart = () => {
-  localStorage.setItem(TENANT_SWITCH_FLAG_KEY, 'true');
-  localStorage.setItem(TENANT_SWITCH_TIMESTAMP_KEY, Date.now().toString());
-};
-
-export const markTenantSwitchComplete = () => {
-  localStorage.removeItem(TENANT_SWITCH_FLAG_KEY);
-};
-
-export const isTenantSwitchInProgress = (): boolean => {
-  return localStorage.getItem(TENANT_SWITCH_FLAG_KEY) === 'true';
-};
-
-export const setupTenantAndAgent = async (tenantData: OrganizationDetailsResponse) => {
-  setTenantIdentifier(tenantData);
-  const agentId = await getAgentIdFromTenant();
-  if (agentId) {
-    setTenantIdentifier({ ...tenantData, agentId }); // Adding agentId to tenantIdentifier
-
-    // Invalidate all React Query caches when tenant changes to ensure fresh data
-    // Clear all cached queries to prevent stale data from previous tenant
-    defaultQueryClient.clear();
-  } else {
-    toast.error('No agents found for tenant');
-  }
-};
-
-export const wasRecentTenantSwitch = (withinMs: number = 500): boolean => {
-  const timestamp = localStorage.getItem(TENANT_SWITCH_TIMESTAMP_KEY);
-  if (!timestamp) return false;
-
-  const elapsed = Date.now() - parseInt(timestamp, 10);
-  return elapsed < withinMs;
-};
+// Remove complex tenant switch tracking
 
 export const getWebsocketBaseUrl = () => {
   // Ensure WebSocket URL uses wss:// protocol
   const protocol = 'wss:';
   const baseUrl = ENV.VITE_CHAT_BASE_API_URL?.replace(/^https?:/, protocol);
   return baseUrl;
+};
+
+/**
+ * Processes login response by filtering and sorting organizations
+ * Filters out organizations with empty tenant-name and sorts by name
+ */
+export const processLoginResponse = <T extends { data: { user: { organizations?: OrganizationDetailsResponse[] } } }>(
+  response: T,
+): T['data'] => {
+  const organizations =
+    response?.data?.user?.organizations?.filter((org: OrganizationDetailsResponse) => org['tenant-name'] !== '') ?? [];
+
+  if (organizations.length > 0) {
+    organizations.sort(
+      (a: OrganizationDetailsResponse, b: OrganizationDetailsResponse) => a.name?.localeCompare(b.name ?? '') ?? 0,
+    );
+  }
+
+  response.data.user.organizations = organizations;
+  return response.data;
 };

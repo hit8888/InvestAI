@@ -1,14 +1,14 @@
 import withPageViewWrapper from '../PageViewWrapper';
 import { GenericTablePage } from '../../features/table-system';
 import { conversationsTableConfig } from './config/conversationsTableConfig';
-import { useAuth } from '../../context/AuthProvider';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 /**
  * ConversationsV2BasePage
  * All Chats page using generic table system with PROSPECT entity
  */
 const ConversationsV2BasePage = () => {
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const userId = userInfo?.id;
 
   return <GenericTablePage config={conversationsTableConfig(userId) as never} />;

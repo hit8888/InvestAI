@@ -3,11 +3,10 @@ import { toast } from 'react-hot-toast';
 import Card from '../../components/AgentManagement/Card';
 import ResizeTextarea from '@breakout/design-system/components/TextArea/ResizeTextarea';
 import InfoCard from '../../components/AgentManagement/InfoCard';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import LoadingState from './components/LoadingState';
 import ErrorState from './components/ErrorState';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
 import PromptHeader from './PromptHeader';
 import { useUpdateCompanyICPConfig } from '../../queries/mutation/useUpdateCompanyICPConfig';
@@ -24,7 +23,7 @@ interface CompanyICPConfigProps {
 }
 
 const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoTitle, textareaPlaceholder }) => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [configValue, setConfigValue] = useState('');
   const [originalValue, setOriginalValue] = useState('');
@@ -75,7 +74,7 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
         component: 'CompanyICPConfig',
         additionalData: {
           agentId,
-          tenantName: getTenantIdentifier()?.['tenant-name'],
+          tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
           errorMessage: 'Unable to save Company ICP Config',
           payload: configValue,
           error: err,

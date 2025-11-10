@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { getCountryDistribution } from '@meaku/core/adminHttp/api';
 import { CountryDistributionResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseCountryDistributionQueryProps = {
   payload: {
@@ -16,7 +16,7 @@ const useCountryDistributionQuery = ({
   payload,
   options,
 }: UseCountryDistributionQueryProps): UseQueryResult<CountryDistributionResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const countryDistributionQuery = useQuery({
     queryKey: ['country-distribution', tenantName, payload],

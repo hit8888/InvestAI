@@ -9,7 +9,7 @@ import { BreadcrumbItemComponent } from '../../components/common/BreadcrumbItemC
 import useLocationPath from '@meaku/core/hooks/useLocationPath';
 import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 import { CONVERSATION_TABS, isTabActive } from '../ConversationTabs';
-import { getDashboardBasicPathURL } from '../../utils/common';
+import { buildPathWithTenantBase } from '../../utils/navigation';
 
 type IProps = {
   isLoading: boolean;
@@ -23,16 +23,15 @@ const ConversationsBreadCrumb = ({ isLoading, isDirectAccess }: IProps) => {
   const { tenantName } = useParams();
 
   const fromTab = useMemo(() => {
-    const currentTab = CONVERSATION_TABS.find((tab) => isTabActive(tab.path, location.pathname));
+    const currentTab = CONVERSATION_TABS.find((tab) => isTabActive(tab.path, location.pathname, tenantName));
     return currentTab;
-  }, [location.pathname]);
+  }, [location.pathname, tenantName]);
 
   const breadCrumbItems = useMemo(() => [fromTab?.label || 'All Visitors', 'Prospect'], [fromTab]);
 
   const handleNavigateBack = useCallback(() => {
     if (isDirectAccess && fromTab) {
-      const baseURL = getDashboardBasicPathURL(tenantName ?? '');
-      navigate(`${baseURL}${fromTab.path}`);
+      navigate(buildPathWithTenantBase(tenantName ?? '', fromTab.path));
     } else {
       // If came from table view, go back in history
       navigate(-1);

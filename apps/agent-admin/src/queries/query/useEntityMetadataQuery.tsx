@@ -2,8 +2,8 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getEntityDataBasedOnType } from '@meaku/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { EntityMetadataResponseType } from '@meaku/core/types/admin/api';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getEntityMetadataKey = (entityType: string, tenantName: string): readonly unknown[] => [
   'entity-metadata',
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const useEntityMetadataQuery = ({ entityType, queryOptions }: IProps): UseQueryResult<EntityMetadataResponseType> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   return useQuery({
     queryKey: getEntityMetadataKey(entityType, tenantName ?? ''),
     queryFn: async (): Promise<EntityMetadataResponseType> => {

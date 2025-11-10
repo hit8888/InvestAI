@@ -4,7 +4,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getLeadsRowData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { LeadsTableResponse } from '@meaku/core/types/admin/admin';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type LeadsTableVariables = LeadsPayload;
 
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const useLeadsTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<LeadsTableResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const leadsQuery = useQuery({
     queryKey: getLeadsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<LeadsTableResponse> => {

@@ -16,7 +16,7 @@ import ConversationProcessingTimeLog from '../components/Insights/ConversationPr
 import BuyerIntentDistribution from '../components/Insights/BuyerIntentDistribution';
 import CountryDistribution from '../components/Insights/CountryDistribution';
 import ProductInterestDistribution from '../components/Insights/ProductInterestDistribution';
-import { useAuth } from '../context/AuthProvider';
+import { useSessionStore } from '../stores/useSessionStore';
 import TopQuestionsClickedByUsers from '../components/Insights/TopQuestionsClickedByUsers';
 import { INSIGHTS_DATE_RANGE_PRESET_OPTIONS } from '../utils/constants';
 
@@ -25,7 +25,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const defaultDateRange = DateUtil.getDateRangeForPresetValue(-30);
 
 const InsightsPage = () => {
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const [currentDateRange, setCurrentDateRange] = useState<DateRangeProp | undefined>(defaultDateRange);
   const [currentDayOfWeek, setCurrentDayOfWeek] = useState<DayOfWeek | undefined>(undefined);
 

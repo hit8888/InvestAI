@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { downloadLlmsTxt, generateLlmsTxt } from '@meaku/core/adminHttp/api';
 import { AxiosResponse, isAxiosError } from 'axios';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 // Types
 export interface GenerateLlmsTxtPayload {
@@ -28,7 +28,7 @@ const downloadLlmsTxtFile = async (dataSourceId: number): Promise<Blob> => {
 
 export const useGenerateLlmsTxt = () => {
   const queryClient = useQueryClient();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useMutation({
     mutationFn: generateLlmsTxtFile,

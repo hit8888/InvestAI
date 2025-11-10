@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query
 import { AxiosResponse } from 'axios';
 import { getUsersList } from '@meaku/core/adminHttp/api';
 import { UsersListResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type BreakoutQueryOptions<TData, TQueryKey extends readonly unknown[]> = Omit<
   UseQueryOptions<TData, Error, TData, TQueryKey>,
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const useUsersListQuery = ({ queryOptions }: IProps = {}): UseQueryResult<UsersListResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const usersListQuery = useQuery({
     queryKey: ['users-list', tenantName],

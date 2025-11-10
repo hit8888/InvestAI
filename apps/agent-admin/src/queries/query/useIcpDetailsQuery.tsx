@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getIcpDetails } from '@meaku/core/adminHttp/api';
 import { IcpDetailsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';
 
@@ -20,11 +20,11 @@ const useIcpDetailsQuery = (
   payload: IcpDetailsQueryPayload = {},
   options: IcpDetailsQueryOptions = {},
 ): UseQueryResult<IcpDetailsResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const icpId = payload.icpId;
 
   const icpDetailsQuery = useQuery({
-    queryKey: getIcpDetailsKey(tenantName, icpId!),
+    queryKey: getIcpDetailsKey(tenantName ?? '', icpId!),
     queryFn: async () => {
       try {
         const response = await getIcpDetails({ icp_id: icpId! });

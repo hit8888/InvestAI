@@ -11,14 +11,13 @@ import { SendAdminMessageWithSessionIdFn, SendMessageFn } from '../../hooks/useA
 import { useSidebar } from '../../context/SidebarContext';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthProvider';
+import { useSessionStore } from '../../stores/useSessionStore';
 import { EventMessageContent } from '@meaku/core/types/webSocketData';
 import NoActiveConversationsFound from './NoActiveConversationsFound';
 import CustomPageHeader from '../CustomPageHeader';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
 import useNewConversationToast, { globalToastTracker } from '../../hooks/useNewConversationToast';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
@@ -73,10 +72,10 @@ const ActiveConversationsLayout = () => {
   const [showActiveConversations, setShowActiveConversations] = useState(true);
   const [sendMessageFnMap, setSendMessageFnMap] = useState<Record<string, SendMessageFn>>({});
   const [pinnedSessionIds, setPinnedSessionIds] = useState<string[]>([]);
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const navigate = useNavigate();
   const location = useLocation();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const {
     currentConversation,

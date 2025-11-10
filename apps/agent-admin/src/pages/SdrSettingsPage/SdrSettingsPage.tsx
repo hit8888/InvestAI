@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthProvider';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import PageContainer from '../../components/AgentManagement/PageContainer';
 import Card from '../../components/AgentManagement/Card';
 import TextArea from '@breakout/design-system/components/TextArea/index';
@@ -11,8 +10,9 @@ import { cn } from '@breakout/design-system/lib/cn';
 import useUpdateUserProfileMutation from '../../queries/mutation/useUpdateUserProfileMutation';
 
 const SdrSettingsPage = () => {
-  const { userInfo, updateUserInfo } = useAuth();
-  const tenantIdentifier = getTenantIdentifier();
+  const userInfo = useSessionStore((state) => state.userInfo);
+  const updateUserInfo = useSessionStore((state) => state.updateUserInfo);
+  const tenantIdentifier = useSessionStore((state) => state.activeTenant);
   const existingMessage = userInfo?.default_hitl_join_message;
 
   // Generate default placeholder message if no message exists

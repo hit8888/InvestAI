@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import useBlocksQuery from '../../../queries/query/useBlocksQuery';
 import { useUpdateBlockMutation } from '../../../queries/mutation/useUpdateBlockMutation';
 import { UpdateBlockPayload } from '@meaku/core/types/admin/api';
+import { useSessionStore } from '../../../stores/useSessionStore';
 
 /**
  * Custom hook to manage AI Blocks data
  * Centralizes all block-related data fetching, transformation, and mutations
  */
 export const useBlocksData = () => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   // API hooks
   const {

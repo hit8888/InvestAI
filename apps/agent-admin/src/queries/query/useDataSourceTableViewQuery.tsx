@@ -8,8 +8,8 @@ import {
 import { AxiosResponse } from 'axios';
 import { CommonDataSourceTableResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage, SLIDES_PAGE } from '@meaku/core/utils/index';
-import { DOCUMENTS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
+import { SLIDES_PAGE, DOCUMENTS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getDataSourceTableKey = (payload: DataSourcePayload, tenantName: string, tableKey: string): unknown[] => [
   'data-source-table',
@@ -40,7 +40,7 @@ const useDataSourceTableViewQuery = ({
   queryOptions,
   tableKey,
 }: IProps): UseQueryResult<DataSourceTableResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const dataSourceQuery = useQuery({
     queryKey: getDataSourceTableKey(payload, tenantName ?? '', tableKey),
     queryFn: async (): Promise<DataSourceTableResponse> => {

@@ -9,7 +9,7 @@ import { getDataSourcesQuery } from '@meaku/core/adminHttp/api';
 import { DataSourcePayload } from '@meaku/core/types/admin/api';
 import { AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 // Types for data source query response
 export interface DataSourceResult {
@@ -45,7 +45,7 @@ interface IProps {
 }
 
 const useDataSourcesQuery = ({ payload, queryOptions }: IProps): UseQueryResult<DataSourcesQueryResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useQuery({
     queryKey: getDataSourcesQueryKey(tenantName ?? '', payload),
@@ -62,7 +62,7 @@ export const useInfiniteDataSourcesQuery = ({
   payload,
   queryOptions,
 }: IProps): UseInfiniteQueryResult<DataSourcesQueryResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const { enabled } = queryOptions || {};
   return useInfiniteQuery({
     queryKey: getDataSourcesQueryKey(tenantName ?? '', payload),

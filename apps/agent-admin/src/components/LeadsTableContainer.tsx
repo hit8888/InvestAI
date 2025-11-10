@@ -32,7 +32,7 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
-import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import useAdminEventAnalytics from '../hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import usePageRouteState from '../hooks/usePageRouteState.tsx';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';

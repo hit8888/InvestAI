@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { getActiveConversations } from '@meaku/core/adminHttp/api';
 import { useQuery } from '@tanstack/react-query';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const useActiveConversationsQuery = () => {
+  const tenant = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const getaActiveConversationsQueryKey = (): unknown[] => {
-    const tenant = getTenantFromLocalStorage();
     return ['active-conversations', tenant];
   };
 

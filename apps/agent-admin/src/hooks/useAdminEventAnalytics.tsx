@@ -1,10 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import useAnalytics from '@meaku/core/hooks/useAnalytics';
-import { getTenantIdentifier, getUserEmailFromLocalStorage } from '../utils';
+import { useSessionStore } from '../stores/useSessionStore';
 
 const useAdminEventAnalytics = () => {
-  const tenantDetails = getTenantIdentifier();
-  const userEmail = getUserEmailFromLocalStorage();
+  const tenantDetails = useSessionStore((state) => state.activeTenant);
+  const userEmail = useSessionStore((state) => state.userInfo?.email);
+
   const { trackEvent } = useAnalytics();
 
   const commonProperties = useMemo(

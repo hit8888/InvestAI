@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Block, UpdateBlockPayload, VisibilityCondition } from '@meaku/core/types/admin/api';
 import { useUpdateBlockMutation } from '../../../queries/mutation/useUpdateBlockMutation';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import { toast } from 'react-hot-toast';
+import { useSessionStore } from '../../../stores/useSessionStore';
 import { BlockVisibilityData } from '../components/BlockVisibilityContent';
 import { PageVisibilityItem } from '../components/PageLevelVisibility';
 
@@ -90,7 +90,7 @@ export function useBlockPageState<TModuleConfig = Record<string, any>>({
   showSuccessToast = true,
   showErrorToast = true,
 }: UseBlockPageStateOptions<TModuleConfig>): UseBlockPageStateReturn<TModuleConfig> {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
   const updateBlockMutation = useUpdateBlockMutation();
 
   // Store parseModuleConfig in a ref to avoid re-running effects when it changes

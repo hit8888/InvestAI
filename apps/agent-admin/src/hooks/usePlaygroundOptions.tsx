@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthProvider';
+import { useSessionStore } from '../stores/useSessionStore';
 import { getAgentIdFromTenant } from '../utils/apiCalls';
 import { useEffect, useState } from 'react';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 
 const usePlaygroundOptions = () => {
   const { tenantName: tenantNameParam } = useParams();
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
+  const activeTenant = useSessionStore((state) => state.activeTenant);
   const orgList = userInfo?.organizations;
   const matchingOrg = orgList?.find((org) => org['tenant-name'] === tenantNameParam);
 
@@ -25,11 +25,11 @@ const usePlaygroundOptions = () => {
     getOrgAgentId();
   }, [matchingOrg]);
 
-  const tenantName = matchingOrg?.['tenant-name'] ?? getTenantFromLocalStorage();
+  const finalTenantName = matchingOrg?.['tenant-name'] ?? activeTenant?.['tenant-name'];
 
   return {
     orgAgentId,
-    tenantName,
+    tenantName: finalTenantName,
   };
 };
 

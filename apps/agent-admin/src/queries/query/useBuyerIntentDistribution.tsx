@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { getBuyerIntentDistribution } from '@meaku/core/adminHttp/api';
 import { BuyerIntentDistributionResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseBuyerIntentDistributionQueryProps = {
   payload: {
@@ -16,7 +16,7 @@ const useBuyerIntentDistributionQuery = ({
   payload,
   options,
 }: UseBuyerIntentDistributionQueryProps): UseQueryResult<BuyerIntentDistributionResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const buyerIntentDistributionQuery = useQuery({
     queryKey: ['buyer-intent-distribution', tenantName, payload],

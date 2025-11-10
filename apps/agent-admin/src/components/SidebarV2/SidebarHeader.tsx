@@ -10,10 +10,9 @@ import {
   PopoverPortal,
 } from '@breakout/design-system/components/Popover/index';
 import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
-import { setupTenantAndAgent, markTenantSwitchStart, markTenantSwitchComplete } from '../../utils/apiCalls';
-import { getDashboardBasicPathURL } from '../../utils/common';
+import { useSessionStore } from '../../stores/useSessionStore';
+import { buildPathWithTenantBase } from '../../utils/navigation';
 import { DEFAULT_ROUTE } from '../../utils/constants';
-import { getTenantFromUrl } from '@meaku/core/utils/index';
 import toast from 'react-hot-toast';
 
 interface SidebarHeaderProps {
@@ -42,8 +41,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Use URL as source of truth for current tenant
-  const currentTenantName = getTenantFromUrl();
+  const organization = useSessionStore((state) => state.activeTenant);
 
   // Filter organizations based on search query
   const filteredOrganizations = useMemo(() => {
@@ -66,21 +64,9 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
     try {
       setIsLogoPopoverOpen(false);
 
-      // Mark that we're starting a tenant switch
-      markTenantSwitchStart();
-
-      await setupTenantAndAgent(org);
-      const basicPathURL = getDashboardBasicPathURL(org['tenant-name'] ?? '');
-
-      // Use client-side navigation - React Query will automatically refetch with new tenant keys
-      navigate(`${basicPathURL}/${DEFAULT_ROUTE}`, { replace: true });
-
-      // Clear the flag after navigation
-      setTimeout(() => {
-        markTenantSwitchComplete();
-      }, 500);
+      const tenantName = org['tenant-name'] ?? '';
+      navigate(buildPathWithTenantBase(tenantName, DEFAULT_ROUTE), { replace: true });
     } catch (error) {
-      markTenantSwitchComplete();
       toast.error('Failed to switch organization');
       console.error('Error switching tenant:', error);
     }
@@ -248,7 +234,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
                 const orgLogo = org.logo;
                 const orgName = org.name || 'Unknown Organization';
                 const orgTenantName = org['tenant-name'];
-                const isCurrentTenant = orgTenantName === currentTenantName;
+                const isCurrentTenant = orgTenantName === organization?.['tenant-name'];
 
                 return (
                   <button

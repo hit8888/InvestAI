@@ -7,7 +7,7 @@ import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters'
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import ChoosePresetsDateValue from '../ChoosePresetsDateValue';
 import moment from 'moment-timezone';
-import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import { DATE_RANGE_PRESET_OPTIONS } from '../../utils/constants';
 

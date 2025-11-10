@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import useBrandingAgentConfigsQuery from '../../../queries/query/useAgentConfigsQuery';
 import { handleConfigUpdate } from '../../BrandingPage/utils';
+import { useSessionStore } from '../../../stores/useSessionStore';
 
 /**
  * Custom hook to manage global settings for AI Blocks
  * Handles primary color, font style, and floating bar visibility
  */
 export const useGlobalSettings = () => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   const {
     data: agentConfigs,

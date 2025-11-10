@@ -1,6 +1,6 @@
 import useWebSocket from 'react-use-websocket';
 import { useEffect, useState } from 'react';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../stores/useSessionStore';
 import { trackError } from '../utils/error.ts';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import {
@@ -75,8 +75,9 @@ const cleanupUserLeftStorage = (tenant: string | null, validSessionIds: string[]
 };
 
 const useActiveConversationsWebSocket = () => {
-  const tenant = getTenantFromLocalStorage();
-  const token = getAccessTokenFromLocalStorage();
+  const { accessToken: token, activeTenant } = useSessionStore();
+  const tenant = activeTenant?.['tenant-name'] ?? null;
+
   const liveConversationsWsUrl =
     tenant && token
       ? `${getWebsocketBaseUrl()}/tenant/ws/active-conversations/events/?tenant=${tenant}&token=${token}`
@@ -84,7 +85,7 @@ const useActiveConversationsWebSocket = () => {
 
   const [lastMessageBySession, setLastMessageBySession] = useState<Record<string, LastMessage>>({});
   const [hasUserLeftBySession, setHasUserLeftBySession] = useState<UserLeftBySession>(() =>
-    loadUserLeftFromStorage(tenant),
+    loadUserLeftFromStorage(tenant ?? null),
   );
   const [retryInterval, setRetryInterval] = useState(INITIAL_RETRY_INTERVAL);
   const currentConversation = useJoinConversationStore((state) => state.currentConversation);
@@ -185,12 +186,12 @@ const useActiveConversationsWebSocket = () => {
 
   // Persist hasUserLeftBySession to localStorage whenever it changes
   useEffect(() => {
-    saveUserLeftToStorage(tenant, hasUserLeftBySession);
+    saveUserLeftToStorage(tenant ?? null, hasUserLeftBySession);
   }, [hasUserLeftBySession, tenant]);
 
   // Handle tenant changes - reload state when tenant changes
   useEffect(() => {
-    const newData = loadUserLeftFromStorage(tenant);
+    const newData = loadUserLeftFromStorage(tenant ?? null);
     setHasUserLeftBySession(newData);
   }, [tenant]);
 
@@ -205,7 +206,7 @@ const useActiveConversationsWebSocket = () => {
 
   // Cleanup function to remove expired sessions
   const cleanupExpiredSessions = (validSessionIds: string[]) => {
-    const cleaned = cleanupUserLeftStorage(tenant, validSessionIds);
+    const cleaned = cleanupUserLeftStorage(tenant ?? null, validSessionIds);
     setHasUserLeftBySession(cleaned);
   };
 

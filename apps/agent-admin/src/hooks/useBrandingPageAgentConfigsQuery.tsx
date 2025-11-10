@@ -1,8 +1,8 @@
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import useAgentConfigsQuery from '../queries/query/useAgentConfigsQuery';
+import { useSessionStore } from '../stores/useSessionStore';
 
 const useBrandingPageAgentConfigsQuery = () => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
   const {
     data: agentConfigs,
     isLoading,

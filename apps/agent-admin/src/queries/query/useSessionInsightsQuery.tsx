@@ -5,7 +5,7 @@ import {
   HourlySessionInsightsResponse,
   WeeklySessionInsightsResponse,
 } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {
   start_date: string;
@@ -24,7 +24,7 @@ const useSessionInsightsQuery = <
   insight_interval,
   enabled = true,
 }: IProps): UseQueryResult<T> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const hasAllRequiredParams = Boolean(start_date && end_date && timezone && insight_interval);
 

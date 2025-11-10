@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { getProductInterestDistribution } from '@meaku/core/adminHttp/api';
 import { ProductInterestDistributionResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseProductInterestDistributionQueryProps = {
   payload: {
@@ -16,7 +16,7 @@ const useProductInterestDistributionQuery = ({
   payload,
   options,
 }: UseProductInterestDistributionQueryProps): UseQueryResult<ProductInterestDistributionResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const productInterestDistributionQuery = useQuery({
     queryKey: ['product-interest-distribution', tenantName, payload],

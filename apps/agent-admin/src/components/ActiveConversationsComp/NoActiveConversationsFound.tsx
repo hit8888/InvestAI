@@ -1,11 +1,11 @@
 import { useLocation } from 'react-router-dom';
 
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const NoActiveConversationsFound = () => {
   const location = useLocation();
-  const tenantName = getTenantIdentifier();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const normalizedPath = tenantName ? location.pathname.replace(`/${tenantName}`, '') : location.pathname;
   let title: string;

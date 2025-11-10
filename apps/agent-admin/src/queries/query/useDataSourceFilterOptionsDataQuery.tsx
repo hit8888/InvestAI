@@ -3,8 +3,9 @@ import { getDataSourceFilterOptionsData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage, PageTypeToTableName } from '@meaku/core/utils/index';
+import { PageTypeToTableName } from '@meaku/core/utils/index';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type FilterOptionsVariables = FilterOptionsPayload;
 
@@ -27,7 +28,7 @@ const useDataSourceFilterOptionsDataQuery = ({
   page,
   queryOptions,
 }: IProps): UseQueryResult<FilterOptionsResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const filterQuery = useQuery({
     queryKey: getDataSourceFilterOptionsDataKey(payload, tenantName ?? '', page),
     queryFn: async (): Promise<FilterOptionsResponse> => {

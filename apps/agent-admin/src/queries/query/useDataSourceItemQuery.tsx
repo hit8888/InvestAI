@@ -3,9 +3,9 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getDataSourceWebpagesItemData, getDataSourceDocumentsItemData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { DOCUMENTS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
 import { DataSourceWebpagesResponseResultSchema } from '@meaku/core/types/admin/api';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getDataSourceItemKey = (tenantName: string, tableKey: string, dataSourceID: number): unknown[] => [
   'data-source-item',
@@ -34,7 +34,7 @@ const useDataSourceItemQuery = ({
   tableKey,
   dataSourceID,
 }: IProps): UseQueryResult<DataSourceItemResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const dataSourceQuery = useQuery({
     queryKey: getDataSourceItemKey(tenantName ?? '', tableKey, dataSourceID),
     queryFn: async (): Promise<DataSourceItemResponse> => {

@@ -3,14 +3,14 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { getTenantMetadata } from '@meaku/core/adminHttp/api';
 import { TenantMetadataResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {
   queryOptions?: Omit<UseQueryOptions<TenantMetadataResponse, Error>, 'queryKey' | 'queryFn'>;
 }
 
 const useTenantMetadataQuery = ({ queryOptions }: IProps = {}): UseQueryResult<TenantMetadataResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useQuery({
     queryKey: ['tenant-metadata', tenantName],

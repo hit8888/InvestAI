@@ -1,8 +1,8 @@
 import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import useInsightsSummaryQuery from '../../queries/query/useInsightsSummaryQuery';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface SummaryProps {
   start_date: string;
@@ -11,7 +11,7 @@ interface SummaryProps {
 }
 
 const Summary = ({ start_date, end_date, timezone }: SummaryProps) => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const { data: insightSummary, isLoading: isSummaryLoading } = useInsightsSummaryQuery({
     start_date,

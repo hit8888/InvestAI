@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { getConversationProcessingTimeLog } from '@meaku/core/adminHttp/api';
 import { ConversationProcessingTimeLogResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseConversationProcessingTimeLogQueryProps = {
   payload: {
@@ -16,7 +16,7 @@ const useConversationProcessingTimeLogQuery = ({
   payload,
   options,
 }: UseConversationProcessingTimeLogQueryProps): UseQueryResult<ConversationProcessingTimeLogResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const conversationProcessingTimeLogQuery = useQuery({
     queryKey: ['processing-time-logs', tenantName, payload],

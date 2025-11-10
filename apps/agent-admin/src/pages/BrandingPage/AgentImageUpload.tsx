@@ -6,8 +6,8 @@ import AgentConfigUploadIcon from '@breakout/design-system/components/icons/agen
 import { cn } from '@breakout/design-system/lib/cn';
 import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { getTenantActiveAgentId, getTenantIdentifier } from '@meaku/core/utils/index';
 import { trackError } from '@meaku/core/utils/error';
+import { useSessionStore } from '../../stores/useSessionStore';
 import ReactCropperModal from '../../components/AgentManagement/ReactCropperModal';
 import { useImageCropModal } from '../../hooks/useImageCropModal';
 import { checkFileSize } from '../../utils/common';
@@ -84,7 +84,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
   onImageUpdate,
   tooltipText,
 }) => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
   const [imagePreview, setImagePreview] = useState<string | null>(initialImage ?? null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -132,7 +132,7 @@ const AgentImageUpload: React.FC<AgentImageUploadProps> = ({
         component: 'AgentImageUpload function',
         additionalData: {
           agentId,
-          tenantName: getTenantIdentifier()?.['tenant-name'],
+          tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
           errorMessage: 'Unable to upload Image',
         },
       });

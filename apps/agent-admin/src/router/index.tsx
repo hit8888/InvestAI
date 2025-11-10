@@ -2,7 +2,8 @@ import { wrapCreateBrowserRouterV6 } from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 import Custom404 from '@breakout/design-system/components/layout/Custom404';
 
-import Root from '../layout';
+import RootLayout from '../layout/RootLayout.tsx';
+import TenantLayout from '../layout/TenantLayout.tsx';
 import Dashboard from '../pages/Dashboard';
 import LoginPage from '../pages/LoginPage/LoginPage.tsx';
 import LeadsPageContainer from '../pages/LeadsPageContainer';
@@ -22,7 +23,6 @@ import BrandingPage from '../pages/BrandingPage';
 import EmbeddingScriptsPage from '../pages/EmbeddingScriptsPage';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import AIBlocksPageContainer from '../pages/AIBlocksPage/index.tsx';
-import RedirectGuard from './RedirectGaurd.tsx';
 import InsightsPageContainer from '../pages/InsightsPageContainer.tsx';
 import IntegrationsPage from '../pages/IntegrationsPage/IntegrationsPage.tsx';
 import OAuthCallbackPage from '../pages/OAuthCallbackPage.tsx';
@@ -40,164 +40,169 @@ const { LOGIN } = AppRoutesEnum;
 const routes = [
   {
     path: '/',
-    element: <Root />,
+    element: <RootLayout />,
     children: [
-      {
-        path: '',
-        element: <ProtectedRoute element={<Dashboard />} />,
-        children: [],
-      },
       {
         path: LOGIN.replace(/\/+$/, ''),
         element: <LoginPage />,
         children: [],
       },
       {
-        path: '/:tenantName?',
-        element: <RedirectGuard />,
+        path: '',
+        element: <TenantLayout />,
         children: [
           {
-            path: 'conversations',
-            element: <ProtectedRoute element={<ConversationsV2PageContainer />} />,
+            path: '',
+            element: <ProtectedRoute element={<Dashboard />} />,
+            children: [],
           },
           {
-            path: 'conversations/leads',
-            element: <ProtectedRoute element={<LeadsV2PageContainer />} />,
-          },
-          {
-            path: 'conversations/link-clicks',
-            element: <ProtectedRoute element={<LeadsPageContainer />} />,
-          },
-          {
-            path: 'conversations/leads/:sessionID',
-            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
-          },
-          {
-            path: 'conversations/link-clicks/:sessionID',
-            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
-          },
-          {
-            path: 'conversations/:sessionID',
-            element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
-          },
-          {
-            path: 'active-conversations',
-            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
-          },
-          {
-            path: 'active-conversations/assigned',
-            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
-          },
-          {
-            path: 'active-conversations/pinned',
-            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
-          },
-          {
-            path: 'active-conversations/live/:sessionID',
-            element: <ProtectedRoute element={<ActiveConversationsPage />} />,
-          },
-          {
-            path: 'agent',
+            path: '/:tenantName?',
             children: [
               {
-                path: 'knowledge-base',
-                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                path: 'conversations',
+                element: <ProtectedRoute element={<ConversationsV2PageContainer />} />,
               },
               {
-                path: 'knowledge-base/webpages/:webPageID?',
-                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                path: 'conversations/leads',
+                element: <ProtectedRoute element={<LeadsV2PageContainer />} />,
               },
               {
-                path: 'knowledge-base/documents/:documentID?',
-                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                path: 'conversations/link-clicks',
+                element: <ProtectedRoute element={<LeadsPageContainer />} />,
               },
               {
-                path: 'knowledge-base/videos',
-                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                path: 'conversations/leads/:sessionID',
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
               },
               {
-                path: 'knowledge-base/slides',
-                element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                path: 'conversations/link-clicks/:sessionID',
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
               },
               {
-                path: 'workflow',
-                element: <ProtectedRoute element={<WorkflowPage />} />,
+                path: 'conversations/:sessionID',
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
               },
               {
-                path: 'branding',
-                element: <ProtectedRoute element={<BrandingPage />} />,
-              },
-            ],
-          },
-          {
-            path: 'training',
-            children: [
-              {
-                path: 'playground',
-                element: <ProtectedRoute element={<PlaygroundPage />} />,
+                path: 'active-conversations',
+                element: <ProtectedRoute element={<ActiveConversationsPage />} />,
               },
               {
-                path: 'playground/preview',
-                element: <ProtectedRoute element={<PlaygroundPreviewPage />} />,
-              },
-            ],
-          },
-          {
-            path: 'insights',
-            element: <ProtectedRoute element={<InsightsPageContainer />} />,
-          },
-          {
-            path: 'companies',
-            element: <ProtectedRoute element={<CompaniesV2PageContainer />} />,
-          },
-          {
-            path: 'visitors',
-            element: <ProtectedRoute element={<VisitorsV2PageContainer />} />,
-          },
-          {
-            path: 'icp',
-            element: <ProtectedRoute element={<IcpV2PageContainer />} />,
-          },
-          {
-            path: 'ai-blocks',
-            element: <ProtectedRoute element={<AIBlocksPageContainer />} />,
-            children: [
-              {
-                index: true,
-                element: <ProtectedRoute element={<AIBlocksPage />} />,
+                path: 'active-conversations/assigned',
+                element: <ProtectedRoute element={<ActiveConversationsPage />} />,
               },
               {
-                path: ':blockId',
-                element: <ProtectedRoute element={<DynamicBlockPage />} />,
-              },
-            ],
-          },
-          {
-            path: 'settings',
-            children: [
-              {
-                path: 'integrations',
-                element: <ProtectedRoute element={<IntegrationsPage />} />,
+                path: 'active-conversations/pinned',
+                element: <ProtectedRoute element={<ActiveConversationsPage />} />,
               },
               {
-                path: 'calendar',
-                element: <ProtectedRoute element={<CalendarPage />} />,
+                path: 'active-conversations/live/:sessionID',
+                element: <ProtectedRoute element={<ActiveConversationsPage />} />,
               },
               {
-                path: 'calendar/add-calendar',
-                element: <ProtectedRoute element={<CalendarPage />} />,
+                path: 'agent',
+                children: [
+                  {
+                    path: 'knowledge-base',
+                    element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                  },
+                  {
+                    path: 'knowledge-base/webpages/:webPageID?',
+                    element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                  },
+                  {
+                    path: 'knowledge-base/documents/:documentID?',
+                    element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                  },
+                  {
+                    path: 'knowledge-base/videos',
+                    element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                  },
+                  {
+                    path: 'knowledge-base/slides',
+                    element: <ProtectedRoute element={<DataSourcesContainer />} />,
+                  },
+                  {
+                    path: 'workflow',
+                    element: <ProtectedRoute element={<WorkflowPage />} />,
+                  },
+                  {
+                    path: 'branding',
+                    element: <ProtectedRoute element={<BrandingPage />} />,
+                  },
+                ],
               },
               {
-                path: 'profile',
-                element: <ProtectedRoute element={<AdminProfilePage />} />,
+                path: 'training',
+                children: [
+                  {
+                    path: 'playground',
+                    element: <ProtectedRoute element={<PlaygroundPage />} />,
+                  },
+                  {
+                    path: 'playground/preview',
+                    element: <ProtectedRoute element={<PlaygroundPreviewPage />} />,
+                  },
+                ],
               },
               {
-                path: 'sdr-settings',
-                element: <ProtectedRoute element={<SdrSettingsPage />} />,
+                path: 'insights',
+                element: <ProtectedRoute element={<InsightsPageContainer />} />,
               },
               {
-                path: 'embeddings',
-                element: <ProtectedRoute element={<EmbeddingScriptsPage />} />,
+                path: 'companies',
+                element: <ProtectedRoute element={<CompaniesV2PageContainer />} />,
+              },
+              {
+                path: 'visitors',
+                element: <ProtectedRoute element={<VisitorsV2PageContainer />} />,
+              },
+              {
+                path: 'icp',
+                element: <ProtectedRoute element={<IcpV2PageContainer />} />,
+              },
+              {
+                path: 'ai-blocks',
+                element: <ProtectedRoute element={<AIBlocksPageContainer />} />,
+                children: [
+                  {
+                    index: true,
+                    element: <ProtectedRoute element={<AIBlocksPage />} />,
+                  },
+                  {
+                    path: ':blockId',
+                    element: <ProtectedRoute element={<DynamicBlockPage />} />,
+                  },
+                ],
+              },
+              {
+                path: 'settings',
+                children: [
+                  {
+                    path: 'integrations',
+                    element: <ProtectedRoute element={<IntegrationsPage />} />,
+                  },
+                  {
+                    path: 'calendar',
+                    element: <ProtectedRoute element={<CalendarPage />} />,
+                  },
+                  {
+                    path: 'calendar/add-calendar',
+                    element: <ProtectedRoute element={<CalendarPage />} />,
+                  },
+                  {
+                    path: 'profile',
+                    element: <ProtectedRoute element={<AdminProfilePage />} />,
+                  },
+                  {
+                    path: 'sdr-settings',
+                    element: <ProtectedRoute element={<SdrSettingsPage />} />,
+                  },
+                  {
+                    path: 'embeddings',
+                    element: <ProtectedRoute element={<EmbeddingScriptsPage />} />,
+                  },
+                ],
               },
             ],
           },

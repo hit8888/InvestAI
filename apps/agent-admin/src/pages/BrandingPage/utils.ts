@@ -6,7 +6,8 @@ import {
 import { updateBrandingAgentConfigs } from '@meaku/core/adminHttp/api';
 import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantIdentifier, deepCompare } from '@meaku/core/utils/index';
+import { deepCompare } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 // Utility function to extract field-specific error messages
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -149,7 +150,7 @@ export const handleConfigUpdate = async (
         updateFieldValues,
         fieldName,
         agentId: agentId,
-        tenantName: getTenantIdentifier()?.['tenant-name'],
+        tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
         errorMessage: 'Unable to update branding page agent configs',
       },
     });

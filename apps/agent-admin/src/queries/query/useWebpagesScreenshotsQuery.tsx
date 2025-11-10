@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getWebpageScreenshots } from '@meaku/core/adminHttp/api';
 import { WebpagesScreenshotsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getWebpagesScreenshotsDataKey = (tenantName: string, urls: string[]): unknown[] => [
   'webpages-screenshots-data',
@@ -25,10 +25,10 @@ const useWebpagesScreenshotsQuery = (
   payload: WebpagesScreenshotsDataQueryPayload,
   options: WebpagesScreenshotsDataQueryOptions = {},
 ): UseQueryResult<WebpagesScreenshotsDataResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
 
   const webpagesScreenshotsDataQuery = useQuery({
-    queryKey: getWebpagesScreenshotsDataKey(tenantName, payload.urls),
+    queryKey: getWebpagesScreenshotsDataKey(tenantName ?? '', payload.urls),
     queryFn: async () => {
       const response = await getWebpageScreenshots(payload);
       return response.data;

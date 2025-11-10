@@ -1,13 +1,11 @@
 import { SPECIAL_CHARS_REGEX } from '../constants/regex';
 import apiClient from '../http/client';
-import { SessionApiResponse, WebSocketMessage } from '../types';
+import { OrganizationDetailsResponse, SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
-import { OrganizationDetailsResponse } from '../types/admin/api';
 import DateUtil from './dateUtils';
 import isEqual from 'lodash/isEqual';
 
 export { checkIsArtifactMessage, checkIsEventMessage, isMessageAnalyticsEvent, isStreamMessage } from './messageUtils';
-export { getTenantFromUrl, getTenantIdentifierFromUrl } from './getTenantFromUrl';
 
 export const CONVERSATIONS_PAGE = 'conversations';
 export const LEADS_PAGE = 'leads';
@@ -66,35 +64,17 @@ export const RGB_PRIMARY_COLOR = 'rgb(var(--primary))';
 export const RGB_WHITE_SHADE_COLOR = 'rgba(255, 255, 255, 0.32)';
 export const BREAKOUT_COLOR = '#4E46DC';
 
-export const setTenantIdentifier = (tenantObj: OrganizationDetailsResponse) => {
-  localStorage.setItem('admin_tenant_identifier', JSON.stringify(tenantObj));
-};
-
 export const getTenantIdentifier = () => {
   try {
-    const tenantIdentifier = localStorage.getItem('admin_tenant_identifier');
-    return tenantIdentifier ? JSON.parse(tenantIdentifier) : null;
+    const value = localStorage.getItem('admin_tenant_identifier');
+    if (value === null) {
+      return null;
+    }
+    return JSON.parse(value) as OrganizationDetailsResponse;
   } catch (error) {
-    console.warn('Error getting tenant identifier from local storage', error);
+    console.warn('Error reading tenant identifier:', error);
     return null;
   }
-};
-
-export const getTenantFromLocalStorage = () => {
-  return getTenantIdentifier()?.['tenant-name'];
-};
-
-export const getAccessTokenFromLocalStorage = () => {
-  return localStorage.getItem('accessToken');
-};
-
-export const getTenantActiveAgentId = (): number => {
-  const tenantIdentifier = getTenantIdentifier();
-  return tenantIdentifier?.agentId ?? 1;
-};
-
-export const getUserEmailFromLocalStorage = () => {
-  return localStorage.getItem('userEmail');
 };
 
 export const setMessageIndexForAddingAIMessage = () => {

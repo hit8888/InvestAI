@@ -9,7 +9,7 @@ import {
   UserProfileNotFoundError,
   UserProfileServerError,
 } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {
   data: UpdateUserProfilePayload;
@@ -27,7 +27,7 @@ const useUpdateUserProfileMutation = (
   options?: UseUpdateUserProfileMutationOptions,
 ): UseMutationResult<UserProfileUpdateResponse, AxiosError<UserProfileUpdateError>, MutationVariables> => {
   const queryClient = useQueryClient();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useMutation({
     mutationFn: async ({ data }: MutationVariables): Promise<UserProfileUpdateResponse> => {

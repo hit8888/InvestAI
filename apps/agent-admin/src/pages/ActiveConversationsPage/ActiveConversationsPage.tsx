@@ -4,13 +4,12 @@ import withPageViewWrapper from '../../pages/PageViewWrapper';
 import { AppRoutesEnum } from '../../utils/constants';
 import ActiveConversationsLayout from '../../components/ActiveConversationsComp/ActiveConversationsLayout';
 import { ActiveConversationsProvider } from '../../context/ActiveConversationsContext';
-import { useAuth } from '../../context/AuthProvider';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const ActiveConversationsBasePage = () => {
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const orgList = userInfo?.organizations;
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const organization = orgList?.find((org) => org['tenant-name'] === tenantName);
   const activeConversationsEnabled = organization?.active_conversations_enabled;
 

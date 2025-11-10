@@ -5,7 +5,7 @@ import useAssignSdrMutation from '../../queries/mutation/useAssignSdrMutation';
 import toast from 'react-hot-toast';
 import AssignRepPopover from './AssignRepPopover';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type IProps = {
   listValue: SdrAssignment;
@@ -39,7 +39,7 @@ const AssignRepValue = ({ listValue, prospectId }: IProps) => {
         component: 'AssignRepValue function',
         additionalData: {
           prospectId,
-          tenantName: getTenantFromLocalStorage(),
+          tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
           errorMessage: 'Unable to assign SDR',
         },
       });

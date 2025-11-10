@@ -4,8 +4,8 @@ import { CreatePromptPayload, useDeletePrompt, useUpdatePrompt } from '../../que
 import { RefObject, useState } from 'react';
 import toast from 'react-hot-toast';
 import { trackError } from '@meaku/core/utils/error';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
 import { UseMutationResult } from '@tanstack/react-query';
+import { useSessionStore } from '../../stores/useSessionStore';
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import Button from '@breakout/design-system/components/Button/index';
@@ -165,7 +165,7 @@ const PromptArea = ({
         component: 'handlePromptSave function',
         additionalData: {
           agentId,
-          tenantName: getTenantIdentifier()?.['tenant-name'],
+          tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
           errorMessage: `Unable to save ${title}`,
           payload: promptToSave.prompt,
           error: err?.response?.data,

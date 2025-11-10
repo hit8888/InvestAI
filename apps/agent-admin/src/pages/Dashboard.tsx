@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import withPageViewWrapper from '../pages/PageViewWrapper';
 import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/CustomFilterDropdown';
-import { useAuth } from '../context/AuthProvider';
-import { setupTenantAndAgent } from '../utils/apiCalls';
+import { useSessionStore } from '../stores/useSessionStore';
 import toast from 'react-hot-toast';
-import { getDashboardBasicPathURL } from '../utils/common';
+import { buildPathWithTenantBase } from '../utils/navigation';
 import { DEFAULT_ROUTE } from '../utils/constants';
 
 const Dashboard = () => {
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const navigate = useNavigate();
   const organizationsList = userInfo?.organizations;
   const organizationsOptions =
@@ -17,9 +16,8 @@ const Dashboard = () => {
   const handleSelectOrganization = async (option: string | null) => {
     const orgItem = organizationsList?.find((item) => item?.name === option);
     if (orgItem) {
-      await setupTenantAndAgent(orgItem);
-      const basicPathURL = getDashboardBasicPathURL(orgItem['tenant-name'] ?? '');
-      navigate(`${basicPathURL}/${DEFAULT_ROUTE}`);
+      const tenantName = orgItem['tenant-name'] ?? '';
+      navigate(buildPathWithTenantBase(tenantName, DEFAULT_ROUTE), { replace: true });
     } else {
       toast.error('Organization not found');
       navigate('/');

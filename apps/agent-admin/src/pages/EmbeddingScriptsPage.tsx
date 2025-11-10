@@ -3,12 +3,12 @@ import Card from '../components/AgentManagement/Card.tsx';
 import CardItem from '../components/AgentManagement/CardItem.tsx';
 import CardTitleAndDescription from '../components/AgentManagement/CardTitleAndDescription.tsx';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { getTenantActiveAgentId, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import CodeBlock from '@breakout/design-system/components/layout/CodeBlock';
+import { useSessionStore } from '../stores/useSessionStore';
 
 const EmbeddingScriptsPage = () => {
-  const tenantName = getTenantFromLocalStorage();
-  const agentId = getTenantActiveAgentId();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   const defaultScriptCode = `<script
   async

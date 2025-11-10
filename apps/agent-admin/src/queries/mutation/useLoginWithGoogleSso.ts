@@ -1,6 +1,7 @@
 import { loginWithGoogleSso } from '@meaku/core/adminHttp/api';
 import { LoginWithGoogleSsoPayload } from '@meaku/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { processLoginResponse } from '../../utils/apiCalls';
 
 type LoginWithGoogleSsoResult = ReturnType<typeof loginWithGoogleSso> extends Promise<infer T> ? T : never;
 
@@ -12,8 +13,7 @@ const useLoginWithGoogleSso = (
   const mutation = useMutation({
     mutationFn: async (payload) => {
       const response = await loginWithGoogleSso(payload);
-
-      return response.data;
+      return processLoginResponse(response);
     },
     ...options,
   });

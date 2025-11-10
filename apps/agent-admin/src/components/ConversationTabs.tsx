@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@breakout/design-system/lib/cn';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { AppRoutesEnum } from '../utils/constants';
 import SingleTabDisplay from './ConversationDetailsComp/SingleTabDisplay';
 import LinkClicksIcon from '@breakout/design-system/components/icons/link-clicks-icon';
 import ActiveLeadsIcon from '@breakout/design-system/components/icons/active-leads-icon';
 import AllConversationsIcon from '@breakout/design-system/components/icons/all-conversations-icon';
+import { useSessionStore } from '../stores/useSessionStore';
 
 type TabConfig = {
   path: string;
@@ -31,9 +31,7 @@ export const CONVERSATION_TABS: TabConfig[] = [
   },
 ];
 
-export const isTabActive = (tabPath: string, pathname: string) => {
-  const tenantName = getTenantFromLocalStorage();
-
+export const isTabActive = (tabPath: string, pathname: string, tenantName: string | null | undefined) => {
   const normalizedPath = tenantName ? pathname.replace(`/${tenantName}`, '') : pathname;
   if (normalizedPath === '/') return tabPath === `/${AppRoutesEnum.CONVERSATIONS}`;
 
@@ -53,7 +51,7 @@ export const isTabActive = (tabPath: string, pathname: string) => {
 const ConversationTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const handleTabClick = (path: string) => {
     const basePath = tenantName ? `/${tenantName}${path}` : path;
@@ -63,7 +61,7 @@ const ConversationTabs = () => {
   return (
     <div className="sticky top-0 z-10 flex items-start self-stretch border-b border-primary/10 bg-white pt-4">
       {CONVERSATION_TABS.map(({ path, label, icon: Icon }) => {
-        const isActive = isTabActive(path, location.pathname);
+        const isActive = isTabActive(path, location.pathname, tenantName);
         return (
           <SingleTabDisplay
             key={path}

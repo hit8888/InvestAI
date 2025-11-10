@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { CommonControlsProps, getFilterAppliedValues, getSortedPrompts } from './utils.ts';
 import { Prompt, usePrompts } from '../../queries/query/usePrompts.ts';
 import { useCreatePrompt } from '../../queries/mutation/usePromptMutations.ts';
-import { getTenantActiveAgentId } from '@meaku/core/utils/index';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import LoadingState from './LoadingState.tsx';
 import PromptHeader from './PromptHeader.tsx';
 import PromptArea from './PromptArea.tsx';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const SinglePromptTextarea = ({
   title,
@@ -16,7 +16,7 @@ const SinglePromptTextarea = ({
   exampleDescription,
   textareaPlaceholder,
 }: CommonControlsProps) => {
-  const agentId = getTenantActiveAgentId();
+  const agentId = useSessionStore((state) => state.activeTenant?.agentId ?? 1);
 
   const allAppliedFilterValues = useMemo(() => {
     return getFilterAppliedValues(promptType, agentId);

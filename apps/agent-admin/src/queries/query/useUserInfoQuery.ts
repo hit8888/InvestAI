@@ -16,7 +16,7 @@ const useUserInfoQuery = (options: UserInfoQueryOptions = {}): UseQueryResult<Us
     queryKey: getUserInfoKey(),
     queryFn: async () => {
       const response = await getUserDataFromMeAPI();
-      const organizations = response?.data?.organizations ?? [];
+      const organizations = response?.data?.organizations?.filter((org) => org['tenant-name'] !== '') ?? [];
 
       if (organizations.length > 0) {
         organizations.sort((a, b) => a.name?.localeCompare(b.name ?? '') ?? 0);

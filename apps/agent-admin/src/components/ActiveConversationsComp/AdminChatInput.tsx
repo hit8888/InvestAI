@@ -15,7 +15,7 @@ import AttachmentSelectionDialog from './AttachmentSelectionDialog';
 
 import { ActiveConversationAttachmentOption } from '../../utils/admin-types';
 import { useDebouncedTyping } from '@meaku/shared/hooks/useDebouncedTyping';
-import { useAuth } from '../../context/AuthProvider';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type ChatInputContainerProps = {
   onSendMessage: SendAdminMessageFn;
@@ -67,7 +67,7 @@ const AdminChatInput = ({
   children,
   onTypingChange,
 }: ChatInputContainerProps) => {
-  const { userInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = useState(userInfo?.default_hitl_join_message || '');
   const [selectedAttachmentOption, setSelectedAttachmentOption] = useState<ActiveConversationAttachmentOption>(

@@ -1,8 +1,8 @@
 import { getTopQuestionsAskedByUser } from '@meaku/core/adminHttp/api';
 import { TopQuestionsByUserResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {
   start_date: string;
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const useTopQuestionsAskedByUsers = ({ start_date, end_date, timezone, enabled = true }: IProps) => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const hasAllRequiredParams = Boolean(start_date && end_date && timezone);
 

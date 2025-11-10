@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { UpdateUserProfilePayload } from '@meaku/core/types/admin/api';
 import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
-import { useAuth } from '../../context/AuthProvider';
+import { useSessionStore } from '../../stores/useSessionStore';
 import useUpdateUserProfileMutation from '../../queries/mutation/useUpdateUserProfileMutation';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
@@ -24,7 +24,8 @@ export type ProfileFormData = z.infer<typeof profileFormSchema>;
 export const useAdminProfile = () => {
   const [isUploadingProfilePicture, setIsUploadingProfilePicture] = useState(false);
 
-  const { userInfo, updateUserInfo } = useAuth();
+  const userInfo = useSessionStore((state) => state.userInfo);
+  const updateUserInfo = useSessionStore((state) => state.updateUserInfo);
 
   // React Hook Form setup
   const form = useForm<ProfileFormData>({

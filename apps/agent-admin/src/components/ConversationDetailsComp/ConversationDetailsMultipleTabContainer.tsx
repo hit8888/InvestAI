@@ -6,7 +6,7 @@ import MultipleTabSelectContainer from './MultipleTabSelectContainer';
 import { ConversationDetailsTabsValueEnum } from '../../utils/constants';
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import ProspectAndCompanyDetailsDisplayContainerShimmer from '../ShimmerComponent/ProspectAndCompanyDetailsDisplayContainerShimmer';
-import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 type IProps = {

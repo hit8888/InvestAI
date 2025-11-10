@@ -3,7 +3,7 @@ import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/Cu
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import PaginationArrowButton from './PaginationArrowButton';
-import useAdminEventAnalytics from '@meaku/core/hooks/useAdminEventAnalytics';
+import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';

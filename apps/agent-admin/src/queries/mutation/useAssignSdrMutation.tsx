@@ -2,7 +2,7 @@ import { useMutation, useQueryClient, UseMutationResult } from '@tanstack/react-
 import { AxiosResponse, AxiosError } from 'axios';
 import { assignSdrManually } from '@meaku/core/adminHttp/api';
 import { AssignSdrRequest, AssignSdrResponse } from '@meaku/core/types/admin/api';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {
   data: AssignSdrRequest;
@@ -17,7 +17,7 @@ const useAssignSdrMutation = (
   options?: UseAssignSdrMutationOptions,
 ): UseMutationResult<AssignSdrResponse, AxiosError, MutationVariables> => {
   const queryClient = useQueryClient();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useMutation({
     mutationFn: async ({ data }: MutationVariables): Promise<AssignSdrResponse> => {

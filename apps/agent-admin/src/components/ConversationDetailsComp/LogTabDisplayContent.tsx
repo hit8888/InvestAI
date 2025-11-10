@@ -2,12 +2,12 @@ import { useConversationDetails } from '../../context/ConversationDetailsContext
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
 import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
 
 const LogTabDisplayContent = () => {
   const { chatHistory, conversation, feedbackData } = useConversationDetails();
-  const logoURL = getTenantIdentifier()?.['logo'];
+  const logoURL = useSessionStore((state) => state.activeTenant?.['logo']) ?? null;
 
   return (
     <div className="flex max-h-[900px] w-full flex-col overflow-auto bg-gray-25">

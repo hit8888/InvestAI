@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { nanoid } from 'nanoid';
+import { useSessionStore } from '../stores/useSessionStore';
 import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';
 import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
@@ -40,8 +40,8 @@ const useAdminConversationsWebSocket = ({
   const setAISuggestionMessage = useMessageStore((state) => state.setAISuggestionMessage);
   const setIsGeneratingAIResponse = useJoinConversationStore((state) => state.setIsGeneratingAIResponse);
 
-  const tenant = getTenantFromLocalStorage();
-  const token = getAccessTokenFromLocalStorage();
+  const tenant = useSessionStore((state) => state.activeTenant?.['tenant-name']);
+  const token = useSessionStore((state) => state.accessToken);
   const adminConversationsWsUrl =
     tenant && token
       ? `${getWebsocketBaseUrl()}/tenant/ws/join-conversation/?tenant=${tenant}&token=${token}&session_id=${sessionId}`

@@ -2,8 +2,8 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getFilterPreferences } from '@meaku/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { FilterPreferencesResponseType } from '@meaku/core/types/admin/api';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getFilterPreferencesKey = (tableName: string, tenantName: string): readonly unknown[] => [
   'filter-preferences',
@@ -20,7 +20,7 @@ const useFilterPreferencesQuery = ({
   tableName,
   queryOptions,
 }: IProps): UseQueryResult<FilterPreferencesResponseType> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   return useQuery({
     queryKey: getFilterPreferencesKey(tableName, tenantName ?? ''),
     queryFn: async (): Promise<FilterPreferencesResponseType> => {

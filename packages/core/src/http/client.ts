@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { ENV } from '../types/env';
-import { getTenantFromUrl } from '../utils/getTenantFromUrl';
 import { trackError } from '../utils/error';
+import { getTenantIdentifier } from '../utils';
 
 const apiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
@@ -14,7 +14,7 @@ const apiClient = axios.create({
 // Add request interceptor to set x-tenant-name header before each request
 apiClient.interceptors.request.use(
   (config) => {
-    config.headers['x-tenant-name'] = config.headers['x-tenant-name'] || getTenantFromUrl();
+    config.headers['x-tenant-name'] = config.headers['x-tenant-name'] || getTenantIdentifier()?.['tenant-name'];
     return config;
   },
   (error) => {

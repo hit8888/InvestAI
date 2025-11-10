@@ -1,9 +1,19 @@
+import { Navigate } from 'react-router-dom';
 import LoginForm from '../../components/LoginForm';
 import { Toaster } from 'react-hot-toast';
 import QouteSlider from './components/QouteSlider';
 import { QOUTE_SLIDES } from './constants';
+import { useSessionStore } from '../../stores/useSessionStore';
+import { getDefaultRoute } from '../../utils/navigation';
 
 const LoginPage = () => {
+  const { isAuthenticated } = useSessionStore();
+
+  // Don't render login form if authenticated (while redirecting)
+  if (isAuthenticated) {
+    return <Navigate to={getDefaultRoute()} replace />;
+  }
+
   return (
     <>
       <div className="relative flex h-screen min-h-[720px] w-full bg-[#FBFBFE] p-4">

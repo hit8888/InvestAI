@@ -1,19 +1,32 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import SidebarV2 from '../components/SidebarV2/SidebarV2';
 import usePageRouteState from '../hooks/usePageRouteState';
-import useAuthHandler from '../hooks/useAuthHandler';
 import { cn } from '@breakout/design-system/lib/cn';
 import { SidebarProvider } from '../context/SidebarContext';
+import { useAuthInitializer } from '../hooks/useAuthInitializer';
+import { AppRoutesEnum } from '../utils/constants';
 
-const Root = () => {
+const RootLayout = () => {
   const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page, isTrainingPlaygroundPreviewPage } =
     usePageRouteState();
-  const { initialized } = useAuthHandler();
+  const location = useLocation();
+  const { isLoading, shouldRedirectToLogin } = useAuthInitializer();
+  const navigate = useNavigate();
+
+  // Redirect to login if tokens are missing and not already on login/OAuth pages
+  useEffect(() => {
+    if (shouldRedirectToLogin && !isLoginPage && !isOAuthCallbackPage) {
+      const currentPath = location.pathname + location.search;
+      localStorage.setItem('redirectAfterLogin', JSON.stringify(currentPath));
+      navigate(`/${AppRoutesEnum.LOGIN}`, { replace: true });
+    }
+  }, [shouldRedirectToLogin, isLoginPage, isOAuthCallbackPage, navigate, location.pathname, location.search]);
 
   const notShowingSidebarCondition =
     !isLoginPage && !isDashboardPage && !isOAuthCallbackPage && !isTrainingPlaygroundPreviewPage;
 
-  if (!initialized) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center space-y-4">
@@ -58,4 +71,4 @@ const Root = () => {
   );
 };
 
-export default Root;
+export default RootLayout;

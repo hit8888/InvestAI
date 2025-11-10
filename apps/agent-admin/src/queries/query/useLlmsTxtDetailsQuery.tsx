@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getLlmsTxtDetails } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 // Types
 export type LlmTxtStatus = 'in_progress' | 'completed' | 'error';
@@ -30,7 +30,7 @@ interface IProps {
 }
 
 const useLlmsTxtDetailsQuery = ({ dataSourceId, queryOptions }: IProps): UseQueryResult<LlmsTxtDetailsResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   return useQuery({
     queryKey: getLlmsTxtDetailsKey(tenantName ?? '', dataSourceId),

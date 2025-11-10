@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { keepPreviousData } from '@tanstack/react-query';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../stores/useSessionStore';
 
 interface UseQueryOptionsProps {
   cacheTime?: number;
@@ -11,7 +11,7 @@ export const useQueryOptions = ({
   cacheTime = 300000, // 5 minutes default
   enabled: customEnabled,
 }: UseQueryOptionsProps = {}) => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   return useMemo(
     () => ({
       enabled: customEnabled !== undefined ? !!tenantName && customEnabled : !!tenantName,

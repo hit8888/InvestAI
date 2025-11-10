@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getIcps } from '@meaku/core/adminHttp/api';
 import { IcpsResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getIcpsKey = (tenantName: string, companyName?: string | null, domain?: string | null): unknown[] => [
   'icps-data',
@@ -21,12 +21,12 @@ type IcpsQueryPayload = {
 type IcpsQueryOptions = BreakoutQueryOptions<IcpsResponse, IcpsKey>;
 
 const useIcpsQuery = (payload: IcpsQueryPayload = {}, options: IcpsQueryOptions = {}): UseQueryResult<IcpsResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const companyName = payload.companyName;
   const domain = payload.domain;
 
   const icpsQuery = useQuery({
-    queryKey: getIcpsKey(tenantName, companyName, domain),
+    queryKey: getIcpsKey(tenantName ?? '', companyName, domain),
     queryFn: async () => {
       if (!companyName && !domain) {
         throw new Error('Company name or domain is required');

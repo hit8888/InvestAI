@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getSessionDetailsByProspectId, getSessionDetailsBySessionId } from '@meaku/core/adminHttp/api';
 import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getSessionDetailsDataKey = (tenantName: string, sessionID?: string, prospectId?: string): unknown[] => [
   'session-details-data',
@@ -24,12 +24,12 @@ const useSessionDetailsQuery = (
   payload: SessionDetailsDataQueryPayload = {},
   options: SessionDetailsDataQueryOptions = {},
 ): UseQueryResult<SessionDetailsDataResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const sessionId = payload.sessionId;
   const prospectId = payload.prospectId;
 
   const sessionDetailsDataQuery = useQuery({
-    queryKey: getSessionDetailsDataKey(tenantName, sessionId, prospectId),
+    queryKey: getSessionDetailsDataKey(tenantName ?? '', sessionId, prospectId),
     queryFn: async () => {
       if (prospectId) {
         const response = await getSessionDetailsByProspectId(prospectId);

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { useAuth } from './AuthProvider';
+import { useSessionStore } from '../stores/useSessionStore';
 import useEntityMetadataQuery from '../queries/query/useEntityMetadataQuery';
 import {
   transformEntityDataRelatedEntities,
@@ -23,7 +23,7 @@ type EntityMetadataProviderProps = {
 const EntityMetadataContext = createContext<EntityMetadataContextType | undefined>(undefined);
 
 export const EntityMetadataProvider: React.FC<EntityMetadataProviderProps> = ({ children, pageType }) => {
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
   const {
     data: entityMetadata,
     isLoading,

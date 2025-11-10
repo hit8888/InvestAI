@@ -1,10 +1,10 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
-import { useAuth } from '../context/AuthProvider';
+import { useSessionStore } from '../stores/useSessionStore';
 import { LOGOUT_BUTTON_TITLE } from '../utils/constants';
 import defaultProfile from '../assets/default-profile.jpg';
 
 const ProfilePicActionButton = () => {
-  const { logout } = useAuth();
+  const logout = useSessionStore((state) => state.logout);
   const profilePic = defaultProfile;
   return (
     <Popover>

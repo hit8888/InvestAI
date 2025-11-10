@@ -1,8 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { ENV } from '@meaku/core/types/env';
-import { authInstance } from '../contexts/AuthInstance';
 import { regenerateTokens } from './api';
-import { getAccessTokenFromLocalStorage, getTenantFromLocalStorage, getTenantFromUrl } from '@meaku/core/utils/index';
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -16,6 +14,33 @@ interface TokenError {
     message: string;
   }>;
 }
+
+/**
+ * Token provider interface for dependency injection
+ * Allows the axios client to work with any token storage mechanism (localStorage, Zustand store, etc.)
+ */
+export interface TokenProvider {
+  getAccessToken?: () => string | null;
+  getRefreshToken?: () => string | null;
+  setAccessToken?: (token: string) => void;
+  setRefreshToken?: (token: string) => void;
+  removeAccessToken?: () => void;
+  removeRefreshToken?: () => void;
+  getTenantIdentifier?: () => string | null;
+  setTenantIdentifier?: (tenantId: string) => void;
+  removeTenantIdentifier?: () => void;
+}
+
+// Token provider instance (no-op if not initialized)
+let tokenProvider: TokenProvider | null = null;
+
+/**
+ * Initialize the admin API client with a token provider
+ * This allows using Zustand store or any other token storage mechanism
+ */
+export const initializeAdminApiClient = (provider: TokenProvider) => {
+  tokenProvider = provider;
+};
 
 const adminApiClient = axios.create({
   baseURL: ENV.VITE_BASE_API_URL,
@@ -44,18 +69,19 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// Add request interceptor to conditionally set "x-tenant-name" & "Authorization" header before each request
+// Add request interceptor to conditionally set "Authorization" header and tenant header before each request
 adminApiClient.interceptors.request.use(
   (config) => {
-    // PRIORITY: Get tenant from URL first (source of truth), fallback to localStorage
-    const tenantName = getTenantFromUrl() || getTenantFromLocalStorage();
-    if (tenantName) {
-      config.headers['x-tenant-name'] = tenantName;
-    }
-    const accessToken = getAccessTokenFromLocalStorage();
+    const accessToken = tokenProvider?.getAccessToken?.();
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
+
+    const tenantIdentifier = tokenProvider?.getTenantIdentifier?.();
+    if (tenantIdentifier) {
+      config.headers['x-tenant-name'] = tenantIdentifier;
+    }
+
     return config;
   },
   (error) => {
@@ -89,7 +115,9 @@ adminApiClient.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          const refreshToken = localStorage.getItem('refreshToken');
+          // Get refresh token from token provider
+          const refreshToken = tokenProvider?.getRefreshToken?.();
+
           if (!refreshToken) {
             throw new Error('No refresh token available');
           }
@@ -97,12 +125,8 @@ adminApiClient.interceptors.response.use(
           const response = await regenerateTokens({ refresh: refreshToken });
           const { access } = response.data;
 
-          localStorage.setItem('accessToken', access);
-
-          // Update tokens and user data using auth context
-          if (authInstance) {
-            authInstance.saveTokens(access, refreshToken);
-          }
+          // Update access token via token provider
+          tokenProvider?.setAccessToken?.(access);
 
           // Update authorization header
           originalRequest.headers['Authorization'] = `Bearer ${access}`;
@@ -120,14 +144,10 @@ adminApiClient.interceptors.response.use(
       }
       // Check if it's a refresh token expiration
       else if (errorData.code === 'token_not_valid' && !errorData.messages) {
-        // Clear all tokens and auth state
-        if (authInstance?.logout) {
-          authInstance.logout();
-        }
-
-        if (authInstance?.clearAuthValuesFromLocalStorage) {
-          authInstance.clearAuthValuesFromLocalStorage();
-        }
+        // Clear auth state via token provider
+        tokenProvider?.removeAccessToken?.();
+        tokenProvider?.removeRefreshToken?.();
+        tokenProvider?.removeTenantIdentifier?.();
 
         // Process any queued requests with the error
         processQueue(error, null);

@@ -2,9 +2,9 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { getCompaniesRowData } from '@meaku/core/adminHttp/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { CompaniesPayload, CompaniesTableResponseSchema } from '@meaku/core/types/admin/api';
 import { z } from 'zod';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type CompaniesTableResponse = z.infer<typeof CompaniesTableResponseSchema>;
 
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const useCompaniesTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<CompaniesTableResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const companiesQuery = useQuery({
     queryKey: getCompaniesTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<CompaniesTableResponse> => {

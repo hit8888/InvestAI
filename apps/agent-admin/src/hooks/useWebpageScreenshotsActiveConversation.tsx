@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ActiveConversation } from '../context/ActiveConversationsContext';
 import useWebpagesScreenshotsQuery from '../queries/query/useWebpagesScreenshotsQuery';
+import { useSessionStore } from '../stores/useSessionStore';
 
 type UseWebpageScreenshotsActiveConversationProps = {
   conversations: ActiveConversation[] | undefined;
@@ -16,7 +16,7 @@ const useWebpageScreenshotsActiveConversation = ({
   setActiveConversations,
 }: UseWebpageScreenshotsActiveConversationProps) => {
   const queryClient = useQueryClient();
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
 
   const webpagesScreenshotsUrls = useMemo(() => {
     return (

@@ -3,7 +3,7 @@ import { getUserProfile } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { UserProfileResponse } from '@meaku/core/types/admin/api';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 const getUserProfileKey = (tenantName: string): unknown[] => ['user-profile', tenantName];
 
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const useUserProfileQuery = ({ queryOptions }: IProps = {}): UseQueryResult<UserProfileResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const userProfileQuery = useQuery({
     queryKey: getUserProfileKey(tenantName ?? ''),
     queryFn: async (): Promise<UserProfileResponse> => {

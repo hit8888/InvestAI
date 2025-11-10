@@ -4,7 +4,7 @@ import { getVisitorsRowData } from '@meaku/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 import { VisitorsTableResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { getTenantFromLocalStorage } from '@meaku/core/utils/index';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type ConversationTableVariables = ConversationsPayload;
 
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const useVisitorsTableQuery = ({ payload, queryOptions }: IProps): UseQueryResult<VisitorsTableResponse> => {
-  const tenantName = getTenantFromLocalStorage();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']);
   const visitorsQuery = useQuery({
     queryKey: getVisitorsTableKey(payload, tenantName ?? ''),
     queryFn: async (): Promise<VisitorsTableResponse> => {

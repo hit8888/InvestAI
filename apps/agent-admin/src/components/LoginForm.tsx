@@ -5,9 +5,9 @@ import useGenerateOtp from '../queries/mutation/useGenerateOtp';
 import useVerifyOtp from '../queries/mutation/useVerifyOtp';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthProvider';
 import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
 import useGoogleSso from '../hooks/useGoogleSso';
+import { handleLoginAndRedirection } from '../utils/authHelpers';
 import { HelpCircle } from 'lucide-react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
@@ -16,8 +16,6 @@ import GoogleIcon from '@breakout/design-system/components/icons/google-icon';
 
 const LoginForm = () => {
   const { initAuth, authInProgress } = useGoogleSso();
-
-  const { saveTokens, handleLoginAndRedirection } = useAuth();
 
   const formRef = useRef<AdminLoginFormRef>(null);
 
@@ -35,8 +33,7 @@ const LoginForm = () => {
     {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       onSuccess: (data: any) => {
-        saveTokens(data.access, data.refresh, data.user);
-        handleLoginAndRedirection(data.user, navigate);
+        handleLoginAndRedirection(data.user, data.access, data.refresh, navigate);
       },
     },
   );
@@ -51,8 +48,7 @@ const LoginForm = () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
       handleResetForm();
-      saveTokens(data.access, data.refresh, data.user);
-      handleLoginAndRedirection(data.user, navigate);
+      handleLoginAndRedirection(data.user, data.access, data.refresh, navigate);
     },
     onError: (error) => {
       setHasOtpBeenSent(false);

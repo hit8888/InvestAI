@@ -1,6 +1,7 @@
 import { verifyOtp } from '@meaku/core/adminHttp/api';
 import { VerifyOtpPayload } from '@meaku/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { processLoginResponse } from '../../utils/apiCalls';
 
 type VerifyOtpResult = ReturnType<typeof verifyOtp> extends Promise<infer T> ? T : never;
 
@@ -10,8 +11,7 @@ const useVerifyOtp = (options?: Omit<UseMutationOptions<VerifyOtpResult, Error, 
   const mutation = useMutation({
     mutationFn: async (payload) => {
       const response = await verifyOtp(payload);
-
-      return response.data;
+      return processLoginResponse(response);
     },
     ...options,
   });
