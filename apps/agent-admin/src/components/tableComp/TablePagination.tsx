@@ -3,8 +3,6 @@ import CustomFilterDropdown from '@breakout/design-system/components/Dropdown/Cu
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import PaginationArrowButton from './PaginationArrowButton';
-import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
 import { PaginationPageType } from '@meaku/core/types/admin/admin';
 
@@ -21,7 +19,6 @@ interface PaginationProps {
 }
 
 const TablePagination: React.FC<PaginationProps> = ({
-  tableType,
   isLoading,
   paginationPerPageOptions,
   totalItems,
@@ -31,14 +28,8 @@ const TablePagination: React.FC<PaginationProps> = ({
   handlePageChange,
   currentPage,
 }) => {
-  const { trackAdminEvent } = useAdminEventAnalytics();
-
   const handlePerPageOperation = (selectedOption: string | null) => {
     onItemsPerPageChange(Number(selectedOption));
-    trackAdminEvent(ANALYTICS_EVENT_NAMES.TABLE_PAGINATION_PER_PAGE_CHANGE, {
-      itemsPerPage: Number(selectedOption),
-      tableType,
-    });
   };
 
   const isFirstPage = currentPage === 1;

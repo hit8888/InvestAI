@@ -32,8 +32,6 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
-import useAdminEventAnalytics from '../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import usePageRouteState from '../hooks/usePageRouteState.tsx';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
@@ -55,7 +53,6 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType,
   });
-  const { trackAdminEvent } = useAdminEventAnalytics();
 
   useInitializeFilterPreferences(pageType);
 
@@ -125,13 +122,6 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
   const resultantLeadsColumns = useFormattedColumns(leadsPageColumns);
 
   const haveNoRecords = totalRecords === 0;
-  const handleRowItemClick = (rowData: unknown) => {
-    const leadDetails = (rowData ?? {}) as LeadsTableDisplayContent;
-
-    trackAdminEvent(ANALYTICS_EVENT_NAMES.LEADS_ROW_CLICKED, {
-      session_id: leadDetails.session_id,
-    });
-  };
 
   const renderTableContent = () => {
     if (isLoading) {
@@ -158,7 +148,6 @@ const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CL
         tabularData={leadsData}
         columnHeaderData={resultantLeadsColumns as ColumnDefinition[]}
         filterContainerHeight={filterContainerHeight}
-        onRowItemClick={handleRowItemClick}
         isSidebarOpen={isSidebarOpen}
         setSortValue={setSortValue}
         sortValue={sortValue}

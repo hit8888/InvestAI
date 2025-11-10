@@ -13,8 +13,11 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import GoogleIcon from '@breakout/design-system/components/icons/google-icon';
+import useAdminEventAnalytics from '../hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 const LoginForm = () => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
   const { initAuth, authInProgress } = useGoogleSso();
 
   const formRef = useRef<AdminLoginFormRef>(null);
@@ -33,6 +36,9 @@ const LoginForm = () => {
     {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       onSuccess: (data: any) => {
+        trackAdminEvent(ANALYTICS_EVENT_NAMES.ADMIN_DASHBOARD.ADMIN_DASHBOARD_LOGIN, {
+          login_method: 'email',
+        });
         handleLoginAndRedirection(data.user, data.access, data.refresh, navigate);
       },
     },
@@ -48,6 +54,9 @@ const LoginForm = () => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     onSuccess: (data: any) => {
       handleResetForm();
+      trackAdminEvent(ANALYTICS_EVENT_NAMES.ADMIN_DASHBOARD.ADMIN_DASHBOARD_LOGIN, {
+        login_method: 'otp',
+      });
       handleLoginAndRedirection(data.user, data.access, data.refresh, navigate);
     },
     onError: (error) => {

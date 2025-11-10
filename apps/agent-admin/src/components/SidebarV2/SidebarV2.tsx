@@ -29,6 +29,8 @@ import {
   SidebarV2SettingsGroup,
 } from '../../utils/sidebarV2Constants';
 import Separator from '@breakout/design-system/components/layout/separator';
+import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 /**
  * Animation configuration for accordion expand/collapse
@@ -48,6 +50,7 @@ const accordionAnimation = {
  * New sidebar with accordion-based navigation structure
  */
 const SidebarV2 = () => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
   const location = useLocation();
   const orgList = useSessionStore((state) => state.userInfo?.organizations) || [];
   const organization = useSessionStore((state) => state.activeTenant);
@@ -120,6 +123,10 @@ const SidebarV2 = () => {
         e.preventDefault();
         return;
       }
+
+      trackAdminEvent(ANALYTICS_EVENT_NAMES.ADMIN_DASHBOARD.ADMIN_DASHBOARD_SIDE_NAV_ITEM_CLICKED, {
+        navItem: item.navItem,
+      });
 
       if (item.isActionItem && item.navUrl === '#logout') {
         e.preventDefault();

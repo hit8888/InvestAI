@@ -30,8 +30,6 @@ import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
 import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
-import useAdminEventAnalytics from '../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import TableViewShimmer from './ShimmerComponent/TableViewShimmer.tsx';
 import { SortValues } from '@meaku/core/types/admin/sort';
@@ -45,7 +43,6 @@ const ConversationsTableContainer = () => {
   const { currentPage, itemsPerPage, handlePageChange, handleItemsPerPageChange } = usePagination({
     pageType: CONVERSATIONS_PAGE,
   });
-  const { trackAdminEvent } = useAdminEventAnalytics();
 
   useInitializeFilterPreferences(CONVERSATIONS_PAGE);
 
@@ -119,14 +116,6 @@ const ConversationsTableContainer = () => {
 
   const haveNoRecords = totalRecords === 0;
 
-  const handleRowItemClick = (rowData: unknown) => {
-    const conversationDetails = (rowData ?? {}) as ConversationsTableDisplayContent;
-
-    trackAdminEvent(ANALYTICS_EVENT_NAMES.CONVERSATIONS_ROW_CLICKED, {
-      session_id: conversationDetails.session_id,
-    });
-  };
-
   const renderTableContent = () => {
     if (isLoading) {
       return <TableViewShimmer />;
@@ -158,7 +147,6 @@ const ConversationsTableContainer = () => {
         tabularData={conversationsData}
         columnHeaderData={resultantConversationsColumns as ColumnDefinition[]}
         filterContainerHeight={filterContainerHeight}
-        onRowItemClick={handleRowItemClick}
         isSidebarOpen={isSidebarOpen}
         setSortValue={setSortValue}
         sortValue={sortValue}

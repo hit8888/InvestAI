@@ -9,6 +9,7 @@ import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import { RotatingText } from '../../components/RotatingText';
 import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
 import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useEffect } from 'react';
 
 const CLOSE_BUTTON_SHOW_DELAY = 2000;
 
@@ -48,6 +49,12 @@ const NudgeActionCta = ({ module, setActiveFeature, onDismiss }: NudgeActionCtaP
       module_type: module.module_type,
     });
   };
+
+  useEffect(() => {
+    trackEvent(ANALYTICS_EVENT_NAMES.COMMAND_BAR.NUDGE_ACTION_CTA_LOAD, {
+      module_type: module.module_type,
+    });
+  }, [module.module_type, trackEvent]);
 
   return (
     <motion.div
