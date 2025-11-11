@@ -3,16 +3,18 @@ import { detectFormSubmissions, watchForNewForms } from './domDetectors/formSubm
 import type { TrackingConfigType } from '../../types/api/configuration_response';
 import type { UpdateProspectPayload } from '../../types/api/update_prospect_request';
 
+type AnalyticsType = 'click' | 'form_submission';
+
 function initDomElementClickDetection(
   trackingConfig: TrackingConfigType,
-  onSubmit: (requestData: UpdateProspectPayload) => void,
+  onSubmit: (requestData: UpdateProspectPayload, type: AnalyticsType) => void,
 ) {
   const { track_clicks, element_selectors } = trackingConfig;
   const cleanupFunctions: (() => void)[] = [];
 
   if (track_clicks) {
-    const clickCleanup = detectElementClicks(element_selectors, onSubmit);
-    const watchCleanup = watchForNewElements(element_selectors, onSubmit);
+    const clickCleanup = detectElementClicks(element_selectors, (payload) => onSubmit(payload, 'click'));
+    const watchCleanup = watchForNewElements(element_selectors, (payload) => onSubmit(payload, 'click'));
     cleanupFunctions.push(clickCleanup, watchCleanup);
   }
 
@@ -23,14 +25,14 @@ function initDomElementClickDetection(
 
 function initFormSubmissionDetection(
   trackingConfig: TrackingConfigType,
-  onSubmit: (requestData: UpdateProspectPayload) => void,
+  onSubmit: (requestData: UpdateProspectPayload, type: AnalyticsType) => void,
 ) {
   const { track_form_submissions } = trackingConfig;
   const cleanupFunctions: (() => void)[] = [];
 
   if (track_form_submissions) {
-    const formCleanup = detectFormSubmissions(onSubmit);
-    const watchCleanup = watchForNewForms(onSubmit);
+    const formCleanup = detectFormSubmissions((payload) => onSubmit(payload, 'form_submission'));
+    const watchCleanup = watchForNewForms((payload) => onSubmit(payload, 'form_submission'));
     cleanupFunctions.push(formCleanup, watchCleanup);
     // detectProgrammaticSubmissions();
   }
@@ -42,7 +44,7 @@ function initFormSubmissionDetection(
 
 export function initProspectAnalytics(
   trackingConfig: TrackingConfigType,
-  onSubmit: (requestData: UpdateProspectPayload) => void,
+  onSubmit: (requestData: UpdateProspectPayload, type: AnalyticsType) => void,
 ) {
   const elementCleanup = initDomElementClickDetection(trackingConfig, onSubmit);
   const formCleanup = initFormSubmissionDetection(trackingConfig, onSubmit);
