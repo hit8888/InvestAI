@@ -36,7 +36,7 @@ const IcpForm = React.memo(
       <div className="flex justify-end">
         <Button
           type="submit"
-          variant="primary"
+          variant="system"
           buttonStyle="rightIcon"
           rightIcon={<Save className="h-4 w-4" />}
           disabled={!canSave || !agentId}

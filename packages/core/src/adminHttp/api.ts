@@ -65,6 +65,8 @@ import {
   BlocksResponse,
   Block,
   UpdateBlockPayload,
+  RecalculateRelevanceScoreResponse,
+  TaskStatus,
 } from '@meaku/core/types/admin/api';
 import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
 
@@ -428,3 +430,9 @@ export const updateBlock = (agentId: number, blockId: number, payload: UpdateBlo
 // Video validation API
 export const validateVideoUrls = (payload: VideoValidationRequest) =>
   adminApiClient.post<VideoValidationResponse>(`tenant/api/videos/validate/`, payload);
+
+// Relevance score recalculation API
+export const recalculateRelevanceScore = () =>
+  adminApiClient.post<RecalculateRelevanceScoreResponse>(`/tenant/api/companies/relevance-score/recalculate/`);
+
+export const getTaskStatus = (taskId: number) => adminApiClient.get<TaskStatus>(`/tenant/api/tasks/status/${taskId}/`);

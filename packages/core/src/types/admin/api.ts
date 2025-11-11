@@ -1327,3 +1327,28 @@ export const VideoValidationResponseSchema = z.object({
   errors: z.record(z.string(), z.string()),
 });
 export type VideoValidationResponse = z.infer<typeof VideoValidationResponseSchema>;
+
+export const TaskStatusSchema = z.object({
+  id: z.number(),
+  task_type: z.string(),
+  status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED', 'FAILED']),
+  total_items: z.number(),
+  processed_items: z.number(),
+  success_count: z.number(),
+  failure_count: z.number(),
+  error_message: z.string().nullable(),
+  created_on: z.string(),
+  updated_on: z.string(),
+  created_by: z.number(),
+  created_by_username: z.string(),
+  progress_percentage: z.number(),
+});
+export type TaskStatus = z.infer<typeof TaskStatusSchema>;
+
+export const RecalculateRelevanceScoreResponseSchema = z.object({
+  task_id: z.number(),
+  workflow_id: z.string(),
+  message: z.string(),
+  task: TaskStatusSchema,
+});
+export type RecalculateRelevanceScoreResponse = z.infer<typeof RecalculateRelevanceScoreResponseSchema>;

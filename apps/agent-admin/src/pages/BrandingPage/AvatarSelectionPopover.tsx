@@ -151,7 +151,7 @@ const AvatarSelectionPopover: React.FC<AvatarSelectionPopoverProps> = ({
         >
           <div className="flex flex-col gap-4">
             {/* Avatar Grid */}
-            <div className="hide-scrollbar grid max-h-80 grid-cols-5 gap-3 overflow-auto p-2">
+            <div className="grid max-h-80 grid-cols-5 gap-3 overflow-auto p-2">
               {avatarComponents.map((AvatarComponent, index) => (
                 <button
                   key={index}

@@ -13,7 +13,13 @@ import { useUpdateCompanyICPConfig } from '../../queries/mutation/useUpdateCompa
 import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
 import { useCompanyICPConfig } from '../../queries/query/useCompanyICPConfig';
-import { EditIcon, SaveIcon } from 'lucide-react';
+import { EditIcon, SaveIcon, RotateCw } from 'lucide-react';
+import { useRecalculateRelevanceScore } from '../../queries/mutation/useRecalculateRelevanceScore';
+import { useTaskStatusPolling } from '../../hooks/useTaskStatusPolling';
+import { taskPollingService } from '../../services/taskPollingService';
+import { taskToastManager } from '../../services/taskToastManager';
+import { taskPollingManager } from '@meaku/core/managers/taskPolling/TaskPollingManager';
+import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 
 interface CompanyICPConfigProps {
   title: string;
@@ -27,12 +33,19 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [configValue, setConfigValue] = useState('');
   const [originalValue, setOriginalValue] = useState('');
+  const [taskId, setTaskId] = useState<number | null>(null);
 
   // Query to fetch the company ICP config
   const { data: companyIcpData, isLoading, error, refetch: refetchCompanyICPConfig } = useCompanyICPConfig(agentId);
 
   // Mutation to update the company ICP config
   const updateMutation = useUpdateCompanyICPConfig(agentId);
+
+  // Mutation to recalculate relevance score
+  const recalculateMutation = useRecalculateRelevanceScore();
+
+  // Polling for task status
+  const { taskStatus, isPolling } = useTaskStatusPolling(taskId, taskId !== null);
 
   // Initialize state when data is loaded
   useEffect(() => {
@@ -42,13 +55,47 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
     }
   }, [companyIcpData]);
 
+  // Check for active tasks on mount and reconnect
+  useEffect(() => {
+    // Get active tasks from store (read once, don't subscribe)
+    const activeTasks = taskPollingManager.getActiveTasks();
+
+    // Find any active relevance score recalculation tasks
+    const activeTaskIds = Object.keys(activeTasks)
+      .map((k) => Number(k))
+      .filter((id) => {
+        const status = activeTasks[id];
+        return (
+          status &&
+          status.task_type === 'RELEVANCE_SCORE_RECALCULATION' &&
+          (status.status === 'PENDING' || status.status === 'IN_PROGRESS')
+        );
+      });
+
+    // If there's an active task, reconnect to it
+    if (activeTaskIds.length > 0) {
+      const firstActiveTaskId = activeTaskIds[0];
+      setTaskId(firstActiveTaskId);
+      // Ensure polling and toast management are active
+      taskPollingService.startPolling(firstActiveTaskId);
+      taskToastManager.startManaging(firstActiveTaskId);
+    }
+  }, []); // Only run on mount
+
+  // Manage toasts for the current task
+  useEffect(() => {
+    if (taskId) {
+      taskToastManager.startManaging(taskId);
+    }
+
+    return () => {
+      // Don't stop managing when component unmounts - toasts should continue
+      // The toast manager will clean up when task completes or fails
+    };
+  }, [taskId]);
+
   const handleClickOnEdit = () => {
     setClickedOnEdit(!clickedOnEdit);
-  };
-
-  const handleCancelClick = () => {
-    setConfigValue(originalValue);
-    setClickedOnEdit(false);
   };
 
   const handleSaveClick = async () => {
@@ -85,6 +132,44 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
     }
   };
 
+  // Clear taskId when task completes or fails
+  useEffect(() => {
+    if (taskStatus && (taskStatus.status === 'COMPLETED' || taskStatus.status === 'FAILED')) {
+      setTaskId(null);
+    }
+  }, [taskStatus]);
+
+  const handleReRunClick = async () => {
+    try {
+      const response = await recalculateMutation.mutateAsync();
+      const newTaskId = response.task_id;
+      setTaskId(newTaskId);
+
+      // Start polling and toast management (will continue even if component unmounts)
+      taskPollingService.startPolling(newTaskId);
+      taskToastManager.startManaging(newTaskId);
+
+      setConfigValue(originalValue);
+      setClickedOnEdit(false);
+    } catch (err) {
+      trackError(err, {
+        action: 'Recalculate Relevance Score',
+        component: 'CompanyICPConfig',
+        additionalData: {
+          agentId,
+          tenantName: useSessionStore.getState().activeTenant?.['tenant-name'],
+          errorMessage: 'Unable to start relevance score recalculation',
+          error: err,
+        },
+      });
+
+      ErrorToastMessage({
+        title: 'Failed to start relevance score recalculation',
+        duration: 5000,
+      });
+    }
+  };
+
   if (isLoading) {
     return <LoadingState title={title} description={description} />;
   }
@@ -118,12 +203,23 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
                 </Typography>
               </div>
             )}
-            <div className="mt-4 flex w-full justify-end">
+            <div className="mt-4 flex w-full justify-end gap-4">
+              <Button
+                size="small"
+                variant="system_secondary"
+                buttonStyle="rightIcon"
+                rightIcon={<RotateCw className="h-4 w-4" />}
+                onClick={handleReRunClick}
+                disabled={recalculateMutation.isPending || isPolling}
+              >
+                Re-Run
+              </Button>
               <Button
                 size="small"
                 buttonStyle="rightIcon"
-                variant="primary"
+                variant="system"
                 rightIcon={<EditIcon />}
+                disabled={recalculateMutation.isPending || isPolling}
                 onClick={handleClickOnEdit}
               >
                 Edit
@@ -144,16 +240,7 @@ const CompanyICPConfig: FC<CompanyICPConfigProps> = ({ title, description, infoT
               <div className="flex gap-4">
                 <Button
                   size="small"
-                  variant="secondary"
-                  buttonStyle="rightIcon"
-                  onClick={handleCancelClick}
-                  disabled={updateMutation.isPending}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  size="small"
-                  variant="primary"
+                  variant="system"
                   buttonStyle="rightIcon"
                   rightIcon={<SaveIcon />}
                   onClick={handleSaveClick}
