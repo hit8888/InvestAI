@@ -236,6 +236,10 @@ export const downloadFromUrl = (url: string, filename: string, doneCallback?: ()
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
       doneCallback?.();
+    })
+    .catch((error) => {
+      console.error('Error downloading from url', error);
+      doneCallback?.();
     });
 };
 
@@ -252,9 +256,6 @@ export const extractFilenameFromUrl = (url: string): string => {
     const filename = urlWithoutParams.split('/').pop() || '';
     return filename;
   } catch {
-    // Fallback: try to extract filename from the string directly
-    const urlWithoutParams = url.split('?')[0].split('#')[0];
-    const filename = urlWithoutParams.split('/').pop() || '';
-    return filename;
+    return 'Breakout file';
   }
 };
