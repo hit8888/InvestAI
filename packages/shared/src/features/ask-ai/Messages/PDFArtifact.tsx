@@ -103,7 +103,7 @@ export const PDFArtifact = ({
                       >
                         <LucideIcon
                           name="download"
-                          className="w-3 h-3 text-foreground group-hover:text-popover-foreground transition-colors"
+                          className="w-3 h-3 text-foreground group-hover:text-white transition-colors"
                         />
                       </button>
                     </TooltipTrigger>
@@ -111,7 +111,7 @@ export const PDFArtifact = ({
                       side="top"
                       sideOffset={4}
                       portalContainer={tooltipPortalContainer}
-                      className="bg-foreground text-popover-foreground text-xs"
+                      className="bg-foreground text-white text-xs"
                     >
                       Download
                     </TooltipContent>
@@ -127,7 +127,7 @@ export const PDFArtifact = ({
                       >
                         <LucideIcon
                           name="external-link"
-                          className="w-3 h-3 text-foreground group-hover:text-popover-foreground transition-colors"
+                          className="w-3 h-3 text-foreground group-hover:text-white transition-colors"
                         />
                       </button>
                     </TooltipTrigger>
@@ -135,7 +135,7 @@ export const PDFArtifact = ({
                       side="top"
                       sideOffset={4}
                       portalContainer={tooltipPortalContainer}
-                      className="bg-foreground text-popover-foreground text-xs"
+                      className="bg-foreground text-white text-xs"
                     >
                       Open in new tab
                     </TooltipContent>
