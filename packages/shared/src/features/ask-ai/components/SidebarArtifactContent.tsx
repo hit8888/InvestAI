@@ -6,7 +6,7 @@ import ReactPlayer from 'react-player';
 interface SidebarArtifactContentProps {
   artifact: {
     url: string;
-    artifactType: 'VIDEO' | 'SLIDE_IMAGE' | 'PDF';
+    artifactType: 'VIDEO' | 'SLIDE_IMAGE';
     title: string;
   };
   videoError: string | null;
@@ -215,18 +215,6 @@ export const SidebarArtifactContent = ({
               </div>
             )}
           </>
-        ) : artifact.artifactType === 'PDF' ? (
-          <div className="w-full h-full flex items-center justify-center overflow-hidden">
-            <iframe
-              key={artifact.url}
-              src={artifact.url}
-              title={artifact.title}
-              className={`w-full h-full rounded-xl transition-all duration-700 ease-out delay-200 ${
-                isContentVisible ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{ border: 'none' }}
-            />
-          </div>
         ) : (
           <div className="w-full flex items-center justify-center overflow-hidden">
             <img

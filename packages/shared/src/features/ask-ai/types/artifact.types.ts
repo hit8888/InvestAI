@@ -21,7 +21,7 @@ export interface ImageState {
 
 export interface SidebarArtifactState {
   url: string;
-  artifactType: Exclude<ArtifactType, 'DEMO'>;
+  artifactType: Exclude<ArtifactType, 'DEMO' | 'PDF'>;
   title: string;
 }
 

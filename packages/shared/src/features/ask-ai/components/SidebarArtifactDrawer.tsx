@@ -10,7 +10,7 @@ interface SidebarArtifactDrawerProps {
   isOpen: boolean;
   artifact: {
     url: string;
-    artifactType: 'VIDEO' | 'SLIDE_IMAGE' | 'PDF';
+    artifactType: 'VIDEO' | 'SLIDE_IMAGE';
     title: string;
   } | null;
   videoError: string | null;
