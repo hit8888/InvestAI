@@ -5,3 +5,4 @@ export { default as VideoLibraryIcon } from './VideoLibraryIcon';
 export { default as ThumbsUp } from './ThumbsUp';
 export { default as KatyIcon } from './Katy';
 export { default as BookMeetingIcon } from './BookMeetingIcon';
+export { default as PDFAttachmentIcon } from './PDFAttachmentIcon';
