@@ -10,8 +10,8 @@ import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
 import { checkIsUserLeftMessage } from '@meaku/core/utils/messageUtils';
 import { MessageRole } from '@meaku/shared/types/message';
-import { useSessionStore } from 'src/stores/useSessionStore';
-import { getActiveJoinUser } from 'src/utils/conversationUtils';
+import { useSessionStore } from '../../stores/useSessionStore';
+import { getActiveJoinUser } from '../../utils/conversationUtils';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;

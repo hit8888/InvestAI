@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ActiveConversation } from 'src/context/ActiveConversationsContext';
+import { ActiveConversation } from '../context/ActiveConversationsContext';
 import toast, { ToastOptions } from 'react-hot-toast';
 import Typography from '@breakout/design-system/components/Typography/index';
 import Button from '@breakout/design-system/components/Button/index';
