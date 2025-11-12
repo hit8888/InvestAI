@@ -1,14 +1,13 @@
-import { useParams } from 'react-router-dom';
 import { useSessionStore } from '../stores/useSessionStore';
 import { getAgentIdFromTenant } from '../utils/apiCalls';
 import { useEffect, useState } from 'react';
 
 const usePlaygroundOptions = () => {
-  const { tenantName: tenantNameParam } = useParams();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const userInfo = useSessionStore((state) => state.userInfo);
   const activeTenant = useSessionStore((state) => state.activeTenant);
   const orgList = userInfo?.organizations;
-  const matchingOrg = orgList?.find((org) => org['tenant-name'] === tenantNameParam);
+  const matchingOrg = orgList?.find((org) => org['tenant-name'] === tenantName);
 
   const [orgAgentId, setOrgAgentId] = useState<number | null>(null);
 

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList } from '@breakout/design-system/components/shadcn-ui/breadcrumb';
 
@@ -10,6 +10,7 @@ import useLocationPath from '@meaku/core/hooks/useLocationPath';
 import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 import { CONVERSATION_TABS, isTabActive } from '../ConversationTabs';
 import { buildPathWithTenantBase } from '../../utils/navigation';
+import { useSessionStore } from '../../stores/useSessionStore';
 
 type IProps = {
   isLoading: boolean;
@@ -20,7 +21,7 @@ const ConversationsBreadCrumb = ({ isLoading, isDirectAccess }: IProps) => {
   const navigate = useNavigate();
   const { getConversationPath } = useLocationPath();
   const location = useLocation();
-  const { tenantName } = useParams();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
 
   const fromTab = useMemo(() => {
     const currentTab = CONVERSATION_TABS.find((tab) => isTabActive(tab.path, location.pathname, tenantName));

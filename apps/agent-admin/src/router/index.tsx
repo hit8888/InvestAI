@@ -73,15 +73,15 @@ const routes = [
               },
               {
                 path: 'conversations/leads/:sessionID',
-                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer />} />,
               },
               {
                 path: 'conversations/link-clicks/:sessionID',
-                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={true} />} />,
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer />} />,
               },
               {
                 path: 'conversations/:sessionID',
-                element: <ProtectedRoute element={<ConversationDetailsPageContainer isLeadsPage={false} />} />,
+                element: <ProtectedRoute element={<ConversationDetailsPageContainer />} />,
               },
               {
                 path: 'active-conversations',

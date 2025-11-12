@@ -1,92 +1,38 @@
-import { useParams } from 'react-router-dom';
-import withPageViewWrapper from '../pages/PageViewWrapper';
-import ConversationsBreadCrumb from '../components/ConversationDetailsComp/ConversationsBreadCrumb';
-import ConversationDetailsNavigatedHeader from '../components/ConversationDetailsComp/ConversationDetailsNavigatedHeader';
-import ConversationDetailsMultipleTabContainer from '../components/ConversationDetailsComp/ConversationDetailsMultipleTabContainer';
-import ErrorState from '@breakout/design-system/components/layout/ErrorState';
+import { Navigate, useParams } from 'react-router-dom';
+import useSessionDetailsQuery from '../queries/query/useSessionDetailsQuery';
+import { useSessionStore } from '../stores/useSessionStore';
+import { buildPathWithTenantBase } from '../utils/navigation';
+import { AppRoutesEnum } from '../utils/constants';
+import ConversationDetailsPageSkeleton from '../components/ShimmerComponent/ConversationDetailsPageSkeleton';
+import withPageViewWrapper from './PageViewWrapper';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
-import { useConversationDetails } from '../context/ConversationDetailsContext';
-import useConversationDetailsDataQuery from '../queries/query/useConversationDetailsDataQuery';
-import { useEffect, useMemo } from 'react';
-import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
-import { useQueryOptions } from '../hooks/useQueryOptions';
-
-type IProps = {
-  isDirectAccess: boolean;
-  isLeadsPage: boolean;
-};
-
-const ConversationDetailsPage = ({ isDirectAccess, isLeadsPage }: IProps) => {
-  const { conversation, handleSetConversationDetails, handleSetChatHistoryDetails, handleSetFeedbackDetails } =
-    useConversationDetails();
+const ConversationDetailsPage = () => {
   const { sessionID } = useParams<string>();
-  const companyName = conversation?.company ?? '';
-  // TODOS: NEED To Add handling for CompanyLogoURL
-  const navigatedHeaderDynamicValues = {
-    companyName,
-    sessionID: sessionID || '',
-    companyLogoUrl: '',
-  };
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
 
-  const queryOptions = useQueryOptions();
-
-  const { data, isLoading, isError, refetch } = useConversationDetailsDataQuery({
-    sessionID: sessionID || '',
-    queryOptions,
+  const { isLoading, isError, data } = useSessionDetailsQuery({
+    sessionId: sessionID,
   });
+  const prospectId = data?.prospect?.prospect_id;
 
-  const handleRefetch = () => {
-    refetch();
-  };
-
-  const detailsManager = useMemo(() => {
-    if (!data) return null;
-    return new ConversationDetailsDataResponseManager(data);
-  }, [data]);
-
-  // Fetch and process conversation details when session ID changes or when loading state changes.
   useEffect(() => {
-    if (!detailsManager || isLoading) return;
-
-    if (detailsManager.hasError()) {
-      console.error('Error in conversation details:', detailsManager.getError());
-      return;
+    if (isError) {
+      toast.error('Conversation not found');
     }
+  }, [isError]);
 
-    const chatHistoryMessages = detailsManager.getFormattedChatHistory();
-    handleSetChatHistoryDetails(chatHistoryMessages);
-
-    const conversationData = detailsManager.getFormattedConversationData();
-    handleSetConversationDetails(conversationData);
-
-    const feedbackData = detailsManager.getFeedback();
-    handleSetFeedbackDetails(feedbackData);
-
-    return () => {
-      // Cleanup code here
-      handleSetConversationDetails(null);
-      handleSetChatHistoryDetails([]);
-      handleSetFeedbackDetails([]);
-    };
-  }, [isLoading, detailsManager]);
-
-  if (isError || (detailsManager && detailsManager.hasError())) {
-    return <ErrorState refetch={handleRefetch} />;
+  if (isLoading) {
+    return <ConversationDetailsPageSkeleton />;
   }
 
-  return (
-    <div className="flex w-full flex-1 flex-col items-start self-stretch">
-      <div className="sticky top-0 z-10 w-full bg-white pt-5">
-        <ConversationsBreadCrumb isLoading={isLoading} isDirectAccess={isDirectAccess} />
-      </div>
-      <ConversationDetailsNavigatedHeader
-        isDirectAccess={isDirectAccess}
-        isLoading={isLoading}
-        {...navigatedHeaderDynamicValues}
-      />
-      <ConversationDetailsMultipleTabContainer isLoading={isLoading} isLeadsPage={isLeadsPage} />
-    </div>
-  );
+  if (prospectId) {
+    const conversationsPath = buildPathWithTenantBase(tenantName, AppRoutesEnum.CONVERSATIONS);
+    return <Navigate to={`${conversationsPath}?rowId=${prospectId}`} replace />;
+  }
+
+  return <Navigate to={buildPathWithTenantBase(tenantName, AppRoutesEnum.CONVERSATIONS)} replace />;
 };
 
 export default withPageViewWrapper(ConversationDetailsPage);
