@@ -46,6 +46,7 @@ const createJoinSessionEvent = (
     first_name: string;
     last_name: string;
     profile_picture: string | null;
+    user_id: number;
   },
 ): EventMessageContent => ({
   content,
@@ -54,6 +55,7 @@ const createJoinSessionEvent = (
     first_name: eventData.first_name,
     last_name: eventData.last_name,
     profile_picture: eventData.profile_picture,
+    user_id: eventData.user_id,
   },
 });
 
@@ -200,6 +202,7 @@ const ActiveConversationsLayout = () => {
             first_name: string;
             last_name: string;
             profile_picture: string | null;
+            user_id: number;
           },
         );
         break;
@@ -236,6 +239,7 @@ const ActiveConversationsLayout = () => {
         first_name: userInfo?.first_name ?? '',
         last_name: userInfo?.last_name ?? '',
         profile_picture: userInfo?.profile_picture ?? '',
+        user_id: userInfo?.id ?? '',
       }),
       message_type: 'EVENT',
     });
