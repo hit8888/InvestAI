@@ -351,7 +351,7 @@ export const getNumericConditionValue = (
 
       case 'contains': {
         const valueStr = String(value);
-        matches = numericThresholds.some((threshold) => valueStr.includes(String(threshold)));
+        matches = thresholds.some((threshold) => valueStr.includes(String(threshold)));
         break;
       }
     }

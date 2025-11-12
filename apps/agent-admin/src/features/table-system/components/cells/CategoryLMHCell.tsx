@@ -13,7 +13,7 @@ interface CategoryLMHCellProps {
   /** Optional tooltip text */
   tooltip?: string;
   labelAssignmentType?: LabelAssignmentType | null;
-  labelAssignmentValue?: Record<string | number, string> | null;
+  labelAssignmentValue?: Record<string, string> | Record<string, [Array<string | number>, string]> | null;
   labelPrefix?: string | null;
   labelSuffix?: string | null;
 }
@@ -76,7 +76,7 @@ export const CategoryLMHCell = ({
           <TooltipTrigger asChild>
             <span
               className={`text-sm font-normal ${colorClass} cursor-default`}
-            >{`${labelPrefix ? `${labelPrefix}` : ''}${displayText}${labelSuffix ? `${labelSuffix}` : ''}`}</span>
+            >{`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}</span>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
             {tooltip}
@@ -87,7 +87,7 @@ export const CategoryLMHCell = ({
   } else {
     return (
       <span className={`text-sm font-normal ${colorClass} cursor-default`} title={tooltip}>
-        {`${labelPrefix ? `${labelPrefix}` : ''}${displayText}${labelSuffix ? `${labelSuffix}` : ''}`}
+        {`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}
       </span>
     );
   }

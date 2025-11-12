@@ -63,7 +63,7 @@ export interface EntityMetadataColumn {
   label_prefix?: string | null;
   label_suffix?: string | null;
   label_assignment_type?: LabelAssignmentType | null;
-  label_assignment_value?: Record<string, string> | null;
+  label_assignment_value?: Record<string, string> | Record<string, [Array<string | number>, string]> | null;
 }
 
 /**

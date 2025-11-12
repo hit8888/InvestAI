@@ -71,7 +71,12 @@ export const smartRenderCell = ({ cellType, column, row, allColumns }: SmartRend
           value={primaryValue}
           tooltip={metadata.tooltip}
           labelAssignmentType={column.label_assignment_type as LabelAssignmentType | null}
-          labelAssignmentValue={column.label_assignment_value as Record<string, string> | null}
+          labelAssignmentValue={
+            (column.label_assignment_value as
+              | Record<string, string>
+              | Record<string, [Array<string | number>, string]>
+              | null) ?? null
+          }
           labelPrefix={column.label_prefix}
           labelSuffix={column.label_suffix}
         />

@@ -28,13 +28,17 @@ export const TextCell = ({
 
   let text = String(value);
 
-  if (labelAssignmentType === 'MAPPING' && labelAssignmentValue) {
-    text = labelAssignmentValue?.[value as string | number] || text;
+  if (
+    labelAssignmentType === 'MAPPING' &&
+    labelAssignmentValue &&
+    (typeof value === 'string' || typeof value === 'number')
+  ) {
+    text = labelAssignmentValue[value] ?? text;
   }
   // Use TruncatedText with custom tooltip if provided, or default behavior
   return (
     <TruncatedText
-      text={`${labelPrefix ? `${labelPrefix}` : ''}${text}${labelSuffix ? `${labelSuffix}` : ''}`}
+      text={`${labelPrefix ?? ''}${text}${labelSuffix ?? ''}`}
       maxWidth="200px"
       customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
       tooltipSide="top"
