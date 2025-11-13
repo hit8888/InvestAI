@@ -5,6 +5,7 @@ import { ViewType } from '@meaku/core/types/common';
 import AccountOffIcon from '../../icons/account-off-icon';
 import Typography from '../../Typography';
 import { Link } from 'react-router-dom';
+import DateUtil from '@meaku/core/utils/dateUtils';
 
 interface UserLeftInfoProps {
   message: WebSocketMessage;
@@ -13,9 +14,9 @@ interface UserLeftInfoProps {
 
 const UserLeftInfo = ({ message, viewType }: UserLeftInfoProps) => {
   const isUserLeftMessage = checkIsUserLeftMessage(message);
+  const isAdminView = viewType === ViewType.ADMIN;
 
-  // User left message is only shown in admin view
-  if (viewType !== ViewType.ADMIN || !isUserLeftMessage) {
+  if (!isUserLeftMessage) {
     return null;
   }
 
@@ -24,13 +25,16 @@ const UserLeftInfo = ({ message, viewType }: UserLeftInfoProps) => {
       <div className="flex items-center gap-4 rounded-3xl bg-transparent_gray_3 p-4">
         <AccountOffIcon />
         <div className="flex flex-col items-start gap-0.5">
-          <Typography variant="label-16-semibold">The user has left this chat.</Typography>
-          <Typography variant="body-14" color="textSecondary">
-            You can find this conversation in{' '}
-            <Link to="/conversations" className="text-base font-medium text-blue_sec-1000">
-              All Conversations
-            </Link>
+          <Typography variant="label-14-semibold">
+            The user left this conversation at {DateUtil.humanizeMessageTimestamp(message.timestamp)}
           </Typography>
+          {isAdminView && (
+            <Link to={`/conversations/${message.session_id}`}>
+              <Typography variant="label-14-medium" className="text-blue_sec-1000">
+                View Details
+              </Typography>
+            </Link>
+          )}
         </div>
       </div>
     </MessageItemLayout>

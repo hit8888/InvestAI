@@ -13,7 +13,6 @@ import {
   checkIsSalesResponseComplete,
   getFormArtifactMessage,
   getFormFilledEventByArtifactId,
-  getMediaArtifactMessage,
   isDemoOptionsMessage,
   isDiscoveryQuestion,
   isDisplayedAsTextMessage,
@@ -98,8 +97,6 @@ const MessageItem = ({
   const isDiscoveryMessage = !!discoveryMessage;
   const isCurrentDiscoveryMessage = isDiscoveryQuestion(message);
 
-  const mediaArtifactMessage = getMediaArtifactMessage(messagesWithSameResponseId);
-
   const formArtifactMessage = getFormArtifactMessage(messagesWithSameResponseId);
   const qualifiedFormFilledMessage = getFormFilledEventByArtifactId(
     messages,
@@ -143,8 +140,6 @@ const MessageItem = ({
     );
   };
 
-  const showingContentForDashboard = viewType === ViewType.DASHBOARD && isAIMessage && isTextMessage;
-
   // To show the text message, the message must be a text message, the content must not be empty, and the message must be a discovery message or the sales response must be complete
   const shouldShowTextMessage =
     isTextMessage && message.message.content !== '' && (isDiscoveryMessage ? isSalesResponseComplete : true);
@@ -157,10 +152,6 @@ const MessageItem = ({
   // For Current Message - To show the suggestions artifact, the sales response must be complete, the message must be an artifact message, and the artifact type must be suggestions
   const shouldShowSuggestions =
     isLastMessage && hasSalesResponseCompleteAndIsArtifactMessage && isSuggestionArtifact(message);
-
-  // To show the media artifact for admin, the media artifact message must exist, and the current message must not be a discovery message
-  const shouldShowMediaArtifactForAdmin =
-    showingContentForDashboard && !!mediaArtifactMessage && !isCurrentDiscoveryMessage;
 
   const renderOrb = () => (
     <Orb showOrb={showOrbFromConfig} state={orbState} color={primaryColor} orbLogoUrl={orbLogoUrl} />
@@ -208,10 +199,10 @@ const MessageItem = ({
         showMessageElementForDemoAgents={showMessageElementForDemoAgents}
       />
 
+      {getMessageArtifactPreviewContent(message, showMessageArtifactPreview)}
+
       {viewType === ViewType.USER || viewType === ViewType.ADMIN ? (
         <>
-          {getMessageArtifactPreviewContent(message, showMessageArtifactPreview)}
-
           <DemoArtifactPreview
             handleSendUserMessage={handleSendUserMessage}
             setDemoPlayingStatus={setDemoPlayingStatus}
@@ -229,10 +220,6 @@ const MessageItem = ({
           )}
         </>
       ) : null}
-
-      {!!mediaArtifactMessage &&
-        getMessageArtifactPreviewContent(mediaArtifactMessage, shouldShowMediaArtifactForAdmin)}
-
       {isCtaEventMessage && <CtaEventMessage event={message} handleSendUserMessage={handleSendUserMessage} />}
     </MessageItemErrorBoundary>
   );
