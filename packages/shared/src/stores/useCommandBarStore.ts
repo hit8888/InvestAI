@@ -8,7 +8,7 @@ import {
   type StreamResponseEventData,
 } from '../types/message';
 import { groupMessagesByResponseId } from '../utils/message-utils';
-import type { CommandBarSettings } from '@meaku/shared/types/common';
+import type { CommandBarSettings } from '../types/common';
 import { InitSessionResponse } from '../types/responses';
 
 // Typing indicator timeout duration in milliseconds
