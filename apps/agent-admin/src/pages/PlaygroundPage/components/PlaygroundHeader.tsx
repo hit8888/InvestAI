@@ -39,7 +39,7 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
         <TooltipWrapperDark
           showTooltip
           showArrow={false}
-          content="Reset the playground to its initial state"
+          content="Start a new session with existing configuration"
           trigger={
             <button
               onClick={onRefresh}
@@ -49,6 +49,7 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
               })}
             >
               <RotateCw className="h-4 w-4 text-gray-600" />
+              <span className="text-sm capitalize">Refresh</span>
             </button>
           }
           tooltipSide="bottom"

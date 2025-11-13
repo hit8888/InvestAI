@@ -24,7 +24,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const [authMode, setAuthMode] = useState<'password' | 'generateOtp' | 'enterOtp' | 'needHelp'>('password');
+  const [authMode, setAuthMode] = useState<'password' | 'generateOtp' | 'enterOtp' | 'needHelp'>('generateOtp');
   const [hasOtpBeenSent, setHasOtpBeenSent] = useState(false);
 
   const showPasswordField = authMode === 'password';
@@ -67,6 +67,7 @@ const LoginForm = () => {
     },
   });
 
+  const hideGoogleLogin = showOtpField || showNeedHelpField || isGenerateOtpPending;
   const isLoading = isLoginWithEmailPasswordPending || isGenerateOtpPending || isVerifyOtpPending;
 
   const handleResetForm = () => {
@@ -148,18 +149,18 @@ const LoginForm = () => {
               <button
                 onClick={handleToggleShowOtpLogin}
                 className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
-                  showPasswordField ? 'bg-white text-primary shadow' : 'text-gray-500'
-                }`}
-              >
-                Login with password
-              </button>
-              <button
-                onClick={handleToggleShowOtpLogin}
-                className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
                   showGenerateOtpField ? 'bg-white text-primary shadow' : 'text-gray-500'
                 }`}
               >
                 Log in with a code
+              </button>
+              <button
+                onClick={handleToggleShowOtpLogin}
+                className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
+                  showPasswordField ? 'bg-white text-primary shadow' : 'text-gray-500'
+                }`}
+              >
+                Login with password
               </button>
             </div>
           </div>
@@ -191,7 +192,7 @@ const LoginForm = () => {
           />
         )}
 
-        {showPasswordField && (
+        {!hideGoogleLogin && (
           <>
             <div className="flex w-full items-center gap-2 self-stretch">
               <hr className="flex-grow border-[#DCDAF8]" />

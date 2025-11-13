@@ -12,7 +12,7 @@ import usePlaygroundOptions from '../../hooks/usePlaygroundOptions';
 import { AppRoutesEnum } from '../../utils/constants';
 import { useSidebar } from '../../context/SidebarContext';
 import bcDefault from '/bc_default.png';
-import { jsonSafeParse } from '@meaku/core/utils/index';
+import { deepCompare, jsonSafeParse } from '@meaku/core/utils/index';
 
 export interface SettingsFormData {
   repeatUser: boolean;
@@ -27,7 +27,7 @@ export interface SettingsFormData {
 
 const DEFAULT_FORM_VALUES: SettingsFormData = {
   repeatUser: false,
-  provideFeedback: false,
+  provideFeedback: true,
   landingPageUrl: '',
   browsingHistory: [],
   utmParameters: [],
@@ -51,7 +51,8 @@ const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
 
 const AGENT_PLAYGROUND_BASE_URL = import.meta.env.VITE_AGENT_PLAYGROUND_BASE_URL;
 
-const PLAYGROUND_FORM_STORAGE_KEY = 'meaku_playground_form_data';
+const DEPRECATED_PLAYGROUND_FORM_STORAGE_KEYS = ['meaku_playground_form_data'];
+const PLAYGROUND_FORM_STORAGE_KEY = 'saved_playground_settings';
 
 const loadSavedFormData = (): SettingsFormData | null => {
   const saved = localStorage.getItem(PLAYGROUND_FORM_STORAGE_KEY);
@@ -138,7 +139,9 @@ const PlaygroundPage = () => {
       iframeRef.current.src = newUrl;
     }
 
-    saveFormData(formValues);
+    if (!deepCompare(formValues, DEFAULT_FORM_VALUES)) {
+      saveFormData(formValues);
+    }
     form.reset(formValues);
   };
 
@@ -148,8 +151,6 @@ const PlaygroundPage = () => {
   };
 
   const handleRefresh = () => {
-    handleClearAll();
-
     const newUrl = `${AGENT_PLAYGROUND_BASE_URL}?bo_tenant_id=${tenantName}&bo_agent_id=${orgAgentId}&${new URLSearchParams({ ...DEFAULT_PARAMS, ...NEW_SESSION_PARAMS }).toString()}`;
 
     setPreviewUrl(newUrl);
@@ -185,6 +186,12 @@ const PlaygroundPage = () => {
     }
   }, [form]);
 
+  useEffect(() => {
+    DEPRECATED_PLAYGROUND_FORM_STORAGE_KEYS.forEach((key) => {
+      localStorage.removeItem(key);
+    });
+  }, []);
+
   return (
     <div className="relative flex h-full max-h-screen w-full">
       <div
@@ -209,7 +216,7 @@ const PlaygroundPage = () => {
               onExternalPreview={form.handleSubmit((values) => handlePreviewAgent(values, true))}
               onClearAll={handleClearAll}
               isPreviewDisabled={!!previewUrl && !form.formState.isDirty}
-              isClearAllDisabled={!form.formState.isDirty}
+              isClearAllDisabled={deepCompare(form.getValues(), DEFAULT_FORM_VALUES)}
             />
           </>
         )}
