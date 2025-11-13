@@ -37,6 +37,7 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   // If not available, use initialSettings values, and if not available, use storage values
   const currentProspectId = config.prospect_id ?? initialSettings.prospect_id ?? storageValues?.prospectId;
   const currentSessionId = config.session_id ?? initialSettings.session_id ?? storageValues?.sessionId;
+  const currentDistinctId = storageValues?.distinctId;
 
   const dynamicConfigEnabled = useDelayedEnable(currentProspectId ? 0 : dynamic_config_start_delay_ms);
 
@@ -92,16 +93,15 @@ const PreloadContainer: FC<PreloadContainerProps> = ({ children, settings: initi
   );
 
   useEffect(() => {
-    if (!currentProspectId) {
-      const distinctId = nanoid();
-      setLocalStorageData({
-        distinctId,
-      });
-      updateCommonProperties({
-        distinct_id: distinctId,
-      });
+    let distinctId = currentDistinctId;
+
+    if (!distinctId) {
+      distinctId = nanoid();
+      setLocalStorageData({ distinctId: distinctId });
     }
-  }, [currentProspectId, updateCommonProperties]);
+
+    updateCommonProperties({ distinct_id: distinctId });
+  }, [currentDistinctId, updateCommonProperties]);
 
   // Initialise command bar after static config is available (prospect id does not exist)
   useEffect(() => {
