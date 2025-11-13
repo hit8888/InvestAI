@@ -1,8 +1,9 @@
 import type { FC, ReactElement } from 'react';
 import { useMemo } from 'react';
-import { CommandBarSettings } from '@meaku/core/types/common';
+import { CommandBarSettings } from '@meaku/shared/types/common';
 import { ensureProtocol, jsonSafeParse } from '@meaku/core/utils/index';
 import { getUrlParams } from '@meaku/core/utils/routing-utils';
+import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
 
 // Helper type to convert snake_case to camelCase
 type ToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${T}${Capitalize<ToCamelCase<U>>}` : S;
@@ -41,6 +42,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     rootBottomOffset: propRootBottomOffset,
     rootRightOffset: propRootRightOffset,
     feedbackEnabled: propFeedbackEnabled,
+    activeModule: propActiveModule,
   } = props;
 
   const settings = useMemo((): CommandBarSettings => {
@@ -73,6 +75,8 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
       root_bottom_offset: urlParams.root_bottom_offset ?? propRootBottomOffset,
       root_right_offset: urlParams.root_right_offset ?? propRootRightOffset,
       feedback_enabled: jsonSafeParse(urlParams.feedback_enabled).data ?? propFeedbackEnabled ?? false,
+      active_module:
+        CommandBarModuleTypeSchema.safeParse(urlParams.active_module ?? propActiveModule).data ?? undefined,
     };
   }, [
     propTenantId,
@@ -94,6 +98,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     propRootBottomOffset,
     propRootRightOffset,
     propFeedbackEnabled,
+    propActiveModule,
   ]);
 
   return children(settings);

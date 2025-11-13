@@ -1,7 +1,7 @@
 import { type FC, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { nanoid } from 'nanoid';
 
-import type { CommandBarSettings } from '@meaku/core/types/common';
+import type { CommandBarSettings } from '@meaku/shared/types/common';
 import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
 import useStaticConfigDataQuery from '@meaku/shared/network/http/queries/useStaticConfigDataQuery';
 import { useCommandBarStore } from '@meaku/shared/stores';

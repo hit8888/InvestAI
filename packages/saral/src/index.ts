@@ -1,92 +1,42 @@
 // Export all components
-export { Button, buttonVariants } from './button';
+export * from './button';
 export type { ButtonProps } from './button';
 
 // Export input component
-export { Input } from './input';
+export * from './input';
 export type { InputProps } from './input';
 
 // Export textarea component
-export { TextArea } from './text-area';
+export * from './text-area';
 
 // Export popover components
-export { Popover, PopoverTrigger, PopoverContent } from './popover';
+export * from './popover';
 
 // Export dropdown components
-export {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-} from './dropdown';
+export * from './dropdown';
 
 // Export command components
-export {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from './command';
+export * from './command';
 
 // Export dialog components
-export {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-  DialogTrigger,
-} from './dialog';
+export * from './dialog';
 export type { DialogProps } from './dialog';
 
 // Export tooltip components
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipArrow } from './tooltip';
+export * from './tooltip';
 
 // Export scroll area components
-export { ScrollArea, ScrollBar } from './scroll-area';
+export * from './scroll-area';
 
 // Export form components
 export { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, useForm } from './form';
 export type { UseFormReturnType } from './form';
 
 // Export select components
-export {
-  Select,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectLabel,
-  SelectItem,
-  SelectSeparator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-} from './select';
+export * from './select';
 
 // Export inline select components
-export {
-  InlineSelect,
-  InlineSelectTrigger,
-  InlineSelectValue,
-  InlineSelectContent,
-  InlineSelectItem,
-} from './inline-select';
+export * from './inline-select';
 
 // Export label components
 export { default as Label } from './label';
@@ -96,20 +46,18 @@ export * from './card-blocks';
 
 // Export typography components
 export { default as Typography } from './typography';
-export { typographyVariants } from './typography';
+export * from './typography';
 
 // Export video artifact component
-export { VideoArtifact } from './video-artifact';
+export * from './video-artifact';
 export type { VideoArtifactProps } from './video-artifact';
-// Export is direct video file component
-export { isDirectVideoFile } from './video-player';
 
 // Export image artifact component
-export { ImageArtifact } from './image-artifact';
+export * from './image-artifact';
 export type { ImageArtifactProps } from './image-artifact';
 
 // Export image with fallback component
-export { ImageWithFallback } from './image-with-fallback';
+export * from './image-with-fallback';
 export type { ImageWithFallbackProps } from './image-with-fallback';
 
 // Export side drawer component
@@ -123,36 +71,18 @@ export * from './custom-Icons';
 export { default as LucideIcon } from './lucide-icon';
 
 // Export utilities
-export { cn, cva } from './utils';
+export * from './utils';
 
 // Export types
 export type { AvatarComponentProps } from './types';
 
 // Export markdown component
 export { default as Markdown } from './markdown';
+export * from './markdown';
 
 // Export all avatar components
-export {
-  Avatar1,
-  Avatar2,
-  Avatar3,
-  Avatar4,
-  Avatar5,
-  Avatar6,
-  Avatar7,
-  Avatar8,
-  Avatar9,
-  Avatar10,
-  Avatar11,
-  Avatar12,
-  Avatar13,
-  Avatar14,
-  Avatar15,
-  Avatar16,
-  Avatar17,
-  Avatar18,
-  Avatar19,
-} from './avatars';
+export * from './avatars';
 
 export { default as VideoPlayer } from './video-player';
+export * from './video-player';
 export type { VideoPlayerProps } from './video-player';

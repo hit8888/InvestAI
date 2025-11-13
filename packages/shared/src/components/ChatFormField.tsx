@@ -71,7 +71,7 @@ const ChatFormField = (props: IChatFormFieldProps) => {
             defaultValue={field.value ?? ''}
             disabled={isArtifactFormFilled}
             className={cn(
-              'text-customPrimaryText border border-gray-300 bg-white placeholder:text-gray-400 focus:border-gray-400 focus:ring-0',
+              'text-customPrimaryText bg-white',
               fieldClassName,
               fieldErrorMessage && 'border border-destructive-600 bg-destructive-25',
             )}
@@ -79,6 +79,9 @@ const ChatFormField = (props: IChatFormFieldProps) => {
               field.onChange(place?.description || '');
             }}
             onBlur={() => handleBlur(field)}
+            classes={{
+              input: 'placeholder:text-gray-400',
+            }}
           />
         );
       case 'phone':
