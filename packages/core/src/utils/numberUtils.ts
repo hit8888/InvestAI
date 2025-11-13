@@ -44,5 +44,15 @@ class NumberUtil {
   static isNumber(value: unknown): boolean {
     return !isNaN(Number(value));
   }
+
+  static truncateToPercentage(number?: number | string): string {
+    if (!this.isNumber(number)) {
+      return number?.toString() ?? '';
+    }
+
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 1,
+    }).format(Number(number) * 100);
+  }
 }
 export default NumberUtil;

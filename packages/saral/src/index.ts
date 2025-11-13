@@ -12,6 +12,9 @@ export * from './text-area';
 // Export popover components
 export * from './popover';
 
+// Export accordion components
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './accordion';
+
 // Export dropdown components
 export * from './dropdown';
 

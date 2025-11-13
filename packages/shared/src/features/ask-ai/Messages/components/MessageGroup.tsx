@@ -9,6 +9,7 @@ import { AvatarComponentProps } from '@meaku/saral';
 import { AvatarDisplay } from '../../../../components/AvatarDisplay';
 import MessageErrorBoundary from '../../../../components/MessageErrorBoundary';
 import { MessageFeedback } from '../MessageFeedback';
+import MessageDataSources from '../MessageDataSources';
 
 interface MessageGroupProps {
   messageGroup: MessageType[];
@@ -114,6 +115,9 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
             {message.role === 'ai' &&
               (message.event_type === 'TEXT_RESPONSE' || message.event_type === 'STREAM_RESPONSE') &&
               feedbackEnabled && <MessageFeedback message={message} />}
+            {message.role === 'ai' && message.documents && message.documents.length > 0 && (
+              <MessageDataSources dataSources={message.documents} />
+            )}
           </MessageErrorBoundary>
         );
       })}
