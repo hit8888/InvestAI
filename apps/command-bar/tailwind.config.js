@@ -52,7 +52,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: 'var(--font-family)',
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -12,6 +12,9 @@
     --breakout-command-bar-bottom: 16px;
     --breakout-command-bar-right: 16px;
 
+    /* Font Family Variable */
+    --font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
     /* Z-index hierarchy relative to command-bar */
     --z-root: 2147483642;
     --z-behind-content: calc(var(--z-root) - 1);
