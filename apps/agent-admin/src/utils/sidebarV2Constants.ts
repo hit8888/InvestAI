@@ -14,6 +14,7 @@ import {
   LogOut,
   UserRoundCog,
   Workflow,
+  Building,
 } from 'lucide-react';
 
 /**
@@ -127,6 +128,13 @@ export const VISITOR_REVEAL_ITEMS: SidebarV2LinkItem[] = [
     navItem: 'Visitors',
     icon: Users,
     activeIcon: Users,
+    accordionGroup: SidebarV2AccordionGroup.VISITOR_REVEAL,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.COMPANIES}`,
+    navItem: 'Companies',
+    icon: Building,
+    activeIcon: Building,
     accordionGroup: SidebarV2AccordionGroup.VISITOR_REVEAL,
   },
 ];

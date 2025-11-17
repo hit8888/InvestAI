@@ -10,6 +10,7 @@ interface CompanyRow extends Record<string, unknown> {
   id: number;
   domain: string | null;
   name: string | null;
+  prospect_id: string | null;
   core_company: number | null;
   relevance_score: number | null;
   relevance_score_reasoning: string | null;
@@ -18,7 +19,6 @@ interface CompanyRow extends Record<string, unknown> {
   custom_attributes: CustomAttributes;
   created_on: string;
   updated_on: string;
-  // Additional fields that might come from the API
   [key: string]: unknown;
 }
 
@@ -33,8 +33,8 @@ export const companiesTableConfig: TablePageConfig<CompanyRow> = {
   pageTitle: 'Companies',
 
   api: {
-    tableData: '/tenant/api/tenant-companies/',
-    entityMetadata: '/tenant/api/entity/?entity_type=COMPANIES',
+    tableData: '/tenant/api/tenant-companies/query/',
+    entityMetadata: '/tenant/api/entity/?entity_type=COMPANY',
     filterOptions: '/tenant/api/tenant-companies/filterset/',
     exportData: '/tenant/api/tenant-companies/download/',
   },
