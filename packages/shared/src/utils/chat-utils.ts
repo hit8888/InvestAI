@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { MessageRole, MessageEventType, type Message } from '../types/message';
+import { DeviceType } from '@meaku/core/types/common';
 
 export const getUserMessage = (message: string, overrides?: Partial<Message>): Partial<Message> => {
   const { event_type, event_data, response_id, ...safeOverrides } = overrides ?? {};
@@ -10,6 +11,8 @@ export const getUserMessage = (message: string, overrides?: Partial<Message>): P
     event_type: event_type ?? MessageEventType.TEXT_REQUEST,
     event_data: event_data ?? { content: message },
     timestamp: new Date().toISOString(),
+    is_admin: false,
+    device_type: DeviceType.DESKTOP,
     ...safeOverrides,
   } as Partial<Message>;
 };
