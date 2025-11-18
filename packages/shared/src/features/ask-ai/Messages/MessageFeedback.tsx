@@ -180,7 +180,7 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
 
   if (state.isSubmitted) {
     return (
-      <div className="relative flex items-center gap-2 pl-10 mt-2">
+      <div className="relative flex items-center gap-2">
         <div className="flex items-center gap-2 px-3 py-1 h-8 rounded-lg bg-green-50 border border-green-200">
           <LucideIcon name="check-circle" className="h-3.5 w-3.5 text-green-600" />
           <span className="text-xs font-medium text-green-700">Thank you for your feedback!</span>
@@ -190,7 +190,7 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
   }
 
   return (
-    <div className="relative flex items-center gap-2 pl-10 mt-2">
+    <div className="relative flex items-center gap-2">
       {renderFeedbackButton('good')}
       {renderFeedbackButton('bad')}
     </div>
