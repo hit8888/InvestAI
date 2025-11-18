@@ -19,9 +19,7 @@ import PanelConversationActiveIcon from '@breakout/design-system/components/icon
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
-import useNewConversationToast, { globalToastTracker } from '../../hooks/useNewConversationToast';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
-import toast from 'react-hot-toast';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
@@ -160,14 +158,8 @@ const ActiveConversationsLayout = () => {
       if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
         updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
       }
-
-      // Dismiss the toast for this conversation when card is clicked
-      toast.dismiss(`new-convo-${conversation.session_id}`);
-
-      // Remove from global toast tracker to prevent showing the toast again
-      globalToastTracker.activeToastIds.delete(conversation.session_id);
     },
-    [updateSessionStatus],
+    [navigate, sessionsStatus, updateSessionStatus],
   );
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {
@@ -257,17 +249,6 @@ const ActiveConversationsLayout = () => {
       message_type: 'EVENT',
     });
   };
-
-  const handleJoinButtonInToast = useCallback(
-    (conversation: ActiveConversation) => {
-      handleCardClick(conversation);
-      updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.PENDING);
-    },
-    [handleCardClick, updateSessionStatus],
-  );
-
-  // Show new conversation Notification Toast when a new conversation is added
-  useNewConversationToast(currentTabConversations, handleJoinButtonInToast);
 
   useEffect(() => {
     return () => {
