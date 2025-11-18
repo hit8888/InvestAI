@@ -122,6 +122,14 @@ const ConfigurationTable = ({
 
   const showFilledDataView = !isEditMode && hasFilledData;
 
+  const handleCancelButtonClick = () => {
+    if (savedData.length > 0) {
+      setIsEditMode(false);
+    }
+    // Always reset the form on cancel to discard any unsaved changes.
+    reset();
+  };
+
   if (isLoading) {
     return <TableLoadingState title={title} description={description} />;
   }
@@ -136,7 +144,7 @@ const ConfigurationTable = ({
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <TableHeader title={title} description={description} />
       {showFilledDataView ? (
-        <FilledTableData configurationData={filledRows} handleEdit={handleEdit} columns={columns} />
+        <FilledTableData configurationData={filledRows} handleEdit={handleEdit} />
       ) : (
         <TableContainer
           isLoading={isLoading}
@@ -148,6 +156,7 @@ const ConfigurationTable = ({
           formFieldName={formFieldName}
           isFormValid={isValid}
           savedData={savedData}
+          handleCancelButtonClick={handleCancelButtonClick}
           addDefaultRow={addDefaultRow}
         />
       )}

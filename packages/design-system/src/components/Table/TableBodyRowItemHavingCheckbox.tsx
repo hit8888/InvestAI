@@ -49,6 +49,7 @@ const TableBodyRowItemHavingCheckbox = ({
         const isVisibilityColumn = cell.column.id === 'access_type';
         const isDataSourceTypeColumn = cell.column.id === 'data_source_type';
         const isDescriptionColumn = cell.column.id === 'description';
+        const isSourcePageTypeColumn = cell.column.id === 'page_type';
         return (
           <td
             key={cell.id}
@@ -58,7 +59,7 @@ const TableBodyRowItemHavingCheckbox = ({
                 'border-l': isFirstColumn,
                 'min-w-[400px] xl:min-w-[450px]': isSourceNameColumn || isUrlColumn || isDescriptionColumn,
                 'min-w-32': isLastColumn || isStatusColumn || isVisibilityColumn,
-                'min-w-48': isDataSourceTypeColumn,
+                'min-w-48': isDataSourceTypeColumn || isSourcePageTypeColumn,
               },
             )}
           >

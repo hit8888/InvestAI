@@ -17,6 +17,7 @@ const webpagesInitialSortValues = {
   ...commonInitialSortValues,
   urlSort: null,
   titleSort: null,
+  page_typeSort: null,
 };
 
 const documentsInitialSortValues = {

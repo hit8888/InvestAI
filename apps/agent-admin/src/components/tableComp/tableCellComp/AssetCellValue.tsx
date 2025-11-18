@@ -102,7 +102,7 @@ const ExternalVideoAsset = ({ keyProp, publicUrl, duration, onLoadedMetadata }: 
     <CustomVideoPlayer
       showControls={false}
       onLoadedMetadata={onLoadedMetadata}
-      className="rounded object-contain"
+      className="w-full rounded object-contain"
       videoURL={publicUrl}
       allowPictureInPicture={false}
       allowDownload={false}
@@ -191,7 +191,7 @@ const ThumbnailAsset = ({ id, assetUrl, videoUrl, videoType, metadataDuration }:
             <img
               src={assetUrl}
               alt="Thumbnail"
-              className={`max-h-full max-w-full rounded object-contain transition-opacity duration-200 ${
+              className={`aspect-video h-full max-h-full w-full max-w-full rounded object-cover transition-opacity duration-200 ${
                 !isLoading ? 'opacity-100' : 'opacity-0'
               }`}
               {...imgProps}

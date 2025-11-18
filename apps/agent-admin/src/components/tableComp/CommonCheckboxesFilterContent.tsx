@@ -50,7 +50,11 @@ const renderFilterLabel = (label: string, keyValue: string, value?: CheckboxValu
         <Typography variant="body-16">{label}</Typography>
       );
     default:
-      return <Typography variant="body-16">{label}</Typography>;
+      return (
+        <Typography variant="body-16" className="flex-1 text-left capitalize">
+          {label}
+        </Typography>
+      );
   }
 };
 

@@ -35,7 +35,7 @@ const AIBlocksNavigation = ({ blockCategory }: { blockCategory: string }) => {
   }
 
   return (
-    <div className="sticky top-0 z-20 flex flex-1 items-center gap-1 bg-white py-6">
+    <div className="sticky top-0 z-50 flex flex-1 items-center gap-1 bg-white py-6">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (
