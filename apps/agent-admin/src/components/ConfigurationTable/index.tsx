@@ -26,6 +26,7 @@ interface ConfigurationTableProps extends CommonControlsProps {
   form: UseFormReturn<ConfigurationFormData>;
   formFieldName?: string;
   addDefaultRow?: ConfigurationData[];
+  showVisibilityRulesCard?: boolean;
 }
 
 const ConfigurationTable = ({
@@ -40,6 +41,7 @@ const ConfigurationTable = ({
   form,
   formFieldName = 'items',
   addDefaultRow,
+  showVisibilityRulesCard = false,
 }: ConfigurationTableProps) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [savedData, setSavedData] = useState<ConfigurationData[]>([]);
@@ -144,7 +146,12 @@ const ConfigurationTable = ({
     <div className="flex w-full flex-col items-start gap-4 self-stretch">
       <TableHeader title={title} description={description} />
       {showFilledDataView ? (
-        <FilledTableData configurationData={filledRows} handleEdit={handleEdit} />
+        <FilledTableData
+          showVisibilityRulesCard={showVisibilityRulesCard}
+          configurationData={filledRows}
+          handleEdit={handleEdit}
+          columns={columns}
+        />
       ) : (
         <TableContainer
           isLoading={isLoading}

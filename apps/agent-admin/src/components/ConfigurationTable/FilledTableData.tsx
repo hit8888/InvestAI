@@ -1,16 +1,58 @@
 import Card from '../../components/AgentManagement/Card';
+import InfoCard from '../../components/AgentManagement/InfoCard';
 import Button from '@breakout/design-system/components/Button/index';
 import { EditIcon } from 'lucide-react';
-import { ConfigurationData } from './utils';
+import { ConfigurationData, ColumnConfig } from './utils';
 import Typography from '@breakout/design-system/components/Typography/index';
 import Separator from '@breakout/design-system/components/layout/separator';
 
 type FilledTableDataProps = {
   configurationData: ConfigurationData[];
   handleEdit: () => void;
+  columns: ColumnConfig[];
+  displayKeys?: string[]; // Specify which keys to display in the card (defaults to first 2 columns)
+  showVisibilityRulesCard?: boolean;
 };
 
-const FilledTableData = ({ configurationData, handleEdit }: FilledTableDataProps) => {
+const FilledTableData = ({
+  configurationData,
+  handleEdit,
+  columns,
+  displayKeys,
+  showVisibilityRulesCard,
+}: FilledTableDataProps) => {
+  // Determine which keys to display - default to first two columns
+  const titleKey = displayKeys?.[0] ?? columns[0]?.key ?? 'name';
+  const descriptionKey = (displayKeys ? displayKeys[1] : columns[1]?.key) ?? (displayKeys ? '' : 'description');
+
+  if (showVisibilityRulesCard && configurationData.some((row) => row.visibility_rules)) {
+    return <VisibilityRulesCard configurationData={configurationData} handleEdit={handleEdit} />;
+  }
+
+  return (
+    <Card background={'GRAY25'} border={'GRAY200'}>
+      {configurationData.map((row, index) => (
+        <InfoCard
+          key={`config-row-${index}-${row[titleKey]}`}
+          title={row[titleKey] || ''}
+          description={row[descriptionKey] || ''}
+        />
+      ))}
+      <div className="flex w-full justify-end">
+        <Button variant="system_secondary" buttonStyle="rightIcon" rightIcon={<EditIcon />} onClick={handleEdit}>
+          Edit
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
+type VisibilityRulesCardProps = {
+  configurationData: ConfigurationData[];
+  handleEdit: () => void;
+};
+
+const VisibilityRulesCard = ({ configurationData, handleEdit }: VisibilityRulesCardProps) => {
   const visibilityRulesGrouped = configurationData.reduce(
     (acc, row) => {
       const visibilityRule = row.visibility_rules as string;

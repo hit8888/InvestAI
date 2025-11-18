@@ -49,22 +49,24 @@ const InfoCard = ({ title, description, className = '', icon }: InfoCardProps) =
         <Typography className="capitalize" variant="caption-12-medium">
           {title}
         </Typography>
-        <div className="flex w-full flex-col items-end gap-1">
+        <div className="flex w-full flex-col gap-1">
           <div className={`text-xs text-gray-500 ${shouldShowToggle && !isExpanded ? 'line-clamp-3' : ''}`}>
             <GithubMarkdownRenderer markdown={description} />
           </div>
-          {shouldShowToggle && (
-            <button
-              type="button"
-              onClick={() => setIsExpanded((prev) => !prev)}
-              className="flex items-center justify-center gap-1 text-left text-[12px] text-blue_sec-1000"
-            >
-              {isExpanded ? 'Show less' : 'Show more'}
-              <span className="pt-1 text-blue_sec-1000">
-                {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </span>
-            </button>
-          )}
+          <div className="flex w-full justify-end">
+            {shouldShowToggle && (
+              <button
+                type="button"
+                onClick={() => setIsExpanded((prev) => !prev)}
+                className="flex items-center justify-center gap-1 text-left text-[12px] text-blue_sec-1000"
+              >
+                {isExpanded ? 'Show less' : 'Show more'}
+                <span className="pt-1 text-blue_sec-1000">
+                  {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div
