@@ -1,4 +1,6 @@
 import { findFlagUrlByCountryName } from 'country-flags-svg';
+import { CellContainer } from './CellContainer';
+import EmptyCell from './EmptyCell';
 
 interface LocationWithFlagCellProps {
   /** Country value from the primary field */
@@ -48,7 +50,7 @@ const normalizeCountryName = (country: string): string => {
  */
 export const LocationWithFlagCell = ({ value, tooltip }: LocationWithFlagCellProps) => {
   if (!value) {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   // Normalize country name
@@ -59,7 +61,7 @@ export const LocationWithFlagCell = ({ value, tooltip }: LocationWithFlagCellPro
   const hasFlag = Boolean(flagUrl && !COUNTRIES_WITHOUT_FLAGS.includes(normalizedCountry));
 
   return (
-    <div className="flex items-center gap-2" title={tooltip || normalizedCountry}>
+    <CellContainer title={tooltip || normalizedCountry}>
       {/* Flag */}
       {hasFlag && flagUrl && (
         <img src={flagUrl} width={20} height={20} alt={`${normalizedCountry} flag`} className="flex-shrink-0" />
@@ -67,6 +69,6 @@ export const LocationWithFlagCell = ({ value, tooltip }: LocationWithFlagCellPro
 
       {/* Location Text */}
       <span className="truncate text-sm capitalize text-gray-900">{normalizedCountry}</span>
-    </div>
+    </CellContainer>
   );
 };

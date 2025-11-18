@@ -29,7 +29,7 @@ const ConversationDetailsPage = () => {
 
   if (prospectId) {
     const conversationsPath = buildPathWithTenantBase(tenantName, AppRoutesEnum.CONVERSATIONS);
-    return <Navigate to={`${conversationsPath}?rowId=${prospectId}`} replace />;
+    return <Navigate to={`${conversationsPath}?rowId=${prospectId}&panel=conversation-details`} replace />;
   }
 
   return <Navigate to={buildPathWithTenantBase(tenantName, AppRoutesEnum.CONVERSATIONS)} replace />;

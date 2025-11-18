@@ -1,5 +1,7 @@
 import { LabelAssignmentType } from '../../types/column.types';
+import { CellContainer } from './CellContainer';
 import { TruncatedText } from './TruncatedText';
+import EmptyCell from './EmptyCell';
 
 interface TextCellProps {
   value: unknown;
@@ -23,7 +25,7 @@ export const TextCell = ({
   labelAssignmentValue,
 }: TextCellProps) => {
   if (value === null || value === undefined || value === '') {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   let text = String(value);
@@ -37,12 +39,14 @@ export const TextCell = ({
   }
   // Use TruncatedText with custom tooltip if provided, or default behavior
   return (
-    <TruncatedText
-      text={`${labelPrefix ?? ''}${text}${labelSuffix ?? ''}`}
-      maxWidth="200px"
-      customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
-      tooltipSide="top"
-      tooltipDelay={200}
-    />
+    <CellContainer>
+      <TruncatedText
+        text={`${labelPrefix ?? ''}${text}${labelSuffix ?? ''}`}
+        maxWidth="200px"
+        customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
+        tooltipSide="top"
+        tooltipDelay={200}
+      />
+    </CellContainer>
   );
 };

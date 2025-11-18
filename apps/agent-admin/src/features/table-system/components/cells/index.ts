@@ -3,6 +3,7 @@
  * Each cell handles its own rendering, truncation, and tooltips
  */
 
+export { CellContainer } from './CellContainer';
 export { TextCell } from './TextCell';
 export { EmailCell } from './EmailCell';
 export { CompanyCell } from './CompanyCell';

@@ -6,6 +6,8 @@ import {
 } from '@breakout/design-system/components/Tooltip/index';
 import { getLabelAssignmentValue } from '@meaku/core/utils/index';
 import { LabelAssignmentType } from '../../types/column.types';
+import { CellContainer } from './CellContainer';
+import EmptyCell from './EmptyCell';
 
 interface CategoryLMHCellProps {
   /** Value to display (already processed from metadata) */
@@ -41,7 +43,7 @@ export const CategoryLMHCell = ({
 }: CategoryLMHCellProps) => {
   // If no value, show dash
   if (value === null || value === undefined || value === '') {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   const category = getLabelAssignmentValue(
@@ -69,14 +71,14 @@ export const CategoryLMHCell = ({
   }
 
   // If tooltip is present and not empty, wrap in Tooltip component
+  const content = <>{`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}</>;
+
   if (tooltip && tooltip.trim()) {
     return (
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
-            <span
-              className={`text-sm font-normal ${colorClass} cursor-default`}
-            >{`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}</span>
+            <CellContainer className={`text-sm font-normal ${colorClass} cursor-default`}>{content}</CellContainer>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
             {tooltip}
@@ -84,11 +86,11 @@ export const CategoryLMHCell = ({
         </Tooltip>
       </TooltipProvider>
     );
-  } else {
-    return (
-      <span className={`text-sm font-normal ${colorClass} cursor-default`} title={tooltip}>
-        {`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}
-      </span>
-    );
   }
+
+  return (
+    <CellContainer className={`text-sm font-normal ${colorClass} cursor-default`} title={tooltip}>
+      {content}
+    </CellContainer>
+  );
 };

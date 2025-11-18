@@ -1,6 +1,7 @@
 import { UserRoundXIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ROUTING_TYPE_LOGO_MAP } from '../../../../utils/constants';
+import { CellContainer } from './CellContainer';
 
 interface SdrAssignmentCellProps {
   /** SDR assignment data object */
@@ -42,10 +43,10 @@ export const SdrAssignmentCell = ({ value, tooltip }: SdrAssignmentCellProps) =>
 
   if (!sdrAssignment || !sdrAssignment.assigned_user) {
     return (
-      <div className="flex items-center gap-2 text-gray-400" title={tooltip}>
+      <CellContainer className="text-gray-400" title={tooltip}>
         <UserRoundXIcon className="h-4 w-4" />
         <span className="text-xs">Unassigned</span>
-      </div>
+      </CellContainer>
     );
   }
 
@@ -54,7 +55,7 @@ export const SdrAssignmentCell = ({ value, tooltip }: SdrAssignmentCellProps) =>
   const companyLogo = routing_source ? ROUTING_TYPE_LOGO_MAP[routing_source] : null;
 
   return (
-    <div className="flex w-full items-center gap-2" title={tooltip}>
+    <CellContainer title={tooltip}>
       {/* Profile picture with fallback avatar - always show avatar */}
       {!profile_picture || profilePictureError ? (
         <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-800">
@@ -85,6 +86,6 @@ export const SdrAssignmentCell = ({ value, tooltip }: SdrAssignmentCellProps) =>
           />
         )}
       </div>
-    </div>
+    </CellContainer>
   );
 };

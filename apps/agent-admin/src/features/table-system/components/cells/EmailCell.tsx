@@ -5,6 +5,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
+import { CellContainer } from './CellContainer';
+import EmptyCell from './EmptyCell';
 
 interface EmailCellProps {
   value: unknown;
@@ -17,13 +19,13 @@ interface EmailCellProps {
  */
 export const EmailCell = ({ value, tooltip }: EmailCellProps) => {
   if (value === null || value === undefined || value === '') {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   const email = String(value);
 
-  const emailContent = (
-    <div className="group flex items-center gap-2">
+  const cellContent = (
+    <CellContainer className="group">
       <span className="block truncate text-sm text-gray-800" title={tooltip || email}>
         {email}
       </span>
@@ -33,7 +35,7 @@ export const EmailCell = ({ value, tooltip }: EmailCellProps) => {
         btnClassName="h-6 w-6 p-0 opacity-0 transition-opacity group-hover:opacity-100"
         copyIconClassname="h-3.5 w-3.5"
       />
-    </div>
+    </CellContainer>
   );
 
   // If explicit tooltip is provided and not empty, use Tooltip component
@@ -41,7 +43,7 @@ export const EmailCell = ({ value, tooltip }: EmailCellProps) => {
     return (
       <TooltipProvider>
         <Tooltip delayDuration={200}>
-          <TooltipTrigger asChild>{emailContent}</TooltipTrigger>
+          <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
             {tooltip}
           </TooltipContent>
@@ -50,5 +52,5 @@ export const EmailCell = ({ value, tooltip }: EmailCellProps) => {
     );
   }
 
-  return emailContent;
+  return cellContent;
 };
