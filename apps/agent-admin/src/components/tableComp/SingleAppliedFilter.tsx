@@ -21,7 +21,7 @@ type SingleAppliedFilterProps = {
   page: PaginationPageType;
 };
 
-const { DateRange, TestConversationIncluded, SessionIdIncluded, SdrAssignment } = FilterType;
+const { DateRange, TestConversationIncluded, SessionIdIncluded, SdrAssignment, Sources } = FilterType;
 const FILTER_KEYS_WITH_NO_POPOVER = [TestConversationIncluded, SessionIdIncluded];
 
 const SingleAppliedFilter = ({
@@ -55,10 +55,18 @@ const SingleAppliedFilter = ({
     }
   };
 
-  const filterValue =
-    filter.key === SdrAssignment
-      ? (filter.value as SdrAssignment[]).map((item) => item?.assigned_user?.full_name)
-      : filter.value;
+  const getFilterValue = () => {
+    switch (filter.key) {
+      case SdrAssignment:
+        return (filter.value as SdrAssignment[]).map((item) => item?.assigned_user?.full_name);
+      case Sources:
+        return (filter.value as string[]).map((item) => item.replace(/_/g, ' ').toLowerCase());
+      default:
+        return filter.value;
+    }
+  };
+
+  const filterValue = getFilterValue();
   return (
     <Popover open={isFilterAppliedClicked} onOpenChange={handlePopoverOpen}>
       <PopoverTrigger

@@ -21,6 +21,9 @@ const DropdownMenuSearch = React.memo(
           className="w-full border-gray-300 bg-gray-50 pl-10 placeholder:text-gray-400 focus:border-gray-300 focus:ring-4 focus:ring-gray-100"
           value={searchTerm}
           onChange={handleInputChange}
+          onKeyDown={(event) => {
+            event.stopPropagation();
+          }}
         />
         {hasSearchTermLength ? (
           <button

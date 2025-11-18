@@ -568,7 +568,7 @@ export const getAllFilterAppliedValues = (filterState: FilterValues, page: strin
 
   if (sources.length > 0) {
     filterApplied.push({
-      field: 'data_source_type',
+      field: 'page_type',
       value: sources,
       operator: 'in',
     });

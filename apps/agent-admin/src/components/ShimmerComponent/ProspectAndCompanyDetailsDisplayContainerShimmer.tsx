@@ -11,7 +11,7 @@ const ProspectAndCompanyDetailsDisplayContainerShimmer = ({
   companyItemsCount = 4,
 }: IProps) => {
   return (
-    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-t border-primary/10">
+    <div className="relative w-[35%] justify-stretch self-stretch border-b border-l border-primary/10">
       <div className="hide-scrollbar sticky top-10 flex max-h-screen w-full flex-col items-start overflow-auto">
         {/* Prospect Section */}
         <div className="flex w-full flex-col items-start gap-4 p-4">

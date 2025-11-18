@@ -9,11 +9,14 @@ export type StylingContainerProps = {
   children: ReactElement;
 };
 
+// This is for development purposes only, in production shadow root will be the only root
+const FALLBACK_ROOT = typeof document !== 'undefined' ? document.documentElement : null;
+
 const StylingContainer: FC<StylingContainerProps> = ({ children }) => {
   const { settings, config } = useCommandBarStore();
-  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
+  const { root: shadowRoot } = useShadowRoot();
 
-  const root = (shadowRoot?.host as HTMLElement) || fallbackRoot;
+  const root = (shadowRoot?.host as HTMLElement) || FALLBACK_ROOT;
 
   useBrandCoverImage(settings.tenant_id, settings.bc);
 

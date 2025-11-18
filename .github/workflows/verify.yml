@@ -1,0 +1,94 @@
+name: Verify
+
+# Add concurrency to prevent multiple deployments
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [release, main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - '.github/workflows/verify.yml'
+  pull_request:
+    branches: [release, main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - '.github/workflows/verify.yml'
+
+jobs:
+  verify:
+    name: Verify Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with Turborepo
+        env:
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: pnpm turbo build --filter=scripts --filter=agent-admin
+
+      - name: Notify on failure
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              body: `❌ Verify workflow failed! Please check the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.name}/actions/runs/${context.runId}) for more details.`
+            });
+
+      - name: Send Slack notification on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "🚨 Verify Workflow failed!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Verify Workflow Failed* ❌\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Workflow:* ${{ github.workflow }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow Run>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+permissions:
+  contents: read
+  pull-requests: read

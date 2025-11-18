@@ -45,8 +45,7 @@ export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
   },
 
   defaultFilters: {
-    company: null, // Will be sent with operator 'is_not_null' - only show visitors with company
-    // Note: No session_id filter - shows ALL visitors (with or without conversations)
+    contact_enrichments: null,
     is_test: false,
   },
 

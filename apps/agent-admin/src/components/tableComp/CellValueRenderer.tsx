@@ -19,6 +19,7 @@ import { DataSourceItem } from '@meaku/core/types/admin/api';
 import DescriptionCellValue from './tableCellComp/DescriptionCellValue';
 import DurationCellValue from './tableCellComp/DurationCellValue';
 import AccessTypeCellValue from './tableCellComp/AccessTypeCellValue';
+import SourcesPageTypeCellValue from './tableCellComp/SourcesPageTypeCellValue';
 
 type cellValueMapType = {
   [key: string]: React.FC<{ value: string }>;
@@ -44,6 +45,7 @@ const cellValueMap: cellValueMapType = {
   updated_on: TimestampCellValue,
   status: StatusCellValue,
   title: TitleCellValue,
+  page_type: SourcesPageTypeCellValue,
   data_source_type: DataSourceTypeCellValue,
   source_url: UrlCellValue,
 };

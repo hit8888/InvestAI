@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import get from 'lodash/get';
 
 import { hexToHSL } from '@meaku/core/utils/color';
 import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
@@ -8,47 +9,69 @@ interface UseStyleConfigProps {
   styleConfig?: ConfigurationApiResponse['style_config'];
 }
 
-const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
-  const { root: shadowRoot, fallbackRoot } = useShadowRoot();
+const COLOR_CONFIG_KEY_PATHS = [
+  { accessorKey: 'primary', cssVariableName: 'primary' },
+  { accessorKey: 'secondary', cssVariableName: 'secondary' },
+  { accessorKey: 'primary_foreground', cssVariableName: 'primary_foreground' },
+  { accessorKey: 'secondary_foreground', cssVariableName: 'secondary_foreground' },
+];
 
+// This is for development purposes only, in production shadow root will be the only root
+const FALLBACK_ROOT = typeof document !== 'undefined' ? document.documentElement : null;
+
+const useStyleConfig = ({ styleConfig }: UseStyleConfigProps) => {
+  const { root: shadowRoot } = useShadowRoot();
+
+  // Handle color configuration
   useEffect(() => {
     if (!styleConfig) return;
 
-    const STYLE_CONFIG_KEYS_NOT_TO_CONSIDER = [
-      'banner_config',
-      'function',
-      'orb_config',
-      'entry_point_alignment',
-      'entry_point_alignment_mobile',
-      'invert_text_color',
-      'shadow_enabled',
-      'font_config',
-    ] as const;
+    COLOR_CONFIG_KEY_PATHS.forEach(({ accessorKey, cssVariableName }) => {
+      const hexValue = get(styleConfig, accessorKey);
 
-    Object.entries(styleConfig)
-      .filter(
-        ([key]) =>
-          !STYLE_CONFIG_KEYS_NOT_TO_CONSIDER.includes(key as (typeof STYLE_CONFIG_KEYS_NOT_TO_CONSIDER)[number]),
-      )
-      .forEach(([key, hexValue]) => {
-        const formattedKey = key.replace(/_/g, '-');
+      if (!hexValue || typeof hexValue !== 'string') return;
 
-        if (!hexValue || typeof hexValue !== 'string') return;
+      try {
+        const value = hexToHSL(hexValue);
+        const rootElement = (shadowRoot?.host as HTMLElement) || FALLBACK_ROOT;
 
-        try {
-          const value = hexToHSL(hexValue);
-          const shadowRootElement = shadowRoot?.host as HTMLElement;
-
-          if (shadowRootElement) {
-            shadowRootElement.style.setProperty(`--${formattedKey}`, value);
-            return;
-          }
-          fallbackRoot?.style.setProperty(`--${formattedKey}`, value);
-        } catch (error) {
-          console.error('Error setting style config', error);
+        if (rootElement) {
+          rootElement.style.setProperty(`--${cssVariableName}`, value);
         }
-      });
-  }, [styleConfig, shadowRoot, fallbackRoot]);
+      } catch (error) {
+        console.error('Error setting style config', error);
+      }
+    });
+  }, [styleConfig, shadowRoot]);
+
+  // Handle font configuration
+  useEffect(() => {
+    const { font_family: fontFamily, font_url: fontUrl } = styleConfig?.font_config ?? {};
+    const rootElement = (shadowRoot?.host as HTMLElement) || FALLBACK_ROOT;
+
+    if (!fontFamily || !fontUrl || !rootElement) return;
+
+    const defaultFontFamily = getComputedStyle(rootElement).getPropertyValue('--font-family').trim();
+
+    rootElement.style.setProperty('--font-family', `${fontFamily}, ${defaultFontFamily}`);
+
+    if (!document.head.querySelector(`link[href="${fontUrl}"]`)) {
+      const link = document.createElement('link');
+      link.href = fontUrl;
+      link.rel = 'stylesheet';
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    }
+
+    return () => {
+      rootElement.style.setProperty('--font-family', defaultFontFamily);
+
+      const link = document.head.querySelector(`link[href="${fontUrl}"]`);
+      if (link) {
+        document.head.removeChild(link);
+      }
+    };
+  }, [styleConfig?.font_config, shadowRoot]);
 };
 
 export default useStyleConfig;

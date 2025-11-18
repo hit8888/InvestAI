@@ -13,16 +13,38 @@ interface MessageFeedbackProps {
   onFeedbackSubmit?: (feedback: { type: 'good' | 'bad'; comment?: string }) => void;
 }
 
+type FeedbackState = {
+  type: 'good' | 'bad' | null;
+  isPopoverOpen: boolean;
+  comment: string;
+  isSubmitted: boolean;
+};
+
 export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFeedbackSubmit }) => {
   const { portalContainer, getZIndexClass } = usePopoverPortal();
-  const [feedbackType, setFeedbackType] = useState<'good' | 'bad' | null>(null);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [comment, setComment] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [state, setState] = useState<FeedbackState>({
+    type: null,
+    isPopoverOpen: false,
+    comment: '',
+    isSubmitted: false,
+  });
 
   const handleFeedbackClick = (type: 'good' | 'bad') => {
-    setFeedbackType(type);
-    setIsPopoverOpen(true);
+    setState({
+      type,
+      isPopoverOpen: true,
+      comment: '',
+      isSubmitted: false,
+    });
+  };
+
+  const resetState = () => {
+    setState({
+      type: null,
+      isPopoverOpen: false,
+      comment: '',
+      isSubmitted: false,
+    });
   };
 
   const { mutate: handlePostResponseFeedback } = useResponseFeedback();
@@ -37,32 +59,34 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
   };
 
   const handleSubmit = async () => {
-    if (feedbackType && onFeedbackSubmit) {
+    if (state.type && onFeedbackSubmit) {
       onFeedbackSubmit({
-        type: feedbackType,
-        comment: comment.trim() || undefined,
+        type: state.type,
+        comment: state.comment.trim() || undefined,
       });
     }
 
-    if (feedbackType) {
+    if (state.type) {
       handlePostResponseFeedback({
         viewType: ViewType.USER,
         sessionId: message.session_id.toString(),
         payload: {
           response_id: message.response_id.toString(),
-          positive_feedback: feedbackType === 'good',
+          positive_feedback: state.type === 'good',
           category: '', // You can add category selection if needed
-          remarks: comment.trim() || '',
+          remarks: state.comment.trim() || '',
           user_message: '', // You might need to pass the user message if available
           ai_message: getMessageContent(message),
         },
       });
 
-      setIsSubmitted(true);
+      setState((prev) => ({
+        ...prev,
+        isSubmitted: true,
+        isPopoverOpen: false,
+        comment: '',
+      }));
     }
-
-    setIsPopoverOpen(false);
-    setComment('');
   };
 
   // Only show for AI messages
@@ -71,25 +95,34 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
   }
 
   const renderFeedbackButton = (type: 'good' | 'bad') => {
-    const isSelected = feedbackType === type;
+    const isSelected = state.type === type;
     const icon = type === 'good' ? 'thumbs-up' : 'thumbs-down';
     const label = type === 'good' ? 'Good' : 'Bad';
 
     return (
-      <Popover open={isPopoverOpen && feedbackType === type} onOpenChange={(open) => !open && setIsPopoverOpen(false)}>
+      <Popover
+        open={state.isPopoverOpen && state.type === type}
+        onOpenChange={(open) => {
+          if (!open && !state.isSubmitted) {
+            resetState();
+          }
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             size="xs"
             onClick={() => handleFeedbackClick(type)}
-            className={cn(
-              'flex items-center gap-2 px-2 py-1 h-8 rounded-lg border transition-all',
-              isSelected
-                ? 'bg-[#FCFCFD] border-[#667085] text-[#475467] shadow-[0px_0px_0px_4px_rgba(234,236,240,1)]'
-                : 'bg-[#FCFCFD] border-[#EAECF0] text-[#475467] hover:border-gray-300',
-            )}
+            className={cn('flex items-center gap-2 px-2 py-1 h-8 rounded-lg border transition-all', {
+              'bg-[#EAECF0] border-transparent text-[#101828]': isSelected,
+              'bg-[#FCFCFD] border-[#EAECF0] text-[#475467]': !isSelected,
+            })}
           >
-            <LucideIcon name={icon} className="h-3.5 w-3.5 text-[#475467]" />
+            <LucideIcon
+              name={icon}
+              strokeWidth={2}
+              className={cn('h-3.5 w-3.5', isSelected ? 'text-[#101828]' : 'text-[#475467]')}
+            />
             <span className="text-xs font-medium">{label}</span>
           </Button>
         </PopoverTrigger>
@@ -112,12 +145,12 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
             <TextArea
               required
               placeholder="Tell us what you liked about the response or how it could be improved."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              value={state.comment}
+              onChange={(e) => setState((prev) => ({ ...prev, comment: e.target.value }))}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault();
-                  if (comment.trim()) {
+                  if (state.comment.trim()) {
                     handleSubmit();
                   }
                 }
@@ -131,7 +164,7 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
             <div className="flex justify-end">
               <Button
                 type="submit"
-                disabled={!comment.trim()}
+                disabled={!state.comment.trim()}
                 size="sm"
                 className="text-white border-2 border-white/24 px-3 py-2 h-8 rounded-lg flex items-center gap-2"
               >
@@ -145,9 +178,9 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
     );
   };
 
-  if (isSubmitted) {
+  if (state.isSubmitted) {
     return (
-      <div className="relative flex items-center gap-2 pl-10 mt-2">
+      <div className="relative flex items-center gap-2">
         <div className="flex items-center gap-2 px-3 py-1 h-8 rounded-lg bg-green-50 border border-green-200">
           <LucideIcon name="check-circle" className="h-3.5 w-3.5 text-green-600" />
           <span className="text-xs font-medium text-green-700">Thank you for your feedback!</span>
@@ -157,7 +190,7 @@ export const MessageFeedback: React.FC<MessageFeedbackProps> = ({ message, onFee
   }
 
   return (
-    <div className="relative flex items-center gap-2 pl-10 mt-2">
+    <div className="relative flex items-center gap-2">
       {renderFeedbackButton('good')}
       {renderFeedbackButton('bad')}
     </div>

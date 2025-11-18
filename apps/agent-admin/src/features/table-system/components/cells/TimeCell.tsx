@@ -5,6 +5,8 @@ import {
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
 import DateUtil from '@meaku/core/utils/dateUtils';
+import { CellContainer } from './CellContainer';
+import EmptyCell from './EmptyCell';
 
 interface TimeCellProps {
   value: unknown;
@@ -16,7 +18,7 @@ interface TimeCellProps {
  */
 export const TimeCell = ({ value }: TimeCellProps) => {
   if (value === null || value === undefined || value === '') {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   try {
@@ -24,12 +26,16 @@ export const TimeCell = ({ value }: TimeCellProps) => {
     const displayValue = getDateInHumanReadableFormat(value as string);
     const tooltipValue = formatDateTime(value as string);
 
+    const cellContent = (
+      <CellContainer className="cursor-default">
+        <span className="block truncate text-sm text-gray-900">{displayValue}</span>
+      </CellContainer>
+    );
+
     return (
       <TooltipProvider>
         <Tooltip delayDuration={200}>
-          <TooltipTrigger asChild>
-            <span className="block cursor-default truncate text-sm text-gray-900">{displayValue}</span>
-          </TooltipTrigger>
+          <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
             {tooltipValue}
           </TooltipContent>
@@ -37,6 +43,6 @@ export const TimeCell = ({ value }: TimeCellProps) => {
       </TooltipProvider>
     );
   } catch {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 };

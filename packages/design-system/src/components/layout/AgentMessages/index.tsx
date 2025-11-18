@@ -3,7 +3,11 @@ import React, { useMemo } from 'react';
 import SuggestionsArtifact from '../ChatMessages/SuggestionsArtifact';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { ViewType } from '@meaku/core/types/common';
-import { checkIsCurrentMessageComplete, willMessageRenderHTML } from '@meaku/core/utils/messageUtils';
+import {
+  checkIsCurrentMessageComplete,
+  willMessageRenderHTML,
+  filterConsecutiveUserLeftEvents,
+} from '@meaku/core/utils/messageUtils';
 import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
 import { useAgentMessagesScrolling } from '../../../hooks/useAgentMessagesScrolling';
 import { IProps } from './types';
@@ -40,6 +44,9 @@ const AgentMessages = ({
 }: IProps) => {
   const isMobile = useIsMobile();
 
+  // Filter out consecutive USER_LEFT events before processing
+  const filteredMessages = useMemo(() => filterConsecutiveUserLeftEvents(messages), [messages]);
+
   // Use the custom scrolling hook
   const {
     currentMessageScrollToTop,
@@ -54,7 +61,7 @@ const AgentMessages = ({
     lastGroupWithContentIndex,
     messagesSortedByResponseIdAndTimestamp,
   } = useAgentMessagesScrolling({
-    messages,
+    messages: filteredMessages,
     viewType,
     enableScrollToBottom,
   });
@@ -65,8 +72,8 @@ const AgentMessages = ({
       feedbackData?.find((feedback) => feedback.response_id === message.response_id);
   }, [feedbackData]);
 
-  const aiMessages = messages.filter((message) => message.role === 'ai');
-  const isCurrentMessageComplete = checkIsCurrentMessageComplete(messages, lastMessageResponseId);
+  const aiMessages = filteredMessages.filter((message) => message.role === 'ai');
+  const isCurrentMessageComplete = checkIsCurrentMessageComplete(filteredMessages, lastMessageResponseId);
   const isViewTypeAdmin = viewType === ViewType.ADMIN;
 
   // Container styles
@@ -127,7 +134,7 @@ const AgentMessages = ({
                   allowFeedback={allowFeedback}
                   getInitialFeedback={getInitialFeedback}
                   lastMessageResponseId={lastMessageResponseId}
-                  messages={messages}
+                  messages={filteredMessages}
                   orbLogoUrl={orbLogoUrl}
                   showOrbFromConfig={showOrbFromConfig}
                   invertTextColor={invertTextColor}

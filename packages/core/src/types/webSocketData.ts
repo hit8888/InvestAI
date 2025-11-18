@@ -263,6 +263,7 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
       profile_picture: z.string().nullable(),
       designation: z.string().nullable().optional(),
       department: z.string().nullable().optional(),
+      user_id: z.number(),
     }),
   }),
   z.object({
@@ -320,6 +321,11 @@ export const EventMessageContentSchema = z.discriminatedUnion('event_type', [
   z.object({
     content: z.string(),
     event_type: z.literal('USER_TYPING'),
+    event_data: z.object({}),
+  }),
+  z.object({
+    content: z.string(),
+    event_type: z.literal('NUDGE_CTA_CLICKED'),
     event_data: z.object({}),
   }),
 ]);

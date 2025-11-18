@@ -1,6 +1,8 @@
 import { Building2 } from 'lucide-react';
 import { useState } from 'react';
+import { CellContainer } from './CellContainer';
 import { TruncatedText } from './TruncatedText';
+import EmptyCell from './EmptyCell';
 
 interface CompanyCellProps {
   /** Company name to display */
@@ -28,14 +30,14 @@ export const CompanyCell = ({ name, logoUrl, email, tooltip }: CompanyCellProps)
   const [logoError, setLogoError] = useState(false);
 
   if (!name) {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
   // Show email if provided (no more page-specific logic)
   const shouldShowEmail = !!email;
 
   return (
-    <div className="flex min-h-11 items-center gap-3">
+    <CellContainer className="gap-3">
       {/* Logo or Icon */}
       <div className="flex-shrink-0">
         {logoUrl && !logoError ? (
@@ -65,6 +67,6 @@ export const CompanyCell = ({ name, logoUrl, email, tooltip }: CompanyCellProps)
           </div>
         )}
       </div>
-    </div>
+    </CellContainer>
   );
 };

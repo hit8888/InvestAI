@@ -160,7 +160,7 @@ const PromptArea = ({
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      trackError(error, {
+      trackError(err || error, {
         action: 'Prompt save/update',
         component: 'handlePromptSave function',
         additionalData: {

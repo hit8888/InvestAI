@@ -254,6 +254,7 @@ const PageLevelVisibility = ({
         addDefaultRow={[{ visibility_rules: 'contains', page_url: '' }]}
         form={form as unknown as UseFormReturn<ConfigurationFormData>}
         formFieldName="items"
+        showVisibilityRulesCard
       />
     </BrandingSectionContainer>
   );

@@ -825,6 +825,7 @@ export const SORT_KEY_TO_FIELD_MAP: Record<keyof SortValues, string> = {
 };
 
 export const WEBPAGES_SORT_KEY_TO_FIELD_MAP: Record<keyof WebpagesSortValues, string> = {
+  page_typeSort: 'page_type',
   updated_onSort: 'updated_on',
   statusSort: 'status',
   titleSort: 'title',

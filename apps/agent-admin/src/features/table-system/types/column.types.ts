@@ -16,6 +16,8 @@ export type CellType =
   | 'LOCATION_WITH_FLAG' // Country flag + city + country name (User Location)
   | 'SDR_ASSIGNMENT'; // SDR rep name or "Unassigned" with icon
 
+export type LabelAssignmentType = 'NONE' | 'MAPPING' | 'NUMERIC_CONDITION';
+
 /**
  * Entity metadata column (from backend API)
  * Supports both V1 and V2 formats
@@ -56,6 +58,12 @@ export interface EntityMetadataColumn {
   meta_reference_relation?: 'TOOLTIP' | 'LINK' | 'EMAIL' | 'LOGO' | 'NONE' | null; // How it relates to the referenced column
   tooltip_text?: string | null; // Tooltip text for the column
   is_searchable?: boolean; // Whether the column is searchable
+
+  // Label fields
+  label_prefix?: string | null;
+  label_suffix?: string | null;
+  label_assignment_type?: LabelAssignmentType | null;
+  label_assignment_value?: Record<string, string> | Record<string, [Array<string | number>, string]> | null;
 }
 
 /**

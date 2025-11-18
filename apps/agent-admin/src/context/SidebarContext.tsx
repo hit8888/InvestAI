@@ -1,11 +1,12 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { SideNavView } from '../utils/constants';
 import {
   SIDEBAR_V2_MAIN_SECTIONS,
   SIDEBAR_V2_SETTINGS_ITEMS,
   SidebarV2SettingsGroup,
 } from '../utils/sidebarV2Constants';
+import { useSessionStore } from '../stores/useSessionStore';
 
 type SidebarContextProps = {
   sideNavView: SideNavView;
@@ -26,8 +27,7 @@ const SidebarContext = createContext<SidebarContextProps | undefined>(undefined)
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { tenantName: tenantNameParam } = useParams();
-  const tenantName = tenantNameParam;
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
 
   // Track collapsed/expanded state (fixed width in V2 - always expanded)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);

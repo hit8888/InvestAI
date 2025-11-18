@@ -8,7 +8,7 @@ import { getLastGroupMinHeight } from '../utils/heightUtils';
 import { AvatarComponentProps } from '@meaku/saral';
 import { AvatarDisplay } from '../../../../components/AvatarDisplay';
 import MessageErrorBoundary from '../../../../components/MessageErrorBoundary';
-import { MessageFeedback } from '../MessageFeedback';
+import AdminBlock from '../AdminBlock';
 
 interface MessageGroupProps {
   messageGroup: MessageType[];
@@ -43,7 +43,7 @@ interface MessageGroupProps {
   onExpand?: () => void;
   showLogo?: boolean;
   logoUrl?: string | null;
-  feedbackEnabled?: boolean;
+  isAdminView?: boolean;
 }
 
 export const MessageGroup: React.FC<MessageGroupProps> = ({
@@ -70,7 +70,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
   onExpand,
   showLogo,
   logoUrl,
-  feedbackEnabled,
+  isAdminView,
 }) => {
   const shouldShowSuggestedQuestions = useMemo(() => {
     return isLastGroup && suggestedQuestions.length > 0 && !isDiscoveryQuestionShown() && !isStreaming;
@@ -111,9 +111,7 @@ export const MessageGroup: React.FC<MessageGroupProps> = ({
               showLogo={showLogo}
               logoUrl={logoUrl}
             />
-            {message.role === 'ai' &&
-              (message.event_type === 'TEXT_RESPONSE' || message.event_type === 'STREAM_RESPONSE') &&
-              feedbackEnabled && <MessageFeedback message={message} />}
+            {isAdminView && <AdminBlock message={message} />}
           </MessageErrorBoundary>
         );
       })}

@@ -4,14 +4,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
+import { getLabelAssignmentValue } from '@meaku/core/utils/index';
+import { LabelAssignmentType } from '../../types/column.types';
+import { CellContainer } from './CellContainer';
+import EmptyCell from './EmptyCell';
 
 interface CategoryLMHCellProps {
   /** Value to display (already processed from metadata) */
   value: unknown;
-  /** Column ID for specific logic (optional) */
-  columnId?: string;
   /** Optional tooltip text */
   tooltip?: string;
+  labelAssignmentType?: LabelAssignmentType | null;
+  labelAssignmentValue?: Record<string, string> | Record<string, [Array<string | number>, string]> | null;
+  labelPrefix?: string | null;
+  labelSuffix?: string | null;
 }
 
 /**
@@ -27,30 +33,24 @@ interface CategoryLMHCellProps {
  * - Medium: Orange (text-orange-600)
  * - High: Green (text-green-600)
  */
-export const CategoryLMHCell = ({ value, columnId, tooltip }: CategoryLMHCellProps) => {
+export const CategoryLMHCell = ({
+  value,
+  tooltip,
+  labelAssignmentType,
+  labelAssignmentValue,
+  labelPrefix,
+  labelSuffix,
+}: CategoryLMHCellProps) => {
   // If no value, show dash
   if (value === null || value === undefined || value === '') {
-    return <span className="text-gray-400">-</span>;
+    return <EmptyCell />;
   }
 
-  // Convert numeric buyer_intent_score (1-100 scale) to L/M/H category
-  let category: string;
-  if (columnId === 'buyer_intent_score' && typeof value === 'number') {
-    if (value >= 1 && value < 33) {
-      category = 'low';
-    } else if (value >= 33 && value < 66) {
-      category = 'medium';
-    } else if (value >= 66 && value <= 100) {
-      category = 'high';
-    } else {
-      // Invalid score range
-      category = String(value).toLowerCase();
-    }
-  } else {
-    // For string values (relevance_score, etc.)
-    category = String(value).toLowerCase();
-  }
-
+  const category = getLabelAssignmentValue(
+    value as number,
+    labelAssignmentType ?? null,
+    labelAssignmentValue as Record<string, string | [Array<string | number>, string]> | null,
+  ) as string;
   // Determine color and display text based on category
   let colorClass = '';
   let displayText = '';
@@ -71,12 +71,14 @@ export const CategoryLMHCell = ({ value, columnId, tooltip }: CategoryLMHCellPro
   }
 
   // If tooltip is present and not empty, wrap in Tooltip component
+  const content = <>{`${labelPrefix ?? ''}${displayText}${labelSuffix ?? ''}`}</>;
+
   if (tooltip && tooltip.trim()) {
     return (
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
-            <span className={`text-sm font-normal ${colorClass} cursor-default`}>{displayText}</span>
+            <CellContainer className={`text-sm font-normal ${colorClass} cursor-default`}>{content}</CellContainer>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-gray-900 text-white">
             {tooltip}
@@ -86,6 +88,9 @@ export const CategoryLMHCell = ({ value, columnId, tooltip }: CategoryLMHCellPro
     );
   }
 
-  // No tooltip - render plain span
-  return <span className={`text-sm font-normal ${colorClass}`}>{displayText}</span>;
+  return (
+    <CellContainer className={`text-sm font-normal ${colorClass} cursor-default`} title={tooltip}>
+      {content}
+    </CellContainer>
+  );
 };

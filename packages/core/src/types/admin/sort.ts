@@ -23,6 +23,7 @@ export type SortCategory =
   | 'url'
   | 'name'
   | 'title'
+  | 'page_type'
   | 'source_url'
   | 'asset'
   | 'data'
@@ -55,6 +56,7 @@ export type CommonSortValues = {
 };
 
 export type WebpagesSortValues = CommonSortValues & {
+  page_typeSort: SortOrder;
   urlSort: SortOrder;
   titleSort: SortOrder;
 };

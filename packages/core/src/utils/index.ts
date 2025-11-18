@@ -2,6 +2,7 @@ import { SPECIAL_CHARS_REGEX } from '../constants/regex';
 import apiClient from '../http/client';
 import { OrganizationDetailsResponse, SessionApiResponse, WebSocketMessage } from '../types';
 import { ConversationDetailsDataResponse, PaginationPageType } from '../types/admin/admin';
+import { Operator } from '../types/admin/api';
 import DateUtil from './dateUtils';
 import isEqual from 'lodash/isEqual';
 
@@ -257,5 +258,136 @@ export const extractFilenameFromUrl = (url: string): string => {
     return filename;
   } catch {
     return 'Breakout file';
+  }
+};
+
+/**
+ * Evaluates numeric conditions based on operators and returns the matching label.
+ *
+ * labelAssignmentValue is an object where:
+ * - Key: operator name (e.g., "lt", "gt", "between", "eq", "neq", "gte", "lte", "contains")
+ * - Value: [thresholds, label] where:
+ *   - thresholds: array of numbers/strings (e.g., [30] for lt/gt, [30, 60] for between)
+ *   - label: string to return if condition matches
+ *
+ * Examples:
+ * { "lt": [["30"], "low"] } -> if value < 30, return "low"
+ * { "gt": [[60], "high"] } -> if value > 60, return "high"
+ * { "between": [[30, 60], "medium"] } -> if 30 <= value <= 60, return "medium"
+ * { "eq": [["10"], "exact"] } -> if value === 10, return "exact"
+ */
+export const getNumericConditionValue = (
+  value: string | number,
+  labelAssignmentValue: Partial<Record<Operator, [Array<string | number>, string]>> | null,
+): string | number => {
+  if (!labelAssignmentValue) {
+    return value;
+  }
+
+  // Convert value to number for numeric comparisons
+  const numericValue = typeof value === 'string' ? parseFloat(value) : value;
+  const isNumeric = !isNaN(numericValue) && isFinite(numericValue);
+
+  // Find the first matching condition
+  for (const [operator, conditionValue] of Object.entries(labelAssignmentValue)) {
+    // Format: [thresholds, label]
+    if (!Array.isArray(conditionValue) || conditionValue.length !== 2) {
+      continue;
+    }
+
+    const [thresholds, label] = conditionValue;
+    if (!Array.isArray(thresholds) || typeof label !== 'string') {
+      continue;
+    }
+
+    // Convert thresholds to numbers
+    const numericThresholds = thresholds.map((t) => (typeof t === 'string' ? parseFloat(t) : t));
+
+    let matches = false;
+
+    switch (operator as Operator) {
+      case 'lt':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue < numericThresholds[0];
+        }
+        break;
+
+      case 'gt':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue > numericThresholds[0];
+        }
+        break;
+
+      case 'lte':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue <= numericThresholds[0];
+        }
+        break;
+
+      case 'gte':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue >= numericThresholds[0];
+        }
+        break;
+
+      case 'eq':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue === numericThresholds[0];
+        }
+        break;
+
+      case 'neq':
+        if (isNumeric && numericThresholds.length >= 1) {
+          matches = numericValue !== numericThresholds[0];
+        }
+        break;
+
+      case 'between':
+        if (isNumeric && numericThresholds.length >= 2) {
+          const [min, max] = numericThresholds;
+          matches = numericValue >= min && numericValue <= max;
+        }
+        break;
+
+      case 'contains': {
+        const valueStr = String(value);
+        matches = thresholds.some((threshold) => valueStr.includes(String(threshold)));
+        break;
+      }
+    }
+
+    if (matches) {
+      return label;
+    }
+  }
+
+  return value;
+};
+
+/**
+ * Gets the label assignment value based on the assignment type.
+ * Supports NONE, MAPPING, and NUMERIC_CONDITION types.
+ */
+export const getLabelAssignmentValue = (
+  value: string | number,
+  labelAssignmentType: 'NONE' | 'MAPPING' | 'NUMERIC_CONDITION' | null,
+  labelAssignmentValue: Record<string, string | [Array<string | number>, string]> | null,
+): string | number => {
+  if (!labelAssignmentType) {
+    return value;
+  }
+  switch (labelAssignmentType) {
+    case 'NONE':
+      return value;
+    case 'MAPPING':
+      // For MAPPING, labelAssignmentValue should be Record<string, string>
+      return (labelAssignmentValue as Record<string, string> | null)?.[value as string | number] ?? value;
+    case 'NUMERIC_CONDITION': {
+      // For NUMERIC_CONDITION, labelAssignmentValue should be Partial<Record<Operator, [Array<string | number>, string]>>
+      return getNumericConditionValue(
+        value,
+        labelAssignmentValue as Partial<Record<Operator, [Array<string | number>, string]>> | null,
+      );
+    }
   }
 };

@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { getSessionDetailsByProspectId, getSessionDetailsBySessionId } from '@meaku/core/adminHttp/api';
 import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
 import { BreakoutQueryOptions } from '@meaku/core/types/queries';
@@ -25,21 +25,35 @@ const useSessionDetailsQuery = (
   options: SessionDetailsDataQueryOptions = {},
 ): UseQueryResult<SessionDetailsDataResponse> => {
   const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
+  const queryClient = useQueryClient();
   const sessionId = payload.sessionId;
   const prospectId = payload.prospectId;
 
   const sessionDetailsDataQuery = useQuery({
-    queryKey: getSessionDetailsDataKey(tenantName ?? '', sessionId, prospectId),
+    queryKey: getSessionDetailsDataKey(tenantName, sessionId ?? '', prospectId ?? ''),
     queryFn: async () => {
+      let data: SessionDetailsDataResponse;
+
       if (prospectId) {
         const response = await getSessionDetailsByProspectId(prospectId);
-        return response.data;
+        data = response.data;
       } else if (sessionId) {
         const response = await getSessionDetailsBySessionId(sessionId);
-        return response.data;
+        data = response.data;
+      } else {
+        throw new Error('Either prospectId or sessionId is required');
       }
 
-      throw new Error('Either prospectId or sessionId is required');
+      // Cache the data under the alternate key (sessionId if fetched by prospectId, prospectId if fetched by sessionId)
+      const alternateSessionId = prospectId ? (data.session?.session_id ?? '') : '';
+      const alternateProspectId = sessionId ? (data.prospect?.prospect_id ?? '') : '';
+
+      if (alternateSessionId || alternateProspectId) {
+        const alternateKey = getSessionDetailsDataKey(tenantName, alternateSessionId, alternateProspectId);
+        queryClient.setQueryData(alternateKey, data);
+      }
+
+      return data;
     },
     enabled: !!sessionId || !!prospectId,
     ...options,

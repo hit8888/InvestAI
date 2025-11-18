@@ -11,6 +11,7 @@ import { BrowsedUrl } from '@meaku/core/types/common';
 import { DataSourceItem, SdrAssignment } from '@meaku/core/types/admin/api';
 import useWebpageScreenshotsActiveConversation from '../hooks/useWebpageScreenshotsActiveConversation';
 import { CoreCompanyResponse } from '@meaku/core/types/admin/admin';
+import { useNewConversationNotifications } from '../hooks/useNewConversationNotifications';
 
 export interface ActiveConversation {
   agent_id: number;
@@ -66,6 +67,10 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
   const [activeConversations, setActiveConversations] = useState<ActiveConversation[] | null>(null);
   const { sessionID } = useParams<{ sessionID: string }>();
   const { setCurrentConversation } = useJoinConversationStore();
+
+  // Use the notification hook
+  const { handleNewConversationNotification, cleanupNotifiedConversations, isAlreadyNotified } =
+    useNewConversationNotifications();
 
   const baseVolume = 0.35;
   const { play } = useSound(popupsound, baseVolume);
@@ -155,8 +160,19 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
     const hasNewSession = !!liveSessionIds.find((sessionId) => !currentSessionIds.includes(sessionId));
 
     if (hasNewSession) {
-      refetchActiveConversations().then(() => {
+      refetchActiveConversations().then((result) => {
         play();
+
+        // Handle notifications for new conversations
+        if (result.data) {
+          const newSessionIds = liveSessionIds.filter((sessionId) => !currentSessionIds.includes(sessionId));
+          const newConversations = result.data.filter(
+            (conv: ActiveConversation) =>
+              newSessionIds.includes(conv.session_id) && !isAlreadyNotified(conv.session_id),
+          );
+
+          handleNewConversationNotification(newConversations);
+        }
       });
     } else {
       setActiveConversations((conversations) => {
@@ -183,6 +199,13 @@ export const ActiveConversationsProvider = ({ children }: { children: React.Reac
       });
     }
   }, [lastMessageBySession, hasUserLeftBySession]);
+
+  // Clean up notified conversations when activeConversations changes
+  useEffect(() => {
+    if (activeConversations) {
+      cleanupNotifiedConversations(activeConversations);
+    }
+  }, [activeConversations, cleanupNotifiedConversations]);
 
   return (
     <ActiveConversationsContext.Provider

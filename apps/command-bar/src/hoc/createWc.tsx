@@ -33,6 +33,7 @@ export function createWc(WrappedComponent: ComponentType, hostId: string) {
         rootBottomOffset: 'string',
         rootRightOffset: 'string',
         feedbackEnabled: 'boolean',
+        activeModule: 'string',
       },
       shadow: 'open',
     },

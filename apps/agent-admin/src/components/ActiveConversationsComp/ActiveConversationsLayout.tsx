@@ -19,9 +19,7 @@ import PanelConversationActiveIcon from '@breakout/design-system/components/icon
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
-import useNewConversationToast, { globalToastTracker } from '../../hooks/useNewConversationToast';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
-import toast from 'react-hot-toast';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
@@ -46,6 +44,7 @@ const createJoinSessionEvent = (
     first_name: string;
     last_name: string;
     profile_picture: string | null;
+    user_id: number;
   },
 ): EventMessageContent => ({
   content,
@@ -54,6 +53,7 @@ const createJoinSessionEvent = (
     first_name: eventData.first_name,
     last_name: eventData.last_name,
     profile_picture: eventData.profile_picture,
+    user_id: eventData.user_id,
   },
 });
 
@@ -158,14 +158,8 @@ const ActiveConversationsLayout = () => {
       if (sessionsStatus[conversation.session_id] === AdminConversationJoinStatus.EXIT) {
         updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.INIT);
       }
-
-      // Dismiss the toast for this conversation when card is clicked
-      toast.dismiss(`new-convo-${conversation.session_id}`);
-
-      // Remove from global toast tracker to prevent showing the toast again
-      globalToastTracker.activeToastIds.delete(conversation.session_id);
     },
-    [updateSessionStatus],
+    [navigate, sessionsStatus, updateSessionStatus],
   );
 
   const handleWebSocketChange = useCallback((sessionId: string, sendMessage: SendMessageFn) => {
@@ -200,6 +194,7 @@ const ActiveConversationsLayout = () => {
             first_name: string;
             last_name: string;
             profile_picture: string | null;
+            user_id: number;
           },
         );
         break;
@@ -236,6 +231,7 @@ const ActiveConversationsLayout = () => {
         first_name: userInfo?.first_name ?? '',
         last_name: userInfo?.last_name ?? '',
         profile_picture: userInfo?.profile_picture ?? '',
+        user_id: userInfo?.id ?? '',
       }),
       message_type: 'EVENT',
     });
@@ -253,17 +249,6 @@ const ActiveConversationsLayout = () => {
       message_type: 'EVENT',
     });
   };
-
-  const handleJoinButtonInToast = useCallback(
-    (conversation: ActiveConversation) => {
-      handleCardClick(conversation);
-      updateSessionStatus(conversation.session_id, AdminConversationJoinStatus.PENDING);
-    },
-    [handleCardClick, updateSessionStatus],
-  );
-
-  // Show new conversation Notification Toast when a new conversation is added
-  useNewConversationToast(currentTabConversations, handleJoinButtonInToast);
 
   useEffect(() => {
     return () => {

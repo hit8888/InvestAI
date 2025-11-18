@@ -2,7 +2,9 @@ import { FileText } from 'lucide-react';
 import useFrequentSourcesQuery from '../../queries/query/useFrequentSourcesQuery';
 import CommonMinTableView from './CommonMinTableView';
 import { FrequentDocumentsResponse } from '@meaku/core/types/admin/api';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSessionStore } from '../../stores/useSessionStore';
+import { buildPathWithTenantBase } from '../../utils/navigation';
 
 const DOCUMENT_TYPE_TO_PATH_MAP = {
   WEB_PAGE: 'webpages',
@@ -20,7 +22,7 @@ type Document = FrequentDocumentsResponse['most_frequently_referenced_documents'
 
 const FrequentSources = ({ start_date, end_date, timezone }: FrequentSourcesProps) => {
   const navigate = useNavigate();
-  const { tenantName } = useParams();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const { data, isLoading } = useFrequentSourcesQuery({
     start_date,
     end_date,
@@ -32,7 +34,7 @@ const FrequentSources = ({ start_date, end_date, timezone }: FrequentSourcesProp
   const handleSourceRowClick = (rowData: unknown) => {
     const document = rowData as Document;
     const redirectPath = `agent/datasets/${DOCUMENT_TYPE_TO_PATH_MAP[document.data_source_type]}`;
-    const fullBasePath = tenantName ? `/${tenantName}/${redirectPath}` : `/${redirectPath}`;
+    const fullBasePath = buildPathWithTenantBase(tenantName, redirectPath);
 
     if (document.data_source_type === 'WEB_PAGE') {
       if (document.web_page_id) {

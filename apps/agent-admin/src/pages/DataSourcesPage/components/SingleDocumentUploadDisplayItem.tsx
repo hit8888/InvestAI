@@ -27,7 +27,7 @@ const SingleDocumentUploadDisplayItem = ({ item }: SingleDocumentUploadDisplayIt
         options={DOCUMENT_ACCESS_TYPE_OPTIONS}
         placeholderLabel="Select Access Type"
         showTooltipContent
-        defaultValue={access_type || undefined}
+        defaultValue={access_type || 'INTERNAL'}
         onCallback={(value) => updateDataSource(id, { access_type: value })}
         fontToShown="text-sm"
         menuContentAlign="end"

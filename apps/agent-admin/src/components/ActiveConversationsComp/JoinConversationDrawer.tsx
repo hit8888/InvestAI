@@ -8,12 +8,10 @@ import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
-import {
-  checkIsAdminJoinedMessage,
-  checkIsAdminLeftMessage,
-  checkIsUserLeftMessage,
-} from '@meaku/core/utils/messageUtils';
+import { checkIsUserLeftMessage } from '@meaku/core/utils/messageUtils';
 import { MessageRole } from '@meaku/shared/types/message';
+import { useSessionStore } from '../../stores/useSessionStore';
+import { getActiveJoinUser } from '../../utils/conversationUtils';
 
 type JoinConversationDrawerProps = {
   conversation: ActiveConversation;
@@ -34,6 +32,8 @@ const JoinConversationDrawer = ({
   const { updateSessionStatus, sessionsStatus, setIsGeneratingAIResponse, currentConversation } =
     useJoinConversationStore();
   const { messages, setMessages } = useMessageStore();
+  const userInfo = useSessionStore((state) => state.userInfo);
+  const currentUserId = userInfo?.id;
   const lastUserMessage = messages.filter((message) => message.role === MessageRole.USER).at(-1);
   const hasUserLeft = lastUserMessage && checkIsUserLeftMessage(lastUserMessage);
 
@@ -43,6 +43,10 @@ const JoinConversationDrawer = ({
       refetchOnMount: 'always',
     },
   );
+
+  const { hasActiveJoin, activeUserId } = getActiveJoinUser(messages);
+  const hasActiveJoinFromOtherUser = hasActiveJoin && activeUserId !== currentUserId;
+  const hasActiveJoinForCurrentUser = activeUserId === currentUserId;
 
   useEffect(() => {
     if (isFetching || !data) return;
@@ -55,18 +59,21 @@ const JoinConversationDrawer = ({
   }, [isFetching, data, setMessages]);
 
   useEffect(() => {
-    if (isFetching || !data) return;
+    if (isFetching || !data || !currentUserId || hasActiveJoinFromOtherUser) return;
 
-    const currentAdminSessionEvents = data.chat_history.filter(
-      (message) => checkIsAdminJoinedMessage(message) || checkIsAdminLeftMessage(message),
-    );
-    const mostRecentSessionEvent = currentAdminSessionEvents[currentAdminSessionEvents.length - 1];
-
-    if (mostRecentSessionEvent && checkIsAdminJoinedMessage(mostRecentSessionEvent)) {
-      // Auto-reconnect: set session status to JOINED if most recent event is JOIN_SESSION
+    // Auto-reconnect: set session status to JOINED if current user has an active join
+    if (hasActiveJoinForCurrentUser) {
       updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);
     }
-  }, [isFetching, data, sessionId, updateSessionStatus]);
+  }, [
+    isFetching,
+    data,
+    sessionId,
+    updateSessionStatus,
+    currentUserId,
+    hasActiveJoinForCurrentUser,
+    hasActiveJoinFromOtherUser,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -123,7 +130,7 @@ const JoinConversationDrawer = ({
               onAIResponseGenerationRequest={handleAIResponseGenerationRequest}
               onExit={onExitConversation}
               onClose={onClose}
-              disableJoinButton={hasUserLeft}
+              disableJoinButton={hasUserLeft || hasActiveJoinFromOtherUser}
             />
           </div>
         </PopoverContent>

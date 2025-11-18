@@ -37,6 +37,7 @@ interface ConfigurationTableContainerProps {
   isFormValid?: boolean;
   savedData?: ConfigurationData[]; // Add savedData to compare with current form values
   addDefaultRow?: ConfigurationData[];
+  handleCancelButtonClick?: () => void;
 }
 
 const TableContainer = ({
@@ -50,6 +51,7 @@ const TableContainer = ({
   isFormValid = false,
   savedData = [],
   addDefaultRow = [],
+  handleCancelButtonClick,
 }: ConfigurationTableContainerProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -251,17 +253,22 @@ const TableContainer = ({
         >
           Add
         </Button>
-        {onSubmit && (
-          <Button
-            type="submit"
-            disabled={isSaveButtonDisabled}
-            variant="system_secondary"
-            buttonStyle="rightIcon"
-            rightIcon={<SaveIcon className="h-4 w-4" />}
-          >
-            Save
+        <div className="flex items-center gap-2">
+          <Button variant="system_secondary" onClick={handleCancelButtonClick}>
+            Cancel
           </Button>
-        )}
+          {onSubmit && (
+            <Button
+              type="submit"
+              disabled={isSaveButtonDisabled}
+              variant="system_secondary"
+              buttonStyle="rightIcon"
+              rightIcon={<SaveIcon className="h-4 w-4" />}
+            >
+              Save
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );

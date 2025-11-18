@@ -3,7 +3,9 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import ChipWithLabelAndCount from '@breakout/design-system/components/layout/ChipWithLabelAndCount';
 import { Settings, ArrowRight } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSessionStore } from '../../../stores/useSessionStore';
+import { buildPathWithTenantBase } from '../../../utils/navigation';
 
 interface SectionReadyToDisplayContentProps {
   header: string;
@@ -24,9 +26,9 @@ const SectionReadyToDisplayContent = ({
   videoCount,
   pathToDatasets,
 }: SectionReadyToDisplayContentProps) => {
-  const { tenantName } = useParams();
+  const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
   const isVideoPresent = videoCount > 0;
-  const fullPath = tenantName ? `/${tenantName}/${pathToDatasets}` : `/${pathToDatasets}`;
+  const fullPath = buildPathWithTenantBase(tenantName, pathToDatasets);
 
   return (
     <Card background="GRAY25" border="GRAY200">

@@ -96,6 +96,7 @@ export const isDisplayedAsTextMessage = (message: WebSocketMessage): boolean => 
   return (
     message.message_type === 'TEXT' ||
     message.message_type === 'STREAM' ||
+    (message.message_type === 'EVENT' && message.message.event_type === 'NUDGE_CTA_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SUGGESTED_QUESTION_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'SLIDE_ITEM_CLICKED') ||
     (message.message_type === 'EVENT' && message.message.event_type === 'PRIMARY_GOAL_CTA_CLICKED') ||
@@ -496,6 +497,19 @@ export const checkIsAdminLeftMessage = (message: WebSocketMessage): boolean => {
 
 export const checkIsUserLeftMessage = (message: WebSocketMessage): boolean => {
   return message.message_type === 'EVENT' && message.message.event_type === 'USER_LEFT';
+};
+
+/**
+ * Filters out consecutive USER_LEFT events, keeping only the first one in each sequence.
+ * This prevents duplicate USER_LEFT notifications from being displayed.
+ * @param messages - Array of WebSocket messages to filter
+ * @returns Filtered array with consecutive USER_LEFT events deduplicated
+ */
+export const filterConsecutiveUserLeftEvents = (messages: WebSocketMessage[]): WebSocketMessage[] => {
+  return messages.filter(
+    (message, index, self) =>
+      !checkIsUserLeftMessage(message) || index === 0 || !checkIsUserLeftMessage(self[index - 1]),
+  );
 };
 
 export function getMessageViewType(messageSenderRole: MessageSenderRole, viewType: ViewType): MessageViewType {

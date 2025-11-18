@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import { FilterType, CommonFilterContentProps } from '@meaku/core/types/admin/filters';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
@@ -10,11 +10,18 @@ const SourcesFilterContent = ({ page, filterState, handleClosePopover }: CommonF
   const { filters, setFilter, resultantOptions, isLoading, isError } = useDataSourceFilterContent({
     page,
     field: 'sources',
-    filterPayload: 'data_source_type',
+    filterPayload: 'page_type',
   });
 
+  const transformedResultantOptions = useMemo(() => {
+    return resultantOptions.map((option) => ({
+      ...option,
+      label: option.label.replace(/_/g, ' ').toLowerCase(),
+    }));
+  }, [resultantOptions]);
+
   if (isLoading) return <FilterOptionsShimmer />;
-  if (isError || !resultantOptions.length)
+  if (isError || !transformedResultantOptions.length)
     return <p className="p-4 text-center text-sm text-gray-500"> No Sources data</p>;
 
   return (
@@ -23,7 +30,7 @@ const SourcesFilterContent = ({ page, filterState, handleClosePopover }: CommonF
         filterState={filterState}
         handleClosePopover={handleClosePopover}
         keyValue={Sources}
-        checkboxOptions={resultantOptions}
+        checkboxOptions={transformedResultantOptions}
         selectedOptions={filters.sources}
         onSelectionChange={(value) => setFilter(page, Sources, value)}
       />
