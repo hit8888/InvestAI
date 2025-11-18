@@ -9,7 +9,7 @@ interface SidebarContextProps {
   toggleIsUploadingValue: (value: boolean) => void;
 }
 
-const { AGENT_KNOWLEDGE_BASE } = AppRoutesEnum;
+const { AGENT_DATASETS } = AppRoutesEnum;
 
 const DataSourcesContext = createContext<SidebarContextProps | undefined>(undefined);
 
@@ -18,7 +18,7 @@ export const DataSourcesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const getSelectedTypeFromPath = (path: string): string | null => {
     // Remove trailing slash for consistent comparison
     const normalizedPath = path.replace(/\/+$/, '');
-    const normalizedDataSourcesPath = AGENT_KNOWLEDGE_BASE.replace(/\/+$/, '');
+    const normalizedDataSourcesPath = AGENT_DATASETS.replace(/\/+$/, '');
 
     if (normalizedPath === normalizedDataSourcesPath) {
       return null;

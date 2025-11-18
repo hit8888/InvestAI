@@ -11,7 +11,7 @@ const withPageViewWrapper = <P extends object>(
 
     return (
       <div
-        className={cn('flex w-full flex-col items-start gap-6 bg-white p-6', className, {
+        className={cn('flex w-full flex-col items-start gap-6', className, {
           // Remove bottom padding for scrollable pages (non-table pages)
           'pb-0': !isTableV2Page,
         })}

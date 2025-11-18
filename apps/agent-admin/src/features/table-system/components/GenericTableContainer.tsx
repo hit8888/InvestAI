@@ -199,7 +199,7 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
             </div>
           ) : (
             // Table (with data or loading shimmer)
-            <div className="relative mb-4">
+            <div className="relative mb-2 border-b border-gray-200">
               <GenericTable
                 data={tableData}
                 columns={columns}
@@ -224,7 +224,7 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
         {/* Pagination */}
         {!isEmpty && (
           <GenericTablePagination
-            currentPage={data?.current_page ?? 1}
+            currentPage={urlState.page}
             pageSize={urlState.pageSize}
             totalPages={data?.total_pages ?? 1}
             totalRecords={data?.total_records ?? 0}
@@ -232,6 +232,7 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
             onPageChange={urlState.setPage}
             onPageSizeChange={urlState.setPageSize}
             isLoading={isLoading}
+            isFetching={isFetching}
           />
         )}
       </div>

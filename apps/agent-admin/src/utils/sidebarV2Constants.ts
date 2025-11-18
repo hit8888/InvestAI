@@ -2,10 +2,7 @@ import { AppRoutesEnum, SidebarNavItemsEnum } from './constants';
 import {
   CalendarIcon,
   MessageSquareText,
-  IdCard,
-  GraduationCap,
-  Users,
-  Blocks,
+  UserStar,
   ToyBrick,
   CircleUser,
   Brain,
@@ -14,6 +11,11 @@ import {
   LogOut,
   UserRoundCog,
   Workflow,
+  Database,
+  LayoutTemplate,
+  Globe,
+  ContactRound,
+  Settings2,
 } from 'lucide-react';
 
 /**
@@ -22,8 +24,8 @@ import {
  */
 
 export enum SidebarV2AccordionGroup {
-  BREAKOUT_BLOCKS = 'Breakout Blocks',
-  VISITOR_REVEAL = 'Visitor Reveal',
+  BREAKOUT_BLOCKS = 'Blocks',
+  VISITOR_REVEAL = 'Reveal',
 }
 
 export enum SidebarV2SettingsGroup {
@@ -45,8 +47,6 @@ export interface SidebarV2LinkItem {
 export interface SidebarV2AccordionSection {
   title: SidebarV2AccordionGroup;
   items: SidebarV2LinkItem[];
-  defaultOpen?: boolean;
-  badge?: string; // Short text displayed in collapsed sidebar (e.g., 'BB', 'VR')
 }
 
 // ============================================================================
@@ -61,6 +61,13 @@ export const INSIGHTS_ITEM: SidebarV2LinkItem = {
   navItem: 'Insights',
   icon: Brain,
   activeIcon: Brain,
+};
+
+export const CONFIG_ITEM: SidebarV2LinkItem = {
+  navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
+  navItem: 'Config',
+  icon: Settings2,
+  activeIcon: Settings2,
 };
 
 // ============================================================================
@@ -90,22 +97,22 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
   {
     navUrl: `/${AppRoutesEnum.ACTIVE_LEADS}`, // V1: Visitors page / Breakout Captured Leads tab
     navItem: 'Leads',
-    icon: IdCard,
-    activeIcon: IdCard,
+    icon: UserStar,
+    activeIcon: UserStar,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: `/${AppRoutesEnum.AGENT_KNOWLEDGE_BASE}`, // V1: Same as V1
-    navItem: 'Knowledge Base',
-    icon: GraduationCap,
-    activeIcon: GraduationCap,
+    navUrl: `/${AppRoutesEnum.AGENT_DATASETS}`, // V1: Same as V1
+    navItem: 'Datasets',
+    icon: Database,
+    activeIcon: Database,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
-    navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
-    navItem: 'AI Blocks',
-    icon: Blocks,
-    activeIcon: Blocks,
+    navUrl: `/${AppRoutesEnum.BLOCKS}`,
+    navItem: 'Blocks',
+    icon: LayoutTemplate,
+    activeIcon: LayoutTemplate,
     accordionGroup: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
   },
   {
@@ -123,10 +130,17 @@ export const BREAKOUT_BLOCKS_ITEMS: SidebarV2LinkItem[] = [
  */
 export const VISITOR_REVEAL_ITEMS: SidebarV2LinkItem[] = [
   {
-    navUrl: '/visitors', // V2 feature - new page to be built at the end, blank for now
-    navItem: 'Visitors',
-    icon: Users,
-    activeIcon: Users,
+    navUrl: `/${AppRoutesEnum.COMPANIES}`,
+    navItem: 'Accounts',
+    icon: Globe,
+    activeIcon: Globe,
+    accordionGroup: SidebarV2AccordionGroup.VISITOR_REVEAL,
+  },
+  {
+    navUrl: `/${AppRoutesEnum.VISITORS_V2}`,
+    navItem: 'Contacts',
+    icon: ContactRound,
+    activeIcon: ContactRound,
     accordionGroup: SidebarV2AccordionGroup.VISITOR_REVEAL,
   },
 ];
@@ -134,25 +148,26 @@ export const VISITOR_REVEAL_ITEMS: SidebarV2LinkItem[] = [
 /**
  * All accordion sections configuration
  */
-export const SIDEBAR_V2_ACCORDION_SECTIONS: SidebarV2AccordionSection[] = [
+export const SIDEBAR_V2_MAIN_SECTIONS: SidebarV2AccordionSection[] = [
   {
     title: SidebarV2AccordionGroup.BREAKOUT_BLOCKS,
     items: BREAKOUT_BLOCKS_ITEMS,
-    defaultOpen: true, // Open by default
-    badge: 'BB', // Badge text shown in collapsed sidebar
   },
   {
     title: SidebarV2AccordionGroup.VISITOR_REVEAL,
     items: VISITOR_REVEAL_ITEMS,
-    defaultOpen: false, // Open by default
-    badge: 'VR', // Badge text shown in collapsed sidebar
   },
 ];
 
 /**
  * Flat list of all main navigation items (for easier filtering/searching)
  */
-export const SIDEBAR_V2_MAIN_ITEMS: SidebarV2LinkItem[] = [...BREAKOUT_BLOCKS_ITEMS, ...VISITOR_REVEAL_ITEMS];
+export const SIDEBAR_V2_MAIN_ITEMS: SidebarV2LinkItem[] = [
+  ...BREAKOUT_BLOCKS_ITEMS,
+  ...VISITOR_REVEAL_ITEMS,
+  INSIGHTS_ITEM,
+  CONFIG_ITEM,
+];
 
 // ============================================================================
 // SETTINGS NAVIGATION ITEMS

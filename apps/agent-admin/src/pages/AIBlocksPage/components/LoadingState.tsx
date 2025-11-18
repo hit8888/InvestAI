@@ -3,13 +3,13 @@ import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton'
 import Typography from '@breakout/design-system/components/Typography/index';
 
 /**
- * Loading state component for AI Blocks page
+ * Loading state component for Blocks page
  * Displays skeleton loaders while data is being fetched
  */
 const LoadingState = React.memo(() => (
   <div className="flex w-full flex-col gap-6">
     <div className="flex-1 flex-col gap-2">
-      <Typography variant="title-18">AI Blocks</Typography>
+      <Typography variant="title-18">Blocks</Typography>
       <Typography variant="body-14" textColor="gray500">
         Manage and configure your website engagement blocks
       </Typography>

@@ -1,6 +1,6 @@
 import z from 'zod';
 import { FunnelStepSchema } from '@meaku/core/types/admin/api';
-import { ConversationChipLabelEnum, NavigationGroup } from './constants';
+import { ConversationChipLabelEnum } from './constants';
 
 // Desired data type for FunnelData
 export type FunnelData = {
@@ -16,31 +16,6 @@ export type ConversationRightSideDetailsType = {
   itemLabel: string;
   itemKey: string;
   ItemIcon: React.ElementType; // If it's a React component
-};
-
-export interface NavLinkItemsType {
-  navUrl: string;
-  navItem: string;
-  isActive: boolean;
-  hasChildren?: boolean;
-  children?: NavItemChildrenType[];
-  navImg: React.ReactNode;
-}
-
-export interface NavItemChildrenType {
-  navItem: string;
-  navUrl: string;
-  isActive: boolean;
-}
-
-export type NavLinkItem = {
-  navUrl: string;
-  navItem: string;
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  activeIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  children?: NavLinkItem[];
-  group?: NavigationGroup;
-  requiredFeatureFlag?: string;
 };
 
 export enum ActiveConversationAttachmentOption {

@@ -43,7 +43,7 @@ const InsightsPage = () => {
   };
 
   return (
-    <div className="flex w-full flex-shrink-0 flex-col items-start gap-4 bg-white p-14">
+    <div className="flex w-full flex-shrink-0 flex-col items-start gap-4 bg-white p-4">
       <div className="flex-start flex w-full flex-col gap-4 self-stretch">
         <div className="flex w-full justify-between">
           <Typography variant={'title-24'}>Insights</Typography>

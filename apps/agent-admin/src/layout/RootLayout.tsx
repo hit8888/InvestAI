@@ -45,7 +45,7 @@ const RootLayout = () => {
   return (
     <SidebarProvider>
       <div
-        className={cn('flex w-full gap-4 p-4', {
+        className={cn('flex w-full', {
           'p-0': isTrainingPlaygroundPreviewPage,
         })}
       >
@@ -55,7 +55,7 @@ const RootLayout = () => {
             'w-full': isLoginPage,
             // Table pages: overflow-hidden (tables handle their own scrolling)
             // Non-table pages: overflow-y-auto (enable vertical scrolling)
-            'max-h-[calc(100vh-32px)] min-w-0 flex-1 rounded-xl border': !isLoginPage,
+            'max-h-screen min-w-0 flex-1 border-l': !isLoginPage,
             'overflow-hidden': !isLoginPage && isTableV2Page,
             'overflow-y-auto': !isLoginPage && !isTableV2Page,
             'max-h-full border-0': isTrainingPlaygroundPreviewPage,

@@ -5,11 +5,11 @@ import { useSessionStore } from '../stores/useSessionStore';
 
 /**
  * Build a tenant-scoped absolute path by prefixing the current tenant base to a relative path.
- * Example: current "/acme/ai-blocks" + "/ai-blocks/123" => "/acme/ai-blocks/123"
+ * Example: current "/acme/blocks" + "/blocks/123" => "/acme/blocks/123"
  */
 export function buildTenantScopedPath(currentPathname: string, relativePath: string): string {
-  const aiBlocksIndex = currentPathname.indexOf('/ai-blocks');
-  const base = aiBlocksIndex >= 0 ? currentPathname.substring(0, aiBlocksIndex) : currentPathname;
+  const blocksIndex = currentPathname.indexOf('/blocks');
+  const base = blocksIndex >= 0 ? currentPathname.substring(0, blocksIndex) : currentPathname;
   return `${base}${relativePath}`.replace(/\/+$/, '');
 }
 

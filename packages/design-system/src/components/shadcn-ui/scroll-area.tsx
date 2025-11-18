@@ -3,16 +3,80 @@ import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 
 import { cn } from '../../lib/cn';
 
-const ScrollArea = React.forwardRef<
-  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
->(({ className, children, ...props }, ref) => (
-  <ScrollAreaPrimitive.Root ref={ref} className={cn('relative overflow-hidden', className)} {...props}>
-    <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">{children}</ScrollAreaPrimitive.Viewport>
-    <ScrollBar />
-    <ScrollAreaPrimitive.Corner />
-  </ScrollAreaPrimitive.Root>
-));
+type ScrollAreaViewportProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Viewport>;
+
+type ScrollAreaProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+  viewportProps?: Omit<ScrollAreaViewportProps, 'children'>;
+  viewportRef?: React.Ref<HTMLDivElement>;
+};
+
+const ScrollArea = React.forwardRef<React.ElementRef<typeof ScrollAreaPrimitive.Root>, ScrollAreaProps>(
+  ({ className, children, viewportProps, viewportRef: externalViewportRef, ...props }, ref) => {
+    const { className: viewportClassName, style: viewportStyle, ...restViewportProps } = viewportProps ?? {};
+
+    const viewportRef = React.useRef<HTMLDivElement | null>(null);
+
+    const processedChildren = React.useMemo(() => {
+      if (!viewportStyle) {
+        return children;
+      }
+
+      const arrayChildren = React.Children.toArray(children);
+      if (arrayChildren.length === 0) {
+        return children;
+      }
+
+      return arrayChildren.map((child, index) => {
+        if (index !== 0 || !React.isValidElement(child)) {
+          return child;
+        }
+
+        const childElement = child as React.ReactElement<{ style?: React.CSSProperties }>;
+        const mergedStyle = { ...(childElement.props.style ?? {}), ...viewportStyle };
+        return React.cloneElement(childElement, { style: mergedStyle });
+      });
+    }, [children, viewportStyle]);
+
+    const assignViewportRef = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        viewportRef.current = node;
+
+        if (typeof externalViewportRef === 'function') {
+          externalViewportRef(node);
+        } else if (externalViewportRef) {
+          (externalViewportRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      },
+      [externalViewportRef],
+    );
+
+    React.useLayoutEffect(() => {
+      const viewportElement = viewportRef.current;
+      if (!viewportElement) {
+        return;
+      }
+
+      const firstChild = viewportElement.firstElementChild as HTMLElement | null;
+      if (firstChild) {
+        firstChild.style.display = 'block';
+      }
+    }, [processedChildren]);
+
+    return (
+      <ScrollAreaPrimitive.Root ref={ref} className={cn('relative overflow-hidden', className)} {...props}>
+        <ScrollAreaPrimitive.Viewport
+          ref={assignViewportRef}
+          className={cn('h-full w-full rounded-[inherit]', viewportClassName)}
+          {...restViewportProps}
+        >
+          {processedChildren}
+        </ScrollAreaPrimitive.Viewport>
+        <ScrollBar />
+        <ScrollAreaPrimitive.Corner />
+      </ScrollAreaPrimitive.Root>
+    );
+  },
+);
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
 const ScrollBar = React.forwardRef<

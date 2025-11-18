@@ -12,7 +12,7 @@ interface SectionReadyToDisplayContentProps {
   noVideosMessage: string;
   noVideosDescription: string;
   videoCount: number;
-  pathToKnowledgeBase: string;
+  pathToDatasets: string;
 }
 
 const SectionReadyToDisplayContent = ({
@@ -22,11 +22,11 @@ const SectionReadyToDisplayContent = ({
   noVideosMessage,
   noVideosDescription,
   videoCount,
-  pathToKnowledgeBase,
+  pathToDatasets,
 }: SectionReadyToDisplayContentProps) => {
   const { tenantName } = useParams();
   const isVideoPresent = videoCount > 0;
-  const fullPath = tenantName ? `/${tenantName}/${pathToKnowledgeBase}` : `/${pathToKnowledgeBase}`;
+  const fullPath = tenantName ? `/${tenantName}/${pathToDatasets}` : `/${pathToDatasets}`;
 
   return (
     <Card background="GRAY25" border="GRAY200">
@@ -58,7 +58,7 @@ const SectionReadyToDisplayContent = ({
             rightIcon={<ArrowRight className="h-4 w-4" />}
             buttonStyle="rightIcon"
           >
-            Go to Knowledge Base
+            Go to Datasets
           </Button>
         </Link>
       </div>

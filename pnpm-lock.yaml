@@ -277,8 +277,8 @@ importers:
         specifier: ^11.16.4
         version: 11.18.2(@emotion/is-prop-valid@1.3.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       lucide-react:
-        specifier: ^0.469.0
-        version: 0.469.0(react@19.2.0)
+        specifier: ^0.530.0
+        version: 0.530.0(react@19.2.0)
       moment-timezone:
         specifier: ^0.6.0
         version: 0.6.0
@@ -847,8 +847,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       lucide-react:
-        specifier: ^0.469.0
-        version: 0.469.0(react@19.2.0)
+        specifier: ^0.530.0
+        version: 0.530.0(react@19.2.0)
       nanoid:
         specifier: ^5.0.7
         version: 5.0.9
@@ -6736,6 +6736,11 @@ packages:
 
   lucide-react@0.469.0:
     resolution: {integrity: sha512-28vvUnnKQ/dBwiCQtwJw7QauYnE7yd2Cyp4tTTJpvglX4EMpbflcdBgrgToX2j71B3YvugK/NH3BGUk+E/p/Fw==}
+    peerDependencies:
+      react: 19.2.0
+
+  lucide-react@0.530.0:
+    resolution: {integrity: sha512-5RkjKHbEMPnkPth9T+BIuVh+E3y4mO6qI2E+4/6GBw2KKKX8taiCPuJVtn/KdtbgBUVqKVJmEqB4ETdU4IjloQ==}
     peerDependencies:
       react: 19.2.0
 
@@ -15051,6 +15056,10 @@ snapshots:
       react: 19.2.0
 
   lucide-react@0.469.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+
+  lucide-react@0.530.0(react@19.2.0):
     dependencies:
       react: 19.2.0
 

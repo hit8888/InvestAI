@@ -8,7 +8,7 @@ const usePageRouteState = () => {
     LINK_CLICKS,
     LOGIN,
     CONVERSATIONS,
-    AGENT_KNOWLEDGE_BASE,
+    AGENT_DATASETS,
     AGENT_WORKFLOW,
     AGENT_BRANDING,
     AGENT_CONTROLS,
@@ -23,7 +23,7 @@ const usePageRouteState = () => {
   const isLeadsPage = location.pathname.includes(ACTIVE_LEADS);
   const isLinkClicksPage = location.pathname.includes(LINK_CLICKS);
   const isConversationsPage = location.pathname.includes(CONVERSATIONS);
-  const isAgentKnowledgeBasePage = location.pathname.includes(AGENT_KNOWLEDGE_BASE);
+  const isAgentDatasetsPage = location.pathname.includes(AGENT_DATASETS);
   const isAgentWorkflowPage = location.pathname.includes(AGENT_WORKFLOW);
   const isAgentBrandingPage = location.pathname.includes(AGENT_BRANDING);
   const isAgentControlsPage = location.pathname.includes(AGENT_CONTROLS);
@@ -33,7 +33,7 @@ const usePageRouteState = () => {
 
   const isAgentPage = location.pathname.match(/\/agent\/?$/) !== null;
   const isTrainingPage = location.pathname.match(/\/training\/?$/) !== null;
-  const isAIBlocksPage = location.pathname.match(/\/ai-blocks\/?$/) !== null;
+  const isBlocksPage = location.pathname.match(/\/blocks\/?$/) !== null;
 
   // Detect V2 table pages that handle their own scrolling
   // Use exact matches or trailing slash matches to avoid matching detail pages
@@ -41,7 +41,7 @@ const usePageRouteState = () => {
     location.pathname.match(/\/conversations\/?$/) !== null || // ConversationsV2 (exact match)
     location.pathname.match(/\/conversations\/leads\/?$/) !== null || // LeadsV2 (exact match)
     location.pathname.match(/\/companies\/?$/) !== null || // CompaniesV2 (exact match)
-    location.pathname.match(/\/visitors\/?$/) !== null || // VisitorsV2 (exact match)
+    location.pathname.match(/\/contacts\/?$/) !== null || // Contacts (exact match)
     location.pathname.match(/\/icp\/?$/) !== null; // IcpV2 (exact match)
 
   const pathURL = location.pathname + location.search;
@@ -54,7 +54,7 @@ const usePageRouteState = () => {
     isConversationsPage,
     isLinkClicksPage,
     isAgentPage,
-    isAgentKnowledgeBasePage,
+    isAgentDatasetsPage,
     isAgentWorkflowPage,
     isAgentBrandingPage,
     isAgentControlsPage,
@@ -63,7 +63,7 @@ const usePageRouteState = () => {
     isTrainingPlaygroundPreviewPage,
     isInsightsPage,
     isTableV2Page,
-    isAIBlocksPage,
+    isBlocksPage,
     pathURL,
   };
 };

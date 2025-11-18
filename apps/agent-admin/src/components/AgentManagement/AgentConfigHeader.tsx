@@ -15,7 +15,9 @@ const AgentConfigHeader = ({
 }: AgentConfigHeaderProps) => {
   return (
     <div className="flex-start flex w-full flex-col">
-      <Typography variant={headerVariant}>{headerLabel}</Typography>
+      <Typography className="font-bold" variant={headerVariant}>
+        {headerLabel}
+      </Typography>
       {subHeading && (
         <Typography variant={subHeadingVariant} textColor={'textSecondary'} className={'mt-2 max-w-xl'}>
           {subHeading}

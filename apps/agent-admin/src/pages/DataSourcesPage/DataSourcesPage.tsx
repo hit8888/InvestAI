@@ -61,7 +61,7 @@ const DataSourcesPage = () => {
 
   if (!selectedType) {
     return (
-      <PageContainer isLoading={isLoading} error={error} className="max-w-3xl gap-8" heading="Knowledge Base">
+      <PageContainer isLoading={isLoading} error={error} className="max-w-3xl gap-8" heading="Datasets">
         <KnowledgeSourcesContent dataSourcesData={knowledgeSourcesData} />
         <ArtifactsContent dataSourcesData={artifactsSourcesData} />
         <AgentControlsSection />

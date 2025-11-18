@@ -22,8 +22,8 @@ interface VisitorRow extends Record<string, unknown> {
  * Uses drawer for visitor details
  */
 export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
-  pageKey: 'visitors',
-  pageTitle: 'Visitors',
+  pageKey: 'contacts',
+  pageTitle: 'Contacts',
   rowKeyField: 'prospect_id', // Use prospect_id as the unique identifier for visitors
 
   api: {

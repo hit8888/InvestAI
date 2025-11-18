@@ -125,7 +125,7 @@ export const GenericTableFilters = ({
   }
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 px-4">
       {/* Filters toolbar */}
       <div className="flex items-center justify-between gap-4">
         {/* Left side: Filters button + Quick filters + Filter chips */}

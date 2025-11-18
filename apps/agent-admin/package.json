@@ -26,7 +26,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.16.4",
-    "lucide-react": "^0.469.0",
+    "lucide-react": "^0.530.0",
     "moment-timezone": "^0.6.0",
     "nanoid": "^5.0.7",
     "numeral": "^2.0.6",

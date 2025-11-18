@@ -46,7 +46,7 @@ const GlobalSettingsContainer = () => {
   const handleInstructionsEdit = () => {
     const askAiBlock = blocks?.find((b) => b.type === 'ASK_AI');
     if (!askAiBlock) return;
-    navigateToSection(navigate, location, `/ai-blocks/${askAiBlock.id}`, 'instructions-settings', 100);
+    navigateToSection(navigate, location, `/blocks/${askAiBlock.id}`, 'instructions-settings', 100);
   };
 
   return (

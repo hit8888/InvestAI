@@ -13,7 +13,7 @@ const DataSourcesNavigation = () => {
 
   const handleDataSourcesClick = () => {
     toggleDataSourceSelectedType(null);
-    const basePath = pathname.split('/knowledge-base')[0] + '/knowledge-base';
+    const basePath = pathname.split('/datasets')[0] + '/datasets';
     navigate(basePath);
   };
 
@@ -27,8 +27,8 @@ const DataSourcesNavigation = () => {
   // Create breadcrumb items array
   const breadCrumbItems = [];
 
-  // Always add "Knowledge Base"
-  breadCrumbItems.push('Agent - Knowledge Base');
+  // Always add "Datasets"
+  breadCrumbItems.push('Agent - Datasets');
 
   // Add selectedType if it exists
   if (selectedType) {
@@ -43,7 +43,7 @@ const DataSourcesNavigation = () => {
   // Handle navigation based on breadcrumb item index
   const handleNavigate = (index: number) => {
     if (index === 0) {
-      // Navigate to Knowledge Base
+      // Navigate to Datasets
       handleDataSourcesClick();
     } else if (index === 1 && selectedType) {
       // Navigate to selectedType view

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@breakout/design-system/lib/cn';
 import {
   Popover,
@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
   PopoverPortal,
 } from '@breakout/design-system/components/Popover/index';
+import SidebarToggleIcon from '@breakout/design-system/components/icons/sidebar-toggle-icon';
 import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { buildPathWithTenantBase } from '../../utils/navigation';
@@ -24,6 +25,8 @@ interface SidebarHeaderProps {
   isUserSuperAdmin: boolean;
   organizations?: OrganizationDetailsResponse[];
   onExpandSidebar: () => void;
+  onToggleCollapse: () => void;
+  isHovered?: boolean;
 }
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -35,10 +38,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   isUserSuperAdmin,
   organizations,
   onExpandSidebar,
+  onToggleCollapse,
+  isHovered = false,
 }) => {
   const navigate = useNavigate();
   const [isLogoPopoverOpen, setIsLogoPopoverOpen] = useState<boolean>(false);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isLogoHovered, setIsLogoHovered] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const organization = useSessionStore((state) => state.activeTenant);
@@ -53,6 +58,10 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
 
   // Handle click in collapsed mode - expand sidebar first, then open popover
   const handleCollapsedClick = () => {
+    // Don't allow tenant selector to work in hovered state
+    if (isHovered) {
+      return;
+    }
     onExpandSidebar();
     // Wait for sidebar expansion animation to complete (300ms)
     setTimeout(() => {
@@ -109,7 +118,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   // If not super admin, render without popover
   if (!isUserSuperAdmin) {
     return (
-      <div className="flex w-full items-center justify-start overflow-hidden">
+      <div className="relative flex w-full items-center justify-start overflow-visible">
         <AnimatePresence mode="wait">
           {isCollapsed ? (
             // Collapsed mode - Show icon
@@ -137,6 +146,24 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Toggle Button - Positioned at top right, half overflowing */}
+        {!isHovered && (
+          <button
+            onClick={onToggleCollapse}
+            className="z-200 group absolute -right-0 top-16 flex size-4 -translate-y-1/2 items-center overflow-visible rounded-lg border border-gray-300 bg-white transition-all"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <div className="flex w-8 items-center justify-center">
+              <SidebarToggleIcon className="h-4 w-4 !text-gray-500 opacity-100 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
+              {!isCollapsed ? (
+                <ChevronLeft className="-ml-2.5 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              ) : (
+                <ChevronRight className="-ml-2.5 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              )}
+            </div>
+          </button>
+        )}
       </div>
     );
   }
@@ -144,8 +171,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   // Super admin - render with popover
   return (
     <Popover
-      open={isLogoPopoverOpen}
+      open={isLogoPopoverOpen && !isHovered}
       onOpenChange={(open) => {
+        // Don't allow popover to open in hovered state
+        if (isHovered && open) {
+          return;
+        }
         setIsLogoPopoverOpen(open);
         // Clear search when closing popover
         if (!open) {
@@ -153,7 +184,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
         }
       }}
     >
-      <div className="flex w-full items-center justify-start">
+      <div className="relative flex h-16 w-full items-center justify-center overflow-visible">
         <AnimatePresence mode="wait">
           {isCollapsed ? (
             // Collapsed mode - Show icon (expands sidebar on click)
@@ -167,7 +198,10 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             >
               <button
                 onClick={handleCollapsedClick}
-                className="flex h-8 w-8 cursor-pointer items-center justify-center focus:outline-none"
+                className={cn(
+                  'flex h-8 w-8 items-center justify-center focus:outline-none',
+                  isHovered ? 'pointer-events-none' : 'cursor-pointer',
+                )}
               >
                 {collapsedIconContent}
               </button>
@@ -181,22 +215,23 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="flex w-full items-center justify-start"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setIsLogoHovered(true)}
+              onMouseLeave={() => setIsLogoHovered(false)}
             >
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    '-mx-2 flex h-14 w-[calc(100%+1rem)] cursor-pointer items-center justify-between gap-2 rounded-lg border px-2 py-1 text-left transition-all duration-300 focus:outline-none',
-                    isLogoPopoverOpen || isHovered ? 'border-gray-200' : 'border-transparent',
+                    '-mx-2 flex h-14 w-[calc(100%+1rem)] items-center justify-between gap-2 rounded-lg border px-2 py-1 text-left transition-all duration-300 focus:outline-none',
+                    !isHovered && (isLogoPopoverOpen || isLogoHovered) ? 'border-gray-200' : 'border-transparent',
+                    isHovered ? 'pointer-events-none' : 'cursor-pointer',
                   )}
                 >
                   <div className="flex-1">{logoContent}</div>
                   <ChevronDown
                     className={cn(
                       'h-4 w-4 flex-shrink-0 text-gray-500',
-                      isLogoPopoverOpen || isHovered ? 'opacity-100' : 'opacity-0',
-                      isLogoPopoverOpen && 'rotate-180',
+                      !isHovered && (isLogoPopoverOpen || isLogoHovered) ? 'opacity-100' : 'opacity-0',
+                      isLogoPopoverOpen && !isHovered && 'rotate-180',
                     )}
                   />
                 </button>
@@ -204,6 +239,24 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Toggle Button - Positioned at top right, half overflowing */}
+        {!isHovered && (
+          <button
+            onClick={onToggleCollapse}
+            className={`z-200 group absolute -bottom-4 flex size-4 translate-y-1/2 items-center overflow-visible rounded-md border border-gray-300 bg-white transition-all ${isCollapsed ? 'right-0' : '-right-2'}`}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <div className="flex w-8 items-center justify-center">
+              <SidebarToggleIcon className="h-4 w-4 !text-gray-500 opacity-100 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
+              {!isCollapsed ? (
+                <ChevronLeft className="-ml-2 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              ) : (
+                <ChevronRight className="-ml-2 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              )}
+            </div>
+          </button>
+        )}
       </div>
       <PopoverPortal>
         <PopoverContent
@@ -211,7 +264,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           align="start"
           sideOffset={8}
           style={{ width: 'var(--radix-popover-trigger-width)' }}
-          className="zoom-in-y-95 data-[state=closed]:zoom-out-y-95 origin-top rounded-lg border border-gray-200 bg-[#FCFCFD] shadow-xl duration-200 animate-in fade-in-0 slide-in-from-top-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2"
+          className="zoom-in-y-95 data-[state=closed]:zoom-out-y-95 min-w-[300px] origin-top rounded-lg border border-gray-200 bg-[#FCFCFD] shadow-xl duration-200 animate-in fade-in-0 slide-in-from-top-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2"
         >
           {/* Search input */}
           <div className="border-b border-gray-200 p-2">

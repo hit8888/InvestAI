@@ -16,6 +16,7 @@ interface GenericTablePaginationProps {
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
   isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 /**
@@ -31,21 +32,23 @@ export const GenericTablePagination = ({
   onPageChange,
   onPageSizeChange,
   isLoading = false,
+  isFetching = false,
 }: GenericTablePaginationProps) => {
   const startRecord = totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const endRecord = Math.min(currentPage * pageSize, totalRecords);
 
-  const canGoPrevious = currentPage > 1 && !isLoading;
-  const canGoNext = currentPage < totalPages && !isLoading;
+  const isDisabled = isLoading || isFetching;
+  const canGoPrevious = currentPage > 1 && !isDisabled;
+  const canGoNext = currentPage < totalPages && !isDisabled;
 
   return (
-    <div className="flex items-center justify-end gap-6">
+    <div className="flex items-center justify-end gap-6 px-4">
       {/* Page size selector */}
       <div className="flex items-center gap-2">
         <Select
           value={String(pageSize)}
           onValueChange={(value) => onPageSizeChange(Number(value))}
-          disabled={isLoading}
+          disabled={isDisabled}
         >
           <SelectTrigger className="h-9 w-[180px] text-sm">
             <SelectValue />

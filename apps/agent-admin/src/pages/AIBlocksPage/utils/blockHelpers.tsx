@@ -109,24 +109,23 @@ export const BLOCK_ICONS: Record<BlockType, { icon: React.ReactNode }> = {
 
 export const SECTION_READY_TO_DISPLAY_CONTENT = {
   VIDEO_LIBRARY: {
-    pathToKnowledgeBase: 'agent/knowledge-base/videos',
+    pathToDatasets: 'agent/datasets/videos',
     header: 'Videos ready to display',
     subHeader:
-      'These videos will be shown to visitors in the Video Library block. To manage or edit your videos, go to the Knowledge Base.',
+      'These videos will be shown to visitors in the Video Library block. To manage or edit your videos, go to Datasets.',
     chipLabel: 'Video',
     noVideosMessage: 'No videos uploaded yet',
-    noVideosDescription:
-      'To activate the Video Library block, you need to upload at least one video to your Knowledge Base.',
+    noVideosDescription: 'To activate the Video Library block, you need to upload at least one video to your Datasets.',
   },
   DEMO_LIBRARY: {
-    pathToKnowledgeBase: 'agent/knowledge-base',
+    pathToDatasets: 'agent/datasets',
     header: 'Demos experiences ready to display',
     subHeader:
-      'These interactive demos will be shown in the Demo Widget block. To manage or edit your demos, go to the Knowledge Base.',
+      'These interactive demos will be shown in the Demo Widget block. To manage or edit your demos, go to Datasets.',
     chipLabel: 'Interactive Demo',
     noVideosMessage: 'No demos found',
     noVideosDescription:
-      'To activate this block, add at least one demo link to the Knowledge Base. Each demo should include a title and short description',
+      'To activate this block, add at least one demo link to Datasets. Each demo should include a title and short description',
   },
 };
 

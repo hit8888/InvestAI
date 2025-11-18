@@ -10,7 +10,7 @@ const Separator = ({ className, vertical = false, isDashed = false, ...props }: 
   return (
     <div
       className={cn(
-        'border border-primary/10',
+        'border-t border-gray-200',
         {
           'h-px w-full': !vertical, // Horizontal separator
           'h-full w-px': vertical, // Vertical separator

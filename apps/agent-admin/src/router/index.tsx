@@ -20,6 +20,7 @@ import ConversationDetailsPageContainer from '../pages/ConversationDetailsPageCo
 import { AppRoutesEnum } from '../utils/constants';
 import WorkflowPage from '../pages/WorkflowPage';
 import BrandingPage from '../pages/BrandingPage';
+import ControlsPage from '../pages/ControlsPage';
 import EmbeddingScriptsPage from '../pages/EmbeddingScriptsPage';
 import DataSourcesContainer from '../pages/DataSourcesPage/DataSourcesContainer';
 import AIBlocksPageContainer from '../pages/AIBlocksPage/index.tsx';
@@ -103,23 +104,23 @@ const routes = [
                 path: 'agent',
                 children: [
                   {
-                    path: 'knowledge-base',
+                    path: 'datasets',
                     element: <ProtectedRoute element={<DataSourcesContainer />} />,
                   },
                   {
-                    path: 'knowledge-base/webpages/:webPageID?',
+                    path: 'datasets/webpages/:webPageID?',
                     element: <ProtectedRoute element={<DataSourcesContainer />} />,
                   },
                   {
-                    path: 'knowledge-base/documents/:documentID?',
+                    path: 'datasets/documents/:documentID?',
                     element: <ProtectedRoute element={<DataSourcesContainer />} />,
                   },
                   {
-                    path: 'knowledge-base/videos',
+                    path: 'datasets/videos',
                     element: <ProtectedRoute element={<DataSourcesContainer />} />,
                   },
                   {
-                    path: 'knowledge-base/slides',
+                    path: 'datasets/slides',
                     element: <ProtectedRoute element={<DataSourcesContainer />} />,
                   },
                   {
@@ -129,6 +130,10 @@ const routes = [
                   {
                     path: 'branding',
                     element: <ProtectedRoute element={<BrandingPage />} />,
+                  },
+                  {
+                    path: 'controls',
+                    element: <ProtectedRoute element={<ControlsPage />} />,
                   },
                 ],
               },
@@ -154,7 +159,7 @@ const routes = [
                 element: <ProtectedRoute element={<CompaniesV2PageContainer />} />,
               },
               {
-                path: 'visitors',
+                path: 'contacts',
                 element: <ProtectedRoute element={<VisitorsV2PageContainer />} />,
               },
               {
@@ -162,7 +167,7 @@ const routes = [
                 element: <ProtectedRoute element={<IcpV2PageContainer />} />,
               },
               {
-                path: 'ai-blocks',
+                path: 'blocks',
                 element: <ProtectedRoute element={<AIBlocksPageContainer />} />,
                 children: [
                   {

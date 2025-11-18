@@ -5,7 +5,7 @@ import { BreadcrumbItemComponent } from '../../components/common/BreadcrumbItemC
 // Utility function to build breadcrumb items from pathname
 const buildBreadcrumbItems = (blockCategory: string): string[] => {
   const items: string[] = [];
-  items.push('AI Blocks');
+  items.push('Blocks');
   items.push(blockCategory.split('_').join(' ').toLowerCase());
 
   return items;
@@ -13,8 +13,8 @@ const buildBreadcrumbItems = (blockCategory: string): string[] => {
 
 // Utility function to get navigation path
 const getNavigationPath = (pathname: string): string => {
-  const basePath = pathname.split('/ai-blocks')[0];
-  return `${basePath}/ai-blocks`;
+  const basePath = pathname.split('/blocks')[0];
+  return `${basePath}/blocks`;
 };
 
 const AIBlocksNavigation = ({ blockCategory }: { blockCategory: string }) => {

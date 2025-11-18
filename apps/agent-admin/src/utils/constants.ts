@@ -32,24 +32,8 @@ import CompanyDomainIcon from '@breakout/design-system/components/icons/company-
 import CompanyFoundationDate from '@breakout/design-system/components/icons/company-foundation-date';
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
-import { ConversationRightSideDetailsType, NavLinkItem } from './admin-types';
+import { ConversationRightSideDetailsType } from './admin-types';
 import { ExportFormat, type SdrAssignment } from '@meaku/core/types/admin/api';
-import PanelConversationIcon from '@breakout/design-system/components/icons/panel-conversation-icon';
-import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
-import PanelAgentActiveIcon from '@breakout/design-system/components/icons/panel-agent-active-icon';
-import PanelAgentIcon from '@breakout/design-system/components/icons/panel-agent-icon';
-import PanelTrainingActiveIcon from '@breakout/design-system/components/icons/panel-training-active-icon';
-import PanelTrainingIcon from '@breakout/design-system/components/icons/panel-training-icon';
-import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-insights-icon';
-import PanelProfileIcon from '@breakout/design-system/components/icons/panel-profile-icon';
-import PanelProfileActiveIcon from '@breakout/design-system/components/icons/panel-profile-active-icon';
-import PanelInsightsActiveIcon from '@breakout/design-system/components/icons/panel-insights-active-icon';
-import PanelIntegrationsIcon from '@breakout/design-system/components/icons/panel-integrations-icon';
-import PanelIntegrationsActiveIcon from '@breakout/design-system/components/icons/panel-integrations-active-icon';
-import CalendarIcon from '@breakout/design-system/components/icons/panel-calendar-icon';
-import CalendarActiveIcon from '@breakout/design-system/components/icons/panel-calendar-active-icon';
-import PanelAIBlocksIcon from '@breakout/design-system/components/icons/panel-ai-blocks-icon';
-import PanelAIBlocksActiveIcon from '@breakout/design-system/components/icons/panel-ai-blocks-active-icon';
 import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-react';
 import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
 import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
@@ -418,7 +402,7 @@ export enum AppRoutesEnum {
   LINK_CLICKS = 'conversations/link-clicks',
   ACTIVE_CONVERSATIONS = 'active-conversations',
   AGENT = 'agent',
-  AGENT_KNOWLEDGE_BASE = 'agent/knowledge-base',
+  AGENT_DATASETS = 'agent/datasets',
   AGENT_WORKFLOW = 'agent/workflow',
   AGENT_BRANDING = 'agent/branding',
   AGENT_CONTROLS = 'agent/controls',
@@ -434,18 +418,18 @@ export enum AppRoutesEnum {
   VISITORS = 'prospects',
   ICP = 'icp',
   COMPANIES = 'companies',
-  VISITORS_V2 = 'visitors',
-  AI_BLOCKS = 'ai-blocks',
+  VISITORS_V2 = 'contacts',
+  BLOCKS = 'blocks',
   SDR_SETTINGS = 'sdr-settings',
   EMBEDDING_SCRIPTS = 'embeddings',
 }
 
 export enum SidebarNavItemsEnum {
-  CONVERSATIONS_LABEL = 'Visitors',
-  ACTIVE_CONVERSATIONS_LABEL = 'Live Visitors',
-  VISITORS_LABEL = 'Visitor List',
+  CONVERSATIONS_LABEL = 'Contacts',
+  ACTIVE_CONVERSATIONS_LABEL = 'Live Contacts',
+  VISITORS_LABEL = 'Contacts List',
   AGENT_LABEL = 'Agent',
-  AGENT_KNOWLEDGE_BASE_LABEL = 'Knowledge Base',
+  AGENT_DATASETS_LABEL = 'Datasets',
   AGENT_BRANDING_LABEL = 'Branding',
   AGENT_WORKFLOW_LABEL = 'Workflow',
   AGENT_CONTROLS_LABEL = 'Controls',
@@ -453,7 +437,7 @@ export enum SidebarNavItemsEnum {
   TRAINING_LABEL = 'Training',
   TRAINING_PLAYGROUND_LABEL = 'Playground',
   INSIGHT_LABEL = 'Insights',
-  AI_BLOCKS_LABEL = 'AI Blocks',
+  BLOCKS_LABEL = 'Blocks',
   INTEGRATIONS_LABEL = 'Integrations',
   PROFILE_LABEL = 'Profile',
   SDR_SETTINGS_LABEL = 'SDR Settings',
@@ -777,107 +761,10 @@ export const CUSTOM_DOCUMENT_DEFAULT_SOURCE = {
   relevant_queries: [],
 };
 
-// Sidebar Navigation Configs
 export enum SideNavView {
   MAIN = 'MAIN',
   SETTINGS = 'SETTINGS',
 }
-
-export enum NavigationGroup {
-  ACCOUNT_SETTINGS = 'Account Settings',
-  WORKSPACE_SETTINGS = 'Workspace Settings',
-}
-
-export const MAIN_LINK_ITEMS: NavLinkItem[] = [
-  {
-    navUrl: `/${AppRoutesEnum.ACTIVE_CONVERSATIONS}`,
-    navItem: SidebarNavItemsEnum.ACTIVE_CONVERSATIONS_LABEL,
-    icon: PanelConversationIcon,
-    activeIcon: PanelConversationActiveIcon,
-    requiredFeatureFlag: 'active_conversations_enabled',
-  },
-  {
-    navUrl: `/${AppRoutesEnum.CONVERSATIONS}`,
-    navItem: SidebarNavItemsEnum.CONVERSATIONS_LABEL,
-    icon: PanelConversationIcon,
-    activeIcon: PanelConversationActiveIcon,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.AI_BLOCKS}`,
-    navItem: SidebarNavItemsEnum.AI_BLOCKS_LABEL,
-    icon: PanelAIBlocksIcon,
-    activeIcon: PanelAIBlocksActiveIcon,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.AGENT}`,
-    navItem: SidebarNavItemsEnum.AGENT_LABEL,
-    icon: PanelAgentIcon,
-    activeIcon: PanelAgentActiveIcon,
-    children: [
-      {
-        navUrl: `/${AppRoutesEnum.AGENT_KNOWLEDGE_BASE}`,
-        navItem: SidebarNavItemsEnum.AGENT_KNOWLEDGE_BASE_LABEL,
-      },
-      {
-        navUrl: `/${AppRoutesEnum.AGENT_BRANDING}`,
-        navItem: SidebarNavItemsEnum.AGENT_BRANDING_LABEL,
-      },
-      {
-        navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
-        navItem: SidebarNavItemsEnum.AGENT_CONTROLS_LABEL,
-      },
-    ],
-  },
-  {
-    navUrl: `/${AppRoutesEnum.TRAINING}`,
-    navItem: SidebarNavItemsEnum.TRAINING_LABEL,
-    icon: PanelTrainingIcon,
-    activeIcon: PanelTrainingActiveIcon,
-    children: [
-      {
-        navUrl: `/${AppRoutesEnum.TRAINING_PLAYGROUND}`,
-        navItem: SidebarNavItemsEnum.TRAINING_PLAYGROUND_LABEL,
-      },
-    ],
-  },
-  {
-    navUrl: `/${AppRoutesEnum.INSIGHTS}`,
-    navItem: SidebarNavItemsEnum.INSIGHT_LABEL,
-    icon: PanelInsightsIcon,
-    activeIcon: PanelInsightsActiveIcon,
-  },
-];
-
-export const SETTINGS_LINK_ITEMS: NavLinkItem[] = [
-  // All Workspace Settings - write in order
-  {
-    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.INTEGRATIONS}`,
-    navItem: SidebarNavItemsEnum.INTEGRATIONS_LABEL,
-    icon: PanelIntegrationsIcon,
-    activeIcon: PanelIntegrationsActiveIcon,
-    group: NavigationGroup.WORKSPACE_SETTINGS,
-  },
-  {
-    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.CALENDAR}`,
-    navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
-    icon: CalendarIcon,
-    activeIcon: CalendarActiveIcon,
-    group: NavigationGroup.WORKSPACE_SETTINGS,
-  },
-  // All Account Settings - write below in order
-  {
-    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.PROFILE}`,
-    navItem: SidebarNavItemsEnum.PROFILE_LABEL,
-    icon: PanelProfileIcon,
-    activeIcon: PanelProfileActiveIcon,
-    group: NavigationGroup.ACCOUNT_SETTINGS,
-  },
-];
-
-export const SIDE_NAV_VIEW_TO_ITEMS = {
-  [SideNavView.MAIN]: MAIN_LINK_ITEMS,
-  [SideNavView.SETTINGS]: SETTINGS_LINK_ITEMS,
-};
 
 export const INITIAL_SORT_VALUES: SortValues = {
   timestampSort: null,
