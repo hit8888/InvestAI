@@ -10,6 +10,7 @@ interface TextCellProps {
   labelSuffix?: string | null;
   labelAssignmentType?: LabelAssignmentType | null;
   labelAssignmentValue?: Record<string, string> | null;
+  defaultLabelValue?: string | null;
 }
 
 /**
@@ -23,19 +24,15 @@ export const TextCell = ({
   labelSuffix,
   labelAssignmentType,
   labelAssignmentValue,
+  defaultLabelValue,
 }: TextCellProps) => {
-  if (value === null || value === undefined || value === '') {
+  if ((value === null || value === undefined || value === '') && !defaultLabelValue) {
     return <EmptyCell />;
   }
+  let text = value === null || value === undefined || value === '' ? (defaultLabelValue ?? '') : String(value);
 
-  let text = String(value);
-
-  if (
-    labelAssignmentType === 'MAPPING' &&
-    labelAssignmentValue &&
-    (typeof value === 'string' || typeof value === 'number')
-  ) {
-    text = labelAssignmentValue[value] ?? text;
+  if (labelAssignmentType === 'MAPPING' && labelAssignmentValue) {
+    text = labelAssignmentValue[text] ?? text;
   }
   // Use TruncatedText with custom tooltip if provided, or default behavior
   return (
