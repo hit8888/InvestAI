@@ -47,8 +47,6 @@ const LeadsDrawerSections = ({
           <UserDetailsSection
             prospect={companyData?.prospect}
             onGenerateEmail={onGenerateEmail}
-            onViewBrowsingHistory={() => {}} // No-op for leads
-            showViewBrowsingHistory={false} // Hide browsing history for leads
             isGeneratingEmail={
               isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
             }
