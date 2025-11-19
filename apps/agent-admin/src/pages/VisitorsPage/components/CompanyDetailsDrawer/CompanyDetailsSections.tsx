@@ -2,8 +2,9 @@ import type { Employee, CompanyData } from './types';
 import { BrowsedUrl } from '@meaku/core/types/common';
 import CompanyDetailsSection from './CompanyDetailsSection';
 import UserDetailsSection from './UserDetailsSection';
-import RelevantProfilesSection from './RelevantProfilesSection';
-import UserInteractionSection from './UserInteractionSection';
+import AiChatSummaryCard from './AiChatSummaryCard';
+import BrowsingHistoryCard from './BrowsingHistoryCard';
+import FindRelevantProfilesCard from './FindRelevantProfilesCard';
 import LoadingContent from './LoadingContent';
 
 interface CompanyDetailsSectionsProps {
@@ -16,30 +17,31 @@ interface CompanyDetailsSectionsProps {
   onViewBrowsingHistory: () => void;
   onFetchIcpList: () => void;
   onViewConversationDetails: () => void;
-  isIcpListLoading: boolean;
   leftSideContentMode: string | null;
-  isIcpListError: boolean;
   hideBrowsingHistory?: boolean;
   hideRelevantProfiles?: boolean;
   hideChatSummary?: boolean;
+  sessionDurationInSeconds?: number;
+  totalMessageCount?: number;
+  deviceType?: string | null;
 }
 
 const CompanyDetailsSections = ({
   isLoading = false,
   companyData,
-  browsingHistory,
   selectedEmployee,
   isReachoutEmailLoading,
   onGenerateEmail,
   onViewBrowsingHistory,
   onFetchIcpList,
   onViewConversationDetails,
-  isIcpListLoading,
   leftSideContentMode,
-  isIcpListError,
   hideBrowsingHistory = false,
   hideRelevantProfiles = false,
   hideChatSummary = false,
+  sessionDurationInSeconds,
+  totalMessageCount,
+  deviceType,
 }: CompanyDetailsSectionsProps) => {
   if (isLoading) {
     return <LoadingContent />;
@@ -54,31 +56,35 @@ const CompanyDetailsSections = ({
       <UserDetailsSection
         prospect={companyData?.prospect}
         onGenerateEmail={onGenerateEmail}
-        onViewBrowsingHistory={onViewBrowsingHistory}
-        showViewBrowsingHistory={!hideBrowsingHistory && browsingHistory.length > 0}
         isGeneratingEmail={
           isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
         }
+        sessionDurationInSeconds={sessionDurationInSeconds}
+        totalMessageCount={totalMessageCount}
+        deviceType={deviceType}
       />
 
-      {/* Relevant Profiles Section */}
-      {!hideRelevantProfiles && (
-        <RelevantProfilesSection
-          companyName={companyData?.name}
-          onSearchProfiles={onFetchIcpList}
-          disableSearchProfiles={isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError}
-          showError={isIcpListError}
-          isLoadingProfiles={isIcpListLoading}
-        />
-      )}
+      {/* Panel Cards Section */}
+      <div className="flex flex-col gap-3">
+        {/* AI Chat Summary Card */}
+        {!hideChatSummary && (
+          <AiChatSummaryCard
+            isActive={leftSideContentMode === 'conversation-log'}
+            onClick={onViewConversationDetails}
+            conversationSummary={companyData?.conversationSummary}
+          />
+        )}
 
-      {/* Browsing & Conversation Summary */}
-      {!hideChatSummary && companyData?.prospect?.session_id && (
-        <UserInteractionSection
-          conversationSummary={companyData?.conversationSummary}
-          onViewConversationDetails={onViewConversationDetails}
-        />
-      )}
+        {/* Browsing History Card */}
+        {!hideBrowsingHistory && (
+          <BrowsingHistoryCard isActive={leftSideContentMode === 'browsing-history'} onClick={onViewBrowsingHistory} />
+        )}
+
+        {/* Find Relevant Profiles Card */}
+        {!hideRelevantProfiles && (
+          <FindRelevantProfilesCard isActive={leftSideContentMode === 'relevant-profiles'} onClick={onFetchIcpList} />
+        )}
+      </div>
     </>
   );
 };

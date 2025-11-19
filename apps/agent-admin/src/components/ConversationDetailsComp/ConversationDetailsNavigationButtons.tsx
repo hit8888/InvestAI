@@ -30,7 +30,7 @@ const ConversationDetailsNavigationButtons = ({ sessionID, isDirectAccess }: IPr
   const handleNavigation = (sessionId: string | undefined | null) => {
     if (sessionId) {
       navigate(getConversationPath(sessionId), {
-        state: { from: 'conversation-details' },
+        state: { from: 'conversation-log' },
       });
     }
   };

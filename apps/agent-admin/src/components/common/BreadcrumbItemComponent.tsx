@@ -28,10 +28,10 @@ export const BreadcrumbItemComponent = ({ item, isLast, showSeparator, onNavigat
         })}
       >
         {isLast ? (
-          <BreadcrumbPage className="font-semibold capitalize text-system">{item}</BreadcrumbPage>
+          <BreadcrumbPage className="text-2xl font-semibold capitalize text-system">{item}</BreadcrumbPage>
         ) : (
           <Button
-            className="p-0 text-base font-medium capitalize text-gray-400 hover:bg-transparent"
+            className="p-0 text-2xl font-medium capitalize text-gray-400 hover:bg-transparent"
             variant="system_tertiary"
             onClick={handleClick}
           >
@@ -39,7 +39,7 @@ export const BreadcrumbItemComponent = ({ item, isLast, showSeparator, onNavigat
           </Button>
         )}
       </BreadcrumbItem>
-      {showSeparator && <BreadcrumbSeparator className="text-base font-medium text-gray-400">/</BreadcrumbSeparator>}
+      {showSeparator && <BreadcrumbSeparator className="text-2xl font-medium text-gray-400">/</BreadcrumbSeparator>}
     </>
   );
 };

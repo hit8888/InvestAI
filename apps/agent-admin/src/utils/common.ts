@@ -921,6 +921,36 @@ const getBantItemsValue = (bantValue: BANTItem[], sessionData: ConversationsTabl
   return bantItems;
 };
 
+/**
+ * Calculates session duration in seconds and total message count from chat history and conversation data
+ */
+export function calculateSessionMetrics(
+  chatHistory: WebSocketMessage[],
+  conversationData?: ConversationsTableDisplayContent | null,
+): { sessionDurationInSeconds: number; totalMessageCount: number } {
+  const isChatHistoryAvailable = chatHistory.length > 0;
+
+  // Calculate session duration in seconds (exact, not rounded)
+  let sessionDurationInSeconds = 0;
+  if (isChatHistoryAvailable) {
+    const firstMessage = new Date(chatHistory[0]?.timestamp as string);
+    const lastMessage = new Date(chatHistory[chatHistory.length - 1]?.timestamp as string);
+    sessionDurationInSeconds = (lastMessage.getTime() - firstMessage.getTime()) / 1000;
+  }
+
+  // Count messages
+  const aiMessageCount = chatHistory.filter(
+    (msg) => msg.role === 'ai' && (isStreamMessage(msg) || isTextMessage(msg)),
+  ).length;
+  const userMessageCount = conversationData ? Number(conversationData.user_message_count) : 0;
+  const totalMessageCount = aiMessageCount + userMessageCount;
+
+  return {
+    sessionDurationInSeconds,
+    totalMessageCount,
+  };
+}
+
 export function generateConversationSummaryContent(
   chatHistory: WebSocketMessage[],
   sessionData: ConversationsTableDisplayContent,

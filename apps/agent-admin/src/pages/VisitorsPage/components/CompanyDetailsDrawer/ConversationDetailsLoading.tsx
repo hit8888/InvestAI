@@ -3,31 +3,39 @@ import { motion } from 'framer-motion';
 
 const ConversationDetailsLoading = () => {
   return (
-    <div className="flex w-[calc(50vw-4rem)] flex-col gap-4 overflow-y-auto">
-      {/* Summary Items Skeleton */}
-      {Array.from({ length: 6 }).map((_, index) => (
-        <motion.div
-          key={index}
-          className="flex w-full max-w-full items-start justify-between gap-4 self-stretch overflow-auto rounded-2xl border border-gray-200 bg-primary/2.5 p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.05, delay: index * 0.01, ease: 'linear' }}
-        >
-          <div className="flex w-[50%] items-center justify-center gap-2">
-            {/* Icon skeleton */}
-            <div className="flex items-center justify-center rounded-lg bg-primary/10 p-1">
-              <Skeleton className="h-4 w-4" />
-            </div>
-            {/* Label skeleton */}
-            <Skeleton className="h-4 w-20 flex-1" />
+    <div className="flex w-full flex-col gap-4 overflow-y-auto">
+      {/* Conversation Log Item Skeleton */}
+      <motion.div
+        className="flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-gray-25 p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.05, ease: 'linear' }}
+      >
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col overflow-auto bg-gray-25">
+            {/* Message skeletons */}
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="mb-6 flex flex-col gap-3 last:mb-0">
+                {/* User message skeleton */}
+                <div className="flex justify-end">
+                  <div className="flex max-w-[80%] flex-col gap-2 rounded-2xl bg-primary/10 p-3">
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                </div>
+                {/* AI message skeleton */}
+                <div className="flex justify-start">
+                  <div className="flex max-w-[80%] flex-col gap-2 rounded-2xl bg-white p-3">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                    <Skeleton className="h-4 w-4/5" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-
-          {/* Value skeleton */}
-          <div className="flex justify-end">
-            <Skeleton className="h-4 w-32" />
-          </div>
-        </motion.div>
-      ))}
+        </div>
+      </motion.div>
     </div>
   );
 };

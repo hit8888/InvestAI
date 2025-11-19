@@ -1,16 +1,13 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import { motion } from 'framer-motion';
-import Typography from '@breakout/design-system/components/Typography/index';
+import { ChevronRight } from 'lucide-react';
 
 const DrawerContentLoading = () => {
   return (
     <div className="flex flex-col gap-10">
       {/* Company Details Section Loading */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05, ease: 'linear' }}>
-        <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-          Company Details
-        </Typography>
-        <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4">
+        <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-gray-25 p-4">
           {/* Company Header */}
           <div className="flex items-center gap-2">
             <div className="flex flex-1 items-center gap-3">
@@ -50,6 +47,13 @@ const DrawerContentLoading = () => {
                 <Skeleton className="h-4 w-12" />
               </div>
             </div>
+            {/* Info chips skeleton */}
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap justify-end gap-2">
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-6 w-16 rounded-full" />
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -72,12 +76,8 @@ const DrawerContentLoading = () => {
         </div>
 
         <div className="ml-6 w-full">
-          <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-            User Details
-          </Typography>
-
           <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-gray-25 p-4">
-            <div className="flex items-end gap-4">
+            <div className="flex items-start gap-4">
               {/* User Avatar */}
               <Skeleton className="h-[42px] w-[42px] rounded-full border-2" />
 
@@ -87,51 +87,97 @@ const DrawerContentLoading = () => {
                   <Skeleton className="h-5 w-32" />
                   <div className="h-4 w-0 border-l border-gray-300" />
                   <Skeleton className="h-4 w-24" />
+                  {/* LinkedIn icon skeleton */}
+                  <Skeleton className="h-5 w-5 rounded-full" />
                 </div>
 
                 {/* Email */}
                 <div className="flex items-center gap-1">
+                  <Skeleton className="h-4 w-12" />
                   <Skeleton className="h-4 w-48" />
                 </div>
               </div>
+
+              {/* Intent Score skeleton */}
+              <Skeleton className="h-8 w-24 rounded-2xl" />
             </div>
 
-            {/* Action buttons area */}
-            <div className="flex gap-2 pt-2">
-              <Skeleton className="h-8 w-32" />
-              <Skeleton className="h-8 w-40" />
+            <div className="h-[1px] w-full bg-gray-100" />
+
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between gap-4">
+                <div className="flex flex-col gap-3">
+                  {/* Location */}
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                </div>
+
+                {/* Session duration chip skeleton */}
+                <Skeleton className="h-7 w-40 rounded-2xl" />
+              </div>
+
+              {/* Action button */}
+              <div className="flex justify-between">
+                <Skeleton className="h-9 w-40 rounded-md" />
+              </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Relevant Profiles Section Loading */}
+      {/* Panel Cards Section Loading */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05, ease: 'linear' }}>
-        <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-          Relevant Profiles
-        </Typography>
-        <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-4 w-40" />
-            <Skeleton className="h-8 w-24" />
+        <div className="flex flex-col gap-3">
+          {/* AI Chat Summary Card Skeleton */}
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Skeleton className="h-4 w-4" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="flex w-full items-center gap-4 rounded-2xl border border-gray-200 p-4">
+              <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
+                <ChevronRight className="h-6 w-6 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                  <Skeleton className="h-4 w-4/5" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* User Interaction Section Loading */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.05, ease: 'linear' }}>
-        <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-          Browsing & Conversation Summary
-        </Typography>
-        <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-4 w-48" />
-            <Skeleton className="h-8 w-32" />
+          {/* Browsing History Card Skeleton */}
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Skeleton className="h-4 w-36" />
+            </div>
+            <div className="flex w-full items-center gap-4 rounded-2xl border border-gray-200 p-4">
+              <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
+                <ChevronRight className="h-6 w-6 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <Skeleton className="h-4 w-full" />
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-            <Skeleton className="h-4 w-4/5" />
+
+          {/* Find Relevant Profiles Card Skeleton */}
+          <div>
+            <div className="mb-2 flex items-center gap-1">
+              <Skeleton className="h-4 w-40" />
+            </div>
+            <div className="flex w-full items-center gap-4 rounded-2xl border border-gray-200 p-4">
+              <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center">
+                <ChevronRight className="h-6 w-6 text-gray-400" />
+              </div>
+              <div className="flex-1">
+                <Skeleton className="h-4 w-full" />
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>

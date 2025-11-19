@@ -14,8 +14,9 @@ import LeftSideContentContainer from './LeftSideContentContainer';
 import RelevantProfilesContent from './RelevantProfilesContent';
 import BrowsingHistoryContent from './BrowsingHistoryContent';
 import ConversationDetailsContent from './ConversationDetailsContent';
-import { normalizeSessionToConversationData } from '../../../../utils/common';
+import { normalizeSessionToConversationData, calculateSessionMetrics } from '../../../../utils/common';
 import ConversationDetailsDataResponseManager from '../../../../managers/ConversationDetailsDataManager';
+import { PANEL_MODE_MAX_WIDTH } from '../../../../hooks/usePanelState';
 
 type CompanyDetailsDrawerProps = {
   open: boolean;
@@ -26,11 +27,11 @@ type CompanyDetailsDrawerProps = {
   hideChatSummary?: boolean;
 };
 
-type LeftSideContentMode = 'generated-email' | 'conversation-details' | 'relevant-profiles' | 'browsing-history' | null;
+type LeftSideContentMode = 'generated-email' | 'conversation-log' | 'relevant-profiles' | 'browsing-history' | null;
 
 const LeftSideContentModeLabels = {
   'generated-email': 'Generated Email',
-  'conversation-details': 'Conversation Details',
+  'conversation-log': 'Conversation Log',
   'relevant-profiles': 'Relevant Profiles',
   'browsing-history': 'Browsing History',
 };
@@ -54,13 +55,10 @@ const CompanyDetailsDrawer = ({
   }, [sessionData]);
   const browsingHistory = companyData?.prospect?.browsing_history || [];
 
-  const {
-    data: icpList,
-    isLoading: isIcpListLoading,
-    refetch: fetchIcpList,
-    isError: isIcpListError,
-    isSuccess: isIcpListSuccess,
-  } = useIcpsQuery({ companyName: companyData?.name, domain: companyData?.website }, { enabled: false, retry: false });
+  const { data: icpList, isLoading: isIcpListLoading } = useIcpsQuery(
+    { companyName: companyData?.name, domain: companyData?.website },
+    { enabled: leftSideContentMode === 'relevant-profiles' && !!companyData?.name, retry: false },
+  );
   const {
     data: icpDetails,
     isLoading: isIcpDetailsLoading,
@@ -100,27 +98,37 @@ const CompanyDetailsDrawer = ({
     if (leftSideContentMode === 'generated-email') {
       return isReachoutEmailSuccess;
     } else if (leftSideContentMode === 'relevant-profiles') {
-      return isIcpListSuccess;
+      return true; // Show panel immediately, loading state handled inside
     } else if (leftSideContentMode === 'browsing-history') {
       return true;
-    } else if (leftSideContentMode === 'conversation-details') {
+    } else if (leftSideContentMode === 'conversation-log') {
       return true;
     }
     return false;
-  }, [isIcpListSuccess, isReachoutEmailSuccess, leftSideContentMode]);
+  }, [isReachoutEmailSuccess, leftSideContentMode]);
 
-  const formattedConversationData = useMemo(() => {
+  const conversationDetailsManager = useMemo(() => {
     if (!sessionData) {
       return null;
     }
 
-    return new ConversationDetailsDataResponseManager(
-      normalizeSessionToConversationData(sessionData),
-    ).getFormattedConversationData();
+    return new ConversationDetailsDataResponseManager(normalizeSessionToConversationData(sessionData));
   }, [sessionData]);
 
+  const formattedConversationData = useMemo(() => {
+    return conversationDetailsManager?.getFormattedConversationData() ?? null;
+  }, [conversationDetailsManager]);
+
+  const formattedChatHistory = useMemo(() => {
+    return conversationDetailsManager?.getFormattedChatHistory() ?? [];
+  }, [conversationDetailsManager]);
+
+  const sessionMetrics = useMemo(() => {
+    return calculateSessionMetrics(formattedChatHistory, formattedConversationData);
+  }, [formattedChatHistory, formattedConversationData]);
+
   const handleViewConversationDetails = () => {
-    setLeftSideContentMode('conversation-details');
+    setLeftSideContentMode('conversation-log');
   };
 
   const handleCloseDrawer = () => {
@@ -136,7 +144,7 @@ const CompanyDetailsDrawer = ({
 
   const handleFetchIcpList = () => {
     setLeftSideContentMode('relevant-profiles');
-    fetchIcpList();
+    // Query will automatically fetch when panel opens due to enabled condition
   };
 
   const handleProspectGenerateEmail = (employee: Employee) => {
@@ -175,6 +183,7 @@ const CompanyDetailsDrawer = ({
               visible={showLeftSideContent}
               headerTitle={leftSideContentMode ? LeftSideContentModeLabels[leftSideContentMode] : ''}
               onClose={handleCloseLeftSideContent}
+              maxWidth={leftSideContentMode ? PANEL_MODE_MAX_WIDTH[leftSideContentMode] : undefined}
             >
               {leftSideContentMode === 'generated-email' && (
                 <GeneratedEmailContent
@@ -198,15 +207,19 @@ const CompanyDetailsDrawer = ({
                   onShowEmail={handleIcpShowEmail}
                   loadingEmail={isIcpDetailsLoading}
                   onCancelEmail={handleIcpCancelEmail}
+                  isLoading={isIcpListLoading}
                 />
               )}
 
-              {leftSideContentMode === 'browsing-history' && <BrowsingHistoryContent browsedUrls={browsingHistory} />}
+              {leftSideContentMode === 'browsing-history' && (
+                <BrowsingHistoryContent browsedUrls={browsingHistory} isLoading={isLoading} />
+              )}
 
-              {leftSideContentMode === 'conversation-details' && (
+              {leftSideContentMode === 'conversation-log' && (
                 <ConversationDetailsContent
-                  chatHistory={sessionData?.chat_history ?? []}
+                  chatHistory={formattedChatHistory}
                   conversation={formattedConversationData}
+                  isLoading={isLoading}
                 />
               )}
             </LeftSideContentContainer>
@@ -234,12 +247,13 @@ const CompanyDetailsDrawer = ({
                   onViewBrowsingHistory={handleViewBrowsingHistory}
                   onFetchIcpList={handleFetchIcpList}
                   onViewConversationDetails={handleViewConversationDetails}
-                  isIcpListLoading={isIcpListLoading}
                   leftSideContentMode={leftSideContentMode}
-                  isIcpListError={isIcpListError}
                   hideBrowsingHistory={hideBrowsingHistory}
                   hideRelevantProfiles={hideRelevantProfiles}
                   hideChatSummary={hideChatSummary}
+                  sessionDurationInSeconds={sessionMetrics.sessionDurationInSeconds}
+                  totalMessageCount={sessionMetrics.totalMessageCount}
+                  deviceType={sessionData?.session?.device_type}
                 />
               </div>
             </div>

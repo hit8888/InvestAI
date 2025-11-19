@@ -264,7 +264,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           align="start"
           sideOffset={8}
           style={{ width: 'var(--radix-popover-trigger-width)' }}
-          className="zoom-in-y-95 data-[state=closed]:zoom-out-y-95 min-w-[300px] origin-top rounded-lg border border-gray-200 bg-[#FCFCFD] shadow-xl duration-200 animate-in fade-in-0 slide-in-from-top-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2"
+          className="zoom-in-y-95 data-[state=closed]:zoom-out-y-95 min-w-[300px] origin-top rounded-lg border border-gray-200 bg-gray-25 shadow-xl duration-200 animate-in fade-in-0 slide-in-from-top-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2"
         >
           {/* Search input */}
           <div className="border-b border-gray-200 p-2">

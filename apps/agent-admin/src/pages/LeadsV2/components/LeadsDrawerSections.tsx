@@ -52,6 +52,8 @@ const LeadsDrawerSections = ({
             isGeneratingEmail={
               isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
             }
+            sessionDurationInSeconds={0}
+            totalMessageCount={0}
           />
         </motion.div>
       )}

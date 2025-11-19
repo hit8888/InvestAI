@@ -10,12 +10,12 @@ import useSessionDetailsQuery from '../queries/query/useSessionDetailsQuery';
 import useReachoutEmailQuery from '../queries/query/useReachoutEmailQuery';
 import useIcpsQuery from '../queries/query/useIcpsQuery';
 import useIcpDetailsQuery from '../queries/query/useIcpDetailsQuery';
-import { normalizeSessionToConversationData } from '../utils/common';
+import { normalizeSessionToConversationData, calculateSessionMetrics } from '../utils/common';
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
 import type { Employee } from '../pages/VisitorsPage/components/CompanyDetailsDrawer/types';
 import { mapSessionDetailToCompanyData } from '../pages/VisitorsPage/utils/mapVisitorToCompanyData';
 import type { IcpsContact } from '@meaku/core/types/admin/admin';
-import { usePanelState, PANEL_MODE_LABELS, type PanelMode } from '../hooks/usePanelState';
+import { usePanelState, PANEL_MODE_LABELS, PANEL_MODE_MAX_WIDTH, type PanelMode } from '../hooks/usePanelState';
 import DrawerSections from '../pages/ConversationsV2/components/DrawerSections';
 
 export interface GenericDrawerFieldAccessors<T> {
@@ -57,13 +57,10 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
   }, [sessionData]);
   const browsingHistory = companyData?.prospect?.browsing_history || [];
 
-  const {
-    data: icpList,
-    isLoading: isIcpListLoading,
-    refetch: fetchIcpList,
-    isError: isIcpListError,
-    isSuccess: isIcpListSuccess,
-  } = useIcpsQuery({ companyName: companyData?.name, domain: companyData?.website }, { enabled: false, retry: false });
+  const { data: icpList, isLoading: isIcpListLoading } = useIcpsQuery(
+    { companyName: companyData?.name, domain: companyData?.website },
+    { enabled: leftSideContentMode === 'relevant-profiles' && !!companyData?.name, retry: false },
+  );
 
   const {
     data: icpDetails,
@@ -107,27 +104,38 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
     if (leftSideContentMode === 'generated-email') {
       return isReachoutEmailSuccess;
     } else if (leftSideContentMode === 'relevant-profiles') {
-      return isIcpListSuccess;
+      return true; // Show panel immediately, loading state handled inside
     } else if (leftSideContentMode === 'browsing-history') {
       // Show if data is loaded OR still loading (to show loader)
       return !!sessionData || isSessionLoading;
-    } else if (leftSideContentMode === 'conversation-details') {
+    } else if (leftSideContentMode === 'conversation-log') {
       // Show if data is loaded OR still loading (to show loader)
       return !!sessionData || isSessionLoading;
     }
     return false;
-  }, [hasActivePanel, isIcpListSuccess, isReachoutEmailSuccess, leftSideContentMode, sessionData, isSessionLoading]);
+  }, [hasActivePanel, isReachoutEmailSuccess, leftSideContentMode, sessionData, isSessionLoading]);
 
-  const formattedConversationData = useMemo(() => {
+  const conversationDetailsManager = useMemo(() => {
     if (!sessionData) {
       return null;
     }
-    return new ConversationDetailsDataResponseManager(
-      normalizeSessionToConversationData(sessionData),
-    ).getFormattedConversationData();
+
+    return new ConversationDetailsDataResponseManager(normalizeSessionToConversationData(sessionData));
   }, [sessionData]);
 
-  const handleViewConversationDetails = () => setLeftSideContentMode('conversation-details' as PanelMode);
+  const formattedConversationData = useMemo(() => {
+    return conversationDetailsManager?.getFormattedConversationData() ?? null;
+  }, [conversationDetailsManager]);
+
+  const formattedChatHistory = useMemo(() => {
+    return conversationDetailsManager?.getFormattedChatHistory() ?? [];
+  }, [conversationDetailsManager]);
+
+  const sessionMetrics = useMemo(() => {
+    return calculateSessionMetrics(formattedChatHistory, formattedConversationData);
+  }, [formattedChatHistory, formattedConversationData]);
+
+  const handleViewConversationDetails = () => setLeftSideContentMode('conversation-log' as PanelMode);
   const handleCloseDrawer = () => {
     setSelectedEmployee(null);
     clearPanelMode(); // Clear panel from URL
@@ -139,7 +147,7 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
   };
   const handleFetchIcpList = () => {
     setLeftSideContentMode('relevant-profiles' as PanelMode);
-    fetchIcpList();
+    // Query will automatically fetch when panel opens due to enabled condition
   };
   const handleProspectGenerateEmail = (employee: Employee) => {
     setSelectedEmployee(employee);
@@ -170,6 +178,7 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
         visible={showLeftSideContent}
         headerTitle={leftSideContentMode ? PANEL_MODE_LABELS[leftSideContentMode] : ''}
         onClose={handleCloseLeftSideContent}
+        maxWidth={leftSideContentMode ? PANEL_MODE_MAX_WIDTH[leftSideContentMode] : undefined}
       >
         {leftSideContentMode === 'generated-email' && (
           <GeneratedEmailContent
@@ -192,12 +201,15 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
             onShowEmail={handleIcpShowEmail}
             loadingEmail={isIcpDetailsLoading}
             onCancelEmail={handleIcpCancelEmail}
+            isLoading={isIcpListLoading}
           />
         )}
-        {leftSideContentMode === 'browsing-history' && <BrowsingHistoryContent browsedUrls={browsingHistory} />}
-        {leftSideContentMode === 'conversation-details' && (
+        {leftSideContentMode === 'browsing-history' && (
+          <BrowsingHistoryContent browsedUrls={browsingHistory} isLoading={isSessionLoading} />
+        )}
+        {leftSideContentMode === 'conversation-log' && (
           <ConversationDetailsContent
-            chatHistory={sessionData?.chat_history ?? []}
+            chatHistory={formattedChatHistory}
             conversation={formattedConversationData}
             isLoading={isSessionLoading}
           />
@@ -226,9 +238,10 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
             onViewBrowsingHistory={handleViewBrowsingHistory}
             onFetchIcpList={handleFetchIcpList}
             onViewConversationDetails={handleViewConversationDetails}
-            isIcpListLoading={isIcpListLoading}
             leftSideContentMode={leftSideContentMode}
-            isIcpListError={isIcpListError}
+            sessionDurationInSeconds={sessionMetrics.sessionDurationInSeconds}
+            totalMessageCount={sessionMetrics.totalMessageCount}
+            deviceType={sessionData?.session?.device_type}
           />
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
   Globe,
   ContactRound,
   Settings2,
+  ArrowLeft,
 } from 'lucide-react';
 
 /**
@@ -214,7 +215,20 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
     activeIcon: CircleUser,
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
   },
-]; /**
+];
+
+/**
+ * Back to Dashboard item - displayed at top of settings view
+ */
+export const SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM: SidebarV2LinkItem = {
+  navUrl: '#back-to-dashboard',
+  navItem: 'Back to Dashboard',
+  icon: ArrowLeft,
+  activeIcon: ArrowLeft,
+  isActionItem: true,
+};
+
+/**
  * Sign out item - displayed at the bottom of settings view
  */
 export const SIDEBAR_V2_SIGN_OUT_ITEM: SidebarV2LinkItem = {

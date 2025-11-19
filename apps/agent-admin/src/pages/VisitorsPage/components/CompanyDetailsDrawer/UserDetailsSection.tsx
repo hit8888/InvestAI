@@ -3,28 +3,63 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import EmployeeAvatar from './EmployeeAvatar';
 import { ReachoutEmailCta } from '../../../../components/common/ReachoutEmail';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
-import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import LinkedInIcon from '@breakout/design-system/components/icons/linkedin-icon';
 import { cn } from '@breakout/design-system/lib/cn';
+import { Monitor, Smartphone, Tablet } from 'lucide-react';
 
 type UserDetailsSectionProps = {
   prospect?: Employee;
   onGenerateEmail: (employee: Employee) => void;
-  onViewBrowsingHistory: () => void;
-  showViewBrowsingHistory: boolean;
   isGeneratingEmail: boolean;
+  sessionDurationInSeconds?: number;
+  totalMessageCount?: number;
+  deviceType?: string | null;
 };
 
 const UserDetailsSection = ({
   prospect,
   onGenerateEmail,
-  onViewBrowsingHistory,
-  showViewBrowsingHistory,
   isGeneratingEmail,
+  sessionDurationInSeconds = 0,
+  totalMessageCount = 0,
+  deviceType,
 }: UserDetailsSectionProps) => {
   if (!prospect) {
     return null;
   }
+
+  // Format session duration: round up to next minute, show only minutes
+  const formatSessionDuration = (seconds: number): string => {
+    if (seconds <= 0) return '';
+    // Round up to the next minute
+    const roundedUpMinutes = Math.ceil(seconds / 60);
+    return `${roundedUpMinutes}m`;
+  };
+
+  const sessionDurationFormatted = formatSessionDuration(sessionDurationInSeconds);
+
+  // Format chip text: "Session duration: 2m | 3 messages"
+  // Show chip if we have data
+  const sessionChipText =
+    sessionDurationFormatted || totalMessageCount > 0
+      ? `Session duration: ${sessionDurationFormatted || '0m'} | ${totalMessageCount} ${totalMessageCount === 1 ? 'message' : 'messages'}`
+      : null;
+
+  // Get device icon based on device type
+  const getDeviceIcon = () => {
+    if (!deviceType) return null;
+
+    const normalizedDeviceType = deviceType.toUpperCase();
+    if (normalizedDeviceType === 'MOBILE') {
+      return <Smartphone className="h-3.5 w-3.5 text-gray-500" />;
+    } else if (normalizedDeviceType === 'DESKTOP') {
+      return <Monitor className="h-3.5 w-3.5 text-gray-500" />;
+    } else if (normalizedDeviceType === 'TABLET') {
+      return <Tablet className="h-3.5 w-3.5 text-gray-500" />;
+    }
+    // Default to desktop icon if unknown
+    return <Monitor className="h-3.5 w-3.5 text-gray-500" />;
+  };
 
   const locationDisplayValue =
     [prospect.location?.city, prospect.location?.country].filter((part) => part && part !== '-').join(', ') || '-';
@@ -41,8 +76,8 @@ const UserDetailsSection = ({
       </div>
 
       <div className="ml-6 w-full">
-        <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-[#FCFCFD] bg-gray-25 p-4">
-          <div className="flex items-end gap-4">
+        <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-gray-25 p-4">
+          <div className="flex items-start gap-4">
             {(prospect.avatar || prospect.name) && (
               <div className="border-white/24 h-[42px] w-[42px] overflow-hidden rounded-full border-2">
                 <EmployeeAvatar avatar={prospect.avatar} name={prospect.name} />
@@ -120,9 +155,11 @@ const UserDetailsSection = ({
                     <Typography variant="caption-12-normal" className="text-gray-500">
                       Location:
                     </Typography>
-                    <Typography variant="caption-12-normal" className="capitalize text-gray-900">
+                    <Typography
+                      variant="caption-12-normal"
+                      className="flex items-center gap-2 capitalize text-gray-900"
+                    >
                       {locationDisplayValue}
-                      &nbsp;
                       {prospect.location?.country && (
                         <img
                           src={findFlagUrlByCountryName(prospect.location.country)}
@@ -137,33 +174,17 @@ const UserDetailsSection = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                {prospect.prospect_id && (
-                  <CopyToClipboardButton
-                    textToCopy={prospect.prospect_id}
-                    toastMessage="Prospect ID copied to clipboard"
-                    btnClassName="flex items-center gap-2 rounded-2xl bg-gray-100 w-28 h-6"
-                    copyIconClassname="w-3 h-3"
-                  >
-                    <Typography variant="caption-12-normal" className="text-gray-500">
-                      Prospect ID
+              {/* Session duration and message count chip (like old IP address chip) */}
+              {sessionChipText && (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-2xl bg-gray-100 px-3 py-1.5">
+                    {deviceType && getDeviceIcon()}
+                    <Typography variant="caption-12-normal" className="text-gray-600">
+                      {sessionChipText}
                     </Typography>
-                  </CopyToClipboardButton>
-                )}
-
-                {prospect.ipAddress && (
-                  <CopyToClipboardButton
-                    textToCopy={prospect.ipAddress}
-                    toastMessage="IP Address copied to clipboard"
-                    btnClassName="flex items-center gap-2 rounded-2xl bg-gray-100 w-28 h-6"
-                    copyIconClassname="w-3 h-3"
-                  >
-                    <Typography variant="caption-12-normal" className="text-gray-500">
-                      IP Address
-                    </Typography>
-                  </CopyToClipboardButton>
-                )}
-              </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between">
@@ -172,14 +193,6 @@ const UserDetailsSection = ({
                 isLoading={isGeneratingEmail}
                 disabled={isGeneratingEmail}
               />
-
-              {showViewBrowsingHistory && (
-                <button className="cursor-pointer text-primaryV2 underline" onClick={onViewBrowsingHistory}>
-                  <Typography variant="caption-12-medium" className="text-primary">
-                    ← View Browsing History
-                  </Typography>
-                </button>
-              )}
             </div>
           </div>
         </div>

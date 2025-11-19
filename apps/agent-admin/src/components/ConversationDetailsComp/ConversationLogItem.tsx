@@ -5,7 +5,6 @@ import { ViewType } from '@meaku/core/types/common';
 import { OrbStatusEnum } from '@meaku/core/types/config';
 import { WebSocketMessage } from '@meaku/core/types/webSocketData';
 import { useSessionStore } from '../../stores/useSessionStore';
-import Typography from '@breakout/design-system/components/Typography/index';
 
 type ConversationLogItemProps = {
   conversation?: ConversationsTableDisplayContent;
@@ -20,13 +19,8 @@ const ConversationLogItem = ({ conversation, chatHistory }: ConversationLogItemP
   }
 
   return (
-    <div className="flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-primary/2.5 p-4">
+    <div className="flex w-full items-start justify-between gap-4 self-stretch rounded-2xl border border-gray-200 bg-gray-25 p-4">
       <div className="flex w-full flex-col gap-4">
-        <div className="flex w-full items-center justify-between gap-2">
-          <Typography variant="label-14-medium" className="text-gray-500">
-            Conversation log:
-          </Typography>
-        </div>
         <div className="flex w-full flex-col overflow-auto bg-gray-25">
           {chatHistory?.length && conversation?.session_id ? (
             <AgentMessages

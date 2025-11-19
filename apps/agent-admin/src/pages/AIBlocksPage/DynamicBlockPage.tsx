@@ -64,10 +64,10 @@ const DynamicBlockPage = () => {
     // Add key with block.type to force React to unmount/remount when switching between different block types
     // This prevents state bleeding between different block page components
     return (
-      <>
+      <div className="flex w-full flex-col gap-6 p-4">
         <AIBlocksNavigation blockCategory={block.type} />
         <PageComponent key={`${block.type}-${block.id}`} block={block} />
-      </>
+      </div>
     );
   };
 
@@ -76,16 +76,18 @@ const DynamicBlockPage = () => {
 
 const LoadingState = () => {
   return (
-    <div className="flex w-full items-start gap-6 self-stretch pt-6">
-      <div className="flex w-full max-w-xl flex-col gap-8">
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-[400px] w-full" />
-        <Skeleton className="h-[400px] w-full" />
-        <Skeleton className="h-[400px] w-full" />
+    <div className="flex w-full flex-col gap-6 p-4">
+      <div className="flex w-full items-start gap-6 self-stretch">
+        <div className="flex w-full max-w-xl flex-col gap-8">
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-[400px] w-full" />
+          <Skeleton className="h-[400px] w-full" />
+          <Skeleton className="h-[400px] w-full" />
+        </div>
+        <BlockPreviewContainer>
+          <Skeleton className="h-[600px] w-full" />
+        </BlockPreviewContainer>
       </div>
-      <BlockPreviewContainer>
-        <Skeleton className="h-[600px] w-full" />
-      </BlockPreviewContainer>
     </div>
   );
 };

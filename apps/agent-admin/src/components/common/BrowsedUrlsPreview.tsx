@@ -1,15 +1,18 @@
 import { ScanEye } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import Typography from '@breakout/design-system/components/Typography/index';
 import ArrowUpIcon from '@breakout/design-system/components/icons/arrow-up-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import useWebpagesScreenshotsQuery from '../../queries/query/useWebpagesScreenshotsQuery';
 import { BrowsedUrl } from '@meaku/core/types/common';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import BrowsingHistoryLoading from '../../pages/VisitorsPage/components/CompanyDetailsDrawer/BrowsingHistoryLoading';
 
 type BrowsedUrlsPreviewProps = {
   browsedUrls: BrowsedUrl[];
   isRealTime?: boolean;
+  isLoading?: boolean;
 };
 
 type BrowsedUrlWithScreenshot = BrowsedUrl & {
@@ -43,8 +46,30 @@ const EmptyActivityState = ({ className, message }: EmptyActivityStateProps) => 
 );
 
 const BrowsedUrlScreenShot = ({ screenshotUrl }: BrowsedUrlScreenShotProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Reset loaded state when screenshot URL changes
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [screenshotUrl]);
+
   if (screenshotUrl) {
-    return <img src={screenshotUrl} alt="Webpage Screenshot" className="h-full w-full rounded" />;
+    return (
+      <div className="relative aspect-video w-full">
+        {/* Placeholder box with border - shown until image loads */}
+        {!imageLoaded && <div className="absolute inset-0 rounded border border-gray-200 bg-gray-50" />}
+        {/* Actual image - hidden until loaded, then fades in */}
+        <img
+          src={screenshotUrl}
+          alt="Webpage Screenshot"
+          className={cn(
+            'h-full w-full rounded transition-opacity duration-300',
+            imageLoaded ? 'opacity-100' : 'opacity-0',
+          )}
+          onLoad={() => setImageLoaded(true)}
+        />
+      </div>
+    );
   }
 
   return <EmptyActivityState className="aspect-video pt-3" message={'Website preview not available'} />;
@@ -75,8 +100,13 @@ const BrowsedUrlPreviewItem = ({ browsedUrl, isFirst, isRealTime }: BrowsedUrlPr
   </div>
 );
 
-const BrowsedUrlsPreview = ({ browsedUrls, isRealTime = false }: BrowsedUrlsPreviewProps) => {
-  const { data: webpagesScreenshotsData, isLoading: isLoadingScreenshots } = useWebpagesScreenshotsQuery(
+const BrowsedUrlsPreview = ({ browsedUrls, isRealTime = false, isLoading = false }: BrowsedUrlsPreviewProps) => {
+  const {
+    data: webpagesScreenshotsData,
+    isLoading: isLoadingScreenshots,
+    isFetching: isFetchingScreenshots,
+    isSuccess: isQuerySuccess,
+  } = useWebpagesScreenshotsQuery(
     {
       urls: browsedUrls.map((browsedUrl) => browsedUrl.url),
     },
@@ -121,15 +151,42 @@ const BrowsedUrlsPreview = ({ browsedUrls, isRealTime = false }: BrowsedUrlsPrev
     );
   };
 
-  if (browsedUrlsWithScreenshots.length === 0) {
+  // Show loader if parent data is loading, or if screenshots are loading/fetching
+  // or if we have browsedUrls but query hasn't completed yet
+  const shouldShowLoader =
+    isLoading || isLoadingScreenshots || isFetchingScreenshots || (browsedUrls.length > 0 && !isQuerySuccess);
+
+  // Only show "not available" if we truly have no browsed URLs (and not loading)
+  if (browsedUrls.length === 0 && !shouldShowLoader) {
     return <EmptyActivityState message="Browsing history not available" />;
   }
 
-  if (isLoadingScreenshots) {
-    return <EmptyActivityState message="Loading browsing history..." />;
-  }
-
-  return <div className="flex flex-col items-center gap-4">{browsedUrlsWithScreenshots.map(renderActivityItem)}</div>;
+  return (
+    <AnimatePresence mode="wait">
+      {shouldShowLoader ? (
+        <motion.div
+          key="browsing-history-loading"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <BrowsingHistoryLoading />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="browsing-history-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-4"
+        >
+          {browsedUrlsWithScreenshots.map(renderActivityItem)}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default BrowsedUrlsPreview;

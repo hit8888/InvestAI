@@ -22,7 +22,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
 
   return (
     <div>
-      <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-[#FCFCFD] p-4">
+      <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-gray-25 p-4">
         {/* Company Header */}
         <div className="flex items-center gap-2">
           <div className="flex flex-1 items-center gap-3">
@@ -108,7 +108,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
               </Typography>
             </div>
           </div>
-          <div className="flex flex-1 flex-col gap-4">
+          <div className="flex flex-col gap-4">
             {showInfoChips && (
               <div className="flex flex-wrap justify-end gap-2">
                 {!!companyData.relevance && <InfoChip label="Relevance" value={companyData.relevance} />}

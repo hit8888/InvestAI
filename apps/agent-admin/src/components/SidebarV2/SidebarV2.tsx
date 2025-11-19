@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ScrollArea } from '@breakout/design-system/components/shadcn-ui/scroll-area';
 import {
@@ -21,6 +20,7 @@ import {
   SIDEBAR_V2_MAIN_SECTIONS,
   SIDEBAR_V2_SETTINGS_ITEMS,
   SIDEBAR_V2_SIGN_OUT_ITEM,
+  SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM,
   INSIGHTS_ITEM,
   CONFIG_ITEM,
   SidebarV2LinkItem,
@@ -114,6 +114,12 @@ const SidebarV2 = () => {
         logout();
         return;
       }
+
+      if (item.isActionItem && item.navUrl === '#back-to-dashboard') {
+        e.preventDefault();
+        navigateToMainView();
+        return;
+      }
     };
 
     const baseClasses = cn(
@@ -128,10 +134,20 @@ const SidebarV2 = () => {
       <button
         key={'sidebar-v2-nav-item-' + item.navItem.toLowerCase().replace(' ', '-')}
         onClick={handleItemClick}
-        className={cn(baseClasses, 'text-red-600 hover:bg-red-50')}
+        className={cn(
+          baseClasses,
+          item.navUrl === '#back-to-dashboard' ? 'text-gray-500 hover:bg-gray-100' : 'text-red-600 hover:bg-red-50',
+        )}
         disabled={isDisabled}
       >
-        {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
+        {Icon && (
+          <Icon
+            className={cn(
+              'h-4 w-4 flex-shrink-0',
+              item.navUrl === '#back-to-dashboard' ? 'text-gray-500' : 'text-red-600',
+            )}
+          />
+        )}
         <span
           className={cn(
             'inline-block overflow-hidden whitespace-nowrap text-sm transition-[max-width,opacity] duration-200 ease-out',
@@ -290,31 +306,15 @@ const SidebarV2 = () => {
               </div>
             ) : (
               // SETTINGS VIEW - Settings Items with Back Button
-              <div className="flex h-full flex-1 flex-col">
-                <div className="space-y-2">
-                  <button
-                    onClick={navigateToMainView}
-                    className="mb-0 flex w-full items-center gap-3 overflow-hidden rounded-lg px-2 py-2.5 text-sm font-semibold text-gray-900 transition-colors duration-200 hover:bg-gray-100"
-                  >
-                    <div className="flex items-center rounded bg-white p-1 transition-colors duration-300">
-                      <ArrowLeft className="h-4 w-4 flex-shrink-0" />
-                    </div>
-                    <span className="inline-block max-w-[200px] overflow-hidden whitespace-nowrap opacity-100">
-                      Back to Dashboard
-                    </span>
-                  </button>
-
-                  <div className="space-y-4">{renderSettingsGroupWithNavItems(true)}</div>
-                </div>
-
-                {/* Sign Out Button - Positioned at bottom */}
-                <div className="mt-auto pt-4">{renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM, true)}</div>
+              <div className="space-y-2">
+                {renderNavItem(SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM, true)}
+                <div className="space-y-4">{renderSettingsGroupWithNavItems(true)}</div>
               </div>
             )}
           </ScrollArea>
 
-          {/* Bottom Actions - Settings Button */}
-          {sideNavView === SideNavView.MAIN && (
+          {/* Bottom Actions */}
+          {sideNavView === SideNavView.MAIN ? (
             <div>
               <button
                 onClick={navigateToSettingsView}
@@ -326,6 +326,8 @@ const SidebarV2 = () => {
                 </span>
               </button>
             </div>
+          ) : (
+            <div>{renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM, true)}</div>
           )}
         </div>
       </>
@@ -336,7 +338,7 @@ const SidebarV2 = () => {
     <>
       <div
         className={cn(
-          'relative flex h-screen flex-shrink-0 flex-col overflow-visible bg-[#FCFCFD] transition-[width,padding-left,padding-right] duration-200 ease-out',
+          'relative flex h-screen flex-shrink-0 flex-col overflow-visible bg-gray-25 transition-[width,padding-left,padding-right] duration-200 ease-out',
           {
             'w-[56px] px-2': isCollapsed,
             'w-[200px] px-2': !isCollapsed,
@@ -404,23 +406,13 @@ const SidebarV2 = () => {
                     <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
                   </div>
                 ) : (
-                  <div className="flex h-full flex-1 flex-col">
-                    <div className="space-y-2">
-                      <button
-                        onClick={navigateToMainView}
-                        className="mb-0 flex w-10 items-center justify-center overflow-hidden rounded-lg px-2 py-2.5 text-sm font-semibold text-gray-900 transition-colors duration-200 hover:bg-gray-100"
-                      >
-                        <div className="flex items-center rounded bg-white p-1">
-                          <ArrowLeft className="h-4 w-4 flex-shrink-0" />
-                        </div>
-                      </button>
-                      <div className="space-y-4">{renderSettingsGroupWithNavItems(false)}</div>
-                    </div>
-                    <div className="mt-auto pt-4">{renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM, false)}</div>
+                  <div className="space-y-2">
+                    {renderNavItem(SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM, false)}
+                    <div className="space-y-4">{renderSettingsGroupWithNavItems(false)}</div>
                   </div>
                 )}
               </ScrollArea>
-              {sideNavView === SideNavView.MAIN && (
+              {sideNavView === SideNavView.MAIN ? (
                 <div
                   className="flex-shrink-0"
                   onMouseEnter={() => isCollapsed && setIsHovered(true)}
@@ -432,6 +424,14 @@ const SidebarV2 = () => {
                   >
                     <PanelSettingsIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
                   </button>
+                </div>
+              ) : (
+                <div
+                  className="flex-shrink-0"
+                  onMouseEnter={() => isCollapsed && setIsHovered(true)}
+                  onMouseLeave={() => isCollapsed && setIsHovered(false)}
+                >
+                  {renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM, false)}
                 </div>
               )}
             </div>
@@ -446,7 +446,7 @@ const SidebarV2 = () => {
       {isCollapsed && (
         <div
           className={cn(
-            'fixed left-0 top-0 z-[9999] flex h-screen flex-shrink-0 flex-col overflow-hidden bg-[#FCFCFD] px-2 shadow-xl transition-[width,opacity] duration-200 ease-out',
+            'fixed left-0 top-0 z-[9999] flex h-screen flex-shrink-0 flex-col overflow-hidden bg-gray-25 px-2 shadow-xl transition-[width,opacity] duration-200 ease-out',
             {
               'w-[200px] opacity-100': isHovered,
               'pointer-events-none w-[56px] opacity-0': !isHovered,

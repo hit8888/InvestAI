@@ -11,8 +11,6 @@ type ConversationDetailsContentProps = {
   isLoading?: boolean;
 };
 
-const IGNORE_LIST_KEYS = ['reachoutEmail', 'assignRep', 'intentScore'];
-
 const ConversationDetailsContent = ({
   chatHistory,
   conversation,
@@ -41,9 +39,9 @@ const ConversationDetailsContent = ({
           {!conversation ? (
             <div>No conversation data found</div>
           ) : (
-            <div className="flex w-[calc(50vw-4rem)] flex-col gap-4 overflow-y-auto">
+            <div className="flex w-full flex-col gap-4 overflow-y-auto">
               {generateConversationSummaryContent(chatHistory, conversation)
-                .filter((item) => item.listValue !== '-' && !IGNORE_LIST_KEYS.includes(item.listKey))
+                .filter((item) => item.listKey === 'conversationLog')
                 .map((item) => (
                   <SummaryTabContentItem
                     key={item.listKey}

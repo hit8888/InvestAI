@@ -3,8 +3,9 @@ import type { Employee, CompanyData } from '../../VisitorsPage/components/Compan
 import { BrowsedUrl } from '@meaku/core/types/common';
 import CompanyDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/CompanyDetailsSection';
 import UserDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserDetailsSection';
-import RelevantProfilesSection from '../../VisitorsPage/components/CompanyDetailsDrawer/RelevantProfilesSection';
-import UserInteractionSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserInteractionSection';
+import AiChatSummaryCard from '../../VisitorsPage/components/CompanyDetailsDrawer/AiChatSummaryCard';
+import BrowsingHistoryCard from '../../VisitorsPage/components/CompanyDetailsDrawer/BrowsingHistoryCard';
+import FindRelevantProfilesCard from '../../VisitorsPage/components/CompanyDetailsDrawer/FindRelevantProfilesCard';
 import DrawerContentLoading from '../../VisitorsPage/components/CompanyDetailsDrawer/DrawerContentLoading';
 
 interface DrawerSectionsProps {
@@ -17,24 +18,25 @@ interface DrawerSectionsProps {
   onViewBrowsingHistory: () => void;
   onFetchIcpList: () => void;
   onViewConversationDetails: () => void;
-  isIcpListLoading: boolean;
   leftSideContentMode: string | null;
-  isIcpListError: boolean;
+  sessionDurationInSeconds?: number;
+  totalMessageCount?: number;
+  deviceType?: string | null;
 }
 
 const DrawerSections = ({
   isLoading = false,
   companyData,
-  browsingHistory,
   selectedEmployee,
   isReachoutEmailLoading,
   onGenerateEmail,
   onViewBrowsingHistory,
   onFetchIcpList,
   onViewConversationDetails,
-  isIcpListLoading,
   leftSideContentMode,
-  isIcpListError,
+  sessionDurationInSeconds,
+  totalMessageCount,
+  deviceType,
 }: DrawerSectionsProps) => {
   return (
     <AnimatePresence mode="wait">
@@ -64,29 +66,32 @@ const DrawerSections = ({
           <UserDetailsSection
             prospect={companyData?.prospect}
             onGenerateEmail={onGenerateEmail}
-            onViewBrowsingHistory={onViewBrowsingHistory}
-            showViewBrowsingHistory={browsingHistory.length > 0}
             isGeneratingEmail={
               isReachoutEmailLoading && selectedEmployee?.prospect_id === companyData?.prospect?.prospect_id
             }
+            sessionDurationInSeconds={sessionDurationInSeconds}
+            totalMessageCount={totalMessageCount}
+            deviceType={deviceType}
           />
 
-          {/* Relevant Profiles Section */}
-          <RelevantProfilesSection
-            companyName={companyData?.name}
-            onSearchProfiles={onFetchIcpList}
-            disableSearchProfiles={isIcpListLoading || leftSideContentMode === 'relevant-profiles' || isIcpListError}
-            showError={isIcpListError}
-            isLoadingProfiles={isIcpListLoading}
-          />
-
-          {/* Browsing & Conversation Summary */}
-          {companyData?.prospect?.session_id && (
-            <UserInteractionSection
+          {/* Panel Cards Section */}
+          <div className="flex flex-col gap-10">
+            {/* AI Chat Summary Card */}
+            <AiChatSummaryCard
+              isActive={leftSideContentMode === 'conversation-log'}
+              onClick={onViewConversationDetails}
               conversationSummary={companyData?.conversationSummary}
-              onViewConversationDetails={onViewConversationDetails}
             />
-          )}
+
+            {/* Browsing History Card */}
+            <BrowsingHistoryCard
+              isActive={leftSideContentMode === 'browsing-history'}
+              onClick={onViewBrowsingHistory}
+            />
+
+            {/* Find Relevant Profiles Card */}
+            <FindRelevantProfilesCard isActive={leftSideContentMode === 'relevant-profiles'} onClick={onFetchIcpList} />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

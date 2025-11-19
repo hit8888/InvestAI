@@ -88,7 +88,7 @@ export const conversationsTableConfig = (userId?: number): TablePageConfig<Prosp
     urlParam: 'rowId',
     // Additional URL parameters to set when opening drawer
     additionalUrlParams: {
-      panel: 'conversation-details',
+      panel: 'conversation-log',
     },
   },
 });

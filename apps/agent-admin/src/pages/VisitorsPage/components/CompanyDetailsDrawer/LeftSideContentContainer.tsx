@@ -7,18 +7,22 @@ const LeftSideContentContainer = ({
   visible,
   children,
   onClose,
+  maxWidth,
 }: {
   headerTitle: string;
   visible: boolean;
   children: React.ReactNode;
   onClose: () => void;
+  maxWidth?: string;
 }) => {
   return (
     <div
       className={cn(
-        'absolute right-[calc(100%+1rem)] top-28 mb-4 flex max-h-[calc(100vh-8rem)] min-w-[35vw] select-text flex-col gap-3 self-end rounded-2xl bg-white',
+        'absolute right-[calc(100%+1rem)] top-1/2 flex max-h-[max(75vh,756px)] -translate-y-1/2 select-text flex-col gap-3 rounded-2xl bg-white',
+        maxWidth ? 'w-full' : 'w-full min-w-[35vw]',
         { 'pointer-events-none opacity-0': !visible, 'pointer-events-auto': visible },
       )}
+      style={maxWidth ? { maxWidth } : undefined}
     >
       <div className="flex items-center gap-2 border-b border-gray-200 p-4">
         <AiSparklesIcon className="size-6" />
