@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { DEFAULT_ROUTE } from '../utils/constants';
 import { getValidTenantFromOrganizations } from '../utils/common';
 import { buildPathWithTenantBase, navigateToDefaultRoute } from '../utils/navigation';
+import { deepCompare } from '@meaku/core/utils/index';
 
 /**
  * Hook to handle authentication and tenant routing logic
@@ -47,7 +48,7 @@ export const useTenantRedirect = () => {
         }
 
         // URL is source of truth - update store if different
-        if (activeTenant?.['tenant-name'] !== tenantNameParam) {
+        if (!deepCompare(activeTenant, matchingOrg)) {
           setActiveTenant(matchingOrg);
           queryClient.removeQueries({
             predicate: (query) => {
