@@ -5,6 +5,8 @@ import useJoinConversationStore from '../stores/useJoinConversationStore';
 import { AdminConversationJoinStatus } from '@meaku/core/types/common';
 import toast from 'react-hot-toast';
 import NewConversationToast from '../components/ActiveConversationsComp/NewConversationToast';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import useAdminEventAnalytics from './useAdminEventAnalytics';
 
 const TOAST_DURATION = 5000;
 
@@ -81,6 +83,7 @@ export const useNewConversationNotifications = () => {
   const { sessionID } = useParams<{ sessionID: string }>();
   const navigate = useNavigate();
   const { updateSessionStatus } = useJoinConversationStore();
+  const { trackAdminEvent } = useAdminEventAnalytics();
 
   // Track conversations that have already been notified about
   const notifiedConversationsRef = useRef<Set<string>>(new Set());
@@ -109,11 +112,14 @@ export const useNewConversationNotifications = () => {
         conversation: latestConversation,
         onViewLead: handleViewLead,
       });
+      trackAdminEvent(ANALYTICS_EVENT_NAMES.ADMIN_DASHBOARD.LIVE_CONVERSATION_NOTIFIED, {
+        session_id: latestConversation.session_id,
+      });
 
       // Mark this conversation as notified
       notifiedConversationsRef.current.add(latestConversation.session_id);
     },
-    [sessionID, handleViewLead],
+    [sessionID, handleViewLead, trackAdminEvent],
   );
 
   // Clean up notified conversations that are no longer active
