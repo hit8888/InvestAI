@@ -5,6 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
+import { cn } from '@breakout/design-system/lib/cn';
 
 interface TruncatedTextProps {
   /** Text content to display */
@@ -71,7 +72,7 @@ export const TruncatedText = ({
   const textElement = (
     <div
       ref={textRef}
-      className={`cursor-default truncate text-sm font-normal text-gray-900 ${className}`}
+      className={cn('cursor-default truncate text-sm font-normal text-gray-900', className)}
       style={{ maxWidth }}
     >
       {text}

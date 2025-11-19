@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { CellContainer } from './CellContainer';
 import { TruncatedText } from './TruncatedText';
 import EmptyCell from './EmptyCell';
+import { extractLinkedInUsername } from '@meaku/core/utils/index';
 
 interface LinkCellProps {
   value: unknown;
@@ -22,12 +23,15 @@ export const LinkCell = ({ value, tooltip }: LinkCellProps) => {
   // Validate URL
   let isValidUrl = false;
   let href = url;
+  let displayText = url;
 
   try {
     // Try to parse as URL
     const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
     isValidUrl = true;
     href = urlObj.href;
+    // Extract LinkedIn username if present, otherwise show pathname
+    displayText = extractLinkedInUsername(href) || urlObj.pathname || '/'; // Show '/' if path is empty
   } catch {
     // Not a valid URL, show as-is
     href = `https://${url}`; // Try to make it work anyway
@@ -58,7 +62,7 @@ export const LinkCell = ({ value, tooltip }: LinkCellProps) => {
       >
         <div className="min-w-0 flex-1">
           <TruncatedText
-            text={href}
+            text={displayText}
             maxWidth="200px"
             className="text-blue-600 hover:text-blue-800"
             customTooltip={tooltip && tooltip.trim() ? tooltip : undefined}
