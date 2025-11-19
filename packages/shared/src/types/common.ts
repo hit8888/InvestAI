@@ -21,5 +21,5 @@ export interface CommandBarSettings {
   root_bottom_offset?: string;
   root_right_offset?: string;
   feedback_enabled?: boolean;
-  active_module?: CommandBarModuleType;
+  active_module?: CommandBarModuleType | null;
 }

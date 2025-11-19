@@ -224,7 +224,8 @@ export type SentryEvent = {
 // ============================================================================
 
 export interface ExternalButtonManager {
-  handleExternalButtons(): void;
+  setupButtonEventListeners(): void;
+  removeButtonEventListeners(): void;
 }
 
 export interface AgentIframeManager {

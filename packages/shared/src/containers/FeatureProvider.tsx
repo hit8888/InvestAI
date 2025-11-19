@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useState, useCallback, useMemo, useEffect } from 'react';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
@@ -20,7 +20,7 @@ interface FeatureProviderProps {
 export const DEFAULT_ASK_AI_MODULE_ID = 1;
 
 const FeatureProvider = ({ children }: FeatureProviderProps) => {
-  const { config, settings } = useCommandBarStore();
+  const { config, settings, updateSettings } = useCommandBarStore();
 
   const [activeFeatureType, setActiveFeatureType] = useState<CommandBarModuleType | null>(() => {
     const parsed = CommandBarModuleTypeSchema.safeParse(settings.active_module);
@@ -45,6 +45,23 @@ const FeatureProvider = ({ children }: FeatureProviderProps) => {
 
     setActiveFeatureType(moduleType);
   }, []);
+
+  useEffect(() => {
+    if (!settings.active_module) {
+      return;
+    }
+
+    setActiveFeatureType((existingFeatureType) => {
+      const parsed = CommandBarModuleTypeSchema.safeParse(settings.active_module);
+
+      if (existingFeatureType || !parsed.success) {
+        return existingFeatureType;
+      }
+
+      return parsed.data;
+    });
+    updateSettings({ active_module: null });
+  }, [settings.active_module, updateSettings]);
 
   return (
     <FeatureContext.Provider
