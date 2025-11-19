@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')!).render(
       <ConversationDetailsProvider>
         <App />
       </ConversationDetailsProvider>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
     </QueryClientProvider>
   </StrictMode>,
 );

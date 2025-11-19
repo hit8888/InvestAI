@@ -257,7 +257,7 @@ const ActiveConversationsLayout = () => {
   }, [setCurrentConversation]);
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col items-start gap-4 self-stretch p-4">
       <CustomPageHeader
         headerTitle={
           <span className="flex items-center gap-4">
@@ -306,7 +306,7 @@ const ActiveConversationsLayout = () => {
           ) : null}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

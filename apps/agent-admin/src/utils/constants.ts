@@ -417,11 +417,12 @@ export enum AppRoutesEnum {
   PROFILE = 'profile',
   VISITORS = 'prospects',
   ICP = 'icp',
-  COMPANIES = 'companies',
+  COMPANIES = 'accounts',
   VISITORS_V2 = 'contacts',
   BLOCKS = 'blocks',
   SDR_SETTINGS = 'sdr-settings',
   EMBEDDING_SCRIPTS = 'embeddings',
+  CONFIG = 'config',
 }
 
 export enum SidebarNavItemsEnum {

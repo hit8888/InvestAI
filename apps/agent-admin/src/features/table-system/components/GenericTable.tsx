@@ -134,7 +134,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                   return (
                     <th
                       key={`shimmer-header-${colIndex}`}
-                      className="min-h-[42px] whitespace-nowrap border border-gray-200 px-4 py-3 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
+                      className="h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
                     >
                       <div className="flex h-full items-center justify-start">
                         <ShimmerCell className={shimmerWidth} />
@@ -161,7 +161,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.2, ease: 'easeInOut' }}
-                          className="whitespace-nowrap border border-gray-200 px-4 py-3 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
+                          className="h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
                         >
                           {header.isPlaceholder ? null : (
                             <div
@@ -219,9 +219,9 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                       return (
                         <td
                           key={`shimmer-cell-${rowIndex}-${colIndex}`}
-                          className="min-h-[40px] border border-gray-200 px-3 first:border-l-0"
+                          className="h-[40px] border border-gray-200 px-3 first:border-l-0"
                         >
-                          <div className="flex min-h-10 items-center  justify-start">
+                          <div className="flex h-full items-center justify-start">
                             <ShimmerCell className={shimmerWidth} />
                           </div>
                         </td>
@@ -246,7 +246,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.2, ease: 'easeInOut' }}
-                            className="border border-gray-200 px-3 text-sm text-gray-900 first:border-l-0"
+                            className="h-[40px] border border-gray-200 px-3 text-sm text-gray-900 first:border-l-0"
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </motion.td>

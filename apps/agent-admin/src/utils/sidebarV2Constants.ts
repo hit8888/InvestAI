@@ -64,7 +64,7 @@ export const INSIGHTS_ITEM: SidebarV2LinkItem = {
 };
 
 export const CONFIG_ITEM: SidebarV2LinkItem = {
-  navUrl: `/${AppRoutesEnum.AGENT_CONTROLS}`,
+  navUrl: `/${AppRoutesEnum.CONFIG}`,
   navItem: 'Config',
   icon: Settings2,
   activeIcon: Settings2,

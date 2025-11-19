@@ -33,6 +33,7 @@ import AdminProfilePage from '../pages/AdminProfilePage/index.tsx';
 import AIBlocksPage from '../pages/AIBlocksPage/AIBlocksPage.tsx';
 import DynamicBlockPage from '../pages/AIBlocksPage/DynamicBlockPage.tsx';
 import SdrSettingsPage from '../pages/SdrSettingsPage/SdrSettingsPage.tsx';
+import ConfigPage from '../pages/ConfigPage/ConfigPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
@@ -155,7 +156,7 @@ const routes = [
                 element: <ProtectedRoute element={<InsightsPageContainer />} />,
               },
               {
-                path: 'companies',
+                path: 'accounts',
                 element: <ProtectedRoute element={<CompaniesV2PageContainer />} />,
               },
               {
@@ -179,6 +180,10 @@ const routes = [
                     element: <ProtectedRoute element={<DynamicBlockPage />} />,
                   },
                 ],
+              },
+              {
+                path: 'config',
+                element: <ProtectedRoute element={<ConfigPage />} />,
               },
               {
                 path: 'settings',

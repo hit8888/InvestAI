@@ -22,10 +22,7 @@ const CompanyInfoSection = ({ companyData }: CompanyInfoSectionProps) => {
 
   return (
     <div>
-      <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-        Company Details
-      </Typography>
-      <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4">
+      <div className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-[#FCFCFD] p-4">
         {/* Company Header */}
         <div className="flex items-center gap-2">
           <div className="flex flex-1 items-center gap-3">

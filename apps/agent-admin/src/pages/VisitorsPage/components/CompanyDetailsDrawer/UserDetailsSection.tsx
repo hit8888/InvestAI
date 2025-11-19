@@ -41,11 +41,7 @@ const UserDetailsSection = ({
       </div>
 
       <div className="ml-6 w-full">
-        <Typography variant="caption-12-medium" className="mb-2 flex items-center">
-          User Details
-        </Typography>
-
-        <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-gray-25 p-4">
+        <div className="flex flex-col gap-2.5 rounded-2xl border border-gray-200 bg-[#FCFCFD] bg-gray-25 p-4">
           <div className="flex items-end gap-4">
             {(prospect.avatar || prospect.name) && (
               <div className="border-white/24 h-[42px] w-[42px] overflow-hidden rounded-full border-2">

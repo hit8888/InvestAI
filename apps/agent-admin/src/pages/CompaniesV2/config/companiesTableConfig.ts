@@ -29,8 +29,8 @@ interface CompanyRow extends Record<string, unknown> {
  * Uses drawer for company details and visitor information
  */
 export const companiesTableConfig: TablePageConfig<CompanyRow> = {
-  pageKey: 'companies',
-  pageTitle: 'Companies',
+  pageKey: 'accounts',
+  pageTitle: 'Accounts',
 
   api: {
     tableData: '/tenant/api/tenant-companies/query/',

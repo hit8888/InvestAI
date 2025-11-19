@@ -7,12 +7,16 @@ import Typography from '@breakout/design-system/components/Typography/index';
  * Displays skeleton loaders while data is being fetched
  */
 const LoadingState = React.memo(() => (
-  <div className="flex w-full flex-col gap-6">
-    <div className="flex-1 flex-col gap-2">
-      <Typography variant="title-18">Blocks</Typography>
-      <Typography variant="body-14" textColor="gray500">
-        Manage and configure your website engagement blocks
-      </Typography>
+  <div className="flex w-full flex-col gap-6 p-4">
+    <div className="flex w-full items-center justify-between">
+      <div className="flex-1 flex-col gap-2">
+        <Typography className="font-bold" variant="title-24">
+          Blocks
+        </Typography>
+        <Typography variant="body-14" textColor="gray500">
+          Manage and configure your website engagement blocks
+        </Typography>
+      </div>
     </div>
     <div className="flex w-full items-start gap-6">
       <div className="flex flex-1 flex-col items-start gap-6">
