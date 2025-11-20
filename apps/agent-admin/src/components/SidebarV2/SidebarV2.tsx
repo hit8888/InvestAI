@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
 import { ScrollArea } from '@breakout/design-system/components/shadcn-ui/scroll-area';
 import {
@@ -15,12 +16,11 @@ import { useSidebar } from '../../context/SidebarContext';
 import SidebarHeader from './SidebarHeader';
 import useBrandingAgentConfigsQuery from '../../queries/query/useAgentConfigsQuery';
 import { ADMIN_DASHBOARD_COMPANY_NAME, SideNavView } from '../../utils/constants';
-import PanelSettingsIcon from '@breakout/design-system/components/icons/panel-settings-icon';
 import {
   SIDEBAR_V2_MAIN_SECTIONS,
   SIDEBAR_V2_SETTINGS_ITEMS,
   SIDEBAR_V2_SIGN_OUT_ITEM,
-  SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM,
+  SIDEBAR_V2_SETTINGS_ITEM,
   INSIGHTS_ITEM,
   CONFIG_ITEM,
   SidebarV2LinkItem,
@@ -120,6 +120,12 @@ const SidebarV2 = () => {
         navigateToMainView();
         return;
       }
+
+      if (item.isActionItem && item.navUrl === '#settings') {
+        e.preventDefault();
+        navigateToSettingsView();
+        return;
+      }
     };
 
     const baseClasses = cn(
@@ -136,17 +142,12 @@ const SidebarV2 = () => {
         onClick={handleItemClick}
         className={cn(
           baseClasses,
-          item.navUrl === '#back-to-dashboard' ? 'text-gray-500 hover:bg-gray-100' : 'text-red-600 hover:bg-red-50',
+          item.navUrl === '#logout' ? 'text-red-600 hover:bg-red-50' : 'text-gray-500 hover:bg-gray-100',
         )}
         disabled={isDisabled}
       >
         {Icon && (
-          <Icon
-            className={cn(
-              'h-4 w-4 flex-shrink-0',
-              item.navUrl === '#back-to-dashboard' ? 'text-gray-500' : 'text-red-600',
-            )}
-          />
+          <Icon className={cn('h-4 w-4 flex-shrink-0', item.navUrl === '#logout' ? 'text-red-600' : 'text-gray-500')} />
         )}
         <span
           className={cn(
@@ -216,7 +217,6 @@ const SidebarV2 = () => {
     // Group items by settingsGroup while preserving order
     const groupedItems = new Map<SidebarV2SettingsGroup | 'ungrouped', SidebarV2LinkItem[]>();
     const groupOrder: (SidebarV2SettingsGroup | 'ungrouped')[] = [];
-    const isExpanded = forceExpanded || !isCollapsed;
 
     SIDEBAR_V2_SETTINGS_ITEMS.forEach((item) => {
       const group = item.settingsGroup || 'ungrouped';
@@ -230,24 +230,16 @@ const SidebarV2 = () => {
     return groupOrder.map((group, index) => {
       const items = groupedItems.get(group)!;
       return (
-        <div key={group} className="space-y-1 px-2">
+        <div key={group} className={cn('flex flex-col items-start justify-start')}>
           {/* Group Header */}
           {group !== 'ungrouped' && (
-            <div
-              className={cn(
-                'flex items-center overflow-hidden whitespace-nowrap px-2 text-xs font-medium uppercase tracking-wide text-gray-400',
-                {
-                  'w-10 justify-center': !isExpanded,
-                  'max-w-[200px]': isExpanded,
-                },
-              )}
-            >
-              {isExpanded ? group : group.charAt(0)}
+            <div className="pb flex h-6 max-w-[200px] items-center overflow-hidden whitespace-nowrap border border-transparent px-2 text-xs font-medium capitalize tracking-wide text-gray-400 opacity-100">
+              {group}
             </div>
           )}
           {/* Group Items */}
-          {items.map((item) => renderNavItem(item, forceExpanded))}
-          {index < groupOrder.length - 1 && <Separator />}
+          <div className="w-full space-y-1">{items.map((item) => renderNavItem(item, forceExpanded))}</div>
+          {index < groupOrder.length - 1 && <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />}
         </div>
       );
     });
@@ -271,6 +263,8 @@ const SidebarV2 = () => {
               onExpandSidebar={() => setIsCollapsed(false)}
               onToggleCollapse={toggleSidebar}
               isHovered={forHoverOverlay}
+              sideNavView={sideNavView}
+              onBackToMain={navigateToMainView}
             />
           </div>
         </div>
@@ -279,53 +273,58 @@ const SidebarV2 = () => {
         <Separator className="my-4" />
 
         {/* Main Navigation */}
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden pb-2">
           <ScrollArea className="sidebar-scrollbar h-full flex-1 pt-0" type="hover">
-            {sideNavView === SideNavView.MAIN ? (
-              // MAIN VIEW - Grouped Navigation + Insights
-              <div className="">
-                {SIDEBAR_V2_MAIN_SECTIONS.map((section, index) => (
-                  <div key={section.title} className={cn('flex flex-col items-start justify-start')}>
-                    <div className="pb flex h-6 max-w-[200px] items-center overflow-hidden whitespace-nowrap border border-transparent px-2 text-xs font-medium capitalize tracking-wide text-gray-400 opacity-100">
-                      {section.title}
+            <AnimatePresence mode="wait">
+              {sideNavView === SideNavView.MAIN ? (
+                // MAIN VIEW - Grouped Navigation + Insights
+                <motion.div
+                  key="main-view"
+                  initial={{ x: '-100%', opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: '-100%', opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className=""
+                >
+                  {SIDEBAR_V2_MAIN_SECTIONS.map((section, index) => (
+                    <div key={section.title} className={cn('flex flex-col items-start justify-start')}>
+                      <div className="pb flex h-6 max-w-[200px] items-center overflow-hidden whitespace-nowrap border border-transparent px-2 text-xs font-medium capitalize tracking-wide text-gray-400 opacity-100">
+                        {section.title}
+                      </div>
+                      <div className="w-full space-y-1">{section.items.map((item) => renderNavItem(item, true))}</div>
+                      {index < SIDEBAR_V2_MAIN_SECTIONS.length - 1 && (
+                        <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                      )}
                     </div>
-                    <div className="w-full space-y-1">{section.items.map((item) => renderNavItem(item, true))}</div>
-                    {index < SIDEBAR_V2_MAIN_SECTIONS.length - 1 && (
-                      <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-                    )}
-                  </div>
-                ))}
+                  ))}
 
-                {/* Insights Link - After accordions */}
-                <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-                <div className="space-y-2 pt-2">
-                  {renderNavItem(INSIGHTS_ITEM, true)}
-                  {renderNavItem(CONFIG_ITEM, true)}
-                </div>
-                <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-              </div>
-            ) : (
-              // SETTINGS VIEW - Settings Items with Back Button
-              <div className="space-y-2">
-                {renderNavItem(SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM, true)}
-                <div className="space-y-4">{renderSettingsGroupWithNavItems(true)}</div>
-              </div>
-            )}
+                  {/* Insights Link - After accordions */}
+                  <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                  <div className="space-y-2 pt-2">
+                    {renderNavItem(INSIGHTS_ITEM, true)}
+                    {renderNavItem(CONFIG_ITEM, true)}
+                  </div>
+                  <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                </motion.div>
+              ) : (
+                // SETTINGS VIEW - Settings Items (back button is in header)
+                <motion.div
+                  key="settings-view"
+                  initial={{ x: '100%', opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: '100%', opacity: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className="space-y-4"
+                >
+                  {renderSettingsGroupWithNavItems(true)}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </ScrollArea>
 
           {/* Bottom Actions */}
           {sideNavView === SideNavView.MAIN ? (
-            <div>
-              <button
-                onClick={navigateToSettingsView}
-                className="flex w-full items-center gap-3 overflow-hidden rounded-lg px-3 py-2.5 text-sm font-normal text-gray-500 transition-colors duration-200 hover:bg-gray-100"
-              >
-                <PanelSettingsIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
-                <span className="inline-block max-w-[200px] overflow-hidden whitespace-nowrap opacity-100">
-                  Settings
-                </span>
-              </button>
-            </div>
+            <div>{renderNavItem(SIDEBAR_V2_SETTINGS_ITEM, true)}</div>
           ) : (
             <div>{renderNavItem(SIDEBAR_V2_SIGN_OUT_ITEM, true)}</div>
           )}
@@ -341,7 +340,7 @@ const SidebarV2 = () => {
           'relative flex h-screen flex-shrink-0 flex-col overflow-visible bg-gray-25 transition-[width,padding-left,padding-right] duration-200 ease-out',
           {
             'w-[56px] px-2': isCollapsed,
-            'w-[200px] px-2': !isCollapsed,
+            'w-[156px] px-2': !isCollapsed,
           },
         )}
         style={{
@@ -375,6 +374,8 @@ const SidebarV2 = () => {
                   onExpandSidebar={() => setIsCollapsed(false)}
                   onToggleCollapse={toggleSidebar}
                   isHovered={isHovered}
+                  sideNavView={sideNavView}
+                  onBackToMain={navigateToMainView}
                 />
               </div>
             </div>
@@ -385,32 +386,47 @@ const SidebarV2 = () => {
               onMouseLeave={() => isCollapsed && setIsHovered(false)}
             >
               <ScrollArea className="sidebar-scrollbar min-h-0 flex-1 pt-0" type="hover">
-                {sideNavView === SideNavView.MAIN ? (
-                  <div className="">
-                    {SIDEBAR_V2_MAIN_SECTIONS.map((section, index) => (
-                      <div key={section.title} className={cn('flex flex-col items-start justify-start')}>
-                        <div className="pb flex h-6 w-10 items-center justify-center overflow-hidden whitespace-nowrap border border-transparent px-2 text-xs font-medium capitalize tracking-wide text-gray-400">
-                          {section.title.charAt(0).toUpperCase()}
+                <AnimatePresence mode="wait">
+                  {sideNavView === SideNavView.MAIN ? (
+                    <motion.div
+                      key="main-view-collapsed"
+                      initial={{ x: '-100%', opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: '-100%', opacity: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className=""
+                    >
+                      {SIDEBAR_V2_MAIN_SECTIONS.map((section, index) => (
+                        <div key={section.title} className={cn('flex flex-col items-start justify-start')}>
+                          <div className="pb flex h-6 w-10 items-center justify-center overflow-hidden whitespace-nowrap border border-transparent px-2 text-xs font-medium capitalize tracking-wide text-gray-400">
+                            {section.title.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="space-y-1">{section.items.map((item) => renderNavItem(item, false))}</div>
+                          {index < SIDEBAR_V2_MAIN_SECTIONS.length - 1 && (
+                            <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                          )}
                         </div>
-                        <div className="space-y-1">{section.items.map((item) => renderNavItem(item, false))}</div>
-                        {index < SIDEBAR_V2_MAIN_SECTIONS.length - 1 && (
-                          <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-                        )}
+                      ))}
+                      <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                      <div className="space-y-2 pt-2">
+                        {renderNavItem(INSIGHTS_ITEM, false)}
+                        {renderNavItem(CONFIG_ITEM, false)}
                       </div>
-                    ))}
-                    <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-                    <div className="space-y-2 pt-2">
-                      {renderNavItem(INSIGHTS_ITEM, false)}
-                      {renderNavItem(CONFIG_ITEM, false)}
-                    </div>
-                    <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {renderNavItem(SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM, false)}
-                    <div className="space-y-4">{renderSettingsGroupWithNavItems(false)}</div>
-                  </div>
-                )}
+                      <Separator className="-mx-2 my-4 w-[calc(100%+1rem)]" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="settings-view-collapsed"
+                      initial={{ x: '100%', opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: '100%', opacity: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className="space-y-4"
+                    >
+                      {renderSettingsGroupWithNavItems(false)}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </ScrollArea>
               {sideNavView === SideNavView.MAIN ? (
                 <div
@@ -418,12 +434,7 @@ const SidebarV2 = () => {
                   onMouseEnter={() => isCollapsed && setIsHovered(true)}
                   onMouseLeave={() => isCollapsed && setIsHovered(false)}
                 >
-                  <button
-                    onClick={navigateToSettingsView}
-                    className="flex w-10 items-center justify-center overflow-hidden rounded-lg px-2 py-2.5 text-sm font-normal text-gray-500 transition-colors duration-200 hover:bg-gray-100"
-                  >
-                    <PanelSettingsIcon className="h-4 w-4 flex-shrink-0 text-gray-500" />
-                  </button>
+                  {renderNavItem(SIDEBAR_V2_SETTINGS_ITEM, false)}
                 </div>
               ) : (
                 <div

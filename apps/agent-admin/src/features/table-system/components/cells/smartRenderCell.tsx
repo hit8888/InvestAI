@@ -85,9 +85,12 @@ export const smartRenderCell = ({ cellType, column, row, allColumns }: SmartRend
     case 'URL':
       return <LinkCell value={primaryValue} tooltip={metadata.tooltip} />;
 
-    case 'LOCATION_WITH_FLAG':
-      // LOCATION_WITH_FLAG cell gets the country value
-      return <LocationWithFlagCell value={primaryValue as string} />;
+    case 'LOCATION_WITH_FLAG': {
+      // LOCATION_WITH_FLAG cell gets the country value and optional city from metadata
+      // City is stored in rawMetadata when meta_reference_relation is 'NONE'
+      const city = metadata.rawMetadata?.user_location_city as string | undefined;
+      return <LocationWithFlagCell value={primaryValue as string} city={city} tooltip={metadata.tooltip} />;
+    }
 
     case 'SDR_ASSIGNMENT':
       // SDR_ASSIGNMENT cell gets the assignment data

@@ -199,7 +199,7 @@ export const GenericTableContainer = <TRow extends Record<string, unknown>>({
             </div>
           ) : (
             // Table (with data or loading shimmer)
-            <div className="relative mb-2 border-b border-gray-200">
+            <div className="relative mb-2">
               <GenericTable
                 data={tableData}
                 columns={columns}

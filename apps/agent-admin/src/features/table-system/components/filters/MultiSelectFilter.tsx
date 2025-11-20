@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { List, type RowComponentProps } from 'react-window';
 import type { FilterConfig, FilterValues } from '../../types';
@@ -76,34 +76,32 @@ export const MultiSelectFilter = ({
     onChange(null);
   }, [onChange]);
 
-  // Sort options on mount: selected first, then unselected
-  // After mount, maintain the order without re-sorting
-  const [initialSort, setInitialSort] = useState(false);
-  const [sortedOptions, setSortedOptions] = useState<typeof filteredOptions>([]);
+  // Sort options: selected first, then unselected
+  // Use useMemo to prevent unnecessary recalculations and maintain stable references
+  const sortedOptions = useMemo(() => {
+    if (filteredOptions.length === 0) return [];
 
-  useEffect(() => {
-    if (!initialSort && filteredOptions.length > 0) {
-      // Initial sort: selected first
-      const sorted = [...filteredOptions].sort((a, b) => {
-        const aSelected = selectedValues.includes(a.value);
-        const bSelected = selectedValues.includes(b.value);
+    // Sort: selected first, then unselected
+    return [...filteredOptions].sort((a, b) => {
+      const aSelected = selectedValues.includes(a.value);
+      const bSelected = selectedValues.includes(b.value);
 
-        if (aSelected && !bSelected) return -1;
-        if (!aSelected && bSelected) return 1;
+      if (aSelected && !bSelected) return -1;
+      if (!aSelected && bSelected) return 1;
 
-        return 0;
-      });
-      setSortedOptions(sorted);
-      setInitialSort(true);
-    } else if (initialSort) {
-      // After initial sort, just update the options without resorting
-      setSortedOptions(filteredOptions);
-    }
-  }, [filteredOptions, selectedValues, initialSort]);
+      return 0;
+    });
+  }, [filteredOptions, selectedValues]);
 
   // Ref for container to measure dynamic height
   const containerRef = useRef<HTMLDivElement>(null);
   const [listHeight, setListHeight] = useState(400);
+
+  // Use ref to store sortedOptions to prevent rowComponent from being recreated
+  const sortedOptionsRef = useRef<typeof sortedOptions>(sortedOptions);
+  useEffect(() => {
+    sortedOptionsRef.current = sortedOptions;
+  }, [sortedOptions]);
 
   // Calculate available height for the list dynamically
   useEffect(() => {
@@ -120,6 +118,30 @@ export const MultiSelectFilter = ({
     window.addEventListener('resize', updateHeight);
     return () => window.removeEventListener('resize', updateHeight);
   }, []);
+
+  // Memoize rowComponent callback outside conditional to satisfy React Hooks rules
+  const rowComponent = useCallback(
+    ({ index, style }: RowComponentProps) => {
+      const option = sortedOptionsRef.current[index];
+      if (!option) return <div style={style} />;
+
+      const isSelected = selectedValues.includes(option.value);
+      return (
+        <div style={style}>
+          <MultiSelectOption
+            key={option.value}
+            option={option}
+            isSelected={isSelected}
+            isFetching={isFetching}
+            isLoading={isLoading}
+            displayType={config.displayType}
+            onToggle={handleToggle}
+          />
+        </div>
+      );
+    },
+    [selectedValues, isFetching, isLoading, config.displayType, handleToggle],
+  );
 
   return (
     <div ref={containerRef} className="flex h-full flex-col">
@@ -170,18 +192,7 @@ export const MultiSelectFilter = ({
             overscanCount={10} // Render 10 extra items above/below viewport for smooth scrolling
             className="px-2"
             rowProps={{}}
-            rowComponent={({ index, style }: RowComponentProps) => (
-              <div style={style}>
-                <MultiSelectOption
-                  option={sortedOptions[index]}
-                  isSelected={selectedValues.includes(sortedOptions[index].value)}
-                  isFetching={isFetching}
-                  isLoading={isLoading}
-                  displayType={config.displayType}
-                  onToggle={handleToggle}
-                />
-              </div>
-            )}
+            rowComponent={rowComponent}
           />
         )}
       </div>

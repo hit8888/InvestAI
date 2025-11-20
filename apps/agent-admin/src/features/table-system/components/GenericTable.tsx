@@ -1,5 +1,5 @@
 import { useReactTable, getCoreRowModel, flexRender, type ColumnDef, type SortingState } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, ChevronsUpDown, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollArea, ScrollBar } from '@breakout/design-system/components/shadcn-ui/scroll-area';
@@ -92,6 +92,30 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
   // Determine number of columns for shimmer (use actual column count or default to 6)
   const shimmerColumnCount = Math.max(filteredColumns.length, 6);
 
+  // Calculate dynamic number of shimmer rows based on viewport height
+  // Table height: calc(100vh - 168px), Header: 42px, Row height: 40px
+  // Available height for rows = (100vh - 168px) - 42px = 100vh - 210px
+  const [shimmerRowCount, setShimmerRowCount] = useState(() => {
+    if (typeof window === 'undefined') return 20; // SSR fallback
+    const availableHeight = window.innerHeight - 210; // 168px (container offset) + 42px (header)
+    const rowHeight = 40;
+    const calculatedRows = Math.floor(availableHeight / rowHeight);
+    return Math.max(calculatedRows, 10); // Minimum 10 rows
+  });
+
+  useEffect(() => {
+    const calculateRows = () => {
+      const availableHeight = window.innerHeight - 210; // 168px (container offset) + 42px (header)
+      const rowHeight = 40;
+      const calculatedRows = Math.ceil(availableHeight / rowHeight);
+      setShimmerRowCount(Math.max(calculatedRows, 10)); // Minimum 10 rows
+    };
+
+    calculateRows();
+    window.addEventListener('resize', calculateRows);
+    return () => window.removeEventListener('resize', calculateRows);
+  }, []);
+
   // Shimmer component for loading state
   const ShimmerCell = ({ className = '' }: { className?: string }) => (
     <div className={`h-5 animate-pulse rounded bg-gradient-to-r from-gray-200 to-gray-300 ${className}`} />
@@ -119,10 +143,10 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
   const tableKey = useMemo(() => `table-reset-${resetVersion}`, [resetVersion]);
 
   return (
-    <div className="flex h-[calc(100vh-168px)] w-full max-w-full flex-col overflow-hidden border border-b">
+    <div className="flex h-[calc(100vh-168px)] w-full max-w-full flex-col overflow-hidden border-b">
       <ScrollArea className="-top-[1px] flex-1">
-        <table key={tableKey} className="w-max min-w-full" style={{ borderCollapse: 'collapse' }}>
-          <thead className="sticky -top-[1px] z-20 bg-gray-100">
+        <table key={tableKey} className="w-max min-w-full">
+          <thead className="sticky top-0 z-20 bg-gray-100">
             {isLoading ? (
               // Loading shimmer header
               <tr>
@@ -134,7 +158,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                   return (
                     <th
                       key={`shimmer-header-${colIndex}`}
-                      className="h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
+                      className={`h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 ${colIndex === 0 ? 'border-l-0' : ''}`}
                     >
                       <div className="flex h-full items-center justify-start">
                         <ShimmerCell className={shimmerWidth} />
@@ -148,7 +172,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
               table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   <AnimatePresence mode="popLayout">
-                    {headerGroup.headers.map((header) => {
+                    {headerGroup.headers.map((header, headerIndex) => {
                       const isSortable = header.column.getCanSort();
                       const columnDef = filteredColumns.find((col) => col.id === header.column.id);
                       const hasTooltip = columnDef?.tooltipText && columnDef.tooltipText.trim();
@@ -161,7 +185,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.2, ease: 'easeInOut' }}
-                          className="h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 first:border-l-0"
+                          className={`h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 ${headerIndex === 0 ? 'border-l-0' : ''}`}
                         >
                           {header.isPlaceholder ? null : (
                             <div
@@ -183,7 +207,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                                           e.stopPropagation();
                                         }}
                                       >
-                                        <Info className="h-3.5 w-3.5 cursor-help text-gray-400 hover:text-gray-600" />
+                                        <Info className="h-3.5 w-3.5 cursor-default text-gray-400 hover:text-gray-600" />
                                       </TooltipTrigger>
                                       <TooltipContent side="top" className="max-w-xs bg-gray-900 text-white">
                                         {columnDef.tooltipText}
@@ -205,8 +229,8 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
           </thead>
           <tbody className="bg-white">
             {isLoading
-              ? // Loading shimmer rows - 20 rows
-                Array.from({ length: 20 }).map((_, rowIndex) => (
+              ? // Loading shimmer rows - dynamically calculated based on viewport height
+                Array.from({ length: shimmerRowCount }).map((_, rowIndex) => (
                   <tr
                     key={`shimmer-row-${rowIndex}`}
                     className="group transition-colors last:border-transparent hover:bg-gray-50"
@@ -219,7 +243,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                       return (
                         <td
                           key={`shimmer-cell-${rowIndex}-${colIndex}`}
-                          className="h-[40px] border border-gray-200 px-3 first:border-l-0"
+                          className={`h-[40px] border border-gray-200 px-3 ${colIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === shimmerRowCount - 1 ? 'border-b-0' : ''}`}
                         >
                           <div className="flex h-full items-center justify-start">
                             <ShimmerCell className={shimmerWidth} />
@@ -230,14 +254,14 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                   </tr>
                 ))
               : // Actual data rows
-                rows.map((row) => (
+                rows.map((row, rowIndex) => (
                   <tr
                     key={row.id}
                     onClick={() => onRowClick?.(row.original)}
                     className="group cursor-pointer transition-colors last:border-transparent hover:bg-gray-50"
                   >
                     <AnimatePresence mode="popLayout">
-                      {row.getVisibleCells().map((cell) => {
+                      {row.getVisibleCells().map((cell, cellIndex) => {
                         return (
                           <motion.td
                             key={cell.id}
@@ -246,7 +270,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.2, ease: 'easeInOut' }}
-                            className="h-[40px] border border-gray-200 px-3 text-sm text-gray-900 first:border-l-0"
+                            className={`h-[40px] border border-gray-200 px-3 text-sm text-gray-900 ${cellIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === rows.length - 1 ? 'border-b-0' : ''}`}
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </motion.td>

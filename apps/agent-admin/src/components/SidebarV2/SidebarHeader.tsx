@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, Search, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { cn } from '@breakout/design-system/lib/cn';
 import {
   Popover,
@@ -13,7 +13,7 @@ import SidebarToggleIcon from '@breakout/design-system/components/icons/sidebar-
 import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { buildPathWithTenantBase } from '../../utils/navigation';
-import { DEFAULT_ROUTE } from '../../utils/constants';
+import { DEFAULT_ROUTE, SideNavView } from '../../utils/constants';
 import toast from 'react-hot-toast';
 
 interface SidebarHeaderProps {
@@ -27,6 +27,8 @@ interface SidebarHeaderProps {
   onExpandSidebar: () => void;
   onToggleCollapse: () => void;
   isHovered?: boolean;
+  sideNavView?: SideNavView;
+  onBackToMain?: () => void;
 }
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
@@ -40,6 +42,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   onExpandSidebar,
   onToggleCollapse,
   isHovered = false,
+  sideNavView = SideNavView.MAIN,
+  onBackToMain,
 }) => {
   const navigate = useNavigate();
   const [isLogoPopoverOpen, setIsLogoPopoverOpen] = useState<boolean>(false);
@@ -114,6 +118,68 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       </span>
     </div>
   );
+
+  // If in settings view, show back button instead of tenant selector
+  if (sideNavView === SideNavView.SETTINGS && onBackToMain) {
+    const isExpanded = !isCollapsed;
+    return (
+      <div className="relative flex w-full items-center justify-start overflow-visible">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={isCollapsed ? 'back-collapsed' : 'back-expanded'}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="flex w-full items-center justify-start"
+          >
+            <button
+              onClick={onBackToMain}
+              className={cn(
+                'mt-4 flex h-10 items-center overflow-hidden rounded-lg text-sm font-normal font-semibold text-gray-900 transition-[colors,shadow,width] duration-200',
+                {
+                  'w-10 justify-center gap-0 px-2': !isExpanded,
+                  '-ml-2 w-full gap-3 px-3': isExpanded,
+                },
+              )}
+              aria-label="Back to dashboard"
+            >
+              <ArrowLeft className="h-4 w-4 flex-shrink-0 stroke-[2] text-gray-900" />
+              <span
+                className={cn(
+                  'inline-block overflow-hidden whitespace-nowrap text-sm transition-[max-width,opacity] duration-200 ease-out',
+                  {
+                    'max-w-0 opacity-0': !isExpanded,
+                    'max-w-[156px] opacity-100': isExpanded,
+                  },
+                )}
+              >
+                Back
+              </span>
+            </button>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Toggle Button */}
+        {!isHovered && (
+          <button
+            onClick={onToggleCollapse}
+            className={`z-200 group absolute -bottom-4 flex size-4 translate-y-1/2 items-center overflow-visible rounded-md border border-gray-300 bg-white transition-all ${isCollapsed ? 'right-0' : '-right-2'}`}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <div className="flex w-8 items-center justify-center">
+              <SidebarToggleIcon className="h-4 w-4 !text-gray-500 opacity-100 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
+              {!isCollapsed ? (
+                <ChevronLeft className="-ml-2 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              ) : (
+                <ChevronRight className="-ml-2 -mt-0.5 h-2.5 w-2.5 !text-gray-500 opacity-0 transition-all duration-200 group-hover:-translate-x-1.5 group-hover:opacity-100" />
+              )}
+            </div>
+          </button>
+        )}
+      </div>
+    );
+  }
 
   // If not super admin, render without popover
   if (!isUserSuperAdmin) {

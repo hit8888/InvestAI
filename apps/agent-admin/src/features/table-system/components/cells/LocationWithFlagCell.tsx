@@ -5,6 +5,8 @@ import EmptyCell from './EmptyCell';
 interface LocationWithFlagCellProps {
   /** Country value from the primary field */
   value: string | null | undefined;
+  /** Optional city value from metadata */
+  city?: string | null | undefined;
   /** Optional tooltip text */
   tooltip?: string;
 }
@@ -44,11 +46,12 @@ const normalizeCountryName = (country: string): string => {
  *
  * This component is now metadata-driven and receives pre-processed props:
  * - value: Country value from primary field
+ * - city: City value from metadata (optional)
  * - tooltip: Tooltip text from TOOLTIP metadata relations (optional)
  *
- * No business logic - just renders the provided country with flag!
+ * Displays city and country when city is available, otherwise just country.
  */
-export const LocationWithFlagCell = ({ value, tooltip }: LocationWithFlagCellProps) => {
+export const LocationWithFlagCell = ({ value, city, tooltip }: LocationWithFlagCellProps) => {
   if (!value) {
     return <EmptyCell />;
   }
@@ -60,15 +63,21 @@ export const LocationWithFlagCell = ({ value, tooltip }: LocationWithFlagCellPro
   const flagUrl = findFlagUrlByCountryName(normalizedCountry);
   const hasFlag = Boolean(flagUrl && !COUNTRIES_WITHOUT_FLAGS.includes(normalizedCountry));
 
+  // Build location text: "City, Country" or just "Country"
+  const locationText = city && city.trim() ? `${city.trim()}, ${normalizedCountry}` : normalizedCountry;
+
+  // Build tooltip: include city if available
+  const tooltipText = tooltip || (city && city.trim() ? `${city.trim()}, ${normalizedCountry}` : normalizedCountry);
+
   return (
-    <CellContainer title={tooltip || normalizedCountry}>
+    <CellContainer title={tooltipText}>
       {/* Flag */}
       {hasFlag && flagUrl && (
         <img src={flagUrl} width={20} height={20} alt={`${normalizedCountry} flag`} className="flex-shrink-0" />
       )}
 
       {/* Location Text */}
-      <span className="truncate text-sm capitalize text-gray-900">{normalizedCountry}</span>
+      <span className="truncate text-sm capitalize text-gray-900">{locationText}</span>
     </CellContainer>
   );
 };

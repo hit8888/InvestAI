@@ -442,7 +442,7 @@ export enum SidebarNavItemsEnum {
   INTEGRATIONS_LABEL = 'Integrations',
   PROFILE_LABEL = 'Profile',
   SDR_SETTINGS_LABEL = 'SDR Settings',
-  EMBEDDING_SCRIPTS_LABEL = 'Embedding',
+  EMBEDDING_SCRIPTS_LABEL = 'Embed',
 }
 
 export const OAUTH_CALLBACK_PAGES = [AppRoutesEnum.GOOGLE_SSO_CALLBACK, AppRoutesEnum.INTEGRATIONS_OAUTH_CALLBACK];

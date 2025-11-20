@@ -1,22 +1,23 @@
 import { AppRoutesEnum, SidebarNavItemsEnum } from './constants';
 import {
-  CalendarIcon,
+  CalendarDays,
   MessageSquareText,
   UserStar,
-  ToyBrick,
+  FileCode,
   CircleUser,
   Brain,
   Dices,
   MessagesSquare,
   LogOut,
   UserRoundCog,
-  Workflow,
+  CodeXml,
   Database,
   LayoutTemplate,
   Globe,
   ContactRound,
   Settings2,
   ArrowLeft,
+  Settings,
 } from 'lucide-react';
 
 /**
@@ -30,8 +31,8 @@ export enum SidebarV2AccordionGroup {
 }
 
 export enum SidebarV2SettingsGroup {
-  WORKSPACE_SETTINGS = 'Workspace Settings',
-  ACCOUNT_SETTINGS = 'Account Settings',
+  WORKSPACE_SETTINGS = 'Workspace',
+  ACCOUNT_SETTINGS = 'Account',
 }
 
 export interface SidebarV2LinkItem {
@@ -182,22 +183,22 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.INTEGRATIONS}`,
     navItem: SidebarNavItemsEnum.INTEGRATIONS_LABEL,
-    icon: ToyBrick,
-    activeIcon: ToyBrick,
+    icon: FileCode,
+    activeIcon: FileCode,
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.CALENDAR}`,
     navItem: SidebarNavItemsEnum.AGENT_CALENDAR_LABEL,
-    icon: CalendarIcon,
-    activeIcon: CalendarIcon,
+    icon: CalendarDays,
+    activeIcon: CalendarDays,
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.EMBEDDING_SCRIPTS}`,
     navItem: SidebarNavItemsEnum.EMBEDDING_SCRIPTS_LABEL,
-    icon: Workflow,
-    activeIcon: Workflow,
+    icon: CodeXml,
+    activeIcon: CodeXml,
     settingsGroup: SidebarV2SettingsGroup.WORKSPACE_SETTINGS,
   },
   // Account Settings
@@ -222,9 +223,20 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
  */
 export const SIDEBAR_V2_BACK_TO_DASHBOARD_ITEM: SidebarV2LinkItem = {
   navUrl: '#back-to-dashboard',
-  navItem: 'Back to Dashboard',
+  navItem: 'Back',
   icon: ArrowLeft,
   activeIcon: ArrowLeft,
+  isActionItem: true,
+};
+
+/**
+ * Settings item - displayed at the bottom of main view
+ */
+export const SIDEBAR_V2_SETTINGS_ITEM: SidebarV2LinkItem = {
+  navUrl: '#settings',
+  navItem: 'Settings',
+  icon: Settings,
+  activeIcon: Settings,
   isActionItem: true,
 };
 
