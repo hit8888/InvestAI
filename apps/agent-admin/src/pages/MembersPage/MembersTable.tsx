@@ -71,12 +71,8 @@ const MembersTable = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-40 rounded-lg border border-gray-200 bg-white p-0 shadow-lg"
+                className="w-auto rounded-lg border border-gray-200 bg-white p-0 shadow-lg"
               >
-                <div className="px-3 py-2">
-                  <div className="text-sm font-semibold text-gray-900">Actions</div>
-                </div>
-                <div className="border-t border-gray-200"></div>
                 <DropdownMenuItem
                   onSelect={() => onEditMember(user)}
                   className="cursor-pointer rounded-none px-3 py-2.5 text-gray-700 focus:bg-gray-50 focus:text-gray-900"
@@ -86,9 +82,9 @@ const MembersTable = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => onDeleteMember(user)}
-                  className="cursor-pointer rounded-none px-3 py-2.5 text-gray-900 focus:bg-gray-50"
+                  className="cursor-pointer rounded-none px-3 py-2.5 text-red-600 focus:bg-gray-50"
                 >
-                  <Trash2 className="mr-2 h-4 w-4 text-red-600" />
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>

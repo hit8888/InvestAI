@@ -1,5 +1,5 @@
 import Button from '@breakout/design-system/components/Button/index';
-import AiSparklesWhiteIcon from '@breakout/design-system/components/icons/ai-sparkles-white';
+import AiSparklesIcon from '@breakout/design-system/components/icons/ai-sparkles-icon';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import Typography from '@breakout/design-system/components/Typography/index';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
@@ -67,14 +67,18 @@ export const ReachoutEmailCta = ({
 }) => {
   return (
     <Button
-      variant="primary"
+      variant="system_secondary"
       size="small"
       disabled={disabled}
       onClick={onClick}
-      className={`!border-black !bg-black hover:!bg-black/80 ${className}`}
+      className={className + 'px-1 py-1'}
     >
+      {isLoading ? (
+        <SpinnerIcon className="h-4 w-4 animate-spin" />
+      ) : (
+        <AiSparklesIcon className="h-4 w-4 text-gray-900" />
+      )}
       Generate Email
-      {isLoading ? <SpinnerIcon className="h-4 w-4 animate-spin" /> : <AiSparklesWhiteIcon className="h-4 w-4" />}
     </Button>
   );
 };

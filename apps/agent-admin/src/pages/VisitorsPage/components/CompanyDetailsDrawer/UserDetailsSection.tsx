@@ -124,12 +124,21 @@ const UserDetailsSection = ({
             </div>
 
             {!!prospect.buyer_intent_score && (
-              <div className="rounded-2xl bg-gray-100 px-2 py-1">
+              <div
+                className={cn('rounded-2xl bg-pink-100 px-2 py-1', {
+                  'bg-positive-100': prospect.buyer_intent_score > 0,
+                })}
+              >
                 <div className="flex items-center gap-1">
                   <Typography variant="caption-12-normal" className="text-gray-500">
                     Intent Score:
                   </Typography>
-                  <Typography variant="caption-12-normal" className="text-gray-900">
+                  <Typography
+                    variant="caption-12-normal"
+                    className={cn('text-pink-1000', {
+                      'text-positive-1000': prospect.buyer_intent_score > 0,
+                    })}
+                  >
                     {prospect.buyer_intent_score}
                   </Typography>
                 </div>
