@@ -6,7 +6,7 @@ export { MessageEventManager } from "./MessageEventManager";
 export { URLManager } from "./URLManager";
 export { SentryManager } from "./SentryManager";
 export { StyleManager } from "./StyleManager";
-export { ExternalButtonManager } from "./ExternalButtonManager";
+export { BreakoutButtonManager } from "./BreakoutButtonManager";
 export { AgentIframeManager } from "./AgentIframeManager";
 export { BottomBarContainerManager } from "./BottomBarContainerManager";
 export { IframeURLManager } from "./IframeURLManager";

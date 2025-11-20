@@ -49,10 +49,18 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
     const urlParams = getUrlParams();
 
     let parsedPropMessage: string | undefined;
+    let parsedPropActiveModule: string | undefined;
+
     if (propMessage) {
       const parseResult = jsonSafeParse(propMessage);
       // Message can be either a string or a json object with a content property
       parsedPropMessage = parseResult.error ? propMessage : parseResult.data.content;
+    }
+
+    if (propActiveModule) {
+      const parsed = jsonSafeParse(propActiveModule);
+      // Active module can be either a string or a json object with a module_type property
+      parsedPropActiveModule = parsed.error ? propActiveModule : parsed.data.module_type;
     }
 
     return {
@@ -76,7 +84,7 @@ const SettingsContainer: FC<SettingsContainerProps> = (props) => {
       root_right_offset: urlParams.root_right_offset ?? propRootRightOffset,
       feedback_enabled: jsonSafeParse(urlParams.feedback_enabled).data ?? propFeedbackEnabled ?? false,
       active_module:
-        CommandBarModuleTypeSchema.safeParse(urlParams.active_module ?? propActiveModule).data ?? undefined,
+        CommandBarModuleTypeSchema.safeParse(urlParams.active_module ?? parsedPropActiveModule).data ?? null,
     };
   }, [
     propTenantId,

@@ -34,6 +34,7 @@ import AIBlocksPage from '../pages/AIBlocksPage/AIBlocksPage.tsx';
 import DynamicBlockPage from '../pages/AIBlocksPage/DynamicBlockPage.tsx';
 import SdrSettingsPage from '../pages/SdrSettingsPage/SdrSettingsPage.tsx';
 import ConfigPage from '../pages/ConfigPage/ConfigPage.tsx';
+import MembersPage from '../pages/MembersPage/MembersPage.tsx';
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 
@@ -207,6 +208,10 @@ const routes = [
                   {
                     path: 'sdr-settings',
                     element: <ProtectedRoute element={<SdrSettingsPage />} />,
+                  },
+                  {
+                    path: 'members',
+                    element: <ProtectedRoute element={<MembersPage />} />,
                   },
                   {
                     path: 'embeddings',

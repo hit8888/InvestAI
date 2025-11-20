@@ -64,6 +64,7 @@ export interface EntityMetadataColumn {
   label_suffix?: string | null;
   label_assignment_type?: LabelAssignmentType | null;
   label_assignment_value?: Record<string, string> | Record<string, [Array<string | number>, string]> | null;
+  default_label_value?: string | null;
 }
 
 /**
@@ -95,3 +96,18 @@ export interface TableColumnDefinition<TRow = unknown> {
   // Note: TRow generic is used by consumers of this interface for type safety
   _row?: TRow; // Phantom type parameter to satisfy TypeScript
 }
+
+/**
+ * Extended column definition with optional custom cell renderer
+ * Used for custom tables like Members that need custom cell rendering logic
+ */
+export interface TableColumnDefinitionWithCustomRenderer<TRow = unknown> extends TableColumnDefinition<TRow> {
+  _customCellRenderer?: (row: TRow) => React.ReactNode;
+}
+
+/**
+ * Union type for column definitions - supports both standard and custom renderer columns
+ */
+export type ColumnDefinition<TRow = unknown> =
+  | TableColumnDefinition<TRow>
+  | TableColumnDefinitionWithCustomRenderer<TRow>;

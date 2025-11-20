@@ -20,6 +20,8 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import ActiveConversationsGridView from './ActiveConversationsGridView';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
+import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
+import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({
@@ -66,6 +68,7 @@ const createResponseSuggestionsEvent = (content: string, eventData: { query?: st
 });
 
 const ActiveConversationsLayout = () => {
+  const { trackAdminEvent } = useAdminEventAnalytics();
   const { isSidebarOpen } = useSidebar();
   const { widthStyle } = useTableWidth({ isSidebarOpen });
   const { activeConversations, isLoading } = useContext(ActiveConversationsContext);
@@ -234,6 +237,9 @@ const ActiveConversationsLayout = () => {
         user_id: userInfo?.id ?? '',
       }),
       message_type: 'EVENT',
+    });
+    trackAdminEvent(ANALYTICS_EVENT_NAMES.ADMIN_DASHBOARD.LIVE_CONVERSATION_JOINED, {
+      session_id: sessionId,
     });
 
     updateSessionStatus(sessionId, AdminConversationJoinStatus.JOINED);

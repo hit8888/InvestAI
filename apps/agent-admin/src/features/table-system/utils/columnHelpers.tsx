@@ -1,5 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { EntityMetadataColumn, TableColumnDefinition } from '../types';
+import React from 'react';
+import {
+  EntityMetadataColumn,
+  TableColumnDefinition,
+  TableColumnDefinitionWithCustomRenderer,
+  ColumnDefinition,
+} from '../types';
 import { smartRenderCell } from '../components/cells/smartRenderCell';
 
 /**
@@ -77,10 +83,57 @@ const getDefaultColumnSize = (cellType: string): number => {
 };
 
 /**
+ * Type guard to check if a column has a custom cell renderer
+ */
+function hasCustomRenderer<TRow>(col: ColumnDefinition<TRow>): col is TableColumnDefinitionWithCustomRenderer<TRow> {
+  return (
+    '_customCellRenderer' in col &&
+    typeof (col as TableColumnDefinitionWithCustomRenderer<TRow>)._customCellRenderer === 'function'
+  );
+}
+
+/**
+ * Render cell content - handles both custom renderers and smart renderers
+ */
+function renderCell<TRow>(
+  col: ColumnDefinition<TRow>,
+  row: TRow,
+  rowAsRecord: Record<string, unknown>,
+  metadataColumns: EntityMetadataColumn[],
+): React.ReactNode {
+  // Check for custom cell renderer first (for custom tables like Members)
+  if (hasCustomRenderer(col)) {
+    const renderer = col._customCellRenderer;
+    if (renderer) {
+      return renderer(row);
+    }
+  }
+
+  // Fall back to smart renderer using metadata
+  const cellType = col.meta.cellType;
+
+  // Find the original metadata column for this cell
+  // Use keyName from meta since col.id now uses data_lookup
+  const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.meta.keyName);
+  if (!originalColumn) {
+    console.warn(`[columnHelpers] Could not find metadata for column: ${col.id}`);
+    return <span style={{ color: 'var(--gray-900, #101828)' }}>-</span>;
+  }
+
+  return smartRenderCell({
+    cellType,
+    column: originalColumn,
+    row: rowAsRecord,
+    allColumns: metadataColumns,
+    columnId: col.id,
+  });
+}
+
+/**
  * Create TanStack Table column definitions from transformed columns
  */
 export const createTanStackColumns = <TRow = unknown,>(
-  columns: TableColumnDefinition<TRow>[],
+  columns: ColumnDefinition<TRow>[],
   metadataColumns: EntityMetadataColumn[],
 ): ColumnDef<TRow>[] => {
   return columns.map((col) => {
@@ -88,7 +141,11 @@ export const createTanStackColumns = <TRow = unknown,>(
     const hasNestedPath = col.accessorKey.includes('.');
 
     // Get default size based on cell type
-    const defaultSize = getDefaultColumnSize(col.meta.cellType);
+    // Special handling for actions column - make it narrower
+    const isActionsColumn = col.id === 'actions';
+    const defaultSize = isActionsColumn ? 60 : getDefaultColumnSize(col.meta.cellType);
+    const minSize = isActionsColumn ? 60 : 100;
+    const maxSize = isActionsColumn ? 80 : 500;
 
     // Use accessor function for nested fields (e.g., company_demographics.website_url)
     if (hasNestedPath) {
@@ -98,8 +155,8 @@ export const createTanStackColumns = <TRow = unknown,>(
         header: col.header,
         enableSorting: col.sortable,
         size: defaultSize,
-        minSize: 100,
-        maxSize: 500,
+        minSize: minSize,
+        maxSize: maxSize,
         accessorFn: (row: TRow) => {
           let value: unknown = row;
           for (const key of path) {
@@ -112,24 +169,9 @@ export const createTanStackColumns = <TRow = unknown,>(
           return value;
         },
         cell: (info) => {
-          const row = info.row.original as Record<string, unknown>;
-          const cellType = col.meta.cellType;
-
-          // Find the original metadata column for this cell
-          // Use keyName from meta since col.id now uses data_lookup
-          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.meta.keyName);
-          if (!originalColumn) {
-            console.warn(`[columnHelpers] Could not find metadata for column: ${col.id}`);
-            return <span className="text-gray-400">-</span>;
-          }
-
-          return smartRenderCell({
-            cellType,
-            column: originalColumn,
-            row,
-            allColumns: metadataColumns,
-            columnId: col.id,
-          });
+          const row = info.row.original;
+          const rowAsRecord = row as Record<string, unknown>;
+          return renderCell(col, row, rowAsRecord, metadataColumns);
         },
         meta: col.meta,
       };
@@ -140,27 +182,12 @@ export const createTanStackColumns = <TRow = unknown,>(
         header: col.header,
         enableSorting: col.sortable,
         size: defaultSize,
-        minSize: 100,
-        maxSize: 500,
+        minSize: minSize,
+        maxSize: maxSize,
         cell: (info) => {
-          const row = info.row.original as Record<string, unknown>;
-          const cellType = col.meta.cellType;
-
-          // Find the original metadata column for this cell
-          // Use keyName from meta since col.id now uses data_lookup
-          const originalColumn = metadataColumns.find((metaCol) => metaCol.key_name === col.meta.keyName);
-          if (!originalColumn) {
-            console.warn(`[columnHelpers] Could not find metadata for column: ${col.id}`);
-            return <span className="text-gray-400">-</span>;
-          }
-
-          return smartRenderCell({
-            cellType,
-            column: originalColumn,
-            row,
-            allColumns: metadataColumns,
-            columnId: col.id,
-          });
+          const row = info.row.original;
+          const rowAsRecord = row as Record<string, unknown>;
+          return renderCell(col, row, rowAsRecord, metadataColumns);
         },
         meta: col.meta,
       };

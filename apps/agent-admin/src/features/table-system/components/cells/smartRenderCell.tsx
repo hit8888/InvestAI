@@ -42,6 +42,7 @@ export const smartRenderCell = ({ cellType, column, row, allColumns }: SmartRend
           labelSuffix={column.label_suffix}
           labelAssignmentType={column.label_assignment_type as LabelAssignmentType | null}
           labelAssignmentValue={column.label_assignment_value as Record<string, string> | null}
+          defaultLabelValue={column.default_label_value}
         />
       );
 
@@ -98,6 +99,16 @@ export const smartRenderCell = ({ cellType, column, row, allColumns }: SmartRend
 
     default:
       // Fallback to text for unknown cell types
-      return <TextCell value={primaryValue} tooltip={metadata.tooltip} />;
+      return (
+        <TextCell
+          value={primaryValue}
+          tooltip={metadata.tooltip}
+          labelPrefix={column.label_prefix}
+          labelSuffix={column.label_suffix}
+          labelAssignmentType={column.label_assignment_type as LabelAssignmentType | null}
+          labelAssignmentValue={column.label_assignment_value as Record<string, string> | null}
+          defaultLabelValue={column.default_label_value}
+        />
+      );
   }
 };

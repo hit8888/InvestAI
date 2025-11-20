@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import filter from 'lodash/filter';
 
 import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useUpdateProspectMutation';
 import { useCommandBarStore } from '@meaku/shared/stores';
@@ -31,6 +32,16 @@ const useTracking = () => {
     }
 
     const cleanup = initProspectAnalytics(tracking_config, (requestData: UpdateProspectPayload, type) => {
+      const hasDataInPayload =
+        filter(requestData, (value, key) => key !== 'prospect_demographics' && !!value).length > 0;
+      const hasDataInDemographics = filter(requestData.prospect_demographics, (value) => !!value).length > 0;
+      const isEmptyPayload = !hasDataInPayload && !hasDataInDemographics;
+
+      // Don't update prospect if there is no request data
+      if (isEmptyPayload) {
+        return;
+      }
+
       updateProspectMutation.mutate({
         prospectId: prospect_id,
         payload: requestData,

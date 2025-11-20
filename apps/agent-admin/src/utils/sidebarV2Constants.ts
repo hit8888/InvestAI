@@ -210,6 +210,13 @@ export const SIDEBAR_V2_SETTINGS_ITEMS: SidebarV2LinkItem[] = [
     settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
   },
   {
+    navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.MEMBERS}`,
+    navItem: SidebarNavItemsEnum.MEMBERS_LABEL,
+    icon: Users,
+    activeIcon: Users,
+    settingsGroup: SidebarV2SettingsGroup.ACCOUNT_SETTINGS,
+  },
+  {
     navUrl: `/${AppRoutesEnum.SETTINGS}/${AppRoutesEnum.PROFILE}`,
     navItem: SidebarNavItemsEnum.PROFILE_LABEL,
     icon: CircleUser,

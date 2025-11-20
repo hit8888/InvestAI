@@ -9,12 +9,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
-import type { TableColumnDefinition, SortOrder, EntityMetadataColumn } from '../types';
+import type { ColumnDefinition, SortOrder, EntityMetadataColumn } from '../types';
 import { createTanStackColumns } from '../utils/columnHelpers.tsx';
 
 interface GenericTableProps<TRow = unknown> {
   data: TRow[];
-  columns: TableColumnDefinition<TRow>[];
+  columns: ColumnDefinition<TRow>[];
   metadataColumns: EntityMetadataColumn[]; // Added for smart rendering
   visibleColumns: string[];
   resetVersion: number;
@@ -49,7 +49,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
     // Map visibleColumns array to actual column objects, preserving order
     return visibleColumns
       .map((id) => columnMap.get(id))
-      .filter((col): col is TableColumnDefinition<TRow> => col !== undefined);
+      .filter((col): col is ColumnDefinition<TRow> => col !== undefined);
   }, [columns, visibleColumns]);
 
   // Create TanStack Table columns
