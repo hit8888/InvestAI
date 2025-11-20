@@ -18,6 +18,7 @@ import {
   Settings2,
   ArrowLeft,
   Settings,
+  Users,
 } from 'lucide-react';
 
 /**
