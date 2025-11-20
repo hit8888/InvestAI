@@ -25,6 +25,7 @@ const useUserInfoQuery = (options: UserInfoQueryOptions = {}): UseQueryResult<Us
       response.data.organizations = organizations;
       return response.data;
     },
+    refetchOnWindowFocus: true,
     ...options,
   });
 };

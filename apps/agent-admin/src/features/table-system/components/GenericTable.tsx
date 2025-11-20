@@ -9,12 +9,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
-import type { TableColumnDefinition, SortOrder, EntityMetadataColumn } from '../types';
+import type { ColumnDefinition, SortOrder, EntityMetadataColumn } from '../types';
 import { createTanStackColumns } from '../utils/columnHelpers.tsx';
 
 interface GenericTableProps<TRow = unknown> {
   data: TRow[];
-  columns: TableColumnDefinition<TRow>[];
+  columns: ColumnDefinition<TRow>[];
   metadataColumns: EntityMetadataColumn[]; // Added for smart rendering
   visibleColumns: string[];
   resetVersion: number;
@@ -49,7 +49,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
     // Map visibleColumns array to actual column objects, preserving order
     return visibleColumns
       .map((id) => columnMap.get(id))
-      .filter((col): col is TableColumnDefinition<TRow> => col !== undefined);
+      .filter((col): col is ColumnDefinition<TRow> => col !== undefined);
   }, [columns, visibleColumns]);
 
   // Create TanStack Table columns
@@ -246,7 +246,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.2, ease: 'easeInOut' }}
-                            className="border border-gray-200 px-3 text-sm text-gray-900"
+                            className="border border-gray-200 px-3 py-1.5 text-sm text-gray-900"
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </motion.td>

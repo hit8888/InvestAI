@@ -431,6 +431,7 @@ export enum AppRoutesEnum {
   ADD_CALENDAR = 'calendar/add-calendar',
   INTEGRATIONS = 'integrations',
   PROFILE = 'profile',
+  MEMBERS = 'members',
   VISITORS = 'prospects',
   ICP = 'icp',
   COMPANIES = 'companies',
@@ -456,6 +457,7 @@ export enum SidebarNavItemsEnum {
   AI_BLOCKS_LABEL = 'AI Blocks',
   INTEGRATIONS_LABEL = 'Integrations',
   PROFILE_LABEL = 'Profile',
+  MEMBERS_LABEL = 'Members',
   SDR_SETTINGS_LABEL = 'SDR Settings',
   EMBEDDING_SCRIPTS_LABEL = 'Embedding',
 }

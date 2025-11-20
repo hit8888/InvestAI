@@ -1172,7 +1172,23 @@ export const UserSchema = z.object({
   full_name: z.string(),
   is_active: z.boolean().optional(),
   designation: z.string().optional().nullable(),
+  department: z.string().optional().nullable(),
   profile_picture: z.string().optional().nullable(),
+  default_hitl_join_message: z.string().optional().nullable(),
+  role: z.string().optional(),
+  date_joined: z
+    .string()
+    .optional()
+    .refine((date) => (date ? !isNaN(Date.parse(date)) : true), {
+      message: 'Invalid date format. Expected ISO 8601 format.',
+    }),
+  last_login: z
+    .string()
+    .optional()
+    .refine((date) => (date ? !isNaN(Date.parse(date)) : true), {
+      message: 'Invalid date format. Expected ISO 8601 format.',
+    }),
+  status: z.string().optional().nullable(),
 });
 
 export type User = z.infer<typeof UserSchema>;
@@ -1182,6 +1198,43 @@ export const UsersListResponseSchema = PaginationDataSchema.extend({
 });
 
 export type UsersListResponse = z.infer<typeof UsersListResponseSchema>;
+
+export const UserRoleSchema = z.enum(['admin', 'read-write', 'read-only']);
+export type UserRole = z.infer<typeof UserRoleSchema>;
+
+export const UserManagementCreateRequestSchema = z.object({
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
+  email: z.string().email(),
+  role: UserRoleSchema,
+});
+export type UserManagementCreateRequest = z.infer<typeof UserManagementCreateRequestSchema>;
+
+export const UserManagementUpdateRequestSchema = z
+  .object({
+    first_name: z.string().min(1).optional(),
+    last_name: z.string().min(1).optional(),
+    role: UserRoleSchema.optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided',
+  });
+export type UserManagementUpdateRequest = z.infer<typeof UserManagementUpdateRequestSchema>;
+
+export const UserManagementResponseSchema = UserSchema;
+export type UserManagementResponse = z.infer<typeof UserManagementResponseSchema>;
+
+export const UserManagementListResponseSchema = UsersListResponseSchema;
+export type UserManagementListResponse = z.infer<typeof UserManagementListResponseSchema>;
+
+export const UsersListQueryParamsSchema = z
+  .object({
+    page: z.number().int().positive().optional(),
+    page_size: z.number().int().positive().optional(),
+    search: z.string().optional(),
+  })
+  .partial();
+export type UsersListQueryParams = z.infer<typeof UsersListQueryParamsSchema>;
 
 // Assign SDR request payload
 export const AssignSdrRequestSchema = z.object({

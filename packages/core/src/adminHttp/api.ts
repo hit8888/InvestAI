@@ -51,7 +51,11 @@ import {
   UpdateUserProfilePayload,
   UserProfileResponse,
   UserProfileUpdateResponse,
+  UserManagementResponse,
+  UserManagementCreateRequest,
+  UserManagementUpdateRequest,
   UsersListResponse,
+  UsersListQueryParams,
   VerifyOtpPayload,
   WeeklySessionInsightsResponse,
   VisitorsPayload,
@@ -404,8 +408,20 @@ export const getIcpDetails = (payload: { icp_id: number }) => {
   return adminApiClient.post(`/tenant/api/icp-email-enrichment/`, payload);
 };
 
-// Get Assigned Rep users list API
-export const getUsersList = () => adminApiClient.get<UsersListResponse>(`/tenant/api/users/`);
+// Get organization users list API
+export const getUsersList = (params?: UsersListQueryParams) =>
+  adminApiClient.get<UsersListResponse>(`/tenant/api/users/`, { params });
+
+export const getUserById = (userId: number) =>
+  adminApiClient.get<UserManagementResponse>(`/tenant/api/users/${userId}/`);
+
+export const createUser = (payload: UserManagementCreateRequest) =>
+  adminApiClient.post<UserManagementResponse>(`/tenant/api/users/`, payload);
+
+export const updateUser = (userId: number, payload: UserManagementUpdateRequest) =>
+  adminApiClient.patch<UserManagementResponse>(`/tenant/api/users/${userId}/`, payload);
+
+export const deleteUser = (userId: number) => adminApiClient.delete(`/tenant/api/users/${userId}/`);
 
 // Assign SDR manually API
 export const assignSdrManually = (payload: AssignSdrRequest) =>

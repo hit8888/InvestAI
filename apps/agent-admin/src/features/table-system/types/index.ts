@@ -16,6 +16,8 @@ export type {
   EntityMetadataColumn,
   EntityMetadataResponse,
   TableColumnDefinition,
+  TableColumnDefinitionWithCustomRenderer,
+  ColumnDefinition,
   ColumnType,
   CellType,
 } from './column.types';
