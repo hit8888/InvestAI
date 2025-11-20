@@ -18,7 +18,7 @@ const ConversationDetailsLoading = () => {
               <div key={index} className="mb-6 flex flex-col gap-3 last:mb-0">
                 {/* User message skeleton */}
                 <div className="flex justify-end">
-                  <div className="flex max-w-[80%] flex-col gap-2 rounded-2xl bg-primary/10 p-3">
+                  <div className="flex max-w-[80%] flex-col gap-2 rounded-2xl bg-gray-100 p-3">
                     <Skeleton className="h-4 w-48" />
                     <Skeleton className="h-4 w-32" />
                   </div>

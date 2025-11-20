@@ -19,8 +19,8 @@ const MessageAnalytics = ({ analytics, invertTextColor }: IProps) => {
         Analytics:
       </Typography>
       <Badge
-        className={cn('bg-primary py-0 leading-6', {
-          'text-black': invertTextColor,
+        className={cn('bg-gray-900 py-0 leading-6 text-white', {
+          'text-white': invertTextColor,
         })}
       >
         Buyer Intent Score: {analytics.buyer_intent_score.toFixed(0)}

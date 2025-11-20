@@ -98,7 +98,7 @@ const SummaryTabContentItem = ({
   return (
     <div
       className={cn(
-        'flex w-full max-w-full items-start justify-between gap-4 self-stretch overflow-auto rounded-2xl border border-gray-200 bg-primary/2.5 p-4',
+        'flex w-full max-w-full items-start justify-between gap-4 self-stretch overflow-auto rounded-2xl border border-gray-200 bg-gray-100 p-4',
         {
           'w-full flex-row items-center justify-between':
             isLabelValueDash || isAssignRep || isIntentScore || isLengthOfConversation,
@@ -110,12 +110,12 @@ const SummaryTabContentItem = ({
     >
       <div className="flex w-[50%] items-center justify-center gap-2">
         {ItemIcon && (
-          <div className="flex items-center justify-center rounded-lg bg-primary/10 p-1">
+          <div className="flex items-center justify-center rounded-lg bg-gray-100 p-1">
             <ItemIcon
               width="16"
               height="16"
-              className={cn('text-primary', {
-                'text-primary/30': isLabelValueDash,
+              className={cn('text-gray-900', {
+                'text-gray-400': isLabelValueDash,
               })}
             />
           </div>
@@ -150,28 +150,10 @@ const SummaryTabContentItem = ({
 };
 
 const SummaryValueForIntentScore = ({ score }: { score: number }) => {
-  const isPositiveScore = score > 0;
   return (
-    <div
-      className={cn(`flex h-8 items-center justify-end gap-2 rounded-full py-1 pl-4 pr-2`, {
-        'bg-positive-100': isPositiveScore,
-        'bg-destructive-100': !isPositiveScore,
-      })}
-    >
-      <p
-        className={cn(`text-base font-medium`, {
-          'text-positive-1000': isPositiveScore,
-          'text-destructive-1000': !isPositiveScore,
-        })}
-      >
-        {score}
-      </p>
-      <IntentScoreStockupIcon
-        className={cn(`h-5 w-5`, {
-          'text-positive-1000': isPositiveScore,
-          'rotate-90 text-destructive-1000': !isPositiveScore,
-        })}
-      />
+    <div className="flex h-8 items-center justify-end gap-2 rounded-full bg-gray-100 py-1 pl-4 pr-2">
+      <p className="text-base font-medium text-gray-900">{score}</p>
+      <IntentScoreStockupIcon className="h-5 w-5 text-gray-900" />
     </div>
   );
 };

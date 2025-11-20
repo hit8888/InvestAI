@@ -25,7 +25,7 @@ const LeftSideContentContainer = ({
       style={maxWidth ? { maxWidth } : undefined}
     >
       <div className="flex items-center gap-2 border-b border-gray-200 p-4">
-        <AiSparklesIcon className="size-6" />
+        <AiSparklesIcon className="size-6 text-gray-900" />
         <span className="text-sm font-medium text-gray-900">{headerTitle}</span>
         <button onClick={onClose} className="ml-auto">
           <X className="size-4" />

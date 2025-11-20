@@ -14,7 +14,7 @@ const ThumbIcon = (props: IProps) => {
       height={height}
       width={width}
       viewBox="0 0 16 16"
-      className={cn('fill-primary', className)}
+      className={cn('fill-current', className)}
       {...restProps}
     >
       {isFilled ? (

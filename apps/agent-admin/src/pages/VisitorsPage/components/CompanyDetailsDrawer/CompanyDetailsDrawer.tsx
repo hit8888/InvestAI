@@ -128,7 +128,11 @@ const CompanyDetailsDrawer = ({
   }, [formattedChatHistory, formattedConversationData]);
 
   const handleViewConversationDetails = () => {
-    setLeftSideContentMode('conversation-log');
+    if (leftSideContentMode === 'conversation-log') {
+      setLeftSideContentMode(null);
+    } else {
+      setLeftSideContentMode('conversation-log');
+    }
   };
 
   const handleCloseDrawer = () => {
@@ -143,8 +147,12 @@ const CompanyDetailsDrawer = ({
   };
 
   const handleFetchIcpList = () => {
-    setLeftSideContentMode('relevant-profiles');
-    // Query will automatically fetch when panel opens due to enabled condition
+    if (leftSideContentMode === 'relevant-profiles') {
+      setLeftSideContentMode(null);
+    } else {
+      setLeftSideContentMode('relevant-profiles');
+      // Query will automatically fetch when panel opens due to enabled condition
+    }
   };
 
   const handleProspectGenerateEmail = (employee: Employee) => {
@@ -163,7 +171,11 @@ const CompanyDetailsDrawer = ({
   };
 
   const handleViewBrowsingHistory = () => {
-    setLeftSideContentMode('browsing-history');
+    if (leftSideContentMode === 'browsing-history') {
+      setLeftSideContentMode(null);
+    } else {
+      setLeftSideContentMode('browsing-history');
+    }
   };
 
   const handleIcpCancelEmail = () => {

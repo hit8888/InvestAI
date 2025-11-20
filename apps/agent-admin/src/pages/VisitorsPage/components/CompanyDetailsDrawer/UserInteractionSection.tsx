@@ -26,8 +26,8 @@ const UserInteractionSection = ({ conversationSummary, onViewConversationDetails
             </p>
           </div>
 
-          <button className="cursor-pointer self-start text-primaryV2 underline" onClick={onViewConversationDetails}>
-            <Typography variant="caption-12-medium" className="text-primaryV2">
+          <button className="cursor-pointer self-start text-gray-900 underline" onClick={onViewConversationDetails}>
+            <Typography variant="caption-12-medium" className="text-gray-900">
               ← View Log
             </Typography>
           </button>

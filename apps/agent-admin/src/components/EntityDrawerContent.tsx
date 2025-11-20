@@ -135,7 +135,13 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
     return calculateSessionMetrics(formattedChatHistory, formattedConversationData);
   }, [formattedChatHistory, formattedConversationData]);
 
-  const handleViewConversationDetails = () => setLeftSideContentMode('conversation-log' as PanelMode);
+  const handleViewConversationDetails = () => {
+    if (leftSideContentMode === 'conversation-log') {
+      clearPanelMode();
+    } else {
+      setLeftSideContentMode('conversation-log' as PanelMode);
+    }
+  };
   const handleCloseDrawer = () => {
     setSelectedEmployee(null);
     clearPanelMode(); // Clear panel from URL
@@ -146,8 +152,12 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
     setSelectedEmployee(null);
   };
   const handleFetchIcpList = () => {
-    setLeftSideContentMode('relevant-profiles' as PanelMode);
-    // Query will automatically fetch when panel opens due to enabled condition
+    if (leftSideContentMode === 'relevant-profiles') {
+      clearPanelMode();
+    } else {
+      setLeftSideContentMode('relevant-profiles' as PanelMode);
+      // Query will automatically fetch when panel opens due to enabled condition
+    }
   };
   const handleProspectGenerateEmail = (employee: Employee) => {
     setSelectedEmployee(employee);
@@ -161,7 +171,13 @@ export function EntityDrawerContent<T>({ data, onClose, fieldAccessors }: Entity
     setLeftSideContentMode('relevant-profiles' as PanelMode);
     fetchIcpDetails();
   };
-  const handleViewBrowsingHistory = () => setLeftSideContentMode('browsing-history' as PanelMode);
+  const handleViewBrowsingHistory = () => {
+    if (leftSideContentMode === 'browsing-history') {
+      clearPanelMode();
+    } else {
+      setLeftSideContentMode('browsing-history' as PanelMode);
+    }
+  };
   const handleIcpCancelEmail = () => {
     setLeftSideContentMode('relevant-profiles' as PanelMode);
     setSelectedEmployee(null);
