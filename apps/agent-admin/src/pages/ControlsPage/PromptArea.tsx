@@ -132,11 +132,20 @@ const PromptArea = ({
   };
 
   const handlePromptSave = async (index: number) => {
-    const promptToSave = localPrompts[index];
+    const localPrompt = localPrompts[index];
+
+    if (!localPrompt) {
+      return;
+    }
+
+    const promptToSave = {
+      ...localPrompt,
+      prompt: localPrompt.prompt?.trim() || '',
+    };
 
     try {
       // Handle empty prompts
-      if (!promptToSave.prompt.trim()) {
+      if (!promptToSave.prompt) {
         await handleEmptyPrompt(promptToSave);
         removeAndUpdatePrompts(index);
         setClickedOnEdit(false);

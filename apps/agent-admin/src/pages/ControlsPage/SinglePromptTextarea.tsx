@@ -24,6 +24,8 @@ const SinglePromptTextarea = ({
 
   const payloadData = {
     filters: allAppliedFilterValues,
+    page: 1,
+    page_size: 50,
   };
 
   const { data: prompts, isLoading, error } = usePrompts(payloadData);
