@@ -46,6 +46,7 @@ export const visitorsTableConfig: TablePageConfig<VisitorRow> = {
 
   defaultFilters: {
     contact_enrichments: null,
+    contact_enrichments__company_name: null,
     is_test: false,
   },
 
