@@ -49,7 +49,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ form, isCollapsed }) => {
               render={({ field }) => (
                 <ToggleSection
                   field={field}
-                  label="Provide Feedback"
+                  label="Admin View"
                   tooltip="Turning this on will allow you to provide feedback to agent's responses"
                 />
               )}
