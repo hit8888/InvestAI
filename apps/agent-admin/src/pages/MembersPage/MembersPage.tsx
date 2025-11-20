@@ -33,8 +33,8 @@ const MembersPageBase = () => {
   }, [isAdmin]);
 
   return (
-    <div className="flex w-full flex-col gap-6">
-      <div className="flex w-full items-start justify-between p-4">
+    <div className="flex h-full w-full flex-1 flex-col gap-6 overflow-hidden">
+      <div className="flex w-full flex-shrink-0 items-start justify-between p-4">
         <div className="flex-start flex flex-col">
           <Typography variant="title-24">Members</Typography>
           <Typography variant="body-14" textColor={'textSecondary'} className={'mt-2 max-w-xl'}>
@@ -47,7 +47,7 @@ const MembersPageBase = () => {
           </Button>
         )}
       </div>
-      {content}
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{content}</div>
     </div>
   );
 };

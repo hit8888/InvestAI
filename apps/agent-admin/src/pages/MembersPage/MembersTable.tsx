@@ -7,7 +7,7 @@ import {
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { UsersListResponse, User } from '@meaku/core/types/admin/api';
-import { GenericTablePagination, GenericTable } from '../../features/table-system';
+import { GenericTablePagination, GenericTable, TableLoadingOverlay } from '../../features/table-system';
 import { membersTableColumns } from './config/membersTableConfig';
 import type { TableColumnDefinition } from '../../features/table-system/types';
 import type { EntityMetadataColumn } from '../../features/table-system/types';
@@ -18,6 +18,7 @@ interface MembersTableProps {
   page: number;
   pageSize: number;
   isLoading: boolean;
+  isFetching?: boolean;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
   onEditMember: (user: User) => void;
@@ -32,6 +33,7 @@ const MembersTable = ({
   page,
   pageSize,
   isLoading,
+  isFetching = false,
   onPageChange,
   onPageSizeChange,
   onEditMember,
@@ -123,9 +125,9 @@ const MembersTable = ({
   const isEmpty = (data || []).length === 0;
 
   return (
-    <div className="flex w-full max-w-full flex-col">
+    <div className="flex h-full flex-1 flex-col overflow-hidden">
       {/* Table content */}
-      <div className="relative min-h-0 min-w-0 max-w-full">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         {isEmpty && !isLoading ? (
           // Empty state
           <div className="flex h-full items-center justify-center">
@@ -133,7 +135,7 @@ const MembersTable = ({
           </div>
         ) : (
           // Table (with data or loading shimmer)
-          <div className="relative mb-2">
+          <div className="relative mb-2 flex flex-1 flex-col overflow-hidden">
             <GenericTable
               data={data || []}
               columns={columns}
@@ -146,6 +148,8 @@ const MembersTable = ({
               isLoading={isLoading}
               rowKeyColumn="id"
             />
+            {/* Loading overlay - show when refetching after mutations */}
+            {isFetching && <TableLoadingOverlay />}
           </div>
         )}
       </div>
@@ -161,7 +165,7 @@ const MembersTable = ({
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
           isLoading={isLoading}
-          isFetching={false}
+          isFetching={isFetching}
         />
       )}
     </div>

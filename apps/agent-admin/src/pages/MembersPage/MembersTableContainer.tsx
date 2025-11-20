@@ -49,13 +49,14 @@ const MembersTableContainer = ({ onCreateMemberClick }: MembersTableContainerPro
   const data: UsersListResponse['results'] = usersQuery.data?.results ?? [];
 
   return (
-    <>
+    <div className="flex h-full flex-1 flex-col overflow-hidden">
       <MembersTable
         data={data}
         totalRecords={usersQuery.data?.total_records ?? 0}
         page={page}
         pageSize={pageSize}
-        isLoading={usersQuery.isLoading || usersQuery.isFetching}
+        isLoading={usersQuery.isLoading}
+        isFetching={usersQuery.isFetching && !usersQuery.isLoading}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         onEditMember={(user) => setEditUser(user)}
@@ -76,7 +77,7 @@ const MembersTableContainer = ({ onCreateMemberClick }: MembersTableContainerPro
         user={deleteUser ?? undefined}
         onClose={() => setDeleteUser(null)}
       />
-    </>
+    </div>
   );
 };
 
