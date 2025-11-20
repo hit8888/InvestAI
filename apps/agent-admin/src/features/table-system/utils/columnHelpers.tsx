@@ -141,11 +141,11 @@ export const createTanStackColumns = <TRow = unknown,>(
     const hasNestedPath = col.accessorKey.includes('.');
 
     // Get default size based on cell type
-    // Special handling for actions column - make it narrower
+    // Special handling for actions column - make it narrower (just enough for menu icon button)
     const isActionsColumn = col.id === 'actions';
-    const defaultSize = isActionsColumn ? 60 : getDefaultColumnSize(col.meta.cellType);
-    const minSize = isActionsColumn ? 60 : 100;
-    const maxSize = isActionsColumn ? 80 : 500;
+    const defaultSize = isActionsColumn ? 50 : getDefaultColumnSize(col.meta.cellType);
+    const minSize = isActionsColumn ? 50 : 100;
+    const maxSize = isActionsColumn ? 60 : 500;
 
     // Use accessor function for nested fields (e.g., company_demographics.website_url)
     if (hasNestedPath) {

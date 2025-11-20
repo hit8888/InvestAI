@@ -38,12 +38,13 @@ const UserDetailsSection = ({
 
   const sessionDurationFormatted = formatSessionDuration(sessionDurationInSeconds);
 
-  // Format chip text: "Session duration: 2m | 3 messages"
-  // Show chip if we have data
-  const sessionChipText =
-    sessionDurationFormatted || totalMessageCount > 0
-      ? `Session duration: ${sessionDurationFormatted || '0m'} | ${totalMessageCount} ${totalMessageCount === 1 ? 'message' : 'messages'}`
-      : null;
+  // Format chip text: conditionally show only metrics that have values
+  const durationPart = sessionDurationInSeconds > 0 ? `Session duration: ${sessionDurationFormatted}` : null;
+
+  const messagePart =
+    totalMessageCount > 0 ? `${totalMessageCount} ${totalMessageCount === 1 ? 'message' : 'messages'}` : null;
+
+  const sessionChipText = [durationPart, messagePart].filter(Boolean).join(' | ') || null;
 
   // Get device icon based on device type
   const getDeviceIcon = () => {

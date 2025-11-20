@@ -1,5 +1,5 @@
 import { useReactTable, getCoreRowModel, flexRender, type ColumnDef, type SortingState } from '@tanstack/react-table';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronDown, ChevronUp, ChevronsUpDown, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollArea, ScrollBar } from '@breakout/design-system/components/shadcn-ui/scroll-area';
@@ -92,29 +92,83 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
   // Determine number of columns for shimmer (use actual column count or default to 6)
   const shimmerColumnCount = Math.max(filteredColumns.length, 6);
 
-  // Calculate dynamic number of shimmer rows based on viewport height
-  // Table height: calc(100vh - 168px), Header: 42px, Row height: 40px
-  // Available height for rows = (100vh - 168px) - 42px = 100vh - 210px
-  const [shimmerRowCount, setShimmerRowCount] = useState(() => {
-    if (typeof window === 'undefined') return 20; // SSR fallback
-    const availableHeight = window.innerHeight - 210; // 168px (container offset) + 42px (header)
+  // Refs for measuring container and header heights
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLTableSectionElement>(null);
+  const scrollAreaViewportRef = useRef<HTMLDivElement>(null);
+
+  // Track if table is scrollable (has more rows than visible)
+  const [isScrollable, setIsScrollable] = useState(false);
+
+  // Calculate dynamic number of shimmer rows based on measured heights
+  const [shimmerRowCount, setShimmerRowCount] = useState(20); // Default fallback
+
+  // Calculate shimmer rows based on measured container and header heights
+  const calculateShimmerRows = useCallback(() => {
+    if (!containerRef.current || !headerRef.current) {
+      return;
+    }
+
+    const containerHeight = containerRef.current.clientHeight;
+    const headerHeight = headerRef.current.clientHeight;
+    const availableHeight = containerHeight - headerHeight;
     const rowHeight = 40;
     const calculatedRows = Math.floor(availableHeight / rowHeight);
-    return Math.max(calculatedRows, 10); // Minimum 10 rows
-  });
+    setShimmerRowCount(Math.max(calculatedRows, 10)); // Minimum 10 rows
+  }, []);
 
+  // Check if table is scrollable (content height > viewport height)
+  const checkScrollability = useCallback(() => {
+    if (!scrollAreaViewportRef.current) {
+      return;
+    }
+
+    const viewport = scrollAreaViewportRef.current;
+    const isScrollableContent = viewport.scrollHeight > viewport.clientHeight;
+    setIsScrollable(isScrollableContent);
+  }, []);
+
+  // Measure heights on mount and when sizes change
   useEffect(() => {
-    const calculateRows = () => {
-      const availableHeight = window.innerHeight - 210; // 168px (container offset) + 42px (header)
-      const rowHeight = 40;
-      const calculatedRows = Math.ceil(availableHeight / rowHeight);
-      setShimmerRowCount(Math.max(calculatedRows, 10)); // Minimum 10 rows
+    calculateShimmerRows();
+
+    // Handler for window resize
+    const handleResize = () => {
+      calculateShimmerRows();
+      setTimeout(checkScrollability, 0);
     };
 
-    calculateRows();
-    window.addEventListener('resize', calculateRows);
-    return () => window.removeEventListener('resize', calculateRows);
-  }, []);
+    // Use ResizeObserver to recalculate when container or header sizes change
+    const resizeObserver = new ResizeObserver(() => {
+      calculateShimmerRows();
+      // Check scrollability after resize
+      setTimeout(checkScrollability, 0);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+    if (headerRef.current) {
+      resizeObserver.observe(headerRef.current);
+    }
+    if (scrollAreaViewportRef.current) {
+      resizeObserver.observe(scrollAreaViewportRef.current);
+    }
+
+    // Also listen to window resize as a fallback
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [calculateShimmerRows, checkScrollability]);
+
+  // Check scrollability when data changes
+  useEffect(() => {
+    // Use setTimeout to ensure DOM has updated
+    setTimeout(checkScrollability, 0);
+  }, [data, checkScrollability]);
 
   // Shimmer component for loading state
   const ShimmerCell = ({ className = '' }: { className?: string }) => (
@@ -143,24 +197,30 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
   const tableKey = useMemo(() => `table-reset-${resetVersion}`, [resetVersion]);
 
   return (
-    <div className="flex h-[calc(100vh-168px)] w-full max-w-full flex-col overflow-hidden border-b">
-      <ScrollArea className="-top-[1px] flex-1">
-        <table key={tableKey} className="w-max min-w-full">
-          <thead className="sticky top-0 z-20 bg-gray-100">
+    <div ref={containerRef} className="flex h-[calc(100vh-168px)] w-full max-w-full flex-col overflow-hidden border-b">
+      <ScrollArea className="-top-[1px] flex-1" viewportRef={scrollAreaViewportRef}>
+        <table key={tableKey} className="w-max min-w-full border-collapse">
+          <thead
+            ref={headerRef}
+            className="sticky top-0 z-20 bg-gray-100 shadow-[0_1px_0_0_rgb(229,231,235)] [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform]"
+          >
             {isLoading ? (
               // Loading shimmer header
               <tr>
                 {Array.from({ length: shimmerColumnCount }).map((_, colIndex) => {
+                  // Check if this is the last column (actions column)
+                  const isLastColumn = colIndex === shimmerColumnCount - 1;
+                  const isBeforeActions = colIndex === shimmerColumnCount - 2;
                   // Vary the width of shimmer cells to look more realistic
                   const widths = ['w-16', 'w-24', 'w-20', 'w-28', 'w-18', 'w-22'];
-                  const shimmerWidth = widths[colIndex % widths.length];
+                  const shimmerWidth = isLastColumn ? 'w-4' : widths[colIndex % widths.length];
 
                   return (
                     <th
                       key={`shimmer-header-${colIndex}`}
-                      className={`h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 ${colIndex === 0 ? 'border-l-0' : ''}`}
+                      className={`h-[42px] whitespace-nowrap border border-gray-200 text-left text-xs font-[500] tracking-wide text-gray-500 ${isLastColumn ? 'w-[50px] border-l-0 px-2' : 'px-4'} ${isBeforeActions ? 'border-r-0' : ''} ${colIndex === 0 ? 'border-l-0' : ''}`}
                     >
-                      <div className="flex h-full items-center justify-start">
+                      <div className="flex h-full items-center justify-center">
                         <ShimmerCell className={shimmerWidth} />
                       </div>
                     </th>
@@ -176,6 +236,10 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                       const isSortable = header.column.getCanSort();
                       const columnDef = filteredColumns.find((col) => col.id === header.column.id);
                       const hasTooltip = columnDef?.tooltipText && columnDef.tooltipText.trim();
+                      const isActionsColumn = header.column.id === 'actions';
+                      const isBeforeActions =
+                        headerIndex === headerGroup.headers.length - 2 &&
+                        headerGroup.headers[headerGroup.headers.length - 1]?.column.id === 'actions';
 
                       return (
                         <motion.th
@@ -185,7 +249,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.2, ease: 'easeInOut' }}
-                          className={`h-[42px] whitespace-nowrap border border-gray-200 px-4 text-left text-xs font-[500] tracking-wide text-gray-500 ${headerIndex === 0 ? 'border-l-0' : ''}`}
+                          className={`h-[42px] whitespace-nowrap border border-gray-200 text-left text-xs font-[500] tracking-wide text-gray-500 ${isActionsColumn ? 'w-[50px] border-l-0 px-2' : 'px-4'} ${isBeforeActions ? 'border-r-0' : ''} ${headerIndex === 0 ? 'border-l-0' : ''}`}
                         >
                           {header.isPlaceholder ? null : (
                             <div
@@ -236,16 +300,21 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                     className="group transition-colors last:border-transparent hover:bg-gray-50"
                   >
                     {Array.from({ length: shimmerColumnCount }).map((_, colIndex) => {
+                      // Check if this is the last column (actions column)
+                      const isLastColumn = colIndex === shimmerColumnCount - 1;
+                      const isBeforeActions = colIndex === shimmerColumnCount - 2;
                       // Vary the width of shimmer cells to look more realistic
                       const widths = ['w-full', 'w-3/4', 'w-5/6', 'w-full', 'w-2/3', 'w-4/5'];
-                      const shimmerWidth = widths[colIndex % widths.length];
+                      const shimmerWidth = isLastColumn ? 'w-4' : widths[colIndex % widths.length];
 
                       return (
                         <td
                           key={`shimmer-cell-${rowIndex}-${colIndex}`}
-                          className={`h-[40px] border border-gray-200 px-3 ${colIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === shimmerRowCount - 1 ? 'border-b-0' : ''}`}
+                          className={`h-[40px] border border-gray-200 ${isLastColumn ? 'w-[50px] border-l-0 px-2' : 'px-3'} ${isBeforeActions ? 'border-r-0' : ''} ${colIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === shimmerRowCount - 1 ? 'border-b-0' : ''}`}
                         >
-                          <div className="flex h-full items-center justify-start">
+                          <div
+                            className={`flex h-full items-center ${isLastColumn ? 'justify-center' : 'justify-start'}`}
+                          >
                             <ShimmerCell className={shimmerWidth} />
                           </div>
                         </td>
@@ -258,10 +327,14 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                   <tr
                     key={row.id}
                     onClick={() => onRowClick?.(row.original)}
-                    className="group cursor-pointer transition-colors last:border-transparent hover:bg-gray-50"
+                    className="group cursor-pointer transition-colors hover:bg-gray-50"
                   >
                     <AnimatePresence mode="popLayout">
                       {row.getVisibleCells().map((cell, cellIndex) => {
+                        const isActionsColumn = cell.column.id === 'actions';
+                        const isBeforeActions =
+                          cellIndex === row.getVisibleCells().length - 2 &&
+                          row.getVisibleCells()[row.getVisibleCells().length - 1]?.column.id === 'actions';
                         return (
                           <motion.td
                             key={cell.id}
@@ -270,7 +343,7 @@ export const GenericTable = <TRow extends Record<string, unknown>>({
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.2, ease: 'easeInOut' }}
-                            className={`h-[40px] border border-gray-200 px-3 text-sm text-gray-900 ${cellIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === rows.length - 1 ? 'border-b-0' : ''}`}
+                            className={`h-[40px] border border-gray-200 text-sm text-gray-900 ${isActionsColumn ? 'w-[50px] border-l-0 px-2' : 'px-3'} ${isBeforeActions ? 'border-r-0' : ''} ${cellIndex === 0 ? 'border-l-0' : ''} ${rowIndex === 0 ? 'border-t-0' : ''} ${rowIndex === rows.length - 1 && isScrollable ? 'border-b-0' : ''}`}
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </motion.td>

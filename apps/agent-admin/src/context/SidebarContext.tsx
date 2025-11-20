@@ -29,7 +29,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const location = useLocation();
   const tenantName = useSessionStore((state) => state.activeTenant?.['tenant-name']) ?? '';
 
-  // Track collapsed/expanded state (fixed width in V2 - always expanded)
+  // Track collapsed/expanded state. Defaults to expanded on initial load.
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   // Track which view we're in (MAIN or SETTINGS)

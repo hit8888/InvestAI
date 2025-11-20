@@ -34,7 +34,7 @@ const MembersPageBase = () => {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex w-full items-start justify-between">
+      <div className="flex w-full items-start justify-between p-4">
         <div className="flex-start flex flex-col">
           <Typography variant="title-24">Members</Typography>
           <Typography variant="body-14" textColor={'textSecondary'} className={'mt-2 max-w-xl'}>

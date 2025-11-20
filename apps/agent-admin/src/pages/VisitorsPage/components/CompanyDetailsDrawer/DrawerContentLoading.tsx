@@ -82,13 +82,9 @@ const DrawerContentLoading = () => {
               <Skeleton className="h-[42px] w-[42px] rounded-full border-2" />
 
               <div className="flex flex-1 flex-col gap-1">
-                {/* User Name and Title */}
+                {/* User Name (minimal state - no title or LinkedIn icon) */}
                 <div className="flex items-center gap-3">
                   <Skeleton className="h-5 w-32" />
-                  <div className="h-4 w-0 border-l border-gray-300" />
-                  <Skeleton className="h-4 w-24" />
-                  {/* LinkedIn icon skeleton */}
-                  <Skeleton className="h-5 w-5 rounded-full" />
                 </div>
 
                 {/* Email */}

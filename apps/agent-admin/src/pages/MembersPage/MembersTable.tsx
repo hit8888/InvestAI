@@ -61,7 +61,7 @@ const MembersTable = ({
               <DropdownMenuTrigger asChild>
                 <button
                   aria-label="Open actions"
-                  className="inline-flex h-6 min-w-[1.75rem] items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100"
+                  className="inline-flex h-6 min-w-[1.75rem] items-center justify-center rounded-lg text-gray-500 opacity-0 transition-opacity hover:bg-gray-100 focus:opacity-100 focus-visible:opacity-100 group-hover:opacity-100 data-[state=open]:opacity-100"
                   style={{ backgroundColor: 'var(--gray-50, #F9FAFB)' }}
                 >
                   <MoreVertical className="h-4 w-4" />
@@ -119,35 +119,51 @@ const MembersTable = ({
 
   // Visible columns (all columns are visible)
   const visibleColumns = useMemo(() => columns.map((col) => col.id), [columns]);
+
+  const isEmpty = (data || []).length === 0;
+
   return (
     <div className="flex w-full max-w-full flex-col">
+      {/* Table content */}
       <div className="relative min-h-0 min-w-0 max-w-full">
-        <div className="relative mb-4">
-          <GenericTable
-            data={data || []}
-            columns={columns}
-            metadataColumns={metadataColumns}
-            visibleColumns={visibleColumns}
-            resetVersion={0}
-            sortBy={null}
-            sortOrder={null}
-            onSortChange={() => {}}
-            isLoading={isLoading}
-            rowKeyColumn="id"
-          />
-        </div>
+        {isEmpty && !isLoading ? (
+          // Empty state
+          <div className="flex h-full items-center justify-center">
+            <div className="py-12 text-center text-gray-500">No data available</div>
+          </div>
+        ) : (
+          // Table (with data or loading shimmer)
+          <div className="relative mb-2">
+            <GenericTable
+              data={data || []}
+              columns={columns}
+              metadataColumns={metadataColumns}
+              visibleColumns={visibleColumns}
+              resetVersion={0}
+              sortBy={null}
+              sortOrder={null}
+              onSortChange={() => {}}
+              isLoading={isLoading}
+              rowKeyColumn="id"
+            />
+          </div>
+        )}
       </div>
 
-      <GenericTablePagination
-        currentPage={page}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        totalRecords={totalRecords}
-        pageSizeOptions={PAGE_SIZE_OPTIONS}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-        isLoading={isLoading}
-      />
+      {/* Pagination */}
+      {!isEmpty && (
+        <GenericTablePagination
+          currentPage={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          totalRecords={totalRecords}
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          isLoading={isLoading}
+          isFetching={false}
+        />
+      )}
     </div>
   );
 };
