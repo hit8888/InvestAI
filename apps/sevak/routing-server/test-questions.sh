@@ -459,6 +459,306 @@ curl -s -X POST "$BASE_URL" \
 echo ""
 echo ""
 
+# Test 46: Export conversation data
+echo "Test 46: Export Conversation Data"
+echo "Question: 'How do I export my conversation history?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I export my conversation history?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 47: Search conversations
+echo "Test 47: Search Conversations"
+echo "Question: 'I need to search through my conversations for a specific topic'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to search through my conversations for a specific topic"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 48: Check dataset processing status
+echo "Test 48: Dataset Processing Status"
+echo "Question: 'How do I check if my documents are done processing?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I check if my documents are done processing?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 49: Assign leads to team members
+echo "Test 49: Assign Leads to Team Members"
+echo "Question: 'I want to assign a lead to one of my team members'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to assign a lead to one of my team members"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 50: View specific conversation session
+echo "Test 50: View Specific Conversation"
+echo "Question: 'I need to view a specific conversation by session ID'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to view a specific conversation by session ID"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 51: Delete dataset items
+echo "Test 51: Delete Dataset Items"
+echo "Question: 'How do I delete old webpages from my datasets?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I delete old webpages from my datasets?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 52: Edit document details
+echo "Test 52: Edit Document Details"
+echo "Question: 'I want to edit the details of an uploaded document'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to edit the details of an uploaded document"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 53: Filter leads
+echo "Test 53: Filter Leads"
+echo "Question: 'Can I filter leads by status or date range?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Can I filter leads by status or date range?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 54: Export leads data
+echo "Test 54: Export Leads Data"
+echo "Question: 'I need to export my leads data to CSV'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to export my leads data to CSV"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 55: Custom instructions setup
+echo "Test 55: Custom Instructions Setup"
+echo "Question: 'Where can I add custom rules to guide my agent behavior?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Where can I add custom rules to guide my agent behavior?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 56: Ideal Company Persona (separate from ICP)
+echo "Test 56: Ideal Company Persona Configuration"
+echo "Question: 'I want to configure industry targeting and company size criteria'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to configure industry targeting and company size criteria"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 57: Secondary color branding
+echo "Test 57: Secondary Color Branding"
+echo "Question: 'How do I change the secondary color for my agent?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I change the secondary color for my agent?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 58: Summarize block configuration
+echo "Test 58: Summarize Block Configuration"
+echo "Question: 'I want to configure the Summarize block'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to configure the Summarize block"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 59: Block page visibility rules
+echo "Test 59: Block Page Visibility Rules"
+echo "Question: 'How do I set which pages my Ask AI block appears on?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I set which pages my Ask AI block appears on?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 60: CTA configuration for Ask AI block
+echo "Test 60: CTA Configuration for Ask AI Block"
+echo "Question: 'I need to add call-to-action buttons to my Ask AI block'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to add call-to-action buttons to my Ask AI block"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 61: Daily session insights
+echo "Test 61: Daily Session Insights"
+echo "Question: 'Show me daily conversation patterns over the last week'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Show me daily conversation patterns over the last week"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 62: Weekly conversation patterns
+echo "Test 62: Weekly Conversation Patterns"
+echo "Question: 'I want to see which day of the week has the most conversations'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to see which day of the week has the most conversations"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 63: Frequent sources analytics
+echo "Test 63: Frequent Sources Analytics"
+echo "Question: 'Where are my visitors coming from?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Where are my visitors coming from?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 64: Search companies/accounts
+echo "Test 64: Search Companies/Accounts"
+echo "Question: 'I need to search for a specific company in my accounts'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to search for a specific company in my accounts"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 65: Search contacts
+echo "Test 65: Search Contacts"
+echo "Question: 'Can I search through my contacts and visitors?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Can I search through my contacts and visitors?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 66: Disconnect integration
+echo "Test 66: Disconnect Integration"
+echo "Question: 'How do I disconnect a third-party integration?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I disconnect a third-party integration?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 67: Edit calendar details
+echo "Test 67: Edit Calendar Details"
+echo "Question: 'I need to edit my calendar settings'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to edit my calendar settings"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 68: Delete calendar
+echo "Test 68: Delete Calendar"
+echo "Question: 'How do I remove a calendar from my account?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I remove a calendar from my account?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 69: Edit team member details
+echo "Test 69: Edit Team Member Details"
+echo "Question: 'I want to update a team member information'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to update a team member information"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 70: Remove team member
+echo "Test 70: Remove Team Member"
+echo "Question: 'How do I delete a team member from my account?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I delete a team member from my account?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 71: Export member list
+echo "Test 71: Export Member List"
+echo "Question: 'I need to export my team member list'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I need to export my team member list"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 72: View webpage statistics
+echo "Test 72: View Webpage Statistics"
+echo "Question: 'I want to see how many pages were processed from my webpages'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to see how many pages were processed from my webpages"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 73: View video statistics
+echo "Test 73: View Video Statistics"
+echo "Question: 'Show me statistics for my uploaded videos including frame counts'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Show me statistics for my uploaded videos including frame counts"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 74: Filter datasets
+echo "Test 74: Filter Datasets"
+echo "Question: 'Can I filter my documents by processing status?'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Can I filter my documents by processing status?"}' | python3 -m json.tool
+echo ""
+echo ""
+
+# Test 75: Live conversation monitoring
+echo "Test 75: Live Conversation Monitoring"
+echo "Question: 'I want to monitor conversations happening right now'"
+echo "---"
+curl -s -X POST "$BASE_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "I want to monitor conversations happening right now"}' | python3 -m json.tool
+echo ""
+echo ""
+
 echo "=========================================="
 echo "Testing Complete"
 echo "=========================================="
