@@ -51,35 +51,17 @@ Connect via Socket.IO and emit `route:question` events with `{ question: string 
       "url": "/agent/datasets",
       "actions": [
         {
-          "type": "navigate",
-          "target": "/agent/datasets",
-          "description": "Navigate to the datasets page",
-          "stepNumber": 1
-        },
-        {
-          "type": "wait",
-          "waitFor": ".page-container",
-          "description": "Wait for the page to load",
-          "stepNumber": 2
-        },
-        {
           "type": "click",
           "target": "[data-testid='upload-button']",
           "description": "Click on the upload button",
-          "stepNumber": 3
+          "stepNumber": 1
         },
         {
-          "type": "wait",
-          "waitFor": ".upload-modal",
-          "description": "Wait for the upload modal to appear",
-          "stepNumber": 4
-        },
-        {
-          "type": "highlight",
-          "target": "[data-testid='file-input']",
-          "cssSelectors": ["[data-testid='file-input']"],
-          "description": "Highlight the file input field",
-          "stepNumber": 5
+          "type": "text_change",
+          "target": "[data-testid='document-name-input']",
+          "description": "Enter the document name",
+          "value": "My Document",
+          "stepNumber": 2
         }
       ],
       "description": "Step 1: Upload a document",
@@ -91,16 +73,18 @@ Connect via Socket.IO and emit `route:question` events with `{ question: string 
 }
 ```
 
-**Action Types:**
+**Action Types (Supported):**
 
-- `navigate`: Navigate to a URL (target should be the URL)
 - `click`: Click on an element (target should be CSS selector or id)
-- `wait`: Wait for something to load (waitFor should be CSS selector or text)
-- `highlight`: Highlight an element (target and cssSelectors should be CSS selector or id)
-- `type`: Type text into an input (target should be CSS selector, value should be text)
-- `scroll`: Scroll to an element (target should be CSS selector)
+- `text_change`: Change text in an input field (target should be CSS selector or id, value should be the final text to input)
 
-The `routes` array contains sequential navigation steps. Each route can have multiple actions that execute in order.
+**Important Notes:**
+
+- Only the **last route** in the `routes` array can have actions
+- Intermediate routes have empty `actions` arrays
+- Actions execute in order on the final destination page
+- The `target` field is required for all actions
+- The `value` field is required for `text_change` actions
 
 ### REST API
 
@@ -116,17 +100,10 @@ POST to `/api/route` with `{ question: string }` in the request body.
       "url": "/agent/datasets",
       "actions": [
         {
-          "type": "navigate",
-          "target": "/agent/datasets",
-          "description": "Navigate to the datasets page",
+          "type": "click",
+          "target": "[data-testid='create-dataset-button']",
+          "description": "Click to create a new dataset",
           "stepNumber": 1
-        },
-        {
-          "type": "highlight",
-          "target": "[data-testid='datasets-list']",
-          "cssSelectors": ["[data-testid='datasets-list']"],
-          "description": "Highlight the datasets list",
-          "stepNumber": 2
         }
       ],
       "description": "Step 1: View datasets",
