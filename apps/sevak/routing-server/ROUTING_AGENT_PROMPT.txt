@@ -5,51 +5,51 @@ For detailed feature mappings of what can be done on each page, refer to FEATURE
 ## Available Routes
 
 ### Conversations & Chats
-- `/conversations` - All conversations/chat history
-- `/active-conversations` - Live/active conversations happening now
-- `/active-conversations/assigned` - Conversations assigned to user
-- `/active-conversations/pinned` - Pinned/important conversations
-- `/conversations/leads` - Captured leads from conversations
-- `/conversations/link-clicks` - Link click tracking data
-- `/conversations/:sessionID` - Specific conversation details
-- `/active-conversations/live/:sessionID` - Live conversation details
+- `/conversations` - All conversations/chat history. View all conversation history, filter by date/status, search conversations, view conversation details, see prospect information, view SDR assignments, export conversation data
+- `/active-conversations` - Live/active conversations happening now. View active/ongoing conversations in real-time, monitor live chat sessions, see which conversations are happening now, view real-time visitor activity
+- `/active-conversations/assigned` - Conversations assigned to user. View conversations assigned to you, manage your assigned leads, filter by assignment status
+- `/active-conversations/pinned` - Pinned/important conversations. View pinned/important conversations, manage priority conversations, quick access to important leads
+- `/conversations/leads` - Captured leads from conversations. View captured leads, filter and search leads, export lead data, view lead details and contact information, manage lead status, assign leads to team members
+- `/conversations/link-clicks` - Link click tracking data. View link click tracking data, see which links were clicked in conversations, analyze click patterns, track engagement metrics
+- `/conversations/:sessionID` - Specific conversation details. View detailed conversation history for a specific session
+- `/active-conversations/live/:sessionID` - Live conversation details. View real-time details of an active conversation session
 
 ### Agent Configuration
-- `/agent/datasets` - Manage knowledge sources (webpages, documents, videos, slides). Can view overview, upload, edit, delete, re-embed items
-- `/agent/datasets/webpages` - Manage webpages. Upload via URL, edit, delete, re-embed, bulk operations
-- `/agent/datasets/documents` - Manage documents/PDFs. Upload PDFs, create custom documents, edit, delete, re-embed
-- `/agent/datasets/videos` - Manage videos. Upload videos, edit, delete, re-embed, view processing status
-- `/agent/datasets/slides` - Manage slides. Upload slides, edit, delete, re-embed
-- `/agent/workflow` - Agent workflow configuration. Set up automation rules
-- `/agent/branding` - Customize agent appearance. Generate/download llms.txt, change primary color, font style, logo, intro message, orb settings
-- `/agent/controls` - Agent controls. Configure product descriptions, ICP, company persona, agent personality, instructions, response length, support settings
+- `/agent/datasets` - Manage knowledge sources (webpages, documents, videos, slides). View overview of all knowledge sources, see statistics for webpages/documents/videos/slides, navigate to specific dataset types, view upload status and processing information, configure agent controls (product description, ICP, customer persona)
+- `/agent/datasets/webpages` - Manage webpages. Upload new webpages via URL, view list of all webpages, edit webpage details, delete webpages, re-embed webpages (reprocess for training), bulk operations (select multiple, delete, re-embed), view webpage processing status, see webpage statistics (pages processed, last updated), filter and search webpages
+- `/agent/datasets/documents` - Manage documents/PDFs. Upload PDF documents (drag & drop or file picker), create custom documents, view list of all documents, edit document details, delete documents, re-embed documents (reprocess for training), bulk operations (select multiple, delete, re-embed), view document processing status, see document statistics, filter and search documents
+- `/agent/datasets/videos` - Manage videos. Upload video files, view list of all videos, edit video details, delete videos, re-embed videos (reprocess for training), bulk operations (select multiple, delete, re-embed), view video processing status, see video statistics (frames count, last updated), filter and search videos
+- `/agent/datasets/slides` - Manage slides. Upload slide files, view list of all slides, edit slide details, delete slides, re-embed slides (reprocess for training), bulk operations (select multiple, delete, re-embed), view slide processing status, see slide statistics, filter and search slides
+- `/agent/workflow` - Agent workflow configuration. Set up workflow automation rules, manage workflow steps and conditions, configure workflow settings
+- `/agent/branding` - Customize agent appearance. Generate llms.txt files for web data sources (select data source, download generated files, view generation status, regenerate files), change primary color (color picker), change secondary color, set font style (select font family from dropdown), upload agent logo and change agent name, configure agent orb appearance (show/hide orb), set welcome/intro message (add emojis, customize greeting text)
+- `/agent/controls` - Agent controls and behavior. Configure product descriptions (add/edit product names and descriptions, add multiple products, remove products), configure Ideal Customer Persona/ICP (set seniorities/roles, select job functions/departments, choose locations, set max contacts per company, configure targeting criteria for SDRs), configure Ideal Company Persona (set industry targeting, set ATS preferences, configure company size/job openings criteria), define agent personality traits (set interaction style: casual/formal, fun/serious), add custom instructions in plain English (set rules to guide assistant behavior), define ideal response length (control conciseness vs detailed answers), configure support handling (set website URL for help page, add support email address, add support phone number, choose which support methods to enable)
 
 ### Training & Testing
-- `/training/playground` - Test agent responses and preview
-- `/training/playground/preview` - Preview mode
+- `/training/playground` - Test agent responses and preview. Test agent responses, preview agent behavior, try different questions, see real-time agent responses, test agent configuration changes
+- `/training/playground/preview` - Preview mode. Preview mode for testing, see how agent appears to users, test agent in preview environment
 
 ### Analytics
-- `/insights` - Analytics dashboard. View summary metrics, daily/weekly patterns, hourly traffic, frequent sources, top questions, buyer intent, country distribution, product interest, processing time logs. Filter by date range
+- `/insights` - Analytics dashboard. View summary metrics and overall statistics (KPIs), filter insights by date range (preset ranges: Last 7 days, Last 30 days, custom range), view daily session insights (conversation patterns by day, session trends over time), view weekly conversation patterns (distribution by weekday, select specific day to analyze), view hourly traffic by weekday (peak hours analysis, filter by day of week), see frequent sources (most frequent traffic sources, analyze where visitors come from), view top questions asked by users (most common user questions, analyze question patterns), view top questions clicked by users (which suggested questions users click, analyze engagement with suggestions), view buyer intent distribution (buyer intent analysis, see intent distribution charts), view country distribution (visitor distribution by country, analyze geographic patterns), view product interest distribution (product interest metrics, analyze which products users ask about), view conversation processing time log (performance metrics, staff only)
 
 ### Visitor Intelligence
-- `/accounts` - Company/account data
-- `/contacts` - Contact/visitor data
-- `/icp` - Ideal Customer Profile configuration
+- `/accounts` - Company/account data. View company/account data, see company details, filter and search companies, view company information, analyze company data
+- `/contacts` - Contact/visitor data. View contact/visitor data, see visitor information, filter and search contacts, view contact details, manage contact information
+- `/icp` - Ideal Customer Profile configuration. Configure ICP settings, set target customer criteria, manage ideal customer profile configuration
 
 ### AI Features
-- `/blocks` - Manage AI blocks. View all blocks (Ask AI, Book Meeting, Video Library, Summarize), preview blocks, configure global settings (primary color, font style, floating bar, instructions)
-- `/blocks/:blockId` - Configure specific block. Set block visibility, page visibility, block-specific settings (CTAs, form fields, etc.)
+- `/blocks` - Manage AI blocks. View all blocks (Ask AI, Book Meeting, Video Library, Summarize), view block status (published/unpublished), click to configure individual blocks, preview all blocks together to see how they appear to users, configure global settings (primary color for all blocks, font family for blocks, toggle floating bottom bar show/hide, edit agent instructions which navigates to Ask AI block instructions)
+- `/blocks/:blockId` - Configure specific block. Enable/disable block (publish/unpublish), set block title and description, upload block icon, configure page visibility (which pages block appears on, set page-level visibility rules). For Ask AI block: configure agent instructions, add/edit CTAs, configure button labels, set CTA behavior (redirect URL or trigger form). For Book Meeting block: configure meeting form fields, set CTA label. For Video Library block: add/edit videos, configure video library. For Summarize block: configure block-specific settings
 
 ### Settings
-- `/settings/integrations` - Third-party integrations. Connect/disconnect services, toggle integration status, configure OAuth
-- `/settings/calendar` - Calendar management. Add/edit/delete calendars, configure Cal.com, set availability, create event types, connect Google Calendar
-- `/settings/profile` - User profile settings. Edit profile, update account information
-- `/settings/sdr-settings` - Sales development settings. Configure SDR preferences and tools
-- `/settings/members` - Team member management. Add/edit/delete members, manage permissions, set roles
-- `/settings/embeddings` - Embedding scripts/widget code. View and copy installation code
+- `/settings/integrations` - Third-party integrations. View all available integrations, connect third-party services, disconnect integrations, toggle integration status, configure integration settings, view integration connection status, manage OAuth connections, fill integration forms for setup
+- `/settings/calendar` - Calendar management. View all calendars, add new calendar (create managed calendar, connect Cal.com calendar), edit calendar details, delete calendar, see calendar connection status, configure availability (set working hours, configure availability schedule, set timezone), create/edit/delete event types (configure event duration, set event descriptions), connect Google Calendar (OAuth authentication, manage Google Calendar sync)
+- `/settings/profile` - User profile settings. View user profile information, edit profile details (first name, last name, email), update account settings, upload profile picture, delete profile picture, change password (reset password with new password and confirm password)
+- `/settings/sdr-settings` - Sales development settings. Configure SDR (Sales Development Representative) settings, set SDR preferences, edit default intro message, manage SDR configuration, configure sales development tools
+- `/settings/members` - Team member management. View all team members, add new team member (first name, last name, email, access level/role: admin, read-write, read-only), edit member details, delete member, manage member permissions, set member roles, view member information, filter and search members, export member list
+- `/settings/embeddings` - Embedding scripts/widget code. View embedding code/widget code, copy installation script, get embed code for website, configure embedding settings, view installation instructions
 
 ### Configuration
-- `/config` - General configuration settings
+- `/config` - General configuration settings. General system configuration, configure system settings, manage app-wide settings
 
 ## Routing Rules
 
