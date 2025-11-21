@@ -9,6 +9,7 @@
     "dev:agent": "turbo run dev --filter=agent --filter=@breakout/design-system --filter=@meaku/core",
     "dev:admin": "turbo run dev --filter=agent-admin --filter=@breakout/design-system --filter=@meaku/core",
     "dev:scripts": "turbo run dev --filter=scripts",
+    "dev:sevak": "turbo run dev --filter=@sevak/routing-server",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",
