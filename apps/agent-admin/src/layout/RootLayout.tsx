@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import SidebarV2 from '../components/SidebarV2/SidebarV2';
 import usePageRouteState from '../hooks/usePageRouteState';
 import { cn } from '@breakout/design-system/lib/cn';
@@ -7,6 +8,7 @@ import { SidebarProvider } from '../context/SidebarContext';
 import { useAuthInitializer } from '../hooks/useAuthInitializer';
 import { AppRoutesEnum } from '../utils/constants';
 import { SevakChatWidget } from '../components/SevakChatWidget';
+import type { RouteStep } from '@sevak/client';
 
 const RootLayout = () => {
   const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page, isTrainingPlaygroundPreviewPage } =
@@ -23,6 +25,64 @@ const RootLayout = () => {
       navigate(`/${AppRoutesEnum.LOGIN}`, { replace: true });
     }
   }, [shouldRedirectToLogin, isLoginPage, isOAuthCallbackPage, navigate, location.pathname, location.search]);
+
+  // Handle sequential navigation from Sevak routes
+  useEffect(() => {
+    const state = location.state as {
+      sevakRoutes?: RouteStep[];
+      currentRouteIndex?: number;
+      totalRoutes?: number;
+    } | null;
+    if (!state?.sevakRoutes || state.sevakRoutes.length === 0) {
+      // Clear completed routes if navigation is done
+      const hasCompletedRoutes = localStorage.getItem('sevakCompletedRoutes');
+      if (hasCompletedRoutes && !state?.sevakRoutes) {
+        // Navigation completed, keep the completed indices for display
+        return;
+      }
+      return;
+    }
+
+    const routes = state.sevakRoutes;
+    const currentIndex = state.currentRouteIndex ?? 0;
+    const totalRoutes = state.totalRoutes ?? routes.length + currentIndex;
+    const nextRoute = routes[0];
+
+    if (!nextRoute.url) {
+      return;
+    }
+
+    // Mark current route as completed
+    const completedIndices = Array.from({ length: currentIndex + 1 }, (_, i) => i);
+    localStorage.setItem('sevakCompletedRoutes', JSON.stringify(completedIndices));
+
+    // Trigger storage event for same-tab listeners
+    window.dispatchEvent(new Event('storage'));
+
+    // Show toast with description
+    if (nextRoute.description) {
+      toast.success(nextRoute.description, {
+        duration: 5000,
+      });
+    }
+
+    // Wait 5 seconds, then navigate to next route
+    const timeoutId = setTimeout(() => {
+      const remainingRoutes = routes.slice(1);
+      navigate(nextRoute.url!, {
+        state:
+          remainingRoutes.length > 0
+            ? {
+                sevakRoutes: remainingRoutes,
+                currentRouteIndex: currentIndex + 1,
+                totalRoutes,
+              }
+            : undefined,
+      });
+    }, 5000);
+
+    return () => clearTimeout(timeoutId);
+  }, [location.state, navigate]);
 
   const notShowingSidebarCondition =
     !isLoginPage && !isDashboardPage && !isOAuthCallbackPage && !isTrainingPlaygroundPreviewPage;
@@ -70,10 +130,7 @@ const RootLayout = () => {
       </div>
       {/* Chat Widget - only show on authenticated pages */}
       {!isLoginPage && !isOAuthCallbackPage && (
-        <SevakChatWidget
-          serverUrl={import.meta.env.VITE_SEVAK_SERVER_URL || 'http://localhost:8080'}
-          position="bottom-right"
-        />
+        <SevakChatWidget serverUrl={import.meta.env.VITE_SEVAK_SERVER_URL || 'http://localhost:7777'} />
       )}
     </SidebarProvider>
   );

@@ -4,13 +4,62 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { getConversationalResponse } from "./services/grokService.js";
+import {
+  saveChatMessage,
+  getChatHistory,
+  clearChatHistory,
+} from "./services/chatHistoryService.js";
 import type {
   RoutingRequest,
   RoutingResponse,
   Action,
   RouteStep,
   NavigationPathItem,
+  ChatMessage,
+  ChatHistoryResponse,
 } from "./types.js";
+
+/**
+ * Generate navigationPath from routes
+ * Converts RouteStep array into NavigationPathItem array for display
+ */
+function generateNavigationPathFromRoutes(
+  routes: RouteStep[],
+): NavigationPathItem[] {
+  const navigationPath: NavigationPathItem[] = [];
+
+  for (const route of routes) {
+    // Add page navigation item if route has a URL
+    if (route.url) {
+      // Extract page name from URL (e.g., "/agent/datasets" -> "Datasets Page")
+      const urlParts = route.url.split("/").filter(Boolean);
+      const pageName =
+        route.description ||
+        urlParts
+          .map(
+            (part) =>
+              part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, " "),
+          )
+          .join(" ") + " Page";
+      navigationPath.push({
+        label: pageName,
+        type: "page",
+      });
+    }
+
+    // Add action items if route has actions
+    if (route.actions && route.actions.length > 0) {
+      for (const action of route.actions) {
+        navigationPath.push({
+          label: action.description || `Action ${action.stepNumber}`,
+          type: action.type === "click" ? "action" : "action", // Both click and text_change are actions
+        });
+      }
+    }
+  }
+
+  return navigationPath;
+}
 
 const app = express();
 const httpServer = createServer(app);
@@ -54,13 +103,8 @@ app.post("/api/route", async (req, res) => {
 
         const response: RoutingResponse = {
           textResponse: grokResponse.textResponse,
-          navigationPath: grokResponse.navigationPath?.map((item) => ({
-            label: item.label,
-            type:
-              item.type === "page" || item.type === "action"
-                ? item.type
-                : "page",
-          })) as NavigationPathItem[],
+          navigationPath: [], // Initialize, will be populated from routes if available
+          routes: [], // Initialize routes array
           question,
           role: "AGENT", // AI responses are always AGENT role
         };
@@ -178,6 +222,8 @@ app.post("/api/route", async (req, res) => {
     const response: RoutingResponse = {
       textResponse:
         "I'm here to help! However, I need the Groq API key configured to provide detailed responses. Please configure GROK_API_KEY or GROQ_API_KEY in your environment.",
+      navigationPath: [], // Always include navigationPath, even if empty
+      routes: [], // Always include routes, even if empty
       question,
       role: "AGENT", // AI responses are always AGENT role
     };
@@ -194,6 +240,18 @@ app.post("/api/route", async (req, res) => {
 // WebSocket connection handling
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
+  // Use session ID from auth if provided, otherwise use socket.id
+  const sessionId = (socket.handshake.auth?.sessionId as string) || socket.id;
+
+  // Send chat history on connection
+  const history = getChatHistory(sessionId);
+  if (history.length > 0) {
+    const historyResponse: ChatHistoryResponse = {
+      messages: history,
+      sessionId,
+    };
+    socket.emit("chat:history", historyResponse);
+  }
 
   // Handle routing requests via WebSocket
   socket.on("route:question", async (data: RoutingRequest) => {
@@ -207,6 +265,16 @@ io.on("connection", (socket) => {
 
       console.log(`Processing question: "${question}"`);
 
+      // Save user message to history
+      const userMessage: ChatMessage = {
+        id: `msg-${Date.now()}-user`,
+        role: "USER",
+        content: question,
+        timestamp: new Date().toISOString(),
+        question,
+      };
+      saveChatMessage(sessionId, userMessage);
+
       // Try Grok for conversational response
       if (process.env.GROK_API_KEY) {
         try {
@@ -214,6 +282,8 @@ io.on("connection", (socket) => {
 
           const response: RoutingResponse = {
             textResponse: grokResponse.textResponse,
+            navigationPath: [], // Initialize, will be populated from routes if available
+            routes: [], // Initialize routes array
             question,
             role: "AGENT", // AI responses are always AGENT role
           };
@@ -296,6 +366,13 @@ io.on("connection", (socket) => {
 
               return routeStep;
             });
+
+            // Generate navigationPath from routes if routes were added
+            if (response.routes.length > 0) {
+              response.navigationPath = generateNavigationPathFromRoutes(
+                response.routes,
+              );
+            }
           } else if (grokResponse.route) {
             // Legacy single route support (no UI actions, just navigation)
             response.routes = [
@@ -307,7 +384,34 @@ io.on("connection", (socket) => {
                 stepNumber: 1,
               },
             ];
+            // Generate navigationPath from routes
+            response.navigationPath = generateNavigationPathFromRoutes(
+              response.routes,
+            );
+          } else if (grokResponse.navigationPath) {
+            // Use navigationPath from AI if no routes but navigationPath provided
+            response.navigationPath = grokResponse.navigationPath.map(
+              (item) => ({
+                label: item.label,
+                type:
+                  item.type === "page" || item.type === "action"
+                    ? item.type
+                    : "page",
+              }),
+            ) as NavigationPathItem[];
           }
+
+          // Save agent response to history
+          const agentMessage: ChatMessage = {
+            id: `msg-${Date.now()}-agent`,
+            role: "AGENT",
+            content: response.textResponse,
+            timestamp: new Date().toISOString(),
+            navigationPath: response.navigationPath,
+            routes: response.routes,
+            question: response.question,
+          };
+          saveChatMessage(sessionId, agentMessage);
 
           socket.emit("route:response", response);
           return;
@@ -330,9 +434,21 @@ io.on("connection", (socket) => {
       const response: RoutingResponse = {
         textResponse:
           "I'm here to help! However, I need the Grok API key configured to provide detailed responses.",
+        navigationPath: [], // Always include navigationPath, even if empty
+        routes: [], // Always include routes, even if empty
         question,
         role: "AGENT", // AI responses are always AGENT role
       };
+
+      // Save agent response to history
+      const agentMessage: ChatMessage = {
+        id: `msg-${Date.now()}-agent`,
+        role: "AGENT",
+        content: response.textResponse,
+        timestamp: new Date().toISOString(),
+        question: response.question,
+      };
+      saveChatMessage(sessionId, agentMessage);
 
       socket.emit("route:response", response);
     } catch (error) {
@@ -341,6 +457,12 @@ io.on("connection", (socket) => {
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
+  });
+
+  // Handle clear history request
+  socket.on("chat:clear", () => {
+    clearChatHistory(sessionId);
+    socket.emit("chat:cleared", { sessionId });
   });
 
   // Handle disconnection

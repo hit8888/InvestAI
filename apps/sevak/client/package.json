@@ -28,8 +28,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lucide-react": "^0.530.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.4.1",
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {

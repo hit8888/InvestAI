@@ -1,18 +1,20 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useSevakChat } from "../hooks/useSevakChat";
 import { ChatMessage } from "./ChatMessage";
-import type { SevakClientConfig } from "../types";
+import type { SevakClientConfig, RouteStep } from "../types";
 
 export interface ChatInterfaceProps extends SevakClientConfig {
   className?: string;
   placeholder?: string;
   showConnectionStatus?: boolean;
+  navigate?: (path: string, options?: { state?: unknown }) => void;
 }
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   className = "",
   placeholder = "Ask me anything about the dashboard...",
   showConnectionStatus = true,
+  navigate,
   ...config
 }) => {
   const {
@@ -24,8 +26,45 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     clearMessages,
   } = useSevakChat(config);
   const [inputValue, setInputValue] = useState("");
+  const [completedRouteIndices, setCompletedRouteIndices] = useState<number[]>(
+    [],
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleNavigate = (_routes: RouteStep[]) => {
+    // Start navigation - don't disable chat, just track it
+    setCompletedRouteIndices([]);
+  };
+
+  // Listen for route completion updates from localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const stored = localStorage.getItem("sevakCompletedRoutes");
+      if (stored) {
+        try {
+          const indices = JSON.parse(stored) as number[];
+          setCompletedRouteIndices(indices);
+        } catch {
+          // Ignore parse errors
+        }
+      }
+    };
+
+    // Check initial value
+    handleStorageChange();
+
+    // Listen for changes
+    window.addEventListener("storage", handleStorageChange);
+
+    // Also check periodically in case same-tab updates
+    const interval = setInterval(handleStorageChange, 100);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -95,8 +134,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         ) : (
           <>
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
+            {messages.map((message, index) => (
+              <ChatMessage
+                key={message.id}
+                message={message}
+                onNavigate={handleNavigate}
+                isNavigationDisabled={false}
+                navigate={navigate}
+                completedRouteIndices={completedRouteIndices}
+                isLastMessage={index === messages.length - 1 && !isLoading}
+              />
             ))}
             {isLoading && (
               <div className="flex justify-start mb-4">

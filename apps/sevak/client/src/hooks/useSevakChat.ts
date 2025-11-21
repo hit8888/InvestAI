@@ -5,6 +5,7 @@ import type {
   RoutingRequest,
   RoutingResponse,
   SevakClientConfig,
+  ChatHistoryResponse,
 } from "../types";
 
 export interface UseSevakChatReturn {
@@ -22,7 +23,7 @@ export function useSevakChat(
 ): UseSevakChatReturn {
   const {
     serverUrl = import.meta.env.VITE_SEVAK_SERVER_URL ||
-      "http://localhost:8080",
+      "http://localhost:7777",
     onMessage,
     onError,
     onConnect,
@@ -35,17 +36,36 @@ export function useSevakChat(
   const [error, setError] = useState<Error | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const messageIdCounter = useRef(0);
+  const sessionIdRef = useRef<string | null>(null);
+  const historyLoadedRef = useRef(false);
+
+  // Get or create persistent session ID from localStorage
+  const getSessionId = (): string => {
+    const stored = localStorage.getItem("sevak-session-id");
+    if (stored) {
+      return stored;
+    }
+    const newSessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("sevak-session-id", newSessionId);
+    return newSessionId;
+  };
 
   const generateMessageId = () =>
     `msg-${Date.now()}-${++messageIdCounter.current}`;
 
   // Initialize socket connection
   useEffect(() => {
+    const sessionId = getSessionId();
+    sessionIdRef.current = sessionId;
+
     const socket = io(serverUrl, {
       transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: 5,
+      auth: {
+        sessionId, // Send session ID in auth so server can use it
+      },
     });
 
     socketRef.current = socket;
@@ -54,6 +74,22 @@ export function useSevakChat(
       setIsConnected(true);
       setError(null);
       onConnect?.();
+    });
+
+    // Load chat history when server sends it
+    socket.on("chat:history", (historyResponse: ChatHistoryResponse) => {
+      if (
+        historyResponse.messages &&
+        historyResponse.messages.length > 0 &&
+        !historyLoadedRef.current
+      ) {
+        historyLoadedRef.current = true;
+        setMessages(historyResponse.messages);
+        // Call onMessage for each historical message
+        historyResponse.messages.forEach((msg) => {
+          onMessage?.(msg);
+        });
+      }
     });
 
     socket.on("disconnect", () => {
@@ -82,6 +118,7 @@ export function useSevakChat(
         question: response.question,
       };
 
+      // Message is already saved on server, just add to local state
       setMessages((prev) => [...prev, agentMessage]);
       onMessage?.(agentMessage);
     });
@@ -132,7 +169,7 @@ export function useSevakChat(
       setMessages((prev) => [...prev, userMessage]);
       onMessage?.(userMessage);
 
-      // Send to server
+      // Send to server (user message will be saved server-side)
       const request: RoutingRequest = {
         question: question.trim(),
         role: "USER",
@@ -144,7 +181,13 @@ export function useSevakChat(
   );
 
   const clearMessages = useCallback(() => {
+    if (socketRef.current) {
+      // Clear on server
+      socketRef.current.emit("chat:clear");
+    }
+    // Clear local state immediately
     setMessages([]);
+    historyLoadedRef.current = false;
   }, []);
 
   const reconnect = useCallback(() => {

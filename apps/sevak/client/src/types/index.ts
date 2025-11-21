@@ -33,8 +33,8 @@ export interface NavigationPathItem {
 
 export interface RoutingResponse {
   textResponse: string;
-  navigationPath?: NavigationPathItem[]; // Array of navigation steps for visual representation (chips with arrows)
-  routes?: RouteStep[];
+  navigationPath: NavigationPathItem[]; // Array of navigation steps for visual representation (chips with arrows) - always present
+  routes: RouteStep[]; // Always present, empty array if no routes
   question: string;
   role: MessageRole; // "USER" for user messages, "AGENT" for AI responses
 }
@@ -55,4 +55,9 @@ export interface SevakClientConfig {
   onError?: (error: Error) => void;
   onConnect?: () => void;
   onDisconnect?: () => void;
+}
+
+export interface ChatHistoryResponse {
+  messages: ChatMessage[];
+  sessionId: string;
 }
