@@ -205,7 +205,7 @@ io.on("connection", (socket) => {
         return;
       }
 
-      console.log(`Processing question: "${question}" from ${role}`);
+      console.log(`Processing question: "${question}"`);
 
       // Try Grok for conversational response
       if (process.env.GROK_API_KEY) {
