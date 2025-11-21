@@ -4,7 +4,6 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { getConversationalResponse } from "./services/grokService.js";
-import { getCssSelectors } from "./routing/routingEngine.js";
 import type {
   RoutingRequest,
   RoutingResponse,
@@ -71,17 +70,13 @@ app.post("/api/route", async (req, res) => {
           response.routes = grokResponse.routes.map((route, routeIndex) => {
             // Handle string routes (legacy format)
             if (typeof route === "string") {
-              const routeStep: RouteStep = {
+              return {
                 url: route,
+                actions: [],
                 description: `Step ${routeIndex + 1}: Navigate to ${route}`,
                 ctaText: `Go to step ${routeIndex + 1}`,
                 stepNumber: routeIndex + 1,
               };
-
-              // Only add actions to the last route (but legacy format doesn't have UI actions)
-              routeStep.actions = [];
-
-              return routeStep;
             }
 
             // Handle route object
@@ -104,20 +99,27 @@ app.post("/api/route", async (req, res) => {
               let actionStepNumber = 1;
               routeStep.actions = routeObj.actions
                 .filter(
-                  (action) =>
-                    action.type === "click" || action.type === "text_change",
+                  (
+                    action,
+                  ): action is typeof action & {
+                    type: "click" | "text_change";
+                  } => action.type === "click" || action.type === "text_change",
                 ) // Only allow click and text_change
                 .map((action) => {
+                  // Target is required for both action types
+                  if (!action.target) {
+                    console.warn(
+                      `Action missing target field, skipping action: ${action.description}`,
+                    );
+                    return null;
+                  }
+
                   const processedAction: Action = {
-                    type: action.type,
+                    type: action.type as "click" | "text_change",
+                    target: action.target,
                     description: action.description,
                     stepNumber: actionStepNumber++,
                   };
-
-                  // Set target (required for both action types)
-                  if (action.target) {
-                    processedAction.target = action.target;
-                  }
 
                   // For text_change actions, require value field
                   if (action.type === "text_change") {
@@ -140,26 +142,11 @@ app.post("/api/route", async (req, res) => {
             return routeStep;
           });
         } else if (grokResponse.route) {
-          // Legacy single route support (only route, so it gets actions)
-          const cssSelectors = getCssSelectors(grokResponse.route);
+          // Legacy single route support (no actions, just navigation)
           response.routes = [
             {
               url: grokResponse.route,
-              actions: [
-                {
-                  type: "navigate",
-                  target: grokResponse.route,
-                  description: `Navigate to ${grokResponse.route}`,
-                  stepNumber: 1,
-                },
-                {
-                  type: "highlight",
-                  target: grokResponse.route,
-                  cssSelectors,
-                  description: "Page loaded",
-                  stepNumber: 2,
-                },
-              ],
+              actions: [],
               description: `Navigate to ${grokResponse.route}`,
               ctaText: grokResponse.ctaText || "Go to page",
               stepNumber: 1,
@@ -230,27 +217,13 @@ io.on("connection", (socket) => {
 
           // Add routes if available (supporting both single and multiple routes)
           if (grokResponse.routes && grokResponse.routes.length > 0) {
+            const totalRoutes = grokResponse.routes.length;
             response.routes = grokResponse.routes.map((route, routeIndex) => {
               // Handle string routes (legacy format)
               if (typeof route === "string") {
-                const cssSelectors = getCssSelectors(route);
                 return {
                   url: route,
-                  actions: [
-                    {
-                      type: "navigate",
-                      target: route,
-                      description: `Navigate to ${route}`,
-                      stepNumber: 1,
-                    },
-                    {
-                      type: "highlight",
-                      target: route,
-                      cssSelectors,
-                      description: "Page loaded",
-                      stepNumber: 2,
-                    },
-                  ],
+                  actions: [],
                   description: `Step ${routeIndex + 1}: Navigate to ${route}`,
                   ctaText: `Go to step ${routeIndex + 1}`,
                   stepNumber: routeIndex + 1,
@@ -259,6 +232,7 @@ io.on("connection", (socket) => {
 
               // Handle route object
               const routeObj = route;
+              const isLastRoute = routeIndex === totalRoutes - 1;
               const routeStep: RouteStep = {
                 url: routeObj.url,
                 actions: [],
@@ -267,66 +241,55 @@ io.on("connection", (socket) => {
                 stepNumber: routeIndex + 1,
               };
 
-              // Process actions if provided
-              if (routeObj.actions && Array.isArray(routeObj.actions)) {
+              // Only process actions if this is the LAST route
+              if (
+                isLastRoute &&
+                routeObj.actions &&
+                Array.isArray(routeObj.actions)
+              ) {
                 let actionStepNumber = 1;
-                routeStep.actions = routeObj.actions.map((action) => {
-                  const processedAction: Action = {
-                    type: action.type,
-                    description: action.description,
-                    stepNumber: actionStepNumber++,
-                  };
+                routeStep.actions = routeObj.actions
+                  .filter(
+                    (
+                      action,
+                    ): action is typeof action & {
+                      type: "click" | "text_change";
+                    } =>
+                      action.type === "click" || action.type === "text_change",
+                  ) // Only allow click and text_change
+                  .map((action) => {
+                    // Target is required for both action types
+                    if (!action.target) {
+                      console.warn(
+                        `Action missing target field, skipping action: ${action.description}`,
+                      );
+                      return null;
+                    }
 
-                  // Set target based on action type
-                  if (action.target) {
-                    processedAction.target = action.target;
-                  }
+                    const processedAction: Action = {
+                      type: action.type as "click" | "text_change",
+                      target: action.target,
+                      description: action.description,
+                      stepNumber: actionStepNumber++,
+                    };
 
-                  // For navigate actions, ensure URL is set
-                  if (action.type === "navigate" && action.target) {
-                    routeStep.url = action.target;
-                  }
+                    // For text_change actions, require value field
+                    if (action.type === "text_change") {
+                      if (action.value) {
+                        processedAction.value = action.value;
+                      } else {
+                        console.warn(
+                          `text_change action missing value field, skipping action: ${action.description}`,
+                        );
+                        return null;
+                      }
+                    }
 
-                  // For highlight actions, get CSS selectors
-                  if (action.type === "highlight") {
-                    const selector = action.cssSelector || action.target || "";
-                    processedAction.cssSelectors = selector
-                      ? [selector, ...getCssSelectors(selector)]
-                      : getCssSelectors(routeObj.url || "");
-                    processedAction.target = selector || action.target;
-                  }
-
-                  // For wait actions
-                  if (action.type === "wait" && action.waitFor) {
-                    processedAction.waitFor = action.waitFor;
-                  }
-
-                  // For type actions
-                  if (action.type === "type" && action.value) {
-                    processedAction.value = action.value;
-                  }
-
-                  return processedAction;
-                });
-              } else if (routeObj.url) {
-                // If no actions but has URL, create a navigate action
-                const cssSelectors = getCssSelectors(routeObj.url);
-                routeStep.actions = [
-                  {
-                    type: "navigate",
-                    target: routeObj.url,
-                    description: `Navigate to ${routeObj.url}`,
-                    stepNumber: 1,
-                  },
-                  {
-                    type: "highlight",
-                    target: routeObj.url,
-                    cssSelectors,
-                    description: "Page loaded",
-                    stepNumber: 2,
-                  },
-                ];
+                    return processedAction;
+                  })
+                  .filter((action): action is Action => action !== null); // Remove null actions
               }
+              // Intermediate routes have empty actions array (no actions)
 
               return routeStep;
             });

@@ -52,7 +52,7 @@ interface GrokResponse {
 }
 
 interface GrokAction {
-  type: "navigate" | "click" | "wait" | "highlight" | "type" | "scroll";
+  type: "click" | "text_change";
   target?: string;
   description: string;
   cssSelector?: string;
@@ -261,7 +261,7 @@ Respond with ONLY a valid JSON object matching the format above.`;
           .trim();
       };
 
-      // Handle legacy single route format and convert to routes array with actions
+      // Handle legacy single route format and convert to routes array (no actions)
       if (parsed.route && typeof parsed.route === "string" && !parsed.routes) {
         const cleanRoute = cleanUrl(parsed.route);
         const finalUrl = cleanRoute.startsWith("/")
@@ -271,13 +271,7 @@ Respond with ONLY a valid JSON object matching the format above.`;
         parsed.routes = [
           {
             url: finalUrl,
-            actions: [
-              {
-                type: "navigate",
-                target: finalUrl,
-                description: `Navigate to ${finalUrl}`,
-              },
-            ],
+            actions: [],
             description: `Navigate to ${finalUrl}`,
             ctaText: parsed.ctaText || "Go to page",
           },
@@ -297,13 +291,7 @@ Respond with ONLY a valid JSON object matching the format above.`;
 
             return {
               url: finalUrl,
-              actions: [
-                {
-                  type: "navigate" as const,
-                  target: finalUrl,
-                  description: `Navigate to ${finalUrl}`,
-                },
-              ],
+              actions: [],
               description: `Step ${routeIndex + 1}: Navigate to ${finalUrl}`,
               ctaText: `Go to step ${routeIndex + 1}`,
             };
@@ -320,40 +308,24 @@ Respond with ONLY a valid JSON object matching the format above.`;
               : `/${cleanRoute}`;
           }
 
-          // Process actions if provided
+          // Process actions if provided - only allow click and text_change
           if (routeObj.actions && Array.isArray(routeObj.actions)) {
-            routeObj.actions = routeObj.actions.map((action, _actionIndex) => {
-              // Clean up targets
-              if (action.target) {
-                action.target = cleanUrl(action.target);
-              }
-              if (action.waitFor) {
-                action.waitFor = cleanUrl(action.waitFor);
-              }
-              if (action.cssSelector) {
-                action.cssSelector = cleanUrl(action.cssSelector);
-              }
+            routeObj.actions = routeObj.actions
+              .filter(
+                (action): action is GrokAction =>
+                  action.type === "click" || action.type === "text_change",
+              )
+              .map((action) => {
+                // Clean up targets
+                if (action.target) {
+                  action.target = cleanUrl(action.target);
+                }
 
-              // Ensure navigate actions have URL in target
-              if (
-                action.type === "navigate" &&
-                routeObj.url &&
-                !action.target
-              ) {
-                action.target = routeObj.url;
-              }
-
-              return action;
-            });
-          } else if (routeObj.url) {
-            // If no actions but has URL, create a navigate action
-            routeObj.actions = [
-              {
-                type: "navigate",
-                target: routeObj.url,
-                description: `Navigate to ${routeObj.url}`,
-              },
-            ];
+                return action;
+              });
+          } else {
+            // Ensure actions array exists (empty if no actions provided)
+            routeObj.actions = [];
           }
 
           // Set defaults
