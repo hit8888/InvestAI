@@ -85,6 +85,7 @@ const UploadPictureButton = ({ onUpload, isUploading }: UploadPictureButtonProps
         outputMimeType={selectedFile?.type || 'image/png'}
       />
       <Button
+        id="profile-upload-picture-button"
         variant="primary"
         buttonStyle="leftIcon"
         leftIcon={<UploadPictureIcon />}
@@ -126,6 +127,7 @@ const DeleteProfilePicButton = ({ onDelete, isDeleting, hasProfilePicture }: Del
     <Dialog open={showDeleteProfilePicDialog} onOpenChange={setShowDeleteProfilePicDialog}>
       <DialogTrigger asChild>
         <Button
+          id="profile-delete-picture-button"
           variant="destructive_tertiary"
           buttonStyle="icon"
           leftIcon={<DeleteIcon />}
@@ -142,10 +144,16 @@ const DeleteProfilePicButton = ({ onDelete, isDeleting, hasProfilePicture }: Del
           </Typography>
         </div>
         <div className="mt-2 flex w-full justify-between gap-6">
-          <Button className="w-full" variant="secondary" onClick={handleCloseDeleteProfilePicDialog}>
+          <Button
+            id="profile-delete-picture-cancel-button"
+            className="w-full"
+            variant="secondary"
+            onClick={handleCloseDeleteProfilePicDialog}
+          >
             Cancel
           </Button>
           <Button
+            id="profile-delete-picture-confirm-button"
             className="w-full"
             variant="destructive"
             buttonStyle="rightIcon"

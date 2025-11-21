@@ -120,7 +120,13 @@ const CalendarForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input autoFocus={true} autoComplete="on" placeholder="Enter calendar name" {...field} />
+                  <Input
+                    id="calendar-form-name-input"
+                    autoFocus={true}
+                    autoComplete="on"
+                    placeholder="Enter calendar name"
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -134,6 +140,7 @@ const CalendarForm = ({
                 <FormItem className="w-full">
                   <FormControl>
                     <AgentDropdown
+                      id="calendar-form-type-dropdown"
                       options={CALENDAR_TYPES}
                       defaultValue={defaultCalendarValue}
                       allowDeselect={false}
@@ -154,6 +161,7 @@ const CalendarForm = ({
                 <FormItem className="w-full">
                   <FormControl>
                     <AgentDropdown
+                      id="calendar-form-timezone-dropdown"
                       options={COMMON_TIMEZONES}
                       defaultValue={defaultTimezoneValue}
                       allowDeselect={false}
@@ -174,7 +182,7 @@ const CalendarForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="https://example.com/calendar" {...field} />
+                  <Input id="calendar-form-url-input" placeholder="https://example.com/calendar" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -187,6 +195,7 @@ const CalendarForm = ({
               <FormItem>
                 <FormControl>
                   <TextArea
+                    id="calendar-form-description-textarea"
                     placeholder="Enter calendar description"
                     rows={3}
                     className="rounded-lg focus:ring-2 focus:ring-primary"
@@ -205,13 +214,13 @@ const CalendarForm = ({
                 <FormControl>
                   <span className="flex items-center gap-2">
                     <Checkbox
-                      id="is_primary"
+                      id="calendar-form-primary-checkbox"
                       checked={field.value}
                       className="flex h-4 w-4 items-center justify-center rounded-sm border-gray-400 data-[state=checked]:border-none"
                       onCheckedChange={field.onChange}
                       haveBlackBackground={false}
                     />
-                    <Label htmlFor="is_primary" className="text-gray-900">
+                    <Label htmlFor="calendar-form-primary-checkbox" className="text-gray-900">
                       Set as primary calendar
                     </Label>
                   </span>
@@ -222,10 +231,21 @@ const CalendarForm = ({
         </div>
 
         <div className="flex justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={onCancel} disabled={isSubmitting}>
+          <Button
+            id="calendar-form-cancel-button"
+            type="button"
+            variant="secondary"
+            onClick={onCancel}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
-          <Button variant="primary" type="submit" disabled={isSubmitting || !checkIsFormDataValuesChanged}>
+          <Button
+            id="calendar-form-save-button"
+            variant="primary"
+            type="submit"
+            disabled={isSubmitting || !checkIsFormDataValuesChanged}
+          >
             {isSubmitting ? 'Saving...' : submitButtonText}
           </Button>
         </div>

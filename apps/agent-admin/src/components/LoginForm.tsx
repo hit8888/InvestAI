@@ -134,6 +134,7 @@ const LoginForm = () => {
       <div className="flex w-full max-w-md flex-col justify-center gap-6">
         {(showOtpField || showNeedHelpField) && (
           <button
+            id="login-return-back-button"
             className="absolute left-4 top-0 px-4 py-3 text-sm font-semibold text-primary"
             onClick={handleReturnBack}
           >
@@ -147,6 +148,7 @@ const LoginForm = () => {
           <div className="flex w-full flex-col items-center self-stretch">
             <div className="flex w-full rounded-custom-50 bg-gray-100 p-1">
               <button
+                id="login-otp-toggle-button"
                 onClick={handleToggleShowOtpLogin}
                 className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
                   showGenerateOtpField ? 'bg-white text-primary shadow' : 'text-gray-500'
@@ -155,6 +157,7 @@ const LoginForm = () => {
                 Log in with a code
               </button>
               <button
+                id="login-password-toggle-button"
                 onClick={handleToggleShowOtpLogin}
                 className={`flex-1 rounded-custom-50 px-4 py-2 text-sm font-medium ${
                   showPasswordField ? 'bg-white text-primary shadow' : 'text-gray-500'
@@ -200,6 +203,7 @@ const LoginForm = () => {
               <hr className="flex-grow border-[#DCDAF8]" />
             </div>
             <button
+              id="login-google-button"
               onClick={initAuth}
               className="flex w-full items-center justify-center gap-2 self-stretch rounded-lg border border-gray-300 py-3 pl-2 pr-4 text-sm font-medium text-slate-800 hover:bg-gray-50"
             >
@@ -217,6 +221,7 @@ const LoginForm = () => {
       </div>
       {!showNeedHelpField && (
         <button
+          id="login-need-help-button"
           className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1 text-sm font-normal text-primary/60"
           onClick={() => setAuthMode('needHelp')}
         >

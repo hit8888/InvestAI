@@ -35,6 +35,7 @@ const IcpForm = React.memo(
       {/* Save Button */}
       <div className="flex justify-end">
         <Button
+          id="controls-icp-save-button"
           type="submit"
           variant="system"
           buttonStyle="rightIcon"

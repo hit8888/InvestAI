@@ -82,7 +82,7 @@ const DisplayAndEditDataSourceDetails = ({
   };
 
   return (
-    <div className="flex h-full max-h-full w-full flex-col gap-4 overflow-auto p-4" id="datasource-container">
+    <div className="flex h-full max-h-full w-full flex-col gap-4 overflow-auto p-4">
       <AssetDisplaySection asset={asset} />
       <TitleSectionEditDrawer key={`title-${id}`} {...commonProps} />
       <DescriptionSectionEditDrawer key={`data-${id}`} {...commonProps} />
@@ -91,6 +91,7 @@ const DisplayAndEditDataSourceDetails = ({
       <div className="sticky -bottom-4 z-10 flex w-full justify-end bg-white">
         <div className="flex w-full justify-between py-3">
           <Button
+            id="datasource-add-question-button"
             variant="secondary"
             onClick={handleAddQuestion}
             leftIcon={<PlusIcon className="h-4 w-4" />}
@@ -103,6 +104,7 @@ const DisplayAndEditDataSourceDetails = ({
           </Button>
 
           <Button
+            id="datasource-save-button"
             variant="primary"
             onClick={handleSave}
             disabled={isSaving || !hasChanges}

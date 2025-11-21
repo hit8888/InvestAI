@@ -29,7 +29,10 @@ const ExportDownload = ({ page, payloadData }: DownloadProps) => {
 
   return (
     <Popover open={downloadOpen} onOpenChange={setDownloadOpen}>
-      <PopoverTrigger className="popover-styling border-gray-200-styling inline-flex items-center justify-center gap-2">
+      <PopoverTrigger
+        id={`table-${page}-export-button`}
+        className="popover-styling border-gray-200-styling inline-flex items-center justify-center gap-2"
+      >
         <DownloadIcon className="h-6 w-6 text-system" />
       </PopoverTrigger>
 

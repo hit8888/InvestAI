@@ -16,7 +16,12 @@ const CreateCustomDocumentButton = () => {
 
   return (
     <>
-      <Button onClick={handleCreateCustomDocument} variant="primary" buttonStyle="rightIcon">
+      <Button
+        id="datasets-create-custom-document-button"
+        onClick={handleCreateCustomDocument}
+        variant="primary"
+        buttonStyle="rightIcon"
+      >
         Create
         <PencilIcon className="h-4 w-4 text-white" />
       </Button>

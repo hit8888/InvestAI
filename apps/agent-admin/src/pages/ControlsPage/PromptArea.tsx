@@ -230,6 +230,7 @@ const PromptArea = ({
         localPrompts.map((prompt, index) => (
           <div key={`new-prompt-${index}-${prompt.agent_id}`} className="flex w-full items-center justify-center gap-2">
             <ResizeTextarea
+              id={`controls-prompt-${index}-textarea`}
               value={prompt.prompt}
               minHeight={125}
               onChange={(e) => handlePromptChange(index, e.target.value)}
@@ -238,7 +239,12 @@ const PromptArea = ({
               className="flex w-full items-center rounded-lg p-2 placeholder:text-gray-400
               focus:border focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-300"
             />
-            <Button buttonStyle={'icon'} variant={'tertiary'} onClick={() => handleDeletePrompt(index)}>
+            <Button
+              id={`controls-prompt-${index}-delete-button`}
+              buttonStyle={'icon'}
+              variant={'tertiary'}
+              onClick={() => handleDeletePrompt(index)}
+            >
               <DeleteIcon width={'16px'} height={'16px'} className="text-destructive-1000" />
             </Button>
           </div>

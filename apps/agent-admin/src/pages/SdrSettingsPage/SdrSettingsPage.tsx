@@ -84,6 +84,7 @@ const SdrSettingsPage = () => {
 
             <div className="flex w-full flex-row gap-4 rounded-lg border border-gray-300 bg-white px-4 py-3">
               <TextArea
+                id="sdr-settings-message-textarea"
                 ref={textareaRef}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -97,6 +98,7 @@ const SdrSettingsPage = () => {
 
             <div className="flex w-full justify-end">
               <Button
+                id="sdr-settings-edit-save-button"
                 variant="primary"
                 size="small"
                 onClick={isEditing ? handleSave : handleEdit}

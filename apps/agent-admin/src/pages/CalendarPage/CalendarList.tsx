@@ -99,7 +99,13 @@ const CalendarList = () => {
           />
         ))}
         <div className="flex w-full justify-end">
-          <Button buttonStyle="rightIcon" rightIcon={<Plus />} variant="primary" onClick={() => setShowAddForm(true)}>
+          <Button
+            id="calendar-add-button"
+            buttonStyle="rightIcon"
+            rightIcon={<Plus />}
+            variant="primary"
+            onClick={() => setShowAddForm(true)}
+          >
             Add
           </Button>
         </div>
@@ -123,7 +129,7 @@ const CalendarList = () => {
       <Typography variant="body-14" textColor="gray500">
         Add a new calendar to manage your availability
       </Typography>
-      <Button variant="primary" onClick={() => setShowAddForm(true)}>
+      <Button id="calendar-add-empty-state-button" variant="primary" onClick={() => setShowAddForm(true)}>
         Add Calendar
       </Button>
     </Card>

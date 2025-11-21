@@ -129,6 +129,7 @@ const PrimaryColorSection = ({
       <div className="flex items-center gap-3 rounded-lg border border-gray-300 bg-white py-3 pl-3 pr-4">
         <ColorPicker color={primaryColor} onChange={handleColorChange} sizeClass="h-6 w-6" />
         <Input
+          id="blocks-global-settings-primary-color-input"
           className="h-5 flex-1 border-none bg-transparent p-0 text-sm text-gray-800 outline-none focus:ring-0"
           value={primaryColor}
           onChange={handleColorChange}
@@ -228,7 +229,13 @@ const InstructionsCard = ({ onEdit }: { onEdit: () => void }) => {
             Create custom rules to guide the assistant’s behavior using plain English.
           </Typography>
         </div>
-        <Button onClick={onEdit} variant="system" buttonStyle="rightIcon" rightIcon={<ArrowRight />}>
+        <Button
+          id="blocks-global-settings-instructions-edit-button"
+          onClick={onEdit}
+          variant="system"
+          buttonStyle="rightIcon"
+          rightIcon={<ArrowRight />}
+        >
           Edit
         </Button>
       </div>

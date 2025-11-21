@@ -29,6 +29,7 @@ const Dashboard = () => {
       <div className="flex w-96 flex-col justify-center gap-6 pt-24">
         <div className="w-full text-center text-4xl font-semibold text-primary">Dashboard</div>
         <CustomFilterDropdown
+          id="dashboard-organization-dropdown"
           options={organizationsOptions}
           filterLabel="Select Organization"
           onCallback={handleSelectOrganization}

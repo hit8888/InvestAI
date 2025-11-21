@@ -41,7 +41,11 @@ const CommonUploadDataSourcesButton = () => {
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button variant={'primary'} buttonStyle={'rightIcon'}>
+        <Button
+          id={`datasets-upload-${selectedType?.toLowerCase() || 'source'}-button`}
+          variant={'primary'}
+          buttonStyle={'rightIcon'}
+        >
           Upload {sourceLabel}
           <AddMorePlusIcon width="16" height="16" />
         </Button>

@@ -48,6 +48,7 @@ const SingleCheckboxAndInputContainer = ({
             render={({ field }) => (
               <Input
                 {...field}
+                id={fieldName}
                 className={`w-full ${error ? 'border-destructive-1000' : ''}`}
                 placeholder={placeholder}
               />

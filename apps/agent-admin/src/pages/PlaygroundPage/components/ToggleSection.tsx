@@ -30,6 +30,7 @@ const ToggleSection: React.FC<ToggleSectionProps> = ({ field, label, tooltip }) 
         <FormItem>
           <FormControl>
             <Switch
+              id={`playground-${field.name}-toggle`}
               checked={field.value}
               onCheckedChange={field.onChange}
               className="data-[state=checked]:bg-gray-900"

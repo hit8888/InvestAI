@@ -9,6 +9,7 @@ const InputFieldContainer = ({ name, label, placeholder, value, onChange }: Inpu
       <div className="flex w-full flex-col items-start gap-2">
         <Typography variant="label-16-medium">{label}</Typography>
         <Input
+          id={`profile-${name.toLowerCase().replace(/\s+/g, '-')}-input`}
           name={name}
           className="w-full bg-white px-4 py-3 text-customPrimaryText placeholder:text-gray-400 focus:border-gray-400"
           placeholder={placeholder}

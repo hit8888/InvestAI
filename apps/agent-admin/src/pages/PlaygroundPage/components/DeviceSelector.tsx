@@ -13,7 +13,11 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = ({ deviceType, onDeviceTyp
   return (
     <Popover open={isDevicePopoverOpen} onOpenChange={setIsDevicePopoverOpen}>
       <PopoverTrigger asChild>
-        <button type="button" className="flex h-8 cursor-pointer items-center gap-2 rounded-lg bg-gray-100 px-2 py-1">
+        <button
+          id="playground-device-selector-button"
+          type="button"
+          className="flex h-8 cursor-pointer items-center gap-2 rounded-lg bg-gray-100 px-2 py-1"
+        >
           {deviceType === 'desktop' ? <Monitor className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
         </button>
       </PopoverTrigger>
@@ -24,6 +28,7 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = ({ deviceType, onDeviceTyp
       >
         <div className="flex flex-col">
           <div
+            id="playground-device-desktop-option"
             className={`flex cursor-pointer items-center gap-2 rounded-lg ${deviceType === 'desktop' ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-50'} px-4 py-2`}
             onClick={() => {
               onDeviceTypeChange('desktop');
@@ -34,6 +39,7 @@ const DeviceSelector: React.FC<DeviceSelectorProps> = ({ deviceType, onDeviceTyp
             <span className="text-sm">Desktop</span>
           </div>
           <div
+            id="playground-device-mobile-option"
             className={`flex cursor-pointer items-center gap-2 rounded-lg ${deviceType === 'mobile' ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-50'} px-4 py-2`}
             onClick={() => {
               onDeviceTypeChange('mobile');

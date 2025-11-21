@@ -47,6 +47,7 @@ const UserFormFields = ({
             render={({ field }) => (
               <Input
                 {...field}
+                id="members-first-name-input"
                 placeholder="Enter first name"
                 disabled={isPending}
                 onKeyDown={onKeyDown}
@@ -71,6 +72,7 @@ const UserFormFields = ({
             render={({ field }) => (
               <Input
                 {...field}
+                id="members-last-name-input"
                 placeholder="Enter last name"
                 disabled={isPending}
                 onKeyDown={onKeyDown}
@@ -100,6 +102,7 @@ const UserFormFields = ({
               render={({ field }) => (
                 <Input
                   {...field}
+                  id="members-email-input"
                   placeholder="name@example.com"
                   disabled={isPending}
                   onKeyDown={onKeyDown}

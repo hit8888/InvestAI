@@ -193,10 +193,22 @@ const UserModal = (props: UserModalProps) => {
           />
 
           <DialogFooter className="mt-2 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-            <Button variant="secondary" onClick={onClose} disabled={isSaving} className="w-full sm:w-auto">
+            <Button
+              id="members-cancel-button"
+              variant="secondary"
+              onClick={onClose}
+              disabled={isSaving}
+              className="w-full sm:w-auto"
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="primary" disabled={isSubmitDisabled} className="w-full sm:w-auto">
+            <Button
+              id="members-save-button"
+              type="submit"
+              variant="primary"
+              disabled={isSubmitDisabled}
+              className="w-full sm:w-auto"
+            >
               {isSaving ? 'Saving...' : 'Save'}
             </Button>
           </DialogFooter>

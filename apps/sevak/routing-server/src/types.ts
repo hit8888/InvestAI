@@ -1,5 +1,8 @@
+export type MessageRole = "USER" | "AGENT";
+
 export interface RoutingRequest {
   question: string;
+  role?: MessageRole; // Optional, defaults to "USER" if not provided
 }
 
 export type ActionType = "click" | "text_change";
@@ -32,4 +35,5 @@ export interface RoutingResponse {
   navigationPath?: NavigationPathItem[]; // Array of navigation steps for visual representation (chips with arrows)
   routes?: RouteStep[];
   question: string;
+  role: MessageRole; // "USER" for user messages, "AGENT" for AI responses
 }

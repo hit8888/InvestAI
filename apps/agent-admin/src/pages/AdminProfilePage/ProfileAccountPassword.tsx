@@ -33,7 +33,9 @@ const ResetPasswordButton = () => {
   return (
     <Dialog open={showResetPasswordDialog} onOpenChange={setShowResetPasswordDialog}>
       <DialogTrigger asChild>
-        <Button variant="secondary">Reset Password</Button>
+        <Button id="profile-reset-password-button" variant="secondary">
+          Reset Password
+        </Button>
       </DialogTrigger>
       <DialogContent className="fixed left-1/2 top-1/2 max-w-[420px] -translate-x-1/2 -translate-y-1/2 !gap-6 !rounded-2xl border border-gray-300 bg-white p-4 shadow-2xl">
         <div className="flex w-full flex-col gap-2">
@@ -51,6 +53,7 @@ const ResetPasswordButton = () => {
               return (
                 <div key={field.name} className="flex flex-col gap-1">
                   <Input
+                    id={`profile-reset-password-${field.valueKey}-input`}
                     className={`w-full border bg-white px-4 py-3 text-customPrimaryText placeholder:text-gray-400 focus:ring-0 ${
                       fieldError
                         ? 'border-destructive-500 focus:border-destructive-500'
@@ -72,6 +75,7 @@ const ResetPasswordButton = () => {
           </div>
           <div className="mt-2 flex w-full justify-between gap-6">
             <Button
+              id="profile-reset-password-cancel-button"
               className="w-full"
               variant="secondary"
               type="button"
@@ -80,7 +84,13 @@ const ResetPasswordButton = () => {
             >
               Cancel
             </Button>
-            <Button className="w-full" variant="primary" type="submit" disabled={isLoading || !canSubmit()}>
+            <Button
+              id="profile-reset-password-save-button"
+              className="w-full"
+              variant="primary"
+              type="submit"
+              disabled={isLoading || !canSubmit()}
+            >
               {isLoading ? 'Changing Password...' : 'Save Changes'}
             </Button>
           </div>

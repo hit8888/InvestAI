@@ -62,6 +62,7 @@ app.post("/api/route", async (req, res) => {
                 : "page",
           })) as NavigationPathItem[],
           question,
+          role: "AGENT", // AI responses are always AGENT role
         };
 
         // Add routes if available (supporting both single and multiple routes)
@@ -178,6 +179,7 @@ app.post("/api/route", async (req, res) => {
       textResponse:
         "I'm here to help! However, I need the Groq API key configured to provide detailed responses. Please configure GROK_API_KEY or GROQ_API_KEY in your environment.",
       question,
+      role: "AGENT", // AI responses are always AGENT role
     };
 
     res.json(response);
@@ -203,7 +205,7 @@ io.on("connection", (socket) => {
         return;
       }
 
-      console.log(`Processing question: "${question}"`);
+      console.log(`Processing question: "${question}" from ${role}`);
 
       // Try Grok for conversational response
       if (process.env.GROK_API_KEY) {
@@ -213,6 +215,7 @@ io.on("connection", (socket) => {
           const response: RoutingResponse = {
             textResponse: grokResponse.textResponse,
             question,
+            role: "AGENT", // AI responses are always AGENT role
           };
 
           // Add routes if available (supporting both single and multiple routes)
@@ -328,6 +331,7 @@ io.on("connection", (socket) => {
         textResponse:
           "I'm here to help! However, I need the Grok API key configured to provide detailed responses.",
         question,
+        role: "AGENT", // AI responses are always AGENT role
       };
 
       socket.emit("route:response", response);

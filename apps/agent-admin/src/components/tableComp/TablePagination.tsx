@@ -51,6 +51,7 @@ const TablePagination: React.FC<PaginationProps> = ({
         <div className="flex items-start gap-2">
           {/* Items per page dropdown */}
           <CustomFilterDropdown
+            id={`table-${tableType}-page-size-dropdown`}
             options={paginationPerPageOptions}
             filterLabel={`${itemsPerPage}`}
             staticValue="per page"

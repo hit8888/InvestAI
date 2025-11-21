@@ -42,6 +42,7 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
           content="Start a new session with existing configuration"
           trigger={
             <button
+              id="playground-header-refresh-button"
               onClick={onRefresh}
               disabled={isRefreshDisabled}
               className={cn('flex h-8 items-center gap-2 rounded-lg bg-gray-100 px-2 py-1', {
@@ -58,6 +59,7 @@ const PlaygroundHeader: React.FC<PlaygroundHeaderProps> = ({
       </div>
       {/* Collapse button */}
       <button
+        id="playground-header-collapse-button"
         onClick={onToggleCollapse}
         className="absolute -right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition-colors hover:bg-gray-50"
       >

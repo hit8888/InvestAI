@@ -202,6 +202,7 @@ const LLMsTxtContainer = () => {
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button
+              id="branding-llms-txt-generate-button"
               onClick={handleGenerate}
               disabled={isGenerating || isInProgress}
               variant={isCompleted ? 'secondary' : 'primary'}
@@ -214,6 +215,7 @@ const LLMsTxtContainer = () => {
 
             {isCompleted && (
               <Button
+                id="branding-llms-txt-download-button"
                 onClick={handleDownload}
                 disabled={isDownloading}
                 variant="primary"

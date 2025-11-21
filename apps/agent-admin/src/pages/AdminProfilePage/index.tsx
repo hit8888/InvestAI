@@ -52,6 +52,7 @@ const AdminProfilePage = () => {
       <div className="flex w-full flex-col gap-8">
         <div className="flex w-full justify-end">
           <Button
+            id="profile-save-details-button"
             variant="primary"
             className="px-6"
             onClick={handleSaveProfileDetails}

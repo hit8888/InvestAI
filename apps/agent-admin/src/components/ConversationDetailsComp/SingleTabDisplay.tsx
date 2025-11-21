@@ -11,8 +11,11 @@ type IProps = {
 };
 
 const SingleTabDisplay = ({ isTabSelected, tabLabel, children, handleTabClick }: IProps) => {
+  // Generate ID from tab label (sanitized)
+  const tabId = tabLabel.toLowerCase().replace(/\s+/g, '-');
   return (
     <AccessibleDiv
+      id={`tab-${tabId}-button`}
       onClick={handleTabClick}
       className={cn('flex flex-col items-start px-4 pb-4', {
         'border-b-2 border-primary': isTabSelected,

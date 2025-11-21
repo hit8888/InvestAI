@@ -105,10 +105,7 @@ const CustomDocumentDrawerContentContainer = ({
   return (
     <div className="flex h-full w-full flex-col overflow-auto">
       <DocumentCreationHeader isEditing={isSelected} onClose={onClose} />
-      <div
-        className="flex max-h-[calc(100vh-65px)] w-full flex-1 flex-col gap-4 overflow-auto p-4 pb-0"
-        id="datasource-container"
-      >
+      <div className="flex max-h-[calc(100vh-65px)] w-full flex-1 flex-col gap-4 overflow-auto p-4 pb-0">
         <DocumentCreationTitleAndDescription title={watchedValues.title} control={control} isSelected={isSelected} />
         <RelevantQueriesSectionDrawer key={`queries-${id}`} {...commonProps} />
         <div className="sticky bottom-0 -ml-3.5 flex w-[calc(100%+28px)] justify-between bg-white p-3">

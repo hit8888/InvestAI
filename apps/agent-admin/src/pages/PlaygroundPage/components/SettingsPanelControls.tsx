@@ -21,6 +21,7 @@ const SettingsPanelControls: React.FC<SettingsPanelControlsProps> = ({
     <div className="border-t border-gray-200 bg-gray-25 p-4 shadow-lg">
       <div className="flex items-center justify-between gap-6">
         <Button
+          id="playground-refresh-button"
           type="button"
           variant="system_secondary"
           size="small"
@@ -32,6 +33,7 @@ const SettingsPanelControls: React.FC<SettingsPanelControlsProps> = ({
           <RefreshChatIcon className="h-4 w-4" />
         </Button>
         <Button
+          id="playground-preview-agent-button"
           type="button"
           variant="primary"
           size="small"

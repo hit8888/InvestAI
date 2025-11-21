@@ -52,6 +52,7 @@ const SupportForm = ({
         {showSubmitButton && (
           <div className="flex w-full justify-end">
             <Button
+              id="controls-support-save-button"
               type="submit"
               variant="system_secondary"
               buttonStyle="rightIcon"

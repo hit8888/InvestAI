@@ -74,6 +74,7 @@ const DateRangeSelector = ({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
+        id="insights-date-range-selector-trigger"
         className={`flex items-center gap-2 self-stretch rounded-lg border border-gray-200 bg-gray-25 p-2 outline-none ${isOpen ? 'ring-4 ring-gray-200' : ''}`}
       >
         <p className="text-sm font-medium text-gray-500">{displayDateRange(currentDateRange)}</p>
@@ -105,8 +106,19 @@ const DateRangeSelector = ({
         <div className="flex w-full items-center justify-between p-4">
           <p className="text-sm font-medium text-gray-400">{displayDateRange(dateRange)}</p>
           <div className="flex gap-4">
-            <FooterButton isClearAllBtn={true} showIcon={false} btnLabel="Cancel" onBtnClicked={handleClose} />
-            <FooterButton showIcon={false} btnLabel="Apply Dates" onBtnClicked={handleApplyDates} />
+            <FooterButton
+              id="insights-date-range-cancel-button"
+              isClearAllBtn={true}
+              showIcon={false}
+              btnLabel="Cancel"
+              onBtnClicked={handleClose}
+            />
+            <FooterButton
+              id="insights-date-range-apply-button"
+              showIcon={false}
+              btnLabel="Apply Dates"
+              onBtnClicked={handleApplyDates}
+            />
           </div>
         </div>
       </PopoverContent>

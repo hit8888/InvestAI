@@ -65,6 +65,7 @@ const BrowsingHistorySection: React.FC<BrowsingHistorySectionProps> = ({ form })
                       </div>
                       <Input
                         {...urlField}
+                        id={`playground-browsing-history-${index}-url-input`}
                         className="h-11 border-gray-300 pl-10 pr-10 focus:border-gray-400 focus:ring-0"
                         placeholder="Enter URL"
                       />
@@ -74,6 +75,7 @@ const BrowsingHistorySection: React.FC<BrowsingHistorySectionProps> = ({ form })
               )}
             />
             <Button
+              id={`playground-browsing-history-${index}-delete-button`}
               type="button"
               variant="system_tertiary"
               size="small"
@@ -87,6 +89,7 @@ const BrowsingHistorySection: React.FC<BrowsingHistorySectionProps> = ({ form })
       ))}
 
       <Button
+        id="playground-browsing-history-add-button"
         type="button"
         variant="system_tertiary"
         size="small"

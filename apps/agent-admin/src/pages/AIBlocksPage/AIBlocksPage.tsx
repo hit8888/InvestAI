@@ -91,6 +91,7 @@ const AIBlocksPage = () => {
           </Typography>
         </div>
         <Button
+          id="blocks-preview-button"
           onClick={handlePreviewClick}
           type="button"
           variant="primary"

@@ -44,8 +44,19 @@ const PromptAreaFooterButtons = ({
   };
 
   const getButtonUI = ({ key, onClick, disabled, rightIcon, label, variant = 'system_secondary' }: ButtonUI) => {
+    // Generate ID based on button key
+    const buttonId =
+      key === 'add-prompt'
+        ? 'controls-prompt-add-button'
+        : key === 'save-or-edit'
+          ? clickedOnEdit
+            ? 'controls-prompt-save-button'
+            : 'controls-prompt-edit-button'
+          : `controls-prompt-${key}-button`;
+
     return (
       <Button
+        id={buttonId}
         key={key}
         size={'small'}
         buttonStyle={'rightIcon'}

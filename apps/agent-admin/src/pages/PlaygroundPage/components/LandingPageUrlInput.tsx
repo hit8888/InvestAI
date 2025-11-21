@@ -17,6 +17,7 @@ const LandingPageUrlInput: React.FC<LandingPageUrlInputProps> = ({ field }) => {
           <Link2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
           <Input
             {...field}
+            id="playground-landing-page-url-input"
             className="h-11 border-gray-300 pl-10 pr-10 focus:border-gray-400 focus:ring-0"
             placeholder="Enter current page URL"
           />

@@ -43,6 +43,7 @@ const UtmParametersSection: React.FC<UtmParametersSectionProps> = ({ form }) => 
                   <FormControl>
                     <Input
                       {...keyField}
+                      id={`playground-utm-${index}-key-input`}
                       className="h-11 border-gray-300 focus:border-gray-400 focus:ring-0"
                       placeholder="Parameter key"
                     />
@@ -58,6 +59,7 @@ const UtmParametersSection: React.FC<UtmParametersSectionProps> = ({ form }) => 
                   <FormControl>
                     <Input
                       {...valueField}
+                      id={`playground-utm-${index}-value-input`}
                       className="h-11 border-gray-300 focus:border-gray-400 focus:ring-0"
                       placeholder="Parameter value"
                     />
@@ -66,6 +68,7 @@ const UtmParametersSection: React.FC<UtmParametersSectionProps> = ({ form }) => 
               )}
             />
             <Button
+              id={`playground-utm-${index}-delete-button`}
               type="button"
               variant="system_tertiary"
               size="small"
@@ -78,6 +81,7 @@ const UtmParametersSection: React.FC<UtmParametersSectionProps> = ({ form }) => 
         ))}
 
         <Button
+          id="playground-utm-add-button"
           type="button"
           variant="system_tertiary"
           size="small"

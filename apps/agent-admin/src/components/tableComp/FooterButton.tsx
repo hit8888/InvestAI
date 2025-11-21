@@ -4,6 +4,7 @@ import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import { cn } from '@breakout/design-system/lib/cn';
 
 type ExportDownloadButtonProps = {
+  id?: string;
   isClearAllBtn?: boolean;
   showIcon?: boolean;
   btnLabel: string;
@@ -12,6 +13,7 @@ type ExportDownloadButtonProps = {
 };
 
 const FooterButton = ({
+  id,
   isClearAllBtn = false,
   showIcon = false,
   btnLabel,
@@ -20,6 +22,7 @@ const FooterButton = ({
 }: ExportDownloadButtonProps) => {
   return (
     <button
+      id={id}
       type="button"
       aria-label="Export Download Button"
       name="export-download-button"

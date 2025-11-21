@@ -38,6 +38,7 @@ const SearchTableContentInput = ({ page }: PageTypeProps) => {
     <div className="relative w-60">
       <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
       <Input
+        id={`table-${page}-search-input`}
         placeholder="Search table content..."
         className="w-full border-gray-200 bg-gray-25 pl-10 placeholder:text-gray-400 focus:border-gray-600 focus:ring-gray-600"
         value={searchTableContent}

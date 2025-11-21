@@ -2,6 +2,13 @@
 
 Sevak is an AI assistant and routing service for the Meaku Agent-Admin Dashboard. It provides conversational AI assistance that helps users navigate the dashboard and perform actions through natural language queries.
 
+**Key Feature: Optional Navigation Suggestions**
+
+- The assistant answers questions conversationally
+- Navigation routes and actions are **optional suggestions** that users can choose to follow
+- Users can continue chatting and asking questions without executing any routes
+- Routes are only provided when they would be genuinely helpful
+
 ## Architecture Overview
 
 Sevak backend is built as a Node.js/TypeScript server that combines:

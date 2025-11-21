@@ -31,6 +31,7 @@ const CreateManagedCalendarButton = () => {
   return (
     <div className="flex flex-col gap-4">
       <Button
+        id="calendar-create-managed-calendar-button"
         onClick={handleCreateManagedCalendar}
         variant="primary"
         className="w-full"

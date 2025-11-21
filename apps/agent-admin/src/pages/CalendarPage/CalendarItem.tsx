@@ -84,10 +84,20 @@ const CalendarItem = ({
             </Typography>
           </div>
           <div className="flex flex-col justify-end gap-3 pr-2">
-            <button type="button" onClick={handleCancelDelete} disabled={isDeleting}>
+            <button
+              id={`calendar-${calendar.id}-delete-cancel-button`}
+              type="button"
+              onClick={handleCancelDelete}
+              disabled={isDeleting}
+            >
               <X width="16" height="16" className="text-gray-500" />
             </button>
-            <button type="button" onClick={handleDelete} disabled={isDeleting}>
+            <button
+              id={`calendar-${calendar.id}-delete-confirm-button`}
+              type="button"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
               {isDeleting ? (
                 <span className="animate-spin">⌛</span>
               ) : (
@@ -149,10 +159,10 @@ const CalendarItem = ({
           </div>
         </div>
         <div className="flex flex-col gap-2 pr-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <button type="button" onClick={() => onStartEdit(calendar.id)}>
+          <button id={`calendar-${calendar.id}-edit-button`} type="button" onClick={() => onStartEdit(calendar.id)}>
             <Pencil className="h-4 w-4 text-gray-500" />
           </button>
-          <button type="button" onClick={() => setShowDeleteConfirm(true)}>
+          <button id={`calendar-${calendar.id}-delete-button`} type="button" onClick={() => setShowDeleteConfirm(true)}>
             <DeleteIcon className="h-4 w-4 text-destructive-1000" />
           </button>
         </div>

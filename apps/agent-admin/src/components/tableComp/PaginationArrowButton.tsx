@@ -9,8 +9,12 @@ interface NavigationArrowBtnProps {
 }
 
 const PaginationArrowButton = ({ isDisabled, onButtonClick, PaginationArrow }: NavigationArrowBtnProps) => {
+  // Determine if this is prev or next based on arrow direction
+  const arrowType =
+    PaginationArrow.name.includes('Previous') || PaginationArrow.name.includes('Prev') ? 'prev' : 'next';
   return (
     <Button
+      id={`table-pagination-${arrowType}-button`}
       onClick={onButtonClick}
       className={cn([!isDisabled && 'border border-gray-300 bg-gray-25', isDisabled && 'disabled:border-gray-200'])}
       variant="system_secondary"

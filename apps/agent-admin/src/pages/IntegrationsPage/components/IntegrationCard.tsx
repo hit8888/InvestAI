@@ -63,7 +63,11 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({ data, onToggle, disab
           className="flex cursor-pointer items-center space-x-2 rounded-2xl border border-gray-200 bg-gray-100 px-4 py-2"
           onClick={() => onToggle?.(data)}
         >
-          <Switch disabled={disableToggle} checked={connected}>
+          <Switch
+            id={`integration-${integrationType.toLowerCase()}-toggle-button`}
+            disabled={disableToggle}
+            checked={connected}
+          >
             <ConnectIcon />
           </Switch>
           <Typography variant="label-14-medium" textColor="gray500">

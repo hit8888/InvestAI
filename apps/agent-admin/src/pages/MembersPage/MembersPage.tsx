@@ -42,7 +42,12 @@ const MembersPageBase = () => {
           </Typography>
         </div>
         {isAdmin && (
-          <Button variant="primary" onClick={() => createMemberHandlerRef.current?.()} className="h-10">
+          <Button
+            id="members-add-member-button"
+            variant="primary"
+            onClick={() => createMemberHandlerRef.current?.()}
+            className="h-10"
+          >
             Add Member
           </Button>
         )}

@@ -21,6 +21,7 @@ const PlaygroundBottomControls: React.FC<PlaygroundBottomControlsProps> = ({
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-gray-25 p-4 shadow-[0px_0px_1.56px_0px_rgba(0,0,0,0.01),0px_0px_2.95px_0px_rgba(0,0,0,0.02),0px_0px_4.93px_0px_rgba(0,0,0,0.02),0px_0px_8.29px_0px_rgba(0,0,0,0.03),0px_0px_13.8px_0px_rgba(0,0,0,0.03),0px_0px_22.23px_0px_rgba(0,0,0,0.03),0px_0px_34.38px_0px_rgba(0,0,0,0.04),0px_0px_51px_0px_rgba(0,0,0,0.05)]">
       <button
+        id="playground-clear-all-button"
         type="button"
         onClick={onClearAll}
         disabled={isClearAllDisabled}
@@ -30,6 +31,7 @@ const PlaygroundBottomControls: React.FC<PlaygroundBottomControlsProps> = ({
       </button>
       <div className="flex items-center gap-4">
         <button
+          id="playground-external-preview-button"
           type="button"
           onClick={onExternalPreview}
           className="flex h-[34px] w-[34px] items-center justify-center rounded-lg border border-gray-900 bg-white transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
@@ -37,6 +39,7 @@ const PlaygroundBottomControls: React.FC<PlaygroundBottomControlsProps> = ({
           <ExternalLink className="h-4 w-4 text-gray-600" />
         </button>
         <Button
+          id="playground-bottom-preview-button"
           type="button"
           variant="system"
           size="small"

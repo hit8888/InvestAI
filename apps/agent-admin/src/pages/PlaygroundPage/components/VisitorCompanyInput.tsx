@@ -28,6 +28,7 @@ const VisitorCompanyInput: React.FC<VisitorCompanyInputProps> = ({ field }) => {
         <FormControl>
           <Input
             {...field}
+            id="playground-visitor-company-input"
             className="h-11 border-gray-300 focus:border-gray-400 focus:ring-0"
             placeholder="Enter company name"
           />
