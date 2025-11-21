@@ -40,6 +40,7 @@ export default defineConfig({
     alias: {
       '@breakout/design-system': path.resolve(__dirname, '../../packages/design-system/src'),
       '@meaku/shared': path.resolve(__dirname, '../../packages/shared/src'),
+      '@sevak/client': path.resolve(__dirname, '../../apps/sevak/client/src'),
     },
     // Deduplicate React to prevent multiple instances
     dedupe: ['react', 'react-dom', 'react-router-dom'],

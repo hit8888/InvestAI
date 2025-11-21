@@ -6,6 +6,7 @@ import { cn } from '@breakout/design-system/lib/cn';
 import { SidebarProvider } from '../context/SidebarContext';
 import { useAuthInitializer } from '../hooks/useAuthInitializer';
 import { AppRoutesEnum } from '../utils/constants';
+import { SevakChatWidget } from '../components/SevakChatWidget';
 
 const RootLayout = () => {
   const { isDashboardPage, isLoginPage, isOAuthCallbackPage, isTableV2Page, isTrainingPlaygroundPreviewPage } =
@@ -67,6 +68,13 @@ const RootLayout = () => {
           <Outlet />
         </div>
       </div>
+      {/* Chat Widget - only show on authenticated pages */}
+      {!isLoginPage && !isOAuthCallbackPage && (
+        <SevakChatWidget
+          serverUrl={import.meta.env.VITE_SEVAK_SERVER_URL || 'http://localhost:8080'}
+          position="bottom-right"
+        />
+      )}
     </SidebarProvider>
   );
 };

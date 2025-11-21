@@ -14,6 +14,7 @@ const config: Config = {
     '../../packages/design-system/src/*.{ts,tsx}',
     '../../packages/design-system/src/components/**/*.{ts,tsx}',
     '../../packages/design-system/src/components/*.{ts,tsx}',
+    '../../apps/sevak/client/src/**/*.{ts,tsx}',
   ],
   presets: [sharedConfig, uiTwConfig],
   plugins: [],

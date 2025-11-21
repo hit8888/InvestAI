@@ -26,10 +26,8 @@ apps/sevak/
 │   ├── src/
 │   │   ├── server.ts        # Express + Socket.IO server setup, REST/WebSocket handlers
 │   │   ├── types.ts         # TypeScript type definitions for requests/responses
-│   │   ├── services/
-│   │   │   └── grokService.ts    # Groq API integration, prompt management, response parsing
-│   │   └── routing/
-│   │       └── routingEngine.ts # Rule-based routing fallback, CSS selector mappings
+│   │   └── services/
+│   │       └── grokService.ts    # Groq API integration, prompt management, response parsing
 │   ├── DASHBOARD_KNOWLEDGE_BASE.md  # Knowledge base for AI context
 │   ├── FEATURE_MAPPING.md           # Feature-to-route mappings
 │   ├── ROUTING_AGENT_PROMPT.txt     # AI prompt template for routing
@@ -100,23 +98,6 @@ Handles all AI interactions with the Groq API:
 3. Filters actions to only `click` and `text_change`
 4. Validates required fields (target for all actions, value for text_change)
 5. Structures routes array (intermediate routes have empty actions, only final route has actions)
-
-### 4. Routing Engine (`src/routing/routingEngine.ts`)
-
-Provides fallback rule-based routing when AI is unavailable:
-
-**Features:**
-
-- **CSS Selector Mappings**: Maps routes to CSS selectors for page highlighting
-- **ID Extraction**: Extracts session IDs, block IDs, document IDs from questions
-- **Route Determination**: Rule-based pattern matching for common queries
-- **Fallback Logic**: Used when Groq API fails or is unavailable
-
-**Key Functions:**
-
-- `getCssSelectors(route)`: Returns CSS selectors for a given route
-- `determineRoute(question)`: Rule-based route determination
-- `processRoutingRequest(question)`: Main entry point (currently uses Groq primarily)
 
 ## Data Flow
 
@@ -573,7 +554,7 @@ Routes are primarily determined by the AI based on the knowledge base and featur
 
 1. **Update `DASHBOARD_KNOWLEDGE_BASE.md`**: Add information about the new feature
 2. **Update `FEATURE_MAPPING.md`**: Add route mapping
-3. **Update `routingEngine.ts`**: Add CSS selector mappings and rule-based routing (for fallback)
+3. **Update `DASHBOARD_KNOWLEDGE_BASE.md`**: Add new element IDs following the `{page}-{action}-{element-type}` convention
 
 ### Modifying AI Behavior
 
