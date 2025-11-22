@@ -99,7 +99,7 @@ export async function getConversationalResponse(
   // Truncate prompts if they're too long (Grok has token limits)
   const maxKnowledgeBaseLength = 5000;
   const maxFeatureMappingLength = 3000;
-  const maxRoutingPromptLength = 2000;
+  const maxRoutingPromptLength = 3000; // Increased to ensure block routing rules are included
 
   const truncatedKnowledgeBase =
     knowledgeBase.length > maxKnowledgeBaseLength
@@ -119,6 +119,13 @@ export async function getConversationalResponse(
 2. Provide helpful information about the dashboard features and capabilities
 3. Ask clarifying follow-up questions when the user's intent is unclear or information is missing
 4. Optionally suggest navigation routes and actions when they would be helpful to the user
+
+CRITICAL BLOCK ROUTING RULE (MUST FOLLOW):
+- When user mentions "Ask AI block", "Ask AI", "ask ai block", or "ask ai" → ALWAYS include route: {"url": "/blocks/1"} in the routes array
+- When user mentions "Book Meeting block", "Book Meeting", "book meeting block", or "book meeting" → ALWAYS include route: {"url": "/blocks/2"} in the routes array
+- When user mentions "Video Library block", "Video Library", "video library block", or "video library" → ALWAYS include route: {"url": "/blocks/3"} in the routes array
+- When user mentions "Summarize block", "Summarize", "summarize block", or "summarize" → ALWAYS include route: {"url": "/blocks/4"} in the routes array
+- DO NOT route to "/blocks" when user mentions a specific block - always use the specific block ID route
 
 TONE GUIDELINES:
 - Always maintain a professional, calm, and supportive demeanor

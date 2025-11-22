@@ -610,12 +610,18 @@ importers:
 
   apps/sevak/client:
     dependencies:
+      lucide-react:
+        specifier: ^0.530.0
+        version: 0.530.0(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
+      react-hot-toast:
+        specifier: ^2.5.1
+        version: 2.5.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       socket.io-client:
         specifier: ^4.7.2
         version: 4.8.1
