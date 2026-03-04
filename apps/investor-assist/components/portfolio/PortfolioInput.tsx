@@ -1,16 +1,29 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Plus, X, Search, Loader2, TrendingUp } from "lucide-react";
 import { useAnalysisStore } from "@/stores/analysisStore";
+import { useAuth } from "@/components/auth/AuthProvider";
+import LoginBanner from "@/components/auth/LoginBanner";
+import { getUserPortfolio, saveStock, deleteStock } from "@/lib/firebase-db";
 import type { Stock } from "@/types";
 
 export default function PortfolioInput() {
-  const { portfolio, addStock, removeStock, setStep } = useAnalysisStore();
+  const { portfolio, addStock, removeStock, setPortfolio, setStep } =
+    useAnalysisStore();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Load portfolio from Firestore on mount if logged in
+  useEffect(() => {
+    if (!user) return;
+    getUserPortfolio(user.uid).then((stocks) => {
+      if (stocks.length > 0) setPortfolio(stocks);
+    });
+  }, [user, setPortfolio]);
 
   async function handleAdd() {
     if (!query.trim() || loading) return;
@@ -26,6 +39,7 @@ export default function PortfolioInput() {
       const data = (await res.json()) as { stock?: Stock; error?: string };
       if (!res.ok || !data.stock) throw new Error(data.error ?? "Not found");
       addStock(data.stock);
+      if (user) await saveStock(user.uid, data.stock);
       setQuery("");
       inputRef.current?.focus();
     } catch (e) {
@@ -35,14 +49,23 @@ export default function PortfolioInput() {
     }
   }
 
+  async function handleRemove(ticker: string) {
+    removeStock(ticker);
+    if (user) await deleteStock(user.uid, ticker);
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">Your Portfolio</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+          Your Portfolio
+        </h2>
         <p className="text-sm text-gray-500">
           Enter company names or ticker symbols to add stocks.
         </p>
       </div>
+
+      {!user && <LoginBanner />}
 
       {/* Search input */}
       <div className="flex gap-2">
@@ -71,9 +94,7 @@ export default function PortfolioInput() {
         </button>
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600 -mt-2">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600 -mt-2">{error}</p>}
 
       {/* Stock cards */}
       {portfolio.length > 0 && (
@@ -82,7 +103,7 @@ export default function PortfolioInput() {
             <StockCard
               key={stock.ticker}
               stock={stock}
-              onRemove={() => removeStock(stock.ticker)}
+              onRemove={() => handleRemove(stock.ticker)}
             />
           ))}
         </div>
@@ -110,7 +131,13 @@ export default function PortfolioInput() {
   );
 }
 
-function StockCard({ stock, onRemove }: { stock: Stock; onRemove: () => void }) {
+function StockCard({
+  stock,
+  onRemove,
+}: {
+  stock: Stock;
+  onRemove: () => void;
+}) {
   return (
     <div className="flex items-center justify-between p-4 rounded-xl bg-white border border-gray-100 shadow-sm">
       <div className="flex items-center gap-3">
@@ -121,13 +148,16 @@ function StockCard({ stock, onRemove }: { stock: Stock; onRemove: () => void }) 
         </div>
         <div>
           <p className="text-sm font-medium text-gray-900">{stock.ticker}</p>
-          <p className="text-xs text-gray-500 truncate max-w-[140px]">{stock.name}</p>
+          <p className="text-xs text-gray-500 truncate max-w-[140px]">
+            {stock.name}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-3">
         <div className="text-right">
           <p className="text-sm font-semibold text-gray-900">
-            {stock.currency === "USD" ? "$" : stock.currency}{stock.currentPrice.toFixed(2)}
+            {stock.currency === "USD" ? "$" : stock.currency}
+            {stock.currentPrice.toFixed(2)}
           </p>
           <p className="text-xs text-gray-400">{stock.exchange}</p>
         </div>

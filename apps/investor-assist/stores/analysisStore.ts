@@ -16,6 +16,7 @@ interface AnalysisActions {
   setStep: (step: AppStep) => void;
   addStock: (stock: Stock) => void;
   removeStock: (ticker: string) => void;
+  setPortfolio: (stocks: Stock[]) => void;
   setNewsSource: (source: NewsSource) => void;
   setNewsUrl: (url: string) => void;
   setArticles: (articles: NewsArticle[]) => void;
@@ -39,26 +40,31 @@ const initialState: AnalysisState = {
   error: null,
 };
 
-export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set) => ({
-  ...initialState,
+export const useAnalysisStore = create<AnalysisState & AnalysisActions>(
+  (set) => ({
+    ...initialState,
 
-  setStep: (step) => set({ step }),
-  addStock: (stock) =>
-    set((s) => ({
-      portfolio: s.portfolio.find((p) => p.ticker === stock.ticker)
-        ? s.portfolio
-        : [...s.portfolio, stock],
-    })),
-  removeStock: (ticker) =>
-    set((s) => ({ portfolio: s.portfolio.filter((p) => p.ticker !== ticker) })),
-  setNewsSource: (newsSource) => set({ newsSource }),
-  setNewsUrl: (newsUrl) => set({ newsUrl }),
-  setArticles: (articles) => set({ articles }),
-  updateSettings: (patch) =>
-    set((s) => ({ settings: { ...s.settings, ...patch } })),
-  setLoading: (isLoading, loadingMessage = "") =>
-    set({ isLoading, loadingMessage }),
-  setError: (error) => set({ error }),
-  setResult: (result) => set({ result, step: "results" }),
-  reset: () => set(initialState),
-}));
+    setStep: (step) => set({ step }),
+    addStock: (stock) =>
+      set((s) => ({
+        portfolio: s.portfolio.find((p) => p.ticker === stock.ticker)
+          ? s.portfolio
+          : [...s.portfolio, stock],
+      })),
+    removeStock: (ticker) =>
+      set((s) => ({
+        portfolio: s.portfolio.filter((p) => p.ticker !== ticker),
+      })),
+    setPortfolio: (stocks) => set({ portfolio: stocks }),
+    setNewsSource: (newsSource) => set({ newsSource }),
+    setNewsUrl: (newsUrl) => set({ newsUrl }),
+    setArticles: (articles) => set({ articles }),
+    updateSettings: (patch) =>
+      set((s) => ({ settings: { ...s.settings, ...patch } })),
+    setLoading: (isLoading, loadingMessage = "") =>
+      set({ isLoading, loadingMessage }),
+    setError: (error) => set({ error }),
+    setResult: (result) => set({ result, step: "results" }),
+    reset: () => set(initialState),
+  }),
+);
