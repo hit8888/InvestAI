@@ -1,4 +1,4 @@
-import { Button, LucideIcon, Typography } from '@meaku/saral';
+import { Button, LucideIcon, Typography } from '@neuraltrade/saral';
 
 interface SummaryErrorProps {
   onRetry: () => void;

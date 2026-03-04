@@ -4,8 +4,8 @@ import { useAllFilterStore } from '../stores/useAllFilterStore';
 import useFilterPreferencesQuery from '../queries/query/useFilterPreferencesQuery';
 import { useQueryOptions } from './useQueryOptions';
 import { getSortValuesFromSortItems } from '../utils/common.ts';
-import { MainPageType } from '@meaku/core/types/admin/admin';
-import { PageTypeToTableName } from '@meaku/core/utils/index';
+import { MainPageType } from '@neuraltrade/core/types/admin/admin';
+import { PageTypeToTableName } from '@neuraltrade/core/utils/index';
 
 export const useInitializeFilterPreferences = (page: MainPageType) => {
   const { initializeSortValues } = useSortFilterStore();

@@ -1,7 +1,7 @@
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { useMemo, useState } from 'react';
-import { filterCountries } from '@meaku/core/utils/country-select-utils';
+import { filterCountries } from '@neuraltrade/core/utils/country-select-utils';
 
 import {
   Button,
@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   ScrollArea,
-} from '@meaku/saral';
+} from '@neuraltrade/saral';
 import { usePopoverPortal } from '../../hooks/usePortal';
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined };

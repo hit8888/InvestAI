@@ -4,7 +4,7 @@ import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   VisitorsTableDisplayContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 
 export const useTablePinningStyles = () => {
   const getCommonPinningStyles = (

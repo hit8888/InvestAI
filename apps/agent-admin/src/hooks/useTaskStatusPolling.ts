@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TaskStatus } from '@meaku/core/types/admin/api';
+import { TaskStatus } from '@neuraltrade/core/types/admin/api';
 import { taskPollingService } from '../services/taskPollingService';
 
 /**

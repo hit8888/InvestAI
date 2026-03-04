@@ -1,5 +1,5 @@
-import { loginWithGoogleSso } from '@meaku/core/adminHttp/api';
-import { LoginWithGoogleSsoPayload } from '@meaku/core/types/admin/api';
+import { loginWithGoogleSso } from '@neuraltrade/core/adminHttp/api';
+import { LoginWithGoogleSsoPayload } from '@neuraltrade/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { processLoginResponse } from '../../utils/apiCalls';
 

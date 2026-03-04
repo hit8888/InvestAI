@@ -1,5 +1,5 @@
-import { createCustomDocument, updateCustomDocument, updateDocumentAccessType } from '@meaku/core/adminHttp/api';
-import { UpdateCustomDocumentRequest } from '@meaku/core/types/admin/api';
+import { createCustomDocument, updateCustomDocument, updateDocumentAccessType } from '@neuraltrade/core/adminHttp/api';
+import { UpdateCustomDocumentRequest } from '@neuraltrade/core/types/admin/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useCreateCustomDocument = () => {

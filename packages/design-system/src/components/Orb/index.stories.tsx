@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react';
 import Orb from './index';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
 
 export default {
   title: 'Components/Orb',

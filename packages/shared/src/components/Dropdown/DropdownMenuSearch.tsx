@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, LucideIcon } from '@meaku/saral';
+import { Input, LucideIcon } from '@neuraltrade/saral';
 
 type DropdownMenuSearchProps = {
   searchTerm: string;

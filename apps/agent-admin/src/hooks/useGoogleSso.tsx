@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-import { ENV } from '@meaku/core/types/index';
+import { ENV } from '@neuraltrade/core/types/index';
 import useLoginWithGoogleSso from '../queries/mutation/useLoginWithGoogleSso';
 import { AppRoutesEnum } from '../utils/constants';
-import useOAuthPopup from '@meaku/core/hooks/useOAuthPopUp';
+import useOAuthPopup from '@neuraltrade/core/hooks/useOAuthPopUp';
 import { handleLoginAndRedirection } from '../utils/authHelpers';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import useAdminEventAnalytics from './useAdminEventAnalytics';
 
 const REDIRECT_PATH = '/auth/google/callback';

@@ -1,5 +1,5 @@
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
-import { BuyerIntent } from '@meaku/core/types/common';
+import { BuyerIntent } from '@neuraltrade/core/types/common';
 
 const ActiveConversationsGridViewShimmer = () => {
   const columns = [BuyerIntent.LOW, BuyerIntent.MEDIUM, BuyerIntent.HIGH];

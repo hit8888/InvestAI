@@ -47,10 +47,9 @@
   "devDependencies": {
     "@breakout/design-system": "workspace:*",
     "@eslint/js": "^9.17.0",
-    "@meaku/core": "workspace:*",
-    "@meaku/shared": "workspace:*",
-    "@sevak/client": "workspace:*",
-    "@meaku/tailwind-config": "workspace:*",
+    "@neuraltrade/core": "workspace:*",
+    "@neuraltrade/shared": "workspace:*",
+    "@neuraltrade/tailwind-config": "workspace:*",
     "@types/google.maps": "^3.58.1",
     "@types/node": "^22.5.4",
     "@types/numeral": "^2.0.5",

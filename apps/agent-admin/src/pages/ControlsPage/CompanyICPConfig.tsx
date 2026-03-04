@@ -5,7 +5,7 @@ import ResizeTextarea from '@breakout/design-system/components/TextArea/ResizeTe
 import InfoCard from '../../components/AgentManagement/InfoCard';
 import LoadingState from './components/LoadingState';
 import ErrorState from './components/ErrorState';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { useSessionStore } from '../../stores/useSessionStore';
 import NoInfoProvidedSadFaceIcon from '@breakout/design-system/components/icons/no-info-sadface-icon';
 import PromptHeader from './PromptHeader';
@@ -18,7 +18,7 @@ import { useRecalculateRelevanceScore } from '../../queries/mutation/useRecalcul
 import { useTaskStatusPolling } from '../../hooks/useTaskStatusPolling';
 import { taskPollingService } from '../../services/taskPollingService';
 import { taskToastManager } from '../../services/taskToastManager';
-import { taskPollingManager } from '@meaku/core/managers/taskPolling/TaskPollingManager';
+import { taskPollingManager } from '@neuraltrade/core/managers/taskPolling/TaskPollingManager';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 
 interface CompanyICPConfigProps {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GoogleConnect, Availability, EventTypeManager } from '@meaku/shared/components/calendar';
+import { GoogleConnect, Availability, EventTypeManager } from '@neuraltrade/shared/components/calendar';
 import CustomTabs from '../../components/CustomTabs';
 import { CREATE_CALENDAR_TAB_ITEMS, CREATE_CALENDAR_TAB_ITEMS_VALUES } from '../../utils/constants';
 import Typography from '@breakout/design-system/components/Typography/index';

@@ -3,12 +3,12 @@ import LocationCellValue from '../tableComp/tableCellComp/LocationCellValue';
 import EmailCellValue from '../tableComp/tableCellComp/EmailCellValue';
 import { cn } from '@breakout/design-system/lib/cn';
 import { CONV_RIGHTSIDE_DETAILS_DATA_ITEMS } from '../../utils/constants';
-import { EnrichmentSource, LocationWithCityCountry } from '@meaku/core/types/admin/admin';
+import { EnrichmentSource, LocationWithCityCountry } from '@neuraltrade/core/types/admin/admin';
 import EnrichmentTag from '@breakout/design-system/components/EnrichmentTag/index';
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { Link } from 'react-router-dom';
-import { ensureProtocol, extractLinkedInUsername } from '@meaku/core/utils/index';
+import { ensureProtocol, extractLinkedInUsername } from '@neuraltrade/core/utils/index';
 
 const { LOCATION, EMAIL, LINKED_IN, DOMAIN } = CONV_RIGHTSIDE_DETAILS_DATA_ITEMS;
 

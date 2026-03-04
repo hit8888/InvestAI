@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 import CommandBarActions from '../CommandBarActions';
 import FeatureContentContainer from '../FeatureContentContainer';
-import { Nudge } from '@meaku/shared/features';
+import { Nudge } from '@neuraltrade/shared/features';
 import { COMPONENT_TRANSITIONS } from '../../constants/animationTimings';
 import { BottomBarTransitionState, BottomBarTransitionActions } from './hooks/useBottomBarTransition';
 import { COMMAND_BAR_ANIMATIONS } from './constants';

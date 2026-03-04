@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getUserProfile } from '@meaku/core/adminHttp/api';
+import { getUserProfile } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { UserProfileResponse } from '@meaku/core/types/admin/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { UserProfileResponse } from '@neuraltrade/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getUserProfileKey = (tenantName: string): unknown[] => ['user-profile', tenantName];

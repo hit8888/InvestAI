@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createThumbnail, deleteThumbnail } from '@meaku/core/adminHttp/api';
-import { CreateThumbnailRequest } from '@meaku/core/types/admin/api';
+import { createThumbnail, deleteThumbnail } from '@neuraltrade/core/adminHttp/api';
+import { CreateThumbnailRequest } from '@neuraltrade/core/types/admin/api';
 
 interface DeleteThumbnailParams {
   thumbnailId: string;

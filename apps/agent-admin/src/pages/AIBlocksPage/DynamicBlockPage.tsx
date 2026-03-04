@@ -8,7 +8,7 @@ import VideoLibraryBlockPage from './VideoLibraryBlockPage';
 import TalkToHumanBlockPage from './TalkToHumanBlockPage';
 import DemoWidgetBlockPage from './DemoWidgetBlockPage';
 import ErrorState from './components/ErrorState';
-import { BlockType, Block } from '@meaku/core/types/admin/api';
+import { BlockType, Block } from '@neuraltrade/core/types/admin/api';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
 import BlockPreviewContainer from './components/BlockPreviewContainer';
 import AIBlocksNavigation from './AIBlocksNavigation';

@@ -1,5 +1,5 @@
-import { getschemaShapeValidatedByZode, getZodType, type ZodSchema } from '@meaku/core/utils/form_fields';
-import { FormFieldType } from '@meaku/core/types/webSocketData';
+import { getschemaShapeValidatedByZode, getZodType, type ZodSchema } from '@neuraltrade/core/utils/form_fields';
+import { FormFieldType } from '@neuraltrade/core/types/webSocketData';
 
 export const createFormSchema = (form_fields: FormFieldType[]) => {
   // Create a local schema shape instead of using the global one

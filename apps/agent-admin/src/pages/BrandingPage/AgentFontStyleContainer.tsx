@@ -1,4 +1,4 @@
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import { FONT_STYLE_SUBTITLE } from '../../utils/constants';
 import BrandingSectionContainer from './BrandingSectionContainer';
 import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 import { useFormattedColumns } from '../../../hooks/useFormattedColumns';
 import { usePagination } from '../../../hooks/usePagination.tsx';
 
@@ -16,14 +16,14 @@ import {
   getMappedDataFromResponseForVisitorsTableView,
   getSortingAppliedValues,
 } from '../../../utils/common';
-import { getCompanyLogoSrc } from '@meaku/core/utils/index';
+import { getCompanyLogoSrc } from '@neuraltrade/core/utils/index';
 
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { VisitorsPayload } from '@meaku/core/types/admin/api';
-import { VisitorsTableDisplayContent, VisitorsTableViewContent } from '@meaku/core/types/admin/admin';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
+import { VisitorsPayload } from '@neuraltrade/core/types/admin/api';
+import { VisitorsTableDisplayContent, VisitorsTableViewContent } from '@neuraltrade/core/types/admin/admin';
 import { useSortFilterStore } from '../../../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../../../stores/useAllFilterStore.ts';
-import { VISITORS_PAGE } from '@meaku/core/utils/index';
+import { VISITORS_PAGE } from '@neuraltrade/core/utils/index';
 import { useTableStore } from '../../../stores/useTableStore.ts';
 import { useQueryOptions } from '../../../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../../../hooks/useInitializeFilterPreferences.tsx';
@@ -34,7 +34,7 @@ import TableViewShimmer from '../../../components/ShimmerComponent/TableViewShim
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import { useSidebar } from '../../../context/SidebarContext.tsx';
-import { SortValues } from '@meaku/core/types/admin/sort';
+import { SortValues } from '@neuraltrade/core/types/admin/sort';
 import { Cell, HeaderGroup, Row } from '@tanstack/react-table';
 import TableBodyRowItemHavingLogo from '@breakout/design-system/components/Table/TableBodyRowItemHavingLogo';
 import CustomSingleHeaderRowItem from '@breakout/design-system/components/Table/CustomSingleHeaderRowItem';

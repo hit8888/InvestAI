@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { LucideIcon, TooltipProvider } from '@meaku/saral';
+import { LucideIcon, TooltipProvider } from '@neuraltrade/saral';
 import { Video } from '../types';
 import { VideoAvatar } from './VideoAvatar';
 

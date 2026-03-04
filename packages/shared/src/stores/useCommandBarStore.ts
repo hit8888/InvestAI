@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ConfigurationApiResponse, Nudge } from '@meaku/core/types/api/configuration_response';
+import type { ConfigurationApiResponse, Nudge } from '@neuraltrade/core/types/api/configuration_response';
 import {
   ArtifactEventData,
   MessageEventType,

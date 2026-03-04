@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Block, UpdateBlockPayload, VisibilityCondition } from '@meaku/core/types/admin/api';
+import { Block, UpdateBlockPayload, VisibilityCondition } from '@neuraltrade/core/types/admin/api';
 import { useUpdateBlockMutation } from '../../../queries/mutation/useUpdateBlockMutation';
 import { toast } from 'react-hot-toast';
 import { useSessionStore } from '../../../stores/useSessionStore';

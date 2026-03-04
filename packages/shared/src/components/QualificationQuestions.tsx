@@ -8,7 +8,7 @@ import {
   SelectValue,
   Button,
   LucideIcon,
-} from '@meaku/saral';
+} from '@neuraltrade/saral';
 import { QualificationQuestionType } from '../utils/artifact';
 import { useSelectPortal } from '../hooks/usePortal';
 

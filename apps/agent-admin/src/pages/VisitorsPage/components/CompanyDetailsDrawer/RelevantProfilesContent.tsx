@@ -1,4 +1,4 @@
-import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
+import { ReachoutEmailResponse } from '@neuraltrade/core/types/admin/api';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import RelevantProfileItem from './RelevantProfileItem';

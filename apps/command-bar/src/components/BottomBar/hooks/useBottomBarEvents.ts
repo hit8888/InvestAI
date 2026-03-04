@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import { MessageEventType } from '@meaku/shared/types/message';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { LayoutType } from '@meaku/core/types/storage';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
+import { MessageEventType } from '@neuraltrade/shared/types/message';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { LayoutType } from '@neuraltrade/core/types/storage';
 import { useTriggerExitAndSwitch } from './useTriggerExitAndSwitch';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { SortFilterState } from '@meaku/core/types/admin/sort';
+import { SortFilterState } from '@neuraltrade/core/types/admin/sort';
 import { INITIAL_SORT_VALUES } from '../utils/constants';
 
 const commonInitialSortValues = {

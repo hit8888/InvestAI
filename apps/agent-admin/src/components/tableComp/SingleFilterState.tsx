@@ -1,4 +1,4 @@
-import { TableAllFilterConfig } from '@meaku/core/types/admin/filters';
+import { TableAllFilterConfig } from '@neuraltrade/core/types/admin/filters';
 import { COMMON_ICON_PROPS } from '../../utils/constants';
 import FilterGreenDotIcon from '@breakout/design-system/components/icons/filter-green-dot';
 

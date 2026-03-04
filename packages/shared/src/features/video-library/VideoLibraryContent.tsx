@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { Markdown, VideoLibraryIcon } from '@meaku/saral';
+import { Markdown, VideoLibraryIcon } from '@neuraltrade/saral';
 import type { FeatureContentProps } from '../';
 import useVideoLibraryQuery from '../../network/http/queries/useVideoLibraryQuery';
 import { MainVideoPlayer } from './components/MainVideoPlayer';
@@ -12,7 +12,7 @@ import { VideoLibraryErrorState } from './components/VideoLibraryErrorState';
 import { Video } from './types';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 import { trackError } from '../../utils/error';
 import { useWatchedVideos } from './hooks/useWatchedVideos';
 

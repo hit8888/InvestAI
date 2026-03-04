@@ -6,11 +6,11 @@ import {
 } from '@breakout/design-system/components/layout/accordion';
 import { cn } from '@breakout/design-system/lib/cn';
 import FaviconImage from '@breakout/design-system/components/layout/favicon-image';
-import { DataSourceType } from '@meaku/core/types/webSocketData';
+import { DataSourceType } from '@neuraltrade/core/types/webSocketData';
 import { Badge } from '@breakout/design-system/components/layout/badge';
-import { ViewType } from '@meaku/core/types/common';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { ViewType } from '@neuraltrade/core/types/common';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 
 interface IProps {
   dataSources: DataSourceType[];

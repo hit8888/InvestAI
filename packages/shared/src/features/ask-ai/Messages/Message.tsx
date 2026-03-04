@@ -1,4 +1,4 @@
-import { cn, typographyVariants, type AvatarComponentProps } from '@meaku/saral';
+import { cn, typographyVariants, type AvatarComponentProps } from '@neuraltrade/saral';
 import { MessageAvatar } from '../../../components/AvatarDisplay';
 import type {
   Message as MessageType,

@@ -1,9 +1,9 @@
-import { LeadsPayload } from '@meaku/core/types/admin/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { LeadsPayload } from '@neuraltrade/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getLeadsRowData } from '@meaku/core/adminHttp/api';
+import { getLeadsRowData } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { LeadsTableResponse } from '@meaku/core/types/admin/admin';
+import { LeadsTableResponse } from '@neuraltrade/core/types/admin/admin';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type LeadsTableVariables = LeadsPayload;

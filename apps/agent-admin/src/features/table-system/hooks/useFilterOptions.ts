@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import adminApiClient from '@meaku/core/adminHttp/client';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import adminApiClient from '@neuraltrade/core/adminHttp/client';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 import type { FilterValues } from '../types';
 
 interface FilterItem {

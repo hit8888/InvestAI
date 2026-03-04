@@ -1,4 +1,4 @@
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 
 export interface Option {
   value: string;

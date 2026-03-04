@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ICPFormData, ICP_INITIAL_DATA, icpFormSchema } from '../utils';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 
 export const useIcpForm = (
   transformedFormData: ICPFormData | null,

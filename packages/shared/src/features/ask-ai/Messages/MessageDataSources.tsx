@@ -1,6 +1,6 @@
-import { cn, LucideIcon, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Typography } from '@meaku/saral';
-import { DataSourceType } from '@meaku/core/types/webSocketData';
-import NumberUtil from '@meaku/core/utils/numberUtils';
+import { cn, LucideIcon, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Typography } from '@neuraltrade/saral';
+import { DataSourceType } from '@neuraltrade/core/types/webSocketData';
+import NumberUtil from '@neuraltrade/core/utils/numberUtils';
 
 interface IProps {
   dataSources: DataSourceType[];

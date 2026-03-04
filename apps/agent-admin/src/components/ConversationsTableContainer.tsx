@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 import { useFormattedColumns } from '../hooks/useFormattedColumns';
 import { usePagination } from '../hooks/usePagination.tsx';
 import useConversationsTableQuery from '../queries/query/useConversationsTableQuery';
@@ -19,12 +19,12 @@ import {
   getSortingAppliedValues,
 } from '../utils/common';
 
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { ConversationsPayload } from '@meaku/core/types/admin/api';
-import { ConversationsTableDisplayContent, ConversationsTableViewContent } from '@meaku/core/types/admin/admin';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
+import { ConversationsPayload } from '@neuraltrade/core/types/admin/api';
+import { ConversationsTableDisplayContent, ConversationsTableViewContent } from '@neuraltrade/core/types/admin/admin';
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
-import { CONVERSATIONS_PAGE } from '@meaku/core/utils/index';
+import { CONVERSATIONS_PAGE } from '@neuraltrade/core/utils/index';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
@@ -32,7 +32,7 @@ import { useEntityMetadata } from '../context/EntityMetadataContext.tsx';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import TableViewShimmer from './ShimmerComponent/TableViewShimmer.tsx';
-import { SortValues } from '@meaku/core/types/admin/sort';
+import { SortValues } from '@neuraltrade/core/types/admin/sort';
 import { useSidebar } from '../context/SidebarContext.tsx';
 
 const ConversationsTableContainer = () => {

@@ -1,6 +1,6 @@
 import Button from '@breakout/design-system/components/Button/index';
 import { XIcon } from 'lucide-react'; //TODO: Expos this for design system
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType } from '@neuraltrade/core/types/webSocketData';
 import FeedbackHeader from './FeedbackHeader';
 import Typography from '../Typography';
 import { useCallback } from 'react';

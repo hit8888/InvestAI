@@ -3,9 +3,9 @@ import PreviousArrowBig from '@breakout/design-system/components/icons/previous-
 import Button from '@breakout/design-system/components/Button/index';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { useTableStore } from '../../stores/useTableStore';
-import { ConversationsTableViewContent, LeadsTableViewContent } from '@meaku/core/types/admin/admin';
+import { ConversationsTableViewContent, LeadsTableViewContent } from '@neuraltrade/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
-import useLocationPath from '@meaku/core/hooks/useLocationPath';
+import useLocationPath from '@neuraltrade/core/hooks/useLocationPath';
 
 type IProps = {
   sessionID: string;

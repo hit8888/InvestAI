@@ -1,6 +1,6 @@
 import PreviewCardActionButtons from './PreviewCardActionButtons';
 import { BLOCK_ICONS } from '../utils/blockHelpers';
-import { BlockType } from '@meaku/core/types/admin/api';
+import { BlockType } from '@neuraltrade/core/types/admin/api';
 
 interface PreviewCardHeaderProps {
   blockType: BlockType;

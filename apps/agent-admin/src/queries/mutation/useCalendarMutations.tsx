@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCalendar, updateCalendar, deleteCalendar } from '@meaku/core/adminHttp/api';
-import { CalendarFormData } from '@meaku/core/types/admin/api';
+import { createCalendar, updateCalendar, deleteCalendar } from '@neuraltrade/core/adminHttp/api';
+import { CalendarFormData } from '@neuraltrade/core/types/admin/api';
 
 interface CreateCalendarParams {
   payload: CalendarFormData;

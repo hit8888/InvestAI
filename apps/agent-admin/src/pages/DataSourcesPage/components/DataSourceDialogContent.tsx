@@ -15,7 +15,7 @@ import { useSitemapFetch } from '../../../hooks/useSitemapFetch';
 import URLLinkInput from '@breakout/design-system/components/layout/URLLinkInput';
 import VideoLinkProvider from './VideoLinkProvider';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 
 // URL validation utility
 const isValidUrl = (url: string): boolean => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DateRangePicker from '@breakout/design-system/components/layout/DateRangePicker';
 import ChoosePresetsDateValue from '../../../../components/ChoosePresetsDateValue';
 import { DATE_RANGE_PRESET_OPTIONS } from '../../../../utils/constants';
-import { PresetDateLabel, DateRangeProp } from '@meaku/core/types/admin/filters';
+import { PresetDateLabel, DateRangeProp } from '@neuraltrade/core/types/admin/filters';
 import { getDateAppliedValue } from '../../../../utils/common';
 import type { FilterConfig, DateRangeValue } from '../../types';
 

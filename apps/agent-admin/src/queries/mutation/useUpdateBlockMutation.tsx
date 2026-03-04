@@ -1,7 +1,7 @@
 import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
-import { updateBlock } from '@meaku/core/adminHttp/api';
-import { Block, UpdateBlockPayload } from '@meaku/core/types/admin/api';
+import { updateBlock } from '@neuraltrade/core/adminHttp/api';
+import { Block, UpdateBlockPayload } from '@neuraltrade/core/types/admin/api';
 import { getBlocksKey } from '../query/useBlocksQuery';
 import { getBlockKey } from '../query/useBlockQuery';
 

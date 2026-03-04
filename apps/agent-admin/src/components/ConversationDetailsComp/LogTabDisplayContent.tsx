@@ -1,9 +1,9 @@
 import { useConversationDetails } from '../../context/ConversationDetailsContext';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
-import { ViewType } from '@meaku/core/types/common';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
 import { useSessionStore } from '../../stores/useSessionStore';
-import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
+import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@neuraltrade/core/constants/index';
 
 const LogTabDisplayContent = () => {
   const { chatHistory, conversation, feedbackData } = useConversationDetails();

@@ -1,6 +1,6 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
-import { changePassword } from '@meaku/core/adminHttp/api';
-import { ChangePasswordPayload } from '@meaku/core/types/admin/api';
+import { changePassword } from '@neuraltrade/core/adminHttp/api';
+import { ChangePasswordPayload } from '@neuraltrade/core/types/admin/api';
 import { AxiosError } from 'axios';
 
 type ChangePasswordResult = ReturnType<typeof changePassword> extends Promise<infer T> ? T : never;

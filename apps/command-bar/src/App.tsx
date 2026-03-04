@@ -1,19 +1,19 @@
 import './index.css';
 import { useState, useEffect } from 'react';
 
-import { useWsClient } from '@meaku/shared/hooks/useWsClient';
-import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
-import { useCommandBarStore } from '@meaku/shared/stores';
-import useSessionDataQuery from '@meaku/shared/network/http/queries/useSessionDataQuery';
-import { useHistory } from '@meaku/core/hooks/useHistory';
-import { sanitizeUrl } from '@meaku/core/utils/index';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { useWsClient } from '@neuraltrade/shared/hooks/useWsClient';
+import { setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
+import { useCommandBarStore } from '@neuraltrade/shared/stores';
+import useSessionDataQuery from '@neuraltrade/shared/network/http/queries/useSessionDataQuery';
+import { useHistory } from '@neuraltrade/core/hooks/useHistory';
+import { sanitizeUrl } from '@neuraltrade/core/utils/index';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 import { useUserLeftTracking } from './hooks/useUserLeftTracking';
 import { useEntryAnimationTiming } from './hooks/useEntryAnimationTiming';
-import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@meaku/shared/containers/FeatureProvider';
-import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import { DEFAULT_ASK_AI_MODULE_ID, useFeature } from '@neuraltrade/shared/containers/FeatureProvider';
+import useDelayedEnable from '@neuraltrade/core/hooks/useDelayedEnable';
 import { CommandBarRenderer } from './components/BottomBar/CommandBarRenderer';
 import { useBottomBarTransition, useCommandBarLayout } from './components/BottomBar/hooks';
 

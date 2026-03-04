@@ -1,7 +1,7 @@
 import type { FC, ReactElement } from 'react';
 import { useEffect } from 'react';
-import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
-import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
+import { useShadowRoot } from '@neuraltrade/shared/containers/ShadowRootProvider';
+import { useCommandBarStore } from '@neuraltrade/shared/stores/useCommandBarStore';
 import useBrandCoverImage from '../hooks/useBrandCoverImage';
 import useStyleConfig from '../hooks/useStyleConfig';
 

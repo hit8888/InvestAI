@@ -1,4 +1,4 @@
-import { ENV } from '@meaku/shared/constants/env';
+import { ENV } from '@neuraltrade/shared/constants/env';
 import * as Sentry from '@sentry/react';
 
 /**

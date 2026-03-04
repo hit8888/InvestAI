@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import SingleAssignRepCell from '../common/SingleAssignRepCell';
 import useAssignSdrMutation from '../../queries/mutation/useAssignSdrMutation';
 import toast from 'react-hot-toast';
 import AssignRepPopover from './AssignRepPopover';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type IProps = {

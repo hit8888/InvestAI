@@ -5,7 +5,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import ArrowUpIcon from '@breakout/design-system/components/icons/arrow-up-icon';
 import { cn } from '@breakout/design-system/lib/cn';
 import useWebpagesScreenshotsQuery from '../../queries/query/useWebpagesScreenshotsQuery';
-import { BrowsedUrl } from '@meaku/core/types/common';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
 import { useMemo, useState, useEffect } from 'react';
 import BrowsingHistoryLoading from '../../pages/VisitorsPage/components/CompanyDetailsDrawer/BrowsingHistoryLoading';
 

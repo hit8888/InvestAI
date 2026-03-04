@@ -1,6 +1,6 @@
 import React from 'react';
-import { NudgeAssetType } from '@meaku/core/types/api/configuration_response';
-import { VideoPlayer } from '@meaku/saral';
+import { NudgeAssetType } from '@neuraltrade/core/types/api/configuration_response';
+import { VideoPlayer } from '@neuraltrade/saral';
 interface NudgeVideoProps {
   asset: NudgeAssetType;
 }

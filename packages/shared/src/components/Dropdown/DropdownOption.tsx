@@ -1,5 +1,5 @@
 import React from 'react';
-import { DropdownMenuItem, LucideIcon, cn } from '@meaku/saral';
+import { DropdownMenuItem, LucideIcon, cn } from '@neuraltrade/saral';
 
 interface MenuOptionProps {
   menuOptionTitle: string;

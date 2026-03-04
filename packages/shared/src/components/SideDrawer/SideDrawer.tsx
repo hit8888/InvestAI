@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 import { useModalPortal, useBehindContentPortal } from '../../hooks/usePortal';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { SideDrawerProps } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSideDrawerPosition } from './hooks/useSideDrawerPosition';

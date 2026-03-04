@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { setTenantHeader } from '@meaku/core/http/client';
-import { setActiveTenantData } from '@meaku/core/utils/storage-utils';
+import { setTenantHeader } from '@neuraltrade/core/http/client';
+import { setActiveTenantData } from '@neuraltrade/core/utils/storage-utils';
 
 interface UseActiveTenantInitProps {
   tenantId?: string;

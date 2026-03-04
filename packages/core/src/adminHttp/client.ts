@@ -1,5 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { ENV } from '@meaku/core/types/env';
+import { ENV } from '@neuraltrade/core/types/env';
 import { regenerateTokens } from './api';
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCommandBarStore } from '../../../stores';
 import { useWsClient } from '../../../hooks/useWsClient';
 import { MessageEventType, type Message, type StreamResponseEventData } from '../../../types/message';
-import { ensureProtocol } from '@meaku/core/utils/index';
+import { ensureProtocol } from '@neuraltrade/core/utils/index';
 
 // TODO: Need proper error types for summary stream messages from the backend
 const ERROR_MESSAGES = [

@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { getCompaniesRowData } from '@meaku/core/adminHttp/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { CompaniesPayload, CompaniesTableResponseSchema } from '@meaku/core/types/admin/api';
+import { getCompaniesRowData } from '@neuraltrade/core/adminHttp/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { CompaniesPayload, CompaniesTableResponseSchema } from '@neuraltrade/core/types/admin/api';
 import { z } from 'zod';
 import { useSessionStore } from '../../stores/useSessionStore';
 

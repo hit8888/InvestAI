@@ -1,6 +1,6 @@
-import type { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
+import type { SessionDetailsDataResponse } from '@neuraltrade/core/types/admin/admin';
 import type { CompanyData } from '../components/CompanyDetailsDrawer/types';
-import { getCompanyLogoSrc } from '@meaku/core/utils/index';
+import { getCompanyLogoSrc } from '@neuraltrade/core/utils/index';
 import { getHighestIntentScore } from '../../../utils/common';
 
 export const mapSessionDetailToCompanyData = (sessionData: SessionDetailsDataResponse): CompanyData => {

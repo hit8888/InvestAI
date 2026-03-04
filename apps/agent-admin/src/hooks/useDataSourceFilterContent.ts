@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
-import { FilterOptionsPayload } from '@meaku/core/types/admin/api';
+import { FilterOptionsPayload } from '@neuraltrade/core/types/admin/api';
 import { getAllFilterAppliedValues, getDescendingOrderedOptions } from '../utils/common';
 import { useQueryOptions } from './useQueryOptions';
 import useDataSourceFilterOptionsDataQuery from '../queries/query/useDataSourceFilterOptionsDataQuery';
-import { FilterValues, FilterValueTypes, ResultantOption } from '@meaku/core/types/admin/filters';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { FilterValues, FilterValueTypes, ResultantOption } from '@neuraltrade/core/types/admin/filters';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 
 interface UseDataSourceFilterContentProps {
   page: PaginationPageType;

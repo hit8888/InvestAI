@@ -1,6 +1,6 @@
 import Button from '@breakout/design-system/components/Button/index';
 import { XIcon } from 'lucide-react';
-import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
+import { CommonDataSourceResponse } from '@neuraltrade/core/types/admin/admin';
 import PaginationNextArrow from '@breakout/design-system/components/icons/pagination-next-arrow';
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import PaginationArrowButton from '../../../components/tableComp/PaginationArrowButton';

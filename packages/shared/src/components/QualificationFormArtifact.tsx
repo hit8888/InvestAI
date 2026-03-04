@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 
 import { FormArtifactContent, QualificationQuestionType } from '../utils/artifact';
 import { SendUserMessageParams, MessageEventType } from '../types/message';

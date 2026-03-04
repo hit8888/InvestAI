@@ -2,8 +2,8 @@ import { useRef } from 'react';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { initializeSession } from '../api';
-import type { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import type { InitializationPayload } from '@meaku/core/types/api/session_init_request';
+import type { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import type { InitializationPayload } from '@neuraltrade/core/types/api/session_init_request';
 import type { InitSessionResponse } from '../../../types/responses';
 import { useCommandBarStore } from '../../../stores';
 

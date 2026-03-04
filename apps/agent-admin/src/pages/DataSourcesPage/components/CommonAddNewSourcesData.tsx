@@ -1,7 +1,7 @@
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
 import IncludedSourcesDialogHeader from './IncludedSourcesDialogHeader';
 import Button from '@breakout/design-system/components/Button/index';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import { useDataSources } from '../../../context/DataSourcesContext';
 import DataSourceSingleItemDisplay from './DataSourceSingleItemDisplay';

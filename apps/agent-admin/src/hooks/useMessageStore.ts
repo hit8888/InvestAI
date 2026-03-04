@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isDiscoveryQuestion, shouldUpdateMessage } from '@meaku/core/utils/messageUtils';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { isDiscoveryQuestion, shouldUpdateMessage } from '@neuraltrade/core/utils/messageUtils';
 
 interface State {
   messages: WebSocketMessage[];

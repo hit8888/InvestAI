@@ -12,7 +12,7 @@ import usePlaygroundOptions from '../../hooks/usePlaygroundOptions';
 import { AppRoutesEnum } from '../../utils/constants';
 import { useSidebar } from '../../context/SidebarContext';
 import bcDefault from '/bc_default.png';
-import { deepCompare, jsonSafeParse } from '@meaku/core/utils/index';
+import { deepCompare, jsonSafeParse } from '@neuraltrade/core/utils/index';
 
 export interface SettingsFormData {
   repeatUser: boolean;

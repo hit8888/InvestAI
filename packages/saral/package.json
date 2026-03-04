@@ -1,5 +1,5 @@
 {
-  "name": "@meaku/saral",
+  "name": "@neuraltrade/saral",
   "type": "module",
   "version": "0.1.0",
   "description": "Saral Design System - React components based on shadcn/ui",

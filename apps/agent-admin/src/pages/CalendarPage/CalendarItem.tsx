@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CalendarResponse, CalendarFormData } from '@meaku/core/types/admin/api';
+import { CalendarResponse, CalendarFormData } from '@neuraltrade/core/types/admin/api';
 import Card from '../../components/AgentManagement/Card';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { Badge } from '@breakout/design-system/components/layout/badge';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
-import { DataSourceItem, ThumbnailAssetData } from '@meaku/core/types/admin/api';
+import { DataSourceItem, ThumbnailAssetData } from '@neuraltrade/core/types/admin/api';
 
 // Generic upload function type that accepts a file and progress callback
 export type UploadFunction<T = DataSourceItem | ThumbnailAssetData> = (

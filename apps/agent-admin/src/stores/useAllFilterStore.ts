@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { AllFilterState, FilterValues, FilterValueTypes, InitialFilterValues } from '@meaku/core/types/admin/filters';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
-import { FilterItem } from '@meaku/core/types/admin/api';
+import { AllFilterState, FilterValues, FilterValueTypes, InitialFilterValues } from '@neuraltrade/core/types/admin/filters';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
+import { FilterItem } from '@neuraltrade/core/types/admin/api';
 
 export const useAllFilterStore = create<AllFilterState>((set) => ({
   leads: { ...InitialFilterValues },

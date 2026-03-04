@@ -1,7 +1,7 @@
 import { FileText } from 'lucide-react';
 import useFrequentSourcesQuery from '../../queries/query/useFrequentSourcesQuery';
 import CommonMinTableView from './CommonMinTableView';
-import { FrequentDocumentsResponse } from '@meaku/core/types/admin/api';
+import { FrequentDocumentsResponse } from '@neuraltrade/core/types/admin/api';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { buildPathWithTenantBase } from '../../utils/navigation';

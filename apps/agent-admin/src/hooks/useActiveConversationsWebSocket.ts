@@ -2,21 +2,21 @@ import useWebSocket from 'react-use-websocket';
 import { useEffect, useState } from 'react';
 import { useSessionStore } from '../stores/useSessionStore';
 import { trackError } from '../utils/error.ts';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import {
   checkIsEventMessage,
   checkIsUserLeftMessage,
   isHeartbeatEvent,
   isMessageAnalyticsEvent,
   isTextMessage,
-} from '@meaku/core/utils/messageUtils';
+} from '@neuraltrade/core/utils/messageUtils';
 import useJoinConversationStore from '../stores/useJoinConversationStore.ts';
 import { useMessageStore } from './useMessageStore.ts';
-import { MessageSenderRole } from '@meaku/core/types/common';
+import { MessageSenderRole } from '@neuraltrade/core/types/common';
 import { nanoid } from 'nanoid';
-import useGetMessagePayload from '@meaku/core/hooks/useGetMessagePayload';
+import useGetMessagePayload from '@neuraltrade/core/hooks/useGetMessagePayload';
 import { getWebsocketBaseUrl } from '../utils/apiCalls.ts';
-import useSound from '@meaku/core/hooks/useSound';
+import useSound from '@neuraltrade/core/hooks/useSound';
 import popupsound from '../assets/popup-sound.mp4';
 
 export type LastMessage = {

@@ -1,9 +1,9 @@
 import { toast } from 'react-hot-toast';
-import { exportTableData } from '@meaku/core/adminHttp/api';
+import { exportTableData } from '@neuraltrade/core/adminHttp/api';
 import { createFilename, triggerDownload } from './downloadUtils';
-import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@meaku/core/types/admin/api';
-import { PageTypeToTableName } from '@meaku/core/utils/index';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { ConversationsPayload, ExportFormat, ExportFormatType, LeadsPayload } from '@neuraltrade/core/types/admin/api';
+import { PageTypeToTableName } from '@neuraltrade/core/utils/index';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 
 interface DownloadProps {
   page: PaginationPageType;

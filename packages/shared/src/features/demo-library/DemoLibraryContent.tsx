@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { VideoLibraryIcon } from '@meaku/saral';
+import { VideoLibraryIcon } from '@neuraltrade/saral';
 import type { FeatureContentProps } from '../';
 import useDemoLibraryQuery from '../../network/http/queries/useDemoLibraryQuery';
 import { MainDemoPlayer } from './components/MainDemoPlayer';
@@ -12,7 +12,7 @@ import { DemoLibraryErrorState } from './components/DemoLibraryErrorState';
 import { Demo } from './types';
 import { useCommandBarStore } from '../../stores';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 import { trackError } from '../../utils/error';
 import { useWatchedDemos } from './hooks/useWatchedDemos';
 

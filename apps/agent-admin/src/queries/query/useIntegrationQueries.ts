@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-import { getIntegrations } from '@meaku/core/adminHttp/api';
-import { IntegrationsResponse } from '@meaku/core/types/admin/api';
+import { getIntegrations } from '@neuraltrade/core/adminHttp/api';
+import { IntegrationsResponse } from '@neuraltrade/core/types/admin/api';
 
 const useIntegrationsQuery = (options?: Omit<UseQueryOptions<IntegrationsResponse, Error>, 'queryFn'>) => {
   return useQuery({

@@ -1,13 +1,13 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { useCallback, useRef, useState } from 'react';
 import { PauseIcon, PlayIcon } from 'lucide-react';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { ArtifactEnum } from '@meaku/core/types/artifact';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { ArtifactEnum } from '@neuraltrade/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
 import ReactPlayer from 'react-player';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { AccessibleDiv } from '../accessibility';
 
 interface IProps {

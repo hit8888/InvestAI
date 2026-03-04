@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { Input, Button, Label } from '@meaku/saral';
+import { Input, Button, Label } from '@neuraltrade/saral';
 import useUpdateProspectMutation from '../../network/http/mutations/useUpdateProspectMutation';
 import { FeatureContentProps } from '../';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
+import { getLocalStorageData, setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
 
 export const IframeContent = ({ onClose }: FeatureContentProps) => {
   const { config } = useCommandBarStore();

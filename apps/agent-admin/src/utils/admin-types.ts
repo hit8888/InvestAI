@@ -1,5 +1,5 @@
 import z from 'zod';
-import { FunnelStepSchema } from '@meaku/core/types/admin/api';
+import { FunnelStepSchema } from '@neuraltrade/core/types/admin/api';
 import { ConversationChipLabelEnum } from './constants';
 
 // Desired data type for FunnelData

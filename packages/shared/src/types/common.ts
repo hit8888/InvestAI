@@ -1,5 +1,5 @@
-import { BrowsedUrl } from '@meaku/core/types/common';
-import { CommandBarModuleType } from '@meaku/core/types/index';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
+import { CommandBarModuleType } from '@neuraltrade/core/types/index';
 
 export interface CommandBarSettings {
   tenant_id: string;

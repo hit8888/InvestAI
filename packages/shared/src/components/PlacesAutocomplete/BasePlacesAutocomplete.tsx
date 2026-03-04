@@ -1,4 +1,4 @@
-import { Popover, PopoverContent, PopoverTrigger, LucideIcon, Input, cn } from '@meaku/saral';
+import { Popover, PopoverContent, PopoverTrigger, LucideIcon, Input, cn } from '@neuraltrade/saral';
 import { usePlacesAutocompleteState, PlaceData } from '../../hooks/usePlacesAutocompleteState';
 
 export type { PlaceData };

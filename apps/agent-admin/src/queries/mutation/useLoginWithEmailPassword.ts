@@ -1,5 +1,5 @@
-import { loginWithEmailPassword } from '@meaku/core/adminHttp/api';
-import { LoginWithEmailPasswordPayload } from '@meaku/core/types/admin/api';
+import { loginWithEmailPassword } from '@neuraltrade/core/adminHttp/api';
+import { LoginWithEmailPasswordPayload } from '@neuraltrade/core/types/admin/api';
 import { useMutation, UseMutationOptions, useMutationState } from '@tanstack/react-query';
 import { processLoginResponse } from '../../utils/apiCalls';
 

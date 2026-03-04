@@ -8,13 +8,13 @@ import useJoinConversationStore from '../../stores/useJoinConversationStore';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { LoaderCircle, ArrowLeft, Plus } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
-import { AdminConversationJoinStatus } from '@meaku/core/types/index';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import AttachmentPopover from './AttachmentPopover';
 import AttachmentSelectionDialog from './AttachmentSelectionDialog';
 
 import { ActiveConversationAttachmentOption } from '../../utils/admin-types';
-import { useDebouncedTyping } from '@meaku/shared/hooks/useDebouncedTyping';
+import { useDebouncedTyping } from '@neuraltrade/shared/hooks/useDebouncedTyping';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type ChatInputContainerProps = {

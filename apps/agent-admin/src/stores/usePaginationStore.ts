@@ -1,4 +1,4 @@
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import {
   CONVERSATIONS_PAGE,
   DOCUMENTS_PAGE,
@@ -8,7 +8,7 @@ import {
   VISITORS_PAGE,
   VIDEOS_PAGE,
   WEBPAGES_PAGE,
-} from '@meaku/core/utils/index';
+} from '@neuraltrade/core/utils/index';
 import { create } from 'zustand';
 
 interface PaginationValues {

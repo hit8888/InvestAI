@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
-import { Button, cn } from '@meaku/saral';
+import { Button, cn } from '@neuraltrade/saral';
 import BlackTooltip from '../../components/BlackTooltip';
 import {
   CommandBarModuleTypeSchema,
   CommandBarModuleConfigType,
   ConfigurationApiResponse,
-} from '@meaku/core/types/api/configuration_response';
+} from '@neuraltrade/core/types/api/configuration_response';
 import { FeatureActionProps } from '../';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 import { useCommandBarStore } from '../../stores/useCommandBarStore';

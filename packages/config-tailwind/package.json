@@ -1,12 +1,12 @@
 {
-  "name": "@meaku/tailwind-config",
+  "name": "@neuraltrade/tailwind-config",
   "version": "0.0.0",
   "private": true,
   "exports": {
     ".": "./tailwind.config.ts"
   },
   "devDependencies": {
-    "@meaku/typescript-config": "workspace:*",
+    "@neuraltrade/typescript-config": "workspace:*",
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {

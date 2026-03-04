@@ -1,4 +1,4 @@
-import { DataSourceItem as DataSourceItemType } from '@meaku/core/types/admin/api';
+import { DataSourceItem as DataSourceItemType } from '@neuraltrade/core/types/admin/api';
 import VideoThumbnailPauseIcon from '@breakout/design-system/components/icons/video-thumbnail-pause-icon';
 import SlidesThumbnailIcon from '@breakout/design-system/components/icons/slides-thumbnail-icon';
 import CustomVideoPlayer from '@breakout/design-system/components/layout/CustomVideoPlayer';

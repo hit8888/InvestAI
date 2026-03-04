@@ -1,11 +1,11 @@
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { checkIsUserLeftMessage } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { checkIsUserLeftMessage } from '@neuraltrade/core/utils/messageUtils';
 import MessageItemLayout, { Alignment } from './MessageItemLayout';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 import AccountOffIcon from '../../icons/account-off-icon';
 import Typography from '../../Typography';
 import { Link } from 'react-router-dom';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 
 interface UserLeftInfoProps {
   message: WebSocketMessage;

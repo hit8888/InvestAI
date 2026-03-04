@@ -1,14 +1,14 @@
-import { AdditionalCalendarArtifactContent, CalendarTypeEnum } from '@meaku/core/types/artifact';
+import { AdditionalCalendarArtifactContent, CalendarTypeEnum } from '@neuraltrade/core/types/artifact';
 import { AspectRatio } from '@breakout/design-system/components/layout/aspect-ratio';
-import { AgentEventType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
+import { AgentEventType, SendUserMessageParams } from '@neuraltrade/core/types/webSocketData';
 import { CalendlyCalendar } from './CalendlyCalendar';
 import { CalComCalendar } from './CalComCalendar';
 import { IframeCalendar } from './IframeCalendar';
 import { HubSpotCalendar } from './HubSpotCalendar';
 import { cn } from '../../lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { useState } from 'react';
-import useElementScrollIntoView from '@meaku/core/hooks/useElementScrollIntoView';
+import useElementScrollIntoView from '@neuraltrade/core/hooks/useElementScrollIntoView';
 import CalendarBookingSuccessfull from './CalendarBookingSuccessfull';
 
 interface Props {

@@ -1,7 +1,7 @@
 import SlidesThumbnailIcon from '@breakout/design-system/components/icons/slides-thumbnail-icon';
 import SlidesSourcesIcon from '@breakout/design-system/components/icons/sources-slides-icon';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { getSingleSourceItemTypeAndName, getSingleSourceItemVideoUrl } from '../utils';
 
 type IProps = {

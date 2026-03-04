@@ -1,12 +1,12 @@
 import Typography from '@breakout/design-system/components/Typography/index';
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import CardTitleAndDescription from '../../components/AgentManagement/CardTitleAndDescription';
 import { ORB_DESCRIPTION } from '../../utils/constants';
 import { Switch } from '@breakout/design-system/components/layout/switch';
 import { useState } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import Orb from '@breakout/design-system/components/Orb/index';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
 import { handleConfigUpdate } from '../../pages/BrandingPage/utils';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import BrandingSectionContainer from './BrandingSectionContainer';

@@ -1,4 +1,4 @@
-import { UserRole } from '@meaku/core/types/admin/api';
+import { UserRole } from '@neuraltrade/core/types/admin/api';
 
 /**
  * User role options for dropdown components

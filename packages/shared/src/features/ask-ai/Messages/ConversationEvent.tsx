@@ -1,4 +1,4 @@
-import { Typography, ImageWithFallback } from '@meaku/saral';
+import { Typography, ImageWithFallback } from '@neuraltrade/saral';
 import { Message } from '../../../types/message';
 import { isJoinSessionEvent, isLeaveSessionEvent } from '../../../utils/message-utils';
 import { OnlineIndicator } from '../../../components/AvatarDisplay';

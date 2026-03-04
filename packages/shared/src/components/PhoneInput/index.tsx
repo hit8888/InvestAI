@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 import { CountryCode } from 'libphonenumber-js';
 import PhoneInput, { DefaultInputComponentProps, Props } from 'react-phone-number-input';
 

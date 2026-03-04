@@ -1,5 +1,5 @@
 import { MessageGroupProps } from './types';
-import { shouldMessageScrollToTop, willMessageRenderHTML } from '@meaku/core/utils/messageUtils';
+import { shouldMessageScrollToTop, willMessageRenderHTML } from '@neuraltrade/core/utils/messageUtils';
 import { calculateMinHeight } from './utils';
 import ScrollTarget from './ScrollTarget';
 import MessageItem from '../ChatMessages/MessageItem';

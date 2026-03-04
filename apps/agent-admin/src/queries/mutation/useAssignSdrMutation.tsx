@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import { AxiosResponse, AxiosError } from 'axios';
-import { assignSdrManually } from '@meaku/core/adminHttp/api';
-import { AssignSdrRequest, AssignSdrResponse } from '@meaku/core/types/admin/api';
+import { assignSdrManually } from '@neuraltrade/core/adminHttp/api';
+import { AssignSdrRequest, AssignSdrResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {

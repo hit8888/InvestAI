@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, memo } from 'react';
 import { Demo } from '../types';
-import { LucideIcon, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@neuraltrade/saral';
 import BlackTooltip from '../../../components/BlackTooltip';
 
 // Global cache to track loaded demos across all component instances

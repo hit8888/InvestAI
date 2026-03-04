@@ -1,9 +1,9 @@
-import { ConversationsPayload } from '@meaku/core/types/admin/api';
+import { ConversationsPayload } from '@neuraltrade/core/types/admin/api';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getConversationRowData } from '@meaku/core/adminHttp/api';
+import { getConversationRowData } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { ConversationsTableResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { ConversationsTableResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type ConversationTableVariables = ConversationsPayload;

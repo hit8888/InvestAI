@@ -1,5 +1,5 @@
 {
-  "name": "@meaku/shared",
+  "name": "@neuraltrade/shared",
   "version": "0.0.0",
   "scripts": {
     "dev": "tsc -w -p tsconfig.json",
@@ -44,9 +44,9 @@
   "devDependencies": {
     "@calcom/embed-react": "^1.5.2",
     "@hookform/resolvers": "^3.9.1",
-    "@meaku/core": "workspace:*",
-    "@meaku/saral": "workspace:*",
-    "@meaku/typescript-config": "workspace:*",
+    "@neuraltrade/core": "workspace:*",
+    "@neuraltrade/saral": "workspace:*",
+    "@neuraltrade/typescript-config": "workspace:*",
     "@sentry/react": "^8.30.0",
     "@tanstack/react-query": "^5.56.2",
     "@testing-library/jest-dom": "^6.6.3",

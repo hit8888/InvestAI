@@ -1,10 +1,10 @@
-import { Button, cn, LucideIcon, VideoPlayer } from '@meaku/saral';
+import { Button, cn, LucideIcon, VideoPlayer } from '@neuraltrade/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BaseArtifact } from '../components/BaseArtifact';
 import { BaseArtifactProps } from '../types/artifact.types';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 /**
  * Strips leading @ symbols from URLs

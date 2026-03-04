@@ -1,17 +1,17 @@
 import { lazy } from 'react';
-import type { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import type { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 import { FeatureContentWrapper } from './FeatureContentWrapper';
-import { useCommandBarStore } from '@meaku/shared/stores';
+import { useCommandBarStore } from '@neuraltrade/shared/stores';
 import useOutsideClick from '../hooks/useOutsideClick';
-import { withSuspenseWrapper } from '@meaku/core/containers/SuspenseWrapper';
+import { withSuspenseWrapper } from '@neuraltrade/core/containers/SuspenseWrapper';
 
-const AskAiContent = lazy(() => import('@meaku/shared/features/ask-ai/AskAiContent'));
-const BookMeetingContent = lazy(() => import('@meaku/shared/features/book-meeting/BookMeetingContent'));
-const SummarizeContent = lazy(() => import('@meaku/shared/features/summarize/SummarizeContent'));
-const IframeContent = lazy(() => import('@meaku/shared/features/iframe/IframeContent'));
-const VideoLibraryContent = lazy(() => import('@meaku/shared/features/video-library/VideoLibraryContent'));
-const DemoLibraryContent = lazy(() => import('@meaku/shared/features/demo-library/DemoLibraryContent'));
+const AskAiContent = lazy(() => import('@neuraltrade/shared/features/ask-ai/AskAiContent'));
+const BookMeetingContent = lazy(() => import('@neuraltrade/shared/features/book-meeting/BookMeetingContent'));
+const SummarizeContent = lazy(() => import('@neuraltrade/shared/features/summarize/SummarizeContent'));
+const IframeContent = lazy(() => import('@neuraltrade/shared/features/iframe/IframeContent'));
+const VideoLibraryContent = lazy(() => import('@neuraltrade/shared/features/video-library/VideoLibraryContent'));
+const DemoLibraryContent = lazy(() => import('@neuraltrade/shared/features/demo-library/DemoLibraryContent'));
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 

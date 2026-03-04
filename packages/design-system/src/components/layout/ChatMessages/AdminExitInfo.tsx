@@ -1,5 +1,5 @@
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { checkIsAdminLeftMessage } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { checkIsAdminLeftMessage } from '@neuraltrade/core/utils/messageUtils';
 import { CircleUserRound } from 'lucide-react';
 import MessageItemLayout, { Alignment, Padding } from './MessageItemLayout';
 

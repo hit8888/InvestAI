@@ -1,6 +1,6 @@
 import LogRocket from 'logrocket';
 import { isProduction } from './utils/common';
-import { ENV } from '@meaku/core/types/env';
+import { ENV } from '@neuraltrade/core/types/env';
 import { useEffect } from 'react';
 import { trackError } from './utils/error';
 

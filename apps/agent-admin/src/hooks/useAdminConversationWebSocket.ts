@@ -2,12 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { nanoid } from 'nanoid';
 import { useSessionStore } from '../stores/useSessionStore';
-import { EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { EventMessageContent, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import { useMessageStore } from './useMessageStore';
-import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import { isHeartbeatEvent, isMessageAnalyticsEvent } from '@neuraltrade/core/utils/messageUtils';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import { getWebsocketBaseUrl } from '../utils/apiCalls';
-import useTabNotification from '@meaku/core/hooks/useTabNotification';
+import useTabNotification from '@neuraltrade/core/hooks/useTabNotification';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 1 min
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // 2 mins

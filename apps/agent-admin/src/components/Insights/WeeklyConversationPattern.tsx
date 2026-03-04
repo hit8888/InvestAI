@@ -2,11 +2,11 @@ import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Cell, 
 import { CalendarDays, Calendar } from 'lucide-react';
 import useSessionInsightsQuery from '../../queries/query/useSessionInsightsQuery';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@meaku/tailwind-config';
-import { DayOfWeek, WeeklySessionInsightsResponse } from '@meaku/core/types/admin/api';
+import tailwindConfig from '@neuraltrade/tailwind-config';
+import { DayOfWeek, WeeklySessionInsightsResponse } from '@neuraltrade/core/types/admin/api';
 import { useEffect, useState } from 'react';
 import InsightInfo from './InsightInfo';
-import { BREAKOUT_COLOR } from '@meaku/core/utils/index';
+import { BREAKOUT_COLOR } from '@neuraltrade/core/utils/index';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fullConfig = resolveConfig(tailwindConfig as any);

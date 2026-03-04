@@ -25,9 +25,9 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@meaku/saral": ["../../packages/saral/src"],
-      "@meaku/core/*": ["../../packages/core/src/*"],
-      "@meaku/shared/*": ["../../packages/shared/src/*"]
+      "@neuraltrade/saral": ["../../packages/saral/src"],
+      "@neuraltrade/core/*": ["../../packages/core/src/*"],
+      "@neuraltrade/shared/*": ["../../packages/shared/src/*"]
     }
   },
   "include": ["src"]

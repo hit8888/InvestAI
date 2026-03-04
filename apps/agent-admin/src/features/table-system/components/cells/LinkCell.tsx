@@ -2,7 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { CellContainer } from './CellContainer';
 import { TruncatedText } from './TruncatedText';
 import EmptyCell from './EmptyCell';
-import { extractLinkedInUsername } from '@meaku/core/utils/index';
+import { extractLinkedInUsername } from '@neuraltrade/core/utils/index';
 
 interface LinkCellProps {
   value: unknown;

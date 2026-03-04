@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { updateUserProfile } from '@meaku/core/adminHttp/api';
+import { updateUserProfile } from '@neuraltrade/core/adminHttp/api';
 import {
   UpdateUserProfilePayload,
   UserProfileUpdateResponse,
   UserProfileValidationError,
   UserProfileNotFoundError,
   UserProfileServerError,
-} from '@meaku/core/types/admin/api';
+} from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {

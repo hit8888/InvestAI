@@ -4,7 +4,7 @@ import PanelInsightsIcon from '@breakout/design-system/components/icons/panel-in
 import { Calendar, CalendarDays, Dot } from 'lucide-react';
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@meaku/tailwind-config';
+import tailwindConfig from '@neuraltrade/tailwind-config';
 import moment from 'moment-timezone';
 import InsightInfo from './InsightInfo';
 import useConversationProcessingTimeLogQuery from '../../queries/query/useConversationProcessingTimeLog';

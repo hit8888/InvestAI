@@ -5,7 +5,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
-import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
+import { ReachoutEmailResponse } from '@neuraltrade/core/types/admin/api';
 
 export const ReachoutEmailBody = ({
   data,

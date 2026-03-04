@@ -7,8 +7,8 @@ import React, { useRef, useState } from 'react';
 import { useVideoValidationMutation } from '../../../queries/mutation/useVideoValidationMutation';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import URLLinkInput from '@breakout/design-system/components/layout/URLLinkInput';
-import { VideoValidationResponse } from '@meaku/core/types/admin/api';
-import { uploadAssetsFromUrl } from '@meaku/core/adminHttp/api';
+import { VideoValidationResponse } from '@neuraltrade/core/types/admin/api';
+import { uploadAssetsFromUrl } from '@neuraltrade/core/adminHttp/api';
 
 const getVideoProvider = (url: string): string => {
   try {

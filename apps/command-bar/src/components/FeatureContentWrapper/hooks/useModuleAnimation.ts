@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { ANIMATION_CONFIG } from '../constants';
 
 /**

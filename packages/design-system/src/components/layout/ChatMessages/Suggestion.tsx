@@ -5,8 +5,8 @@ import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';
 import BlackThreeStarIcon from '../../icons/black-three-star-icon';
 import Typography from '../../Typography';
 import { useTextTruncation } from '../../../hooks/useTextTruncation';
-import { ViewType } from '@meaku/core/types/common';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   question: string;

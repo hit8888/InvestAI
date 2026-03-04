@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { getTenantMetadata } from '@meaku/core/adminHttp/api';
-import { TenantMetadataResponse } from '@meaku/core/types/admin/api';
+import { getTenantMetadata } from '@neuraltrade/core/adminHttp/api';
+import { TenantMetadataResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {

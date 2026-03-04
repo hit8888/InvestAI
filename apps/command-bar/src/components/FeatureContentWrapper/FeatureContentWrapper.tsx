@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { LAYOUT_CONSTANTS } from './constants';
 
 import { useModulePositioning, useModuleStyles, useInnerModuleStyles, useModuleAnimation } from './hooks';

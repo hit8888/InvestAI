@@ -1,4 +1,4 @@
-import { VideoLibraryIcon } from '@meaku/saral';
+import { VideoLibraryIcon } from '@neuraltrade/saral';
 
 export const DemoLibraryEmptyState = () => {
   return (

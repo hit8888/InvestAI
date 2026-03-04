@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo } from 'react';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import Typography from '../../Typography';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 interface Props {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
-import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
-import { ViewType } from '@meaku/core/types/common';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@neuraltrade/core/constants/index';
+import { ConversationsTableDisplayContent } from '@neuraltrade/core/types/admin/admin';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type ConversationLogItemProps = {

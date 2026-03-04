@@ -4,7 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 import { CellContainer } from './CellContainer';
 import EmptyCell from './EmptyCell';
 

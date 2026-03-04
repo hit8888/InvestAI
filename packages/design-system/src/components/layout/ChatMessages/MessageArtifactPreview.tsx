@@ -6,14 +6,14 @@ import {
   VideoArtifactContent,
   SlideImageArtifactContent,
   ArtifactContentWithMetadataProps,
-} from '@meaku/core/types/artifact';
-import { ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { checkIsArtifactMessage } from '@meaku/core/utils/index';
+} from '@neuraltrade/core/types/artifact';
+import { ArtifactBaseType, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
+import { checkIsArtifactMessage } from '@neuraltrade/core/utils/index';
 import ArtifactPreview from './ArtifactPreview';
-import { checkIsQualificationFormArtifact, BASE_ARTIFACT_TYPES } from '@meaku/core/utils/messageUtils';
-import { ViewType } from '@meaku/core/types/common';
-import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
+import { checkIsQualificationFormArtifact, BASE_ARTIFACT_TYPES } from '@neuraltrade/core/utils/messageUtils';
+import { ViewType } from '@neuraltrade/core/types/common';
+import useNormalAndQualificationFormArtifactMetadataProvider from '@neuraltrade/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
 import MessageItemLayout, { Padding } from './MessageItemLayout';
 
 interface MessageArtifactPreviewProps {

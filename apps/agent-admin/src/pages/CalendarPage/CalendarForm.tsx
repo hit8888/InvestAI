@@ -11,7 +11,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import { Checkbox } from '@breakout/design-system/components/Checkbox/index';
 import Label from '@breakout/design-system/components/layout/label';
 import { Form, FormControl, FormField, FormItem } from '@breakout/design-system/components/layout/form';
-import { CalendarFormData } from '@meaku/core/types/admin/api';
+import { CalendarFormData } from '@neuraltrade/core/types/admin/api';
 
 // Validation schema using zod that matches the existing validation logic
 const calendarFormSchema = z.object({

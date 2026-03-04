@@ -1,5 +1,5 @@
 import SourcesDragDropPattern from '@breakout/design-system/components/icons/sources-dragdrop-patterns';
-import { DataSourceItem, ThumbnailAssetData } from '@meaku/core/types/admin/api';
+import { DataSourceItem, ThumbnailAssetData } from '@neuraltrade/core/types/admin/api';
 import DragDropClickUploadFiles from './DragDropClickUploadFiles';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';

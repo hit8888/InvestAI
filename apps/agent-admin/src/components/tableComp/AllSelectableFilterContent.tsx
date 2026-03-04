@@ -4,8 +4,8 @@ import { USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD } from '../../utils/constants'
 import { getDateAppliedValue, getFiltersConfig, getOrderedBuyerIntent } from '../../utils/common';
 import SingleFilterState from './SingleFilterState';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
-import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
-import { CONVERSATIONS_PAGE, LEADS_PAGE, VISITORS_PAGE } from '@meaku/core/utils/index';
+import { FilterType, PageTypeProps } from '@neuraltrade/core/types/admin/filters';
+import { CONVERSATIONS_PAGE, LEADS_PAGE, VISITORS_PAGE } from '@neuraltrade/core/utils/index';
 import TestConversationIncludedFilter from './TestConversationIncludedFilter';
 import SessionIdIncludedFilter from './SessionIdIncludedFilter';
 

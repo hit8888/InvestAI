@@ -1,8 +1,8 @@
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { AgentEventType, ArtifactBaseType, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
-import { SuggestionArtifactContent } from '@meaku/core/types/artifact';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
+import { AgentEventType, ArtifactBaseType, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@neuraltrade/core/types/api/feedback_request';
+import { SuggestionArtifactContent } from '@neuraltrade/core/types/artifact';
 import ArtifactsHistory from './ArtifactsHistory.tsx';
 import TextMessage from './TextMessage';
 import MessageItemErrorBoundary from './MessageItemErrorBoundary';
@@ -22,18 +22,18 @@ import {
   checkIsLoadingTextMessage,
   isSuggestionArtifact,
   getMessagesWithSameResponseId,
-} from '@meaku/core/utils/messageUtils';
+} from '@neuraltrade/core/utils/messageUtils';
 import DiscoveryQuestion from './DiscoveryQuestion';
 import { DiscoveryAnswer } from './DiscoveryAnswer/index.tsx';
 import Orb from '../../Orb';
 import SuggestionsArtifact from './SuggestionsArtifact';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 import AdminJoinedInfo from './AdminJoinedInfo.tsx';
 import AdminExitInfo from './AdminExitInfo.tsx';
 import DemoArtifactPreview from './DemoArtifactPreview.tsx';
 import CtaEventMessage from './CtaEventMessage.tsx';
 import MessageElementsDemoAgents from './MessageElementsDemoAgents.tsx';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import UserLeftInfo from './UserLeftInfo.tsx';
 
 interface IProps {

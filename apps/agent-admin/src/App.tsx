@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router';
 import { useInitializeSentry } from './useInitializeSentry';
 import { Toaster } from 'react-hot-toast';
-import { useSetDistinctIdOnAppMount } from '@meaku/core/hooks/useSetDistinctIdOnAppMount';
+import { useSetDistinctIdOnAppMount } from '@neuraltrade/core/hooks/useSetDistinctIdOnAppMount';
 
 function App() {
   useInitializeSentry();

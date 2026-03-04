@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getConversationFunnelData } from '@meaku/core/adminHttp/api';
+import { getConversationFunnelData } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { ConversationsFunnelDataResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { ConversationsFunnelDataResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 
 const getConversationsFunnelDataKey = (tenantName: string): unknown[] => ['conversations-funnel-data', tenantName];
 

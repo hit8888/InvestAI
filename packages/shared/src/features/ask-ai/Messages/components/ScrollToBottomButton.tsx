@@ -1,5 +1,5 @@
 import React from 'react';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon } from '@neuraltrade/saral';
 
 interface ScrollToBottomButtonProps {
   showDownArrow: boolean;

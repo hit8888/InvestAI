@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useIcpConfigQuery from '../../../queries/query/useIcpConfigQuery';
 import { useIcpConfigMutation } from '../../../queries/mutation/useIcpConfigMutation';
-import { IcpConfigPayload } from '@meaku/core/types/admin/api';
+import { IcpConfigPayload } from '@neuraltrade/core/types/admin/api';
 import { ICPFormData } from '../utils';
 import { useSessionStore } from '../../../stores/useSessionStore';
 

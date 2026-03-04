@@ -1,4 +1,4 @@
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import Button from '@breakout/design-system/components/Button/index';
 import { LogOut } from 'lucide-react';
 import ExitConversationConfirmDialog from './ExitConversationConfirmDialog';

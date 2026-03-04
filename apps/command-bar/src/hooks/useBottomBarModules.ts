@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleConfigType } from '@neuraltrade/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 
 const { ASK_AI } = CommandBarModuleTypeSchema.enum;
 

@@ -1,4 +1,4 @@
-import { Block } from '@meaku/core/types/admin/api';
+import { Block } from '@neuraltrade/core/types/admin/api';
 import BlockPageLayout from './components/BlockPageLayout';
 import { useBlockPageState } from './hooks/useBlockPageState';
 import SectionReadyToDisplayContent from './components/SectionReadyToDisplayContent';

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import get from 'lodash/get';
 
-import { hexToHSL } from '@meaku/core/utils/color';
-import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
-import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
+import { hexToHSL } from '@neuraltrade/core/utils/color';
+import type { ConfigurationApiResponse } from '@neuraltrade/core/types/api/configuration_response';
+import { useShadowRoot } from '@neuraltrade/shared/containers/ShadowRootProvider';
 
 interface UseStyleConfigProps {
   styleConfig?: ConfigurationApiResponse['style_config'];

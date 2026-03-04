@@ -1,6 +1,6 @@
 import React from 'react';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { MessageEventType } from '@meaku/shared/types/message';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { MessageEventType } from '@neuraltrade/shared/types/message';
 
 // Components
 import BottomBarContainer from './BottomBarContainer';

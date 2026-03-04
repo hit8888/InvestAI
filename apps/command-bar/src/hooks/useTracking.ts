@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import filter from 'lodash/filter';
 
-import useUpdateProspectMutation from '@meaku/shared/network/http/mutations/useUpdateProspectMutation';
-import { useCommandBarStore } from '@meaku/shared/stores';
-import { initProspectAnalytics } from '@meaku/core/lib/prospectAnalytics';
-import { isProduction } from '@meaku/shared/constants/common';
+import useUpdateProspectMutation from '@neuraltrade/shared/network/http/mutations/useUpdateProspectMutation';
+import { useCommandBarStore } from '@neuraltrade/shared/stores';
+import { initProspectAnalytics } from '@neuraltrade/core/lib/prospectAnalytics';
+import { isProduction } from '@neuraltrade/shared/constants/common';
 import { useVectorTracking } from './useVectorTracking';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import { UpdateProspectPayload } from '@meaku/core/index';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import { UpdateProspectPayload } from '@neuraltrade/core/index';
 
 const useTracking = () => {
   const { trackEvent } = useCommandBarAnalytics();

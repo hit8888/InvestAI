@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { ReactNode } from 'react';
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { AgentEventType, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import { SingleSelectQuestion } from './SingleSelectQuestion';
 import { MultiSelectQuestion } from './MultiSelectQuestion';
 import { EventData, OptionType } from './types';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@neuraltrade/core/constants/index';
 import TextBasedDiscoveryQuestion from './TextBasedDiscoveryQuestion';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 import MessageItemLayout, { Alignment, Gap, Padding } from '../MessageItemLayout';
 
 interface IProps {

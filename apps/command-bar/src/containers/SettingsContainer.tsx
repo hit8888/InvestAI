@@ -1,9 +1,9 @@
 import type { FC, ReactElement } from 'react';
 import { useMemo } from 'react';
-import { CommandBarSettings } from '@meaku/shared/types/common';
-import { ensureProtocol, jsonSafeParse } from '@meaku/core/utils/index';
-import { getUrlParams } from '@meaku/core/utils/routing-utils';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarSettings } from '@neuraltrade/shared/types/common';
+import { ensureProtocol, jsonSafeParse } from '@neuraltrade/core/utils/index';
+import { getUrlParams } from '@neuraltrade/core/utils/routing-utils';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 
 // Helper type to convert snake_case to camelCase
 type ToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${T}${Capitalize<ToCamelCase<U>>}` : S;

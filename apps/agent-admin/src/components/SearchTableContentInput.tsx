@@ -1,10 +1,10 @@
 import { Search } from 'lucide-react';
 import Input from '@breakout/design-system/components/layout/input';
 import React, { useState, useEffect, useRef } from 'react';
-import { PageTypeProps } from '@meaku/core/types/admin/filters';
+import { PageTypeProps } from '@neuraltrade/core/types/admin/filters';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
-import { FilterType } from '@meaku/core/types/admin/filters';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { FilterType } from '@neuraltrade/core/types/admin/filters';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 
 const { SearchTableContent } = FilterType;
 

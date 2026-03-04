@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { Block } from '@meaku/core/types/admin/api';
+import { Block } from '@neuraltrade/core/types/admin/api';
 import BlockPageLayout from './components/BlockPageLayout';
 import { useBlockPageState } from './hooks/useBlockPageState';
 import VideoLibraryBlockPreviewContent from './VideoLibraryBlockPreviewContent';
-import { DataSourceArtifactsTableResponse } from '@meaku/core/types/admin/admin';
+import { DataSourceArtifactsTableResponse } from '@neuraltrade/core/types/admin/admin';
 import useDataSourceTableViewQuery from '../../queries/query/useDataSourceTableViewQuery';
 import { SECTION_READY_TO_DISPLAY_CONTENT } from './utils/blockHelpers';
 import SectionReadyToDisplayContent from './components/SectionReadyToDisplayContent';

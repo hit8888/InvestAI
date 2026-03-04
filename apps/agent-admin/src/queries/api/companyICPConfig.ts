@@ -1,4 +1,4 @@
-import adminApiClient from '@meaku/core/adminHttp/client';
+import adminApiClient from '@neuraltrade/core/adminHttp/client';
 import { UpdateCompanyICPConfigPayload } from '../mutation/useUpdateCompanyICPConfig';
 
 /**

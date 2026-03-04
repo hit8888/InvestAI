@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { useCommandBarStore } from '@meaku/shared/stores';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { Message, MessageEventType } from '@meaku/shared/types/message';
+import { useCommandBarStore } from '@neuraltrade/shared/stores';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { Message, MessageEventType } from '@neuraltrade/shared/types/message';
 
 /**
  * Custom hook to track USER_LEFT events when the browser tab is closed

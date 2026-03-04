@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { MessageEventType, SendUserMessageParams } from '../../types/message';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { BookMeetingIcon } from '@meaku/saral';
+import { BookMeetingIcon } from '@neuraltrade/saral';
 import { WaveLoader } from '../../components/WaveLoader';
 import { useWsClient } from '../../hooks/useWsClient';
 import { FeatureContentProps } from '../';
@@ -9,7 +9,7 @@ import BookMeetingFlowContainer from './components/BookMeetingFlowContainer';
 import useBookMeetingContentHelper from './hooks/useBookMeetingContentHelper';
 import useFeatureConfig from '../../hooks/useFeatureConfig';
 import MessageErrorBoundary from '../../components/MessageErrorBoundary';
-import { Markdown } from '@meaku/saral';
+import { Markdown } from '@neuraltrade/saral';
 
 const BookMeetingContent = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {
   const { sendUserMessage } = useWsClient();

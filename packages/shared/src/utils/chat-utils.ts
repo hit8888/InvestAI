@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { MessageRole, MessageEventType, type Message } from '../types/message';
-import { DeviceType } from '@meaku/core/types/common';
+import { DeviceType } from '@neuraltrade/core/types/common';
 
 export const getUserMessage = (message: string, overrides?: Partial<Message>): Partial<Message> => {
   const { event_type, event_data, response_id, ...safeOverrides } = overrides ?? {};

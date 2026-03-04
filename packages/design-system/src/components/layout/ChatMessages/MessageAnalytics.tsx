@@ -1,5 +1,5 @@
 import { Badge } from '@breakout/design-system/components/layout/badge';
-import { MessageAnalyticsEventData } from '@meaku/core/types/webSocketData';
+import { MessageAnalyticsEventData } from '@neuraltrade/core/types/webSocketData';
 import Typography from '../../Typography';
 import { cn } from '@breakout/design-system/lib/cn';
 

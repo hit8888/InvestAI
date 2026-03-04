@@ -1,12 +1,12 @@
 import { memo } from 'react';
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
 import TableViewShimmer from '../ShimmerComponent/TableViewShimmer';
 import { useDataSourceTableStore, useTableSelection } from '../../stores/useDataSourceTableStore';
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import { useSidebar } from '../../context/SidebarContext';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import { useSortFilterStore } from '../../stores/useSortFilterStore';
-import { DataSourceSortValues } from '@meaku/core/types/admin/sort';
+import { DataSourceSortValues } from '@neuraltrade/core/types/admin/sort';
 import { useDataSourcesDrawer } from '../../context/DataSourcesDrawerContext';
 import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 

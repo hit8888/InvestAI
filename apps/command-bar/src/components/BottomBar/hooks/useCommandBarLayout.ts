@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef } from 'react';
-import { cn } from '@meaku/saral';
-import { LAYOUT_PREFERENCE_CONFIG } from '@meaku/core/constants/layout-preference';
-import { useDevice } from '@meaku/core/contexts/DeviceManagerProvider';
+import { cn } from '@neuraltrade/saral';
+import { LAYOUT_PREFERENCE_CONFIG } from '@neuraltrade/core/constants/layout-preference';
+import { useDevice } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { useLayoutPreference } from '../../../hooks/useLayoutPreference';
 
 export interface CommandBarLayoutConfig {

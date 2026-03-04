@@ -20,7 +20,7 @@ import {
   Avatar18,
   Avatar19,
   AvatarComponentProps,
-} from '@meaku/saral';
+} from '@neuraltrade/saral';
 
 const AVATAR_COMPONENTS = [
   Avatar1,

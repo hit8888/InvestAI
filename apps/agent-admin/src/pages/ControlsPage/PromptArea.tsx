@@ -3,7 +3,7 @@ import { Prompt } from '../../queries/query/usePrompts';
 import { CreatePromptPayload, useDeletePrompt, useUpdatePrompt } from '../../queries/mutation/usePromptMutations';
 import { RefObject, useState } from 'react';
 import toast from 'react-hot-toast';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { UseMutationResult } from '@tanstack/react-query';
 import { useSessionStore } from '../../stores/useSessionStore';
 import InfoCard from '../../components/AgentManagement/InfoCard';

@@ -1,14 +1,14 @@
-import { DataSourcePayload } from '@meaku/core/types/admin/api';
+import { DataSourcePayload } from '@neuraltrade/core/types/admin/api';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
   getDataSourceDocumentsData,
   getDataSourceArtifactsData,
   getDataSourceWebpagesData,
-} from '@meaku/core/adminHttp/api';
+} from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { CommonDataSourceTableResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { SLIDES_PAGE, DOCUMENTS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
+import { CommonDataSourceTableResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { SLIDES_PAGE, DOCUMENTS_PAGE, VIDEOS_PAGE, WEBPAGES_PAGE } from '@neuraltrade/core/utils/index';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getDataSourceTableKey = (payload: DataSourcePayload, tenantName: string, tableKey: string): unknown[] => [

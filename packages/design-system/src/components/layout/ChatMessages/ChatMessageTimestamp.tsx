@@ -1,7 +1,7 @@
-import { MessageViewType } from '@meaku/core/types/common';
-import { isHumanMessageInAdminView, isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
+import { MessageViewType } from '@neuraltrade/core/types/common';
+import { isHumanMessageInAdminView, isHumanMessageInDashboardView } from '@neuraltrade/core/utils/messageUtils';
 import Typography from '../../Typography';
-import { getMessageTimestamp } from '@meaku/core/utils/index';
+import { getMessageTimestamp } from '@neuraltrade/core/utils/index';
 
 interface ChatMessageTimestampProps {
   messageViewType: MessageViewType;

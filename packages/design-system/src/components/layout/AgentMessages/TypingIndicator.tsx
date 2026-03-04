@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import MessageItemLayout from '../ChatMessages/MessageItemLayout';
 import { getChatMessageClass, getChatTextMessageContainerClass } from '../messageUtils';
-import { MessageViewType } from '@meaku/core/types/common';
+import { MessageViewType } from '@neuraltrade/core/types/common';
 import ChatMessageTail from '../ChatMessages/ChatMessageTail';
 import ChatMessageSender from '../ChatMessages/ChatMessageSender';
 

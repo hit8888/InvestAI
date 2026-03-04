@@ -1,4 +1,4 @@
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { create } from 'zustand';
 
 // Type guard to check if an item is a DataSourceItem

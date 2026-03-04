@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { updateTenantMetadata } from '@meaku/core/adminHttp/api';
-import { TenantMetadataResponse, TenantMetadataUpdateRequest } from '@meaku/core/types/admin/api';
+import { updateTenantMetadata } from '@neuraltrade/core/adminHttp/api';
+import { TenantMetadataResponse, TenantMetadataUpdateRequest } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface MutationVariables {

@@ -1,4 +1,4 @@
-import { Markdown } from '@meaku/saral';
+import { Markdown } from '@neuraltrade/saral';
 
 export const TextArtifact = ({ content }: { content: string }) => {
   if (!content) return null;

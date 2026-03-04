@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { getBuyerIntentDistribution } from '@meaku/core/adminHttp/api';
-import { BuyerIntentDistributionResponse } from '@meaku/core/types/admin/api';
+import { getBuyerIntentDistribution } from '@neuraltrade/core/adminHttp/api';
+import { BuyerIntentDistributionResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseBuyerIntentDistributionQueryProps = {

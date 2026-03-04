@@ -1,9 +1,9 @@
-import { Typography, Button, LucideIcon } from '@meaku/saral';
+import { Typography, Button, LucideIcon } from '@neuraltrade/saral';
 import { useSidebarArtifactContext } from '../context/SidebarArtifactContext';
 import { useCallback, useEffect, useRef, useMemo } from 'react';
 import { BaseArtifact } from '../components/BaseArtifact';
 import { BaseArtifactProps } from '../types/artifact.types';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface ImageArtifactProps extends BaseArtifactProps {
   alt?: string;

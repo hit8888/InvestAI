@@ -1,5 +1,5 @@
 {
-  "extends": "@meaku/typescript-config/base.json",
+  "extends": "@neuraltrade/typescript-config/base.json",
   "include": ["."],
   "exclude": [
     "dist",
@@ -14,7 +14,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@meaku/core/*": ["../../packages/core/src/*"]
+      "@neuraltrade/core/*": ["../../packages/core/src/*"]
     },
     "noEmit": false,
     "allowImportingTsExtensions": false,

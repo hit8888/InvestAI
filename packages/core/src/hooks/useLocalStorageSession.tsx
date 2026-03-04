@@ -1,7 +1,7 @@
 import { useLocalStorageState } from "ahooks";
 import { useParams } from "react-router-dom";
 import { useCallback } from "react";
-import { AgentParams } from "@meaku/core/types/config";
+import { AgentParams } from "@neuraltrade/core/types/config";
 import { trackError } from "../utils/error";
 
 type Session = {

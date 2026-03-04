@@ -1,4 +1,4 @@
-import { FormArtifactContent } from '@meaku/core/types/artifact';
+import { FormArtifactContent } from '@neuraltrade/core/types/artifact';
 import { ArtifactMessageContent } from '../../../types/message';
 
 import { Message, MessageEventType } from '../../../types/message';

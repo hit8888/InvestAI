@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, LucideIcon } from '@meaku/saral';
+import { Button, LucideIcon } from '@neuraltrade/saral';
 import { useModalPortal } from '../../../hooks/usePortal';
 
 interface FullscreenDemoPlayerProps {

@@ -1,4 +1,4 @@
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { useEffect, useState } from 'react';
 
 interface FileSizeResult {

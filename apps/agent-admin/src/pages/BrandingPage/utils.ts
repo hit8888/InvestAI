@@ -2,11 +2,11 @@ import {
   AgentConfigPayload,
   agentConfigPayloadSchema,
   AgentConfigResponse,
-} from '@meaku/core/types/admin/agent-configs';
-import { updateBrandingAgentConfigs } from '@meaku/core/adminHttp/api';
+} from '@neuraltrade/core/types/admin/agent-configs';
+import { updateBrandingAgentConfigs } from '@neuraltrade/core/adminHttp/api';
 import toast from 'react-hot-toast';
-import { trackError } from '@meaku/core/utils/error';
-import { deepCompare } from '@meaku/core/utils/index';
+import { trackError } from '@neuraltrade/core/utils/error';
+import { deepCompare } from '@neuraltrade/core/utils/index';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 // Utility function to extract field-specific error messages

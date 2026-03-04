@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { UsersListResponse, UsersListQueryParams, User } from '@meaku/core/types/admin/api';
+import { UsersListResponse, UsersListQueryParams, User } from '@neuraltrade/core/types/admin/api';
 import useUsersListQuery from '../../queries/query/useUsersListQuery';
 import UserModal from './components/UserModal';
 import DeleteUserModal from './components/DeleteUserModal';

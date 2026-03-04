@@ -1,5 +1,5 @@
 import { type Message as MessageType } from '../../../types/message';
-import { AvatarComponentProps } from '@meaku/saral';
+import { AvatarComponentProps } from '@neuraltrade/saral';
 import React, { useMemo } from 'react';
 import { groupMessagesWithAdminSessions, shouldShowSessionIndicator } from '../../../utils/message-utils';
 import { useScrollManagement, useContainerHeight, useMessageData } from './hooks';

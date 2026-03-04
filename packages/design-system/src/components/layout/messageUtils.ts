@@ -1,4 +1,4 @@
-import { MessageViewType } from '@meaku/core/types/common';
+import { MessageViewType } from '@neuraltrade/core/types/common';
 
 export const getChatTextMessageContainerClass = (messageViewType: MessageViewType): string => {
   switch (messageViewType) {

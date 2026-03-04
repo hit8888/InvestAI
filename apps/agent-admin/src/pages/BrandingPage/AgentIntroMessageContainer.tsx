@@ -1,4 +1,4 @@
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import BrandingSectionContainer from './BrandingSectionContainer';
 import { AGENT_INTRO_MESSAGE_TITLE, AGENT_INTRO_MESSAGE_SUBTITLE } from '../../utils/constants';
 import Button from '@breakout/design-system/components/Button/index';

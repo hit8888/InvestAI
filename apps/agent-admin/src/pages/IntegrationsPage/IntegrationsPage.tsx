@@ -6,14 +6,14 @@ import PageContainer from '../../components/AgentManagement/PageContainer';
 import { useIntegrationsQuery } from '../../queries/query/useIntegrationQueries';
 import IntegrationCard from './components/IntegrationCard';
 import IntegrationForm from '@breakout/design-system/components/layout/IntegrationForm';
-import type { Integration } from '@meaku/core/types/admin/api';
+import type { Integration } from '@neuraltrade/core/types/admin/api';
 import { getIntegrationNameFromType } from '../../utils/common';
 import {
   useIntegrationConnect,
   useIntegrationConnectCallback,
   useIntegrationDisconnect,
 } from '../../queries/mutation/useIntegrationMutations';
-import { useOAuthPopup } from '@meaku/core/hooks/useOAuthPopUp';
+import { useOAuthPopup } from '@neuraltrade/core/hooks/useOAuthPopUp';
 
 const IntegrationsPage = () => {
   const queryClient = useQueryClient();

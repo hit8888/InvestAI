@@ -10,7 +10,7 @@ import {
   PopoverPortal,
 } from '@breakout/design-system/components/Popover/index';
 import SidebarToggleIcon from '@breakout/design-system/components/icons/sidebar-toggle-icon';
-import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
+import { OrganizationDetailsResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { buildPathWithTenantBase } from '../../utils/navigation';
 import { DEFAULT_ROUTE, SideNavView } from '../../utils/constants';

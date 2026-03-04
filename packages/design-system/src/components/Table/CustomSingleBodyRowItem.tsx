@@ -3,11 +3,11 @@ import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   VisitorsTableDisplayContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import AccessibleTableRow from '../accessibility/AccessibleTableRow';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
+import { SHADOW_PINNED_COLUMNS } from '@neuraltrade/core/utils/index';
 
 type CustomSingleBodyRowItemProps = {
   row: Row<ConversationsTableDisplayContent | LeadsTableDisplayContent | VisitorsTableDisplayContent>;

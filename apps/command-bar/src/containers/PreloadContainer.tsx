@@ -1,18 +1,18 @@
 import { type FC, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { nanoid } from 'nanoid';
 
-import type { CommandBarSettings } from '@meaku/shared/types/common';
-import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
-import useStaticConfigDataQuery from '@meaku/shared/network/http/queries/useStaticConfigDataQuery';
-import { useCommandBarStore } from '@meaku/shared/stores';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import type { CommandBarSettings } from '@neuraltrade/shared/types/common';
+import { getLocalStorageData, setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
+import useStaticConfigDataQuery from '@neuraltrade/shared/network/http/queries/useStaticConfigDataQuery';
+import { useCommandBarStore } from '@neuraltrade/shared/stores';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import { useActiveTenantInit } from '../hooks/useActiveTenantInit';
-import { ConfigurationApiResponse, sanitizeUrl } from '@meaku/core/index';
-import useDynamicConfigDataQuery from '@meaku/shared/network/http/queries/useDynamicConfigDataQuery';
-import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import { ConfigurationApiResponse, sanitizeUrl } from '@neuraltrade/core/index';
+import useDynamicConfigDataQuery from '@neuraltrade/shared/network/http/queries/useDynamicConfigDataQuery';
+import useDelayedEnable from '@neuraltrade/core/hooks/useDelayedEnable';
 import useTracking from '../hooks/useTracking';
-import { removeParamFromUrl } from '@meaku/core/utils/routing-utils';
+import { removeParamFromUrl } from '@neuraltrade/core/utils/routing-utils';
 
 interface PreloadContainerProps {
   children: ReactNode;

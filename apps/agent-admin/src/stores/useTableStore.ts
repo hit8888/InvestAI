@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import TableDataManager from '../managers/TableDataManager';
-import { TableDataResponse } from '@meaku/core/types/admin/admin';
+import { TableDataResponse } from '@neuraltrade/core/types/admin/admin';
 
 interface TableStore {
   // Raw API data (if needed)

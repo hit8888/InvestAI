@@ -1,4 +1,4 @@
-import { Typography, LucideIcon } from '@meaku/saral';
+import { Typography, LucideIcon } from '@neuraltrade/saral';
 import { MessageEventType, type Message as MessageType } from '../../../../types/message';
 
 type SuggestedQuestionsProps = {

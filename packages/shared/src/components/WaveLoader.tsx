@@ -1,4 +1,4 @@
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 
 export const WaveLoader = ({ className = 'bg-foreground' }: { className?: string }) => (
   <div className="flex items-center justify-center space-x-1">

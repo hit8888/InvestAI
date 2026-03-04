@@ -1,4 +1,4 @@
-import { Button, Markdown, Typography } from '@meaku/saral';
+import { Button, Markdown, Typography } from '@neuraltrade/saral';
 import useFeatureConfig from '../../../hooks/useFeatureConfig';
 
 interface SummaryInitialProps {

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
-import { willMessageRenderHTML, messagesGroupedByResponseIdAndTimestamp } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { MessageSenderRole, ViewType } from '@neuraltrade/core/types/common';
+import { willMessageRenderHTML, messagesGroupedByResponseIdAndTimestamp } from '@neuraltrade/core/utils/messageUtils';
 import throttle from 'lodash/throttle';
 
 interface UseAgentMessagesScrollingProps {

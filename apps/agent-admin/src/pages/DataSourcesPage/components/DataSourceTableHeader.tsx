@@ -1,7 +1,7 @@
 import { useFiltersContainerHeight } from '../../../hooks/useFiltersContainerHeight';
 import { useEffect } from 'react';
 import AllFiltersContainer from '../../../components/tableComp/AllFilters';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import { useDataSources } from '../../../context/DataSourcesContext';
 import { SourcesCardTypes } from '../constants';
 import ReembedBulkRowItemsButton from './ReembedBulkRowItemsButton';

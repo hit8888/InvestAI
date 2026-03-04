@@ -2,7 +2,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import SingleSlideUploadDisplayItem from './SingleSlideUploadDisplayItem';
 import SingleVideoUploadDisplayItem from './SingleVideoUploadDisplayItem';
 import WebpagesSourcesIcon from '@breakout/design-system/components/icons/sources-webpages-icon';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import SingleDocumentUploadDisplayItem from './SingleDocumentUploadDisplayItem';

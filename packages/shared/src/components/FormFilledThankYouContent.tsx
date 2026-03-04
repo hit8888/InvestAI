@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { LucideIcon, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@neuraltrade/saral';
 import { FormFieldSchemaType } from '../utils/artifact';
 
 type FormFilledThankYouContentProps = {

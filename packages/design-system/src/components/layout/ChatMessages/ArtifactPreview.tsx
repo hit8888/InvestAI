@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import { useState } from 'react';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
 import SlideArtifactPreview from './SlideArtifactPreview.tsx';
 import CustomVideoPlayer from '../CustomVideoPlayer.tsx';
 import {
@@ -14,16 +14,16 @@ import {
   VideoArtifactContent,
   ArtifactContentWithMetadataProps,
   AdditionalCalendarArtifactContent,
-} from '@meaku/core/types/artifact';
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
+} from '@neuraltrade/core/types/artifact';
+import { ArtifactBaseType } from '@neuraltrade/core/types/webSocketData';
 import CommonArtifactPreview from './CommonArtifactPreview.tsx';
 import ArrowRight from '../../icons/ArrowRight.tsx';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 import FormArtifact from '../FormArtifact.tsx';
 import QualificationFlowArtifact from '../../Artifact/QualificationFlow/QualificationFlowArtifact.tsx';
 import CalendarArtifactPreview from './CalendarArtifactPreview.tsx';
 import { CalendarArtifact } from '../../Artifact/CalendarArtifact.tsx';
-import { EMPTY_FUNCTION } from '@meaku/core/constants/index';
+import { EMPTY_FUNCTION } from '@neuraltrade/core/constants/index';
 interface IProps {
   viewType: ViewType;
   artifactId: string;

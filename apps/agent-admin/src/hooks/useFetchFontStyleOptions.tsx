@@ -1,4 +1,4 @@
-import { getFonts } from '@meaku/core/adminHttp/api';
+import { getFonts } from '@neuraltrade/core/adminHttp/api';
 import { useEffect, useState } from 'react';
 
 // TODO: Remove this once we have a proper font family list coming from api

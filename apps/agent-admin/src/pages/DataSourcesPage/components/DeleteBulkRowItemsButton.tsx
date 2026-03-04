@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { SourcesCardTypes } from '../constants';
 import { useQueryClient } from '@tanstack/react-query';
-import { deleteArtifacts, deleteDocuments, deleteWebpages } from '@meaku/core/adminHttp/api';
+import { deleteArtifacts, deleteDocuments, deleteWebpages } from '@neuraltrade/core/adminHttp/api';
 import { toast } from 'react-hot-toast';
 import Button from '@breakout/design-system/components/Button/index';
 import DeleteIcon from '@breakout/design-system/components/icons/delete-icon';
-import { DeleteArtifactsResponse, DeleteDocumentsResponse, DeleteWebpagesResponse } from '@meaku/core/types/admin/api';
+import { DeleteArtifactsResponse, DeleteDocumentsResponse, DeleteWebpagesResponse } from '@neuraltrade/core/types/admin/api';
 import DeleteDialogWrapper from '@breakout/design-system/components/layout/DeleteDialogWrapper';
 
 const DeleteBulkRowItemsButton = ({ selectedType }: { selectedType: SourcesCardTypes }) => {

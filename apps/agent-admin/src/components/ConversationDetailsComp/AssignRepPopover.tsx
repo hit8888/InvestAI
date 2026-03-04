@@ -3,7 +3,7 @@ import Button from '@breakout/design-system/components/Button/index';
 import { Pencil } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@breakout/design-system/components/Popover/index';
 import { useState, useMemo } from 'react';
-import { SdrAssignment, User } from '@meaku/core/types/admin/api';
+import { SdrAssignment, User } from '@neuraltrade/core/types/admin/api';
 import SingleAssignRepCell from '../common/SingleAssignRepCell';
 
 type AssignRepPopoverProps = {

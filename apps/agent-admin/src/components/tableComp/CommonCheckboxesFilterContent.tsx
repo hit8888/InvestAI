@@ -5,11 +5,11 @@ import LocationCellValue from './tableCellComp/LocationCellValue';
 import { cn } from '@breakout/design-system/lib/cn';
 import BuyerIntentCellValue from './tableCellComp/BuyerIntentCellValue';
 import FilterSelectAllContainer from './FilterSelectAllContainer';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType } from '@neuraltrade/core/types/admin/filters';
 import DataSourceStatusChip from './tableCellComp/DataSourceStatusChip';
 import { DATA_SOURCE_STATUS } from '../../pages/DataSourcesPage/constants';
 import Typography from '@breakout/design-system/components/Typography/index';
-import type { SdrAssignment } from '@meaku/core/types/admin/api';
+import type { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import SingleAssignRepCell from '../common/SingleAssignRepCell';
 import {
   handleCheckboxToggle as utilHandleCheckboxToggle,

@@ -11,7 +11,7 @@ import {
   SQUARE_LOGO_SUBTITLE,
   SQUARE_LOGO_TITLE,
 } from '../../utils/constants';
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import BrandingSectionContainer from './BrandingSectionContainer';
 
 type AgentLogoAndNameContainerProps = {

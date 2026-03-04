@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
 import { useTableStore } from '../stores/useTableStore';
-import { FilterOptionsPayload } from '@meaku/core/types/admin/api';
+import { FilterOptionsPayload } from '@neuraltrade/core/types/admin/api';
 import { getAllFilterAppliedValues, getDescendingOrderedOptions } from '../utils/common';
 import useFilterOptionsDataQuery from '../queries/query/useFilterOptionsDataQuery';
 import { useQueryOptions } from './useQueryOptions';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
-import { ResultantOption, FilterValues, FilterValueTypes } from '@meaku/core/types/admin/filters';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
+import { ResultantOption, FilterValues, FilterValueTypes } from '@neuraltrade/core/types/admin/filters';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 
 interface UseFilterContentProps {
   page: PaginationPageType;

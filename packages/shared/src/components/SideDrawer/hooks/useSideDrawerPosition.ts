@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { SideDrawerPosition } from '../types';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface UseSideDrawerPositionProps {
   targetRef: React.RefObject<HTMLElement | null>;

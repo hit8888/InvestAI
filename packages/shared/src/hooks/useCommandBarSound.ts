@@ -1,4 +1,4 @@
-import useSound, { UseSoundProps } from '@meaku/core/hooks/useSound';
+import useSound, { UseSoundProps } from '@neuraltrade/core/hooks/useSound';
 
 import { useCommandBarStore } from '../stores';
 

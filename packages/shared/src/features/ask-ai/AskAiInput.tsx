@@ -1,9 +1,9 @@
-import { Button, LucideIcon, TextArea } from '@meaku/saral';
+import { Button, LucideIcon, TextArea } from '@neuraltrade/saral';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Message, MessageEventType } from '../../types/message';
 import { useDebouncedTyping } from '../../hooks/useDebouncedTyping';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import { cn } from '@meaku/saral';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
+import { cn } from '@neuraltrade/saral';
 
 interface AskAiInputProps {
   disabled: boolean;

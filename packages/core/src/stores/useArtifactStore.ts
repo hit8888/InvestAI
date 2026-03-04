@@ -1,4 +1,4 @@
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
+import { ArtifactBaseType } from '@neuraltrade/core/types/webSocketData';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';

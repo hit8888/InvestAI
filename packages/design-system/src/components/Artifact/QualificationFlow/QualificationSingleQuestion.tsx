@@ -1,7 +1,7 @@
-import { QualificationQuestionMetadataType } from '@meaku/core/types/artifact';
+import { QualificationQuestionMetadataType } from '@neuraltrade/core/types/artifact';
 import QualificationAnsweredTickIcon from '../../icons/qualification-answered-tick-icon';
 import AgentDropdown from '../../Dropdown/AgentDropdown';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import Typography from '../../Typography';
 import { cn } from '@breakout/design-system/lib/cn';
 

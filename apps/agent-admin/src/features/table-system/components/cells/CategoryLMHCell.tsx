@@ -4,7 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@breakout/design-system/components/Tooltip/index';
-import { getLabelAssignmentValue } from '@meaku/core/utils/index';
+import { getLabelAssignmentValue } from '@neuraltrade/core/utils/index';
 import { LabelAssignmentType } from '../../types/column.types';
 import { CellContainer } from './CellContainer';
 import EmptyCell from './EmptyCell';

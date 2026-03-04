@@ -1,4 +1,4 @@
-import { cn, FormControl, FormField, FormItem, FormMessage, Input, UseFormReturnType } from '@meaku/saral';
+import { cn, FormControl, FormField, FormItem, FormMessage, Input, UseFormReturnType } from '@neuraltrade/saral';
 import { FormFieldType } from '../utils/types';
 import { getInputType } from '../utils/chat-utils';
 import PhoneInputContainer from './PhoneInput';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useShadowRoot } from '@meaku/shared/containers/ShadowRootProvider';
+import { useShadowRoot } from '@neuraltrade/shared/containers/ShadowRootProvider';
 
 type UseOutsideClickProps = {
   onOutsideClick: () => void;

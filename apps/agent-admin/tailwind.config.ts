@@ -1,4 +1,4 @@
-import sharedConfig from '@meaku/tailwind-config';
+import sharedConfig from '@neuraltrade/tailwind-config';
 import uiTwConfig from '@breakout/design-system/tailwind-config';
 import type { Config } from 'tailwindcss';
 

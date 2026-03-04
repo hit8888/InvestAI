@@ -1,5 +1,5 @@
-import { User } from '@meaku/core/types/admin/api';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import { User } from '@neuraltrade/core/types/admin/api';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 import { ROLE_LABEL_MAP } from '../constants';
 import type { TableColumnDefinition } from '../../../features/table-system/types';
 import type { CellType } from '../../../features/table-system/types';

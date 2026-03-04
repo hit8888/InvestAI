@@ -8,9 +8,9 @@ import SlidesSourcesIcon from '@breakout/design-system/components/icons/sources-
 import SourcesUrlLinkIcon from '@breakout/design-system/components/icons/sources-url-link-icon';
 import SourceFileIcon from '@breakout/design-system/components/icons/source-file-icon';
 import SourceVideoIcon from '@breakout/design-system/components/icons/source-video-icon';
-import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
-import DateUtil from '@meaku/core/utils/dateUtils';
-import { DataSourceItem, DataSourcesAccessorFnType } from '@meaku/core/types/admin/api';
+import { DataSourceFeaturesData, DataSourceOverviewData } from '@neuraltrade/core/types/admin/admin';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
+import { DataSourceItem, DataSourcesAccessorFnType } from '@neuraltrade/core/types/admin/api';
 
 export type CommonEditDrawerSectionProps = {
   id: number;

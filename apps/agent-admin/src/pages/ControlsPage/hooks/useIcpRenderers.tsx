@@ -4,7 +4,7 @@ import { countries as CountriesData, findFlagUrlByCountryName } from 'country-fl
 import MultiSelectDropdown, { OptionType } from '@breakout/design-system/components/Dropdown/MultiSelectDropdown';
 import Input from '@breakout/design-system/components/layout/input';
 import { ICPFormData, ICPFieldConfig, ICP_FORM_FIELDS } from '../utils';
-import { IcpConfigResponse } from '@meaku/core/types/admin/api';
+import { IcpConfigResponse } from '@neuraltrade/core/types/admin/api';
 
 type IcpConfigOptions = IcpConfigResponse['options'];
 

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { getUserById } from '@meaku/core/adminHttp/api';
-import { UserManagementResponse } from '@meaku/core/types/admin/api';
+import { getUserById } from '@neuraltrade/core/adminHttp/api';
+import { UserManagementResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type BreakoutQueryOptions<TData, TQueryKey extends readonly unknown[]> = Omit<

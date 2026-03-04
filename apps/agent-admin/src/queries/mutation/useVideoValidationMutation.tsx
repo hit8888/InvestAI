@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { validateVideoUrls } from '@meaku/core/adminHttp/api';
-import { VideoValidationRequest, VideoValidationResponse } from '@meaku/core/types/admin/api';
+import { validateVideoUrls } from '@neuraltrade/core/adminHttp/api';
+import { VideoValidationRequest, VideoValidationResponse } from '@neuraltrade/core/types/admin/api';
 import { AxiosResponse, AxiosError } from 'axios';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 

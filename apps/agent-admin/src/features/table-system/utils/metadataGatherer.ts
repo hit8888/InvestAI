@@ -1,5 +1,5 @@
 import { EntityMetadataColumn } from '../types';
-import { getCompanyLogoSrc } from '@meaku/core/utils/index';
+import { getCompanyLogoSrc } from '@neuraltrade/core/utils/index';
 
 /**
  * Related metadata gathered for a specific column

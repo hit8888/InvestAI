@@ -1,6 +1,6 @@
-import { getTaskStatus } from '@meaku/core/adminHttp/api';
-import { taskPollingManager } from '@meaku/core/managers/taskPolling/TaskPollingManager';
-import { TaskStatus } from '@meaku/core/types/admin/api';
+import { getTaskStatus } from '@neuraltrade/core/adminHttp/api';
+import { taskPollingManager } from '@neuraltrade/core/managers/taskPolling/TaskPollingManager';
+import { TaskStatus } from '@neuraltrade/core/types/admin/api';
 
 const POLLING_INTERVAL_MS = 3000; // Poll every 3 seconds
 

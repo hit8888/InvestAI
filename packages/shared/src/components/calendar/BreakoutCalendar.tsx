@@ -1,9 +1,9 @@
 import { CalendarArtifactContent } from '../../utils/artifact';
 import { CalComEventData, CalendarMessageHandler } from '../../types/calendar';
 import { Booker } from '@calcom/atoms';
-import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
+import useDelayedCallback from '@neuraltrade/core/hooks/useDelayedCallback';
 import { BreakoutCalcomCalendar } from './BreakoutCalcomCalendar';
-import { Typography } from '@meaku/saral';
+import { Typography } from '@neuraltrade/saral';
 
 const calOauthClientId = import.meta.env.VITE_CAL_OAUTH_CLIENT_ID;
 const calApiUrl = import.meta.env.VITE_CAL_API_URL;

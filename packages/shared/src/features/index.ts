@@ -1,4 +1,4 @@
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 
 // Base Action component
 export { default as BaseActionComponent } from './base/BaseActionComponent';

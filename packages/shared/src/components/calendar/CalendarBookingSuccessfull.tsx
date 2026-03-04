@@ -1,4 +1,4 @@
-import { LucideIcon, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@neuraltrade/saral';
 
 interface IProps {
   title?: string;

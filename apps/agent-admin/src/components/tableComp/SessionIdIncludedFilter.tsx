@@ -1,4 +1,4 @@
-import { FilterType, PageTypeProps } from '@meaku/core/types/admin/filters';
+import { FilterType, PageTypeProps } from '@neuraltrade/core/types/admin/filters';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { Switch } from '@breakout/design-system/components/layout/switch';
 

@@ -1,14 +1,14 @@
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import TooltipAddedAppliedFilter from './TooltipAddedAppliedFilter';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType } from '@neuraltrade/core/types/admin/filters';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useState } from 'react';
 import FilterContent from './FilterContent';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import { MULTI_VALUE_FILTER_TYPES } from '../../utils/constants';
 import Typography from '@breakout/design-system/components/Typography/index';
-import type { SdrAssignment } from '@meaku/core/types/admin/api';
+import type { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 
 type SingleAppliedFilterProps = {
   filter: { key: string; label: string; value: string | string[] | boolean | SdrAssignment[] };

@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BUTTON_SIZING } from './constants';
-import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
-import { LucideIcon } from '@meaku/saral';
-import BlackTooltip from '@meaku/shared/components/BlackTooltip';
-import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
-import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
-import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
-import { RotatingText } from '@meaku/shared/components/RotatingText';
+import { CommandBarModuleConfigType } from '@neuraltrade/core/types/api/configuration_response';
+import { LucideIcon } from '@neuraltrade/saral';
+import BlackTooltip from '@neuraltrade/shared/components/BlackTooltip';
+import { useCommandBarStore } from '@neuraltrade/shared/stores/useCommandBarStore';
+import FallbackOrb from '@neuraltrade/shared/features/ask-ai/components/FallbackOrb';
+import { OnlineIndicator } from '@neuraltrade/shared/components/AvatarDisplay';
+import { RotatingText } from '@neuraltrade/shared/components/RotatingText';
 import { ANIMATION_TIMINGS } from '../../constants/animationTimings';
 
 interface BottomBarInputFieldProps {

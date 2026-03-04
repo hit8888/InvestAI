@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn, KatyIcon, ImageWithFallback, type AvatarComponentProps } from '@meaku/saral';
+import { cn, KatyIcon, ImageWithFallback, type AvatarComponentProps } from '@neuraltrade/saral';
 
 export interface AvatarDisplayProps {
   // Admin session data

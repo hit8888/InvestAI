@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { ArtifactMessageContent } from '@meaku/core/types/webSocketData';
+import { ArtifactMessageContent } from '@neuraltrade/core/types/webSocketData';
 import useGetLastMediaArtifactMessage from './useGetLastMediaArtifactMessage';
-import useArtifactStore from '@meaku/core/stores/useArtifactStore';
+import useArtifactStore from '@neuraltrade/core/stores/useArtifactStore';
 
 export const useSetArtifactOnNewMessage = () => {
   const setActiveArtifact = useArtifactStore((state) => state.setActiveArtifact);

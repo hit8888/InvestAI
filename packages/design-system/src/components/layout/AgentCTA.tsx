@@ -1,11 +1,11 @@
 import Button from '@breakout/design-system/components/Button/index';
 import { useCallback, useMemo } from 'react';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { checkIfCTAButtonDisabled, checkIfCTAButtonShown } from '@meaku/core/utils/messageUtils';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { CTAConfigType } from '@neuraltrade/core/types/api/configuration_response';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { checkIfCTAButtonDisabled, checkIfCTAButtonShown } from '@neuraltrade/core/utils/messageUtils';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   messages: WebSocketMessage[];

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getBrandingAgentConfigs } from '@meaku/core/adminHttp/api';
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { getBrandingAgentConfigs } from '@neuraltrade/core/adminHttp/api';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import { AxiosResponse } from 'axios';
 
 interface IProps {

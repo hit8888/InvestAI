@@ -8,7 +8,7 @@ import {
 } from '@breakout/design-system/components/Popover/index';
 import { RadioGroup, RadioGroupItem, RadioIndicator } from '@breakout/design-system/components/shadcn-ui/radio-group';
 import Button from '@breakout/design-system/components/Button/Button';
-import type { ExportFormatType } from '@meaku/core/types/admin/api';
+import type { ExportFormatType } from '@neuraltrade/core/types/admin/api';
 
 interface GenericTableExportDownloadProps {
   /** Available export formats */

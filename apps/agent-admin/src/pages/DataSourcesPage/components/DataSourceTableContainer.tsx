@@ -1,10 +1,10 @@
 import DataSourceTableView from './DataSourceTableView';
 import { useDataSources } from '../../../context/DataSourcesContext';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import EditBulkRowItemsDrawer from './EditBulkRowItemsDrawer';
 import { useDataSourcesDrawer } from '../../../context/DataSourcesDrawerContext';
-import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
+import { DOCUMENTS_PAGE } from '@neuraltrade/core/utils/index';
 import CustomDocumentDrawer from './CustomDocumentDrawer';
 
 const DataSourceTableContainer = () => {

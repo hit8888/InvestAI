@@ -8,7 +8,7 @@ import { getStringWithBothCommaAND } from '../../utils/common';
 import BuyerIntentCellValue from '../tableComp/tableCellComp/BuyerIntentCellValue';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';
 import AssignRepValue from './AssignRepValue';
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import GenerateReachoutEmailItem from './GenerateReachoutEmailItem';
 import ConversationLogItem from './ConversationLogItem';
 

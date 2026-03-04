@@ -1,8 +1,8 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
-import { createUser } from '@meaku/core/adminHttp/api';
-import { UserManagementCreateRequest, UserManagementResponse } from '@meaku/core/types/admin/api';
+import { createUser } from '@neuraltrade/core/adminHttp/api';
+import { UserManagementCreateRequest, UserManagementResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type MutationError = AxiosError<{ detail?: string; error?: string; message?: string }>;

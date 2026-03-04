@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import DropdownIcon from '@breakout/design-system/components/icons/dropdown-icon';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 
 import {
   DropdownMenu,

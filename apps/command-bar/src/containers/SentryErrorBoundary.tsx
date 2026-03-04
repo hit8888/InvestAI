@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as Sentry from '@sentry/react';
-import { ENV } from '@meaku/core/types/env';
+import { ENV } from '@neuraltrade/core/types/env';
 
 interface SentryErrorBoundaryProps {
   children: React.ReactNode;

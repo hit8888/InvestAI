@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import OverviewDataItem, { OverviewDataItemProps } from './OverviewDataItem';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
-import NumberUtil from '@meaku/core/utils/numberUtils';
-import { ensureProtocol } from '@meaku/core/utils/index';
+import NumberUtil from '@neuraltrade/core/utils/numberUtils';
+import { ensureProtocol } from '@neuraltrade/core/utils/index';
 
 interface ContactDetailsCardProps {
   conversation: ActiveConversation;

@@ -5,9 +5,9 @@ import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   VisitorsTableDisplayContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { SHADOW_PINNED_COLUMNS } from '@meaku/core/utils/index';
+import { SHADOW_PINNED_COLUMNS } from '@neuraltrade/core/utils/index';
 import LogoImage from '../LogoImage';
 
 export type CustomSingleBodyRowItemWithLogoProps = {

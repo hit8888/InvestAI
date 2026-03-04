@@ -3,7 +3,7 @@ import { SourcesCardTypes } from '../constants';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
-import { bulkProcessDocuments, bulkReprocessArtifacts, reprocessWebpages } from '@meaku/core/adminHttp/api';
+import { bulkProcessDocuments, bulkReprocessArtifacts, reprocessWebpages } from '@neuraltrade/core/adminHttp/api';
 import Button from '@breakout/design-system/components/Button/index';
 import ReembedIcon from '@breakout/design-system/components/icons/reembed-icon';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';

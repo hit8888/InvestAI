@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { FeatureSelectionDTOType } from '@meaku/core/types/webSocketData';
+import { FeatureSelectionDTOType } from '@neuraltrade/core/types/webSocketData';
 
 interface SelectedFeatureStore {
   isFirstSlideInDemoFlow: boolean;

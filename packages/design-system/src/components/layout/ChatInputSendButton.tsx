@@ -1,7 +1,7 @@
 import SendIcon from '@breakout/design-system/components/icons/send';
 import Button from '../Button';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { useMemo } from 'react';
 
 interface SendButtonProps {

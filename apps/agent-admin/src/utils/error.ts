@@ -1,3 +1,3 @@
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 
 export { trackError };

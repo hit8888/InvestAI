@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@meaku/saral';
+import { Typography } from '@neuraltrade/saral';
 
 interface AdminSessionHeaderProps {
   hasActiveAdminSession: boolean;

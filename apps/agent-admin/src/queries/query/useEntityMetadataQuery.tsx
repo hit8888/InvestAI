@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getEntityDataBasedOnType } from '@meaku/core/adminHttp/api';
+import { getEntityDataBasedOnType } from '@neuraltrade/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { EntityMetadataResponseType } from '@meaku/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { EntityMetadataResponseType } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getEntityMetadataKey = (entityType: string, tenantName: string): readonly unknown[] => [

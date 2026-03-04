@@ -1,4 +1,4 @@
-import { Typography } from '@meaku/saral';
+import { Typography } from '@neuraltrade/saral';
 
 interface SummaryFooterProps {
   onAskAIClick: () => void;

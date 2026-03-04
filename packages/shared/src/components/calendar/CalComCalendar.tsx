@@ -1,7 +1,7 @@
 import Cal from '@calcom/embed-react';
 import { useEffect } from 'react';
 import { CalendarArtifactContent } from '../../utils/artifact';
-import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
+import useDelayedCallback from '@neuraltrade/core/hooks/useDelayedCallback';
 import { CalendarMessageHandler, CalComEventData } from '../../types/calendar';
 
 interface Props {

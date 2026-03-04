@@ -1,4 +1,4 @@
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import NoDataFoundIcon from '@breakout/design-system/components/icons/no-data-found-icon';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { ROUTING_TYPE_LOGO_MAP } from '../../utils/constants';

@@ -1,5 +1,5 @@
 import CreateManagedCalendarButton from './CreateManagedCalendarButton';
-import { BreakoutCalcomCalendar } from '@meaku/shared/components/calendar';
+import { BreakoutCalcomCalendar } from '@neuraltrade/shared/components/calendar';
 import CalComCalendarDisplay from './CalComCalendarDisplay';
 import useManagedCalendars from '../../queries/query/useManagedCalendarsQuery';
 import LoadingState from '../ControlsPage/LoadingState';

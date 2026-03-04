@@ -3,7 +3,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import Input from '@breakout/design-system/components/layout/input';
 import AgentDropdown from '@breakout/design-system/components/Dropdown/AgentDropdown';
 import { Controller } from 'react-hook-form';
-import { UserRole } from '@meaku/core/types/admin/api';
+import { UserRole } from '@neuraltrade/core/types/admin/api';
 import { ROLE_OPTIONS } from '../constants';
 
 export type BaseFormValues = {

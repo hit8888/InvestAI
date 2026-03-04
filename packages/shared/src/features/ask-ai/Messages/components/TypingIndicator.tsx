@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AvatarComponentProps } from '@meaku/saral';
+import { AvatarComponentProps } from '@neuraltrade/saral';
 import { TypingAvatar } from '../../../../components/AvatarDisplay';
 
 interface TypingIndicatorProps {

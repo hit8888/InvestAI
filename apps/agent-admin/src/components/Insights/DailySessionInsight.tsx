@@ -4,10 +4,10 @@ import { Calendar, CalendarDays, Dot } from 'lucide-react';
 import { COMMON_SMALL_ICON_PROPS } from '../../utils/constants';
 import useSessionInsightsQuery from '../../queries/query/useSessionInsightsQuery';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@meaku/tailwind-config';
+import tailwindConfig from '@neuraltrade/tailwind-config';
 import moment from 'moment-timezone';
 import InsightInfo from './InsightInfo';
-import { DailySessionInsightsResponse } from '@meaku/core/types/admin/api';
+import { DailySessionInsightsResponse } from '@neuraltrade/core/types/admin/api';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fullConfig = resolveConfig(tailwindConfig as any);

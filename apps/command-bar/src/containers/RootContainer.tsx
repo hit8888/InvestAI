@@ -1,15 +1,15 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { defaultQueryClient } from '@meaku/core/queries/defaultQueryClient';
+import { defaultQueryClient } from '@neuraltrade/core/queries/defaultQueryClient';
 import SettingsContainer, { SettingsContainerProps } from './SettingsContainer';
 import StylingContainer from './StylingContainer';
 import PreloadContainer from './PreloadContainer';
-import CommandBarAnalyticsProvider from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ShadowRootProvider from '@meaku/shared/containers/ShadowRootProvider';
-import DeviceManagerProvider from '@meaku/core/contexts/DeviceManagerProvider';
+import CommandBarAnalyticsProvider from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ShadowRootProvider from '@neuraltrade/shared/containers/ShadowRootProvider';
+import DeviceManagerProvider from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import SentryErrorBoundary from './SentryErrorBoundary';
-import FeatureProvider from '@meaku/shared/containers/FeatureProvider';
+import FeatureProvider from '@neuraltrade/shared/containers/FeatureProvider';
 
 interface RootContainerProps {
   settings?: SettingsContainerProps;

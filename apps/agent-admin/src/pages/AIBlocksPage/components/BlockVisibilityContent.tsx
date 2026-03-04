@@ -10,8 +10,8 @@ import SeparatorLine from './SeparatorLine';
 import { cn } from '@breakout/design-system/lib/cn';
 import Typography from '@breakout/design-system/components/Typography/index';
 import TextArea from '@breakout/design-system/components/TextArea/index';
-import { Asset } from '@meaku/core/types/common';
-import { Block } from '@meaku/core/types/admin/api';
+import { Asset } from '@neuraltrade/core/types/common';
+import { Block } from '@neuraltrade/core/types/admin/api';
 
 export interface BlockVisibilityData {
   isVisible: boolean;

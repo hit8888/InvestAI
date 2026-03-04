@@ -1,9 +1,9 @@
-import { Button, cn, LucideIcon } from '@meaku/saral';
+import { Button, cn, LucideIcon } from '@neuraltrade/saral';
 import { motion } from 'framer-motion';
 import { Message, MessageEventType } from '../../../types/message';
-import { CommandBarModuleType, CommandBarModuleTypeSchema } from '@meaku/core/types/index';
+import { CommandBarModuleType, CommandBarModuleTypeSchema } from '@neuraltrade/core/types/index';
 import { useCommandBarStore } from '../../../stores/useCommandBarStore';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface ScrollTriggeredNudgeProps {
   setActiveFeature?: (feature: CommandBarModuleType | null) => void;

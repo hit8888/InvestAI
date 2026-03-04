@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button, LucideIcon } from '@meaku/saral';
+import { Button, LucideIcon } from '@neuraltrade/saral';
 import { ANIMATION_TIMINGS } from '../../constants/animationTimings';
 import { BUTTON_SIZING } from './constants';
-import { RotatingText } from '@meaku/shared/components/RotatingText';
+import { RotatingText } from '@neuraltrade/shared/components/RotatingText';
 
 interface RotatingQuestionButtonProps {
   questions: string[];

@@ -1,6 +1,6 @@
-import { BrowsedUrl } from '@meaku/core/types/common';
-import { SdrAssignment } from '@meaku/core/types/admin/api';
-import { EnrichmentSource } from '@meaku/core/types/admin/admin';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
+import { EnrichmentSource } from '@neuraltrade/core/types/admin/admin';
 
 export type Employee = {
   icp_id?: number;

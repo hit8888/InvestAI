@@ -1,4 +1,4 @@
-import { BuyerIntent } from '@meaku/core/types/common';
+import { BuyerIntent } from '@neuraltrade/core/types/common';
 
 const buyerIntentText: Record<BuyerIntent, string> = {
   HIGH: 'High Intent',

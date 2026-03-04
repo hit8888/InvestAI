@@ -17,7 +17,7 @@ import {
   createEmptyRow,
 } from './utils';
 import { useFieldArray, Control, FieldErrors, Controller, useWatch } from 'react-hook-form';
-import { deepCompare } from '@meaku/core/utils/index';
+import { deepCompare } from '@neuraltrade/core/utils/index';
 import {
   Select,
   SelectContent,

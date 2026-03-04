@@ -1,6 +1,6 @@
 import { Demo } from '../types';
 import { useState } from 'react';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon } from '@neuraltrade/saral';
 
 interface DemoThumbnailProps {
   demo: Demo;

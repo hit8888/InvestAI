@@ -5,9 +5,9 @@ import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import CustomRadioGroupButtons from './CustomRadioGroupButtons';
 import CustomFooterWithButtons from './CustomFooterWithButtons';
 import { useState } from 'react';
-import { ConversationsPayload, LeadsPayload, ExportFormatType, ExportFormat } from '@meaku/core/types/admin/api';
+import { ConversationsPayload, LeadsPayload, ExportFormatType, ExportFormat } from '@neuraltrade/core/types/admin/api';
 import { downloadTableData } from '../../utils/download/downloadService';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 interface DownloadProps {
   page: PaginationPageType;
   payloadData: ConversationsPayload | LeadsPayload;

@@ -1,13 +1,13 @@
-import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
+import { MessageSenderRole, ViewType } from '@neuraltrade/core/types/common';
 import Typography from '../../Typography';
-import { MessageAnalyticsEventData, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { MessageAnalyticsEventData, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import MessageDataSources from './MessageDataSources';
 import MessageFeedback from './MessageFeedback';
 import MessageAnalytics from './MessageAnalytics';
-import { getMessageTimestamp } from '@meaku/core/utils/index';
-import { checkIsSalesResponseComplete, getAnalyticsEvent } from '@meaku/core/utils/messageUtils';
+import { getMessageTimestamp } from '@neuraltrade/core/utils/index';
+import { checkIsSalesResponseComplete, getAnalyticsEvent } from '@neuraltrade/core/utils/messageUtils';
 import { useState } from 'react';
-import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
+import { FeedbackRequestPayload } from '@neuraltrade/core/types/api/feedback_request';
 import MessageItemLayout, { Gap, Padding, Orientation } from './MessageItemLayout';
 
 interface IProps {

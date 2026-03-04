@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
+import type { CommandBarModuleConfigType } from '@neuraltrade/core/types/api/configuration_response';
 import { ANIMATION_TIMINGS } from '../constants/animationTimings';
 
 export const useEntryAnimationTiming = (modules: CommandBarModuleConfigType[]) => {

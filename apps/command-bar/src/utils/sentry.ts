@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react';
-import { ENV } from '@meaku/shared/constants/env';
-import { isProduction } from '@meaku/shared/constants/common';
-import { COMMON_DENY_URLS, COMMON_IGNORE_ERRORS } from '@meaku/core/lib/sentry';
+import { ENV } from '@neuraltrade/shared/constants/env';
+import { isProduction } from '@neuraltrade/shared/constants/common';
+import { COMMON_DENY_URLS, COMMON_IGNORE_ERRORS } from '@neuraltrade/core/lib/sentry';
 
 const dsn = ENV.VITE_SENTRY_DSN;
 

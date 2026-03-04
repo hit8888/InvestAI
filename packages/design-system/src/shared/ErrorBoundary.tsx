@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 
 interface ErrorBoundaryProps {
   children: ReactNode;

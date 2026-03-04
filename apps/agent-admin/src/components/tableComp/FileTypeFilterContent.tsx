@@ -1,6 +1,6 @@
 import React from 'react';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
-import { FilterType, CommonFilterContentProps } from '@meaku/core/types/admin/filters';
+import { FilterType, CommonFilterContentProps } from '@neuraltrade/core/types/admin/filters';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import { useDataSourceFilterContent } from '../../hooks/useDataSourceFilterContent';
 

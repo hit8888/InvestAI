@@ -3,9 +3,9 @@ import type { ComponentType, Dispatch, MouseEvent, SetStateAction } from 'react'
 import { createRoot } from 'react-dom/client';
 
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
-import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
-import { getTenantIdentifier } from '@meaku/core/utils/index';
-import { trackError } from '@meaku/core/utils/error';
+import { uploadAssetsFile } from '@neuraltrade/core/adminHttp/api';
+import { getTenantIdentifier } from '@neuraltrade/core/utils/index';
+import { trackError } from '@neuraltrade/core/utils/error';
 
 import { useImageCropModal } from '../../hooks/useImageCropModal';
 import { checkFileSize } from '../../utils/common';

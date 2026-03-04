@@ -1,7 +1,7 @@
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
 import { useTextTruncation } from '@breakout/design-system/hooks/useTextTruncation';
 import { cn } from '@breakout/design-system/lib/cn';
-import { LocationWithCityCountry } from '@meaku/core/types/admin/admin';
+import { LocationWithCityCountry } from '@neuraltrade/core/types/admin/admin';
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 
 // Country name mappings for flag library compatibility

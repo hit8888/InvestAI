@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { UseQueryResult } from '@tanstack/react-query';
 
-import { getUserDataFromMeAPI } from '@meaku/core/adminHttp/api';
-import { UserInfoResponse } from '@meaku/core/types/admin/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getUserDataFromMeAPI } from '@neuraltrade/core/adminHttp/api';
+import { UserInfoResponse } from '@neuraltrade/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 
 const getUserInfoKey = (): unknown[] => ['user-info'];
 

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getWebpageScreenshots } from '@meaku/core/adminHttp/api';
-import { WebpagesScreenshotsDataResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getWebpageScreenshots } from '@neuraltrade/core/adminHttp/api';
+import { WebpagesScreenshotsDataResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getWebpagesScreenshotsDataKey = (tenantName: string, urls: string[]): unknown[] => [

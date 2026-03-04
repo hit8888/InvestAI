@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CalendarFormData } from '@meaku/core/types/admin/api';
+import { CalendarFormData } from '@neuraltrade/core/types/admin/api';
 import useCalendars from '../../queries/query/useCalendarsQuery';
 import { useCreateCalendar, useUpdateCalendar, useDeleteCalendar } from '../../queries/mutation/useCalendarMutations';
 import CalendarItem from './CalendarItem';
@@ -10,7 +10,7 @@ import Typography from '@breakout/design-system/components/Typography/index';
 import LoadingState from '../ControlsPage/LoadingState';
 import ErrorState from '@breakout/design-system/components/layout/ErrorState';
 import { toast } from 'react-hot-toast';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { Plus } from 'lucide-react';
 
 const CalendarList = () => {

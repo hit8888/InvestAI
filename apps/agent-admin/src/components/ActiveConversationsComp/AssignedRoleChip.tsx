@@ -1,5 +1,5 @@
 import SingleAssignRepCell from '../common/SingleAssignRepCell';
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 
 interface AssignedRoleChipProps {
   sdrAssignment: SdrAssignment | null;

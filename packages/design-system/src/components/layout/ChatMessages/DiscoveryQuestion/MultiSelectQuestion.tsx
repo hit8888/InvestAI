@@ -3,9 +3,9 @@ import { OptionType } from './types';
 import CommonDiscoveryAnswer from '../DiscoveryAnswer/CommonDiscoveryAnswer';
 import { MultiSelectResponseOption } from './MultiSelectResponseItem';
 import Button from '../../../Button';
-import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
-import { ViewType } from '@meaku/core/types/common';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@neuraltrade/core/constants/index';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 type MultiSelectQuestionProps = {
   message: WebSocketMessage;

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Employee, CompanyData } from '../../VisitorsPage/components/CompanyDetailsDrawer/types';
-import { BrowsedUrl } from '@meaku/core/types/common';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
 import CompanyDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/CompanyDetailsSection';
 import UserDetailsSection from '../../VisitorsPage/components/CompanyDetailsDrawer/UserDetailsSection';
 import AiChatSummaryCard from '../../VisitorsPage/components/CompanyDetailsDrawer/AiChatSummaryCard';

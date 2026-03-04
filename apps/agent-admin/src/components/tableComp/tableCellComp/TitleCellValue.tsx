@@ -1,5 +1,5 @@
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { CellValueProps } from '@meaku/core/types/admin/admin-table';
+import { CellValueProps } from '@neuraltrade/core/types/admin/admin-table';
 import React from 'react';
 
 const TitleCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {

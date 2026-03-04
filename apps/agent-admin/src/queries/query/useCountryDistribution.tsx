@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { getCountryDistribution } from '@meaku/core/adminHttp/api';
-import { CountryDistributionResponse } from '@meaku/core/types/admin/api';
+import { getCountryDistribution } from '@neuraltrade/core/adminHttp/api';
+import { CountryDistributionResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseCountryDistributionQueryProps = {

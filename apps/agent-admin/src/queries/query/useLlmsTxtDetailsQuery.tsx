@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getLlmsTxtDetails } from '@meaku/core/adminHttp/api';
+import { getLlmsTxtDetails } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 // Types

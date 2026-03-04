@@ -1,7 +1,7 @@
-import { AgentType } from '@meaku/core/types/admin/agent-configs';
-import { getAllAgents } from '@meaku/core/adminHttp/api';
-import { ENV } from '@meaku/core/types/env';
-import { OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
+import { AgentType } from '@neuraltrade/core/types/admin/agent-configs';
+import { getAllAgents } from '@neuraltrade/core/adminHttp/api';
+import { ENV } from '@neuraltrade/core/types/env';
+import { OrganizationDetailsResponse } from '@neuraltrade/core/types/admin/api';
 
 export const getAllAgentsForTenant = async () => {
   try {

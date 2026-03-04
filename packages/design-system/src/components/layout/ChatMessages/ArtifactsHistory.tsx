@@ -1,14 +1,14 @@
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import ArtifactManager from '@meaku/core/managers/ArtifactManager';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
+import ArtifactManager from '@neuraltrade/core/managers/ArtifactManager';
 import MessageArtifactPreview from './MessageArtifactPreview';
-import { ArtifactBaseType, ArtifactEnum, ViewType, WebSocketMessage } from '@meaku/core/types/index';
-import { DemoPlayingStatus } from '@meaku/core/types/index';
+import { ArtifactBaseType, ArtifactEnum, ViewType, WebSocketMessage } from '@neuraltrade/core/types/index';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/index';
 import { ArtifactContentUi } from '../../Artifact/ArtifactContentUi';
-import { checkIsArtifactMessage } from '@meaku/core/utils/messageUtils';
+import { checkIsArtifactMessage } from '@neuraltrade/core/utils/messageUtils';
 import ArtifactsCardMobile from './ArtifactsCardMobile';
-import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
-import { ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
-import { EMPTY_FUNCTION } from '@meaku/core/constants/index';
+import useNormalAndQualificationFormArtifactMetadataProvider from '@neuraltrade/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
+import { ArtifactContentWithMetadataProps } from '@neuraltrade/core/types/artifact';
+import { EMPTY_FUNCTION } from '@neuraltrade/core/constants/index';
 
 interface IProps {
   message: WebSocketMessage;

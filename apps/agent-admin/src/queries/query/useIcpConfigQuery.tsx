@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getIcpConfig } from '@meaku/core/adminHttp/api';
-import { IcpConfigResponse } from '@meaku/core/types/admin/api';
+import { getIcpConfig } from '@neuraltrade/core/adminHttp/api';
+import { IcpConfigResponse } from '@neuraltrade/core/types/admin/api';
 import { AxiosResponse } from 'axios';
 
 interface IProps {

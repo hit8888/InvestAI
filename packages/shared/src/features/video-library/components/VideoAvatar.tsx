@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect, useRef } from 'react';
-import { LucideIcon, VideoPlayer } from '@meaku/saral';
+import { LucideIcon, VideoPlayer } from '@neuraltrade/saral';
 import { Video } from '../types';
 import BlackTooltip from '../../../components/BlackTooltip';
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { ActiveConversation } from '../context/ActiveConversationsContext';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 
 interface JoinConversationState {
   currentConversation: ActiveConversation | null;

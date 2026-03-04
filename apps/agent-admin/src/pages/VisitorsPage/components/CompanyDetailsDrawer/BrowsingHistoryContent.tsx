@@ -1,4 +1,4 @@
-import { BrowsedUrl } from '@meaku/core/types/common';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
 import BrowsedUrlsPreview from '../../../../components/common/BrowsedUrlsPreview';
 
 interface BrowsingHistoryContentProps {

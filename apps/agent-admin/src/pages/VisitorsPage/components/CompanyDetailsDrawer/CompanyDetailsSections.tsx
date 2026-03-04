@@ -1,5 +1,5 @@
 import type { Employee, CompanyData } from './types';
-import { BrowsedUrl } from '@meaku/core/types/common';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
 import CompanyDetailsSection from './CompanyDetailsSection';
 import UserDetailsSection from './UserDetailsSection';
 import AiChatSummaryCard from './AiChatSummaryCard';

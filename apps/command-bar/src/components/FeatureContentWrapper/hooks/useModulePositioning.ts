@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 import { LAYOUT_CONSTANTS, MODULE_CONFIG } from '../constants';
 import { getBottomGap } from '../utils';
 

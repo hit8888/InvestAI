@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../Popover/index';
 import { ScrollArea } from '../shadcn-ui/scroll-area';
 import { cn } from '../../lib/cn';
 import Button from '../Button';
-import { filterCountries } from '@meaku/core/utils/country-select-utils';
+import { filterCountries } from '@neuraltrade/core/utils/country-select-utils';
 
 type CountryEntry = { label: string; value: RPNInput.Country | undefined };
 

@@ -1,7 +1,7 @@
 // useFormattedColumns.ts
 import { useMemo } from 'react';
 import RenderCell from '../components/tableComp/CellValueRenderer';
-import { CellProps } from '@meaku/core/types/admin/admin-table';
+import { CellProps } from '@neuraltrade/core/types/admin/admin-table';
 
 interface Column {
   id: string;

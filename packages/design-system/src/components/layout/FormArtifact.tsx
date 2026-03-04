@@ -1,21 +1,21 @@
-import { AgentEventType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
+import { AgentEventType, SendUserMessageParams } from '@neuraltrade/core/types/webSocketData';
 import Card from '@breakout/design-system/components/layout/card';
 import CardContent from '@breakout/design-system/components/layout/card-content';
 import { Form, useForm } from '@breakout/design-system/components/layout/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '@breakout/design-system/components/Button/index';
-import { getFormSchemaTypeDefinition } from '@meaku/core/utils/form_fields';
+import { getFormSchemaTypeDefinition } from '@neuraltrade/core/utils/form_fields';
 import { useState } from 'react';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
 import ChatFormField from './ChatFormField';
-import { FormArtifactContent, FormArtifactMetadataType } from '@meaku/core/types/artifact';
+import { FormArtifactContent, FormArtifactMetadataType } from '@neuraltrade/core/types/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
 import { createFormSchema } from '../../utils/chat';
-import { sanitizeObject } from '@meaku/core/utils/sanitize';
-import { ViewType } from '@meaku/core/types/common';
+import { sanitizeObject } from '@neuraltrade/core/utils/sanitize';
+import { ViewType } from '@neuraltrade/core/types/common';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 type FormFilledEventDataType = {
   artifact_id: string;

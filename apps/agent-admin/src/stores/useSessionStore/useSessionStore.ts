@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserInfoResponse, OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
+import { UserInfoResponse, OrganizationDetailsResponse } from '@neuraltrade/core/types/admin/api';
 import { DefaultAuthResponse } from '../../utils/constants';
 import { SessionState } from './useSessionStore.types';
 import { storageAdapter } from './useSessionStore.storageAdapter';

@@ -2,7 +2,7 @@ import { TrendingUp, Users } from 'lucide-react';
 import InsightInfo from './InsightInfo';
 import CommonPieChart, { generateDistributionColors } from './CommonPieChart';
 import useBuyerIntentDistributionQuery from '../../queries/query/useBuyerIntentDistribution';
-import { BuyerIntent } from '@meaku/core/types/common';
+import { BuyerIntent } from '@neuraltrade/core/types/common';
 import { processDistributionData } from '../../utils/common';
 
 interface BuyerIntentDistributionProps {

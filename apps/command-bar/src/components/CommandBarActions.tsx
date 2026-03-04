@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BaseActionComponent } from '@meaku/shared/features';
-import { clearAllInitialTooltips } from '@meaku/shared/components/BlackTooltip';
+import { BaseActionComponent } from '@neuraltrade/shared/features';
+import { clearAllInitialTooltips } from '@neuraltrade/shared/components/BlackTooltip';
 import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
   CommandBarModuleTypeSchema,
-} from '@meaku/core/types/api/configuration_response';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+} from '@neuraltrade/core/types/api/configuration_response';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { useCommandBarStore } from '@neuraltrade/shared/stores/useCommandBarStore';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { ACTION_ANIMATION_CONSTANTS, ANIMATION_STYLES, TRANSITION_PRESETS } from '../constants/actionAnimations';
 import { getVisualIndex, getAnimationDelay, getTooltipDelay } from '../utils/actionUtils';
 import { ActionShimmerEffect } from './ActionShimmerEffect';

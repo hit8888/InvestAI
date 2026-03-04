@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
-import { getMyCalendars } from '@meaku/core/adminHttp/api';
+import { getMyCalendars } from '@neuraltrade/core/adminHttp/api';
 import { useQuery } from '@tanstack/react-query';
-import { CalendarResponse } from '@meaku/core/types/admin/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { CalendarResponse } from '@neuraltrade/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 
 const useMyCalendars = (options?: BreakoutQueryOptions<CalendarResponse[], string[]>) => {
   const myCalendarsQueryData = useQuery({

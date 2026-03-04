@@ -1,6 +1,6 @@
 import { useCallback, useRef, createContext, useContext, ReactNode, useMemo } from 'react';
 
-import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import useAnalytics from '@neuraltrade/core/hooks/useAnalytics';
 
 interface CommonProperties {
   tenant_name?: string;

@@ -1,8 +1,8 @@
 import CommonArtifactPreview from './CommonArtifactPreview';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { AgentEventType, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import { AgentEventType, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import MessageItemLayout, { Padding } from './MessageItemLayout';
 
 type IProps = {

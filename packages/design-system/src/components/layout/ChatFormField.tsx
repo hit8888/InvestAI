@@ -5,14 +5,14 @@ import {
   FormMessage,
   UseFormReturnType,
 } from '@breakout/design-system/components/layout/form';
-import { FormFieldType } from '@meaku/core/types/webSocketData';
+import { FormFieldType } from '@neuraltrade/core/types/webSocketData';
 import Input from '@breakout/design-system/components/layout/input';
-import { getInputType } from '@meaku/core/utils/form_fields';
+import { getInputType } from '@neuraltrade/core/utils/form_fields';
 import PhoneInputContainer from '../PhoneInput';
 import { cn } from '../../lib/cn';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import AgentDropdown from '../Dropdown/AgentDropdown';
-import { FormArtifactMetadataType } from '@meaku/core/types/artifact';
+import { FormArtifactMetadataType } from '@neuraltrade/core/types/artifact';
 import { CountryCode } from 'libphonenumber-js/core';
 
 interface IChatFormFieldProps {

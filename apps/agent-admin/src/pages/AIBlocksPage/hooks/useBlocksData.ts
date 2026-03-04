@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useBlocksQuery from '../../../queries/query/useBlocksQuery';
 import { useUpdateBlockMutation } from '../../../queries/mutation/useUpdateBlockMutation';
-import { UpdateBlockPayload } from '@meaku/core/types/admin/api';
+import { UpdateBlockPayload } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../../stores/useSessionStore';
 
 /**

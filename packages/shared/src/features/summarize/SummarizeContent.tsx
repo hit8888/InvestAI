@@ -1,14 +1,14 @@
-import { cn, LucideIcon } from '@meaku/saral';
+import { cn, LucideIcon } from '@neuraltrade/saral';
 import type { FeatureContentProps } from '..';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 import { SummaryContent } from './components/SummaryContent';
 import { SummaryError } from './components/SummaryError';
 import { SummaryInitial } from './components/SummaryInitial';
 import { SummaryFooter } from './components/SummaryFooter';
 import { useSummary } from './hooks/useSummary';
 import { useEffect } from 'react';
-import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { getLocalStorageData, setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
 
 const { ASK_AI, SUMMARIZE } = CommandBarModuleTypeSchema.enum;
 

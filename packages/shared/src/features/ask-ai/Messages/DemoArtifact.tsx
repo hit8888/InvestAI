@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FullscreenDemoPlayer } from '../../demo-library/components/FullscreenDemoPlayer';
 import { DemoArtifactData } from '../../../types/message';
-import { Button } from '@meaku/saral';
+import { Button } from '@neuraltrade/saral';
 
 interface DemoArtifactProps {
   data: DemoArtifactData;

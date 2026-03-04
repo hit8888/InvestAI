@@ -28,7 +28,7 @@ import {
 } from '../../utils/sidebarV2Constants';
 import Separator from '@breakout/design-system/components/layout/separator';
 import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 
 /**
  * SidebarV2 Component

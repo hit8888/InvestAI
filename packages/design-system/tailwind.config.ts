@@ -1,4 +1,4 @@
-import sharedConfig from '@meaku/tailwind-config';
+import sharedConfig from '@neuraltrade/tailwind-config';
 import type { Config } from 'tailwindcss';
 
 const config: Pick<Config, 'prefix' | 'presets' | 'content'> = {

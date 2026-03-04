@@ -1,8 +1,8 @@
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import CommonDiscoveryAnswer from './CommonDiscoveryAnswer';
-import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
-import { ViewType } from '@meaku/core/types/common';
-import { isDiscoveryAnswer } from '@meaku/core/utils/messageUtils';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@neuraltrade/core/constants/index';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { isDiscoveryAnswer } from '@neuraltrade/core/utils/messageUtils';
 import MessageItemLayout, { Gap, Padding } from '../MessageItemLayout';
 
 type DiscoveryAnswerProps = {

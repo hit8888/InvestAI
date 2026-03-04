@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
-import { LucideIcon, Button, buttonVariants, Typography, cn } from '@meaku/saral';
+import { LucideIcon, Button, buttonVariants, Typography, cn } from '@neuraltrade/saral';
 import { Message, MessageEventType } from '../types/message';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import useFeatureConfig from '../hooks/useFeatureConfig';
 import { useFeature } from '../containers/FeatureProvider';
 

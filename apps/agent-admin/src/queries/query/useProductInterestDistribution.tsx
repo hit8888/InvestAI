@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { getProductInterestDistribution } from '@meaku/core/adminHttp/api';
-import { ProductInterestDistributionResponse } from '@meaku/core/types/admin/api';
+import { getProductInterestDistribution } from '@neuraltrade/core/adminHttp/api';
+import { ProductInterestDistributionResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseProductInterestDistributionQueryProps = {

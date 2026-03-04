@@ -1,4 +1,4 @@
-import { Button, LucideIcon } from '@meaku/saral';
+import { Button, LucideIcon } from '@neuraltrade/saral';
 
 interface DemoLibraryErrorStateProps {
   onRetry: () => void;

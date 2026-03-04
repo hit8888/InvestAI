@@ -1,1 +1,2 @@
-pnpm run lint-staged
+export PATH="/Users/hitesh/.nvm/versions/node/v24.6.0/bin:$PATH"
+node "$(which node 2>/dev/null || echo /Users/hitesh/.nvm/versions/node/v24.6.0/bin/node)" /Users/hitesh/.nvm/versions/node/v24.6.0/bin/corepack pnpm run lint-staged

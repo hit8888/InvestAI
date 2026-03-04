@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { KatyIcon, Markdown } from '@meaku/saral';
+import { KatyIcon, Markdown } from '@neuraltrade/saral';
 import NudgeTimeoutLoader from './NudgeTimeoutLoader';
 import NudgeDismissButton from './NudgeDismissButton';
 

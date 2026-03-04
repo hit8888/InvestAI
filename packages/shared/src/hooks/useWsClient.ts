@@ -3,13 +3,13 @@ import { useEffect, useRef } from 'react';
 import { useCommandBarStore } from '../stores';
 import type { Message } from '../types/message';
 import { getUserMessage } from '../utils/chat-utils';
-import { jsonSafeParse } from '@meaku/core/utils/index';
+import { jsonSafeParse } from '@neuraltrade/core/utils/index';
 import { ENV } from '../constants/env';
-import WebSocketClient from '@meaku/core/networkClients/wsClient/wsClient';
+import WebSocketClient from '@neuraltrade/core/networkClients/wsClient/wsClient';
 import { useIncomingMessageSound } from './useIncomingMessageSound';
 import { useFeature } from '../containers/FeatureProvider';
-import { DeviceType } from '@meaku/core/types/common';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { DeviceType } from '@neuraltrade/core/types/common';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 export const wsClient = new WebSocketClient(`${ENV.VITE_BASE_WS_URL}/ws/chat`, {
   heartbeat: {

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
 
 interface State {
   latestResponseId: string;

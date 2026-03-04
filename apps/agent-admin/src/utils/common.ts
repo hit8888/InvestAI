@@ -1,4 +1,4 @@
-import { ENV } from '@meaku/core/types/env';
+import { ENV } from '@neuraltrade/core/types/env';
 import {
   BANTItem,
   CONVERSATION_DETAILS_PAGESUMMARY_TAB_CONTENT_LIST,
@@ -33,7 +33,7 @@ import {
   TransformedProspectAndCompanyDetailsContent,
   VisitorsTableDisplayContent,
   VisitorsTableViewContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import {
   ConversationRightSideDetailsType,
   FunnelData,
@@ -53,10 +53,10 @@ import {
   VIDEOS_PAGE,
   VISITORS_PAGE,
   WEBPAGES_PAGE,
-} from '@meaku/core/utils/index';
-import DateUtil from '@meaku/core/utils/dateUtils';
-import { DateRangeProp, FilterType, FilterValues } from '@meaku/core/types/admin/filters';
-import { SortValues, DataSourceSortValues, SortKeyToFieldMap } from '@meaku/core/types/admin/sort';
+} from '@neuraltrade/core/utils/index';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
+import { DateRangeProp, FilterType, FilterValues } from '@neuraltrade/core/types/admin/filters';
+import { SortValues, DataSourceSortValues, SortKeyToFieldMap } from '@neuraltrade/core/types/admin/sort';
 import {
   EntityMetadataResponseType,
   EntityMetadataSchemaType,
@@ -64,10 +64,10 @@ import {
   OrganizationDetailsResponse,
   type SdrAssignment,
   SortItem,
-} from '@meaku/core/types/admin/api';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isStreamMessage, isTextMessage } from '@meaku/core/utils/messageUtils';
-import NumberUtil from '@meaku/core/utils/numberUtils';
+} from '@neuraltrade/core/types/admin/api';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { isStreamMessage, isTextMessage } from '@neuraltrade/core/utils/messageUtils';
+import NumberUtil from '@neuraltrade/core/utils/numberUtils';
 import { capitalizeString } from '../../../agent/src/utils/common';
 
 export const isDev = ENV.VITE_APP_ENV !== 'production' && ENV.VITE_APP_ENV !== 'staging';

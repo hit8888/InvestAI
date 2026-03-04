@@ -1,4 +1,4 @@
-import { ShiningRectangle, ThreeStarInsideOrbIcon } from '@meaku/saral';
+import { ShiningRectangle, ThreeStarInsideOrbIcon } from '@neuraltrade/saral';
 
 interface FallbackOrbProps {
   size?: number;

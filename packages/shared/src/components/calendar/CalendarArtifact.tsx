@@ -1,7 +1,7 @@
 import { CalendarArtifactContent } from '../../utils/artifact';
 import { SendUserMessageParams } from '../../types/message';
 import { CalendarBookingSuccessfull, useCommonCalendarArtifact } from './index';
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 import { useEffect } from 'react';
 
 interface AskAiCalendarArtifactProps {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { BaseActionComponent } from '@meaku/shared/features';
-import { CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
+import { BaseActionComponent } from '@neuraltrade/shared/features';
+import { CommandBarModuleConfigType } from '@neuraltrade/core/types/api/configuration_response';
 import { ACTION_CONFIGS } from '../../utils/commandBarActionConfigs';
 import { ANIMATION_TIMINGS } from '../../constants/animationTimings';
 

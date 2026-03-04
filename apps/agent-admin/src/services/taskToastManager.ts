@@ -1,4 +1,4 @@
-import { TaskStatus } from '@meaku/core/types/admin/api';
+import { TaskStatus } from '@neuraltrade/core/types/admin/api';
 import { taskPollingService } from './taskPollingService';
 import LoadingToastMessage from '@breakout/design-system/components/layout/LoadingToastMessage';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';

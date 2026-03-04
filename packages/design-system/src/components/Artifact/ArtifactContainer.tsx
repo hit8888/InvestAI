@@ -1,11 +1,11 @@
 import Artifact from '@breakout/design-system/components/Artifact/index';
-import { useCommonMessageStore } from '@meaku/core/stores/useCommonMessageStore';
-import useArtifactStore from '@meaku/core/stores/useArtifactStore';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { SupportedArtifactType } from '@meaku/core/utils/messageUtils';
-import { ViewType } from '@meaku/core/types/common';
-import useNormalAndQualificationFormArtifactMetadataProvider from '@meaku/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
-import { ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
+import { useCommonMessageStore } from '@neuraltrade/core/stores/useCommonMessageStore';
+import useArtifactStore from '@neuraltrade/core/stores/useArtifactStore';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { SupportedArtifactType } from '@neuraltrade/core/utils/messageUtils';
+import { ViewType } from '@neuraltrade/core/types/common';
+import useNormalAndQualificationFormArtifactMetadataProvider from '@neuraltrade/core/hooks/useNormalAndQualificationFormArtifactMetadataProvider';
+import { ArtifactContentWithMetadataProps } from '@neuraltrade/core/types/artifact';
 
 type IProps = {
   logoURL: string;

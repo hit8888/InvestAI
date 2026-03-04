@@ -1,7 +1,7 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { getStaticConfig } from '../api';
-import type { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
-import type { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import type { ConfigurationApiResponse } from '@neuraltrade/core/types/api/configuration_response';
+import type { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 
 export const configDataKey = (): unknown[] => ['static-config'];
 

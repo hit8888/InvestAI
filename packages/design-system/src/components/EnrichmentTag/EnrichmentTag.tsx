@@ -3,7 +3,7 @@ import OutboundCampaignIcon from '../icons/outbound_campaign_enrichment_icon.tsx
 import UserInputIcon from '../icons/user_input_enrichment_icon.tsx';
 import AiSparklesIcon from '../icons/ai-sparkles-icon.tsx';
 import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark.tsx';
-import { EnrichmentSource } from '@meaku/core/types/admin/admin';
+import { EnrichmentSource } from '@neuraltrade/core/types/admin/admin';
 import { ReactElement } from 'react';
 
 const ENRICHMENT_SOURCE_TO_DISPLAY_CONFIG: Record<

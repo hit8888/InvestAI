@@ -1,5 +1,5 @@
-import { WebSocketMessage, EventMessageContent } from '@meaku/core/types/webSocketData';
-import { checkIsAdminJoinedMessage, checkIsAdminLeftMessage } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage, EventMessageContent } from '@neuraltrade/core/types/webSocketData';
+import { checkIsAdminJoinedMessage, checkIsAdminLeftMessage } from '@neuraltrade/core/utils/messageUtils';
 
 /**
  * Gets the active user ID from JOIN events in the conversation.

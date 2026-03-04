@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system/components/Popover/index';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { DateRangeProp, FilterValues, FilterValueTypes, PageTypeProps } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, FilterValues, FilterValueTypes, PageTypeProps } from '@neuraltrade/core/types/admin/filters';
 
 import FilterContent from './FilterContent';
 import SingleAppliedFilter from './SingleAppliedFilter';
@@ -9,7 +9,7 @@ import AllSelectableFilterContent from './AllSelectableFilterContent';
 import AllFiltersIcon from '@breakout/design-system/components/icons/all-filters';
 import PopoverHeaderLabelWithCloseIcon from './PopoverHeaderLabelWithCloseIcon';
 import { collectAppliedFilters, getFilterHeaderLabel } from '../../utils/common';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType } from '@neuraltrade/core/types/admin/filters';
 import SearchTableContentInput from '../SearchTableContentInput';
 
 const {

@@ -1,6 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import React from 'react';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 // Defined proper enums for better type safety and IntelliSense
 export enum Alignment {

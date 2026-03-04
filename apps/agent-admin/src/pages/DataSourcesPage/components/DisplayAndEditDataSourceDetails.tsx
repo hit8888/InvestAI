@@ -1,12 +1,12 @@
 import CustomVideoPlayer from '@breakout/design-system/components/layout/CustomVideoPlayer';
-import { CommonDataSourceResponse, DataSourceArtifactsResponse } from '@meaku/core/types/admin/admin';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { CommonDataSourceResponse, DataSourceArtifactsResponse } from '@neuraltrade/core/types/admin/admin';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import RelevantQueriesSectionDrawer from './RelevantQueriesSectionDrawer';
 import DescriptionSectionEditDrawer from './DescriptionSectionEditDrawer';
 import TitleSectionEditDrawer from './TitleSectionEditDrawer';
 import { useState } from 'react';
 import Button from '@breakout/design-system/components/Button/index';
-import { updateArtifact } from '@meaku/core/adminHttp/api';
+import { updateArtifact } from '@neuraltrade/core/adminHttp/api';
 import { useDataSourceTableStore } from '../../../stores/useDataSourceTableStore';
 import { toast } from 'react-hot-toast';
 import { PlusIcon, Loader2Icon } from 'lucide-react';

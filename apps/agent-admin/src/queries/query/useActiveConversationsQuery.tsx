@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { getActiveConversations } from '@meaku/core/adminHttp/api';
+import { getActiveConversations } from '@neuraltrade/core/adminHttp/api';
 import { useQuery } from '@tanstack/react-query';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import { useSessionStore } from '../../stores/useSessionStore';

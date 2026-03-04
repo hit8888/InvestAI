@@ -1,10 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getFilterOptionsData, getProspectsFilterOptionsData } from '@meaku/core/adminHttp/api';
+import { getFilterOptionsData, getProspectsFilterOptionsData } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { FilterOptionsPayload, FilterOptionsResponse } from '@meaku/core/types/admin/api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { PageTypeToTableName } from '@meaku/core/utils/index';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { FilterOptionsPayload, FilterOptionsResponse } from '@neuraltrade/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { PageTypeToTableName } from '@neuraltrade/core/utils/index';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type FilterOptionsVariables = FilterOptionsPayload;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DATA_SOURCE_DESCRIPTION_TRIM_LENGTH } from '../../../utils/constants';
-import { DescriptionValue } from '@meaku/core/types/admin/admin-table';
+import { DescriptionValue } from '@neuraltrade/core/types/admin/admin-table';
 import Typography from '@breakout/design-system/components/Typography/index';
 import SparkleThreeStarIcon from '@breakout/design-system/components/icons/sparkle-three-star';
 import GithubMarkdownRenderer from '@breakout/design-system/components/layout/GithubMarkdownRenderer';

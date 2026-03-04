@@ -1,4 +1,4 @@
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon } from '@neuraltrade/saral';
 
 export const VideoLibraryShimmer = () => {
   return (

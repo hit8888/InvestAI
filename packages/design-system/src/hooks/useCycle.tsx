@@ -1,4 +1,4 @@
-import { SUGGESTED_QUESTIONS_INTERVAL_DURATION_IN_CYCLE_IN_MS } from '@meaku/core/constants/index';
+import { SUGGESTED_QUESTIONS_INTERVAL_DURATION_IN_CYCLE_IN_MS } from '@neuraltrade/core/constants/index';
 import { useState, useEffect } from 'react';
 
 type UseCycleProps = {

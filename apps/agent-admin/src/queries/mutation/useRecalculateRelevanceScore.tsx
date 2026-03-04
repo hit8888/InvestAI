@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { recalculateRelevanceScore } from '@meaku/core/adminHttp/api';
+import { recalculateRelevanceScore } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
 
 export interface RecalculateRelevanceScoreResponse {

@@ -1,4 +1,4 @@
-import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
+import useLocalStorageSession from '@neuraltrade/core/hooks/useLocalStorageSession';
 import Typography from '../Typography';
 import StarsGradientIcon from '../icons/stars-gradient-icon';
 

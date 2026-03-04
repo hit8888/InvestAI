@@ -5,7 +5,7 @@ import useGenerateOtp from '../queries/mutation/useGenerateOtp';
 import useVerifyOtp from '../queries/mutation/useVerifyOtp';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { LoginFormValues } from '@meaku/core/types/admin/adminLogin';
+import { LoginFormValues } from '@neuraltrade/core/types/admin/adminLogin';
 import useGoogleSso from '../hooks/useGoogleSso';
 import { handleLoginAndRedirection } from '../utils/authHelpers';
 import { HelpCircle } from 'lucide-react';
@@ -14,7 +14,7 @@ import CopyToClipboardButton from '@breakout/design-system/components/layout/Cop
 import SpinLoader from '@breakout/design-system/components/layout/SpinLoader';
 import GoogleIcon from '@breakout/design-system/components/icons/google-icon';
 import useAdminEventAnalytics from '../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 
 const LoginForm = () => {
   const { trackAdminEvent } = useAdminEventAnalytics();

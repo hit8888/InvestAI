@@ -1,5 +1,5 @@
-import { initSentry } from '@meaku/core/lib/sentry';
-import { ENV } from '@meaku/core/types/env';
+import { initSentry } from '@neuraltrade/core/lib/sentry';
+import { ENV } from '@neuraltrade/core/types/env';
 import { isDev } from '../utils/common';
 import { getWebsocketBaseUrl } from '../utils/apiCalls';
 

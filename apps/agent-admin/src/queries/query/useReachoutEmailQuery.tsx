@@ -1,5 +1,5 @@
-import { reachoutEmail } from '@meaku/core/adminHttp/api';
-import { ReachoutEmailPayload, ReachoutEmailResponse } from '@meaku/core/types/admin/api';
+import { reachoutEmail } from '@neuraltrade/core/adminHttp/api';
+import { ReachoutEmailPayload, ReachoutEmailResponse } from '@neuraltrade/core/types/admin/api';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';

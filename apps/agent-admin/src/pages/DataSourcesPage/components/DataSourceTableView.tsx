@@ -1,12 +1,12 @@
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
 import { useFormattedColumns } from '../../../hooks/useFormattedColumns';
 import { usePagination } from '../../../hooks/usePagination';
 import { useMemo, useEffect, useState } from 'react';
-import { DataSourcePayload } from '@meaku/core/types/admin/api';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { DataSourcePayload } from '@neuraltrade/core/types/admin/api';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 import { useQueryOptions } from '../../../hooks/useQueryOptions';
 import useDataSourceTableViewQuery from '../../../queries/query/useDataSourceTableViewQuery';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 import DataSourceTableViewContent from '../../../components/AgentManagement/DataSourceTableViewContent';
 import { PAGINATION_PER_PAGE_OPTIONS_FOR_DATA_SOURCE_TABLE } from '../../../utils/constants';
 import TablePagination from '../../../components/tableComp/TablePagination';

@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { CellValueProps } from '@meaku/core/types/admin/admin-table';
+import { CellValueProps } from '@neuraltrade/core/types/admin/admin-table';
 
 const MeetingStatusCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {
   const isStatusBooked = value === 'Booked';

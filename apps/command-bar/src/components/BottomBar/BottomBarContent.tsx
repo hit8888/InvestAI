@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CommandBarModuleType, CommandBarModuleConfigType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleType, CommandBarModuleConfigType } from '@neuraltrade/core/types/api/configuration_response';
 
 // Components
 import { BottomBarInputField } from './BottomBarInputField';

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { IcpConfigPayload } from '@meaku/core/types/admin/api';
-import { updateIcpConfig } from '@meaku/core/adminHttp/api';
+import { IcpConfigPayload } from '@neuraltrade/core/types/admin/api';
+import { updateIcpConfig } from '@neuraltrade/core/adminHttp/api';
 
 interface UpdateIcpConfigParams {
   agentId: number;

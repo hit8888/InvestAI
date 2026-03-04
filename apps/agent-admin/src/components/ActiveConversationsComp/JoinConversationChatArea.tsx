@@ -1,11 +1,11 @@
 import { useSessionStore } from '../../stores/useSessionStore';
 import AgentMessages from '@breakout/design-system/components/layout/AgentMessages/index';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
 import { cn } from '@breakout/design-system/lib/cn';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 import { LoaderCircle } from 'lucide-react';
 import { useMessageStore } from '../../hooks/useMessageStore';
-import useArtifactStore from '@meaku/core/stores/useArtifactStore';
+import useArtifactStore from '@neuraltrade/core/stores/useArtifactStore';
 import { useSetArtifactOnNewMessage } from '../../hooks/useSetArtifactOnNewMessage';
 import SummaryCard from './SummaryCard';
 import AccountSignalsCard from './AccountSignalsCard';
@@ -13,8 +13,8 @@ import ContactDetailsCard from './ContactDetailsCard';
 import BrowsedUrlsPreview from '../common/BrowsedUrlsPreview';
 import LandingPageCard from './LandingPageCard';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
-import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@meaku/core/constants/index';
-import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
+import { EMPTY_ARRAY, EMPTY_FUNCTION } from '@neuraltrade/core/constants/index';
+import { SessionDetailsDataResponse } from '@neuraltrade/core/types/admin/admin';
 
 interface JoinConversationChatAreaProps {
   conversationDetails?: SessionDetailsDataResponse;

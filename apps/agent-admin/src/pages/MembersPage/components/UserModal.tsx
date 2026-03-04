@@ -16,7 +16,7 @@ import {
   UserManagementCreateRequestSchema,
   UserRole,
   User,
-} from '@meaku/core/types/admin/api';
+} from '@neuraltrade/core/types/admin/api';
 import useCreateUserMutation from '../../../queries/mutation/useCreateUserMutation';
 import useUpdateUserMutation from '../../../queries/mutation/useUpdateUserMutation';
 import UserFormFields, { BaseFormValues } from './UserFormFields';

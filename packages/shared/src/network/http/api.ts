@@ -1,12 +1,12 @@
-import apiClient from '@meaku/core/http/client';
+import apiClient from '@neuraltrade/core/http/client';
 
-import { ConfigPayload } from '@meaku/core/types/api/agent_config_request';
-import { ConfigurationApiResponse } from '@meaku/core/types/api/configuration_response';
-import { InitializationPayload } from '@meaku/core/types/api/session_init_request';
-import { UpdateProspectPayload } from '@meaku/core/types/api/update_prospect_request';
+import { ConfigPayload } from '@neuraltrade/core/types/api/agent_config_request';
+import { ConfigurationApiResponse } from '@neuraltrade/core/types/api/configuration_response';
+import { InitializationPayload } from '@neuraltrade/core/types/api/session_init_request';
+import { UpdateProspectPayload } from '@neuraltrade/core/types/api/update_prospect_request';
 import { FormConfigResponse, InitSessionResponse } from '../../types/responses';
-import { VideoLibraryResponse } from '@meaku/core/types/api/video_library_response';
-import { DemoLibraryResponse } from '@meaku/core/types/api/demo_library_response';
+import { VideoLibraryResponse } from '@neuraltrade/core/types/api/video_library_response';
+import { DemoLibraryResponse } from '@neuraltrade/core/types/api/demo_library_response';
 
 export const getNudge = (agentId: string, payload: ConfigPayload) =>
   apiClient.post(`/tenant/chat/v2/agent/${agentId}/config/`, { ...payload });

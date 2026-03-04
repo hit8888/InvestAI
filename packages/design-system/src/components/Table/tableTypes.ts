@@ -1,5 +1,5 @@
-import { CommonDataSourceResponse, PaginationPageType } from '@meaku/core/types/admin/admin';
-import { DataSourceSortValues, SortCategory, SortOrder } from '@meaku/core/types/admin/sort';
+import { CommonDataSourceResponse, PaginationPageType } from '@neuraltrade/core/types/admin/admin';
+import { DataSourceSortValues, SortCategory, SortOrder } from '@neuraltrade/core/types/admin/sort';
 import { Cell, Header, HeaderGroup, Row } from '@tanstack/react-table';
 
 export type DataSourceStoreProps = {

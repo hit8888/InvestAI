@@ -6,7 +6,7 @@ import {
 } from '../../utils/constants';
 import { getConversationRightSideDetailsItems } from '../../utils/common';
 import SingleProspectAndCompanyItemDataDisplay from './SingleProspectAndCompanyItemDataDisplay';
-import { TransformedProspectAndCompanyDetailsContent } from '@meaku/core/types/admin/admin';
+import { TransformedProspectAndCompanyDetailsContent } from '@neuraltrade/core/types/admin/admin';
 
 const ProspectAndCompanyDetailsDisplayContainer = ({
   prospect,

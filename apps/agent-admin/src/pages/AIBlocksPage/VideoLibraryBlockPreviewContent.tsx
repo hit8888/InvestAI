@@ -1,4 +1,4 @@
-import { BlockTypeEnum } from '@meaku/core/types/admin/api';
+import { BlockTypeEnum } from '@neuraltrade/core/types/admin/api';
 import PreviewCardHeader from './components/PreviewCardHeader';
 import { BaseBlockPreviewProps } from './types/previewTypes';
 import VideoBlockPreviewContent from './components/VideoBlockPreviewContent';

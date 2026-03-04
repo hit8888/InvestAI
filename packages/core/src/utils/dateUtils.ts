@@ -1,6 +1,6 @@
 import { format, differenceInHours, addDays, isSameDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
-import { DATE_FORMAT_OPTIONS, DATE_FORMATS, HUMAN_READABLE_DATE_LABELS } from '@meaku/core/constants/dateFormat';
+import { DATE_FORMAT_OPTIONS, DATE_FORMATS, HUMAN_READABLE_DATE_LABELS } from '@neuraltrade/core/constants/dateFormat';
 
 const { TODAY, YESTERDAY } = HUMAN_READABLE_DATE_LABELS;
 const { STANDARD_DATE, ISO_DATE_TIME } = DATE_FORMATS;

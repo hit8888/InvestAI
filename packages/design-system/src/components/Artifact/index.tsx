@@ -1,8 +1,8 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import { ArtifactContentUi } from './ArtifactContentUi';
-import { ArtifactBaseType, SendUserMessageParams } from '@meaku/core/types/webSocketData';
-import { ArtifactContent, ArtifactContentWithMetadataProps } from '@meaku/core/types/artifact';
-import { ViewType } from '@meaku/core/types/common';
+import { ArtifactBaseType, SendUserMessageParams } from '@neuraltrade/core/types/webSocketData';
+import { ArtifactContent, ArtifactContentWithMetadataProps } from '@neuraltrade/core/types/artifact';
+import { ViewType } from '@neuraltrade/core/types/common';
 
 export interface ArtifactProps {
   viewType: ViewType;

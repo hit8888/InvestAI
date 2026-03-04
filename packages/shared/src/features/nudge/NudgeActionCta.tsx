@@ -2,13 +2,13 @@ import Lottie from 'lottie-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import aiShimmer from '../../assets/ai-shimmer.json';
-import { LucideIcon } from '@meaku/saral';
-import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { LucideIcon } from '@neuraltrade/saral';
+import useDelayedEnable from '@neuraltrade/core/hooks/useDelayedEnable';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
 import { RotatingText } from '../../components/RotatingText';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import { useEffect } from 'react';
 
 const CLOSE_BUTTON_SHOW_DELAY = 2000;

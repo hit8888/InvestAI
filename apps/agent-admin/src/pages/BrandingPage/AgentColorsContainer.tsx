@@ -8,7 +8,7 @@ import {
   COLOR_SECONDARY_SUBTITLE,
   COLOR_SECONDARY_TITLE,
 } from '../../utils/constants';
-import { AgentConfigResponse } from '@meaku/core/types/admin/agent-configs';
+import { AgentConfigResponse } from '@neuraltrade/core/types/admin/agent-configs';
 import BrandingSectionContainer from './BrandingSectionContainer';
 
 type AgentColorsContainerProps = {

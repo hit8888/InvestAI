@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getDataSourceWebpagesItemData, getDataSourceDocumentsItemData } from '@meaku/core/adminHttp/api';
+import { getDataSourceWebpagesItemData, getDataSourceDocumentsItemData } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { DOCUMENTS_PAGE, WEBPAGES_PAGE } from '@meaku/core/utils/index';
-import { DataSourceWebpagesResponseResultSchema } from '@meaku/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { DOCUMENTS_PAGE, WEBPAGES_PAGE } from '@neuraltrade/core/utils/index';
+import { DataSourceWebpagesResponseResultSchema } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getDataSourceItemKey = (tenantName: string, tableKey: string, dataSourceID: number): unknown[] => [

@@ -1,10 +1,10 @@
-import useLocalStorageSession from '@meaku/core/hooks/useLocalStorageSession';
+import useLocalStorageSession from '@neuraltrade/core/hooks/useLocalStorageSession';
 import Button from '@breakout/design-system/components/Button/index';
 import RefreshChatIcon from '@breakout/design-system/components/icons/refresh';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
-import useSessionApiResponseManager from '@meaku/core/hooks/useSessionApiResponseManager';
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import useSessionApiResponseManager from '@neuraltrade/core/hooks/useSessionApiResponseManager';
+import { ArtifactBaseType } from '@neuraltrade/core/types/webSocketData';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { cn } from '@breakout/design-system/lib/cn';
 
 interface FeedbackHeaderProps {

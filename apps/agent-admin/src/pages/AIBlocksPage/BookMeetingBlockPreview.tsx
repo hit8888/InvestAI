@@ -1,4 +1,4 @@
-import { BlockTypeEnum } from '@meaku/core/types/admin/api';
+import { BlockTypeEnum } from '@neuraltrade/core/types/admin/api';
 import PreviewCardCTA from './components/PreviewCardCTA';
 import PreviewCardHeader from './components/PreviewCardHeader';
 import PreviewCardDescription from './components/PreviewCardDescription';

@@ -1,4 +1,4 @@
-import { ENV } from '@meaku/shared/constants/env';
+import { ENV } from '@neuraltrade/shared/constants/env';
 import type r2wc from '@r2wc/react-to-web-component';
 
 export const injectCSSIntoShadowRoot = (shadowRoot: ShadowRoot) => {

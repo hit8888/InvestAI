@@ -1,9 +1,9 @@
-import { ConversationDetailResponse, ConversationDetailsDataResponse } from '@meaku/core/types/admin/admin';
-// import { ConversationDetailsResponseSchema } from '@meaku/core/types/admin/api';
-import { convertServerConversationDataToClientConversationData } from '@meaku/core/transformers/common';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { FeedbackRequestPayload } from '@meaku/core/types/index';
-import { getTransformedResponse } from '@meaku/core/utils/index';
+import { ConversationDetailResponse, ConversationDetailsDataResponse } from '@neuraltrade/core/types/admin/admin';
+// import { ConversationDetailsResponseSchema } from '@neuraltrade/core/types/admin/api';
+import { convertServerConversationDataToClientConversationData } from '@neuraltrade/core/transformers/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@neuraltrade/core/types/index';
+import { getTransformedResponse } from '@neuraltrade/core/utils/index';
 
 type Result<T> = {
   success: boolean;

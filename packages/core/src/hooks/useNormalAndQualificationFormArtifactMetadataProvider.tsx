@@ -1,7 +1,7 @@
 import { AgentEventType, ArtifactMessageContent } from '../types/webSocketData';
 
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { ArtifactContent, QualificationResponsesType } from '@meaku/core/types/artifact';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { ArtifactContent, QualificationResponsesType } from '@neuraltrade/core/types/artifact';
 import {
   checkIsQualificationFormArtifact,
   findArtifactMessageWithSameArtifactId,

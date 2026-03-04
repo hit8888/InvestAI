@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { OrbStatusEnum } from '@meaku/core/types/config';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
 import { cn } from '../../lib/cn';
 import ShiningRectangle from '../icons/ShiningRectangle';
 import './index.css';

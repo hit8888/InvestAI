@@ -3,7 +3,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@breakout/design-system
 import FooterButton from '../tableComp/FooterButton';
 import DateRangePicker from '@breakout/design-system/components/layout/DateRangePicker';
 import { getDateAppliedValue } from '../../utils/common';
-import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, PresetDateLabel } from '@neuraltrade/core/types/admin/filters';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import ChoosePresetsDateValue from '../ChoosePresetsDateValue';
 import moment from 'moment-timezone';

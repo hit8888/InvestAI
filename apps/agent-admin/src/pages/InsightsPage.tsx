@@ -1,14 +1,14 @@
 import Typography from '@breakout/design-system/components/Typography/index';
 import DateRangeSelector from '../components/Insights/DateRangeSelector';
 import { useMemo, useState } from 'react';
-import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, PresetDateLabel } from '@neuraltrade/core/types/admin/filters';
 import Separator from '@breakout/design-system/components/layout/separator';
 import Summary from '../components/Insights/Summary';
 import moment from 'moment-timezone';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 import DailySessionInsight from '../components/Insights/DailySessionInsight';
 import WeeklyConversationPattern from '../components/Insights/WeeklyConversationPattern';
-import { DayOfWeek } from '@meaku/core/types/admin/api';
+import { DayOfWeek } from '@neuraltrade/core/types/admin/api';
 import HourlyTrafficByWeekday from '../components/Insights/HourlyTrafficByWeekday';
 import FrequentSources from '../components/Insights/FrequentSources';
 import TopQuestionsAskedByUsers from '../components/Insights/TopQuestionsAskedByUsers';

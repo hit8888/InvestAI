@@ -1,14 +1,14 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import React, { useMemo } from 'react';
 import SuggestionsArtifact from '../ChatMessages/SuggestionsArtifact';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { ViewType } from '@meaku/core/types/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { ViewType } from '@neuraltrade/core/types/common';
 import {
   checkIsCurrentMessageComplete,
   willMessageRenderHTML,
   filterConsecutiveUserLeftEvents,
-} from '@meaku/core/utils/messageUtils';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+} from '@neuraltrade/core/utils/messageUtils';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import { useAgentMessagesScrolling } from '../../../hooks/useAgentMessagesScrolling';
 import { IProps } from './types';
 import DownArrowButton from './DownArrowButton';

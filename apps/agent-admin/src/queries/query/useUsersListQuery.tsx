@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
-import { getUsersList } from '@meaku/core/adminHttp/api';
-import { UsersListQueryParams, UsersListResponse } from '@meaku/core/types/admin/api';
+import { getUsersList } from '@neuraltrade/core/adminHttp/api';
+import { UsersListQueryParams, UsersListResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { AxiosResponse } from 'axios';
 

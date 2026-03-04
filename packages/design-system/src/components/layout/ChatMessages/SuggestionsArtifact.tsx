@@ -1,11 +1,11 @@
-import { SuggestionArtifactContent } from '@meaku/core/types/artifact';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { SuggestionArtifactContent } from '@neuraltrade/core/types/artifact';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import { Suggestion } from './Suggestion.tsx';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { ViewType } from '@meaku/core/types/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import { ViewType } from '@neuraltrade/core/types/common';
 import MessageItemLayout, { Alignment, Gap, Padding, Orientation } from './MessageItemLayout.tsx';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   suggestedQuestionOrientation?: 'left' | 'right';

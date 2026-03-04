@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useEventTypes } from '@calcom/atoms';
-import { CalendarFormData } from '@meaku/core/types/admin/api';
+import { CalendarFormData } from '@neuraltrade/core/types/admin/api';
 import { UseMutationResult } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';

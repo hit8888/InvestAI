@@ -1,6 +1,6 @@
-import { isGeneratingMediaArtifactEvent } from '@meaku/core/utils/messageUtils';
+import { isGeneratingMediaArtifactEvent } from '@neuraltrade/core/utils/messageUtils';
 import useGetLastMediaArtifactMessage from './useGetLastMediaArtifactMessage';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 export const useGetArtifactLoadingState = () => {
   const { currentResponseIdMessages, lastArtifactMessage } = useGetLastMediaArtifactMessage();

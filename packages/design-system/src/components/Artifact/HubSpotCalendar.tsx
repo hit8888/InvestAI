@@ -1,4 +1,4 @@
-import { CalendarArtifactContent } from '@meaku/core/types/artifact';
+import { CalendarArtifactContent } from '@neuraltrade/core/types/artifact';
 import { useEffect, useRef } from 'react';
 
 interface Props {

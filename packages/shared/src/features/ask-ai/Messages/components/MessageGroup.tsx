@@ -5,7 +5,7 @@ import { WaveLoader } from '../../../../components/WaveLoader';
 import { SuggestedQuestions } from './SuggestedQuestions';
 import { TypingIndicator } from './TypingIndicator';
 import { getLastGroupMinHeight } from '../utils/heightUtils';
-import { AvatarComponentProps } from '@meaku/saral';
+import { AvatarComponentProps } from '@neuraltrade/saral';
 import { AvatarDisplay } from '../../../../components/AvatarDisplay';
 import MessageErrorBoundary from '../../../../components/MessageErrorBoundary';
 import AdminBlock from '../AdminBlock';

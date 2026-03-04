@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router-dom';
-import { UserInfoResponse } from '@meaku/core/types/admin/api';
+import { UserInfoResponse } from '@neuraltrade/core/types/admin/api';
 import { AppRoutesEnum } from './constants';
 import { useSessionStore } from '../stores/useSessionStore';
 import { navigateToDefaultRoute } from './navigation';

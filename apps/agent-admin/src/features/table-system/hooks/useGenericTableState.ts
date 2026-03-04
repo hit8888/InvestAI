@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import adminApiClient from '@meaku/core/adminHttp/client';
+import adminApiClient from '@neuraltrade/core/adminHttp/client';
 import type {
   TablePageConfig,
   TableResponse,

@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { updateProspect } from '../api';
-import { UpdateProspectPayload } from '@meaku/core/types/api/update_prospect_request';
-import { BreakoutMutationOptions } from '@meaku/core/types/queries';
+import { UpdateProspectPayload } from '@neuraltrade/core/types/api/update_prospect_request';
+import { BreakoutMutationOptions } from '@neuraltrade/core/types/queries';
 import { ProspectResponse } from '../../../types/api';
 
 const useUpdateProspectMutation = (

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import BlockVisibilityContent, { BlockVisibilityData } from './BlockVisibilityContent';
 import BlockPreviewContainer from './BlockPreviewContainer';
 import PageLevelVisibility, { PageVisibilityItem } from './PageLevelVisibility';
-import { Block } from '@meaku/core/types/admin/api';
+import { Block } from '@neuraltrade/core/types/admin/api';
 
 const COMMAND_BAR_FONT_FAMILY = '"Plus Jakarta Sans", "ui-sans-serif", "system-ui", "sans-serif"';
 

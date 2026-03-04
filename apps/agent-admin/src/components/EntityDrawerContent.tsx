@@ -14,7 +14,7 @@ import { normalizeSessionToConversationData, calculateSessionMetrics } from '../
 import ConversationDetailsDataResponseManager from '../managers/ConversationDetailsDataManager';
 import type { Employee } from '../pages/VisitorsPage/components/CompanyDetailsDrawer/types';
 import { mapSessionDetailToCompanyData } from '../pages/VisitorsPage/utils/mapVisitorToCompanyData';
-import type { IcpsContact } from '@meaku/core/types/admin/admin';
+import type { IcpsContact } from '@neuraltrade/core/types/admin/admin';
 import { usePanelState, PANEL_MODE_LABELS, PANEL_MODE_MAX_WIDTH, type PanelMode } from '../hooks/usePanelState';
 import DrawerSections from '../pages/ConversationsV2/components/DrawerSections';
 

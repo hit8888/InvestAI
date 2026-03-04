@@ -1,4 +1,4 @@
-import { SourceNameValue } from '@meaku/core/types/admin/admin-table';
+import { SourceNameValue } from '@neuraltrade/core/types/admin/admin-table';
 import DataSourcePdfIcon from '@breakout/design-system/components/icons/data-source-pdf-icon';
 import { Link } from 'react-router-dom';
 import Typography from '@breakout/design-system/components/Typography/index';

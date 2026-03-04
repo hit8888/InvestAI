@@ -1,6 +1,6 @@
 // import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 import { COPIED_FIELD_TEXTS } from '../../../utils/constants';
-import { CellValueProps } from '@meaku/core/types/admin/admin-table';
+import { CellValueProps } from '@neuraltrade/core/types/admin/admin-table';
 import CustomTooltipWithClipboardUsingHover from '../../CustomTooltipWithClipboardUsingHover';
 import CopyToClipboardButton from '@breakout/design-system/components/layout/CopyToClipboardButton';
 

@@ -36,9 +36,9 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@meaku/saral': path.resolve(__dirname, '../../packages/saral/src'),
-      '@meaku/shared': path.resolve(__dirname, '../../packages/shared/src'),
-      '@meaku/core': path.resolve(__dirname, '../../packages/core/src'),
+      '@neuraltrade/saral': path.resolve(__dirname, '../../packages/saral/src'),
+      '@neuraltrade/shared': path.resolve(__dirname, '../../packages/shared/src'),
+      '@neuraltrade/core': path.resolve(__dirname, '../../packages/core/src'),
     },
   },
 

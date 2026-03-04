@@ -4,12 +4,12 @@ import useSessionDetailsQuery from '../../queries/query/useSessionDetailsQuery';
 import JoinConversationChatArea from './JoinConversationChatArea';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import JoinConversationBottomBar from './JoinConversationBottomBar';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { SendAdminMessageFn, SendAdminMessageWithSessionIdFn } from '../../hooks/useAdminConversationWebSocket';
-import { checkIsUserLeftMessage } from '@meaku/core/utils/messageUtils';
-import { MessageRole } from '@meaku/shared/types/message';
+import { checkIsUserLeftMessage } from '@neuraltrade/core/utils/messageUtils';
+import { MessageRole } from '@neuraltrade/shared/types/message';
 import { useSessionStore } from '../../stores/useSessionStore';
 import { getActiveJoinUser } from '../../utils/conversationUtils';
 

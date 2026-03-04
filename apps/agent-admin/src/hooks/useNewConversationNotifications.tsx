@@ -2,10 +2,10 @@ import { useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ActiveConversation } from '../context/ActiveConversationsContext';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import toast from 'react-hot-toast';
 import NewConversationToast from '../components/ActiveConversationsComp/NewConversationToast';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import useAdminEventAnalytics from './useAdminEventAnalytics';
 
 const TOAST_DURATION = 5000;

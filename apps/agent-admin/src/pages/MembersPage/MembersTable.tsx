@@ -6,7 +6,7 @@ import {
 } from '@breakout/design-system/components/shadcn-ui/dropdown-menu';
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { useMemo } from 'react';
-import { UsersListResponse, User } from '@meaku/core/types/admin/api';
+import { UsersListResponse, User } from '@neuraltrade/core/types/admin/api';
 import { GenericTablePagination, GenericTable, TableLoadingOverlay } from '../../features/table-system';
 import { membersTableColumns } from './config/membersTableConfig';
 import type { TableColumnDefinition } from '../../features/table-system/types';

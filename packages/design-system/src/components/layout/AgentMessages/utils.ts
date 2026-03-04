@@ -1,4 +1,4 @@
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 export const shouldShowSuggestions = (
   aiMessages: WebSocketMessage[],

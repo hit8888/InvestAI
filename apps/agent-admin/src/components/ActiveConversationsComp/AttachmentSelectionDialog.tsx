@@ -3,13 +3,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@breakout/desi
 import Typography from '@breakout/design-system/components/Typography/index';
 import DataSourcePdfIcon from '@breakout/design-system/components/icons/data-source-pdf-icon';
 import CalendarIcon from '@breakout/design-system/components/icons/calendar-icon';
-import { CalendarResponse } from '@meaku/core/types/admin/api';
-import { DataSourceDocumentsResponseResult } from '@meaku/core/types/admin/api';
-import { DataSourceDocumentsTableResponse } from '@meaku/core/types/admin/admin';
+import { CalendarResponse } from '@neuraltrade/core/types/admin/api';
+import { DataSourceDocumentsResponseResult } from '@neuraltrade/core/types/admin/api';
+import { DataSourceDocumentsTableResponse } from '@neuraltrade/core/types/admin/admin';
 import useDataSourceTableViewQuery from '../../queries/query/useDataSourceTableViewQuery';
 import useCalendars from '../../queries/query/useCalendarsQuery';
 import useMyCalendars from '../../queries/query/useMyCalendarQueries';
-import { DOCUMENTS_PAGE } from '@meaku/core/utils/index';
+import { DOCUMENTS_PAGE } from '@neuraltrade/core/utils/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import { ActiveConversationAttachmentOption } from '../../utils/admin-types';
 

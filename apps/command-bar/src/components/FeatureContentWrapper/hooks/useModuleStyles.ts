@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 import { MODULE_CONFIG, BASE_STYLES } from '../constants';
 import { ModulePosition } from './useModulePositioning';
 

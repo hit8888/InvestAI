@@ -1,14 +1,14 @@
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import ChipWithIcon from '@breakout/design-system/components/ChipWithIcon/ChipWithIcon';
 import moment from 'moment-timezone';
-import useTimeAgo from '@meaku/core/hooks/useTimeAgo';
+import useTimeAgo from '@neuraltrade/core/hooks/useTimeAgo';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import BuyerIntentChip from './BuyerIntentChip';
 import { Link2 as LinkIcon, Briefcase } from 'lucide-react';
 // import { Pin as PinIcon } from 'lucide-react';
 // import { cn } from '@breakout/design-system/lib/cn';
-import { toSentenceCase } from '@meaku/core/utils/index';
-import NumberUtil from '@meaku/core/utils/numberUtils';
+import { toSentenceCase } from '@neuraltrade/core/utils/index';
+import NumberUtil from '@neuraltrade/core/utils/numberUtils';
 import Typography from '@breakout/design-system/components/Typography/index';
 import AssignedRoleChip from './AssignedRoleChip';
 

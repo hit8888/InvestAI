@@ -1,6 +1,6 @@
 import Orb from '@breakout/design-system/components/Orb/index';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { RGB_PRIMARY_COLOR } from '@meaku/core/utils/index';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { RGB_PRIMARY_COLOR } from '@neuraltrade/core/utils/index';
 import { CSSProperties } from 'react';
 
 interface InputWaitingOrbProps {

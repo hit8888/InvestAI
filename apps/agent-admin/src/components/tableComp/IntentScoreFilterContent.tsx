@@ -1,7 +1,7 @@
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { FILTER_BY_INTENT_SCORE_CHECKBOX_OPTIONS } from '../../utils/constants';
-import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentProps, FilterType } from '@neuraltrade/core/types/admin/filters';
 import { useCallback } from 'react';
 import { CheckboxValue } from '../../utils/checkboxUtils';
 

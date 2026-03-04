@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createBreakoutCalendar } from '@meaku/core/adminHttp/api';
+import { createBreakoutCalendar } from '@neuraltrade/core/adminHttp/api';
 
 // Type definition for calendar access token data
 export interface CalendarAccessTokenData {

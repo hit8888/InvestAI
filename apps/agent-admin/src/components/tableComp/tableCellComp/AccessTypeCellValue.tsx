@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import { useUpdateDocumentAccessType } from '../../../queries/mutation/useDocumentMutation';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
-import { AccessTypeValue } from '@meaku/core/types/admin/admin-table';
-import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
+import { AccessTypeValue } from '@neuraltrade/core/types/admin/admin-table';
+import { DATA_SOURCE_TYPE_ENUM } from '@neuraltrade/core/utils/index';
 
 const AccessTypeCellValue = ({ value }: { value: AccessTypeValue }) => {
   const { id, access_type, file_type } = value;

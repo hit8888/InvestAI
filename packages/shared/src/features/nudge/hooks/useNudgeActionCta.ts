@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useScrollProgress } from '../../../hooks/useScrollProgress';
-import useDelayedEnable from '@meaku/core/hooks/useDelayedEnable';
+import useDelayedEnable from '@neuraltrade/core/hooks/useDelayedEnable';
 import { useCommandBarStore } from '../../../stores/useCommandBarStore';
 
 const INACTIVITY_TIMEOUT_DELAY = 5000;

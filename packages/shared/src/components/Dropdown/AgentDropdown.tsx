@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 
 import {
   DropdownMenu,
@@ -13,7 +13,7 @@ import {
   Typography,
   LucideIcon,
   cn,
-} from '@meaku/saral';
+} from '@neuraltrade/saral';
 import DropdownOption from './DropdownOption';
 import DropdownMenuSearch from './DropdownMenuSearch';
 import { useDropdownPortal } from '../../hooks/usePortal';

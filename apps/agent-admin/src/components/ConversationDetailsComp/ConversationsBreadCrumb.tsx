@@ -6,7 +6,7 @@ import BreadcrumbLeftArrow from '@breakout/design-system/components/icons/breadc
 import Separator from '@breakout/design-system/components/layout/separator';
 import ConversationsBreadCrumbShimmer from '../ShimmerComponent/ConversationsBreadCrumbShimmer';
 import { BreadcrumbItemComponent } from '../../components/common/BreadcrumbItemComponent';
-import useLocationPath from '@meaku/core/hooks/useLocationPath';
+import useLocationPath from '@neuraltrade/core/hooks/useLocationPath';
 import AccessibleDiv from '@breakout/design-system/components/accessibility/AccessibleDiv';
 import { CONVERSATION_TABS, isTabActive } from '../ConversationTabs';
 import { buildPathWithTenantBase } from '../../utils/navigation';

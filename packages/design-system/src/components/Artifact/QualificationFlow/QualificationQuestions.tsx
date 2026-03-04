@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import Button from '@breakout/design-system/components/Button/index';
 import { cn } from '../../../lib/cn';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import { AgentEventType } from '@meaku/core/types/webSocketData';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import { AgentEventType } from '@neuraltrade/core/types/webSocketData';
 import ArrowRight from '../../icons/ArrowRight';
 import {
   QualificationQuestionMetadataType,
   QualificationQuestionType,
   QualificationResponsesType,
   QualificationFlowArtifactProps,
-} from '@meaku/core/types/artifact';
+} from '@neuraltrade/core/types/artifact';
 import QualificationSingleQuestion from './QualificationSingleQuestion';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import Typography from '../../Typography';
 
 const MAX_QUESTION_IN_DISPLAY_WITHOUT_SCROLL = 4;

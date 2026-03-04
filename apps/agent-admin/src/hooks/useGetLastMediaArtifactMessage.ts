@@ -1,5 +1,5 @@
-import { ArtifactMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isMediaArtifact } from '@meaku/core/utils/messageUtils';
+import { ArtifactMessageContent, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { isMediaArtifact } from '@neuraltrade/core/utils/messageUtils';
 import { useMessageStore } from './useMessageStore';
 
 const useGetLastMediaArtifactMessage = () => {

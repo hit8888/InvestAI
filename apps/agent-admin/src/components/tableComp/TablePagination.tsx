@@ -4,7 +4,7 @@ import PaginationNextArrow from '@breakout/design-system/components/icons/pagina
 import PaginationPreviousArrow from '@breakout/design-system/components/icons/pagination-previous-arrow';
 import PaginationArrowButton from './PaginationArrowButton';
 import TablePaginationShimmer from '../ShimmerComponent/TablePaginationShimmer';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 
 interface PaginationProps {
   tableType: PaginationPageType;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Card from '../../../components/AgentManagement/Card';
 import CardTitleAndDescription from '../../../components/AgentManagement/CardTitleAndDescription';
 import Button from '@breakout/design-system/components/Button/index';
-import { deepCompare } from '@meaku/core/utils/index';
+import { deepCompare } from '@neuraltrade/core/utils/index';
 import { AskAICallToActionsSectionProps, CTAData, isValidCTA } from '../utils/blockHelpers';
 import AskAICTAItem from './AskAICTAItem';
 import InfoCard from '../../../components/AgentManagement/InfoCard';

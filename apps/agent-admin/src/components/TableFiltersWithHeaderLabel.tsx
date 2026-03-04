@@ -1,6 +1,6 @@
-import { PageTypeProps } from '@meaku/core/types/admin/filters';
+import { PageTypeProps } from '@neuraltrade/core/types/admin/filters';
 import AllFiltersContainer from './tableComp/AllFilters';
-import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@meaku/core/types/admin/api';
+import { ConversationsPayload, LeadsPayload, DataSourcePayload } from '@neuraltrade/core/types/admin/api';
 import TableFiltersWithHeaderLabelShimmer from './ShimmerComponent/TableFiltersWithHeaderLabelShimmer';
 import { useFiltersContainerHeight } from '../hooks/useFiltersContainerHeight';
 import { useEffect } from 'react';

@@ -8,7 +8,7 @@ import SupportForm from './SupportForm';
 import useTenantMetadataMutation from '../../queries/mutation/useTenantMetadataMutation';
 import { toast } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
-import { deepCompare } from '@meaku/core/utils/index';
+import { deepCompare } from '@neuraltrade/core/utils/index';
 
 type ICheckedFields = {
   email: boolean;

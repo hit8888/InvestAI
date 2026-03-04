@@ -71,8 +71,8 @@ import {
   UpdateBlockPayload,
   RecalculateRelevanceScoreResponse,
   TaskStatus,
-} from '@meaku/core/types/admin/api';
-import { AgentConfigPayload } from '@meaku/core/types/admin/agent-configs';
+} from '@neuraltrade/core/types/admin/api';
+import { AgentConfigPayload } from '@neuraltrade/core/types/admin/agent-configs';
 
 import adminApiClient from './client';
 import { FeedbackRequestPayload } from '../types/api/feedback_request';

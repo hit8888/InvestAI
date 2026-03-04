@@ -7,8 +7,8 @@ import {
   QualificationQuestionMetadataType,
   QualificationFlowArtifactProps,
   FormArtifactMetadataType,
-} from '@meaku/core/types/artifact';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+} from '@neuraltrade/core/types/artifact';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import CtaEventMessage from '../../layout/ChatMessages/CtaEventMessage';
 
 const QualificationFlowArtifact = ({ artifact, handleSendUserMessage, viewType }: QualificationFlowArtifactProps) => {

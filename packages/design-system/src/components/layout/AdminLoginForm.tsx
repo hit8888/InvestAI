@@ -3,7 +3,7 @@ import {
   LoginFormValues,
   showOtpSchema,
   showPasswordSchema,
-} from '@meaku/core/types/admin/adminLogin';
+} from '@neuraltrade/core/types/admin/adminLogin';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormMessage } from './form';

@@ -1,4 +1,4 @@
-import { MessageViewType } from '@meaku/core/types/common';
+import { MessageViewType } from '@neuraltrade/core/types/common';
 import LeftMessageChatTail from '../../icons/left-message-chat-tail';
 import RightMessageChatTail from '../../icons/right-message-chat-tail';
 

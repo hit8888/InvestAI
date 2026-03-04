@@ -23,7 +23,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@meaku/shared/*": ["../../packages/shared/src/*"],
+      "@neuraltrade/shared/*": ["../../packages/shared/src/*"],
       "@sevak/client": ["../../apps/sevak/client/src/index.ts"],
       "@sevak/client/*": ["../../apps/sevak/client/src/*"]
     }

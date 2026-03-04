@@ -1,4 +1,4 @@
-import { BlockType } from '@meaku/core/types/admin/api';
+import { BlockType } from '@neuraltrade/core/types/admin/api';
 import { CalendarDays, MessageCircle, FileText, Users, Percent, TvMinimalPlay } from 'lucide-react';
 import React from 'react';
 import AskAiIcon from '../../../assets/askai-icon.png';

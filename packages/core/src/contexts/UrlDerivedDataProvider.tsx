@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { useLocation } from 'react-router-dom';
 
-import { getTenantIdentifier } from '@meaku/core/utils/index';
+import { getTenantIdentifier } from '@neuraltrade/core/utils/index';
 
 const ADMIN_PATHS = ['/demo/', '/debug/'];
 const READONLY_PATHS = ['/debug/'];

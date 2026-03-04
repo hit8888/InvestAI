@@ -1,6 +1,6 @@
-import { LucideIcon, Typography, VideoPlayer, cn, isDirectVideoFile } from '@meaku/saral';
+import { LucideIcon, Typography, VideoPlayer, cn, isDirectVideoFile } from '@neuraltrade/saral';
 import { RefObject, useEffect, useState, useCallback, useMemo } from 'react';
-import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
+import { useScreenSize } from '@neuraltrade/core/hooks/useScreenSize';
 import ReactPlayer from 'react-player';
 
 interface SidebarArtifactContentProps {

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Typography from '@breakout/design-system/components/Typography/index';
-import DateUtil from '@meaku/core/utils/dateUtils';
-import { toSentenceCase } from '@meaku/core/utils/index';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
+import { toSentenceCase } from '@neuraltrade/core/utils/index';
 
 type LandingPageCardProps = {
   source?: string;

@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getFilterPreferences } from '@meaku/core/adminHttp/api';
+import { getFilterPreferences } from '@neuraltrade/core/adminHttp/api';
 import { AxiosError, AxiosResponse } from 'axios';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { FilterPreferencesResponseType } from '@meaku/core/types/admin/api';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { FilterPreferencesResponseType } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getFilterPreferencesKey = (tableName: string, tenantName: string): readonly unknown[] => [

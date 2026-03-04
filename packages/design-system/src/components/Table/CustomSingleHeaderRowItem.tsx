@@ -3,13 +3,13 @@ import {
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   VisitorsTableDisplayContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import { cn } from '@breakout/design-system/lib/cn';
 import { useTablePinningStyles } from '../../hooks/useTablePinningStyles';
-import { LEADS_PAGE, LINK_CLICKS_PAGE, SHADOW_PINNED_COLUMNS, VISITORS_PAGE } from '@meaku/core/utils/index';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
-import { SortCategory, SortOrder } from '@meaku/core/types/admin/sort';
-import { SortValues } from '@meaku/core/types/admin/sort';
+import { LEADS_PAGE, LINK_CLICKS_PAGE, SHADOW_PINNED_COLUMNS, VISITORS_PAGE } from '@neuraltrade/core/utils/index';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
+import { SortCategory, SortOrder } from '@neuraltrade/core/types/admin/sort';
+import { SortValues } from '@neuraltrade/core/types/admin/sort';
 import SortFilterButton from './SortFilterButton';
 
 const HIDE_ACTION_ITEMS_FOR_COLUMNS = ['updated_on', 'company', 'sdr_assignment'];

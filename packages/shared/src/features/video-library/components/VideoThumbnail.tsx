@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LucideIcon, Typography, Button, VideoPlayer } from '@meaku/saral';
+import { LucideIcon, Typography, Button, VideoPlayer } from '@neuraltrade/saral';
 import { Video } from '../types';
 import { useWatchedVideos } from '../hooks/useWatchedVideos';
 

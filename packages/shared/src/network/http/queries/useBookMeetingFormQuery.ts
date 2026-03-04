@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
 import { getBookMeetingForm } from '../api';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { FormConfigResponse } from '../../../types/responses';
 
 const bookMeetingFormQueryKey = (prospectId: string): unknown[] => ['get-book-meeting-form', prospectId];

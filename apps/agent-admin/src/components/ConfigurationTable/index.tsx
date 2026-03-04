@@ -13,7 +13,7 @@ import {
   isRowEmpty,
 } from './utils';
 import { useEffect, useMemo, useState, useRef } from 'react';
-import { deepCompare } from '@meaku/core/utils/index';
+import { deepCompare } from '@neuraltrade/core/utils/index';
 import { UseFormReturn } from 'react-hook-form';
 
 interface ConfigurationTableProps extends CommonControlsProps {

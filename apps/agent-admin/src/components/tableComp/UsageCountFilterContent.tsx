@@ -1,4 +1,4 @@
-import { FilterType, PageTypeProps, usageCountFilterValues } from '@meaku/core/types/admin/filters';
+import { FilterType, PageTypeProps, usageCountFilterValues } from '@neuraltrade/core/types/admin/filters';
 import { useState } from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
 import { USER_MESSAGES_COUNT_FILTER_MAX_THRESHOLD } from '../../utils/constants';

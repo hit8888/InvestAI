@@ -1,7 +1,7 @@
 import { RadioGroup } from '@breakout/design-system/components/shadcn-ui/radio-group';
 import RadioButtonWithLabel from './RadioButtonWithLabel';
 import { useState } from 'react';
-import { SortCategory } from '@meaku/core/types/admin/sort';
+import { SortCategory } from '@neuraltrade/core/types/admin/sort';
 
 interface CustomRadioGroupButtonsProps {
   onCallback: ((value: string) => void) | ((category: SortCategory, value: string) => void);

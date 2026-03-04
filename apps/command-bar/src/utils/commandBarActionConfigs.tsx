@@ -1,9 +1,9 @@
-import { ActionConfig } from '@meaku/shared/features/base/BaseActionComponent';
-import { Button, LucideIcon, VideoLibraryIcon } from '@meaku/saral';
-import CustomIconImageContainer from '@meaku/shared/features/ask-ai/components/CustomIconImageContainer';
-import FallbackOrb from '@meaku/shared/features/ask-ai/components/FallbackOrb';
-import { CommandBarModuleTypeSchema } from '@meaku/core/index';
-import { OnlineIndicator } from '@meaku/shared/components/AvatarDisplay';
+import { ActionConfig } from '@neuraltrade/shared/features/base/BaseActionComponent';
+import { Button, LucideIcon, VideoLibraryIcon } from '@neuraltrade/saral';
+import CustomIconImageContainer from '@neuraltrade/shared/features/ask-ai/components/CustomIconImageContainer';
+import FallbackOrb from '@neuraltrade/shared/features/ask-ai/components/FallbackOrb';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/index';
+import { OnlineIndicator } from '@neuraltrade/shared/components/AvatarDisplay';
 
 const { ASK_AI, BOOK_MEETING, SUMMARIZE, IFRAME, VIDEO_LIBRARY, DEMO_LIBRARY } = CommandBarModuleTypeSchema.enum;
 

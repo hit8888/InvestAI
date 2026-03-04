@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { cn } from '@meaku/saral';
-import { Button } from '@meaku/saral';
-import { Popover, PopoverContent, PopoverTrigger } from '@meaku/saral';
-import { TextArea, LucideIcon } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
+import { Button } from '@neuraltrade/saral';
+import { Popover, PopoverContent, PopoverTrigger } from '@neuraltrade/saral';
+import { TextArea, LucideIcon } from '@neuraltrade/saral';
 import { Message, Message as MessageType } from '../../../types/message';
 import { usePopoverPortal } from '../../../hooks/usePortal';
-import useResponseFeedback from '@meaku/core/queries/mutation/useResponseFeedback';
-import { ViewType } from '@meaku/core/types/common';
+import useResponseFeedback from '@neuraltrade/core/queries/mutation/useResponseFeedback';
+import { ViewType } from '@neuraltrade/core/types/common';
 
 interface MessageFeedbackProps {
   message: Message;

@@ -5,11 +5,11 @@ import CardTitle from './card-title';
 import CardDescription from './card-description';
 // import { PencilIcon } from 'lucide-react';
 // import Button from './button';
-import { FormArtifactMetadataType, FormFieldSchemaType } from '@meaku/core/types/artifact';
+import { FormArtifactMetadataType, FormFieldSchemaType } from '@neuraltrade/core/types/artifact';
 import Typography from '../Typography';
 import { useMemo } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 type FormFilledThankYouContentProps = {
   formFields: FormFieldSchemaType[];

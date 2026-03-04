@@ -1,7 +1,7 @@
 import SlideHeader from '../layout/SlideHeader';
 import SlideSubTitle from '../layout/SlideSubTitle';
 import SlideItems from '../layout/SlideItems';
-import { SlideArtifactContent } from '@meaku/core/types/artifact';
+import { SlideArtifactContent } from '@neuraltrade/core/types/artifact';
 import CommonSlideArtifactContent from './CommonSlideArtifactContent';
 
 interface IProps {

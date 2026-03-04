@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getIcpDetails } from '@meaku/core/adminHttp/api';
-import { IcpDetailsResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getIcpDetails } from '@neuraltrade/core/adminHttp/api';
+import { IcpDetailsResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';

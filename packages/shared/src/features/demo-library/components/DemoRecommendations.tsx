@@ -1,5 +1,5 @@
 import { useMemo, memo, useCallback } from 'react';
-import { LucideIcon, TooltipProvider } from '@meaku/saral';
+import { LucideIcon, TooltipProvider } from '@neuraltrade/saral';
 import { useCarousel } from '../../../hooks/useCarousel';
 import { Demo } from '../types';
 import { DemoAvatar } from './DemoAvatar';

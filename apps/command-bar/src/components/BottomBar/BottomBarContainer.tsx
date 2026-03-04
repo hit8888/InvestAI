@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import { useCommandBarStore } from '@meaku/shared/stores/useCommandBarStore';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
-import { MessageEventType } from '@meaku/shared/types/message';
-import { cn } from '@meaku/saral';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import { useCommandBarStore } from '@neuraltrade/shared/stores/useCommandBarStore';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
+import { MessageEventType } from '@neuraltrade/shared/types/message';
+import { cn } from '@neuraltrade/saral';
 
 // Custom hooks
 import { useBottomBarAnimation } from './hooks/useBottomBarAnimation';

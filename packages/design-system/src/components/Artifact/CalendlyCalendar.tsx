@@ -1,6 +1,6 @@
 import { EventScheduledEvent, InlineWidget as CalendlyWidget, useCalendlyEventListener } from 'react-calendly';
-import { CalendarArtifactContent } from '@meaku/core/types/artifact';
-import useDelayedCallback from '@meaku/core/hooks/useDelayedCallback';
+import { CalendarArtifactContent } from '@neuraltrade/core/types/artifact';
+import useDelayedCallback from '@neuraltrade/core/hooks/useDelayedCallback';
 
 interface Props {
   calendarContent: CalendarArtifactContent;

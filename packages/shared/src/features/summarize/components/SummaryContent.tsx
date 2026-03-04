@@ -1,10 +1,10 @@
-import { LucideIcon, Typography } from '@meaku/saral';
+import { LucideIcon, Typography } from '@neuraltrade/saral';
 import { TextArtifact } from '../../ask-ai/Messages/TextArtifact';
-import { ThumbsUp } from '@meaku/saral';
+import { ThumbsUp } from '@neuraltrade/saral';
 import { ConfettiAnimation } from '../../../components/ConfettiAnimation';
 import { useState, useEffect, useMemo } from 'react';
 import useFeatureConfig from '../../../hooks/useFeatureConfig';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
 
 interface SummarySuccessProps {
   content: string;

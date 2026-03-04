@@ -1,6 +1,6 @@
-import { MessageSenderRole, MessageViewType } from '@meaku/core/types/common';
+import { MessageSenderRole, MessageViewType } from '@neuraltrade/core/types/common';
 import Typography from '../../Typography';
-import { isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
+import { isHumanMessageInDashboardView } from '@neuraltrade/core/utils/messageUtils';
 
 interface ChatMessageSenderProps {
   messageViewType: MessageViewType;

@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
-import { getSessionDetailsByProspectId, getSessionDetailsBySessionId } from '@meaku/core/adminHttp/api';
-import { SessionDetailsDataResponse } from '@meaku/core/types/admin/admin';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { getSessionDetailsByProspectId, getSessionDetailsBySessionId } from '@neuraltrade/core/adminHttp/api';
+import { SessionDetailsDataResponse } from '@neuraltrade/core/types/admin/admin';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 const getSessionDetailsDataKey = (tenantName: string, sessionID?: string, prospectId?: string): unknown[] => [

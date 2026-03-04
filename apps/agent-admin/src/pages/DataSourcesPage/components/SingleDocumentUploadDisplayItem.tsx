@@ -1,5 +1,5 @@
 import DocumentsSourcesIcon from '@breakout/design-system/components/icons/sources-documents-icon';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { useDataSourcesStore } from '../../../stores/useDataSourcesStore';
 import Typography from '@breakout/design-system/components/Typography/index';
 import AgentDropdown from '@breakout/design-system/components/Dropdown/AgentDropdown';

@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { BasePlacesAutocomplete, PlaceData } from '@meaku/shared/components/PlacesAutocomplete';
+import { BasePlacesAutocomplete, PlaceData } from '@neuraltrade/shared/components/PlacesAutocomplete';
 
 export type { PlaceData };
 

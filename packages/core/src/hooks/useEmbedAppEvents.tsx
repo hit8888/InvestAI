@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAgentbotAnalytics from './useAgentbotAnalytics';
-import { ENV } from '@meaku/core/types/env';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { ENV } from '@neuraltrade/core/types/env';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import { useSearchParams } from 'react-router-dom';
 import useLocalStorageSession from './useLocalStorageSession';
 import { WebSocketMessage } from '../types/webSocketData';

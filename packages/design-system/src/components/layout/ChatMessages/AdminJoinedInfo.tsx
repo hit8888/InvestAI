@@ -1,6 +1,6 @@
-import { ViewType } from '@meaku/core/types/common';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { checkIsAdminJoinedMessage } from '@meaku/core/utils/messageUtils';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { checkIsAdminJoinedMessage } from '@neuraltrade/core/utils/messageUtils';
 import { CircleUserRound } from 'lucide-react';
 import MessageItemLayout, { Alignment, Padding } from './MessageItemLayout';
 

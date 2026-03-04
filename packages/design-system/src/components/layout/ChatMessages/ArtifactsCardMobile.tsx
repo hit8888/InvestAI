@@ -1,6 +1,6 @@
 import { ARTIFACT_CONFIG } from '../../../utils/constant';
 import Typography from '../../Typography';
-import { ArtifactEnum } from '@meaku/core/types/index';
+import { ArtifactEnum } from '@neuraltrade/core/types/index';
 import { Dialog, DialogContent, DialogTrigger } from '@breakout/design-system/components/layout/dialog';
 import { useState } from 'react';
 

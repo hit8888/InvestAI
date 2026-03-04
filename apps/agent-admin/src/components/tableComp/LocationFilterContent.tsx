@@ -2,7 +2,7 @@ import React from 'react';
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
 import CrossIcon from '@breakout/design-system/components/icons/cross-icon';
 import Input from '@breakout/design-system/components/layout/input';
-import { FilterType, CommonFilterContentProps } from '@meaku/core/types/admin/filters';
+import { FilterType, CommonFilterContentProps } from '@neuraltrade/core/types/admin/filters';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import { useFilterContent } from '../../hooks/useFilterContent';
 

@@ -6,7 +6,7 @@ import Button from '../Button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from './form';
 import Input from './input';
-import type { IntegrationForm } from '@meaku/core/types/admin/api';
+import type { IntegrationForm } from '@neuraltrade/core/types/admin/api';
 import TooltipWrapperDark from '../Tooltip/TooltipWrapperDark';
 
 type IntegrationFormProps = {

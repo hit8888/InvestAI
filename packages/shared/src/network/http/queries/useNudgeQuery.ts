@@ -2,9 +2,9 @@ import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
 import { getNudge } from '../api';
-import { ConfigurationApiResponse, Nudge } from '@meaku/core/types/api/configuration_response';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
-import { ConfigPayload } from '@meaku/core/types/api/agent_config_request';
+import { ConfigurationApiResponse, Nudge } from '@neuraltrade/core/types/api/configuration_response';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
+import { ConfigPayload } from '@neuraltrade/core/types/api/agent_config_request';
 import { useCommandBarStore } from '../../../stores/useCommandBarStore';
 
 const nudgeQueryKey = (parent_url: string): unknown[] => ['get-nudge', parent_url];

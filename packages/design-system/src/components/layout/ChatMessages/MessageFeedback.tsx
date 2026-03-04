@@ -13,10 +13,10 @@ import {
   FeedbackEnum,
   FeedbackRequestPayload,
   getFeedbackRequestPayloadSchema,
-} from '@meaku/core/types/api/feedback_request';
-import { NEGATIVE_FEEDBACK_CATEGORIES, POSITIVE_FEEDBACK_CATEGORIES } from '@meaku/core/constants/feedback';
-import useResponseFeedback from '@meaku/core/queries/mutation/useResponseFeedback';
-import { trackError } from '@meaku/core/utils/error';
+} from '@neuraltrade/core/types/api/feedback_request';
+import { NEGATIVE_FEEDBACK_CATEGORIES, POSITIVE_FEEDBACK_CATEGORIES } from '@neuraltrade/core/constants/feedback';
+import useResponseFeedback from '@neuraltrade/core/queries/mutation/useResponseFeedback';
+import { trackError } from '@neuraltrade/core/utils/error';
 import {
   Form,
   FormControl,
@@ -27,12 +27,12 @@ import {
 } from '@breakout/design-system/components/layout/form';
 import { BadgeSelect, BadgeSelectOption } from '@breakout/design-system/components/layout/badge-select';
 import MessageSquare from '@breakout/design-system/components/icons/message-square';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import SuccessToastMessage from '../SuccessToastMessage';
 import toast from 'react-hot-toast';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 
 interface IProps {
   sessionId: string;

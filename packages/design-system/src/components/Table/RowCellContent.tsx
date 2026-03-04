@@ -1,4 +1,4 @@
-import { CommonDataSourceResponse } from '@meaku/core/types/admin/admin';
+import { CommonDataSourceResponse } from '@neuraltrade/core/types/admin/admin';
 import { Cell, flexRender } from '@tanstack/react-table';
 import { memo } from 'react';
 import { Checkbox } from '../Checkbox';

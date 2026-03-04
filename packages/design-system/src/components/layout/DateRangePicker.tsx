@@ -1,6 +1,6 @@
 import { SelectRangeEventHandler } from 'react-day-picker';
 import { Calendar, CalendarProps } from '../shadcn-ui/calendar';
-import { DateRangePickerProps, DateRangeProp } from '@meaku/core/types/admin/filters';
+import { DateRangePickerProps, DateRangeProp } from '@neuraltrade/core/types/admin/filters';
 
 const DateRangePicker = ({ date, onDateChange, ...props }: CalendarProps & DateRangePickerProps) => {
   const handleSelect: SelectRangeEventHandler = (range) => {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ViewType } from '@meaku/core/types/common';
-import { CalendarSubmitEventData, SendUserMessageParams, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { CalendarSubmitEventData, SendUserMessageParams, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 export const ArtifactEnumSchema = z.enum([
   'SLIDE',

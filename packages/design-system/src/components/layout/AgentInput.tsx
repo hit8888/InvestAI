@@ -1,12 +1,12 @@
 import TextArea from '@breakout/design-system/components/TextArea/index';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { isStreamMessageComplete } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { isStreamMessageComplete } from '@neuraltrade/core/utils/messageUtils';
 import { useEffect, useRef, useState } from 'react';
 import SendButtonWithTooltip from './SendButtonWithTooltip';
 import ChatInputSendButton from './ChatInputSendButton';
-import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@meaku/core/constants/index';
+import { AGENT_INPUT_SEND_BUTTON_TOOLTIP_TEXT } from '@neuraltrade/core/constants/index';
 import { cn } from '../../lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface IProps {
   handleSendMessage: (message: string) => void;

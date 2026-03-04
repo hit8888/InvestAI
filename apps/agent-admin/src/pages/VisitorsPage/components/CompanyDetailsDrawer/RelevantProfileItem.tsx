@@ -6,7 +6,7 @@ import {
   ReachoutEmailCta,
 } from '../../../../components/common/ReachoutEmail';
 import EmployeeAvatar from './EmployeeAvatar';
-import { ReachoutEmailResponse } from '@meaku/core/types/admin/api';
+import { ReachoutEmailResponse } from '@neuraltrade/core/types/admin/api';
 import SpinnerIcon from '@breakout/design-system/components/icons/spinner';
 import LinkedInIcon from '@breakout/design-system/components/icons/linkedin-icon';
 import Button from '@breakout/design-system/components/Button/index';

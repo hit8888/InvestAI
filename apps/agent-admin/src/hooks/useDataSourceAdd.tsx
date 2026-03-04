@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDataSourcesStore } from '../stores/useDataSourcesStore';
 import { SourcesCardTypes } from '../pages/DataSourcesPage/constants';
-import { addWebpagesSitemapLinks, bulkAddArtifacts, bulkAddDocuments } from '@meaku/core/adminHttp/api';
+import { addWebpagesSitemapLinks, bulkAddArtifacts, bulkAddDocuments } from '@neuraltrade/core/adminHttp/api';
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import { useQueryClient } from '@tanstack/react-query';
 import SuccessToastMessage from '@breakout/design-system/components/layout/SuccessToastMessage';

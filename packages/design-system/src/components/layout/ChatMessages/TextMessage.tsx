@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 import { cn } from '@breakout/design-system/lib/cn';
 import { AiResponseLoadingText } from '@breakout/design-system/components/AiResponseLoadingText/index';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
-import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
-import { checkIsAIMessage, getMessageViewType, checkIsLoadingTextMessage } from '@meaku/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
+import { MessageSenderRole, ViewType } from '@neuraltrade/core/types/common';
+import { checkIsAIMessage, getMessageViewType, checkIsLoadingTextMessage } from '@neuraltrade/core/utils/messageUtils';
 import ChatMessageTail from './ChatMessageTail';
 import ChatMessageTimestamp from './ChatMessageTimestamp';
 import ChatMessageSender from './ChatMessageSender';
 import { getChatMessageClass, getChatTextMessageContainerClass } from '../messageUtils';
 import GithubMarkdownRenderer from '../GithubMarkdownRenderer';
 import MessageItemLayout from './MessageItemLayout';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 interface TextMessageProps {
   elementRef: React.RefObject<HTMLDivElement | null>;

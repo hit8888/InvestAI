@@ -1,7 +1,7 @@
 import VideosSourcesIcon from '@breakout/design-system/components/icons/sources-videos-icon';
 import VideoThumbnailPauseIcon from '@breakout/design-system/components/icons/video-thumbnail-pause-icon';
 import Typography from '@breakout/design-system/components/Typography/index';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 import { useVideoDuration } from '../../../hooks/useVideoDuration';
 import { getSingleSourceItemTypeAndName, getSingleSourceItemVideoUrl } from '../utils';
 import useFileSize from '../../../hooks/useFileSize';

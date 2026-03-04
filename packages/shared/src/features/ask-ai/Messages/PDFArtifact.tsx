@@ -11,9 +11,9 @@ import {
   TooltipProvider,
   cn,
   Typography,
-} from '@meaku/saral';
+} from '@neuraltrade/saral';
 import { usePopoverPortal, useTooltipPortal } from '../../../hooks/usePortal';
-import { downloadFromUrl, convertBytesToMB, extractFilenameFromUrl } from '@meaku/core/utils/index';
+import { downloadFromUrl, convertBytesToMB, extractFilenameFromUrl } from '@neuraltrade/core/utils/index';
 
 interface PDFArtifactProps {
   title?: string;

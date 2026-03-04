@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { CommonDataSourceResponse, TableDataResponse } from '@meaku/core/types/admin/admin';
-import { PaginationDataSchema } from '@meaku/core/types/admin/api';
+import { CommonDataSourceResponse, TableDataResponse } from '@neuraltrade/core/types/admin/admin';
+import { PaginationDataSchema } from '@neuraltrade/core/types/admin/api';
 import TableDataManager from '../managers/TableDataManager';
 
 interface DataSourceTableState {

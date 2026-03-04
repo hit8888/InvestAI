@@ -2,7 +2,7 @@ import CustomDateRangePicker from '../CustomDateRangePicker';
 import FooterButton from './FooterButton';
 import React from 'react';
 import { useAllFilterStore } from '../../stores/useAllFilterStore';
-import { FilterType, DateRangeProp, CommonFilterContentPropsWithoutFilterState } from '@meaku/core/types/admin/filters';
+import { FilterType, DateRangeProp, CommonFilterContentPropsWithoutFilterState } from '@neuraltrade/core/types/admin/filters';
 import { getDateAppliedValue } from '../../utils/common';
 
 const DateRangePickerFilterContent = ({ page, handleClosePopover }: CommonFilterContentPropsWithoutFilterState) => {

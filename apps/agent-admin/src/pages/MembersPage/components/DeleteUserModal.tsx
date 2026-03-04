@@ -1,7 +1,7 @@
 import DeleteDialogWrapper from '@breakout/design-system/components/layout/DeleteDialogWrapper';
 import { useMemo, type Dispatch, type SetStateAction } from 'react';
 import useDeleteUserMutation from '../../../queries/mutation/useDeleteUserMutation';
-import { User } from '@meaku/core/types/admin/api';
+import { User } from '@neuraltrade/core/types/admin/api';
 
 interface DeleteUserModalProps {
   isOpen: boolean;

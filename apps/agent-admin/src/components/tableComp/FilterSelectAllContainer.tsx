@@ -1,5 +1,5 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { FilterType } from '@meaku/core/types/admin/filters';
+import { FilterType } from '@neuraltrade/core/types/admin/filters';
 import CustomCheckboxItem from './CustomCheckboxItem';
 import { useEffect, useState } from 'react';
 import SelectAllToggleButton from './SelectAllToggleButton';

@@ -1,7 +1,7 @@
 import { cn } from '@breakout/design-system/lib/cn';
 import DateRangePicker from '@breakout/design-system/components/layout/DateRangePicker';
 import ChoosePresetsDateValue from './ChoosePresetsDateValue';
-import { DateRangeProp, FilterType, PageTypeProps, PresetDateLabel } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, FilterType, PageTypeProps, PresetDateLabel } from '@neuraltrade/core/types/admin/filters';
 import { useAllFilterStore } from '../stores/useAllFilterStore';
 
 type CustomDateRangePickerProps = PageTypeProps & {

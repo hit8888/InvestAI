@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@meaku/typescript-config": "workspace:*",
+    "@neuraltrade/typescript-config": "workspace:*",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.5.4",
     "@vitejs/plugin-legacy": "^7.1.0",

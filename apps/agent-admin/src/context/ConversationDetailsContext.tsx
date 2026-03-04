@@ -1,11 +1,11 @@
 import {
   ConversationsTableDisplayContent,
   TransformedProspectAndCompanyDetailsContent,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import React, { createContext, useContext, useState, ReactNode, useMemo, useCallback } from 'react';
 import { getProspectAndCompanyDetailsData } from '../utils/common';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@neuraltrade/core/types/api/feedback_request';
 
 interface ConversationDetailsContextType {
   conversation: ConversationsTableDisplayContent | null;

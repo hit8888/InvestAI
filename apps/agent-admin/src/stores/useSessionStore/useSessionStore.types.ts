@@ -1,4 +1,4 @@
-import { UserInfoResponse, OrganizationDetailsResponse } from '@meaku/core/types/admin/api';
+import { UserInfoResponse, OrganizationDetailsResponse } from '@neuraltrade/core/types/admin/api';
 
 export type SessionState = {
   accessToken: string | null;

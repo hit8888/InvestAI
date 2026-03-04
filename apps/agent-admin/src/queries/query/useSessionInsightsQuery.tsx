@@ -1,10 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getSessionInsights } from '@meaku/core/adminHttp/api';
+import { getSessionInsights } from '@neuraltrade/core/adminHttp/api';
 import {
   DailySessionInsightsResponse,
   HourlySessionInsightsResponse,
   WeeklySessionInsightsResponse,
-} from '@meaku/core/types/admin/api';
+} from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {

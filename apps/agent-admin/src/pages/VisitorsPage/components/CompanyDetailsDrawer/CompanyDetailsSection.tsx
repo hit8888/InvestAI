@@ -1,8 +1,8 @@
 import { findFlagUrlByCountryName } from 'country-flags-svg';
 import LogoImage from '@breakout/design-system/components/LogoImage';
 import { CompanyData } from './types';
-import { ensureProtocol } from '@meaku/core/utils/index';
-import NumberUtil from '@meaku/core/utils/numberUtils';
+import { ensureProtocol } from '@neuraltrade/core/utils/index';
+import NumberUtil from '@neuraltrade/core/utils/numberUtils';
 import Typography from '@breakout/design-system/components/Typography/index';
 import InfoChip from './InfoChip';
 import AssignRepValue from '../../../../components/ConversationDetailsComp/AssignRepValue';

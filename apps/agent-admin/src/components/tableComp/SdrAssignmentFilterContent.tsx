@@ -1,11 +1,11 @@
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
-import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentProps, FilterType } from '@neuraltrade/core/types/admin/filters';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
-import { SdrAssignment } from '@meaku/core/types/admin/api';
+import { SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import { useFilterContent } from '../../hooks/useFilterContent';
 import { useTableStore } from '../../stores/useTableStore';
 import { useMemo } from 'react';
-import { VisitorsTableViewContent } from '@meaku/core/types/admin/admin';
+import { VisitorsTableViewContent } from '@neuraltrade/core/types/admin/admin';
 
 const SdrAssignmentFilterContent = ({ page, filterState, handleClosePopover }: CommonFilterContentProps) => {
   const { SdrAssignment } = FilterType;

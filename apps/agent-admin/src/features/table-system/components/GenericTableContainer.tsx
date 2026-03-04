@@ -2,7 +2,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import type { TablePageConfig } from '../types';
 import type { UseGenericTableStateReturn } from '../hooks/useGenericTableState';
-import type { ExportFormatType } from '@meaku/core/types/admin/api';
+import type { ExportFormatType } from '@neuraltrade/core/types/admin/api';
 import { GenericTableHeader } from './GenericTableHeader';
 import { GenericTableFilters } from './GenericTableFilters';
 import { GenericTable } from './GenericTable';
@@ -11,7 +11,7 @@ import { TableEmptyState } from './states/TableEmptyState';
 import { TableErrorState } from './states/TableErrorState';
 import { TableLoadingOverlay } from './states/TableLoadingOverlay';
 import { ColumnManagementProvider } from '../context/ColumnManagementContext';
-import adminApiClient from '@meaku/core/adminHttp/client';
+import adminApiClient from '@neuraltrade/core/adminHttp/client';
 import { createFilename, triggerDownload } from '../../../utils/download/downloadUtils';
 
 interface GenericTableContainerProps<TRow = unknown> {

@@ -1,4 +1,4 @@
-import { ArtifactPreviewEnum } from '@meaku/core/types/artifact';
+import { ArtifactPreviewEnum } from '@neuraltrade/core/types/artifact';
 import Typography from '../../Typography';
 import { useTextTruncation } from '../../../hooks/useTextTruncation';
 import TooltipWrapperDark from '../../Tooltip/TooltipWrapperDark';

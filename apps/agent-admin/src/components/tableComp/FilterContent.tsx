@@ -4,7 +4,7 @@ import IntentScoreFilterContent from './IntentScoreFilterContent';
 import MeetingBookedFilterContent from './MeetingBookedFilterContent';
 import LocationFilterContent from './LocationFilterContent';
 import ProductOfInterestFilterContent from './ProductOfInterestFilterContent';
-import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentProps, FilterType } from '@neuraltrade/core/types/admin/filters';
 import CompanyFilterContent from './CompanyFilterContent';
 import UserMessagesCountFilterContent from './UserMessagesCountFilterContent';
 import SourcesFilterContent from './SourcesFilterContent';

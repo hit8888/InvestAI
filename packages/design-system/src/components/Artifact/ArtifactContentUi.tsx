@@ -6,14 +6,14 @@ import {
   VideoArtifactContent,
   ArtifactContentWithMetadataProps,
   AdditionalCalendarArtifactContent,
-} from '@meaku/core/types/artifact';
+} from '@neuraltrade/core/types/artifact';
 import SlideArtifact from './SlideArtifact';
 import VideoArtifact from './VideoArtifact';
 import { CalendarArtifact } from './CalendarArtifact';
-import { SendUserMessageParams } from '@meaku/core/types/webSocketData';
+import { SendUserMessageParams } from '@neuraltrade/core/types/webSocketData';
 import QualificationFlowArtifact from './QualificationFlow/QualificationFlowArtifact';
 import FormArtifact from '../layout/FormArtifact';
-import { ViewType } from '@meaku/core/types/common';
+import { ViewType } from '@neuraltrade/core/types/common';
 
 interface Props {
   viewType: ViewType;

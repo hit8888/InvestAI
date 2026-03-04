@@ -1,4 +1,4 @@
-import { CellValueProps } from '@meaku/core/types/admin/admin-table';
+import { CellValueProps } from '@neuraltrade/core/types/admin/admin-table';
 import React from 'react';
 
 const DataSourceTypeCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {

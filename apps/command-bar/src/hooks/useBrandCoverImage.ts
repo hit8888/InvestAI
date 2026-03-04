@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { CDN_URL_FOR_ASSETS } from '@meaku/core/constants';
+import { CDN_URL_FOR_ASSETS } from '@neuraltrade/core/constants';
 import { loadImageWithCallback } from '../utils/imageUtils';
 import defaultCoverImage from '/bc_default.png';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { MessageEventType, Message } from '@meaku/shared/types/message';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { MessageEventType, Message } from '@neuraltrade/shared/types/message';
 import { ANIMATION_TIMINGS } from '../../../constants/animationTimings';
 
 export interface BottomBarTransitionState {

@@ -1,4 +1,4 @@
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 import React from 'react';
 import { SideDrawerPosition } from './types';
 

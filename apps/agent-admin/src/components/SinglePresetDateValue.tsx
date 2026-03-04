@@ -1,6 +1,6 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import { DateRangeProp, PresetDateLabel } from '@neuraltrade/core/types/admin/filters';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 
 const SinglePresetDateValue = ({
   presetValue,

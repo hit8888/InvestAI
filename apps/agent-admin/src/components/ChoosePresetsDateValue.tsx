@@ -1,4 +1,4 @@
-import { DateRangeProp, PresetDateLabel } from '@meaku/core/types/admin/filters';
+import { DateRangeProp, PresetDateLabel } from '@neuraltrade/core/types/admin/filters';
 import SinglePresetDateValue from './SinglePresetDateValue';
 import { DATE_RANGE_PRESET_OPTIONS } from '../utils/constants';
 

@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { LayoutType } from '@meaku/core/types/storage';
+import { LayoutType } from '@neuraltrade/core/types/storage';
 import {
   setLayoutPreference,
   getLayoutPreference,
   clearLayoutPreference,
   determineLayout,
   isLayoutPreferenceActive,
-} from '@meaku/core/utils/layout-preference-utils';
+} from '@neuraltrade/core/utils/layout-preference-utils';
 
 /**
  * Custom hook for managing layout preferences

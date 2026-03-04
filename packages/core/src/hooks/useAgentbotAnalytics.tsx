@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
-import { AgentParams } from '@meaku/core/types/config';
-import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import { AgentParams } from '@neuraltrade/core/types/config';
+import useAnalytics from '@neuraltrade/core/hooks/useAnalytics';
 import useLocalStorageSession from './useLocalStorageSession';
 import { useUrlParams } from './useUrlParams';
 

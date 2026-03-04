@@ -1,8 +1,8 @@
 import { cn } from '@breakout/design-system/lib/cn';
-import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@meaku/core/constants/index';
-import { MessageSenderRole, ViewType } from '@meaku/core/types/common';
-import { getMessageViewType, isHumanMessageInDashboardView } from '@meaku/core/utils/messageUtils';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { DISCOVERY_QUESTION_ANSWER_TYPE } from '@neuraltrade/core/constants/index';
+import { MessageSenderRole, ViewType } from '@neuraltrade/core/types/common';
+import { getMessageViewType, isHumanMessageInDashboardView } from '@neuraltrade/core/utils/messageUtils';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import ChatMessageTail from '../ChatMessageTail';
 import ChatMessageTimestamp from '../ChatMessageTimestamp';
 import ChatMessageSender from '../ChatMessageSender';

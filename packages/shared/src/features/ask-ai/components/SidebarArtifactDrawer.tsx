@@ -1,8 +1,8 @@
-import { cn } from '@meaku/saral';
+import { cn } from '@neuraltrade/saral';
 import { SideDrawer } from '../../../components/SideDrawer';
 import { SidebarArtifactContent } from './SidebarArtifactContent';
 import { RefObject } from 'react';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import ReactPlayer from 'react-player';
 
 interface SidebarArtifactDrawerProps {

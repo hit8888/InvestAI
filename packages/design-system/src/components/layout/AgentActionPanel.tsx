@@ -1,8 +1,8 @@
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import AgentInput from './AgentInput';
 import AgentCTA from './AgentCTA';
-import { CTAConfigType } from '@meaku/core/types/api/configuration_response';
+import { CTAConfigType } from '@neuraltrade/core/types/api/configuration_response';
 import { cn } from '../../lib/cn';
 
 interface IProps {

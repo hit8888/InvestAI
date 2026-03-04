@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { fetchSitemapforWebpage } from '@meaku/core/adminHttp/api';
-import { FetchSitemapRequest } from '@meaku/core/types/admin/api';
+import { fetchSitemapforWebpage } from '@neuraltrade/core/adminHttp/api';
+import { FetchSitemapRequest } from '@neuraltrade/core/types/admin/api';
 import { useDataSourcesStore } from '../stores/useDataSourcesStore';
 import toast from 'react-hot-toast';
 

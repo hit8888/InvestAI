@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/api/configuration_response';
-import { MessageEventType } from '@meaku/shared/types/message';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/api/configuration_response';
+import { MessageEventType } from '@neuraltrade/shared/types/message';
 import { ANIMATION_TIMINGS } from '../../../constants/animationTimings';
 import { useLayoutPreference } from '../../../hooks/useLayoutPreference';
 import { useTriggerExitAndSwitch } from './useTriggerExitAndSwitch';

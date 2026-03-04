@@ -1,16 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react';
 import useActiveConversationsWebSocket, { LastMessage } from '../hooks/useActiveConversationsWebSocket';
 import useActiveConversationsQuery from '../queries/query/useActiveConversationsQuery';
-import { BuyerIntent } from '@meaku/core/types/common';
-import useSound from '@meaku/core/hooks/useSound';
+import { BuyerIntent } from '@neuraltrade/core/types/common';
+import useSound from '@neuraltrade/core/hooks/useSound';
 import { useParams } from 'react-router-dom';
 import useJoinConversationStore from '../stores/useJoinConversationStore';
 import popupsound from '../assets/popup-sound.mp4';
 import { ReadyState } from 'react-use-websocket';
-import { BrowsedUrl } from '@meaku/core/types/common';
-import { DataSourceItem, SdrAssignment } from '@meaku/core/types/admin/api';
+import { BrowsedUrl } from '@neuraltrade/core/types/common';
+import { DataSourceItem, SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import useWebpageScreenshotsActiveConversation from '../hooks/useWebpageScreenshotsActiveConversation';
-import { CoreCompanyResponse } from '@meaku/core/types/admin/admin';
+import { CoreCompanyResponse } from '@neuraltrade/core/types/admin/admin';
 import { useNewConversationNotifications } from '../hooks/useNewConversationNotifications';
 
 export interface ActiveConversation {

@@ -1,5 +1,5 @@
-import { generateOtp } from '@meaku/core/adminHttp/api';
-import { GenerateOtpPayload } from '@meaku/core/types/admin/api';
+import { generateOtp } from '@neuraltrade/core/adminHttp/api';
+import { GenerateOtpPayload } from '@neuraltrade/core/types/admin/api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 
 type GenerateOtpResult = ReturnType<typeof generateOtp> extends Promise<infer T> ? T : never;

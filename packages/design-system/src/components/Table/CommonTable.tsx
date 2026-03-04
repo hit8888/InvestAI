@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 
 import { useReactTable, getCoreRowModel, ColumnDef, HeaderGroup, Row } from '@tanstack/react-table';
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@meaku/core/types/admin/sort';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
+import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@neuraltrade/core/types/admin/sort';
 import {
   CONVERSATIONS_PAGE,
   CONVERSATIONS_PINNED_COLUMNS,
@@ -16,14 +16,14 @@ import {
   SLIDES_PAGE,
   VISITORS_PAGE,
   VISITORS_PINNED_COLUMNS,
-} from '@meaku/core/utils/index';
+} from '@neuraltrade/core/utils/index';
 import {
   CommonDataSourceResponse,
   ConversationsTableDisplayContent,
   LeadsTableDisplayContent,
   VisitorsTableDisplayContent,
   PaginationPageType,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import { useNavigate } from 'react-router-dom';
 import { useScrollSync } from '../../hooks/useScrollSync';
 import { useHeaderIntersection } from '../../hooks/useHeaderIntersection';

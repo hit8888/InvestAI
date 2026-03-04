@@ -9,7 +9,7 @@ import marketoLogo from '../../../assets/marketo-icon.svg';
 import attioLogo from '../../../assets/attio-icon.svg';
 import hubspotLogo from '../../../assets/hubspot-icon.svg';
 import ConnectIcon from '@breakout/design-system/components/icons/connect-icon';
-import type { Integration } from '@meaku/core/types/admin/api';
+import type { Integration } from '@neuraltrade/core/types/admin/api';
 import { getIntegrationNameFromType } from '../../../utils/common';
 
 const integrationIcons: { [key: string]: string } = {

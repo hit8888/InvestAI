@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { Button, Markdown } from '@meaku/saral';
+import { Button, Markdown } from '@neuraltrade/saral';
 import NudgeAsset from './NudgeAsset';
 import NudgeTimeoutLoader from './NudgeTimeoutLoader';
-import { Cta, NudgeAssetType } from '@meaku/core/types/api/configuration_response';
+import { Cta, NudgeAssetType } from '@neuraltrade/core/types/api/configuration_response';
 import NudgeDismissButton from './NudgeDismissButton';
 
 interface NudgeBodyProps {

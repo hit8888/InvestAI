@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { downloadLlmsTxt, generateLlmsTxt } from '@meaku/core/adminHttp/api';
+import { downloadLlmsTxt, generateLlmsTxt } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse, isAxiosError } from 'axios';
 import { useSessionStore } from '../../stores/useSessionStore';
 

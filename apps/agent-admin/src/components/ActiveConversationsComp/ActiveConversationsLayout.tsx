@@ -9,10 +9,10 @@ import JoinConversationDrawer from './JoinConversationDrawer';
 import WebSocketManager from './WebSocketManager';
 import { SendAdminMessageWithSessionIdFn, SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import { useSidebar } from '../../context/SidebarContext';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSessionStore } from '../../stores/useSessionStore';
-import { EventMessageContent } from '@meaku/core/types/webSocketData';
+import { EventMessageContent } from '@neuraltrade/core/types/webSocketData';
 import NoActiveConversationsFound from './NoActiveConversationsFound';
 import CustomPageHeader from '../CustomPageHeader';
 import PanelConversationActiveIcon from '@breakout/design-system/components/icons/panel-conversation-active-icon';
@@ -21,7 +21,7 @@ import ActiveConversationsGridView from './ActiveConversationsGridView';
 import ActiveConversationsGridViewShimmer from '../ShimmerComponent/ActiveConversationsGridViewShimmer';
 import { useAdminSessionCleanup } from '../../hooks/useAdminSessionCleanup';
 import useAdminEventAnalytics from '../../hooks/useAdminEventAnalytics';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 
 // Helper functions to create type-safe event messages
 const createAdminResponseEvent = (content: string, eventData: Record<string, unknown> = {}): EventMessageContent => ({

@@ -1,7 +1,7 @@
 import { useDataSourcesStore } from '../stores/useDataSourcesStore';
-import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
+import { uploadAssetsFile } from '@neuraltrade/core/adminHttp/api';
 import { useGenericFileUpload } from './useGenericFileUpload';
-import { DataSourceItem } from '@meaku/core/types/admin/api';
+import { DataSourceItem } from '@neuraltrade/core/types/admin/api';
 
 interface UseFileUploadReturn {
   uploadProgress: number;

@@ -1,7 +1,7 @@
 import { Demo } from '../types';
 import { useEffect, useState } from 'react';
 import { DemoThumbnail } from './DemoThumbnail';
-import { Button } from '@meaku/saral';
+import { Button } from '@neuraltrade/saral';
 
 interface MainDemoPlayerProps {
   demoId: string | null;

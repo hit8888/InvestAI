@@ -3,7 +3,7 @@ import {
   CommandBarModuleConfigType,
   CommandBarModuleType,
   CommandBarModuleTypeSchema,
-} from '@meaku/core/types/api/configuration_response';
+} from '@neuraltrade/core/types/api/configuration_response';
 import { useCommandBarStore } from '../stores';
 
 interface FeatureContextType {

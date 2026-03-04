@@ -16,7 +16,7 @@ import PageContainer from '../../components/AgentManagement/PageContainer';
 import DataSourceTableContainer from './components/DataSourceTableContainer';
 import useDataSourceOverviewDataQuery from '../../queries/query/useDataSourcesOverviewDataQuery';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
-import { DataSourceFeaturesData, DataSourceOverviewData } from '@meaku/core/types/admin/admin';
+import { DataSourceFeaturesData, DataSourceOverviewData } from '@neuraltrade/core/types/admin/admin';
 import { generateDataSourceStats, generateFeatureAssetStats } from './utils';
 import { DataSourcesDrawerProvider } from '../../context/DataSourcesDrawerContext';
 import CreateCustomDocumentButton from './components/CreateCustomDocumentButton';

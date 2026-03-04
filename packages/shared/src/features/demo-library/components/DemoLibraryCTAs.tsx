@@ -1,4 +1,4 @@
-import { Button, LucideIcon, ThreeStarInsideOrbIcon, ShiningRectangle } from '@meaku/saral';
+import { Button, LucideIcon, ThreeStarInsideOrbIcon, ShiningRectangle } from '@neuraltrade/saral';
 
 interface DemoLibraryCTAsProps {
   onBookMeetingClick: () => void;

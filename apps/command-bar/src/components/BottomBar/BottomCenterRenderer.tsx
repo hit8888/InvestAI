@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { cn } from '@meaku/saral';
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { cn } from '@neuraltrade/saral';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 import { BottomCenterBar } from './';
 import CommandBarActions from '../CommandBarActions';
 import FeatureContentContainer from '../FeatureContentContainer';
-import { Nudge } from '@meaku/shared/features';
+import { Nudge } from '@neuraltrade/shared/features';
 import { COMPONENT_TRANSITIONS } from '../../constants/animationTimings';
 import { BottomBarTransitionState, BottomBarTransitionActions } from './hooks/useBottomBarTransition';
 import { COMMAND_BAR_ANIMATIONS, BUTTON_SIZING } from './constants';

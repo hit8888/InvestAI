@@ -1,4 +1,4 @@
-import { CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 
 /**
  * Layout constants for FeatureContentWrapper positioning and sizing

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import adminApiClient from '@meaku/core/adminHttp/client';
+import adminApiClient from '@neuraltrade/core/adminHttp/client';
 
 export interface Prompt {
   id?: number;

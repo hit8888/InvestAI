@@ -1,4 +1,4 @@
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 

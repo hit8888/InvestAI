@@ -16,5 +16,5 @@ export default tseslint.config(
 */
 
 // module.exports = {
-//   extends: ["@meaku/eslint-config/react.js", "plugin:storybook/recommended"],
+//   extends: ["@neuraltrade/eslint-config/react.js", "plugin:storybook/recommended"],
 // };

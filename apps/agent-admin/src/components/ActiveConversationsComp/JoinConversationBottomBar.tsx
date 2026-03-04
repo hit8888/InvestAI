@@ -1,5 +1,5 @@
 import { TriangleAlert } from 'lucide-react';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import AdminChatInput, { JoinButtons } from './AdminChatInput';
 import Typography from '@breakout/design-system/components/Typography/index';
 import { SendAdminMessageFn } from '../../hooks/useAdminConversationWebSocket';

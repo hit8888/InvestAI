@@ -1,7 +1,7 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
-import { connectIntegration, connectIntegrationCallback, disconnectIntegration } from '@meaku/core/adminHttp/api';
+import { connectIntegration, connectIntegrationCallback, disconnectIntegration } from '@neuraltrade/core/adminHttp/api';
 import { getIntegrationNameFromType } from '../../utils/common';
 
 type IntegrationConnectResult = {

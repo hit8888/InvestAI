@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getInsightsSummary } from '@meaku/core/adminHttp/api';
+import { getInsightsSummary } from '@neuraltrade/core/adminHttp/api';
 import { AxiosResponse } from 'axios';
-import { InsightsSummaryResponse } from '@meaku/core/types/admin/api';
+import { InsightsSummaryResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 interface IProps {

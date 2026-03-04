@@ -2,7 +2,7 @@ import { Radio } from 'lucide-react';
 import Typography from '@breakout/design-system/components/Typography/index';
 import OverviewDataItem, { OverviewDataItemProps } from './OverviewDataItem';
 import BuyerIntentChip from './BuyerIntentChip';
-import { BuyerIntent } from '@meaku/core/types/common';
+import { BuyerIntent } from '@neuraltrade/core/types/common';
 import { ActiveConversation } from '../../context/ActiveConversationsContext';
 import { useMessageStore } from '../../hooks/useMessageStore';
 import { getHighestIntentScore } from '../../utils/common';

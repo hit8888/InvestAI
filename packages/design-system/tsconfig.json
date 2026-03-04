@@ -1,5 +1,5 @@
 {
-  "extends": "@meaku/typescript-config/react-library.json",
+  "extends": "@neuraltrade/typescript-config/react-library.json",
   "include": [".", "src/global.d.ts"],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {

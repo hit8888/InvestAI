@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import useAnalytics from '@meaku/core/hooks/useAnalytics';
+import useAnalytics from '@neuraltrade/core/hooks/useAnalytics';
 import { useSessionStore } from '../stores/useSessionStore';
 
 const useAdminEventAnalytics = () => {

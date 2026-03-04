@@ -4,7 +4,7 @@ import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { FilterConfig, FilterValues } from '../types';
 import type { QuickFilterConfig } from '../types/filter.types';
-import type { ExportFormatType } from '@meaku/core/types/admin/api';
+import type { ExportFormatType } from '@neuraltrade/core/types/admin/api';
 import { SearchFilter } from './filters/SearchFilter';
 import { FilterChipsList } from './filters/FilterChipsList';
 import { MultiSelectFilter } from './filters/MultiSelectFilter';

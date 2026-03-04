@@ -2,7 +2,7 @@ import { Video } from '../types';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { VideoThumbnail } from './VideoThumbnail';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LucideIcon, VideoPlayer } from '@meaku/saral';
+import { LucideIcon, VideoPlayer } from '@neuraltrade/saral';
 import ReactPlayer from 'react-player';
 import { useSidebarArtifact } from '../../ask-ai/hooks/useSidebarArtifact';
 

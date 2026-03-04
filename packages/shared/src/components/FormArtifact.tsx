@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button, Form, Typography, useForm } from '@meaku/saral';
+import { Button, Form, Typography, useForm } from '@neuraltrade/saral';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCommandBarAnalytics } from '@meaku/core/contexts/CommandBarAnalyticsProvider';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
+import { useCommandBarAnalytics } from '@neuraltrade/core/contexts/CommandBarAnalyticsProvider';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
 import { FormArtifactContent, FormArtifactMetadataType } from '../utils/artifact';
 import FormFilledThankYouContent from './FormFilledThankYouContent';
 import { sanitizeObject } from '../features/book-meeting/sanitize';
@@ -11,7 +11,7 @@ import { handleEmailDomainCheck } from '../helpers/checkEmailDomain';
 import ChatFormField from './ChatFormField';
 import { createFormSchema } from '../features/book-meeting/utils';
 import useFeatureConfig from '../hooks/useFeatureConfig';
-import { CommandBarModuleTypeSchema } from '@meaku/core/types/index';
+import { CommandBarModuleTypeSchema } from '@neuraltrade/core/types/index';
 
 type FormFilledEventDataType = {
   artifact_id: string;

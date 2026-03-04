@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { useScreenSize } from '@meaku/core/hooks/useScreenSize';
+import { useScreenSize } from '@neuraltrade/core/hooks/useScreenSize';
 import {
   WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_SIDEBAR_CLOSED,
   WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_SIDEBAR_OPEN,
   WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_DATA_SOURCE_SIDEBAR_CLOSED,
   WIDTH_TO_BE_SUBTRACTED_FROM_SCREEN_WIDTH_FOR_DATA_SOURCE_SIDEBAR_OPEN,
-} from '@meaku/core/utils/index';
+} from '@neuraltrade/core/utils/index';
 
 interface UseTableWidthReturn {
   widthStyle: { maxWidth: string };

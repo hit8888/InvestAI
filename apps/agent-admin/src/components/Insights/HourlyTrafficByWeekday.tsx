@@ -1,10 +1,10 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 import useSessionInsightsQuery from '../../queries/query/useSessionInsightsQuery';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@meaku/tailwind-config';
-import { DayOfWeek, HourlySessionInsightsResponse } from '@meaku/core/types/admin/api';
+import tailwindConfig from '@neuraltrade/tailwind-config';
+import { DayOfWeek, HourlySessionInsightsResponse } from '@neuraltrade/core/types/admin/api';
 import { Skeleton } from '@breakout/design-system/components/shadcn-ui/skeleton';
-import { BREAKOUT_COLOR } from '@meaku/core/utils/index';
+import { BREAKOUT_COLOR } from '@neuraltrade/core/utils/index';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fullConfig = resolveConfig(tailwindConfig as any);

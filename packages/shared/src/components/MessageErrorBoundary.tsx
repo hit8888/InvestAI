@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo } from 'react';
-import { trackError } from '@meaku/core/utils/error';
-import { Typography } from '@meaku/saral';
+import { trackError } from '@neuraltrade/core/utils/error';
+import { Typography } from '@neuraltrade/saral';
 import { Message } from '../types/message';
 
 interface Props {

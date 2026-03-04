@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import AccessibleTableRow from '../accessibility/AccessibleTableRow';
 import { CustomSingleBodyRowItemProps } from './tableTypes';
 import RowCellContent from './RowCellContent';
-import { DATA_SOURCE_TYPE_ENUM } from '@meaku/core/utils/index';
+import { DATA_SOURCE_TYPE_ENUM } from '@neuraltrade/core/utils/index';
 
 const TableBodyRowItemHavingCheckbox = ({
   row,

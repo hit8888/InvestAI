@@ -1,4 +1,4 @@
-import { OrbStatusEnum } from '@meaku/core/types/index';
+import { OrbStatusEnum } from '@neuraltrade/core/types/index';
 import InputWaitingOrb from './InputWaitingOrb';
 import { CSSProperties } from 'react';
 

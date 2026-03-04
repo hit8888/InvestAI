@@ -1,4 +1,4 @@
-import { CommandBarModuleConfigType, CommandBarModuleType } from '@meaku/core/types/api/configuration_response';
+import { CommandBarModuleConfigType, CommandBarModuleType } from '@neuraltrade/core/types/api/configuration_response';
 import { useCommandBarStore } from '../stores';
 
 const useFeatureConfig = (activeFeature?: CommandBarModuleType): CommandBarModuleConfigType | undefined => {

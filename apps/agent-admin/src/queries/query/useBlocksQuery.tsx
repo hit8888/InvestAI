@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getBlocks } from '@meaku/core/adminHttp/api';
-import { BlocksResponse } from '@meaku/core/types/admin/api';
+import { getBlocks } from '@neuraltrade/core/adminHttp/api';
+import { BlocksResponse } from '@neuraltrade/core/types/admin/api';
 import { AxiosResponse } from 'axios';
 
 interface UseBlocksQueryProps {

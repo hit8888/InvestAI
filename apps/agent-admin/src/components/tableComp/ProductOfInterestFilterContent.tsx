@@ -1,5 +1,5 @@
 import CommonCheckboxesFilterContent from './CommonCheckboxesFilterContent';
-import { CommonFilterContentProps, FilterType } from '@meaku/core/types/admin/filters';
+import { CommonFilterContentProps, FilterType } from '@neuraltrade/core/types/admin/filters';
 import FilterOptionsShimmer from '../ShimmerComponent/FilterOptionsShimmer';
 import { useFilterContent } from '../../hooks/useFilterContent';
 

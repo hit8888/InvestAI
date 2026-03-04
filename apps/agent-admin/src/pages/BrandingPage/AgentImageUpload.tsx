@@ -4,9 +4,9 @@ import SourcesDragDropPattern from '@breakout/design-system/components/icons/sou
 import ErrorToastMessage from '@breakout/design-system/components/layout/ErrorToastMessage';
 import AgentConfigUploadIcon from '@breakout/design-system/components/icons/agent-config-upload-icon';
 import { cn } from '@breakout/design-system/lib/cn';
-import { uploadAssetsFile } from '@meaku/core/adminHttp/api';
+import { uploadAssetsFile } from '@neuraltrade/core/adminHttp/api';
 import TooltipWrapperDark from '@breakout/design-system/components/Tooltip/TooltipWrapperDark';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 import { useSessionStore } from '../../stores/useSessionStore';
 import ReactCropperModal from '../../components/AgentManagement/ReactCropperModal';
 import { useImageCropModal } from '../../hooks/useImageCropModal';

@@ -1,5 +1,5 @@
-import { UserInfoResponse } from '@meaku/core/types/admin/api';
-import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@meaku/core/types/admin/filters';
+import { UserInfoResponse } from '@neuraltrade/core/types/admin/api';
+import { FilterType, PresetDateLabel, TableAllFilterConfig } from '@neuraltrade/core/types/admin/filters';
 import FilterProductOfInterestIcon from '@breakout/design-system/components/icons/filter-productofinterest-icon';
 import FilterAssignedUserEmailIcon from '@breakout/design-system/components/icons/filter-assigneduseremail-icon';
 import FilterLocationIcon from '@breakout/design-system/components/icons/filter-location-icon';
@@ -33,12 +33,12 @@ import CompanyFoundationDate from '@breakout/design-system/components/icons/comp
 import CompanyNumberOfEmployeesIcon from '@breakout/design-system/components/icons/company-numberofemployees-icon';
 import CompanyRevenueIcon from '@breakout/design-system/components/icons/company-revenue-icon';
 import { ConversationRightSideDetailsType } from './admin-types';
-import { ExportFormat, type SdrAssignment } from '@meaku/core/types/admin/api';
+import { ExportFormat, type SdrAssignment } from '@neuraltrade/core/types/admin/api';
 import { ExternalLink, History, Link, MonitorSmartphone, User } from 'lucide-react';
-import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@meaku/core/types/admin/sort';
-import { AgentResponseWordCountEnum, PlaygroundView } from '@meaku/core/types/common';
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { ArtifactsSortValues, DocumentsSortValues, SortValues, WebpagesSortValues } from '@neuraltrade/core/types/admin/sort';
+import { AgentResponseWordCountEnum, PlaygroundView } from '@neuraltrade/core/types/common';
+import { ConversationsTableDisplayContent } from '@neuraltrade/core/types/admin/admin';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 
 // Import local SVG logos
 import salesforceLogo from '../assets/salesforce-icon.svg';

@@ -1,10 +1,10 @@
 import Lottie from 'lottie-react';
 
 import { CtaEventDataContent } from '../../../utils/types';
-import { Typography, Button, LucideIcon } from '@meaku/saral';
+import { Typography, Button, LucideIcon } from '@neuraltrade/saral';
 import { Message, MessageEventType, SendUserMessageParams } from '../../../types/message';
 import { useEffect, useCallback, useMemo } from 'react';
-import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { getLocalStorageData, setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
 import loadingDotsBlueAnimation from '../../../assets/loading-dots-blue.json';
 
 type IProps = {

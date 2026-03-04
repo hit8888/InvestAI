@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { usePaginationStore } from '../stores/usePaginationStore';
-import { PaginationPageType } from '@meaku/core/types/admin/admin';
+import { PaginationPageType } from '@neuraltrade/core/types/admin/admin';
 
 interface UsePaginationProps {
   pageType: PaginationPageType;

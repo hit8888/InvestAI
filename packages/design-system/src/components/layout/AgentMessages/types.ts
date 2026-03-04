@@ -1,9 +1,9 @@
-import { ViewType } from '@meaku/core/types/common';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { OrbStatusEnum } from '@meaku/core/types/config';
-import { DemoPlayingStatus } from '@meaku/core/types/common';
-import { ArtifactBaseType } from '@meaku/core/types/webSocketData';
-import { FeedbackRequestPayload } from '@meaku/core/types/api/feedback_request';
+import { ViewType } from '@neuraltrade/core/types/common';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { OrbStatusEnum } from '@neuraltrade/core/types/config';
+import { DemoPlayingStatus } from '@neuraltrade/core/types/common';
+import { ArtifactBaseType } from '@neuraltrade/core/types/webSocketData';
+import { FeedbackRequestPayload } from '@neuraltrade/core/types/api/feedback_request';
 
 // Types
 export interface IProps {

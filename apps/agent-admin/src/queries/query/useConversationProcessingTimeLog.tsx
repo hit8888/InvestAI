@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { getConversationProcessingTimeLog } from '@meaku/core/adminHttp/api';
-import { ConversationProcessingTimeLogResponse } from '@meaku/core/types/admin/api';
+import { getConversationProcessingTimeLog } from '@neuraltrade/core/adminHttp/api';
+import { ConversationProcessingTimeLogResponse } from '@neuraltrade/core/types/admin/api';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 type UseConversationProcessingTimeLogQueryProps = {

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon } from '@neuraltrade/saral';
 import { useCarousel } from '../../../hooks/useCarousel';
 import { VideoThumbnail } from './VideoThumbnail';
 import { Video } from '../types';

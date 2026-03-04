@@ -1,7 +1,7 @@
 import { generateConversationSummaryContent } from '../../../../utils/common';
 import SummaryTabContentItem from '../../../../components/ConversationDetailsComp/SummaryTabContentItem';
-import { WebSocketMessage } from '@meaku/core/types/webSocketData';
-import { ConversationsTableDisplayContent } from '@meaku/core/types/admin/admin';
+import { WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
+import { ConversationsTableDisplayContent } from '@neuraltrade/core/types/admin/admin';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConversationDetailsLoading from './ConversationDetailsLoading';
 

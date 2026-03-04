@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import { ActiveConversation } from '../context/ActiveConversationsContext';
 import { SendMessageFn } from './useAdminConversationWebSocket';
-import { EventMessageContent } from '@meaku/core/types/webSocketData';
+import { EventMessageContent } from '@neuraltrade/core/types/webSocketData';
 
 interface UseAdminSessionCleanupProps {
   currentConversation: ActiveConversation | null;

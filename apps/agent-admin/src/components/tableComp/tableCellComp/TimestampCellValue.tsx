@@ -1,5 +1,5 @@
-import { CellValueProps } from '@meaku/core/types/admin/admin-table';
-import DateUtil from '@meaku/core/utils/dateUtils';
+import { CellValueProps } from '@neuraltrade/core/types/admin/admin-table';
+import DateUtil from '@neuraltrade/core/utils/dateUtils';
 
 const TimestampCellValue: React.FC<CellValueProps> = ({ value }: { value: string }) => {
   const { getDateInHumanReadableFormat, formatDateTime } = DateUtil;

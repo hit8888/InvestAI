@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { FeatureHeader } from '../../components/FeatureHeader';
-import { LucideIcon } from '@meaku/saral';
+import { LucideIcon } from '@neuraltrade/saral';
 import { HeaderAvatar } from '../../components/AvatarDisplay';
 import type { FeatureContentProps } from '../';
 import { AskAiInput } from './AskAiInput';
@@ -14,7 +14,7 @@ import { useWsClient } from '../../hooks/useWsClient';
 import { useAdminSession } from './hooks/useAdminSession';
 import { useFormArtifactMessage } from '../../hooks/useFormArtifactMessage';
 import { MessageEventType } from '../../types/message';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 import PoweredByBreakout from '../../components/PoweredByBreakout';
 
 const AskAiContentInner = ({ onClose, onExpand, isExpanded }: FeatureContentProps) => {

@@ -7,9 +7,9 @@ import {
   LeadsTableDisplayContent,
   PaginationPageType,
   VisitorsTableDisplayContent,
-} from '@meaku/core/types/admin/admin';
-import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@meaku/core/types/admin/sort';
-import { NON_SORTABLE_COLUMNS } from '@meaku/core/utils/index';
+} from '@neuraltrade/core/types/admin/admin';
+import { DataSourceSortValues, SortCategory, SortOrder, SortValues } from '@neuraltrade/core/types/admin/sort';
+import { NON_SORTABLE_COLUMNS } from '@neuraltrade/core/utils/index';
 import { Header } from '@tanstack/react-table';
 
 type IProps = {

@@ -1,6 +1,6 @@
-// import { TableDataSchema } from '@meaku/core/types/admin/admin-table';
-import { TableDataResponse, PaginationData } from '@meaku/core/types/admin/admin';
-import { PaginationDataSchema } from '@meaku/core/types/admin/api';
+// import { TableDataSchema } from '@neuraltrade/core/types/admin/admin-table';
+import { TableDataResponse, PaginationData } from '@neuraltrade/core/types/admin/admin';
+import { PaginationDataSchema } from '@neuraltrade/core/types/admin/api';
 
 type Result<T> = {
   success: boolean;

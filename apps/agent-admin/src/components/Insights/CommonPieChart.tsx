@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@meaku/tailwind-config';
+import tailwindConfig from '@neuraltrade/tailwind-config';
 import { PieChartDataItem } from '../../utils/admin-types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

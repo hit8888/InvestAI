@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useAdminConversationsWebSocket, { SendMessageFn } from '../../hooks/useAdminConversationWebSocket';
 import useJoinConversationStore from '../../stores/useJoinConversationStore';
-import { AdminConversationJoinStatus } from '@meaku/core/types/common';
+import { AdminConversationJoinStatus } from '@neuraltrade/core/types/common';
 import { ReadyState } from 'react-use-websocket';
 
 type WebSocketManagerProps = {

@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react';
-import { getLocalStorageData, setLocalStorageData } from '@meaku/core/utils/storage-utils';
+import { getLocalStorageData, setLocalStorageData } from '@neuraltrade/core/utils/storage-utils';
 
 export const useWatchedVideos = () => {
   const [watchedVideos, setWatchedVideos] = useState<string[]>([]);

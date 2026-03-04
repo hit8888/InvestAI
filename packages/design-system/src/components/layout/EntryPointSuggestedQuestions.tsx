@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@breakout/design-system/lib/cn';
 import { Suggestion } from './ChatMessages/Suggestion';
-import { getSuggestionItemAnimation, suggestionContainerAnimation } from '@meaku/core/utils/entryPointAnimation';
+import { getSuggestionItemAnimation, suggestionContainerAnimation } from '@neuraltrade/core/utils/entryPointAnimation';
 import { SuggestedQuestionsShowingInCycle } from './ChatMessages/SuggestedQuestionsShowingInCycle';
-import { EntryPointAlignment, EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
-import ANALYTICS_EVENT_NAMES from '@meaku/core/constants/analytics';
-import useAgentbotAnalytics from '@meaku/core/hooks/useAgentbotAnalytics';
+import { EntryPointAlignment, EntryPointAlignmentType } from '@neuraltrade/core/types/entryPoint';
+import ANALYTICS_EVENT_NAMES from '@neuraltrade/core/constants/analytics';
+import useAgentbotAnalytics from '@neuraltrade/core/hooks/useAgentbotAnalytics';
 
 type EntryPointSuggestedQuestionsProps = {
   showSuggestedQuestions: boolean;

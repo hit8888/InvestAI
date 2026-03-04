@@ -5,10 +5,10 @@ import {
   useQuery,
   UseQueryResult,
 } from '@tanstack/react-query';
-import { getDataSourcesQuery } from '@meaku/core/adminHttp/api';
-import { DataSourcePayload } from '@meaku/core/types/admin/api';
+import { getDataSourcesQuery } from '@neuraltrade/core/adminHttp/api';
+import { DataSourcePayload } from '@neuraltrade/core/types/admin/api';
 import { AxiosResponse } from 'axios';
-import { BreakoutQueryOptions } from '@meaku/core/types/queries';
+import { BreakoutQueryOptions } from '@neuraltrade/core/types/queries';
 import { useSessionStore } from '../../stores/useSessionStore';
 
 // Types for data source query response

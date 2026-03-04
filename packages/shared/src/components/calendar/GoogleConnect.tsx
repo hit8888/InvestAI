@@ -1,4 +1,4 @@
-import { Typography } from '@meaku/saral';
+import { Typography } from '@neuraltrade/saral';
 import { Connect } from '@calcom/atoms';
 import { toast } from 'react-hot-toast';
 

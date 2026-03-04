@@ -1,10 +1,10 @@
-import { CtaEventDataContent, EventMessageContent, WebSocketMessage } from '@meaku/core/types/webSocketData';
+import { CtaEventDataContent, EventMessageContent, WebSocketMessage } from '@neuraltrade/core/types/webSocketData';
 import Typography from '../../Typography';
 import Button from '@breakout/design-system/components/Button/index';
 import ArrowRight from '../../icons/ArrowRight';
 import MessageItemLayout, { Padding } from './MessageItemLayout';
 import { cn } from '@breakout/design-system/lib/cn';
-import { useIsMobile } from '@meaku/core/contexts/DeviceManagerProvider';
+import { useIsMobile } from '@neuraltrade/core/contexts/DeviceManagerProvider';
 
 type IProps = {
   event: WebSocketMessage;

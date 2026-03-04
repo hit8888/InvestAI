@@ -16,17 +16,17 @@ import {
   getSortingAppliedValues,
 } from '../utils/common';
 
-import { ColumnDefinition } from '@meaku/core/types/admin/admin-table';
-import { LeadsPayload } from '@meaku/core/types/admin/api';
+import { ColumnDefinition } from '@neuraltrade/core/types/admin/admin-table';
+import { LeadsPayload } from '@neuraltrade/core/types/admin/api';
 import {
   LEADS_PAGE_TYPE,
   LeadsTableDisplayContent,
   LeadsTableViewContent,
   LINK_CLICKS_PAGE_TYPE,
-} from '@meaku/core/types/admin/admin';
+} from '@neuraltrade/core/types/admin/admin';
 import { useSortFilterStore } from '../stores/useSortFilterStore.ts';
 import { useAllFilterStore } from '../stores/useAllFilterStore.ts';
-import { useDebouncedValue } from '@meaku/core/hooks/useDebouncedValue';
+import { useDebouncedValue } from '@neuraltrade/core/hooks/useDebouncedValue';
 import { useTableStore } from '../stores/useTableStore.ts';
 import { useQueryOptions } from '../hooks/useQueryOptions.ts';
 import { useInitializeFilterPreferences } from '../hooks/useInitializeFilterPreferences.tsx';
@@ -37,7 +37,7 @@ import NoDataFound from '@breakout/design-system/components/layout/NoDataFound';
 import CommonTable from '@breakout/design-system/components/Table/CommonTable';
 import TableViewShimmer from './ShimmerComponent/TableViewShimmer';
 import { useSidebar } from '../context/SidebarContext.tsx';
-import { SortValues } from '@meaku/core/types/admin/sort';
+import { SortValues } from '@neuraltrade/core/types/admin/sort';
 import NoDataFoundWithSearchTerm from '@breakout/design-system/components/layout/NoDataFoundWithSearchTerm';
 
 const LeadsTableContainer = ({ pageType }: { pageType: LEADS_PAGE_TYPE | LINK_CLICKS_PAGE_TYPE }) => {

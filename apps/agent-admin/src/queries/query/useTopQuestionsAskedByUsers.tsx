@@ -1,5 +1,5 @@
-import { getTopQuestionsAskedByUser } from '@meaku/core/adminHttp/api';
-import { TopQuestionsByUserResponse } from '@meaku/core/types/admin/api';
+import { getTopQuestionsAskedByUser } from '@neuraltrade/core/adminHttp/api';
+import { TopQuestionsByUserResponse } from '@neuraltrade/core/types/admin/api';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useSessionStore } from '../../stores/useSessionStore';

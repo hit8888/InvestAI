@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import { Loader } from 'lucide-react';
 import Button from '@breakout/design-system/components/Button/index';
 import { getBrowserTimezone } from './utils';
-import { trackError } from '@meaku/core/utils/error';
+import { trackError } from '@neuraltrade/core/utils/error';
 
 const CreateManagedCalendarButton = () => {
   const [isSuccess, setIsSuccess] = useState(false);

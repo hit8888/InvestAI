@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Suggestion } from './Suggestion';
-import { getSuggestionItemAnimation } from '@meaku/core/utils/entryPointAnimation';
-import { EntryPointAlignmentType } from '@meaku/core/types/entryPoint';
+import { getSuggestionItemAnimation } from '@neuraltrade/core/utils/entryPointAnimation';
+import { EntryPointAlignmentType } from '@neuraltrade/core/types/entryPoint';
 
 type SuggestedQuestionsShowingInCycleProps = {
   questions: string[];
