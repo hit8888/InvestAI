@@ -19,6 +19,7 @@ interface AnalysisActions {
   setPortfolio: (stocks: Stock[]) => void;
   setNewsSource: (source: NewsSource) => void;
   setNewsUrl: (url: string) => void;
+  setNewsTopic: (topic: string) => void;
   setArticles: (articles: NewsArticle[]) => void;
   updateSettings: (patch: Partial<SimulationSettings>) => void;
   setLoading: (loading: boolean, message?: string) => void;
@@ -32,6 +33,7 @@ const initialState: AnalysisState = {
   portfolio: [],
   newsSource: "latest",
   newsUrl: "",
+  newsTopic: "",
   articles: [],
   settings: DEFAULT_SETTINGS,
   result: null,
@@ -58,6 +60,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>(
     setPortfolio: (stocks) => set({ portfolio: stocks }),
     setNewsSource: (newsSource) => set({ newsSource }),
     setNewsUrl: (newsUrl) => set({ newsUrl }),
+    setNewsTopic: (newsTopic) => set({ newsTopic }),
     setArticles: (articles) => set({ articles }),
     updateSettings: (patch) =>
       set((s) => ({ settings: { ...s.settings, ...patch } })),

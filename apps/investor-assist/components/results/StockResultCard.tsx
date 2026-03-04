@@ -1,38 +1,47 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, Info } from "lucide-react";
 import type { SimulationResult } from "@/types";
 import SentimentBadge from "./SentimentBadge";
 import DistributionChart from "./DistributionChart";
 import { cn } from "@/lib/utils";
 
-export default function StockResultCard({ result }: { result: SimulationResult }) {
+export default function StockResultCard({
+  result,
+}: {
+  result: SimulationResult;
+}) {
   const [expanded, setExpanded] = useState(false);
 
   const isPositive = result.expectedChangePct >= 0;
-  const changeFmt = (n: number) =>
-    `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+  const changeFmt = (n: number) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
   const priceFmt = (n: number) => `$${n.toFixed(2)}`;
 
   const confidencePct = Math.round(result.confidence * 100);
   const confidenceColor =
-    confidencePct >= 70 ? "text-emerald-600" :
-    confidencePct >= 45 ? "text-amber-600" : "text-red-600";
+    confidencePct >= 70
+      ? "text-emerald-600"
+      : confidencePct >= 45
+        ? "text-amber-600"
+        : "text-red-600";
 
   return (
-    <div className="rounded-xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+    <div className="rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       {/* Header */}
       <div className="flex items-start justify-between p-5">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center shrink-0">
+          <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 flex items-center justify-center shrink-0 shadow-sm">
             <span className="text-xs font-bold text-brand-700">
               {result.ticker.slice(0, 2)}
             </span>
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-base font-semibold text-gray-900">{result.ticker}</span>
+              <span className="text-base font-semibold text-gray-900">
+                {result.ticker}
+              </span>
               <SentimentBadge sentiment={result.sentiment} />
             </div>
             <p className="text-xs text-gray-500 mt-0.5">{result.name}</p>
@@ -53,16 +62,20 @@ export default function StockResultCard({ result }: { result: SimulationResult }
         </div>
       </div>
 
-      {/* Probability bar */}
+      {/* Probability bar — animated */}
       <div className="px-5 pb-4">
-        <div className="flex gap-px rounded-full overflow-hidden h-2 mb-1.5">
-          <div
-            className="bg-red-300"
-            style={{ width: `${result.probNegative}%` }}
+        <div className="flex gap-px rounded-full overflow-hidden h-2.5 mb-1.5 bg-gray-100">
+          <motion.div
+            className="bg-gradient-to-r from-red-400 to-red-300 rounded-l-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${result.probNegative}%` }}
+            transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
           />
-          <div
-            className="bg-emerald-300"
-            style={{ width: `${result.probPositive}%` }}
+          <motion.div
+            className="bg-gradient-to-r from-emerald-300 to-emerald-400 rounded-r-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${result.probPositive}%` }}
+            transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
           />
         </div>
         <div className="flex justify-between text-xs text-gray-400">
@@ -72,18 +85,49 @@ export default function StockResultCard({ result }: { result: SimulationResult }
       </div>
 
       {/* Price range table */}
-      <div className="grid grid-cols-5 gap-px bg-gray-100 mx-5 rounded-lg overflow-hidden mb-4">
-        {([
-          ["Bearish (5th)", result.pricePercentiles.p5, result.changePctPercentiles.p5],
-          ["Low (25th)", result.pricePercentiles.p25, result.changePctPercentiles.p25],
-          ["Median", result.pricePercentiles.p50, result.changePctPercentiles.p50],
-          ["High (75th)", result.pricePercentiles.p75, result.changePctPercentiles.p75],
-          ["Bullish (95th)", result.pricePercentiles.p95, result.changePctPercentiles.p95],
-        ] as [string, number, number][]).map(([label, price, pct]) => (
+      <div className="grid grid-cols-5 gap-px bg-gray-100 mx-5 rounded-xl overflow-hidden mb-4">
+        {(
+          [
+            [
+              "Bear 5th",
+              result.pricePercentiles.p5,
+              result.changePctPercentiles.p5,
+            ],
+            [
+              "Low 25th",
+              result.pricePercentiles.p25,
+              result.changePctPercentiles.p25,
+            ],
+            [
+              "Median",
+              result.pricePercentiles.p50,
+              result.changePctPercentiles.p50,
+            ],
+            [
+              "High 75th",
+              result.pricePercentiles.p75,
+              result.changePctPercentiles.p75,
+            ],
+            [
+              "Bull 95th",
+              result.pricePercentiles.p95,
+              result.changePctPercentiles.p95,
+            ],
+          ] as [string, number, number][]
+        ).map(([label, price, pct]) => (
           <div key={label} className="bg-white p-2.5 text-center">
-            <p className="text-[10px] text-gray-400 mb-0.5 leading-tight">{label}</p>
-            <p className="text-sm font-semibold text-gray-900">{priceFmt(price)}</p>
-            <p className={cn("text-[10px] font-medium", pct >= 0 ? "text-emerald-600" : "text-red-600")}>
+            <p className="text-[9px] text-gray-400 mb-0.5 leading-tight">
+              {label}
+            </p>
+            <p className="text-sm font-semibold text-gray-900">
+              {priceFmt(price)}
+            </p>
+            <p
+              className={cn(
+                "text-[10px] font-medium",
+                pct >= 0 ? "text-emerald-600" : "text-red-600",
+              )}
+            >
               {changeFmt(pct)}
             </p>
           </div>
@@ -113,58 +157,75 @@ export default function StockResultCard({ result }: { result: SimulationResult }
           )}
         </button>
 
-        {expanded && (
-          <div className="px-5 pb-5 space-y-4">
-            {/* Confidence + volatility */}
-            <div className="grid grid-cols-2 gap-3">
-              <MetricBox
-                label="Confidence Score"
-                value={`${confidencePct}%`}
-                valueClass={confidenceColor}
-                sub="AI analysis confidence"
-              />
-              <MetricBox
-                label="Volatility Projection"
-                value={`${(result.volatilityProjection * 100).toFixed(0)}%`}
-                valueClass="text-gray-700"
-                sub="Annualised vol (sim)"
-              />
-              <MetricBox
-                label="Sentiment Score"
-                value={result.sentimentScore.toFixed(2)}
-                valueClass={result.sentimentScore >= 0 ? "text-emerald-600" : "text-red-600"}
-                sub="-1 bearish → +1 bullish"
-              />
-              <MetricBox
-                label="Current Price"
-                value={`$${result.currentPrice.toFixed(2)}`}
-                valueClass="text-gray-700"
-                sub="At analysis time"
-              />
-            </div>
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="px-5 pb-5 space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <MetricBox
+                    label="Confidence Score"
+                    value={`${confidencePct}%`}
+                    valueClass={confidenceColor}
+                    sub="AI analysis confidence"
+                  />
+                  <MetricBox
+                    label="Volatility Projection"
+                    value={`${(result.volatilityProjection * 100).toFixed(0)}%`}
+                    valueClass="text-gray-700"
+                    sub="Annualised vol (sim)"
+                  />
+                  <MetricBox
+                    label="Sentiment Score"
+                    value={result.sentimentScore.toFixed(2)}
+                    valueClass={
+                      result.sentimentScore >= 0
+                        ? "text-emerald-600"
+                        : "text-red-600"
+                    }
+                    sub="-1 bearish → +1 bullish"
+                  />
+                  <MetricBox
+                    label="Current Price"
+                    value={`$${result.currentPrice.toFixed(2)}`}
+                    valueClass="text-gray-700"
+                    sub="At analysis time"
+                  />
+                </div>
 
-            {/* Key factors */}
-            <div>
-              <p className="text-xs font-medium text-gray-600 mb-2">Key Factors</p>
-              <div className="flex flex-wrap gap-1.5">
-                {result.keyFactors.map((f) => (
-                  <span
-                    key={f}
-                    className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs"
-                  >
-                    {f}
-                  </span>
-                ))}
+                <div>
+                  <p className="text-xs font-medium text-gray-600 mb-2">
+                    Key Factors
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {result.keyFactors.map((f) => (
+                      <span
+                        key={f}
+                        className="px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-medium border border-brand-100"
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs font-medium text-gray-600 mb-1.5">
+                    Reasoning
+                  </p>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    {result.reasoning}
+                  </p>
+                </div>
               </div>
-            </div>
-
-            {/* Reasoning */}
-            <div>
-              <p className="text-xs font-medium text-gray-600 mb-1.5">Reasoning</p>
-              <p className="text-xs text-gray-600 leading-relaxed">{result.reasoning}</p>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -182,7 +243,7 @@ function MetricBox({
   sub: string;
 }) {
   return (
-    <div className="rounded-lg bg-gray-50 p-3">
+    <div className="rounded-xl bg-gray-50 p-3">
       <p className="text-[10px] text-gray-400 mb-0.5">{label}</p>
       <p className={cn("text-base font-bold", valueClass)}>{value}</p>
       <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>

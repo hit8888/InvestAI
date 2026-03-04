@@ -1,17 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchLatestNews, fetchArticleFromUrl } from "@/lib/news";
+import {
+  fetchLatestNews,
+  fetchArticleFromUrl,
+  fetchNewsByTopic,
+} from "@/lib/news";
 import type { Stock } from "@/types";
 
 export async function POST(req: NextRequest) {
   try {
-    const { source, url, stocks } = (await req.json()) as {
-      source: "latest" | "url";
+    const { source, url, topic, stocks } = (await req.json()) as {
+      source: "latest" | "url" | "topic";
       url?: string;
+      topic?: string;
       stocks: Stock[];
     };
 
     if (!stocks?.length) {
-      return NextResponse.json({ error: "Stocks are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Stocks are required" },
+        { status: 400 },
+      );
     }
 
     if (source === "url") {
@@ -20,6 +28,17 @@ export async function POST(req: NextRequest) {
       }
       const article = await fetchArticleFromUrl(url.trim());
       return NextResponse.json({ articles: [article] });
+    }
+
+    if (source === "topic") {
+      if (!topic?.trim()) {
+        return NextResponse.json(
+          { error: "Topic is required" },
+          { status: 400 },
+        );
+      }
+      const articles = await fetchNewsByTopic(topic.trim());
+      return NextResponse.json({ articles });
     }
 
     // source === "latest"

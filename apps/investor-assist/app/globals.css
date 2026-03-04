@@ -13,6 +13,36 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply text-gray-900 antialiased;
+    background-color: #f0f4f8;
+    background-image: radial-gradient(
+        circle at 20% 20%,
+        rgba(14, 165, 233, 0.05) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(99, 102, 241, 0.04) 0%,
+        transparent 50%
+      ),
+      radial-gradient(#cbd5e1 0.8px, transparent 0.8px);
+    background-size:
+      auto,
+      auto,
+      22px 22px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300;
   }
 }

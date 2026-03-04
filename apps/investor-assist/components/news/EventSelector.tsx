@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Rss, Link2, Newspaper, Loader2, ExternalLink, ChevronLeft } from "lucide-react";
+import {
+  Rss,
+  Link2,
+  Newspaper,
+  Loader2,
+  ExternalLink,
+  ChevronLeft,
+  Search,
+} from "lucide-react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { cn } from "@/lib/utils";
 import type { NewsArticle } from "@/types";
@@ -12,9 +20,11 @@ export default function EventSelector() {
     portfolio,
     newsSource,
     newsUrl,
+    newsTopic,
     articles,
     setNewsSource,
     setNewsUrl,
+    setNewsTopic,
     setArticles,
     setStep,
   } = useAnalysisStore();
@@ -32,11 +42,20 @@ export default function EventSelector() {
         body: JSON.stringify({
           source: newsSource,
           url: newsUrl,
+          topic: newsTopic,
           stocks: portfolio,
         }),
       });
-      const data = (await res.json()) as { articles?: NewsArticle[]; error?: string };
-      if (!res.ok || !data.articles) throw new Error(data.error ?? "Failed to fetch news");
+      const data = (await res.json()) as {
+        articles?: NewsArticle[];
+        error?: string;
+      };
+      if (!res.ok || !data.articles)
+        throw new Error(data.error ?? "Failed to fetch news");
+      if (data.articles.length === 0)
+        throw new Error(
+          "No articles found for that topic. Try different keywords.",
+        );
       setArticles(data.articles);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to fetch news");
@@ -45,30 +64,53 @@ export default function EventSelector() {
     }
   }
 
+  const canFetch =
+    newsSource === "latest" ||
+    (newsSource === "url" && !!newsUrl.trim()) ||
+    (newsSource === "topic" && !!newsTopic.trim());
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-1">Select News Event</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+          Select News Event
+        </h2>
         <p className="text-sm text-gray-500">
           Choose how to source the news event for analysis.
         </p>
       </div>
 
       {/* Source toggle */}
-      <div className="flex gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <SourceOption
           active={newsSource === "latest"}
           icon={<Rss className="h-5 w-5" />}
           label="Latest News"
           description="Auto-pull recent news for your stocks"
-          onClick={() => { setNewsSource("latest"); setArticles([]); }}
+          onClick={() => {
+            setNewsSource("latest");
+            setArticles([]);
+          }}
         />
         <SourceOption
           active={newsSource === "url"}
           icon={<Link2 className="h-5 w-5" />}
           label="Article URL"
           description="Paste a specific news article link"
-          onClick={() => { setNewsSource("url"); setArticles([]); }}
+          onClick={() => {
+            setNewsSource("url");
+            setArticles([]);
+          }}
+        />
+        <SourceOption
+          active={newsSource === "topic"}
+          icon={<Search className="h-5 w-5" />}
+          label="Topic"
+          description="Search by any news topic or keyword"
+          onClick={() => {
+            setNewsSource("topic");
+            setArticles([]);
+          }}
         />
       </div>
 
@@ -88,10 +130,30 @@ export default function EventSelector() {
         </div>
       )}
 
+      {/* Topic input */}
+      {newsSource === "topic" && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            News Topic
+          </label>
+          <input
+            type="text"
+            value={newsTopic}
+            onChange={(e) => setNewsTopic(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && canFetch && fetchNews()}
+            placeholder="e.g. Fed interest rates, AI regulation, oil prices…"
+            className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          />
+          <p className="text-xs text-gray-400 mt-1.5">
+            Articles will be shown for your review before analysis runs.
+          </p>
+        </div>
+      )}
+
       {/* Fetch button */}
       <button
         onClick={fetchNews}
-        disabled={loading || (newsSource === "url" && !newsUrl.trim())}
+        disabled={loading || !canFetch}
         className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {loading ? (
@@ -104,12 +166,25 @@ export default function EventSelector() {
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      {/* Articles list */}
+      {/* Articles list + confirmation */}
       {articles.length > 0 && (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-gray-700">
-            {articles.length} article{articles.length !== 1 ? "s" : ""} found
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-700">
+              {articles.length} article{articles.length !== 1 ? "s" : ""} found
+              {newsSource === "topic" && newsTopic && (
+                <span className="text-gray-400 font-normal">
+                  {" "}
+                  for &ldquo;{newsTopic}&rdquo;
+                </span>
+              )}
+            </p>
+            {newsSource === "topic" && (
+              <p className="text-xs text-brand-600">
+                Looks right? Click Continue →
+              </p>
+            )}
+          </div>
           <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
             {articles.map((article, i) => (
               <ArticleCard key={i} article={article} />
@@ -156,7 +231,7 @@ function SourceOption({
     <button
       onClick={onClick}
       className={cn(
-        "flex-1 flex flex-col items-start gap-1 p-4 rounded-xl border-2 text-left transition-all",
+        "flex flex-col items-start gap-1 p-4 rounded-xl border-2 text-left transition-all",
         active
           ? "border-brand-500 bg-brand-50"
           : "border-gray-100 bg-white hover:border-gray-200",
@@ -165,7 +240,12 @@ function SourceOption({
       <div className={cn("mb-1", active ? "text-brand-600" : "text-gray-400")}>
         {icon}
       </div>
-      <p className={cn("text-sm font-medium", active ? "text-brand-700" : "text-gray-700")}>
+      <p
+        className={cn(
+          "text-sm font-medium",
+          active ? "text-brand-700" : "text-gray-700",
+        )}
+      >
         {label}
       </p>
       <p className="text-xs text-gray-500">{description}</p>
@@ -185,8 +265,12 @@ function ArticleCard({ article }: { article: NewsArticle }) {
           {format(new Date(article.publishedAt), "MMM d, HH:mm")}
           {article.relatedTickers.length > 0 && (
             <span className="ml-1">
-              · {article.relatedTickers.map((t) => (
-                <span key={t} className="inline-block bg-gray-100 text-gray-600 text-[10px] font-mono px-1 rounded ml-0.5">
+              ·{" "}
+              {article.relatedTickers.map((t) => (
+                <span
+                  key={t}
+                  className="inline-block bg-gray-100 text-gray-600 text-[10px] font-mono px-1 rounded ml-0.5"
+                >
                   {t}
                 </span>
               ))}
@@ -194,7 +278,9 @@ function ArticleCard({ article }: { article: NewsArticle }) {
           )}
         </p>
         {article.summary && (
-          <p className="text-xs text-gray-400 mt-1 line-clamp-2">{article.summary}</p>
+          <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+            {article.summary}
+          </p>
         )}
       </div>
       <a
