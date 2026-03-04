@@ -1,17 +1,22 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import type { User } from "firebase/auth";
 import {
   onAuthChange,
   signInWithGoogle,
   signOutUser,
-} from "@/lib/firebase-auth";
-import { upsertUser } from "@/lib/firebase-db";
+} from "@/lib/supabase-auth";
 import { useAnalysisStore } from "@/stores/analysisStore";
 
+export interface AuthUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+}
+
 interface AuthContextValue {
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -20,25 +25,21 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const resetStore = useAnalysisStore((s) => s.reset);
 
   useEffect(() => {
-    const unsubscribe = onAuthChange((firebaseUser) => {
-      setUser(firebaseUser);
+    const unsubscribe = onAuthChange((authUser) => {
+      setUser(authUser);
       setLoading(false);
     });
     return unsubscribe;
   }, []);
 
   async function signIn() {
-    const firebaseUser = await signInWithGoogle();
-    await upsertUser(firebaseUser.uid, {
-      name: firebaseUser.displayName ?? "",
-      email: firebaseUser.email ?? "",
-      photoURL: firebaseUser.photoURL ?? "",
-    });
+    await signInWithGoogle();
+    // Session is set automatically after OAuth redirect
   }
 
   async function signOut() {

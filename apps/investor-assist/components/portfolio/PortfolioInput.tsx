@@ -5,7 +5,7 @@ import { Plus, X, Search, Loader2, TrendingUp } from "lucide-react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { useAuth } from "@/components/auth/AuthProvider";
 import LoginBanner from "@/components/auth/LoginBanner";
-import { getUserPortfolio, saveStock, deleteStock } from "@/lib/firebase-db";
+import { getUserPortfolio, saveStock, deleteStock } from "@/lib/supabase-db";
 import type { Stock } from "@/types";
 
 export default function PortfolioInput() {
@@ -17,7 +17,7 @@ export default function PortfolioInput() {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Load portfolio from Firestore on mount if logged in
+  // Load portfolio from Supabase on mount if logged in
   useEffect(() => {
     if (!user) return;
     getUserPortfolio(user.uid).then((stocks) => {
