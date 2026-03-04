@@ -58,6 +58,13 @@ export interface Config {
   startTime: string | null;
   endTime: string | null;
   allowedDays: string | null;
+  containerId?: string | null;
+  feedbackEnabled?: boolean;
+  userEmail?: string;
+  hideBottomBar?: boolean;
+  initialMessage?: string;
+  showBottomBar?: boolean;
+  allowExternalButtons?: boolean;
 }
 
 export interface Constants {

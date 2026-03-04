@@ -251,7 +251,7 @@ export function MessageEventManager(
       styleManager.adjustResponsiveStyles(
         state.bottomContainer,
         state.isAgentOpen,
-        config.hideBottomBar,
+        config.hideBottomBar ?? false,
         state.showBanner,
         state.cycleCompleted,
         state.entryPointAlignment || EntryPointAlignment.CENTER,
@@ -261,7 +261,7 @@ export function MessageEventManager(
       // Setup resize listener for responsive styling
       styleManager.setupResizeListener(state.bottomContainer, () => ({
         isAgentOpen: state.isAgentOpen,
-        hideBottomBar: config.hideBottomBar,
+        hideBottomBar: config.hideBottomBar ?? false,
         showBanner: state.showBanner,
         cycleCompleted: state.cycleCompleted,
         entryPointAlignment:

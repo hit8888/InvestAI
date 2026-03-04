@@ -10,7 +10,6 @@ import {
   ConfigManager,
   DeviceManager,
   EmbeddedContainerManager,
-  ExternalButtonManager,
   IframeURLManager,
   MessageEventManager,
   MessageManager,
@@ -33,7 +32,7 @@ import { TabNotificationManager } from "../managers/TabNotificationManager";
   const messageManager = MessageManager();
   const urlManager = URLManager();
   const timeManager = TimeManager();
-  const configManager = ConfigManager(deviceManager.getDeviceType());
+  const configManager = ConfigManager();
   const sentryManager = SentryManager(
     configManager.constants.SENTRY_DSN,
     configManager.getConfig(),
@@ -41,9 +40,6 @@ import { TabNotificationManager } from "../managers/TabNotificationManager";
   const styleManager = StyleManager(
     configManager.constants.RESPONSIVE_SIZES,
     deviceManager.getDeviceType,
-  );
-  const externalButtonManager = ExternalButtonManager(
-    messageManager.sendMessage,
   );
   const agentIframeManager = AgentIframeManager();
   const bottomBarContainerManager = BottomBarContainerManager(
@@ -144,6 +140,7 @@ import { TabNotificationManager } from "../managers/TabNotificationManager";
         isAgentEnabled,
         isAgentOpen,
         showBanner,
+        cycleCompleted: false,
         entryPointAlignment,
         hasFirstUserMessageBeenSent,
         initialMessageSent,
@@ -190,16 +187,12 @@ import { TabNotificationManager } from "../managers/TabNotificationManager";
       }
 
       // Check if current time is within allowed range
-      if (!timeManager.isWithinTimeRange(startTime, endTime)) {
+      if (!timeManager.isWithinTimeRange({ startTime, endTime })) {
         return;
       }
 
       // Initialize Sentry in the background without awaiting
       sentryManager.init();
-
-      if (config.allowExternalButtons) {
-        externalButtonManager.handleExternalButtons();
-      }
 
       // Initialize widget immediately
       initializeWidget();
