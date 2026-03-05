@@ -90,7 +90,7 @@ export default function DashboardPage() {
                       </div>
                       <span
                         className={cn(
-                          "text-sm font-medium transition-colors",
+                          "text-sm font-medium transition-colors hidden sm:inline",
                           isActive
                             ? "text-gray-900"
                             : isDone

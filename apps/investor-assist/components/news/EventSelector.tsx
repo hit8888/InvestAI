@@ -81,7 +81,7 @@ export default function EventSelector() {
       </div>
 
       {/* Source toggle */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <SourceOption
           active={newsSource === "latest"}
           icon={<Rss className="h-5 w-5" />}

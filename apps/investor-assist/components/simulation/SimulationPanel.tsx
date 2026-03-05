@@ -95,7 +95,7 @@ export default function SimulationPanel() {
           </div>
 
           {/* Summary cards */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
             {[
               { label: "Stocks", value: portfolio.length },
               { label: "Articles", value: articles.length },
