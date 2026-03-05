@@ -16,8 +16,10 @@ export default function StockResultCard({
   const [expanded, setExpanded] = useState(false);
 
   const isPositive = result.expectedChangePct >= 0;
-  const changeFmt = (n: number) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
-  const priceFmt = (n: number) => `$${n.toFixed(2)}`;
+  const changeFmt = (n: number | null) =>
+    n == null ? "N/A" : `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+  const priceFmt = (n: number | null) =>
+    n == null ? "N/A" : `$${n.toFixed(2)}`;
 
   const confidencePct = Math.round(result.confidence * 100);
   const confidenceColor =
@@ -79,8 +81,8 @@ export default function StockResultCard({
           />
         </div>
         <div className="flex justify-between text-xs text-gray-400">
-          <span>{result.probNegative.toFixed(0)}% chance down</span>
-          <span>{result.probPositive.toFixed(0)}% chance up</span>
+          <span>{(result.probNegative ?? 0).toFixed(0)}% chance down</span>
+          <span>{(result.probPositive ?? 0).toFixed(0)}% chance up</span>
         </div>
       </div>
 
@@ -176,13 +178,13 @@ export default function StockResultCard({
                   />
                   <MetricBox
                     label="Volatility Projection"
-                    value={`${(result.volatilityProjection * 100).toFixed(0)}%`}
+                    value={`${((result.volatilityProjection ?? 0) * 100).toFixed(0)}%`}
                     valueClass="text-gray-700"
                     sub="Annualised vol (sim)"
                   />
                   <MetricBox
                     label="Sentiment Score"
-                    value={result.sentimentScore.toFixed(2)}
+                    value={(result.sentimentScore ?? 0).toFixed(2)}
                     valueClass={
                       result.sentimentScore >= 0
                         ? "text-emerald-600"
@@ -192,7 +194,7 @@ export default function StockResultCard({
                   />
                   <MetricBox
                     label="Current Price"
-                    value={`$${result.currentPrice.toFixed(2)}`}
+                    value={`$${(result.currentPrice ?? 0).toFixed(2)}`}
                     valueClass="text-gray-700"
                     sub="At analysis time"
                   />
