@@ -53,10 +53,11 @@ async function fetchNewsAPI(
   if (!apiKey) return [];
 
   const query = [...names.slice(0, 3), ...tickers.slice(0, 3)].join(" OR ");
+  const from = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
   try {
     const res = await fetch(
-      `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&pageSize=10&language=en`,
+      `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${from}&sortBy=publishedAt&pageSize=10&language=en`,
       { headers: { "X-Api-Key": apiKey }, next: { revalidate: 300 } },
     );
     const data = (await res.json()) as {
@@ -258,8 +259,11 @@ export async function fetchLatestNews(
     }
   }
 
-  // Sort by date descending
+  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+
+  // Sort by date descending, filter to last 24 hours
   return unique
+    .filter((a) => new Date(a.publishedAt).getTime() >= cutoff)
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
