@@ -27,7 +27,7 @@ export async function resolveStockTicker(query: string): Promise<{
         {
           role: "system",
           content:
-            "You are a financial data assistant. Given a company name or partial ticker, return the primary US stock ticker symbol and full company name. Respond with ONLY valid JSON: {\"ticker\": \"AAPL\", \"name\": \"Apple Inc.\"}. If not found, respond with null.",
+            'You are a financial data assistant. Given a company name or partial ticker, return the primary US stock ticker symbol and full company name. Respond with ONLY valid JSON: {"ticker": "AAPL", "name": "Apple Inc."}. If not found, respond with null.',
         },
         { role: "user", content: query },
       ],
@@ -52,7 +52,10 @@ export async function analyzeNewsImpact(
 ): Promise<LLMAnalysisResult> {
   const stockList = stocks.map((s) => `${s.ticker} (${s.name})`).join(", ");
   const articleSummaries = articles
-    .map((a, i) => `[${i + 1}] "${a.title}" — ${a.source} (${a.publishedAt})\n${a.summary}`)
+    .map(
+      (a, i) =>
+        `[${i + 1}] "${a.title}" — ${a.source} (${a.publishedAt})\n${a.summary}`,
+    )
     .join("\n\n");
 
   const systemPrompt = `You are an expert quantitative financial analyst specializing in event-driven investing and market microstructure.
@@ -63,6 +66,8 @@ Analyze the provided news articles and estimate their impact on the specified st
 - Sector contagion and correlation effects
 - Historical precedents for similar events
 - Short-term (days) vs medium-term dynamics
+
+CRITICAL: In the "reasoning" field, always cite the specific news article (by headline, source, or date) that drives the impact. Do not use vague language like "recent news" or "reports suggest". Name the exact event, who reported it, and explain the precise mechanism linking it to the stock price movement.
 
 Return ONLY a valid JSON object with exactly this structure:
 {
@@ -76,7 +81,7 @@ Return ONLY a valid JSON object with exactly this structure:
       "impactRangePct": [-5.1, 0.8],
       "confidence": 0.72,
       "volatilityMultiplier": 1.4,
-      "reasoning": "2-3 sentence explanation of why this stock is impacted and how",
+      "reasoning": "2-3 sentences citing the specific news event (use exact headline or source) and explaining the direct mechanism by which it moves this stock — e.g. 'Reuters reported on [date] that X, which will compress AAPL margins by Y because Z'",
       "keyFactors": ["supply chain disruption", "tariff risk", "demand uncertainty"]
     }
   ],
@@ -122,12 +127,16 @@ Analyze each stock's exposure to these news events. If a stock is not directly m
   if (!text) throw new Error("Empty LLM response");
 
   // Extract JSON even if wrapped in markdown code blocks
-  const jsonMatch = text.match(/```(?:json)?\s*([\s\S]+?)\s*```/) ?? [null, text];
+  const jsonMatch = text.match(/```(?:json)?\s*([\s\S]+?)\s*```/) ?? [
+    null,
+    text,
+  ];
   const jsonText = jsonMatch[1] ?? text;
 
   try {
     const parsed = JSON.parse(jsonText) as LLMAnalysisResult;
-    parsed.analysisTimestamp = parsed.analysisTimestamp ?? new Date().toISOString();
+    parsed.analysisTimestamp =
+      parsed.analysisTimestamp ?? new Date().toISOString();
 
     // Ensure all portfolio stocks are present
     for (const stock of stocks) {
@@ -149,6 +158,8 @@ Analyze each stock's exposure to these news events. If a stock is not directly m
 
     return parsed;
   } catch (e) {
-    throw new Error(`Failed to parse LLM response: ${String(e)}\n\nRaw: ${jsonText.slice(0, 500)}`);
+    throw new Error(
+      `Failed to parse LLM response: ${String(e)}\n\nRaw: ${jsonText.slice(0, 500)}`,
+    );
   }
 }
