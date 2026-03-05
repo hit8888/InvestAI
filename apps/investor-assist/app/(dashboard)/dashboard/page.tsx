@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const currentStepIndex = STEPS.findIndex((s) => s.id === step);
 
   return (
-    <div className="max-w-2xl mx-auto relative">
+    <div className="max-w-2xl mx-auto relative pb-8">
       {/* Sticky New Analysis button */}
       <AnimatePresence>
         {step === "results" && (
@@ -32,7 +32,7 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed top-5 right-6 z-50"
+            className="fixed top-4 right-4 z-50"
           >
             <button
               onClick={reset}

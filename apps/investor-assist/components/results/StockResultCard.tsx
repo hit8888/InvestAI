@@ -83,53 +83,55 @@ export default function StockResultCard({
       </div>
 
       {/* Price range table */}
-      <div className="grid grid-cols-5 gap-px bg-gray-100 mx-5 rounded-xl overflow-hidden mb-4">
-        {(
-          [
+      <div className="mx-5 mb-4 overflow-x-auto rounded-xl">
+        <div className="grid grid-cols-5 gap-px bg-gray-100 min-w-[320px] rounded-xl overflow-hidden">
+          {(
             [
-              "Bear 5th",
-              result.pricePercentiles.p5,
-              result.changePctPercentiles.p5,
-            ],
-            [
-              "Low 25th",
-              result.pricePercentiles.p25,
-              result.changePctPercentiles.p25,
-            ],
-            [
-              "Median",
-              result.pricePercentiles.p50,
-              result.changePctPercentiles.p50,
-            ],
-            [
-              "High 75th",
-              result.pricePercentiles.p75,
-              result.changePctPercentiles.p75,
-            ],
-            [
-              "Bull 95th",
-              result.pricePercentiles.p95,
-              result.changePctPercentiles.p95,
-            ],
-          ] as [string, number, number][]
-        ).map(([label, price, pct]) => (
-          <div key={label} className="bg-white p-2.5 text-center">
-            <p className="text-[9px] text-gray-400 mb-0.5 leading-tight">
-              {label}
-            </p>
-            <p className="text-sm font-semibold text-gray-900">
-              {priceFmt(price)}
-            </p>
-            <p
-              className={cn(
-                "text-[10px] font-medium",
-                pct >= 0 ? "text-emerald-600" : "text-red-600",
-              )}
-            >
-              {changeFmt(pct)}
-            </p>
-          </div>
-        ))}
+              [
+                "Bear 5th",
+                result.pricePercentiles.p5,
+                result.changePctPercentiles.p5,
+              ],
+              [
+                "Low 25th",
+                result.pricePercentiles.p25,
+                result.changePctPercentiles.p25,
+              ],
+              [
+                "Median",
+                result.pricePercentiles.p50,
+                result.changePctPercentiles.p50,
+              ],
+              [
+                "High 75th",
+                result.pricePercentiles.p75,
+                result.changePctPercentiles.p75,
+              ],
+              [
+                "Bull 95th",
+                result.pricePercentiles.p95,
+                result.changePctPercentiles.p95,
+              ],
+            ] as [string, number, number][]
+          ).map(([label, price, pct]) => (
+            <div key={label} className="bg-white p-2.5 text-center">
+              <p className="text-[9px] text-gray-400 mb-0.5 leading-tight">
+                {label}
+              </p>
+              <p className="text-sm font-semibold text-gray-900">
+                {priceFmt(price)}
+              </p>
+              <p
+                className={cn(
+                  "text-[10px] font-medium",
+                  pct >= 0 ? "text-emerald-600" : "text-red-600",
+                )}
+              >
+                {changeFmt(pct)}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Distribution chart */}
@@ -139,7 +141,7 @@ export default function StockResultCard({
       </div>
 
       {/* Metrics */}
-      <div className="px-5 pb-4 grid grid-cols-2 gap-3">
+      <div className="px-5 pb-4 grid grid-cols-2 sm:grid-cols-2 gap-3">
         <MetricBox
           label="Confidence Score"
           value={`${confidencePct}%`}
