@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { TrendingUp, LayoutDashboard, Info, LogIn, LogOut } from "lucide-react";
+import { LayoutDashboard, Info, LogIn, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth/AuthProvider";
 
@@ -19,9 +19,13 @@ export default function Sidebar() {
   return (
     <aside className="w-56 shrink-0 border-r border-gray-100 bg-white flex flex-col">
       <div className="flex items-center gap-2 px-5 py-5 border-b border-gray-100">
-        <div className="h-7 w-7 rounded-lg bg-brand-600 flex items-center justify-center">
-          <TrendingUp className="h-4 w-4 text-white" />
-        </div>
+        <Image
+          src="/logo.png"
+          alt="NeuralTrade"
+          width={32}
+          height={32}
+          className="rounded-lg"
+        />
         <span className="text-base font-semibold text-gray-900">
           NeuralTrade
         </span>
