@@ -186,9 +186,9 @@ export default function StockResultCard({
                   />
                   <MetricBox
                     label="Volatility Projection"
-                    value={`${((result.volatilityProjection ?? 0) * 100).toFixed(0)}%`}
+                    value={`${(((result.volatilityProjection ?? 0) / Math.sqrt(252)) * 100).toFixed(2)}%`}
                     valueClass="text-gray-700"
-                    sub="Annualised vol (sim)"
+                    sub="Daily vol (sim)"
                   />
                   <MetricBox
                     label="Sentiment Score"
