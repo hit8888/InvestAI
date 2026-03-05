@@ -142,6 +142,14 @@ export default function StockResultCard({
         <DistributionChart distribution={result.changePctDistribution} />
       </div>
 
+      {/* Reasoning */}
+      <div className="px-5 pb-4">
+        <p className="text-xs font-medium text-gray-600 mb-1.5">Reasoning</p>
+        <p className="text-xs text-gray-600 leading-relaxed">
+          {result.reasoning}
+        </p>
+      </div>
+
       {/* Technical details toggle */}
       <div className="border-t border-gray-50">
         <button
@@ -214,15 +222,6 @@ export default function StockResultCard({
                       </span>
                     ))}
                   </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-medium text-gray-600 mb-1.5">
-                    Reasoning
-                  </p>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    {result.reasoning}
-                  </p>
                 </div>
               </div>
             </motion.div>
