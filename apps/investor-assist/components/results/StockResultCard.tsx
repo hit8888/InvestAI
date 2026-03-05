@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { motion } from "framer-motion";
 import type { SimulationResult } from "@/types";
 import SentimentBadge from "./SentimentBadge";
 import DistributionChart from "./DistributionChart";
@@ -13,8 +11,6 @@ export default function StockResultCard({
 }: {
   result: SimulationResult;
 }) {
-  const [expanded, setExpanded] = useState(false);
-
   const isPositive = result.expectedChangePct >= 0;
   const changeFmt = (n: number | null) =>
     n == null ? "N/A" : `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
@@ -142,91 +138,57 @@ export default function StockResultCard({
         <DistributionChart distribution={result.changePctDistribution} />
       </div>
 
-      {/* Reasoning */}
+      {/* Metrics */}
+      <div className="px-5 pb-4 grid grid-cols-2 gap-3">
+        <MetricBox
+          label="Confidence Score"
+          value={`${confidencePct}%`}
+          valueClass={confidenceColor}
+          sub="AI analysis confidence"
+        />
+        <MetricBox
+          label="Volatility Projection"
+          value={`${(((result.volatilityProjection ?? 0) / Math.sqrt(252)) * 100).toFixed(2)}%`}
+          valueClass="text-gray-700"
+          sub="Daily vol (sim)"
+        />
+        <MetricBox
+          label="Sentiment Score"
+          value={(result.sentimentScore ?? 0).toFixed(2)}
+          valueClass={
+            result.sentimentScore >= 0 ? "text-emerald-600" : "text-red-600"
+          }
+          sub="-1 bearish → +1 bullish"
+        />
+        <MetricBox
+          label="Current Price"
+          value={`$${(result.currentPrice ?? 0).toFixed(2)}`}
+          valueClass="text-gray-700"
+          sub="At analysis time"
+        />
+      </div>
+
+      {/* Key Factors */}
       <div className="px-5 pb-4">
+        <p className="text-xs font-medium text-gray-600 mb-2">Key Factors</p>
+        <div className="flex flex-wrap gap-1.5">
+          {result.keyFactors.map((f) => (
+            <span
+              key={f}
+              className="px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-medium border border-brand-100"
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Reasoning */}
+      <div className="px-5 pb-5">
         <p className="text-xs font-medium text-gray-600 mb-1.5">Reasoning</p>
         <p className="text-xs text-gray-600 leading-relaxed">
           {result.reasoning}
         </p>
-      </div>
-
-      {/* Technical details toggle */}
-      <div className="border-t border-gray-50">
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center justify-between px-5 py-3 text-xs text-gray-500 hover:bg-gray-50 transition-colors"
-        >
-          <span className="flex items-center gap-1.5">
-            <Info className="h-3.5 w-3.5" />
-            Technical details
-          </span>
-          {expanded ? (
-            <ChevronUp className="h-3.5 w-3.5" />
-          ) : (
-            <ChevronDown className="h-3.5 w-3.5" />
-          )}
-        </button>
-
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="px-5 pb-5 space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <MetricBox
-                    label="Confidence Score"
-                    value={`${confidencePct}%`}
-                    valueClass={confidenceColor}
-                    sub="AI analysis confidence"
-                  />
-                  <MetricBox
-                    label="Volatility Projection"
-                    value={`${(((result.volatilityProjection ?? 0) / Math.sqrt(252)) * 100).toFixed(2)}%`}
-                    valueClass="text-gray-700"
-                    sub="Daily vol (sim)"
-                  />
-                  <MetricBox
-                    label="Sentiment Score"
-                    value={(result.sentimentScore ?? 0).toFixed(2)}
-                    valueClass={
-                      result.sentimentScore >= 0
-                        ? "text-emerald-600"
-                        : "text-red-600"
-                    }
-                    sub="-1 bearish → +1 bullish"
-                  />
-                  <MetricBox
-                    label="Current Price"
-                    value={`$${(result.currentPrice ?? 0).toFixed(2)}`}
-                    valueClass="text-gray-700"
-                    sub="At analysis time"
-                  />
-                </div>
-
-                <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">
-                    Key Factors
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {result.keyFactors.map((f) => (
-                      <span
-                        key={f}
-                        className="px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 text-xs font-medium border border-brand-100"
-                      >
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );
