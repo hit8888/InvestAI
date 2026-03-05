@@ -157,7 +157,7 @@ function StockCard({
         <div className="text-right">
           <p className="text-sm font-semibold text-gray-900">
             {stock.currency === "USD" ? "$" : stock.currency}
-            {stock.currentPrice.toFixed(2)}
+            {(stock.currentPrice ?? 0).toFixed(2)}
           </p>
           <p className="text-xs text-gray-400">{stock.exchange}</p>
         </div>
