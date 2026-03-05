@@ -5,8 +5,7 @@ import {
   onAuthChange,
   signInWithGoogle,
   signOutUser,
-} from "@/lib/firebase-auth";
-import { upsertUser } from "@/lib/firebase-db";
+} from "@/lib/supabase-auth";
 import { useAnalysisStore } from "@/stores/analysisStore";
 
 export interface AuthUser {
@@ -34,19 +33,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthChange((authUser) => {
       setUser(authUser);
       setLoading(false);
-      if (authUser) {
-        upsertUser(authUser.uid, {
-          name: authUser.displayName,
-          email: authUser.email,
-          photoURL: authUser.photoURL,
-        }).catch(console.error);
-      }
     });
     return unsubscribe;
   }, []);
 
   async function signIn() {
     await signInWithGoogle();
+    // Session is set automatically after OAuth redirect
   }
 
   async function signOut() {
