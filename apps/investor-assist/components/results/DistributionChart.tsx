@@ -32,7 +32,10 @@ export default function DistributionChart({ distribution }: Props) {
   );
 
   for (const val of distribution) {
-    const idx = Math.min(buckets - 1, Math.floor((val - min) / width));
+    const idx =
+      width === 0
+        ? Math.floor(buckets / 2)
+        : Math.min(buckets - 1, Math.floor((val - min) / width));
     data[idx].count++;
   }
 
