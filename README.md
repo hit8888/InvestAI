@@ -1,6 +1,31 @@
-# Meaku
+# InvestAI 
 
-A monorepo built with Turborepo containing an agent application and shared packages.
+"InvestAI — News-Aware Portfolio Impact Simulator for Retail Investors"
+2. The Problem (2-3 sentences)
+Markets move on news, but no tool connects real-time global events directly to your specific holdings. Retail investors are left reading headlines and guessing. InvestAI bridges that gap.
+
+3. What It Does
+Ingests live news (political, economic, macro events) via [News API]
+Runs each news item against your portfolio holdings
+Uses Claude to simulate directional impact (bullish/bearish signal) per stock
+Gives you a consolidated view of portfolio exposure to current events
+
+4. How It Works (simple architecture diagram or bullet flow)
+News APIs → Agent Core → Claude (impact simulation) → Portfolio Dashboard
+
+5. Tech Stack (what you already have, just reframed)
+Built with Claude Code in 2 days
+React 19 + TypeScript + Vite (frontend)
+Supabase (database)
+Vercel (deployment)
+Grok + News APIs (real-time data)
+Turborepo monorepo architecture
+
+6. Live Demo
+Link to invest-ai-agent-admin.vercel.app
+
+7. Why I Built This (1 paragraph)
+This week, I watched tariff announcements, Fed signals, and geopolitical headlines move my portfolio in ways that felt impossible to reason about in real time. Every tool I had showed me what happened — charts, price drops, red numbers — but nothing told me why a specific stock in my portfolio was affected, or what the next headline might mean for it. I built InvestAI in a few days to close that gap: give me the news, show me my exposure, and let me make a more informed decision before the market does it for me.
 
 ## What's Inside
 
