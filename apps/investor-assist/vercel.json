@@ -1,0 +1,5 @@
+{
+  "installCommand": "cd ../.. && npx pnpm install --filter investor-assist...",
+  "buildCommand": "cd ../.. && npx pnpm --filter investor-assist build",
+  "outputDirectory": ".next"
+}
