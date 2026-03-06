@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type {
   AnalysisState,
   AppStep,
@@ -42,32 +43,39 @@ const initialState: AnalysisState = {
   error: null,
 };
 
-export const useAnalysisStore = create<AnalysisState & AnalysisActions>(
-  (set) => ({
-    ...initialState,
+export const useAnalysisStore = create<AnalysisState & AnalysisActions>()(
+  persist(
+    (set) => ({
+      ...initialState,
 
-    setStep: (step) => set({ step }),
-    addStock: (stock) =>
-      set((s) => ({
-        portfolio: s.portfolio.find((p) => p.ticker === stock.ticker)
-          ? s.portfolio
-          : [...s.portfolio, stock],
-      })),
-    removeStock: (ticker) =>
-      set((s) => ({
-        portfolio: s.portfolio.filter((p) => p.ticker !== ticker),
-      })),
-    setPortfolio: (stocks) => set({ portfolio: stocks }),
-    setNewsSource: (newsSource) => set({ newsSource }),
-    setNewsUrl: (newsUrl) => set({ newsUrl }),
-    setNewsTopic: (newsTopic) => set({ newsTopic }),
-    setArticles: (articles) => set({ articles }),
-    updateSettings: (patch) =>
-      set((s) => ({ settings: { ...s.settings, ...patch } })),
-    setLoading: (isLoading, loadingMessage = "") =>
-      set({ isLoading, loadingMessage }),
-    setError: (error) => set({ error }),
-    setResult: (result) => set({ result, step: "results" }),
-    reset: () => set(initialState),
-  }),
+      setStep: (step) => set({ step }),
+      addStock: (stock) =>
+        set((s) => ({
+          portfolio: s.portfolio.find((p) => p.ticker === stock.ticker)
+            ? s.portfolio
+            : [...s.portfolio, stock],
+        })),
+      removeStock: (ticker) =>
+        set((s) => ({
+          portfolio: s.portfolio.filter((p) => p.ticker !== ticker),
+        })),
+      setPortfolio: (stocks) => set({ portfolio: stocks }),
+      setNewsSource: (newsSource) => set({ newsSource }),
+      setNewsUrl: (newsUrl) => set({ newsUrl }),
+      setNewsTopic: (newsTopic) => set({ newsTopic }),
+      setArticles: (articles) => set({ articles }),
+      updateSettings: (patch) =>
+        set((s) => ({ settings: { ...s.settings, ...patch } })),
+      setLoading: (isLoading, loadingMessage = "") =>
+        set({ isLoading, loadingMessage }),
+      setError: (error) => set({ error }),
+      setResult: (result) => set({ result, step: "results" }),
+      reset: () => set(initialState),
+    }),
+    {
+      name: "neuraltrade-portfolio",
+      // Only persist the portfolio — everything else resets on page load
+      partialize: (state) => ({ portfolio: state.portfolio }),
+    },
+  ),
 );
