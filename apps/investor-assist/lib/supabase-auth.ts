@@ -22,7 +22,7 @@ export async function signInWithGoogle(): Promise<void> {
     options: {
       redirectTo:
         typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback?next=/dashboard`
+          ? `${window.location.origin}/auth/callback`
           : undefined,
     },
   });
