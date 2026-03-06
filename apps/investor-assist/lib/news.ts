@@ -91,7 +91,9 @@ async function fetchNewsAPI(
 export async function fetchArticleFromUrl(url: string): Promise<NewsArticle> {
   const res = await fetch(url, {
     headers: { "User-Agent": "Mozilla/5.0 (compatible; InvestAI/1.0)" },
+    signal: AbortSignal.timeout(10_000),
   });
+  if (!res.ok) throw new Error(`Failed to fetch article (HTTP ${res.status})`);
   const html = await res.text();
 
   // Extract title
@@ -266,11 +268,9 @@ export async function fetchLatestNews(
     }
   }
 
-  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-
-  // Sort by date descending, filter to last 24 hours
+  // Sort by date descending — no hard cutoff so weekends/international stocks
+  // still return results; take the 15 most recent
   return unique
-    .filter((a) => new Date(a.publishedAt).getTime() >= cutoff)
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),

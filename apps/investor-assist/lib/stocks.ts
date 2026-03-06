@@ -12,6 +12,7 @@ export async function fetchStockPrice(ticker: string): Promise<{
       `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`,
       {
         headers: { "User-Agent": "Mozilla/5.0" },
+        signal: AbortSignal.timeout(10_000),
         next: { revalidate: 60 },
       },
     );

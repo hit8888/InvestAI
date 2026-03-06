@@ -7,7 +7,10 @@ export async function getUserPortfolio(userId: string): Promise<Stock[]> {
     .select("ticker, name, current_price, currency, exchange")
     .eq("user_id", userId);
 
-  if (error) throw error;
+  if (error) {
+    console.error("[getUserPortfolio]", error.message);
+    return [];
+  }
 
   return (data ?? []).map((row) => ({
     ticker: row.ticker as string,
@@ -31,7 +34,7 @@ export async function saveStock(userId: string, stock: Stock): Promise<void> {
     { onConflict: "user_id,ticker" },
   );
 
-  if (error) throw error;
+  if (error) console.error("[saveStock]", error.message);
 }
 
 export async function deleteStock(
@@ -44,5 +47,5 @@ export async function deleteStock(
     .eq("user_id", userId)
     .eq("ticker", ticker);
 
-  if (error) throw error;
+  if (error) console.error("[deleteStock]", error.message);
 }

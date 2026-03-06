@@ -54,7 +54,9 @@ export default function EventSelector() {
         throw new Error(data.error ?? "Failed to fetch news");
       if (data.articles.length === 0)
         throw new Error(
-          "No articles found for that topic. Try different keywords.",
+          newsSource === "topic"
+            ? "No articles found for that topic. Try different keywords."
+            : "No recent news found for your stocks. Try the Topic source instead.",
         );
       setArticles(data.articles);
     } catch (e) {

@@ -31,6 +31,7 @@ export async function resolveStockTicker(
       Authorization: `Bearer ${getGroqKey()}`,
       "Content-Type": "application/json",
     },
+    signal: AbortSignal.timeout(15_000),
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
       temperature: 0,
@@ -120,6 +121,7 @@ Analyze each stock's exposure to these news events. If a stock is not directly m
       Authorization: `Bearer ${getGroqKey()}`,
       "Content-Type": "application/json",
     },
+    signal: AbortSignal.timeout(45_000),
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
       temperature: 0.1,
