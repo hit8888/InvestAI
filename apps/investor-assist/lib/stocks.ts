@@ -20,14 +20,13 @@ export async function fetchStockPrice(ticker: string): Promise<{
     if (!result) return null;
 
     const price: number =
-      result.meta?.regularMarketPrice ??
-      result.meta?.previousClose ??
-      0;
+      result.meta?.regularMarketPrice ?? result.meta?.previousClose ?? 0;
 
     return {
       price,
       currency: result.meta?.currency ?? "USD",
-      exchange: result.meta?.exchangeName ?? "NASDAQ",
+      exchange:
+        result.meta?.exchangeName ?? result.meta?.fullExchangeName ?? "Unknown",
       name: result.meta?.longName ?? result.meta?.shortName ?? ticker,
     };
   } catch {

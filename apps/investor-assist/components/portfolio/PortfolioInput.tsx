@@ -13,6 +13,7 @@ export default function PortfolioInput() {
     useAnalysisStore();
   const { user } = useAuth();
   const [query, setQuery] = useState("");
+  const [market, setMarket] = useState<"US" | "LSE" | "NSE">("US");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +35,7 @@ export default function PortfolioInput() {
       const res = await fetch("/api/stocks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: query.trim() }),
+        body: JSON.stringify({ query: query.trim(), market }),
       });
       const data = (await res.json()) as { stock?: Stock; error?: string };
       if (!res.ok || !data.stock) throw new Error(data.error ?? "Not found");
@@ -67,6 +68,23 @@ export default function PortfolioInput() {
 
       {!user && <LoginBanner />}
 
+      {/* Market selector */}
+      <div className="flex gap-2">
+        {(["US", "LSE", "NSE"] as const).map((m) => (
+          <button
+            key={m}
+            onClick={() => setMarket(m)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+              market === m
+                ? "bg-brand-600 text-white border-brand-600"
+                : "bg-white text-gray-600 border-gray-200 hover:border-brand-400"
+            }`}
+          >
+            {m === "US" ? "🇺🇸 US" : m === "LSE" ? "🇬🇧 London" : "🇮🇳 India NSE"}
+          </button>
+        ))}
+      </div>
+
       {/* Search input */}
       <div className="flex gap-2">
         <div className="relative flex-1">
@@ -76,7 +94,13 @@ export default function PortfolioInput() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            placeholder="e.g. Apple, MSFT, Tesla…"
+            placeholder={
+              market === "US"
+                ? "e.g. Apple, MSFT, Tesla…"
+                : market === "LSE"
+                  ? "e.g. BP, Barclays, Vodafone…"
+                  : "e.g. Reliance, TCS, Infosys…"
+            }
             className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
           />
         </div>
@@ -156,7 +180,15 @@ function StockCard({
       <div className="flex items-center gap-3">
         <div className="text-right">
           <p className="text-sm font-semibold text-gray-900">
-            {stock.currency === "USD" ? "$" : stock.currency}
+            {stock.currency === "USD"
+              ? "$"
+              : stock.currency === "GBp"
+                ? "p"
+                : stock.currency === "GBP"
+                  ? "£"
+                  : stock.currency === "INR"
+                    ? "₹"
+                    : stock.currency + " "}
             {(stock.currentPrice ?? 0).toFixed(2)}
           </p>
           <p className="text-xs text-gray-400">{stock.exchange}</p>

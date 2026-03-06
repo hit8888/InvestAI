@@ -10,7 +10,18 @@ function getGroqKey(): string {
 
 // ─── Stock ticker resolution ──────────────────────────────────────────────────
 
-export async function resolveStockTicker(query: string): Promise<{
+export type StockMarket = "US" | "LSE" | "NSE";
+
+const MARKET_INSTRUCTIONS: Record<StockMarket, string> = {
+  US: 'Return the primary US stock ticker symbol (e.g. "AAPL", "MSFT"). No suffix needed.',
+  LSE: 'Return the London Stock Exchange ticker with ".L" suffix as used on Yahoo Finance (e.g. "BP.L", "HSBA.L", "VOD.L").',
+  NSE: 'Return the NSE India ticker with ".NS" suffix as used on Yahoo Finance (e.g. "RELIANCE.NS", "TCS.NS", "INFY.NS").',
+};
+
+export async function resolveStockTicker(
+  query: string,
+  market: StockMarket = "US",
+): Promise<{
   ticker: string;
   name: string;
 } | null> {
@@ -26,8 +37,7 @@ export async function resolveStockTicker(query: string): Promise<{
       messages: [
         {
           role: "system",
-          content:
-            'You are a financial data assistant. Given a company name or partial ticker, return the primary US stock ticker symbol and full company name. Respond with ONLY valid JSON: {"ticker": "AAPL", "name": "Apple Inc."}. If not found, respond with null.',
+          content: `You are a financial data assistant. Given a company name or partial ticker, return the stock ticker symbol and full company name for the specified exchange. ${MARKET_INSTRUCTIONS[market]} Respond with ONLY valid JSON: {"ticker": "AAPL", "name": "Apple Inc."}. If not found on that exchange, respond with null.`,
         },
         { role: "user", content: query },
       ],

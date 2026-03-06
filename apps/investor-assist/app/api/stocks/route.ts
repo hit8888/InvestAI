@@ -4,19 +4,26 @@ import { resolveAndFetchStock } from "@/lib/stocks";
 
 export async function POST(req: NextRequest) {
   try {
-    const { query } = (await req.json()) as { query: string };
+    const { query, market } = (await req.json()) as {
+      query: string;
+      market?: "US" | "LSE" | "NSE";
+    };
     if (!query?.trim()) {
       return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
     // Try to resolve ticker via LLM
-    const resolved = await resolveStockTicker(query.trim());
+    const resolved = await resolveStockTicker(query.trim(), market ?? "US");
     if (!resolved) {
       return NextResponse.json({ error: "Stock not found" }, { status: 404 });
     }
 
     // Fetch live price from Yahoo Finance
-    const stock = await resolveAndFetchStock(query, resolved.ticker, resolved.name);
+    const stock = await resolveAndFetchStock(
+      query,
+      resolved.ticker,
+      resolved.name,
+    );
     if (!stock) {
       return NextResponse.json(
         { error: `Could not fetch price for ${resolved.ticker}` },
