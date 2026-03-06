@@ -5,7 +5,7 @@ import type { NewsArticle } from "../types";
 async function fetchYahooRSS(ticker: string): Promise<NewsArticle[]> {
   try {
     const res = await fetch(
-      `https://finance.yahoo.com/rss/headline?s=${ticker}`,
+      `https://feeds.finance.yahoo.com/rss/2.0/headline?s=${ticker}&region=US&lang=en-US`,
       { headers: { "User-Agent": "Mozilla/5.0" }, next: { revalidate: 300 } },
     );
     const xml = await res.text();
