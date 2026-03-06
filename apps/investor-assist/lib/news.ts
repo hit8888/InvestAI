@@ -241,12 +241,19 @@ export async function fetchLatestNews(
   tickers: string[],
   names: string[],
 ): Promise<NewsArticle[]> {
-  const [yahooResults, newsApiResults] = await Promise.all([
+  const [yahooResults, newsApiResults, googleResults] = await Promise.all([
     Promise.all(tickers.map((t) => fetchYahooRSS(t))),
     fetchNewsAPI(tickers, names),
+    // Google News fallback — especially useful for non-US tickers (NSE, LSE)
+    // that have little/no coverage on Yahoo Finance RSS
+    Promise.all(names.slice(0, 3).map((name) => fetchGoogleNewsRSS(name))),
   ]);
 
-  const allArticles = [...yahooResults.flat(), ...newsApiResults];
+  const allArticles = [
+    ...yahooResults.flat(),
+    ...newsApiResults,
+    ...googleResults.flat(),
+  ];
 
   // Deduplicate by title similarity
   const seen = new Set<string>();
