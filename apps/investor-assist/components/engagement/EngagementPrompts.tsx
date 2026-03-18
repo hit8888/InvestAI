@@ -123,6 +123,7 @@ export function EngagementPrompts() {
             </div>
 
             <button
+              type="button"
               onClick={() => {
                 writeDismissed(DISMISS_UNAUTH_ALERTS_KEY);
                 setUnauthVisible(false);
@@ -139,6 +140,7 @@ export function EngagementPrompts() {
               Your portfolio will be saved after you sign in.
             </div>
             <button
+              type="button"
               onClick={signIn}
               disabled={loading}
               className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 disabled:opacity-50 transition-colors"
@@ -214,6 +216,7 @@ export function EngagementPrompts() {
             </div>
 
             <button
+              type="button"
               onClick={() => {
                 writeDismissed(DISMISS_DAILY_PROMPT_KEY);
                 setDailyVisible(false);
@@ -233,6 +236,7 @@ export function EngagementPrompts() {
             </div>
 
             <button
+              type="button"
               onClick={async () => {
                 if (!user) return;
                 setPrefsSaving(true);

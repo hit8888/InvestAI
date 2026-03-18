@@ -40,6 +40,7 @@ export default function MobileHeader() {
                 </div>
               )}
               <button
+                type="button"
                 onClick={signOut}
                 className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50"
               >
@@ -48,6 +49,7 @@ export default function MobileHeader() {
             </div>
           ) : (
             <button
+              type="button"
               onClick={signIn}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-medium hover:bg-brand-700 transition-colors"
             >

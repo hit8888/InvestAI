@@ -82,6 +82,7 @@ export default function Sidebar() {
               </div>
             </div>
             <button
+              type="button"
               onClick={signOut}
               className="flex items-center gap-1.5 w-full px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
             >
@@ -92,6 +93,7 @@ export default function Sidebar() {
         ) : (
           <>
             <button
+              type="button"
               onClick={signIn}
               disabled={loading}
               className="flex items-center gap-1.5 w-full px-3 py-1.5 rounded-lg text-xs font-medium text-brand-600 hover:bg-brand-50 transition-colors disabled:opacity-50"
