@@ -9,17 +9,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
-    // Try to resolve ticker via LLM
-    const resolved = await resolveStockTicker(query.trim());
-    if (!resolved) {
-      return NextResponse.json({ error: "Stock not found" }, { status: 404 });
-    }
+    const trimmedQuery = query.trim();
 
-    // Fetch live price from Yahoo Finance
-    const stock = await resolveAndFetchStock(query, resolved.ticker, resolved.name);
+    // Try to resolve ticker via LLM (helps when user enters company name)
+    const resolved = await resolveStockTicker(trimmedQuery);
+
+    // Fetch live price from Yahoo Finance.
+    // If LLM resolution fails (e.g., malformed JSON / missing API key), fall back
+    // to treating the input as a ticker (e.g., "NBIS").
+    const stock = resolved
+      ? await resolveAndFetchStock(trimmedQuery, resolved.ticker, resolved.name)
+      : await resolveAndFetchStock(trimmedQuery);
     if (!stock) {
       return NextResponse.json(
-        { error: `Could not fetch price for ${resolved.ticker}` },
+        {
+          error: resolved
+            ? `Could not fetch price for ${resolved.ticker}`
+            : "Stock not found",
+        },
         { status: 404 },
       );
     }
