@@ -5,7 +5,16 @@ import { Plus, X, Search, Loader2, TrendingUp } from "lucide-react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { useAuth } from "@/components/auth/AuthProvider";
 import LoginBanner from "@/components/auth/LoginBanner";
-import { getUserPortfolio, saveStock, deleteStock } from "@/lib/supabase-db";
+import {
+  getUserPortfolio,
+  saveStock,
+  deleteStock,
+} from "@/lib/supabase-db";
+import {
+  readLocalPortfolio,
+  writeLocalPortfolio,
+  clearLocalPortfolio,
+} from "@/lib/local-portfolio";
 import type { Stock } from "@/types";
 
 type StockSuggestion = {
@@ -31,11 +40,49 @@ export default function PortfolioInput() {
 
   // Load portfolio from Supabase on mount if logged in
   useEffect(() => {
-    if (!user) return;
-    getUserPortfolio(user.uid).then((stocks) => {
-      if (stocks.length > 0) setPortfolio(stocks);
+    let cancelled = false;
+
+    async function load() {
+      // Logged out: load local cached portfolio seamlessly
+      if (!user) {
+        const local = readLocalPortfolio();
+        if (!cancelled && local.length > 0) setPortfolio(local);
+        return;
+      }
+
+      // Logged in: fetch from DB, then migrate any local cached holdings
+      const [dbStocks, localStocks] = await Promise.all([
+        getUserPortfolio(user.uid),
+        Promise.resolve(readLocalPortfolio()),
+      ]);
+
+      const mergedMap = new Map<string, Stock>();
+      for (const s of dbStocks) mergedMap.set(s.ticker, s);
+      for (const s of localStocks) mergedMap.set(s.ticker, s);
+
+      const merged = Array.from(mergedMap.values());
+      if (!cancelled) setPortfolio(merged);
+
+      if (localStocks.length > 0) {
+        await Promise.all(localStocks.map((s) => saveStock(user.uid, s)));
+        clearLocalPortfolio();
+      }
+    }
+
+    load().catch(() => {
+      // Non-fatal; app still usable
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [user, setPortfolio]);
+
+  // Keep a seamless local cache for logged-out users
+  useEffect(() => {
+    if (user) return;
+    writeLocalPortfolio(portfolio);
+  }, [user, portfolio]);
 
   // Autocomplete suggestions (debounced)
   useEffect(() => {

@@ -1,6 +1,11 @@
 import supabase from "./supabase";
 import type { Stock } from "@/types";
 
+export type AlertPreferences = {
+  dailyAlertEnabled: boolean;
+  eventAlertEnabled: boolean;
+};
+
 export async function getUserPortfolio(userId: string): Promise<Stock[]> {
   const { data, error } = await supabase
     .from("portfolio")
@@ -43,6 +48,40 @@ export async function deleteStock(
     .delete()
     .eq("user_id", userId)
     .eq("ticker", ticker);
+
+  if (error) throw error;
+}
+
+export async function getAlertPreferences(
+  userId: string,
+): Promise<AlertPreferences | null> {
+  const { data, error } = await supabase
+    .from("alert_preferences")
+    .select("daily_alert_enabled, event_alert_enabled")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) return null;
+
+  return {
+    dailyAlertEnabled: !!data.daily_alert_enabled,
+    eventAlertEnabled: !!data.event_alert_enabled,
+  };
+}
+
+export async function upsertAlertPreferences(
+  userId: string,
+  prefs: Partial<AlertPreferences>,
+): Promise<void> {
+  const { error } = await supabase.from("alert_preferences").upsert(
+    {
+      user_id: userId,
+      daily_alert_enabled: prefs.dailyAlertEnabled,
+      event_alert_enabled: prefs.eventAlertEnabled,
+    },
+    { onConflict: "user_id" },
+  );
 
   if (error) throw error;
 }

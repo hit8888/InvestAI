@@ -7,6 +7,7 @@ import PortfolioInput from "@/components/portfolio/PortfolioInput";
 import EventSelector from "@/components/news/EventSelector";
 import SimulationPanel from "@/components/simulation/SimulationPanel";
 import ResultsView from "@/components/results/ResultsView";
+import { EngagementPrompts } from "@/components/engagement/EngagementPrompts";
 import { cn } from "@/lib/utils";
 import type { AppStep } from "@/types";
 
@@ -118,6 +119,8 @@ export default function DashboardPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <EngagementPrompts />
 
       {/* Step content */}
       <div className="rounded-2xl bg-white/80 backdrop-blur-sm border border-white shadow-xl shadow-gray-200/60 p-6">
